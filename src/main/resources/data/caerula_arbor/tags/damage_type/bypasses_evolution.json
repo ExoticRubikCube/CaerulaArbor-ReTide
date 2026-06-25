@@ -1,0 +1,21 @@
+{
+  "replace": false,
+  "values": [
+    "caerula_arbor:hand_of_choker",
+    "caerula_arbor:inv_killer",
+    "generic_kill",
+    "out_of_world",
+    "outside_border",
+    "caerula_arbor:chest_attack",
+    "caerula_arbor:general_seaborn_attack",
+    "caerula_arbor:highmore_attack",
+    "caerula_arbor:izumik_normal_attack",
+    "caerula_arbor:puncture_attack",
+    "caerula_arbor:repeller_attack",
+    "caerula_arbor:super_cat_attack",
+    "caerula_arbor:warden_attack",
+    "mob_attack_no_aggro",
+    "caerula_arbor:immortal_punishment",
+    "caerula_arbor:isharmla_cursed"
+  ]
+}

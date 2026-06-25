@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "caerula_arbor:block/tide_observation"
+    },
+    "facing=east": {
+      "model": "caerula_arbor:block/tide_observation",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "caerula_arbor:block/tide_observation",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "caerula_arbor:block/tide_observation",
+      "y": 270
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "parent": "caerula_arbor:custom/operation_table",
+  "textures": {
+    "all": "caerula_arbor:block/operation_table",
+    "particle": "caerula_arbor:block/operation_table",
+    "0": "caerula_arbor:block/operation_table"
+  },
+  "render_type": "cutout"
+}

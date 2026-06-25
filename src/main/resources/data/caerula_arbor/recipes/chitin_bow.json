@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    " ab",
+    "c d",
+    " ab"
+  ],
+  "key": {
+    "a": {
+      "item": "caerula_arbor:ocean_chitin"
+    },
+    "b": {
+      "item": "minecraft:string"
+    },
+    "c": {
+      "item": "caerula_arbor:chitin_ingot"
+    },
+    "d": {
+      "item": "caerula_arbor:ocean_cutin"
+    }
+  },
+  "result": {
+    "item": "caerula_arbor:chitin_bow",
+    "count": 1
+  }
+}

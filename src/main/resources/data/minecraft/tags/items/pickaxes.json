@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
+    "caerula_arbor:trailrite_pickaxe",
+    "caerula_arbor:hand_anchor",
+    "caerula_arbor:trail_mop",
     "caerula_arbor:complex_chitin_pickaxe",
     "caerula_arbor:pickaxe_ocean_crystal",
     "caerula_arbor:chitin_pickaxe"

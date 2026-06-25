@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "item": "caerula_arbor:tulip_medcine"
+    },
+    "title": {
+      "translate": "advancements.but_i_refuse.title"
+    },
+    "description": {
+      "translate": "advancements.but_i_refuse.descr"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "but_i_refuse_0": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "caerula_arbor:to_we_many"
+}

@@ -1,7 +1,7 @@
 plugins {
     id 'eclipse'
     id 'idea'
-    id 'net.minecraftforge.gradle' version '[6.0.16,6.2)'
+    id 'net.minecraftforge.gradle' version '[6.0.16,6.24)'
     id 'org.spongepowered.mixin' version '0.7.+'
     id 'org.parchmentmc.librarian.forgegradle' version '1.+'
 }
@@ -31,13 +31,13 @@ java {
 }
 
 minecraft {
-    mappings channel: 'parchment', version: '2023.08.13-1.20.1'
+    mappings channel: 'parchment', version: '2023.09.03-1.20.1'
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
     copyIdeResources = true
 
     runs {
         configureEach {
-            // 需要使用 JetBrains 的 JBR 作为运行时才能发挥作用
+            //JBR 热重载增强 需要使用 JetBrains 的 JBR 作为运行时才能发挥作用
             jvmArgs = [
                     "-XX:+IgnoreUnrecognizedVMOptions",
                     "-XX:+AllowEnhancedClassRedefinition"
@@ -70,10 +70,7 @@ minecraft {
     }
 }
 
-sourceSets.main.resources {
-    srcDir 'src/generated/resources'
-    exclude '.cache/**'
-}
+sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
     mavenLocal()
@@ -115,8 +112,9 @@ repositories {
 
 processResources {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    // 或者根据需要使用其他策略
+    //资源冲突解决策略 可以根据需要使用其他策略
     // duplicatesStrategy = DuplicatesStrategy.IGNORE
+    //duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 
 dependencies {
@@ -151,7 +149,7 @@ dependencies {
 mixin {
     add sourceSets.main, 'mixins.caerula_arbor.refmap.json'
 
-    config 'mixins.caerulaarbor.json'
+    config 'mixins.caerula_arbor.json'
 
     debug.verbose = true
     debug.export = true

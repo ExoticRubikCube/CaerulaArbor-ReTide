@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "caerula_arbor:trail_shard"
+    },
+    {
+      "item": "caerula_arbor:trail_shard"
+    },
+    {
+      "item": "caerula_arbor:trail_shard"
+    },
+    {
+      "item": "caerula_arbor:trail_shard"
+    },
+    {
+      "item": "caerula_arbor:trail_powder_core"
+    },
+    {
+      "item": "minecraft:diamond"
+    },
+    {
+      "item": "minecraft:diamond"
+    },
+    {
+      "item": "minecraft:diamond"
+    },
+    {
+      "item": "minecraft:diamond"
+    }
+  ],
+  "result": {
+    "item": "caerula_arbor:trailrite",
+    "count": 1
+  }
+}

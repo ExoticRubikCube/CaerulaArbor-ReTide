@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "caerula_arbor:deep_reef",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 50,
+    "separation": 47,
+    "salt": 2042074128
+  }
+}

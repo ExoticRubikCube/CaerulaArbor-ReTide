@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "caerula_arbor:block/trail_pumpking"
+    },
+    "facing=east": {
+      "model": "caerula_arbor:block/trail_pumpking",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "caerula_arbor:block/trail_pumpking",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "caerula_arbor:block/trail_pumpking",
+      "y": 270
+    }
+  }
+}

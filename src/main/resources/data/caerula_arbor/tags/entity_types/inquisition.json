@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "#caerula_arbor:warriors",
+    "#caerula_arbor:phalax",
+    "caerula_arbor:tribunal_healer",
+    "caerula_arbor:irene",
+    "caerula_arbor:saint_carmen"
+  ]
+}

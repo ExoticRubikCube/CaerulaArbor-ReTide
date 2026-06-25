@@ -1,0 +1,14 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": [
+    "snowy_beach",
+    "snowy_plains",
+    "caerula_arbor:branded_land"
+  ],
+  "spawners": {
+    "type": "caerula_arbor:spike_chest",
+    "weight": 1,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

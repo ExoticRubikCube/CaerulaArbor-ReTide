@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "caerula_arbor:base_operation_kit"
+    },
+    {
+      "item": "caerula_arbor:targeted_transmitter_specter"
+    },
+    {
+      "item": "caerula_arbor:targeted_transmitter_specter"
+    },
+    {
+      "item": "caerula_arbor:circular_saw"
+    }
+  ],
+  "result": {
+    "item": "caerula_arbor:operation_kit_specter",
+    "count": 1
+  }
+}

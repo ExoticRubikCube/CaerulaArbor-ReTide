@@ -1,0 +1,8 @@
+{
+  "parent": "block/cross",
+  "textures": {
+    "cross": "caerula_arbor:block/thirst_coral",
+    "particle": "caerula_arbor:block/thirst_coral"
+  },
+  "render_type": "cutout"
+}

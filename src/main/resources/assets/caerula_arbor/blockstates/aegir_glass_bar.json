@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "blockstate=0": {
+      "model": "caerula_arbor:block/aegir_glass_bar"
+    },
+    "blockstate=1": {
+      "model": "caerula_arbor:block/aegir_glass_linked_bar_blockstate_0"
+    },
+    "blockstate=2": {
+      "model": "caerula_arbor:block/aegir_glass_linked_bar_blockstate_1"
+    },
+    "blockstate=3": {
+      "model": "caerula_arbor:block/aegir_glass_linked_bar_blockstate_2"
+    }
+  }
+}

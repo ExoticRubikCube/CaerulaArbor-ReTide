@@ -1,0 +1,12 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": {
+    "type": "forge:any"
+  },
+  "spawners": {
+    "type": "caerula_arbor:floater_prokaryote",
+    "weight": 50,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

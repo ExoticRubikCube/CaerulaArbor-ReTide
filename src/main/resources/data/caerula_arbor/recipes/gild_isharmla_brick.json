@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "caerula_arbor:isharmla_brick_chiesled"
+    },
+    {
+      "item": "caerula_arbor:tear_isharmla"
+    },
+    {
+      "item": "minecraft:gold_nugget"
+    },
+    {
+      "item": "minecraft:gold_nugget"
+    },
+    {
+      "item": "minecraft:gold_nugget"
+    }
+  ],
+  "result": {
+    "item": "caerula_arbor:isharmla_brick_gilded",
+    "count": 1
+  }
+}

@@ -1,0 +1,12 @@
+{
+	"type": "patchouli:shapeless_book_recipe",
+	"ingredients": [
+		{
+			"tag": "minecraft:bookshelf_books"
+		},
+		{
+			"tag": "caerula_arbor:seaborn_loots"
+		}
+	],
+	"book": "caerula_arbor:caerula_illustration"
+}

@@ -1,0 +1,36 @@
+{
+  "display": {
+    "icon": {
+      "item": "caerula_arbor:path_inaugurator"
+    },
+    "title": {
+      "translate": "advancements.pave_the_way.title"
+    },
+    "description": {
+      "translate": "advancements.pave_the_way.descr"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "pave_the_way_0": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "caerula_arbor:path_inaugurator"
+            ],
+            "count": {
+              "min": 1,
+              "max": 9999
+            }
+          }
+        ]
+      }
+    }
+  },
+  "parent": "caerula_arbor:musician_we_many"
+}

@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "category": "food",
+  "experience": 13.5,
+  "cookingtime": 320,
+  "ingredient": {
+    "item": "caerula_arbor:fibre_block"
+  },
+  "result": "caerula_arbor:cooked_fibre_block"
+}

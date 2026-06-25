@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "a a",
+    "bcb",
+    "d d"
+  ],
+  "key": {
+    "a": {
+      "item": "caerula_arbor:ocean_chitin"
+    },
+    "b": {
+      "item": "caerula_arbor:chitin_ingot"
+    },
+    "c": {
+      "item": "caerula_arbor:sealeather_chestplate"
+    },
+    "d": {
+      "item": "caerula_arbor:ocean_phloem"
+    }
+  },
+  "result": {
+    "item": "caerula_arbor:sealeather_chitin_chestplate",
+    "count": 1
+  }
+}

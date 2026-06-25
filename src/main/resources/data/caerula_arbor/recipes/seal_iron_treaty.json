@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:iron_ingot"
+    },
+    {
+      "item": "caerula_arbor:treaty_copper"
+    },
+    {
+      "item": "minecraft:white_tulip"
+    },
+    {
+      "item": "caerula_arbor:redstone_ingot"
+    },
+    {
+      "item": "caerula_arbor:redstone_ingot"
+    }
+  ],
+  "result": {
+    "item": "caerula_arbor:treaty_iron",
+    "count": 1
+  }
+}

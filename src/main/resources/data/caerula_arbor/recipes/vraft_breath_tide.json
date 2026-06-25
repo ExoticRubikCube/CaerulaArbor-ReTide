@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "abc",
+    "ddd"
+  ],
+  "key": {
+    "a": {
+      "item": "minecraft:conduit"
+    },
+    "b": {
+      "item": "caerula_arbor:whirl_eye"
+    },
+    "c": {
+      "item": "caerula_arbor:heteropic_piece"
+    },
+    "d": {
+      "item": "caerula_arbor:ocean_cutin"
+    }
+  },
+  "result": {
+    "item": "caerula_arbor:breath_of_tide",
+    "count": 1
+  }
+}

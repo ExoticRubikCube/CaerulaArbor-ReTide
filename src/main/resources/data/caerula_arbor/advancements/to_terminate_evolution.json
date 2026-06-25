@@ -23,6 +23,10 @@
     "experience": 32,
     "loot": [
       "caerula_arbor:gameplay/terminal_relics"
+    ],
+    "recipes": [
+      "caerula_arbor:smith_trident",
+      "caerula_arbor:cream_smithed"
     ]
   },
   "parent": "caerula_arbor:to_experience_evolution"

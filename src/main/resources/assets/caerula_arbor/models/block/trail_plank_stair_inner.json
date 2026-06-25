@@ -1,0 +1,10 @@
+{
+  "parent": "block/inner_stairs",
+  "textures": {
+    "particle": "caerula_arbor:block/trail_plank",
+    "bottom": "caerula_arbor:block/trail_plank",
+    "top": "caerula_arbor:block/trail_plank",
+    "side": "caerula_arbor:block/trail_plank"
+  },
+  "render_type": "solid"
+}

@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "aba",
+    "aba"
+  ],
+  "key": {
+    "a": {
+      "item": "minecraft:stick"
+    },
+    "b": {
+      "item": "caerula_arbor:trail_plank"
+    }
+  },
+  "result": {
+    "item": "caerula_arbor:trail_plank_fencedoor",
+    "count": 1
+  }
+}

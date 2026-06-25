@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "caerula_arbor:inquisition_outpost",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 50,
+    "separation": 39,
+    "salt": 1901042701
+  }
+}

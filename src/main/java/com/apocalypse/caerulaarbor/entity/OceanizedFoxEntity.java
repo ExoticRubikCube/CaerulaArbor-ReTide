@@ -1,0 +1,478 @@
+package com.apocalypse.caerulaarbor.entity;
+
+import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
+
+import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.utils.EntityUtils;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.animal.*;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.network.NetworkHooks;
+import net.minecraftforge.network.PlayMessages;
+import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.NotNull;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
+
+import javax.annotation.Nullable;
+import java.util.Comparator;
+import java.util.List;
+
+public class OceanizedFoxEntity extends SeaMonster {
+	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanizedFoxEntity.class, EntityDataSerializers.BOOLEAN);
+	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedFoxEntity.class, EntityDataSerializers.STRING);
+	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(OceanizedFoxEntity.class, EntityDataSerializers.STRING);
+	public static final EntityDataAccessor<Integer> DATA_skillp = SynchedEntityData.defineId(OceanizedFoxEntity.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<Boolean> DATA_sleeping = SynchedEntityData.defineId(OceanizedFoxEntity.class, EntityDataSerializers.BOOLEAN);
+	public static final EntityDataAccessor<Integer> DATA_action_time = SynchedEntityData.defineId(OceanizedFoxEntity.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(OceanizedFoxEntity.class, EntityDataSerializers.INT);
+	private boolean swinging;
+	private boolean lastloop;
+	private long lastSwing;
+	public String animationprocedure = "empty";
+
+	public OceanizedFoxEntity(PlayMessages.SpawnEntity packet, Level world) {
+		this(CaerulaArborModEntities.OCEANIZED_FOX.get(), world);
+	}
+
+	public OceanizedFoxEntity(EntityType<OceanizedFoxEntity> type, Level world) {
+		super(type, world);
+		xpReward = 8;
+		setNoAi(false);
+		setMaxUpStep(0.8f);
+		setPersistenceRequired();
+	}
+
+	@Override
+	protected void defineSynchedData() {
+		super.defineSynchedData();
+		this.entityData.define(SHOOT, false);
+		this.entityData.define(ANIMATION, "undefined");
+		this.entityData.define(TEXTURE, "oceanized_fox");
+		this.entityData.define(DATA_skillp, 10);
+		this.entityData.define(DATA_sleeping, false);
+		this.entityData.define(DATA_action_time, 0);
+		this.entityData.define(DATA_duration, 0);
+	}
+
+	public void setTexture(String texture) {
+		this.entityData.set(TEXTURE, texture);
+	}
+
+	public String getTexture() {
+		return this.entityData.get(TEXTURE);
+	}
+
+	@Override
+	public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket() {
+		return NetworkHooks.getEntitySpawningPacket(this);
+	}
+
+	@Override
+	protected void registerGoals() {
+		super.registerGoals();
+		this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+		this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 2, false) {
+			@Override
+			protected double getAttackReachSqr(@NotNull LivingEntity entity) {
+				return this.mob.getBbWidth() * this.mob.getBbWidth() + entity.getBbWidth();
+			}
+
+			@Override
+			public boolean canUse() {
+				double x = OceanizedFoxEntity.this.getX();
+				double y = OceanizedFoxEntity.this.getY();
+				double z = OceanizedFoxEntity.this.getZ();
+				Entity entity = OceanizedFoxEntity.this;
+				Level world = OceanizedFoxEntity.this.level();
+				return super.canUse() && OceanizedFoxEntity.this.notSleeping();
+			}
+
+			@Override
+			public boolean canContinueToUse() {
+				return super.canContinueToUse() && OceanizedFoxEntity.this.notSleeping();
+			}
+
+		});
+		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal(this, Chicken.class, true, false));
+		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal(this, Rabbit.class, true, false));
+		this.targetSelector.addGoal(5, new NearestAttackableTargetGoal(this, Turtle.class, true, false));
+		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal(this, Salmon.class, true, true));
+		this.targetSelector.addGoal(7, new NearestAttackableTargetGoal(this, TropicalFish.class, true, true));
+		this.targetSelector.addGoal(8, new NearestAttackableTargetGoal(this, Pufferfish.class, true, true));
+		this.goalSelector.addGoal(9, new TemptGoal(this, 1, Ingredient.of(CaerulaArborModItems.CANNED_CHERRY.get()), false));
+		this.goalSelector.addGoal(10, new RemoveBlockGoal(Blocks.SWEET_BERRY_BUSH, this, 1, (int) 3));
+		this.goalSelector.addGoal(11, new RandomStrollGoal(this, 1) {
+			@Override
+			public boolean canUse() {
+				double x = OceanizedFoxEntity.this.getX();
+				double y = OceanizedFoxEntity.this.getY();
+				double z = OceanizedFoxEntity.this.getZ();
+				Entity entity = OceanizedFoxEntity.this;
+				Level world = OceanizedFoxEntity.this.level();
+				return super.canUse() && OceanizedFoxEntity.this.notSleeping();
+			}
+
+			@Override
+			public boolean canContinueToUse() {
+				double x = OceanizedFoxEntity.this.getX();
+				double y = OceanizedFoxEntity.this.getY();
+				double z = OceanizedFoxEntity.this.getZ();
+				Entity entity = OceanizedFoxEntity.this;
+				Level world = OceanizedFoxEntity.this.level();
+				return super.canContinueToUse() && OceanizedFoxEntity.this.notSleeping();
+			}
+		});
+		this.goalSelector.addGoal(12, new RandomLookAroundGoal(this) {
+			@Override
+			public boolean canUse() {
+				double x = OceanizedFoxEntity.this.getX();
+				double y = OceanizedFoxEntity.this.getY();
+				double z = OceanizedFoxEntity.this.getZ();
+				Entity entity = OceanizedFoxEntity.this;
+				Level world = OceanizedFoxEntity.this.level();
+				return super.canUse() && OceanizedFoxEntity.this.notSleeping();
+			}
+
+			@Override
+			public boolean canContinueToUse() {
+				double x = OceanizedFoxEntity.this.getX();
+				double y = OceanizedFoxEntity.this.getY();
+				double z = OceanizedFoxEntity.this.getZ();
+				Entity entity = OceanizedFoxEntity.this;
+				Level world = OceanizedFoxEntity.this.level();
+				return super.canContinueToUse() && OceanizedFoxEntity.this.notSleeping();
+			}
+		});
+		this.goalSelector.addGoal(13, new FloatGoal(this));
+	}
+
+	@Override
+	public MobType getMobType() {
+		return MobType.WATER;
+	}
+
+	@Override
+	public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+		return false;
+	}
+
+	@Override
+	public SoundEvent getAmbientSound() {
+		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.fox.ambient"));
+	}
+
+	@Override
+	public SoundEvent getHurtSound(DamageSource ds) {
+		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.fox.hurt"));
+	}
+
+	@Override
+	public SoundEvent getDeathSound() {
+		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.fox.death"));
+	}
+
+	@Override
+	public boolean hurt(DamageSource source, float amount) {
+        if (this != null) {
+            setShiftKeyDown(false);
+            if ((Entity) this instanceof OceanizedFoxEntity _datEntSetL)
+                _datEntSetL.getEntityData().set(DATA_sleeping, false);
+        }
+        if (source.is(DamageTypes.CACTUS))
+			return false;
+		if (source.is(DamageTypes.DROWN))
+			return false;
+		return super.hurt(source, amount);
+	}
+
+	@Override
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
+		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
+		EntityUtils.initAplusMagic(this);
+		return retval;
+	}
+
+	@Override
+	public void addAdditionalSaveData(CompoundTag compound) {
+		super.addAdditionalSaveData(compound);
+		compound.putString("Texture", this.getTexture());
+		compound.putInt("Dataskillp", this.entityData.get(DATA_skillp));
+		compound.putBoolean("Datasleeping", this.entityData.get(DATA_sleeping));
+		compound.putInt("Dataaction_time", this.entityData.get(DATA_action_time));
+		compound.putInt("Dataduration", this.entityData.get(DATA_duration));
+	}
+
+	@Override
+	public void readAdditionalSaveData(CompoundTag compound) {
+		super.readAdditionalSaveData(compound);
+		if (compound.contains("Texture"))
+			this.setTexture(compound.getString("Texture"));
+		if (compound.contains("Dataskillp"))
+			this.entityData.set(DATA_skillp, compound.getInt("Dataskillp"));
+		if (compound.contains("Datasleeping"))
+			this.entityData.set(DATA_sleeping, compound.getBoolean("Datasleeping"));
+		if (compound.contains("Dataaction_time"))
+			this.entityData.set(DATA_action_time, compound.getInt("Dataaction_time"));
+		if (compound.contains("Dataduration"))
+			this.entityData.set(DATA_duration, compound.getInt("Dataduration"));
+	}
+
+	@Override
+	public void awardKillScore(Entity entity, int score, DamageSource damageSource) {
+		super.awardKillScore(entity, score, damageSource);
+        if (this == null)
+            return;
+        Entity enemy = null;
+        double damage = 0;
+        if ((Entity) this instanceof LivingEntity _entity)
+            _entity.setHealth((float) (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) + 2));
+    }
+
+	@Override
+	public void baseTick() {
+		super.baseTick();
+        LevelAccessor world = this.level();
+        double x = this.getX();
+        double y = this.getY();
+        double z = this.getZ();
+        if (this != null) {
+            boolean sneak = false;
+            double time_stamp = 0;
+            double skillp = 0;
+            double dura = 0;
+            Entity enemy = null;
+            if (this.isAlive()) {
+                if (tickCount % 10 == 0) {
+                    time_stamp = (Entity) this instanceof OceanizedFoxEntity _datEntI ? _datEntI.getEntityData().get(DATA_action_time) : 0;
+                    sneak = (Entity) this instanceof OceanizedFoxEntity _datEntL3 && _datEntL3.getEntityData().get(DATA_sleeping);
+                    if (time_stamp > 0) {
+                        if ((Entity) this instanceof OceanizedFoxEntity _datEntSetI)
+                            _datEntSetI.getEntityData().set(DATA_action_time, (int) (time_stamp - 1));
+                    } else if (Math.random() < 0.02) {
+                        if (sneak) {
+                            if ((Entity) this instanceof OceanizedFoxEntity _datEntSetL)
+                                _datEntSetL.getEntityData().set(DATA_sleeping, false);
+                            if ((Entity) this instanceof OceanizedFoxEntity _datEntSetI)
+                                _datEntSetI.getEntityData().set(DATA_action_time, 200);
+                        } else if (!((Entity) this instanceof Mob _mobEnt7 && _mobEnt7.isAggressive())) {
+                            if ((Entity) this instanceof OceanizedFoxEntity _datEntSetL)
+                                _datEntSetL.getEntityData().set(DATA_sleeping, true);
+                            if ((Entity) this instanceof OceanizedFoxEntity _datEntSetI)
+                                _datEntSetI.getEntityData().set(DATA_action_time, 200);
+                        }
+                    }
+                    setShiftKeyDown(sneak);
+                }
+                enemy = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+                if (!(enemy == null) && enemy.isAlive()) {
+                    setShiftKeyDown(false);
+                    if ((Entity) this instanceof OceanizedFoxEntity _datEntSetL)
+                        _datEntSetL.getEntityData().set(DATA_sleeping, false);
+                }
+                skillp = (Entity) this instanceof OceanizedFoxEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp) : 0;
+                dura = (Entity) this instanceof OceanizedFoxEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
+                if (dura > 0) {
+                    if ((Entity) this instanceof OceanizedFoxEntity _datEntSetI)
+                        _datEntSetI.getEntityData().set(DATA_duration, (int) (dura - 1));
+                }
+                if (skillp > 0) {
+                    if ((Entity) this instanceof OceanizedFoxEntity _datEntSetI)
+                        _datEntSetI.getEntityData().set(DATA_skillp, (int) (skillp - 1));
+                } else {
+                    if (!(enemy == null) && enemy.isAlive()) {
+                        if ((enemy != null ? distanceTo(enemy) : -1) <= 4) {
+                            if ((Entity) this instanceof OceanizedFoxEntity _datEntSetI)
+                                _datEntSetI.getEntityData().set(DATA_duration, 45);
+                            if ((Entity) this instanceof OceanizedFoxEntity _datEntSetI)
+                                _datEntSetI.getEntityData().set(DATA_skillp, 200);
+                            if (this instanceof OceanizedFoxEntity) {
+                                ((OceanizedFoxEntity) this).setAnimation("animation.oceanized_fox.jump");
+                            }
+                            if (!this.level().isClientSide())
+                                this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 25, 9, false, false));
+                            push((getLookAngle().x * 0.25), 0.25, (getLookAngle().z * 0.25));
+                            CaerulaArborMod.queueServerWork(20, () -> {
+                                if (this.isAlive() && !(((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == null)) {
+                                    if (world instanceof Level _level) {
+                                        if (!_level.isClientSide()) {
+                                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.fox.teleport")), SoundSource.HOSTILE, 1, 1);
+                                        } else {
+                                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.fox.teleport")), SoundSource.HOSTILE, 1, 1, false);
+                                        }
+                                    }
+                                    {
+                                        Entity _ent = this;
+                                        _ent.teleportTo((((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null).getX()), (((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null).getY() + 0.25),
+                                                (((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null).getZ()));
+                                        if (_ent instanceof ServerPlayer _serverPlayer)
+                                            _serverPlayer.connection.teleport((((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null).getX()), (((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null).getY() + 0.25),
+                                                    (((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null).getZ()), _ent.getYRot(), _ent.getXRot());
+                                    }
+                                }
+                            });
+                            CaerulaArborMod.queueServerWork(30, () -> {
+                                if (this.isAlive()) {
+                                    if (this == null)
+                                        return;
+                                    Entity enemy1 = null;
+                                    double damage = 0;
+                                    if (world instanceof Level _level) {
+                                        if (!_level.isClientSide()) {
+                                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.fox.aggro")), SoundSource.HOSTILE, 2, 1);
+                                        } else {
+                                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.fox.aggro")), SoundSource.HOSTILE, 2, 1, false);
+                                        }
+                                    }
+                                    damage = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
+                                    enemy1 = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+                                    {
+                                        final Vec3 _center = new Vec3((getX()), (getY()), (getZ()));
+                                        List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(6 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+                                        for (Entity entityiterator : _entfound) {
+                                            if (!(entityiterator instanceof LivingEntity)) {
+                                                continue;
+                                            }
+                                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                                                if (!(entityiterator == enemy1)) {
+                                                    continue;
+                                                }
+                                            }
+                                            if (entityiterator == this) {
+                                                continue;
+                                            }
+                                            if ((entityiterator != null ? distanceTo(entityiterator) : -1) <= 3) {
+                                                entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.MOB_ATTACK), this), (float) (damage * 1.5));
+                                                if ((Entity) this instanceof LivingEntity _entity)
+                                                    _entity.setHealth((float) (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) + 1));
+                                            }
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+        }
+        this.refreshDimensions();
+	}
+
+	@Override
+	public EntityDimensions getDimensions(Pose p_33597_) {
+		return super.getDimensions(p_33597_).scale((float) 1);
+	}
+
+	public static void init() {
+	}
+
+	public static AttributeSupplier.Builder createAttributes() {
+		AttributeSupplier.Builder builder = Mob.createMobAttributes();
+		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.16);
+		builder = builder.add(Attributes.MAX_HEALTH, 37);
+		builder = builder.add(Attributes.ARMOR, 0);
+		builder = builder.add(Attributes.ATTACK_DAMAGE, 7);
+		builder = builder.add(Attributes.FOLLOW_RANGE, 24);
+		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.35);
+		return builder;
+	}
+
+	private PlayState movementPredicate(AnimationState event) {
+		if (this.animationprocedure.equals("empty")) {
+			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
+
+					&& !this.isAggressive()) {
+				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_fox.move"));
+			}
+			if (this.isShiftKeyDown()) {
+				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_fox.sleep"));
+			}
+			if (this.isAggressive() && event.isMoving()) {
+				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_fox.sprint"));
+			}
+			return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_fox.idle"));
+		}
+		return PlayState.STOP;
+	}
+
+	String prevAnim = "empty";
+
+	private PlayState procedurePredicate(AnimationState event) {
+		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
+			if (!this.animationprocedure.equals(prevAnim))
+				event.getController().forceAnimationReset();
+			event.getController().setAnimation(RawAnimation.begin().thenPlay(this.animationprocedure));
+			if (event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+				this.animationprocedure = "empty";
+				event.getController().forceAnimationReset();
+			}
+		} else if (animationprocedure.equals("empty")) {
+			prevAnim = "empty";
+			return PlayState.STOP;
+		}
+		prevAnim = this.animationprocedure;
+		return PlayState.CONTINUE;
+	}
+
+	@Override
+	protected void tickDeath() {
+		++this.deathTime;
+		if (this.deathTime == 20) {
+			this.remove(OceanizedFoxEntity.RemovalReason.KILLED);
+			this.dropExperience();
+		}
+	}
+
+	public String getSyncedAnimation() {
+		return this.entityData.get(ANIMATION);
+	}
+
+	public void setAnimation(String animation) {
+		this.entityData.set(ANIMATION, animation);
+	}
+
+	@Override
+	public void registerControllers(AnimatableManager.ControllerRegistrar data) {
+		data.add(new AnimationController<>(this, "movement", 3, this::movementPredicate));
+		data.add(new AnimationController<>(this, "procedure", 3, this::procedurePredicate));
+	}
+
+	public boolean notSleeping() {
+		return !this.getEntityData().get(OceanizedFoxEntity.DATA_sleeping)
+				&& this.getEntityData().get(OceanizedFoxEntity.DATA_duration) <= 0;
+	}
+}

@@ -1,6 +1,13 @@
 {
   "replace": false,
   "values": [
+    "caerula_arbor:record_isharmla",
+    "caerula_arbor:record_deepness",
+    "caerula_arbor:record_undertides",
+    "caerula_arbor:record_path_ahead",
+    "caerula_arbor:record_endospore",
+    "caerula_arbor:record_whisper",
+    "caerula_arbor:bloody_record",
     "caerula_arbor:score"
   ]
 }

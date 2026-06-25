@@ -1,0 +1,9 @@
+{
+  "parent": "caerula_arbor:custom/eme_aid_building",
+  "textures": {
+    "all": "caerula_arbor:block/emergency_aid_building",
+    "particle": "minecraft:block/chiseled_sandstone",
+    "1": "caerula_arbor:block/emergency_aid_building"
+  },
+  "render_type": "cutout"
+}

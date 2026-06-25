@@ -1,0 +1,25 @@
+{
+  "replace": false,
+  "values": [
+    "#caerula_arbor:bypass_protection",
+    "explosion",
+    "player_explosion",
+    "caerula_arbor:hand_spike",
+    "caerula_arbor:gunmu_damage",
+    "caerula_arbor:oceankiller_damage",
+    "caerula_arbor:brand_bomb",
+    "caerula_arbor:wipe_magic",
+    "caerula_arbor:warden_sonic",
+    "in_fire",
+    "on_fire",
+    "lava",
+    "fall",
+    "falling_block",
+    "caerula_arbor:hand_of_choker",
+    "caerula_arbor:ocean_wither",
+    "wither",
+    "indirect_magic",
+    "caerula_arbor:isharmla_cursed",
+    "caerula_arbor:isharmla_attack"
+  ]
+}

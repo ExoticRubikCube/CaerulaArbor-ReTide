@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "aba",
+    "aca",
+    "ada"
+  ],
+  "key": {
+    "a": {
+      "item": "caerula_arbor:isharmla_scute"
+    },
+    "b": {
+      "item": "caerula_arbor:tear_isharmla"
+    },
+    "c": {
+      "item": "caerula_arbor:moist_echo_shard"
+    },
+    "d": {
+      "item": "caerula_arbor:heteropic_piece"
+    }
+  },
+  "result": {
+    "item": "caerula_arbor:anchor_lower",
+    "count": 1
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "aba",
+    "acd",
+    "efe"
+  ],
+  "key": {
+    "a": {
+      "item": "minecraft:iron_ingot"
+    },
+    "b": {
+      "item": "minecraft:iron_bars"
+    },
+    "c": {
+      "item": "minecraft:ink_sac"
+    },
+    "d": {
+      "item": "caerula_arbor:ocean_glasspane"
+    },
+    "e": {
+      "item": "caerula_arbor:ocean_crystal"
+    },
+    "f": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "result": {
+    "item": "caerula_arbor:fax",
+    "count": 1
+  }
+}

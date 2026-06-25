@@ -1,6 +1,15 @@
 {
   "replace": false,
   "values": [
+    "caerula_arbor:skadi_sword",
+    "caerula_arbor:aegir_sword",
+    "caerula_arbor:broken_sea",
+    "caerula_arbor:aegir_lancet",
+    "caerula_arbor:apocata_sword",
+    "caerula_arbor:lanc_xiao",
+    "caerula_arbor:long_sword_of_knight_corpus",
+    "caerula_arbor:iron_sword_of_knight_corpus",
+    "caerula_arbor:trailrite_sword",
     "caerula_arbor:trailed_golden_sword",
     "caerula_arbor:trailed_netherite_sword",
     "caerula_arbor:trailed_diamond_sword",

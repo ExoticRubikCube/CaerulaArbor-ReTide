@@ -1,0 +1,66 @@
+{
+  "display": {
+    "icon": {
+      "item": "caerula_arbor:sea_trail_init"
+    },
+    "title": {
+      "translate": "advancements.start_of_calamity.title"
+    },
+    "description": {
+      "translate": "advancements.start_of_calamity.descr"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "start_of_calamity_0": {
+      "trigger": "minecraft:placed_block",
+      "conditions": {
+        "location": [
+          {
+            "condition": "minecraft:block_state_property",
+            "block": "caerula_arbor:sea_trail_grown"
+          }
+        ]
+      }
+    }
+  },
+  "rewards": {
+    "experience": 0,
+    "recipes": [
+      "caerula_arbor:smelt_mor",
+      "caerula_arbor:smoke_mor",
+      "caerula_arbor:campfire_mor",
+      "caerula_arbor:make_caramel_mor",
+      "caerula_arbor:assemble_cake_trail",
+      "caerula_arbor:make_cake_trail",
+      "caerula_arbor:generate_trail",
+      "caerula_arbor:trail_bomb",
+      "caerula_arbor:solided_trail",
+      "caerula_arbor:craft_trail_brick",
+      "caerula_arbor:cut_trail_brick",
+      "caerula_arbor:craft_trail_slab",
+      "caerula_arbor:assemble_trail_slab",
+      "caerula_arbor:craft_trail_stair",
+      "caerula_arbor:cut_trail_stair",
+      "caerula_arbor:craft_trail_plate",
+      "caerula_arbor:craft_trail_button",
+      "caerula_arbor:cut_trail_slab",
+      "caerula_arbor:craft_trail_axe",
+      "caerula_arbor:craft_trail_sword",
+      "caerula_arbor:craft_trailrite",
+      "caerula_arbor:assemble_trailrite",
+      "caerula_arbor:dessemble_trailrite",
+      "caerula_arbor:cur_trail_wall",
+      "caerula_arbor:stripped_log_plank",
+      "caerula_arbor:log_to_wood",
+      "caerula_arbor:strip_log_to_wood",
+      "caerula_arbor:new_tide_core",
+      "caerula_arbor:craft_enderina_core",
+      "caerula_arbor:moist_crystal"
+    ]
+  },
+  "parent": "caerula_arbor:encounter_from_the_ocean"
+}

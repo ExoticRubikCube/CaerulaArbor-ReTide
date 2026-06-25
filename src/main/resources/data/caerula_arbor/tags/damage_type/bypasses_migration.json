@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "caerula_arbor:hand_of_choker",
+    "caerula_arbor:hand_spike",
+    "caerula_arbor:extractor_damage",
+    "caerula_arbor:inv_killer",
+    "caerula_arbor:wipe_magic",
+    "caerula_arbor:immortal_punishment",
+    "caerula_arbor:isharmla_cursed"
+  ]
+}

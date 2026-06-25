@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:smoking",
+  "group": "food",
+  "category": "food",
+  "experience": 2,
+  "cookingtime": 150,
+  "ingredient": {
+    "item": "caerula_arbor:kebab_raw"
+  },
+  "result": "caerula_arbor:kebab_cooked"
+}

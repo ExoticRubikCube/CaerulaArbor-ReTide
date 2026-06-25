@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "caerula_arbor:nethersea_chicken_egg"
+    },
+    {
+      "item": "caerula_arbor:nethersea_chicken_egg"
+    },
+    {
+      "item": "caerula_arbor:trail_powder"
+    },
+    {
+      "item": "caerula_arbor:trail_powder"
+    },
+    {
+      "item": "caerula_arbor:trail_powder"
+    },
+    {
+      "tag": "caerula_arbor:fish_food"
+    }
+  ],
+  "result": {
+    "item": "caerula_arbor:nethersea_preserved_egg",
+    "count": 2
+  }
+}

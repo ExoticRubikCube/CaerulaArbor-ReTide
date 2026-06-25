@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "caerula_arbor:a_cup_of_water"
+    },
+    {
+      "item": "caerula_arbor:deep_seagrass"
+    },
+    {
+      "item": "caerula_arbor:deep_seagrass"
+    },
+    {
+      "item": "caerula_arbor:deep_seagrass"
+    },
+    {
+      "item": "caerula_arbor:caramel_mor"
+    },
+    {
+      "item": "caerula_arbor:caramel_mor"
+    }
+  ],
+  "result": {
+    "item": "caerula_arbor:caramel_seagrass_juice",
+    "count": 1
+  }
+}

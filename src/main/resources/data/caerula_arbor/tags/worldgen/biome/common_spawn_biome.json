@@ -1,0 +1,20 @@
+{
+  "replace": false,
+  "values": [
+    "caerula_arbor:branded_land",
+    "birch_forest",
+    "flower_forest",
+    "forest",
+    "old_growth_birch_forest",
+    "plains",
+    "snowy_plains",
+    "sunflower_plains",
+    "meadow",
+    "stony_shore",
+    "beach",
+    "snowy_beach",
+    "#caerula_arbor:underwater_spawn_biome",
+    "#minecraft:is_beach",
+    "#minecraft:is_forest"
+  ]
+}

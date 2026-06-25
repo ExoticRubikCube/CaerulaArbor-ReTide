@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:smithing_transform",
+  "template": {
+    "item": "caerula_arbor:hunter_gene_gladiia"
+  },
+  "base": {
+    "item": "caerula_arbor:aegir_lancet"
+  },
+  "addition": {
+    "item": "caerula_arbor:pale_gold_pendant"
+  },
+  "result": {
+    "item": "caerula_arbor:broken_sea"
+  }
+}

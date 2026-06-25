@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:trimmable_armor",
+    "#forge:armors",
+    "#forge:armor/leggings",
+    "#forge:armor/boots",
+    "#forge:armor/helmets",
+    "#forge:armor/chestplates"
+  ]
+}

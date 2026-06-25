@@ -1,17 +1,17 @@
 {
-  "type": "minecraft:crafting_shaped",
+  "type": "minecraft:crafting_shapeless",
   "category": "misc",
-  "pattern": [
-    "aab"
-  ],
-  "key": {
-    "a": {
-      "tag": "minecraft:meat"
+  "ingredients": [
+    {
+      "tag": "forge:meats"
     },
-    "b": {
+    {
+      "tag": "forge:meats"
+    },
+    {
       "item": "caerula_arbor:empty_can"
     }
-  },
+  ],
   "result": {
     "item": "caerula_arbor:meat_can",
     "count": 1

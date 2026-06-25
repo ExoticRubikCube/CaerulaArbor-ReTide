@@ -1,6 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
+  "category": "equipment",
   "pattern": [
     " ab",
     "acb",
@@ -8,7 +8,7 @@
   ],
   "key": {
     "a": {
-      "item": "caerula_arbor:ocean_phloem"
+      "item": "caerula_arbor:phloem_block"
     },
     "b": {
       "item": "caerula_arbor:ocean_fibre"

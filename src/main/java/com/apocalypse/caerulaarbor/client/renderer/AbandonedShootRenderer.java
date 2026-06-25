@@ -1,26 +1,27 @@
 package com.apocalypse.caerulaarbor.client.renderer;
 
-import com.apocalypse.caerulaarbor.client.model.Modelfishbullet_Converted;
-import com.apocalypse.caerulaarbor.entity.AbandonedShootEntity;
-import net.minecraft.util.Mth;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.MultiBufferSource;
+import com.apocalypse.caerulaarbor.CaerulaArborMod;
 
-import com.mojang.math.Axis;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.apocalypse.caerulaarbor.client.model.ModelBulletProjectile;
+import com.apocalypse.caerulaarbor.entity.AbandonedShootEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 
 public class AbandonedShootRenderer extends EntityRenderer<AbandonedShootEntity> {
-	private static final ResourceLocation texture = new ResourceLocation("caerula_arbor:textures/entitiy/splashbullet.png");
-	private final Modelfishbullet_Converted model;
+	private static final ResourceLocation texture = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/splashbullet.png");
+	private final ModelBulletProjectile model;
 
 	public AbandonedShootRenderer(EntityRendererProvider.Context context) {
 		super(context);
-		model = new Modelfishbullet_Converted(context.bakeLayer(Modelfishbullet_Converted.LAYER_LOCATION));
+		model = new ModelBulletProjectile(context.bakeLayer(ModelBulletProjectile.LAYER_LOCATION));
 	}
 
 	@Override

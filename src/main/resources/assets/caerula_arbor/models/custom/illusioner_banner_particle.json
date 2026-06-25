@@ -1,0 +1,6 @@
+{
+  "parent": "caerula_arbor:displaysettings/oceanized_banner",
+  "textures": {
+    "particle": "caerula_arbor:block/illusioner_banner"
+  }
+}

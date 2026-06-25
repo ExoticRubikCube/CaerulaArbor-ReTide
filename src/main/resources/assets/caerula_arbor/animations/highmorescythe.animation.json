@@ -1,0 +1,84 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.highmore_scythe.idle": {
+			"loop": true,
+			"animation_length": 0.25,
+			"bones": {
+				"blade": {
+					"scale": {
+						"vector": [0, 0, 0]
+					}
+				}
+			}
+		},
+		"animation.highmore_scythe.attack": {
+			"animation_length": 1.25,
+			"bones": {
+				"highmore_scythe_bladed": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.25": {
+							"vector": [180, -12.5, 90],
+							"easing": "easeInOutSine"
+						},
+						"0.5": {
+							"vector": [180, -12.5, 90],
+							"easing": "easeInOutSine"
+						},
+						"0.875": {
+							"vector": [180, -12.5, 90],
+							"easing": "easeInOutSine"
+						},
+						"1.0": {
+							"vector": [180, -12.5, 90],
+							"easing": "easeInOutSine"
+						},
+						"1.25": {
+							"vector": [0, 0, 0],
+							"easing": "easeOutSine"
+						}
+					}
+				},
+				"scythe": {
+					"rotation": {
+						"0.25": {
+							"vector": [0, 0, 0]
+						},
+						"1.0": {
+							"vector": [0, 0, 360],
+							"easing": "easeOutCubic"
+						}
+					}
+				},
+				"blade": {
+					"scale": {
+						"vector": [1, 1, 0.1]
+					}
+				},
+				"bone": {
+					"scale": {
+						"0.0": {
+							"vector": [1, 0, 1]
+						},
+						"0.25": {
+							"vector": [1, 0, 1],
+							"easing": "linear"
+						},
+						"0.5": {
+							"vector": [1, 1, 1],
+							"easing": "easeOutSine"
+						},
+						"1.125": {
+							"vector": [0.1, 0.2, 1],
+							"easing": "easeOutCubic"
+						}
+					}
+				}
+			}
+		}
+	},
+	"geckolib_format_version": 2
+}

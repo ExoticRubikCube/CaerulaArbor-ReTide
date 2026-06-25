@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " a ",
+    "bcb",
+    " a "
+  ],
+  "key": {
+    "a": {
+      "item": "caerula_arbor:tide_hunet_template"
+    },
+    "b": {
+      "item": "caerula_arbor:cell_cluster"
+    },
+    "c": {
+      "item": "caerula_arbor:dna_horse"
+    }
+  },
+  "result": {
+    "item": "caerula_arbor:rocinante_injector",
+    "count": 1
+  }
+}

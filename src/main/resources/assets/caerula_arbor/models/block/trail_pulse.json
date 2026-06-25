@@ -1,8 +1,8 @@
 {
   "parent": "block/cube_all",
   "textures": {
-    "all": "caerula_arbor:block/trail_pump",
-    "particle": "caerula_arbor:block/trail_pump"
+    "all": "caerula_arbor:block/nethersea_pulse",
+    "particle": "caerula_arbor:block/nethersea_pulse"
   },
   "render_type": "solid"
 }

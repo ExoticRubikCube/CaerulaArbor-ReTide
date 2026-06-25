@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "caerula_arbor:abyssal_lab",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 56,
+    "separation": 28,
+    "salt": 983379551
+  }
+}

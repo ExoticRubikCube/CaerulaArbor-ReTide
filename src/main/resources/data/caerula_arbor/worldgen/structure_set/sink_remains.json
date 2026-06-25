@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "caerula_arbor:sink_remains",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 60,
+    "separation": 55,
+    "salt": 594832990
+  }
+}

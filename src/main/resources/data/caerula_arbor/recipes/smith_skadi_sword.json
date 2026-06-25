@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:smithing_transform",
+  "template": {
+    "item": "caerula_arbor:hunter_gene_skadi"
+  },
+  "base": {
+    "item": "caerula_arbor:aegir_sword"
+  },
+  "addition": {
+    "item": "caerula_arbor:moist_bag"
+  },
+  "result": {
+    "item": "caerula_arbor:skadi_sword"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "caerula_arbor:ocean_counter",
+    "caerula_arbor:ocean_magic",
+    "caerula_arbor:ocean_wither",
+    "caerula_arbor:oceanize_damage",
+    "caerula_arbor:trail_damage",
+    "caerula_arbor:isharmla_cursed"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "caerula_arbor:block/fax"
+    },
+    "facing=east": {
+      "model": "caerula_arbor:block/fax",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "caerula_arbor:block/fax",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "caerula_arbor:block/fax",
+      "y": 270
+    }
+  }
+}

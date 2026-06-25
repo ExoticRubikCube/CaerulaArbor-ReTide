@@ -1,0 +1,166 @@
+package com.apocalypse.caerulaarbor.entity;
+
+import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.procedures.SingleHealProcedure;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.TagKey;
+import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.ItemSupplier;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.network.NetworkHooks;
+import net.minecraftforge.network.PlayMessages;
+import net.minecraftforge.registries.ForgeRegistries;
+
+import java.util.Comparator;
+import java.util.List;
+
+@OnlyIn(value = Dist.CLIENT, _interface = ItemSupplier.class)
+public class HealBullletEntity extends AbstractArrow implements ItemSupplier {
+	public static final ItemStack PROJECTILE_ITEM = new ItemStack(Items.AMETHYST_SHARD);
+
+	public HealBullletEntity(PlayMessages.SpawnEntity packet, Level world) {
+		super(CaerulaArborModEntities.HEAL_BULLLET.get(), world);
+	}
+
+	public HealBullletEntity(EntityType<? extends HealBullletEntity> type, Level world) {
+		super(type, world);
+	}
+
+	public HealBullletEntity(EntityType<? extends HealBullletEntity> type, double x, double y, double z, Level world) {
+		super(type, x, y, z, world);
+	}
+
+	public HealBullletEntity(EntityType<? extends HealBullletEntity> type, LivingEntity entity, Level world) {
+		super(type, entity, world);
+	}
+
+	@Override
+	public Packet<ClientGamePacketListener> getAddEntityPacket() {
+		return NetworkHooks.getEntitySpawningPacket(this);
+	}
+
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public ItemStack getItem() {
+		return PROJECTILE_ITEM;
+	}
+
+	@Override
+	protected ItemStack getPickupItem() {
+		return PROJECTILE_ITEM;
+	}
+
+	@Override
+	protected void doPostHurtEffects(LivingEntity entity) {
+		super.doPostHurtEffects(entity);
+		entity.setArrowCount(entity.getArrowCount() - 1);
+	}
+
+	@Override
+	public void tick() {
+		super.tick();
+        LevelAccessor world = this.level();
+        double x = this.getX();
+        double y = this.getY();
+        double z = this.getZ();
+        Entity entity = this.getOwner();
+        if (entity != null && this != null) {
+            if (!level().isClientSide())
+                discard();
+            CaerulaArborMod.queueServerWork(16, () -> {
+                if (entity.isAlive()) {
+                    if (entity != null) {
+                        double atk = 0;
+                        double count = 0;
+                        double curH = 0;
+                        double maxH = 0;
+                        atk = entity instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity0.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
+                        {
+                            final Vec3 _center = new Vec3(x, y, z);
+                            List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(12 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+                            for (Entity entityiterator : _entfound) {
+                                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "homo_sapiens")))) {
+                                    if ((entityiterator instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < (entityiterator instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1)) {
+                                        if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
+                                            _entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 40, 1));
+                                        com.apocalypse.caerulaarbor.utils.EntityUtils.healWithParticles(world, entityiterator, atk, 0);
+                                        if (!(entityiterator == entity)) {
+                                            count = count + 1;
+                                            if (count >= 3) {
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (world instanceof Level _level) {
+                        if (!_level.isClientSide()) {
+                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "medic_normal")), SoundSource.HOSTILE, (float) 1.8,
+                                    (float) Mth.nextDouble(RandomSource.create(), 0.8, 1.2));
+                        } else {
+                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "medic_normal")), SoundSource.HOSTILE, (float) 1.8, (float) Mth.nextDouble(RandomSource.create(), 0.8, 1.2), false);
+                        }
+                    }
+                }
+            });
+        }
+        if (this.inGround)
+			this.discard();
+	}
+
+	public static HealBullletEntity shoot(Level world, LivingEntity entity, RandomSource source) {
+		return shoot(world, entity, source, 0.1f, 0, 0);
+	}
+
+	public static HealBullletEntity shoot(Level world, LivingEntity entity, RandomSource source, float pullingPower) {
+		return shoot(world, entity, source, pullingPower * 0.1f, 0, 0);
+	}
+
+	public static HealBullletEntity shoot(Level world, LivingEntity entity, RandomSource random, float power, double damage, int knockback) {
+		HealBullletEntity entityarrow = new HealBullletEntity(CaerulaArborModEntities.HEAL_BULLLET.get(), entity, world);
+		entityarrow.shoot(entity.getViewVector(1).x, entity.getViewVector(1).y, entity.getViewVector(1).z, power * 2, 0);
+		entityarrow.setSilent(true);
+		entityarrow.setCritArrow(false);
+		entityarrow.setBaseDamage(damage);
+		entityarrow.setKnockback(knockback);
+		world.addFreshEntity(entityarrow);
+		return entityarrow;
+	}
+
+	public static HealBullletEntity shoot(LivingEntity entity, LivingEntity target) {
+		HealBullletEntity entityarrow = new HealBullletEntity(CaerulaArborModEntities.HEAL_BULLLET.get(), entity, entity.level());
+		double dx = target.getX() - entity.getX();
+		double dy = target.getY() + target.getEyeHeight() - 1.1;
+		double dz = target.getZ() - entity.getZ();
+		entityarrow.shoot(dx, dy - entityarrow.getY() + Math.hypot(dx, dz) * 0.2F, dz, 0.1f * 2, 12.0F);
+		entityarrow.setSilent(true);
+		entityarrow.setBaseDamage(0);
+		entityarrow.setKnockback(0);
+		entityarrow.setCritArrow(false);
+		entity.level().addFreshEntity(entityarrow);
+		return entityarrow;
+	}
+}

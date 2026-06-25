@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " a ",
+    "aba",
+    "cdc"
+  ],
+  "key": {
+    "a": {
+      "item": "caerula_arbor:ocean_cutin"
+    },
+    "b": {
+      "tag": "minecraft:wool"
+    },
+    "c": {
+      "item": "caerula_arbor:ocean_crystal"
+    },
+    "d": {
+      "item": "caerula_arbor:phloem_block"
+    }
+  },
+  "result": {
+    "item": "caerula_arbor:pocket_sea_doll",
+    "count": 1
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:campfire_cooking",
+  "category": "food",
+  "experience": 0,
+  "cookingtime": 240,
+  "ingredient": {
+    "item": "caerula_arbor:fake_egg"
+  },
+  "result": "caerula_arbor:cooked_fakeegg"
+}

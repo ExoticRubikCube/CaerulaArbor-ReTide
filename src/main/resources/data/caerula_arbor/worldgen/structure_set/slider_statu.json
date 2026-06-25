@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "caerula_arbor:slider_statu",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 66,
+    "separation": 32,
+    "salt": 890563194
+  }
+}

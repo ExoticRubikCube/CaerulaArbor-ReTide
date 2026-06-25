@@ -1,0 +1,34 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "caerula_arbor:a_cup_of_water"
+    },
+    {
+      "item": "minecraft:cocoa_beans"
+    },
+    {
+      "item": "minecraft:cocoa_beans"
+    },
+    {
+      "item": "caerula_arbor:trail_leave"
+    },
+    {
+      "item": "caerula_arbor:trail_leave"
+    },
+    {
+      "item": "caerula_arbor:trail_leave"
+    },
+    {
+      "item": "minecraft:sugar"
+    },
+    {
+      "item": "minecraft:sugar"
+    }
+  ],
+  "result": {
+    "item": "caerula_arbor:nethersea_coffee",
+    "count": 1
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "parent": "caerula_arbor:custom/tide_shield_block",
+  "textures": {
+    "0": "caerula_arbor:block/tide_shield",
+    "particle": "caerula_arbor:item/tide_shield"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "aba",
+    "bcb",
+    "aba"
+  ],
+  "key": {
+    "a": {
+      "tag": "caerula_arbor:fish_food"
+    },
+    "b": {
+      "item": "caerula_arbor:cell_cluster"
+    },
+    "c": {
+      "item": "caerula_arbor:real_egg"
+    }
+  },
+  "result": {
+    "item": "caerula_arbor:base_egg",
+    "count": 1
+  }
+}

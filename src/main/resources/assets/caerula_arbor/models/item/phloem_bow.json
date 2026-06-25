@@ -1,5 +1,5 @@
 {
-  "parent": "caerula_arbor:displaysettings/bluebow",
+  "parent": "caerula_arbor:displaysettings/pholemnbow",
   "textures": {
     "layer0": "caerula_arbor:item/combinedarrow"
   }

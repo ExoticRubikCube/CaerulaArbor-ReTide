@@ -1,0 +1,28 @@
+{
+  "name": "caerula_arbor:flourish_zhong",
+  "fallback": "caerula_arbor:flourish_ding_fallback",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "caerula_arbor:flourish_he_zhong",
+        "projection": "rigid",
+        "processors": {
+          "processors": []
+        }
+      }
+    },
+    {
+      "weight": 4,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "caerula_arbor:flourish_he_ding",
+        "projection": "rigid",
+        "processors": {
+          "processors": []
+        }
+      }
+    }
+  ]
+}

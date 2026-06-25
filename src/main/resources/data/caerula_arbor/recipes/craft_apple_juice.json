@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "caerula_arbor:a_cup_of_water"
+    },
+    {
+      "item": "caerula_arbor:colourfull_jelly"
+    },
+    {
+      "item": "caerula_arbor:colourfull_jelly"
+    },
+    {
+      "item": "caerula_arbor:trail_apple"
+    },
+    {
+      "item": "minecraft:apple"
+    }
+  ],
+  "result": {
+    "item": "caerula_arbor:colourful_apple_juice",
+    "count": 1
+  }
+}

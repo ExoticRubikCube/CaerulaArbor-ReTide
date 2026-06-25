@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "caerula_arbor:sanity_break",
+    "caerula_arbor:inv_killer",
+    "caerula_arbor:gunmu_damage",
+    "caerula_arbor:hand_of_choker",
+    "caerula_arbor:immortal_punishment",
+    "caerula_arbor:isharmla_cursed",
+    "caerula_arbor:isharmla_attack",
+    "caerula_arbor:oceankiller_damage"
+  ]
+}

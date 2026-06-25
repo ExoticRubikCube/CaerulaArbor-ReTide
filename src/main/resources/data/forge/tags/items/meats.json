@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "caerula_arbor:ocean_fibre",
+    "caerula_arbor:cooked_fibre",
+    "caerula_arbor:ocean_peduncle",
+    "caerula_arbor:elite_peduncle",
+    "caerula_arbor:cooked_peduncle",
+    "caerula_arbor:collector_meat",
+    "caerula_arbor:cooked_collector",
+    "#minecraft:meat"
+  ]
+}

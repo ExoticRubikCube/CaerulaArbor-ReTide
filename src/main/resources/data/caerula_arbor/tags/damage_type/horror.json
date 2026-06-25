@@ -1,0 +1,21 @@
+{
+  "replace": false,
+  "values": [
+    "wither",
+    "wither_skull",
+    "explosion",
+    "player_explosion",
+    "fireworks",
+    "falling_stalactite",
+    "stalagmite",
+    "falling_anvil",
+    "lava",
+    "sonic_boom",
+    "dragon_breath",
+    "caerula_arbor:warden_sonic",
+    "caerula_arbor:warden_attack",
+    "caerula_arbor:izumik_normal_attack",
+    "caerula_arbor:izumik_skill",
+    "caerula_arbor:golem_attack"
+  ]
+}

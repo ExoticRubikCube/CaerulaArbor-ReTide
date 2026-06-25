@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "caerula_arbor:branded_land",
+  "features": "caerula_arbor:slider_flower",
+  "step": "surface_structures"
+}

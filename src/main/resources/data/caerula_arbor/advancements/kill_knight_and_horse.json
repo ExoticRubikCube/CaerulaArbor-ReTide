@@ -1,0 +1,29 @@
+{
+  "display": {
+    "icon": {
+      "item": "caerula_arbor:tide_hunet_template"
+    },
+    "title": {
+      "translate": "advancements.kill_knight_and_horse.title"
+    },
+    "description": {
+      "translate": "advancements.kill_knight_and_horse.descr"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "kill_knight_and_horse_0": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "rewards": {
+    "experience": 32,
+    "loot": [
+      "caerula_arbor:gameplay/mere_geen_sample"
+    ]
+  },
+  "parent": "caerula_arbor:kill_knight"
+}

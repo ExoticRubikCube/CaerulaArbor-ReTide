@@ -1,24 +1,28 @@
 
 package com.apocalypse.caerulaarbor.potion;
 
-import com.apocalypse.caerulaarbor.init.ModParticleTypes;
+import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraftforge.common.ForgeMod;
 
-import java.util.ArrayList;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffect;
+
+import com.apocalypse.caerulaarbor.utils.MathUtils;
+
 import java.util.List;
+import java.util.ArrayList;
 
 public class DizzyMobEffect extends MobEffect {
 	public DizzyMobEffect() {
-		super(MobEffectCategory.NEUTRAL, -3355444);
+		super(MobEffectCategory.HARMFUL, -3355444);
 		this.addAttributeModifier(Attributes.ATTACK_SPEED, "acd7cc57-c6e7-3da1-b6fc-9e1e5dd88598", -1, AttributeModifier.Operation.MULTIPLY_TOTAL);
 		this.addAttributeModifier(Attributes.JUMP_STRENGTH, "d909f02c-69f1-3309-aa57-9512487407ff", -1, AttributeModifier.Operation.MULTIPLY_TOTAL);
 		this.addAttributeModifier(Attributes.MOVEMENT_SPEED, "8fce4344-e7dc-3485-bcfc-1eabaf2662f2", -1, AttributeModifier.Operation.MULTIPLY_TOTAL);
@@ -30,7 +34,7 @@ public class DizzyMobEffect extends MobEffect {
 
 	@Override
 	public List<ItemStack> getCurativeItems() {
-		ArrayList<ItemStack> cures = new ArrayList<>();
+		ArrayList<ItemStack> cures = new ArrayList<ItemStack>();
 		cures.add(new ItemStack(Items.TOTEM_OF_UNDYING));
 		cures.add(new ItemStack(Items.HONEY_BOTTLE));
 		return cures;
@@ -38,18 +42,17 @@ public class DizzyMobEffect extends MobEffect {
 
 	@Override
 	public void applyEffectTick(LivingEntity entity, int amplifier) {
-		LevelAccessor world = entity.level();
-		double x = entity.getX();
-		double y = entity.getY();
-		double z = entity.getZ();
-		if (world instanceof ServerLevel server) {
-			server.sendParticles(ModParticleTypes.DIZZINESS.get(), x, y, z, 2, 1, 1, 1, 0.1);
-		}
-		world.addParticle(ModParticleTypes.DIZZINESS.get(), x, y, z, 0.5 - Math.random(), 0.1, 0.5 - Math.random());
-	}
+        LevelAccessor world = entity.level();
+        double x = entity.getX();
+        double y = entity.getY();
+        double z = entity.getZ();
+        if (world instanceof ServerLevel _level)
+            _level.sendParticles((SimpleParticleType) (CaerulaArborModParticleTypes.DIZZINESS.get()), x, y, z, 2, 1, 1, 1, 0.1);
+        world.addParticle((SimpleParticleType) (CaerulaArborModParticleTypes.DIZZINESS.get()), x, y, z, (0.5 - Math.random()), 0.1, (0.5 - Math.random()));
+    }
 
 	@Override
 	public boolean isDurationEffectTick(int duration, int amplifier) {
-		return duration % 10 == 0;
+		return MathUtils.isMultipleOf(duration, 10);
 	}
 }

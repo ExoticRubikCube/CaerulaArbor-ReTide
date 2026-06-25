@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "item": "caerula_arbor:base_operation_kit"
+    },
+    "title": {
+      "translate": "advancements.to_slain_the_sea.title"
+    },
+    "description": {
+      "translate": "advancements.to_slain_the_sea.descr"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "to_slain_the_sea_0": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "rewards": {
+    "experience": 32
+  },
+  "parent": "caerula_arbor:gain_hunter_gene"
+}

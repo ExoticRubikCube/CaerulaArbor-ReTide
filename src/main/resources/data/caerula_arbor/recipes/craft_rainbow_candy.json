@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "tag": "minecraft:fruits"
+    },
+    {
+      "tag": "minecraft:fruits"
+    },
+    {
+      "tag": "minecraft:fruits"
+    },
+    {
+      "item": "caerula_arbor:paper_bag"
+    },
+    {
+      "item": "caerula_arbor:paper_bag"
+    },
+    {
+      "item": "caerula_arbor:paper_bag"
+    },
+    {
+      "item": "minecraft:gold_nugget"
+    },
+    {
+      "item": "minecraft:gold_nugget"
+    },
+    {
+      "item": "minecraft:gold_nugget"
+    }
+  ],
+  "result": {
+    "item": "caerula_arbor:rainbow_candy",
+    "count": 3
+  }
+}

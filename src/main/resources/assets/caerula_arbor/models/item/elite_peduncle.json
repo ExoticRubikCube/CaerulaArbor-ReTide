@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "caerula_arbor:item/elite_peduncle"
+    "layer0": "caerula_arbor:item/ped_shine"
   }
 }

@@ -1,0 +1,66 @@
+package com.apocalypse.caerulaarbor.client.model;
+
+import com.apocalypse.caerulaarbor.CaerulaArborMod;
+
+import com.apocalypse.caerulaarbor.entity.OceanizedShulkerEntity;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import software.bernie.geckolib.constant.DataTickets;
+import software.bernie.geckolib.core.animatable.model.CoreGeoBone;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.model.GeoModel;
+import software.bernie.geckolib.model.data.EntityModelData;
+
+public class OceanizedShulkerModel extends GeoModel<OceanizedShulkerEntity> {
+	@Override
+	public ResourceLocation getAnimationResource(OceanizedShulkerEntity entity) {
+		return new ResourceLocation(CaerulaArborMod.MODID, "animations/oceanized_shulker.animation.json");
+	}
+
+	@Override
+	public ResourceLocation getModelResource(OceanizedShulkerEntity entity) {
+		return new ResourceLocation(CaerulaArborMod.MODID, "geo/oceanized_shulker.geo.json");
+	}
+
+	@Override
+	public ResourceLocation getTextureResource(OceanizedShulkerEntity entity) {
+		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+	}
+
+	@Override
+	public void setCustomAnimations(OceanizedShulkerEntity animatable, long instanceId, AnimationState animationState) {
+		CoreGeoBone head = getAnimationProcessor().getBone("head");
+		if (head != null) {
+			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);
+			head.setRotX(entityData.headPitch() * Mth.DEG_TO_RAD);
+			head.setRotY(entityData.netHeadYaw() * Mth.DEG_TO_RAD);
+		}
+		CoreGeoBone shell = getAnimationProcessor().getBone("shell");
+
+		if (shell != null && !animatable.isWalking()){
+			Direction dire = animatable.getAttachDirection();
+			float pi = (float) Math.PI;
+			switch(dire){
+                case UP -> {
+                    shell.setRotX(0); shell.setRotY(0); shell.setRotZ(0);
+                }
+                case DOWN -> {
+                    shell.setRotX(0); shell.setRotY(0); shell.setRotZ(pi);
+                }
+                case NORTH -> {
+                    shell.setRotX(0); shell.setRotY(0); shell.setRotZ(-pi/2);
+                }
+                case EAST ->{
+                    shell.setRotX(0); shell.setRotY(0); shell.setRotZ(pi/2);
+                }
+                case WEST -> {
+                    shell.setRotX(-pi/2); shell.setRotY(0); shell.setRotZ(-pi/2);
+                }
+                case SOUTH -> {
+                    shell.setRotX(pi/2); shell.setRotY(0); shell.setRotZ(-pi/2);
+                }
+			}
+		}
+	}
+}

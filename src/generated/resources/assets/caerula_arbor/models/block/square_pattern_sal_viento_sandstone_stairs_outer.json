@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/outer_stairs",
-  "textures": {
-    "bottom": "caerula_arbor:block/sal_viento_sandstone_top",
-    "side": "caerula_arbor:block/sal_viento_sandstone_top",
-    "top": "caerula_arbor:block/sal_viento_sandstone_top"
-  }
-}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "caerula_arbor:royal_fate"
+    },
+    {
+      "tag": "caerula_arbor:king_relics"
+    }
+  ],
+  "result": {
+    "item": "caerula_arbor:royal_fate",
+    "count": 2
+  }
+}

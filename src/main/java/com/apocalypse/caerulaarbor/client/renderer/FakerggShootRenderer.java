@@ -1,7 +1,9 @@
 package com.apocalypse.caerulaarbor.client.renderer;
 
-import com.apocalypse.caerulaarbor.client.model.Modelfakebullet;
-import com.apocalypse.caerulaarbor.entity.bullets.FakerggShootEntity;
+import com.apocalypse.caerulaarbor.CaerulaArborMod;
+
+import com.apocalypse.caerulaarbor.client.model.ModelFakerggShoot;
+import com.apocalypse.caerulaarbor.entity.FakerggShootEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -14,12 +16,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
 public class FakerggShootRenderer extends EntityRenderer<FakerggShootEntity> {
-	private static final ResourceLocation texture = new ResourceLocation("caerula_arbor:textures/entities/fakebullet.png");
-	private final Modelfakebullet model;
+	private static final ResourceLocation texture = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/fakebullet.png");
+	private final ModelFakerggShoot model;
 
 	public FakerggShootRenderer(EntityRendererProvider.Context context) {
 		super(context);
-		model = new Modelfakebullet(context.bakeLayer(Modelfakebullet.LAYER_LOCATION));
+		model = new ModelFakerggShoot(context.bakeLayer(ModelFakerggShoot.LAYER_LOCATION));
 	}
 
 	@Override

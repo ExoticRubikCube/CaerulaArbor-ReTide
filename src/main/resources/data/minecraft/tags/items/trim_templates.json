@@ -1,6 +1,13 @@
 {
   "replace": false,
   "values": [
-    "caerula_arbor:ocean_trim_template"
+    "caerula_arbor:ocean_trim_template",
+    "caerula_arbor:hunter_gene",
+    "caerula_arbor:hunter_gene_skadi",
+    "caerula_arbor:hunter_gene_ulpians",
+    "caerula_arbor:hunter_gene_gladiia",
+    "caerula_arbor:hunter_gene_specter",
+    "caerula_arbor:tide_hunet_template",
+    "caerula_arbor:flamarine_upgrade_template"
   ]
 }

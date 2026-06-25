@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "aba",
+    "cdc",
+    "aea"
+  ],
+  "key": {
+    "a": {
+      "tag": "minecraft:sal_viento_deco"
+    },
+    "b": {
+      "item": "minecraft:prismarine_shard"
+    },
+    "c": {
+      "item": "minecraft:prismarine_crystals"
+    },
+    "d": {
+      "item": "minecraft:nether_star"
+    },
+    "e": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "result": {
+    "item": "caerula_arbor:emergency_aid_building_salviento",
+    "count": 2
+  }
+}

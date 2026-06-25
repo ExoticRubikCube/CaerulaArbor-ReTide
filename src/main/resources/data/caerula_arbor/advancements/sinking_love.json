@@ -1,0 +1,54 @@
+{
+  "display": {
+    "icon": {
+      "item": "caerula_arbor:trailrite"
+    },
+    "title": {
+      "translate": "advancements.sinking_love.title"
+    },
+    "description": {
+      "translate": "advancements.sinking_love.descr"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "sinking_love_0": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "caerula_arbor:trailrite"
+            ],
+            "count": {
+              "min": 1,
+              "max": 999
+            }
+          }
+        ]
+      }
+    }
+  },
+  "rewards": {
+    "experience": 0,
+    "recipes": [
+      "caerula_arbor:craft_trailrite",
+      "caerula_arbor:assemble_trailrite",
+      "caerula_arbor:dessemble_trailrite",
+      "caerula_arbor:smith_trailrite_helm",
+      "caerula_arbor:smith_trailrite_chest",
+      "caerula_arbor:smith_trailrite_leg",
+      "caerula_arbor:smith_trailrite_boots",
+      "caerula_arbor:smith_trailrite_pick",
+      "caerula_arbor:smith_trailrite_hoe",
+      "caerula_arbor:smith_trailrite_shovel",
+      "caerula_arbor:smith_trailrite_bow",
+      "caerula_arbor:dessemble_trail_ingot",
+      "caerula_arbor:assemble_trail_ingot"
+    ]
+  },
+  "parent": "caerula_arbor:withered_tranquiliy"
+}

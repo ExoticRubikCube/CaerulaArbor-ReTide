@@ -1,0 +1,44 @@
+{
+  "display": {
+    "icon": {
+      "item": "caerula_arbor:knight_corpse"
+    },
+    "title": {
+      "translate": "advancements.kill_knight.title"
+    },
+    "description": {
+      "translate": "advancements.kill_knight.descr"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "kill_knight_0": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "caerula_arbor:knight_corpse"
+            ],
+            "count": {
+              "min": 1,
+              "max": 999
+            }
+          }
+        ]
+      }
+    }
+  },
+  "rewards": {
+    "experience": 0,
+    "recipes": [
+      "caerula_arbor:smith_long_knight_sword",
+      "caerula_arbor:craft_rocinante_injector",
+      "caerula_arbor:craft_tide_hunt_template"
+    ]
+  },
+  "parent": "caerula_arbor:encounter_from_the_ocean"
+}

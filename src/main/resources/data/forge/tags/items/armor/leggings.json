@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    "caerula_arbor:chitin_armor_leggings",
+    "caerula_arbor:sealeather_leggings",
+    "caerula_arbor:complexchitin_armor_leggings",
+    "minecraft:leather_leggings",
+    "minecraft:chainmail_leggings",
+    "minecraft:iron_leggings",
+    "minecraft:golden_leggings",
+    "minecraft:diamond_leggings",
+    "minecraft:netherite_leggings",
+    "caerula_arbor:sealeather_chitin_leggings",
+    "caerula_arbor:trailrite_armor_leggings",
+    "caerula_arbor:knight_iron_leggings"
+  ]
+}

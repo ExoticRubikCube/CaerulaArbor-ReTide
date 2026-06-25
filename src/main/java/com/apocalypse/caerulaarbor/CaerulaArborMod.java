@@ -1,118 +1,111 @@
 package com.apocalypse.caerulaarbor;
 
-import com.apocalypse.caerulaarbor.client.gui.CaerulaArborSettings;
-import com.apocalypse.caerulaarbor.capability.Relic;
-import com.apocalypse.caerulaarbor.config.CommonConfig;
-import com.apocalypse.caerulaarbor.config.ServerConfig;
-import com.apocalypse.caerulaarbor.init.*;
-import com.apocalypse.caerulaarbor.network.ModNetwork;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.PotionUtils;
-import net.minecraft.world.item.alchemy.Potions;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraftforge.client.ConfigScreenHandler;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
+import com.apocalypse.caerulaarbor.network.CaerulaArborModMessages;
+import net.minecraftforge.network.simple.SimpleChannel;
+import net.minecraftforge.network.NetworkRegistry;
+import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.fml.util.thread.SidedThreadGroups;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.util.thread.SidedThreadGroups;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.common.MinecraftForge;
 
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.FriendlyByteBuf;
+
+import com.apocalypse.caerulaarbor.init.CaerulaArborModVillagerProfessions;
+import com.apocalypse.caerulaarbor.init.CaerulaArborModTabs;
+import com.apocalypse.caerulaarbor.init.CaerulaArborModSounds;
+import com.apocalypse.caerulaarbor.init.CaerulaArborModPotions;
+import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
+import com.apocalypse.caerulaarbor.init.CaerulaArborModPaintings;
+import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CaerulaArborModMenus;
+import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CaerulaArborModEnchantments;
+import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
+import com.apocalypse.caerulaarbor.init.CaerulaArborModBlockEntities;
+import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
+
+import java.util.function.Supplier;
+import java.util.function.Function;
+import java.util.function.BiConsumer;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.List;
+import java.util.Collection;
+import java.util.ArrayList;
+import java.util.AbstractMap;
 
 @Mod(CaerulaArborMod.MODID)
 public class CaerulaArborMod {
+	public static final Logger LOGGER = LogManager.getLogger(CaerulaArborMod.class);
+	public static final String MODID = "caerula_arbor";
 
-    public static final String MODID = "caerula_arbor";
-    public static final Logger LOGGER = LogManager.getLogger(CaerulaArborMod.class);
-    public static final String ATTRIBUTE_MODIFIER = "caerula_arbor_attribute_modifier";
+	public CaerulaArborMod() {
+		// Start of user code block mod constructor
+		// End of user code block mod constructor
+		MinecraftForge.EVENT_BUS.register(this);
+		IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+		CaerulaArborModSounds.REGISTRY.register(bus);
+		CaerulaArborModBlocks.REGISTRY.register(bus);
+		CaerulaArborModBlockEntities.REGISTRY.register(bus);
+		CaerulaArborModItems.REGISTRY.register(bus);
+		CaerulaArborModEntities.REGISTRY.register(bus);
+		CaerulaArborModEnchantments.REGISTRY.register(bus);
+		CaerulaArborModTabs.REGISTRY.register(bus);
 
-    public CaerulaArborMod() {
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.init());
-        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ServerConfig.init());
+		CaerulaArborModMobEffects.REGISTRY.register(bus);
+		CaerulaArborModPotions.REGISTRY.register(bus);
+		CaerulaArborModPaintings.REGISTRY.register(bus);
+		CaerulaArborModParticleTypes.REGISTRY.register(bus);
+		CaerulaArborModVillagerProfessions.PROFESSIONS.register(bus);
+		CaerulaArborModMenus.REGISTRY.register(bus);
+		CaerulaArborModAttributes.REGISTRY.register(bus);
+		bus.addListener(this::onCommonSetup);
+		// Start of user code block mod init
+		// End of user code block mod init
+	}
 
-        // Register an empty config screen to appear under Mods list
-        ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class,
-                () -> new ConfigScreenHandler.ConfigScreenFactory((mc, parent) -> new CaerulaArborSettings(parent)));
+	// Start of user code block mod methods
+	// End of user code block mod methods
+	private static final String PROTOCOL_VERSION = "1";
+	public static final SimpleChannel PACKET_HANDLER = NetworkRegistry.newSimpleChannel(new ResourceLocation(MODID, MODID), () -> PROTOCOL_VERSION, PROTOCOL_VERSION::equals, PROTOCOL_VERSION::equals);
+	private static int messageID = 0;
 
-        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+	public static <T> void addNetworkMessage(Class<T> messageType, BiConsumer<T, FriendlyByteBuf> encoder, Function<FriendlyByteBuf, T> decoder, BiConsumer<T, Supplier<NetworkEvent.Context>> messageConsumer) {
+		PACKET_HANDLER.registerMessage(messageID, messageType, encoder, decoder, messageConsumer);
+		messageID++;
+	}
 
-        ModSounds.REGISTRY.register(bus);
-        ModBlocks.BLOCKS.register(bus);
-        ModBlockEntityTypes.BLOCK_ENTITIES.register(bus);
+	private void onCommonSetup(final FMLCommonSetupEvent event) {
+		CaerulaArborModMessages.register();
+	}
 
-        ModItems.register(bus);
-        ModEntities.ENTITY_TYPES.register(bus);
-        ModEnchantments.REGISTRY.register(bus);
-        ModTabs.REGISTRY.register(bus);
+	private static final Collection<AbstractMap.SimpleEntry<Runnable, Integer>> workQueue = new ConcurrentLinkedQueue<>();
 
-        ModMobEffects.REGISTRY.register(bus);
-        ModPotions.REGISTRY.register(bus);
+	public static void queueServerWork(int tick, Runnable action) {
+		if (Thread.currentThread().getThreadGroup() == SidedThreadGroups.SERVER)
+			workQueue.add(new AbstractMap.SimpleEntry<>(action, tick));
+	}
 
-        ModParticleTypes.REGISTRY.register(bus);
-        ModVillagers.register(bus);
-        ModMenus.REGISTRY.register(bus);
-        ModAttributes.REGISTRY.register(bus);
-
-        ModCommandArguments.COMMAND_ARGUMENT_TYPES.register(bus);
-        ModLootModifier.LOOT_MODIFIERS.register(bus);
-
-        bus.addListener(this::onCommonSetup);
-
-        MinecraftForge.EVENT_BUS.register(this);
-    }
-
-    private static final Collection<AbstractMap.SimpleEntry<Runnable, Integer>> workQueue = new ConcurrentLinkedQueue<>();
-
-    public static void queueServerWork(int tick, Runnable action) {
-        if (Thread.currentThread().getThreadGroup() == SidedThreadGroups.SERVER)
-            workQueue.add(new AbstractMap.SimpleEntry<>(action, tick));
-    }
-
-    @SubscribeEvent
-    public void tick(TickEvent.ServerTickEvent event) {
-        if (event.phase == TickEvent.Phase.END) {
-            List<AbstractMap.SimpleEntry<Runnable, Integer>> actions = new ArrayList<>();
-            workQueue.forEach(work -> {
-                work.setValue(work.getValue() - 1);
-                if (work.getValue() == 0)
-                    actions.add(work);
-            });
-            actions.forEach(e -> e.getKey().run());
-            workQueue.removeAll(actions);
-        }
-    }
-
-    public static ResourceLocation loc(String path) {
-        return new ResourceLocation(MODID, path);
-    }
-
-    public void onCommonSetup(final FMLCommonSetupEvent event) {
-        event.enqueueWork(() -> BrewingRecipeRegistry.addRecipe(Ingredient.of(PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.AWKWARD)),
-                Ingredient.of(ModItems.FERMENTED_OCEAN_EYE.get()), PotionUtils.setPotion(new ItemStack(Items.POTION), ModPotions.INST_SANITY.get())));
-        event.enqueueWork(() -> BrewingRecipeRegistry.addRecipe(Ingredient.of(PotionUtils.setPotion(new ItemStack(Items.POTION), ModPotions.INST_SANITY.get())),
-                Ingredient.of(ModItems.CARAMEL_MOR.get()), PotionUtils.setPotion(new ItemStack(Items.POTION), ModPotions.SANITY_CURE.get())));
-        event.enqueueWork(() -> BrewingRecipeRegistry.addRecipe(Ingredient.of(PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.AWKWARD)),
-                Ingredient.of(Items.SWEET_BERRIES), new ItemStack(ModItems.SCREAMING_CHERRY.get())));
-        event.enqueueWork(() -> BrewingRecipeRegistry.addRecipe(Ingredient.of(PotionUtils.setPotion(new ItemStack(Items.POTION), ModPotions.INST_SANITY.get())),
-                Ingredient.of(Items.GLOWSTONE_DUST), PotionUtils.setPotion(new ItemStack(Items.POTION), ModPotions.INST_SANITY_II.get())));
-        event.enqueueWork(() -> BrewingRecipeRegistry.addRecipe(Ingredient.of(PotionUtils.setPotion(new ItemStack(Items.POTION), ModPotions.SANITY_CURE.get())),
-                Ingredient.of(Items.GLOWSTONE_DUST), PotionUtils.setPotion(new ItemStack(Items.POTION), ModPotions.SANITY_CURE_II.get())));
-        event.enqueueWork(Relic::onRegisterItem);
-
-        ModNetwork.register();
-    }
+	@SubscribeEvent
+	public void tick(TickEvent.ServerTickEvent event) {
+		if (event.phase == TickEvent.Phase.END) {
+			List<AbstractMap.SimpleEntry<Runnable, Integer>> actions = new ArrayList<>();
+			workQueue.forEach(work -> {
+				work.setValue(work.getValue() - 1);
+				if (work.getValue() == 0)
+					actions.add(work);
+			});
+			actions.forEach(e -> e.getKey().run());
+			workQueue.removeAll(actions);
+		}
+	}
 }

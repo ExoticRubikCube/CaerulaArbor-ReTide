@@ -1,0 +1,6 @@
+{
+  "parent": "caerula_arbor:displaysettings/mizuki",
+  "textures": {
+    "particle": "caerula_arbor:block/mizuki"
+  }
+}

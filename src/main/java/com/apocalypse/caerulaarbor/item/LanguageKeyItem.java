@@ -33,5 +33,7 @@ public class LanguageKeyItem extends Item {
 		list.add(Component.translatable("item.caerula_arbor.language_key.description_12"));
 		list.add(Component.translatable("item.caerula_arbor.language_key.description_13"));
 		list.add(Component.translatable("item.caerula_arbor.language_key.description_14"));
+		list.add(Component.translatable("item.caerula_arbor.language_key.description_15"));
+		list.add(Component.translatable("item.caerula_arbor.language_key.description_16"));
 	}
 }

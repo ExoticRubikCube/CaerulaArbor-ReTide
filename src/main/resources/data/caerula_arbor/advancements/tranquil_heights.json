@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "item": "caerula_arbor:nethersea_soul_sand"
+    },
+    "title": {
+      "translate": "advancements.tranquil_heights.title"
+    },
+    "description": {
+      "translate": "advancements.tranquil_heights.descr"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "tranquil_heights_0": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "caerula_arbor:start_of_calamity"
+}

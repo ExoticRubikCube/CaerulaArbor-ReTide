@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:emerald"
+    },
+    {
+      "item": "caerula_arbor:treaty_empty"
+    },
+    {
+      "item": "minecraft:amethyst_shard"
+    },
+    {
+      "item": "caerula_arbor:redstonium"
+    }
+  ],
+  "result": {
+    "item": "caerula_arbor:emerald_treaty",
+    "count": 1
+  }
+}

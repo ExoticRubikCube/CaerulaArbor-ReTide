@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "redstone",
+  "ingredients": [
+    {
+      "item": "caerula_arbor:redstonium"
+    }
+  ],
+  "result": {
+    "item": "caerula_arbor:redstone_ingot",
+    "count": 9
+  }
+}

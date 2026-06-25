@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "aaa",
+    "aaa",
+    "aaa"
+  ],
+  "key": {
+    "a": {
+      "item": "caerula_arbor:cooked_fibre"
+    }
+  },
+  "result": {
+    "item": "caerula_arbor:cooked_fibre_block",
+    "count": 1
+  }
+}

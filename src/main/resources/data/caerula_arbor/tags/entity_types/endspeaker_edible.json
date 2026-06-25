@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "caerula_arbor:baselayer_abyssal",
+    "caerula_arbor:cracker_abyssal",
+    "caerula_arbor:guide_abyssal",
+    "caerula_arbor:predator_abyssal",
+    "caerula_arbor:splasher_abyssal",
+    "caerula_arbor:umbrella_abyssal"
+  ]
+}

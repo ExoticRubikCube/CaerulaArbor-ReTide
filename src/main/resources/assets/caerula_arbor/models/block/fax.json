@@ -1,0 +1,13 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "down": "caerula_arbor:block/fax_bottom",
+    "up": "caerula_arbor:block/fax_top",
+    "north": "caerula_arbor:block/fax_front",
+    "east": "caerula_arbor:block/fax_left",
+    "south": "caerula_arbor:block/fax_bottom",
+    "west": "caerula_arbor:block/fax_right",
+    "particle": "caerula_arbor:block/fax_bottom"
+  },
+  "render_type": "solid"
+}

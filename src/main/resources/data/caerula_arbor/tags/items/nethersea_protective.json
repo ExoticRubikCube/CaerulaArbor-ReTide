@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "caerula_arbor:trailrite_axe",
+    "caerula_arbor:trailrite_sword",
+    "caerula_arbor:trailrite_pickaxe",
+    "caerula_arbor:trailrite_hoe",
+    "caerula_arbor:trailrite_shovel",
+    "caerula_arbor:trail_mop"
+  ]
+}

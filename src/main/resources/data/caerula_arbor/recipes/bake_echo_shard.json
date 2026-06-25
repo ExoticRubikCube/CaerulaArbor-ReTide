@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "experience": 12,
+  "cookingtime": 300,
+  "ingredient": {
+    "item": "caerula_arbor:moist_echo_shard"
+  },
+  "result": "minecraft:echo_shard"
+}

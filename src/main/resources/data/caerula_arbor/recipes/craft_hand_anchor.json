@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "abc",
+    " db",
+    "e a"
+  ],
+  "key": {
+    "a": {
+      "item": "minecraft:iron_ingot"
+    },
+    "b": {
+      "item": "minecraft:iron_block"
+    },
+    "c": {
+      "item": "caerula_arbor:trail_powder_core"
+    },
+    "d": {
+      "item": "minecraft:deepslate"
+    },
+    "e": {
+      "item": "caerula_arbor:cutin_stick"
+    }
+  },
+  "result": {
+    "item": "caerula_arbor:hand_anchor",
+    "count": 1
+  }
+}

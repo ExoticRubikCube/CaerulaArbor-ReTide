@@ -1,21 +1,20 @@
 
 package com.apocalypse.caerulaarbor.potion;
 
-import net.minecraft.core.registries.Registries;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.monster.Blaze;
-import net.minecraft.world.entity.monster.Creeper;
-import net.minecraft.world.entity.monster.MagmaCube;
+import net.minecraftforge.client.extensions.common.IClientMobEffectExtensions;
+
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
+import net.minecraft.client.gui.GuiGraphics;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.function.Consumer;
 
-public class CooldownSinalMobEffect extends InvisibleMobEffect {
+public class CooldownSinalMobEffect extends MobEffect {
     public CooldownSinalMobEffect() {
         super(MobEffectCategory.BENEFICIAL, -3342337);
     }
@@ -26,22 +25,27 @@ public class CooldownSinalMobEffect extends InvisibleMobEffect {
     }
 
     @Override
-    public void applyEffectTick(LivingEntity entity, int amplifier) {
-        LevelAccessor world = entity.level();
-
-        if (entity instanceof Creeper creeper) {
-            creeper.setSwellDir(0);
-        }
-        if (entity instanceof Blaze) {
-            entity.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.FREEZE)), 1);
-        }
-        if (entity instanceof MagmaCube) {
-            entity.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.FREEZE)), 1);
-        }
+    public boolean isDurationEffectTick(int duration, int amplifier) {
+        return true;
     }
 
     @Override
-    public boolean isDurationEffectTick(int duration, int amplifier) {
-        return duration % 20 == 0;
+    public void initializeClient(Consumer<IClientMobEffectExtensions> consumer) {
+        consumer.accept(new IClientMobEffectExtensions() {
+            @Override
+            public boolean isVisibleInInventory(MobEffectInstance effect) {
+                return false;
+            }
+
+            @Override
+            public boolean renderInventoryText(MobEffectInstance instance, EffectRenderingInventoryScreen<?> screen, GuiGraphics guiGraphics, int x, int y, int blitOffset) {
+                return false;
+            }
+
+            @Override
+            public boolean isVisibleInGui(MobEffectInstance effect) {
+                return false;
+            }
+        });
     }
 }

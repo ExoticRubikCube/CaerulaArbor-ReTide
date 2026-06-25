@@ -1,0 +1,15 @@
+{
+  "replace": false,
+  "values": [
+    "caerula_arbor:sea_trail_stop",
+    "caerula_arbor:trail_pulse",
+    "caerula_arbor:sea_trail_burnt_solid",
+    "caerula_arbor:sea_trail_burnt",
+    "caerula_arbor:red_ovary",
+    "caerula_arbor:ocean_ovary",
+    "caerula_arbor:sea_trail_solid",
+    "caerula_arbor:sea_trail_grown",
+    "caerula_arbor:sea_trail_growing",
+    "caerula_arbor:sea_trail_init"
+  ]
+}

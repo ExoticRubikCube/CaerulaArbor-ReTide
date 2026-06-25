@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "caerula_arbor:isharmla_stair",
+    "caerula_arbor:saltwind_smooth_stair",
+    "caerula_arbor:saltwind_stair",
+    "caerula_arbor:trail_plank_stair",
+    "caerula_arbor:smooth_saltwind_sand_stair",
+    "caerula_arbor:saltwind_sand_stair",
+    "caerula_arbor:trail_stair"
+  ]
+}

@@ -4,7 +4,7 @@
   "pattern": [
     "aba",
     "ccc",
-    "bdb"
+    "bab"
   ],
   "key": {
     "a": {
@@ -15,9 +15,6 @@
     },
     "c": {
       "item": "caerula_arbor:fluore_berries"
-    },
-    "d": {
-      "item": "minecraft:nether_star"
     }
   },
   "result": {

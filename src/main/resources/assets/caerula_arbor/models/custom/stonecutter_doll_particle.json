@@ -1,0 +1,6 @@
+{
+  "parent": "caerula_arbor:displaysettings/chiseler_block",
+  "textures": {
+    "particle": "caerula_arbor:block/chieslerfish"
+  }
+}

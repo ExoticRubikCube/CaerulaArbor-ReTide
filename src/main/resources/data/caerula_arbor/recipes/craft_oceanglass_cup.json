@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "a a",
+    " a "
+  ],
+  "key": {
+    "a": {
+      "item": "caerula_arbor:ocean_glasspane"
+    }
+  },
+  "result": {
+    "item": "caerula_arbor:oceanglass_cup",
+    "count": 2
+  }
+}

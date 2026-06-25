@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "item": "minecraft:white_shulker_box"
+    },
+    "title": {
+      "translate": "advancements.construction.title"
+    },
+    "description": {
+      "translate": "advancements.construction.descr"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "construction_0": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "caerula_arbor:enthusiast_of_chitin"
+}

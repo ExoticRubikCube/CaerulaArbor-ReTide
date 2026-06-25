@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "iron_golem",
+    "caerula_arbor:chitin_golem",
+    "caerula_arbor:the_last_knight",
+    "caerula_arbor:last_knight_and_horse",
+    "caerula_arbor:complex_chitin_golem",
+    "caerula_arbor:flamarine_statue",
+    "caerula_arbor:flamarine_golem"
+  ]
+}

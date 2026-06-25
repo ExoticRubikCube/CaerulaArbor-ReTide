@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "aba",
+    "cdc",
+    "aea"
+  ],
+  "key": {
+    "a": {
+      "item": "minecraft:diorite"
+    },
+    "b": {
+      "item": "caerula_arbor:chitin_block"
+    },
+    "c": {
+      "item": "minecraft:netherite_ingot"
+    },
+    "d": {
+      "item": "caerula_arbor:heteropic_block"
+    },
+    "e": {
+      "item": "caerula_arbor:targeted_transmitter_specter"
+    }
+  },
+  "result": {
+    "item": "caerula_arbor:diorite_sculpture",
+    "count": 1
+  }
+}

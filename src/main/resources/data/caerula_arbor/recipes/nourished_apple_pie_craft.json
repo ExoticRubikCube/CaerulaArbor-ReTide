@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "aaa",
+    "bcb",
+    "ded"
+  ],
+  "key": {
+    "a": {
+      "item": "minecraft:wheat"
+    },
+    "b": {
+      "item": "caerula_arbor:trail_apple"
+    },
+    "c": {
+      "item": "caerula_arbor:trail_golden_apple"
+    },
+    "d": {
+      "item": "minecraft:sugar"
+    },
+    "e": {
+      "item": "minecraft:shulker_shell"
+    }
+  },
+  "result": {
+    "item": "caerula_arbor:nourished_apple_pie",
+    "count": 2
+  }
+}

@@ -1,6 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
+  "category": "equipment",
   "pattern": [
     "a",
     "a",
@@ -8,7 +8,7 @@
   ],
   "key": {
     "a": {
-      "item": "caerula_arbor:ocean_chitin"
+      "item": "caerula_arbor:chitin_ingot"
     },
     "b": {
       "item": "caerula_arbor:cutin_stick"

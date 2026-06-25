@@ -1,7 +1,9 @@
 package com.apocalypse.caerulaarbor.client.renderer;
 
-import com.apocalypse.caerulaarbor.client.model.Modelfishbullet_Converted;
-import com.apocalypse.caerulaarbor.entity.bullets.FishShootEntity;
+import com.apocalypse.caerulaarbor.CaerulaArborMod;
+
+import com.apocalypse.caerulaarbor.client.model.ModelBulletProjectile;
+import com.apocalypse.caerulaarbor.entity.FishShootEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
@@ -14,12 +16,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
 public class FishShootRenderer extends EntityRenderer<FishShootEntity> {
-	private static final ResourceLocation texture = new ResourceLocation("caerula_arbor:textures/entities/fishbullet.png");
-	private final Modelfishbullet_Converted model;
+	private static final ResourceLocation texture = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/fishbullet.png");
+	private final ModelBulletProjectile model;
 
 	public FishShootRenderer(EntityRendererProvider.Context context) {
 		super(context);
-		model = new Modelfishbullet_Converted(context.bakeLayer(Modelfishbullet_Converted.LAYER_LOCATION));
+		model = new ModelBulletProjectile(context.bakeLayer(ModelBulletProjectile.LAYER_LOCATION));
 	}
 
 	@Override

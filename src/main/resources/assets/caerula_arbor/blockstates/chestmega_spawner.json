@@ -1,18 +1,33 @@
 {
   "variants": {
-    "facing=north": {
+    "facing=north,blockstate=0": {
       "model": "caerula_arbor:custom/chestmega_spawner_particle"
     },
-    "facing=east": {
+    "facing=east,blockstate=0": {
       "model": "caerula_arbor:custom/chestmega_spawner_particle",
       "y": 90
     },
-    "facing=south": {
+    "facing=south,blockstate=0": {
       "model": "caerula_arbor:custom/chestmega_spawner_particle",
       "y": 180
     },
-    "facing=west": {
+    "facing=west,blockstate=0": {
       "model": "caerula_arbor:custom/chestmega_spawner_particle",
+      "y": 270
+    },
+    "facing=north,blockstate=1": {
+      "model": "caerula_arbor:block/chestmega_spawner_blockstate_0"
+    },
+    "facing=east,blockstate=1": {
+      "model": "caerula_arbor:block/chestmega_spawner_blockstate_0",
+      "y": 90
+    },
+    "facing=south,blockstate=1": {
+      "model": "caerula_arbor:block/chestmega_spawner_blockstate_0",
+      "y": 180
+    },
+    "facing=west,blockstate=1": {
+      "model": "caerula_arbor:block/chestmega_spawner_blockstate_0",
       "y": 270
     }
   }

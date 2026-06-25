@@ -1,0 +1,6 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "caerula_arbor:item/chitinhoe"
+  }
+}

@@ -1,10 +1,10 @@
+
 package com.apocalypse.caerulaarbor.item;
 
-import com.apocalypse.caerulaarbor.capability.ModCapabilities;
-import com.apocalypse.caerulaarbor.capability.Relic;
+import com.apocalypse.caerulaarbor.procedures.GainRelicARMORProcedure;
 import com.google.common.collect.Iterables;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -17,20 +17,18 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.jetbrains.annotations.NotNull;
-
-import javax.annotation.ParametersAreNonnullByDefault;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public abstract class WearableChestItem extends ArmorItem {
 	public WearableChestItem(ArmorItem.Type type, Item.Properties properties) {
 		super(new ArmorMaterial() {
 			@Override
-			public int getDurabilityForType(ArmorItem.@NotNull Type type) {
+			public int getDurabilityForType(ArmorItem.Type type) {
 				return new int[]{13, 15, 16, 11}[type.getSlot().getIndex()] * 18;
 			}
 
 			@Override
-			public int getDefenseForType(ArmorItem.@NotNull Type type) {
+			public int getDefenseForType(ArmorItem.Type type) {
 				return new int[]{2, 5, 11, 2}[type.getSlot().getIndex()];
 			}
 
@@ -40,17 +38,17 @@ public abstract class WearableChestItem extends ArmorItem {
 			}
 
 			@Override
-			public @NotNull SoundEvent getEquipSound() {
-				return SoundEvents.ARMOR_EQUIP_NETHERITE;
+			public SoundEvent getEquipSound() {
+				return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.armor.equip_netherite"));
 			}
 
 			@Override
-			public @NotNull Ingredient getRepairIngredient() {
+			public Ingredient getRepairIngredient() {
 				return Ingredient.of();
 			}
 
 			@Override
-			public @NotNull String getName() {
+			public String getName() {
 				return "wearable_chest";
 			}
 
@@ -78,7 +76,7 @@ public abstract class WearableChestItem extends ArmorItem {
 
 		@Override
 		@OnlyIn(Dist.CLIENT)
-		public boolean isFoil(@NotNull ItemStack itemstack) {
+		public boolean isFoil(ItemStack itemstack) {
 			return true;
 		}
 
@@ -88,22 +86,10 @@ public abstract class WearableChestItem extends ArmorItem {
 		}
 
 		@Override
-		@ParametersAreNonnullByDefault
 		public void inventoryTick(ItemStack itemstack, Level world, Entity entity, int slot, boolean selected) {
 			super.inventoryTick(itemstack, world, entity, slot, selected);
 			if (entity instanceof Player player && Iterables.contains(player.getArmorSlots(), itemstack)) {
-				var cap = ModCapabilities.getPlayerVariables(entity);
-				if (!Relic.KING_ARMOR.gained(cap)) {
-					Relic.KING_ARMOR.gain(cap);
-					double lives_left = cap.life;
-
-					if (cap.life > 1) {
-						cap.life = 1;
-					}
-
-					cap.shield = (int) (cap.shield + lives_left + 3);
-					cap.syncPlayerVariables(entity);
-				}
+				GainRelicARMORProcedure.execute(world, entity.getX(), entity.getY(), entity.getZ(), entity, itemstack);
 			}
 		}
 	}

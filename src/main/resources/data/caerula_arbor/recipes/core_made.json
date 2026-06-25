@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "aaa",
+    "aba",
+    "aaa"
+  ],
+  "key": {
+    "a": {
+      "item": "caerula_arbor:trail_powder"
+    },
+    "b": {
+      "item": "caerula_arbor:moist_star"
+    }
+  },
+  "result": {
+    "item": "caerula_arbor:trail_powder_core",
+    "count": 4
+  }
+}

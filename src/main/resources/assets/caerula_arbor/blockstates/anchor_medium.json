@@ -1,32 +1,32 @@
 {
   "variants": {
-    "facing=north,activated=false": {
+    "facing=north,blockstate=0": {
       "model": "caerula_arbor:block/anchor_medium"
     },
-    "facing=east,activated=false": {
+    "facing=east,blockstate=0": {
       "model": "caerula_arbor:block/anchor_medium",
       "y": 90
     },
-    "facing=south,activated=false": {
+    "facing=south,blockstate=0": {
       "model": "caerula_arbor:block/anchor_medium",
       "y": 180
     },
-    "facing=west,activated=false": {
+    "facing=west,blockstate=0": {
       "model": "caerula_arbor:block/anchor_medium",
       "y": 270
     },
-    "facing=north,activated=true": {
+    "facing=north,blockstate=1": {
       "model": "caerula_arbor:block/anchor_lit_blockstate_0"
     },
-    "facing=east,activated=true": {
+    "facing=east,blockstate=1": {
       "model": "caerula_arbor:block/anchor_lit_blockstate_0",
       "y": 90
     },
-    "facing=south,activated=true": {
+    "facing=south,blockstate=1": {
       "model": "caerula_arbor:block/anchor_lit_blockstate_0",
       "y": 180
     },
-    "facing=west,activated=true": {
+    "facing=west,blockstate=1": {
       "model": "caerula_arbor:block/anchor_lit_blockstate_0",
       "y": 270
     }

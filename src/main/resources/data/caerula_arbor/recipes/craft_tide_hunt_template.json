@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "aba",
+    "aca",
+    "aaa"
+  ],
+  "key": {
+    "a": {
+      "item": "caerula_arbor:ocean_crystal"
+    },
+    "b": {
+      "item": "caerula_arbor:tide_hunet_template"
+    },
+    "c": {
+      "item": "caerula_arbor:knight_corpse"
+    }
+  },
+  "result": {
+    "item": "caerula_arbor:tide_hunet_template",
+    "count": 2
+  }
+}

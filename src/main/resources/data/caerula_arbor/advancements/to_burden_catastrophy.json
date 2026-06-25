@@ -32,5 +32,28 @@
       }
     }
   },
+  "rewards": {
+    "experience": 0,
+    "recipes": [
+      "caerula_arbor:craft_chitinblock",
+      "caerula_arbor:craft_chitin_hel",
+      "caerula_arbor:craft_chitin_chest",
+      "caerula_arbor:craft_chitin_leg",
+      "caerula_arbor:craft_chitin_bts",
+      "caerula_arbor:craft_chitin_pick",
+      "caerula_arbor:craft_chitin_hoe",
+      "caerula_arbor:craft_chitin_axe",
+      "caerula_arbor:craft_chitin_swd",
+      "caerula_arbor:craft_chitin_shovel",
+      "caerula_arbor:craft_complexchitin",
+      "caerula_arbor:smith_compchitin_sword",
+      "caerula_arbor:dessemble_chitinblock",
+      "caerula_arbor:burn_chitin",
+      "caerula_arbor:craft_chitin_shield",
+      "caerula_arbor:craft_complex_chitin_shield",
+      "caerula_arbor:craft_chitin_ingot",
+      "caerula_arbor:chitin_bow"
+    ]
+  },
   "parent": "caerula_arbor:encounter_from_the_ocean"
 }

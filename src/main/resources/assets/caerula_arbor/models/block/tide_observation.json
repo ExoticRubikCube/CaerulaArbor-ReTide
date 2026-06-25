@@ -1,0 +1,9 @@
+{
+  "parent": "caerula_arbor:custom/tide_observation_station",
+  "textures": {
+    "all": "caerula_arbor:block/tide_particle",
+    "particle": "caerula_arbor:block/tide_particle",
+    "1": "caerula_arbor:block/tide_observation_station"
+  },
+  "render_type": "cutout_mipped"
+}

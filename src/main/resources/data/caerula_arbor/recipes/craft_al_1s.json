@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:gray_dye"
+    },
+    {
+      "item": "minecraft:lapis_lazuli"
+    },
+    {
+      "item": "minecraft:diamond"
+    },
+    {
+      "item": "caerula_arbor:item_helper"
+    }
+  ],
+  "result": {
+    "item": "caerula_arbor:item_helper_al_1s",
+    "count": 1
+  }
+}

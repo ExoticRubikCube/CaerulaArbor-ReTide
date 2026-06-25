@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "deep_cold_ocean",
+    "deep_frozen_ocean",
+    "deep_lukewarm_ocean",
+    "deep_ocean",
+    "#minecraft:is_deep_ocean",
+    "caerula_arbor:branded_land"
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "exhaustion": 0,
+  "message_id": "boil_water",
+  "scaling": "never",
+  "effects": "drowning"
+}

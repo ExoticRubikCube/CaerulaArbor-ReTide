@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "item": "caerula_arbor:gene_sample_superb"
+    },
+    "title": {
+      "translate": "advancements.end_player_evo.title"
+    },
+    "description": {
+      "translate": "advancements.end_player_evo.descr"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "end_player_evo_0": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "rewards": {
+    "experience": 8
+  },
+  "parent": "caerula_arbor:start_player_evo"
+}

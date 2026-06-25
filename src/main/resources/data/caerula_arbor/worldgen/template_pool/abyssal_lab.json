@@ -1,0 +1,29 @@
+{
+  "name": "caerula_arbor:abyssal_lab",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "caerula_arbor:abyssal_lab_2",
+        "projection": "rigid",
+        "processors": {
+          "processors": [
+            {
+              "processor_type": "minecraft:block_ignore",
+              "blocks": [
+                {
+                  "Name": "minecraft:structure_block"
+                },
+                {
+                  "Name": "minecraft:cherry_planks"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

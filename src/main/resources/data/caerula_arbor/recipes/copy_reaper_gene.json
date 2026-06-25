@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "caerula_arbor:dna_reaper"
+    },
+    {
+      "item": "caerula_arbor:gene_sample_normal"
+    },
+    {
+      "item": "caerula_arbor:gene_sample_normal"
+    },
+    {
+      "item": "caerula_arbor:gene_sample_normal"
+    },
+    {
+      "item": "caerula_arbor:gene_sample_normal"
+    }
+  ],
+  "result": {
+    "item": "caerula_arbor:dna_reaper",
+    "count": 2
+  }
+}

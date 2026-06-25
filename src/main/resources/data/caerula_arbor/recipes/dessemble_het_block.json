@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "caerula_arbor:heteropic_block"
+    }
+  ],
+  "result": {
+    "item": "caerula_arbor:heteropic_piece",
+    "count": 9
+  }
+}

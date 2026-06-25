@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
+    "caerula_arbor:trailrite_shovel",
     "caerula_arbor:complex_chitin_shovel",
     "caerula_arbor:shovel_ocean_crystal",
     "caerula_arbor:chitin_shovel"

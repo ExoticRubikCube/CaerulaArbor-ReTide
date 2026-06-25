@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "aa",
+    "a "
+  ],
+  "key": {
+    "a": {
+      "item": "caerula_arbor:aegir_glass_deco"
+    }
+  },
+  "result": {
+    "item": "caerula_arbor:aegir_glass_arch",
+    "count": 3
+  }
+}

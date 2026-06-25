@@ -1,0 +1,17 @@
+{
+  "name": "caerula_arbor:flourish_ding_fallback",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 1,
+      "element": {
+        "element_type": "minecraft:single_pool_element",
+        "location": "caerula_arbor:flourish_he_ding",
+        "projection": "rigid",
+        "processors": {
+          "processors": []
+        }
+      }
+    }
+  ]
+}

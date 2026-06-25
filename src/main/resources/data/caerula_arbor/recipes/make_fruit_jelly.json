@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "caerula_arbor:colourfull_jelly"
+    },
+    {
+      "item": "caerula_arbor:colourfull_jelly"
+    },
+    {
+      "item": "minecraft:sugar"
+    },
+    {
+      "item": "caerula_arbor:fluore_berries"
+    }
+  ],
+  "result": {
+    "item": "caerula_arbor:fruit_jelly",
+    "count": 1
+  }
+}

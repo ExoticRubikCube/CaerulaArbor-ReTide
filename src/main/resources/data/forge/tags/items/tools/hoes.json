@@ -1,0 +1,16 @@
+{
+  "replace": false,
+  "values": [
+    "caerula_arbor:chitin_hoe",
+    "caerula_arbor:hoe_ocean_crystal",
+    "caerula_arbor:complex_chitin_hoe",
+    "caerula_arbor:path_inaugurator",
+    "caerula_arbor:trailrite_hoe",
+    "minecraft:wooden_hoe",
+    "minecraft:stone_hoe",
+    "minecraft:iron_hoe",
+    "minecraft:golden_hoe",
+    "minecraft:diamond_hoe",
+    "minecraft:netherite_hoe"
+  ]
+}

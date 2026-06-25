@@ -1,0 +1,33 @@
+{
+  "display": {
+    "icon": {
+      "item": "caerula_arbor:transform_cell"
+    },
+    "title": {
+      "translate": "advancements.they_shall_pay.title"
+    },
+    "description": {
+      "translate": "advancements.they_shall_pay.descr"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "they_shall_pay_0": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "rewards": {
+    "experience": 32,
+    "loot": [
+      "caerula_arbor:entities/chest_fish"
+    ],
+    "recipes": [
+      "caerula_arbor:craft_capsule",
+      "caerula_arbor:craft_catalyst"
+    ]
+  },
+  "parent": "caerula_arbor:they_shall_welcome"
+}

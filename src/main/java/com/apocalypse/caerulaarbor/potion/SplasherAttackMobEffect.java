@@ -2,30 +2,37 @@
 package com.apocalypse.caerulaarbor.potion;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.capability.ModCapabilities;
-import com.apocalypse.caerulaarbor.entity.bullets.FishSplashEntity;
-import com.apocalypse.caerulaarbor.init.ModBlocks;
-import com.apocalypse.caerulaarbor.init.ModEntities;
-import com.apocalypse.caerulaarbor.init.ModTags;
-import net.minecraft.core.particles.ParticleTypes;
+import com.apocalypse.caerulaarbor.entity.FishSplashEntity;
+import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
+import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
+import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffect;
+
+import com.apocalypse.caerulaarbor.utils.MathUtils;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
 
-public class SplasherAttackMobEffect extends InvisibleMobEffect {
+public class SplasherAttackMobEffect extends MobEffect {
     public SplasherAttackMobEffect() {
         super(MobEffectCategory.BENEFICIAL, -13421773);
     }
@@ -36,64 +43,71 @@ public class SplasherAttackMobEffect extends InvisibleMobEffect {
     }
 
     @Override
-    public void applyEffectTick(@NotNull LivingEntity entity, int amplifier) {
-        var world = entity.level();
+    public void applyEffectTick(LivingEntity entity, int amplifier) {
+        LevelAccessor world = entity.level();
         double x = entity.getX();
         double y = entity.getY();
         double z = entity.getZ();
+        if (entity == null)
+            return;
         double num = 0;
-        double rand;
-
-        for (Entity entityiterator : world.getEntities(entity, new AABB((x + 48), (y + 6), (z + 48), (x - 48), (y - 6), (z - 48)))) {
-            if ((entityiterator instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) < 5) {
-                continue;
-            }
-            if (entityiterator.getType().is(ModTags.EntityTypes.SEABORN)) {
-                continue;
-            }
-            if (entityiterator instanceof Player) {
-                if ((ModCapabilities.getPlayerVariables(entityiterator)).seabornization >= 3) {
+        double rand = 0;
+        double dama = 0;
+        num = 0;
+        if ((Entity) entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CaerulaArborModMobEffects.TRAIL_BUFF.get())) {
+            dama = ((Entity) entity instanceof LivingEntity _livingEntity1 && _livingEntity1.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity1.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.5;
+            for (Entity entityiterator : world.getEntities(entity, new AABB((x + 48), (y + 6), (z + 48), (x - 48), (y - 6), (z - 48)))) {
+                if ((entityiterator instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) < 5) {
                     continue;
                 }
-            }
-            rand = Mth.nextDouble(RandomSource.create(), 7, 11);
-            if (world.getBlockState(entityiterator.blockPosition()).getBlock() == ModBlocks.NETHERSEA_BRAND_GROWN.get()) {
-                if (world instanceof ServerLevel projectileLevel) {
-                    Projectile _entityToSpawn = new Object() {
-                        public Projectile getArrow(Level level, Entity shooter, float damage, int knockback) {
-                            AbstractArrow entityToSpawn = new FishSplashEntity(ModEntities.FISH_SPLASH.get(), level);
-                            entityToSpawn.setOwner(shooter);
-                            entityToSpawn.setBaseDamage(damage);
-                            entityToSpawn.setKnockback(knockback);
-                            entityToSpawn.setSilent(true);
-                            entityToSpawn.setCritArrow(true);
-                            return entityToSpawn;
+                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                    continue;
+                }
+                if (entityiterator instanceof Player && (entityiterator.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).player_oceanization >= 3) {
+                    continue;
+                }
+                rand = Mth.nextDouble(RandomSource.create(), 7, 11);
+                if (entityiterator instanceof LivingEntity _livEnt6 && _livEnt6.hasEffect(CaerulaArborModMobEffects.TRAIL_BUFF.get())) {
+                    if (world instanceof ServerLevel projectileLevel) {
+                        Projectile _entityToSpawn = new Object() {
+                            public Projectile getArrow(Level level, Entity shooter, float damage, int knockback) {
+                                AbstractArrow entityToSpawn = new FishSplashEntity(CaerulaArborModEntities.FISH_SPLASH.get(), level);
+                                entityToSpawn.setOwner(shooter);
+                                entityToSpawn.setBaseDamage(damage);
+                                entityToSpawn.setKnockback(knockback);
+                                entityToSpawn.setSilent(true);
+                                entityToSpawn.setCritArrow(true);
+                                return entityToSpawn;
+                            }
+                        }.getArrow(projectileLevel, (Entity) entity, (float) dama, 0);
+                        _entityToSpawn.setPos((entityiterator.getX()), (entityiterator.getY() + rand), (entityiterator.getZ()));
+                        _entityToSpawn.shoot(0, (-1), 0, (float) 1.5, 0);
+                        projectileLevel.addFreshEntity(_entityToSpawn);
+                    }
+                    num = num + 1;
+                    new Object() {
+                        void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
+                            if (world instanceof ServerLevel _level)
+                                _level.sendParticles((SimpleParticleType) (CaerulaArborModParticleTypes.SEA_SPLASH.get()), (entityiterator.getX() + ((x - entityiterator.getX()) / 40) * timedloopiterator),
+                                        (entityiterator.getY() + 9 + ((y - (entityiterator.getY() + 9)) / 40) * timedloopiterator), (entityiterator.getZ() + ((z - entityiterator.getZ()) / 40) * timedloopiterator), 1, 0.1, 0.1, 0.1, 0.01);
+                            final int tick2 = ticks;
+                            CaerulaArborMod.queueServerWork(tick2, () -> {
+                                if (timedlooptotal > timedloopiterator + 1) {
+                                    timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
+                                }
+                            });
                         }
-                    }.getArrow(projectileLevel, (Entity) entity, 5, 0);
-                    _entityToSpawn.setPos((entityiterator.getX()), (entityiterator.getY() + rand), (entityiterator.getZ()));
-                    _entityToSpawn.shoot(0, (-1), 0, 1.5F, 0);
-                    projectileLevel.addFreshEntity(_entityToSpawn);
+                    }.timedLoop(0, 40, 1);
                 }
-                num += 1;
-
-                for (int i = 0; i < 40; i++) {
-                    int finalI = i;
-                    CaerulaArborMod.queueServerWork(i, () -> {
-                        if (world instanceof ServerLevel server)
-                            server.sendParticles(ParticleTypes.END_ROD, (entityiterator.getX() + ((x - entityiterator.getX()) / 40) * finalI), (entityiterator.getY() + 9 + ((y - (entityiterator.getY() + 9)) / 40) * finalI),
-                                    (entityiterator.getZ() + ((z - entityiterator.getZ()) / 40) * finalI), 4, 0.1, 0.1, 0.1, 0.01);
-                    });
+                if (num >= 3) {
+                    break;
                 }
-            }
-
-            if (num >= 3) {
-                break;
             }
         }
     }
 
     @Override
     public boolean isDurationEffectTick(int duration, int amplifier) {
-        return duration % 40 == 0;
+        return MathUtils.isMultipleOf(duration, 40);
     }
 }

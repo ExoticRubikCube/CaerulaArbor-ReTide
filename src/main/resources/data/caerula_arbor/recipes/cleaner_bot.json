@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "aba",
+    "cdc",
+    "efe"
+  ],
+  "key": {
+    "a": {
+      "item": "minecraft:gold_ingot"
+    },
+    "b": {
+      "item": "caerula_arbor:heteropic_piece"
+    },
+    "c": {
+      "item": "minecraft:copper_block"
+    },
+    "d": {
+      "item": "minecraft:netherite_ingot"
+    },
+    "e": {
+      "item": "caerula_arbor:ocean_phloem"
+    },
+    "f": {
+      "item": "caerula_arbor:ocean_machine"
+    }
+  },
+  "result": {
+    "item": "caerula_arbor:item_helper",
+    "count": 1
+  }
+}

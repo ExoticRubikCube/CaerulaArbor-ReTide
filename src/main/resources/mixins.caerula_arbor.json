@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "package": "com.apocalypse.caerulaarbor.mixins",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "mixins.caerula_arbor.refmap.json",
+  "mixins": [
+    "AddEffectMixinMixin"
+  ],
+  "client": [
+  ],
+  "minVersion": "0.8",
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

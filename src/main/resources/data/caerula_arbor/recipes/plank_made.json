@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "tag": "caerula_arbor:nethersea_logs"
+    }
+  ],
+  "result": {
+    "item": "caerula_arbor:trail_plank",
+    "count": 4
+  }
+}

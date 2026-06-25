@@ -1,0 +1,36 @@
+{
+  "display": {
+    "icon": {
+      "item": "caerula_arbor:ocarina"
+    },
+    "title": {
+      "translate": "advancements.musician_we_many.title"
+    },
+    "description": {
+      "translate": "advancements.musician_we_many.descr"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "musician_we_many_0": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "caerula_arbor:ocarina"
+            ],
+            "count": {
+              "min": 1,
+              "max": 999
+            }
+          }
+        ]
+      }
+    }
+  },
+  "parent": "caerula_arbor:whirling_whisper"
+}

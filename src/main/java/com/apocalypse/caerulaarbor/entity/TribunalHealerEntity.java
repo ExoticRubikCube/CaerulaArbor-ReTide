@@ -1,0 +1,568 @@
+package com.apocalypse.caerulaarbor.entity;
+
+import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
+import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
+import com.apocalypse.caerulaarbor.procedures.GetAggresiveMobAroundProcedure;
+import com.apocalypse.caerulaarbor.procedures.SingleHealProcedure;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.TagKey;
+import net.minecraft.util.Mth;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.RangedAttackMob;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.network.NetworkHooks;
+import net.minecraftforge.network.PlayMessages;
+import net.minecraftforge.registries.ForgeRegistries;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
+
+import javax.annotation.Nullable;
+import java.util.Comparator;
+import java.util.EnumSet;
+import java.util.List;
+
+public class TribunalHealerEntity extends Animal implements RangedAttackMob, GeoEntity {
+	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(TribunalHealerEntity.class, EntityDataSerializers.BOOLEAN);
+	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(TribunalHealerEntity.class, EntityDataSerializers.STRING);
+	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(TribunalHealerEntity.class, EntityDataSerializers.STRING);
+	public static final EntityDataAccessor<Integer> DATA_skillp1 = SynchedEntityData.defineId(TribunalHealerEntity.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<Integer> DATA_skillp2 = SynchedEntityData.defineId(TribunalHealerEntity.class, EntityDataSerializers.INT);
+	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+	private boolean swinging;
+	private boolean lastloop;
+	private long lastSwing;
+	public String animationprocedure = "empty";
+
+	public TribunalHealerEntity(PlayMessages.SpawnEntity packet, Level world) {
+		this(CaerulaArborModEntities.TRIBUNAL_HEALER.get(), world);
+	}
+
+	public TribunalHealerEntity(EntityType<TribunalHealerEntity> type, Level world) {
+		super(type, world);
+		xpReward = 8;
+		setNoAi(false);
+		setMaxUpStep(0.8f);
+		setPersistenceRequired();
+	}
+
+	@Override
+	protected void defineSynchedData() {
+		super.defineSynchedData();
+		this.entityData.define(SHOOT, false);
+		this.entityData.define(ANIMATION, "undefined");
+		this.entityData.define(TEXTURE, "tribunalhealer");
+		this.entityData.define(DATA_skillp1, 100);
+		this.entityData.define(DATA_skillp2, 90);
+	}
+
+	public void setTexture(String texture) {
+		this.entityData.set(TEXTURE, texture);
+	}
+
+	public String getTexture() {
+		return this.entityData.get(TEXTURE);
+	}
+
+	@Override
+	public Packet<ClientGamePacketListener> getAddEntityPacket() {
+		return NetworkHooks.getEntitySpawningPacket(this);
+	}
+
+	@Override
+	protected void registerGoals() {
+		super.registerGoals();
+		this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal(this, Monster.class, true, false));
+		this.goalSelector.addGoal(3, new LookAtPlayerGoal(this, Monster.class, (float) 6));
+		this.goalSelector.addGoal(4, new RandomStrollGoal(this, 1));
+		this.goalSelector.addGoal(5, new OpenDoorGoal(this, false));
+		this.goalSelector.addGoal(6, new OpenDoorGoal(this, true));
+		this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
+		this.goalSelector.addGoal(8, new FloatGoal(this));
+		this.goalSelector.addGoal(1, new TribunalHealerEntity.RangedAttackGoal(this, 1.25, 60, 14f) {
+			@Override
+			public boolean canContinueToUse() {
+				return this.canUse();
+			}
+		});
+	}
+
+	public class RangedAttackGoal extends Goal {
+		private final Mob mob;
+		private final RangedAttackMob rangedAttackMob;
+		@Nullable
+		private LivingEntity target;
+		private int attackTime = -1;
+		private final double speedModifier;
+		private int seeTime;
+		private final int attackIntervalMin;
+		private final int attackIntervalMax;
+		private final float attackRadius;
+		private final float attackRadiusSqr;
+
+		public RangedAttackGoal(RangedAttackMob p_25768_, double p_25769_, int p_25770_, float p_25771_) {
+			this(p_25768_, p_25769_, p_25770_, p_25770_, p_25771_);
+		}
+
+		public RangedAttackGoal(RangedAttackMob p_25773_, double p_25774_, int p_25775_, int p_25776_, float p_25777_) {
+			if (!(p_25773_ instanceof LivingEntity)) {
+				throw new IllegalArgumentException("ArrowAttackGoal requires Mob implements RangedAttackMob");
+			} else {
+				this.rangedAttackMob = p_25773_;
+				this.mob = (Mob) p_25773_;
+				this.speedModifier = p_25774_;
+				this.attackIntervalMin = p_25775_;
+				this.attackIntervalMax = p_25776_;
+				this.attackRadius = p_25777_;
+				this.attackRadiusSqr = p_25777_ * p_25777_;
+				this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
+			}
+		}
+
+		public boolean canUse() {
+			LivingEntity livingentity = this.mob.getTarget();
+			if (livingentity != null && livingentity.isAlive()) {
+				this.target = livingentity;
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		public boolean canContinueToUse() {
+			return this.canUse() || this.target.isAlive() && !this.mob.getNavigation().isDone();
+		}
+
+		public void stop() {
+			this.target = null;
+			this.seeTime = 0;
+			this.attackTime = -1;
+			((TribunalHealerEntity) rangedAttackMob).entityData.set(SHOOT, false);
+		}
+
+		public boolean requiresUpdateEveryTick() {
+			return true;
+		}
+
+		public void tick() {
+			double d0 = this.mob.distanceToSqr(this.target.getX(), this.target.getY(), this.target.getZ());
+			boolean flag = this.mob.getSensing().hasLineOfSight(this.target);
+			if (flag) {
+				++this.seeTime;
+			} else {
+				this.seeTime = 0;
+			}
+			if (!(d0 > (double) this.attackRadiusSqr) && this.seeTime >= 5) {
+				this.mob.getNavigation().stop();
+			} else {
+				this.mob.getNavigation().moveTo(this.target, this.speedModifier);
+			}
+			this.mob.getLookControl().setLookAt(this.target, 30.0F, 30.0F);
+			if (--this.attackTime == 0) {
+				if (!flag) {
+					((TribunalHealerEntity) rangedAttackMob).entityData.set(SHOOT, false);
+					return;
+				}
+				((TribunalHealerEntity) rangedAttackMob).entityData.set(SHOOT, true);
+				float f = (float) Math.sqrt(d0) / this.attackRadius;
+				float f1 = Mth.clamp(f, 0.1F, 1.0F);
+				this.rangedAttackMob.performRangedAttack(this.target, f1);
+				this.attackTime = Mth.floor(f * (float) (this.attackIntervalMax - this.attackIntervalMin) + (float) this.attackIntervalMin);
+			} else if (this.attackTime < 0) {
+				this.attackTime = Mth.floor(Mth.lerp(Math.sqrt(d0) / (double) this.attackRadius, (double) this.attackIntervalMin, (double) this.attackIntervalMax));
+			} else
+				((TribunalHealerEntity) rangedAttackMob).entityData.set(SHOOT, false);
+		}
+	}
+
+	@Override
+	public MobType getMobType() {
+		return MobType.UNDEFINED;
+	}
+
+	@Override
+	public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+		return false;
+	}
+
+	protected void dropCustomDeathLoot(DamageSource source, int looting, boolean recentlyHitIn) {
+		super.dropCustomDeathLoot(source, looting, recentlyHitIn);
+		this.spawnAtLocation(new ItemStack(Items.AMETHYST_SHARD));
+	}
+
+	@Override
+	public SoundEvent getHurtSound(DamageSource ds) {
+		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.generic.hurt"));
+	}
+
+	@Override
+	public SoundEvent getDeathSound() {
+		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.generic.death"));
+	}
+
+	@Override
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
+		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
+        if (this != null) {
+            if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
+                this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(50);
+        }
+        return retval;
+	}
+
+	@Override
+	public void addAdditionalSaveData(CompoundTag compound) {
+		super.addAdditionalSaveData(compound);
+		compound.putString("Texture", this.getTexture());
+		compound.putInt("Dataskillp1", this.entityData.get(DATA_skillp1));
+		compound.putInt("Dataskillp2", this.entityData.get(DATA_skillp2));
+	}
+
+	@Override
+	public void readAdditionalSaveData(CompoundTag compound) {
+		super.readAdditionalSaveData(compound);
+		if (compound.contains("Texture"))
+			this.setTexture(compound.getString("Texture"));
+		if (compound.contains("Dataskillp1"))
+			this.entityData.set(DATA_skillp1, compound.getInt("Dataskillp1"));
+		if (compound.contains("Dataskillp2"))
+			this.entityData.set(DATA_skillp2, compound.getInt("Dataskillp2"));
+	}
+
+	@Override
+	public void baseTick() {
+		super.baseTick();
+        LevelAccessor world = this.level();
+        double x = this.getX();
+        double y = this.getY();
+        double z = this.getZ();
+        if (this != null) {
+            Entity enemy = null;
+            double sklp1 = 0;
+            double sklp2 = 0;
+            double count = 0;
+            double atk = 0;
+            if (this.isAlive()) {
+                sklp1 = (Entity) this instanceof TribunalHealerEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp1) : 0;
+                sklp2 = (Entity) this instanceof TribunalHealerEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp2) : 0;
+                if (sklp1 > 0) {
+                    if ((Entity) this instanceof TribunalHealerEntity _datEntSetI)
+                        _datEntSetI.getEntityData().set(DATA_skillp1, (int) (sklp1 - 1));
+                } else {
+                    if (tickCount % 5 == 0) {
+                        atk = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
+                        {
+                            final Vec3 _center = new Vec3(x, y, z);
+                            List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(16 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+                            for (Entity entityiterator : _entfound) {
+                                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "homo_sapiens")))) {
+                                    if (!(this == entityiterator)) {
+                                        if ((Entity) this instanceof TribunalHealerEntity _datEntSetI)
+                                            _datEntSetI.getEntityData().set(DATA_skillp1, 100);
+                                        if (this instanceof TribunalHealerEntity) {
+                                            ((TribunalHealerEntity) this).setAnimation("animation.tribunal_healer.concentratedheal");
+                                        }
+                                        CaerulaArborMod.queueServerWork(20, () -> {
+                                            if (this.isAlive()) {
+												if (this == null)
+													return;
+												double atk1 = 0;
+												double count1 = 0;
+												atk1 = (Entity) this instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity0.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
+												if (world instanceof Level _level) {
+													if (!_level.isClientSide()) {
+														_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "medic_strong")), SoundSource.NEUTRAL, 2, 1);
+													} else {
+														_level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "medic_strong")), SoundSource.NEUTRAL, 2, 1, false);
+													}
+												}
+												{
+													final Vec3 _center1 = new Vec3(x, y, z);
+													List<Entity> _entfound1 = world.getEntitiesOfClass(Entity.class, new AABB(_center1, _center1).inflate(18 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center1))).toList();
+													for (Entity entityiterator1 : _entfound1) {
+														if (entityiterator1.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "inquisition")))) {
+															if ((entityiterator1 instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < (entityiterator1 instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1)) {
+																if (entityiterator1 instanceof LivingEntity _entity && !_entity.level().isClientSide())
+																	_entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 60, 1));
+																if ((entityiterator1 instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < (entityiterator1 instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5) {
+																	if ((Entity) this instanceof LivingEntity _entity && !_entity.level().isClientSide())
+																		_entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 200, 1));
+																	if ((Entity) this instanceof LivingEntity _entity && !_entity.level().isClientSide())
+																		_entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 200, 1));
+																	com.apocalypse.caerulaarbor.utils.EntityUtils.healWithParticles(world, entityiterator1, atk1 * 2, 20);
+																} else {
+																	com.apocalypse.caerulaarbor.utils.EntityUtils.healWithParticles(world, entityiterator1, atk1 * 2, 0);
+																}
+																if (!(this == entityiterator1)) {
+																	count1 = count1 + 1;
+																	if (count1 >= 7) {
+																		break;
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+                                        });
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                if (sklp2 > 0) {
+                    if ((Entity) this instanceof TribunalHealerEntity _datEntSetI)
+                        _datEntSetI.getEntityData().set(DATA_skillp2, (int) (sklp2 - 1));
+                } else {
+                    if (tickCount % 5 == 0 && GetAggresiveMobAroundProcedure.execute(world, x, y, z, this)) {
+                        if ((Entity) this instanceof TribunalHealerEntity _datEntSetI)
+                            _datEntSetI.getEntityData().set(DATA_skillp2, 240);
+                        if (this instanceof TribunalHealerEntity) {
+                            this.setAnimation("animation.tribunal_healer.shockwave");
+                        }
+                        CaerulaArborMod.queueServerWork(40, () -> {
+                            if (this.isAlive()) {
+                                double vx = 0;
+								double vz = 0;
+								double dist = 0;
+								if (world instanceof Level _level) {
+									if (!_level.isClientSide()) {
+										_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "medic_blast")), SoundSource.PLAYERS, 2, 1);
+									} else {
+										_level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "medic_blast")), SoundSource.PLAYERS, 2, 1, false);
+									}
+								}
+								{
+									final Vec3 _center = new Vec3((getX()), (getY()), (getZ()));
+									List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(12 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+									for (Entity entityiterator : _entfound) {
+										if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "is_humanside")))) {
+											continue;
+										}
+										if (entityiterator instanceof TamableAnimal _tamEnt && _tamEnt.isTame()) {
+											continue;
+										}
+										if (!(entityiterator instanceof Mob)) {
+											continue;
+										}
+										if (distanceTo(entityiterator) <= 6) {
+											vx = entityiterator.getX() - getX();
+											vz = entityiterator.getZ() - getZ();
+											if (vx == 0) {
+												vx = 1;
+											}
+											if (vz == 0) {
+												vz = 1;
+											}
+											dist = Math.sqrt(vx * vx + vz * vz);
+											entityiterator.push((0.85 / Math.max(vx, vx / dist)), 0.25, (0.85 / Math.max(vz, vz / dist)));
+											if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
+												_entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.MUTE.get(), 60, 0, false, false));
+											CaerulaArborMod.queueServerWork(8, () -> {
+												if (this.isAlive()) {
+													entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.INDIRECT_MAGIC), this),
+															(float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 2));
+												}
+											});
+										}
+									}
+								}
+								CaerulaArborMod.queueServerWork(7, () -> {
+									if (this.isAlive()) {
+										if (world instanceof Level _level) {
+											if (!_level.isClientSide()) {
+												_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "medic_attack")), SoundSource.PLAYERS, (float) 1.25, 1);
+											} else {
+												_level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "medic_attack")), SoundSource.PLAYERS, (float) 1.25, 1, false);
+											}
+										}
+										new Object() {
+											void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
+												for (int index0 = 0; index0 < 60; index0++) {
+													if (world instanceof ServerLevel _level)
+														_level.sendParticles((SimpleParticleType) (CaerulaArborModParticleTypes.PURPLE_FLAME.get()), (getX() + 1 * (timedloopiterator + 1) * Math.sin(Math.toRadians(index0 * 6))), (getY()),
+																(getZ() + 1 * (timedloopiterator + 1) * Math.cos(Math.toRadians(index0 * 6))), 2, 0.1, 0.15, 0.1, 0.1);
+												}
+												final int tick2 = ticks;
+												CaerulaArborMod.queueServerWork(tick2, () -> {
+													if (timedlooptotal > timedloopiterator + 1) {
+														timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
+													}
+												});
+											}
+										}.timedLoop(0, 6, 1);
+									}
+								});
+							}
+                        });
+                    }
+                }
+            }
+        }
+        this.refreshDimensions();
+	}
+
+	@Override
+	public EntityDimensions getDimensions(Pose p_33597_) {
+		return super.getDimensions(p_33597_).scale((float) 1);
+	}
+
+	@Override
+	public void performRangedAttack(LivingEntity target, float flval) {
+		HealBullletEntity.shoot(this, target);
+	}
+
+	@Override
+	public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
+		TribunalHealerEntity retval = CaerulaArborModEntities.TRIBUNAL_HEALER.get().create(serverWorld);
+		retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null, null);
+		return retval;
+	}
+
+	@Override
+	public boolean isFood(ItemStack stack) {
+		return List.of().contains(stack.getItem());
+	}
+
+	@Override
+	public void aiStep() {
+		super.aiStep();
+		this.updateSwingTime();
+	}
+
+	public static void init() {
+	}
+
+	public static AttributeSupplier.Builder createAttributes() {
+		AttributeSupplier.Builder builder = Mob.createMobAttributes();
+		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.2);
+		builder = builder.add(Attributes.MAX_HEALTH, 70);
+		builder = builder.add(Attributes.ARMOR, 5);
+		builder = builder.add(Attributes.ATTACK_DAMAGE, 10);
+		builder = builder.add(Attributes.FOLLOW_RANGE, 18);
+		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.25);
+		return builder;
+	}
+
+	private PlayState movementPredicate(AnimationState event) {
+		if (this.animationprocedure.equals("empty")) {
+			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
+
+			) {
+				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.tribunal_healer.move"));
+			}
+			if (this.isDeadOrDying()) {
+				return event.setAndContinue(RawAnimation.begin().thenPlay("animation.tribunal_healer.death"));
+			}
+			return event.setAndContinue(RawAnimation.begin().thenLoop("animation.tribunal_healer.idle"));
+		}
+		return PlayState.STOP;
+	}
+
+	private PlayState attackingPredicate(AnimationState event) {
+		double d1 = this.getX() - this.xOld;
+		double d0 = this.getZ() - this.zOld;
+		float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
+		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
+			this.swinging = true;
+			this.lastSwing = level().getGameTime();
+		}
+		if (this.swinging && this.lastSwing + 35L <= level().getGameTime()) {
+			this.swinging = false;
+		}
+		if ((this.swinging || this.entityData.get(SHOOT)) && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+			event.getController().forceAnimationReset();
+			return event.setAndContinue(RawAnimation.begin().thenPlay("animation.tribunal_healer.heal"));
+		}
+		return PlayState.CONTINUE;
+	}
+
+	String prevAnim = "empty";
+
+	private PlayState procedurePredicate(AnimationState event) {
+		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
+			if (!this.animationprocedure.equals(prevAnim))
+				event.getController().forceAnimationReset();
+			event.getController().setAnimation(RawAnimation.begin().thenPlay(this.animationprocedure));
+			if (event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+				this.animationprocedure = "empty";
+				event.getController().forceAnimationReset();
+			}
+		} else if (animationprocedure.equals("empty")) {
+			prevAnim = "empty";
+			return PlayState.STOP;
+		}
+		prevAnim = this.animationprocedure;
+		return PlayState.CONTINUE;
+	}
+
+	@Override
+	protected void tickDeath() {
+		++this.deathTime;
+		if (this.deathTime == 24) {
+			this.remove(TribunalHealerEntity.RemovalReason.KILLED);
+			this.dropExperience();
+		}
+	}
+
+	public String getSyncedAnimation() {
+		return this.entityData.get(ANIMATION);
+	}
+
+	public void setAnimation(String animation) {
+		this.entityData.set(ANIMATION, animation);
+	}
+
+	@Override
+	public void registerControllers(AnimatableManager.ControllerRegistrar data) {
+		data.add(new AnimationController<>(this, "movement", 4, this::movementPredicate));
+		data.add(new AnimationController<>(this, "attacking", 4, this::attackingPredicate));
+		data.add(new AnimationController<>(this, "procedure", 4, this::procedurePredicate));
+	}
+
+	@Override
+	public AnimatableInstanceCache getAnimatableInstanceCache() {
+		return this.cache;
+	}
+}

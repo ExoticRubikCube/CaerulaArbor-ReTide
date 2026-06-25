@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "caerula_arbor:branded_land",
+    "beach",
+    "snowy_beach",
+    "stony_shore",
+    "#minecraft:is_beach",
+    "#caerula_arbor:marine_spawn_biome"
+  ]
+}

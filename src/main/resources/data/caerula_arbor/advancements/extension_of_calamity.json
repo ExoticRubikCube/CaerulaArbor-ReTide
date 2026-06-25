@@ -1,0 +1,52 @@
+{
+  "display": {
+    "icon": {
+      "item": "caerula_arbor:ocean_ovary"
+    },
+    "title": {
+      "translate": "advancements.extension_of_calamity.title"
+    },
+    "description": {
+      "translate": "advancements.extension_of_calamity.descr"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "extension_of_calamity_0": {
+      "trigger": "minecraft:placed_block",
+      "conditions": {
+        "location": [
+          {
+            "condition": "minecraft:block_state_property",
+            "block": "caerula_arbor:ocean_ovary"
+          }
+        ]
+      }
+    },
+    "extension_of_calamity_1": {
+      "trigger": "minecraft:placed_block",
+      "conditions": {
+        "location": [
+          {
+            "condition": "minecraft:block_state_property",
+            "block": "caerula_arbor:red_ovary"
+          }
+        ]
+      }
+    }
+  },
+  "rewards": {
+    "experience": 0,
+    "recipes": [
+      "caerula_arbor:craft_ocarino",
+      "caerula_arbor:fermen_eye",
+      "caerula_arbor:craft_anchor_ingot",
+      "caerula_arbor:smith_anchor",
+      "caerula_arbor:craft_unfinished_beauty"
+    ]
+  },
+  "parent": "caerula_arbor:start_of_calamity"
+}

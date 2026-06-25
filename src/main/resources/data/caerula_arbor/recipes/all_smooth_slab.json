@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "aaa"
+  ],
+  "key": {
+    "a": {
+      "item": "caerula_arbor:saltwind_smooth_brick"
+    }
+  },
+  "result": {
+    "item": "caerula_arbor:saltwind_smooth_slab",
+    "count": 6
+  }
+}

@@ -1,11 +1,16 @@
 
 package com.apocalypse.caerulaarbor.client.particle;
 
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.*;
-import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.Dist;
+
+import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.client.particle.TextureSheetParticle;
+import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.particle.ParticleProvider;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.multiplayer.ClientLevel;
 
 @OnlyIn(Dist.CLIENT)
 public class KnifeptcParticle extends TextureSheetParticle {
@@ -41,17 +46,12 @@ public class KnifeptcParticle extends TextureSheetParticle {
 		this.zd = vz * 0.2;
 		this.angularVelocity = 0.01f;
 		this.angularAcceleration = 0f;
-		this.setSpriteFromAge(spriteSet);
-	}
-
-	@Override
-	public int getLightColor(float partialTick) {
-		return 15728880;
+		this.pickSprite(spriteSet);
 	}
 
 	@Override
 	public ParticleRenderType getRenderType() {
-		return ParticleRenderType.PARTICLE_SHEET_LIT;
+		return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
 	}
 
 	@Override
@@ -60,8 +60,5 @@ public class KnifeptcParticle extends TextureSheetParticle {
 		this.oRoll = this.roll;
 		this.roll += this.angularVelocity;
 		this.angularVelocity += this.angularAcceleration;
-		if (!this.removed) {
-			this.setSprite(this.spriteSet.get((this.age / 5) % 4 + 1, 4));
-		}
 	}
 }

@@ -1,13 +1,12 @@
 
 package com.apocalypse.caerulaarbor.item;
 
-import com.apocalypse.caerulaarbor.init.ModItems;
+import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShovelItem;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.crafting.Ingredient;
-import org.jetbrains.annotations.NotNull;
 
 public class OceanthornShovelItem extends ShovelItem {
 	public OceanthornShovelItem() {
@@ -28,13 +27,12 @@ public class OceanthornShovelItem extends ShovelItem {
 				return 2;
 			}
 
-			@Override
 			public int getEnchantmentValue() {
 				return 18;
 			}
 
-			public @NotNull Ingredient getRepairIngredient() {
-				return Ingredient.of(new ItemStack(ModItems.OCEAN_CRYSTAL.get()));
+			public Ingredient getRepairIngredient() {
+				return Ingredient.of(new ItemStack(CaerulaArborModItems.OCEAN_CRYSTAL.get()));
 			}
 		}, 1, -3f, new Item.Properties());
 	}
@@ -55,7 +53,7 @@ public class OceanthornShovelItem extends ShovelItem {
 	}
 
 	@Override
-	public boolean isRepairable(@NotNull ItemStack itemstack) {
+	public boolean isRepairable(ItemStack itemstack) {
 		return false;
 	}
 }

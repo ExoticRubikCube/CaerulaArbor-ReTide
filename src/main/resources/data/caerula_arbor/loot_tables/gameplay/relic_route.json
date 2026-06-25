@@ -12,8 +12,8 @@
             {
               "function": "set_count",
               "count": {
-                "min": 3,
-                "max": 8
+                "min": 6,
+                "max": 14
               }
             },
             {
@@ -30,13 +30,13 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "caerula_arbor:pure_gold_expedition",
+          "name": "caerula_arbor:voyage_of_gold",
           "weight": 20,
           "functions": [
             {
               "function": "set_count",
               "count": {
-                "min": 0,
+                "min": 1,
                 "max": 1
               }
             }
@@ -64,7 +64,7 @@
             {
               "function": "set_count",
               "count": {
-                "min": 0,
+                "min": 1,
                 "max": 1
               }
             }
@@ -73,12 +73,12 @@
         {
           "type": "minecraft:item",
           "name": "caerula_arbor:score",
-          "weight": 10,
+          "weight": 20,
           "functions": [
             {
               "function": "set_count",
               "count": {
-                "min": 0,
+                "min": 1,
                 "max": 1
               }
             }
@@ -87,12 +87,54 @@
         {
           "type": "minecraft:item",
           "name": "caerula_arbor:omni_key",
+          "weight": 20,
+          "functions": [
+            {
+              "function": "set_count",
+              "count": {
+                "min": 1,
+                "max": 1
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "caerula_arbor:proof_of_longevity",
           "weight": 10,
           "functions": [
             {
               "function": "set_count",
               "count": {
-                "min": 0,
+                "min": 1,
+                "max": 1
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "caerula_arbor:hand_sword",
+          "weight": 15,
+          "functions": [
+            {
+              "function": "set_count",
+              "count": {
+                "min": 1,
+                "max": 1
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "caerula_arbor:smelly_hemostatic",
+          "weight": 10,
+          "functions": [
+            {
+              "function": "set_count",
+              "count": {
+                "min": 1,
                 "max": 1
               }
             }

@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/cube_column_horizontal",
-  "textures": {
-    "end": "caerula_arbor:block/sea_log_top",
-    "side": "caerula_arbor:block/sea_log"
-  }
-}

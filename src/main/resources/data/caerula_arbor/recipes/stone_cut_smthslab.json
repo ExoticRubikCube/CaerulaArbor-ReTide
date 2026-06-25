@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 2,
+  "ingredient": {
+    "item": "caerula_arbor:saltwind_sandstone"
+  },
+  "result": "caerula_arbor:smooth_saltwind_sand_slab"
+}

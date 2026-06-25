@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "caerula_arbor:sea_trail_solid"
+    },
+    {
+      "item": "caerula_arbor:sea_trail_solid"
+    },
+    {
+      "item": "caerula_arbor:sea_trail_solid"
+    },
+    {
+      "item": "caerula_arbor:sea_trail_solid"
+    },
+    {
+      "item": "caerula_arbor:broken_cell_cluster"
+    },
+    {
+      "item": "caerula_arbor:sea_trail_solid"
+    },
+    {
+      "item": "caerula_arbor:sea_trail_solid"
+    },
+    {
+      "item": "caerula_arbor:sea_trail_solid"
+    },
+    {
+      "item": "caerula_arbor:sea_trail_solid"
+    }
+  ],
+  "result": {
+    "item": "caerula_arbor:cell_cluster",
+    "count": 2
+  }
+}

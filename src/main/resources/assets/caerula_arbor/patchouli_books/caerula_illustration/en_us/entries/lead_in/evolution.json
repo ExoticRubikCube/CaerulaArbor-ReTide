@@ -1,0 +1,35 @@
+{
+  "name": "进化",
+  "icon": "caerula_arbor:dictation_chapter",
+  "category": "caerula_arbor:lead_in",
+  "read_by_default": true,
+  "sortnum": 4,
+  "pages": [
+    {
+      "type": "text",
+      "title": "进化",
+      "text": "海嗣在这片大地上求索，共享伤痛和智慧，不断进化，补足短板，以求完美无缺的境界。$(br)进化依其主题分为四个常规策略：迁徙、存续、繁育和生长。四个策略有各自的途径累计进化点数，点数累积到一定程度后将会提升阶段并发出全图通知。"
+    },
+    {
+      "type": "spotlight",
+      "title": "进化的查看",
+      "item": "caerula_arbor:tide_observation",
+      "scale": 1,
+      "text": "放置海潮观测站以查看进化进度、点数累积方式及进化带来的效果。"
+    },
+    {
+      "type": "spotlight",
+      "title": "静谧进化",
+      "item": "caerula_arbor:leviathan_animus",
+      "scale": 1,
+      "text": "使用枯竭之心可以激活静谧进化。激活后，当四个常规进化策略均达到满级时，将可以开启静谧进化的进程。$(br)静谧进化会为三个常规策略追加词条，同样可以在海潮观测站查看。"
+    },
+    {
+      "type": "spotlight",
+      "title": "干预进化",
+      "item": "caerula_arbor:dictationless_chapter",
+      "scale": 1,
+      "text": "屠谕者的掉落物及其衍生物可用于干预进化。咏叹的“深海猎人”被净化后得到的物品则可以对进化产生更深刻的影响。"
+    }
+  ]
+}

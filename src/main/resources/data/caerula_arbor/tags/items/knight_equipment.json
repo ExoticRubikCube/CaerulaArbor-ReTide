@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "caerula_arbor:iron_sword_of_knight_corpus",
+    "caerula_arbor:long_sword_of_knight_corpus",
+    "caerula_arbor:knight_iron_helmet",
+    "caerula_arbor:knight_iron_chestplate",
+    "caerula_arbor:knight_iron_leggings",
+    "caerula_arbor:knight_iron_boots"
+  ]
+}

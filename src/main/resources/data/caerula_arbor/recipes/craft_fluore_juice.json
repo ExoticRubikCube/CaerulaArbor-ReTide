@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "caerula_arbor:a_cup_of_water"
+    },
+    {
+      "item": "caerula_arbor:fluore_berries"
+    },
+    {
+      "item": "caerula_arbor:fluore_berries"
+    },
+    {
+      "item": "minecraft:sweet_berries"
+    },
+    {
+      "item": "minecraft:glow_berries"
+    }
+  ],
+  "result": {
+    "item": "caerula_arbor:fluore_berry_juice",
+    "count": 1
+  }
+}

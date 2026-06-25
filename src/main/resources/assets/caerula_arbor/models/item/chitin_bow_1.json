@@ -1,0 +1,6 @@
+{
+  "parent": "item/bow",
+  "textures": {
+    "layer0": "caerula_arbor:item/chiitn_bow_pull_2"
+  }
+}

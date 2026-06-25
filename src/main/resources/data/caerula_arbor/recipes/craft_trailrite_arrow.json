@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "a",
+    "b",
+    "c"
+  ],
+  "key": {
+    "a": {
+      "item": "caerula_arbor:trailrite_nugget"
+    },
+    "b": {
+      "item": "caerula_arbor:cutin_stick"
+    },
+    "c": {
+      "item": "minecraft:feather"
+    }
+  },
+  "result": {
+    "item": "caerula_arbor:trailrite_arrow",
+    "count": 4
+  }
+}

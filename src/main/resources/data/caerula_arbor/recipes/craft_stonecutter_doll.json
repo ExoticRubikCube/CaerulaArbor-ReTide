@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " a ",
+    " b ",
+    "cdc"
+  ],
+  "key": {
+    "a": {
+      "item": "caerula_arbor:shell_of_stonecutter"
+    },
+    "b": {
+      "tag": "minecraft:wool"
+    },
+    "c": {
+      "item": "caerula_arbor:claw"
+    },
+    "d": {
+      "item": "caerula_arbor:phloem_block"
+    }
+  },
+  "result": {
+    "item": "caerula_arbor:stonecutter_doll",
+    "count": 1
+  }
+}

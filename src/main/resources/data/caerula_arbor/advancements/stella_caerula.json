@@ -1,0 +1,29 @@
+{
+  "display": {
+    "icon": {
+      "item": "caerula_arbor:mizuki_determination"
+    },
+    "title": {
+      "translate": "advancements.stella_caerula.title"
+    },
+    "description": {
+      "translate": "advancements.stella_caerula.descr"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": true
+  },
+  "criteria": {
+    "stella_caerula_0": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "rewards": {
+    "experience": 256,
+    "loot": [
+      "caerula_arbor:gameplay/mere_geen_sample"
+    ]
+  },
+  "parent": "caerula_arbor:boiling_sea"
+}

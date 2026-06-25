@@ -1,0 +1,36 @@
+{
+  "display": {
+    "icon": {
+      "item": "caerula_arbor:gene_sample_normal"
+    },
+    "title": {
+      "translate": "advancements.start_player_evo.title"
+    },
+    "description": {
+      "translate": "advancements.start_player_evo.descr"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "start_player_evo_0": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "caerula_arbor:nurture_gene_set"
+            ],
+            "count": {
+              "min": 1,
+              "max": 999
+            }
+          }
+        ]
+      }
+    }
+  },
+  "parent": "caerula_arbor:they_shall_pay"
+}

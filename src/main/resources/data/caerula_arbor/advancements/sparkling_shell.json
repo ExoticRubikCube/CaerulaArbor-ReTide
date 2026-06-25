@@ -32,5 +32,23 @@
       }
     }
   },
+  "rewards": {
+    "experience": 0,
+    "recipes": [
+      "caerula_arbor:item_to_block_rec",
+      "caerula_arbor:block_to_item_rec",
+      "caerula_arbor:caerula_rec",
+      "caerula_arbor:craft_circular_saw",
+      "caerula_arbor:craft_hand_anchor",
+      "caerula_arbor:craft_pocket_doll",
+      "caerula_arbor:craft_oceanglass_cup",
+      "caerula_arbor:craft_deep_seagrass_juice",
+      "caerula_arbor:craft_caramel_seagrs_juice",
+      "caerula_arbor:craft_apple_juice",
+      "caerula_arbor:craft_nethersea_coffee",
+      "caerula_arbor:craft_nethersea_stimutant",
+      "caerula_arbor:craft_fluore_juice"
+    ]
+  },
   "parent": "caerula_arbor:encounter_from_the_ocean"
 }

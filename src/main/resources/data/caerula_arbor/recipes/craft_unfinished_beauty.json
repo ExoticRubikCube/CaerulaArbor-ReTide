@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:smithing_transform",
+  "template": {
+    "item": "caerula_arbor:hunter_gene_specter"
+  },
+  "base": {
+    "item": "caerula_arbor:circular_saw"
+  },
+  "addition": {
+    "item": "caerula_arbor:diorite_sculpture"
+  },
+  "result": {
+    "item": "caerula_arbor:unfinished_beauty"
+  }
+}

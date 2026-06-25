@@ -1,0 +1,9 @@
+{
+  "parent": "caerula_arbor:custom/injectorremake",
+  "textures": {
+    "all": "caerula_arbor:block/injector",
+    "particle": "caerula_arbor:block/injector",
+    "0": "caerula_arbor:block/injector_empty"
+  },
+  "render_type": "cutout"
+}

@@ -1,9 +1,9 @@
 {
   "parent": "caerula_arbor:custom/traceblock",
   "textures": {
-    "all": "caerula_arbor:block/trace_burn",
-    "particle": "caerula_arbor:block/trace_burn",
-    "0": "caerula_arbor:block/trace_burn"
+    "all": "caerula_arbor:block/nethersea_dust",
+    "particle": "caerula_arbor:block/nethersea_dust",
+    "0": "caerula_arbor:block/nethersea_dust"
   },
   "render_type": "translucent"
 }

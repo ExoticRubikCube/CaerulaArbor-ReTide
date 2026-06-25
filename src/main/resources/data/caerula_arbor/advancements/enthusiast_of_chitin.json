@@ -32,5 +32,23 @@
       }
     }
   },
-  "parent": "caerula_arbor:to_burden_catastrophy"
+  "rewards": {
+    "experience": 0,
+    "recipes": [
+      "caerula_arbor:craft_complexchitin",
+      "caerula_arbor:smith_compchitin_sword",
+      "caerula_arbor:smith_compchit_pick",
+      "caerula_arbor:smith_compchi_axe",
+      "caerula_arbor:smith_compchi_shovel",
+      "caerula_arbor:smith_compchi_hoe",
+      "caerula_arbor:comple_block",
+      "caerula_arbor:dessembe_comple",
+      "caerula_arbor:smith_compc_helm",
+      "caerula_arbor:smith_complexc_chest",
+      "caerula_arbor:smith_complexc_leg",
+      "caerula_arbor:smith_complexc_boot",
+      "caerula_arbor:craft_complex_chitin_shield"
+    ]
+  },
+  "parent": "caerula_arbor:im_watching_you"
 }

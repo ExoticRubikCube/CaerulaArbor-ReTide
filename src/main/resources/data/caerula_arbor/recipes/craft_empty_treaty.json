@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "aaa",
+    "bcb",
+    "aaa"
+  ],
+  "key": {
+    "a": {
+      "item": "minecraft:paper"
+    },
+    "b": {
+      "item": "minecraft:ink_sac"
+    },
+    "c": {
+      "tag": "forge:dyes"
+    }
+  },
+  "result": {
+    "item": "caerula_arbor:treaty_empty",
+    "count": 1
+  }
+}

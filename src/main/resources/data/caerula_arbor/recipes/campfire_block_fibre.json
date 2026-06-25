@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:campfire_cooking",
+  "category": "food",
+  "experience": 13.5,
+  "cookingtime": 640,
+  "ingredient": {
+    "item": "caerula_arbor:fibre_block"
+  },
+  "result": "caerula_arbor:cooked_fibre_block"
+}

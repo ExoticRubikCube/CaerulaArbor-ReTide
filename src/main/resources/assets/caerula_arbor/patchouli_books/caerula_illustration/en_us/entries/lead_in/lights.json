@@ -1,0 +1,34 @@
+{
+  "name": "灯火",
+  "icon": "minecraft:soul_lantern",
+  "category": "caerula_arbor:lead_in",
+  "read_by_default": true,
+  "sortnum": 2,
+  "pages": [
+    {
+      "type": "text",
+      "title": "灯火",
+      "text": "反映您认知与理性的属性。较低的灯火将使您的神经变得脆弱，神经丰度等效值下降。反之，较高的神经丰度将使您的神经变得更加强大，神经丰度等效值上升。$(br)较低的灯火会增加您罹患排异反应的概率。"
+    },
+    {
+      "type": "text",
+      "title": "查看",
+      "text": "可以在界面上方或深蓝记录仪查看灯火值，为0~100，依据数值变化，其外观也会改变。$(br)可以在深蓝记录仪切换是否显示，可以在配置文件切换样式。"
+    },
+    {
+      "type": "text",
+      "title": "影响",
+      "text": "服用发光浆果、启动应急急救设施等可以为您恢复灯火。$(br)受到伤害会使您的灯火缓慢下降。部分遭诅古物和粗制的药物会使您的灯火显著下降。$(br)消耗目标生命会使灯火下降，死亡则会近乎清空您的灯火，请珍惜自己的生命。"
+    },
+    {
+      "type": "relations",
+      "title": "相关链接",
+      "text": "本条目提到的其它概念链接如上",
+      "entries": [
+        "caerula_arbor:lead_in/life_point",
+        "caerula_arbor:lead_in/nervous_density",
+        "caerula_arbor:lead_in/relics"
+      ]
+    }
+  ]
+}

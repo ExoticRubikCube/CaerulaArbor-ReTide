@@ -1,0 +1,13 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "down": "caerula_arbor:block/city_column_top",
+    "up": "caerula_arbor:block/city_column_top",
+    "north": "caerula_arbor:block/city_column_side",
+    "east": "caerula_arbor:block/city_column_side",
+    "south": "caerula_arbor:block/city_column_side",
+    "west": "caerula_arbor:block/city_column_side",
+    "particle": "caerula_arbor:block/city_column_top"
+  },
+  "render_type": "solid"
+}

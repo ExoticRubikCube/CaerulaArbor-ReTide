@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "caerula_arbor:block/saltwind_smooth_slab"
+    },
+    "type=top": {
+      "model": "caerula_arbor:block/saltwind_smooth_slab_top"
+    },
+    "type=double": {
+      "model": "caerula_arbor:block/saltwind_smooth_slab_full"
+    }
+  }
+}

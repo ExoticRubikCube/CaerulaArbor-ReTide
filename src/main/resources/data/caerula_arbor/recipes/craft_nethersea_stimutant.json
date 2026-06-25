@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "caerula_arbor:nethersea_coffee"
+    },
+    {
+      "item": "caerula_arbor:caffeine"
+    },
+    {
+      "item": "caerula_arbor:caffeine"
+    },
+    {
+      "item": "minecraft:sugar"
+    },
+    {
+      "item": "minecraft:sugar"
+    },
+    {
+      "item": "caerula_arbor:trail_leave"
+    },
+    {
+      "item": "caerula_arbor:trail_leave"
+    }
+  ],
+  "result": {
+    "item": "caerula_arbor:nethersea_stimutant",
+    "count": 1
+  }
+}

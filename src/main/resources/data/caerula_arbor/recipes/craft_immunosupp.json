@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "caerula_arbor:trail_mushroom"
+    },
+    {
+      "item": "minecraft:sugar"
+    },
+    {
+      "item": "minecraft:sugar"
+    },
+    {
+      "item": "caerula_arbor:caffeine"
+    },
+    {
+      "item": "caerula_arbor:cell_cluster"
+    },
+    {
+      "item": "minecraft:sugar"
+    },
+    {
+      "item": "caerula_arbor:caffeine"
+    },
+    {
+      "item": "caerula_arbor:caffeine"
+    },
+    {
+      "item": "caerula_arbor:trail_mushroom"
+    }
+  ],
+  "result": {
+    "item": "caerula_arbor:immunosuppressor",
+    "count": 2
+  }
+}

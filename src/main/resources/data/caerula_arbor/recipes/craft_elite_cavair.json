@@ -1,0 +1,34 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "caerula_arbor:ocean_cavair"
+    },
+    {
+      "item": "caerula_arbor:cell_cluster"
+    },
+    {
+      "item": "caerula_arbor:fermented_ocean_eye"
+    },
+    {
+      "item": "caerula_arbor:ocean_peduncle"
+    },
+    {
+      "item": "caerula_arbor:deep_seagrass"
+    },
+    {
+      "item": "minecraft:blaze_powder"
+    },
+    {
+      "item": "caerula_arbor:cooked_fakeegg"
+    },
+    {
+      "item": "minecraft:gold_nugget"
+    }
+  ],
+  "result": {
+    "item": "caerula_arbor:elite_cavair",
+    "count": 1
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    "caerula_arbor:dna_reaper",
+    "caerula_arbor:hunter_gene",
+    "caerula_arbor:dna_horse",
+    "caerula_arbor:rocinante_injector",
+    "caerula_arbor:hunter_gene_skadi",
+    "caerula_arbor:hunter_gene_ulpians",
+    "caerula_arbor:hunter_gene_gladiia",
+    "caerula_arbor:hunter_gene_specter",
+    "caerula_arbor:nurture_gene_set",
+    "caerula_arbor:gene_sample_normal",
+    "caerula_arbor:gene_sample_upgraded",
+    "caerula_arbor:gene_sample_superb"
+  ]
+}

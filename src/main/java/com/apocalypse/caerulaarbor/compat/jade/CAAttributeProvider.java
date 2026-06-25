@@ -1,0 +1,48 @@
+package com.apocalypse.caerulaarbor.compat.jade;
+
+import com.apocalypse.caerulaarbor.CaerulaArborMod;
+
+import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import snownee.jade.api.EntityAccessor;
+import snownee.jade.api.IEntityComponentProvider;
+import snownee.jade.api.ITooltip;
+import snownee.jade.api.config.IPluginConfig;
+
+public enum CAAttributeProvider implements IEntityComponentProvider {
+    INSTANCE;
+
+    public static final ResourceLocation UID = new ResourceLocation(CaerulaArborMod.MODID, "attribute_provider");
+
+    @Override
+    public void appendTooltip(ITooltip iTooltip, EntityAccessor entityAccessor, IPluginConfig iPluginConfig) {
+        Entity entity = entityAccessor.getEntity();
+        if (entity instanceof LivingEntity living) {
+            double def = getDefense(living);
+            double resistance = getResistance(living);
+            if (def > 0 || resistance > 0) {
+                iTooltip.add(new CAAttributeElement(def, resistance));
+            }
+        }
+    }
+
+    @Override
+    public ResourceLocation getUid() {
+        return UID;
+    }
+
+    private double getDefense(LivingEntity living) {
+        AttributeInstance instance = living.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get());
+        if (instance != null) return instance.getValue();
+        return 0;
+    }
+
+    private double getResistance(LivingEntity living) {
+        AttributeInstance instance = living.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get());
+        if (instance != null) return instance.getValue();
+        return 0;
+    }
+}

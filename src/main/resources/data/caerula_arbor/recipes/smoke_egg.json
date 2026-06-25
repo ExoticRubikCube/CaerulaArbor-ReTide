@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smoking",
+  "category": "misc",
+  "experience": 8,
+  "cookingtime": 100,
+  "ingredient": {
+    "item": "caerula_arbor:real_egg"
+  },
+  "result": "caerula_arbor:fried_egg"
+}

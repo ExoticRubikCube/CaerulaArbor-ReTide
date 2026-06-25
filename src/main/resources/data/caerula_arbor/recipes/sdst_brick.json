@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "aa",
+    "aa"
+  ],
+  "key": {
+    "a": {
+      "item": "caerula_arbor:saltsand"
+    }
+  },
+  "result": {
+    "item": "caerula_arbor:saltwind_sandstone",
+    "count": 1
+  }
+}

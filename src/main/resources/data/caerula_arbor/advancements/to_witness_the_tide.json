@@ -36,6 +36,20 @@
     "experience": 0,
     "loot": [
       "caerula_arbor:gameplay/table_of_hands"
+    ],
+    "recipes": [
+      "caerula_arbor:craft_crystal_sword",
+      "caerula_arbor:craft_cryst_pick",
+      "caerula_arbor:craft_cryst_hoe",
+      "caerula_arbor:craft_cryst_shovel",
+      "caerula_arbor:craft_cryst_axe",
+      "caerula_arbor:blocked_oceancry",
+      "caerula_arbor:dessemble_blockcry",
+      "caerula_arbor:craft_tide_observe",
+      "caerula_arbor:craft_anchor_ingot",
+      "caerula_arbor:smith_anchor",
+      "caerula_arbor:craft_hand_anchor",
+      "caerula_arbor:craft_tidelinked_shield"
     ]
   },
   "parent": "caerula_arbor:sparkling_shell"

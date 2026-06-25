@@ -1,0 +1,967 @@
+package com.apocalypse.caerulaarbor.entity;
+
+import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
+
+import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.init.*;
+import com.apocalypse.caerulaarbor.procedures.*;
+import com.apocalypse.caerulaarbor.utils.EntityUtils;
+import com.apocalypse.caerulaarbor.utils.WorldUtils;
+import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementProgress;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.TagKey;
+import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.network.PlayMessages;
+import net.minecraftforge.network.NetworkHooks;
+
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerBossEvent;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.nbt.CompoundTag;
+
+import net.minecraft.sounds.SoundEvents;
+
+import javax.annotation.Nullable;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
+public class IsharmlaEntity extends SeaMonster {
+	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(IsharmlaEntity.class, EntityDataSerializers.BOOLEAN);
+	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(IsharmlaEntity.class, EntityDataSerializers.STRING);
+	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(IsharmlaEntity.class, EntityDataSerializers.STRING);
+	public static final EntityDataAccessor<Boolean> DATA_IS_MONSTER = SynchedEntityData.defineId(IsharmlaEntity.class, EntityDataSerializers.BOOLEAN);
+	public static final EntityDataAccessor<Integer> DATA_SKILLP_1 = SynchedEntityData.defineId(IsharmlaEntity.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<Integer> DATA_SKILLP_2 = SynchedEntityData.defineId(IsharmlaEntity.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<Integer> DATA_DURATION = SynchedEntityData.defineId(IsharmlaEntity.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<Integer> DATA_RECORDED_HEALTH = SynchedEntityData.defineId(IsharmlaEntity.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<Integer> DATA_ABSORPTION = SynchedEntityData.defineId(IsharmlaEntity.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<Integer> DATA_HEAL_P = SynchedEntityData.defineId(IsharmlaEntity.class, EntityDataSerializers.INT);
+	private boolean IS_ANGERED;
+	private boolean swinging;
+	private boolean lastloop;
+	private long lastSwing;
+	public String animationprocedure = "empty";
+	private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.YELLOW, ServerBossEvent.BossBarOverlay.NOTCHED_6);
+
+	public static final SoundEvent SKADI_HIT = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "skadi_hit"));
+	
+	public IsharmlaEntity(PlayMessages.SpawnEntity packet, Level world) {
+		this(CaerulaArborModEntities.ISHARMLA.get(), world);
+	}
+
+	public IsharmlaEntity(EntityType<IsharmlaEntity> type, Level world) {
+		super(type, world);
+		xpReward = 64;
+		setNoAi(false);
+		setMaxUpStep(1.5f);
+		setPersistenceRequired();
+		IS_ANGERED = false;
+	}
+
+	@Override
+	protected void defineSynchedData() {
+		super.defineSynchedData();
+		this.entityData.define(SHOOT, false);
+		this.entityData.define(ANIMATION, "undefined");
+		this.entityData.define(TEXTURE, "isharmla_corrupted_heart");
+		this.entityData.define(DATA_IS_MONSTER, false);
+		this.entityData.define(DATA_SKILLP_1, 400);
+		this.entityData.define(DATA_SKILLP_2, 240);
+		this.entityData.define(DATA_DURATION, 60);
+		this.entityData.define(DATA_RECORDED_HEALTH, 1000);
+		this.entityData.define(DATA_ABSORPTION, 60);
+		this.entityData.define(DATA_HEAL_P, 60);
+	}
+
+	public void setTexture(String texture) {
+		this.entityData.set(TEXTURE, texture);
+	}
+
+	public String getTexture() {
+		return this.entityData.get(TEXTURE);
+	}
+
+	@Override
+	public Packet<ClientGamePacketListener> getAddEntityPacket() {
+		return NetworkHooks.getEntitySpawningPacket(this);
+	}
+
+	@Override
+	protected void registerGoals() {
+		super.registerGoals();
+		this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1, false) {
+			@Override
+			protected double getAttackReachSqr(LivingEntity entity) {
+				return 576;
+			}
+
+			@Override
+			public boolean canUse() {
+				double x = IsharmlaEntity.this.getX();
+				double y = IsharmlaEntity.this.getY();
+				double z = IsharmlaEntity.this.getZ();
+				Entity entity = IsharmlaEntity.this;
+				Level world = IsharmlaEntity.this.level();
+				return super.canUse() && IsharmlaEntity.this.isMonster();
+			}
+
+			@Override
+			public boolean canContinueToUse() {
+				double x = IsharmlaEntity.this.getX();
+				double y = IsharmlaEntity.this.getY();
+				double z = IsharmlaEntity.this.getZ();
+				Entity entity = IsharmlaEntity.this;
+				Level world = IsharmlaEntity.this.level();
+				return super.canContinueToUse() && IsharmlaEntity.this.isMonster();
+			}
+
+		});
+		this.targetSelector.addGoal(2, new HurtByTargetGoal(this));
+		this.goalSelector.addGoal(3, new RandomStrollGoal(this, 1) {
+			@Override
+			public boolean canUse() {
+				double x = IsharmlaEntity.this.getX();
+				double y = IsharmlaEntity.this.getY();
+				double z = IsharmlaEntity.this.getZ();
+				Entity entity = IsharmlaEntity.this;
+				Level world = IsharmlaEntity.this.level();
+				return super.canUse() && IsharmlaEntity.this.isDurative();
+			}
+
+			@Override
+			public boolean canContinueToUse() {
+				double x = IsharmlaEntity.this.getX();
+				double y = IsharmlaEntity.this.getY();
+				double z = IsharmlaEntity.this.getZ();
+				Entity entity = IsharmlaEntity.this;
+				Level world = IsharmlaEntity.this.level();
+				return super.canContinueToUse() && IsharmlaEntity.this.isDurative();
+			}
+		});
+		this.goalSelector.addGoal(4, new RandomLookAroundGoal(this) {
+			@Override
+			public boolean canUse() {
+				double x = IsharmlaEntity.this.getX();
+				double y = IsharmlaEntity.this.getY();
+				double z = IsharmlaEntity.this.getZ();
+				Entity entity = IsharmlaEntity.this;
+				Level world = IsharmlaEntity.this.level();
+				return !isMonster() && super.canUse() && IsharmlaEntity.this.isDurative();
+			}
+
+			@Override
+			public boolean canContinueToUse() {
+				double x = IsharmlaEntity.this.getX();
+				double y = IsharmlaEntity.this.getY();
+				double z = IsharmlaEntity.this.getZ();
+				Entity entity = IsharmlaEntity.this;
+				Level world = IsharmlaEntity.this.level();
+				return super.canContinueToUse() && IsharmlaEntity.this.isDurative();
+			}
+		});
+		this.goalSelector.addGoal(5, new FloatGoal(this));
+	}
+
+	@Override
+	public MobType getMobType() {
+		return MobType.WATER;
+	}
+
+	@Override
+	public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+		return false;
+	}
+
+	@Override
+	public SoundEvent getHurtSound(DamageSource ds) {
+		if (isMonster()) return SoundEvents.GUARDIAN_HURT;
+		return SKADI_HIT;
+	}
+
+	@Override
+	public SoundEvent getDeathSound() {
+		return SoundEvents.GUARDIAN_DEATH;
+	}
+
+	@Override
+	public boolean hurt(DamageSource source, float amount) {
+		if (source.is(DamageTypes.DROWN) || source.is(DamageTypes.IN_WALL)
+)
+			return false;
+		return super.hurt(source, amount);
+	}
+
+	@Override
+	public void die(DamageSource source) {
+		if (this.transformToHuman()) return;
+		super.die(source);
+	}
+
+	@Override
+	public void setHealth(float pHealth){
+		float deletion = Math.min(this.getHealth() - pHealth, this.getMaxHealth() * 0.51f);
+		float newHealth = this.getHealth() - deletion;
+		if (newHealth <= 0 
+		&& this.transformToHuman()) return;
+		super.setHealth(newHealth);
+	}
+
+	@Override
+	public InteractionResult mobInteract(Player pPlayer, InteractionHand pHand){
+		ItemStack item = pPlayer.getMainHandItem();
+		if (item.is(CaerulaArborModItems.ISHARMLA_SPAWNER.get())){
+			this.transformToMonster();
+			return InteractionResult.SUCCESS;
+		}
+		return super.mobInteract(pPlayer, pHand);
+	}
+
+	@Override
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
+		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
+        double x = this.getX();
+        double y = this.getY();
+        double z = this.getZ();
+        if (this != null) {
+            if (this instanceof IsharmlaEntity) {
+                ((IsharmlaEntity) this).setAnimation("animation.isharmla.start");
+            }
+            if (!this.level().isClientSide())
+                this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 60, 9, false, false));
+            if ((LevelAccessor) world instanceof Level _level) {
+                if (!_level.isClientSide()) {
+                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "isharmla_to_human")), SoundSource.HOSTILE, 2, 1);
+                } else {
+                    _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "isharmla_to_human")), SoundSource.HOSTILE, 2, 1, false);
+                }
+            }
+            if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()))
+                this.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).setBaseValue(4);
+            if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
+                this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(50);
+            if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()))
+                this.getAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()).setBaseValue(0.01);
+            for (Entity entityiterator : new ArrayList<>(world.players())) {
+                if ((level().dimension()) == (entityiterator.level().dimension())) {
+                    if (entityiterator instanceof ServerPlayer _player) {
+                        Advancement _adv = _player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "we_many_orienting"));
+                        AdvancementProgress _ap = _player.getAdvancements().getOrStartProgress(_adv);
+                        if (!_ap.isDone()) {
+                            for (String criteria : _ap.getRemainingCriteria())
+                                _player.getAdvancements().award(_adv, criteria);
+                        }
+                    }
+                }
+            }
+        }
+        return retval;
+	}
+
+	@Override
+	public void addAdditionalSaveData(CompoundTag compound) {
+		super.addAdditionalSaveData(compound);
+		compound.putString("Texture", this.getTexture());
+		compound.putBoolean("DataIS_MONSTER", this.entityData.get(DATA_IS_MONSTER));
+		compound.putInt("DataSKILLP_1", this.entityData.get(DATA_SKILLP_1));
+		compound.putInt("DataSKILLP_2", this.entityData.get(DATA_SKILLP_2));
+		compound.putInt("DataDURATION", this.entityData.get(DATA_DURATION));
+		compound.putInt("DataRECORDED_HEALTH", this.entityData.get(DATA_RECORDED_HEALTH));
+		compound.putInt("DataABSORPTION", this.entityData.get(DATA_ABSORPTION));
+		compound.putInt("DataHEAL_P", this.entityData.get(DATA_HEAL_P));
+		compound.putBoolean("IsAngered", IS_ANGERED);
+	}
+
+	@Override
+	public void readAdditionalSaveData(CompoundTag compound) {
+		super.readAdditionalSaveData(compound);
+		if (compound.contains("Texture"))
+			this.setTexture(compound.getString("Texture"));
+		if (compound.contains("DataIS_MONSTER"))
+			this.entityData.set(DATA_IS_MONSTER, compound.getBoolean("DataIS_MONSTER"));
+		if (compound.contains("DataSKILLP_1"))
+			this.entityData.set(DATA_SKILLP_1, compound.getInt("DataSKILLP_1"));
+		if (compound.contains("DataSKILLP_2"))
+			this.entityData.set(DATA_SKILLP_2, compound.getInt("DataSKILLP_2"));
+		if (compound.contains("DataDURATION"))
+			this.entityData.set(DATA_DURATION, compound.getInt("DataDURATION"));
+		if (compound.contains("DataRECORDED_HEALTH"))
+			this.entityData.set(DATA_RECORDED_HEALTH, compound.getInt("DataRECORDED_HEALTH"));
+		if (compound.contains("DataABSORPTION"))
+			this.entityData.set(DATA_ABSORPTION, compound.getInt("DataABSORPTION"));
+		if (compound.contains("DataHEAL_P"))
+			this.entityData.set(DATA_HEAL_P, compound.getInt("DataHEAL_P"));
+		if (compound.contains("IsAngered"))
+			this.IS_ANGERED = compound.getBoolean("IS_ANGERED");
+
+	}
+
+	@Override
+	public void baseTick() {
+		super.baseTick();
+		if (isMonster()) bossInfo.setColor(ServerBossEvent.BossBarColor.WHITE);
+		else{
+			bossInfo.setColor(ServerBossEvent.BossBarColor.YELLOW);
+			if (this.getHealth() < this.getMaxHealth() * 0.5 && !IS_ANGERED){
+				AttributeInstance inst = this.getAttribute(Attributes.ATTACK_DAMAGE);
+				if (inst != null) inst.setBaseValue(inst.getBaseValue() * 1.5);
+				this.entityData.set(DATA_SKILLP_2, 1);
+				this.distributeIsharmlaTear(this.level(), this.getX(), this.getY(), this.getZ());
+				this.IS_ANGERED = true;
+			}
+		}
+        LevelAccessor world = this.level();
+        double x = this.getX();
+        double y = this.getY();
+        double z = this.getZ();
+        if (this != null) {
+            Entity enemy = null;
+            double sklp1 = 0;
+            double sklp2 = 0;
+            double dura = 0;
+            double healP = 0;
+            double absP = 0;
+            boolean isMonster = false;
+            boolean canAttack = false;
+            if (this.isAlive()) {
+                sklp1 = (Entity) this instanceof IsharmlaEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP_1) : 0;
+                sklp2 = (Entity) this instanceof IsharmlaEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP_2) : 0;
+                dura = (Entity) this instanceof IsharmlaEntity _datEntI ? _datEntI.getEntityData().get(DATA_DURATION) : 0;
+                absP = (Entity) this instanceof IsharmlaEntity _datEntI ? _datEntI.getEntityData().get(DATA_ABSORPTION) : 0;
+                isMonster = (Entity) this instanceof IsharmlaEntity _datEntL5 && _datEntL5.getEntityData().get(DATA_IS_MONSTER);
+                enemy = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+                if (dura > 0) {
+                    if ((Entity) this instanceof IsharmlaEntity _datEntSetI)
+                        _datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura - 1));
+                }
+                if (absP > 0) {
+                    if (this != null) {
+                        boolean isFullSecond = false;
+                        double damage = 0;
+                        double d = 0;
+                        double healthBonus = 0;
+                        double attackBonus = 0;
+                        double itrHealth = 0;
+                        double itrAttack = 0;
+                        double beforeHealth = 0;
+                        double beforeAttack = 0;
+                        double t = 0;
+                        t = 60 - absP;
+                        damage = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.15;
+                        isFullSecond = t > 0 && t % 20 == 0;
+                        {
+                            final Vec3 _center = new Vec3(x, y, z);
+                            List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(64 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+                            for (Entity entityiterator : _entfound) {
+                                if (!(entityiterator instanceof LivingEntity)) {
+                                    continue;
+                                }
+                                if (entityiterator instanceof GladiiaWhirlEntity) {
+                                    continue;
+                                }
+                                if (entityiterator instanceof Player) {
+                                    continue;
+                                }
+                                if (entityiterator instanceof IsharmlaTearEntity) {
+                                    continue;
+                                }
+                                if (this == entityiterator) {
+                                    continue;
+                                }
+                                if (!entityiterator.isAlive()) {
+                                    continue;
+                                }
+                                d = entityiterator != null ? distanceTo(entityiterator) : -1;
+                                if (d <= 32) {
+                                    EntityUtils.turnRounds(entityiterator, this);
+                                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))
+                                            && !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "bossoffspring")))) {
+                                        itrHealth = (entityiterator instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.01;
+                                        itrAttack = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) * 0.01;
+                                        if (Math.random() < 0.25) {
+                                            WorldUtils.isharmlaLinkPtcToEntity(world, x - 0.5, y, z - 0.5, entityiterator);
+                                            if (d >= 3) {
+                                                EntityUtils.pullToGladiia(entityiterator, this);
+                                            }
+                                        }
+                                        entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceankiller_damage")))),
+                                                (float) damage);
+                                        healthBonus = healthBonus + itrHealth;
+                                        attackBonus = attackBonus + itrAttack;
+                                    }
+                                }
+                            }
+                        }
+                        beforeHealth = this.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? this.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0;
+                        beforeAttack = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0;
+                        if (this.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
+                            this.getAttribute(Attributes.MAX_HEALTH).setBaseValue((beforeHealth + Math.min(beforeHealth * 0.025, healthBonus)));
+                        if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
+                            this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue((beforeAttack + Math.min(beforeAttack * 0.025, attackBonus)));
+                        this.setHealth(this.getMaxHealth());
+                    }
+                    if ((Entity) this instanceof IsharmlaEntity _datEntSetI)
+                        _datEntSetI.getEntityData().set(DATA_ABSORPTION, (int) (absP - 1));
+                }
+                canAttack = !(enemy == null) && enemy.isAlive();
+                if (isMonster) {
+                    if (this != null) {
+                        double p = 0;
+                        double r = 0;
+                        double t = 0;
+                        double ang = 0;
+                        t = tickCount % 90;
+                        for (int index0 = 0; index0 < 20; index0++) {
+                            ang = Math.toRadians(index0 * 6 + t * 4);
+                            r = 12 + Math.sin(index0 * 12);
+                            if (Math.random() < 0.33) {
+                                if (world instanceof ServerLevel _level1)
+                                    _level1.sendParticles(ParticleTypes.END_ROD, (x + r * Math.sin(ang)), (y + 0.125), (z + r * Math.cos(ang)), 1, 0, 0.25, 0, 0.2);
+                            }
+                            if (world instanceof ServerLevel _level1)
+                                _level1.sendParticles((SimpleParticleType) (CaerulaArborModParticleTypes.EDERMAN_PTC.get()), (x + r * Math.sin(ang)), (y + 0.15), (z + r * Math.cos(ang)), 1, 0, 0.25, 0, 0.2);
+                            r = 23 + Math.sin(index0 * 12);
+                            if (Math.random() < 0.33) {
+                                if (world instanceof ServerLevel _level1)
+                                    _level1.sendParticles(ParticleTypes.END_ROD, (x + r * Math.sin(ang)), (y + 0.125), (z + r * Math.cos(ang)), 1, 0, 0.25, 0, 0.2);
+                            }
+                            if (world instanceof ServerLevel _level1)
+                                _level1.sendParticles((SimpleParticleType) (CaerulaArborModParticleTypes.EDERMAN_PTC.get()), (x + r * Math.sin(ang)), (y + 0.15), (z + r * Math.cos(ang)), 1, 0, 0.25, 0, 0.2);
+                        }
+                    }
+                    if (sklp1 > 0) {
+                        if ((Entity) this instanceof IsharmlaEntity _datEntSetI)
+                            _datEntSetI.getEntityData().set(DATA_SKILLP_1, (int) (sklp1 - 1));
+                    } else if (dura <= 0) {
+                        if (canAttack) {
+                            if ((enemy != null ? distanceTo(enemy) : -1) <= 32) {
+                                if (this instanceof IsharmlaEntity) {
+                                    ((IsharmlaEntity) this).setAnimation("animation.isharmla.tail_monster");
+                                }
+                                if ((Entity) this instanceof IsharmlaEntity _datEntSetI)
+                                    _datEntSetI.getEntityData().set(DATA_SKILLP_1, 300);
+                                if ((Entity) this instanceof IsharmlaEntity _datEntSetI)
+                                    _datEntSetI.getEntityData().set(DATA_DURATION, 26);
+                                dura = 26;
+                                CaerulaArborMod.queueServerWork(10, () -> {
+                                    this.performRangedAttack(32, 2.5);
+                                });
+                            }
+                        }
+                    }
+                    if (sklp2 > 0) {
+                        if ((Entity) this instanceof IsharmlaEntity _datEntSetI)
+                            _datEntSetI.getEntityData().set(DATA_SKILLP_2, (int) (sklp2 - 1));
+                    } else if (dura <= 0) {
+                        if (canAttack) {
+                            if ((enemy != null ? distanceTo(enemy) : -1) <= 32) {
+                                if (this instanceof IsharmlaEntity) {
+                                    ((IsharmlaEntity) this).setAnimation("animation.isharmla.bite_monster");
+                                }
+                                if ((Entity) this instanceof IsharmlaEntity _datEntSetI)
+                                    _datEntSetI.getEntityData().set(DATA_SKILLP_2, 200);
+                                if ((Entity) this instanceof IsharmlaEntity _datEntSetI)
+                                    _datEntSetI.getEntityData().set(DATA_DURATION, 40);
+                                dura = 40;
+                                if (!this.level().isClientSide())
+                                    this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 30, 9, false, false));
+                                CaerulaArborMod.queueServerWork(15, () -> {
+                                    if (this == null)
+                                        return;
+                                    Entity enemy1 = null;
+                                    double d = 0;
+                                    enemy1 = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+                                    d = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
+                                    if (world instanceof Level _level) {
+                                        if (!_level.isClientSide()) {
+                                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "isharmla_tear_hurt_1")), SoundSource.HOSTILE, 3, 1);
+                                        } else {
+                                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "isharmla_tear_hurt_1")), SoundSource.HOSTILE, 3, 1, false);
+                                        }
+                                    }
+                                    if (!(enemy1 == null)) {
+                                        if ((enemy1 instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) <= d) {
+                                            enemy1.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "isharmla_attack"))), this),
+                                                    (float) (d * 16));
+                                        } else {
+                                            enemy1.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "isharmla_attack"))), this),
+                                                    (float) (d * 3.5));
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    }
+                } else {
+                    healP = (Entity) this instanceof IsharmlaEntity _datEntI ? _datEntI.getEntityData().get(DATA_HEAL_P) : 0;
+                    if (healP > 0) {
+                        if ((Entity) this instanceof IsharmlaEntity _datEntSetI)
+                            _datEntSetI.getEntityData().set(DATA_HEAL_P, (int) (healP - 1));
+                    } else if (dura <= 0) {
+                        if (this instanceof IsharmlaEntity) {
+                            ((IsharmlaEntity) this).setAnimation("animation.isharmla.heal_human");
+                        }
+                        if ((Entity) this instanceof IsharmlaEntity _datEntSetI)
+                            _datEntSetI.getEntityData().set(DATA_HEAL_P, 120);
+                        if ((Entity) this instanceof IsharmlaEntity _datEntSetI)
+                            _datEntSetI.getEntityData().set(DATA_DURATION, 30);
+                        dura = 30;
+                        CaerulaArborMod.queueServerWork(15, () -> {
+                            if (this == null)
+                                return;
+                            double atk = 0;
+                            double count = 0;
+                            atk = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
+                            if (world instanceof Level _level) {
+                                if (!_level.isClientSide()) {
+                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "isharmla_heal")), SoundSource.HOSTILE, 3, 1);
+                                } else {
+                                    _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "isharmla_heal")), SoundSource.HOSTILE, 3, 1, false);
+                                }
+                            }
+                            {
+                                final Vec3 _center = new Vec3(x, y, z);
+                                List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(16 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+                                for (Entity entityiterator : _entfound) {
+                                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                                        if ((entityiterator instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < (entityiterator instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1)) {
+                                            EntityUtils.heal(entityiterator, atk);
+                                            if (world instanceof ServerLevel _level)
+                                                _level.sendParticles(ParticleTypes.HAPPY_VILLAGER, (entityiterator.getX()), (entityiterator.getY() + 0.75), (entityiterator.getZ()), 24, 0.75, 0.75, 0.75, 0.1);
+                                            if (!(this == entityiterator)) {
+                                                count = count + 1;
+                                                if (count >= 6) {
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    }
+                    if (sklp1 > 0) {
+                        if ((Entity) this instanceof IsharmlaEntity _datEntSetI)
+                            _datEntSetI.getEntityData().set(DATA_SKILLP_1, (int) (sklp1 - 1));
+                    } else if (dura <= 0) {
+                        this.transformToMonster();
+                        dura = 40;
+                    }
+                    if (sklp2 > 0) {
+                        if ((Entity) this instanceof IsharmlaEntity _datEntSetI)
+                            _datEntSetI.getEntityData().set(DATA_SKILLP_2, (int) (sklp2 - 1));
+                    } else if (dura <= 0) {
+                        if (this instanceof IsharmlaEntity) {
+                            ((IsharmlaEntity) this).setAnimation("animation.isharmla.heal_human");
+                        }
+                        if ((Entity) this instanceof IsharmlaEntity _datEntSetI)
+                            _datEntSetI.getEntityData().set(DATA_SKILLP_2, 600);
+                        if ((Entity) this instanceof IsharmlaEntity _datEntSetI)
+                            _datEntSetI.getEntityData().set(DATA_DURATION, 30);
+                        dura = 30;
+                        if (!this.level().isClientSide())
+                            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 30, 9, false, false));
+                        this.distributeIsharmlaTear(world, x, y, z);
+                    }
+                    if (tickCount % 400 == 80) {
+                        WorldUtils.corruptedSpawnMobs(world, x, y, z, 3);
+                    }
+                }
+            }
+        }
+        this.refreshDimensions();
+	}
+
+	@Override
+	public EntityDimensions getDimensions(Pose p_33597_) {
+		if (isMonster()) return super.getDimensions(p_33597_).scale(10, 4f);
+		return super.getDimensions(p_33597_);
+	}
+
+	@Override
+	public boolean canChangeDimensions() {
+		return false;
+	}
+
+	@Override
+	public void startSeenByPlayer(ServerPlayer player) {
+		super.startSeenByPlayer(player);
+		this.bossInfo.addPlayer(player);
+	}
+
+	@Override
+	public void stopSeenByPlayer(ServerPlayer player) {
+		super.stopSeenByPlayer(player);
+		this.bossInfo.removePlayer(player);
+	}
+
+	@Override
+	public void customServerAiStep() {
+		super.customServerAiStep();
+		this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
+	}
+
+	public static void init() {
+	}
+
+	@Override
+	public boolean isPushable() {
+		if (isMonster()) return false;
+		return true;
+	}
+
+	@Override
+	protected void doPush(Entity entityIn) {
+		if (isMonster()) return;
+		super.doPush(entityIn);
+	}
+
+
+	public static AttributeSupplier.Builder createAttributes() {
+		AttributeSupplier.Builder builder = Mob.createMobAttributes();
+		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.18);
+		builder = builder.add(Attributes.MAX_HEALTH, 320);
+		builder = builder.add(Attributes.ARMOR, 12);
+		builder = builder.add(Attributes.ATTACK_DAMAGE, 16);
+		builder = builder.add(Attributes.FOLLOW_RANGE, 64);
+		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 1);
+		builder = builder.add(CaerulaArborModAttributes.GENERAL_DEFENSE.get(), 4);
+		builder = builder.add(CaerulaArborModAttributes.MAGIC_RESISTANCE.get(), 50);
+		builder = builder.add(CaerulaArborModAttributes.SANITY_MODIFIER.get(), 0.01);
+		return builder;
+	}
+
+	private PlayState movementPredicate(AnimationState event) {
+		boolean isM3 = isMonster();
+		if (this.animationprocedure.equals("empty")) {
+			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.05F && event.getLimbSwingAmount() < 0.05F))
+) {
+				if (isM3) return event.setAndContinue(RawAnimation.begin().thenLoop("animation.isharmla.idle_monster"));
+				else return event.setAndContinue(RawAnimation.begin().thenLoop("animation.isharmla.move_human"));
+			}
+			if (this.isDeadOrDying()) {
+				return event.setAndContinue(RawAnimation.begin().thenPlay("animation.isharmla.die"));
+			}
+			if (isM3) return event.setAndContinue(RawAnimation.begin().thenLoop("animation.isharmla.idle_monster"));
+			return event.setAndContinue(RawAnimation.begin().thenLoop("animation.isharmla.idle_human"));
+		}
+		return PlayState.STOP;
+	}
+
+	private PlayState attackingPredicate(AnimationState event) {
+		double d1 = this.getX() - this.xOld;
+		double d0 = this.getZ() - this.zOld;
+		float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
+		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
+			this.swinging = true;
+			this.lastSwing = level().getGameTime();
+		}
+		if (this.swinging && this.lastSwing + 42L <= level().getGameTime()) {
+			this.swinging = false;
+		}
+		if (this.swinging && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+			event.getController().forceAnimationReset();
+			return event.setAndContinue(RawAnimation.begin().thenPlay("animation.isharmla.attack_monster"));
+		}
+		return PlayState.CONTINUE;
+	}
+
+	String prevAnim = "empty";
+
+	private PlayState procedurePredicate(AnimationState event) {
+		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
+			if (!this.animationprocedure.equals(prevAnim))
+				event.getController().forceAnimationReset();
+			event.getController().setAnimation(RawAnimation.begin().thenPlay(this.animationprocedure));
+			if (event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+				this.animationprocedure = "empty";
+				event.getController().forceAnimationReset();
+			}
+		} else if (animationprocedure.equals("empty")) {
+			prevAnim = "empty";
+			return PlayState.STOP;
+		}
+		prevAnim = this.animationprocedure;
+		return PlayState.CONTINUE;
+	}
+
+	@Override
+	protected void tickDeath() {
+		++this.deathTime;
+		if (this.deathTime >= 20) {
+            LevelAccessor world = this.level();
+            double x = this.getX();
+            double y = this.getY();
+            double z = this.getZ();
+            if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
+                if (!world.isClientSide() && world.getServer() != null) {
+                    BlockPos _bpLootTblWorld = BlockPos.containing(x, y, z);
+                    for (ItemStack itemstackiterator : world.getServer().getLootData().getLootTable(new ResourceLocation(CaerulaArborMod.MODID, "gameplay/relic_isharmla"))
+                            .getRandomItems(new LootParams.Builder((ServerLevel) world).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(_bpLootTblWorld)).withParameter(LootContextParams.BLOCK_STATE, world.getBlockState(_bpLootTblWorld))
+                                    .withOptionalParameter(LootContextParams.BLOCK_ENTITY, world.getBlockEntity(_bpLootTblWorld)).create(LootContextParamSets.EMPTY))) {
+                        if (world instanceof ServerLevel _level) {
+                            ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, itemstackiterator);
+                            entityToSpawn.setPickUpDelay(10);
+                            entityToSpawn.setUnlimitedLifetime();
+                            _level.addFreshEntity(entityToSpawn);
+                        }
+                    }
+                }
+                for (int index0 = 0; index0 < 96; index0++) {
+                    if (world instanceof ServerLevel _level)
+                        _level.addFreshEntity(new ExperienceOrb(_level, (x + Mth.nextDouble(RandomSource.create(), -1, 1)), y, (z + Mth.nextDouble(RandomSource.create(), -1, 1)), Mth.nextInt(RandomSource.create(), 16, 48)));
+                }
+            }
+            this.remove(IsharmlaEntity.RemovalReason.KILLED);
+			this.dropExperience();
+		}
+	}
+
+	public String getSyncedAnimation() {
+		return this.entityData.get(ANIMATION);
+	}
+
+	public void setAnimation(String animation) {
+		this.entityData.set(ANIMATION, animation);
+	}
+
+	@Override
+	public void registerControllers(AnimatableManager.ControllerRegistrar data) {
+		data.add(new AnimationController<>(this, "movement", 0, this::movementPredicate));
+		data.add(new AnimationController<>(this, "attacking", 0, this::attackingPredicate));
+		data.add(new AnimationController<>(this, "procedure", 0, this::procedurePredicate));
+	}
+
+	private void distributeIsharmlaTear(LevelAccessor world, double x, double y, double z) {
+		double r = 0;
+		double d = 0;
+		double tx = 0;
+		double tz = 0;
+		double ty = 0;
+		for (int index0 = 0; index0 < 8; index0++) {
+			r = Mth.nextDouble(RandomSource.create(), 0, 6.283);
+			d = Mth.nextDouble(RandomSource.create(), 4, 18);
+			tx = x + d * Math.cos(r);
+			tz = z + d * Math.sin(r);
+			ty = WorldUtils.findYzforTear(world, tx, y, tz);
+			if (ty < 114110) {
+				if (world instanceof ServerLevel _level) {
+					Entity entityToSpawn = CaerulaArborModEntities.ISHARMLA_TEAR.get().spawn(_level, BlockPos.containing(tx, ty, tz), MobSpawnType.MOB_SUMMONED);
+					if (entityToSpawn != null) {
+						entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+					}
+				}
+				break;
+			}
+		}
+	}
+
+	private boolean isDurative() {
+		if (!isAlive()) {
+			return false;
+		}
+		return getEntityData().get(DATA_DURATION) <= 0;
+	}
+
+	private boolean isMonster() {
+		return isDurative() && getEntityData().get(DATA_IS_MONSTER);
+	}
+
+	private void performRangedAttack(double radius, double damageRate) {
+		LevelAccessor world = this.level();
+		double x = this.getX();
+		double y = this.getY();
+		double z = this.getZ();
+
+		Entity enemy = (Entity) this.getTarget();
+		double damage = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() * damageRate : 0;
+
+		if (world instanceof Level _level) {
+			if (!_level.isClientSide()) {
+				_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "isharmla_attack_hit")), SoundSource.HOSTILE, 2, (float) Mth.nextDouble(RandomSource.create(), 0.85, 1.1));
+			} else {
+				_level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "isharmla_attack_hit")), SoundSource.HOSTILE, 2, (float) Mth.nextDouble(RandomSource.create(), 0.85, 1.1), false);
+			}
+		}
+
+		final Vec3 center = new Vec3(x, y, z);
+		List<Entity> entities = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(radius), e -> true).stream()
+				.sorted(Comparator.comparingDouble(ent -> ent.distanceToSqr(center)))
+				.toList();
+
+		for (Entity entityiterator : entities) {
+			if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+				if (!(entityiterator == enemy)) {
+					continue;
+				}
+			}
+			if (!(entityiterator instanceof LivingEntity)) {
+				continue;
+			}
+			if (center.distanceTo(entityiterator.position()) <= radius) {
+				entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "isharmla_attack"))), this),
+						(float) damage);
+			}
+		}
+	}
+
+	private void transformToMonster() {
+		LevelAccessor world = this.level();
+		double x = this.getX();
+		double y = this.getY();
+		double z = this.getZ();
+
+		if (this.getEntityData().get(DATA_IS_MONSTER)) {
+			return;
+		}
+
+		if (world instanceof Level _level) {
+			if (!_level.isClientSide()) {
+				_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "isharmla_to_monsterr")), SoundSource.HOSTILE, 3, 1);
+			} else {
+				_level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "isharmla_to_monsterr")), SoundSource.HOSTILE, 3, 1, false);
+			}
+		}
+
+		transformParticleLoop(world, x, y, z, 0, 10, 2, true);
+
+		double currentHealth = this.getHealth();
+		double maxHealth = this.getMaxHealth();
+
+		this.setAnimation("animation.isharmla.to_monster");
+		this.getEntityData().set(DATA_DURATION, 40);
+		this.getEntityData().set(DATA_SKILLP_1, 200);
+		this.getEntityData().set(DATA_SKILLP_2, 100);
+		this.getEntityData().set(DATA_RECORDED_HEALTH, (int) ((currentHealth / maxHealth) * 1000));
+		this.getEntityData().set(DATA_IS_MONSTER, true);
+
+		this.setHealth((float) maxHealth);
+		if (!this.level().isClientSide())
+			this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 40, 9, false, false));
+		if (!this.level().isClientSide())
+			this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 99999, 2, false, false));
+
+		final Vec3 center = new Vec3(x, y, z);
+		List<Entity> nearbyEntities = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(32), e -> true).stream()
+				.sorted(Comparator.comparingDouble(ent -> ent.distanceToSqr(center)))
+				.toList();
+
+		for (Entity entityiterator : nearbyEntities) {
+			if (entityiterator instanceof IsharmlaTearEntity) {
+				entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceankiller_damage")))),
+						114514);
+			}
+		}
+	}
+
+	private boolean transformToHuman() {
+		LevelAccessor world = this.level();
+		double x = this.getX();
+		double y = this.getY();
+		double z = this.getZ();
+
+		if (!this.getEntityData().get(DATA_IS_MONSTER)) {
+			return false;
+		}
+
+		transformParticleLoop(world, x, y, z, 0, 10, 2, false);
+
+		if (world instanceof Level _level) {
+			if (!_level.isClientSide()) {
+				_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "isharmla_to_human")), SoundSource.HOSTILE, 3, 1);
+			} else {
+				_level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "isharmla_to_human")), SoundSource.HOSTILE, 3, 1, false);
+			}
+		}
+
+		double recordedHealth = this.getEntityData().get(DATA_RECORDED_HEALTH);
+		double maxHealth = this.getMaxHealth();
+
+		this.setAnimation("animation.isharmla.to_human");
+
+		this.removeEffect(MobEffects.MOVEMENT_SPEED);
+		this.getEntityData().set(DATA_DURATION, 40);
+		this.getEntityData().set(DATA_SKILLP_1, 2400);
+		this.getEntityData().set(DATA_SKILLP_2, 280);
+		this.getEntityData().set(DATA_IS_MONSTER, false);
+
+		this.removeEffect(CaerulaArborModMobEffects.INVULNERABLE.get());
+		this.setHealth((float) Math.max(maxHealth * Math.min(recordedHealth * 0.001 + 0.03, 1), 1));
+		if (!this.level().isClientSide())
+			this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 40, 9, false, false));
+
+		return true;
+	}
+
+	private void transformParticleLoop(LevelAccessor world, double x, double y, double z, int startIter, int totalIter, int ticks, boolean expanding) {
+		final int currentIter = startIter;
+		CaerulaArborMod.queueServerWork(ticks, () -> {
+			if (totalIter > currentIter + 1) {
+				for (int index0 = 0; index0 < 120; index0++) {
+					int radius = expanding ? currentIter : (10 - currentIter);
+					if (world instanceof ServerLevel _level)
+						_level.sendParticles(CaerulaArborModParticleTypes.EDERMAN_PTC.get(), (x + radius * Math.sin(Math.toRadians(3 * index0))), (y + 0.125),
+								(z + radius * Math.cos(Math.toRadians(3 * index0))), 2, 0.05, 0.05, 0.05, 0.1);
+					if (world instanceof ServerLevel _level)
+						_level.sendParticles(ParticleTypes.END_ROD, (x + radius * Math.sin(Math.toRadians(3 * index0))), (y + 0.125), (z + radius * Math.cos(Math.toRadians(3 * index0))), 1, 0.05, 0.05, 0.05, 0.1);
+					if (world instanceof ServerLevel _level)
+						_level.sendParticles(CaerulaArborModParticleTypes.EDERMAN_PTC.get(), (x + 2 * Math.sin(Math.toRadians(3 * index0))), (y + currentIter * 0.5), (z + 2 * Math.cos(Math.toRadians(3 * index0))), 2,
+								0.05, 0.05, 0.05, 0.1);
+					if (world instanceof ServerLevel _level)
+						_level.sendParticles(ParticleTypes.END_ROD, (x + 2 * Math.sin(Math.toRadians(3 * index0))), (y + currentIter * 0.5), (z + 2 * Math.cos(Math.toRadians(3 * index0))), 1, 0.05, 0.05, 0.05, 0.1);
+				}
+				transformParticleLoop(world, x, y, z, currentIter + 1, totalIter, ticks, expanding);
+			}
+		});
+	}
+}

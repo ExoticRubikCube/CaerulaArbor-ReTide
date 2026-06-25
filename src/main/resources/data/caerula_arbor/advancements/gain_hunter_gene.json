@@ -1,0 +1,53 @@
+{
+  "display": {
+    "icon": {
+      "item": "caerula_arbor:hunter_gene"
+    },
+    "title": {
+      "translate": "advancements.gain_hunter_gene.title"
+    },
+    "description": {
+      "translate": "advancements.gain_hunter_gene.descr"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "gain_hunter_gene_0": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "caerula_arbor:hunter_gene"
+            ],
+            "count": {
+              "min": 1,
+              "max": 999
+            }
+          }
+        ]
+      }
+    }
+  },
+  "rewards": {
+    "experience": 0,
+    "recipes": [
+      "caerula_arbor:craft_skadi_kit",
+      "caerula_arbor:craft_ulpians_kit",
+      "caerula_arbor:craft_gladiia_kit",
+      "caerula_arbor:craft_trageted_base",
+      "caerula_arbor:craft_base_kit",
+      "caerula_arbor:craft_lancet",
+      "caerula_arbor:smith_anchor",
+      "caerula_arbor:smith_gladiia_weapon",
+      "caerula_arbor:craft_unfinished_beauty",
+      "caerula_arbor:craft_aegir_sword",
+      "caerula_arbor:smith_skadi_sword",
+      "caerula_arbor:craft_moist_bag"
+    ]
+  },
+  "parent": "caerula_arbor:encounter_from_the_ocean"
+}

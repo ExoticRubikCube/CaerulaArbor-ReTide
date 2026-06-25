@@ -1,0 +1,23 @@
+{
+  "replace": false,
+  "values": [
+    "glow_item_frame",
+    "item_display",
+    "item_frame",
+    "zombie",
+    "boat",
+    "chest_boat",
+    "minecart",
+    "chest_minecart",
+    "command_block_minecart",
+    "furnace_minecart",
+    "hopper_minecart",
+    "spawner_minecart",
+    "tnt_minecart",
+    "caerula_arbor:gladiia_whirl",
+    "caerula_arbor:al_1_s_helper",
+    "caerula_arbor:little_helper",
+    "caerula_arbor:isharmla_tear",
+    "caerula_arbor:qunyou_wanted_isharmla"
+  ]
+}

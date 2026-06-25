@@ -1,0 +1,63 @@
+{
+  "type": "minecraft:random_selector",
+  "config": {
+    "default": {
+      "feature": {
+        "type": "minecraft:no_op",
+        "config": {}
+      },
+      "placement": []
+    },
+    "features": [
+      {
+        "chance": 0.5,
+        "feature": {
+          "feature": {
+            "type": "minecraft:disk",
+            "config": {
+              "radius": {
+                "type": "uniform",
+                "value": {
+                  "min_inclusive": 0,
+                  "max_inclusive": 3
+                }
+              },
+              "half_height": 1,
+              "target": {
+                "type": "minecraft:matching_blocks",
+                "blocks": "#dirt"
+              },
+              "state_provider": {
+                "fallback": {
+                  "type": "minecraft:simple_state_provider",
+                  "state": {
+                    "Name": "caerula_arbor:sea_trail_burnt_solid"
+                  }
+                },
+                "rules": []
+              }
+            }
+          },
+          "placement": []
+        }
+      },
+      {
+        "chance": 0.5,
+        "feature": {
+          "feature": {
+            "type": "minecraft:simple_block",
+            "config": {
+              "to_place": {
+                "type": "minecraft:simple_state_provider",
+                "state": {
+                  "Name": "caerula_arbor:sea_trail_burnt"
+                }
+              }
+            }
+          },
+          "placement": []
+        }
+      }
+    ]
+  }
+}

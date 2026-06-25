@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "caerula_arbor:relic_curse_emelight",
+    "caerula_arbor:relic_cursed_glowbody",
+    "caerula_arbor:relic_cursed_research",
+    "caerula_arbor:caerula_heart"
+  ]
+}

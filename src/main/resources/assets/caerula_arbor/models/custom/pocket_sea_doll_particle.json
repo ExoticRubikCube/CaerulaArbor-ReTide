@@ -1,0 +1,6 @@
+{
+  "parent": "caerula_arbor:displaysettings/creeper_fish_block",
+  "textures": {
+    "particle": "caerula_arbor:block/creeperfish"
+  }
+}

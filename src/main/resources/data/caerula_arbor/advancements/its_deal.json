@@ -27,5 +27,12 @@
       }
     }
   },
+  "rewards": {
+    "experience": 0,
+    "recipes": [
+      "caerula_arbor:made_redstonium",
+      "caerula_arbor:dessemble_redstonium"
+    ]
+  },
   "parent": "caerula_arbor:to_witness_the_tide"
 }

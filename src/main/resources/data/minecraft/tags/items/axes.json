@@ -1,8 +1,12 @@
 {
   "replace": false,
   "values": [
+    "caerula_arbor:trailrite_axe",
     "caerula_arbor:complex_chitin_axe",
     "caerula_arbor:axe_ocean_crystal",
-    "caerula_arbor:chitin_axe"
+    "caerula_arbor:chitin_axe",
+    "caerula_arbor:path_inaugurator",
+    "caerula_arbor:circular_saw",
+    "caerula_arbor:unfinished_beauty"
   ]
 }

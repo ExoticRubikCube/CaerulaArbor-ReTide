@@ -1,0 +1,29 @@
+{
+  "display": {
+    "icon": {
+      "item": "caerula_arbor:highmore_scythe"
+    },
+    "title": {
+      "translate": "advancements.precious_days.title"
+    },
+    "description": {
+      "translate": "advancements.precious_days.descr"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": true
+  },
+  "criteria": {
+    "precious_days_0": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "rewards": {
+    "experience": 16,
+    "loot": [
+      "caerula_arbor:gameplay/mere_geen_sample"
+    ]
+  },
+  "parent": "caerula_arbor:speechless_break"
+}

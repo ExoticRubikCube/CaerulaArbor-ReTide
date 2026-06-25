@@ -1,0 +1,8 @@
+{
+  "criteria": {
+    "surging_waves_notice_0": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "parent": "caerula_arbor:encounter_from_the_ocean"
+}

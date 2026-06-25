@@ -1,0 +1,8 @@
+{
+  "parent": "block/template_orientable_trapdoor_top",
+  "textures": {
+    "texture": "caerula_arbor:block/trail_trapdoor",
+    "particle": "caerula_arbor:block/trail_trapdoor"
+  },
+  "render_type": "cutout"
+}

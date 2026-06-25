@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "item": "caerula_arbor:crimson_treaty"
+    },
+    "title": {
+      "translate": "advancements.kill_brute.title"
+    },
+    "description": {
+      "translate": "advancements.kill_brute.descr"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": true
+  },
+  "criteria": {
+    "kill_brute_0": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "rewards": {
+    "experience": 4
+  },
+  "parent": "caerula_arbor:forced_welcome"
+}

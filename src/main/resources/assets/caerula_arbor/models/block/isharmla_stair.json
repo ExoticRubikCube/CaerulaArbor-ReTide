@@ -1,0 +1,10 @@
+{
+  "parent": "block/stairs",
+  "textures": {
+    "particle": "caerula_arbor:block/isharmla_brick",
+    "bottom": "caerula_arbor:block/isharmla_brick",
+    "top": "caerula_arbor:block/isharmla_brick",
+    "side": "caerula_arbor:block/isharmla_brick"
+  },
+  "render_type": "solid"
+}

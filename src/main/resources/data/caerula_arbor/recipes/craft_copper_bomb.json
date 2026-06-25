@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "aba",
+    "cdc",
+    "aba"
+  ],
+  "key": {
+    "a": {
+      "item": "minecraft:copper_ingot"
+    },
+    "b": {
+      "item": "minecraft:gunpowder"
+    },
+    "c": {
+      "item": "caerula_arbor:trail_powder"
+    },
+    "d": {
+      "item": "caerula_arbor:bomb_trailer"
+    }
+  },
+  "result": {
+    "item": "caerula_arbor:bomb_copper",
+    "count": 1
+  }
+}

@@ -1,8 +1,0 @@
-{
-  "parent": "caerula_arbor:block/base/pool_of_procreation",
-  "render_type": "minecraft:cutout",
-  "textures": {
-    "0": "caerula_arbor:block/pool_of_procreation_dim",
-    "particle": "caerula_arbor:block/pool_of_procreation_dim"
-  }
-}

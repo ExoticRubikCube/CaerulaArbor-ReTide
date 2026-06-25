@@ -1,0 +1,13 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "down": "caerula_arbor:block/saltwind_bottom",
+    "up": "caerula_arbor:block/saltwind_top",
+    "north": "caerula_arbor:block/com_saltwind",
+    "east": "caerula_arbor:block/com_saltwind",
+    "south": "caerula_arbor:block/com_saltwind",
+    "west": "caerula_arbor:block/com_saltwind",
+    "particle": "caerula_arbor:block/saltwind_bottom"
+  },
+  "render_type": "solid"
+}

@@ -1,0 +1,39 @@
+{
+  "display": {
+    "icon": {
+      "item": "caerula_arbor:carmen_treaty"
+    },
+    "title": {
+      "translate": "advancements.eternal_anger.title"
+    },
+    "description": {
+      "translate": "advancements.eternal_anger.descr"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "eternal_anger_0": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "caerula_arbor:carmen_treaty"
+            ],
+            "count": {
+              "min": 1,
+              "max": 999
+            }
+          }
+        ]
+      }
+    }
+  },
+  "rewards": {
+    "experience": 8
+  },
+  "parent": "caerula_arbor:encounter_from_the_ocean"
+}

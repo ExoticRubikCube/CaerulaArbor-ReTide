@@ -1,31 +1,11 @@
 {
   "type": "forge:add_spawns",
-  "biomes": [
-    "cold_ocean",
-    "deep_cold_ocean",
-    "deep_frozen_ocean",
-    "deep_lukewarm_ocean",
-    "deep_ocean",
-    "frozen_ocean",
-    "lukewarm_ocean",
-    "ocean",
-    "warm_ocean",
-    "frozen_river",
-    "river",
-    "plains",
-    "snowy_plains",
-    "sunflower_plains",
-    "beach",
-    "snowy_beach",
-    "birch_forest",
-    "flower_forest",
-    "forest",
-    "old_growth_birch_forest",
-    "stony_shore"
-  ],
+  "biomes": {
+    "type": "forge:any"
+  },
   "spawners": {
     "type": "caerula_arbor:chiseler_fish",
-    "weight": 80,
+    "weight": 45,
     "minCount": 1,
     "maxCount": 4
   }

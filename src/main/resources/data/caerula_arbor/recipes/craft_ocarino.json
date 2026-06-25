@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " a ",
+    "aba"
+  ],
+  "key": {
+    "a": {
+      "item": "caerula_arbor:ocean_chitin"
+    },
+    "b": {
+      "item": "caerula_arbor:ocean_eye"
+    }
+  },
+  "result": {
+    "item": "caerula_arbor:ocarina",
+    "count": 1
+  }
+}

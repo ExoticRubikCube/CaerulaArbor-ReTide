@@ -4,10 +4,6 @@
     "caerula_arbor:chitin_armor_helmet",
     "caerula_arbor:chitin_armor_chestplate",
     "caerula_arbor:chitin_armor_leggings",
-    "caerula_arbor:chitin_armor_boots",
-    "caerula_arbor:complexchitin_armor_helmet",
-    "caerula_arbor:complexchitin_armor_chestplate",
-    "caerula_arbor:complexchitin_armor_leggings",
-    "caerula_arbor:complexchitin_armor_boots"
+    "caerula_arbor:chitin_armor_boots"
   ]
 }

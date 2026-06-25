@@ -1,0 +1,6 @@
+{
+  "parent": "caerula_arbor:displaysettings/centrifuger",
+  "textures": {
+    "particle": "caerula_arbor:block/centrifuger"
+  }
+}

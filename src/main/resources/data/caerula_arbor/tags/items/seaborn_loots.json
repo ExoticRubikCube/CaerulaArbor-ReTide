@@ -1,0 +1,18 @@
+{
+  "replace": false,
+  "values": [
+    "caerula_arbor:ocean_phloem",
+    "caerula_arbor:ocean_fibre",
+    "caerula_arbor:ocean_eye",
+    "caerula_arbor:ocean_crystal",
+    "caerula_arbor:ocean_cutin",
+    "caerula_arbor:ocean_chitin",
+    "#caerula_arbor:fish_food",
+    "#caerula_arbor:moist_item",
+    "caerula_arbor:heteropic_piece",
+    "caerula_arbor:broken_ocean_cell",
+    "caerula_arbor:broken_cell_cluster",
+    "caerula_arbor:ocean_cell",
+    "caerula_arbor:cell_cluster"
+  ]
+}

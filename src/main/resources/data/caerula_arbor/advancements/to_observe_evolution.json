@@ -27,5 +27,12 @@
       }
     }
   },
+  "rewards": {
+    "experience": 0,
+    "recipes": [
+      "caerula_arbor:smith_trident",
+      "caerula_arbor:cream_smithed"
+    ]
+  },
   "parent": "caerula_arbor:to_experience_evolution"
 }

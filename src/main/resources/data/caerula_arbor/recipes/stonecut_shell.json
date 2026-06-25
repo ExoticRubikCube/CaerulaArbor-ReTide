@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 2,
+  "ingredient": {
+    "item": "caerula_arbor:shell_of_stonecutter"
+  },
+  "result": "caerula_arbor:ocean_chitin"
+}

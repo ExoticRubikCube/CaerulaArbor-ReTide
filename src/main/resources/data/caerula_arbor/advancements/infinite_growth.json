@@ -1,0 +1,57 @@
+{
+  "display": {
+    "icon": {
+      "item": "caerula_arbor:broken_ocean_cell"
+    },
+    "title": {
+      "translate": "advancements.infinite_growth.title"
+    },
+    "description": {
+      "translate": "advancements.infinite_growth.descr"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "infinite_growth_0": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "caerula_arbor:cell_cluster"
+            ],
+            "count": {
+              "min": 1,
+              "max": 999
+            }
+          }
+        ]
+      }
+    }
+  },
+  "rewards": {
+    "experience": 0,
+    "recipes": [
+      "caerula_arbor:craft_base_egg",
+      "caerula_arbor:craft_trageted_base",
+      "caerula_arbor:cluster_cells",
+      "caerula_arbor:cluster_brocell",
+      "caerula_arbor:decluster_cells",
+      "caerula_arbor:decluster_brocell",
+      "caerula_arbor:cook_cell",
+      "caerula_arbor:cook_celll",
+      "caerula_arbor:smoke_cell",
+      "caerula_arbor:smoke_celll",
+      "caerula_arbor:campfire_cell",
+      "caerula_arbor:campfire_celll",
+      "caerula_arbor:fix_cell",
+      "caerula_arbor:fix_cell_block",
+      "caerula_arbor:change_cell",
+      "caerula_arbor:dictationless_chapter"
+    ]
+  },
+  "parent": "caerula_arbor:encounter_from_the_ocean"
+}

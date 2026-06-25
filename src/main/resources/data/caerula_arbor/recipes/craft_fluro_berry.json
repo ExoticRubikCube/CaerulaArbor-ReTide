@@ -12,13 +12,22 @@
       "item": "minecraft:glowstone_dust"
     },
     {
-      "item": "minecraft:warped_fungus"
+      "item": "minecraft:glowstone_dust"
     },
     {
       "item": "minecraft:glow_berries"
     },
     {
-      "item": "minecraft:crimson_fungus"
+      "item": "minecraft:glowstone_dust"
+    },
+    {
+      "item": "minecraft:glowstone_dust"
+    },
+    {
+      "item": "minecraft:glowstone_dust"
+    },
+    {
+      "item": "minecraft:glowstone_dust"
     }
   ],
   "result": {

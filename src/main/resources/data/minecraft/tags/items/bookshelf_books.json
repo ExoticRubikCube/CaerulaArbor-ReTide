@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "caerula_arbor:survivor_contract",
+    "caerula_arbor:piglin_diary",
+    "caerula_arbor:toponym_textology",
+    "caerula_arbor:martus_book",
+    "caerula_arbor:dictationless_chapter",
+    "caerula_arbor:relic_cursed_research",
+    "caerula_arbor:dictation_chapter"
+  ]
+}

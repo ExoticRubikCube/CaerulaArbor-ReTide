@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:axes",
+    "#minecraft:swords",
+    "caerula_arbor:unambiguous_direction",
+    "caerula_arbor:unfinished_beauty",
+    "caerula_arbor:wavecleaver",
+    "#minecraft:enchantable/weapon"
+  ]
+}

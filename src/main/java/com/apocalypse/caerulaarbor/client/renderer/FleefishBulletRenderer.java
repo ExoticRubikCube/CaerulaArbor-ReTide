@@ -1,27 +1,27 @@
 package com.apocalypse.caerulaarbor.client.renderer;
 
-import net.minecraft.util.Mth;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.MultiBufferSource;
+import com.apocalypse.caerulaarbor.CaerulaArborMod;
 
-import com.apocalypse.caerulaarbor.entity.bullets.FleefishBulletEntity;
-import com.apocalypse.caerulaarbor.client.model.Modelfleefish;
-
-import com.mojang.math.Axis;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.apocalypse.caerulaarbor.client.model.ModelFleefishBullet;
+import com.apocalypse.caerulaarbor.entity.FleefishBulletEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Axis;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 
 public class FleefishBulletRenderer extends EntityRenderer<FleefishBulletEntity> {
-	private static final ResourceLocation texture = new ResourceLocation("caerula_arbor:textures/entities/fleefishbullet.png");
-	private final Modelfleefish model;
+	private static final ResourceLocation texture = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/fleefishbullet.png");
+	private final ModelFleefishBullet model;
 
 	public FleefishBulletRenderer(EntityRendererProvider.Context context) {
 		super(context);
-		model = new Modelfleefish(context.bakeLayer(Modelfleefish.LAYER_LOCATION));
+		model = new ModelFleefishBullet(context.bakeLayer(ModelFleefishBullet.LAYER_LOCATION));
 	}
 
 	@Override

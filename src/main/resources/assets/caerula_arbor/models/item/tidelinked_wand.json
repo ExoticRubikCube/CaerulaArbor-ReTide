@@ -1,0 +1,7 @@
+{
+  "parent": "caerula_arbor:custom/tidelinked_wand",
+  "textures": {
+    "0": "caerula_arbor:block/tidelinked_wand",
+    "particle": "caerula_arbor:item/tidelinked_wand"
+  }
+}

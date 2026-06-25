@@ -8,13 +8,13 @@
   ],
   "key": {
     "a": {
-      "item": "caerula_arbor:complex_chitin"
+      "item": "caerula_arbor:ocean_cutin"
     },
     "b": {
-      "item": "caerula_arbor:fake_egg"
+      "item": "caerula_arbor:ocean_trim_template"
     },
     "c": {
-      "item": "caerula_arbor:ocean_trim_template"
+      "item": "caerula_arbor:fake_egg"
     }
   },
   "result": {

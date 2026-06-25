@@ -8,7 +8,7 @@ import net.minecraft.world.item.Rarity;
 
 public class CookedMorItem extends Item {
 	public CookedMorItem() {
-		super(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(2).saturationMod(0.5f).build()));
+		super(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(2).saturationMod(0.25f).build()));
 	}
 
 	@Override

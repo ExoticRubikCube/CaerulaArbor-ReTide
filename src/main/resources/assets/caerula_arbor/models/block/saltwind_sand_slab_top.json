@@ -1,0 +1,10 @@
+{
+  "parent": "block/slab_top",
+  "textures": {
+    "particle": "caerula_arbor:block/saltwind_bottom",
+    "bottom": "caerula_arbor:block/saltwind_bottom",
+    "top": "caerula_arbor:block/saltwind_top",
+    "side": "caerula_arbor:block/com_saltwind"
+  },
+  "render_type": "solid"
+}

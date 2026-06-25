@@ -1,0 +1,22 @@
+{
+  "replace": false,
+  "values": [
+    "caerula_arbor:complex_chitin_sword",
+    "caerula_arbor:complex_chitin_pickaxe",
+    "caerula_arbor:complex_chitin_axe",
+    "caerula_arbor:complex_chitin_shovel",
+    "caerula_arbor:complex_chitin_hoe",
+    "caerula_arbor:legendary_spear",
+    "caerula_arbor:trailed_wooden_sword",
+    "caerula_arbor:trailed_stone_sword",
+    "caerula_arbor:trailed_iron_sword",
+    "caerula_arbor:trailed_diamond_sword",
+    "caerula_arbor:trailed_netherite_sword",
+    "caerula_arbor:trailed_golden_sword",
+    "caerula_arbor:phloem_bow",
+    "caerula_arbor:trailrite_axe",
+    "caerula_arbor:trailrite_sword",
+    "caerula_arbor:path_inaugurator",
+    "caerula_arbor:complex_chitin_bow"
+  ]
+}

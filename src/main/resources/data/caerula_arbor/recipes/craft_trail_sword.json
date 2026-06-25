@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:smithing_transform",
+  "template": {
+    "item": "caerula_arbor:flamarine_upgrade_template"
+  },
+  "base": {
+    "item": "minecraft:netherite_sword"
+  },
+  "addition": {
+    "item": "caerula_arbor:trailrite"
+  },
+  "result": {
+    "item": "caerula_arbor:trailrite_sword"
+  }
+}

@@ -1,36 +1,34 @@
 
 package com.apocalypse.caerulaarbor.item;
 
-import com.apocalypse.caerulaarbor.api.event.SanityEvent;
-import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
+import com.apocalypse.caerulaarbor.utils.EntityUtils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.entity.LivingEntity;
 
-import javax.annotation.ParametersAreNonnullByDefault;
+import net.minecraft.world.level.LevelAccessor;
 
 public class TrailCakePieceItem extends Item {
-    public TrailCakePieceItem() {
-        super(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(5).saturationMod(0.2f).build()));
-    }
+	public TrailCakePieceItem() {
+		super(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(5).saturationMod(0.1f).build()));
+	}
 
-    @Override
-    @ParametersAreNonnullByDefault
-    public @NotNull ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
-        double x = entity.getX();
-        double y = entity.getY();
-        double z = entity.getZ();
-        SIHelper.causeSanityInjury(entity, 150, SanityEvent.Hurt.Type.FOOD);
-
-        if (world instanceof ServerLevel server) {
-            server.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, (y + 0.7), z, 32, 0.5, 1.5, 0.5, 1);
+	@Override
+	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
+		ItemStack retval = super.finishUsingItem(itemstack, world, entity);
+		double x = entity.getX();
+		double y = entity.getY();
+		double z = entity.getZ();
+        if (entity != null) {
+            EntityUtils.deductSanity(entity, 150);
+            if ((LevelAccessor) world instanceof ServerLevel _level)
+                _level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, (y + 0.7), z, 32, 0.5, 1.5, 0.5, 1);
         }
-        return super.finishUsingItem(itemstack, world, entity);
-    }
+        return retval;
+	}
 }

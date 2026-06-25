@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:block",
+  "random_sequence": "caerula_arbor:blocks/block_spear",
+  "pools": [
+    {
+      "rolls": 1.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "caerula_arbor:block_spear"
+        }
+      ]
+    }
+  ]
+}

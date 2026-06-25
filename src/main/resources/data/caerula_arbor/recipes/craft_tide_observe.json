@@ -3,17 +3,20 @@
   "category": "misc",
   "pattern": [
     "aba",
-    "bcb",
-    "aba"
+    "cdc",
+    "aca"
   ],
   "key": {
     "a": {
       "item": "minecraft:obsidian"
     },
     "b": {
-      "item": "minecraft:deepslate"
+      "item": "minecraft:diamond"
     },
     "c": {
+      "item": "minecraft:deepslate"
+    },
+    "d": {
       "item": "minecraft:heart_of_the_sea"
     }
   },
