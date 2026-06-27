@@ -2,13 +2,14 @@
 package com.apocalypse.caerulaarbor.client.renderer;
 
 import com.apocalypse.caerulaarbor.entity.MoistEnderCrystalEntity;
-import com.apocalypse.caerulaarbor.client.model.layer.MoistEnderCrystalLayer;
 import com.apocalypse.caerulaarbor.client.model.MoistEnderCrystalModel;
+import com.apocalypse.caerulaarbor.client.model.layer.MoistEnderCrystalLayer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
@@ -23,6 +24,11 @@ public class MoistEnderCrystalRenderer extends GeoEntityRenderer<MoistEnderCryst
 	@Override
 	public RenderType getRenderType(MoistEnderCrystalEntity animatable, ResourceLocation texture, MultiBufferSource bufferSource, float partialTick) {
 		return RenderType.entityTranslucent(getTextureLocation(animatable));
+	}
+
+	@Override
+	public int getPackedOverlay(MoistEnderCrystalEntity animatable, float u) {
+		return OverlayTexture.pack(OverlayTexture.u(animatable.hurtTime > 0 || animatable.deathTime > 0 ? 0.35F : u), OverlayTexture.v(false));
 	}
 
 	@Override

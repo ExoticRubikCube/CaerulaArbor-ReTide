@@ -50,10 +50,10 @@ public class MutagenisisCapsuleItem extends Item {
             if (ocean < 2.9) {
                 EntityUtils.deductSanity(entity, (ocean + 1) * 40);
                 ((Entity) entity).hurt(new DamageSource(((LevelAccessor) world).registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanize_damage")))), (float) (3 * (ocean + 1)));
-                if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                    _entity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 2400, (int) ocean));
-                if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                    _entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 400, (int) ocean));
+                if (!entity.level().isClientSide()) {
+                    entity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 2400, (int) ocean));
+                    entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 400, (int) ocean));
+                }
                 if (((Entity) entity).isAlive()) {
                     {
                         double _setval = ocean + 1;

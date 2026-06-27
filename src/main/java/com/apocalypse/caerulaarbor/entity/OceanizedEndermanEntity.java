@@ -161,6 +161,23 @@ public class OceanizedEndermanEntity extends SeaMonster {
 	}
 
 	@Override
+	public boolean doHurtTarget(Entity target) {
+		if (!this.level().isClientSide()) {
+			CaerulaArborMod.queueServerWork(9, () -> {
+				if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 2.5) {
+					target.hurt(
+							new DamageSource(
+									this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
+											.getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "general_seaborn_attack"))),
+									this),
+							(float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
+				}
+			});
+		}
+		return true;
+	}
+
+	@Override
 	public boolean hurt(DamageSource source, float amount) {
         LevelAccessor world = this.level();
         double x = this.getX();

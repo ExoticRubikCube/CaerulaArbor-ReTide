@@ -2,9 +2,8 @@
 package com.apocalypse.caerulaarbor.command;
 
 import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
-import com.apocalypse.caerulaarbor.procedures.*;
-import com.apocalypse.caerulaarbor.utils.WorldUtils;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
+import com.apocalypse.caerulaarbor.utils.WorldUtils;
 import net.minecraft.network.chat.Component;
 
 import net.minecraft.world.entity.player.Player;
@@ -24,6 +23,7 @@ import com.mojang.brigadier.arguments.BoolArgumentType;
 
 @Mod.EventBusSubscriber
 public class CaerulaArborEndspeakerCommand {
+	
 	@SubscribeEvent
 	public static void registerCommand(RegisterCommandsEvent event) {
 		event.getDispatcher().register(Commands.literal("caerula_arbor:endspeaker").requires(s -> s.hasPermission(2)).then(Commands.literal("inquiry").executes(arguments -> {
@@ -125,7 +125,7 @@ public class CaerulaArborEndspeakerCommand {
             double ind = 0;
             String info = "";
             for (int index0 = 0; index0 < 6; index0++) {
-                RevokeAbilityProcedure.execute(world, (double) index0);
+                revokeAbility(world, (double) index0);
             }
             info = Component.translatable("command.endspeaker.revoke.all").getString();
             {
@@ -149,7 +149,7 @@ public class CaerulaArborEndspeakerCommand {
             String info = "";
             double ind = 0;
             ind = Math.round(DoubleArgumentType.getDouble(arguments, "index"));
-            RevokeAbilityProcedure.execute(world, ind - 1);
+            revokeAbility(world, ind - 1);
             info = Component.translatable("command.endspeaker.revoke.one").getString();
             info = info.replace("{index}", "" + Math.round(ind));
             {
@@ -187,5 +187,12 @@ public class CaerulaArborEndspeakerCommand {
             }
             return 0;
 		}))));
+	}
+
+    private static void revokeAbility(Level world, double index) {
+		if (EntityUtils.inquirybility(world, index)) {
+			CaerulaArborModVariables.MapVariables.get(world).endspeaker_abolities = (double) ((int) CaerulaArborModVariables.MapVariables.get(world).endspeaker_abolities - (int) Math.pow(2, index));
+			CaerulaArborModVariables.MapVariables.get(world).syncData(world);
+		}
 	}
 }

@@ -99,6 +99,16 @@ public class ChiselerFishEntity extends SeaMonster implements RangedAttackMob {
 	}
 
 	@Override
+	public void setTarget(@Nullable LivingEntity target) {
+		super.setTarget(target);
+		if (target != null && !this.level().isClientSide() && !this.hasEffect(CaerulaArborModMobEffects.COOLDOWN_SINAL.get())) {
+			this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 3, false, false));
+			this.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 400, 1));
+			this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.COOLDOWN_SINAL.get(), 800, 0, false, false));
+		}
+	}
+
+	@Override
 	protected void registerGoals() {
 		super.registerGoals();
 		this.targetSelector.addGoal(1, new HurtByTargetGoal(this));

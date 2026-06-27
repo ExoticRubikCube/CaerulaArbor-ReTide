@@ -5,7 +5,6 @@ import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
-import com.apocalypse.caerulaarbor.procedures.GetAggresiveMobAroundProcedure;
 import com.apocalypse.caerulaarbor.procedures.SingleHealProcedure;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
@@ -355,7 +354,7 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
                     if ((Entity) this instanceof TribunalHealerEntity _datEntSetI)
                         _datEntSetI.getEntityData().set(DATA_skillp2, (int) (sklp2 - 1));
                 } else {
-                    if (tickCount % 5 == 0 && GetAggresiveMobAroundProcedure.execute(world, x, y, z, this)) {
+                    if (tickCount % 5 == 0 && hasAggresiveMobAround(world, x, y, z)) {
                         if ((Entity) this instanceof TribunalHealerEntity _datEntSetI)
                             _datEntSetI.getEntityData().set(DATA_skillp2, 240);
                         if (this instanceof TribunalHealerEntity) {
@@ -441,6 +440,19 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
             }
         }
         this.refreshDimensions();
+	}
+
+	private boolean hasAggresiveMobAround(LevelAccessor world, double x, double y, double z) {
+		Vec3 center = new Vec3(x, y, z);
+		List<Entity> entities = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(8 / 2d), entity -> true).stream()
+				.sorted(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(center))).toList();
+		for (Entity entityIterator : entities) {
+			if (this.distanceTo(entityIterator) <= 4
+					&& ((entityIterator instanceof Mob mob ? mob.getTarget() : null) == this || entityIterator == this.getLastHurtByMob())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override

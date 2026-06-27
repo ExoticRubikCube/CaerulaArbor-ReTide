@@ -7,7 +7,6 @@ import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
-import com.apocalypse.caerulaarbor.procedures.ShieldBreakProcedure;
 import com.apocalypse.caerulaarbor.utils.EntityPredicateUtils;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
 import com.apocalypse.caerulaarbor.utils.WorldUtils;
@@ -44,6 +43,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrownPotion;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ShieldItem;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -210,6 +210,28 @@ public class FlamarineGolemEntity extends SeaMonster {
 	@Override
 	public SoundEvent getDeathSound() {
 		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.iron_golem.death"));
+	}
+
+	@Override
+	public boolean doHurtTarget(Entity target) {
+		double targetX = target.getX();
+		double targetY = target.getY();
+		double targetZ = target.getZ();
+		if (!this.level().isClientSide()) {
+			this.getEntityData().set(DATA_duration, 35);
+			CaerulaArborMod.queueServerWork(20, () -> {
+				if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 5.75) {
+					target.hurt(
+							new DamageSource(
+									this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
+											.getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "golem_attack"))),
+									this),
+							(float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
+					breakShield(this.level(), targetX, targetY, targetZ, target, 120);
+				}
+			});
+		}
+		return true;
 	}
 
 	@Override
@@ -397,7 +419,7 @@ public class FlamarineGolemEntity extends SeaMonster {
                                                 d = Math.min(damage * 4.5, Math.max(h * 0.25, damage * 1.5));
                                                 entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "golem_attack"))), this),
                                                         (float) d);
-                                                ShieldBreakProcedure.execute(world, x, y, z, entityiterator, 120);
+                                                breakShield(world, x, y, z, entityiterator, 120);
                                             }
                                         }
                                     }
@@ -637,7 +659,24 @@ public class FlamarineGolemEntity extends SeaMonster {
 			this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY()), (enemy.getZ())));
 			if (this.distanceTo(enemy) <= dist) {
 				enemy.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "golem_attack"))), this), (float) damage);
-				ShieldBreakProcedure.execute(world, x, y, z, enemy, 120);
+				breakShield(world, x, y, z, enemy, 120);
+			}
+		}
+	}
+
+	private void breakShield(LevelAccessor world, double x, double y, double z, Entity entity, int time) {
+		if ((entity instanceof LivingEntity livingEntity ? livingEntity.getUseItem() : ItemStack.EMPTY).getItem() instanceof ShieldItem) {
+			if (entity instanceof Player player) {
+				player.getCooldowns().addCooldown(player.getUseItem().getItem(), time);
+				player.stopUsingItem();
+				player.level().broadcastEntityEvent(player, (byte) 30);
+			}
+			if (world instanceof Level level) {
+				if (!level.isClientSide()) {
+					level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.shield.break")), SoundSource.PLAYERS, 1, 1);
+				} else {
+					level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.shield.break")), SoundSource.PLAYERS, 1, 1, false);
+				}
 			}
 		}
 	}

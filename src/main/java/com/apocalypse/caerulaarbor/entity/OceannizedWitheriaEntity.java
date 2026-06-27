@@ -6,7 +6,6 @@ import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
-import com.apocalypse.caerulaarbor.procedures.PurchaseEnemyProcedure;
 import com.apocalypse.caerulaarbor.utils.EntityPredicateUtils;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
 import com.apocalypse.caerulaarbor.utils.WorldUtils;
@@ -383,13 +382,13 @@ public class OceannizedWitheriaEntity extends SeaMonster {
                         });
                         CaerulaArborMod.queueServerWork(27, () -> {
                             if (this.isAlive()) {
-                                PurchaseEnemyProcedure.execute(this);
+                                purchaseEnemy();
                                 witheriaSweep(-2, 0.75);
                             }
                         });
                         CaerulaArborMod.queueServerWork(30, () -> {
                             if (this.isAlive()) {
-                                PurchaseEnemyProcedure.execute(this);
+                                purchaseEnemy();
                                 Entity enemy1 = null;
                                 Entity otherOne = null;
                                 Entity otherTwo = null;
@@ -414,7 +413,7 @@ public class OceannizedWitheriaEntity extends SeaMonster {
                         });
                         CaerulaArborMod.queueServerWork(48, () -> {
                             if (this.isAlive()) {
-                                PurchaseEnemyProcedure.execute(this);
+                                purchaseEnemy();
                                 witheriaSweep(0, 1.5);
                             }
                         });
@@ -492,6 +491,13 @@ public class OceannizedWitheriaEntity extends SeaMonster {
             }
         }
         this.refreshDimensions();
+	}
+
+	private void purchaseEnemy() {
+		Entity enemy = this.getTarget();
+		if (enemy != null && enemy.isAlive() && this.distanceTo(enemy) > 4) {
+			this.teleportTo(enemy.getX(), enemy.getY(), enemy.getZ());
+		}
 	}
 
 	@Override

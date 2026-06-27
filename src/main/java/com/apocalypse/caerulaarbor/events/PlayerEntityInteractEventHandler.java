@@ -5,7 +5,7 @@ import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.*;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
-import com.apocalypse.caerulaarbor.procedures.TransformIndexProcedure;
+import com.apocalypse.caerulaarbor.helper.TransformIndexProcedure;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -16,7 +16,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -78,7 +77,7 @@ public class PlayerEntityInteractEventHandler {
                 return;
             }
 
-            if (Math.random() < perc + 0.05 && TransformIndexProcedure.execute(world, x, y, z, entity)) {
+            if (Math.random() < perc + 0.05 && TransformIndexProcedure.transformToSeaborn(world, x, y, z, entity)) {
                 if (!entity.level().isClientSide())
                     entity.discard();
                 itemstack.shrink(1);

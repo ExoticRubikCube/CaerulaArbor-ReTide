@@ -10,12 +10,10 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.items.ItemHandlerHelper;
 
 import java.util.List;
 
@@ -50,39 +48,47 @@ public class NetherseaStimutantItem extends Item {
 
 	@Override
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
-		ItemStack retval = super.finishUsingItem(itemstack, world, entity);
+		ItemStack resultStack = super.finishUsingItem(itemstack, world, entity);
 		double x = entity.getX();
 		double y = entity.getY();
 		double z = entity.getZ();
-        if (entity != null) {
-            if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ADD_ATTACK_PERCLY.get(), 280, 3));
-            if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                _entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 300, 2));
-            if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                _entity.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 300, 3));
-            if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                _entity.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 480, 0));
-            EntityUtils.deductSanity75(entity);
-            itemstack.shrink(1);
-            if ((Entity) entity instanceof Player _player) {
-                ItemStack _setstack = new ItemStack(CaerulaArborModItems.OCEANGLASS_CUP.get()).copy();
-                _setstack.setCount(1);
-                ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
-            }
-            CaerulaArborMod.queueServerWork(240, () -> {
-                if (((Entity) entity).isAlive() && (Entity) entity instanceof LivingEntity _livEnt8 && _livEnt8.hasEffect(CaerulaArborModMobEffects.ADD_ATTACK_PERCLY.get())) {
-                    if (Math.random() < 0.5) {
-                        if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                            _entity.addEffect(new MobEffectInstance(MobEffects.POISON, 280, 0));
-                    } else {
-                        if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                            _entity.addEffect(new MobEffectInstance(MobEffects.WITHER, 280, 0));
-                    }
-                    EntityUtils.deductSanity(entity, 125);
-                }
-            });
-        }
-        return retval;
+		if (entity != null) {
+			if (!entity.level().isClientSide()) {
+				entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ADD_ATTACK_PERCLY.get(), 280, 3));
+				entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 300, 2));
+				entity.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 300, 3));
+				entity.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 480, 0));
+			}
+			EntityUtils.deductSanity75(entity);
+			if (!(entity instanceof Player)) {
+				resultStack.shrink(1);
+				ItemStack emptyCup = new ItemStack(CaerulaArborModItems.OCEANGLASS_CUP.get());
+				if (resultStack.isEmpty()) {
+					return emptyCup;
+				}
+			} else if (entity instanceof Player player && !player.getAbilities().instabuild) {
+				resultStack.shrink(1);
+				ItemStack emptyCup = new ItemStack(CaerulaArborModItems.OCEANGLASS_CUP.get());
+				if (resultStack.isEmpty()) {
+					return emptyCup;
+				}
+				if (!player.getInventory().add(emptyCup)) {
+					player.drop(emptyCup, false);
+				}
+			}
+			CaerulaArborMod.queueServerWork(240, () -> {
+				if (entity.isAlive() && entity.hasEffect(CaerulaArborModMobEffects.ADD_ATTACK_PERCLY.get())) {
+					if (Math.random() < 0.5) {
+						if (!entity.level().isClientSide()) {
+							entity.addEffect(new MobEffectInstance(MobEffects.POISON, 280, 0));
+						}
+					} else if (!entity.level().isClientSide()) {
+						entity.addEffect(new MobEffectInstance(MobEffects.WITHER, 280, 0));
+					}
+					EntityUtils.deductSanity(entity, 125);
+				}
+			});
+		}
+		return resultStack;
 	}
 }

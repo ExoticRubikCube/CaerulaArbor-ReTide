@@ -18,9 +18,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.util.Mth;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.client.Minecraft;
-
-import com.apocalypse.caerulaarbor.procedures.GetOverlayOffsetProcedure;
-
 import com.apocalypse.caerulaarbor.configuration.CaerulaConfigsConfiguration;
 
 @Mod.EventBusSubscriber({Dist.CLIENT})
@@ -48,8 +45,8 @@ public class SanityShowOverlay {
             result1 = ((Entity) entity instanceof LivingEntity _livingEntity1 && _livingEntity1.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY.get()) ? _livingEntity1.getAttribute(CaerulaArborModAttributes.SANITY.get()).getBaseValue() : 0) < 1000;
         }
         if (result1) {
-			int dx = GetOverlayOffsetProcedure.x();
-			int dy = GetOverlayOffsetProcedure.y();
+			int dx = getOverlayOffsetX();
+			int dy = getOverlayOffsetY();
 			if (CaerulaConfigsConfiguration.SANITY_BAR_STYLE.get()){
 				event.getGuiGraphics().blit(BAR, w / 2 + 93 + dx, h - 12 + dy, 
 				0, 4, 62, 8, 62, 12);
@@ -65,5 +62,13 @@ public class SanityShowOverlay {
 				Mth.clamp((int) EntityUtils.getSanityIndex(entity) * 16, 0, 304), 0, 16, 16, 320, 16);
 			}
 		}
+	}
+
+	private static int getOverlayOffsetX() {
+		return Math.toIntExact(Math.round(CaerulaConfigsConfiguration.X_OFFSET.get()));
+	}
+
+	private static int getOverlayOffsetY() {
+		return Math.toIntExact(Math.round(CaerulaConfigsConfiguration.Y_OFFSET.get()));
 	}
 }

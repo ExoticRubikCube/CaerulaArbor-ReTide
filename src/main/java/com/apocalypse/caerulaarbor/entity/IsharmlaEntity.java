@@ -23,8 +23,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.level.GameRules;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
@@ -40,8 +39,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.network.NetworkHooks;
 
-import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
@@ -232,6 +229,123 @@ public class IsharmlaEntity extends SeaMonster {
 	@Override
 	public SoundEvent getDeathSound() {
 		return SoundEvents.GUARDIAN_DEATH;
+	}
+
+	@Override
+	public boolean doHurtTarget(Entity target) {
+		double targetX = target.getX();
+		double targetY = target.getY();
+		double targetZ = target.getZ();
+		if (!this.level().isClientSide()) {
+			this.level().playSound(null, BlockPos.containing(this.getX(), this.getY(), this.getZ()),
+					ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "isharmla_attack_pre")), SoundSource.HOSTILE, 2.5F, 1);
+			CaerulaArborMod.queueServerWork(13, () -> {
+				if (this.isAlive() && this.level() instanceof ServerLevel serverLevel) {
+					double sourceX = this.getX();
+					double sourceY = this.getY();
+					double sourceZ = this.getZ();
+					for (int index = 0; index < 12; index++) {
+						serverLevel.sendParticles((SimpleParticleType) CaerulaArborModParticleTypes.MOIST_BOOM.get(), sourceX, sourceY + 10 + index, sourceZ, 6, index * 0.1, index * 0.1, index * 0.1, 0);
+					}
+				}
+			});
+			CaerulaArborMod.queueServerWork(15, () -> {
+				if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 32) {
+					Entity enemy = this.getTarget();
+					this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
+							ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "isharmla_attack_launch")), SoundSource.HOSTILE, 2.5F, 1);
+					isharmlaDroppedAttack(this.level(), targetX, targetY, targetZ, Mth.nextDouble(RandomSource.create(), 1.5, 3), 1);
+					int count = 0;
+					for (int index = 0; index < 5; index++) {
+						if (count > 5) {
+							break;
+						}
+						final Vec3 center = new Vec3(this.getX(), this.getY(), this.getZ());
+						List<Entity> foundEntities = this.level().getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(48 / 2d), entity -> true).stream()
+								.sorted(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(center))).toList();
+						for (Entity entityIterator : foundEntities) {
+							if (count > 5) {
+								break;
+							}
+							if (!(entityIterator instanceof LivingEntity)) {
+								continue;
+							}
+							if (!entityIterator.isAlive()) {
+								continue;
+							}
+							if (entityIterator instanceof ServerPlayer serverPlayer) {
+								if (serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE || serverPlayer.gameMode.getGameModeForPlayer() == GameType.SPECTATOR) {
+									continue;
+								}
+							}
+							if (entityIterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring"))) && entityIterator != enemy) {
+								continue;
+							}
+							if (entityIterator == this) {
+								continue;
+							}
+							if (this.distanceTo(entityIterator) <= 24) {
+								count++;
+								Entity dropTarget = entityIterator;
+								int delayTicks = 2 * count;
+								CaerulaArborMod.queueServerWork(delayTicks, () -> {
+									isharmlaDroppedAttack(this.level(), dropTarget.getX(), dropTarget.getY(), dropTarget.getZ(), Mth.nextDouble(RandomSource.create(), 1.5, 3), 1);
+								});
+							}
+						}
+					}
+				}
+			});
+			this.getEntityData().set(DATA_DURATION, 60);
+		}
+		return true;
+	}
+
+	private void isharmlaDroppedAttack(LevelAccessor world, double x, double y, double z, double radius, double rate) {
+		if (!(world instanceof ServerLevel level)) {
+			return;
+		}
+		for (int index = 0; index < 20; index++) {
+			final int tick = index;
+			final double particleIndex = index;
+			CaerulaArborMod.queueServerWork(tick, () -> {
+				level.sendParticles(CaerulaArborModParticleTypes.MOIST_BOOM.get(), x, y + 10 - particleIndex * 0.5, z, 1, 0, 0, 0, 0);
+				double angle = Math.toRadians(particleIndex * 9);
+				level.sendParticles(ParticleTypes.END_ROD, x + radius * Math.cos(angle), y, z + radius * Math.sin(angle), 1, 0, 0, 0, 0);
+				double oppositeAngle = Math.toRadians(particleIndex * 9 + 180);
+				level.sendParticles(ParticleTypes.END_ROD, x + radius * Math.cos(oppositeAngle), y + 0.125, z + radius * Math.sin(oppositeAngle), 1, 0, 0, 0, 0);
+			});
+		}
+		CaerulaArborMod.queueServerWork(20, () -> {
+			Entity enemy = this.getTarget();
+			double damage = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * rate;
+			if (level instanceof Level currentLevel) {
+				if (!currentLevel.isClientSide()) {
+					currentLevel.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "isharmla_attack_hit")), SoundSource.HOSTILE, 2,
+							(float) Mth.nextDouble(RandomSource.create(), 0.85, 1.1));
+				} else {
+					currentLevel.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "isharmla_attack_hit")), SoundSource.HOSTILE, 2,
+							(float) Mth.nextDouble(RandomSource.create(), 0.85, 1.1), false);
+				}
+			}
+			Vec3 center = new Vec3(x, y, z);
+			List<Entity> entities = level.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate((radius * 2) / 2d), entity -> true).stream()
+					.sorted(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(center))).toList();
+			for (Entity entityIterator : entities) {
+				if (entityIterator.getType().is(EntityUtils.OCEAN_OFFSPRING) && entityIterator != enemy) {
+					continue;
+				}
+				if (!(entityIterator instanceof LivingEntity)) {
+					continue;
+				}
+				if (center.distanceTo(new Vec3(entityIterator.getX(), entityIterator.getY(), entityIterator.getZ())) <= radius) {
+					entityIterator.hurt(
+							new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
+									.getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "isharmla_attack"))), this),
+							(float) damage);
+				}
+			}
+		});
 	}
 
 	@Override

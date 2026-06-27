@@ -134,7 +134,17 @@ public class CreeperFishEntity extends SeaMonster {
 	public boolean hurt(DamageSource source, float amount) {
 		if (source.is(DamageTypes.DROWN))
 			return false;
-		return super.hurt(source, amount);
+		float healthBeforeDamage = this.getHealth();
+		boolean damaged = super.hurt(source, amount);
+		if (damaged && amount <= healthBeforeDamage) {
+			double accumulatedDamage = this.getEntityData().get(DATA_deal) + amount;
+			this.getEntityData().set(DATA_deal, (int) accumulatedDamage);
+			if (accumulatedDamage >= this.getMaxHealth() * 0.15) {
+				RangedSanityAttackProcedure.execute(this.level(), this.getX(), this.getY(), this.getZ(), this);
+				this.getEntityData().set(DATA_deal, 0);
+			}
+		}
+		return damaged;
 	}
 
 	@Override

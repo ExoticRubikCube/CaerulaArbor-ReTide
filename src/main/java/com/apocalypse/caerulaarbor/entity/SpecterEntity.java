@@ -191,6 +191,50 @@ public class SpecterEntity extends Animal implements GeoEntity {
 	}
 
 	@Override
+	public boolean doHurtTarget(Entity target) {
+		double targetX = target.getX();
+		double targetY = target.getY();
+		double targetZ = target.getZ();
+		if (!this.level().isClientSide()) {
+			this.getEntityData().set(DATA_duration, this.getEntityData().get(DATA_duration) + 30);
+			this.getEntityData().set(DATA_skillp1, this.getEntityData().get(DATA_skillp1) + 1);
+			this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
+					ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "specter_attack")), SoundSource.HOSTILE, 2.5F, 1);
+			CaerulaArborMod.queueServerWork(12, () -> {
+				if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 3.5) {
+					target.hurt(
+							new DamageSource(
+									this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
+											.getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "saw_cut"))),
+									this),
+							(float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.45));
+				}
+			});
+			CaerulaArborMod.queueServerWork(15, () -> {
+				if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 3.5) {
+					target.hurt(
+							new DamageSource(
+									this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
+											.getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "saw_cut"))),
+									this),
+							(float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.5));
+				}
+			});
+			CaerulaArborMod.queueServerWork(18, () -> {
+				if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 3.5) {
+					target.hurt(
+							new DamageSource(
+									this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
+											.getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "saw_cut"))),
+									this),
+							(float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.45));
+				}
+			});
+		}
+		return true;
+	}
+
+	@Override
 	public boolean hurt(DamageSource source, float amount) {
 		if (source.is(DamageTypes.DROWN))
 			return false;

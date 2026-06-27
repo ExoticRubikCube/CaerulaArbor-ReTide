@@ -1,5 +1,6 @@
 package com.apocalypse.caerulaarbor.entity;
 
+import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 
 import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
@@ -13,6 +14,8 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
@@ -99,6 +102,23 @@ public class OceanizedSpiderEntity extends SeaMonster {
 	@Override
 	public Packet<ClientGamePacketListener> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
+	}
+
+	@Override
+	public boolean doHurtTarget(Entity target) {
+		if (!this.level().isClientSide()) {
+			CaerulaArborMod.queueServerWork(10, () -> {
+				if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 2.6) {
+					target.hurt(
+							new DamageSource(
+									this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
+											.getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "general_seaborn_attack"))),
+									this),
+							(float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
+				}
+			});
+		}
+		return true;
 	}
 
 	@Override

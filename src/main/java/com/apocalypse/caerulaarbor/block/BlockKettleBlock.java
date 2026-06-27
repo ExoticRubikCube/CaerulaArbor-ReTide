@@ -1,14 +1,16 @@
 
 package com.apocalypse.caerulaarbor.block;
 
+import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.configuration.CaerulaConfigsConfiguration;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
-import com.apocalypse.caerulaarbor.procedures.SetBoilingProcedure;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -27,6 +29,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
@@ -139,17 +142,51 @@ public class BlockKettleBlock extends Block implements SimpleWaterloggedBlock {
 	@Override
 	public void neighborChanged(BlockState blockstate, Level world, BlockPos pos, Block neighborBlock, BlockPos fromPos, boolean moving) {
 		super.neighborChanged(blockstate, world, pos, neighborBlock, fromPos, moving);
-		SetBoilingProcedure.execute(world, pos.getX(), pos.getY(), pos.getZ());
+		setBoiling(world, pos);
 	}
 
 	@Override
 	public void tick(BlockState blockstate, ServerLevel world, BlockPos pos, RandomSource random) {
 		super.tick(blockstate, world, pos, random);
-		int x = pos.getX();
-		int y = pos.getY();
-		int z = pos.getZ();
-		SetBoilingProcedure.execute(world, x, y, z);
+		setBoiling(world, pos);
 		world.scheduleTick(pos, this, 40);
+	}
+
+	private void setBoiling(LevelAccessor world, BlockPos pos) {
+		boolean valid = false;
+		BlockState lower = world.getBlockState(pos.below());
+		if (lower.is(BlockTags.create(new ResourceLocation(CaerulaArborMod.MODID, "heat")))) {
+			if (lower.getBlock() == Blocks.CAMPFIRE || lower.getBlock() == Blocks.SOUL_CAMPFIRE) {
+				valid = lower.getBlock().getStateDefinition().getProperty("lit") instanceof BooleanProperty litProperty && lower.getValue(litProperty);
+			} else if (lower.getBlock() == Blocks.SMOKER) {
+				valid = lower.getBlock().getStateDefinition().getProperty("lit") instanceof BooleanProperty litProperty && lower.getValue(litProperty);
+			} else {
+				valid = true;
+			}
+		} else {
+			for (String blockId : CaerulaConfigsConfiguration.BOIL_WATER.get()) {
+				if (ForgeRegistries.BLOCKS.getKey(lower.getBlock()).toString().equals(blockId)) {
+					if (ForgeRegistries.BLOCKS.getKey(lower.getBlock()).toString().equals("create:blaze_burner")) {
+						if (!(lower.getBlock().getStateDefinition().getProperty("blaze") instanceof EnumProperty<?> blazeProperty
+								&& lower.getValue(blazeProperty).toString().equals("smouldering"))) {
+							valid = true;
+						}
+					} else {
+						valid = true;
+					}
+					break;
+				}
+			}
+		}
+		BlockState state = world.getBlockState(pos);
+		int blockStateValue = valid ? 1 : 0;
+		if (state.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProperty && integerProperty.getPossibleValues().contains(blockStateValue)) {
+			state = state.setValue(integerProperty, blockStateValue);
+		}
+		if (state.getBlock().getStateDefinition().getProperty("boiling") instanceof BooleanProperty booleanProperty) {
+			state = state.setValue(booleanProperty, valid);
+		}
+		world.setBlock(pos, state, 3);
 	}
 
 	@Override

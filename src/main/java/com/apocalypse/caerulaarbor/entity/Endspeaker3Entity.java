@@ -3,10 +3,7 @@ package com.apocalypse.caerulaarbor.entity;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.*;
 import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
 import net.minecraft.advancements.Advancement;
@@ -23,6 +20,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
@@ -520,14 +518,39 @@ public class Endspeaker3Entity extends SeaMonster {
 						continue;
 					}
 					if (distanceTo(entityiterator) <= 4) {
-						entityiterator.hurt(new DamageSource(level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "endspeaker_attack"))), this),
-								(float) (atk1 * 0.9));
+						LivingEntity livingTarget = (LivingEntity) entityiterator;
+						float healthBeforeHit = livingTarget.getHealth();
+						float absorptionBeforeHit = livingTarget.getAbsorptionAmount();
+						if (livingTarget.hurt(new DamageSource(level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "endspeaker_attack"))),
+								this), (float) (atk1 * 0.9))) {
+							handleAttackHit(livingTarget, healthBeforeHit, absorptionBeforeHit);
+						}
 					}
 				}
 			}
 		} else if (canAttack) {
-			enemy.hurt(new DamageSource(level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "endspeaker_attack"))), this),
-					(float) (atk * 1.5));
+			LivingEntity livingTarget = (LivingEntity) enemy;
+			float healthBeforeHit = livingTarget.getHealth();
+			float absorptionBeforeHit = livingTarget.getAbsorptionAmount();
+			if (livingTarget.hurt(new DamageSource(level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "endspeaker_attack"))),
+					this), (float) (atk * 1.5))) {
+				handleAttackHit(livingTarget, healthBeforeHit, absorptionBeforeHit);
+			}
+		}
+	}
+
+	private void handleAttackHit(LivingEntity target, float healthBeforeHit, float absorptionBeforeHit) {
+		float dealtDamage = Math.max(0.0F, healthBeforeHit + absorptionBeforeHit - target.getHealth() - target.getAbsorptionAmount());
+		if (dealtDamage <= 0.0F) {
+			return;
+		}
+		if (level() instanceof ServerLevel serverLevel) {
+			serverLevel.sendParticles(CaerulaArborModParticleTypes.ENDSPEAKER_PARTICLE.get(), target.getX(), target.getY() + 0.75, target.getZ(), 8, 0.75, 0.75, 0.75, 0.1);
+		}
+		if (getHealth() >= getMaxHealth() * 0.4F) {
+			setHealth(getHealth() + dealtDamage * 1.4F);
+		} else {
+			setHealth(getHealth() + dealtDamage * 1.8F);
 		}
 	}
 

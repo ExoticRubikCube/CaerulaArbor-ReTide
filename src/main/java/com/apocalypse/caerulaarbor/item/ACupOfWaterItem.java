@@ -13,8 +13,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.InteractionHand;
 
-import net.minecraftforge.items.ItemHandlerHelper;
-
 public class ACupOfWaterItem extends Item {
 	public ACupOfWaterItem() {
 		super(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON));
@@ -39,18 +37,28 @@ public class ACupOfWaterItem extends Item {
 
 	@Override
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
-		ItemStack retval = super.finishUsingItem(itemstack, world, entity);
+		ItemStack resultStack = super.finishUsingItem(itemstack, world, entity);
 		double x = entity.getX();
 		double y = entity.getY();
 		double z = entity.getZ();
-        if (entity != null) {
-            itemstack.shrink(1);
-            if ((Entity) entity instanceof Player _player) {
-                ItemStack _setstack = new ItemStack(CaerulaArborModItems.OCEANGLASS_CUP.get()).copy();
-                _setstack.setCount(1);
-                ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
-            }
-        }
-        return retval;
+		if (entity != null) {
+			if (!(entity instanceof Player)) {
+				resultStack.shrink(1);
+				ItemStack emptyCup = new ItemStack(CaerulaArborModItems.OCEANGLASS_CUP.get());
+				if (resultStack.isEmpty()) {
+					return emptyCup;
+				}
+			} else if (entity instanceof Player player && !player.getAbilities().instabuild) {
+				resultStack.shrink(1);
+				ItemStack emptyCup = new ItemStack(CaerulaArborModItems.OCEANGLASS_CUP.get());
+				if (resultStack.isEmpty()) {
+					return emptyCup;
+				}
+				if (!player.getInventory().add(emptyCup)) {
+					player.drop(emptyCup, false);
+				}
+			}
+		}
+		return resultStack;
 	}
 }

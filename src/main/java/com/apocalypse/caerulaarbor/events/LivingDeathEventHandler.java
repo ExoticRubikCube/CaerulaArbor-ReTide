@@ -5,7 +5,7 @@ import com.apocalypse.caerulaarbor.configuration.CaerulaConfigsConfiguration;
 import com.apocalypse.caerulaarbor.entity.*;
 import com.apocalypse.caerulaarbor.init.*;
 import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
-import com.apocalypse.caerulaarbor.procedures.TransformIndexProcedure;
+import com.apocalypse.caerulaarbor.helper.TransformIndexProcedure;
 import com.apocalypse.caerulaarbor.procedures.UpgradeBreedProcedure;
 import com.apocalypse.caerulaarbor.procedures.UpgradeSilenceProcedure;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
@@ -780,7 +780,7 @@ public class LivingDeathEventHandler {
         if (entity instanceof SkadiEntity) return;
 
         if (damagesource.is(TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "can_trigger_oceanization")))) {
-            if (TransformIndexProcedure.execute(world, x, y, z, entity)) {
+            if (TransformIndexProcedure.transformToSeaborn(world, x, y, z, entity)) {
                 if (event.isCancelable()) {
                     event.setCanceled(true);
                 }
@@ -946,7 +946,7 @@ public class LivingDeathEventHandler {
         if (event.isCanceled()) return;
 
         if (!entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring"))) && sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
-            if (TransformIndexProcedure.execute(world, x, y, z, entity)) {
+            if (TransformIndexProcedure.transformToSeaborn(world, x, y, z, entity)) {
                 if (event.isCancelable()) {
                     event.setCanceled(true);
                 }

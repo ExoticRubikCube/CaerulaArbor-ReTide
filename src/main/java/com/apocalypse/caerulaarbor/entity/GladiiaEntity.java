@@ -197,6 +197,30 @@ public class GladiiaEntity extends Animal implements GeoEntity {
 	}
 
 	@Override
+	public boolean doHurtTarget(Entity target) {
+		double targetX = target.getX();
+		double targetY = target.getY();
+		double targetZ = target.getZ();
+		if (!this.level().isClientSide()) {
+			this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
+					ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "gladiia_attack_pre")), SoundSource.NEUTRAL, 2.2F, 1);
+			CaerulaArborMod.queueServerWork(9, () -> {
+				if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 5) {
+					this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
+							ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "gladiia_attack_hit")), SoundSource.NEUTRAL, 2.75F, 1);
+					target.hurt(
+							new DamageSource(
+									this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
+											.getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))),
+									this),
+							(float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
+				}
+			});
+		}
+		return true;
+	}
+
+	@Override
 	public boolean hurt(DamageSource source, float amount) {
 		if (source.is(DamageTypes.DROWN))
 			return false;

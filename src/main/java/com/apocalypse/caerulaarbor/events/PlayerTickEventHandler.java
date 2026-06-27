@@ -298,7 +298,6 @@ public class PlayerTickEventHandler {
         double y = entity.getY();
         double z = entity.getZ();
 
-        handleDisoclusionEffects(entity);
         handleSanityModifier(entity);
         handleKingSuit(entity);
         handleHandSpeed(entity, world, x, y, z);
@@ -310,26 +309,6 @@ public class PlayerTickEventHandler {
         handleOceanizationEffects(entity);
         handleRelicHemost(entity);
         handleRelicYearning(entity);
-    }
-
-    private static void handleDisoclusionEffects(Player entity) {
-        if ((entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).disoclusion == 2) {
-            if (!entity.hasEffect(CaerulaArborModMobEffects.HAEMOPHILIA.get())) {
-                if (!entity.level().isClientSide())
-                    entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.HAEMOPHILIA.get(), 10000, 1, false, false));
-            }
-        } else {
-            entity.removeEffect(CaerulaArborModMobEffects.HAEMOPHILIA.get());
-        }
-
-        if ((entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).disoclusion == 4) {
-            if (!entity.level().isClientSide())
-                entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.FLESHDEFORMITY.get(), 999, 1, false, false));
-        } else {
-            if (entity.hasEffect(CaerulaArborModMobEffects.FLESHDEFORMITY.get())) {
-                entity.removeEffect(CaerulaArborModMobEffects.HAEMOPHILIA.get());
-            }
-        }
     }
 
     private static void handleSanityModifier(Player entity) {

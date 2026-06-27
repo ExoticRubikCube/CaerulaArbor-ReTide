@@ -38,6 +38,7 @@ import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -211,6 +212,65 @@ public class UlpiansEntity extends Animal implements GeoEntity {
 	@Override
 	public SoundEvent getDeathSound() {
 		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "ulpians_die"));
+	}
+
+	@Override
+	public boolean doHurtTarget(Entity target) {
+		double targetX = target.getX();
+		double targetY = target.getY();
+		double targetZ = target.getZ();
+		if (!this.level().isClientSide()) {
+			this.getEntityData().set(DATA_duration, this.getEntityData().get(DATA_duration) + 30);
+			this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
+					ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "anchor_pre")), SoundSource.HOSTILE, 2.2F, 1);
+			CaerulaArborMod.queueServerWork(14, () -> {
+				if (this.isAlive()) {
+					Entity enemy = this.getTarget();
+					double damage = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
+					this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
+							ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "anchor_hit")), SoundSource.HOSTILE, 2.75F, 1);
+					final Vec3 center = new Vec3(this.getX(), this.getY(), this.getZ());
+					List<Entity> foundEntities = this.level().getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(48 / 2d), entity -> true).stream()
+							.sorted(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(center))).toList();
+					for (Entity entityIterator : foundEntities) {
+						if (!(entityIterator instanceof LivingEntity)) {
+							continue;
+						}
+						if (!entityIterator.isAlive()) {
+							continue;
+						}
+						if (entityIterator instanceof ServerPlayer serverPlayer) {
+							if (serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE || serverPlayer.gameMode.getGameModeForPlayer() == GameType.SPECTATOR) {
+								continue;
+							}
+						}
+						if (entityIterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring"))) && entityIterator != enemy) {
+							continue;
+						}
+						if (entityIterator == this) {
+							continue;
+						}
+						if (this.distanceTo(entityIterator) <= 24) {
+							entityIterator.hurt(
+									new DamageSource(
+											this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
+													.getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))),
+											this),
+									(float) damage);
+							Vec3 pushVec = this.position().vectorTo(entityIterator.position());
+							if (pushVec.lengthSqr() < 0.0001) {
+								pushVec = new Vec3(0, 0, 1);
+							} else {
+								pushVec = pushVec.normalize();
+							}
+							pushVec = pushVec.scale(1.25);
+							entityIterator.push(pushVec.x, pushVec.y, pushVec.z);
+						}
+					}
+				}
+			});
+		}
+		return true;
 	}
 
 	@Override

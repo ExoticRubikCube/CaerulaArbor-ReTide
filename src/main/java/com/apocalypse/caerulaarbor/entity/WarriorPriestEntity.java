@@ -140,6 +140,26 @@ public class WarriorPriestEntity extends Animal implements GeoEntity {
 	}
 
 	@Override
+	public boolean doHurtTarget(Entity target) {
+		if (!this.level().isClientSide()) {
+			CaerulaArborMod.queueServerWork(8, () -> {
+				if (this.isAlive() && target.isAlive()) {
+					target.hurt(
+							new DamageSource(
+									this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
+											.getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "generic_warrior_attack"))),
+									this),
+							(float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
+					if (target instanceof LivingEntity livingTarget && !livingTarget.level().isClientSide()) {
+						livingTarget.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 60, 1, false, true));
+					}
+				}
+			});
+		}
+		return true;
+	}
+
+	@Override
 	public boolean hurt(DamageSource source, float amount) {
         LevelAccessor world = this.level();
         double x = this.getX();

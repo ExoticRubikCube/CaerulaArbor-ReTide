@@ -55,10 +55,10 @@ public class EliteCavairItem extends Item {
 		double y = entity.getY();
 		double z = entity.getZ();
         if (entity != null) {
-            if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ADD_ATTACK_PERCLY.get(), 1200, 3));
-            if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                _entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 800, 1));
+            if (!entity.level().isClientSide()) {
+                entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ADD_ATTACK_PERCLY.get(), 1200, 3));
+                entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 800, 1));
+            }
             {
                 double _setval = 0;
                 ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {

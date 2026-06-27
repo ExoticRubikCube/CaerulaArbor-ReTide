@@ -70,14 +70,12 @@ public class OilAndCreamItem extends Item {
                 });
             }
             ((Entity) entity).hurt(new DamageSource(((LevelAccessor) world).registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.IN_FIRE)), 12);
-            if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                _entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 2));
-            if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                _entity.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 100, 0));
-            if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                _entity.addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 200, 1));
-            if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                _entity.addEffect(new MobEffectInstance(MobEffects.HUNGER, 1200, 0));
+            if (!entity.level().isClientSide()) {
+                entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 2));
+                entity.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 100, 0));
+                entity.addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 200, 1));
+                entity.addEffect(new MobEffectInstance(MobEffects.HUNGER, 1200, 0));
+            }
             entity.setSecondsOnFire(8);
             if ((LevelAccessor) world instanceof ServerLevel _level) {
                 ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, new ItemStack(Items.STICK));

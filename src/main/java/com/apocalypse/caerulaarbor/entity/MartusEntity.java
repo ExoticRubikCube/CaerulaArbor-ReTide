@@ -7,9 +7,8 @@ import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
 import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
-import com.apocalypse.caerulaarbor.procedures.MartusParticleRimProcedure;
-import com.apocalypse.caerulaarbor.procedures.ParticleLinkProcedure;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
 import com.apocalypse.caerulaarbor.utils.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -78,6 +77,7 @@ public class MartusEntity extends SeaMonster {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(MartusEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(MartusEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(MartusEntity.class, EntityDataSerializers.STRING);
+
 	public static final EntityDataAccessor<Integer> DATA_phase = SynchedEntityData.defineId(MartusEntity.class, EntityDataSerializers.INT);
 	public static final EntityDataAccessor<Integer> DATA_skillp1 = SynchedEntityData.defineId(MartusEntity.class, EntityDataSerializers.INT);
 	public static final EntityDataAccessor<Integer> DATA_skillp2 = SynchedEntityData.defineId(MartusEntity.class, EntityDataSerializers.INT);
@@ -325,15 +325,15 @@ public class MartusEntity extends SeaMonster {
                                 }
                                 if (entityiterator instanceof LivingEntity _livEnt1 && _livEnt1.hasEffect(CaerulaArborModMobEffects.GUIDED_EVO.get())) {
                                     num = num + 1;
-                                    ParticleLinkProcedure.execute(world, this, entityiterator);
+                                    this.spawnParticleLink(entityiterator);
                                     CaerulaArborMod.queueServerWork(3, () -> {
-                                        ParticleLinkProcedure.execute(world, this, entityiterator);
+                                        this.spawnParticleLink(entityiterator);
                                     });
                                     CaerulaArborMod.queueServerWork(6, () -> {
-                                        ParticleLinkProcedure.execute(world, this, entityiterator);
+                                        this.spawnParticleLink(entityiterator);
                                     });
                                     CaerulaArborMod.queueServerWork(9, () -> {
-                                        ParticleLinkProcedure.execute(world, this, entityiterator);
+                                        this.spawnParticleLink(entityiterator);
                                     });
                                 }
                                 if (num >= limit) {
@@ -350,7 +350,7 @@ public class MartusEntity extends SeaMonster {
                 }
                 if (phase < 0.33) {
                     if (tickCount % 2 == 0) {
-                        MartusParticleRimProcedure.execute(world, x, y, z);
+                        this.spawnMartusParticleRim();
                     }
                     if (!((Entity) this instanceof LivingEntity _livEnt8 && _livEnt8.hasEffect(CaerulaArborModMobEffects.INVULNERABLE.get()))) {
                         if (!this.level().isClientSide())
@@ -436,7 +436,7 @@ public class MartusEntity extends SeaMonster {
                                 this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 20, 9, false, false));
                         }
                         if (tickCount % 2 == 0) {
-                            MartusParticleRimProcedure.execute(world, x, y, z);
+                            this.spawnMartusParticleRim();
                         }
                     }
                     if (sklp1 > 0) {
@@ -587,6 +587,39 @@ public class MartusEntity extends SeaMonster {
 				com.apocalypse.caerulaarbor.utils.WorldUtils.summonRandomSeaborn(world, 0.33, x, y, z);
 				if (world instanceof ServerLevel _level)
 					_level.sendParticles(ParticleTypes.CLOUD, x, y, z, 18, 0.6, 0.6, 0.6, 0.16);
+			}
+		}
+	}
+
+	private void spawnMartusParticleRim() {
+		double angleOffset = Mth.nextInt(RandomSource.create(), 0, 59);
+		for (int index0 = 0; index0 < 60; index0++) {
+			double angle = angleOffset + index0 * 6;
+			double radius = 2.5 + 0.5 * Math.sin(Math.toRadians(index0 * 24));
+			double particleX = this.getX() + radius * Math.sin(Math.toRadians(angle));
+			double particleZ = this.getZ() + radius * Math.cos(Math.toRadians(angle));
+			this.level().addParticle(CaerulaArborModParticleTypes.MARTUS_CHARS.get(), particleX, this.getY() + 1, particleZ, 0, 0.15, 0);
+			this.level().addParticle(CaerulaArborModParticleTypes.MARTUS_CHARS.get(), particleX, this.getY() + 0.8, particleZ, 0, -0.08, 0);
+		}
+	}
+
+	private void spawnParticleLink(Entity target) {
+		if (!this.isAlive() || target == null || !(this.level() instanceof ServerLevel serverLevel)) {
+			return;
+		}
+
+		double vx = target.getX() - this.getX();
+		double vy = target.getY() + target.getBbHeight() * 0.5 - (this.getY() + this.getBbHeight() * 0.5);
+		double vz = target.getZ() - this.getZ();
+		double size = Math.max(Math.min(Math.round(Math.sqrt(Math.pow(vx, 2) + Math.pow(vy, 2) + Math.pow(vz, 2))), 32), 1) * 3;
+		for (int index0 = 0; index0 < (int) size; index0++) {
+			double particleX = this.getX() + vx / size * index0;
+			double particleY = this.getY() + vy / size * index0 + this.getBbHeight() * 0.5;
+			double particleZ = this.getZ() + vz / size * index0;
+			if (Math.random() > 0.5) {
+				serverLevel.sendParticles(ParticleTypes.END_ROD, particleX, particleY, particleZ, 1, 0.08, 0.08, 0.08, 0);
+			} else {
+				serverLevel.sendParticles(ParticleTypes.FIREWORK, particleX, particleY, particleZ, 1, 0.08, 0.08, 0.08, 0);
 			}
 		}
 	}

@@ -4,6 +4,7 @@ import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
+import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
 import com.apocalypse.caerulaarbor.procedures.*;
 import com.apocalypse.caerulaarbor.utils.WorldUtils;
@@ -17,6 +18,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.LevelAccessor;
@@ -210,7 +212,76 @@ public class ThirsterEntity extends SeaMonster {
 	public boolean hurt(DamageSource source, float amount) {
 		if (source.is(DamageTypes.DROWN))
 			return false;
-		return super.hurt(source, amount);
+		double healthBeforeDamage = this.getHealth();
+		boolean damaged = super.hurt(source, amount);
+		if (damaged) {
+			LevelAccessor world = this.level();
+			double x = this.getX();
+			double y = this.getY();
+			double z = this.getZ();
+			double duration = this.getEntityData().get(DATA_DURATION);
+			double integration = this.getEntityData().get(DATA_INTEGRATION) + Math.max(1, amount);
+			double maxHealth = this.getMaxHealth();
+			this.getEntityData().set(DATA_INTEGRATION, (int) integration);
+			if (integration >= maxHealth * 0.15 && duration <= 0) {
+				double dizzyTargetCount = this.getEntityData().get(DATA_DIZZY_NUM);
+				Entity currentTarget = this.getTarget();
+				new Object() {
+					void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
+						double d = timedloopiterator * 4;
+						for (int index0 = 0; index0 < 120; index0++) {
+							double angle = index0 * 3;
+							if (world instanceof ServerLevel _level)
+								_level.sendParticles(ParticleTypes.CLOUD, (x + d * Math.sin(angle)), (y + 0.5), (z + d * Math.cos(angle)), 2, 0.1, 0.1, 0.1, 0.1);
+						}
+						final int tick2 = ticks;
+						CaerulaArborMod.queueServerWork(tick2, () -> {
+							if (timedlooptotal > timedloopiterator + 1) {
+								timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
+							}
+						});
+					}
+				}.timedLoop(0, 5, 1);
+				if (world instanceof Level _level) {
+					if (!_level.isClientSide()) {
+						_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "bishopfish_attack")), SoundSource.HOSTILE,
+								(float) 2.5, 1);
+					} else {
+						_level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "bishopfish_attack")), SoundSource.HOSTILE,
+								(float) 2.5, 1, false);
+					}
+				}
+				final Vec3 _center = new Vec3(x, y, z);
+				List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(40 / 2d), e -> true).stream()
+						.sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+				for (Entity entityiterator : _entfound) {
+					if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+						if (!(entityiterator == currentTarget)) {
+							continue;
+						}
+					}
+					if (!(entityiterator instanceof LivingEntity)) {
+						continue;
+					}
+					if (entityiterator instanceof Player player && (player.isCreative() || player.isSpectator())) {
+						continue;
+					}
+					if (this.distanceTo(entityiterator) < 20) {
+						if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
+							_entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.DIZZY.get(), 160, 0, false, false));
+						dizzyTargetCount = dizzyTargetCount - 1;
+						if (dizzyTargetCount <= 1) {
+							break;
+						}
+					}
+				}
+				this.getEntityData().set(DATA_INTEGRATION, 0);
+				this.getEntityData().set(DATA_DURATION, 400);
+				if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.LIVING_BARRIER.get()))
+					this.getAttribute(CaerulaArborModAttributes.LIVING_BARRIER.get()).setBaseValue((maxHealth - healthBeforeDamage));
+			}
+		}
+		return damaged;
 	}
 
 	@Override

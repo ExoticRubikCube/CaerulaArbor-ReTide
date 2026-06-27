@@ -22,6 +22,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -234,6 +235,47 @@ public class IreneEntity extends Animal implements GeoEntity {
 	@Override
 	public SoundEvent getDeathSound() {
 		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_die"));
+	}
+
+	@Override
+	public boolean doHurtTarget(Entity target) {
+		double targetX = target.getX();
+		double targetY = target.getY();
+		double targetZ = target.getZ();
+		if (!this.level().isClientSide()) {
+			this.getEntityData().set(DATA_skillp1, this.getEntityData().get(DATA_skillp1) + 1);
+			this.getEntityData().set(DATA_skillp2, this.getEntityData().get(DATA_skillp2) + 1);
+			CaerulaArborMod.queueServerWork(6, () -> {
+				if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 3) {
+					this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
+							ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_attack")), SoundSource.NEUTRAL, 2.5F,
+							(float) Mth.nextDouble(RandomSource.create(), 0.9, 1.1));
+					if (target instanceof LivingEntity livingTarget) {
+						livingTarget.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.MUTE.get(), 60, 0, false, false));
+					}
+					target.hurt(
+							new DamageSource(
+									this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
+											.getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "generic_warrior_attack"))),
+									this),
+							(float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
+				}
+			});
+			CaerulaArborMod.queueServerWork(11, () -> {
+				if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 3) {
+					this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
+							ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_attack")), SoundSource.NEUTRAL, 2.5F,
+							(float) Mth.nextDouble(RandomSource.create(), 0.9, 1.1));
+					target.hurt(
+							new DamageSource(
+									this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
+											.getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "generic_warrior_attack"))),
+									this),
+							(float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
+				}
+			});
+		}
+		return true;
 	}
 
 	@Override

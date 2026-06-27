@@ -15,5 +15,3 @@ public class SetUnpowrredProcedure {
 		}
 	}
 }
-
-// TODO: 调用次数 = 2，与 SetPoweredProcedure 配对使用，保持原样不重构

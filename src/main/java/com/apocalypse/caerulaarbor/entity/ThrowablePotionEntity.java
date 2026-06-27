@@ -1,7 +1,6 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.procedures.ShootRandomPotionProcedure;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.util.RandomSource;
@@ -63,11 +62,14 @@ public class ThrowablePotionEntity extends AbstractArrow implements ItemSupplier
 	@Override
 	public void tick() {
 		super.tick();
-        Entity entity = this.getOwner();
-        if (entity != null && this != null) {
-            ShootRandomPotionProcedure.execute(entity);
-            if (!level().isClientSide())
-                discard();
+        Entity owner = this.getOwner();
+        if (owner != null) {
+            if (owner instanceof OceanziedWitchEntity oceanziedWitch) {
+                oceanziedWitch.shootRandomPotion();
+            }
+            if (!this.level().isClientSide()) {
+                this.discard();
+            }
         }
         if (this.inGround)
 			this.discard();

@@ -1,7 +1,9 @@
 package com.apocalypse.caerulaarbor.utils;
 
+import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
 import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 
 public class PlayerStateUtils {
 
@@ -25,16 +27,16 @@ public class PlayerStateUtils {
 	}
 
 	public static boolean isLightBright(Entity entity) {
-		double light = getPlayerLight(entity);
-		return 85 <= light && light < 100;
+		return 85 <= getPlayerLight(entity);
 	}
 
 	public static boolean isLightCeased(Entity entity) {
-		return getPlayerLight(entity) >= 100;
+		return getPlayerLight(entity) < 1;
 	}
 
 	public static boolean isLightDim(Entity entity) {
-		return getPlayerLight(entity) < 50;
+		double light = getPlayerLight(entity);
+		return 1 <= light && light < 50;
 	}
 
 	public static double getOceanization(Entity entity) {
@@ -42,15 +44,24 @@ public class PlayerStateUtils {
 	}
 
 	public static boolean hasOceanization0(Entity entity) {
-		return getOceanization(entity) >= 0 && getOceanization(entity) < 1;
+		if (entity instanceof LivingEntity living && living.hasEffect(CaerulaArborModMobEffects.INFESTED.get())) {
+			return living.getEffect(CaerulaArborModMobEffects.INFESTED.get()).getAmplifier() == 0;
+		}
+		return false;
 	}
 
 	public static boolean hasOceanization1(Entity entity) {
-		return getOceanization(entity) >= 1 && getOceanization(entity) < 2;
+		if (entity instanceof LivingEntity living && living.hasEffect(CaerulaArborModMobEffects.INFESTED.get())) {
+			return living.getEffect(CaerulaArborModMobEffects.INFESTED.get()).getAmplifier() == 1;
+		}
+		return false;
 	}
 
 	public static boolean hasOceanization2(Entity entity) {
-		return getOceanization(entity) >= 2 && getOceanization(entity) < 3;
+		if (entity instanceof LivingEntity living && living.hasEffect(CaerulaArborModMobEffects.INFESTED.get())) {
+			return living.getEffect(CaerulaArborModMobEffects.INFESTED.get()).getAmplifier() > 1;
+		}
+		return false;
 	}
 
 	public static boolean canPlayerEvo(Entity entity) {

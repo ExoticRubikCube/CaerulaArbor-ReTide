@@ -36,6 +36,7 @@ public class CaerulaArborModParticles {
 		event.registerSpriteSet(CaerulaArborModParticleTypes.ENDSPEAKER_PARTICLE.get(), EndspeakerParticleParticle::provider);
 		event.registerSpriteSet(CaerulaArborModParticleTypes.ENDSPEAKER_INV.get(), EndspeakerInvParticle::provider);
 		event.registerSpriteSet(CaerulaArborModParticleTypes.SEA_SPLASH.get(), SeaSplashParticle::provider);
+		event.registerSpriteSet(CaerulaArborModParticleTypes.SEA_RIPPLE.get(), SeaRippleParticle::provider);
 		event.registerSpriteSet(CaerulaArborModParticleTypes.SPECTER_GLITTER.get(), SpecterGlitterParticle::provider);
 		event.registerSpriteSet(CaerulaArborModParticleTypes.SPECTER_CHARS.get(), SpecterCharsParticle::provider);
 		event.registerSpriteSet(CaerulaArborModParticleTypes.IMMORTAL_PTC.get(), ImmortalPtcParticle::provider);

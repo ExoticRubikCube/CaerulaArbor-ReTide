@@ -8,8 +8,8 @@ import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModPotions;
 import com.apocalypse.caerulaarbor.procedures.RaiderRideRavagerProcedure;
-import com.apocalypse.caerulaarbor.procedures.ShootRandomPotionProcedure;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
+import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -50,6 +50,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ThrownPotion;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
@@ -457,30 +458,14 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob 
                             _datEntSetI.getEntityData().set(DATA_skillp, 250);
                         if (!this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 60, 0, false, false));
-                        CaerulaArborMod.queueServerWork(14, () -> {
-                            ShootRandomPotionProcedure.execute(this);
-                        });
-                        CaerulaArborMod.queueServerWork(19, () -> {
-                            ShootRandomPotionProcedure.execute(this);
-                        });
-                        CaerulaArborMod.queueServerWork(23, () -> {
-                            ShootRandomPotionProcedure.execute(this);
-                        });
-                        CaerulaArborMod.queueServerWork(28, () -> {
-                            ShootRandomPotionProcedure.execute(this);
-                        });
-                        CaerulaArborMod.queueServerWork(29, () -> {
-                            ShootRandomPotionProcedure.execute(this);
-                        });
-                        CaerulaArborMod.queueServerWork(34, () -> {
-                            ShootRandomPotionProcedure.execute(this);
-                        });
-                        CaerulaArborMod.queueServerWork(36, () -> {
-                            ShootRandomPotionProcedure.execute(this);
-                        });
-                        CaerulaArborMod.queueServerWork(41, () -> {
-                            ShootRandomPotionProcedure.execute(this);
-                        });
+                        CaerulaArborMod.queueServerWork(14, this::shootRandomPotion);
+                        CaerulaArborMod.queueServerWork(19, this::shootRandomPotion);
+                        CaerulaArborMod.queueServerWork(23, this::shootRandomPotion);
+                        CaerulaArborMod.queueServerWork(28, this::shootRandomPotion);
+                        CaerulaArborMod.queueServerWork(29, this::shootRandomPotion);
+                        CaerulaArborMod.queueServerWork(34, this::shootRandomPotion);
+                        CaerulaArborMod.queueServerWork(36, this::shootRandomPotion);
+                        CaerulaArborMod.queueServerWork(41, this::shootRandomPotion);
                     }
                 } else {
                     if ((Entity) this instanceof OceanziedWitchEntity _datEntSetI)
@@ -506,6 +491,50 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob 
 	@Override
 	public void performRangedAttack(LivingEntity target, float flval) {
 		ThrowablePotionEntity.shoot(this, target);
+	}
+
+	public void shootRandomPotion() {
+		if (!this.isAlive()) {
+			return;
+		}
+
+		LivingEntity target = this.getTarget();
+		if (target != null) {
+			this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3(target.getX(), target.getY() + target.getBbHeight() * 0.9, target.getZ()));
+		}
+
+		int potionIndex = Mth.nextInt(this.getRandom(), 0, 4);
+		if (potionIndex == 0) {
+			this.throwSplashPotion(Potions.HARMING);
+		} else if (potionIndex == 1) {
+			this.throwSplashPotion(CaerulaArborModPotions.INST_SANITY.get());
+		} else if (potionIndex == 2) {
+			this.throwSplashPotion(Potions.POISON);
+		} else if (potionIndex == 3) {
+			this.throwSplashPotion(Potions.LONG_WEAKNESS);
+		} else {
+			this.throwSplashPotion(Potions.SLOWNESS);
+		}
+
+		if (this.getRandom().nextBoolean()) {
+			this.throwSplashPotion(Potions.HARMING);
+		} else {
+			this.throwSplashPotion(CaerulaArborModPotions.INST_SANITY.get());
+		}
+	}
+
+	private void throwSplashPotion(Potion potion) {
+		Level projectileLevel = this.level();
+		if (projectileLevel.isClientSide()) {
+			return;
+		}
+
+		ThrownPotion thrownPotion = new ThrownPotion(EntityType.POTION, projectileLevel);
+		thrownPotion.setItem(PotionUtils.setPotion(Items.SPLASH_POTION.getDefaultInstance(), potion));
+		thrownPotion.setOwner(this);
+		thrownPotion.setPos(this.getX(), this.getEyeY() - 0.1, this.getZ());
+		thrownPotion.shoot(this.getLookAngle().x, this.getLookAngle().y, this.getLookAngle().z, 1, 2);
+		projectileLevel.addFreshEntity(thrownPotion);
 	}
 
 	public static void init() {

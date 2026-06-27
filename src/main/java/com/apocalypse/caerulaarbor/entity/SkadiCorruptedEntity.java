@@ -227,6 +227,49 @@ public class SkadiCorruptedEntity extends SeaMonster {
 	}
 	
 	@Override
+	public boolean doHurtTarget(Entity target) {
+		if (!this.level().isClientSide()) {
+			CaerulaArborMod.queueServerWork(24, () -> {
+				if (this.isAlive() && EntityPredicateUtils.isCorruptedDurative(this) && target.isAlive() && this.distanceTo(target) <= 2.25) {
+					double damage = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
+					final Vec3 center = new Vec3(this.getX(), this.getY(), this.getZ());
+					List<Entity> foundEntities = this.level().getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(6 / 2d), entity -> true).stream()
+							.sorted(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(center))).toList();
+					for (Entity entityIterator : foundEntities) {
+						if (!(entityIterator instanceof LivingEntity)) {
+							continue;
+						}
+						if (entityIterator == this) {
+							continue;
+						}
+						if (entityIterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+							continue;
+						}
+						if (this.distanceTo(entityIterator) <= 3) {
+							entityIterator.hurt(
+									new DamageSource(
+											this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
+													.getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "general_seaborn_attack"))),
+											this),
+									(float) damage);
+							Vec3 pushVec = this.position().vectorTo(entityIterator.position());
+							if (pushVec.lengthSqr() < 0.0001) {
+								pushVec = new Vec3(0, 0, 1);
+							} else {
+								pushVec = pushVec.normalize();
+							}
+							pushVec = pushVec.scale(1.25);
+							entityIterator.push(pushVec.x, pushVec.y, pushVec.z);
+						}
+					}
+					this.getEntityData().set(DATA_duration, 40);
+				}
+			});
+		}
+		return true;
+	}
+
+	@Override
 	public boolean hurt(DamageSource source, float amount) {
 		if (source.is(DamageTypes.IN_FIRE))
 			return false;
@@ -238,7 +281,29 @@ public class SkadiCorruptedEntity extends SeaMonster {
 			if(p<0.5) newAmount = amount * 0.15f;
 			else if(p<1.5) newAmount = amount * 0.5f;
 		}
-		return super.hurt(source, newAmount);
+		boolean damaged = super.hurt(source, newAmount);
+		if (damaged && EntityUtils.isCorruptedSource(source)) {
+			if (this.getEntityData().get(DATA_phase) > 1.5) {
+				return damaged;
+			}
+			double accumulatedDamage = this.getEntityData().get(DATA_deal) + newAmount;
+			this.getEntityData().set(DATA_deal, (int) accumulatedDamage);
+			if (accumulatedDamage >= this.getMaxHealth() * 0.7) {
+				this.getEntityData().set(DATA_mayCorrupt, false);
+				if (this.getEntityData().get(DATA_phase) > 0.5) {
+					return damaged;
+				}
+				this.setAnimation("animation.skadi_corrupted.convert_in_1");
+				if (!this.level().isClientSide())
+					this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 9999, 9, false, false));
+				this.getEntityData().set(DATA_duration, 10000);
+				this.getEntityData().set(DATA_convertTick, 30);
+				this.getEntityData().set(DATA_convertP, 10000);
+			} else {
+				this.getEntityData().set(DATA_mayCorrupt, true);
+			}
+		}
+		return damaged;
 	}
 
 	@Override

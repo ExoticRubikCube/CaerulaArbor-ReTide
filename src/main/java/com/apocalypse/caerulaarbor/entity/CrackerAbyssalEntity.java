@@ -24,6 +24,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -215,6 +217,32 @@ public class CrackerAbyssalEntity extends SeaMonster {
 	@Override
 	public SoundEvent getDeathSound() {
 		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.phantom.death"));
+	}
+
+	@Override
+	public boolean doHurtTarget(Entity target) {
+		double targetX = target.getX();
+		double targetY = target.getY();
+		double targetZ = target.getZ();
+		if (!this.level().isClientSide()) {
+			this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
+					ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "reefbreaker_attack")), SoundSource.HOSTILE, 10,
+					(float) Mth.nextDouble(RandomSource.create(), 0.85, 1.15));
+			double amplifier = this.hasEffect(CaerulaArborModMobEffects.REEF_CRACKER.get()) ? this.getEffect(CaerulaArborModMobEffects.REEF_CRACKER.get()).getAmplifier() : -1;
+			int nextAmplifier = amplifier < 0 ? 0 : Math.min((int)amplifier + 1, 14);
+			this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.REEF_CRACKER.get(), 120, nextAmplifier, false, false));
+			CaerulaArborMod.queueServerWork(12, () -> {
+				if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 3) {
+					target.hurt(
+							new DamageSource(
+									this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
+											.getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "general_seaborn_attack"))),
+									this),
+							(float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
+				}
+			});
+		}
+		return true;
 	}
 
 	@Override

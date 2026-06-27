@@ -35,6 +35,7 @@ public class CaerulaArborModParticleTypes {
 	public static final RegistryObject<SimpleParticleType> ENDSPEAKER_PARTICLE = REGISTRY.register("endspeaker_particle", () -> new SimpleParticleType(false));
 	public static final RegistryObject<SimpleParticleType> ENDSPEAKER_INV = REGISTRY.register("endspeaker_inv", () -> new SimpleParticleType(false));
 	public static final RegistryObject<SimpleParticleType> SEA_SPLASH = REGISTRY.register("sea_splash", () -> new SimpleParticleType(false));
+	public static final RegistryObject<SimpleParticleType> SEA_RIPPLE = REGISTRY.register("sea_ripple", () -> new SimpleParticleType(false));
 	public static final RegistryObject<SimpleParticleType> SPECTER_GLITTER = REGISTRY.register("specter_glitter", () -> new SimpleParticleType(false));
 	public static final RegistryObject<SimpleParticleType> SPECTER_CHARS = REGISTRY.register("specter_chars", () -> new SimpleParticleType(false));
 	public static final RegistryObject<SimpleParticleType> IMMORTAL_PTC = REGISTRY.register("immortal_ptc", () -> new SimpleParticleType(false));

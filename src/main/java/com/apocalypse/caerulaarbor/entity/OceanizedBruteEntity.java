@@ -197,6 +197,26 @@ public class OceanizedBruteEntity extends SeaMonster {
 	}
 
 	@Override
+	public boolean doHurtTarget(Entity target) {
+		if (!this.level().isClientSide()) {
+			CaerulaArborMod.queueServerWork(10, () -> {
+				if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 2.6) {
+					boolean damaged = target.hurt(
+							new DamageSource(
+									this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
+											.getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "general_seaborn_attack"))),
+									this),
+							(float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
+					if (damaged && target instanceof Player player) {
+						recordHurtPlayer(player);
+					}
+				}
+			});
+		}
+		return true;
+	}
+
+	@Override
 	public boolean hurt(DamageSource source, float amount) {
         LevelAccessor world = this.level();
         double x = this.getX();
@@ -233,8 +253,10 @@ public class OceanizedBruteEntity extends SeaMonster {
 												((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.25),
 										(this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1);
 								if (distanceTo(sourceentity) <= 3) {
-									sourceentity.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "general_seaborn_attack"))), this),
-											(float) sklp1);
+									if (sourceentity.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "general_seaborn_attack"))), this),
+											(float) sklp1) && sourceentity instanceof Player player) {
+										recordHurtPlayer(player);
+									}
 									if (sourceentity instanceof LivingEntity _entity1 && !_entity1.level().isClientSide())
 										_entity1.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.DIZZY.get(), 120, 0, false, false));
 									if (sourceentity instanceof LivingEntity _entity1 && !_entity1.level().isClientSide())
@@ -305,6 +327,14 @@ public class OceanizedBruteEntity extends SeaMonster {
 		if (source.is(DamageTypes.DROWN))
 			return false;
 		return super.hurt(source, amount);
+	}
+
+	private void recordHurtPlayer(Player player) {
+		String hurtPlayerNames = getPersistentData().getString("hurtPlayer");
+		String playerName = player.getDisplayName().getString();
+		if (!hurtPlayerNames.contains(playerName)) {
+			getPersistentData().putString("hurtPlayer", hurtPlayerNames + "," + playerName);
+		}
 	}
 
 	@Override

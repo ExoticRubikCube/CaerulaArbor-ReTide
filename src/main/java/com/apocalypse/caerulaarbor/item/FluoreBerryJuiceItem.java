@@ -5,7 +5,6 @@ import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.item.TooltipFlag;
@@ -17,8 +16,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.network.chat.Component;
-
-import net.minecraftforge.items.ItemHandlerHelper;
 
 import java.util.List;
 
@@ -52,25 +49,34 @@ public class FluoreBerryJuiceItem extends Item {
 
 	@Override
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
-		ItemStack retval = super.finishUsingItem(itemstack, world, entity);
+		ItemStack resultStack = super.finishUsingItem(itemstack, world, entity);
 		double x = entity.getX();
 		double y = entity.getY();
 		double z = entity.getZ();
-        if (entity != null) {
-            if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                _entity.addEffect(new MobEffectInstance(MobEffects.GLOWING, 200, 0));
-            if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                _entity.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 400, 0));
-            EntityUtils.restorePlayerLights(entity, 20);
-            itemstack.shrink(1);
-            if ((Entity) entity instanceof LivingEntity _entity)
-                _entity.removeEffect(MobEffects.BLINDNESS);
-            if ((Entity) entity instanceof Player _player) {
-                ItemStack _setstack = new ItemStack(CaerulaArborModItems.OCEANGLASS_CUP.get()).copy();
-                _setstack.setCount(1);
-                ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
-            }
-        }
-        return retval;
+		if (entity != null) {
+			if (!entity.level().isClientSide()) {
+				entity.addEffect(new MobEffectInstance(MobEffects.GLOWING, 200, 0));
+				entity.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 400, 0));
+			}
+			EntityUtils.restorePlayerLights(entity, 20);
+			entity.removeEffect(MobEffects.BLINDNESS);
+			if (!(entity instanceof Player)) {
+				resultStack.shrink(1);
+				ItemStack emptyCup = new ItemStack(CaerulaArborModItems.OCEANGLASS_CUP.get());
+				if (resultStack.isEmpty()) {
+					return emptyCup;
+				}
+			} else if (entity instanceof Player player && !player.getAbilities().instabuild) {
+				resultStack.shrink(1);
+				ItemStack emptyCup = new ItemStack(CaerulaArborModItems.OCEANGLASS_CUP.get());
+				if (resultStack.isEmpty()) {
+					return emptyCup;
+				}
+				if (!player.getInventory().add(emptyCup)) {
+					player.drop(emptyCup, false);
+				}
+			}
+		}
+		return resultStack;
 	}
 }

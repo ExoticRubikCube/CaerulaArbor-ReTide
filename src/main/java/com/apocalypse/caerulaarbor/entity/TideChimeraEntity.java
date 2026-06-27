@@ -7,7 +7,7 @@ import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
-import com.apocalypse.caerulaarbor.procedures.SummonRandomChimeraProcedure;
+import com.apocalypse.caerulaarbor.procedures.RangedSanityAttackProcedure;
 import com.apocalypse.caerulaarbor.utils.EntityPredicateUtils;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
 import net.minecraft.core.BlockPos;
@@ -222,6 +222,30 @@ public class TideChimeraEntity extends SeaMonster {
 	}
 
 	@Override
+	public boolean doHurtTarget(Entity target) {
+		double targetX = target.getX();
+		double targetY = target.getY();
+		double targetZ = target.getZ();
+		if (!this.level().isClientSide()) {
+			CaerulaArborMod.queueServerWork(8, () -> {
+				if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 4) {
+					EntityUtils.giveLessArmor(target, 11);
+					this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
+							ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "puncturefish_attack")), SoundSource.HOSTILE, 3,
+							(float) Mth.nextDouble(RandomSource.create(), 0.9, 1.1));
+					target.hurt(
+							new DamageSource(
+									this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
+											.getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "general_seaborn_attack"))),
+									this),
+							(float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
+				}
+			});
+		}
+		return true;
+	}
+
+	@Override
 	public boolean hurt(DamageSource source, float amount) {
         LevelAccessor world = this.level();
         Entity sourceentity = source.getEntity();
@@ -248,7 +272,17 @@ public class TideChimeraEntity extends SeaMonster {
 			return false;
 		if (source.is(DamageTypes.DROWN))
 			return false;
-		return super.hurt(source, amount);
+		float healthBeforeDamage = this.getHealth();
+		boolean damaged = super.hurt(source, amount);
+		if (damaged && amount <= healthBeforeDamage) {
+			double accumulatedDamage = this.getEntityData().get(DATA_deal) + amount;
+			this.getEntityData().set(DATA_deal, (int) accumulatedDamage);
+			if (accumulatedDamage >= this.getMaxHealth() * 0.25) {
+				RangedSanityAttackProcedure.execute(this.level(), this.getX(), this.getY(), this.getZ(), this);
+				this.getEntityData().set(DATA_deal, 0);
+			}
+		}
+		return damaged;
 	}
 
 	@Override
@@ -433,17 +467,17 @@ public class TideChimeraEntity extends SeaMonster {
                         if (!this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.IMMORTAL.get(), 600, 0, false, false));
                         CaerulaArborMod.queueServerWork(10, () -> {
-                            SummonRandomChimeraProcedure.execute(world, x, y, z, this);
+                            summonRandomChimera(world, x, y, z);
                         });
                     } else if (perc <= 0.5 && tap >= 2) {
                         maySummon = true;
                         CaerulaArborMod.queueServerWork(10, () -> {
-                            SummonRandomChimeraProcedure.execute(world, x, y, z, this);
+                            summonRandomChimera(world, x, y, z);
                         });
                     } else if (perc <= 0.75 && tap >= 3) {
                         maySummon = true;
                         CaerulaArborMod.queueServerWork(10, () -> {
-                            SummonRandomChimeraProcedure.execute(world, x, y, z, this);
+                            summonRandomChimera(world, x, y, z);
                         });
                     }
                     if (maySummon) {
@@ -556,6 +590,46 @@ public class TideChimeraEntity extends SeaMonster {
             }
         }
         this.refreshDimensions();
+	}
+
+	private void summonRandomChimera(LevelAccessor world, double x, double y, double z) {
+		double randomValue = Math.random();
+		if (world instanceof Level level) {
+			if (!level.isClientSide()) {
+				level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.lingering_potion.throw")), SoundSource.HOSTILE, 3, 1);
+			} else {
+				level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.lingering_potion.throw")), SoundSource.HOSTILE, 3, 1, false);
+			}
+		}
+		Entity entityToSpawn = null;
+		BlockPos pos = BlockPos.containing(x, y + 3, z);
+		if (world instanceof ServerLevel serverLevel) {
+			if (randomValue < 0.01) {
+				entityToSpawn = CaerulaArborModEntities.IZUMIK.get().spawn(serverLevel, pos, MobSpawnType.MOB_SUMMONED);
+				if (entityToSpawn instanceof IzumikEntity izumik) {
+					izumik.getEntityData().set(IzumikEntity.DATA_growth_p, 20);
+				}
+			} else if (randomValue < 0.02) {
+				entityToSpawn = CaerulaArborModEntities.TIDE_CHIMERA.get().spawn(serverLevel, pos, MobSpawnType.MOB_SUMMONED);
+			} else if (randomValue < 0.21) {
+				entityToSpawn = CaerulaArborModEntities.TIDE_DEATHREPELLER.get().spawn(serverLevel, pos, MobSpawnType.MOB_SUMMONED);
+			} else if (randomValue < 0.4) {
+				entityToSpawn = CaerulaArborModEntities.LINGERING_PATHSHAPER.get().spawn(serverLevel, pos, MobSpawnType.MOB_SUMMONED);
+			} else if (randomValue < 0.6) {
+				entityToSpawn = CaerulaArborModEntities.ENDSPEAKER_3.get().spawn(serverLevel, pos, MobSpawnType.MOB_SUMMONED);
+			} else if (randomValue < 0.8) {
+				entityToSpawn = CaerulaArborModEntities.FIRST_TO_TALK.get().spawn(serverLevel, pos, MobSpawnType.MOB_SUMMONED);
+			} else {
+				entityToSpawn = CaerulaArborModEntities.MEGA_CHEST.get().spawn(serverLevel, pos, MobSpawnType.MOB_SUMMONED);
+				if (this instanceof MegaChestEntity megaChest) {
+					megaChest.getEntityData().set(MegaChestEntity.DATA_released, true);
+				}
+			}
+		}
+		if (entityToSpawn != null) {
+			entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+			entityToSpawn.push(this.getLookAngle().x, 0.25, this.getLookAngle().z);
+		}
 	}
 
 	@Override

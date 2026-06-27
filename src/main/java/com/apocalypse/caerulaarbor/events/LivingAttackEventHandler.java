@@ -755,25 +755,6 @@ public class LivingAttackEventHandler {
 
         if (event.isCanceled()) return;
 
-        if (entity instanceof Player) {
-            double light_cost = Math.min(amount * 0.0025, 0.25);
-            if ((entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).disoclusion == 3) {
-                double rate = 0.04;
-                double time = 40;
-                if (world.getBiome(BlockPos.containing(x, y, z)).value().getBaseTemperature() * 100f >= 180) {
-                    rate = 0.01;
-                    time = 20;
-                } else if (world.getBiome(BlockPos.containing(x, y, z)).value().getBaseTemperature() * 100f <= 10) {
-                    rate = 0.06;
-                    time = 80;
-                }
-                if (Math.random() < rate) {
-                    if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                        _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.FROZEN.get(), (int) time, 0, false, false));
-                }
-            }
-        }
-
         if (sourceentity instanceof Player) {
             handlePlayerHitRelics(event, world, x, y, z, entity, immediatesourceentity, sourceentity, amount, mainHandItem);
         }

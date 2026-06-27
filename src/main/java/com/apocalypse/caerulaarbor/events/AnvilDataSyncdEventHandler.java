@@ -9,7 +9,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber
-public class AnvilDataSyncProcedure {
+public class AnvilDataSyncdEventHandler {
 	@SubscribeEvent
 	public static void onItemTakenFromAnvil(AnvilRepairEvent event) {
 		ItemStack leftItem = event.getLeft();
@@ -24,5 +24,3 @@ public class AnvilDataSyncProcedure {
 	}
 
 }
-
-// TODO: 事件处理器，不需要重构

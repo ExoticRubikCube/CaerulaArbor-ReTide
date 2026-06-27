@@ -12,8 +12,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.items.ItemHandlerHelper;
-
 public class CannedWaterItem extends Item {
 	public CannedWaterItem() {
 		super(new Item.Properties().stacksTo(1).rarity(Rarity.COMMON));
@@ -38,18 +36,28 @@ public class CannedWaterItem extends Item {
 
 	@Override
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
-		ItemStack retval = super.finishUsingItem(itemstack, world, entity);
+		ItemStack resultStack = super.finishUsingItem(itemstack, world, entity);
 		double x = entity.getX();
 		double y = entity.getY();
 		double z = entity.getZ();
-        if (entity != null) {
-            itemstack.shrink(1);
-            if ((Entity) entity instanceof Player _player) {
-                ItemStack _setstack = new ItemStack(CaerulaArborModItems.EMPTY_CAN.get()).copy();
-                _setstack.setCount(1);
-                ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
-            }
-        }
-        return retval;
+		if (entity != null) {
+			if (!(entity instanceof Player)) {
+				resultStack.shrink(1);
+				ItemStack emptyCan = new ItemStack(CaerulaArborModItems.EMPTY_CAN.get());
+				if (resultStack.isEmpty()) {
+					return emptyCan;
+				}
+			} else if (entity instanceof Player player && !player.getAbilities().instabuild) {
+				resultStack.shrink(1);
+				ItemStack emptyCan = new ItemStack(CaerulaArborModItems.EMPTY_CAN.get());
+				if (resultStack.isEmpty()) {
+					return emptyCan;
+				}
+				if (!player.getInventory().add(emptyCan)) {
+					player.drop(emptyCan, false);
+				}
+			}
+		}
+		return resultStack;
 	}
 }

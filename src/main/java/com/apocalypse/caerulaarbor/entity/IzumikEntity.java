@@ -7,8 +7,9 @@ import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
 import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
-import com.apocalypse.caerulaarbor.procedures.GiveAdvIzumikProcedure;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
+import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -71,6 +72,7 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -233,8 +235,51 @@ public class IzumikEntity extends SeaMonster {
 	}
 
 	@Override
+	public boolean doHurtTarget(Entity target) {
+		double targetX = target.getX();
+		double targetY = target.getY();
+		double targetZ = target.getZ();
+		if (!this.level().isClientSide()) {
+			CaerulaArborMod.queueServerWork(7, () -> {
+				this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
+						ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "izumik_attack")), SoundSource.HOSTILE, 1,
+						(float) Mth.nextDouble(RandomSource.create(), 0.85, 0.15));
+				if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 13) {
+					target.hurt(
+							new DamageSource(
+									this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
+											.getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "izumik_normal_attack"))),
+									this),
+							(float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
+					if (this.getEntityData().get(DATA_phase) >= 1) {
+						float oceanMagicDamage = (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0);
+						if (CaerulaArborModVariables.MapVariables.get(this.level()).strategy_grow >= 4) {
+							oceanMagicDamage *= 1.5F;
+						}
+						target.hurt(
+								new DamageSource(
+										this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
+												.getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_magic"))),
+										this),
+								oceanMagicDamage);
+						if (this.getEntityData().get(DATA_phase) >= 2 && Math.random() < 0.15 && target instanceof LivingEntity livingTarget
+								&& livingTarget.getAttributes().hasAttribute(CaerulaArborModAttributes.NUMB.get())) {
+							livingTarget.getAttribute(CaerulaArborModAttributes.NUMB.get())
+									.setBaseValue(livingTarget.getAttribute(CaerulaArborModAttributes.NUMB.get()).getBaseValue() + 1);
+							if (this.level() instanceof ServerLevel serverLevel) {
+								serverLevel.sendParticles(ParticleTypes.FIREWORK, targetX, targetY + 0.75, targetZ, 16, 0.75, 0.75, 0.75, 0.1);
+							}
+						}
+					}
+				}
+			});
+		}
+		return true;
+	}
+
+	@Override
 	public boolean hurt(DamageSource source, float amount) {
-		GiveAdvIzumikProcedure.execute(this.level(), this);
+		this.awardBoilingSeaAdvancement();
 		if (source.is(DamageTypes.IN_FIRE))
 			return false;
 		if (source.getDirectEntity() instanceof ThrownPotion || source.getDirectEntity() instanceof AreaEffectCloud)
@@ -255,13 +300,23 @@ public class IzumikEntity extends SeaMonster {
 			return false;
 		if (source.is(DamageTypes.WITHER_SKULL))
 			return false;
-		return super.hurt(source, amount);
+		boolean damaged = super.hurt(source, amount);
+		if (damaged) {
+			double accumulatedDamage = this.getEntityData().get(DATA_deal);
+			if (accumulatedDamage >= this.getMaxHealth() * 0.3) {
+				this.getEntityData().set(DATA_skillp, 0);
+				this.getEntityData().set(DATA_deal, 0);
+			} else {
+				this.getEntityData().set(DATA_deal, (int) (accumulatedDamage + amount));
+			}
+		}
+		return damaged;
 	}
 
 	@Override
 	public void die(DamageSource source) {
 		super.die(source);
-		GiveAdvIzumikProcedure.execute(this.level(), this);
+		this.awardBoilingSeaAdvancement();
 	}
 
 	@Override
@@ -650,6 +705,20 @@ public class IzumikEntity extends SeaMonster {
 	}
 
 	public static void init() {
+	}
+
+	private void awardBoilingSeaAdvancement() {
+		for (Entity playerEntity : new ArrayList<>(this.level().players())) {
+			if (this.level().dimension() == playerEntity.level().dimension() && playerEntity instanceof ServerPlayer serverPlayer) {
+				Advancement advancement = serverPlayer.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "boiling_sea"));
+				AdvancementProgress advancementProgress = serverPlayer.getAdvancements().getOrStartProgress(advancement);
+				if (!advancementProgress.isDone()) {
+					for (String criteria : advancementProgress.getRemainingCriteria()) {
+						serverPlayer.getAdvancements().award(advancement, criteria);
+					}
+				}
+			}
+		}
 	}
 
 	private void performShockAttack(double r) {

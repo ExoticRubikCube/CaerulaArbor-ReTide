@@ -221,6 +221,24 @@ public class OceanizedWardenisEntity extends SeaMonster {
 	}
 
 	@Override
+	public boolean doHurtTarget(Entity target) {
+		double targetX = target.getX();
+		double targetY = target.getY();
+		double targetZ = target.getZ();
+		if (!this.level().isClientSide()) {
+			CaerulaArborMod.queueServerWork(10, () -> {
+				if (target.isAlive() && this.distanceTo(target) <= 6) {
+					this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
+							ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.attack_impact")), SoundSource.HOSTILE,
+							(float) Mth.nextDouble(RandomSource.create(), 0.9, 1.1), 1);
+					EntityUtils.wardenRangedAttack(this.level(), this, false, 1, targetX, targetY, targetZ);
+				}
+			});
+		}
+		return true;
+	}
+
+	@Override
 	public boolean hurt(DamageSource source, float amount) {
 		if (source.is(DamageTypes.IN_FIRE))
 			return false;

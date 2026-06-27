@@ -6,7 +6,6 @@ import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 
 import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.procedures.ScreamChestStartProcedure;
 import com.apocalypse.caerulaarbor.utils.EntityPredicateUtils;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
 import net.minecraft.advancements.Advancement;
@@ -209,7 +208,8 @@ public class ScreamChestFishEntity extends SeaMonster {
 		if (isScreaming())
 			return super.hurt(source, amount * 0.5f);
 		boolean flag = super.hurt(source, amount);
-		if (flag) ScreamChestStartProcedure.execute(this.level(), this.getX(), this.getY(), this.getZ(), this, source.getEntity());
+		if (flag)
+			startScreamChest(source.getEntity());
 		return flag;
 	}
 
@@ -221,6 +221,30 @@ public class ScreamChestFishEntity extends SeaMonster {
 	@Override
 	public boolean canBeCollidedWith() {
 		return this.isAlive();
+	}
+
+	private InteractionResult startScreamChest(@Nullable Entity sourceEntity) {
+		if (sourceEntity == null) {
+			return InteractionResult.PASS;
+		}
+		if (this.isShiftKeyDown()) {
+			this.setAnimation("animation.scream_chest_fish.open");
+			if (this.level() instanceof Level level) {
+				if (!level.isClientSide()) {
+					level.playSound(null, BlockPos.containing(this.getX(), this.getY(), this.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.chest.open")), SoundSource.HOSTILE, 1, 1);
+				} else {
+					level.playLocalSound(this.getX(), this.getY(), this.getZ(), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.chest.open")), SoundSource.HOSTILE, 1, 1, false);
+				}
+			}
+			this.setShiftKeyDown(false);
+			this.getEntityData().set(DATA_release, true);
+			this.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
+			if (sourceEntity instanceof LivingEntity livingEntity) {
+				this.setTarget(livingEntity);
+			}
+			return InteractionResult.SUCCESS;
+		}
+		return InteractionResult.PASS;
 	}
 
 
@@ -289,12 +313,7 @@ public class ScreamChestFishEntity extends SeaMonster {
 		ItemStack itemstack = sourceentity.getItemInHand(hand);
 		InteractionResult retval = InteractionResult.sidedSuccess(this.level().isClientSide());
 		super.mobInteract(sourceentity, hand);
-		double x = this.getX();
-		double y = this.getY();
-		double z = this.getZ();
-		Entity entity = this;
-		Level world = this.level();
-		return ScreamChestStartProcedure.execute(world, x, y, z, entity, sourceentity);
+		return startScreamChest(sourceentity);
 	}
 
 	@Override

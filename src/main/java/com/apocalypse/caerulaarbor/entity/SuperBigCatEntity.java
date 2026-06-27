@@ -1,5 +1,6 @@
 package com.apocalypse.caerulaarbor.entity;
 
+import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
@@ -7,17 +8,21 @@ import com.apocalypse.caerulaarbor.init.CaerulaArborModGameRules;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
 import com.apocalypse.caerulaarbor.utils.WorldUtils;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
@@ -192,6 +197,55 @@ public class SuperBigCatEntity extends SeaMonster {
 	@Override
 	public SoundEvent getDeathSound() {
 		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.ocelot.death"));
+	}
+
+	@Override
+	public boolean doHurtTarget(Entity target) {
+		double targetX = target.getX();
+		double targetY = target.getY();
+		double targetZ = target.getZ();
+		if (!this.level().isClientSide()) {
+			this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
+					ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.cat.hiss")), SoundSource.HOSTILE, 1,
+					(float) Mth.nextDouble(RandomSource.create(), 0.85, 1.15));
+			CaerulaArborMod.queueServerWork(9, () -> {
+				if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 10) {
+					superCatRanged(targetX, targetY, targetZ);
+				}
+			});
+			CaerulaArborMod.queueServerWork(14, () -> {
+				if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 15) {
+					superCatRanged(targetX, targetY, targetZ);
+				}
+			});
+		}
+		return true;
+	}
+
+	private void superCatRanged(double x, double y, double z) {
+		Entity enemy = this.getTarget();
+		double damage = 0;
+		Vec3 center = new Vec3(x, y, z);
+		List<Entity> entities = this.level().getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(10 / 2d), entity -> true).stream()
+				.sorted(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(center))).toList();
+		for (Entity entityIterator : entities) {
+			if (!(entityIterator instanceof Mob) && !(entityIterator instanceof Player)) {
+				continue;
+			}
+			if (entityIterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring"))) && entityIterator != enemy) {
+				continue;
+			}
+			if (entityIterator == this) {
+				continue;
+			}
+			if (center.distanceTo(new Vec3(entityIterator.getX(), entityIterator.getY(), entityIterator.getZ())) <= 5) {
+				damage = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
+				entityIterator.hurt(
+						new DamageSource(this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
+								.getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "super_cat_attack"))), this),
+						(float) damage);
+			}
+		}
 	}
 
 	@Override

@@ -59,14 +59,12 @@ public class TulipMedcineItem extends Item {
                     capability.syncPlayerVariables(entity);
                 });
             }
-            if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                _entity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 400, 2));
-            if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                _entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 400, 1));
-            if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                _entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 600, 1));
-            if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                _entity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 600, 2));
+            if (!entity.level().isClientSide()) {
+                entity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 400, 2));
+                entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 400, 1));
+                entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 600, 1));
+                entity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 600, 2));
+            }
             if ((Entity) entity instanceof ServerPlayer _player) {
                 Advancement _adv = _player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "but_i_refuse"));
                 AdvancementProgress _ap = _player.getAdvancements().getOrStartProgress(_adv);

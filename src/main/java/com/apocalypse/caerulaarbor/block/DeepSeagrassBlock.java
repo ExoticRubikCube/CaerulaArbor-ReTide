@@ -2,7 +2,6 @@
 package com.apocalypse.caerulaarbor.block;
 
 import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
-import com.apocalypse.caerulaarbor.procedures.SeagrassStyleProcedure;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -106,12 +105,20 @@ public class DeepSeagrassBlock extends Block implements SimpleWaterloggedBlock {
 	@Override
 	public void onPlace(BlockState blockstate, Level world, BlockPos pos, BlockState oldState, boolean moving) {
 		super.onPlace(blockstate, world, pos, oldState, moving);
-		SeagrassStyleProcedure.execute(world, pos.getX(), pos.getY(), pos.getZ());
+		updateSeagrassStyle(world, pos);
 	}
 
 	@Override
 	public void neighborChanged(BlockState blockstate, Level world, BlockPos pos, Block neighborBlock, BlockPos fromPos, boolean moving) {
 		super.neighborChanged(blockstate, world, pos, neighborBlock, fromPos, moving);
-		SeagrassStyleProcedure.execute(world, pos.getX(), pos.getY(), pos.getZ());
+		updateSeagrassStyle(world, pos);
+	}
+
+	private void updateSeagrassStyle(LevelAccessor world, BlockPos pos) {
+		int blockStateValue = world.getBlockState(pos.above()).getBlock() == CaerulaArborModBlocks.DEEP_SEAGRASS.get() ? 1 : 0;
+		BlockState state = world.getBlockState(pos);
+		if (state.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProperty && integerProperty.getPossibleValues().contains(blockStateValue)) {
+			world.setBlock(pos, state.setValue(integerProperty, blockStateValue), 3);
+		}
 	}
 }
