@@ -7,7 +7,6 @@ import com.apocalypse.caerulaarbor.utils.EntityUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
@@ -39,20 +38,14 @@ public class FloureIcecreamItem extends Item {
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
 		ItemStack retval = new ItemStack(CaerulaArborModItems.SHELL_OF_STONECUTTER.get());
 		super.finishUsingItem(itemstack, world, entity);
-		double x = entity.getX();
-		double y = entity.getY();
-		double z = entity.getZ();
-        if (entity != null) {
-            if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                _entity.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 300, 0));
-            if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ESSENCE_RESISTANCE.get(), 1200, 0));
-            if ((Entity) entity instanceof LivingEntity _entity)
-                _entity.removeEffect(CaerulaArborModMobEffects.FROZEN.get());
-            entity.setTicksFrozen(0);
-            EntityUtils.restorePlayerLights(entity, 12);
-        }
-        if (itemstack.isEmpty()) {
+		if (!entity.level().isClientSide()) {
+			entity.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 300, 0));
+			entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ESSENCE_RESISTANCE.get(), 1200, 0));
+		}
+		entity.removeEffect(CaerulaArborModMobEffects.FROZEN.get());
+		entity.setTicksFrozen(0);
+		EntityUtils.restorePlayerLights(entity, 12);
+		if (itemstack.isEmpty()) {
 			return retval;
 		} else {
 			if (entity instanceof Player player && !player.getAbilities().instabuild) {

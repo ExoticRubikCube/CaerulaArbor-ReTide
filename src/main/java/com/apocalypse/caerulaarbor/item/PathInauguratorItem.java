@@ -4,26 +4,21 @@ package com.apocalypse.caerulaarbor.item;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.*;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.Tier;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.AxeItem;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.network.chat.Component;
-
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -87,11 +82,11 @@ public class PathInauguratorItem extends AxeItem {
                 BlockState _bs = Blocks.FARMLAND.defaultBlockState();
                 BlockState _bso = world.getBlockState(_bp);
                 for (Map.Entry<Property<?>, Comparable<?>> entry : _bso.getValues().entrySet()) {
-                    Property _property = _bs.getBlock().getStateDefinition().getProperty(entry.getKey().getName());
+                    Property<?> _property = _bs.getBlock().getStateDefinition().getProperty(entry.getKey().getName());
                     if (_property != null && _bs.getValue(_property) != null)
                         try {
                             _bs = _bs.setValue(_property, (Comparable) entry.getValue());
-                        } catch (Exception e) {
+                        } catch (Exception ignored) {
                         }
                 }
                 world.setBlock(_bp, _bs, 3);
@@ -125,11 +120,11 @@ public class PathInauguratorItem extends AxeItem {
                 BlockState _bs = Blocks.DIRT.defaultBlockState();
                 BlockState _bso = world.getBlockState(_bp);
                 for (Map.Entry<Property<?>, Comparable<?>> entry : _bso.getValues().entrySet()) {
-                    Property _property = _bs.getBlock().getStateDefinition().getProperty(entry.getKey().getName());
+                    Property<?> _property = _bs.getBlock().getStateDefinition().getProperty(entry.getKey().getName());
                     if (_property != null && _bs.getValue(_property) != null)
                         try {
                             _bs = _bs.setValue(_property, (Comparable) entry.getValue());
-                        } catch (Exception e) {
+                        } catch (Exception ignored) {
                         }
                 }
                 world.setBlock(_bp, _bs, 3);
@@ -153,12 +148,9 @@ public class PathInauguratorItem extends AxeItem {
                     return false;
                 }
             }.checkGamemode(entity))) {
-                {
-                    ItemStack _ist = itemstack;
-                    if (_ist.hurt(1, RandomSource.create(), null)) {
-                        _ist.shrink(1);
-                        _ist.setDamageValue(0);
-                    }
+                if (itemstack.hurt(1, RandomSource.create(), null)) {
+                    itemstack.shrink(1);
+                    itemstack.setDamageValue(0);
                 }
             }
             return InteractionResult.SUCCESS;

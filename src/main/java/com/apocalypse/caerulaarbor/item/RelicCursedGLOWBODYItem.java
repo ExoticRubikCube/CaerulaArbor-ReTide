@@ -63,16 +63,14 @@ public class RelicCursedGLOWBODYItem extends Item {
 		double x = entity.getX();
 		double y = entity.getY();
 		double z = entity.getZ();
-        if (entity != null) {
-            if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                _entity.addEffect(new MobEffectInstance(MobEffects.GLOWING, 100, 0));
-            if ((LevelAccessor) world instanceof ServerLevel _level)
-                _level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, y, z, 72, 1, 2, 1, 0.1);
-            EntityUtils.deductSanity(entity, 500);
-            if ((Entity) entity instanceof Player _player)
-                _player.getCooldowns().addCooldown(itemstack.getItem(), 200);
-        }
-        return retval;
+		if (!entity.level().isClientSide())
+			entity.addEffect(new MobEffectInstance(MobEffects.GLOWING, 100, 0));
+		if (world instanceof ServerLevel level)
+			level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, y, z, 72, 1, 2, 1, 0.1);
+		EntityUtils.deductSanity(entity, 500);
+		if (entity instanceof Player player)
+			player.getCooldowns().addCooldown(itemstack.getItem(), 200);
+		return retval;
 	}
 
 	@Override

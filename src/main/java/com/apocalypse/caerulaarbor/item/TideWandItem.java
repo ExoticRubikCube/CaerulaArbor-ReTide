@@ -82,9 +82,7 @@ public class TideWandItem extends Item {
         double x = entity.getX();
         double y = entity.getY();
         double z = entity.getZ();
-        if (entity == null)
-            return;
-        if (!((Entity) entity instanceof Player _plrCldCheck1 && _plrCldCheck1.getCooldowns().isOnCooldown(itemstack.getItem())) && (new Object() {
+        if (!(entity instanceof Player _plrCldCheck1 && _plrCldCheck1.getCooldowns().isOnCooldown(itemstack.getItem())) && (new Object() {
             public boolean checkGamemode(Entity _ent) {
                 if (_ent instanceof ServerPlayer _serverPlayer) {
                     return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
@@ -95,8 +93,7 @@ public class TideWandItem extends Item {
             }
         }.checkGamemode((Entity) entity) || ((Entity) entity instanceof Player _plr ? _plr.totalExperience : 0) >= 5)) {
             {
-                Entity _shootFrom = entity;
-                Level projectileLevel = _shootFrom.level();
+                Level projectileLevel = entity.level();
                 if (!projectileLevel.isClientSide()) {
                     Projectile _entityToSpawn = new Object() {
                         public Projectile getArrow(Level level, Entity shooter, float damage, int knockback) {
@@ -109,8 +106,8 @@ public class TideWandItem extends Item {
                         }
                     }.getArrow(projectileLevel, (Entity) entity,
                             (float) ((Entity) entity instanceof LivingEntity _livingEntity4 && _livingEntity4.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity4.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0), 0);
-                    _entityToSpawn.setPos(_shootFrom.getX(), _shootFrom.getEyeY() - 0.1, _shootFrom.getZ());
-                    _entityToSpawn.shoot(_shootFrom.getLookAngle().x, _shootFrom.getLookAngle().y, _shootFrom.getLookAngle().z, (float) 2.2, 0);
+                    _entityToSpawn.setPos(entity.getX(), entity.getEyeY() - 0.1, entity.getZ());
+                    _entityToSpawn.shoot(entity.getLookAngle().x, entity.getLookAngle().y, entity.getLookAngle().z, (float) 2.2, 0);
                     projectileLevel.addFreshEntity(_entityToSpawn);
                 }
             }

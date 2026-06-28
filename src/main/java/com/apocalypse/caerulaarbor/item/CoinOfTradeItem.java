@@ -1,14 +1,12 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
@@ -50,28 +48,22 @@ public class CoinOfTradeItem extends Item {
 	@Override
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
 		ItemStack retval = super.finishUsingItem(itemstack, world, entity);
-		double x = entity.getX();
-		double y = entity.getY();
-		double z = entity.getZ();
-        if (entity != null) {
-            ItemStack togive = ItemStack.EMPTY;
-            if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).is(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "relic_generic")))
-                    && ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == itemstack.getItem()) {
-                for (int index0 = 0; index0 < 64; index0++) {
-                    togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElseGet(() -> Items.AIR))).copy();
-                    if (!(togive.getItem() == ItemStack.EMPTY.getItem())) {
-                        break;
-                    }
-                }
-                if ((Entity) entity instanceof Player _player) {
-                    ItemStack _setstack = togive.copy();
-                    _setstack.setCount(1);
-                    ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
-                }
-                ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).shrink(1);
-                ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
-            }
-        }
-        return retval;
+		ItemStack togive = ItemStack.EMPTY;
+		if (entity.getOffhandItem().is(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "relic_generic"))) && entity.getMainHandItem().getItem() == itemstack.getItem()) {
+			for (int index0 = 0; index0 < 64; index0++) {
+				togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElseGet(() -> Items.AIR))).copy();
+				if (!(togive.getItem() == ItemStack.EMPTY.getItem())) {
+					break;
+				}
+			}
+			if (entity instanceof Player player) {
+				ItemStack _setstack = togive.copy();
+				_setstack.setCount(1);
+				ItemHandlerHelper.giveItemToPlayer(player, _setstack);
+			}
+			entity.getOffhandItem().shrink(1);
+			entity.getMainHandItem().shrink(1);
+		}
+		return retval;
 	}
 }

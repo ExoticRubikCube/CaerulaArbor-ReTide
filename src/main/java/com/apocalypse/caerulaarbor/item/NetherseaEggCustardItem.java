@@ -4,7 +4,6 @@ package com.apocalypse.caerulaarbor.item;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
@@ -33,16 +32,11 @@ public class NetherseaEggCustardItem extends Item {
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
 		ItemStack retval = new ItemStack(Items.BOWL);
 		super.finishUsingItem(itemstack, world, entity);
-		double x = entity.getX();
-		double y = entity.getY();
-		double z = entity.getZ();
-        if (entity != null) {
-            if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.REGENERATION_PERCLY.get(), 100, 0, false, false));
-            if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.DEDUCT_ONE_SANITY.get(), 80, 0, false, false));
-        }
-        if (itemstack.isEmpty()) {
+		if (!entity.level().isClientSide()) {
+			entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.REGENERATION_PERCLY.get(), 100, 0, false, false));
+			entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.DEDUCT_ONE_SANITY.get(), 80, 0, false, false));
+		}
+		if (itemstack.isEmpty()) {
 			return retval;
 		} else {
 			if (entity instanceof Player player && !player.getAbilities().instabuild) {

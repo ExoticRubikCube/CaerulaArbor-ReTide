@@ -4,7 +4,6 @@ package com.apocalypse.caerulaarbor.item;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
@@ -22,16 +21,11 @@ public class CannedNoodleItem extends Item {
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
 		ItemStack retval = new ItemStack(CaerulaArborModItems.EMPTY_CAN.get());
 		super.finishUsingItem(itemstack, world, entity);
-		double x = entity.getX();
-		double y = entity.getY();
-		double z = entity.getZ();
-        if (entity != null) {
-            if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                _entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 220, 0));
-            if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                _entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 220, 0));
-        }
-        if (itemstack.isEmpty()) {
+		if (!entity.level().isClientSide()) {
+			entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 220, 0));
+			entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 220, 0));
+		}
+		if (itemstack.isEmpty()) {
 			return retval;
 		} else {
 			if (entity instanceof Player player && !player.getAbilities().instabuild) {

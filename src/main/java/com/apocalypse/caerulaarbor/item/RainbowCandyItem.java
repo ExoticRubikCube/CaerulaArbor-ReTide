@@ -6,7 +6,6 @@ import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
@@ -34,25 +33,19 @@ public class RainbowCandyItem extends Item {
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
 		ItemStack retval = new ItemStack(CaerulaArborModItems.PAPER_BAG.get());
 		super.finishUsingItem(itemstack, world, entity);
-		double x = entity.getX();
-		double y = entity.getY();
-		double z = entity.getZ();
-        if (entity != null) {
-            if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                _entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 280, 1));
-            if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                _entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 280, 1));
-            if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                _entity.addEffect(new MobEffectInstance(MobEffects.HEALTH_BOOST, 560, 1));
-            {
-                boolean _setval = true;
-                ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
-                    capability.player_util_RAINBOW = _setval;
-                    capability.syncPlayerVariables(entity);
-                });
-            }
-        }
-        if (itemstack.isEmpty()) {
+		if (!entity.level().isClientSide()) {
+			entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 280, 1));
+			entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 280, 1));
+			entity.addEffect(new MobEffectInstance(MobEffects.HEALTH_BOOST, 560, 1));
+		}
+		{
+			boolean _setval = true;
+			entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+				capability.player_util_RAINBOW = _setval;
+				capability.syncPlayerVariables(entity);
+			});
+		}
+		if (itemstack.isEmpty()) {
 			return retval;
 		} else {
 			if (entity instanceof Player player && !player.getAbilities().instabuild) {

@@ -60,47 +60,45 @@ public class SkadiSwordItem extends SwordItem {
 	public boolean hurtEnemy(ItemStack itemstack, LivingEntity entity, LivingEntity sourceentity) {
 		boolean retval = super.hurtEnemy(itemstack, entity, sourceentity);
         LevelAccessor world = entity.level();
-        if (entity != null && sourceentity != null) {
-            double damage = 0;
-            double r = 0;
-            Entity enemy = null;
-            Entity target = null;
-            r = 3;
-            enemy = ((Entity) sourceentity instanceof LivingEntity _entity) ? _entity.getLastHurtByMob() : null;
-            enemy = ((Entity) sourceentity instanceof LivingEntity _entity) ? _entity.getLastHurtMob() : null;
-            damage = (Entity) sourceentity instanceof LivingEntity _livingEntity2 && _livingEntity2.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity2.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
-            {
-                final Vec3 _center = new Vec3(entity.getX(), entity.getY(), entity.getZ());
-                List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate((2 * r) / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                for (Entity entityiterator : _entfound) {
-                    if (!(entityiterator instanceof LivingEntity)) {
+        double damage = 0;
+        double r = 0;
+        Entity enemy = null;
+        Entity target = null;
+        r = 3;
+        enemy = ((Entity) sourceentity instanceof LivingEntity _entity) ? _entity.getLastHurtByMob() : null;
+        enemy = ((Entity) sourceentity instanceof LivingEntity _entity) ? _entity.getLastHurtMob() : null;
+        damage = (Entity) sourceentity instanceof LivingEntity _livingEntity2 && _livingEntity2.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity2.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
+        {
+            final Vec3 _center = new Vec3(entity.getX(), entity.getY(), entity.getZ());
+            List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate((2 * r) / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+            for (Entity entityiterator : _entfound) {
+                if (!(entityiterator instanceof LivingEntity)) {
+                    continue;
+                }
+                if (!(entityiterator instanceof Monster)) {
+                    if (!(((Entity) entity instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == sourceentity)) {
                         continue;
                     }
-                    if (!(entityiterator instanceof Monster)) {
-                        if (!(((Entity) entity instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == sourceentity)) {
-                            continue;
-                        }
-                    }
-                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "is_humanside")))) {
-                        if (!(entityiterator == enemy || entityiterator == target)) {
-                            continue;
-                        }
-                    }
-                    if (entityiterator instanceof Player || (entityiterator instanceof TamableAnimal _tamEnt && _tamEnt.isTame())) {
-                        if (!(entityiterator == enemy || entityiterator == target)) {
-                            continue;
-                        }
-                    }
-                    if (entityiterator == sourceentity) {
+                }
+                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "is_humanside")))) {
+                    if (!(entityiterator == enemy || entityiterator == target)) {
                         continue;
                     }
-                    if (entityiterator == entity) {
+                }
+                if (entityiterator instanceof Player || (entityiterator instanceof TamableAnimal _tamEnt && _tamEnt.isTame())) {
+                    if (!(entityiterator == enemy || entityiterator == target)) {
                         continue;
                     }
-                    if ((entityiterator != null ? entity.distanceTo(entityiterator) : -1) <= r) {
-                        entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))), sourceentity),
-                                (float) damage);
-                    }
+                }
+                if (entityiterator == sourceentity) {
+                    continue;
+                }
+                if (entityiterator == entity) {
+                    continue;
+                }
+                if (entity.distanceTo(entityiterator) <= r) {
+                    entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))), sourceentity),
+                            (float) damage);
                 }
             }
         }
@@ -118,16 +116,12 @@ public class SkadiSwordItem extends SwordItem {
 	@Override
 	public void inventoryTick(ItemStack itemstack, Level world, Entity entity, int slot, boolean selected) {
 		super.inventoryTick(itemstack, world, entity, slot, selected);
-		if (selected) {
-            if (entity == null)
-                return;
-            if (EntityUtils.getHealthPerc(entity) >= 0.5) {
-                if (!(entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CaerulaArborModMobEffects.BOOST_OF_SILENCE.get()))) {
-                    if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                        _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.BOOST_OF_SILENCE.get(), 10, 6, false, false));
-                    if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                        _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ADD_REACH.get(), 10, 2, false, false));
-                }
+		if (selected && EntityUtils.getHealthPerc(entity) >= 0.5) {
+            if (!(entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CaerulaArborModMobEffects.BOOST_OF_SILENCE.get()))) {
+                if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
+                    _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.BOOST_OF_SILENCE.get(), 10, 6, false, false));
+                if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
+                    _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ADD_REACH.get(), 10, 2, false, false));
             }
         }
 	}

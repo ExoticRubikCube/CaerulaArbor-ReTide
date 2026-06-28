@@ -4,14 +4,12 @@ package com.apocalypse.caerulaarbor.item;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.item.Rarity;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.entity.LivingEntity;
-
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.world.level.Level;
 
 public class TrailCakePieceItem extends Item {
 	public TrailCakePieceItem() {
@@ -24,11 +22,9 @@ public class TrailCakePieceItem extends Item {
 		double x = entity.getX();
 		double y = entity.getY();
 		double z = entity.getZ();
-        if (entity != null) {
-            EntityUtils.deductSanity(entity, 150);
-            if ((LevelAccessor) world instanceof ServerLevel _level)
-                _level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, (y + 0.7), z, 32, 0.5, 1.5, 0.5, 1);
-        }
+        EntityUtils.deductSanity(entity, 150);
+        if (world instanceof ServerLevel _level)
+            _level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, (y + 0.7), z, 32, 0.5, 1.5, 0.5, 1);
         return retval;
 	}
 }

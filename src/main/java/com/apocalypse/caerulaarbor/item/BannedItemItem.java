@@ -32,8 +32,6 @@ public class BannedItemItem extends Item {
     public @NotNull InteractionResult interactLivingEntity(
             @NotNull ItemStack pStack, @NotNull Player pPlayer, @NotNull LivingEntity pTarget, @NotNull InteractionHand pHand
     ) {
-        if (pTarget == null)
-            return InteractionResult.PASS;
         if (pTarget.getPersistentData().getBoolean("seabornForgive")) {
             return InteractionResult.PASS;
         }

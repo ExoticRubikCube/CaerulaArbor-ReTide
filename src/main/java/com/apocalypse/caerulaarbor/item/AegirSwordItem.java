@@ -72,15 +72,11 @@ public class AegirSwordItem extends SwordItem {
 	@Override
 	public void inventoryTick(ItemStack itemstack, Level world, Entity entity, int slot, boolean selected) {
 		super.inventoryTick(itemstack, world, entity, slot, selected);
-		if (selected) {
-            if (entity == null)
-                return;
-            if (EntityUtils.getHealthPerc(entity) >= 0.5) {
-                if (!(entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CaerulaArborModMobEffects.BOOST_OF_SILENCE.get()))) {
-                    if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                        _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.BOOST_OF_SILENCE.get(), 10, 1, false, false));
-                }
-            }
-        }
+		if (selected && EntityUtils.getHealthPerc(entity) >= 0.5) {
+			if (!(entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CaerulaArborModMobEffects.BOOST_OF_SILENCE.get()))) {
+				if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
+					_entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.BOOST_OF_SILENCE.get(), 10, 1, false, false));
+			}
+		}
 	}
 }

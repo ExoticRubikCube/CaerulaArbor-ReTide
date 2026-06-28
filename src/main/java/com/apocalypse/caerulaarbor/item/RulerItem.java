@@ -29,7 +29,7 @@ public class RulerItem extends Item {
         double z = context.getClickedPos().getZ();
         Direction direction = context.getClickedFace();
         Entity entity = context.getPlayer();
-        if (direction == null || entity == null)
+        if (entity == null)
             return InteractionResult.PASS;
         if (entity instanceof Player _player && !_player.level().isClientSide())
             _player.displayClientMessage(Component.literal(("light, block:" + world.getBrightness(LightLayer.BLOCK, BlockPos.containing(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ())) + "sky: "
@@ -41,13 +41,11 @@ public class RulerItem extends Item {
 	public boolean hurtEnemy(ItemStack itemstack, LivingEntity entity, LivingEntity sourceentity) {
 		boolean retval = super.hurtEnemy(itemstack, entity, sourceentity);
         LevelAccessor world = entity.level();
-        if (entity != null) {
-            if (!world.isClientSide() && world.getServer() != null)
-                world.getServer().getPlayerList().broadcastSystemMessage(Component.literal(("scale of " + entity.getDisplayName().getString() + "(W x H):" + entity.getBbWidth() + "x" + entity.getBbHeight())), false);
-            if (!world.isClientSide() && world.getServer() != null)
-                world.getServer().getPlayerList().broadcastSystemMessage(Component.literal(("look of" + entity.getDisplayName().getString() + "x " + Math.round(Math.pow(10, 3) * (entity.getLookAngle().x)) / Math.pow(10, 3) + " y "
-                        + Math.round(Math.pow(10, 3) * (entity.getLookAngle().y)) / Math.pow(10, 3) + " z " + Math.round(Math.pow(10, 3) * (entity.getLookAngle().z)) / Math.pow(10, 3))), false);
-        }
+        if (!world.isClientSide() && world.getServer() != null)
+            world.getServer().getPlayerList().broadcastSystemMessage(Component.literal(("scale of " + entity.getDisplayName().getString() + "(W x H):" + entity.getBbWidth() + "x" + entity.getBbHeight())), false);
+        if (!world.isClientSide() && world.getServer() != null)
+            world.getServer().getPlayerList().broadcastSystemMessage(Component.literal(("look of" + entity.getDisplayName().getString() + "x " + Math.round(Math.pow(10, 3) * (entity.getLookAngle().x)) / Math.pow(10, 3) + " y "
+                    + Math.round(Math.pow(10, 3) * (entity.getLookAngle().y)) / Math.pow(10, 3) + " z " + Math.round(Math.pow(10, 3) * (entity.getLookAngle().z)) / Math.pow(10, 3))), false);
         return retval;
 	}
 }

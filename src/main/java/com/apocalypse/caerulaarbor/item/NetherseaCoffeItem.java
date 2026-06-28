@@ -47,34 +47,29 @@ public class NetherseaCoffeItem extends Item {
 	@Override
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
 		ItemStack resultStack = super.finishUsingItem(itemstack, world, entity);
-		double x = entity.getX();
-		double y = entity.getY();
-		double z = entity.getZ();
-		if (entity != null) {
-			if (!entity.level().isClientSide()) {
-				entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ADD_ATTACK_PERCLY.get(), 400, 1));
-				entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 400, 1));
-				entity.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 400, 2));
-				entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 500, 1));
-			}
-			EntityUtils.deductSanity(entity, 45);
-			if (!(entity instanceof Player)) {
-				resultStack.shrink(1);
-				ItemStack emptyCup = new ItemStack(CaerulaArborModItems.OCEANGLASS_CUP.get());
-				if (resultStack.isEmpty()) {
-					return emptyCup;
-				}
-			} else if (entity instanceof Player player && !player.getAbilities().instabuild) {
-				resultStack.shrink(1);
-				ItemStack emptyCup = new ItemStack(CaerulaArborModItems.OCEANGLASS_CUP.get());
-				if (resultStack.isEmpty()) {
-					return emptyCup;
-				}
-				if (!player.getInventory().add(emptyCup)) {
-					player.drop(emptyCup, false);
-				}
-			}
-		}
-		return resultStack;
+        if (!entity.level().isClientSide()) {
+            entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ADD_ATTACK_PERCLY.get(), 400, 1));
+            entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 400, 1));
+            entity.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 400, 2));
+            entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 500, 1));
+        }
+        EntityUtils.deductSanity(entity, 45);
+        if (!(entity instanceof Player)) {
+            resultStack.shrink(1);
+            ItemStack emptyCup = new ItemStack(CaerulaArborModItems.OCEANGLASS_CUP.get());
+            if (resultStack.isEmpty()) {
+                return emptyCup;
+            }
+        } else if (entity instanceof Player player && !player.getAbilities().instabuild) {
+            resultStack.shrink(1);
+            ItemStack emptyCup = new ItemStack(CaerulaArborModItems.OCEANGLASS_CUP.get());
+            if (resultStack.isEmpty()) {
+                return emptyCup;
+            }
+            if (!player.getInventory().add(emptyCup)) {
+                player.drop(emptyCup, false);
+            }
+        }
+        return resultStack;
 	}
 }

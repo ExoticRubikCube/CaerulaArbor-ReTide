@@ -5,7 +5,6 @@ import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
@@ -30,18 +29,10 @@ public class NervousRegenerationItem extends Item {
 	@Override
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
 		ItemStack retval = super.finishUsingItem(itemstack, world, entity);
-		double x = entity.getX();
-		double y = entity.getY();
-		double z = entity.getZ();
-        if (entity != null) {
-            EntityUtils.restoreSanity(entity, 1000);
-            if ((Entity) entity instanceof LivingEntity _entity)
-                _entity.removeEffect(CaerulaArborModMobEffects.DIZZY.get());
-            if ((Entity) entity instanceof LivingEntity _entity)
-                _entity.removeEffect(MobEffects.BLINDNESS);
-            if ((Entity) entity instanceof LivingEntity _entity)
-                _entity.removeEffect(MobEffects.DARKNESS);
-        }
-        return retval;
+		EntityUtils.restoreSanity(entity, 1000);
+		entity.removeEffect(CaerulaArborModMobEffects.DIZZY.get());
+		entity.removeEffect(MobEffects.BLINDNESS);
+		entity.removeEffect(MobEffects.DARKNESS);
+		return retval;
 	}
 }

@@ -46,7 +46,7 @@ public class CarmenTreatyItem extends Item {
         Direction direction = context.getClickedFace();
         Entity entity = context.getPlayer();
         ItemStack itemstack = context.getItemInHand();
-        if (direction == null || entity == null)
+        if (entity == null)
             return InteractionResult.PASS;
         double tx = 0;
         double ty = 0;

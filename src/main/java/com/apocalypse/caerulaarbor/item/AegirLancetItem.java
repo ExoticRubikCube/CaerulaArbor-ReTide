@@ -55,15 +55,13 @@ public class AegirLancetItem extends SwordItem {
         double x = entity.getX();
         double y = entity.getY();
         double z = entity.getZ();
-        if (entity != null && sourceentity != null) {
-            if (((Entity) sourceentity instanceof Player _plr ? _plr.getAttackStrengthScale(0) : 0) > 0.95) {
-                if (Math.random() < 0.25 && !(entity instanceof Player)) {
-                    if (world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "gladiia_attack_hit")), SoundSource.PLAYERS, 1, 1);
-                    }
-                    if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                        _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.HAEMOPHILIA.get(), 120, 0, false, false));
+        if (((Entity) sourceentity instanceof Player _plr ? _plr.getAttackStrengthScale(0) : 0) > 0.95) {
+            if (Math.random() < 0.25 && !(entity instanceof Player)) {
+                if (world instanceof Level _level) {
+                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "gladiia_attack_hit")), SoundSource.PLAYERS, 1, 1);
                 }
+                if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
+                    _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.HAEMOPHILIA.get(), 120, 0, false, false));
             }
         }
         return retval;

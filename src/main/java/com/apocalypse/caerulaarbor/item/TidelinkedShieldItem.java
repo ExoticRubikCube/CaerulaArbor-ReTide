@@ -57,8 +57,6 @@ public class TidelinkedShieldItem extends ShieldItem {
 	public void inventoryTick(ItemStack itemstack, Level world, Entity entity, int slot, boolean selected) {
 		super.inventoryTick(itemstack, world, entity, slot, selected);
 		if (selected) {
-            if (entity == null)
-                return;
             if (entity instanceof LivingEntity _entity)
                 _entity.removeEffect(CaerulaArborModMobEffects.LESS_ARMOR.get());
         }

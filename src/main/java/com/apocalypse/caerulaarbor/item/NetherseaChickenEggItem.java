@@ -44,12 +44,10 @@ public class NetherseaChickenEggItem extends Item {
         ooo = Math.max(itemstack.getOrCreateTag().getDouble("offset"), 4);
         String hoverText = Component.translatable("item.caerula_arbor.nethersea_chicken_egg.rate").getString() + new java.text.DecimalFormat("##.##").format(rrr) + "%" + "\n"
                 + Component.translatable("item.caerula_arbor.nethersea_chicken_egg.offset").getString() + new java.text.DecimalFormat("##.##").format(ooo);
-		if (hoverText != null) {
-			for (String line : hoverText.split("\n")) {
-				list.add(Component.literal(line));
-			}
-		}
-	}
+        for (String line : hoverText.split("\n")) {
+            list.add(Component.literal(line));
+        }
+    }
 
 	@Override
 	public InteractionResult useOn(UseOnContext context) {
@@ -61,7 +59,7 @@ public class NetherseaChickenEggItem extends Item {
         Direction direction = context.getClickedFace();
         Entity entity = context.getPlayer();
         ItemStack itemstack = context.getItemInHand();
-        if (direction == null || entity == null)
+        if (entity == null)
             return InteractionResult.SUCCESS;
         if (world.isClientSide()) return InteractionResult.SUCCESS;
         if (Math.random() < 0.75) {
@@ -90,11 +88,9 @@ public class NetherseaChickenEggItem extends Item {
                     if (atk != null) atk.setBaseValue(atk.getBaseValue() * fr);
                     chicken.setHealth(chicken.getMaxHealth());
                     SynchedEntityData data = chicken.getEntityData();
-                    if (data != null) {
-                        data.set(OceanizedChickenEntity.DATA_EGG_RATE, (int) (fr * 1000));
-                        data.set(OceanizedChickenEntity.DATA_EGG_OFFSET, (int) ooo);
-                        data.set(OceanizedChickenEntity.DATA_IS_CHILD, true);
-                    }
+                    data.set(OceanizedChickenEntity.DATA_EGG_RATE, (int) (fr * 1000));
+                    data.set(OceanizedChickenEntity.DATA_EGG_OFFSET, (int) ooo);
+                    data.set(OceanizedChickenEntity.DATA_IS_CHILD, true);
                 }
             }
             //CaerulaArborMod.LOGGER.info(("Summon chicken with rate: " + new java.text.DecimalFormat("##.##").format(fr) + " and with offset: " + new java.text.DecimalFormat("##.##").format(ooo)));

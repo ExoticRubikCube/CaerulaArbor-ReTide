@@ -149,53 +149,49 @@ public class WavecleaverItem extends Item implements GeoItem {
 		double y = entity.getY();
 		double z = entity.getZ();
 
-        if (entity != null) {
-            if (!((Entity) entity instanceof Player _plrCldCheck1 && _plrCldCheck1.getCooldowns().isOnCooldown(itemstack.getItem()))) {
-                if (itemstack.getItem() instanceof WavecleaverItem)
-                    itemstack.getOrCreateTag().putString("geckoAnim", "animation.wavelceaver.spin");
-                CaerulaArborMod.queueServerWork(5, () -> {
-                    if (entity.isHolding(CaerulaArborModItems.WAVECLEAVER.get())) {
-                        new Object() {
-                            void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
-                                if (entity.isHolding(CaerulaArborModItems.WAVECLEAVER.get())) {
-									double xx = entity.getX() + 2 * entity.getLookAngle().x;
-									double yy = entity.getY() + 2 * entity.getLookAngle().y;
-									double zz = entity.getZ() + 2 * entity.getLookAngle().z;
-									if (entity != null) {
-										{
-											final Vec3 _center = new Vec3(xx, yy, zz);
-											List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(5 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-											for (Entity entityiterator : _entfound) {
-												if (entityiterator == entity) continue;
+        if (!((Entity) entity instanceof Player _plrCldCheck1 && _plrCldCheck1.getCooldowns().isOnCooldown(itemstack.getItem()))) {
+            if (itemstack.getItem() instanceof WavecleaverItem)
+                itemstack.getOrCreateTag().putString("geckoAnim", "animation.wavelceaver.spin");
+            CaerulaArborMod.queueServerWork(5, () -> {
+                if (entity.isHolding(CaerulaArborModItems.WAVECLEAVER.get())) {
+                    new Object() {
+                        void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
+                            if (entity.isHolding(CaerulaArborModItems.WAVECLEAVER.get())) {
+                                double xx = entity.getX() + 2 * entity.getLookAngle().x;
+                                double yy = entity.getY() + 2 * entity.getLookAngle().y;
+                                double zz = entity.getZ() + 2 * entity.getLookAngle().z;
+                                {
+                                    final Vec3 _center = new Vec3(xx, yy, zz);
+                                    List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(5 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+                                    for (Entity entityiterator : _entfound) {
+                                        if (entityiterator == entity) continue;
 
-												if (entityiterator instanceof TamableAnimal _tamEnt && _tamEnt.getOwner() == entity)
-													continue;
+                                        if (entityiterator instanceof TamableAnimal _tamEnt && _tamEnt.getOwner() == entity)
+                                            continue;
 
-												if (!(entityiterator instanceof LivingEntity)) continue;
+                                        if (!(entityiterator instanceof LivingEntity)) continue;
 
-												if (entityiterator instanceof Player) continue;
+                                        if (entityiterator instanceof Player) continue;
 
-												if (new Vec3((entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ())).distanceTo(new Vec3(xx, yy, zz)) <= 2.5) {
-													entityiterator.hurt(new DamageSource(((LevelAccessor) world).registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "cleaver_mix"))), entity),
-															(float) (((Entity) entity instanceof LivingEntity _livingEntity9 && _livingEntity9.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity9.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.8));
-												}
-											}
-										}
-									}
-								}
-                                final int tick2 = ticks;
-                                CaerulaArborMod.queueServerWork(tick2, () -> {
-                                    if (timedlooptotal > timedloopiterator + 1) {
-                                        timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
+                                        if (new Vec3((entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ())).distanceTo(new Vec3(xx, yy, zz)) <= 2.5) {
+                                            entityiterator.hurt(new DamageSource(((LevelAccessor) world).registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "cleaver_mix"))), entity),
+                                                    (float) ((entity.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? entity.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.8));
+                                        }
                                     }
-                                });
+                                }
                             }
-                        }.timedLoop(0, 10, 2);
-                    }
-                });
-                if ((Entity) entity instanceof Player _player)
-                    _player.getCooldowns().addCooldown(itemstack.getItem(), 240);
-            }
+                            final int tick2 = ticks;
+                            CaerulaArborMod.queueServerWork(tick2, () -> {
+                                if (timedlooptotal > timedloopiterator + 1) {
+                                    timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
+                                }
+                            });
+                        }
+                    }.timedLoop(0, 10, 2);
+                }
+            });
+            if ((Entity) entity instanceof Player _player)
+                _player.getCooldowns().addCooldown(itemstack.getItem(), 240);
         }
         return ar;
 	}

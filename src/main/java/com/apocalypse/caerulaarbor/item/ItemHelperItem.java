@@ -1,7 +1,6 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -45,8 +44,6 @@ public class ItemHelperItem extends Item {
         double z = context.getClickedPos().getZ();
         Direction direction = context.getClickedFace();
         ItemStack itemstack = context.getItemInHand();
-        if (direction == null)
-            return InteractionResult.PASS;
         double tgtX = 0;
         double tgtY = 0;
         double tgtZ = 0;

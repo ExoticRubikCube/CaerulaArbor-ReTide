@@ -1,7 +1,6 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.entity.AnchorFlyEntity;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
@@ -92,15 +91,13 @@ public class UnambiguousDirectionItem extends Item {
         double x = entity.getX();
         double y = entity.getY();
         double z = entity.getZ();
-        if (sourceentity != null) {
-            if ((Entity) sourceentity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CaerulaArborModMobEffects.PATH_TO_UNCOVER.get())) {
-                if (world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "anchor_skillattack")), SoundSource.PLAYERS, 2, 1);
-                }
-            } else {
-                if (world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "anchor_attack")), SoundSource.PLAYERS, 2, 1);
-                }
+        if (sourceentity.hasEffect(CaerulaArborModMobEffects.PATH_TO_UNCOVER.get())) {
+            if (world instanceof Level _level) {
+                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "anchor_skillattack")), SoundSource.PLAYERS, 2, 1);
+            }
+        } else {
+            if (world instanceof Level _level) {
+                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "anchor_attack")), SoundSource.PLAYERS, 2, 1);
             }
         }
         return retval;
@@ -118,32 +115,27 @@ public class UnambiguousDirectionItem extends Item {
         double x = entity.getX();
         double y = entity.getY();
         double z = entity.getZ();
-        if (entity == null)
-            return;
-        if (!((Entity) entity instanceof Player _plrCldCheck1 && _plrCldCheck1.getCooldowns().isOnCooldown(itemstack.getItem()))) {
+        if (!(entity instanceof Player _plrCldCheck1 && _plrCldCheck1.getCooldowns().isOnCooldown(itemstack.getItem()))) {
             if ((LevelAccessor) world instanceof Level _level) {
                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "anchor_throw")), SoundSource.PLAYERS, (float) 1.8, 1);
             }
-            {
-                Entity _shootFrom = entity;
-                Level projectileLevel = _shootFrom.level();
-                if (!projectileLevel.isClientSide()) {
-                    Projectile _entityToSpawn = new Object() {
-                        public Projectile getArrow(Level level, Entity shooter, float damage, int knockback) {
-                            AbstractArrow entityToSpawn = new AnchorFlyEntity(CaerulaArborModEntities.ANCHOR_FLY.get(), level);
-                            entityToSpawn.setOwner(shooter);
-                            entityToSpawn.setBaseDamage(damage);
-                            entityToSpawn.setKnockback(knockback);
-                            entityToSpawn.setSilent(true);
-                            entityToSpawn.setCritArrow(true);
-                            return entityToSpawn;
-                        }
-                    }.getArrow(projectileLevel, (Entity) entity,
-                            (float) ((Entity) entity instanceof LivingEntity _livingEntity3 && _livingEntity3.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity3.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0), 0);
-                    _entityToSpawn.setPos(_shootFrom.getX(), _shootFrom.getEyeY() - 0.1, _shootFrom.getZ());
-                    _entityToSpawn.shoot(_shootFrom.getLookAngle().x, _shootFrom.getLookAngle().y, _shootFrom.getLookAngle().z, (float) 2.4, 0);
-                    projectileLevel.addFreshEntity(_entityToSpawn);
-                }
+            Level projectileLevel = entity.level();
+            if (!projectileLevel.isClientSide()) {
+                Projectile _entityToSpawn = new Object() {
+                    public Projectile getArrow(Level level, Entity shooter, float damage, int knockback) {
+                        AbstractArrow entityToSpawn = new AnchorFlyEntity(CaerulaArborModEntities.ANCHOR_FLY.get(), level);
+                        entityToSpawn.setOwner(shooter);
+                        entityToSpawn.setBaseDamage(damage);
+                        entityToSpawn.setKnockback(knockback);
+                        entityToSpawn.setSilent(true);
+                        entityToSpawn.setCritArrow(true);
+                        return entityToSpawn;
+                    }
+                }.getArrow(projectileLevel, (Entity) entity,
+                        (float) ((Entity) entity instanceof LivingEntity _livingEntity3 && _livingEntity3.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity3.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0), 0);
+                _entityToSpawn.setPos(entity.getX(), entity.getEyeY() - 0.1, entity.getZ());
+                _entityToSpawn.shoot(entity.getLookAngle().x, entity.getLookAngle().y, entity.getLookAngle().z, (float) 2.4, 0);
+                projectileLevel.addFreshEntity(_entityToSpawn);
             }
             if (!(new Object() {
                 public boolean checkGamemode(Entity _ent) {

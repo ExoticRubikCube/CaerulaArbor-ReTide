@@ -8,12 +8,16 @@ import com.apocalypse.caerulaarbor.block.display.*;
 import com.apocalypse.caerulaarbor.item.*;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
 import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.ForgeSpawnEggItem;
@@ -23,6 +27,9 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+
+import java.util.List;
+import java.util.function.Supplier;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class CaerulaArborModItems {
@@ -370,7 +377,8 @@ public class CaerulaArborModItems {
 	public static final RegistryObject<Item> TIDE_BISHOP_SPAWNEGG = REGISTRY.register("tide_bishop_spawnegg", () -> new TideBishopSpawneggItem());
 	public static final RegistryObject<Item> DEATHREPELLER_SPAWNEGG = REGISTRY.register("deathrepeller_spawnegg", () -> new ForgeSpawnEggItem(CaerulaArborModEntities.TIDE_DEATHREPELLER, -1, -1, new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON)));
 	public static final RegistryObject<Item> HIGHMORE_SPAWNEGG = REGISTRY.register("highmore_spawnegg", () -> new ForgeSpawnEggItem(CaerulaArborModEntities.HIGHMORE, -1, -1, new Item.Properties().stacksTo(64).rarity(Rarity.RARE)));
-	public static final RegistryObject<Item> IZUMIK_SPAWNEGG = REGISTRY.register("izumik_spawnegg", () -> new IzumikSpawneggItem());
+	public static final RegistryObject<Item> IZUMIK_SPAWNEGG = registerTooltipSpawnEgg("izumik_spawnegg", CaerulaArborModEntities.IZUMIK, -1, -1, new Item.Properties().stacksTo(64).rarity(Rarity.EPIC),
+			"item.caerula_arbor.izumik_spawnegg.description_0");
 	public static final RegistryObject<Item> COLOURFULL_JELLY = REGISTRY.register("colourfull_jelly", () -> new ColourfullJellyItem());
 	public static final RegistryObject<Item> CHITIN_SHIELD = REGISTRY.register("chitin_shield", () -> new ChitinShieldItem());
 	public static final RegistryObject<Item> COMPLEX_CHITIN_SHIELD = REGISTRY.register("complex_chitin_shield", () -> new ComplexChitinShieldItem());
@@ -402,7 +410,7 @@ public class CaerulaArborModItems {
 	public static final RegistryObject<Item> UNFINISHED_BEAUTY = REGISTRY.register("unfinished_beauty", () -> new UninishedBeautyItem());
 	public static final RegistryObject<Item> OCEAN_CAVAIR = REGISTRY.register("ocean_cavair", () -> new OceanCavairItem());
 	public static final RegistryObject<Item> ELITE_CAVAIR = REGISTRY.register("elite_cavair", () -> new EliteCavairItem());
-	public static final RegistryObject<Item> MARTUS_SPAWNEGG = REGISTRY.register("martus_spawnegg", () -> new MartusSpawneggItem());
+	public static final RegistryObject<Item> MARTUS_SPAWNEGG = REGISTRY.register("martus_spawnegg", () -> new ForgeSpawnEggItem(CaerulaArborModEntities.MARTUS, -1, -1, new Item.Properties().stacksTo(64).rarity(Rarity.RARE)));
 	public static final RegistryObject<Item> KEBAB_RAW = REGISTRY.register("kebab_raw", () -> new KebabRawItem());
 	public static final RegistryObject<Item> KEBAB_COOKED = REGISTRY.register("kebab_cooked", () -> new KebabCookedItem());
 	public static final RegistryObject<Item> GUNMU_SPAWN_EGG = REGISTRY.register("gunmu_spawn_egg", () -> new ForgeSpawnEggItem(CaerulaArborModEntities.GUNMU, -1, -1, new Item.Properties()));
@@ -530,7 +538,7 @@ public class CaerulaArborModItems {
 	public static final RegistryObject<Item> SAINT_CARMEN_SPAWN_EGG = REGISTRY.register("saint_carmen_spawn_egg", () -> new ForgeSpawnEggItem(CaerulaArborModEntities.SAINT_CARMEN, -1, -1, new Item.Properties()));
 	public static final RegistryObject<Item> SALTWIND_SMOOTH_STAIR = block(CaerulaArborModBlocks.SALTWIND_SMOOTH_STAIR);
 	public static final RegistryObject<Item> CARMEN_TREATY = REGISTRY.register("carmen_treaty", () -> new CarmenTreatyItem());
-	public static final RegistryObject<Item> OCEANIZED_ILLUSIONER_SPAWNER = REGISTRY.register("oceanized_illusioner_spawner", () -> new OceanizedIllusionerSpawnerItem());
+	public static final RegistryObject<Item> OCEANIZED_ILLUSIONER_SPAWNER = REGISTRY.register("oceanized_illusioner_spawner", () -> new ForgeSpawnEggItem(CaerulaArborModEntities.OCEANIZED_ILLUSIONER, -1, -1, new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON)));
 	public static final RegistryObject<Item> OCEAN_ILLUSION_SPAWN_EGG = REGISTRY.register("ocean_illusion_spawn_egg", () -> new ForgeSpawnEggItem(CaerulaArborModEntities.OCEAN_ILLUSION, -13609646, -14469579, new Item.Properties()));
 	public static final RegistryObject<TrailriteArmorItem> TRAILRITE_ARMOR_HELMET = REGISTRY.register("trailrite_armor_helmet", () -> new TrailriteArmorItem(ArmorItem.Type.HELMET, new Item.Properties().fireResistant()));
 	public static final RegistryObject<TrailriteArmorItem> TRAILRITE_ARMOR_CHESTPLATE = REGISTRY.register("trailrite_armor_chestplate", () -> new TrailriteArmorItem(ArmorItem.Type.CHESTPLATE, new Item.Properties().fireResistant()));
@@ -555,7 +563,8 @@ public class CaerulaArborModItems {
 	public static final RegistryObject<KnightIronItem> KNIGHT_IRON_CHESTPLATE = REGISTRY.register("knight_iron_chestplate", () -> new KnightIronItem(ArmorItem.Type.CHESTPLATE, new Item.Properties()));
 	public static final RegistryObject<KnightIronItem> KNIGHT_IRON_LEGGINGS = REGISTRY.register("knight_iron_leggings", () -> new KnightIronItem(ArmorItem.Type.LEGGINGS, new Item.Properties()));
 	public static final RegistryObject<KnightIronItem> KNIGHT_IRON_BOOTS = REGISTRY.register("knight_iron_boots", () -> new KnightIronItem(ArmorItem.Type.BOOTS, new Item.Properties()));
-	public static final RegistryObject<Item> ISHARMLA_SPAWNER = REGISTRY.register("isharmla_spawner", () -> new IsharmlaSpawnerItem());
+	public static final RegistryObject<Item> ISHARMLA_SPAWNER = registerTooltipSpawnEgg("isharmla_spawner", CaerulaArborModEntities.ISHARMLA, -1, -1, new Item.Properties().stacksTo(64).rarity(Rarity.EPIC),
+			"item.caerula_arbor.isharmla_spawner.description_0");
 	public static final RegistryObject<Item> QUNYOU_WANTED_ISHARMLA_SPAWN_EGG = REGISTRY.register("qunyou_wanted_isharmla_spawn_egg",
 			() -> new ForgeSpawnEggItem(CaerulaArborModEntities.QUNYOU_WANTED_ISHARMLA, -2499866, -10115, new Item.Properties()));
 	public static final RegistryObject<Item> ISHARMLA_TEAR_SPAWN_EGG = REGISTRY.register("isharmla_tear_spawn_egg", () -> new ForgeSpawnEggItem(CaerulaArborModEntities.ISHARMLA_TEAR, -3034976, -328990, new Item.Properties()));
@@ -575,7 +584,8 @@ public class CaerulaArborModItems {
 	public static final RegistryObject<Item> ISHARMLA_WALL_GILDED = block(CaerulaArborModBlocks.ISHARMLA_WALL_GILDED);
 	public static final RegistryObject<Item> COMPASSION_PRAYER_SPAWN_EGG = REGISTRY.register("compassion_prayer_spawn_egg", () -> new ForgeSpawnEggItem(CaerulaArborModEntities.COMPASSION_PRAYER, -11571331, -2371137, new Item.Properties()));
 	public static final RegistryObject<Item> MOIST_ENDER_CRYSTAL_SPAWN_EGG = REGISTRY.register("moist_ender_crystal_spawn_egg", () -> new ForgeSpawnEggItem(CaerulaArborModEntities.MOIST_ENDER_CRYSTAL, -1, -1, new Item.Properties()));
-	public static final RegistryObject<Item> ENDERINA_SPAWNER = REGISTRY.register("enderina_spawner", () -> new EnderinaSpawnerItem());
+	public static final RegistryObject<Item> ENDERINA_SPAWNER = registerTooltipSpawnEgg("enderina_spawner", CaerulaArborModEntities.OCEANIZED_ENDERINA, -1, -1, new Item.Properties().stacksTo(64).rarity(Rarity.EPIC),
+			"item.caerula_arbor.enderina_spawner.description_0");
 	public static final RegistryObject<Item> DRAGON_BRAND = block(CaerulaArborModBlocks.DRAGON_BRAND);
 	public static final RegistryObject<Item> MOIST_CRYSTAL_ITEM = REGISTRY.register("moist_crystal_item", () -> new MoistCrystalItemItem());
 	public static final RegistryObject<Item> ENDERINA_CORE = block(CaerulaArborModBlocks.ENDERINA_CORE);
@@ -609,6 +619,18 @@ public class CaerulaArborModItems {
 
 	// Start of user code block custom items
 	// End of user code block custom items
+	private static RegistryObject<Item> registerTooltipSpawnEgg(String name, Supplier<? extends EntityType<? extends Mob>> entityType, int primaryColor, int secondaryColor, Item.Properties properties,
+			String... tooltipKeys) {
+		return REGISTRY.register(name, () -> new ForgeSpawnEggItem(entityType, primaryColor, secondaryColor, properties) {
+			@Override
+			public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
+				super.appendHoverText(itemstack, level, list, flag);
+				for (String tooltipKey : tooltipKeys)
+					list.add(Component.translatable(tooltipKey));
+			}
+		});
+	}
+
 	private static RegistryObject<Item> block(RegistryObject<Block> block) {
 		return REGISTRY.register(block.getId().getPath(), () -> new BlockItem(block.get(), new Item.Properties()));
 	}

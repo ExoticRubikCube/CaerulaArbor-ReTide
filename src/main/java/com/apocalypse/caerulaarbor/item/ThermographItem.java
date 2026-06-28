@@ -31,26 +31,24 @@ public class ThermographItem extends Item {
 	@Override
 	public boolean hurtEnemy(ItemStack itemstack, LivingEntity entity, LivingEntity sourceentity) {
 		boolean retval = super.hurtEnemy(itemstack, entity, sourceentity);
-        if (entity != null && sourceentity != null) {
-            double def = 0;
-            double mgc = 0;
-            double snt = 0;
-            def = Math.round(Math.pow(10, 2) * ((Entity) entity instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get())
-                    ? _livingEntity0.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).getValue()
-                    : 0)) / Math.pow(10, 2);
-            mgc = Math.round(Math.pow(10, 2) * ((Entity) entity instanceof LivingEntity _livingEntity2 && _livingEntity2.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get())
-                    ? _livingEntity2.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).getValue()
-                    : 0)) / Math.pow(10, 2);
-            snt = Math.round(Math.pow(10, 2) * ((Entity) entity instanceof LivingEntity _livingEntity4 && _livingEntity4.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RESISTANCE.get())
-                    ? _livingEntity4.getAttribute(CaerulaArborModAttributes.SANITY_RESISTANCE.get()).getValue()
-                    : 0)) / Math.pow(10, 2);
-            if ((Entity) sourceentity instanceof Player _player && !_player.level().isClientSide())
-                _player.displayClientMessage(Component.literal(("Defense: " + def)), false);
-            if ((Entity) sourceentity instanceof Player _player && !_player.level().isClientSide())
-                _player.displayClientMessage(Component.literal(("Magic Resiatance: " + mgc)), false);
-            if ((Entity) sourceentity instanceof Player _player && !_player.level().isClientSide())
-                _player.displayClientMessage(Component.literal(("Sanity Resistance: " + snt)), false);
-        }
+        double def = 0;
+        double mgc = 0;
+        double snt = 0;
+        def = Math.round(Math.pow(10, 2) * ((Entity) entity instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get())
+                ? _livingEntity0.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).getValue()
+                : 0)) / Math.pow(10, 2);
+        mgc = Math.round(Math.pow(10, 2) * ((Entity) entity instanceof LivingEntity _livingEntity2 && _livingEntity2.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get())
+                ? _livingEntity2.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).getValue()
+                : 0)) / Math.pow(10, 2);
+        snt = Math.round(Math.pow(10, 2) * ((Entity) entity instanceof LivingEntity _livingEntity4 && _livingEntity4.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RESISTANCE.get())
+                ? _livingEntity4.getAttribute(CaerulaArborModAttributes.SANITY_RESISTANCE.get()).getValue()
+                : 0)) / Math.pow(10, 2);
+        if ((Entity) sourceentity instanceof Player _player && !_player.level().isClientSide())
+            _player.displayClientMessage(Component.literal(("Defense: " + def)), false);
+        if ((Entity) sourceentity instanceof Player _player && !_player.level().isClientSide())
+            _player.displayClientMessage(Component.literal(("Magic Resiatance: " + mgc)), false);
+        if ((Entity) sourceentity instanceof Player _player && !_player.level().isClientSide())
+            _player.displayClientMessage(Component.literal(("Sanity Resistance: " + snt)), false);
         return retval;
 	}
 }

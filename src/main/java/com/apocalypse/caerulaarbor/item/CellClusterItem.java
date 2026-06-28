@@ -7,7 +7,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
@@ -15,7 +14,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 
 import java.util.List;
 
@@ -37,13 +35,11 @@ public class CellClusterItem extends Item {
 		double x = entity.getX();
 		double y = entity.getY();
 		double z = entity.getZ();
-        if (entity != null) {
-            if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                _entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 80, 1));
-            EntityUtils.deductSanity(entity, 225);
-            if ((LevelAccessor) world instanceof ServerLevel _level)
-                _level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, y, z, 64, 0.75, 2, 0.75, 0.1);
-        }
-        return retval;
+		if (!entity.level().isClientSide())
+			entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 80, 1));
+		EntityUtils.deductSanity(entity, 225);
+		if (world instanceof ServerLevel level)
+			level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, y, z, 64, 0.75, 2, 0.75, 0.1);
+		return retval;
 	}
 }
