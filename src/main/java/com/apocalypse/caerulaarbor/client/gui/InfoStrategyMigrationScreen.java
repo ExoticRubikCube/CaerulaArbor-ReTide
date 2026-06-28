@@ -1,12 +1,13 @@
-package com.apocalypse.caerulaarbor.client.gui;
+﻿package com.apocalypse.caerulaarbor.client.gui;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
 import com.apocalypse.caerulaarbor.entity.ReaperFishEntity;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.menu.InfoStrategyMigrationMenu;
+import com.apocalypse.caerulaarbor.network.CaerulaArborModNetwork;
 import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
-import com.apocalypse.caerulaarbor.network.InfoStrategyReturnButtonMessage;
+import com.apocalypse.caerulaarbor.network.message.send.InfoStrategyReturnButtonMessage;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.StrategyUtils;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -116,7 +117,7 @@ public class InfoStrategyMigrationScreen extends AbstractContainerScreen<InfoStr
 		super.init();
 		button_return = new PlainTextButton(this.leftPos + 217, this.topPos + 156, 36, 20, Component.translatable("gui.caerula_arbor.info_strategy_migration.button_return"), e -> {
 			if (true) {
-				CaerulaArborMod.PACKET_HANDLER.sendToServer(new InfoStrategyReturnButtonMessage(0, x, y, z));
+				CaerulaArborModNetwork.PACKET_HANDLER.sendToServer(new InfoStrategyReturnButtonMessage(0, x, y, z));
 				InfoStrategyReturnButtonMessage.handleButtonAction(entity, 0, x, y, z);
 			}
 		}, this.font);
@@ -124,3 +125,4 @@ public class InfoStrategyMigrationScreen extends AbstractContainerScreen<InfoStr
 		this.addRenderableWidget(button_return);
 	}
 }
+

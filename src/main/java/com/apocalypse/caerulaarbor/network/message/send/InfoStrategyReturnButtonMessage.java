@@ -1,13 +1,11 @@
-package com.apocalypse.caerulaarbor.network;
-
-import net.minecraftforge.network.NetworkEvent;
-
-import net.minecraft.world.level.Level;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.core.BlockPos;
+package com.apocalypse.caerulaarbor.network.message.send;
 
 import com.apocalypse.caerulaarbor.procedures.OpenStraGUIProcedure;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
@@ -43,8 +41,10 @@ public class InfoStrategyReturnButtonMessage {
 			int x = message.x;
 			int y = message.y;
 			int z = message.z;
-			handleButtonAction(entity, buttonID, x, y, z);
-		});
+            if (entity != null) {
+                handleButtonAction(entity, buttonID, x, y, z);
+            }
+        });
 		context.setPacketHandled(true);
 	}
 
@@ -58,3 +58,4 @@ public class InfoStrategyReturnButtonMessage {
 		}
 	}
 }
+

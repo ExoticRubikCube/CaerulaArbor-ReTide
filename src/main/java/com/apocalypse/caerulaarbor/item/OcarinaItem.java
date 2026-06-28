@@ -1,7 +1,6 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
@@ -24,12 +23,9 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
-import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
-import java.util.Map;
-
 public class OcarinaItem extends Item {
 	public OcarinaItem() {
 		super(new Item.Properties().durability(8).fireResistant().rarity(Rarity.UNCOMMON));
@@ -234,16 +230,7 @@ public class OcarinaItem extends Item {
                                     }
                                     {
                                         BlockPos _bp = BlockPos.containing(px, py, pz);
-                                        BlockState _bs = CaerulaArborModBlocks.UNDERTIDE_SPAWN.get().defaultBlockState();
-                                        BlockState _bso = ((LevelAccessor) world).getBlockState(_bp);
-                                        for (Map.Entry<Property<?>, Comparable<?>> entry : _bso.getValues().entrySet()) {
-                                            Property _property = _bs.getBlock().getStateDefinition().getProperty(entry.getKey().getName());
-                                            if (_property != null && _bs.getValue(_property) != null)
-                                                try {
-                                                    _bs = _bs.setValue(_property, (Comparable) entry.getValue());
-                                                } catch (Exception e) {
-                                                }
-                                        }
+                                        BlockState _bs = CaerulaArborModBlocks.UNDERTIDE_SPAWN.get().withPropertiesOf(((LevelAccessor) world).getBlockState(_bp));
                                         ((LevelAccessor) world).setBlock(_bp, _bs, 3);
                                     }
                                     found = true;

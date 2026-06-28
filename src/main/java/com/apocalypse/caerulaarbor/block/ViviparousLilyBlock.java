@@ -40,7 +40,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 public class ViviparousLilyBlock extends BaseEntityBlock implements SimpleWaterloggedBlock, EntityBlock {
 	public static final IntegerProperty ANIMATION = IntegerProperty.create("animation", 0, 1);
@@ -215,34 +214,7 @@ public class ViviparousLilyBlock extends BaseEntityBlock implements SimpleWaterl
                 if ((((LevelAccessor) world).getBlockState(BlockPos.containing(x, y, z))).getBlock() == CaerulaArborModBlocks.VIVIPAROUS_LILY.get()) {
                     {
                         BlockPos _bp = BlockPos.containing(x, y, z);
-                        BlockState _bs = (new Object() {
-                            public BlockState with(BlockState _bs, Direction newValue) {
-                                Property<?> _prop = _bs.getBlock().getStateDefinition().getProperty("facing");
-                                if (_prop instanceof DirectionProperty _dp && _dp.getPossibleValues().contains(newValue))
-                                    return _bs.setValue(_dp, newValue);
-                                _prop = _bs.getBlock().getStateDefinition().getProperty("axis");
-                                return _prop instanceof EnumProperty _ep && _ep.getPossibleValues().contains(newValue.getAxis()) ? _bs.setValue(_ep, newValue.getAxis()) : _bs;
-                            }
-                        }.with(CaerulaArborModBlocks.HUGE_LILY.get().defaultBlockState(), (new Object() {
-                            public Direction getDirection(BlockState _bs) {
-                                Property<?> _prop = _bs.getBlock().getStateDefinition().getProperty("facing");
-                                if (_prop instanceof DirectionProperty _dp)
-                                    return _bs.getValue(_dp);
-                                _prop = _bs.getBlock().getStateDefinition().getProperty("axis");
-                                return _prop instanceof EnumProperty _ep && _ep.getPossibleValues().toArray()[0] instanceof Direction.Axis
-                                        ? Direction.fromAxisAndDirection((Direction.Axis) _bs.getValue(_ep), Direction.AxisDirection.POSITIVE)
-                                        : Direction.NORTH;
-                            }
-                        }.getDirection(blockstate))));
-                        BlockState _bso = ((LevelAccessor) world).getBlockState(_bp);
-                        for (Map.Entry<Property<?>, Comparable<?>> entry : _bso.getValues().entrySet()) {
-                            Property _property = _bs.getBlock().getStateDefinition().getProperty(entry.getKey().getName());
-                            if (_property != null && _bs.getValue(_property) != null)
-                                try {
-                                    _bs = _bs.setValue(_property, (Comparable) entry.getValue());
-                                } catch (Exception e) {
-                                }
-                        }
+                        BlockState _bs = CaerulaArborModBlocks.HUGE_LILY.get().withPropertiesOf(blockstate);
                         ((LevelAccessor) world).setBlock(_bp, _bs, 3);
                     }
                 }

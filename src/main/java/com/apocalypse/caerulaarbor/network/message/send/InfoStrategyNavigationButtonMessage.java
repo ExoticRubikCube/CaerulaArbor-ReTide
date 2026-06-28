@@ -1,4 +1,4 @@
-package com.apocalypse.caerulaarbor.network;
+package com.apocalypse.caerulaarbor.network.message.send;
 
 import com.apocalypse.caerulaarbor.menu.*;
 import io.netty.buffer.Unpooled;
@@ -109,3 +109,4 @@ public class InfoStrategyNavigationButtonMessage {
 		}, blockPos);
 	}
 }
+

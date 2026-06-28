@@ -42,8 +42,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
-
 public class SeaTrailGrownBlock extends Block implements SimpleWaterloggedBlock, BonemealableBlock {
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
@@ -209,34 +207,8 @@ public class SeaTrailGrownBlock extends Block implements SimpleWaterloggedBlock,
                                         || (((LevelAccessor) world).getBlockState(BlockPos.containing(x, (double) y - 1, z))).getBlock() == CaerulaArborModBlocks.STRIPPED_TRAIL_LOG.get())) {
                             {
                                 BlockPos _bp = BlockPos.containing((double) x + dx, y, (double) z + dz);
-                                BlockState _bs = (new Object() {
-                                    public BlockState with(BlockState _bs, Direction newValue) {
-                                        Property<?> _prop = _bs.getBlock().getStateDefinition().getProperty("facing");
-                                        if (_prop instanceof DirectionProperty _dp && _dp.getPossibleValues().contains(newValue))
-                                            return _bs.setValue(_dp, newValue);
-                                        _prop = _bs.getBlock().getStateDefinition().getProperty("axis");
-                                        return _prop instanceof EnumProperty _ep && _ep.getPossibleValues().contains(newValue.getAxis()) ? _bs.setValue(_ep, newValue.getAxis()) : _bs;
-                                    }
-                                }.with(CaerulaArborModBlocks.TRAIL_LOG.get().defaultBlockState(), (new Object() {
-                                    public Direction getDirection(BlockState _bs) {
-                                        Property<?> _prop = _bs.getBlock().getStateDefinition().getProperty("facing");
-                                        if (_prop instanceof DirectionProperty _dp)
-                                            return _bs.getValue(_dp);
-                                        _prop = _bs.getBlock().getStateDefinition().getProperty("axis");
-                                        return _prop instanceof EnumProperty _ep && _ep.getPossibleValues().toArray()[0] instanceof Direction.Axis
-                                                ? Direction.fromAxisAndDirection((Direction.Axis) _bs.getValue(_ep), Direction.AxisDirection.POSITIVE)
-                                                : Direction.NORTH;
-                                    }
-                                }.getDirection((((LevelAccessor) world).getBlockState(BlockPos.containing((double) x + dx, y, (double) z + dz)))))));
                                 BlockState _bso = ((LevelAccessor) world).getBlockState(_bp);
-                                for (Map.Entry<Property<?>, Comparable<?>> entry : _bso.getValues().entrySet()) {
-                                    Property<?> _property = _bs.getBlock().getStateDefinition().getProperty(entry.getKey().getName());
-                                    if (_property != null && _bs.getValue(_property) != null)
-                                        try {
-                                            _bs = _bs.setValue(_property, (Comparable) entry.getValue());
-                                        } catch (Exception e) {
-                                        }
-                                }
+                                BlockState _bs = CaerulaArborModBlocks.TRAIL_LOG.get().withPropertiesOf(_bso);
                                 ((LevelAccessor) world).setBlock(_bp, _bs, 3);
                             }
                         } else if ((((LevelAccessor) world).getBlockState(BlockPos.containing((double) x + dx, y, (double) z + dz))).is(BlockTags.create(new ResourceLocation("minecraft:leaves")))

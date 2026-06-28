@@ -1,11 +1,11 @@
 package com.apocalypse.caerulaarbor.network;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import net.minecraft.client.Minecraft;
+import com.apocalypse.caerulaarbor.network.message.receive.PlayerVariablesSyncMessage;
+import com.apocalypse.caerulaarbor.network.message.receive.SavedDataSyncMessage;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -23,10 +23,7 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.PacketDistributor;
-
-import java.util.function.Supplier;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class CaerulaArborModVariables {
@@ -161,9 +158,9 @@ public class CaerulaArborModVariables {
 				SavedData mapdata = MapVariables.get(event.getEntity().level());
 				SavedData worlddata = WorldVariables.get(event.getEntity().level());
 				if (mapdata != null)
-					CaerulaArborMod.PACKET_HANDLER.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) event.getEntity()), new SavedDataSyncMessage(0, mapdata));
+					CaerulaArborModNetwork.PACKET_HANDLER.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) event.getEntity()), new SavedDataSyncMessage(0, mapdata));
 				if (worlddata != null)
-					CaerulaArborMod.PACKET_HANDLER.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) event.getEntity()), new SavedDataSyncMessage(1, worlddata));
+					CaerulaArborModNetwork.PACKET_HANDLER.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) event.getEntity()), new SavedDataSyncMessage(1, worlddata));
 			}
 		}
 
@@ -172,7 +169,7 @@ public class CaerulaArborModVariables {
 			if (!event.getEntity().level().isClientSide()) {
 				SavedData worlddata = WorldVariables.get(event.getEntity().level());
 				if (worlddata != null)
-					CaerulaArborMod.PACKET_HANDLER.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) event.getEntity()), new SavedDataSyncMessage(1, worlddata));
+					CaerulaArborModNetwork.PACKET_HANDLER.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) event.getEntity()), new SavedDataSyncMessage(1, worlddata));
 			}
 		}
 	}
@@ -197,10 +194,10 @@ public class CaerulaArborModVariables {
 		public void syncData(LevelAccessor world) {
 			this.setDirty();
 			if (world instanceof Level level && !level.isClientSide())
-				CaerulaArborMod.PACKET_HANDLER.send(PacketDistributor.DIMENSION.with(level::dimension), new SavedDataSyncMessage(1, this));
+				CaerulaArborModNetwork.PACKET_HANDLER.send(PacketDistributor.DIMENSION.with(level::dimension), new SavedDataSyncMessage(1, this));
 		}
 
-		static WorldVariables clientSide = new WorldVariables();
+		public static WorldVariables clientSide = new WorldVariables();
 
 		public static WorldVariables get(LevelAccessor world) {
 			if (world instanceof ServerLevel level) {
@@ -273,10 +270,10 @@ public class CaerulaArborModVariables {
 		public void syncData(LevelAccessor world) {
 			this.setDirty();
 			if (world instanceof Level && !world.isClientSide())
-				CaerulaArborMod.PACKET_HANDLER.send(PacketDistributor.ALL.noArg(), new SavedDataSyncMessage(0, this));
+				CaerulaArborModNetwork.PACKET_HANDLER.send(PacketDistributor.ALL.noArg(), new SavedDataSyncMessage(0, this));
 		}
 
-		static MapVariables clientSide = new MapVariables();
+		public static MapVariables clientSide = new MapVariables();
 
 		public static MapVariables get(LevelAccessor world) {
 			if (world instanceof ServerLevelAccessor serverLevelAcc) {
@@ -284,47 +281,6 @@ public class CaerulaArborModVariables {
 			} else {
 				return clientSide;
 			}
-		}
-	}
-
-	public static class SavedDataSyncMessage {
-		private final int type;
-		private SavedData data;
-
-		public SavedDataSyncMessage(FriendlyByteBuf buffer) {
-			this.type = buffer.readInt();
-			CompoundTag nbt = buffer.readNbt();
-			if (nbt != null) {
-				this.data = this.type == 0 ? new MapVariables() : new WorldVariables();
-				if (this.data instanceof MapVariables mapVariables)
-					mapVariables.read(nbt);
-				else if (this.data instanceof WorldVariables worldVariables)
-					worldVariables.read(nbt);
-			}
-		}
-
-		public SavedDataSyncMessage(int type, SavedData data) {
-			this.type = type;
-			this.data = data;
-		}
-
-		public static void buffer(SavedDataSyncMessage message, FriendlyByteBuf buffer) {
-			buffer.writeInt(message.type);
-			if (message.data != null)
-				buffer.writeNbt(message.data.save(new CompoundTag()));
-		}
-
-		public static void handler(SavedDataSyncMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
-			NetworkEvent.Context context = contextSupplier.get();
-			context.enqueueWork(() -> {
-				if (!context.getDirection().getReceptionSide().isServer() && message.data != null) {
-					if (message.type == 0)
-						MapVariables.clientSide = (MapVariables) message.data;
-					else
-						WorldVariables.clientSide = (WorldVariables) message.data;
-				}
-			});
-			context.setPacketHandled(true);
 		}
 	}
 
@@ -453,7 +409,7 @@ public class CaerulaArborModVariables {
 
 		public void syncPlayerVariables(Entity entity) {
 			if (entity instanceof ServerPlayer serverPlayer)
-				CaerulaArborMod.PACKET_HANDLER.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new PlayerVariablesSyncMessage(this));
+				CaerulaArborModNetwork.PACKET_HANDLER.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new PlayerVariablesSyncMessage(this));
 		}
 
 		public Tag writeNBT() {
@@ -648,111 +604,4 @@ public class CaerulaArborModVariables {
 		}
 	}
 
-	public static class PlayerVariablesSyncMessage {
-		private final PlayerVariables data;
-
-		public PlayerVariablesSyncMessage(FriendlyByteBuf buffer) {
-			this.data = new PlayerVariables();
-			this.data.readNBT(buffer.readNbt());
-		}
-
-		public PlayerVariablesSyncMessage(PlayerVariables data) {
-			this.data = data;
-		}
-
-		public static void buffer(PlayerVariablesSyncMessage message, FriendlyByteBuf buffer) {
-			buffer.writeNbt((CompoundTag) message.data.writeNBT());
-		}
-
-		public static void handler(PlayerVariablesSyncMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
-			NetworkEvent.Context context = contextSupplier.get();
-			context.enqueueWork(() -> {
-				if (!context.getDirection().getReceptionSide().isServer()) {
-					PlayerVariables variables = Minecraft.getInstance().player.getCapability(PLAYER_VARIABLES_CAPABILITY, null).orElse(new PlayerVariables());
-					variables.player_light = message.data.player_light;
-					variables.player_lives = message.data.player_lives;
-					variables.player_maxlive = message.data.player_maxlive;
-					variables.player_shield = message.data.player_shield;
-					variables.disoclusion = message.data.disoclusion;
-					variables.show_stats = message.data.show_stats;
-					variables.relic_cursed_EMELIGHT = message.data.relic_cursed_EMELIGHT;
-					variables.relic_cursed_GLOWBODY = message.data.relic_cursed_GLOWBODY;
-					variables.relic_cursed_RESEARCH = message.data.relic_cursed_RESEARCH;
-					variables.relic_king_CROWN = message.data.relic_king_CROWN;
-					variables.relic_king_ARMOR = message.data.relic_king_ARMOR;
-					variables.relic_king_SPEAR = message.data.relic_king_SPEAR;
-					variables.relic_king_EXTENSION = message.data.relic_king_EXTENSION;
-					variables.kingShowPtc = message.data.kingShowPtc;
-					variables.relic_king_CRYSTAL = message.data.relic_king_CRYSTAL;
-					variables.relic_hand_THORNS = message.data.relic_hand_THORNS;
-					variables.relic_hand_STRANGLE = message.data.relic_hand_STRANGLE;
-					variables.relic_hand_FERTILITY = message.data.relic_hand_FERTILITY;
-					variables.relic_hand_SPEED = message.data.relic_hand_SPEED;
-					variables.relic_hand_BARREN = message.data.relic_hand_BARREN;
-					variables.relic_hand_SWIPE = message.data.relic_hand_SWIPE;
-					variables.relic_archfi_ARTIFACT = message.data.relic_archfi_ARTIFACT;
-					variables.relic_hand_FIREWORK = message.data.relic_hand_FIREWORK;
-					variables.relic_archfi_FLAG = message.data.relic_archfi_FLAG;
-					variables.relic_hand_ENGRAVE = message.data.relic_hand_ENGRAVE;
-					variables.relic_archfi_BED = message.data.relic_archfi_BED;
-					variables.relic_SURVIVOR = message.data.relic_SURVIVOR;
-					variables.relic_TREATY = message.data.relic_TREATY;
-					variables.relic_archifi_RYLFATE = message.data.relic_archifi_RYLFATE;
-					variables.relic_util_MEATCAN = message.data.relic_util_MEATCAN;
-					variables.relic_util_SEAGRASS = message.data.relic_util_SEAGRASS;
-					variables.relic_util_ORANGE = message.data.relic_util_ORANGE;
-					variables.relic_util_COFFEE = message.data.relic_util_COFFEE;
-					variables.relic_util_BERRIES = message.data.relic_util_BERRIES;
-					variables.player_util_RAINBOW = message.data.player_util_RAINBOW;
-					variables.player_util_AROMATIC = message.data.player_util_AROMATIC;
-					variables.relic_util_MUSICBOX = message.data.relic_util_MUSICBOX;
-					variables.relic_util_IRIS = message.data.relic_util_IRIS;
-					variables.relic_util_FLUTE = message.data.relic_util_FLUTE;
-					variables.relic_util_VOYGOLD = message.data.relic_util_VOYGOLD;
-					variables.relic_util_DURIN = message.data.relic_util_DURIN;
-					variables.relic_util_TOPONYM = message.data.relic_util_TOPONYM;
-					variables.relic_util_KETTLE = message.data.relic_util_KETTLE;
-					variables.relic_legend_CHITIN = message.data.relic_legend_CHITIN;
-					variables.chitin_knife_selected = message.data.chitin_knife_selected;
-					variables.relic_util_ALLEY = message.data.relic_util_ALLEY;
-					variables.relic_util_BATBED = message.data.relic_util_BATBED;
-					variables.relic_util_LONGEVITY = message.data.relic_util_LONGEVITY;
-					variables.relic_util_OMNIKEY = message.data.relic_util_OMNIKEY;
-					variables.relic_util_score = message.data.relic_util_score;
-					variables.relic_util_RESCISSION = message.data.relic_util_RESCISSION;
-					variables.relic_util_STARE = message.data.relic_util_STARE;
-					variables.relic_hand_SWORD = message.data.relic_hand_SWORD;
-					variables.player_king_suit = message.data.player_king_suit;
-					variables.player_demon_suit = message.data.player_demon_suit;
-					variables.player_oceanization = message.data.player_oceanization;
-					variables.relic_cursed_HEART = message.data.relic_cursed_HEART;
-					variables.relic_HEMOST = message.data.relic_HEMOST;
-					variables.relic_YEARNING = message.data.relic_YEARNING;
-					variables.plauyer_balance = message.data.plauyer_balance;
-					variables.can_player_evo = message.data.can_player_evo;
-					variables.reserve_quantity = message.data.reserve_quantity;
-					variables.reserve_quality = message.data.reserve_quality;
-					variables.PEVO_NEXUS_no_rejection = message.data.PEVO_NEXUS_no_rejection;
-					variables.PEVO_NEXUS_reg_sanity = message.data.PEVO_NEXUS_reg_sanity;
-					variables.PEVO_NODE_add_def = message.data.PEVO_NODE_add_def;
-					variables.PEVO_NODE_add_resis = message.data.PEVO_NODE_add_resis;
-					variables.PEVO_NODE_add_speed = message.data.PEVO_NODE_add_speed;
-					variables.PEVO_NODE_add_sanity = message.data.PEVO_NODE_add_sanity;
-					variables.PEVO_NEXUS_reg_lights = message.data.PEVO_NEXUS_reg_lights;
-					variables.PEVO_NODE_add_damage = message.data.PEVO_NODE_add_damage;
-					variables.PEVO_NODE_less_damage = message.data.PEVO_NODE_less_damage;
-					variables.PEVO_NODE_living_barrier = message.data.PEVO_NODE_living_barrier;
-					variables.PEVO_NODE_add_miss = message.data.PEVO_NODE_add_miss;
-					variables.PEVO_NEXUS_perc_damage = message.data.PEVO_NEXUS_perc_damage;
-					variables.PEVO_NODE_real_damage = message.data.PEVO_NODE_real_damage;
-					variables.PEVO_NODE_heal_damage = message.data.PEVO_NODE_heal_damage;
-					variables.PEVO_NODE_worse_break = message.data.PEVO_NODE_worse_break;
-					variables.PEVO_NEXUS_expo_shield = message.data.PEVO_NEXUS_expo_shield;
-					variables.PEVO_NODE_eunectes = message.data.PEVO_NODE_eunectes;
-					variables.PEVO_NODE_less_armor = message.data.PEVO_NODE_less_armor;
-				}
-			});
-			context.setPacketHandled(true);
-		}
-	}
 }

@@ -44,8 +44,6 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-import java.util.Map;
-
 public class WorldUtils {
 	@SuppressWarnings("rawtypes")
 	private static final RegistryObject[] WATER_NORMAL_POOL = {
@@ -94,16 +92,7 @@ public class WorldUtils {
 		if (entity == null)
 			return InteractionResult.PASS;
 		if (entity.isShiftKeyDown() && blockstate.getBlock() == Blocks.FARMLAND) {
-			BlockState _bs = CaerulaArborModBlocks.OCEAN_FARMLAND.get().defaultBlockState();
-			BlockState _bso = world.getBlockState(pos);
-			for (Map.Entry<Property<?>, Comparable<?>> entry : _bso.getValues().entrySet()) {
-				Property _property = _bs.getBlock().getStateDefinition().getProperty(entry.getKey().getName());
-				if (_property != null && _bs.getValue(_property) != null)
-					try {
-						_bs = _bs.setValue(_property, (Comparable) entry.getValue());
-					} catch (Exception e) {
-					}
-			}
+			BlockState _bs = CaerulaArborModBlocks.OCEAN_FARMLAND.get().withPropertiesOf(blockstate);
 			world.setBlock(pos, _bs, 3);
 		}
 		return InteractionResult.SUCCESS;
@@ -148,16 +137,8 @@ public class WorldUtils {
 				if (watered) {
 					{
 						BlockPos _bp = BlockPos.containing(px, py, pz);
-						BlockState _bs = Blocks.WATER.defaultBlockState();
 						BlockState _bso = world.getBlockState(_bp);
-						for (Map.Entry<Property<?>, Comparable<?>> entry : _bso.getValues().entrySet()) {
-							Property _property = _bs.getBlock().getStateDefinition().getProperty(entry.getKey().getName());
-							if (_property != null && _bs.getValue(_property) != null)
-								try {
-									_bs = _bs.setValue(_property, (Comparable) entry.getValue());
-								} catch (Exception e) {
-								}
-						}
+						BlockState _bs = Blocks.WATER.withPropertiesOf(_bso);
 						world.setBlock(_bp, _bs, 3);
 					}
 				} else {
@@ -166,16 +147,12 @@ public class WorldUtils {
 			} else {
 				{
 					BlockPos _bp = BlockPos.containing(px, py, pz);
-					BlockState _bs = output;
 					BlockState _bso = world.getBlockState(_bp);
-					for (Map.Entry<Property<?>, Comparable<?>> entry : _bso.getValues().entrySet()) {
-						Property _property = _bs.getBlock().getStateDefinition().getProperty(entry.getKey().getName());
-						if (_property != null && _bs.getValue(_property) != null)
-							try {
-								_bs = _bs.setValue(_property, (Comparable) entry.getValue());
-							} catch (Exception e) {
-							}
-					}
+					BlockState _bs = output.getBlock().withPropertiesOf(_bso);
+					if (output.hasProperty(BlockStateProperties.WATERLOGGED) && _bs.hasProperty(BlockStateProperties.WATERLOGGED))
+						_bs = _bs.setValue(BlockStateProperties.WATERLOGGED, output.getValue(BlockStateProperties.WATERLOGGED));
+					if (output.getBlock().getStateDefinition().getProperty("longevity") instanceof IntegerProperty _integerProp && _bs.hasProperty(_integerProp))
+						_bs = _bs.setValue(_integerProp, output.getValue(_integerProp));
 					world.setBlock(_bp, _bs, 3);
 				}
 			}

@@ -9,7 +9,6 @@ import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -42,8 +41,6 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -54,8 +51,6 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 
 import javax.annotation.Nullable;
-import java.util.Map;
-
 public class MegaChestEntity extends SeaMonster {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(MegaChestEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(MegaChestEntity.class, EntityDataSerializers.STRING);
@@ -268,24 +263,9 @@ public class MegaChestEntity extends SeaMonster {
                                     discard();
                                 {
                                     BlockPos _bp = BlockPos.containing(x, y, z);
-                                    BlockState _bs = (new Object() {
-                                        public BlockState with(BlockState _bs, Direction newValue) {
-                                            Property<?> _prop = _bs.getBlock().getStateDefinition().getProperty("facing");
-                                            if (_prop instanceof DirectionProperty _dp && _dp.getPossibleValues().contains(newValue))
-                                                return _bs.setValue(_dp, newValue);
-                                            _prop = _bs.getBlock().getStateDefinition().getProperty("axis");
-                                            return _prop instanceof EnumProperty _ep && _ep.getPossibleValues().contains(newValue.getAxis()) ? _bs.setValue(_ep, newValue.getAxis()) : _bs;
-                                        }
-                                    }.with(CaerulaArborModBlocks.CHESTMEGA_SPAWNER.get().defaultBlockState(), (getDirection())));
-                                    BlockState _bso = world.getBlockState(_bp);
-                                    for (Map.Entry<Property<?>, Comparable<?>> entry : _bso.getValues().entrySet()) {
-                                        Property _property = _bs.getBlock().getStateDefinition().getProperty(entry.getKey().getName());
-                                        if (_property != null && _bs.getValue(_property) != null)
-                                            try {
-                                                _bs = _bs.setValue(_property, (Comparable) entry.getValue());
-                                            } catch (Exception e) {
-                                            }
-                                    }
+                                    BlockState _bs = CaerulaArborModBlocks.CHESTMEGA_SPAWNER.get().withPropertiesOf(world.getBlockState(_bp));
+                                    if (_bs.getBlock().getStateDefinition().getProperty("facing") instanceof DirectionProperty _directionProperty)
+                                        _bs = _bs.setValue(_directionProperty, getDirection());
                                     world.setBlock(_bp, _bs, 3);
                                 }
                                 if (world instanceof Level _level) {

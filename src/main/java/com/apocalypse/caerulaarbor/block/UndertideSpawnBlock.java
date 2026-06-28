@@ -16,12 +16,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.PushReaction;
-
-import java.util.Map;
 
 public class UndertideSpawnBlock extends Block implements SimpleWaterloggedBlock {
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
@@ -71,16 +68,7 @@ public class UndertideSpawnBlock extends Block implements SimpleWaterloggedBlock
             world.destroyBlock(BlockPos.containing(x, y + 1, z), false);
             {
                 BlockPos _bp = BlockPos.containing(x, y, z);
-                BlockState _bs = CaerulaArborModBlocks.UNDERTIDE_TABLE.get().defaultBlockState();
-                BlockState _bso = ((LevelAccessor) world).getBlockState(_bp);
-                for (Map.Entry<Property<?>, Comparable<?>> entry : _bso.getValues().entrySet()) {
-                    Property _property = _bs.getBlock().getStateDefinition().getProperty(entry.getKey().getName());
-                    if (_property != null && _bs.getValue(_property) != null)
-                        try {
-                            _bs = _bs.setValue(_property, (Comparable) entry.getValue());
-                        } catch (Exception e) {
-                        }
-                }
+                BlockState _bs = CaerulaArborModBlocks.UNDERTIDE_TABLE.get().withPropertiesOf(blockstate);
                 ((LevelAccessor) world).setBlock(_bp, _bs, 3);
             }
         }

@@ -1,10 +1,11 @@
-package com.apocalypse.caerulaarbor.network;
+package com.apocalypse.caerulaarbor.network.message.send;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.menu.PlayerEvoMenu;
+import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.NodeUtils;
 import com.apocalypse.caerulaarbor.util.PlayerStateUtils;
-import com.apocalypse.caerulaarbor.menu.PlayerEvoMenu;
 import io.netty.buffer.Unpooled;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -220,11 +221,7 @@ public class PlayerEvoButtonMessage {
                     }
                 }
             } else if (title.contains("node.less_damage")) {
-                double result = 0;
-                if (entity != null) {
-                    result = (((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).PEVO_NODE_less_damage;
-                }
-                add_def = result;
+                add_def = (((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).PEVO_NODE_less_damage;
                 for (int index5 = 0; index5 < 4; index5++) {
                     if (add_def < index5 + 1) {
                         if (index5 + 1 <= 2) {
@@ -655,3 +652,4 @@ public class PlayerEvoButtonMessage {
 		}
 	}
 }
+

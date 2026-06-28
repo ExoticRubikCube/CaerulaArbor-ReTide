@@ -50,36 +50,31 @@ public class EliteCavairItem extends Item {
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
 		ItemStack retval = new ItemStack(CaerulaArborModItems.EMPTY_CAN.get());
 		super.finishUsingItem(itemstack, world, entity);
-		double x = entity.getX();
-		double y = entity.getY();
-		double z = entity.getZ();
-        if (entity != null) {
-            if (!entity.level().isClientSide()) {
-                entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ADD_ATTACK_PERCLY.get(), 1200, 3));
-                entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 800, 1));
-            }
-            {
-                double _setval = 0;
-                ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
-                    capability.disoclusion = _setval;
-                    capability.syncPlayerVariables(entity);
-                });
-            }
-            {
-                double _setval = Math.min((((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).player_light + 10, 100);
-                ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
-                    capability.player_light = _setval;
-                    capability.syncPlayerVariables(entity);
-                });
-            }
-            EntityUtils.deductSanity(entity, 45);
-            if ((Entity) entity instanceof ServerPlayer _player) {
-                Advancement _adv = _player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "but_i_refuse"));
-                AdvancementProgress _ap = _player.getAdvancements().getOrStartProgress(_adv);
-                if (!_ap.isDone()) {
-                    for (String criteria : _ap.getRemainingCriteria())
-                        _player.getAdvancements().award(_adv, criteria);
-                }
+        if (!entity.level().isClientSide()) {
+            entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ADD_ATTACK_PERCLY.get(), 1200, 3));
+            entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 800, 1));
+        }
+        {
+            double _setval = 0;
+            ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                capability.disoclusion = _setval;
+                capability.syncPlayerVariables(entity);
+            });
+        }
+        {
+            double _setval = Math.min((((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).player_light + 10, 100);
+            ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                capability.player_light = _setval;
+                capability.syncPlayerVariables(entity);
+            });
+        }
+        EntityUtils.deductSanity(entity, 45);
+        if ((Entity) entity instanceof ServerPlayer _player) {
+            Advancement _adv = _player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "but_i_refuse"));
+            AdvancementProgress _ap = _player.getAdvancements().getOrStartProgress(_adv);
+            if (!_ap.isDone()) {
+                for (String criteria : _ap.getRemainingCriteria())
+                    _player.getAdvancements().award(_adv, criteria);
             }
         }
         if (itemstack.isEmpty()) {

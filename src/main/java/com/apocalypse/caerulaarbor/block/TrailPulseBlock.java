@@ -24,13 +24,14 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.*;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import java.util.Map;
 
 public class TrailPulseBlock extends Block {
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
@@ -129,37 +130,20 @@ public class TrailPulseBlock extends Block {
                             }
                             {
                                 BlockPos _bp = BlockPos.containing((double) x + directioniterator.getStepX() * dist, (double) y + dy, (double) z + directioniterator.getStepZ() * dist);
-                                BlockState _bs = (new Object() {
-                                    public BlockState with(BlockState _bs, Direction newValue) {
-                                        Property<?> _prop = _bs.getBlock().getStateDefinition().getProperty("facing");
-                                        if (_prop instanceof DirectionProperty _dp && _dp.getPossibleValues().contains(newValue))
-                                            return _bs.setValue(_dp, newValue);
-                                        _prop = _bs.getBlock().getStateDefinition().getProperty("axis");
-                                        return _prop instanceof EnumProperty _ep && _ep.getPossibleValues().contains(newValue.getAxis()) ? _bs.setValue(_ep, newValue.getAxis()) : _bs;
-                                    }
-                                }.with(toPlace, new Object() {
-                                    public Direction getValue() {
-                                        Direction _dir = Direction.NORTH;
-                                        int _num = Mth.nextInt(RandomSource.create(), 1, 4);
-                                        if (_num == 1) {
-                                            _dir = Direction.EAST;
-                                        } else if (_num == 2) {
-                                            _dir = Direction.SOUTH;
-                                        } else if (_num == 3) {
-                                            _dir = Direction.WEST;
-                                        }
-                                        return _dir;
-                                    }
-                                }.getValue()));
                                 BlockState _bso = ((LevelAccessor) world).getBlockState(_bp);
-                                for (Map.Entry<Property<?>, Comparable<?>> entry : _bso.getValues().entrySet()) {
-                                    Property _property = _bs.getBlock().getStateDefinition().getProperty(entry.getKey().getName());
-                                    if (_property != null && _bs.getValue(_property) != null)
-                                        try {
-                                            _bs = _bs.setValue(_property, (Comparable) entry.getValue());
-                                        } catch (Exception e) {
-                                        }
-                                }
+                            Direction _dir = Direction.NORTH;
+                            int _num = Mth.nextInt(RandomSource.create(), 1, 4);
+                            if (_num == 1) {
+                                _dir = Direction.EAST;
+                            } else if (_num == 2) {
+                                _dir = Direction.SOUTH;
+                            } else if (_num == 3) {
+                                _dir = Direction.WEST;
+                            }
+                            BlockState _bs = CaerulaArborModBlocks.SEA_TRAIL_INIT.get().withPropertiesOf(_bso);
+                            if (_bs.hasProperty(BlockStateProperties.WATERLOGGED) && toPlace.hasProperty(BlockStateProperties.WATERLOGGED))
+                                _bs = _bs.setValue(BlockStateProperties.WATERLOGGED, toPlace.getValue(BlockStateProperties.WATERLOGGED));
+                            _bs = _bs.setValue(FACING, _dir);
                                 ((LevelAccessor) world).setBlock(_bp, _bs, 3);
                             }
                             put = true;
@@ -201,37 +185,20 @@ public class TrailPulseBlock extends Block {
                         }
                         {
                             BlockPos _bp = BlockPos.containing((double) x + dltx, (double) y + dy, (double) z + dltz);
-                            BlockState _bs = (new Object() {
-                                public BlockState with(BlockState _bs, Direction newValue) {
-                                    Property<?> _prop = _bs.getBlock().getStateDefinition().getProperty("facing");
-                                    if (_prop instanceof DirectionProperty _dp && _dp.getPossibleValues().contains(newValue))
-                                        return _bs.setValue(_dp, newValue);
-                                    _prop = _bs.getBlock().getStateDefinition().getProperty("axis");
-                                    return _prop instanceof EnumProperty _ep && _ep.getPossibleValues().contains(newValue.getAxis()) ? _bs.setValue(_ep, newValue.getAxis()) : _bs;
-                                }
-                            }.with(toPlace, new Object() {
-                                public Direction getValue() {
-                                    Direction _dir = Direction.NORTH;
-                                    int _num = Mth.nextInt(RandomSource.create(), 1, 4);
-                                    if (_num == 1) {
-                                        _dir = Direction.EAST;
-                                    } else if (_num == 2) {
-                                        _dir = Direction.SOUTH;
-                                    } else if (_num == 3) {
-                                        _dir = Direction.WEST;
-                                    }
-                                    return _dir;
-                                }
-                            }.getValue()));
                             BlockState _bso = ((LevelAccessor) world).getBlockState(_bp);
-                            for (Map.Entry<Property<?>, Comparable<?>> entry : _bso.getValues().entrySet()) {
-                                Property _property = _bs.getBlock().getStateDefinition().getProperty(entry.getKey().getName());
-                                if (_property != null && _bs.getValue(_property) != null)
-                                    try {
-                                        _bs = _bs.setValue(_property, (Comparable) entry.getValue());
-                                    } catch (Exception e) {
-                                    }
+                            Direction _dir = Direction.NORTH;
+                            int _num = Mth.nextInt(RandomSource.create(), 1, 4);
+                            if (_num == 1) {
+                                _dir = Direction.EAST;
+                            } else if (_num == 2) {
+                                _dir = Direction.SOUTH;
+                            } else if (_num == 3) {
+                                _dir = Direction.WEST;
                             }
+                            BlockState _bs = CaerulaArborModBlocks.SEA_TRAIL_INIT.get().withPropertiesOf(_bso);
+                            if (_bs.hasProperty(BlockStateProperties.WATERLOGGED) && toPlace.hasProperty(BlockStateProperties.WATERLOGGED))
+                                _bs = _bs.setValue(BlockStateProperties.WATERLOGGED, toPlace.getValue(BlockStateProperties.WATERLOGGED));
+                            _bs = _bs.setValue(FACING, _dir);
                             ((LevelAccessor) world).setBlock(_bp, _bs, 3);
                         }
                         put = true;
@@ -261,37 +228,20 @@ public class TrailPulseBlock extends Block {
                         }
                         {
                             BlockPos _bp = BlockPos.containing((double) x + dltx, (double) y + dy, (double) z + dltz);
-                            BlockState _bs = (new Object() {
-                                public BlockState with(BlockState _bs, Direction newValue) {
-                                    Property<?> _prop = _bs.getBlock().getStateDefinition().getProperty("facing");
-                                    if (_prop instanceof DirectionProperty _dp && _dp.getPossibleValues().contains(newValue))
-                                        return _bs.setValue(_dp, newValue);
-                                    _prop = _bs.getBlock().getStateDefinition().getProperty("axis");
-                                    return _prop instanceof EnumProperty _ep && _ep.getPossibleValues().contains(newValue.getAxis()) ? _bs.setValue(_ep, newValue.getAxis()) : _bs;
-                                }
-                            }.with(toPlace, new Object() {
-                                public Direction getValue() {
-                                    Direction _dir = Direction.NORTH;
-                                    int _num = Mth.nextInt(RandomSource.create(), 1, 4);
-                                    if (_num == 1) {
-                                        _dir = Direction.EAST;
-                                    } else if (_num == 2) {
-                                        _dir = Direction.SOUTH;
-                                    } else if (_num == 3) {
-                                        _dir = Direction.WEST;
-                                    }
-                                    return _dir;
-                                }
-                            }.getValue()));
                             BlockState _bso = ((LevelAccessor) world).getBlockState(_bp);
-                            for (Map.Entry<Property<?>, Comparable<?>> entry : _bso.getValues().entrySet()) {
-                                Property _property = _bs.getBlock().getStateDefinition().getProperty(entry.getKey().getName());
-                                if (_property != null && _bs.getValue(_property) != null)
-                                    try {
-                                        _bs = _bs.setValue(_property, (Comparable) entry.getValue());
-                                    } catch (Exception e) {
-                                    }
+                            Direction _dir = Direction.NORTH;
+                            int _num = Mth.nextInt(RandomSource.create(), 1, 4);
+                            if (_num == 1) {
+                                _dir = Direction.EAST;
+                            } else if (_num == 2) {
+                                _dir = Direction.SOUTH;
+                            } else if (_num == 3) {
+                                _dir = Direction.WEST;
                             }
+                            BlockState _bs = CaerulaArborModBlocks.SEA_TRAIL_INIT.get().withPropertiesOf(_bso);
+                            if (_bs.hasProperty(BlockStateProperties.WATERLOGGED) && toPlace.hasProperty(BlockStateProperties.WATERLOGGED))
+                                _bs = _bs.setValue(BlockStateProperties.WATERLOGGED, toPlace.getValue(BlockStateProperties.WATERLOGGED));
+                            _bs = _bs.setValue(FACING, _dir);
                             ((LevelAccessor) world).setBlock(_bp, _bs, 3);
                         }
                         put = true;
@@ -321,37 +271,20 @@ public class TrailPulseBlock extends Block {
                         }
                         {
                             BlockPos _bp = BlockPos.containing((double) x + dltx, (double) y + dy, (double) z + dltz);
-                            BlockState _bs = (new Object() {
-                                public BlockState with(BlockState _bs, Direction newValue) {
-                                    Property<?> _prop = _bs.getBlock().getStateDefinition().getProperty("facing");
-                                    if (_prop instanceof DirectionProperty _dp && _dp.getPossibleValues().contains(newValue))
-                                        return _bs.setValue(_dp, newValue);
-                                    _prop = _bs.getBlock().getStateDefinition().getProperty("axis");
-                                    return _prop instanceof EnumProperty _ep && _ep.getPossibleValues().contains(newValue.getAxis()) ? _bs.setValue(_ep, newValue.getAxis()) : _bs;
-                                }
-                            }.with(toPlace, new Object() {
-                                public Direction getValue() {
-                                    Direction _dir = Direction.NORTH;
-                                    int _num = Mth.nextInt(RandomSource.create(), 1, 4);
-                                    if (_num == 1) {
-                                        _dir = Direction.EAST;
-                                    } else if (_num == 2) {
-                                        _dir = Direction.SOUTH;
-                                    } else if (_num == 3) {
-                                        _dir = Direction.WEST;
-                                    }
-                                    return _dir;
-                                }
-                            }.getValue()));
                             BlockState _bso = ((LevelAccessor) world).getBlockState(_bp);
-                            for (Map.Entry<Property<?>, Comparable<?>> entry : _bso.getValues().entrySet()) {
-                                Property _property = _bs.getBlock().getStateDefinition().getProperty(entry.getKey().getName());
-                                if (_property != null && _bs.getValue(_property) != null)
-                                    try {
-                                        _bs = _bs.setValue(_property, (Comparable) entry.getValue());
-                                    } catch (Exception e) {
-                                    }
+                            Direction _dir = Direction.NORTH;
+                            int _num = Mth.nextInt(RandomSource.create(), 1, 4);
+                            if (_num == 1) {
+                                _dir = Direction.EAST;
+                            } else if (_num == 2) {
+                                _dir = Direction.SOUTH;
+                            } else if (_num == 3) {
+                                _dir = Direction.WEST;
                             }
+                            BlockState _bs = CaerulaArborModBlocks.SEA_TRAIL_INIT.get().withPropertiesOf(_bso);
+                            if (_bs.hasProperty(BlockStateProperties.WATERLOGGED) && toPlace.hasProperty(BlockStateProperties.WATERLOGGED))
+                                _bs = _bs.setValue(BlockStateProperties.WATERLOGGED, toPlace.getValue(BlockStateProperties.WATERLOGGED));
+                            _bs = _bs.setValue(FACING, _dir);
                             ((LevelAccessor) world).setBlock(_bp, _bs, 3);
                         }
                         put = true;
@@ -381,37 +314,20 @@ public class TrailPulseBlock extends Block {
                         }
                         {
                             BlockPos _bp = BlockPos.containing((double) x + dltx, (double) y + dy, (double) z + dltz);
-                            BlockState _bs = (new Object() {
-                                public BlockState with(BlockState _bs, Direction newValue) {
-                                    Property<?> _prop = _bs.getBlock().getStateDefinition().getProperty("facing");
-                                    if (_prop instanceof DirectionProperty _dp && _dp.getPossibleValues().contains(newValue))
-                                        return _bs.setValue(_dp, newValue);
-                                    _prop = _bs.getBlock().getStateDefinition().getProperty("axis");
-                                    return _prop instanceof EnumProperty _ep && _ep.getPossibleValues().contains(newValue.getAxis()) ? _bs.setValue(_ep, newValue.getAxis()) : _bs;
-                                }
-                            }.with(toPlace, new Object() {
-                                public Direction getValue() {
-                                    Direction _dir = Direction.NORTH;
-                                    int _num = Mth.nextInt(RandomSource.create(), 1, 4);
-                                    if (_num == 1) {
-                                        _dir = Direction.EAST;
-                                    } else if (_num == 2) {
-                                        _dir = Direction.SOUTH;
-                                    } else if (_num == 3) {
-                                        _dir = Direction.WEST;
-                                    }
-                                    return _dir;
-                                }
-                            }.getValue()));
                             BlockState _bso = ((LevelAccessor) world).getBlockState(_bp);
-                            for (Map.Entry<Property<?>, Comparable<?>> entry : _bso.getValues().entrySet()) {
-                                Property _property = _bs.getBlock().getStateDefinition().getProperty(entry.getKey().getName());
-                                if (_property != null && _bs.getValue(_property) != null)
-                                    try {
-                                        _bs = _bs.setValue(_property, (Comparable) entry.getValue());
-                                    } catch (Exception e) {
-                                    }
+                            Direction _dir = Direction.NORTH;
+                            int _num = Mth.nextInt(RandomSource.create(), 1, 4);
+                            if (_num == 1) {
+                                _dir = Direction.EAST;
+                            } else if (_num == 2) {
+                                _dir = Direction.SOUTH;
+                            } else if (_num == 3) {
+                                _dir = Direction.WEST;
                             }
+                            BlockState _bs = CaerulaArborModBlocks.SEA_TRAIL_INIT.get().withPropertiesOf(_bso);
+                            if (_bs.hasProperty(BlockStateProperties.WATERLOGGED) && toPlace.hasProperty(BlockStateProperties.WATERLOGGED))
+                                _bs = _bs.setValue(BlockStateProperties.WATERLOGGED, toPlace.getValue(BlockStateProperties.WATERLOGGED));
+                            _bs = _bs.setValue(FACING, _dir);
                             ((LevelAccessor) world).setBlock(_bp, _bs, 3);
                         }
                         put = true;
@@ -431,16 +347,8 @@ public class TrailPulseBlock extends Block {
                     if (WorldUtils.isOrganic(((LevelAccessor) world).getBlockState(BlockPos.containing((double) x + directioniterator.getStepX(), (double) y + directioniterator.getStepY(), (double) z + directioniterator.getStepZ())))) {
                         {
                             BlockPos _bp = BlockPos.containing((double) x + directioniterator.getStepX(), (double) y + directioniterator.getStepY(), (double) z + directioniterator.getStepZ());
-                            BlockState _bs = CaerulaArborModBlocks.TRAIL_PULSE.get().defaultBlockState();
                             BlockState _bso = ((LevelAccessor) world).getBlockState(_bp);
-                            for (Map.Entry<Property<?>, Comparable<?>> entry : _bso.getValues().entrySet()) {
-                                Property _property = _bs.getBlock().getStateDefinition().getProperty(entry.getKey().getName());
-                                if (_property != null && _bs.getValue(_property) != null)
-                                    try {
-                                        _bs = _bs.setValue(_property, (Comparable) entry.getValue());
-                                    } catch (Exception e) {
-                                    }
-                            }
+                            BlockState _bs = CaerulaArborModBlocks.TRAIL_PULSE.get().withPropertiesOf(_bso);
                             ((LevelAccessor) world).setBlock(_bp, _bs, 3);
                         }
                         put = true;

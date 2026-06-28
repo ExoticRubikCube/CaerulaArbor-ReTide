@@ -25,13 +25,13 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.*;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import java.util.Map;
 
 public class NetherseaWoodBlock extends Block {
 	public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.AXIS;
@@ -99,34 +99,7 @@ public class NetherseaWoodBlock extends Block {
                 }
                 {
                     BlockPos _bp = BlockPos.containing(x, y, z);
-                    BlockState _bs = (new Object() {
-                        public BlockState with(BlockState _bs, Direction newValue) {
-                            Property<?> _prop = _bs.getBlock().getStateDefinition().getProperty("facing");
-                            if (_prop instanceof DirectionProperty _dp && _dp.getPossibleValues().contains(newValue))
-                                return _bs.setValue(_dp, newValue);
-                            _prop = _bs.getBlock().getStateDefinition().getProperty("axis");
-                            return _prop instanceof EnumProperty _ep && _ep.getPossibleValues().contains(newValue.getAxis()) ? _bs.setValue(_ep, newValue.getAxis()) : _bs;
-                        }
-                    }.with(CaerulaArborModBlocks.STRIPPED_NETHERSEA_WOOD.get().defaultBlockState(), (new Object() {
-                        public Direction getDirection(BlockState _bs) {
-                            Property<?> _prop = _bs.getBlock().getStateDefinition().getProperty("facing");
-                            if (_prop instanceof DirectionProperty _dp)
-                                return _bs.getValue(_dp);
-                            _prop = _bs.getBlock().getStateDefinition().getProperty("axis");
-                            return _prop instanceof EnumProperty _ep && _ep.getPossibleValues().toArray()[0] instanceof Direction.Axis
-                                    ? Direction.fromAxisAndDirection((Direction.Axis) _bs.getValue(_ep), Direction.AxisDirection.POSITIVE)
-                                    : Direction.NORTH;
-                        }
-                    }.getDirection(blockstate))));
-                    BlockState _bso = ((LevelAccessor) world).getBlockState(_bp);
-                    for (Map.Entry<Property<?>, Comparable<?>> entry : _bso.getValues().entrySet()) {
-                        Property _property = _bs.getBlock().getStateDefinition().getProperty(entry.getKey().getName());
-                        if (_property != null && _bs.getValue(_property) != null)
-                            try {
-                                _bs = _bs.setValue(_property, (Comparable) entry.getValue());
-                            } catch (Exception e) {
-                            }
-                    }
+                    BlockState _bs = CaerulaArborModBlocks.STRIPPED_NETHERSEA_WOOD.get().withPropertiesOf(blockstate);
                     ((LevelAccessor) world).setBlock(_bp, _bs, 3);
                 }
                 result = InteractionResult.SUCCESS;

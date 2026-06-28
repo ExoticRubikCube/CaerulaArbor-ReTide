@@ -1,7 +1,5 @@
+package com.apocalypse.caerulaarbor.network.message.send;
 
-package com.apocalypse.caerulaarbor.network;
-
-import com.apocalypse.caerulaarbor.menu.EvoTreeMenu;
 import com.apocalypse.caerulaarbor.procedures.OpenStraGUIProcedure;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -9,7 +7,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkEvent;
 
-import java.util.HashMap;
 import java.util.function.Supplier;
 
 public class EvoTreeButtonMessage {
@@ -44,14 +41,15 @@ public class EvoTreeButtonMessage {
 			int x = message.x;
 			int y = message.y;
 			int z = message.z;
-			handleButtonAction(entity, buttonID, x, y, z);
-		});
+            if (entity != null) {
+                handleButtonAction(entity, buttonID, x, y, z);
+            }
+        });
 		context.setPacketHandled(true);
 	}
 
 	public static void handleButtonAction(Player entity, int buttonID, int x, int y, int z) {
 		Level world = entity.level();
-		HashMap guistate = EvoTreeMenu.guistate;
 		// security measure to prevent arbitrary chunk generation
 		if (!world.hasChunkAt(new BlockPos(x, y, z)))
 			return;
@@ -61,3 +59,4 @@ public class EvoTreeButtonMessage {
 		}
 	}
 }
+

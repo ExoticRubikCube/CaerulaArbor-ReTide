@@ -28,13 +28,13 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.*;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import java.util.Map;
 
 public class TrailLogBlock extends Block {
 	public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.AXIS;
@@ -86,9 +86,8 @@ public class TrailLogBlock extends Block {
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();
-        BlockState targetBlock = Blocks.AIR.defaultBlockState();
-        Direction dire = Direction.NORTH;
-        double expand = 0;
+        BlockState targetBlock;
+        Direction dire;
         double longev = 0;
         if ((blockstate.getBlock().getStateDefinition().getProperty("grow_age") instanceof IntegerProperty _getip1 ? blockstate.getValue(_getip1) : -1) < 64) {
             {
@@ -111,48 +110,15 @@ public class TrailLogBlock extends Block {
                         dire = directioniterator;
                         targetBlock = (((LevelAccessor) world).getBlockState(BlockPos.containing((double) x + dire.getStepX(), (double) y + dire.getStepY(), (double) z + dire.getStepZ())));
                         if (targetBlock.is(BlockTags.create(new ResourceLocation("minecraft:logs"))) && !targetBlock.is(BlockTags.create(new ResourceLocation(CaerulaArborMod.MODID, "cannot_cover")))) {
-                            {
-                                BlockPos _bp = BlockPos.containing((double) x + dire.getStepX(), (double) y + dire.getStepY(), (double) z + dire.getStepZ());
-                                BlockState _bs = (new Object() {
-                                    public BlockState with(BlockState _bs, Direction newValue) {
-                                        Property<?> _prop = _bs.getBlock().getStateDefinition().getProperty("facing");
-                                        if (_prop instanceof DirectionProperty _dp && _dp.getPossibleValues().contains(newValue))
-                                            return _bs.setValue(_dp, newValue);
-                                        _prop = _bs.getBlock().getStateDefinition().getProperty("axis");
-                                        return _prop instanceof EnumProperty _ep && _ep.getPossibleValues().contains(newValue.getAxis()) ? _bs.setValue(_ep, newValue.getAxis()) : _bs;
-                                    }
-                                }.with((new Object() {
-                                    public BlockState with(BlockState _bs, String _property, int _newValue) {
-                                        Property<?> _prop = _bs.getBlock().getStateDefinition().getProperty(_property);
-                                        return _prop instanceof IntegerProperty _ip && _prop.getPossibleValues().contains(_newValue) ? _bs.setValue(_ip, _newValue) : _bs;
-                                    }
-                                }.with(CaerulaArborModBlocks.TRAIL_LOG.get().defaultBlockState(), "longevity", (int) longev)), dire));
-                                BlockState _bso = ((LevelAccessor) world).getBlockState(_bp);
-                                for (Map.Entry<Property<?>, Comparable<?>> entry : _bso.getValues().entrySet()) {
-                                    Property<?> _property = _bs.getBlock().getStateDefinition().getProperty(entry.getKey().getName());
-                                    if (_property != null && _bs.getValue(_property) != null)
-                                        try {
-                                            _bs = _bs.setValue(_property, (Comparable) entry.getValue());
-                                        } catch (Exception e) {
-                                        }
-                                }
-                                ((LevelAccessor) world).setBlock(_bp, _bs, 3);
-                            }
+                            BlockPos _bp = BlockPos.containing((double) x + dire.getStepX(), (double) y + dire.getStepY(), (double) z + dire.getStepZ());
+                            BlockState _bso = ((LevelAccessor) world).getBlockState(_bp);
+                            BlockState _bs = CaerulaArborModBlocks.TRAIL_LOG.get().withPropertiesOf(_bso).setValue(LONGEVITY, (int) longev);
+                            ((LevelAccessor) world).setBlock(_bp, _bs, 3);
                         } else if (targetBlock.is(BlockTags.create(new ResourceLocation("minecraft:leaves"))) && !(targetBlock.getBlock() == CaerulaArborModBlocks.TRAIL_LEAVE.get())) {
-                            {
-                                BlockPos _bp = BlockPos.containing((double) x + dire.getStepX(), (double) y + dire.getStepY(), (double) z + dire.getStepZ());
-                                BlockState _bs = CaerulaArborModBlocks.TRAIL_LEAVE.get().defaultBlockState();
-                                BlockState _bso = ((LevelAccessor) world).getBlockState(_bp);
-                                for (Map.Entry<Property<?>, Comparable<?>> entry : _bso.getValues().entrySet()) {
-                                    Property<?> _property = _bs.getBlock().getStateDefinition().getProperty(entry.getKey().getName());
-                                    if (_property != null && _bs.getValue(_property) != null)
-                                        try {
-                                            _bs = _bs.setValue(_property, (Comparable) entry.getValue());
-                                        } catch (Exception e) {
-                                        }
-                                }
-                                ((LevelAccessor) world).setBlock(_bp, _bs, 3);
-                            }
+                            BlockPos _bp = BlockPos.containing((double) x + dire.getStepX(), (double) y + dire.getStepY(), (double) z + dire.getStepZ());
+                            BlockState _bso = ((LevelAccessor) world).getBlockState(_bp);
+                            BlockState _bs = CaerulaArborModBlocks.TRAIL_LEAVE.get().withPropertiesOf(_bso);
+                            ((LevelAccessor) world).setBlock(_bp, _bs, 3);
                         } else if (targetBlock.getBlock() == Blocks.VINE) {
                             world.destroyBlock(BlockPos.containing((double) x + dire.getStepX(), (double) y + dire.getStepY(), (double) z + dire.getStepZ()), false);
                         }
@@ -176,52 +142,16 @@ public class TrailLogBlock extends Block {
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();
-		double hitX = hit.getLocation().x;
-		double hitY = hit.getLocation().y;
-		double hitZ = hit.getLocation().z;
-		Direction direction = hit.getDirection();
         InteractionResult result = InteractionResult.PASS;
-        if (entity != null) {
-            if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).is(ItemTags.create(new ResourceLocation("minecraft:axes")))
-                    || ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).is(ItemTags.create(new ResourceLocation("minecraft:axes")))) {
-                world.levelEvent(2001, BlockPos.containing(x, y, z), getId(CaerulaArborModBlocks.TRAIL_LOG.get().defaultBlockState()));
-                if ((LevelAccessor) world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.axe.strip")), SoundSource.BLOCKS, 1, 1);
-                }
-                {
-                    BlockPos _bp = BlockPos.containing(x, y, z);
-                    BlockState _bs = (new Object() {
-                        public BlockState with(BlockState _bs, Direction newValue) {
-                            Property<?> _prop = _bs.getBlock().getStateDefinition().getProperty("facing");
-                            if (_prop instanceof DirectionProperty _dp && _dp.getPossibleValues().contains(newValue))
-                                return _bs.setValue(_dp, newValue);
-                            _prop = _bs.getBlock().getStateDefinition().getProperty("axis");
-                            return _prop instanceof EnumProperty _ep && _ep.getPossibleValues().contains(newValue.getAxis()) ? _bs.setValue(_ep, newValue.getAxis()) : _bs;
-                        }
-                    }.with(CaerulaArborModBlocks.STRIPPED_TRAIL_LOG.get().defaultBlockState(), (new Object() {
-                        public Direction getDirection(BlockState _bs) {
-                            Property<?> _prop = _bs.getBlock().getStateDefinition().getProperty("facing");
-                            if (_prop instanceof DirectionProperty _dp)
-                                return _bs.getValue(_dp);
-                            _prop = _bs.getBlock().getStateDefinition().getProperty("axis");
-                            return _prop instanceof EnumProperty _ep && _ep.getPossibleValues().toArray()[0] instanceof Direction.Axis
-                                    ? Direction.fromAxisAndDirection((Direction.Axis) _bs.getValue(_ep), Direction.AxisDirection.POSITIVE)
-                                    : Direction.NORTH;
-                        }
-                    }.getDirection(blockstate))));
-                    BlockState _bso = ((LevelAccessor) world).getBlockState(_bp);
-                    for (Map.Entry<Property<?>, Comparable<?>> entry : _bso.getValues().entrySet()) {
-                        Property<?> _property = _bs.getBlock().getStateDefinition().getProperty(entry.getKey().getName());
-                        if (_property != null && _bs.getValue(_property) != null)
-                            try {
-                                _bs = _bs.setValue(_property, (Comparable) entry.getValue());
-                            } catch (Exception e) {
-                            }
-                    }
-                    ((LevelAccessor) world).setBlock(_bp, _bs, 3);
-                }
-                result = InteractionResult.SUCCESS;
+        if (entity.getMainHandItem().is(ItemTags.create(new ResourceLocation("minecraft:axes"))) || ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).is(ItemTags.create(new ResourceLocation("minecraft:axes")))) {
+            world.levelEvent(2001, BlockPos.containing(x, y, z), getId(CaerulaArborModBlocks.TRAIL_LOG.get().defaultBlockState()));
+            if ((LevelAccessor) world instanceof Level _level) {
+                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.axe.strip")), SoundSource.BLOCKS, 1, 1);
             }
+            BlockPos _bp = BlockPos.containing(x, y, z);
+            BlockState _bs = CaerulaArborModBlocks.STRIPPED_TRAIL_LOG.get().withPropertiesOf(blockstate);
+            ((LevelAccessor) world).setBlock(_bp, _bs, 3);
+            result = InteractionResult.SUCCESS;
         }
         return result;
 	}

@@ -103,7 +103,8 @@ public class TideBiDeathProcedure {
                                 if (entity instanceof TideDeathrepellerEntity) {
                                     ((TideDeathrepellerEntity) entity).setAnimation("empty");
                                 }
-                                if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
+                                LivingEntity _entity = (LivingEntity) entity;
+                                if (!_entity.level().isClientSide())
                                     _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 50, 0, false, false));
                                 if (entity instanceof TideDeathrepellerEntity) {
                                     ((TideDeathrepellerEntity) entity).setAnimation("animation.deathrepeller.combo");
@@ -160,69 +161,67 @@ public class TideBiDeathProcedure {
 				}
 			}
 			if (entity instanceof TideBishopEntity) {
-                if (entity != null) {
-                    double sklp = 0;
-                    if (!(entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CaerulaArborModMobEffects.FAKE_DEATH.get()))) {
-                        sklp = entity instanceof TideBishopEntity _datEntI ? _datEntI.getEntityData().get(TideBishopEntity.DATA_skillp) : 0;
-                        if (sklp <= 0) {
-                            if (!((entity instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == null)) {
-                                if (entity instanceof TideBishopEntity) {
-                                    ((TideBishopEntity) entity).setAnimation("animation.tidebishop.cast");
-                                }
-                                if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                                    _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 50, 0, false, false));
-                                CaerulaArborMod.queueServerWork(33, () -> {
-                                    if (entity == null)
-                                        return;
-                                    double sklp1 = 0;
-                                    Entity rep = null;
-                                    if (entity.isAlive() && (entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1)) {
-                                        {
-                                            Entity _shootFrom = entity;
-                                            Level projectileLevel = _shootFrom.level();
-                                            if (!projectileLevel.isClientSide()) {
-                                                Projectile _entityToSpawn = new Object() {
-                                                    public Projectile getArrow(Level level, Entity shooter, float damage, int knockback, byte piercing) {
-                                                        AbstractArrow entityToSpawn = new TellerShotEntity(CaerulaArborModEntities.TELLER_SHOT.get(), level);
-                                                        entityToSpawn.setOwner(shooter);
-                                                        entityToSpawn.setBaseDamage(damage);
-                                                        entityToSpawn.setKnockback(knockback);
-                                                        entityToSpawn.setSilent(true);
-                                                        entityToSpawn.setPierceLevel(piercing);
-                                                        entityToSpawn.setCritArrow(true);
-                                                        return entityToSpawn;
-                                                    }
-                                                }.getArrow(projectileLevel, entity,
-                                                        (float) (entity instanceof LivingEntity _livingEntity3 && _livingEntity3.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity3.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0), 0, (byte) 1);
-                                                _entityToSpawn.setPos(_shootFrom.getX(), _shootFrom.getEyeY() - 0.1, _shootFrom.getZ());
-                                                _entityToSpawn.shoot(_shootFrom.getLookAngle().x, _shootFrom.getLookAngle().y, _shootFrom.getLookAngle().z, (float) 1.5, 0);
-                                                projectileLevel.addFreshEntity(_entityToSpawn);
-                                            }
-                                        }
-                                        if (entity instanceof LivingEntity _entity)
-                                            _entity.setHealth((float) ((entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) + (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.1));
-                                        if (world instanceof ServerLevel _level)
-                                            _level.sendParticles(ParticleTypes.HAPPY_VILLAGER, x, (y + 1.5), z, 64, 1.5, 1.5, 1.5, 0.2);
-                                    }
-                                    rep = world.getEntitiesOfClass(TideDeathrepellerEntity.class, AABB.ofSize(new Vec3(x, y, z), 96, 96, 96), e1 -> true).stream().sorted(new Object() {
-                                        Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
-                                            return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
-                                        }
-                                    }.compareDistOf(x, y, z)).findFirst().orElse(null);
-                                    if (!(rep == null) && rep.isAlive() && (rep instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < (rep instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1)) {
-                                        if (rep instanceof LivingEntity _entity)
-                                            _entity.setHealth((float) ((rep instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) + (rep instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.1));
-                                        if (world instanceof ServerLevel _level)
-                                            _level.sendParticles(ParticleTypes.HAPPY_VILLAGER, (rep.getX()), (rep.getY() + 1.5), (rep.getZ()), 64, 1.5, 1.5, 1.5, 0.2);
-                                    }
-                                });
-                                if (entity instanceof TideBishopEntity _datEntSetI)
-                                    _datEntSetI.getEntityData().set(TideBishopEntity.DATA_skillp, 200);
+                double sklp = 0;
+                if (!(entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CaerulaArborModMobEffects.FAKE_DEATH.get()))) {
+                    sklp = entity instanceof TideBishopEntity _datEntI ? _datEntI.getEntityData().get(TideBishopEntity.DATA_skillp) : 0;
+                    if (sklp <= 0) {
+                        if (!((entity instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == null)) {
+                            if (entity instanceof TideBishopEntity) {
+                                ((TideBishopEntity) entity).setAnimation("animation.tidebishop.cast");
                             }
-                        } else {
+                            if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
+                                _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 50, 0, false, false));
+                            CaerulaArborMod.queueServerWork(33, () -> {
+                                if (entity == null)
+                                    return;
+                                double sklp1 = 0;
+                                Entity rep = null;
+                                if (entity.isAlive() && (entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1)) {
+                                    {
+                                        Entity _shootFrom = entity;
+                                        Level projectileLevel = _shootFrom.level();
+                                        if (!projectileLevel.isClientSide()) {
+                                            Projectile _entityToSpawn = new Object() {
+                                                public Projectile getArrow(Level level, Entity shooter, float damage, int knockback, byte piercing) {
+                                                    AbstractArrow entityToSpawn = new TellerShotEntity(CaerulaArborModEntities.TELLER_SHOT.get(), level);
+                                                    entityToSpawn.setOwner(shooter);
+                                                    entityToSpawn.setBaseDamage(damage);
+                                                    entityToSpawn.setKnockback(knockback);
+                                                    entityToSpawn.setSilent(true);
+                                                    entityToSpawn.setPierceLevel(piercing);
+                                                    entityToSpawn.setCritArrow(true);
+                                                    return entityToSpawn;
+                                                }
+                                            }.getArrow(projectileLevel, entity,
+                                                    (float) (entity instanceof LivingEntity _livingEntity3 && _livingEntity3.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity3.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0), 0, (byte) 1);
+                                            _entityToSpawn.setPos(_shootFrom.getX(), _shootFrom.getEyeY() - 0.1, _shootFrom.getZ());
+                                            _entityToSpawn.shoot(_shootFrom.getLookAngle().x, _shootFrom.getLookAngle().y, _shootFrom.getLookAngle().z, (float) 1.5, 0);
+                                            projectileLevel.addFreshEntity(_entityToSpawn);
+                                        }
+                                    }
+                                    if (entity instanceof LivingEntity _entity)
+                                        _entity.setHealth((float) ((entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) + (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.1));
+                                    if (world instanceof ServerLevel _level)
+                                        _level.sendParticles(ParticleTypes.HAPPY_VILLAGER, x, (y + 1.5), z, 64, 1.5, 1.5, 1.5, 0.2);
+                                }
+                                rep = world.getEntitiesOfClass(TideDeathrepellerEntity.class, AABB.ofSize(new Vec3(x, y, z), 96, 96, 96), e1 -> true).stream().min(new Object() {
+                                    Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
+                                        return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
+                                    }
+                                }.compareDistOf(x, y, z)).orElse(null);
+                                if (!(rep == null) && rep.isAlive() && (rep instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < (rep instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1)) {
+                                    LivingEntity _entity = (LivingEntity) rep;
+                                    _entity.setHealth((float) ((rep instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) + (rep instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.1));
+                                    if (world instanceof ServerLevel _level)
+                                        _level.sendParticles(ParticleTypes.HAPPY_VILLAGER, (rep.getX()), (rep.getY() + 1.5), (rep.getZ()), 64, 1.5, 1.5, 1.5, 0.2);
+                                }
+                            });
                             if (entity instanceof TideBishopEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(TideBishopEntity.DATA_skillp, (int) (sklp - 1));
+                                _datEntSetI.getEntityData().set(TideBishopEntity.DATA_skillp, 200);
                         }
+                    } else {
+                        if (entity instanceof TideBishopEntity _datEntSetI)
+                            _datEntSetI.getEntityData().set(TideBishopEntity.DATA_skillp, (int) (sklp - 1));
                     }
                 }
                 nearest = world.getEntitiesOfClass(TideDeathrepellerEntity.class, AABB.ofSize(new Vec3(x, y, z), 128, 128, 128), e -> true).stream().sorted(new Object() {

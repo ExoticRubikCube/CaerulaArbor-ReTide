@@ -1,9 +1,9 @@
-
-package com.apocalypse.caerulaarbor.network;
+package com.apocalypse.caerulaarbor.network.message.send;
 
 import com.apocalypse.caerulaarbor.menu.CaerulaRecordGUIMenu;
 import com.apocalypse.caerulaarbor.menu.PlayerEvoMenu;
 import com.apocalypse.caerulaarbor.menu.RelicShowcaseMenu;
+import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import io.netty.buffer.Unpooled;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -53,8 +53,10 @@ public class CaerulaRecordGUIButtonMessage {
 			int x = message.x;
 			int y = message.y;
 			int z = message.z;
-			handleButtonAction(entity, buttonID, x, y, z);
-		});
+            if (entity != null) {
+                handleButtonAction(entity, buttonID, x, y, z);
+            }
+        });
 		context.setPacketHandled(true);
 	}
 
@@ -66,51 +68,43 @@ public class CaerulaRecordGUIButtonMessage {
 			return;
 		if (buttonID == 0) {
 
-            if (entity != null) {
-                {
-                    boolean _setval = !(((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).show_stats;
-                    ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
-                        capability.show_stats = _setval;
-                        capability.syncPlayerVariables(entity);
-                    });
-                }
+            {
+                boolean _setval = !(((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).show_stats;
+                ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                    capability.show_stats = _setval;
+                    capability.syncPlayerVariables(entity);
+                });
             }
         }
 		if (buttonID == 1) {
 
-            if (entity != null) {
-                {
-                    boolean _setval = !(((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).kingShowPtc;
-                    ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
-                        capability.kingShowPtc = _setval;
-                        capability.syncPlayerVariables(entity);
-                    });
-                }
+            {
+                boolean _setval = !(((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).kingShowPtc;
+                ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                    capability.kingShowPtc = _setval;
+                    capability.syncPlayerVariables(entity);
+                });
             }
         }
 		if (buttonID == 2) {
 
-            if (entity != null) {
-                if ((Entity) entity instanceof ServerPlayer _ent) {
-                    BlockPos _bpos = BlockPos.containing(x, y, z);
-                    NetworkHooks.openScreen(_ent, new MenuProvider() {
-                        @Override
-                        public Component getDisplayName() {
-                            return Component.literal("RelicShowcase");
-                        }
+            if ((Entity) entity instanceof ServerPlayer _ent) {
+                BlockPos _bpos = BlockPos.containing(x, y, z);
+                NetworkHooks.openScreen(_ent, new MenuProvider() {
+                    @Override
+                    public Component getDisplayName() {
+                        return Component.literal("RelicShowcase");
+                    }
 
-                        @Override
-                        public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
-                            return new RelicShowcaseMenu(id, inventory, new FriendlyByteBuf(Unpooled.buffer()).writeBlockPos(_bpos));
-                        }
-                    }, _bpos);
-                }
+                    @Override
+                    public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
+                        return new RelicShowcaseMenu(id, inventory, new FriendlyByteBuf(Unpooled.buffer()).writeBlockPos(_bpos));
+                    }
+                }, _bpos);
             }
         }
 		if (buttonID == 3) {
 
-            if (entity == null)
-                return;
             if ((Entity) entity instanceof ServerPlayer _ent) {
                 BlockPos _bpos = BlockPos.containing(x, y, z);
                 NetworkHooks.openScreen(_ent, new MenuProvider() {
@@ -128,3 +122,4 @@ public class CaerulaRecordGUIButtonMessage {
         }
 	}
 }
+

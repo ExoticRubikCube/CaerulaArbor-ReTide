@@ -21,10 +21,6 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
-import net.minecraft.world.level.block.state.properties.Property;
-
-import java.util.Map;
-
 public class TrailLeaveBlock extends LeavesBlock {
 	public static final IntegerProperty GROW_AGE = IntegerProperty.create("grow_age", 0, 64);
 	public static final IntegerProperty LONGEVITY = IntegerProperty.create("longevity", 0, 16);
@@ -95,21 +91,8 @@ public class TrailLeaveBlock extends LeavesBlock {
                         if (targetBlock.is(BlockTags.create(new ResourceLocation("minecraft:leaves"))) && !(targetBlock.getBlock() == CaerulaArborModBlocks.TRAIL_LEAVE.get())) {
                             {
                                 BlockPos _bp = BlockPos.containing((double) x + dire.getStepX(), (double) y + dire.getStepY(), (double) z + dire.getStepZ());
-                                BlockState _bs = (new Object() {
-                                    public BlockState with(BlockState _bs, String _property, int _newValue) {
-                                        Property<?> _prop = _bs.getBlock().getStateDefinition().getProperty(_property);
-                                        return _prop instanceof IntegerProperty _ip && _prop.getPossibleValues().contains(_newValue) ? _bs.setValue(_ip, _newValue) : _bs;
-                                    }
-                                }.with(CaerulaArborModBlocks.TRAIL_LEAVE.get().defaultBlockState(), "longevity", (int) longev));
                                 BlockState _bso = ((LevelAccessor) world).getBlockState(_bp);
-                                for (Map.Entry<Property<?>, Comparable<?>> entry : _bso.getValues().entrySet()) {
-                                    Property<?> _property = _bs.getBlock().getStateDefinition().getProperty(entry.getKey().getName());
-                                    if (_property != null && _bs.getValue(_property) != null)
-                                        try {
-                                            _bs = _bs.setValue(_property, (Comparable) entry.getValue());
-                                        } catch (Exception e) {
-                                        }
-                                }
+                                BlockState _bs = CaerulaArborModBlocks.TRAIL_LEAVE.get().withPropertiesOf(_bso).setValue(LONGEVITY, (int) longev);
                                 ((LevelAccessor) world).setBlock(_bp, _bs, 3);
                             }
                         }

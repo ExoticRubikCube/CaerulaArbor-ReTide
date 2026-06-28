@@ -42,13 +42,11 @@ public class EchoJellyItem extends Item {
 			entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ESSENCE_RESISTANCE.get(), 3600, 1));
 			entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.SANITY_HEAL.get(), 1, 2, false, false));
 		}
-		{
-			double _setval = Math.min((entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).player_light + 19, 100);
-			entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
-				capability.player_light = _setval;
-				capability.syncPlayerVariables(entity);
-			});
-		}
+		double _setval = Math.min((entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).player_light + 19, 100);
+		entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+			capability.player_light = _setval;
+			capability.syncPlayerVariables(entity);
+		});
 		return retval;
 	}
 }
