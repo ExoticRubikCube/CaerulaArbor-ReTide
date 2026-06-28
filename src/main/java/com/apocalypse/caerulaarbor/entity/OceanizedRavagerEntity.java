@@ -241,9 +241,9 @@ public class OceanizedRavagerEntity extends SeaMonster {
         if (_mobEnt1.isAggressive()) {
             if (WorldUtils.canGrief(world)) {
                 if (Math.random() < 0.05) {
-                    for (int dx = (int) (-1); dx <= (int) 1; dx++) {
-                        for (int dy = (int) 1; dy <= (int) 3; dy++) {
-                            for (int dz = (int) (-1); dz <= (int) 1; dz++) {
+                    for (int dx = -1; dx <= 1; dx++) {
+                        for (int dy = 1; dy <= 3; dy++) {
+                            for (int dz = -1; dz <= 1; dz++) {
                                 target = (world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz)));
                                 if (world.getBlockFloorHeight(BlockPos.containing(x + dx, y + dy, z + dz)) > 0 && target.getDestroySpeed(world, BlockPos.containing(0, 0, 0)) > 0 && target.getDestroySpeed(world, BlockPos.containing(0, 0, 0)) <= 5) {
                                     world.destroyBlock(BlockPos.containing(x + dx, y + dy, z + dz), false);

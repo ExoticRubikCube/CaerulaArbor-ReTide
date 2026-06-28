@@ -56,7 +56,7 @@ import java.util.List;
 
 public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
 	public static final IntegerProperty BLOCKSTATE = IntegerProperty.create("blockstate", 0, 1);
-	public static final IntegerProperty ANIMATION = IntegerProperty.create("animation", 0, (int) 4);
+	public static final IntegerProperty ANIMATION = IntegerProperty.create("animation", 0, 4);
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 
 	public CrisisTableBlock() {
@@ -98,19 +98,19 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
 		if (state.getValue(BLOCKSTATE) == 1) {
 
 			return switch (state.getValue(FACING)) {
-				default -> box(0, 0, 0, 16, 16, 16);
-				case NORTH -> box(0, 0, 0, 16, 16, 16);
+                case NORTH -> box(0, 0, 0, 16, 16, 16);
 				case EAST -> box(0, 0, 0, 16, 16, 16);
 				case WEST -> box(0, 0, 0, 16, 16, 16);
-			};
+                default -> box(0, 0, 0, 16, 16, 16);
+            };
 		}
 
 		return switch (state.getValue(FACING)) {
-			default -> box(0, 0, 0, 16, 16, 16);
-			case NORTH -> box(0, 0, 0, 16, 16, 16);
+            case NORTH -> box(0, 0, 0, 16, 16, 16);
 			case EAST -> box(0, 0, 0, 16, 16, 16);
 			case WEST -> box(0, 0, 0, 16, 16, 16);
-		};
+            default -> box(0, 0, 0, 16, 16, 16);
+        };
 	}
 
 	@Override

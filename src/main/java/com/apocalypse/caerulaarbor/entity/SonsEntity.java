@@ -1,7 +1,6 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-
 import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
@@ -216,7 +215,7 @@ public class SonsEntity extends SeaMonster {
         if (this == null)
             return;
         if (this instanceof SonsEntity) {
-            ((SonsEntity) this).setAnimation("animation.bishopson.end");
+            this.setAnimation("animation.bishopson.end");
         }
     }
 
@@ -230,7 +229,7 @@ public class SonsEntity extends SeaMonster {
         if (this != null) {
             Entity owner = null;
             Entity tgt = null;
-            owner = (Entity) world.getEntitiesOfClass(BishopFishEntity.class, AABB.ofSize(new Vec3(x, y, z), 96, 96, 96), e -> true).stream().sorted(new Object() {
+            owner = world.getEntitiesOfClass(BishopFishEntity.class, AABB.ofSize(new Vec3(x, y, z), 96, 96, 96), e -> true).stream().sorted(new Object() {
                 Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
                     return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
                 }
@@ -243,7 +242,7 @@ public class SonsEntity extends SeaMonster {
                     _entity.getNavigation().stop();
             }
             if (!((Entity) this instanceof LivingEntity _livEnt7 && _livEnt7.hasEffect(CaerulaArborModMobEffects.COOLDOWN_SINAL.get()))) {
-                tgt = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+                tgt = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                 if (!(null == tgt)) {
                     if ((tgt != null ? distanceTo(tgt) : -1) <= 3.5) {
                         if (tgt instanceof LivingEntity _entity && !this.level().isClientSide())
@@ -256,7 +255,7 @@ public class SonsEntity extends SeaMonster {
                         }
                         tgt.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3(x, y, z));
                         if (this instanceof SonsEntity) {
-                            ((SonsEntity) this).setAnimation("animation.bishopson.loop");
+                            this.setAnimation("animation.bishopson.loop");
                         }
                     }
                 }

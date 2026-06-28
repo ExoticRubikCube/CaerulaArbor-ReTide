@@ -2,25 +2,22 @@
 package com.apocalypse.caerulaarbor.potion;
 
 import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
-import net.minecraft.core.particles.SimpleParticleType;
+import com.apocalypse.caerulaarbor.utils.MathUtils;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraftforge.common.ForgeMod;
 
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.effect.MobEffect;
-
-import com.apocalypse.caerulaarbor.utils.MathUtils;
-
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 public class SubHaemoMobEffect extends MobEffect {
 	public SubHaemoMobEffect() {
@@ -54,7 +51,7 @@ public class SubHaemoMobEffect extends MobEffect {
                 if ((Entity) entity instanceof LivingEntity _entity)
                     _entity.setHealth((float) health_cur);
                 for (int index0 = 0; index0 < 24; index0++) {
-                    world.addParticle((SimpleParticleType) (CaerulaArborModParticleTypes.BLOODOOZE.get()), entity.getX(), (entity.getY() + 1.33), entity.getZ(), (Mth.nextDouble(RandomSource.create(), -1.25, 1.25)), (Mth.nextDouble(RandomSource.create(), -0.05, 0.05)),
+                    world.addParticle(CaerulaArborModParticleTypes.BLOODOOZE.get(), entity.getX(), (entity.getY() + 1.33), entity.getZ(), (Mth.nextDouble(RandomSource.create(), -1.25, 1.25)), (Mth.nextDouble(RandomSource.create(), -0.05, 0.05)),
                             (Mth.nextDouble(RandomSource.create(), -1.25, 1.25)));
                 }
             }

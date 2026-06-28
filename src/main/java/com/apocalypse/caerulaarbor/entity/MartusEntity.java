@@ -1,13 +1,8 @@
 package com.apocalypse.caerulaarbor.entity;
 
-import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
+import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
+import com.apocalypse.caerulaarbor.init.*;
 import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
 import com.apocalypse.caerulaarbor.utils.WorldUtils;
@@ -404,7 +399,7 @@ public class MartusEntity extends SeaMonster {
                                 if ((Entity) this instanceof MartusEntity _datEntSetI)
                                     _datEntSetI.getEntityData().set(DATA_skillp1, 400);
                                 if (this instanceof MartusEntity) {
-                                    ((MartusEntity) this).setAnimation("animation.martus.buff");
+                                    this.setAnimation("animation.martus.buff");
                                 }
                                 tgt.getPersistentData().putBoolean("blessed", true);
                                 perc = (tgt instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) / (tgt instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1);
@@ -447,7 +442,7 @@ public class MartusEntity extends SeaMonster {
                             if ((Entity) this instanceof MartusEntity _datEntSetI)
                                 _datEntSetI.getEntityData().set(DATA_skillp1, 1000);
                             if (this instanceof MartusEntity) {
-                                ((MartusEntity) this).setAnimation("animation.martus.cure");
+                                this.setAnimation("animation.martus.cure");
                             }
                             new Object() {
                                 void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
@@ -494,14 +489,14 @@ public class MartusEntity extends SeaMonster {
                         if ((Entity) this instanceof MartusEntity _datEntSetI)
                             _datEntSetI.getEntityData().set(DATA_skillp2, 600);
                         if (this instanceof MartusEntity) {
-                            ((MartusEntity) this).setAnimation("animation.martus.reject");
+                            this.setAnimation("animation.martus.reject");
                         }
                         CaerulaArborMod.queueServerWork(15, () -> {
                             if (this == null)
                                 return;
                             Entity tgt_ent = null;
                             double max_h = 0;
-                            tgt_ent = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+                            tgt_ent = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                             if (tgt_ent == null || tgt_ent instanceof LivingEntity _livEnt2 && _livEnt2.hasEffect(CaerulaArborModMobEffects.SUB_HAEMO.get())) {
                                 tgt_ent = ((Entity) this instanceof LivingEntity _entity) ? _entity.getLastHurtByMob() : null;
                             }

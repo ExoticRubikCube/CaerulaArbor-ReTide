@@ -42,7 +42,7 @@ public class GoodsquidsServererItem extends Item {
         if (entity == null)
             return;
         if (entity.tickCount % 20 == 10) {
-            itemstack.setDamageValue((int) Math.min(100 + itemstack.getDamageValue(), 800));
+            itemstack.setDamageValue(Math.min(100 + itemstack.getDamageValue(), 800));
             if (itemstack.getDamageValue() >= 799) {
                 if (Math.random() < 0.2) {
                     if (((LevelAccessor) world).getLevelData().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
@@ -51,7 +51,7 @@ public class GoodsquidsServererItem extends Item {
                     }
                     if ((LevelAccessor) world instanceof ServerLevel _level) {
                         LightningBolt entityToSpawn = EntityType.LIGHTNING_BOLT.create(_level);
-                        entityToSpawn.moveTo(Vec3.atBottomCenterOf(BlockPos.containing(x, y, z)));;
+                        entityToSpawn.moveTo(Vec3.atBottomCenterOf(BlockPos.containing(x, y, z)));
                         _level.addFreshEntity(entityToSpawn);
                     }
                     if ((LevelAccessor) world instanceof ServerLevel _level)

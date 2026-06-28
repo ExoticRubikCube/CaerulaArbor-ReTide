@@ -218,7 +218,7 @@ public class OceanizedVexEntity extends SeaMonster {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
         if (this != null) {
             if ((Entity) this instanceof OceanizedVexEntity _datEntSetI)
-                _datEntSetI.getEntityData().set(DATA_leftSurvivalTick, (int) (600 + Mth.nextInt(RandomSource.create(), 0, 1800)));
+                _datEntSetI.getEntityData().set(DATA_leftSurvivalTick, 600 + Mth.nextInt(RandomSource.create(), 0, 1800));
         }
         return retval;
 	}
@@ -251,7 +251,7 @@ public class OceanizedVexEntity extends SeaMonster {
             double sklp1 = 0;
             String uuid1 = "";
             if (this.isAlive()) {
-                enemy = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+                enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                 sklp1 = (Entity) this instanceof OceanizedVexEntity _datEntI ? _datEntI.getEntityData().get(DATA_leftSurvivalTick) : 0;
                 if (sklp1 <= 0) {
                     ((Entity) this).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.STARVE)), (float) Math.max(0.075 * ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1), 1));

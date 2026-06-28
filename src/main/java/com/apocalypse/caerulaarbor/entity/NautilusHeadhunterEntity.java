@@ -88,7 +88,7 @@ public class NautilusHeadhunterEntity extends Animal implements GeoEntity {
 					double dx = this.wantedX - NautilusHeadhunterEntity.this.getX();
 					double dy = this.wantedY - NautilusHeadhunterEntity.this.getY();
 					double dz = this.wantedZ - NautilusHeadhunterEntity.this.getZ();
-					float f = (float) (Mth.atan2(dz, dx) * (double) (180 / Math.PI)) - 90;
+					float f = (float) (Mth.atan2(dz, dx) * (180 / Math.PI)) - 90;
 					float f1 = (float) (this.speedModifier * NautilusHeadhunterEntity.this.getAttribute(Attributes.MOVEMENT_SPEED).getValue());
 					NautilusHeadhunterEntity.this.setYRot(this.rotlerp(NautilusHeadhunterEntity.this.getYRot(), f, 10));
 					NautilusHeadhunterEntity.this.yBodyRot = NautilusHeadhunterEntity.this.getYRot();
@@ -257,7 +257,7 @@ public class NautilusHeadhunterEntity extends Animal implements GeoEntity {
             Entity vehicle = null;
             if (this.isAlive()) {
                 dryTick = (Entity) this instanceof NautilusHeadhunterEntity _datEntI ? _datEntI.getEntityData().get(DATA_DRY_TICK) : 0;
-                enemy = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+                enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                 isMounting = isPassenger();
                 if (isInWaterRainOrBubble() || isMounting) {
                     if ((Entity) this instanceof NautilusHeadhunterEntity _datEntSetI)

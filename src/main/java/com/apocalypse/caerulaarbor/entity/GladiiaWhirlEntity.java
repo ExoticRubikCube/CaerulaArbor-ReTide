@@ -106,7 +106,7 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity {
         double z = this.getZ();
         if (this != null) {
             Entity gladiia = null;
-            gladiia = (Entity) world.getEntitiesOfClass(GladiiaEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true).stream().sorted(new Object() {
+            gladiia = world.getEntitiesOfClass(GladiiaEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true).stream().sorted(new Object() {
                 Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
                     return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
                 }
@@ -172,8 +172,8 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity {
                                 continue;
                             }
                         }
-                        enemy = entityiterator instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
-                        if (entityiterator instanceof Player || (entityiterator instanceof TamableAnimal _tamEnt ? _tamEnt.isTame() : false)) {
+                        enemy = entityiterator instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+                        if (entityiterator instanceof Player || (entityiterator instanceof TamableAnimal _tamEnt && _tamEnt.isTame())) {
                             if (new Object() {
                                 public boolean checkGamemode(Entity _ent) {
                                     if (_ent instanceof ServerPlayer _serverPlayer) {
@@ -236,8 +236,8 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity {
                             if (entityiterator instanceof GladiiaWhirlEntity) {
                                 continue;
                             }
-                            enemy = entityiterator instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
-                            if (entityiterator instanceof Player || (entityiterator instanceof TamableAnimal _tamEnt ? _tamEnt.isTame() : false)) {
+                            enemy = entityiterator instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+                            if (entityiterator instanceof Player || (entityiterator instanceof TamableAnimal _tamEnt && _tamEnt.isTame())) {
                                 if (new Object() {
                                     public boolean checkGamemode(Entity _ent) {
                                         if (_ent instanceof ServerPlayer _serverPlayer) {
@@ -317,7 +317,6 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity {
 
     @Override
     protected void actuallyHurt(@NotNull DamageSource pDamageSource, float pDamageAmount) {
-        return;
     }
 
     @Override

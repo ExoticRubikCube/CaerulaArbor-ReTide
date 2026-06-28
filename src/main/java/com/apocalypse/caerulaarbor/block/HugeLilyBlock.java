@@ -1,7 +1,6 @@
 package com.apocalypse.caerulaarbor.block;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.init.CaerulaArborModBlockEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.utils.WorldUtils;
@@ -42,7 +41,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class HugeLilyBlock extends BaseEntityBlock implements SimpleWaterloggedBlock, EntityBlock {
-	public static final IntegerProperty ANIMATION = IntegerProperty.create("animation", 0, (int) 1);
+	public static final IntegerProperty ANIMATION = IntegerProperty.create("animation", 0, 1);
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
@@ -78,11 +77,11 @@ public class HugeLilyBlock extends BaseEntityBlock implements SimpleWaterloggedB
 	public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
 
 		return switch (state.getValue(FACING)) {
-			default -> box(2, 2, 2, 14, 15, 10);
-			case NORTH -> box(2, 2, 6, 14, 15, 14);
+            case NORTH -> box(2, 2, 6, 14, 15, 14);
 			case EAST -> box(2, 2, 2, 10, 15, 14);
 			case WEST -> box(6, 2, 2, 14, 15, 14);
-		};
+            default -> box(2, 2, 2, 14, 15, 10);
+        };
 	}
 
 	@Override

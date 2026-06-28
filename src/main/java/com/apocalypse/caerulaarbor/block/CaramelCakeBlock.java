@@ -77,34 +77,34 @@ public class CaramelCakeBlock extends Block implements SimpleWaterloggedBlock {
 	public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
 		if (state.getValue(BLOCKSTATE) == 1) {
 			return switch (state.getValue(FACING)) {
-				default -> Shapes.or(box(1, 0, 1, 8, 8, 8), box(8, 0, 8, 15, 8, 15), box(8, 0, 1, 15, 8, 8));
-				case NORTH -> Shapes.or(box(8, 0, 8, 15, 8, 15), box(1, 0, 1, 8, 8, 8), box(1, 0, 8, 8, 8, 15));
+                case NORTH -> Shapes.or(box(8, 0, 8, 15, 8, 15), box(1, 0, 1, 8, 8, 8), box(1, 0, 8, 8, 8, 15));
 				case EAST -> Shapes.or(box(1, 0, 8, 8, 8, 15), box(8, 0, 1, 15, 8, 8), box(1, 0, 1, 8, 8, 8));
 				case WEST -> Shapes.or(box(8, 0, 1, 15, 8, 8), box(1, 0, 8, 8, 8, 15), box(8, 0, 8, 15, 8, 15));
-			};
+                default -> Shapes.or(box(1, 0, 1, 8, 8, 8), box(8, 0, 8, 15, 8, 15), box(8, 0, 1, 15, 8, 8));
+            };
 		}
 		if (state.getValue(BLOCKSTATE) == 2) {
 			return switch (state.getValue(FACING)) {
-				default -> Shapes.or(box(1, 0, 1, 8, 8, 8), box(8, 0, 1, 15, 8, 8));
-				case NORTH -> Shapes.or(box(8, 0, 8, 15, 8, 15), box(1, 0, 8, 8, 8, 15));
+                case NORTH -> Shapes.or(box(8, 0, 8, 15, 8, 15), box(1, 0, 8, 8, 8, 15));
 				case EAST -> Shapes.or(box(1, 0, 8, 8, 8, 15), box(1, 0, 1, 8, 8, 8));
 				case WEST -> Shapes.or(box(8, 0, 1, 15, 8, 8), box(8, 0, 8, 15, 8, 15));
-			};
+                default -> Shapes.or(box(1, 0, 1, 8, 8, 8), box(8, 0, 1, 15, 8, 8));
+            };
 		}
 		if (state.getValue(BLOCKSTATE) == 3) {
 			return switch (state.getValue(FACING)) {
-				default -> box(1, 0, 1, 8, 8, 8);
-				case NORTH -> box(8, 0, 8, 15, 8, 15);
+                case NORTH -> box(8, 0, 8, 15, 8, 15);
 				case EAST -> box(1, 0, 8, 8, 8, 15);
 				case WEST -> box(8, 0, 1, 15, 8, 8);
-			};
+                default -> box(1, 0, 1, 8, 8, 8);
+            };
 		}
 		return switch (state.getValue(FACING)) {
-			default -> Shapes.or(box(1, 0, 1, 8, 8, 8), box(8, 0, 8, 15, 8, 15), box(8, 0, 1, 15, 8, 8), box(1, 0, 8, 8, 8, 15));
-			case NORTH -> Shapes.or(box(8, 0, 8, 15, 8, 15), box(1, 0, 1, 8, 8, 8), box(1, 0, 8, 8, 8, 15), box(8, 0, 1, 15, 8, 8));
+            case NORTH -> Shapes.or(box(8, 0, 8, 15, 8, 15), box(1, 0, 1, 8, 8, 8), box(1, 0, 8, 8, 8, 15), box(8, 0, 1, 15, 8, 8));
 			case EAST -> Shapes.or(box(1, 0, 8, 8, 8, 15), box(8, 0, 1, 15, 8, 8), box(1, 0, 1, 8, 8, 8), box(8, 0, 8, 15, 8, 15));
 			case WEST -> Shapes.or(box(8, 0, 1, 15, 8, 8), box(1, 0, 8, 8, 8, 15), box(8, 0, 8, 15, 8, 15), box(1, 0, 1, 8, 8, 8));
-		};
+            default -> Shapes.or(box(1, 0, 1, 8, 8, 8), box(8, 0, 8, 15, 8, 15), box(8, 0, 1, 15, 8, 8), box(1, 0, 8, 8, 8, 15));
+        };
 	}
 
 	@Override
@@ -157,7 +157,7 @@ public class CaramelCakeBlock extends Block implements SimpleWaterloggedBlock {
                 && ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()) {
             if ((blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _getip2 ? blockstate.getValue(_getip2) : -1) < 3) {
                 {
-                    int _value = (int) ((blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _getip4 ? blockstate.getValue(_getip4) : -1) + 1);
+                    int _value = (blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _getip4 ? blockstate.getValue(_getip4) : -1) + 1;
                     BlockPos _pos = BlockPos.containing(x, y, z);
                     BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
                     if (_bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))
@@ -177,7 +177,7 @@ public class CaramelCakeBlock extends Block implements SimpleWaterloggedBlock {
                 || ((Entity) entity instanceof LivingEntity _entity ? _entity.getOffhandItem() : ItemStack.EMPTY).getItem() instanceof AxeItem
                 || ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).is(ItemTags.create(new ResourceLocation("forge:tools/knives")))
                 || ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).is(ItemTags.create(new ResourceLocation("forge:tools/knives")))) {
-            for (int index0 = 0; index0 < (int) (4 - (blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _getip13 ? blockstate.getValue(_getip13) : -1)); index0++) {
+            for (int index0 = 0; index0 < (4 - (blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _getip13 ? blockstate.getValue(_getip13) : -1)); index0++) {
                 if ((LevelAccessor) world instanceof ServerLevel _level) {
                     ItemEntity entityToSpawn = new ItemEntity(_level, ((double) x + 0.5), ((double) y + 0.5), ((double) z + 0.5), new ItemStack(CaerulaArborModItems.CARAMEL_CAKE_PIECE.get()));
                     entityToSpawn.setPickUpDelay(10);

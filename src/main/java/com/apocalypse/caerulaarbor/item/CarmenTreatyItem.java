@@ -6,7 +6,6 @@ import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionResult;
@@ -57,7 +56,7 @@ public class CarmenTreatyItem extends Item {
             ty = y + direction.getStepY();
             tz = z + 0.5 + direction.getStepZ();
             if (world instanceof ServerLevel _level)
-                _level.sendParticles((SimpleParticleType) (CaerulaArborModParticleTypes.PURPLE_FLAME.get()), tx, (ty + 0.64), tz, 48, 0.64, 0.64, 0.64, 0.1);
+                _level.sendParticles(CaerulaArborModParticleTypes.PURPLE_FLAME.get(), tx, (ty + 0.64), tz, 48, 0.64, 0.64, 0.64, 0.1);
             if (world instanceof ServerLevel _level) {
                 Entity entityToSpawn = CaerulaArborModEntities.SAINT_CARMEN.get().spawn(_level, BlockPos.containing(tx, ty, tz), MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn != null) {

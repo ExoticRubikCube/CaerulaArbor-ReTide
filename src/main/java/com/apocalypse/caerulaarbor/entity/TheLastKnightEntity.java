@@ -301,7 +301,7 @@ public class TheLastKnightEntity extends Animal implements GeoEntity {
                 setTicksFrozen(0);
                 if ((Entity) this instanceof LivingEntity _entity)
                     _entity.removeEffect(CaerulaArborModMobEffects.FROZEN.get());
-                enemy = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+                enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                 if (skillp > 0) {
                     if ((Entity) this instanceof TheLastKnightEntity _datEntSetI)
                         _datEntSetI.getEntityData().set(DATA_skillp, (int) (skillp - 1));
@@ -315,7 +315,7 @@ public class TheLastKnightEntity extends Animal implements GeoEntity {
                             if (!this.level().isClientSide())
                                 this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 30, 0, false, false));
                             if (this instanceof TheLastKnightEntity) {
-                                ((TheLastKnightEntity) this).setAnimation("animation.last_knight.skill");
+                                this.setAnimation("animation.last_knight.skill");
                             }
                             CaerulaArborMod.queueServerWork(27, () -> {
                                 if (this.isAlive()) {
@@ -500,7 +500,7 @@ public class TheLastKnightEntity extends Animal implements GeoEntity {
 		double z = this.getZ();
 
 		double damage = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 2;
-		Entity enemy = (Entity) this.getTarget();
+		Entity enemy = this.getTarget();
 
 		for (int index0 = 0; index0 < 96; index0++) {
 			if (world instanceof ServerLevel _level)

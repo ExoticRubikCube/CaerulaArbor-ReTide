@@ -71,18 +71,18 @@ public class OperationTableBlock extends Block {
 	public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
 		if (state.getValue(BLOCKSTATE) == 1) {
 			return switch (state.getValue(FACING)) {
-				default -> box(0, 0, -16, 16, 16, 16);
-				case NORTH -> box(0, 0, 0, 16, 16, 32);
+                case NORTH -> box(0, 0, 0, 16, 16, 32);
 				case EAST -> box(-16, 0, 0, 16, 16, 16);
 				case WEST -> box(0, 0, 0, 32, 16, 16);
-			};
+                default -> box(0, 0, -16, 16, 16, 16);
+            };
 		}
 		return switch (state.getValue(FACING)) {
-			default -> box(0, 0, -16, 16, 16, 16);
-			case NORTH -> box(0, 0, 0, 16, 16, 32);
+            case NORTH -> box(0, 0, 0, 16, 16, 32);
 			case EAST -> box(-16, 0, 0, 16, 16, 16);
 			case WEST -> box(0, 0, 0, 32, 16, 16);
-		};
+            default -> box(0, 0, -16, 16, 16, 16);
+        };
 	}
 
 	@Override

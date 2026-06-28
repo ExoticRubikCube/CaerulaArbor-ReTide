@@ -43,7 +43,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ViviparousLilyBlock extends BaseEntityBlock implements SimpleWaterloggedBlock, EntityBlock {
-	public static final IntegerProperty ANIMATION = IntegerProperty.create("animation", 0, (int) 1);
+	public static final IntegerProperty ANIMATION = IntegerProperty.create("animation", 0, 1);
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
@@ -79,11 +79,11 @@ public class ViviparousLilyBlock extends BaseEntityBlock implements SimpleWaterl
 	public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
 
 		return switch (state.getValue(FACING)) {
-			default -> box(6, 0, 6, 10, 5, 10);
-			case NORTH -> box(6, 0, 6, 10, 5, 10);
+            case NORTH -> box(6, 0, 6, 10, 5, 10);
 			case EAST -> box(6, 0, 6, 10, 5, 10);
 			case WEST -> box(6, 0, 6, 10, 5, 10);
-		};
+            default -> box(6, 0, 6, 10, 5, 10);
+        };
 	}
 
 	@Override
@@ -180,8 +180,8 @@ public class ViviparousLilyBlock extends BaseEntityBlock implements SimpleWaterl
 
         boolean huge = false;
         huge = true;
-        for (int dx = (int) (-1); dx <= (int) 1; dx++) {
-            for (int dz = (int) (-1); dz <= (int) 1; dz++) {
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dz = -1; dz <= 1; dz++) {
                 if (!((((LevelAccessor) world).getBlockState(BlockPos.containing((double) x + dx, y, (double) z + dz))).getBlock() == CaerulaArborModBlocks.VIVIPAROUS_LILY.get())) {
                     huge = false;
                     break;
@@ -192,8 +192,8 @@ public class ViviparousLilyBlock extends BaseEntityBlock implements SimpleWaterl
             }
         }
         if (huge) {
-            for (int dx = (int) (-1); dx <= (int) 1; dx++) {
-                for (int dz = (int) (-1); dz <= (int) 1; dz++) {
+            for (int dx = -1; dx <= 1; dx++) {
+                for (int dz = -1; dz <= 1; dz++) {
                     if (!(dx == 0 && dz == 0)) {
                         ((LevelAccessor) world).setBlock(BlockPos.containing((double) x + dx, y, (double) z + dz), Blocks.AIR.defaultBlockState(), 3);
                         if ((LevelAccessor) world instanceof Level _level) {

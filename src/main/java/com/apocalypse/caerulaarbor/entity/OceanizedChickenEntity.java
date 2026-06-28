@@ -252,9 +252,9 @@ public class OceanizedChickenEntity extends SeaMonster {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
         if (this != null) {
             if ((Entity) this instanceof OceanizedChickenEntity _datEntSetI)
-                _datEntSetI.getEntityData().set(DATA_GROW_TIME, (int) (10000 - Mth.nextInt(RandomSource.create(), 0, 6000)));
+                _datEntSetI.getEntityData().set(DATA_GROW_TIME, 10000 - Mth.nextInt(RandomSource.create(), 0, 6000));
             if ((Entity) this instanceof OceanizedChickenEntity _datEntSetI)
-                _datEntSetI.getEntityData().set(DATA_LAY_COOLDOWN, (int) (1200 + Mth.nextInt(RandomSource.create(), -100, 100)));
+                _datEntSetI.getEntityData().set(DATA_LAY_COOLDOWN, 1200 + Mth.nextInt(RandomSource.create(), -100, 100));
         }
         return retval;
 	}
@@ -309,7 +309,7 @@ public class OceanizedChickenEntity extends SeaMonster {
                 return false;
             }
         }.checkGamemode((Entity) sourceentity)) {
-            if (((Entity) sourceentity instanceof LivingEntity _entity) ? _entity.isHolding(CaerulaArborModItems.NETHERSEA_CHICKEN_EGG.get()) : false) {
+            if ((Entity) sourceentity instanceof LivingEntity _entity && _entity.isHolding(CaerulaArborModItems.NETHERSEA_CHICKEN_EGG.get())) {
                 if (entity instanceof OceanizedChickenEntity _datEntL2 && _datEntL2.getEntityData().get(DATA_IS_CHILD)) {
                     if (entity instanceof OceanizedChickenEntity _datEntSetI)
                         _datEntSetI.getEntityData().set(DATA_GROW_TIME, 1);
@@ -354,7 +354,7 @@ public class OceanizedChickenEntity extends SeaMonster {
                     if ((Entity) this instanceof OceanizedChickenEntity _datEntSetI)
                         _datEntSetI.getEntityData().set(DATA_LAY_COOLDOWN, Mth.nextInt(RandomSource.create(), 2400, 4800));
                     if (this instanceof OceanizedChickenEntity) {
-                        ((OceanizedChickenEntity) this).setAnimation("animation.oceanized_chicken.lay");
+                        this.setAnimation("animation.oceanized_chicken.lay");
                     }
                     CaerulaArborMod.queueServerWork(5, () -> {
                         if (world instanceof Level _level) {

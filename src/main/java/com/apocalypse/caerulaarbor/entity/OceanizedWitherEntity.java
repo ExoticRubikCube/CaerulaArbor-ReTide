@@ -302,7 +302,7 @@ public class OceanizedWitherEntity extends SeaMonster implements RangedAttackMob
 				this.rangedAttackMob.performRangedAttack(this.target, f1);
 				this.attackTime = Mth.floor(f * (float) (this.attackIntervalMax - this.attackIntervalMin) + (float) this.attackIntervalMin);
 			} else if (this.attackTime < 0) {
-				this.attackTime = Mth.floor(Mth.lerp(Math.sqrt(d0) / (double) this.attackRadius, (double) this.attackIntervalMin, (double) this.attackIntervalMax));
+				this.attackTime = Mth.floor(Mth.lerp(Math.sqrt(d0) / (double) this.attackRadius, this.attackIntervalMin, this.attackIntervalMax));
 			} else
 				((OceanizedWitherEntity) rangedAttackMob).entityData.set(SHOOT, false);
 		}
@@ -496,7 +496,7 @@ public class OceanizedWitherEntity extends SeaMonster implements RangedAttackMob
                     if ((Entity) this instanceof OceanizedWitherEntity _datEntSetI)
                         _datEntSetI.getEntityData().set(DATA_duration, (int) (duration - 1));
                 }
-                enemy = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+                enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                 if (skillp > 0) {
                     if ((Entity) this instanceof OceanizedWitherEntity _datEntSetI)
                         _datEntSetI.getEntityData().set(DATA_skillp, (int) (skillp - 1));
@@ -506,11 +506,11 @@ public class OceanizedWitherEntity extends SeaMonster implements RangedAttackMob
                             _datEntSetI.getEntityData().set(DATA_duration, 40);
                         if ((Entity) this instanceof OceanizedWitherEntity _datEntSetI)
                             _datEntSetI.getEntityData().set(DATA_skillp, 300);
-                        LivingEntity _entity = (LivingEntity) (Entity) this;
+                        LivingEntity _entity = this;
                         if (!this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 20, 0, false, false));
                         if (this instanceof OceanizedWitherEntity) {
-                            ((OceanizedWitherEntity) this).setAnimation("animation.oceanzied_wither.skill");
+                            this.setAnimation("animation.oceanzied_wither.skill");
                         }
                         CaerulaArborMod.queueServerWork(4, () -> {
                             rimedWitherShoot(world);

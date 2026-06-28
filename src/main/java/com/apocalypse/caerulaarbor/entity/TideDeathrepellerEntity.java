@@ -1,8 +1,7 @@
 package com.apocalypse.caerulaarbor.entity;
 
-import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
 import com.apocalypse.caerulaarbor.procedures.TideBiDeathProcedure;
@@ -279,7 +278,7 @@ public class TideDeathrepellerEntity extends SeaMonster {
                     }
                     if (num >= 2 || ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5) {
                         if (this instanceof TideDeathrepellerEntity) {
-                            ((TideDeathrepellerEntity) this).setAnimation("animation.deathrepeller.enchantattack");
+                            this.setAnimation("animation.deathrepeller.enchantattack");
                         }
                         if (!this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.COOLDOWN_SINAL.get(), 60, 0, false, false));

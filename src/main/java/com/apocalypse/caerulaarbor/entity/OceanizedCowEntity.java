@@ -224,7 +224,7 @@ public class OceanizedCowEntity extends SeaMonster {
 		Level world = this.level();
         if (entity == null || sourceentity == null)
             return InteractionResult.PASS;
-        if ((((Entity) sourceentity instanceof LivingEntity _entity) ? _entity.isHolding(Items.SHEARS) : false) && entity instanceof OceanizedCowEntity _datEntL1 && _datEntL1.getEntityData().get(DATA_skill)) {
+        if (((Entity) sourceentity instanceof LivingEntity _entity && _entity.isHolding(Items.SHEARS)) && entity instanceof OceanizedCowEntity _datEntL1 && _datEntL1.getEntityData().get(DATA_skill)) {
             if (entity instanceof OceanizedCowEntity _datEntSetL)
                 _datEntSetL.getEntityData().set(DATA_skill, false);
             if (entity instanceof OceanizedCowEntity animatable)

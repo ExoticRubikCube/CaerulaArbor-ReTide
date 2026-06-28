@@ -336,9 +336,9 @@ public class ApostleProkaryoteEntity extends SeaMonster {
             double perc = 0;
             if (this.isAlive()) {
                 if (!((Entity) this instanceof ApostleProkaryoteEntity _datEntL1 && _datEntL1.getEntityData().get(DATA_shelled))) {
-                    for (int dx = (int) (-2); dx <= (int) 2; dx++) {
-                        for (int dy = (int) (-2); dy <= (int) 3; dy++) {
-                            for (int dz = (int) (-2); dz <= (int) 2; dz++) {
+                    for (int dx = -2; dx <= 2; dx++) {
+                        for (int dy = -2; dy <= 3; dy++) {
+                            for (int dz = -2; dz <= 2; dz++) {
                                 if ((world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz))).getBlock() == CaerulaArborModBlocks.WHITE_CHITIN_BLOCK.get()) {
                                     ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((x + dx), (y + dy), (z + dz)));
                                     world.destroyBlock(BlockPos.containing(x + dx, y + dy, z + dz), false);
@@ -376,7 +376,7 @@ public class ApostleProkaryoteEntity extends SeaMonster {
                         if ((Entity) this instanceof ApostleProkaryoteEntity _datEntSetL)
                             _datEntSetL.getEntityData().set(DATA_shelled, true);
                         if (this instanceof ApostleProkaryoteEntity) {
-                            ((ApostleProkaryoteEntity) this).setAnimation("animation.apostle.skill");
+                            this.setAnimation("animation.apostle.skill");
                         }
                         CaerulaArborMod.queueServerWork(17, () -> {
                             if (world instanceof Level _level) {

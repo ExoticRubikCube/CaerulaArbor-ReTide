@@ -5,7 +5,6 @@ import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -114,7 +113,7 @@ public class PrayerSplashEntity extends AbstractArrow implements ItemSupplier {
                                 if (entityiterator.isAlive()) {
                                     EntityUtils.heal(entityiterator, atk);
                                     if (world instanceof ServerLevel _level)
-                                        _level.sendParticles((SimpleParticleType) (CaerulaArborModParticleTypes.SEA_SPLASH.get()), (entityiterator.getX()), (entityiterator.getY() + 1), (entityiterator.getZ()), 24, 1, 1, 1, 0.1);
+                                        _level.sendParticles(CaerulaArborModParticleTypes.SEA_SPLASH.get(), (entityiterator.getX()), (entityiterator.getY() + 1), (entityiterator.getZ()), 24, 1, 1, 1, 0.1);
                                     count = count + 1;
                                     if (count >= 3) {
                                         break;

@@ -77,7 +77,7 @@ public class OcarinaItem extends Item {
             if ((Entity) entity instanceof Player _player)
                 _player.getCooldowns().addCooldown(itemstack.getItem(), 200);
             if (world.getDifficulty() != Difficulty.PEACEFUL) {
-                if ((Entity) entity instanceof Player _playerHasItem ? _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.WHIRL_EYE.get())) : false) {
+                if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.WHIRL_EYE.get()))) {
                     for (int index0 = 0; index0 < 64; index0++) {
                         for (int index1 = 0; index1 < 24; index1++) {
                             for (int index2 = 0; index2 < 64; index2++) {
@@ -194,9 +194,9 @@ public class OcarinaItem extends Item {
                                     found = true;
                                 } else if (cradle.getBlock() == CaerulaArborModBlocks.TIDE_BISHOP_CORE.get()) {
                                     double hdns = 0;
-                                    for (int dx = (int) (-1); dx <= (int) 1; dx++) {
-                                        for (int dy = (int) (-1); dy <= (int) 5; dy++) {
-                                            for (int dz = (int) (-1); dz <= (int) 1; dz++) {
+                                    for (int dx = -1; dx <= 1; dx++) {
+                                        for (int dy = -1; dy <= 5; dy++) {
+                                            for (int dz = -1; dz <= 1; dz++) {
                                                 hdns = (((LevelAccessor) world).getBlockState(BlockPos.containing(px + dx, py + dy, pz + dz))).getDestroySpeed(world, BlockPos.containing(0, 0, 0));
                                                 if (hdns <= 6 && hdns > 0) {
                                                     world.destroyBlock(BlockPos.containing(px + dx, py + dy, pz + dz), false);

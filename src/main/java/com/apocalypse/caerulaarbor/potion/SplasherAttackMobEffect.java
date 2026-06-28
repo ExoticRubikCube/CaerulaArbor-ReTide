@@ -7,30 +7,28 @@ import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
 import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
-import net.minecraft.core.particles.SimpleParticleType;
+import com.apocalypse.caerulaarbor.utils.MathUtils;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.effect.MobEffect;
-
-import com.apocalypse.caerulaarbor.utils.MathUtils;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 public class SplasherAttackMobEffect extends MobEffect {
     public SplasherAttackMobEffect() {
@@ -88,7 +86,7 @@ public class SplasherAttackMobEffect extends MobEffect {
                     new Object() {
                         void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                             if (world instanceof ServerLevel _level)
-                                _level.sendParticles((SimpleParticleType) (CaerulaArborModParticleTypes.SEA_SPLASH.get()), (entityiterator.getX() + ((x - entityiterator.getX()) / 40) * timedloopiterator),
+                                _level.sendParticles(CaerulaArborModParticleTypes.SEA_SPLASH.get(), (entityiterator.getX() + ((x - entityiterator.getX()) / 40) * timedloopiterator),
                                         (entityiterator.getY() + 9 + ((y - (entityiterator.getY() + 9)) / 40) * timedloopiterator), (entityiterator.getZ() + ((z - entityiterator.getZ()) / 40) * timedloopiterator), 1, 0.1, 0.1, 0.1, 0.01);
                             final int tick2 = ticks;
                             CaerulaArborMod.queueServerWork(tick2, () -> {

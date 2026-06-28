@@ -86,7 +86,7 @@ public class WitherShootPreEntity extends AbstractArrow implements ItemSupplier 
                 discard();
             return;
         }
-        enemy = sourceentity instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+        enemy = sourceentity instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
         if (enemy == null || !enemy.isAlive()) {
             if (!level().isClientSide())
                 discard();
@@ -123,7 +123,7 @@ public class WitherShootPreEntity extends AbstractArrow implements ItemSupplier 
                 if (!level().isClientSide())
                     discard();
             } else {
-                enemy = entity instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+                enemy = entity instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                 if (enemy == null || !enemy.isAlive()) {
                     if (!level().isClientSide())
                         discard();

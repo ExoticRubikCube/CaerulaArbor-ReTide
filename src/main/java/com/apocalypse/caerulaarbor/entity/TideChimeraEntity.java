@@ -1,12 +1,12 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.entity.base.RangedSanityAttacker;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
-import com.apocalypse.caerulaarbor.procedures.RangedSanityAttackProcedure;
 import com.apocalypse.caerulaarbor.utils.EntityPredicateUtils;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
 import net.minecraft.core.BlockPos;
@@ -67,7 +67,7 @@ import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.List;
 
-public class TideChimeraEntity extends SeaMonster {
+public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacker {
 
 	private boolean isChimeraDurative() {
 		return EntityPredicateUtils.isChimeraDurative(this);
@@ -277,7 +277,7 @@ public class TideChimeraEntity extends SeaMonster {
 			double accumulatedDamage = this.getEntityData().get(DATA_deal) + amount;
 			this.getEntityData().set(DATA_deal, (int) accumulatedDamage);
 			if (accumulatedDamage >= this.getMaxHealth() * 0.25) {
-				RangedSanityAttackProcedure.execute(this.level(), this.getX(), this.getY(), this.getZ(), this);
+				this.performRangedSanityAttack();
 				this.getEntityData().set(DATA_deal, 0);
 			}
 		}
@@ -300,7 +300,7 @@ public class TideChimeraEntity extends SeaMonster {
             if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
                 this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(45);
             if (this instanceof TideChimeraEntity) {
-                ((TideChimeraEntity) this).setAnimation("animation.super_apocata.start");
+                this.setAnimation("animation.super_apocata.start");
             }
             CaerulaArborMod.queueServerWork(36, () -> {
                 if (this.isAlive()) {
@@ -439,7 +439,7 @@ public class TideChimeraEntity extends SeaMonster {
                 dura = (Entity) this instanceof TideChimeraEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
                 tap = (Entity) this instanceof TideChimeraEntity _datEntI ? _datEntI.getEntityData().get(DATA_summonP) : 0;
                 perc = EntityUtils.getHealthPerc(this);
-                enemy = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+                enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                 if (dura > 0) {
                     if ((Entity) this instanceof TideChimeraEntity _datEntSetI)
                         _datEntSetI.getEntityData().set(DATA_duration, (int) (dura - 1));
@@ -472,7 +472,7 @@ public class TideChimeraEntity extends SeaMonster {
                             _datEntSetI.getEntityData().set(DATA_duration, 18);
                         dura = 18;
                         if (this instanceof TideChimeraEntity) {
-                            ((TideChimeraEntity) this).setAnimation("animation.super_apocata.throw");
+                            this.setAnimation("animation.super_apocata.throw");
                         }
                     }
                 }
@@ -483,7 +483,7 @@ public class TideChimeraEntity extends SeaMonster {
                     if (!(enemy == null) && enemy.isAlive()) {
                         if ((enemy != null ? distanceTo(enemy) : -1) <= 8) {
                             if (this instanceof TideChimeraEntity) {
-                                ((TideChimeraEntity) this).setAnimation("animation.super_apocata.ranged");
+                                this.setAnimation("animation.super_apocata.ranged");
                             }
                             if ((Entity) this instanceof TideChimeraEntity _datEntSetI)
                                 _datEntSetI.getEntityData().set(DATA_skillP, 300);

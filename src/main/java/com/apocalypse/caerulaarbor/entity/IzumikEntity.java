@@ -1,8 +1,7 @@
 package com.apocalypse.caerulaarbor.entity;
 
-import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
@@ -324,7 +323,7 @@ public class IzumikEntity extends SeaMonster {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
         if (this != null) {
             if (this instanceof IzumikEntity) {
-                ((IzumikEntity) this).setAnimation("animation.izumik.start");
+                this.setAnimation("animation.izumik.start");
             }
             if (!this.level().isClientSide())
                 this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 30, 1, false, false));
@@ -422,7 +421,7 @@ public class IzumikEntity extends SeaMonster {
             if (this.isAlive()) {
                 this.removeEffect(CaerulaArborModMobEffects.DIZZY.get());
                 this.removeEffect(CaerulaArborModMobEffects.FROZEN.get());
-                enemy = (Entity) this.getTarget();
+                enemy = this.getTarget();
                 sklp = this.getEntityData().get(DATA_skillp);
                 sklp1 = this.getEntityData().get(DATA_skillp_1);
                 grow = this.getEntityData().get(DATA_growth_p);
@@ -467,7 +466,7 @@ public class IzumikEntity extends SeaMonster {
                         }
                     } else {
                         if (this instanceof IzumikEntity) {
-                            ((IzumikEntity) this).setAnimation("animation.izumik.revive");
+                            this.setAnimation("animation.izumik.revive");
                         }
                         this.getEntityData().set(DATA_phase, 1);
                         this.removeEffect(CaerulaArborModMobEffects.INVULNERABLE.get());
@@ -487,7 +486,7 @@ public class IzumikEntity extends SeaMonster {
                         this.getEntityData().set(DATA_skillp, 5);
                         if (grow + 1 < 20) {
                             if (this instanceof IzumikEntity) {
-                                ((IzumikEntity) this).setAnimation("animation.izumik.grow");
+                                this.setAnimation("animation.izumik.grow");
                             }
                         }
                         CaerulaArborMod.queueServerWork(25, () -> {
@@ -513,7 +512,7 @@ public class IzumikEntity extends SeaMonster {
                                 List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate((2 * range) / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
                                 for (Entity entityiterator : _entfound) {
                                     if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
-                                        if (!(entityiterator == ((Entity) this.getTarget()))) {
+                                        if (!(entityiterator == this.getTarget())) {
                                             continue;
                                         }
                                     }
@@ -530,7 +529,7 @@ public class IzumikEntity extends SeaMonster {
                     }
                     if (waves <= 0) {
                         if (this instanceof IzumikEntity) {
-                            ((IzumikEntity) this).setAnimation("animation.izumik.revive");
+                            this.setAnimation("animation.izumik.revive");
                         }
                         this.getEntityData().set(DATA_phase, 1);
                         this.removeEffect(CaerulaArborModMobEffects.INVULNERABLE.get());
@@ -582,8 +581,8 @@ public class IzumikEntity extends SeaMonster {
                     }
                 } else {
                     if (sklp <= 0) {
-                        if (!(((Entity) this.getTarget()) == null) && ((Entity) this.getTarget()).isAlive()) {
-                            if ((((Entity) this.getTarget()) != null ? distanceTo(((Entity) this.getTarget())) : -1) <= 24) {
+                        if (!(this.getTarget() == null) && ((Entity) this.getTarget()).isAlive()) {
+                            if ((this.getTarget() != null ? distanceTo(this.getTarget()) : -1) <= 24) {
                                 if (phase >= 2) {
                                     this.getEntityData().set(DATA_skillp, 400);
                                 } else {
@@ -592,7 +591,7 @@ public class IzumikEntity extends SeaMonster {
                                 if (!this.level().isClientSide())
                                     this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 50, 0, false, false));
                                 if (this instanceof IzumikEntity) {
-                                    ((IzumikEntity) this).setAnimation("animation.izumik.skill");
+                                    this.setAnimation("animation.izumik.skill");
                                 }
                                 CaerulaArborMod.queueServerWork(35, () -> {
                                     this.setHealth((float) ((this.getHealth()) + (this.getMaxHealth()) * 0.03));
@@ -736,7 +735,7 @@ public class IzumikEntity extends SeaMonster {
 
 		for (Entity entityiterator : nearbyEntities) {
 			if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
-				if (!(entityiterator == (Entity) this.getTarget())) {
+				if (!(entityiterator == this.getTarget())) {
 					continue;
 				}
 			}

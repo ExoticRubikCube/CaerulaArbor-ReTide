@@ -1,9 +1,7 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
@@ -212,7 +210,7 @@ public class FakeOffspringEntity extends SeaMonster {
             double ToHurt = 0;
             double amplifi = 0;
             if ((Entity) this instanceof Mob _mobEnt0 && _mobEnt0.isAggressive()) {
-                obj = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+                obj = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                 if (!(obj == null)) {
                     if ((obj != null ? distanceTo(obj) : -1) <= 4) {
                         {

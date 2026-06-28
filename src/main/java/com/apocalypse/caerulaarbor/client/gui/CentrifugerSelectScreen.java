@@ -1,30 +1,28 @@
 package com.apocalypse.caerulaarbor.client.gui;
 
+import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.GladiiaEntity;
 import com.apocalypse.caerulaarbor.entity.SkadiEntity;
 import com.apocalypse.caerulaarbor.entity.SpecterEntity;
 import com.apocalypse.caerulaarbor.entity.UlpiansEntity;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.network.chat.Component;
-import net.minecraft.client.gui.screens.inventory.InventoryScreen;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.gui.components.ImageButton;
-import net.minecraft.client.gui.GuiGraphics;
-
-import com.apocalypse.caerulaarbor.world.inventory.CentrifugerSelectMenu;
 import com.apocalypse.caerulaarbor.network.CentrifugerSelectButtonMessage;
-import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.world.inventory.CentrifugerSelectMenu;
+import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.ImageButton;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 
 import java.util.HashMap;
-
-import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.world.level.LevelAccessor;
 
 public class CentrifugerSelectScreen extends AbstractContainerScreen<CentrifugerSelectMenu> {
 	private final static HashMap<String, Object> guistate = CentrifugerSelectMenu.guistate;
@@ -84,7 +82,7 @@ public class CentrifugerSelectScreen extends AbstractContainerScreen<Centrifuger
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
 
-		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/centrifuger_select_bg.png"), this.leftPos + 0, this.topPos + 0, 0, 0, 194, 130, 194, 130);
+		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/centrifuger_select_bg.png"), this.leftPos, this.topPos, 0, 0, 194, 130, 194, 130);
 
 		RenderSystem.disableBlend();
 	}

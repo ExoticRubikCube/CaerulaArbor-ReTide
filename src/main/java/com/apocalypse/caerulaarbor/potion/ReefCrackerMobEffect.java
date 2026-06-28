@@ -3,22 +3,20 @@ package com.apocalypse.caerulaarbor.potion;
 
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
-import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.effect.MobEffect;
-
+import net.minecraft.world.entity.ai.attributes.AttributeMap;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LevelAccessor;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ReefCrackerMobEffect extends MobEffect {
     public ReefCrackerMobEffect() {
@@ -41,10 +39,10 @@ public class ReefCrackerMobEffect extends MobEffect {
             return;
         double angle = 0;
         if (world instanceof ServerLevel _level)
-            _level.sendParticles((SimpleParticleType) (CaerulaArborModParticleTypes.CRACKER_BUFF_0.get()), x, (y + entity.getBbHeight() * 0.5), z, (int) ((double) amplifier + 1), 0.8, 1.5, 0.8, 0.3);
+            _level.sendParticles(CaerulaArborModParticleTypes.CRACKER_BUFF_0.get(), x, (y + entity.getBbHeight() * 0.5), z, (int) ((double) amplifier + 1), 0.8, 1.5, 0.8, 0.3);
         if ((double) amplifier > 6) {
             if (world instanceof ServerLevel _level)
-                _level.sendParticles((SimpleParticleType) (CaerulaArborModParticleTypes.CRACKER_BUFF_1.get()), x, y, z, 3, 1, 0.5, 1, 0.3);
+                _level.sendParticles(CaerulaArborModParticleTypes.CRACKER_BUFF_1.get(), x, y, z, 3, 1, 0.5, 1, 0.3);
         }
     }
 

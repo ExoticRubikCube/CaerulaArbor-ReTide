@@ -199,7 +199,7 @@ public class SkadiEntity extends Animal implements GeoEntity {
                             if ((Entity) this instanceof SkadiEntity _datEntSetI)
                                 _datEntSetI.getEntityData().set(DATA_skillp2, 120);
                             if (this instanceof SkadiEntity) {
-                                ((SkadiEntity) this).setAnimation("animation.skadi.skill");
+                                this.setAnimation("animation.skadi.skill");
                             }
                             ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((sourceentity.getX()), (sourceentity.getY()), (sourceentity.getZ())));
                             if (!this.level().isClientSide())
@@ -308,7 +308,7 @@ public class SkadiEntity extends Animal implements GeoEntity {
                             if ((Entity) this instanceof Mob _entity)
                                 _entity.getNavigation().stop();
                             if (this instanceof SkadiEntity) {
-                                ((SkadiEntity) this).setAnimation("animation.skadi.relax");
+                                this.setAnimation("animation.skadi.relax");
                             }
                             rlx = 320;
                         }
@@ -321,9 +321,9 @@ public class SkadiEntity extends Animal implements GeoEntity {
                 sklp2 = (Entity) this instanceof SkadiEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp2) : 0;
                 if (sklp <= 0) {
                     if (!(((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == null)) {
-                        if ((((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) != null ? distanceTo(((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null)) : -1) < 3) {
+                        if ((((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) != null ? distanceTo(((Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null)) : -1) < 3) {
                             if (this instanceof SkadiEntity) {
-                                ((SkadiEntity) this).setAnimation("animation.skadi.spin");
+                                this.setAnimation("animation.skadi.spin");
                             }
                             if (!this.level().isClientSide())
                                 this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 40, 0, false, false));

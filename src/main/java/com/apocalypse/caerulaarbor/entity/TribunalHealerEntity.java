@@ -6,7 +6,6 @@ import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -206,7 +205,7 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
 				this.rangedAttackMob.performRangedAttack(this.target, f1);
 				this.attackTime = Mth.floor(f * (float) (this.attackIntervalMax - this.attackIntervalMin) + (float) this.attackIntervalMin);
 			} else if (this.attackTime < 0) {
-				this.attackTime = Mth.floor(Mth.lerp(Math.sqrt(d0) / (double) this.attackRadius, (double) this.attackIntervalMin, (double) this.attackIntervalMax));
+				this.attackTime = Mth.floor(Mth.lerp(Math.sqrt(d0) / (double) this.attackRadius, this.attackIntervalMin, this.attackIntervalMax));
 			} else
 				((TribunalHealerEntity) rangedAttackMob).entityData.set(SHOOT, false);
 		}
@@ -297,7 +296,7 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
                                         if ((Entity) this instanceof TribunalHealerEntity _datEntSetI)
                                             _datEntSetI.getEntityData().set(DATA_skillp1, 100);
                                         if (this instanceof TribunalHealerEntity) {
-                                            ((TribunalHealerEntity) this).setAnimation("animation.tribunal_healer.concentratedheal");
+                                            this.setAnimation("animation.tribunal_healer.concentratedheal");
                                         }
                                         CaerulaArborMod.queueServerWork(20, () -> {
                                             if (this.isAlive()) {
@@ -407,7 +406,7 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
 											void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
 												for (int index0 = 0; index0 < 60; index0++) {
 													if (world instanceof ServerLevel _level)
-														_level.sendParticles((SimpleParticleType) (CaerulaArborModParticleTypes.PURPLE_FLAME.get()), (getX() + 1 * (timedloopiterator + 1) * Math.sin(Math.toRadians(index0 * 6))), (getY()),
+														_level.sendParticles(CaerulaArborModParticleTypes.PURPLE_FLAME.get(), (getX() + 1 * (timedloopiterator + 1) * Math.sin(Math.toRadians(index0 * 6))), (getY()),
 																(getZ() + 1 * (timedloopiterator + 1) * Math.cos(Math.toRadians(index0 * 6))), 2, 0.1, 0.15, 0.1, 0.1);
 												}
 												final int tick2 = ticks;

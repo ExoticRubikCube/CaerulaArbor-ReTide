@@ -1,11 +1,11 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.entity.base.PolarMountRider;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
-import com.apocalypse.caerulaarbor.procedures.SeabornRidePolarProcedure;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
 import com.apocalypse.caerulaarbor.utils.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -64,7 +64,7 @@ import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.List;
 
-public class CrackerAbyssalEntity extends SeaMonster {
+public class CrackerAbyssalEntity extends SeaMonster implements PolarMountRider {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(CrackerAbyssalEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(CrackerAbyssalEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(CrackerAbyssalEntity.class, EntityDataSerializers.STRING);
@@ -267,7 +267,7 @@ public class CrackerAbyssalEntity extends SeaMonster {
                     }
                     if (num >= 2 && (sourceentity != null ? distanceTo(sourceentity) : -1) <= 4) {
                         if (this instanceof CrackerAbyssalEntity) {
-                            ((CrackerAbyssalEntity) this).setAnimation("animation.nethersea_reefbreaker.spin");
+                            this.setAnimation("animation.nethersea_reefbreaker.spin");
                         }
                         if (!this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.COOLDOWN_SINAL.get(), 40, 0, false, false));
@@ -337,7 +337,6 @@ public class CrackerAbyssalEntity extends SeaMonster {
                 if (world instanceof ServerLevel _level)
                     _level.sendParticles(ParticleTypes.SMOKE, x, (y + 1), z, 4, 0.4, 2, 0.4, 0.01);
             }
-            SeabornRidePolarProcedure.execute(world, x, y, z, this);
         }
         this.refreshDimensions();
 	}

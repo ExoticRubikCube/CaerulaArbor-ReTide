@@ -7,7 +7,6 @@ import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -121,7 +120,7 @@ public class LancXiaoItem extends SwordItem {
                                                     _serverPlayer.connection.teleport(tx, ty, tz, _ent.getYRot(), _ent.getXRot());
                                             }
                                             if ((LevelAccessor) world instanceof ServerLevel _level)
-                                                _level.sendParticles((SimpleParticleType) (CaerulaArborModParticleTypes.ENDSPEAKER_PARTICLE.get()), tx, (ty + 0.75), tz, 18, 0.75, 0.75, 0.75, 0.15);
+                                                _level.sendParticles(CaerulaArborModParticleTypes.ENDSPEAKER_PARTICLE.get(), tx, (ty + 0.75), tz, 18, 0.75, 0.75, 0.75, 0.15);
                                             if ((LevelAccessor) world instanceof Level _level) {
                                                     _level.playSound(null, BlockPos.containing(tx, ty, tz), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "endspeaker_attack_hit")), SoundSource.PLAYERS, (float) 1.5, 1);
                                             }

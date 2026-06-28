@@ -1,11 +1,11 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.entity.base.PolarMountRider;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
-import com.apocalypse.caerulaarbor.procedures.SeabornRidePolarProcedure;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
 import com.apocalypse.caerulaarbor.utils.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -56,7 +56,7 @@ import software.bernie.geckolib.core.object.PlayState;
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 
-public class SplasherAbyssalEntity extends SeaMonster implements RangedAttackMob {
+public class SplasherAbyssalEntity extends SeaMonster implements RangedAttackMob, PolarMountRider {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(SplasherAbyssalEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(SplasherAbyssalEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(SplasherAbyssalEntity.class, EntityDataSerializers.STRING);
@@ -245,7 +245,7 @@ public class SplasherAbyssalEntity extends SeaMonster implements RangedAttackMob
 				this.rangedAttackMob.performRangedAttack(this.target, f1);
 				this.attackTime = Mth.floor(f * (float) (this.attackIntervalMax - this.attackIntervalMin) + (float) this.attackIntervalMin);
 			} else if (this.attackTime < 0) {
-				this.attackTime = Mth.floor(Mth.lerp(Math.sqrt(d0) / (double) this.attackRadius, (double) this.attackIntervalMin, (double) this.attackIntervalMax));
+				this.attackTime = Mth.floor(Mth.lerp(Math.sqrt(d0) / (double) this.attackRadius, this.attackIntervalMin, this.attackIntervalMax));
 			} else
 				((SplasherAbyssalEntity) rangedAttackMob).entityData.set(SHOOT, false);
 		}
@@ -317,7 +317,6 @@ public class SplasherAbyssalEntity extends SeaMonster implements RangedAttackMob
                 if (!this.level().isClientSide())
                     this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.SPLASHER_ATTACK.get(), 10000, 0, false, false));
             }
-            SeabornRidePolarProcedure.execute(world, this.getX(), this.getY(), this.getZ(), this);
         }
         this.refreshDimensions();
 	}

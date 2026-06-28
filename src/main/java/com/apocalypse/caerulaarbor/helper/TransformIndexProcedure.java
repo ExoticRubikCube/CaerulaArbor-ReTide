@@ -1,7 +1,6 @@
 package com.apocalypse.caerulaarbor.helper;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.configuration.CaerulaConfigsConfiguration;
 import com.apocalypse.caerulaarbor.entity.TribunalHealerEntity;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
@@ -80,7 +79,7 @@ public class TransformIndexProcedure {
 		}
 		if (!(entity instanceof LivingEntity _livEnt2 && _livEnt2.getMobType() == MobType.UNDEAD || entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "cannot_transform"))))
 				&& world.getLevelData().getGameRules().getBoolean(CaerulaArborModGameRules.OCEANIZATION_MODE) && !(entity instanceof LivingEntity _livEnt5 && _livEnt5.isBaby())) {
-			if (EntityUtils.getSeabornAround(world, x, y, z, entity) > Math.min((world.getLevelData().getGameRules().getInt(CaerulaArborModGameRules.CLONE_NUMBER_LIMIT)), (double) CaerulaConfigsConfiguration.CLONE_NUM.get()) * 2) {
+			if (EntityUtils.getSeabornAround(world, x, y, z, entity) > Math.min((world.getLevelData().getGameRules().getInt(CaerulaArborModGameRules.CLONE_NUMBER_LIMIT)), CaerulaConfigsConfiguration.CLONE_NUM.get()) * 2) {
 				return false;
 			}
 			TransformAttemptResult standardTransformResult = tryStandardTransformRules(world, x, y, z, entity);

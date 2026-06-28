@@ -37,7 +37,7 @@ public class NumbnessParticle extends TextureSheetParticle {
 		this.spriteSet = spriteSet;
 		this.setSize(0.2f, 0.2f);
 		this.quadSize *= 1.5f;
-		this.lifetime = (int) Math.max(1, 50 + (this.random.nextInt(20) - 10));
+		this.lifetime = Math.max(1, 50 + (this.random.nextInt(20) - 10));
 		this.gravity = -0.2f;
 		this.hasPhysics = true;
 		this.xd = vx * 0.6;

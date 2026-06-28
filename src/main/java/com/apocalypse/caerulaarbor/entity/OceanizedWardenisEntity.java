@@ -344,7 +344,7 @@ public class OceanizedWardenisEntity extends SeaMonster {
                 sklp1 = (Entity) this instanceof OceanizedWardenisEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp1) : 0;
                 sklp2 = (Entity) this instanceof OceanizedWardenisEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp2) : 0;
                 dura = (Entity) this instanceof OceanizedWardenisEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
-                enemy = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+                enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                 if (dura > 0) {
                     if ((Entity) this instanceof OceanizedWardenisEntity _datEntSetI)
                         _datEntSetI.getEntityData().set(DATA_duration, (int) (dura - 1));
@@ -358,7 +358,7 @@ public class OceanizedWardenisEntity extends SeaMonster {
                             if ((Entity) this instanceof OceanizedWardenisEntity _datEntSetI)
                                 _datEntSetI.getEntityData().set(DATA_duration, 45);
                             if (this instanceof OceanizedWardenisEntity) {
-                                ((OceanizedWardenisEntity) this).setAnimation("animation.oceanized_wardenis.sonic");
+                                this.setAnimation("animation.oceanized_wardenis.sonic");
                             }
                             if (!this.level().isClientSide())
                                 this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 45, 0, false, false));
@@ -373,7 +373,7 @@ public class OceanizedWardenisEntity extends SeaMonster {
                                     if (world instanceof Level _level) {
                                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.sonic_boom")), SoundSource.HOSTILE, 2, 1);
                                     }
-                                    EntityUtils.wardenSonicBoom(world, this, (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null);
+                                    EntityUtils.wardenSonicBoom(world, this, (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null);
                                 }
                             });
                             if ((Entity) this instanceof OceanizedWardenisEntity _datEntSetI)
@@ -390,12 +390,12 @@ public class OceanizedWardenisEntity extends SeaMonster {
                             if ((Entity) this instanceof OceanizedWardenisEntity _datEntSetI)
                                 _datEntSetI.getEntityData().set(DATA_duration, 45);
                             if (this instanceof OceanizedWardenisEntity) {
-                                ((OceanizedWardenisEntity) this).setAnimation("animation.oceanized_wardenis.combo");
+                                this.setAnimation("animation.oceanized_wardenis.combo");
                             }
                             ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY()), (enemy.getZ())));
                             CaerulaArborMod.queueServerWork(12, () -> {
                                 if (this.isAlive() && !(((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == null)) {
-                                    if ((((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) != null ? distanceTo(((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null)) : -1) <= 4) {
+                                    if ((((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) != null ? distanceTo(((Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null)) : -1) <= 4) {
                                         ((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null).hurt(
                                                 new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "warden_attack"))), this),
                                                 (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
@@ -415,7 +415,7 @@ public class OceanizedWardenisEntity extends SeaMonster {
                                 if (world instanceof Level _level) {
                                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.sonic_boom")), SoundSource.HOSTILE, 2, 1);
                                 }
-                                EntityUtils.wardenLightBoom(world, this, (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null);
+                                EntityUtils.wardenLightBoom(world, this, (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null);
                             });
                             if ((Entity) this instanceof OceanizedWardenisEntity _datEntSetI)
                                 _datEntSetI.getEntityData().set(DATA_skillp2, 300);

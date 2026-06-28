@@ -1,9 +1,10 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-
 import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.utils.EntityUtils;
+import com.apocalypse.caerulaarbor.utils.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -54,8 +55,6 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 
 import java.util.Map;
-import com.apocalypse.caerulaarbor.utils.WorldUtils;
-import com.apocalypse.caerulaarbor.utils.EntityUtils;
 
 public class DepositerProkaryoteEntity extends SeaMonster {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(DepositerProkaryoteEntity.class, EntityDataSerializers.BOOLEAN);
@@ -85,7 +84,7 @@ public class DepositerProkaryoteEntity extends SeaMonster {
 					double dx = this.wantedX - DepositerProkaryoteEntity.this.getX();
 					double dy = this.wantedY - DepositerProkaryoteEntity.this.getY();
 					double dz = this.wantedZ - DepositerProkaryoteEntity.this.getZ();
-					float f = (float) (Mth.atan2(dz, dx) * (double) (180 / Math.PI)) - 90;
+					float f = (float) (Mth.atan2(dz, dx) * (180 / Math.PI)) - 90;
 					float f1 = (float) (this.speedModifier * DepositerProkaryoteEntity.this.getAttribute(Attributes.MOVEMENT_SPEED).getValue());
 					DepositerProkaryoteEntity.this.setYRot(this.rotlerp(DepositerProkaryoteEntity.this.getYRot(), f, 10));
 					DepositerProkaryoteEntity.this.yBodyRot = DepositerProkaryoteEntity.this.getYRot();

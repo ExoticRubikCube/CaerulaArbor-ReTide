@@ -47,11 +47,11 @@ public class BerryCanBlock extends Block implements SimpleWaterloggedBlock {
 	@Override
 	public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
 		return switch (state.getValue(FACING)) {
-			default -> Shapes.or(box(3, 0, 3, 13, 11, 13), box(4, 10.5, 4, 12, 12.5, 12), box(5, 12.5, 5, 11, 13.5, 11));
-			case NORTH -> Shapes.or(box(3, 0, 3, 13, 11, 13), box(4, 10.5, 4, 12, 12.5, 12), box(5, 12.5, 5, 11, 13.5, 11));
+            case NORTH -> Shapes.or(box(3, 0, 3, 13, 11, 13), box(4, 10.5, 4, 12, 12.5, 12), box(5, 12.5, 5, 11, 13.5, 11));
 			case EAST -> Shapes.or(box(3, 0, 3, 13, 11, 13), box(4, 10.5, 4, 12, 12.5, 12), box(5, 12.5, 5, 11, 13.5, 11));
 			case WEST -> Shapes.or(box(3, 0, 3, 13, 11, 13), box(4, 10.5, 4, 12, 12.5, 12), box(5, 12.5, 5, 11, 13.5, 11));
-		};
+            default -> Shapes.or(box(3, 0, 3, 13, 11, 13), box(4, 10.5, 4, 12, 12.5, 12), box(5, 12.5, 5, 11, 13.5, 11));
+        };
 	}
 
 	@Override

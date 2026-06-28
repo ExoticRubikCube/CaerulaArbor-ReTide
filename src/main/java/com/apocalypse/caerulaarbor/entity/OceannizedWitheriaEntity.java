@@ -298,7 +298,7 @@ public class OceannizedWitheriaEntity extends SeaMonster {
             if (!this.level().isClientSide())
                 this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 95, 9, false, false));
             if (this instanceof OceannizedWitheriaEntity) {
-                ((OceannizedWitheriaEntity) this).setAnimation("animation.oceanzied_witheria.start");
+                this.setAnimation("animation.oceanzied_witheria.start");
             }
         }
         return retval;
@@ -351,7 +351,7 @@ public class OceannizedWitheriaEntity extends SeaMonster {
                         _datEntSetI.getEntityData().set(DATA_duration, (int) (duration - 1));
                 }
                 if ((getDisplayName().getString()).equals(getType().getDescription().getString())) {
-                    enemy = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+                    enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                     idle = (Entity) this instanceof OceannizedWitheriaEntity _datEntI ? _datEntI.getEntityData().get(DATA_idle_time) : 0;
                     if (enemy == null || !enemy.isAlive()) {
                         if ((Entity) this instanceof OceannizedWitheriaEntity _datEntSetI)
@@ -373,7 +373,7 @@ public class OceannizedWitheriaEntity extends SeaMonster {
                         if (!this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 65, 0, false, false));
                         if (this instanceof OceannizedWitheriaEntity) {
-                            ((OceannizedWitheriaEntity) this).setAnimation("animation.oceanzied_witheria.skill");
+                            this.setAnimation("animation.oceanzied_witheria.skill");
                         }
                         CaerulaArborMod.queueServerWork(20, () -> {
                             if (this.isAlive()) {
@@ -393,7 +393,7 @@ public class OceannizedWitheriaEntity extends SeaMonster {
                                 Entity otherOne = null;
                                 Entity otherTwo = null;
                                 if (((Entity) this instanceof OceannizedWitheriaEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0) <= 0) {
-                                    enemy1 = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+                                    enemy1 = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                                     if (enemy1 != null && enemy1.isAlive()) {
                                         this.shootWitheriaTo(enemy1);
                                         otherOne = EntityUtils.getNearestEnemy(world, x, y, z, enemy1, enemy1, this);
@@ -481,7 +481,7 @@ public class OceannizedWitheriaEntity extends SeaMonster {
                     if (!this.level().isClientSide())
                         this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 999, 9, false, false));
                     if (this instanceof OceannizedWitheriaEntity) {
-                        ((OceannizedWitheriaEntity) this).setAnimation("animation.oceanzied_witheria.byebye");
+                        this.setAnimation("animation.oceanzied_witheria.byebye");
                     }
                     CaerulaArborMod.queueServerWork(100, () -> {
                         if (!level().isClientSide())

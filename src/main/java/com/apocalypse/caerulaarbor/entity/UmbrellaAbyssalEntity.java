@@ -1,9 +1,7 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
 import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
@@ -50,7 +48,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.DungeonHooks;
-import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -61,8 +58,6 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 
 import javax.annotation.Nullable;
-
-;
 
 public class UmbrellaAbyssalEntity extends SeaMonster {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(UmbrellaAbyssalEntity.class, EntityDataSerializers.BOOLEAN);
@@ -218,22 +213,22 @@ public class UmbrellaAbyssalEntity extends SeaMonster {
                 angle = Mth.nextDouble(RandomSource.create(), 0, 6.283);
                 d = Mth.nextDouble(RandomSource.create(), 1.6, 2.2);
                 if (world instanceof ServerLevel _level)
-                    _level.sendParticles((SimpleParticleType) CaerulaArborModParticleTypes.SEA_RIPPLE.get(), (x + d * Math.sin(angle)), (y + 0.4), (z + d * Math.cos(angle)), 0, (float) Math.sin(angle), 0.0, (float) Math.cos(angle), 0.09);
+                    _level.sendParticles(CaerulaArborModParticleTypes.SEA_RIPPLE.get(), (x + d * Math.sin(angle)), (y + 0.4), (z + d * Math.cos(angle)), 0, (float) Math.sin(angle), 0.0, (float) Math.cos(angle), 0.09);
                 angle = Mth.nextDouble(RandomSource.create(), 0, 6.283);
                 d = Mth.nextDouble(RandomSource.create(), 1.9, 2.5);
                 if (world instanceof ServerLevel _level)
-                    _level.sendParticles((SimpleParticleType) CaerulaArborModParticleTypes.SEA_RIPPLE.get(), (x + d * Math.sin(angle)), (y + 0.4), (z + d * Math.cos(angle)), 0, (float) Math.sin(angle), 0.0, (float) Math.cos(angle), 0.11);
+                    _level.sendParticles(CaerulaArborModParticleTypes.SEA_RIPPLE.get(), (x + d * Math.sin(angle)), (y + 0.4), (z + d * Math.cos(angle)), 0, (float) Math.sin(angle), 0.0, (float) Math.cos(angle), 0.11);
             }
             if (CaerulaArborModVariables.MapVariables.get(world).strategy_grow >= 3) {
                 for (int index1 = 0; index1 < 14; index1++) {
                     angle = Mth.nextDouble(RandomSource.create(), 0, 6.283);
                     d = Mth.nextDouble(RandomSource.create(), 3.6, 4.3);
                     if (world instanceof ServerLevel _level)
-                        _level.sendParticles((SimpleParticleType) CaerulaArborModParticleTypes.SEA_RIPPLE.get(), (x + d * Math.sin(angle)), (y + 0.4), (z + d * Math.cos(angle)), 0, (float) Math.sin(angle), 0.0, (float) Math.cos(angle), 0.12);
+                        _level.sendParticles(CaerulaArborModParticleTypes.SEA_RIPPLE.get(), (x + d * Math.sin(angle)), (y + 0.4), (z + d * Math.cos(angle)), 0, (float) Math.sin(angle), 0.0, (float) Math.cos(angle), 0.12);
                     angle = Mth.nextDouble(RandomSource.create(), 0, 6.283);
                     d = Mth.nextDouble(RandomSource.create(), 4.0, 4.7);
                     if (world instanceof ServerLevel _level)
-                        _level.sendParticles((SimpleParticleType) CaerulaArborModParticleTypes.SEA_RIPPLE.get(), (x + d * Math.sin(angle)), (y + 0.4), (z + d * Math.cos(angle)), 0, (float) Math.sin(angle), 0.0, (float) Math.cos(angle), 0.14);
+                        _level.sendParticles(CaerulaArborModParticleTypes.SEA_RIPPLE.get(), (x + d * Math.sin(angle)), (y + 0.4), (z + d * Math.cos(angle)), 0, (float) Math.sin(angle), 0.0, (float) Math.cos(angle), 0.14);
                 }
             }
             if (tickCount % 20 == 0) {

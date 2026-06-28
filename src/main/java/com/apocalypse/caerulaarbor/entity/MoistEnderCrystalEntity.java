@@ -299,7 +299,7 @@ public class MoistEnderCrystalEntity extends PathfinderMob implements GeoEntity 
             if (world instanceof ServerLevel _level)
                 _level.sendParticles(ParticleTypes.EXPLOSION, x, (y + 0.5), z, 4, 0.5, 0.5, 0.5, 0.1);
             if (world instanceof ServerLevel _level)
-                _level.sendParticles((SimpleParticleType) (CaerulaArborModParticleTypes.EDERMAN_PTC.get()), x, (y + 0.5), z, 32, 1, 1, 1, 0.18);
+                _level.sendParticles(CaerulaArborModParticleTypes.EDERMAN_PTC.get(), x, (y + 0.5), z, 32, 1, 1, 1, 0.18);
             d = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
             if (d > 0) {
                 {
@@ -318,7 +318,7 @@ public class MoistEnderCrystalEntity extends PathfinderMob implements GeoEntity 
                     }
                 }
             }
-            enderina = (Entity) world.getEntitiesOfClass(OceanizedEnderinaEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).stream().sorted(new Object() {
+            enderina = world.getEntitiesOfClass(OceanizedEnderinaEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).stream().sorted(new Object() {
                 Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
                     return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
                 }

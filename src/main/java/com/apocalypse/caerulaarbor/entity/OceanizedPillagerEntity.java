@@ -2,8 +2,8 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
+import com.apocalypse.caerulaarbor.entity.base.RavagerMountRider;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.procedures.RaiderRideRavagerProcedure;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
@@ -52,7 +52,7 @@ import software.bernie.geckolib.core.object.PlayState;
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 
-public class OceanizedPillagerEntity extends SeaMonster implements RangedAttackMob {
+public class OceanizedPillagerEntity extends SeaMonster implements RangedAttackMob, RavagerMountRider {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanizedPillagerEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedPillagerEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(OceanizedPillagerEntity.class, EntityDataSerializers.STRING);
@@ -247,7 +247,7 @@ public class OceanizedPillagerEntity extends SeaMonster implements RangedAttackM
 				this.rangedAttackMob.performRangedAttack(this.target, f1);
 				this.attackTime = Mth.floor(f * (float) (this.attackIntervalMax - this.attackIntervalMin) + (float) this.attackIntervalMin);
 			} else if (this.attackTime < 0) {
-				this.attackTime = Mth.floor(Mth.lerp(Math.sqrt(d0) / (double) this.attackRadius, (double) this.attackIntervalMin, (double) this.attackIntervalMax));
+				this.attackTime = Mth.floor(Mth.lerp(Math.sqrt(d0) / (double) this.attackRadius, this.attackIntervalMin, this.attackIntervalMax));
 			} else
 				((OceanizedPillagerEntity) rangedAttackMob).entityData.set(SHOOT, false);
 		}
@@ -309,11 +309,11 @@ public class OceanizedPillagerEntity extends SeaMonster implements RangedAttackM
             if (this.isAlive()) {
                 sklp = (Entity) this instanceof OceanizedPillagerEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp) : 0;
                 if (sklp <= 0) {
-                    enemy = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+                    enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                     if (!(enemy == null) && enemy.isAlive()) {
-                        if (((Entity) this instanceof LivingEntity _liveEnt && enemy != null ? _liveEnt.hasLineOfSight(enemy) : false) && (enemy != null ? distanceTo(enemy) : -1) <= 12) {
+                        if (((Entity) this instanceof LivingEntity _liveEnt && enemy != null && _liveEnt.hasLineOfSight(enemy)) && (enemy != null ? distanceTo(enemy) : -1) <= 12) {
                             if (this instanceof OceanizedPillagerEntity) {
-                                ((OceanizedPillagerEntity) this).setAnimation("animation.oceanized_pillager.pour");
+                                this.setAnimation("animation.oceanized_pillager.pour");
                             }
                             if ((Entity) this instanceof OceanizedPillagerEntity _datEntSetI)
                                 _datEntSetI.getEntityData().set(DATA_skillp, 300);
@@ -369,7 +369,6 @@ public class OceanizedPillagerEntity extends SeaMonster implements RangedAttackM
                     if ((Entity) this instanceof OceanizedPillagerEntity _datEntSetI)
                         _datEntSetI.getEntityData().set(DATA_skillp, (int) (sklp - 1));
                 }
-                RaiderRideRavagerProcedure.execute(world, x, y, z, this);
             }
         }
         this.refreshDimensions();

@@ -92,7 +92,7 @@ public class NucleicMaleficentEntity extends SeaMonster {
 					double dx = this.wantedX - NucleicMaleficentEntity.this.getX();
 					double dy = this.wantedY - NucleicMaleficentEntity.this.getY();
 					double dz = this.wantedZ - NucleicMaleficentEntity.this.getZ();
-					float f = (float) (Mth.atan2(dz, dx) * (double) (180 / Math.PI)) - 90;
+					float f = (float) (Mth.atan2(dz, dx) * (180 / Math.PI)) - 90;
 					float f1 = (float) (this.speedModifier * NucleicMaleficentEntity.this.getAttribute(Attributes.MOVEMENT_SPEED).getValue());
 					NucleicMaleficentEntity.this.setYRot(this.rotlerp(NucleicMaleficentEntity.this.getYRot(), f, 10));
 					NucleicMaleficentEntity.this.yBodyRot = NucleicMaleficentEntity.this.getYRot();
@@ -353,10 +353,7 @@ public class NucleicMaleficentEntity extends SeaMonster {
                 return false;
             }
             if (Math.random() * 100 < (world.getLevelData().getGameRules().getInt(CaerulaArborModGameRules.SEABORN_SPAWN_RATE))) {
-                if (world.getDifficulty() == Difficulty.PEACEFUL) {
-                    return false;
-                }
-                return true;
+                return world.getDifficulty() != Difficulty.PEACEFUL;
             }
             return false;
         });

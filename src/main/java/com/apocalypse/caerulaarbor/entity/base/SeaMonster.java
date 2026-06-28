@@ -18,4 +18,15 @@ public abstract class SeaMonster extends Monster implements GeoEntity {
 	public AnimatableInstanceCache getAnimatableInstanceCache() {
 		return this.cache;
 	}
+
+	@Override
+	public void baseTick() {
+		super.baseTick();
+		if (!this.level().isClientSide()) {
+			if (this instanceof PolarMountRider rider) {
+				rider.tickMountBehavior();
+			}
+		}
+	}
+
 }

@@ -24,7 +24,7 @@ public class UpgradeGrowProcedure {
 		String prefix = "";
 		stra = CaerulaArborModVariables.MapVariables.get(world).strategy_grow;
 		if (stra < 4) {
-			if (CaerulaArborModVariables.MapVariables.get(world).evo_point_grow >= Math.pow(stra + 1, 3) * (double) CaerulaConfigsConfiguration.COEFFICIENT.get()) {
+			if (CaerulaArborModVariables.MapVariables.get(world).evo_point_grow >= Math.pow(stra + 1, 3) * CaerulaConfigsConfiguration.COEFFICIENT.get()) {
 				for (Entity entityiterator : new ArrayList<>(world.players())) {
 					if (entityiterator instanceof ServerPlayer _player) {
 						Advancement _adv = _player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "to_experience_evolution"));
@@ -69,7 +69,7 @@ public class UpgradeGrowProcedure {
 					}
 				}
 				if (!world.isClientSide() && world.getServer() != null)
-					world.getServer().getPlayerList().broadcastSystemMessage(Component.literal((prefix + "" + Component.translatable("item.caerula_arbor.sample_grow.description_5").getString() + num)), false);
+					world.getServer().getPlayerList().broadcastSystemMessage(Component.literal((prefix + Component.translatable("item.caerula_arbor.sample_grow.description_5").getString() + num)), false);
 			}
 		} else {
 			for (Entity entityiterator : new ArrayList<>(world.players())) {

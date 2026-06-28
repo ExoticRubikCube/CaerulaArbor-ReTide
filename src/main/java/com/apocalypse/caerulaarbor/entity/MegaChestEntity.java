@@ -1,12 +1,13 @@
 package com.apocalypse.caerulaarbor.entity;
 
+import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-
 import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.procedures.GrandChestAvdProcedure;
 import com.apocalypse.caerulaarbor.utils.EntityPredicateUtils;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
+import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -197,7 +198,14 @@ public class MegaChestEntity extends SeaMonster {
 	@Override
 	public void die(DamageSource source) {
 		super.die(source);
-		GrandChestAvdProcedure.execute(this, source.getEntity());
+		if (source.getEntity() instanceof ServerPlayer player) {
+			Advancement advancement = player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "costly_treasures"));
+			AdvancementProgress progress = player.getAdvancements().getOrStartProgress(advancement);
+			if (!progress.isDone()) {
+				for (String criteria : progress.getRemainingCriteria())
+					player.getAdvancements().award(advancement, criteria);
+			}
+		}
 	}
 
 	@Override
@@ -250,7 +258,7 @@ public class MegaChestEntity extends SeaMonster {
                 if (!this.level().isClientSide())
                     this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, 8, false, false));
             }
-            enemy = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+            enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
             if (enemy == null || !enemy.isAlive()) {
                 if (!world.isClientSide()) {
                     if (((Entity) this instanceof LivingEntity _entity ? _entity.getNoActionTime() : 0) >= 1200) {

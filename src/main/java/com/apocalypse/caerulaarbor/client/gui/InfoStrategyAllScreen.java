@@ -55,7 +55,7 @@ public class InfoStrategyAllScreen extends AbstractContainerScreen<InfoStrategyA
                 double rate = 0;
                 if (!(CaerulaArborModVariables.MapVariables.get(world).strategy_silence >= 4)) {
                     result = Math.round(CaerulaArborModVariables.MapVariables.get(world).evo_point_silence) + "\u00A7c/"
-                            + Math.round(Math.pow(CaerulaArborModVariables.MapVariables.get(world).strategy_silence + 1, 3) * (double) CaerulaConfigsConfiguration.COEFFICIENT.get() * 8);
+                            + Math.round(Math.pow(CaerulaArborModVariables.MapVariables.get(world).strategy_silence + 1, 3) * CaerulaConfigsConfiguration.COEFFICIENT.get() * 8);
                 }
                 guiGraphics.renderTooltip(font, Component.literal(result), mouseX, mouseY);
             }
@@ -75,7 +75,7 @@ public class InfoStrategyAllScreen extends AbstractContainerScreen<InfoStrategyA
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
 
-		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/wetplayer.png"), this.leftPos + 0, this.topPos + 0, 0, 0, 200, 120, 200, 120);
+		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/wetplayer.png"), this.leftPos, this.topPos, 0, 0, 200, 120, 200, 120);
 
 		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/silence.png"), this.leftPos + -15, this.topPos + -17, Mth.clamp((int) EntityUtils.getStraSilence(world) * 29, 0, 116), 0, 29, 33, 145, 33);
 

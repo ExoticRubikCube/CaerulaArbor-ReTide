@@ -58,11 +58,11 @@ public class BlockCrystalBlock extends Block implements SimpleWaterloggedBlock {
 	@Override
 	public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
 		return switch (state.getValue(FACING)) {
-			default -> Shapes.or(box(1, 0, 2, 15, 4, 16), box(5, 4, 6, 11, 10, 12));
-			case NORTH -> Shapes.or(box(1, 0, 0, 15, 4, 14), box(5, 4, 4, 11, 10, 10));
+            case NORTH -> Shapes.or(box(1, 0, 0, 15, 4, 14), box(5, 4, 4, 11, 10, 10));
 			case EAST -> Shapes.or(box(2, 0, 1, 16, 4, 15), box(6, 4, 5, 12, 10, 11));
 			case WEST -> Shapes.or(box(0, 0, 1, 14, 4, 15), box(4, 4, 5, 10, 10, 11));
-		};
+            default -> Shapes.or(box(1, 0, 2, 15, 4, 16), box(5, 4, 6, 11, 10, 12));
+        };
 	}
 
 	@Override

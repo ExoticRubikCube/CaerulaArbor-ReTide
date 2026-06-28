@@ -1,11 +1,9 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
+import com.apocalypse.caerulaarbor.entity.base.PolarMountRider;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.procedures.SeabornRidePolarProcedure;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
 import com.apocalypse.caerulaarbor.utils.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -52,7 +50,7 @@ import software.bernie.geckolib.core.object.PlayState;
 
 import javax.annotation.Nullable;
 
-public class PunctureFishEntity extends SeaMonster {
+public class PunctureFishEntity extends SeaMonster implements PolarMountRider {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(PunctureFishEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(PunctureFishEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(PunctureFishEntity.class, EntityDataSerializers.STRING);
@@ -220,7 +218,6 @@ public class PunctureFishEntity extends SeaMonster {
 	@Override
 	public void baseTick() {
 		super.baseTick();
-		SeabornRidePolarProcedure.execute(this.level(), this.getX(), this.getY(), this.getZ(), this);
 		this.refreshDimensions();
 	}
 

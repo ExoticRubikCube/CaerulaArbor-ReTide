@@ -1,54 +1,47 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.util.GeckoLibUtil;
-import software.bernie.geckolib.core.object.PlayState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animatable.GeoEntity;
-
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.network.NetworkHooks;
-
-import net.minecraft.world.level.Level;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
-import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.OpenDoorGoal;
-import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.nbt.CompoundTag;
-
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import net.minecraftforge.network.PlayMessages;
+import net.minecraftforge.registries.ForgeRegistries;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.Comparator;
 import java.util.List;
@@ -171,7 +164,7 @@ public class CorrectionalPhalanxyInfantryEntity extends Animal implements GeoEnt
                         if ((Entity) this instanceof CorrectionalPhalanxyInfantryEntity _datEntSetI)
                             _datEntSetI.getEntityData().set(DATA_skillp1, 100);
                         if (this instanceof CorrectionalPhalanxyInfantryEntity) {
-                            ((CorrectionalPhalanxyInfantryEntity) this).setAnimation("animation.correctional_phalanx _infantry.heavyattack");
+                            this.setAnimation("animation.correctional_phalanx _infantry.heavyattack");
                         }
                         CaerulaArborMod.queueServerWork(20, () -> {
                             if (!(sourceentity == null)) {
@@ -225,13 +218,13 @@ public class CorrectionalPhalanxyInfantryEntity extends Animal implements GeoEnt
                     if ((Entity) this instanceof CorrectionalPhalanxyInfantryEntity _datEntSetI)
                         _datEntSetI.getEntityData().set(DATA_skillp2, (int) (sklp2 - 1));
                 } else {
-                    enemy = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+                    enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                     if (!(enemy == null)) {
                         if ((enemy != null ? distanceTo(enemy) : -1) <= 5 && enemy.isAlive()) {
                             if ((Entity) this instanceof CorrectionalPhalanxyInfantryEntity _datEntSetI)
                                 _datEntSetI.getEntityData().set(DATA_skillp2, 200);
                             if (this instanceof CorrectionalPhalanxyInfantryEntity) {
-                                ((CorrectionalPhalanxyInfantryEntity) this).setAnimation("animation.correctional_phalanx _infantry.swing");
+                                this.setAnimation("animation.correctional_phalanx _infantry.swing");
                             }
                             ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY()), (enemy.getZ())));
                             CaerulaArborMod.queueServerWork(16, () -> {

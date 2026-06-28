@@ -273,7 +273,7 @@ public class GladiiaEntity extends Animal implements GeoEntity {
                 sklp1 = (Entity) this instanceof GladiiaEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillP) : 0;
                 skillp2 = (Entity) this instanceof GladiiaEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillP2) : 0;
                 dura = (Entity) this instanceof GladiiaEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
-                enemy = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+                enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                 if (dura > 0) {
                     if ((Entity) this instanceof GladiiaEntity _datEntSetI)
                         _datEntSetI.getEntityData().set(DATA_duration, (int) (dura - 1));
@@ -285,7 +285,7 @@ public class GladiiaEntity extends Animal implements GeoEntity {
                     if (!(enemy == null) && enemy.isAlive()) {
                         if ((enemy != null ? distanceTo(enemy) : -1) <= 7.5 && dura <= 0) {
                             if (this instanceof GladiiaEntity) {
-                                ((GladiiaEntity) this).setAnimation("animation.gladiia.pull");
+                                this.setAnimation("animation.gladiia.pull");
                             }
                             if ((Entity) this instanceof GladiiaEntity _datEntSetI)
                                 _datEntSetI.getEntityData().set(DATA_skillP, 160);
@@ -297,7 +297,7 @@ public class GladiiaEntity extends Animal implements GeoEntity {
                             ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY() + 1.6), (enemy.getZ())));
                             CaerulaArborMod.queueServerWork(10, () -> {
                                 if (this.isAlive()) {
-                                    Entity ene = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+                                    Entity ene = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                                     if (ene == null || this == null)
                                         return;
                                     Entity side = null;
@@ -336,7 +336,7 @@ public class GladiiaEntity extends Animal implements GeoEntity {
                     if (!(enemy == null) && enemy.isAlive()) {
                         if ((enemy != null ? distanceTo(enemy) : -1) <= 21 && dura <= 0) {
                             if (this instanceof GladiiaEntity) {
-                                ((GladiiaEntity) this).setAnimation("animation.gladiia.float");
+                                this.setAnimation("animation.gladiia.float");
                             }
                             if (EntityPredicateUtils.isSpecterAround(world, x, y, z)) {
                                 if ((Entity) this instanceof GladiiaEntity _datEntSetI)
@@ -375,7 +375,7 @@ public class GladiiaEntity extends Animal implements GeoEntity {
                             });
                             CaerulaArborMod.queueServerWork(114, () -> {
                                 if (this.isAlive()) {
-                                    Entity ene = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+                                    Entity ene = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                                     if (ene == null || this == null)
                                         return;
                                     Entity side = null;

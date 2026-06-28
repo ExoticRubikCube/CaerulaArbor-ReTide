@@ -18,7 +18,6 @@ import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -117,7 +116,7 @@ public class LivingAttackEventHandler {
             if (sourceentity instanceof LivingEntity _livingEntity2 && _livingEntity2.getAttributes().hasAttribute(CaerulaArborModAttributes.NUMB.get()))
                 _livingEntity2.getAttribute(CaerulaArborModAttributes.NUMB.get()).setBaseValue((numb - 1));
             if (world instanceof ServerLevel _level)
-                _level.sendParticles((SimpleParticleType) (CaerulaArborModParticleTypes.NUMBNESS.get()), (sourceentity.getX()), (sourceentity.getY() + 1), (sourceentity.getZ()), 12, 1, 1, 1, 0.1);
+                _level.sendParticles(CaerulaArborModParticleTypes.NUMBNESS.get(), (sourceentity.getX()), (sourceentity.getY() + 1), (sourceentity.getZ()), 12, 1, 1, 1, 0.1);
             if (world instanceof Level _level) {
                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sign.waxed_interact_fail")), SoundSource.HOSTILE, 2, 1);
             }
@@ -145,7 +144,7 @@ public class LivingAttackEventHandler {
                 if (!(entity instanceof LivingEntity _livEnt3 && _livEnt3.hasEffect(CaerulaArborModMobEffects.MUTE.get()))) {
                     if (Math.random() * 100 < missRate) {
                         if (world instanceof ServerLevel _level)
-                            _level.sendParticles((SimpleParticleType) (CaerulaArborModParticleTypes.MISS.get()), x, y, z, 6, 1, 1, 1, 0.1);
+                            _level.sendParticles(CaerulaArborModParticleTypes.MISS.get(), x, y, z, 6, 1, 1, 1, 0.1);
                         if (entity instanceof PredatorAbyssalEntity) {
                             ((PredatorAbyssalEntity) entity).setAnimation("animation.predator.miss");
                         }
@@ -340,7 +339,7 @@ public class LivingAttackEventHandler {
             if ((entity.getPersistentData().getString("recentCommander")).equals(sourceentity.getDisplayName().getString())) {
                 event.setCanceled(true);
             }
-            if ((sourceentity instanceof LivingEntity _entity) ? _entity.isHolding(CaerulaArborModItems.INTERPHONE.get()) : false) {
+            if (sourceentity instanceof LivingEntity _entity && _entity.isHolding(CaerulaArborModItems.INTERPHONE.get())) {
                 entity.getPersistentData().putString("recentCommander", "");
             }
         }
@@ -472,7 +471,7 @@ public class LivingAttackEventHandler {
                             for (Entity entityiterator : _entfound) {
                                 if ((sourceentity != null ? entityiterator.distanceTo(sourceentity) : -1) <= 4) {
                                     if (entityiterator instanceof LivingEntity && !(entityiterator == sourceentity)) {
-                                        if (!(entityiterator instanceof TamableAnimal _tamIsTamedBy && sourceentity instanceof LivingEntity _livEnt ? _tamIsTamedBy.isOwnedBy(_livEnt) : false)) {
+                                        if (!(entityiterator instanceof TamableAnimal _tamIsTamedBy && sourceentity instanceof LivingEntity _livEnt && _tamIsTamedBy.isOwnedBy(_livEnt))) {
                                             entityiterator.hurt(
                                                     new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "highmore_attack"))),
                                                             sourceentity),
@@ -740,7 +739,7 @@ public class LivingAttackEventHandler {
         if (EnchantmentHelper.getItemEnchantmentLevel(CaerulaArborModEnchantments.MUTE_ATTACK.get(), mainHandItem) != 0) {
             if (Math.random() < 0.2 * mainHandItem.getEnchantmentLevel(CaerulaArborModEnchantments.MUTE_ATTACK.get())) {
                 if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                    _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.MUTE.get(), (int) (30 * mainHandItem.getEnchantmentLevel(CaerulaArborModEnchantments.MUTE_ATTACK.get())), 0, false, false));
+                    _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.MUTE.get(), 30 * mainHandItem.getEnchantmentLevel(CaerulaArborModEnchantments.MUTE_ATTACK.get()), 0, false, false));
             }
         }
 
@@ -774,7 +773,7 @@ public class LivingAttackEventHandler {
                     if (entity.isAlive()) {
                         entity.hurt(
                                 new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hand_of_choker"))), sourceentity),
-                                (float) ((entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 99));
+                                (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 99);
                         if (world instanceof ServerLevel _level)
                             _level.sendParticles(ParticleTypes.GLOW_SQUID_INK, (entity.getX()), (entity.getY()), (entity.getZ()), 128, 1, 1, 1, 0.33);
                         if (world instanceof Level _level) {

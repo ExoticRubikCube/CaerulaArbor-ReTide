@@ -58,11 +58,11 @@ public class KingsArmorBlock extends Block implements SimpleWaterloggedBlock {
 	@Override
 	public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
 		return switch (state.getValue(FACING)) {
-			default -> box(1, 0, 2, 15, 5, 16);
-			case NORTH -> box(1, 0, 0, 15, 5, 14);
+            case NORTH -> box(1, 0, 0, 15, 5, 14);
 			case EAST -> box(2, 0, 1, 16, 5, 15);
 			case WEST -> box(0, 0, 1, 14, 5, 15);
-		};
+            default -> box(1, 0, 2, 15, 5, 16);
+        };
 	}
 
 	@Override

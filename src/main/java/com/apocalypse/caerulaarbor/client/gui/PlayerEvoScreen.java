@@ -1,26 +1,23 @@
 package com.apocalypse.caerulaarbor.client.gui;
 
-import com.apocalypse.caerulaarbor.utils.PlayerStateUtils;
-
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.network.chat.Component;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.gui.components.ImageButton;
-import net.minecraft.client.gui.GuiGraphics;
-
-import com.apocalypse.caerulaarbor.world.inventory.PlayerEvoMenu;
-import com.apocalypse.caerulaarbor.utils.NodeUtils;
-import com.apocalypse.caerulaarbor.network.PlayerEvoButtonMessage;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
+import com.apocalypse.caerulaarbor.network.PlayerEvoButtonMessage;
+import com.apocalypse.caerulaarbor.utils.NodeUtils;
+import com.apocalypse.caerulaarbor.utils.PlayerStateUtils;
+import com.apocalypse.caerulaarbor.world.inventory.PlayerEvoMenu;
+import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.ImageButton;
+import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 
 import java.util.HashMap;
-
-import com.mojang.blaze3d.systems.RenderSystem;
 
 public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 	private final static HashMap<String, Object> guistate = PlayerEvoMenu.guistate;
@@ -119,7 +116,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
 
-		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/player_evo_bg.png"), this.leftPos + 0, this.topPos + 0, 0, 0, 304, 216, 304, 216);
+		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/player_evo_bg.png"), this.leftPos, this.topPos, 0, 0, 304, 216, 304, 216);
 
 		if (PlayerStateUtils.isNexusNoRejectionSelected(entity)) {
 			guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/player_evo_checked.png"), this.leftPos + 26, this.topPos + 43, 0, 0, 6, 6, 6, 6);
@@ -401,16 +398,14 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
                 result1, 9, 192, -1, false);
         String result2 = "";
         if (entity != null) {
-            result2 = Component.translatable("p_evo.caerula_arbor.quantity_reserve").getString() + ""
-                    + (int) ((((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).reserve_quantity);
+            result2 = Component.translatable("p_evo.caerula_arbor.quantity_reserve").getString() + (int) ((((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).reserve_quantity);
         }
         guiGraphics.drawString(this.font,
 
                 result2, 3, 3, -13158601, false);
         String result = "";
         if (entity != null) {
-            result = Component.translatable("p_evo.caerula_arbor.quality_reserve").getString() + ""
-                    + (int) ((((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).reserve_quality);
+            result = Component.translatable("p_evo.caerula_arbor.quality_reserve").getString() + (int) ((((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).reserve_quality);
         }
         guiGraphics.drawString(this.font,
 

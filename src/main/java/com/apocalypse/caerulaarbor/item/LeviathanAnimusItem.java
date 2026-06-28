@@ -7,7 +7,6 @@ import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import com.apocalypse.caerulaarbor.utils.StrategyUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -65,7 +64,7 @@ public class LeviathanAnimusItem extends Item {
                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.end_portal.spawn")), SoundSource.PLAYERS, 4, (float) 0.85);
             }
             if ((LevelAccessor) world instanceof ServerLevel _level)
-                _level.sendParticles((SimpleParticleType) (CaerulaArborModParticleTypes.MOIST_BOOM.get()), x, (y + 2), z, 32, 2, 2, 2, 0.33);
+                _level.sendParticles(CaerulaArborModParticleTypes.MOIST_BOOM.get(), x, (y + 2), z, 32, 2, 2, 2, 0.33);
             if (!((LevelAccessor) world).isClientSide() && ((LevelAccessor) world).getServer() != null)
                 ((LevelAccessor) world).getServer().getPlayerList().broadcastSystemMessage(Component.literal((Component.translatable("item.caerula_arbor.language_key.description_14").getString())), false);
             itemstack.shrink(1);

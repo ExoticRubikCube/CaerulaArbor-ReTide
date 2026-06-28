@@ -342,7 +342,7 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity {
                 }
                 sklp1 = (Entity) this instanceof ComplexChitinGolemEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp) : 0;
                 dura = (Entity) this instanceof ComplexChitinGolemEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
-                enemy = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+                enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                 if (dura > 0) {
                     if ((Entity) this instanceof ComplexChitinGolemEntity _datEntSetI)
                         _datEntSetI.getEntityData().set(DATA_duration, (int) (dura - 1));
@@ -356,7 +356,7 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity {
                             if ((Entity) this instanceof ComplexChitinGolemEntity _datEntSetI)
                                 _datEntSetI.getEntityData().set(DATA_duration, 110);
                             if (this instanceof ComplexChitinGolemEntity) {
-                                ((ComplexChitinGolemEntity) this).setAnimation("animation.complex_chitin_golem.spin");
+                                this.setAnimation("animation.complex_chitin_golem.spin");
                             }
                             if (!this.level().isClientSide())
                                 this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 110, 9, false, false));
@@ -383,7 +383,7 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity {
                                 }
                             });
                             for (int index0 = 0; index0 < 16; index0++) {
-                                CaerulaArborMod.queueServerWork((int) index0 * 3 + 26, () -> {
+                                CaerulaArborMod.queueServerWork(index0 * 3 + 26, () -> {
                                     if (this.isAlive()) {
                                         if (this == null)
                                             return;

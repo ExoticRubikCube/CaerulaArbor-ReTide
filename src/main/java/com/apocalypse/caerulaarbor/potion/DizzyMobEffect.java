@@ -2,23 +2,20 @@
 package com.apocalypse.caerulaarbor.potion;
 
 import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
-import net.minecraft.core.particles.SimpleParticleType;
+import com.apocalypse.caerulaarbor.utils.MathUtils;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraftforge.common.ForgeMod;
 
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.effect.MobEffect;
-
-import com.apocalypse.caerulaarbor.utils.MathUtils;
-
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 public class DizzyMobEffect extends MobEffect {
 	public DizzyMobEffect() {
@@ -47,8 +44,8 @@ public class DizzyMobEffect extends MobEffect {
         double y = entity.getY();
         double z = entity.getZ();
         if (world instanceof ServerLevel _level)
-            _level.sendParticles((SimpleParticleType) (CaerulaArborModParticleTypes.DIZZINESS.get()), x, y, z, 2, 1, 1, 1, 0.1);
-        world.addParticle((SimpleParticleType) (CaerulaArborModParticleTypes.DIZZINESS.get()), x, y, z, (0.5 - Math.random()), 0.1, (0.5 - Math.random()));
+            _level.sendParticles(CaerulaArborModParticleTypes.DIZZINESS.get(), x, y, z, 2, 1, 1, 1, 0.1);
+        world.addParticle(CaerulaArborModParticleTypes.DIZZINESS.get(), x, y, z, (0.5 - Math.random()), 0.1, (0.5 - Math.random()));
     }
 
 	@Override

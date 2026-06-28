@@ -85,26 +85,26 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
 	public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
 		if (state.getValue(BLOCKSTATE) == 1) {
 			return switch (state.getValue(FACING)) {
-				default -> box(4.5, 0, 4.5, 11.5, 10.5, 11.5);
-				case NORTH -> box(4.5, 0, 4.5, 11.5, 10.5, 11.5);
+                case NORTH -> box(4.5, 0, 4.5, 11.5, 10.5, 11.5);
 				case EAST -> box(4.5, 0, 4.5, 11.5, 10.5, 11.5);
 				case WEST -> box(4.5, 0, 4.5, 11.5, 10.5, 11.5);
-			};
+                default -> box(4.5, 0, 4.5, 11.5, 10.5, 11.5);
+            };
 		}
 		if (state.getValue(BLOCKSTATE) == 2) {
 			return switch (state.getValue(FACING)) {
-				default -> box(4.5, 0, 4.5, 11.5, 11, 11.5);
-				case NORTH -> box(4.5, 0, 4.5, 11.5, 11, 11.5);
+                case NORTH -> box(4.5, 0, 4.5, 11.5, 11, 11.5);
 				case EAST -> box(4.5, 0, 4.5, 11.5, 11, 11.5);
 				case WEST -> box(4.5, 0, 4.5, 11.5, 11, 11.5);
-			};
+                default -> box(4.5, 0, 4.5, 11.5, 11, 11.5);
+            };
 		}
 		return switch (state.getValue(FACING)) {
-			default -> box(4.5, 0, 4.5, 11.5, 10, 11.5);
-			case NORTH -> box(4.5, 0, 4.5, 11.5, 10, 11.5);
+            case NORTH -> box(4.5, 0, 4.5, 11.5, 10, 11.5);
 			case EAST -> box(4.5, 0, 4.5, 11.5, 10, 11.5);
 			case WEST -> box(4.5, 0, 4.5, 11.5, 10, 11.5);
-		};
+            default -> box(4.5, 0, 4.5, 11.5, 10, 11.5);
+        };
 	}
 
 	@Override
@@ -234,7 +234,7 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
                     }
                 } else if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == ItemStack.EMPTY.getItem()) {
                     if (entity.isShiftKeyDown()) {
-                        output = Component.translatable("block.golden_chalise.inquiry").getString() + "" + Math.round(balance) + " /131072";
+                        output = Component.translatable("block.golden_chalise.inquiry").getString() + Math.round(balance) + " /131072";
                         if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
                             _player.displayClientMessage(Component.literal(output), true);
                     } else {

@@ -90,7 +90,7 @@ public class CannedBoiledWaterItem extends Item {
 		super.inventoryTick(itemstack, world, entity, slot, selected);
         if (entity == null)
             return;
-        itemstack.setDamageValue((int) (itemstack.getDamageValue() + 1));
+        itemstack.setDamageValue(itemstack.getDamageValue() + 1);
         if (itemstack.getDamageValue() >= 1199) {
             if (entity instanceof Player _player) {
                 ItemStack _stktoremove = new ItemStack(CaerulaArborModItems.CANNED_BOILED_WATER.get());

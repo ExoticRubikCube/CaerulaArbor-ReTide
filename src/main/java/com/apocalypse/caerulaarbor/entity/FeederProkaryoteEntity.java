@@ -1,9 +1,7 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
@@ -82,7 +80,7 @@ public class FeederProkaryoteEntity extends SeaMonster {
 					double dx = this.wantedX - FeederProkaryoteEntity.this.getX();
 					double dy = this.wantedY - FeederProkaryoteEntity.this.getY();
 					double dz = this.wantedZ - FeederProkaryoteEntity.this.getZ();
-					float f = (float) (Mth.atan2(dz, dx) * (double) (180 / Math.PI)) - 90;
+					float f = (float) (Mth.atan2(dz, dx) * (180 / Math.PI)) - 90;
 					float f1 = (float) (this.speedModifier * FeederProkaryoteEntity.this.getAttribute(Attributes.MOVEMENT_SPEED).getValue());
 					FeederProkaryoteEntity.this.setYRot(this.rotlerp(FeederProkaryoteEntity.this.getYRot(), f, 10));
 					FeederProkaryoteEntity.this.yBodyRot = FeederProkaryoteEntity.this.getYRot();

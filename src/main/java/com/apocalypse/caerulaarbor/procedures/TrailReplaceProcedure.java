@@ -1,7 +1,6 @@
 package com.apocalypse.caerulaarbor.procedures;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
@@ -47,5 +46,3 @@ public class TrailReplaceProcedure {
 		}
 	}
 }
-
-// TODO: 调用次数 = 16，但副作用密集（修改方块、播放声音、给予玩家成就、掉落方块资源），保持原样不重构

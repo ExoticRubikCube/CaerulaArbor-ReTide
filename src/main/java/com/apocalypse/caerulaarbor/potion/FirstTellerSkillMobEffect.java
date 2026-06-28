@@ -91,7 +91,7 @@ public class FirstTellerSkillMobEffect extends MobEffect {
                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "firetteller_skill_attack")), SoundSource.NEUTRAL, 3,
                             (float) Mth.nextDouble(RandomSource.create(), 0.85, 1.15));
             }
-            enemy = (Entity) world.getEntitiesOfClass(FirstTellerEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).stream().sorted(new Object() {
+            enemy = world.getEntitiesOfClass(FirstTellerEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).stream().sorted(new Object() {
                 Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
                     return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
                 }

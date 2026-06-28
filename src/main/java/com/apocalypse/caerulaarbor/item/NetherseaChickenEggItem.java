@@ -42,7 +42,7 @@ public class NetherseaChickenEggItem extends Item {
         String info = "";
         rrr = Math.max(itemstack.getOrCreateTag().getDouble("rate") * 0.1, 100);
         ooo = Math.max(itemstack.getOrCreateTag().getDouble("offset"), 4);
-        String hoverText = Component.translatable("item.caerula_arbor.nethersea_chicken_egg.rate").getString() + "" + new java.text.DecimalFormat("##.##").format(rrr) + "%" + "\n"
+        String hoverText = Component.translatable("item.caerula_arbor.nethersea_chicken_egg.rate").getString() + new java.text.DecimalFormat("##.##").format(rrr) + "%" + "\n"
                 + Component.translatable("item.caerula_arbor.nethersea_chicken_egg.offset").getString() + new java.text.DecimalFormat("##.##").format(ooo);
 		if (hoverText != null) {
 			for (String line : hoverText.split("\n")) {

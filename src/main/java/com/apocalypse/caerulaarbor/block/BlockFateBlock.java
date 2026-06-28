@@ -58,11 +58,11 @@ public class BlockFateBlock extends Block implements SimpleWaterloggedBlock {
 	@Override
 	public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
 		return switch (state.getValue(FACING)) {
-			default -> Shapes.or(box(0, 0, 4, 16, 6, 12), box(0.5, 6, 4.5, 15.5, 15, 11.5));
-			case NORTH -> Shapes.or(box(0, 0, 4, 16, 6, 12), box(0.5, 6, 4.5, 15.5, 15, 11.5));
+            case NORTH -> Shapes.or(box(0, 0, 4, 16, 6, 12), box(0.5, 6, 4.5, 15.5, 15, 11.5));
 			case EAST -> Shapes.or(box(4, 0, 0, 12, 6, 16), box(4.5, 6, 0.5, 11.5, 15, 15.5));
 			case WEST -> Shapes.or(box(4, 0, 0, 12, 6, 16), box(4.5, 6, 0.5, 11.5, 15, 15.5));
-		};
+            default -> Shapes.or(box(0, 0, 4, 16, 6, 12), box(0.5, 6, 4.5, 15.5, 15, 11.5));
+        };
 	}
 
 	@Override

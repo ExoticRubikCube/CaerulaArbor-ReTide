@@ -295,7 +295,7 @@ public class FlamarineGolemEntity extends SeaMonster {
             if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RESISTANCE.get()))
                 this.getAttribute(CaerulaArborModAttributes.SANITY_RESISTANCE.get()).setBaseValue(60);
             if (this instanceof FlamarineGolemEntity) {
-                ((FlamarineGolemEntity) this).setAnimation("animation.flamarine_golem.start");
+                this.setAnimation("animation.flamarine_golem.start");
             }
             if ((Entity) this instanceof FlamarineGolemEntity _datEntSetI)
                 _datEntSetI.getEntityData().set(DATA_duration, 60);
@@ -351,7 +351,7 @@ public class FlamarineGolemEntity extends SeaMonster {
                 sklp1 = (Entity) this instanceof FlamarineGolemEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillP1) : 0;
                 sklp2 = (Entity) this instanceof FlamarineGolemEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillP2) : 0;
                 dura = (Entity) this instanceof FlamarineGolemEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
-                enemy = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+                enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                 if (dura > 0) {
                     if ((Entity) this instanceof FlamarineGolemEntity _datEntSetI)
                         _datEntSetI.getEntityData().set(DATA_duration, (int) (dura - 1));
@@ -360,7 +360,7 @@ public class FlamarineGolemEntity extends SeaMonster {
                     if (!(enemy == null) && enemy.isAlive()) {
                         if ((enemy != null ? distanceTo(enemy) : -1) <= 6) {
                             if (this instanceof FlamarineGolemEntity) {
-                                ((FlamarineGolemEntity) this).setAnimation("animation.flamarine_golem.heavy");
+                                this.setAnimation("animation.flamarine_golem.heavy");
                             }
                             if ((Entity) this instanceof FlamarineGolemEntity _datEntSetI)
                                 _datEntSetI.getEntityData().set(DATA_skillP1, 11);
@@ -376,7 +376,7 @@ public class FlamarineGolemEntity extends SeaMonster {
                                     double r = 0;
                                     double h = 0;
                                     double d = 0;
-                                    enemy1 = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+                                    enemy1 = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                                     r = 6;
                                     damage = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
                                     if (world instanceof Level _level) {
@@ -396,7 +396,7 @@ public class FlamarineGolemEntity extends SeaMonster {
                                             if (!entityiterator.isAlive()) {
                                                 continue;
                                             }
-                                            if (entityiterator instanceof Player || (entityiterator instanceof TamableAnimal _tamEnt ? _tamEnt.isTame() : false)) {
+                                            if (entityiterator instanceof Player || (entityiterator instanceof TamableAnimal _tamEnt && _tamEnt.isTame())) {
                                                 if (!(entityiterator == enemy1)) {
                                                     continue;
                                                 }
@@ -430,7 +430,7 @@ public class FlamarineGolemEntity extends SeaMonster {
                     if (!(enemy == null) && enemy.isAlive()) {
                         if ((enemy != null ? distanceTo(enemy) : -1) <= 5) {
                             if (this instanceof FlamarineGolemEntity) {
-                                ((FlamarineGolemEntity) this).setAnimation("animation.flamarine_golem.combo");
+                                this.setAnimation("animation.flamarine_golem.combo");
                             }
                             if ((Entity) this instanceof FlamarineGolemEntity _datEntSetI)
                                 _datEntSetI.getEntityData().set(DATA_skillP2, 380);

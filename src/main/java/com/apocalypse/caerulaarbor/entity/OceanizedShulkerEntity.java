@@ -481,11 +481,11 @@ public class OceanizedShulkerEntity extends SeaMonster {
                                     _datEntSetI.getEntityData().set(DATA_PEEK_TIME, Mth.nextInt(RandomSource.create(), 60, 160));
                                 if (Math.random() < 0.5) {
                                     if (this instanceof OceanizedShulkerEntity) {
-                                        ((OceanizedShulkerEntity) this).setAnimation("animation.oceanized_shulker.open1");
+                                        this.setAnimation("animation.oceanized_shulker.open1");
                                     }
                                 } else {
                                     if (this instanceof OceanizedShulkerEntity) {
-                                        ((OceanizedShulkerEntity) this).setAnimation("animation.oceanized_shulker.open2");
+                                        this.setAnimation("animation.oceanized_shulker.open2");
                                     }
                                 }
                                 if (world instanceof Level _level) {
@@ -496,11 +496,11 @@ public class OceanizedShulkerEntity extends SeaMonster {
                             if (peekTime <= 1) {
                                 if (Math.random() < 0.5) {
                                     if (this instanceof OceanizedShulkerEntity) {
-                                        ((OceanizedShulkerEntity) this).setAnimation("animation.oceanized_shulker.close1");
+                                        this.setAnimation("animation.oceanized_shulker.close1");
                                     }
                                 } else {
                                     if (this instanceof OceanizedShulkerEntity) {
-                                        ((OceanizedShulkerEntity) this).setAnimation("animation.oceanized_shulker.close2");
+                                        this.setAnimation("animation.oceanized_shulker.close2");
                                     }
                                 }
                                 if (world instanceof Level _level) {
@@ -530,7 +530,7 @@ public class OceanizedShulkerEntity extends SeaMonster {
                     if ((Entity) this instanceof LivingEntity _entity)
                         _entity.removeEffect(CaerulaArborModMobEffects.SHULKER_BUFF.get());
                 }
-                enemy = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+                enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                 if (shootDelay <= 0) {
                     if (!(enemy == null) && enemy.isAlive()) {
                         if ((enemy != null ? distanceTo(enemy) : -1) <= 24) {
@@ -541,16 +541,16 @@ public class OceanizedShulkerEntity extends SeaMonster {
                             if (isAttached) {
                                 if (Math.random() < 0.5) {
                                     if (this instanceof OceanizedShulkerEntity) {
-                                        ((OceanizedShulkerEntity) this).setAnimation("animation.oceanized_shulker.attack1");
+                                        this.setAnimation("animation.oceanized_shulker.attack1");
                                     }
                                 } else {
                                     if (this instanceof OceanizedShulkerEntity) {
-                                        ((OceanizedShulkerEntity) this).setAnimation("animation.oceanized_shulker.attack2");
+                                        this.setAnimation("animation.oceanized_shulker.attack2");
                                     }
                                 }
                             } else {
                                 if (this instanceof OceanizedShulkerEntity) {
-                                    ((OceanizedShulkerEntity) this).setAnimation("animation.oceanized_shulker.attack_withfeet");
+                                    this.setAnimation("animation.oceanized_shulker.attack_withfeet");
                                 }
                                 if (!this.level().isClientSide())
                                     this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, 9, false, false));

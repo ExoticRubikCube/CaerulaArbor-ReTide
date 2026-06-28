@@ -46,6 +46,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 public class XantisEntity extends TamableAnimal implements GeoEntity {
 
@@ -182,7 +183,7 @@ public class XantisEntity extends TamableAnimal implements GeoEntity {
         boolean result = false;
         Entity sourceentity = source.getEntity();
         if (sourceentity != null) {
-            result = (sourceentity instanceof LivingEntity _entity) ? _entity.isHolding(CaerulaArborModItems.APOCATA_SWORD.get()) : false;
+            result = sourceentity instanceof LivingEntity _entity && _entity.isHolding(CaerulaArborModItems.APOCATA_SWORD.get());
         }
         if (result){
             this.setNoNiubi();
@@ -203,7 +204,7 @@ public class XantisEntity extends TamableAnimal implements GeoEntity {
         if (isNiubi()){
 			this.hurt(this.level().damageSources().fellOutOfWorld(), 0.1F);
 			return;
-        };
+        }
         super.die(pSource);
     }
 
@@ -276,7 +277,7 @@ public class XantisEntity extends TamableAnimal implements GeoEntity {
         double tapTick = 0;
         boolean isNiubi = false;
         tapTick = entity instanceof XantisEntity _datEntI ? _datEntI.getEntityData().get(DATA_TAP_TICK) : 0;
-        if (((Entity) sourceentity instanceof LivingEntity _entity) ? _entity.isHolding(CaerulaArborModItems.BANNED_ITEM.get()) : false) {
+        if ((Entity) sourceentity instanceof LivingEntity _entity && _entity.isHolding(CaerulaArborModItems.BANNED_ITEM.get())) {
             isNiubi = entity instanceof XantisEntity _datEntL2 && _datEntL2.getEntityData().get(DATA_NIUBI);
             if (isNiubi) {
                 if (entity instanceof XantisEntity _datEntSetL)
@@ -364,7 +365,7 @@ public class XantisEntity extends TamableAnimal implements GeoEntity {
 
 	@Override
 	public boolean isFood(ItemStack stack) {
-		return List.of(CaerulaArborModItems.APOCALYPSE.get()).contains(stack.getItem());
+		return Objects.equals(CaerulaArborModItems.APOCALYPSE.get(), stack.getItem());
 	}
 
 	@Override

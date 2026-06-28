@@ -81,7 +81,7 @@ public class CollectorProkaryoteEntity extends SeaMonster {
 					double dx = this.wantedX - CollectorProkaryoteEntity.this.getX();
 					double dy = this.wantedY - CollectorProkaryoteEntity.this.getY();
 					double dz = this.wantedZ - CollectorProkaryoteEntity.this.getZ();
-					float f = (float) (Mth.atan2(dz, dx) * (double) (180 / Math.PI)) - 90;
+					float f = (float) (Mth.atan2(dz, dx) * (180 / Math.PI)) - 90;
 					float f1 = (float) (this.speedModifier * CollectorProkaryoteEntity.this.getAttribute(Attributes.MOVEMENT_SPEED).getValue());
 					CollectorProkaryoteEntity.this.setYRot(this.rotlerp(CollectorProkaryoteEntity.this.getYRot(), f, 10));
 					CollectorProkaryoteEntity.this.yBodyRot = CollectorProkaryoteEntity.this.getYRot();

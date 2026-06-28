@@ -288,7 +288,7 @@ public class IreneEntity extends Animal implements GeoEntity {
         if (sourceentity != null) {
             Entity specter = null;
             if (!(sourceentity instanceof Player) && !(sourceentity instanceof SpecterEntity)) {
-                specter = (Entity) world.getEntitiesOfClass(SpecterEntity.class, AABB.ofSize(new Vec3(x, y, z), 32, 32, 32), e -> true).stream().sorted(new Object() {
+                specter = world.getEntitiesOfClass(SpecterEntity.class, AABB.ofSize(new Vec3(x, y, z), 32, 32, 32), e -> true).stream().sorted(new Object() {
                     Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
                         return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
                     }
@@ -346,12 +346,12 @@ public class IreneEntity extends Animal implements GeoEntity {
         if (!entity.isAlive()) {
             return InteractionResult.PASS;
         }
-        if (((Entity) sourceentity instanceof LivingEntity _entity) ? _entity.isHolding(CaerulaArborModItems.PERSONNEL_TRANSPORTER.get()) : false) {
+        if ((Entity) sourceentity instanceof LivingEntity _entity && _entity.isHolding(CaerulaArborModItems.PERSONNEL_TRANSPORTER.get())) {
             return InteractionResult.PASS;
         }
         tap = entity instanceof IreneEntity _datEntI ? _datEntI.getEntityData().get(DATA_tapTick) : 0;
         if (tap <= 0) {
-            enemy = entity instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+            enemy = entity instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
             if (!(enemy == null) && enemy.isAlive()) {
                 return InteractionResult.PASS;
             }
@@ -394,7 +394,7 @@ public class IreneEntity extends Animal implements GeoEntity {
                 skillp2 = (Entity) this instanceof IreneEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp2) : 0;
                 dura = (Entity) this instanceof IreneEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
                 tap = (Entity) this instanceof IreneEntity _datEntI ? _datEntI.getEntityData().get(DATA_tapTick) : 0;
-                enemy = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+                enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                 if (dura > 0) {
                     if ((Entity) this instanceof IreneEntity _datEntSetI)
                         _datEntSetI.getEntityData().set(DATA_duration, (int) (dura - 1));
@@ -418,7 +418,7 @@ public class IreneEntity extends Animal implements GeoEntity {
                                     if (world instanceof Level _level) {
                                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_fly")), SoundSource.NEUTRAL, 3, 1);
                                     }
-									Entity enemy1 = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+									Entity enemy1 = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
 									if (enemy1 == null || this == null)
 										return;
 									enemy1.push(0, 0.4, 0);
@@ -445,7 +445,7 @@ public class IreneEntity extends Animal implements GeoEntity {
                     if (!(enemy == null) && enemy.isAlive()) {
                         if ((enemy != null ? distanceTo(enemy) : -1) <= 6) {
                             if (this instanceof IreneEntity) {
-                                ((IreneEntity) this).setAnimation("animation.irene.skill_2");
+                                this.setAnimation("animation.irene.skill_2");
                             }
                             if (!this.level().isClientSide())
                                 this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 60, 9, false, false));
@@ -490,7 +490,7 @@ public class IreneEntity extends Animal implements GeoEntity {
                                 }
                             });
                             for (int index0 = 0; index0 < 10; index0++) {
-                                CaerulaArborMod.queueServerWork((int) Math.toIntExact(Math.round(20 + index0 * 3.778)), () -> {
+                                CaerulaArborMod.queueServerWork(Math.toIntExact(Math.round(20 + index0 * 3.778)), () -> {
                                     if (this.isAlive()) {
                                         Entity selected = null;
 										double damage = 0;

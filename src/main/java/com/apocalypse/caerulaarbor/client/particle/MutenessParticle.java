@@ -37,7 +37,7 @@ public class MutenessParticle extends TextureSheetParticle {
 		this.spriteSet = spriteSet;
 		this.setSize(0.2f, 0.2f);
 		this.quadSize *= 1.5f;
-		this.lifetime = (int) Math.max(1, 40 + (this.random.nextInt(16) - 8));
+		this.lifetime = Math.max(1, 40 + (this.random.nextInt(16) - 8));
 		this.gravity = -0.1f;
 		this.hasPhysics = false;
 		this.xd = vx * 0.5;

@@ -115,7 +115,7 @@ public class CaerulaArborModBlocks {
 	public static final RegistryObject<Block> HIGHMORE_SPAWNING_BLOCK = REGISTRY.register("highmore_spawning_block", () -> new HighmoreSpawningBlockBlock());
 	public static final RegistryObject<Block> GOLDEN_CHALISE = REGISTRY.register("golden_chalise", () -> new GoldenChaliseBlock());
 	public static final RegistryObject<Block> EMERGENCY_AID_BUILDING = REGISTRY.register("emergency_aid_building", () -> new EmergencyAidBuildingBlock());
-	public static final RegistryObject<Block> EMERGENCY_AID_BUILDING_SALVIENTO = REGISTRY.register("emergency_aid_building_salviento", () -> new EmergencyAidBuildingSalvientoBlock());
+	public static final RegistryObject<Block> EMERGENCY_AID_BUILDING_SALVIENTO = REGISTRY.register("emergency_aid_building_salviento", () -> new EmergencyAidBuildingBlock());
 	public static final RegistryObject<Block> MIZUKI_STATUE = REGISTRY.register("mizuki_statue", () -> new MizukiStatueBlock());
 	public static final RegistryObject<Block> POCKET_SEA_DOLL = REGISTRY.register("pocket_sea_doll", () -> new PocketSeaDollBlock());
 	public static final RegistryObject<Block> SWARMCALLER_DOLL = REGISTRY.register("swarmcaller_doll", () -> new SwarmcallerDollBlock());

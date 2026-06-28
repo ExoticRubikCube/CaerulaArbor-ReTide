@@ -91,7 +91,7 @@ public class ShotOceanArrowEntity extends AbstractArrow implements ItemSupplier 
         Entity entity = this.getOwner();
         if (entity != null && this != null) {
             Entity enemy = null;
-            enemy = entity instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+            enemy = entity instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
             if (!(enemy == null)) {
                 lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY() + enemy.getBbHeight() * 0.75), (enemy.getZ())));
             }

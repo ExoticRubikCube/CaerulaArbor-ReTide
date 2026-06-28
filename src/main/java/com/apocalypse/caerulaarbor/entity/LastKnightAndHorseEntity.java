@@ -380,7 +380,7 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity {
                             }
                         }
                     }
-                    enemy = (Entity) this.getTarget();
+                    enemy = this.getTarget();
                     if (!(enemy == null) && enemy.isAlive()) {
                         add = this.getEntityData().get(DATA_addiiton);
                         if (add < 20) {
@@ -401,7 +401,7 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity {
                 if (duration > 0) {
                     this.getEntityData().set(DATA_duration, (int) (duration - 1));
                 }
-                enemy = (Entity) this.getTarget();
+                enemy = this.getTarget();
                 if (skillp > 0) {
                     this.getEntityData().set(DATA_skillp, (int) (skillp - 1));
                 } else {
@@ -418,7 +418,7 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity {
                                 Entity enemy1 = null;
                                 double damage = 0;
                                 damage = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
-                                enemy1 = (Entity) this.getTarget();
+                                enemy1 = this.getTarget();
                                 {
                                     final Vec3 _center = new Vec3((x + 2 * getLookAngle().x), y, (z + 2 * getLookAngle().z));
                                     List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(8 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();

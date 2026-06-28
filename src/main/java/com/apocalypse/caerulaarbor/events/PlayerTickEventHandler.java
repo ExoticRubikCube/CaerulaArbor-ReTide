@@ -1,7 +1,6 @@
 package com.apocalypse.caerulaarbor.events;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.configuration.CaerulaConfigsConfiguration;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEnchantments;
@@ -25,7 +24,6 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -375,6 +373,7 @@ public class PlayerTickEventHandler {
                     if (entityiterator == entity) continue;
                     if (entityiterator instanceof ServerPlayer || entityiterator instanceof Player || entityiterator instanceof Animal) {
                         valid = false;
+                        break;
                     }
                 }
                 if (valid && !entity.level().isClientSide()) {

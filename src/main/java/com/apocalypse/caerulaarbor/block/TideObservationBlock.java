@@ -58,11 +58,11 @@ public class TideObservationBlock extends Block {
 	@Override
 	public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
 		return switch (state.getValue(FACING)) {
-			default -> box(1, 0, 0, 15, 16, 12);
-			case NORTH -> box(1, 0, 4, 15, 16, 16);
+            case NORTH -> box(1, 0, 4, 15, 16, 16);
 			case EAST -> box(0, 0, 1, 12, 16, 15);
 			case WEST -> box(4, 0, 1, 16, 16, 15);
-		};
+            default -> box(1, 0, 0, 15, 16, 12);
+        };
 	}
 
 	@Override

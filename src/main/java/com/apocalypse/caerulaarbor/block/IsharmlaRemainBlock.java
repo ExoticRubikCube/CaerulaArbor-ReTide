@@ -1,7 +1,6 @@
 package com.apocalypse.caerulaarbor.block;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.entity.SkadiCorruptedEntity;
 import com.apocalypse.caerulaarbor.entity.SkadiEntity;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
@@ -84,12 +83,7 @@ public class IsharmlaRemainBlock extends Block {
 	public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
 		if (state.getValue(BLOCKSTATE) == 1) {
 			return switch (state.getValue(FACING)) {
-				default -> switch (state.getValue(FACE)) {
-					case FLOOR -> box(0, 0, 0, 16, 16, 16);
-					case WALL -> box(0, 0, 0, 16, 16, 16);
-					case CEILING -> box(0, 0, 0, 16, 16, 16);
-				};
-				case NORTH -> switch (state.getValue(FACE)) {
+                case NORTH -> switch (state.getValue(FACE)) {
 					case FLOOR -> box(0, 0, 0, 16, 16, 16);
 					case WALL -> box(0, 0, 0, 16, 16, 16);
 					case CEILING -> box(0, 0, 0, 16, 16, 16);
@@ -104,15 +98,15 @@ public class IsharmlaRemainBlock extends Block {
 					case WALL -> box(0, 0, 0, 16, 16, 16);
 					case CEILING -> box(0, 0, 0, 16, 16, 16);
 				};
-			};
+                default -> switch (state.getValue(FACE)) {
+                    case FLOOR -> box(0, 0, 0, 16, 16, 16);
+                    case WALL -> box(0, 0, 0, 16, 16, 16);
+                    case CEILING -> box(0, 0, 0, 16, 16, 16);
+                };
+            };
 		}
 		return switch (state.getValue(FACING)) {
-			default -> switch (state.getValue(FACE)) {
-				case FLOOR -> box(0, 0, 0, 16, 16, 16);
-				case WALL -> box(0, 0, 0, 16, 16, 16);
-				case CEILING -> box(0, 0, 0, 16, 16, 16);
-			};
-			case NORTH -> switch (state.getValue(FACE)) {
+            case NORTH -> switch (state.getValue(FACE)) {
 				case FLOOR -> box(0, 0, 0, 16, 16, 16);
 				case WALL -> box(0, 0, 0, 16, 16, 16);
 				case CEILING -> box(0, 0, 0, 16, 16, 16);
@@ -127,7 +121,12 @@ public class IsharmlaRemainBlock extends Block {
 				case WALL -> box(0, 0, 0, 16, 16, 16);
 				case CEILING -> box(0, 0, 0, 16, 16, 16);
 			};
-		};
+            default -> switch (state.getValue(FACE)) {
+                case FLOOR -> box(0, 0, 0, 16, 16, 16);
+                case WALL -> box(0, 0, 0, 16, 16, 16);
+                case CEILING -> box(0, 0, 0, 16, 16, 16);
+            };
+        };
 	}
 
 	@Override
@@ -175,7 +174,7 @@ public class IsharmlaRemainBlock extends Block {
                 if (stat == 0) {
                     if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CaerulaArborModItems.WHIRL_EYE.get()
                             && ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == CaerulaArborModItems.CAERULA_HEART.get()) {
-                        skadi = (Entity) world.getEntitiesOfClass(SkadiEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).stream().sorted(new Object() {
+                        skadi = world.getEntitiesOfClass(SkadiEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).stream().sorted(new Object() {
                             Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
                                 return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
                             }

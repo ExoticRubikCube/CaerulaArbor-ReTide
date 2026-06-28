@@ -7,12 +7,10 @@ import com.apocalypse.caerulaarbor.entity.LittleHelperEntity;
 import com.apocalypse.caerulaarbor.entity.OceanizedWitherEntity;
 import com.apocalypse.caerulaarbor.init.*;
 import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
-
 import com.apocalypse.caerulaarbor.procedures.SummonEliteFishProcedure;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -39,16 +37,12 @@ import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LiquidBlock;
-import net.minecraftforge.registries.RegistryObject;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.level.block.state.properties.IntegerProperty;
-import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Map;
 
@@ -117,7 +111,7 @@ public class WorldUtils {
 
 	public static void addGrowAge(LevelAccessor world, BlockPos pos, BlockState blockstate) {
 		if ((blockstate.getBlock().getStateDefinition().getProperty("grow_age") instanceof IntegerProperty _getip1 ? blockstate.getValue(_getip1) : -1) < 30) {
-			int value = (int) ((blockstate.getBlock().getStateDefinition().getProperty("grow_age") instanceof IntegerProperty _getip3 ? blockstate.getValue(_getip3) : -1) + 8);
+			int value = (blockstate.getBlock().getStateDefinition().getProperty("grow_age") instanceof IntegerProperty _getip3 ? blockstate.getValue(_getip3) : -1) + 8;
 			BlockState _bs = world.getBlockState(pos);
 			if (_bs.getBlock().getStateDefinition().getProperty("grow_age") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
 				world.setBlock(pos, _bs.setValue(integerProp, value), 3);
@@ -125,7 +119,7 @@ public class WorldUtils {
 	}
 
 	public static void bestowAbility(LevelAccessor world, double index) {
-		CaerulaArborModVariables.MapVariables.get(world).endspeaker_abolities =(double) ((int)CaerulaArborModVariables.MapVariables.get(world).endspeaker_abolities | (int)Math.pow(2, index));
+		CaerulaArborModVariables.MapVariables.get(world).endspeaker_abolities = (int)CaerulaArborModVariables.MapVariables.get(world).endspeaker_abolities | (int)Math.pow(2, index);
 		CaerulaArborModVariables.MapVariables.get(world).syncData(world);
 	}
 
@@ -192,7 +186,7 @@ public class WorldUtils {
 	}
 
 	public static void bulletParticle(LevelAccessor world, double x, double y, double z) {
-		world.addParticle((SimpleParticleType) (CaerulaArborModParticleTypes.SEA_SPLASH.get()), x, y, z, 0, 0, 0);
+		world.addParticle(CaerulaArborModParticleTypes.SEA_SPLASH.get(), x, y, z, 0, 0, 0);
 	}
 
 	public static boolean canLilyExist(LevelAccessor world, double x, double y, double z) {
@@ -539,7 +533,7 @@ public class WorldUtils {
 		BlockState target = Blocks.AIR.defaultBlockState();
 		double findY = 0;
 		findY = 114514;
-		for (int dy = (int) 0; dy <= (int) 3; dy++) {
+		for (int dy = 0; dy <= 3; dy++) {
 			target = (world.getBlockState(BlockPos.containing(xx, yy + dy, zz)));
 			if (target.canBeReplaced() && world.getBlockFloorHeight(BlockPos.containing(xx, yy + dy - 1, zz)) > 0) {
 				findY = yy + dy;
@@ -614,7 +608,7 @@ public class WorldUtils {
 							|| toBeBurn.getBlock() == CaerulaArborModBlocks.SEA_TRAIL_STOP.get() || toBeBurn.getBlock() == CaerulaArborModBlocks.SEA_TRAIL_SOLID.get() || toBeBurn.getBlock() == CaerulaArborModBlocks.TRAIL_PULSE.get()) {
 						burndownTrail(world, toBeBurn, px, py, pz);
 						if (world instanceof ServerLevel _level)
-							_level.sendParticles((SimpleParticleType) (CaerulaArborModParticleTypes.PURPLE_FLAME.get()), (x + 0.5), (y + 1), (z + 0.5), 16, 0.75, 0.75, 0.75, 0.15);
+							_level.sendParticles(CaerulaArborModParticleTypes.PURPLE_FLAME.get(), (x + 0.5), (y + 1), (z + 0.5), 16, 0.75, 0.75, 0.75, 0.15);
 					}
 				}
 			}
@@ -638,7 +632,7 @@ public class WorldUtils {
 				_level.playLocalSound(xx, yy, zz, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.enderman.ambient")), SoundSource.HOSTILE, 0, 1, false);
 			}
 		}
-		for (int dy = (int) 0; dy <= (int) 3; dy++) {
+		for (int dy = 0; dy <= 3; dy++) {
 			if (world.getBlockFloorHeight(BlockPos.containing(xx, yy + dy, zz)) > 0) {
 				return false;
 			}
@@ -669,7 +663,7 @@ public class WorldUtils {
 		double size = Math.max(Math.min(Math.round(Math.sqrt(Math.pow(vx, 2) + Math.pow(vy, 2) + Math.pow(vz, 2))), 32), 1);
 		for (int index0 = 0; index0 < (int) size; index0++) {
 			if (world instanceof ServerLevel _level)
-				_level.sendParticles((SimpleParticleType) (CaerulaArborModParticleTypes.ISHARMLA_CURSE_PARTICLE.get()), (x + 0.5 + (vx / size) * index0), (y + 0.5 + (vy / size) * index0 + 0.5), (z + 0.5 + (vz / size) * index0), 5, 0.32, 0.5, 0.32, 0.05);
+				_level.sendParticles(CaerulaArborModParticleTypes.ISHARMLA_CURSE_PARTICLE.get(), (x + 0.5 + (vx / size) * index0), (y + 0.5 + (vy / size) * index0 + 0.5), (z + 0.5 + (vz / size) * index0), 5, 0.32, 0.5, 0.32, 0.05);
 		}
 	}
 

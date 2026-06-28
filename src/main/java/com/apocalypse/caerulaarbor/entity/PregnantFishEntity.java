@@ -1,9 +1,9 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.entity.base.PolarMountRider;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.procedures.SeabornRidePolarProcedure;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
 import com.apocalypse.caerulaarbor.utils.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -51,7 +51,7 @@ import software.bernie.geckolib.core.object.PlayState;
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 
-public class PregnantFishEntity extends SeaMonster implements RangedAttackMob {
+public class PregnantFishEntity extends SeaMonster implements RangedAttackMob, PolarMountRider {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(PregnantFishEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(PregnantFishEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(PregnantFishEntity.class, EntityDataSerializers.STRING);
@@ -241,7 +241,7 @@ public class PregnantFishEntity extends SeaMonster implements RangedAttackMob {
 				this.rangedAttackMob.performRangedAttack(this.target, f1);
 				this.attackTime = Mth.floor(f * (float) (this.attackIntervalMax - this.attackIntervalMin) + (float) this.attackIntervalMin);
 			} else if (this.attackTime < 0) {
-				this.attackTime = Mth.floor(Mth.lerp(Math.sqrt(d0) / (double) this.attackRadius, (double) this.attackIntervalMin, (double) this.attackIntervalMax));
+				this.attackTime = Mth.floor(Mth.lerp(Math.sqrt(d0) / (double) this.attackRadius, this.attackIntervalMin, this.attackIntervalMax));
 			} else
 				((PregnantFishEntity) rangedAttackMob).entityData.set(SHOOT, false);
 		}
@@ -299,10 +299,9 @@ public class PregnantFishEntity extends SeaMonster implements RangedAttackMob {
         if (this != null) {
             if (!((Entity) this instanceof Mob _mobEnt0 && _mobEnt0.isAggressive()) && Math.random() < 0.001) {
                 if (this instanceof PregnantFishEntity) {
-                    ((PregnantFishEntity) this).setAnimation("animation.pregnant.random");
+                    this.setAnimation("animation.pregnant.random");
                 }
             }
-            SeabornRidePolarProcedure.execute(world, this.getX(), this.getY(), this.getZ(), this);
         }
         this.refreshDimensions();
 	}

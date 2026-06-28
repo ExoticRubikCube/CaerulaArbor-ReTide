@@ -142,11 +142,7 @@ public class OceanizedSpiderEntity extends SeaMonster {
 			}
 
 			public boolean canUse() {
-				if (OceanizedSpiderEntity.this.getTarget() != null && !OceanizedSpiderEntity.this.getMoveControl().hasWanted()) {
-					return true;
-				} else {
-					return false;
-				}
+                return OceanizedSpiderEntity.this.getTarget() != null && !OceanizedSpiderEntity.this.getMoveControl().hasWanted();
 			}
 
 			@Override

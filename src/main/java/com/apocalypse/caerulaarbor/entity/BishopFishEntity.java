@@ -232,10 +232,10 @@ public class BishopFishEntity extends SeaMonster {
             if (this.isAlive()) {
                 if (((Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_sklp) : 0) <= 0) {
                     if (this instanceof BishopFishEntity) {
-                        ((BishopFishEntity) this).setAnimation("animation.bishop.skill");
+                        this.setAnimation("animation.bishop.skill");
                     }
                     if ((Entity) this instanceof BishopFishEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_duration, (int) (((Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0) + 20));
+                        _datEntSetI.getEntityData().set(DATA_duration, ((Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0) + 20);
                     if (world instanceof Level _level) {
                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "bishopfish_flap")), SoundSource.HOSTILE, 3, 1);
                     }
@@ -394,7 +394,7 @@ public class BishopFishEntity extends SeaMonster {
                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.emerge")), SoundSource.HOSTILE, 3, 1);
             }
             if (this instanceof BishopFishEntity) {
-                ((BishopFishEntity) this).setAnimation("animation.bishop.start1");
+                this.setAnimation("animation.bishop.start1");
             }
         }
         return retval;
@@ -479,7 +479,7 @@ public class BishopFishEntity extends SeaMonster {
             if (end <= 0) {
                 if (EntityUtils.getSeabornAround(world, x, y, z, this) < 32) {
                     if (this instanceof BishopFishEntity) {
-                        ((BishopFishEntity) this).setAnimation("animation.bishop.blast");
+                        this.setAnimation("animation.bishop.blast");
                     }
                     if ((Entity) this instanceof BishopFishEntity _datEntSetI)
                         _datEntSetI.getEntityData().set(DATA_duration, (int) (d + 40));

@@ -1,10 +1,10 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.entity.base.RangedSanityAttacker;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
-import com.apocalypse.caerulaarbor.procedures.RangedSanityAttackProcedure;
 import com.apocalypse.caerulaarbor.utils.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -45,7 +45,7 @@ import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 
-public class CreeperFishEntity extends SeaMonster {
+public class CreeperFishEntity extends SeaMonster implements RangedSanityAttacker {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(CreeperFishEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(CreeperFishEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(CreeperFishEntity.class, EntityDataSerializers.STRING);
@@ -139,7 +139,7 @@ public class CreeperFishEntity extends SeaMonster {
 			double accumulatedDamage = this.getEntityData().get(DATA_deal) + amount;
 			this.getEntityData().set(DATA_deal, (int) accumulatedDamage);
 			if (accumulatedDamage >= this.getMaxHealth() * 0.15) {
-				RangedSanityAttackProcedure.execute(this.level(), this.getX(), this.getY(), this.getZ(), this);
+				this.performRangedSanityAttack();
 				this.getEntityData().set(DATA_deal, 0);
 			}
 		}
@@ -183,7 +183,7 @@ public class CreeperFishEntity extends SeaMonster {
             }
             new Object() {
                 void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
-                    RangedSanityAttackProcedure.execute(world, x, y, z, entity);
+                    CreeperFishEntity.this.performRangedSanityAttack();
                     final int tick2 = ticks;
                     CaerulaArborMod.queueServerWork(tick2, () -> {
                         if (timedlooptotal > timedloopiterator + 1) {

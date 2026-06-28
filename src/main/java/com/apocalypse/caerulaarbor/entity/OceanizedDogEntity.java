@@ -47,6 +47,7 @@ import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.List;
+import java.util.Objects;
 
 public class OceanizedDogEntity extends TamableAnimal implements GeoEntity {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanizedDogEntity.class, EntityDataSerializers.BOOLEAN);
@@ -317,8 +318,8 @@ public class OceanizedDogEntity extends TamableAnimal implements GeoEntity {
         if (this != null) {
             Entity owner = null;
             Entity enemy = null;
-            owner = (Entity) this instanceof TamableAnimal _tamEnt ? (Entity) _tamEnt.getOwner() : null;
-            enemy = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+            owner = (Entity) this instanceof TamableAnimal _tamEnt ? _tamEnt.getOwner() : null;
+            enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
             if ((Entity) this instanceof OceanizedDogEntity _datEntL2 && _datEntL2.getEntityData().get(DATA_sitting)) {
                 setShiftKeyDown(true);
                 if (!((Entity) this instanceof LivingEntity _livEnt4 && _livEnt4.hasEffect(MobEffects.MOVEMENT_SLOWDOWN))) {
@@ -352,7 +353,7 @@ public class OceanizedDogEntity extends TamableAnimal implements GeoEntity {
 
 	@Override
 	public boolean isFood(ItemStack stack) {
-		return List.of(Items.BONE).contains(stack.getItem());
+		return Objects.equals(Items.BONE, stack.getItem());
 	}
 
 	@Override

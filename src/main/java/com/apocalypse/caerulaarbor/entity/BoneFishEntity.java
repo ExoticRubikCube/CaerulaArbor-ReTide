@@ -1,7 +1,6 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
@@ -77,7 +76,7 @@ public class BoneFishEntity extends SeaMonster {
 					double dx = this.wantedX - BoneFishEntity.this.getX();
 					double dy = this.wantedY - BoneFishEntity.this.getY();
 					double dz = this.wantedZ - BoneFishEntity.this.getZ();
-					float f = (float) (Mth.atan2(dz, dx) * (double) (180 / Math.PI)) - 90;
+					float f = (float) (Mth.atan2(dz, dx) * (180 / Math.PI)) - 90;
 					float f1 = (float) (this.speedModifier * BoneFishEntity.this.getAttribute(Attributes.MOVEMENT_SPEED).getValue());
 					BoneFishEntity.this.setYRot(this.rotlerp(BoneFishEntity.this.getYRot(), f, 10));
 					BoneFishEntity.this.yBodyRot = BoneFishEntity.this.getYRot();

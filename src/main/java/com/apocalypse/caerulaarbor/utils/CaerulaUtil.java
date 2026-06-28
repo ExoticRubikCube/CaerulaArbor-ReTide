@@ -1,7 +1,6 @@
 package com.apocalypse.caerulaarbor.utils;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -25,7 +24,7 @@ public class CaerulaUtil {
 		int maxPoint = getMaxLifePoint(player);
 		player.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null)
 		.ifPresent(c -> {
-			c.player_lives = (double) Math.min(value,maxPoint);
+			c.player_lives = Math.min(value,maxPoint);
 			c.syncPlayerVariables(player);
 		});
 	}
@@ -39,7 +38,7 @@ public class CaerulaUtil {
 		if(value < 1) return;
 		player.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null)
 		.ifPresent(c -> {
-			c.player_maxlive = (double) value;
+			c.player_maxlive = value;
 			c.syncPlayerVariables(player);
 		});
 		if (value < getLifePoint(player)) setLifePoint(player, value);
@@ -54,7 +53,7 @@ public class CaerulaUtil {
 		if(value < 0) return;
 		player.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null)
 		.ifPresent(c -> {
-			c.player_shield = (double) value;
+			c.player_shield = value;
 			c.syncPlayerVariables(player);
 		});
 	}

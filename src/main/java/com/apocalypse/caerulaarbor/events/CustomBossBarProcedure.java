@@ -1,7 +1,6 @@
 package com.apocalypse.caerulaarbor.events;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.configuration.CaerulaConfigsConfiguration;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.Minecraft;
@@ -197,7 +196,7 @@ public class CustomBossBarProcedure {
         return context;
     }
 
-    private static Set<String> nameList = Set.of(
+    private static final Set<String> nameList = Set.of(
 		"entity.caerula_arbor.oceanized_brute",
 		"entity.caerula_arbor.oceanized_illusioner",
 		"entity.caerula_arbor.mega_chest",

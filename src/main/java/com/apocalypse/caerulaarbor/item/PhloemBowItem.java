@@ -184,7 +184,7 @@ public class PhloemBowItem extends Item implements GeoItem {
                     }
                     valid = false;
                 } else if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY)) != 0
-                        && !(EnchantmentHelper.getItemEnchantmentLevel(CaerulaArborModEnchantments.METABOLISM.get(), itemstack) != 0)) {
+                        && EnchantmentHelper.getItemEnchantmentLevel(CaerulaArborModEnchantments.METABOLISM.get(), itemstack) == 0) {
                     {
                         Map<Enchantment, Integer> _enchantments = EnchantmentHelper.getEnchantments(itemstack);
                         if (_enchantments.containsKey(CaerulaArborModEnchantments.METABOLISM.get())) {
@@ -210,7 +210,7 @@ public class PhloemBowItem extends Item implements GeoItem {
             }
             if (valid) {
                 if (!((Entity) entity instanceof Player _plrCldCheck32 && _plrCldCheck32.getCooldowns().isOnCooldown(itemstack.getItem()))) {
-                    if (((Entity) entity instanceof Player _playerHasItem ? _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.OCEAN_ARROW.get())) : false) || new Object() {
+                    if (((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.OCEAN_ARROW.get()))) || new Object() {
                         public boolean checkGamemode(Entity _ent) {
                             if (_ent instanceof ServerPlayer _serverPlayer) {
                                 return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;

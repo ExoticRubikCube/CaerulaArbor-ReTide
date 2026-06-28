@@ -636,7 +636,7 @@ public class CaerulaArborModItems {
 			ItemProperties.register(CHITIN_BOW.get(), new ResourceLocation(CaerulaArborMod.MODID, "chitin_bow_pulling"), (itemStackToRender, clientWorld, entity, itemEntityId) -> {
                 double result = 0;
                 if (entity != null) {
-                    if (((Entity) entity instanceof LivingEntity _entity) ? _entity.isHolding(CHITIN_BOW.get()) : false) {
+                    if ((Entity) entity instanceof LivingEntity _entity && _entity.isHolding(CHITIN_BOW.get())) {
                         result = (Entity) entity instanceof LivingEntity _entUseTicks1 ? _entUseTicks1.getTicksUsingItem() : 0;
                     }
                 }

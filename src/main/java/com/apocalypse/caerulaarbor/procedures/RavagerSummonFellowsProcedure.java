@@ -55,5 +55,3 @@ public class RavagerSummonFellowsProcedure {
 		}
 	}
 }
-
-// TODO: 调用次数 = 4，副作用密集（实体生成），保持原样不重构

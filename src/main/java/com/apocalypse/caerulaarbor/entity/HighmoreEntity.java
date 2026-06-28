@@ -335,7 +335,7 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
 				this.rangedAttackMob.performRangedAttack(this.target, f1);
 				this.attackTime = Mth.floor(f * (float) (this.attackIntervalMax - this.attackIntervalMin) + (float) this.attackIntervalMin);
 			} else if (this.attackTime < 0) {
-				this.attackTime = Mth.floor(Mth.lerp(Math.sqrt(d0) / (double) this.attackRadius, (double) this.attackIntervalMin, (double) this.attackIntervalMax));
+				this.attackTime = Mth.floor(Mth.lerp(Math.sqrt(d0) / (double) this.attackRadius, this.attackIntervalMin, this.attackIntervalMax));
 			} else
 				((HighmoreEntity) rangedAttackMob).entityData.set(SHOOT, false);
 		}
@@ -398,7 +398,7 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
         if (this != null) {
             if (this instanceof HighmoreEntity) {
-                ((HighmoreEntity) this).setAnimation("animation.highmore.start");
+                this.setAnimation("animation.highmore.start");
             }
         }
         return retval;
@@ -493,7 +493,7 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
                 if (sklp1 <= 0 && !((Entity) this instanceof LivingEntity _livEnt17 && _livEnt17.hasEffect(CaerulaArborModMobEffects.COOLDOWN_SINAL.get()))) {
                     if (!(null == ((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null))) {
                         if (this instanceof HighmoreEntity) {
-                            ((HighmoreEntity) this).setAnimation("animation.highmore.skill");
+                            this.setAnimation("animation.highmore.skill");
                         }
                         if (world instanceof Level _level) {
                                 _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "highmore_preamble")), SoundSource.HOSTILE, 4, 1);
@@ -501,7 +501,7 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
                         if (lvl == 0) {
                             CaerulaArborMod.queueServerWork(15, () -> {
                                 if (!(null == ((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null))) {
-                                    this.multiShoot(world, x, y, z, (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null, 3);
+                                    this.multiShoot(world, x, y, z, (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null, 3);
                                 }
                             });
                             if ((Entity) this instanceof HighmoreEntity _datEntSetI)
@@ -509,7 +509,7 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
                         } else {
                             CaerulaArborMod.queueServerWork(15, () -> {
                                 if (!(null == ((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null))) {
-                                    this.multiShoot(world, x, y, z, (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null, 5);
+                                    this.multiShoot(world, x, y, z, (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null, 5);
                                 }
                             });
                             if ((Entity) this instanceof HighmoreEntity _datEntSetI)
@@ -523,7 +523,7 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
                 if (sklp2 <= 0) {
                     if (!(null == ((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null))) {
                         if (this instanceof HighmoreEntity) {
-                            ((HighmoreEntity) this).setAnimation("animation.highmore.charge");
+                            this.setAnimation("animation.highmore.charge");
                         }
                         if (!this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.COOLDOWN_SINAL.get(), 80, 0, false, false));

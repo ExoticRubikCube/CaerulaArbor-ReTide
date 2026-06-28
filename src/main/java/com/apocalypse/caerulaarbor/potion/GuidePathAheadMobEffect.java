@@ -66,7 +66,7 @@ public class GuidePathAheadMobEffect extends MobEffect {
                                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.step")), SoundSource.NEUTRAL, 2, 1);
                                 }
                                 if ((Entity) entity instanceof GuideAbyssalEntity _datEntSetI)
-                                    _datEntSetI.getEntityData().set(GuideAbyssalEntity.DATA_laylimit, (int) (((Entity) entity instanceof GuideAbyssalEntity _datEntI ? _datEntI.getEntityData().get(GuideAbyssalEntity.DATA_laylimit) : 0) - 1));
+                                    _datEntSetI.getEntityData().set(GuideAbyssalEntity.DATA_laylimit, ((Entity) entity instanceof GuideAbyssalEntity _datEntI ? _datEntI.getEntityData().get(GuideAbyssalEntity.DATA_laylimit) : 0) - 1);
                             }
                         }
                     } else if (((Entity) entity instanceof OceanizedHorseEntity _datEntI ? _datEntI.getEntityData().get(OceanizedHorseEntity.DATA_lay_limit) : 0) > 0) {
@@ -82,7 +82,7 @@ public class GuidePathAheadMobEffect extends MobEffect {
                                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.step")), SoundSource.NEUTRAL, 2, 1);
                                 }
                                 if ((Entity) entity instanceof OceanizedHorseEntity _datEntSetI)
-                                    _datEntSetI.getEntityData().set(OceanizedHorseEntity.DATA_lay_limit, (int) (((Entity) entity instanceof OceanizedHorseEntity _datEntI ? _datEntI.getEntityData().get(OceanizedHorseEntity.DATA_lay_limit) : 0) - 1));
+                                    _datEntSetI.getEntityData().set(OceanizedHorseEntity.DATA_lay_limit, ((Entity) entity instanceof OceanizedHorseEntity _datEntI ? _datEntI.getEntityData().get(OceanizedHorseEntity.DATA_lay_limit) : 0) - 1);
                             }
                         }
                     }

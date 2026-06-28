@@ -42,7 +42,7 @@ import java.util.List;
 
 public class IllusionerBannerBlock extends BaseEntityBlock implements SimpleWaterloggedBlock, EntityBlock {
 	public static final IntegerProperty BLOCKSTATE = IntegerProperty.create("blockstate", 0, 1);
-	public static final IntegerProperty ANIMATION = IntegerProperty.create("animation", 0, (int) 2);
+	public static final IntegerProperty ANIMATION = IntegerProperty.create("animation", 0, 2);
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
@@ -85,19 +85,19 @@ public class IllusionerBannerBlock extends BaseEntityBlock implements SimpleWate
 		if (state.getValue(BLOCKSTATE) == 1) {
 
 			return switch (state.getValue(FACING)) {
-				default -> box(4, 0, 4, 12, 4, 12);
-				case NORTH -> box(4, 0, 4, 12, 4, 12);
+                case NORTH -> box(4, 0, 4, 12, 4, 12);
 				case EAST -> box(4, 0, 4, 12, 4, 12);
 				case WEST -> box(4, 0, 4, 12, 4, 12);
-			};
+                default -> box(4, 0, 4, 12, 4, 12);
+            };
 		}
 
 		return switch (state.getValue(FACING)) {
-			default -> box(4, 0, 4, 12, 44, 12);
-			case NORTH -> box(4, 0, 4, 12, 44, 12);
+            case NORTH -> box(4, 0, 4, 12, 44, 12);
 			case EAST -> box(4, 0, 4, 12, 44, 12);
 			case WEST -> box(4, 0, 4, 12, 44, 12);
-		};
+            default -> box(4, 0, 4, 12, 44, 12);
+        };
 	}
 
 	@Override

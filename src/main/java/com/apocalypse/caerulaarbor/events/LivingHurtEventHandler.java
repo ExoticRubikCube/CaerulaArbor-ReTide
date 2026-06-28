@@ -3,22 +3,11 @@ package com.apocalypse.caerulaarbor.events;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.configuration.CaerulaConfigsConfiguration;
 import com.apocalypse.caerulaarbor.entity.*;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEnchantments;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.*;
 import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
-import com.apocalypse.caerulaarbor.utils.EntityPredicateUtils;
-import com.apocalypse.caerulaarbor.utils.EntityUtils;
-import com.apocalypse.caerulaarbor.utils.MathUtils;
-import com.apocalypse.caerulaarbor.utils.PlayerStateUtils;
-import com.apocalypse.caerulaarbor.utils.ValidationUtils;
-import com.apocalypse.caerulaarbor.utils.WorldUtils;
+import com.apocalypse.caerulaarbor.utils.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -34,12 +23,7 @@ import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.Slime;
@@ -58,13 +42,11 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.List;
 
@@ -161,7 +143,7 @@ public class LivingHurtEventHandler {
                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "living_barrier")), SoundSource.HOSTILE, 2, (float) Mth.nextDouble(RandomSource.create(), 0.9, 1.1));
             }
             if (world instanceof ServerLevel _level)
-                _level.sendParticles((SimpleParticleType) (CaerulaArborModParticleTypes.LIVING_BARRIER_SHOW.get()), x, (y + 0.75), z, (int) Math.min(disp * 0.5, 24), 0.75, 0.75, 0.75, 0.1);
+                _level.sendParticles(CaerulaArborModParticleTypes.LIVING_BARRIER_SHOW.get(), x, (y + 0.75), z, (int) Math.min(disp * 0.5, 24), 0.75, 0.75, 0.75, 0.1);
         }
     }
 
@@ -636,7 +618,7 @@ public class LivingHurtEventHandler {
                         if (!damagesource.is(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hand_spike"))) && !damagesource.is(DamageTypes.THORNS)
                                 && !damagesource.is(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "gunmu_damage"))) && !(entity == sourceentity)) {
                             CaerulaArborMod.queueServerWork(2, () -> {
-                                if (!(sourceentity instanceof TamableAnimal _tamIsTamedBy && entity instanceof LivingEntity _livEnt ? _tamIsTamedBy.isOwnedBy(_livEnt) : false)) {
+                                if (!(sourceentity instanceof TamableAnimal _tamIsTamedBy && entity instanceof LivingEntity _livEnt && _tamIsTamedBy.isOwnedBy(_livEnt))) {
                                     if (world instanceof ServerLevel _level)
                                         _level.sendParticles(ParticleTypes.SMOKE, (sourceentity.getX()), (sourceentity.getY()), (sourceentity.getZ()), 72, 0.85, 1, 0.85, 0.2);
                                     sourceentity.hurt(
@@ -855,7 +837,7 @@ public class LivingHurtEventHandler {
                 }
                 if (lll > 4) {
                     if (world instanceof ServerLevel _level)
-                        _level.sendParticles((SimpleParticleType) (CaerulaArborModParticleTypes.MOIST_BOOM.get()), x, (y + 0.5), z, 2, 0.1, 0.1, 0.1, 0.1);
+                        _level.sendParticles(CaerulaArborModParticleTypes.MOIST_BOOM.get(), x, (y + 0.5), z, 2, 0.1, 0.1, 0.1, 0.1);
                     EntityUtils.deductSanity(entity, amount * 5);
                     EntityUtils.giveLessArmor(entity, 16);
                 }
@@ -911,7 +893,7 @@ public class LivingHurtEventHandler {
         if (entity == null) return;
 
         if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanelite"))) && WorldUtils.canGrief(world)) {
-            Entity eee = entity instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+            Entity eee = entity instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
             if (eee != null && eee.isAlive()) {
                 Entity boat = entity.getVehicle();
                 if (boat instanceof Boat) {

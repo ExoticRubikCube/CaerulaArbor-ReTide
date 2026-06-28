@@ -1,15 +1,12 @@
 package com.apocalypse.caerulaarbor.client.gui;
 
-import com.apocalypse.caerulaarbor.utils.PlayerStateUtils;
-
-import com.apocalypse.caerulaarbor.utils.RelicUtils;
-
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModGameRules;
 import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import com.apocalypse.caerulaarbor.network.CaerulaRecordGUIButtonMessage;
-import com.apocalypse.caerulaarbor.procedures.*;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
+import com.apocalypse.caerulaarbor.utils.PlayerStateUtils;
+import com.apocalypse.caerulaarbor.utils.RelicUtils;
 import com.apocalypse.caerulaarbor.world.inventory.CaerulaRecordGUIMenu;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
@@ -109,7 +106,7 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
 
-		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/caerularecord.png"), this.leftPos + 0, this.topPos + 0, 0, 0, 168, 166, 168, 166);
+		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/caerularecord.png"), this.leftPos, this.topPos, 0, 0, 168, 166, 168, 166);
 
 		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/target_health.png"), this.leftPos + 4, this.topPos + 30, 0, 0, 24, 16, 24, 16);
 

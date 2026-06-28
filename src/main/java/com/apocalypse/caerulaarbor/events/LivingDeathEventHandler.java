@@ -14,7 +14,6 @@ import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
@@ -152,7 +151,7 @@ public class LivingDeathEventHandler {
                     entity.getAttribute(CaerulaArborModAttributes.SANITY.get()).setBaseValue(1000);
                 if (is_shield) {
                     if (world instanceof ServerLevel _level)
-                        _level.sendParticles((SimpleParticleType) (CaerulaArborModParticleTypes.SHIELDLOSS.get()), x, (y + 0.95), z, 72, 0.75, 0.55, 0.75, 0.2);
+                        _level.sendParticles(CaerulaArborModParticleTypes.SHIELDLOSS.get(), x, (y + 0.95), z, 72, 0.75, 0.55, 0.75, 0.2);
                     if (!world.isClientSide()) {
                         entity.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 100, 0));
                         entity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 200, 4));
@@ -161,10 +160,10 @@ public class LivingDeathEventHandler {
                     entity.setHealth(entity.getMaxHealth());
                 } else {
                     if (world instanceof ServerLevel _level)
-                        _level.sendParticles((SimpleParticleType) (CaerulaArborModParticleTypes.LIFELOSS.get()), x, (y + 0.95), z, 72, 0.75, 0.55, 0.75, 0.2);
+                        _level.sendParticles(CaerulaArborModParticleTypes.LIFELOSS.get(), x, (y + 0.95), z, 72, 0.75, 0.55, 0.75, 0.2);
                     if (!world.isClientSide())
                         entity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 200, 2));
-                    entity.setHealth((float) entity.getMaxHealth() * 0.5f);
+                    entity.setHealth(entity.getMaxHealth() * 0.5f);
                     if (damagesource.is(TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "rare")))) {
                         light_cost = 15;
                     } else if (damagesource.is(TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "horror")))) {
@@ -250,7 +249,7 @@ public class LivingDeathEventHandler {
                 if ((sEntity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == CaerulaArborModItems.ENDERINA_SPAWNER.get()) {
                     result = true;
                 } else if (!sEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
-                    if (sEntity instanceof TamableAnimal _tamEnt ? !_tamEnt.isTame() : true) {
+                    if (!(sEntity instanceof TamableAnimal _tamEnt) || !_tamEnt.isTame()) {
                         result = !(sEntity instanceof Player || sEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "is_humanside"))));
                     }
                 }
@@ -630,7 +629,7 @@ public class LivingDeathEventHandler {
 
         if ((sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).is(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "self_mendable")))) {
             ItemStack weapon = (sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).copy();
-            double dama = weapon.getDamageValue() - Mth.nextInt(RandomSource.create(), 1, (int) (5 + weapon.getEnchantmentLevel(Enchantments.UNBREAKING)));
+            double dama = weapon.getDamageValue() - Mth.nextInt(RandomSource.create(), 1, 5 + weapon.getEnchantmentLevel(Enchantments.UNBREAKING));
             if (dama <= 0) {
                 (sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).setDamageValue(0);
             } else {
@@ -796,9 +795,9 @@ public class LivingDeathEventHandler {
                 for (int index2 = 0; index2 < 3; index2++) {
                     if ((world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz))).getBlock() == CaerulaArborModBlocks.SEA_TRAIL_INIT.get()
                             || (world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz))).getBlock() == CaerulaArborModBlocks.SEA_TRAIL_GROWING.get()) {
-                        int _value = (int) (((world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz))).getBlock().getStateDefinition().getProperty("grow_age") instanceof IntegerProperty _getip6
+                        int _value = ((world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz))).getBlock().getStateDefinition().getProperty("grow_age") instanceof IntegerProperty _getip6
                                 ? (world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz))).getValue(_getip6)
-                                : -1) + 4);
+                                : -1) + 4;
                         BlockPos _pos = BlockPos.containing(x + dx, y + dy, z + dz);
                         BlockState _bs = world.getBlockState(_pos);
                         if (_bs.getBlock().getStateDefinition().getProperty("grow_age") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))
@@ -949,7 +948,7 @@ public class LivingDeathEventHandler {
 
     private static void handleTideDeathrepellerDeath(LivingDeathEvent event, LevelAccessor world, double x, double y, double z, Entity entity) {
         boolean keepup = true;
-        if (!(!world.getEntitiesOfClass(TideBishopEntity.class, AABB.ofSize(new Vec3(x, y, z), 128, 128, 128), e -> true).isEmpty())) {
+        if (world.getEntitiesOfClass(TideBishopEntity.class, AABB.ofSize(new Vec3(x, y, z), 128, 128, 128), e -> true).isEmpty()) {
             keepup = false;
         } else {
             Entity bishop = world.getEntitiesOfClass(TideBishopEntity.class, AABB.ofSize(new Vec3(x, y, z), 128, 128, 128), e -> true).stream()
@@ -972,7 +971,7 @@ public class LivingDeathEventHandler {
 
     private static void handleTideBishopDeath(LivingDeathEvent event, LevelAccessor world, double x, double y, double z, Entity entity) {
         boolean keepup = true;
-        if (!(!world.getEntitiesOfClass(TideDeathrepellerEntity.class, AABB.ofSize(new Vec3(x, y, z), 128, 128, 128), e -> true).isEmpty())) {
+        if (world.getEntitiesOfClass(TideDeathrepellerEntity.class, AABB.ofSize(new Vec3(x, y, z), 128, 128, 128), e -> true).isEmpty()) {
             keepup = false;
         } else {
             Entity repeller = world.getEntitiesOfClass(TideDeathrepellerEntity.class, AABB.ofSize(new Vec3(x, y, z), 128, 128, 128), e -> true).stream()
@@ -1006,10 +1005,10 @@ public class LivingDeathEventHandler {
 
         if (helm.getItem() == CaerulaArborModItems.TRAILRITE_ARMOR_HELMET.get() && chest.getItem() == CaerulaArborModItems.TRAILRITE_ARMOR_CHESTPLATE.get()
                 && legg.getItem() == CaerulaArborModItems.TRAILRITE_ARMOR_LEGGINGS.get() && boot.getItem() == CaerulaArborModItems.TRAILRITE_ARMOR_BOOTS.get()) {
-            (sourceentity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.HEAD) : ItemStack.EMPTY).setDamageValue((int) (helm.getDamageValue() - 3));
-            (sourceentity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.CHEST) : ItemStack.EMPTY).setDamageValue((int) (chest.getDamageValue() - 3));
-            (sourceentity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.LEGS) : ItemStack.EMPTY).setDamageValue((int) (legg.getDamageValue() - 3));
-            (sourceentity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.FEET) : ItemStack.EMPTY).setDamageValue((int) (boot.getDamageValue() - 3));
+            (sourceentity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.HEAD) : ItemStack.EMPTY).setDamageValue(helm.getDamageValue() - 3);
+            (sourceentity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.CHEST) : ItemStack.EMPTY).setDamageValue(chest.getDamageValue() - 3);
+            (sourceentity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.LEGS) : ItemStack.EMPTY).setDamageValue(legg.getDamageValue() - 3);
+            (sourceentity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.FEET) : ItemStack.EMPTY).setDamageValue(boot.getDamageValue() - 3);
         }
     }
 

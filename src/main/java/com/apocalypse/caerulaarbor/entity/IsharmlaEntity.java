@@ -1,74 +1,67 @@
 package com.apocalypse.caerulaarbor.entity;
 
-import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.*;
-import com.apocalypse.caerulaarbor.procedures.*;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
 import com.apocalypse.caerulaarbor.utils.WorldUtils;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import software.bernie.geckolib.core.object.PlayState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.network.NetworkHooks;
-
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
-import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
-import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.DifficultyInstance;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.level.ServerBossEvent;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.nbt.CompoundTag;
-
-import net.minecraft.sounds.SoundEvents;
+import net.minecraftforge.network.PlayMessages;
+import net.minecraftforge.registries.ForgeRegistries;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
 
 import javax.annotation.Nullable;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -245,7 +238,7 @@ public class IsharmlaEntity extends SeaMonster {
 					double sourceY = this.getY();
 					double sourceZ = this.getZ();
 					for (int index = 0; index < 12; index++) {
-						serverLevel.sendParticles((SimpleParticleType) CaerulaArborModParticleTypes.MOIST_BOOM.get(), sourceX, sourceY + 10 + index, sourceZ, 6, index * 0.1, index * 0.1, index * 0.1, 0);
+						serverLevel.sendParticles(CaerulaArborModParticleTypes.MOIST_BOOM.get(), sourceX, sourceY + 10 + index, sourceZ, 6, index * 0.1, index * 0.1, index * 0.1, 0);
 					}
 				}
 			});
@@ -382,7 +375,7 @@ public class IsharmlaEntity extends SeaMonster {
         double z = this.getZ();
         if (this != null) {
             if (this instanceof IsharmlaEntity) {
-                ((IsharmlaEntity) this).setAnimation("animation.isharmla.start");
+                this.setAnimation("animation.isharmla.start");
             }
             if (!this.level().isClientSide())
                 this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 60, 9, false, false));
@@ -482,7 +475,7 @@ public class IsharmlaEntity extends SeaMonster {
                 dura = (Entity) this instanceof IsharmlaEntity _datEntI ? _datEntI.getEntityData().get(DATA_DURATION) : 0;
                 absP = (Entity) this instanceof IsharmlaEntity _datEntI ? _datEntI.getEntityData().get(DATA_ABSORPTION) : 0;
                 isMonster = (Entity) this instanceof IsharmlaEntity _datEntL5 && _datEntL5.getEntityData().get(DATA_IS_MONSTER);
-                enemy = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+                enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                 if (dura > 0) {
                     if ((Entity) this instanceof IsharmlaEntity _datEntSetI)
                         _datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura - 1));
@@ -572,14 +565,14 @@ public class IsharmlaEntity extends SeaMonster {
                                     _level1.sendParticles(ParticleTypes.END_ROD, (x + r * Math.sin(ang)), (y + 0.125), (z + r * Math.cos(ang)), 1, 0, 0.25, 0, 0.2);
                             }
                             if (world instanceof ServerLevel _level1)
-                                _level1.sendParticles((SimpleParticleType) (CaerulaArborModParticleTypes.EDERMAN_PTC.get()), (x + r * Math.sin(ang)), (y + 0.15), (z + r * Math.cos(ang)), 1, 0, 0.25, 0, 0.2);
+                                _level1.sendParticles(CaerulaArborModParticleTypes.EDERMAN_PTC.get(), (x + r * Math.sin(ang)), (y + 0.15), (z + r * Math.cos(ang)), 1, 0, 0.25, 0, 0.2);
                             r = 23 + Math.sin(index0 * 12);
                             if (Math.random() < 0.33) {
                                 if (world instanceof ServerLevel _level1)
                                     _level1.sendParticles(ParticleTypes.END_ROD, (x + r * Math.sin(ang)), (y + 0.125), (z + r * Math.cos(ang)), 1, 0, 0.25, 0, 0.2);
                             }
                             if (world instanceof ServerLevel _level1)
-                                _level1.sendParticles((SimpleParticleType) (CaerulaArborModParticleTypes.EDERMAN_PTC.get()), (x + r * Math.sin(ang)), (y + 0.15), (z + r * Math.cos(ang)), 1, 0, 0.25, 0, 0.2);
+                                _level1.sendParticles(CaerulaArborModParticleTypes.EDERMAN_PTC.get(), (x + r * Math.sin(ang)), (y + 0.15), (z + r * Math.cos(ang)), 1, 0, 0.25, 0, 0.2);
                         }
                     }
                     if (sklp1 > 0) {
@@ -589,7 +582,7 @@ public class IsharmlaEntity extends SeaMonster {
                         if (canAttack) {
                             if ((enemy != null ? distanceTo(enemy) : -1) <= 32) {
                                 if (this instanceof IsharmlaEntity) {
-                                    ((IsharmlaEntity) this).setAnimation("animation.isharmla.tail_monster");
+                                    this.setAnimation("animation.isharmla.tail_monster");
                                 }
                                 if ((Entity) this instanceof IsharmlaEntity _datEntSetI)
                                     _datEntSetI.getEntityData().set(DATA_SKILLP_1, 300);
@@ -609,7 +602,7 @@ public class IsharmlaEntity extends SeaMonster {
                         if (canAttack) {
                             if ((enemy != null ? distanceTo(enemy) : -1) <= 32) {
                                 if (this instanceof IsharmlaEntity) {
-                                    ((IsharmlaEntity) this).setAnimation("animation.isharmla.bite_monster");
+                                    this.setAnimation("animation.isharmla.bite_monster");
                                 }
                                 if ((Entity) this instanceof IsharmlaEntity _datEntSetI)
                                     _datEntSetI.getEntityData().set(DATA_SKILLP_2, 200);
@@ -623,7 +616,7 @@ public class IsharmlaEntity extends SeaMonster {
                                         return;
                                     Entity enemy1 = null;
                                     double d = 0;
-                                    enemy1 = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+                                    enemy1 = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                                     d = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
                                     if (world instanceof Level _level) {
                                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "isharmla_tear_hurt_1")), SoundSource.HOSTILE, 3, 1);
@@ -648,7 +641,7 @@ public class IsharmlaEntity extends SeaMonster {
                             _datEntSetI.getEntityData().set(DATA_HEAL_P, (int) (healP - 1));
                     } else if (dura <= 0) {
                         if (this instanceof IsharmlaEntity) {
-                            ((IsharmlaEntity) this).setAnimation("animation.isharmla.heal_human");
+                            this.setAnimation("animation.isharmla.heal_human");
                         }
                         if ((Entity) this instanceof IsharmlaEntity _datEntSetI)
                             _datEntSetI.getEntityData().set(DATA_HEAL_P, 120);
@@ -697,7 +690,7 @@ public class IsharmlaEntity extends SeaMonster {
                             _datEntSetI.getEntityData().set(DATA_SKILLP_2, (int) (sklp2 - 1));
                     } else if (dura <= 0) {
                         if (this instanceof IsharmlaEntity) {
-                            ((IsharmlaEntity) this).setAnimation("animation.isharmla.heal_human");
+                            this.setAnimation("animation.isharmla.heal_human");
                         }
                         if ((Entity) this instanceof IsharmlaEntity _datEntSetI)
                             _datEntSetI.getEntityData().set(DATA_SKILLP_2, 600);
@@ -751,9 +744,8 @@ public class IsharmlaEntity extends SeaMonster {
 
 	@Override
 	public boolean isPushable() {
-		if (isMonster()) return false;
-		return true;
-	}
+        return !isMonster();
+    }
 
 	@Override
 	protected void doPush(Entity entityIn) {
@@ -918,7 +910,7 @@ public class IsharmlaEntity extends SeaMonster {
 		double y = this.getY();
 		double z = this.getZ();
 
-		Entity enemy = (Entity) this.getTarget();
+		Entity enemy = this.getTarget();
 		double damage = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() * damageRate : 0;
 
 		if (world instanceof Level _level) {

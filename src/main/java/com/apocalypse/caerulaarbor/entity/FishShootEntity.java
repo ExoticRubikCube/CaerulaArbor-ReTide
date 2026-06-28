@@ -85,7 +85,7 @@ public class FishShootEntity extends AbstractArrow implements ItemSupplier {
 	}
 
 	public static FishShootEntity shoot(Level world, LivingEntity entity, RandomSource source, float pullingPower) {
-		return shoot(world, entity, source, pullingPower * 1f, 2, 0);
+		return shoot(world, entity, source, pullingPower, 2, 0);
 	}
 
 	public static FishShootEntity shoot(Level world, LivingEntity entity, RandomSource random, float power, double damage, int knockback) {

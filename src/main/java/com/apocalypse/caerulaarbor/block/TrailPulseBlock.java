@@ -114,8 +114,8 @@ public class TrailPulseBlock extends Block {
         double dltx = 0;
         double dltz = 0;
         for (Direction directioniterator : Direction.Plane.HORIZONTAL) {
-            for (int dy = (int) 0; dy <= (int) 2; dy++) {
-                for (int dist = (int) 1; dist <= (int) 2; dist++) {
+            for (int dy = 0; dy <= 2; dy++) {
+                for (int dist = 1; dist <= 2; dist++) {
                     if (Math.random() < 0.25) {
                         toReplace = (((LevelAccessor) world).getBlockState(BlockPos.containing((double) x + directioniterator.getStepX() * dist, (double) y + dy, (double) z + directioniterator.getStepZ() * dist)));
                         if (toReplace.canBeReplaced()
@@ -175,7 +175,7 @@ public class TrailPulseBlock extends Block {
                 break;
             }
             if (!put) {
-                for (int dist = (int) 1; dist <= (int) 2; dist++) {
+                for (int dist = 1; dist <= 2; dist++) {
                     if (Math.random() < 0.25 && canDropTrail(world, (double) x + directioniterator.getStepX() * dist, (double) y - 1, (double) z + directioniterator.getStepZ() * dist)) {
                         if ((LevelAccessor) world instanceof ServerLevel _level)
                             FallingBlockEntity.fall(_level, BlockPos.containing((double) x + directioniterator.getStepX() * dist, (double) y - 1, (double) z + directioniterator.getStepZ() * dist), CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState());
@@ -188,7 +188,7 @@ public class TrailPulseBlock extends Block {
         if (!put) {
             dltx = 1;
             dltz = 1;
-            for (int dy = (int) 0; dy >= (int) 2; dy--) {
+            for (int dy = 0; dy >= 2; dy--) {
                 if (Math.random() < 0.25) {
                     toReplace = (((LevelAccessor) world).getBlockState(BlockPos.containing((double) x + dltx, (double) y + dy, (double) z + dltz)));
                     if (toReplace.canBeReplaced() && CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing((double) x + dltx, (double) y + dy, (double) z + dltz))) {
@@ -248,7 +248,7 @@ public class TrailPulseBlock extends Block {
         if (!put) {
             dltx = 1;
             dltz = -1;
-            for (int dy = (int) 0; dy >= (int) 2; dy--) {
+            for (int dy = 0; dy >= 2; dy--) {
                 if (Math.random() < 0.25) {
                     toReplace = (((LevelAccessor) world).getBlockState(BlockPos.containing((double) x + dltx, (double) y + dy, (double) z + dltz)));
                     if (toReplace.canBeReplaced() && CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing((double) x + dltx, (double) y + dy, (double) z + dltz))) {
@@ -308,7 +308,7 @@ public class TrailPulseBlock extends Block {
         if (!put) {
             dltx = -1;
             dltz = 1;
-            for (int dy = (int) 0; dy >= (int) 2; dy--) {
+            for (int dy = 0; dy >= 2; dy--) {
                 if (Math.random() < 0.25) {
                     toReplace = (((LevelAccessor) world).getBlockState(BlockPos.containing((double) x + dltx, (double) y + dy, (double) z + dltz)));
                     if (toReplace.canBeReplaced() && CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing((double) x + dltx, (double) y + dy, (double) z + dltz))) {
@@ -368,7 +368,7 @@ public class TrailPulseBlock extends Block {
         if (!put) {
             dltx = -1;
             dltz = -1;
-            for (int dy = (int) 0; dy >= (int) 2; dy--) {
+            for (int dy = 0; dy >= 2; dy--) {
                 if (Math.random() < 0.25) {
                     toReplace = (((LevelAccessor) world).getBlockState(BlockPos.containing((double) x + dltx, (double) y + dy, (double) z + dltz)));
                     if (toReplace.canBeReplaced() && CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing((double) x + dltx, (double) y + dy, (double) z + dltz))) {
@@ -480,7 +480,7 @@ public class TrailPulseBlock extends Block {
                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.place")), SoundSource.BLOCKS, (float) 0.33, 1);
             }
             {
-                int _value = (int) ((blockstate.getBlock().getStateDefinition().getProperty("nurtr") instanceof IntegerProperty _getip106 ? blockstate.getValue(_getip106) : -1) - 1);
+                int _value = (blockstate.getBlock().getStateDefinition().getProperty("nurtr") instanceof IntegerProperty _getip106 ? blockstate.getValue(_getip106) : -1) - 1;
                 BlockPos _pos = BlockPos.containing(x, y, z);
                 BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
                 if (_bs.getBlock().getStateDefinition().getProperty("nurtr") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))
@@ -488,7 +488,7 @@ public class TrailPulseBlock extends Block {
             }
         }
         {
-            int _value = (int) ((blockstate.getBlock().getStateDefinition().getProperty("grow_age") instanceof IntegerProperty _getip109 ? blockstate.getValue(_getip109) : -1) - 1);
+            int _value = (blockstate.getBlock().getStateDefinition().getProperty("grow_age") instanceof IntegerProperty _getip109 ? blockstate.getValue(_getip109) : -1) - 1;
             BlockPos _pos = BlockPos.containing(x, y, z);
             BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
             if (_bs.getBlock().getStateDefinition().getProperty("grow_age") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))

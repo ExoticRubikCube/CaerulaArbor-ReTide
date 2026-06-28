@@ -135,7 +135,7 @@ public class OceanizedFoxEntity extends SeaMonster {
 		this.targetSelector.addGoal(7, new NearestAttackableTargetGoal(this, TropicalFish.class, true, true));
 		this.targetSelector.addGoal(8, new NearestAttackableTargetGoal(this, Pufferfish.class, true, true));
 		this.goalSelector.addGoal(9, new TemptGoal(this, 1, Ingredient.of(CaerulaArborModItems.CANNED_CHERRY.get()), false));
-		this.goalSelector.addGoal(10, new RemoveBlockGoal(Blocks.SWEET_BERRY_BUSH, this, 1, (int) 3));
+		this.goalSelector.addGoal(10, new RemoveBlockGoal(Blocks.SWEET_BERRY_BUSH, this, 1, 3));
 		this.goalSelector.addGoal(11, new RandomStrollGoal(this, 1) {
 			@Override
 			public boolean canUse() {
@@ -260,7 +260,7 @@ public class OceanizedFoxEntity extends SeaMonster {
         Entity enemy = null;
         double damage = 0;
         if ((Entity) this instanceof LivingEntity _entity)
-            _entity.setHealth((float) (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) + 2));
+            _entity.setHealth(((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) + 2);
     }
 
 	@Override
@@ -298,7 +298,7 @@ public class OceanizedFoxEntity extends SeaMonster {
                     }
                     setShiftKeyDown(sneak);
                 }
-                enemy = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+                enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                 if (!(enemy == null) && enemy.isAlive()) {
                     setShiftKeyDown(false);
                     if ((Entity) this instanceof OceanizedFoxEntity _datEntSetL)
@@ -321,7 +321,7 @@ public class OceanizedFoxEntity extends SeaMonster {
                             if ((Entity) this instanceof OceanizedFoxEntity _datEntSetI)
                                 _datEntSetI.getEntityData().set(DATA_skillp, 200);
                             if (this instanceof OceanizedFoxEntity) {
-                                ((OceanizedFoxEntity) this).setAnimation("animation.oceanized_fox.jump");
+                                this.setAnimation("animation.oceanized_fox.jump");
                             }
                             if (!this.level().isClientSide())
                                 this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 25, 9, false, false));
@@ -351,7 +351,7 @@ public class OceanizedFoxEntity extends SeaMonster {
                                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.fox.aggro")), SoundSource.HOSTILE, 2, 1);
                                     }
                                     damage = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
-                                    enemy1 = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+                                    enemy1 = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                                     {
                                         final Vec3 _center = new Vec3((getX()), (getY()), (getZ()));
                                         List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(6 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
@@ -370,7 +370,7 @@ public class OceanizedFoxEntity extends SeaMonster {
                                             if ((entityiterator != null ? distanceTo(entityiterator) : -1) <= 3) {
                                                 entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.MOB_ATTACK), this), (float) (damage * 1.5));
                                                 if ((Entity) this instanceof LivingEntity _entity)
-                                                    _entity.setHealth((float) (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) + 1));
+                                                    _entity.setHealth(((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) + 1);
                                             }
                                         }
                                     }

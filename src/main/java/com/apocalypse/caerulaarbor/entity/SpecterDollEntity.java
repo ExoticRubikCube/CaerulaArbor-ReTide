@@ -1,13 +1,11 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -144,7 +142,7 @@ public class SpecterDollEntity extends Animal implements GeoEntity {
                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "specter_doll_ambient")), SoundSource.NEUTRAL, 3, 1);
             }
             if ((LevelAccessor) world instanceof ServerLevel _level)
-                _level.sendParticles((SimpleParticleType) (CaerulaArborModParticleTypes.SPECTER_GLITTER.get()), x, (y + 0.75), z, 64, 0.75, 0.75, 0.75, 0.1);
+                _level.sendParticles(CaerulaArborModParticleTypes.SPECTER_GLITTER.get(), x, (y + 0.75), z, 64, 0.75, 0.75, 0.75, 0.1);
             if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
                 this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(50);
             if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()))
@@ -189,7 +187,7 @@ public class SpecterDollEntity extends Animal implements GeoEntity {
                             Entity enemy = null;
                             double damage = 0;
                             double r = 0;
-                            enemy = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+                            enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                             r = 6;
                             damage = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.8;
                             {
@@ -202,7 +200,7 @@ public class SpecterDollEntity extends Animal implements GeoEntity {
                                     if (!entityiterator.isAlive()) {
                                         continue;
                                     }
-                                    if (entityiterator instanceof Player || (entityiterator instanceof TamableAnimal _tamEnt ? _tamEnt.isTame() : false)) {
+                                    if (entityiterator instanceof Player || (entityiterator instanceof TamableAnimal _tamEnt && _tamEnt.isTame())) {
                                         if (!(entityiterator == enemy)) {
                                             continue;
                                         }
@@ -235,7 +233,7 @@ public class SpecterDollEntity extends Animal implements GeoEntity {
                     if (!level().isClientSide())
                         discard();
                     if (world instanceof ServerLevel _level)
-                        _level.sendParticles((SimpleParticleType) (CaerulaArborModParticleTypes.SPECTER_GLITTER.get()), x, (y + 0.75), z, 64, 0.75, 0.75, 0.75, 0.1);
+                        _level.sendParticles(CaerulaArborModParticleTypes.SPECTER_GLITTER.get(), x, (y + 0.75), z, 64, 0.75, 0.75, 0.75, 0.1);
                     if (world instanceof ServerLevel _level) {
                         Entity entityToSpawn = CaerulaArborModEntities.SPECTER.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                         if (entityToSpawn != null) {
@@ -284,15 +282,15 @@ public class SpecterDollEntity extends Animal implements GeoEntity {
 		for (int index0 = 0; index0 < (int) (R + 1); index0++) {
 			double dx = index0 * 0.5;
 			double dz = (R - index0) * 0.5;
-			world.addParticle((SimpleParticleType) (CaerulaArborModParticleTypes.SPECTER_GLITTER.get()), (x + dx), (y + 0.1), (z + dz), 0, 0.1, 0);
-			world.addParticle((SimpleParticleType) (CaerulaArborModParticleTypes.SPECTER_GLITTER.get()), (x - dx), (y + 0.1), (z + dz), 0, 0.1, 0);
-			world.addParticle((SimpleParticleType) (CaerulaArborModParticleTypes.SPECTER_GLITTER.get()), (x + dx), (y + 0.1), (z - dz), 0, 0.1, 0);
-			world.addParticle((SimpleParticleType) (CaerulaArborModParticleTypes.SPECTER_GLITTER.get()), (x - dx), (y + 0.1), (z - dz), 0, 0.1, 0);
+			world.addParticle(CaerulaArborModParticleTypes.SPECTER_GLITTER.get(), (x + dx), (y + 0.1), (z + dz), 0, 0.1, 0);
+			world.addParticle(CaerulaArborModParticleTypes.SPECTER_GLITTER.get(), (x - dx), (y + 0.1), (z + dz), 0, 0.1, 0);
+			world.addParticle(CaerulaArborModParticleTypes.SPECTER_GLITTER.get(), (x + dx), (y + 0.1), (z - dz), 0, 0.1, 0);
+			world.addParticle(CaerulaArborModParticleTypes.SPECTER_GLITTER.get(), (x - dx), (y + 0.1), (z - dz), 0, 0.1, 0);
 		}
 		if (Math.random() < 0.15) {
 			R = Mth.nextDouble(RandomSource.create(), 1, 8);
 			double tt = Mth.nextDouble(RandomSource.create(), 0, 6.283);
-			world.addParticle((SimpleParticleType) (CaerulaArborModParticleTypes.SPECTER_CHARS.get()), (x + R * Math.cos(tt)), (y + 0.2), (z + R * Math.sin(tt)), 0, 0.25, 0);
+			world.addParticle(CaerulaArborModParticleTypes.SPECTER_CHARS.get(), (x + R * Math.cos(tt)), (y + 0.2), (z + R * Math.sin(tt)), 0, 0.25, 0);
 		}
 	}
 

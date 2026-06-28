@@ -1,9 +1,7 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
@@ -82,7 +80,7 @@ public class AccumulatorCloneEntity extends SeaMonster {
 					double dx = this.wantedX - AccumulatorCloneEntity.this.getX();
 					double dy = this.wantedY - AccumulatorCloneEntity.this.getY();
 					double dz = this.wantedZ - AccumulatorCloneEntity.this.getZ();
-					float f = (float) (Mth.atan2(dz, dx) * (double) (180 / Math.PI)) - 90;
+					float f = (float) (Mth.atan2(dz, dx) * (180 / Math.PI)) - 90;
 					float f1 = (float) (this.speedModifier * AccumulatorCloneEntity.this.getAttribute(Attributes.MOVEMENT_SPEED).getValue());
 					AccumulatorCloneEntity.this.setYRot(this.rotlerp(AccumulatorCloneEntity.this.getYRot(), f, 10));
 					AccumulatorCloneEntity.this.yBodyRot = AccumulatorCloneEntity.this.getYRot();

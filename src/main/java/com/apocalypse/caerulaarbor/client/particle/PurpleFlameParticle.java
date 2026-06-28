@@ -1,16 +1,11 @@
 
 package com.apocalypse.caerulaarbor.client.particle;
 
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.api.distmarker.Dist;
-
-import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraft.client.particle.TextureSheetParticle;
-import net.minecraft.client.particle.SpriteSet;
-import net.minecraft.client.particle.ParticleRenderType;
-import net.minecraft.client.particle.ParticleProvider;
-import net.minecraft.client.particle.Particle;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.particle.*;
+import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class PurpleFlameParticle extends TextureSheetParticle {
@@ -37,7 +32,7 @@ public class PurpleFlameParticle extends TextureSheetParticle {
 		this.spriteSet = spriteSet;
 		this.setSize(0.2f, 0.2f);
 		this.quadSize *= 0.5f;
-		this.lifetime = (int) Math.max(1, 20 + (this.random.nextInt(30) - 15));
+		this.lifetime = Math.max(1, 20 + (this.random.nextInt(30) - 15));
 		this.gravity = 0f;
 		this.hasPhysics = true;
 		this.xd = vx * 0.25;

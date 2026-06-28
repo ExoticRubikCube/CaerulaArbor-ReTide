@@ -1,11 +1,12 @@
 package com.apocalypse.caerulaarbor.entity;
 
+import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.procedures.GrandChestAvdProcedure;
 import com.apocalypse.caerulaarbor.utils.EntityPredicateUtils;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
+import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -14,6 +15,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Difficulty;
@@ -206,7 +208,14 @@ public class ChestFishEntity extends SeaMonster {
 	@Override
 	public void die(DamageSource source) {
 		super.die(source);
-		GrandChestAvdProcedure.execute(this, source.getEntity());
+		if (source.getEntity() instanceof ServerPlayer player) {
+			Advancement advancement = player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "treasures"));
+			AdvancementProgress progress = player.getAdvancements().getOrStartProgress(advancement);
+			if (!progress.isDone()) {
+				for (String criteria : progress.getRemainingCriteria())
+					player.getAdvancements().award(advancement, criteria);
+			}
+		}
 	}
 
 	@Override

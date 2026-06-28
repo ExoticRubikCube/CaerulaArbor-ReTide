@@ -3,9 +3,9 @@ package com.apocalypse.caerulaarbor.entity;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
+import com.apocalypse.caerulaarbor.entity.base.PolarMountRider;
 
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.procedures.SeabornRidePolarProcedure;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -56,7 +56,7 @@ import software.bernie.geckolib.core.object.PlayState;
 
 import javax.annotation.Nullable;
 
-public class OceanizedPiglinEntity extends SeaMonster {
+public class OceanizedPiglinEntity extends SeaMonster implements PolarMountRider {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanizedPiglinEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedPiglinEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(OceanizedPiglinEntity.class, EntityDataSerializers.STRING);
@@ -234,7 +234,7 @@ public class OceanizedPiglinEntity extends SeaMonster {
         if (entity instanceof Hoglin) {
             if (Math.random() < 0.1) {
                 if (this instanceof OceanizedPiglinEntity) {
-                    ((OceanizedPiglinEntity) this).setAnimation("animation.oceanized_piglin.celebrate");
+                    this.setAnimation("animation.oceanized_piglin.celebrate");
                 }
                 if (!this.level().isClientSide())
                     this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 55, 9, false, false));
@@ -245,7 +245,6 @@ public class OceanizedPiglinEntity extends SeaMonster {
 	@Override
 	public void baseTick() {
 		super.baseTick();
-		SeabornRidePolarProcedure.execute(this.level(), this.getX(), this.getY(), this.getZ(), this);
 		this.refreshDimensions();
 	}
 

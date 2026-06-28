@@ -40,7 +40,7 @@ import java.util.List;
 
 public class MizukiStatueBlock extends BaseEntityBlock implements SimpleWaterloggedBlock, EntityBlock {
 	public static final IntegerProperty BLOCKSTATE = IntegerProperty.create("blockstate", 0, 1);
-	public static final IntegerProperty ANIMATION = IntegerProperty.create("animation", 0, (int) 2);
+	public static final IntegerProperty ANIMATION = IntegerProperty.create("animation", 0, 2);
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
 	public MizukiStatueBlock() {

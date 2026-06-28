@@ -58,11 +58,11 @@ public class BlockExtensionBlock extends Block implements SimpleWaterloggedBlock
 	@Override
 	public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
 		return switch (state.getValue(FACING)) {
-			default -> box(1, 1, 0, 9, 5, 16);
-			case NORTH -> box(7, 1, 0, 15, 5, 16);
+            case NORTH -> box(7, 1, 0, 15, 5, 16);
 			case EAST -> box(0, 1, 7, 16, 5, 15);
 			case WEST -> box(0, 1, 1, 16, 5, 9);
-		};
+            default -> box(1, 1, 0, 9, 5, 16);
+        };
 	}
 
 	@Override

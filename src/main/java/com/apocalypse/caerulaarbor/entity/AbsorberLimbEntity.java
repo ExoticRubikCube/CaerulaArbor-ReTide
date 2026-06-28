@@ -1,9 +1,7 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-
 import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
@@ -155,7 +153,7 @@ public class AbsorberLimbEntity extends SeaMonster {
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
         LivingEntity _entity = this;
-        _entity.setHealth((float) ((((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 2) / 3));
+        _entity.setHealth((((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 2) / 3);
         if (this instanceof AbsorberLimbEntity) {
             this.setAnimation("animation.absorber_limb.start");
         }

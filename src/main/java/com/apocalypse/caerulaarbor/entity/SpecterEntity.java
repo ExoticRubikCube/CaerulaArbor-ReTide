@@ -147,8 +147,8 @@ public class SpecterEntity extends Animal implements GeoEntity {
 		});
 		this.goalSelector.addGoal(7, new RandomStrollGoal(this, 1) {
 			@Override
-			public boolean canUse() {;
-				return super.canUse() && isSpecterDurative();
+			public boolean canUse() {
+                return super.canUse() && isSpecterDurative();
 			}
 
 			@Override
@@ -531,7 +531,7 @@ public class SpecterEntity extends Animal implements GeoEntity {
 			if (!entityiterator.isAlive()) {
 				continue;
 			}
-			if (entityiterator instanceof Player || (entityiterator instanceof TamableAnimal _tamEnt ? _tamEnt.isTame() : false)) {
+			if (entityiterator instanceof Player || (entityiterator instanceof TamableAnimal _tamEnt && _tamEnt.isTame())) {
 				if (!(entityiterator == enemy)) {
 					continue;
 				}

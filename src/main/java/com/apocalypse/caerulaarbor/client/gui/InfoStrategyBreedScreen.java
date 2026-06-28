@@ -6,8 +6,8 @@ import com.apocalypse.caerulaarbor.entity.PregnantFishEntity;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import com.apocalypse.caerulaarbor.network.InfoStrategyReturnButtonMessage;
-import com.apocalypse.caerulaarbor.utils.StrategyUtils;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
+import com.apocalypse.caerulaarbor.utils.StrategyUtils;
 import com.apocalypse.caerulaarbor.world.inventory.InfoStrategyBreedMenu;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
@@ -58,7 +58,7 @@ public class InfoStrategyBreedScreen extends AbstractContainerScreen<InfoStrateg
             double rate = 0;
             if (!(CaerulaArborModVariables.MapVariables.get(world).strategy_breed >= 4)) {
                 result = Math.round(CaerulaArborModVariables.MapVariables.get(world).evo_point_breed) + "\u00A7b/"
-                        + Math.round(Math.pow(CaerulaArborModVariables.MapVariables.get(world).strategy_breed + 1, 3) * (double) CaerulaConfigsConfiguration.COEFFICIENT.get());
+                        + Math.round(Math.pow(CaerulaArborModVariables.MapVariables.get(world).strategy_breed + 1, 3) * CaerulaConfigsConfiguration.COEFFICIENT.get());
             }
             guiGraphics.renderTooltip(font, Component.literal(result), mouseX, mouseY);
         }
@@ -72,12 +72,12 @@ public class InfoStrategyBreedScreen extends AbstractContainerScreen<InfoStrateg
 
 		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/sidebar.png"), this.leftPos + -3, this.topPos + -3, 0, 0, 262, 174, 262, 174);
 
-		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/bg_breed.png"), this.leftPos + 0, this.topPos + 0, Mth.clamp((int) EntityUtils.getStraBreed(world) * 256, 0, 1024), 0, 256, 168, 1280, 168);
+		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/bg_breed.png"), this.leftPos, this.topPos, Mth.clamp((int) EntityUtils.getStraBreed(world) * 256, 0, 1024), 0, 256, 168, 1280, 168);
 
         double result = 18;
         double rate = 0;
         if (!(CaerulaArborModVariables.MapVariables.get(world).strategy_breed >= 4)) {
-            rate = CaerulaArborModVariables.MapVariables.get(world).evo_point_breed / (Math.pow(CaerulaArborModVariables.MapVariables.get(world).strategy_breed + 1, 3) * (double) CaerulaConfigsConfiguration.COEFFICIENT.get());
+            rate = CaerulaArborModVariables.MapVariables.get(world).evo_point_breed / (Math.pow(CaerulaArborModVariables.MapVariables.get(world).strategy_breed + 1, 3) * CaerulaConfigsConfiguration.COEFFICIENT.get());
             if (rate > 1) {
                 rate = 1;
             }

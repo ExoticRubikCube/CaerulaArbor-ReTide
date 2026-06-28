@@ -150,7 +150,7 @@ public class OceanOvaryBlock extends AbstractOvaryBlock {
 					}
 					chance = blockstate.getValue(OUTPUT);
 					if (Math.random() < chance * 0.005) {
-						if (EntityUtils.getSeabornNum(world, x, y, z) >= Math.min((double) CaerulaConfigsConfiguration.CLONE_NUM.get(), (((LevelAccessor) world).getLevelData().getGameRules().getInt(CaerulaArborModGameRules.CLONE_NUMBER_LIMIT)))) {
+						if (EntityUtils.getSeabornNum(world, x, y, z) >= Math.min(CaerulaConfigsConfiguration.CLONE_NUM.get(), (((LevelAccessor) world).getLevelData().getGameRules().getInt(CaerulaArborModGameRules.CLONE_NUMBER_LIMIT)))) {
 							finished = true;
 						} else {
 							com.apocalypse.caerulaarbor.utils.WorldUtils.summonRandomSeaborn(world, rate, (double) x + 0.5, (double) y + 1.5, (double) z + 0.5);

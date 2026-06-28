@@ -43,7 +43,7 @@ import java.util.List;
 
 public class TidewayCradleBlock extends BaseEntityBlock implements SimpleWaterloggedBlock, EntityBlock {
 	public static final IntegerProperty BLOCKSTATE = IntegerProperty.create("blockstate", 0, 1);
-	public static final IntegerProperty ANIMATION = IntegerProperty.create("animation", 0, (int) 1);
+	public static final IntegerProperty ANIMATION = IntegerProperty.create("animation", 0, 1);
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
 	public TidewayCradleBlock() {

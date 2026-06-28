@@ -1,4 +1,4 @@
-package com.apocalypse.caerulaarbor.procedures;
+package com.apocalypse.caerulaarbor.helper;
 
 import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import net.minecraft.client.Minecraft;

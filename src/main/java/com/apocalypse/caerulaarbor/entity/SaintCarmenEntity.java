@@ -18,7 +18,6 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -296,7 +295,7 @@ public class SaintCarmenEntity extends Animal implements GeoEntity {
                 bullet = (Entity) this instanceof SaintCarmenEntity _datEntI ? _datEntI.getEntityData().get(DATA_bullet) : 0;
                 reloadP = (Entity) this instanceof SaintCarmenEntity _datEntI ? _datEntI.getEntityData().get(DATA_reloadP) : 0;
                 dura = (Entity) this instanceof SaintCarmenEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
-                enemy = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+                enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                 if (dura > 0) {
                     if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
                         _datEntSetI.getEntityData().set(DATA_duration, (int) (dura - 1));
@@ -312,7 +311,7 @@ public class SaintCarmenEntity extends Animal implements GeoEntity {
                     if (!(enemy == null) && enemy.isAlive()) {
                         if ((enemy != null ? distanceTo(enemy) : -1) <= 24) {
                             if (this instanceof SaintCarmenEntity) {
-                                ((SaintCarmenEntity) this).setAnimation("animation.saint_carmen.melee_skill");
+                                this.setAnimation("animation.saint_carmen.melee_skill");
                             }
                             if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
                                 _datEntSetI.getEntityData().set(DATA_skillP1, 240);
@@ -340,7 +339,7 @@ public class SaintCarmenEntity extends Animal implements GeoEntity {
                     if (!(enemy == null) && enemy.isAlive()) {
                         if ((enemy != null ? distanceTo(enemy) : -1) <= 24) {
                             if (this instanceof SaintCarmenEntity) {
-                                ((SaintCarmenEntity) this).setAnimation("animation.saint_carmen.gun_skill");
+                                this.setAnimation("animation.saint_carmen.gun_skill");
                             }
                             if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
                                 _datEntSetI.getEntityData().set(DATA_skillP2, 480);
@@ -375,7 +374,7 @@ public class SaintCarmenEntity extends Animal implements GeoEntity {
                         if (!(enemy == null) && enemy.isAlive()) {
                             if ((enemy != null ? distanceTo(enemy) : -1) <= 6) {
                                 if (this instanceof SaintCarmenEntity) {
-                                    ((SaintCarmenEntity) this).setAnimation("animation.saint_carmen.gun");
+                                    this.setAnimation("animation.saint_carmen.gun");
                                 }
                                 if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
                                     _datEntSetI.getEntityData().set(DATA_duration, 20);
@@ -400,7 +399,7 @@ public class SaintCarmenEntity extends Animal implements GeoEntity {
                             _datEntSetI.getEntityData().set(DATA_reloadP, (int) (reloadP - 1));
                     } else if (dura <= 0) {
                         if (this instanceof SaintCarmenEntity) {
-                            ((SaintCarmenEntity) this).setAnimation("animation.saint_carmen.reload");
+                            this.setAnimation("animation.saint_carmen.reload");
                         }
                         if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
                             _datEntSetI.getEntityData().set(DATA_bullet, 3);

@@ -1,11 +1,10 @@
-package com.apocalypse.caerulaarbor.item;
+﻿package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
 import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -128,7 +127,7 @@ public class DictationlessChapterItem extends Item {
                 stra = Component.translatable("gui.caerula_arbor.evo_tree.label_strategy_migration").getString();
             }
             if (world instanceof ServerLevel _level)
-                _level.sendParticles((SimpleParticleType) (CaerulaArborModParticleTypes.ENDSPEAKER_INV.get()), (x + 0.5), (y + 1), (z + 0.5), 32, 0.75, 1, 0.75, 0.15);
+                _level.sendParticles(CaerulaArborModParticleTypes.ENDSPEAKER_INV.get(), (x + 0.5), (y + 1), (z + 0.5), 32, 0.75, 1, 0.75, 0.15);
             info = (Component.translatable("item.caerula_arbor.dictationless_chapter.use").getString()).replace("{stra}", stra);
             if (entity instanceof Player _player && !_player.level().isClientSide())
                 _player.displayClientMessage(Component.literal(info), false);

@@ -61,18 +61,18 @@ public class AnchorMediumBlock extends Block {
 	public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
 		if (state.getValue(BLOCKSTATE) == 1) {
 			return switch (state.getValue(FACING)) {
-				default -> box(0, 0, 0, 16, 16, 16);
-				case NORTH -> box(0, 0, 0, 16, 16, 16);
+                case NORTH -> box(0, 0, 0, 16, 16, 16);
 				case EAST -> box(0, 0, 0, 16, 16, 16);
 				case WEST -> box(0, 0, 0, 16, 16, 16);
-			};
+                default -> box(0, 0, 0, 16, 16, 16);
+            };
 		}
 		return switch (state.getValue(FACING)) {
-			default -> box(0, 0, 0, 16, 16, 16);
-			case NORTH -> box(0, 0, 0, 16, 16, 16);
+            case NORTH -> box(0, 0, 0, 16, 16, 16);
 			case EAST -> box(0, 0, 0, 16, 16, 16);
 			case WEST -> box(0, 0, 0, 16, 16, 16);
-		};
+            default -> box(0, 0, 0, 16, 16, 16);
+        };
 	}
 
 	@Override

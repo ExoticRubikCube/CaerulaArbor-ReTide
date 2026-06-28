@@ -32,14 +32,12 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Supplier;
@@ -169,7 +167,7 @@ public class PlayerLeftClickEventHandler {
                         for (Entity entityiterator : _entfound) {
                             if (entityiterator.distanceTo(entity) <= 4) {
                                 if (entityiterator instanceof LivingEntity && !(entityiterator == entity)) {
-                                    if (!(entityiterator instanceof TamableAnimal _tamIsTamedBy && entity instanceof LivingEntity _livEnt ? _tamIsTamedBy.isOwnedBy(_livEnt) : false)) {
+                                    if (!(entityiterator instanceof TamableAnimal _tamIsTamedBy && entity instanceof LivingEntity _livEnt && _tamIsTamedBy.isOwnedBy(_livEnt))) {
                                         entityiterator.hurt(
                                                 new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "highmore_attack"))), entity),
                                                 (float) ((entity instanceof LivingEntity _livingEntity10 && _livingEntity10.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)
@@ -195,7 +193,7 @@ public class PlayerLeftClickEventHandler {
 
     public static void executeRangedLightning(LevelAccessor world, double x, double y, double z, Entity entity) {
         if (entity == null) return;
-        if ((entity instanceof LivingEntity _entity) ? _entity.isHolding(CaerulaArborModItems.APOCATA_SWORD.get()) : false) {
+        if (entity instanceof LivingEntity _entity && _entity.isHolding(CaerulaArborModItems.APOCATA_SWORD.get())) {
             final Vec3 _center = new Vec3(x, y, z);
             List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(64 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
             for (Entity entityiterator : _entfound) {

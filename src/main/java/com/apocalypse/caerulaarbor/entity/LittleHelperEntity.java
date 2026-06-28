@@ -1,9 +1,8 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.procedures.RecycleLittleHelperProcedure;
+import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
 import com.apocalypse.caerulaarbor.utils.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -14,6 +13,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
@@ -23,11 +23,13 @@ import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrownPotion;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
@@ -59,7 +61,7 @@ public class LittleHelperEntity extends PathfinderMob implements GeoEntity {
 		this(CaerulaArborModEntities.LITTLE_HELPER.get(), world);
 	}
 
-	public LittleHelperEntity(EntityType<LittleHelperEntity> type, Level world) {
+	public LittleHelperEntity(EntityType<? extends LittleHelperEntity> type, Level world) {
 		super(type, world);
 		xpReward = 0;
 		setNoAi(false);
@@ -72,8 +74,17 @@ public class LittleHelperEntity extends PathfinderMob implements GeoEntity {
 		super.defineSynchedData();
 		this.entityData.define(SHOOT, false);
 		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(TEXTURE, "little_helper");
+		this.entityData.define(TEXTURE, this.getDefaultTexture());
 		this.entityData.define(DATA_durability, 4);
+	}
+
+	protected String getDefaultTexture() {
+		return "little_helper";
+	}
+
+	@Nullable
+	protected ResourceLocation getCustomDeathSound() {
+		return new ResourceLocation("entity.armor_stand.break");
 	}
 
 	public void setTexture(String texture) {
@@ -82,6 +93,14 @@ public class LittleHelperEntity extends PathfinderMob implements GeoEntity {
 
 	public String getTexture() {
 		return this.entityData.get(TEXTURE);
+	}
+
+	protected InteractionResult handleApocalypseInteract(Player sourceentity) {
+		return InteractionResult.PASS;
+	}
+
+	protected ItemStack getRecycleItemStack() {
+		return new ItemStack(CaerulaArborModItems.ITEM_HELPER.get());
 	}
 
 	@Override
@@ -122,7 +141,8 @@ public class LittleHelperEntity extends PathfinderMob implements GeoEntity {
 
 	@Override
 	public SoundEvent getDeathSound() {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.armor_stand.break"));
+		ResourceLocation deathSound = this.getCustomDeathSound();
+		return deathSound == null ? super.getDeathSound() : ForgeRegistries.SOUND_EVENTS.getValue(deathSound);
 	}
 
 	@Override
@@ -179,16 +199,25 @@ public class LittleHelperEntity extends PathfinderMob implements GeoEntity {
 
 	@Override
 	public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
-		ItemStack itemstack = sourceentity.getItemInHand(hand);
-		InteractionResult retval = InteractionResult.sidedSuccess(this.level().isClientSide());
 		super.mobInteract(sourceentity, hand);
 		sourceentity.startRiding(this);
-		double x = this.getX();
-		double y = this.getY();
-		double z = this.getZ();
-		Entity entity = this;
-		Level world = this.level();
-		return RecycleLittleHelperProcedure.execute(world, x, y, z, entity, sourceentity);
+		InteractionResult apocalypseResult = this.handleApocalypseInteract(sourceentity);
+		if (apocalypseResult != InteractionResult.PASS) {
+			return apocalypseResult;
+		}
+		if (sourceentity.isShiftKeyDown() && sourceentity.getMainHandItem().getItem() == Blocks.AIR.asItem() && sourceentity.getOffhandItem().getItem() == Blocks.AIR.asItem()) {
+			if (!this.level().isClientSide()) {
+				this.discard();
+			}
+			if (this.level() instanceof ServerLevel serverLevel) {
+				ItemEntity itemEntity = new ItemEntity(serverLevel, this.getX(), this.getY(), this.getZ(), this.getRecycleItemStack());
+				itemEntity.setPickUpDelay(5);
+				itemEntity.setUnlimitedLifetime();
+				serverLevel.addFreshEntity(itemEntity);
+			}
+			return InteractionResult.FAIL;
+		}
+		return InteractionResult.PASS;
 	}
 
 	@Override
@@ -205,7 +234,7 @@ public class LittleHelperEntity extends PathfinderMob implements GeoEntity {
 
 	@Override
 	public void travel(Vec3 dir) {
-		Entity entity = this.getPassengers().isEmpty() ? null : (Entity) this.getPassengers().get(0);
+		Entity entity = this.getPassengers().isEmpty() ? null : this.getPassengers().get(0);
 		if (this.isVehicle()) {
 			this.setYRot(entity.getYRot());
 			this.yRotO = this.getYRot();

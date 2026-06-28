@@ -225,35 +225,31 @@ public class OceanizeRabbitEntity extends SeaMonster {
         if ((entity instanceof OceanizeRabbitEntity _datEntI ? _datEntI.getEntityData().get(DATA_variant) : 0) > 4.5) {
             return InteractionResult.PASS;
         }
-        if (((Entity) sourceentity instanceof LivingEntity _entity) ? _entity.isHolding(CaerulaArborModItems.APOCALYPSE.get()) : false) {
+        if ((Entity) sourceentity instanceof LivingEntity _entity && _entity.isHolding(CaerulaArborModItems.APOCALYPSE.get())) {
             if (entity instanceof OceanizeRabbitEntity _datEntSetI)
                 _datEntSetI.getEntityData().set(DATA_variant, 5);
             if (entity instanceof OceanizeRabbitEntity animatable)
                 animatable.setTexture("oceanized_rabbit_bloody");
-            if (entity instanceof LivingEntity _livingEntity6 && this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
-                this.getAttribute(Attributes.ATTACK_DAMAGE)
-                        .setBaseValue(((entity instanceof LivingEntity _livingEntity5 && _livingEntity5.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity5.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) * 10));
-            if (entity instanceof LivingEntity _livingEntity8 && _livingEntity8.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
-                _livingEntity8.getAttribute(Attributes.MAX_HEALTH)
-                        .setBaseValue(((entity instanceof LivingEntity _livingEntity7 && this.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? this.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0) * 10));
-            if (entity instanceof LivingEntity _livingEntity9 && _livingEntity9.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()))
-                _livingEntity9.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).setBaseValue(32.5);
-            if (entity instanceof LivingEntity _livingEntity10 && _livingEntity10.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-                _livingEntity10.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(79.9);
-            if (entity instanceof LivingEntity _livingEntity11 && _livingEntity11.getAttributes().hasAttribute(Attributes.KNOCKBACK_RESISTANCE))
-                _livingEntity11.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
-            if (entity instanceof LivingEntity _entity && !this.level().isClientSide())
-                this.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 99999, 2));
-            if (entity instanceof LivingEntity _entity && !this.level().isClientSide())
-                this.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 99999, 2));
-            if (entity instanceof LivingEntity _entity && !this.level().isClientSide())
-                this.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 99999, 0));
-            if (entity instanceof LivingEntity _entity && !this.level().isClientSide())
-                this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.SANITY_IMMUE.get(), 99999, 0));
-            if (entity instanceof LivingEntity _entity && !this.level().isClientSide())
-                this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 99999, 1));
-            if (entity instanceof LivingEntity _entity)
-                _entity.setHealth(entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1);
+            if (entity instanceof LivingEntity livingEntity) {
+                if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
+                    this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue((livingEntity.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) * 10);
+                if (livingEntity.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
+                    livingEntity.getAttribute(Attributes.MAX_HEALTH).setBaseValue((this.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? this.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0) * 10);
+                if (livingEntity.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()))
+                    livingEntity.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).setBaseValue(32.5);
+                if (livingEntity.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
+                    livingEntity.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(79.9);
+                if (livingEntity.getAttributes().hasAttribute(Attributes.KNOCKBACK_RESISTANCE))
+                    livingEntity.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
+                if (!this.level().isClientSide()) {
+                    this.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 99999, 2));
+                    this.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 99999, 2));
+                    this.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 99999, 0));
+                    this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.SANITY_IMMUE.get(), 99999, 0));
+                    this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 99999, 1));
+                }
+                livingEntity.setHealth(livingEntity.getMaxHealth());
+            }
             return InteractionResult.SUCCESS;
         }
         return InteractionResult.PASS;
@@ -269,7 +265,7 @@ public class OceanizeRabbitEntity extends SeaMonster {
             if (!(((Entity) this instanceof OceanizeRabbitEntity _datEntI ? _datEntI.getEntityData().get(DATA_variant) : 0) < 4.5)) {
                 if (this.isAlive()) {
                     sklp1 = (Entity) this instanceof OceanizeRabbitEntity _datEntI ? _datEntI.getEntityData().get(DATA_swallowP) : 0;
-                    enemy = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+                    enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                     if (sklp1 > 0) {
                         if ((Entity) this instanceof OceanizeRabbitEntity _datEntSetI)
                             _datEntSetI.getEntityData().set(DATA_swallowP, (int) (sklp1 - 1));
@@ -277,7 +273,7 @@ public class OceanizeRabbitEntity extends SeaMonster {
                         if (!(enemy == null) && enemy.isAlive()) {
                             if ((enemy != null ? distanceTo(enemy) : -1) <= 5) {
                                 if (this instanceof OceanizeRabbitEntity) {
-                                    ((OceanizeRabbitEntity) this).setAnimation("animation.oceanized_rabbit.swallow");
+                                    this.setAnimation("animation.oceanized_rabbit.swallow");
                                 }
                                 if ((Entity) this instanceof OceanizeRabbitEntity _datEntSetI)
                                     _datEntSetI.getEntityData().set(DATA_swallowP, 200);

@@ -1,11 +1,13 @@
 package com.apocalypse.caerulaarbor.network;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
 import com.apocalypse.caerulaarbor.world.inventory.CaerulaRecordGUIMenu;
+import com.apocalypse.caerulaarbor.world.inventory.RelicShowcaseMenu;
 import io.netty.buffer.Unpooled;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -14,24 +16,19 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.network.NetworkEvent;
-
-import net.minecraft.world.level.Level;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.core.BlockPos;
-
-import com.apocalypse.caerulaarbor.world.inventory.RelicShowcaseMenu;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.function.Supplier;
 import java.util.HashMap;
+import java.util.function.Supplier;
 
 public class RelicShowcaseButtonMessage {
 	private final int buttonID, x, y, z;
@@ -81,7 +78,7 @@ public class RelicShowcaseButtonMessage {
             if (entity != null) {
                 if ((Entity) entity instanceof ServerPlayer _ent) {
                     BlockPos _bpos = BlockPos.containing(x, y, z);
-                    NetworkHooks.openScreen((ServerPlayer) _ent, new MenuProvider() {
+                    NetworkHooks.openScreen(_ent, new MenuProvider() {
                         @Override
                         public Component getDisplayName() {
                             return Component.literal("CaerulaRecordGUI");
@@ -99,7 +96,7 @@ public class RelicShowcaseButtonMessage {
 
             if (entity != null) {
                 ItemStack togive = ItemStack.EMPTY;
-                if ((Entity) entity instanceof Player _playerHasItem ? _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get())) : false) {
+                if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get()))) {
                     if ((((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).relic_king_CROWN) {
                         if ((Entity) entity instanceof Player _player) {
                             ItemStack _stktoremove = new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get());
@@ -153,7 +150,7 @@ public class RelicShowcaseButtonMessage {
 
             if (entity != null) {
                 ItemStack togive = ItemStack.EMPTY;
-                if ((Entity) entity instanceof Player _playerHasItem ? _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get())) : false) {
+                if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get()))) {
                     if ((((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).relic_king_SPEAR) {
                         if ((Entity) entity instanceof Player _player) {
                             ItemStack _stktoremove = new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get());
@@ -208,7 +205,7 @@ public class RelicShowcaseButtonMessage {
             if (entity != null) {
                 double lives_left = 0;
                 ItemStack togive = ItemStack.EMPTY;
-                if ((Entity) entity instanceof Player _playerHasItem ? _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get())) : false) {
+                if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get()))) {
                     if ((((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).relic_king_ARMOR) {
                         if ((Entity) entity instanceof Player _player) {
                             ItemStack _stktoremove = new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get());
@@ -262,7 +259,7 @@ public class RelicShowcaseButtonMessage {
 
             if (entity != null) {
                 ItemStack togive = ItemStack.EMPTY;
-                if ((Entity) entity instanceof Player _playerHasItem ? _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get())) : false) {
+                if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get()))) {
                     if ((((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).relic_king_EXTENSION) {
                         if ((Entity) entity instanceof Player _player) {
                             ItemStack _stktoremove = new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get());
@@ -316,7 +313,7 @@ public class RelicShowcaseButtonMessage {
 
             if (entity != null) {
                 ItemStack togive = ItemStack.EMPTY;
-                if ((Entity) entity instanceof Player _playerHasItem ? _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get())) : false) {
+                if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get()))) {
                     if ((((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).relic_king_CRYSTAL) {
                         if ((Entity) entity instanceof Player _player) {
                             ItemStack _stktoremove = new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get());
@@ -370,7 +367,7 @@ public class RelicShowcaseButtonMessage {
 
             if (entity != null) {
                 ItemStack togive = ItemStack.EMPTY;
-                if ((Entity) entity instanceof Player _playerHasItem ? _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get())) : false) {
+                if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get()))) {
                     if ((((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).relic_archfi_ARTIFACT) {
                         if ((Entity) entity instanceof Player _player) {
                             ItemStack _stktoremove = new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get());
@@ -424,7 +421,7 @@ public class RelicShowcaseButtonMessage {
 
             if (entity != null) {
                 ItemStack togive = ItemStack.EMPTY;
-                if ((Entity) entity instanceof Player _playerHasItem ? _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get())) : false) {
+                if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get()))) {
                     if ((((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).relic_archfi_FLAG) {
                         if ((Entity) entity instanceof Player _player) {
                             ItemStack _stktoremove = new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get());
@@ -478,7 +475,7 @@ public class RelicShowcaseButtonMessage {
 
             if (entity != null) {
                 ItemStack togive = ItemStack.EMPTY;
-                if ((Entity) entity instanceof Player _playerHasItem ? _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get())) : false) {
+                if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get()))) {
                     if ((((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).relic_archfi_BED) {
                         {
                             boolean _setval = false;
@@ -532,7 +529,7 @@ public class RelicShowcaseButtonMessage {
 
             if (entity != null) {
                 ItemStack togive = ItemStack.EMPTY;
-                if ((Entity) entity instanceof Player _playerHasItem ? _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get())) : false) {
+                if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get()))) {
                     if ((((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).relic_hand_THORNS) {
                         if ((Entity) entity instanceof Player _player) {
                             ItemStack _stktoremove = new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get());
@@ -586,7 +583,7 @@ public class RelicShowcaseButtonMessage {
 
             if (entity != null) {
                 ItemStack togive = ItemStack.EMPTY;
-                if ((Entity) entity instanceof Player _playerHasItem ? _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get())) : false) {
+                if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get()))) {
                     if ((((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).relic_hand_STRANGLE) {
                         if ((Entity) entity instanceof Player _player) {
                             ItemStack _stktoremove = new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get());
@@ -640,7 +637,7 @@ public class RelicShowcaseButtonMessage {
 
             if (entity != null) {
                 ItemStack togive = ItemStack.EMPTY;
-                if ((Entity) entity instanceof Player _playerHasItem ? _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get())) : false) {
+                if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get()))) {
                     if ((((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).relic_hand_FERTILITY) {
                         if ((Entity) entity instanceof Player _player) {
                             ItemStack _stktoremove = new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get());
@@ -694,7 +691,7 @@ public class RelicShowcaseButtonMessage {
 
             if (entity != null) {
                 ItemStack togive = ItemStack.EMPTY;
-                if ((Entity) entity instanceof Player _playerHasItem ? _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get())) : false) {
+                if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get()))) {
                     if ((((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).relic_hand_BARREN) {
                         if ((Entity) entity instanceof Player _player) {
                             ItemStack _stktoremove = new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get());
@@ -748,7 +745,7 @@ public class RelicShowcaseButtonMessage {
 
             if (entity != null) {
                 ItemStack togive = ItemStack.EMPTY;
-                if ((Entity) entity instanceof Player _playerHasItem ? _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get())) : false) {
+                if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get()))) {
                     if ((((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).relic_hand_SWIPE) {
                         if ((Entity) entity instanceof Player _player) {
                             ItemStack _stktoremove = new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get());
@@ -802,7 +799,7 @@ public class RelicShowcaseButtonMessage {
 
             if (entity != null) {
                 ItemStack togive = ItemStack.EMPTY;
-                if ((Entity) entity instanceof Player _playerHasItem ? _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get())) : false) {
+                if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get()))) {
                     if ((((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).relic_hand_ENGRAVE >= 0) {
                         {
                             double _setval = -1;
@@ -856,7 +853,7 @@ public class RelicShowcaseButtonMessage {
 
             if (entity != null) {
                 ItemStack togive = ItemStack.EMPTY;
-                if ((Entity) entity instanceof Player _playerHasItem ? _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get())) : false) {
+                if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get()))) {
                     if ((((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).relic_hand_FIREWORK) {
                         {
                             boolean _setval = false;
@@ -910,7 +907,7 @@ public class RelicShowcaseButtonMessage {
 
             if (entity != null) {
                 ItemStack togive = ItemStack.EMPTY;
-                if ((Entity) entity instanceof Player _playerHasItem ? _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get())) : false) {
+                if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get()))) {
                     if ((((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).relic_TREATY) {
                         {
                             boolean _setval = false;
@@ -964,7 +961,7 @@ public class RelicShowcaseButtonMessage {
 
             if (entity != null) {
                 ItemStack togive = ItemStack.EMPTY;
-                if ((Entity) entity instanceof Player _playerHasItem ? _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get())) : false) {
+                if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get()))) {
                     if ((((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).relic_SURVIVOR >= 0) {
                         {
                             double _setval = -1;
@@ -1018,7 +1015,7 @@ public class RelicShowcaseButtonMessage {
 
             if (entity != null) {
                 ItemStack togive = ItemStack.EMPTY;
-                if ((Entity) entity instanceof Player _playerHasItem ? _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get())) : false) {
+                if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get()))) {
                     if ((((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).relic_cursed_EMELIGHT) {
                         {
                             boolean _setval = false;
@@ -1072,7 +1069,7 @@ public class RelicShowcaseButtonMessage {
 
             if (entity != null) {
                 ItemStack togive = ItemStack.EMPTY;
-                if ((Entity) entity instanceof Player _playerHasItem ? _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get())) : false) {
+                if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get()))) {
                     if ((((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).relic_cursed_GLOWBODY) {
                         if ((Entity) entity instanceof Player _player) {
                             ItemStack _stktoremove = new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get());
@@ -1126,7 +1123,7 @@ public class RelicShowcaseButtonMessage {
 
             if (entity != null) {
                 ItemStack togive = ItemStack.EMPTY;
-                if ((Entity) entity instanceof Player _playerHasItem ? _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get())) : false) {
+                if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get()))) {
                     if ((((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).relic_cursed_RESEARCH) {
                         if ((Entity) entity instanceof Player _player) {
                             ItemStack _stktoremove = new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get());
@@ -1180,7 +1177,7 @@ public class RelicShowcaseButtonMessage {
 
             if (entity != null) {
                 ItemStack togive = ItemStack.EMPTY;
-                if ((Entity) entity instanceof Player _playerHasItem ? _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get())) : false) {
+                if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get()))) {
                     if ((((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).relic_hand_SWORD) {
                         {
                             boolean _setval = false;
@@ -1234,7 +1231,7 @@ public class RelicShowcaseButtonMessage {
 
             if (entity != null) {
                 ItemStack togive = ItemStack.EMPTY;
-                if ((Entity) entity instanceof Player _playerHasItem ? _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get())) : false) {
+                if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get()))) {
                     if ((((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).relic_legend_CHITIN) {
                         {
                             boolean _setval = false;
@@ -1288,7 +1285,7 @@ public class RelicShowcaseButtonMessage {
 
             if (entity != null) {
                 ItemStack togive = ItemStack.EMPTY;
-                if ((Entity) entity instanceof Player _playerHasItem ? _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get())) : false) {
+                if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get()))) {
                     if ((((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).relic_hand_SPEED) {
                         if ((Entity) entity instanceof Player _player) {
                             ItemStack _stktoremove = new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get());
@@ -1342,7 +1339,7 @@ public class RelicShowcaseButtonMessage {
 
             if (entity != null) {
                 ItemStack togive = ItemStack.EMPTY;
-                if ((Entity) entity instanceof Player _playerHasItem ? _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get())) : false) {
+                if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get()))) {
                     if ((((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).relic_HEMOST) {
                         {
                             boolean _setval = false;
@@ -1397,7 +1394,7 @@ public class RelicShowcaseButtonMessage {
             if (entity == null)
                 return;
             ItemStack togive = ItemStack.EMPTY;
-            if ((Entity) entity instanceof Player _playerHasItem ? _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get())) : false) {
+            if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.COIN_OF_TRADE.get()))) {
                 if ((((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).relic_YEARNING) {
                     {
                         boolean _setval = false;

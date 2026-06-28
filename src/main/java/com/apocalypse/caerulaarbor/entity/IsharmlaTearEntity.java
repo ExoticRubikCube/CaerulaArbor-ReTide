@@ -1,7 +1,6 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
@@ -186,7 +185,7 @@ public class IsharmlaTearEntity extends PathfinderMob implements GeoEntity {
                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "isharmla_tear_place")), SoundSource.HOSTILE, 2, 1);
             }
             if (this instanceof IsharmlaTearEntity) {
-                ((IsharmlaTearEntity) this).setAnimation("animation.isharmla_tear.start");
+                this.setAnimation("animation.isharmla_tear.start");
             }
             if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
                 this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(60);
@@ -245,7 +244,7 @@ public class IsharmlaTearEntity extends PathfinderMob implements GeoEntity {
                     isAttack = this.performHurtAttack();
                     if (isAttack || this.tryConsumeIsharmlaSkillPoint()) {
                         if (this instanceof IsharmlaTearEntity) {
-                            ((IsharmlaTearEntity) this).setAnimation("animation.isharmla_tear.attack");
+                            this.setAnimation("animation.isharmla_tear.attack");
                         }
                         if ((Entity) this instanceof IsharmlaTearEntity _datEntSetI)
                             _datEntSetI.getEntityData().set(DATA_FUNC_COOLDOWN, 60);

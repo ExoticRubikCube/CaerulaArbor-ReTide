@@ -71,7 +71,7 @@ public class PlayerEatEventHandler {
 			}
 		}
 		for (String configuredLightFood : CaerulaConfigsConfiguration.LIGHTS_FOOD.get()) {
-			separatorIndex = configuredLightFood.indexOf(", ", 0);
+			separatorIndex = configuredLightFood.indexOf(", ");
 			if (separatorIndex < 0) {
 				CaerulaArborMod.LOGGER.warn("Wrong lights food config for item" + configuredLightFood);
 				return;
@@ -79,7 +79,7 @@ public class PlayerEatEventHandler {
 			String configuredItemId = configuredLightFood.substring(0, (int) separatorIndex);
 			if (itemId.equals(configuredItemId)) {
 				String lightRange = configuredLightFood.substring((int) (separatorIndex + 2));
-				separatorIndex = lightRange.indexOf("/", 0);
+				separatorIndex = lightRange.indexOf("/");
 				if (separatorIndex < 0) {
 					CaerulaArborMod.LOGGER.warn("Wrong lights food config for item" + configuredLightFood);
 					return;

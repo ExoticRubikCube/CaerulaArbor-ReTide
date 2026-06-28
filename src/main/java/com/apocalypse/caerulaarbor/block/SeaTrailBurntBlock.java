@@ -1,7 +1,6 @@
 package com.apocalypse.caerulaarbor.block;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
 import com.apocalypse.caerulaarbor.utils.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -59,11 +58,11 @@ public class SeaTrailBurntBlock extends Block implements SimpleWaterloggedBlock,
 	@Override
 	public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
 		return switch (state.getValue(FACING)) {
-			default -> box(0, 0, 0, 16, 0.625, 16);
-			case NORTH -> box(0, 0, 0, 16, 0.625, 16);
+            case NORTH -> box(0, 0, 0, 16, 0.625, 16);
 			case EAST -> box(0, 0, 0, 16, 0.625, 16);
 			case WEST -> box(0, 0, 0, 16, 0.625, 16);
-		};
+            default -> box(0, 0, 0, 16, 0.625, 16);
+        };
 	}
 
 	@Override

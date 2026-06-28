@@ -382,7 +382,7 @@ public class UlpiansEntity extends Animal implements GeoEntity {
                 sklp1 = (Entity) this instanceof UlpiansEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp1) : 0;
                 skillp2 = (Entity) this instanceof UlpiansEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp2) : 0;
                 dura = (Entity) this instanceof UlpiansEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
-                enemy = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+                enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                 if (dura > 0) {
                     if ((Entity) this instanceof UlpiansEntity _datEntSetI)
                         _datEntSetI.getEntityData().set(DATA_duration, (int) (dura - 1));
@@ -394,7 +394,7 @@ public class UlpiansEntity extends Animal implements GeoEntity {
                     if (!(enemy == null) && enemy.isAlive()) {
                         if ((enemy != null ? distanceTo(enemy) : -1) <= 3.5) {
                             if (this instanceof UlpiansEntity) {
-                                ((UlpiansEntity) this).setAnimation("animation.ulpians.pull");
+                                this.setAnimation("animation.ulpians.pull");
                             }
                             if ((Entity) this instanceof UlpiansEntity _datEntSetI)
                                 _datEntSetI.getEntityData().set(DATA_skillp1, 120);
@@ -419,7 +419,7 @@ public class UlpiansEntity extends Animal implements GeoEntity {
                                     double damage = 0;
                                     double r = 0;
                                     double d = 0;
-                                    enemy1 = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+                                    enemy1 = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                                     r = 6;
                                     damage = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 2.7;
                                     if (world instanceof Level _level) {
@@ -432,7 +432,7 @@ public class UlpiansEntity extends Animal implements GeoEntity {
                                             if (!(entityiterator instanceof LivingEntity)) {
                                                 continue;
                                             }
-                                            if (entityiterator instanceof Player || (entityiterator instanceof TamableAnimal _tamEnt ? _tamEnt.isTame() : false)) {
+                                            if (entityiterator instanceof Player || (entityiterator instanceof TamableAnimal _tamEnt && _tamEnt.isTame())) {
                                                 if (!(entityiterator == enemy1)) {
                                                     continue;
                                                 }
@@ -463,7 +463,7 @@ public class UlpiansEntity extends Animal implements GeoEntity {
                                     Entity enemy1 = null;
                                     double damage = 0;
                                     double r = 0;
-                                    enemy1 = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+                                    enemy1 = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                                     r = 4.5;
                                     {
                                         final Vec3 _center = new Vec3(x, y, z);
@@ -475,7 +475,7 @@ public class UlpiansEntity extends Animal implements GeoEntity {
                                             if (!entityiterator.isAlive()) {
                                                 continue;
                                             }
-                                            if (entityiterator instanceof Player || (entityiterator instanceof TamableAnimal _tamEnt ? _tamEnt.isTame() : false)) {
+                                            if (entityiterator instanceof Player || (entityiterator instanceof TamableAnimal _tamEnt && _tamEnt.isTame())) {
                                                 if (!(entityiterator == enemy1)) {
                                                     continue;
                                                 }
@@ -517,7 +517,7 @@ public class UlpiansEntity extends Animal implements GeoEntity {
                     if (!(enemy == null) && enemy.isAlive()) {
                         if ((enemy != null ? distanceTo(enemy) : -1) <= 24) {
                             if (this instanceof UlpiansEntity) {
-                                ((UlpiansEntity) this).setAnimation("animation.ulpians.skill");
+                                this.setAnimation("animation.ulpians.skill");
                             }
                             if (EntityPredicateUtils.isSpecterAround(world, x, y, z)) {
                                 if ((Entity) this instanceof UlpiansEntity _datEntSetI)
@@ -557,7 +557,7 @@ public class UlpiansEntity extends Animal implements GeoEntity {
                                         this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.PATH_TO_UNCOVER.get(), 500, 0, false, true));
                                     if ((Entity) this instanceof LivingEntity _entity)
                                         _entity.setHealth((float) (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * perc));
-                                    enemy1 = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+                                    enemy1 = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                                     damage = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.5;
                                     if (!(enemy1 == null)) {
                                         {
@@ -580,7 +580,7 @@ public class UlpiansEntity extends Animal implements GeoEntity {
                                             if (!(entityiterator instanceof LivingEntity)) {
                                                 continue;
                                             }
-                                            if (entityiterator instanceof Player || (entityiterator instanceof TamableAnimal _tamEnt ? _tamEnt.isTame() : false)) {
+                                            if (entityiterator instanceof Player || (entityiterator instanceof TamableAnimal _tamEnt && _tamEnt.isTame())) {
                                                 continue;
                                             }
                                             if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "is_humanside")))) {

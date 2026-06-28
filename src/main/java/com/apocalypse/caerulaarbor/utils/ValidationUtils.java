@@ -16,7 +16,7 @@ public class ValidationUtils {
 			return true;
 		}
 		if (item.contains("*")) {
-			int index = item.indexOf("*", 0);
+			int index = item.indexOf("*");
 			if (index < 1) {
 				return false;
 			}

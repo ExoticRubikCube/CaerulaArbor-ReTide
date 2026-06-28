@@ -39,7 +39,7 @@ public class MuteMobEffect extends MobEffect {
         if (entity == null)
             return;
         if (world instanceof ServerLevel _level)
-            _level.sendParticles((SimpleParticleType) (CaerulaArborModParticleTypes.MUTENESS.get()), entity.getX(), entity.getY(), entity.getZ(), 2, 1, 1, 1, 0.1);
+            _level.sendParticles(CaerulaArborModParticleTypes.MUTENESS.get(), entity.getX(), entity.getY(), entity.getZ(), 2, 1, 1, 1, 0.1);
         if (entity instanceof Creeper) {
             CompoundTag dataIndex2 = new CompoundTag();
             entity.saveWithoutId(dataIndex2);

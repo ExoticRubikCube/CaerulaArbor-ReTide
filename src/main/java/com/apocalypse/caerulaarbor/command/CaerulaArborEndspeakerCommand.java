@@ -4,22 +4,19 @@ package com.apocalypse.caerulaarbor.command;
 import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
 import com.apocalypse.caerulaarbor.utils.WorldUtils;
-import net.minecraft.network.chat.Component;
-
-import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.common.util.FakePlayerFactory;
-
-import net.minecraft.world.level.Level;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.core.Direction;
-import net.minecraft.commands.Commands;
-
-import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.BoolArgumentType;
+import com.mojang.brigadier.arguments.DoubleArgumentType;
+import net.minecraft.commands.Commands;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.common.util.FakePlayerFactory;
+import net.minecraftforge.event.RegisterCommandsEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber
 public class CaerulaArborEndspeakerCommand {
@@ -77,7 +74,7 @@ public class CaerulaArborEndspeakerCommand {
             double ind = 0;
             String info = "";
             for (int index0 = 0; index0 < 6; index0++) {
-                WorldUtils.bestowAbility(world, (double) index0);
+                WorldUtils.bestowAbility(world, index0);
             }
             info = Component.translatable("command.endspeaker.bestow.all").getString();
             {
@@ -125,7 +122,7 @@ public class CaerulaArborEndspeakerCommand {
             double ind = 0;
             String info = "";
             for (int index0 = 0; index0 < 6; index0++) {
-                revokeAbility(world, (double) index0);
+                revokeAbility(world, index0);
             }
             info = Component.translatable("command.endspeaker.revoke.all").getString();
             {
@@ -191,7 +188,7 @@ public class CaerulaArborEndspeakerCommand {
 
     private static void revokeAbility(Level world, double index) {
 		if (EntityUtils.inquirybility(world, index)) {
-			CaerulaArborModVariables.MapVariables.get(world).endspeaker_abolities = (double) ((int) CaerulaArborModVariables.MapVariables.get(world).endspeaker_abolities - (int) Math.pow(2, index));
+			CaerulaArborModVariables.MapVariables.get(world).endspeaker_abolities = (int) CaerulaArborModVariables.MapVariables.get(world).endspeaker_abolities - (int) Math.pow(2, index);
 			CaerulaArborModVariables.MapVariables.get(world).syncData(world);
 		}
 	}

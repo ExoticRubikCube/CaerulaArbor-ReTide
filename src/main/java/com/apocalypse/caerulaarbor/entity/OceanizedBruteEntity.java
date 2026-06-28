@@ -233,14 +233,14 @@ public class OceanizedBruteEntity extends SeaMonster {
                 } else {
                     if ((sourceentity != null ? distanceTo(sourceentity) : -1) <= 5 && !((Entity) this instanceof LivingEntity _livEnt4 && _livEnt4.hasEffect(CaerulaArborModMobEffects.COOLDOWN_SINAL.get()))) {
                         if (this instanceof OceanizedBruteEntity) {
-                            ((OceanizedBruteEntity) this).setAnimation("animation.oceanized_brute.skill");
+                            this.setAnimation("animation.oceanized_brute.skill");
                         }
                         if (!this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 40, 1, false, false));
                         ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((sourceentity.getX()), (sourceentity.getY()), (sourceentity.getZ())));
                         if ((Entity) this instanceof OceanizedBruteEntity _datEntSetI)
                             _datEntSetI.getEntityData().set(DATA_skillp, 5);
-                        LivingEntity _entity = (LivingEntity) (Entity) this;
+                        LivingEntity _entity = this;
                         if (!this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.COOLDOWN_SINAL.get(), 80, 0, false, false));
                         CaerulaArborMod.queueServerWork(20, () -> {

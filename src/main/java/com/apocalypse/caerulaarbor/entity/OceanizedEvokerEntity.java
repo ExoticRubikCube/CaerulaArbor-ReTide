@@ -2,15 +2,14 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
+import com.apocalypse.caerulaarbor.entity.base.RavagerMountRider;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModGameRules;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
 import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
-import com.apocalypse.caerulaarbor.procedures.RaiderRideRavagerProcedure;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
 import com.apocalypse.caerulaarbor.utils.WorldUtils;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -60,7 +59,7 @@ import software.bernie.geckolib.core.object.PlayState;
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 
-public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob {
+public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob, RavagerMountRider {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanizedEvokerEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedEvokerEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(OceanizedEvokerEntity.class, EntityDataSerializers.STRING);
@@ -257,7 +256,7 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
 				this.rangedAttackMob.performRangedAttack(this.target, f1);
 				this.attackTime = Mth.floor(f * (float) (this.attackIntervalMax - this.attackIntervalMin) + (float) this.attackIntervalMin);
 			} else if (this.attackTime < 0) {
-				this.attackTime = Mth.floor(Mth.lerp(Math.sqrt(d0) / (double) this.attackRadius, (double) this.attackIntervalMin, (double) this.attackIntervalMax));
+				this.attackTime = Mth.floor(Mth.lerp(Math.sqrt(d0) / (double) this.attackRadius, this.attackIntervalMin, this.attackIntervalMax));
 			} else
 				((OceanizedEvokerEntity) rangedAttackMob).entityData.set(SHOOT, false);
 		}
@@ -327,7 +326,7 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
             double sklp2 = 0;
             double dist = 0;
             if (this.isAlive()) {
-                enemy = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+                enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                 sklp1 = (Entity) this instanceof OceanizedEvokerEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp1) : 0;
                 sklp2 = (Entity) this instanceof OceanizedEvokerEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp2) : 0;
                 if (sklp1 <= 0) {
@@ -335,7 +334,7 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
                         dist = Math.round(enemy != null ? distanceTo(enemy) : -1);
                         if (dist <= 35) {
                             if (this instanceof OceanizedEvokerEntity) {
-                                ((OceanizedEvokerEntity) this).setAnimation("animation.oceanized_evoker.spell");
+                                this.setAnimation("animation.oceanized_evoker.spell");
                             }
                             if ((Entity) this instanceof OceanizedEvokerEntity _datEntSetI)
                                 _datEntSetI.getEntityData().set(DATA_skillp1, 100);
@@ -403,7 +402,7 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
                 if (sklp2 <= 0) {
                     if (!(enemy == null) && enemy.isAlive()) {
                         if (this instanceof OceanizedEvokerEntity) {
-                            ((OceanizedEvokerEntity) this).setAnimation("animation.oceanized_evoker.spell");
+                            this.setAnimation("animation.oceanized_evoker.spell");
                         }
                         if (world instanceof Level _level) {
                                 _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.evoker.cast_spell")), SoundSource.NEUTRAL, 1, 1);
@@ -475,7 +474,7 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
 												}
 											}
 											if (world instanceof ServerLevel _level)
-												_level.sendParticles((SimpleParticleType) (CaerulaArborModParticleTypes.EDERMAN_PTC.get()), tx, (y + 2), tz, 16, 0.5, 0.5, 0.5, 0.15);
+												_level.sendParticles(CaerulaArborModParticleTypes.EDERMAN_PTC.get(), tx, (y + 2), tz, 16, 0.5, 0.5, 0.5, 0.15);
 										}
 									}
                                     final int tick2 = ticks;
@@ -497,7 +496,6 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
                         }
                     }
                 }
-                RaiderRideRavagerProcedure.execute(world, x, y, z, this);
             }
         }
         this.refreshDimensions();

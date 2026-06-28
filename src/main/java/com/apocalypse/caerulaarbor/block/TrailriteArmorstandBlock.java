@@ -35,7 +35,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import javax.annotation.Nullable;
 
 public class TrailriteArmorstandBlock extends BaseEntityBlock implements SimpleWaterloggedBlock, EntityBlock {
-	public static final IntegerProperty ANIMATION = IntegerProperty.create("animation", 0, (int) 1);
+	public static final IntegerProperty ANIMATION = IntegerProperty.create("animation", 0, 1);
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
@@ -71,11 +71,11 @@ public class TrailriteArmorstandBlock extends BaseEntityBlock implements SimpleW
 	public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
 
 		return switch (state.getValue(FACING)) {
-			default -> box(2, 0, 2, 14, 16, 14);
-			case NORTH -> box(2, 0, 2, 14, 16, 14);
+            case NORTH -> box(2, 0, 2, 14, 16, 14);
 			case EAST -> box(2, 0, 2, 14, 16, 14);
 			case WEST -> box(2, 0, 2, 14, 16, 14);
-		};
+            default -> box(2, 0, 2, 14, 16, 14);
+        };
 	}
 
 	@Override

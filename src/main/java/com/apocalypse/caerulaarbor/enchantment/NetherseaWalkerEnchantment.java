@@ -12,6 +12,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
+import java.util.Objects;
 
 public class NetherseaWalkerEnchantment extends Enchantment {
 	private static final EnchantmentCategory ENCHANTMENT_CATEGORY = EnchantmentCategory.create("caerula_arbor_nethersea_walker",
@@ -38,6 +39,6 @@ public class NetherseaWalkerEnchantment extends Enchantment {
 
 	@Override
 	protected boolean checkCompatibility(Enchantment enchantment) {
-		return super.checkCompatibility(enchantment) && !List.of(Enchantments.FROST_WALKER).contains(enchantment);
+		return super.checkCompatibility(enchantment) && !Objects.equals(Enchantments.FROST_WALKER, enchantment);
 	}
 }

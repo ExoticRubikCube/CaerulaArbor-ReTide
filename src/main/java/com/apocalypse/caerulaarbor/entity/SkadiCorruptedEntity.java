@@ -1,16 +1,13 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-
 import com.apocalypse.caerulaarbor.init.*;
 import com.apocalypse.caerulaarbor.utils.EntityPredicateUtils;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
 import com.apocalypse.caerulaarbor.utils.WorldUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -398,7 +395,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
                 dura = (Entity) this instanceof SkadiCorruptedEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
                 deal = (Entity) this instanceof SkadiCorruptedEntity _datEntI ? _datEntI.getEntityData().get(DATA_deal) : 0;
                 phase = (Entity) this instanceof SkadiCorruptedEntity _datEntI ? _datEntI.getEntityData().get(DATA_phase) : 0;
-                enemy = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+                enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                 if (dura > 0) {
                     if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetI)
                         _datEntSetI.getEntityData().set(DATA_duration, (int) (dura - 1));
@@ -411,7 +408,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
                 } else if (dura <= 0) {
                     if (phase < 0.5) {
                         if (this instanceof SkadiCorruptedEntity) {
-                            ((SkadiCorruptedEntity) this).setAnimation("animation.skadi_corrupted.to_phase_2");
+                            this.setAnimation("animation.skadi_corrupted.to_phase_2");
                         }
                         if ((Entity) this instanceof SkadiCorruptedEntity animatable)
                             animatable.setTexture("skadi_corrupted_1");
@@ -439,7 +436,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
                         }
                     } else if (phase < 1.5) {
                         if (this instanceof SkadiCorruptedEntity) {
-                            ((SkadiCorruptedEntity) this).setAnimation("animation.skadi_corrupted.to_phase_3");
+                            this.setAnimation("animation.skadi_corrupted.to_phase_3");
                         }
                         if ((Entity) this instanceof SkadiCorruptedEntity animatable)
                             animatable.setTexture("skadi_corrupted");
@@ -487,7 +484,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
                             double ddd = 0;
                             double dama = 0;
                             ddd = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
-                            enemy1 = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+                            enemy1 = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                             {
                                 final Vec3 _center = new Vec3(x, y, z);
                                 List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(24 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
@@ -554,7 +551,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
                             ang = Math.toRadians(index0 * 6 + t * 4);
                             r = 11.5 + Math.sin(index0 * 12);
                             if (world instanceof ServerLevel _level)
-                                _level.sendParticles((SimpleParticleType) (CaerulaArborModParticleTypes.CORRUPTED_FISH.get()), (x + r * Math.sin(ang)), (y + 0.15), (z + r * Math.cos(ang)), 1, 0, 0.25, 0, 0.2);
+                                _level.sendParticles(CaerulaArborModParticleTypes.CORRUPTED_FISH.get(), (x + r * Math.sin(ang)), (y + 0.15), (z + r * Math.cos(ang)), 1, 0, 0.25, 0, 0.2);
                         }
                     }
                 }
@@ -567,7 +564,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
                         Entity enemy1 = null;
                         ddd = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
                         healPerc = 0.1;
-                        enemy1 = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+                        enemy1 = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                         if (phase > 0.5) {
                             healPerc = 0.2;
                         }
@@ -645,7 +642,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
                 for (int index0 = 0; index0 < (int) (phase1 + 1); index0++) {
                     r = Mth.nextDouble(RandomSource.create(), 2, 3.5);
                     if (world instanceof ServerLevel _level)
-                        _level.sendParticles((SimpleParticleType) (CaerulaArborModParticleTypes.CORRUPTED_FISH.get()), (x + r * Math.sin(ang)), (y + 0.25), (z + r * Math.cos(ang)), 1, 0, 0, 0, 0.2);
+                        _level.sendParticles(CaerulaArborModParticleTypes.CORRUPTED_FISH.get(), (x + r * Math.sin(ang)), (y + 0.25), (z + r * Math.cos(ang)), 1, 0, 0, 0, 0.2);
                 }
                 if (!(phase > 1.5)) {
                     LivingEntity _livEnt =  this;

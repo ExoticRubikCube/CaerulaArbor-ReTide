@@ -1,7 +1,6 @@
 package com.apocalypse.caerulaarbor.utils;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.entity.*;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
 import net.minecraft.core.registries.Registries;
@@ -194,7 +193,7 @@ public class EntityPredicateUtils {
 	public static boolean isValidEnemyForIrene(Entity ene, Entity entity) {
 		if (ene == null || entity == null)
 			return false;
-		Entity enemy = entity instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+		Entity enemy = entity instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
 		if (!(ene instanceof LivingEntity)) {
 			return false;
 		}
@@ -211,11 +210,8 @@ public class EntityPredicateUtils {
 				return false;
 			}
 		}
-		if (ene == entity) {
-			return false;
-		}
-		return true;
-	}
+        return ene != entity;
+    }
 
 	public static boolean isNotShiftKeyDown(Entity entity) {
 		return entity != null && !entity.isShiftKeyDown();

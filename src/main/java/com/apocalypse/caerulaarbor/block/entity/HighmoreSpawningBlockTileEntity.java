@@ -36,7 +36,7 @@ import java.util.stream.IntStream;
 
 public class HighmoreSpawningBlockTileEntity extends RandomizableContainerBlockEntity implements GeoBlockEntity, WorldlyContainer {
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
-	private NonNullList<ItemStack> stacks = NonNullList.<ItemStack>withSize(0, ItemStack.EMPTY);
+	private NonNullList<ItemStack> stacks = NonNullList.withSize(0, ItemStack.EMPTY);
 	private final LazyOptional<? extends IItemHandler>[] handlers = SidedInvWrapper.create(this, Direction.values());
 	public int blockstateNew = this.getBlockState().getValue(HighmoreSpawningBlockBlock.BLOCKSTATE);
 	private int blockstateOld = this.getBlockState().getValue(HighmoreSpawningBlockBlock.BLOCKSTATE);

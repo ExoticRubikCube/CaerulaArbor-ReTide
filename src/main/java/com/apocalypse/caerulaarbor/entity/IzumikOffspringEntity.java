@@ -1,12 +1,12 @@
 package com.apocalypse.caerulaarbor.entity;
 
-import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
 import com.apocalypse.caerulaarbor.utils.EntitySpawnUtils;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
+import com.apocalypse.caerulaarbor.utils.WorldUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -59,9 +59,6 @@ import software.bernie.geckolib.core.object.PlayState;
 import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.List;
-import com.apocalypse.caerulaarbor.utils.WorldUtils;
-
-;
 
 public class IzumikOffspringEntity extends SeaMonster {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(IzumikOffspringEntity.class, EntityDataSerializers.BOOLEAN);
@@ -228,7 +225,7 @@ public class IzumikOffspringEntity extends SeaMonster {
             boolean success = false;
             Entity owner = null;
             if (tickCount % 5 == 0) {
-                owner = (Entity) world.getEntitiesOfClass(IzumikEntity.class, AABB.ofSize(new Vec3(x, y, z), 85, 32, 85), e -> true).stream().sorted(new Object() {
+                owner = world.getEntitiesOfClass(IzumikEntity.class, AABB.ofSize(new Vec3(x, y, z), 85, 32, 85), e -> true).stream().sorted(new Object() {
                     Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
                         return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
                     }

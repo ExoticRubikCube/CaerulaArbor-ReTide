@@ -1,27 +1,25 @@
 
 package com.apocalypse.caerulaarbor.network;
 
+import com.apocalypse.caerulaarbor.world.inventory.CaerulaRecordGUIMenu;
 import com.apocalypse.caerulaarbor.world.inventory.PlayerEvoMenu;
 import com.apocalypse.caerulaarbor.world.inventory.RelicShowcaseMenu;
 import io.netty.buffer.Unpooled;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraftforge.network.NetworkEvent;
-
-import net.minecraft.world.level.Level;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.core.BlockPos;
-
-import com.apocalypse.caerulaarbor.world.inventory.CaerulaRecordGUIMenu;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.NetworkHooks;
 
-import java.util.function.Supplier;
 import java.util.HashMap;
+import java.util.function.Supplier;
 
 public class CaerulaRecordGUIButtonMessage {
 	private final int buttonID, x, y, z;
@@ -95,7 +93,7 @@ public class CaerulaRecordGUIButtonMessage {
             if (entity != null) {
                 if ((Entity) entity instanceof ServerPlayer _ent) {
                     BlockPos _bpos = BlockPos.containing(x, y, z);
-                    NetworkHooks.openScreen((ServerPlayer) _ent, new MenuProvider() {
+                    NetworkHooks.openScreen(_ent, new MenuProvider() {
                         @Override
                         public Component getDisplayName() {
                             return Component.literal("RelicShowcase");
@@ -115,7 +113,7 @@ public class CaerulaRecordGUIButtonMessage {
                 return;
             if ((Entity) entity instanceof ServerPlayer _ent) {
                 BlockPos _bpos = BlockPos.containing(x, y, z);
-                NetworkHooks.openScreen((ServerPlayer) _ent, new MenuProvider() {
+                NetworkHooks.openScreen(_ent, new MenuProvider() {
                     @Override
                     public Component getDisplayName() {
                         return Component.literal("PlayerEvo");

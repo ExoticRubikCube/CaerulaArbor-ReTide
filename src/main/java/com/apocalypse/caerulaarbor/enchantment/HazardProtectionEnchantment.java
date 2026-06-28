@@ -1,18 +1,16 @@
 package com.apocalypse.caerulaarbor.enchantment;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
-import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.tags.ItemTags;
-import net.minecraft.resources.ResourceLocation;
-
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEnchantments;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentCategory;
 
-import java.util.List;
+import java.util.Objects;
 
 public class HazardProtectionEnchantment extends Enchantment {
 	private static final EnchantmentCategory ENCHANTMENT_CATEGORY = EnchantmentCategory.create("caerula_arbor_hazard_protection",
@@ -39,7 +37,7 @@ public class HazardProtectionEnchantment extends Enchantment {
 
 	@Override
 	protected boolean checkCompatibility(Enchantment enchantment) {
-		return super.checkCompatibility(enchantment) && !List.of(CaerulaArborModEnchantments.FLEXIBILITY.get()).contains(enchantment);
+		return super.checkCompatibility(enchantment) && !Objects.equals(CaerulaArborModEnchantments.FLEXIBILITY.get(), enchantment);
 	}
 
 	@Override

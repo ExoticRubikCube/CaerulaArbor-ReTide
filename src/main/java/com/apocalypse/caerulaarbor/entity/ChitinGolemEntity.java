@@ -174,7 +174,7 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity {
                     if ((sourceentity != null ? distanceTo(sourceentity) : -1) <= 5) {
                         if (num >= 2) {
                             if (this instanceof ChitinGolemEntity) {
-                                ((ChitinGolemEntity) this).setAnimation("animation.chitgolem.smash");
+                                this.setAnimation("animation.chitgolem.smash");
                             }
                             if (!this.level().isClientSide())
                                 this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.COOLDOWN_SINAL.get(), 60, 0, false, false));

@@ -171,7 +171,7 @@ public class WarriorPriestEntity extends Animal implements GeoEntity {
             if (this.isAlive() && sourceentity.isAlive()) {
                 if ((sourceentity != null ? distanceTo(sourceentity) : -1) <= 2.5 && ((Entity) this instanceof WarriorPriestEntity _datEntI ? _datEntI.getEntityData().get(DATA_skill_p) : 0) <= 0) {
                     if (this instanceof WarriorPriestEntity) {
-                        ((WarriorPriestEntity) this).setAnimation("animation.warriorpriest.shieldattack");
+                        this.setAnimation("animation.warriorpriest.shieldattack");
                     }
                     if ((Entity) this instanceof WarriorPriestEntity _datEntSetI)
                         _datEntSetI.getEntityData().set(DATA_skill_p, 150);
@@ -231,7 +231,7 @@ public class WarriorPriestEntity extends Animal implements GeoEntity {
                         _datEntSetI.getEntityData().set(DATA_skill_p1, (int) (sklp1 - 1));
                 } else {
                     if (this instanceof WarriorPriestEntity) {
-                        ((WarriorPriestEntity) this).setAnimation("animation.warriorpriest.givebuff");
+                        this.setAnimation("animation.warriorpriest.givebuff");
                     }
                     if ((Entity) this instanceof WarriorPriestEntity _datEntSetI)
                         _datEntSetI.getEntityData().set(DATA_skill_p1, 400);

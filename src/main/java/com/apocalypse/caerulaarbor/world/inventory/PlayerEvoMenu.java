@@ -1,33 +1,29 @@
 package com.apocalypse.caerulaarbor.world.inventory;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
+import com.apocalypse.caerulaarbor.init.CaerulaArborModMenus;
 import com.apocalypse.caerulaarbor.utils.NodeUtils;
-import com.apocalypse.caerulaarbor.procedures.*;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.IItemHandler;
-
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.inventory.ContainerLevelAccess;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMenus;
-
-import java.util.function.Supplier;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Supplier;
 
 public class PlayerEvoMenu extends AbstractContainerMenu implements Supplier<Map<Integer, Slot>> {
 	public final static HashMap<String, Object> guistate = new HashMap<>();
@@ -35,12 +31,12 @@ public class PlayerEvoMenu extends AbstractContainerMenu implements Supplier<Map
 	public final Player entity;
 	public int x, y, z;
 	private ContainerLevelAccess access = ContainerLevelAccess.NULL;
-	private IItemHandler internal;
+	private final IItemHandler internal;
 	private final Map<Integer, Slot> customSlots = new HashMap<>();
-	private boolean bound = false;
-	private Supplier<Boolean> boundItemMatcher = null;
-	private Entity boundEntity = null;
-	private BlockEntity boundBlockEntity = null;
+	private final boolean bound = false;
+	private final Supplier<Boolean> boundItemMatcher = null;
+	private final Entity boundEntity = null;
+	private final BlockEntity boundBlockEntity = null;
 
 	public PlayerEvoMenu(int id, Inventory inv, FriendlyByteBuf extraData) {
 		super(CaerulaArborModMenus.PLAYER_EVO.get(), id);

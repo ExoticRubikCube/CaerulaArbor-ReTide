@@ -213,7 +213,7 @@ public class OceanizedSheepEntity extends SeaMonster {
 		Level world = this.level();
         if (entity == null || sourceentity == null)
             return InteractionResult.PASS;
-        if ((((Entity) sourceentity instanceof LivingEntity _entity) ? _entity.isHolding(Items.SHEARS) : false) && entity instanceof OceanizedSheepEntity _datEntL1 && _datEntL1.getEntityData().get(DATA_fur)) {
+        if (((Entity) sourceentity instanceof LivingEntity _entity && _entity.isHolding(Items.SHEARS)) && entity instanceof OceanizedSheepEntity _datEntL1 && _datEntL1.getEntityData().get(DATA_fur)) {
             if (entity instanceof OceanizedSheepEntity _datEntSetL)
                 _datEntSetL.getEntityData().set(DATA_fur, false);
             if (entity instanceof OceanizedSheepEntity animatable)
@@ -250,7 +250,7 @@ public class OceanizedSheepEntity extends SeaMonster {
             if (!((Entity) this instanceof OceanizedSheepEntity _datEntL0 && _datEntL0.getEntityData().get(DATA_fur))) {
                 if ((world.getBlockState(BlockPos.containing(x + getLookAngle().x, y, z + getLookAngle().z))).getBlock() == CaerulaArborModBlocks.TRAIL_MUSHROOM.get()) {
                     if (this instanceof OceanizedSheepEntity) {
-                        ((OceanizedSheepEntity) this).setAnimation("animation.oceanized_sheep.eat");
+                        this.setAnimation("animation.oceanized_sheep.eat");
                     }
                     if ((Entity) this instanceof OceanizedSheepEntity _datEntSetL)
                         _datEntSetL.getEntityData().set(DATA_fur, true);

@@ -1,10 +1,10 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
+import com.apocalypse.caerulaarbor.entity.base.PolarMountRider;
 
 import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
-import com.apocalypse.caerulaarbor.procedures.SeabornRidePolarProcedure;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.level.LevelAccessor;
@@ -70,7 +70,7 @@ import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 
 import javax.annotation.Nullable;
 
-public class OceanizedVindicatorEntity extends SeaMonster {
+public class OceanizedVindicatorEntity extends SeaMonster implements PolarMountRider {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanizedVindicatorEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedVindicatorEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(OceanizedVindicatorEntity.class, EntityDataSerializers.STRING);
@@ -247,7 +247,6 @@ public class OceanizedVindicatorEntity extends SeaMonster {
                         this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ANGER_OF_TIDE.get(), 20, 0, false, false));
                 }
             }
-            SeabornRidePolarProcedure.execute(world, this.getX(), this.getY(), this.getZ(), this);
         }
         this.refreshDimensions();
 	}

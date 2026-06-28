@@ -60,10 +60,9 @@ public class EntityUtils {
 	}
 
 	public static void spawnLinkParticles(LevelAccessor world, Entity a, Entity b) {
-		if (a == null || b == null || !(world instanceof ServerLevel))
+		if (a == null || b == null || !(world instanceof ServerLevel level))
 			return;
-		ServerLevel level = (ServerLevel) world;
-		double dx = a.getX() - b.getX();
+        double dx = a.getX() - b.getX();
 		double dy = a.getY() - b.getY();
 		double dz = a.getZ() - b.getZ();
 		for (int i = 0; i < 40; i++) {
@@ -487,7 +486,7 @@ public class EntityUtils {
 		if (entity == null || sourceentity == null)
 			return InteractionResult.PASS;
 		boolean given = false;
-		if ((sourceentity instanceof LivingEntity _entity) ? _entity.isHolding(Items.BUCKET) : false) {
+		if (sourceentity instanceof LivingEntity _entity && _entity.isHolding(Items.BUCKET)) {
 			if (entity instanceof RunFishEntity) {
 				if (sourceentity instanceof Player _player) {
 					ItemStack _setstack = new ItemStack(CaerulaArborModItems.BUCKET_RUNFISH.get()).copy();
@@ -771,7 +770,7 @@ public class EntityUtils {
 					}
 					if ((entityiterator != null ? sacrifice.distanceTo(entityiterator) : -1) < r) {
 						entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceankiller_damage")))),
-								(float) ((double) CaerulaConfigsConfiguration.SANITY_BREAK.get() * 6));
+								(float) (CaerulaConfigsConfiguration.SANITY_BREAK.get() * 6));
 					}
 				}
 			}
@@ -1205,7 +1204,7 @@ public class EntityUtils {
 			if ((obj instanceof LivingEntity _livEnt && _livEnt.hasEffect(CaerulaArborModMobEffects.LESS_ARMOR.get()) ? _livEnt.getEffect(CaerulaArborModMobEffects.LESS_ARMOR.get()).getAmplifier() : 0) < limit) {
 				if (obj instanceof LivingEntity _entity && !_entity.level().isClientSide())
 					_entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.LESS_ARMOR.get(), 300,
-							(int) ((obj instanceof LivingEntity _livEnt && _livEnt.hasEffect(CaerulaArborModMobEffects.LESS_ARMOR.get()) ? _livEnt.getEffect(CaerulaArborModMobEffects.LESS_ARMOR.get()).getAmplifier() : 0) + 1), false, true));
+                            (obj instanceof LivingEntity _livEnt && _livEnt.hasEffect(CaerulaArborModMobEffects.LESS_ARMOR.get()) ? _livEnt.getEffect(CaerulaArborModMobEffects.LESS_ARMOR.get()).getAmplifier() : 0) + 1, false, true));
 			}
 		} else {
 			if (obj instanceof LivingEntity _entity && !_entity.level().isClientSide())
@@ -1234,7 +1233,7 @@ public class EntityUtils {
 				entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "repeller_attack"))), entity),
 						(float) ((entity instanceof LivingEntity _livingEntity7 && _livingEntity7.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity7.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * rate));
 				if (entity instanceof LivingEntity _entity)
-					_entity.setHealth((float) ((entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) + 3));
+					_entity.setHealth((entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) + 3);
 				for (int index0 = 0; index0 < 2; index0++) {
 					giveLessArmor(entityiterator, 18);
 				}
@@ -1426,7 +1425,7 @@ public class EntityUtils {
 		Entity enemy = null;
 		double damage = 0;
 		double r = 0;
-		enemy = obj instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+		enemy = obj instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
 		r = 3;
 		if (isSonic) {
 			r = 4.5;
@@ -1679,7 +1678,7 @@ public class EntityUtils {
 			return;
 		if (entity instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
 			_livingEntity0.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(24);
-		if (!(!world.getEntitiesOfClass(Player.class, AABB.ofSize(new Vec3(x, y, z), 16, 16, 16), e -> true).isEmpty())) {
+		if (world.getEntitiesOfClass(Player.class, AABB.ofSize(new Vec3(x, y, z), 16, 16, 16), e -> true).isEmpty()) {
 			if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
 				_entity.addEffect(new MobEffectInstance(MobEffects.GLOWING, 1800, 0, false, false));
 		}

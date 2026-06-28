@@ -41,7 +41,7 @@ public class AegirGlassArchBlock extends Block {
 
 	@Override
 	public boolean skipRendering(BlockState state, BlockState adjacentBlockState, Direction side) {
-		return adjacentBlockState.getBlock() == this ? true : super.skipRendering(state, adjacentBlockState, side);
+		return adjacentBlockState.getBlock() == this || super.skipRendering(state, adjacentBlockState, side);
 	}
 
 	@Override
@@ -63,18 +63,18 @@ public class AegirGlassArchBlock extends Block {
 	public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
 		if (state.getValue(BLOCKSTATE) == 1) {
 			return switch (state.getValue(FACING)) {
-				default -> box(0, 0, 0, 16, 16, 16);
-				case NORTH -> box(0, 0, 0, 16, 16, 16);
+                case NORTH -> box(0, 0, 0, 16, 16, 16);
 				case EAST -> box(0, 0, 0, 16, 16, 16);
 				case WEST -> box(0, 0, 0, 16, 16, 16);
-			};
+                default -> box(0, 0, 0, 16, 16, 16);
+            };
 		}
 		return switch (state.getValue(FACING)) {
-			default -> box(0, 0, 0, 16, 16, 16);
-			case NORTH -> box(0, 0, 0, 16, 16, 16);
+            case NORTH -> box(0, 0, 0, 16, 16, 16);
 			case EAST -> box(0, 0, 0, 16, 16, 16);
 			case WEST -> box(0, 0, 0, 16, 16, 16);
-		};
+            default -> box(0, 0, 0, 16, 16, 16);
+        };
 	}
 
 	@Override

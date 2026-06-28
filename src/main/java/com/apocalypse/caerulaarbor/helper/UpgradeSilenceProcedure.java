@@ -41,7 +41,7 @@ public class UpgradeSilenceProcedure {
 				}
 			}
 			if (stra < 4) {
-				if (CaerulaArborModVariables.MapVariables.get(world).evo_point_silence >= Math.pow(stra + 1, 3) * (double) CaerulaConfigsConfiguration.COEFFICIENT.get() * 8) {
+				if (CaerulaArborModVariables.MapVariables.get(world).evo_point_silence >= Math.pow(stra + 1, 3) * CaerulaConfigsConfiguration.COEFFICIENT.get() * 8) {
 					CaerulaArborModVariables.MapVariables.get(world).strategy_silence = stra + 1;
 					CaerulaArborModVariables.MapVariables.get(world).syncData(world);
 					stra = CaerulaArborModVariables.MapVariables.get(world).strategy_silence;
@@ -94,7 +94,7 @@ public class UpgradeSilenceProcedure {
 						}
 					}
 					if (!world.isClientSide() && world.getServer() != null)
-						world.getServer().getPlayerList().broadcastSystemMessage(Component.literal((prefix + "" + Component.translatable("item.caerula_arbor.language_key.description_4").getString() + num)), false);
+						world.getServer().getPlayerList().broadcastSystemMessage(Component.literal((prefix + Component.translatable("item.caerula_arbor.language_key.description_4").getString() + num)), false);
 				}
 			} else {
 				CaerulaArborModVariables.MapVariables.get(world).evo_point_silence = 0;

@@ -1,10 +1,9 @@
 package com.apocalypse.caerulaarbor.entity;
 
-import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.entity.base.PolarMountRider;
+import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.procedures.SeabornRidePolarProcedure;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
@@ -48,7 +47,7 @@ import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 
-public class TheAbandonedEntity extends SeaMonster {
+public class TheAbandonedEntity extends SeaMonster implements PolarMountRider {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(TheAbandonedEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(TheAbandonedEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(TheAbandonedEntity.class, EntityDataSerializers.STRING);
@@ -215,13 +214,13 @@ public class TheAbandonedEntity extends SeaMonster {
                 if ((Entity) this instanceof TheAbandonedEntity _datEntSetI)
                     _datEntSetI.getEntityData().set(DATA_skillp, (int) (sklp - 1));
             } else {
-                enemy = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+                enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                 if (!(enemy == null) && enemy.isAlive() && (enemy != null ? distanceTo(enemy) : -1) < 7) {
                     if ((Entity) this instanceof TheAbandonedEntity _datEntSetI)
                         _datEntSetI.getEntityData().set(DATA_skillp, 100);
                     ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY() + enemy.getBbHeight()), (enemy.getZ())));
                     if (this instanceof TheAbandonedEntity) {
-                        ((TheAbandonedEntity) this).setAnimation("animation.the_abandoned.shoot");
+                        this.setAnimation("animation.the_abandoned.shoot");
                     }
                     CaerulaArborMod.queueServerWork(23, () -> {
                         if (this.isAlive()) {
@@ -265,7 +264,6 @@ public class TheAbandonedEntity extends SeaMonster {
                     });
                 }
             }
-            SeabornRidePolarProcedure.execute(world, x, y, z, this);
         }
         this.refreshDimensions();
 	}

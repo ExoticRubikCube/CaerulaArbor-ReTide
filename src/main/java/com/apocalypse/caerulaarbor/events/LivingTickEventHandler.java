@@ -125,7 +125,7 @@ public class LivingTickEventHandler {
         if (entity == null) return;
         if (entity.tickCount % 30 != 1 || !(entity instanceof LivingEntity)) return;
 
-        Entity enemy = entity instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+        Entity enemy = entity instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
         if (enemy == null) return;
 
         Entity other = null;
@@ -200,7 +200,7 @@ public class LivingTickEventHandler {
 
         double minDist = 999;
         Entity enemy = null;
-        Entity curEnemy = entity instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+        Entity curEnemy = entity instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
 
         if (curEnemy != null && curEnemy.isAlive()) return;
         if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) return;
@@ -258,7 +258,7 @@ public class LivingTickEventHandler {
     }
 
     private static void handleMobTargeting(LevelAccessor world, double x, double y, double z, Entity entity) {
-        Entity enemy = entity instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+        Entity enemy = entity instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
         if (enemy == null || !enemy.isAlive()) {
             if (!entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "is_humanside")))) {
                 if (entity instanceof Monster && entity.tickCount % 40 == 5) {

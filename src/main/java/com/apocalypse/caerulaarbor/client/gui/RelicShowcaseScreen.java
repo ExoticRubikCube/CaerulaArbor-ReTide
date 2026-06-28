@@ -1,12 +1,10 @@
 package com.apocalypse.caerulaarbor.client.gui;
 
-import com.apocalypse.caerulaarbor.utils.RelicUtils;
-
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.network.RelicShowcaseButtonMessage;
-import com.apocalypse.caerulaarbor.procedures.*;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
 import com.apocalypse.caerulaarbor.utils.PlayerStateUtils;
+import com.apocalypse.caerulaarbor.utils.RelicUtils;
 import com.apocalypse.caerulaarbor.world.inventory.RelicShowcaseMenu;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
@@ -236,7 +234,7 @@ public class RelicShowcaseScreen extends AbstractContainerScreen<RelicShowcaseMe
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
 
-		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/relic_bg.png"), this.leftPos + 0, this.topPos + 0, 0, 0, 328, 216, 328, 216);
+		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/relic_bg.png"), this.leftPos, this.topPos, 0, 0, 328, 216, 328, 216);
 
 		if (RelicUtils.hasLongevity(entity)) {
 			guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/longevity.png"), this.leftPos + 172, this.topPos + 100, 0, 0, 16, 16, 16, 16);

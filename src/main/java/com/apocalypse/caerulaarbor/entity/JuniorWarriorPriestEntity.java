@@ -155,7 +155,7 @@ public class JuniorWarriorPriestEntity extends Animal implements GeoEntity {
             if (this.isAlive() && sourceentity.isAlive()) {
                 if ((sourceentity != null ? distanceTo(sourceentity) : -1) <= 2.4 && ((Entity) this instanceof JuniorWarriorPriestEntity _datEntI ? _datEntI.getEntityData().get(DATA_skill_p) : 0) <= 0) {
                     if (this instanceof JuniorWarriorPriestEntity) {
-                        ((JuniorWarriorPriestEntity) this).setAnimation("animation.warriorpriest.shieldattack");
+                        this.setAnimation("animation.warriorpriest.shieldattack");
                     }
                     if ((Entity) this instanceof JuniorWarriorPriestEntity _datEntSetI)
                         _datEntSetI.getEntityData().set(DATA_skill_p, 200);

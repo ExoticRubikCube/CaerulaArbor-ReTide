@@ -5,21 +5,20 @@ import com.apocalypse.caerulaarbor.world.inventory.CaerulaRecordGUIMenu;
 import io.netty.buffer.Unpooled;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.Rarity;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.network.chat.Component;
-
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkHooks;
 
 import java.util.List;
@@ -41,7 +40,7 @@ public class CaerulaRecorderItem extends Item {
         if (entity != null) {
             if ((Entity) entity instanceof ServerPlayer _ent) {
                 BlockPos _bpos = BlockPos.containing(entity.getX(), entity.getY(), entity.getZ());
-                NetworkHooks.openScreen((ServerPlayer) _ent, new MenuProvider() {
+                NetworkHooks.openScreen(_ent, new MenuProvider() {
                     @Override
                     public Component getDisplayName() {
                         return Component.literal("CaerulaRecordGUI");

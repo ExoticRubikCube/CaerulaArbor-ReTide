@@ -47,11 +47,11 @@ public class AllayBlockBlock extends Block implements SimpleWaterloggedBlock {
 	@Override
 	public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
 		return switch (state.getValue(FACING)) {
-			default -> box(5.5, 5, 0, 10.5, 10, 5);
-			case NORTH -> box(5.5, 5, 11, 10.5, 10, 16);
+            case NORTH -> box(5.5, 5, 11, 10.5, 10, 16);
 			case EAST -> box(0, 5, 5.5, 5, 10, 10.5);
 			case WEST -> box(11, 5, 5.5, 16, 10, 10.5);
-		};
+            default -> box(5.5, 5, 0, 10.5, 10, 5);
+        };
 	}
 
 	@Override

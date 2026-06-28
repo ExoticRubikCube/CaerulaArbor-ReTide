@@ -2,20 +2,17 @@
 package com.apocalypse.caerulaarbor.potion;
 
 import com.apocalypse.caerulaarbor.entity.IzumikEntity;
+import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
 import com.apocalypse.caerulaarbor.utils.EntityPredicateUtils;
-import com.apocalypse.caerulaarbor.utils.EntityUtils;
-import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffect;
-
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.level.LevelAccessor;
 
 public class InvulnerableMobEffect extends MobEffect {
@@ -41,18 +38,18 @@ public class InvulnerableMobEffect extends MobEffect {
         }
         if ((double) amplifier == 0) {
             if (world instanceof ServerLevel _level)
-                _level.sendParticles((SimpleParticleType) (CaerulaArborModParticleTypes.INV_PTC_BLUE.get()), (x + 2 * Math.sin(ang)), (y + 1.25), (z + 2 * Math.cos(ang)), 1, 0.1, 2, 0.1, 0.2);
+                _level.sendParticles(CaerulaArborModParticleTypes.INV_PTC_BLUE.get(), (x + 2 * Math.sin(ang)), (y + 1.25), (z + 2 * Math.cos(ang)), 1, 0.1, 2, 0.1, 0.2);
         } else if ((double) amplifier == 1) {
             if (EntityPredicateUtils.isEndspeaker(entity)) {
                 if (world instanceof ServerLevel _level)
-                    _level.sendParticles((SimpleParticleType) (CaerulaArborModParticleTypes.ENDSPEAKER_INV.get()), (x + 2 * Math.sin(ang)), (y + 1.25), (z + 2 * Math.cos(ang)), 4, 0.1, 2, 0.1, 0.2);
+                    _level.sendParticles(CaerulaArborModParticleTypes.ENDSPEAKER_INV.get(), (x + 2 * Math.sin(ang)), (y + 1.25), (z + 2 * Math.cos(ang)), 4, 0.1, 2, 0.1, 0.2);
             } else {
                 if (world instanceof ServerLevel _level)
-                    _level.sendParticles((SimpleParticleType) (CaerulaArborModParticleTypes.INV_PTC.get()), (x + 2 * Math.sin(ang)), (y + 1.25), (z + 2 * Math.cos(ang)), 4, 0.1, 2, 0.1, 0.2);
+                    _level.sendParticles(CaerulaArborModParticleTypes.INV_PTC.get(), (x + 2 * Math.sin(ang)), (y + 1.25), (z + 2 * Math.cos(ang)), 4, 0.1, 2, 0.1, 0.2);
             }
         } else {
             if (world instanceof ServerLevel _level)
-                _level.sendParticles((SimpleParticleType) (CaerulaArborModParticleTypes.INV_PTC_VOILET.get()), (x + 2 * Math.sin(ang)), (y + 1.25), (z + 2 * Math.cos(ang)), 4, 0.1, 2, 0.1, 0.2);
+                _level.sendParticles(CaerulaArborModParticleTypes.INV_PTC_VOILET.get(), (x + 2 * Math.sin(ang)), (y + 1.25), (z + 2 * Math.cos(ang)), 4, 0.1, 2, 0.1, 0.2);
             if (entity instanceof IzumikEntity && ((Entity) entity instanceof IzumikEntity _datEntI ? _datEntI.getEntityData().get(IzumikEntity.DATA_phase) : 0) == 0) {
                 phase = Math.floor(((Entity) entity instanceof IzumikEntity _datEntI ? _datEntI.getEntityData().get(IzumikEntity.DATA_growth_p) : 0) / 5);
                 if ((Entity) entity instanceof LivingEntity _entity)

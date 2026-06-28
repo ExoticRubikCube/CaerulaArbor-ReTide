@@ -1,7 +1,6 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
 import net.minecraft.core.registries.Registries;
@@ -122,7 +121,7 @@ public class DamageTesterEntity extends PathfinderMob {
 		Level world = this.level();
         if (entity == null || sourceentity == null)
             return InteractionResult.PASS;
-        if ((((Entity) sourceentity instanceof LivingEntity _entity) ? _entity.isHolding(CaerulaArborModItems.APOCALYPSE.get()) : false) || (((Entity) sourceentity instanceof LivingEntity _entity) ? _entity.isHolding(CaerulaArborModItems.BANNED_ITEM.get()) : false)) {
+        if (sourceentity.isHolding(CaerulaArborModItems.APOCALYPSE.get()) || sourceentity.isHolding(CaerulaArborModItems.BANNED_ITEM.get())) {
             entity.hurt(new DamageSource(((LevelAccessor) world).registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "inv_killer")))), 114514);
             return InteractionResult.SUCCESS;
         }

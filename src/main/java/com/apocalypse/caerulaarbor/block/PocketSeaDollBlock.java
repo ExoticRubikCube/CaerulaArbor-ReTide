@@ -40,7 +40,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class PocketSeaDollBlock extends BaseEntityBlock implements SimpleWaterloggedBlock, EntityBlock {
-	public static final IntegerProperty ANIMATION = IntegerProperty.create("animation", 0, (int) 2);
+	public static final IntegerProperty ANIMATION = IntegerProperty.create("animation", 0, 2);
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
@@ -76,11 +76,11 @@ public class PocketSeaDollBlock extends BaseEntityBlock implements SimpleWaterlo
 	public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
 
 		return switch (state.getValue(FACING)) {
-			default -> box(3, 0, 3, 13, 10, 13);
-			case NORTH -> box(3, 0, 3, 13, 10, 13);
+            case NORTH -> box(3, 0, 3, 13, 10, 13);
 			case EAST -> box(3, 0, 3, 13, 10, 13);
 			case WEST -> box(3, 0, 3, 13, 10, 13);
-		};
+            default -> box(3, 0, 3, 13, 10, 13);
+        };
 	}
 
 	@Override
@@ -135,7 +135,7 @@ public class PocketSeaDollBlock extends BaseEntityBlock implements SimpleWaterlo
 		Direction direction = hit.getDirection();
         InteractionResult result = InteractionResult.PASS;
         if (entity != null) {
-            if (((Entity) entity instanceof LivingEntity _entity) ? _entity.isHolding(Items.FLINT_AND_STEEL) : false) {
+            if ((Entity) entity instanceof LivingEntity _entity && _entity.isHolding(Items.FLINT_AND_STEEL)) {
                 if ((LevelAccessor) world instanceof Level _level) {
                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.creeper.primed")), SoundSource.BLOCKS, 1, 1);
                 }

@@ -1,16 +1,11 @@
 
 package com.apocalypse.caerulaarbor.client.particle;
 
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.api.distmarker.Dist;
-
-import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraft.client.particle.TextureSheetParticle;
-import net.minecraft.client.particle.SpriteSet;
-import net.minecraft.client.particle.ParticleRenderType;
-import net.minecraft.client.particle.ParticleProvider;
-import net.minecraft.client.particle.Particle;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.particle.*;
+import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class KingSlayParticle extends TextureSheetParticle {
@@ -36,7 +31,7 @@ public class KingSlayParticle extends TextureSheetParticle {
 		super(world, x, y, z);
 		this.spriteSet = spriteSet;
 		this.setSize(0.2f, 0.2f);
-		this.lifetime = (int) Math.max(1, 25 + (this.random.nextInt(10) - 5));
+		this.lifetime = Math.max(1, 25 + (this.random.nextInt(10) - 5));
 		this.gravity = -0.2f;
 		this.hasPhysics = true;
 		this.xd = vx * 0.1;

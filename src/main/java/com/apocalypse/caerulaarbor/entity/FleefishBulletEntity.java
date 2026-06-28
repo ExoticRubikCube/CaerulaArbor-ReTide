@@ -2,7 +2,6 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.procedures.TimedFadeProcedure;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -87,7 +86,8 @@ public class FleefishBulletEntity extends AbstractArrow implements ItemSupplier 
 	@Override
 	public void tick() {
 		super.tick();
-		TimedFadeProcedure.execute(this);
+		if (!this.level().isClientSide() && this.tickCount >= 200)
+			this.discard();
 		if (this.inGround)
 			this.discard();
 	}

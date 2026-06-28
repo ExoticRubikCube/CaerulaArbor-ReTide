@@ -2,11 +2,11 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
+import com.apocalypse.caerulaarbor.entity.base.RavagerMountRider;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModPotions;
-import com.apocalypse.caerulaarbor.procedures.RaiderRideRavagerProcedure;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
@@ -71,7 +71,7 @@ import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
 
-public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob {
+public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob, RavagerMountRider {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanziedWitchEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanziedWitchEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(OceanziedWitchEntity.class, EntityDataSerializers.STRING);
@@ -263,7 +263,7 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob 
 				this.rangedAttackMob.performRangedAttack(this.target, f1);
 				this.attackTime = Mth.floor(f * (float) (this.attackIntervalMax - this.attackIntervalMin) + (float) this.attackIntervalMin);
 			} else if (this.attackTime < 0) {
-				this.attackTime = Mth.floor(Mth.lerp(Math.sqrt(d0) / (double) this.attackRadius, (double) this.attackIntervalMin, (double) this.attackIntervalMax));
+				this.attackTime = Mth.floor(Mth.lerp(Math.sqrt(d0) / (double) this.attackRadius, this.attackIntervalMin, this.attackIntervalMax));
 			} else
 				((OceanziedWitchEntity) rangedAttackMob).entityData.set(SHOOT, false);
 		}
@@ -444,10 +444,10 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob 
             if (this.isAlive()) {
                 sklp = (Entity) this instanceof OceanziedWitchEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp) : 0;
                 if (sklp <= 0) {
-                    enemy = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+                    enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                     if (!(enemy == null) && enemy.isAlive() && (enemy != null ? distanceTo(enemy) : -1) <= 9) {
                         if (this instanceof OceanziedWitchEntity) {
-                            ((OceanziedWitchEntity) this).setAnimation("animation.oceanized_witch.throw");
+                            this.setAnimation("animation.oceanized_witch.throw");
                         }
                         if ((Entity) this instanceof OceanziedWitchEntity _datEntSetI)
                             _datEntSetI.getEntityData().set(DATA_skillp, 250);
@@ -472,7 +472,6 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob 
                     _entity.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
                 if ((Entity) this instanceof LivingEntity _entity)
                     _entity.removeEffect(MobEffects.WEAKNESS);
-                RaiderRideRavagerProcedure.execute(world, this.getX(), this.getY(), this.getZ(), this);
             }
         }
         this.refreshDimensions();

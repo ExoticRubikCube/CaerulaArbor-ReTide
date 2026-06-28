@@ -259,13 +259,13 @@ public class OceanizedEndermanEntity extends SeaMonster {
             if (this.isAlive()) {
                 sklp = (Entity) this instanceof OceanizedEndermanEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp) : 0;
                 cool = (Entity) this instanceof OceanizedEndermanEntity _datEntI ? _datEntI.getEntityData().get(DATA_cooldown) : 0;
-                enemy = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+                enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                 if (!(enemy == null)) {
                     if (sklp <= 0) {
                         if ((Entity) this instanceof OceanizedEndermanEntity _datEntSetI)
                             _datEntSetI.getEntityData().set(DATA_skillp, 300);
                         if (this instanceof OceanizedEndermanEntity) {
-                            ((OceanizedEndermanEntity) this).setAnimation("animation.oceanzied_enderman.skill");
+                            this.setAnimation("animation.oceanzied_enderman.skill");
                         }
                         if (!this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 35, 0, false, false));
@@ -277,7 +277,7 @@ public class OceanizedEndermanEntity extends SeaMonster {
 								return;
 							double sklp1 = 0;
 							Entity enemy1 = null;
-							enemy1 = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+							enemy1 = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
 							if (!(enemy1 == null)) {
 								((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy1.getX()), (enemy1.getY()), (enemy1.getZ())));
 							}

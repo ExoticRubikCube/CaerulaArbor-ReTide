@@ -205,7 +205,7 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity 
                     }
                 }.entityFromStringUUID(uuid1, (Level) world);
                 if (world instanceof ServerLevel _level)
-                    _level.sendParticles((SimpleParticleType) (CaerulaArborModParticleTypes.EDERMAN_PTC.get()), x, (y + 0.25), z, 3, 0.1, 0.1, 0.1, 0.1);
+                    _level.sendParticles(CaerulaArborModParticleTypes.EDERMAN_PTC.get(), x, (y + 0.25), z, 3, 0.1, 0.1, 0.1, 0.1);
                 if (!(enemy == null) && enemy.isAlive()) {
                     ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY() + 0.5), (enemy.getZ())));
                     if (tickCount > 20) {
@@ -225,7 +225,7 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity 
                         }
                     }
                 } else {
-                    enemy = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+                    enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                     if (!(enemy == null) && enemy.isAlive()) {
                         if ((Entity) this instanceof MoistDragonBreathEntity _datEntSetS)
                             _datEntSetS.getEntityData().set(DATA_TARGET, (enemy.getStringUUID()));

@@ -38,7 +38,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class StonecutterDollBlock extends BaseEntityBlock implements SimpleWaterloggedBlock, EntityBlock {
-	public static final IntegerProperty ANIMATION = IntegerProperty.create("animation", 0, (int) 2);
+	public static final IntegerProperty ANIMATION = IntegerProperty.create("animation", 0, 2);
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
@@ -74,11 +74,11 @@ public class StonecutterDollBlock extends BaseEntityBlock implements SimpleWater
 	public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
 
 		return switch (state.getValue(FACING)) {
-			default -> box(5, 0, 5, 11, 6, 11);
-			case NORTH -> box(5, 0, 5, 11, 6, 11);
+            case NORTH -> box(5, 0, 5, 11, 6, 11);
 			case EAST -> box(5, 0, 5, 11, 6, 11);
 			case WEST -> box(5, 0, 5, 11, 6, 11);
-		};
+            default -> box(5, 0, 5, 11, 6, 11);
+        };
 	}
 
 	@Override

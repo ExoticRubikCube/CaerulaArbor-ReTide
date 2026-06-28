@@ -86,7 +86,7 @@ public class AccumulatorProkaryoteEntity extends SeaMonster {
 					double dx = this.wantedX - AccumulatorProkaryoteEntity.this.getX();
 					double dy = this.wantedY - AccumulatorProkaryoteEntity.this.getY();
 					double dz = this.wantedZ - AccumulatorProkaryoteEntity.this.getZ();
-					float f = (float) (Mth.atan2(dz, dx) * (double) (180 / Math.PI)) - 90;
+					float f = (float) (Mth.atan2(dz, dx) * (180 / Math.PI)) - 90;
 					float f1 = (float) (this.speedModifier * AccumulatorProkaryoteEntity.this.getAttribute(Attributes.MOVEMENT_SPEED).getValue());
 					AccumulatorProkaryoteEntity.this.setYRot(this.rotlerp(AccumulatorProkaryoteEntity.this.getYRot(), f, 10));
 					AccumulatorProkaryoteEntity.this.yBodyRot = AccumulatorProkaryoteEntity.this.getYRot();
@@ -337,7 +337,7 @@ public class AccumulatorProkaryoteEntity extends SeaMonster {
                 if (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) <= ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5 && (Entity) this instanceof AccumulatorProkaryoteEntity _datEntL4
                         && _datEntL4.getEntityData().get(DATA_split)) {
                     if (this instanceof AccumulatorProkaryoteEntity) {
-                        ((AccumulatorProkaryoteEntity) this).setAnimation("animation.accumulator.split");
+                        this.setAnimation("animation.accumulator.split");
                     }
                     if ((Entity) this instanceof LivingEntity _entity)
                         _entity.setHealth((float) (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5));

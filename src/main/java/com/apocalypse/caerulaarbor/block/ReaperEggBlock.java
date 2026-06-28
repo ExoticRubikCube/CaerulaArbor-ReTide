@@ -79,26 +79,26 @@ public class ReaperEggBlock extends Block implements SimpleWaterloggedBlock {
 	public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
 		if (state.getValue(BLOCKSTATE) == 1) {
 			return switch (state.getValue(FACING)) {
-				default -> box(4, 0, 4, 12, 12, 12);
-				case NORTH -> box(4, 0, 4, 12, 12, 12);
+                case NORTH -> box(4, 0, 4, 12, 12, 12);
 				case EAST -> box(4, 0, 4, 12, 12, 12);
 				case WEST -> box(4, 0, 4, 12, 12, 12);
-			};
+                default -> box(4, 0, 4, 12, 12, 12);
+            };
 		}
 		if (state.getValue(BLOCKSTATE) == 2) {
 			return switch (state.getValue(FACING)) {
-				default -> box(4, 0, 4, 12, 12, 12);
-				case NORTH -> box(4, 0, 4, 12, 12, 12);
+                case NORTH -> box(4, 0, 4, 12, 12, 12);
 				case EAST -> box(4, 0, 4, 12, 12, 12);
 				case WEST -> box(4, 0, 4, 12, 12, 12);
-			};
+                default -> box(4, 0, 4, 12, 12, 12);
+            };
 		}
 		return switch (state.getValue(FACING)) {
-			default -> box(4, 0, 4, 12, 12, 12);
-			case NORTH -> box(4, 0, 4, 12, 12, 12);
+            case NORTH -> box(4, 0, 4, 12, 12, 12);
 			case EAST -> box(4, 0, 4, 12, 12, 12);
 			case WEST -> box(4, 0, 4, 12, 12, 12);
-		};
+            default -> box(4, 0, 4, 12, 12, 12);
+        };
 	}
 
 	@Override
@@ -149,7 +149,7 @@ public class ReaperEggBlock extends Block implements SimpleWaterloggedBlock {
         if (blockstate.getBlock().getStateDefinition().getProperty("waterlogged") instanceof BooleanProperty _getbp1 && blockstate.getValue(_getbp1)) {
             if (Math.random() < 0.2) {
                 {
-                    int _value = (int) ((blockstate.getBlock().getStateDefinition().getProperty("process") instanceof IntegerProperty _getip3 ? blockstate.getValue(_getip3) : -1) + 1);
+                    int _value = (blockstate.getBlock().getStateDefinition().getProperty("process") instanceof IntegerProperty _getip3 ? blockstate.getValue(_getip3) : -1) + 1;
                     BlockPos _pos = BlockPos.containing(x, y, z);
                     BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
                     if (_bs.getBlock().getStateDefinition().getProperty("process") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))
@@ -159,7 +159,7 @@ public class ReaperEggBlock extends Block implements SimpleWaterloggedBlock {
         }
         if ((blockstate.getBlock().getStateDefinition().getProperty("process") instanceof IntegerProperty _getip6 ? blockstate.getValue(_getip6) : -1) >= 10) {
             {
-                int _value = (int) ((blockstate.getBlock().getStateDefinition().getProperty("hatch") instanceof IntegerProperty _getip8 ? blockstate.getValue(_getip8) : -1) + 1);
+                int _value = (blockstate.getBlock().getStateDefinition().getProperty("hatch") instanceof IntegerProperty _getip8 ? blockstate.getValue(_getip8) : -1) + 1;
                 BlockPos _pos = BlockPos.containing(x, y, z);
                 BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
                 if (_bs.getBlock().getStateDefinition().getProperty("hatch") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))
@@ -224,7 +224,7 @@ public class ReaperEggBlock extends Block implements SimpleWaterloggedBlock {
                     }
                 }.checkGamemode((Entity) entity)) {
                     {
-                        int _value = (int) ((blockstate.getBlock().getStateDefinition().getProperty("hatch") instanceof IntegerProperty _getip4 ? blockstate.getValue(_getip4) : -1) + 1);
+                        int _value = (blockstate.getBlock().getStateDefinition().getProperty("hatch") instanceof IntegerProperty _getip4 ? blockstate.getValue(_getip4) : -1) + 1;
                         BlockPos _pos = BlockPos.containing(x, y, z);
                         BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
                         if (_bs.getBlock().getStateDefinition().getProperty("hatch") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))
@@ -233,7 +233,7 @@ public class ReaperEggBlock extends Block implements SimpleWaterloggedBlock {
                     ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                 } else {
                     {
-                        int _value = (int) ((blockstate.getBlock().getStateDefinition().getProperty("process") instanceof IntegerProperty _getip9 ? blockstate.getValue(_getip9) : -1) + 1);
+                        int _value = (blockstate.getBlock().getStateDefinition().getProperty("process") instanceof IntegerProperty _getip9 ? blockstate.getValue(_getip9) : -1) + 1;
                         BlockPos _pos = BlockPos.containing(x, y, z);
                         BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
                         if (_bs.getBlock().getStateDefinition().getProperty("process") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))

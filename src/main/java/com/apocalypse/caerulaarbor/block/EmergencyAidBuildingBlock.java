@@ -1,13 +1,18 @@
-
 package com.apocalypse.caerulaarbor.block;
 
-import com.apocalypse.caerulaarbor.procedures.EmergencyReviveSanityProcedure;
-import com.apocalypse.caerulaarbor.procedures.SetPoweredProcedure;
-import com.apocalypse.caerulaarbor.procedures.SetUnpowrredProcedure;
+import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.utils.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -22,9 +27,15 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.registries.ForgeRegistries;
+
+import java.util.Comparator;
+import java.util.List;
 
 public class EmergencyAidBuildingBlock extends Block implements SimpleWaterloggedBlock {
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
@@ -95,19 +106,45 @@ public class EmergencyAidBuildingBlock extends Block implements SimpleWaterlogge
 	public void neighborChanged(BlockState blockstate, Level world, BlockPos pos, Block neighborBlock, BlockPos fromPos, boolean moving) {
 		super.neighborChanged(blockstate, world, pos, neighborBlock, fromPos, moving);
 		if (world.getBestNeighborSignal(pos) > 0) {
-			SetPoweredProcedure.execute(world, pos.getX(), pos.getY(), pos.getZ(), blockstate);
+			if (!blockstate.getValue(POWERED)) {
+				world.playSound(null, pos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "bell_ring")), SoundSource.BLOCKS, 1.25F, 1);
+			}
+			world.setBlock(pos, world.getBlockState(pos).setValue(POWERED, true), 3);
 		} else {
-			SetUnpowrredProcedure.execute(world, pos.getX(), pos.getY(), pos.getZ());
+			world.setBlock(pos, world.getBlockState(pos).setValue(POWERED, false), 3);
 		}
 	}
 
 	@Override
 	public void tick(BlockState blockstate, ServerLevel world, BlockPos pos, RandomSource random) {
 		super.tick(blockstate, world, pos, random);
-		int x = pos.getX();
-		int y = pos.getY();
-		int z = pos.getZ();
-		EmergencyReviveSanityProcedure.execute(world, x, y, z, blockstate);
+		if (blockstate.getValue(POWERED)) {
+			double tx;
+			double tz;
+			double dist;
+			Vec3 center = new Vec3(pos.getX(), pos.getY(), pos.getZ());
+			List<Entity> nearbyEntities = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(32 / 2d), entity -> true).stream()
+					.sorted(Comparator.comparingDouble(entity -> entity.distanceToSqr(center))).toList();
+			for (Entity entity : nearbyEntities) {
+				if (!(entity instanceof LivingEntity)) {
+					continue;
+				}
+				if (center.distanceTo(new Vec3(entity.getX(), entity.getY(), entity.getZ())) > 16) {
+					continue;
+				}
+				if (entity instanceof Player) {
+					EntityUtils.restoreSanity(entity, 20);
+				} else {
+					EntityUtils.restoreSanity(entity, 10);
+				}
+			}
+			for (int index0 = 0; index0 < 120; index0++) {
+				dist = Mth.nextDouble(RandomSource.create(), 13, 16);
+				tx = pos.getX() + 0.5 + dist * Math.cos(Math.toRadians(index0 * 3));
+				tz = pos.getZ() + 0.5 + dist * Math.sin(Math.toRadians(index0 * 3));
+				world.sendParticles(ParticleTypes.GLOW, tx, pos.getY() + 0.25, tz, 2, 0.1, 0.1, 0.1, 0);
+			}
+		}
 		world.scheduleTick(pos, this, 20);
 	}
 }

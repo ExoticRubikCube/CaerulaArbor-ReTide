@@ -275,12 +275,12 @@ public class FirstTellerEntity extends SeaMonster implements RangedAttackMob {
         Entity enemy;
         if (this.isAlive()) {
             if ((Entity) this instanceof FirstTellerEntity _datEntSetI)
-                _datEntSetI.getEntityData().set(DATA_sklp, (int) (((Entity) this instanceof FirstTellerEntity _datEntI ? _datEntI.getEntityData().get(DATA_sklp) : 0) + 1));
+                _datEntSetI.getEntityData().set(DATA_sklp, ((Entity) this instanceof FirstTellerEntity _datEntI ? _datEntI.getEntityData().get(DATA_sklp) : 0) + 1);
             if (CaerulaArborModVariables.MapVariables.get(world).strategy_grow >= 4) {
                 if ((Entity) this instanceof FirstTellerEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_sklp, (int) (((Entity) this instanceof FirstTellerEntity _datEntI ? _datEntI.getEntityData().get(DATA_sklp) : 0) + 1));
+                    _datEntSetI.getEntityData().set(DATA_sklp, ((Entity) this instanceof FirstTellerEntity _datEntI ? _datEntI.getEntityData().get(DATA_sklp) : 0) + 1);
             }
-            enemy = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+            enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
             if (((Entity) this instanceof FirstTellerEntity _datEntI ? _datEntI.getEntityData().get(DATA_sklp) : 0) >= 400 && !(enemy == null)) {
                 if (distanceTo(enemy) <= 8) {
                     if (world instanceof Level _level) {

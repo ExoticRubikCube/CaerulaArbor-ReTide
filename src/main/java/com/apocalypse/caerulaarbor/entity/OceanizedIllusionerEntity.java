@@ -2,11 +2,11 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
+import com.apocalypse.caerulaarbor.entity.base.RavagerMountRider;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModGameRules;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
-import com.apocalypse.caerulaarbor.procedures.RaiderRideRavagerProcedure;
 import com.apocalypse.caerulaarbor.utils.EntityPredicateUtils;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
 import com.apocalypse.caerulaarbor.utils.WorldUtils;
@@ -64,7 +64,7 @@ import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
 
-public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttackMob {
+public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttackMob, RavagerMountRider {
 
 	private boolean isIllusionerDurative() {
 		return EntityPredicateUtils.isIllusionerDurative(this);
@@ -312,7 +312,7 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
 				this.rangedAttackMob.performRangedAttack(this.target, f1);
 				this.attackTime = Mth.floor(f * (float) (this.attackIntervalMax - this.attackIntervalMin) + (float) this.attackIntervalMin);
 			} else if (this.attackTime < 0) {
-				this.attackTime = Mth.floor(Mth.lerp(Math.sqrt(d0) / (double) this.attackRadius, (double) this.attackIntervalMin, (double) this.attackIntervalMax));
+				this.attackTime = Mth.floor(Mth.lerp(Math.sqrt(d0) / (double) this.attackRadius, this.attackIntervalMin, this.attackIntervalMax));
 			} else
 				((OceanizedIllusionerEntity) rangedAttackMob).entityData.set(SHOOT, false);
 		}
@@ -356,7 +356,7 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
             Entity illusion = null;
             if (!isPassenger()) {
                 if (Math.random() < 0.75) {
-                    illusion = (Entity) world.getEntitiesOfClass(OceanIllusionEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true).stream().sorted(new Object() {
+                    illusion = world.getEntitiesOfClass(OceanIllusionEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true).stream().sorted(new Object() {
                         Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
                             return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
                         }
@@ -461,7 +461,7 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
                 sklp1 = (Entity) this instanceof OceanizedIllusionerEntity _datEntI ? _datEntI.getEntityData().get(DATA_spellP) : 0;
                 sklp2 = (Entity) this instanceof OceanizedIllusionerEntity _datEntI ? _datEntI.getEntityData().get(DATA_mirrorP) : 0;
                 dura = (Entity) this instanceof OceanizedIllusionerEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
-                enemy = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
+                enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                 if (dura > 0) {
                     if ((Entity) this instanceof OceanizedIllusionerEntity _datEntSetI)
                         _datEntSetI.getEntityData().set(DATA_duration, (int) (dura - 1));
@@ -481,7 +481,7 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
                                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.illusioner.cast_spell")), SoundSource.HOSTILE, 1, 1);
                             }
                             if (this instanceof OceanizedIllusionerEntity) {
-                                ((OceanizedIllusionerEntity) this).setAnimation("animation.oceanized_illusioner.cast");
+                                this.setAnimation("animation.oceanized_illusioner.cast");
                             }
                             if (enemy instanceof LivingEntity _entity && !this.level().isClientSide())
                                 this.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 400, 0));
@@ -514,7 +514,7 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
                                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.illusioner.cast_spell")), SoundSource.HOSTILE, 1, 1);
                             }
                             if (this instanceof OceanizedIllusionerEntity) {
-                                ((OceanizedIllusionerEntity) this).setAnimation("animation.oceanized_illusioner.fission");
+                                this.setAnimation("animation.oceanized_illusioner.fission");
                             }
                             for (int index0 = 0; index0 < 5; index0++) {
                                 if (WorldUtils.isValidForMan(world, x + 4 - index0, y, z)) {
@@ -575,7 +575,6 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
                         }
                     }
                 }
-                RaiderRideRavagerProcedure.execute(world, x, y, z, this);
             }
         }
         this.refreshDimensions();

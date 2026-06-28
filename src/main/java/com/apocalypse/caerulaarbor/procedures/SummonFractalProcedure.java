@@ -62,5 +62,3 @@ public class SummonFractalProcedure {
 		}
 	}
 }
-
-// TODO: 调用次数 = 6，副作用密集（生成实体、发送粒子），保持原样不重构
