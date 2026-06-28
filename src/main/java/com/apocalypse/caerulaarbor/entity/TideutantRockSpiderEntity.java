@@ -321,11 +321,7 @@ public class TideutantRockSpiderEntity extends SeaMonster {
                         CaerulaArborMod.queueServerWork(11, () -> {
                             if (this.isAlive()) {
                                 if (world instanceof Level _level) {
-                                    if (!_level.isClientSide()) {
                                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.zombie.destroy_egg")), SoundSource.HOSTILE, 1, 1);
-                                    } else {
-                                        _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.zombie.destroy_egg")), SoundSource.HOSTILE, 1, 1, false);
-                                    }
                                 }
                                 if (world instanceof ServerLevel _level) {
                                     Entity entityToSpawn = CaerulaArborModEntities.TIDUTANT_EXCRESCENCE.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);

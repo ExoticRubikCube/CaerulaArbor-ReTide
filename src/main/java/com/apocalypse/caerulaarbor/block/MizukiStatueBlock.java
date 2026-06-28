@@ -148,11 +148,7 @@ public class MizukiStatueBlock extends BaseEntityBlock implements SimpleWaterlog
             if ((LevelAccessor) world instanceof ServerLevel _level)
                 _level.sendParticles(ParticleTypes.END_ROD, (x + 0.5), (y + 2), (z + 0.5), 48, 2, 2, 2, 0.15);
             if ((LevelAccessor) world instanceof Level _level) {
-                if (!_level.isClientSide()) {
                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.end_portal_frame.fill")), SoundSource.BLOCKS, 2, 1);
-                } else {
-                    _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.end_portal_frame.fill")), SoundSource.BLOCKS, 2, 1, false);
-                }
             }
             {
                 int _value = 0;

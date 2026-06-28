@@ -1,30 +1,27 @@
 package com.apocalypse.caerulaarbor.network;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.world.inventory.CentrifugerSelectMenu;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraftforge.network.NetworkEvent;
-
-import net.minecraft.world.level.Level;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.core.BlockPos;
-
-import com.apocalypse.caerulaarbor.world.inventory.CentrifugerSelectMenu;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.function.Supplier;
 import java.util.HashMap;
+import java.util.function.Supplier;
 
 public class CentrifugerSelectButtonMessage {
 	private final int buttonID, x, y, z;
@@ -115,11 +112,7 @@ public class CentrifugerSelectButtonMessage {
                                 ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
                         }
                         if ((LevelAccessor) world instanceof Level _level) {
-                            if (!_level.isClientSide()) {
                                 _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "notice")), SoundSource.BLOCKS, 2, 1);
-                            } else {
-                                _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "notice")), SoundSource.BLOCKS, 2, 1, false);
-                            }
                         }
                         if ((LevelAccessor) world instanceof ServerLevel _level) {
                             ItemEntity entityToSpawn = new ItemEntity(_level, ((double) x + 0.5), ((double) y + 1), ((double) z + 0.5), res);

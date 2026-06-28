@@ -216,11 +216,7 @@ public class SkadiEntity extends Animal implements GeoEntity {
                                         sourceentity.push((getLookAngle().x + 0.33), 0, (getLookAngle().z + 0.33));
                                     }
                                     if (world instanceof Level _level) {
-                                        if (!_level.isClientSide()) {
                                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.dragon_fireball.explode")), SoundSource.HOSTILE, 2, 1);
-                                        } else {
-                                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.dragon_fireball.explode")), SoundSource.HOSTILE, 2, 1, false);
-                                        }
                                     }
                                     if (this == null || sourceentity == null)
                                         return;

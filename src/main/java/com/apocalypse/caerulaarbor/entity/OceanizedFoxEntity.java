@@ -329,11 +329,7 @@ public class OceanizedFoxEntity extends SeaMonster {
                             CaerulaArborMod.queueServerWork(20, () -> {
                                 if (this.isAlive() && !(((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == null)) {
                                     if (world instanceof Level _level) {
-                                        if (!_level.isClientSide()) {
                                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.fox.teleport")), SoundSource.HOSTILE, 1, 1);
-                                        } else {
-                                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.fox.teleport")), SoundSource.HOSTILE, 1, 1, false);
-                                        }
                                     }
                                     {
                                         Entity _ent = this;
@@ -352,11 +348,7 @@ public class OceanizedFoxEntity extends SeaMonster {
                                     Entity enemy1 = null;
                                     double damage = 0;
                                     if (world instanceof Level _level) {
-                                        if (!_level.isClientSide()) {
                                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.fox.aggro")), SoundSource.HOSTILE, 2, 1);
-                                        } else {
-                                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.fox.aggro")), SoundSource.HOSTILE, 2, 1, false);
-                                        }
                                     }
                                     damage = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
                                     enemy1 = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;

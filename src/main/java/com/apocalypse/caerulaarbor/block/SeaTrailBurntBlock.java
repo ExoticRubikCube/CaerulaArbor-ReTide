@@ -224,11 +224,7 @@ public class SeaTrailBurntBlock extends Block implements SimpleWaterloggedBlock,
                             }.getValue())), "longevity", (int) ((blockstate.getBlock().getStateDefinition().getProperty("longevity") instanceof IntegerProperty _getip15 ? blockstate.getValue(_getip15) : -1) - 1)))),
                     3);
             if ((LevelAccessor) world instanceof Level _level) {
-                if (!_level.isClientSide()) {
                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.step")), SoundSource.NEUTRAL, 1, 1);
-                } else {
-                    _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.step")), SoundSource.NEUTRAL, 1, 1, false);
-                }
             }
         }
         world.scheduleTick(pos, this, 20);

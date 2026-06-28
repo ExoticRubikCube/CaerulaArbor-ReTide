@@ -377,20 +377,12 @@ public class OceanizedWardenEntity extends SeaMonster {
                                 this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 45, 9, false, false));
                             ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY()), (enemy.getZ())));
                             if (world instanceof Level _level) {
-                                if (!_level.isClientSide()) {
                                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.sonic_charge")), SoundSource.HOSTILE, 2, 1);
-                                } else {
-                                    _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.sonic_charge")), SoundSource.HOSTILE, 2, 1, false);
-                                }
                             }
                             CaerulaArborMod.queueServerWork(30, () -> {
                                 if (this.isAlive()) {
                                     if (world instanceof Level _level) {
-                                        if (!_level.isClientSide()) {
                                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.sonic_boom")), SoundSource.HOSTILE, 2, 1);
-                                        } else {
-                                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.sonic_boom")), SoundSource.HOSTILE, 2, 1, false);
-                                        }
                                     }
                                     EntityUtils.wardenSonicBoom(world, this, (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null);
                                 }
@@ -425,22 +417,14 @@ public class OceanizedWardenEntity extends SeaMonster {
                             });
                             CaerulaArborMod.queueServerWork(20, () -> {
                                 if (world instanceof Level _level) {
-                                    if (!_level.isClientSide()) {
                                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.sonic_charge")), SoundSource.HOSTILE, 2, 1);
-                                    } else {
-                                        _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.sonic_charge")), SoundSource.HOSTILE, 2, 1, false);
-                                    }
                                 }
                                 if (!this.level().isClientSide())
                                     this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 25, 9, false, false));
                             });
                             CaerulaArborMod.queueServerWork(27, () -> {
                                 if (world instanceof Level _level) {
-                                    if (!_level.isClientSide()) {
                                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.sonic_boom")), SoundSource.HOSTILE, 2, 1);
-                                    } else {
-                                        _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.sonic_boom")), SoundSource.HOSTILE, 2, 1, false);
-                                    }
                                 }
                                 EntityUtils.wardenLightBoom(world, this, (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null);
                             });
@@ -462,11 +446,7 @@ public class OceanizedWardenEntity extends SeaMonster {
                 if (gap > 0 && !(enemy == null) && enemy.isAlive()) {
                     if (tickCount % gap == 0) {
                         if (world instanceof Level _level) {
-                            if (!_level.isClientSide()) {
                                 _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.heartbeat")), SoundSource.HOSTILE, 2, Mth.nextInt(RandomSource.create(), (int) 0.9, (int) 1.05));
-                            } else {
-                                _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.heartbeat")), SoundSource.HOSTILE, 2, Mth.nextInt(RandomSource.create(), (int) 0.9, (int) 1.05), false);
-                            }
                         }
                     }
                 }
@@ -639,11 +619,7 @@ public class OceanizedWardenEntity extends SeaMonster {
 
 		CaerulaArborMod.queueServerWork(10, () -> {
 			if (world instanceof Level _level) {
-				if (!_level.isClientSide()) {
 					_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.sonic_charge")), SoundSource.HOSTILE, (float) 0.1, 1);
-				} else {
-					_level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.sonic_charge")), SoundSource.HOSTILE, (float) 0.1, 1, false);
-				}
 			}
 			for (int index0 = 0; index0 < 3; index0++) {
 				double t = Mth.nextDouble(RandomSource.create(), 0, 6.283);
@@ -656,11 +632,7 @@ public class OceanizedWardenEntity extends SeaMonster {
 
 		CaerulaArborMod.queueServerWork(20, () -> {
 			if (world instanceof Level _level) {
-				if (!_level.isClientSide()) {
 					_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.sonic_charge")), SoundSource.HOSTILE, (float) 0.2, 1);
-				} else {
-					_level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.sonic_charge")), SoundSource.HOSTILE, (float) 0.2, 1, false);
-				}
 			}
 			for (int index1 = 0; index1 < 5; index1++) {
 				double t = Mth.nextDouble(RandomSource.create(), 0, 6.283);
@@ -673,11 +645,7 @@ public class OceanizedWardenEntity extends SeaMonster {
 
 		CaerulaArborMod.queueServerWork(32, () -> {
 			if (world instanceof Level _level) {
-				if (!_level.isClientSide()) {
 					_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.sonic_charge")), SoundSource.HOSTILE, (float) 0.3, 1);
-				} else {
-					_level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.sonic_charge")), SoundSource.HOSTILE, (float) 0.3, 1, false);
-				}
 			}
 			for (int index2 = 0; index2 < 9; index2++) {
 				double t = Mth.nextDouble(RandomSource.create(), 0, 6.283);
@@ -690,11 +658,7 @@ public class OceanizedWardenEntity extends SeaMonster {
 
 		CaerulaArborMod.queueServerWork(35, () -> {
 			if (world instanceof Level _level) {
-				if (!_level.isClientSide()) {
 					_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.sonic_charge")), SoundSource.HOSTILE, (float) 0.4, 1);
-				} else {
-					_level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.sonic_charge")), SoundSource.HOSTILE, (float) 0.4, 1, false);
-				}
 			}
 			for (int index3 = 0; index3 < 9; index3++) {
 				double t = Mth.nextDouble(RandomSource.create(), 0, 6.283);
@@ -707,11 +671,7 @@ public class OceanizedWardenEntity extends SeaMonster {
 
 		CaerulaArborMod.queueServerWork(38, () -> {
 			if (world instanceof Level _level) {
-				if (!_level.isClientSide()) {
 					_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.sonic_charge")), SoundSource.HOSTILE, (float) 0.5, 1);
-				} else {
-					_level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.sonic_charge")), SoundSource.HOSTILE, (float) 0.5, 1, false);
-				}
 			}
 			for (int index4 = 0; index4 < 9; index4++) {
 				double t = Mth.nextDouble(RandomSource.create(), 0, 6.283);
@@ -724,11 +684,7 @@ public class OceanizedWardenEntity extends SeaMonster {
 
 		CaerulaArborMod.queueServerWork(40, () -> {
 			if (world instanceof Level _level) {
-				if (!_level.isClientSide()) {
 					_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.sonic_charge")), SoundSource.HOSTILE, 2, 1);
-				} else {
-					_level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.sonic_charge")), SoundSource.HOSTILE, 2, 1, false);
-				}
 			}
 		});
 
@@ -760,11 +716,7 @@ public class OceanizedWardenEntity extends SeaMonster {
 
 			if (hasSound) {
 				if (world instanceof Level _level) {
-					if (!_level.isClientSide()) {
 						_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.sonic_boom")), SoundSource.HOSTILE, 22, 1);
-					} else {
-						_level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.sonic_boom")), SoundSource.HOSTILE, 22, 1, false);
-					}
 				}
 			}
 		});

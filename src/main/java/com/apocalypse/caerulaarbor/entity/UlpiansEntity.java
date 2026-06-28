@@ -401,21 +401,13 @@ public class UlpiansEntity extends Animal implements GeoEntity {
                             if ((Entity) this instanceof UlpiansEntity _datEntSetI)
                                 _datEntSetI.getEntityData().set(DATA_duration, (int) (dura + 40));
                             if (world instanceof Level _level) {
-                                if (!_level.isClientSide()) {
                                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "ulpians_pul_pre")), SoundSource.NEUTRAL, (float) 2.2, 1);
-                                } else {
-                                    _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "ulpians_pul_pre")), SoundSource.NEUTRAL, (float) 2.2, 1, false);
-                                }
                             }
                             ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY() + 1.6), (enemy.getZ())));
                             CaerulaArborMod.queueServerWork(13, () -> {
                                 if (this.isAlive()) {
                                     if (world instanceof Level _level) {
-                                        if (!_level.isClientSide()) {
                                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "ulpians_pull_throw")), SoundSource.NEUTRAL, 3, 1);
-                                        } else {
-                                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "ulpians_pull_throw")), SoundSource.NEUTRAL, 3, 1, false);
-                                        }
                                     }
                                 }
                             });
@@ -431,11 +423,7 @@ public class UlpiansEntity extends Animal implements GeoEntity {
                                     r = 6;
                                     damage = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 2.7;
                                     if (world instanceof Level _level) {
-                                        if (!_level.isClientSide()) {
                                             _level.playSound(null, BlockPos.containing(getX(), getY(), getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "ulpians_pull_hit")), SoundSource.NEUTRAL, 3, 1);
-                                        } else {
-                                            _level.playLocalSound((getX()), (getY()), (getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "ulpians_pull_hit")), SoundSource.NEUTRAL, 3, 1, false);
-                                        }
                                     }
                                     {
                                         final Vec3 _center = new Vec3((getX()), (getY()), (getZ()));
@@ -515,11 +503,7 @@ public class UlpiansEntity extends Animal implements GeoEntity {
                             CaerulaArborMod.queueServerWork(26, () -> {
                                 if (this.isAlive()) {
                                     if (world instanceof Level _level) {
-                                        if (!_level.isClientSide()) {
                                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "ulpians_pull_pull")), SoundSource.NEUTRAL, (float) 2.5, 1);
-                                        } else {
-                                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "ulpians_pull_pull")), SoundSource.NEUTRAL, (float) 2.5, 1, false);
-                                        }
                                     }
                                 }
                             });
@@ -545,29 +529,17 @@ public class UlpiansEntity extends Animal implements GeoEntity {
                             if ((Entity) this instanceof UlpiansEntity _datEntSetI)
                                 _datEntSetI.getEntityData().set(DATA_duration, (int) (dura + 40));
                             if (world instanceof Level _level) {
-                                if (!_level.isClientSide()) {
                                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "ulpians_pul_pre")), SoundSource.NEUTRAL, (float) 2.2, 1);
-                                } else {
-                                    _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "ulpians_pul_pre")), SoundSource.NEUTRAL, (float) 2.2, 1, false);
-                                }
                             }
                             ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY() + 1.6), (enemy.getZ())));
                             if (!this.level().isClientSide())
                                 this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 25, 9, false, false));
                             if (world instanceof Level _level) {
-                                if (!_level.isClientSide()) {
                                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "ulpians_skill")), SoundSource.NEUTRAL, (float) 2.5, 1);
-                                } else {
-                                    _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "ulpians_skill")), SoundSource.NEUTRAL, (float) 2.5, 1, false);
-                                }
                             }
                             CaerulaArborMod.queueServerWork(16, () -> {
                                 if (world instanceof Level _level) {
-                                    if (!_level.isClientSide()) {
                                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "anchor_throw")), SoundSource.NEUTRAL, (float) 2.2, 1);
-                                    } else {
-                                        _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "anchor_throw")), SoundSource.NEUTRAL, (float) 2.2, 1, false);
-                                    }
                                 }
                             });
                             CaerulaArborMod.queueServerWork(22, () -> {
@@ -639,11 +611,7 @@ public class UlpiansEntity extends Animal implements GeoEntity {
                                     if (world instanceof ServerLevel _level)
                                         _level.sendParticles(ParticleTypes.EXPLOSION_EMITTER, noeX, nowY, nowZ, 72, 3, 3, 3, 0.5);
                                     if (world instanceof Level _level) {
-                                        if (!_level.isClientSide()) {
                                             _level.playSound(null, BlockPos.containing(noeX, nowY, nowZ), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "anchor_skill")), SoundSource.PLAYERS, 3, 1);
-                                        } else {
-                                            _level.playLocalSound(noeX, nowY, nowZ, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "anchor_skill")), SoundSource.PLAYERS, 3, 1, false);
-                                        }
                                     }
                                 }
                             });

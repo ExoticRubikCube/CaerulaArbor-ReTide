@@ -58,23 +58,13 @@ public class UpgradeBreedProcedure {
 					for (Entity entityiterator : new ArrayList<>(world.players())) {
 						if (stra >= 3) {
 							if (world instanceof Level _level) {
-								if (!_level.isClientSide()) {
 									_level.playSound(null, BlockPos.containing(entityiterator.getX(), entityiterator.getY(), entityiterator.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "breed2")),
 											SoundSource.NEUTRAL, 4, 1);
-								} else {
-									_level.playLocalSound((entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "breed2")), SoundSource.NEUTRAL, 4, 1,
-											false);
-								}
 							}
 						} else if (stra > 0) {
 							if (world instanceof Level _level) {
-								if (!_level.isClientSide()) {
 									_level.playSound(null, BlockPos.containing(entityiterator.getX(), entityiterator.getY(), entityiterator.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "breed1")),
 											SoundSource.NEUTRAL, 4, 1);
-								} else {
-									_level.playLocalSound((entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "breed1")), SoundSource.NEUTRAL, 4, 1,
-											false);
-								}
 							}
 						}
 					}

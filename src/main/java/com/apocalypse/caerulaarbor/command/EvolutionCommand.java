@@ -1,30 +1,29 @@
 package com.apocalypse.caerulaarbor.command;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
-import com.apocalypse.caerulaarbor.procedures.*;
+import com.apocalypse.caerulaarbor.procedures.UpgradeBreedProcedure;
+import com.apocalypse.caerulaarbor.procedures.UpgradeGrowProcedure;
+import com.apocalypse.caerulaarbor.procedures.UpgradeMigraProcedure;
+import com.apocalypse.caerulaarbor.procedures.UpgradeSubsisProcedure;
 import com.apocalypse.caerulaarbor.utils.StrategyUtils;
+import com.mojang.brigadier.arguments.DoubleArgumentType;
+import net.minecraft.commands.Commands;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraftforge.registries.ForgeRegistries;
-
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.common.util.FakePlayerFactory;
-
-import net.minecraft.world.level.Level;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.core.Direction;
-import net.minecraft.commands.Commands;
-
-import com.mojang.brigadier.arguments.DoubleArgumentType;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraftforge.common.util.FakePlayerFactory;
+import net.minecraftforge.event.RegisterCommandsEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.ForgeRegistries;
 
 @Mod.EventBusSubscriber
 public class EvolutionCommand {
@@ -61,19 +60,11 @@ public class EvolutionCommand {
             CaerulaArborModVariables.MapVariables.get(world).syncData(world);
             if (DoubleArgumentType.getDouble(arguments, "lvl") >= 3) {
                 if ((LevelAccessor) world instanceof Level _level) {
-                    if (!_level.isClientSide()) {
                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "grow2")), SoundSource.NEUTRAL, 4, 1);
-                    } else {
-                        _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "grow2")), SoundSource.NEUTRAL, 4, 1, false);
-                    }
                 }
             } else if (DoubleArgumentType.getDouble(arguments, "lvl") > 0) {
                 if ((LevelAccessor) world instanceof Level _level) {
-                    if (!_level.isClientSide()) {
                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "grow1")), SoundSource.NEUTRAL, 4, 1);
-                    } else {
-                        _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "grow1")), SoundSource.NEUTRAL, 4, 1, false);
-                    }
                 }
             }
             if (DoubleArgumentType.getDouble(arguments, "lvl") < 4) {
@@ -119,19 +110,11 @@ public class EvolutionCommand {
             CaerulaArborModVariables.MapVariables.get(world).syncData(world);
             if (DoubleArgumentType.getDouble(arguments, "lvl") >= 3) {
                 if ((LevelAccessor) world instanceof Level _level) {
-                    if (!_level.isClientSide()) {
                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "breed2")), SoundSource.NEUTRAL, 4, 1);
-                    } else {
-                        _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "breed2")), SoundSource.NEUTRAL, 4, 1, false);
-                    }
                 }
             } else if (DoubleArgumentType.getDouble(arguments, "lvl") > 0) {
                 if ((LevelAccessor) world instanceof Level _level) {
-                    if (!_level.isClientSide()) {
                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "breed1")), SoundSource.NEUTRAL, 4, 1);
-                    } else {
-                        _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "breed1")), SoundSource.NEUTRAL, 4, 1, false);
-                    }
                 }
             }
             if (DoubleArgumentType.getDouble(arguments, "lvl") < 4) {
@@ -177,19 +160,11 @@ public class EvolutionCommand {
             CaerulaArborModVariables.MapVariables.get(world).syncData(world);
             if (DoubleArgumentType.getDouble(arguments, "lvl") >= 3) {
                 if ((LevelAccessor) world instanceof Level _level) {
-                    if (!_level.isClientSide()) {
                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "migration2")), SoundSource.NEUTRAL, 4, 1);
-                    } else {
-                        _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "migration2")), SoundSource.NEUTRAL, 4, 1, false);
-                    }
                 }
             } else if (DoubleArgumentType.getDouble(arguments, "lvl") > 0) {
                 if ((LevelAccessor) world instanceof Level _level) {
-                    if (!_level.isClientSide()) {
                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "migration1")), SoundSource.NEUTRAL, 4, 1);
-                    } else {
-                        _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "migration1")), SoundSource.NEUTRAL, 4, 1, false);
-                    }
                 }
             }
             if (DoubleArgumentType.getDouble(arguments, "lvl") < 4) {
@@ -235,19 +210,11 @@ public class EvolutionCommand {
             CaerulaArborModVariables.MapVariables.get(world).syncData(world);
             if (DoubleArgumentType.getDouble(arguments, "lvl") >= 3) {
                 if ((LevelAccessor) world instanceof Level _level) {
-                    if (!_level.isClientSide()) {
                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "subsisting2")), SoundSource.NEUTRAL, 4, 1);
-                    } else {
-                        _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "subsisting2")), SoundSource.NEUTRAL, 4, 1, false);
-                    }
                 }
             } else if (DoubleArgumentType.getDouble(arguments, "lvl") > 0) {
                 if ((LevelAccessor) world instanceof Level _level) {
-                    if (!_level.isClientSide()) {
                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "subsisting1")), SoundSource.NEUTRAL, 4, 1);
-                    } else {
-                        _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "subsisting1")), SoundSource.NEUTRAL, 4, 1, false);
-                    }
                 }
             }
             if (DoubleArgumentType.getDouble(arguments, "lvl") < 4) {
@@ -281,41 +248,25 @@ public class EvolutionCommand {
                     CaerulaArborModVariables.MapVariables.get(world).syncData(world);
                     if (DoubleArgumentType.getDouble(arguments, "lvl") == 1) {
                         if ((LevelAccessor) world instanceof Level _level) {
-                            if (!_level.isClientSide()) {
                                 _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "silence1")), SoundSource.NEUTRAL, 6, 1);
-                            } else {
-                                _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "silence1")), SoundSource.NEUTRAL, 6, 1, false);
-                            }
                         }
                         if (entity instanceof Player _player && !_player.level().isClientSide())
                             _player.displayClientMessage(Component.literal((Component.translatable("item.caerula_arbor.language_key.description_6").getString())), true);
                     } else if (DoubleArgumentType.getDouble(arguments, "lvl") == 2) {
                         if ((LevelAccessor) world instanceof Level _level) {
-                            if (!_level.isClientSide()) {
                                 _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "silence2")), SoundSource.NEUTRAL, 6, 1);
-                            } else {
-                                _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "silence2")), SoundSource.NEUTRAL, 6, 1, false);
-                            }
                         }
                         if (entity instanceof Player _player && !_player.level().isClientSide())
                             _player.displayClientMessage(Component.literal((Component.translatable("item.caerula_arbor.language_key.description_7").getString())), true);
                     } else if (DoubleArgumentType.getDouble(arguments, "lvl") == 3) {
                         if ((LevelAccessor) world instanceof Level _level) {
-                            if (!_level.isClientSide()) {
                                 _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "silence3")), SoundSource.NEUTRAL, 6, 1);
-                            } else {
-                                _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "silence3")), SoundSource.NEUTRAL, 6, 1, false);
-                            }
                         }
                         if (entity instanceof Player _player && !_player.level().isClientSide())
                             _player.displayClientMessage(Component.literal((Component.translatable("item.caerula_arbor.language_key.description_8").getString())), true);
                     } else if (DoubleArgumentType.getDouble(arguments, "lvl") == 4) {
                         if ((LevelAccessor) world instanceof Level _level) {
-                            if (!_level.isClientSide()) {
                                 _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "silence4")), SoundSource.NEUTRAL, 6, 1);
-                            } else {
-                                _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "silence4")), SoundSource.NEUTRAL, 6, 1, false);
-                            }
                         }
                         if (entity instanceof Player _player && !_player.level().isClientSide())
                             _player.displayClientMessage(Component.literal((Component.translatable("item.caerula_arbor.language_key.description_9").getString())), true);

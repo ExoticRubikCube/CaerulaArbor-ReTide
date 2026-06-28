@@ -1,7 +1,6 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
 import com.apocalypse.caerulaarbor.utils.EntityPredicateUtils;
@@ -158,11 +157,7 @@ public class ApocataEntity extends PathfinderMob implements GeoEntity {
         String name = "";
         if (!world.isClientSide()) {
             if (world instanceof Level _level) {
-                if (!_level.isClientSide()) {
                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "apocata_die")), SoundSource.NEUTRAL, 4, (float) 1.5);
-                } else {
-                    _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "apocata_die")), SoundSource.NEUTRAL, 4, (float) 1.5, false);
-                }
             }
         }
         name = sourceentity.getDisplayName().getString();
@@ -216,11 +211,7 @@ public class ApocataEntity extends PathfinderMob implements GeoEntity {
             }
             if (!((LevelAccessor) world).isClientSide()) {
                 if ((LevelAccessor) world instanceof Level _level) {
-                    if (!_level.isClientSide()) {
                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "apocata_interact")), SoundSource.NEUTRAL, 3, (float) 1.5);
-                    } else {
-                        _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "apocata_interact")), SoundSource.NEUTRAL, 3, (float) 1.5, false);
-                    }
                 }
             }
             if (entity instanceof ApocataEntity _datEntSetI)

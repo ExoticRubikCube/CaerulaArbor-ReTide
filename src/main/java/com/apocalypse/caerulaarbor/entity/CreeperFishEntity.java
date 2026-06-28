@@ -1,8 +1,7 @@
 package com.apocalypse.caerulaarbor.entity;
 
-import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
 import com.apocalypse.caerulaarbor.procedures.RangedSanityAttackProcedure;
@@ -177,11 +176,7 @@ public class CreeperFishEntity extends SeaMonster {
             return InteractionResult.PASS;
         if (itemstack.getItem() == Items.FLINT_AND_STEEL) {
             if ((LevelAccessor) world instanceof Level _level) {
-                if (!_level.isClientSide()) {
                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.creeper.primed")), SoundSource.HOSTILE, 2, 1);
-                } else {
-                    _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.creeper.primed")), SoundSource.HOSTILE, 2, 1, false);
-                }
             }
             if (entity instanceof CreeperFishEntity) {
                 ((CreeperFishEntity) entity).setAnimation("animation.explosivefish.jump");

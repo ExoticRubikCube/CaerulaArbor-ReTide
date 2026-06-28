@@ -141,11 +141,7 @@ public class SpecterDollEntity extends Animal implements GeoEntity {
         double z = this.getZ();
         if (this != null) {
             if ((LevelAccessor) world instanceof Level _level) {
-                if (!_level.isClientSide()) {
                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "specter_doll_ambient")), SoundSource.NEUTRAL, 3, 1);
-                } else {
-                    _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "specter_doll_ambient")), SoundSource.NEUTRAL, 3, 1, false);
-                }
             }
             if ((LevelAccessor) world instanceof ServerLevel _level)
                 _level.sendParticles((SimpleParticleType) (CaerulaArborModParticleTypes.SPECTER_GLITTER.get()), x, (y + 0.75), z, 64, 0.75, 0.75, 0.75, 0.1);

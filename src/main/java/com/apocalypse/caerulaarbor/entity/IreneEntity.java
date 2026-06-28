@@ -357,11 +357,7 @@ public class IreneEntity extends Animal implements GeoEntity {
             }
             if (!((LevelAccessor) world).isClientSide()) {
                 if ((LevelAccessor) world instanceof Level _level) {
-                    if (!_level.isClientSide()) {
                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_interact")), SoundSource.NEUTRAL, 3, 1);
-                    } else {
-                        _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_interact")), SoundSource.NEUTRAL, 3, 1, false);
-                    }
                 }
             }
             if (entity instanceof IreneEntity) {
@@ -420,11 +416,7 @@ public class IreneEntity extends Animal implements GeoEntity {
                             CaerulaArborMod.queueServerWork(10, () -> {
                                 if (this.isAlive()) {
                                     if (world instanceof Level _level) {
-                                        if (!_level.isClientSide()) {
                                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_fly")), SoundSource.NEUTRAL, 3, 1);
-                                        } else {
-                                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_fly")), SoundSource.NEUTRAL, 3, 1, false);
-                                        }
                                     }
 									Entity enemy1 = (Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null;
 									if (enemy1 == null || this == null)
@@ -438,11 +430,7 @@ public class IreneEntity extends Animal implements GeoEntity {
 											(float) (((Entity) this instanceof LivingEntity _livingEntity6 && _livingEntity6.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity6.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * (double) 3));
 									CaerulaArborMod.queueServerWork(6, () -> {
 										if (world instanceof Level _level) {
-											if (!_level.isClientSide()) {
 												_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_gun")), SoundSource.NEUTRAL, 3, 1);
-											} else {
-												_level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_gun")), SoundSource.NEUTRAL, 3, 1, false);
-											}
 										}
 										if (world instanceof ServerLevel _level)
 											_level.sendParticles(ParticleTypes.END_ROD, (enemy1.getX()), (enemy1.getY() + 0.75), (enemy1.getZ()), 32, 0.75, 0.75, 0.75, 0.15);
@@ -462,11 +450,7 @@ public class IreneEntity extends Animal implements GeoEntity {
                             if (!this.level().isClientSide())
                                 this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 60, 9, false, false));
                             if (world instanceof Level _level) {
-                                if (!_level.isClientSide()) {
                                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_skill")), SoundSource.NEUTRAL, 3, 1);
-                                } else {
-                                    _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_skill")), SoundSource.NEUTRAL, 3, 1, false);
-                                }
                             }
                             if ((Entity) this instanceof IreneEntity _datEntSetI)
                                 _datEntSetI.getEntityData().set(DATA_skillp2, 0);
@@ -479,11 +463,7 @@ public class IreneEntity extends Animal implements GeoEntity {
 									double damage = 0;
 									damage = (Entity) this instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity0.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
 									if (world instanceof Level _level) {
-										if (!_level.isClientSide()) {
 											_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_skill_fly")), SoundSource.NEUTRAL, 3, 1);
-										} else {
-											_level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_skill_fly")), SoundSource.NEUTRAL, 3, 1, false);
-										}
 									}
 									{
 										final Vec3 _center = new Vec3(x, y, z);
@@ -505,11 +485,7 @@ public class IreneEntity extends Animal implements GeoEntity {
                             CaerulaArborMod.queueServerWork(16, () -> {
                                 if (this.isAlive()) {
                                     if (world instanceof Level _level) {
-                                        if (!_level.isClientSide()) {
                                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_skill_loop")), SoundSource.NEUTRAL, 2, 1);
-                                        } else {
-                                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_skill_loop")), SoundSource.NEUTRAL, 2, 1, false);
-                                        }
                                     }
                                 }
                             });
@@ -548,11 +524,7 @@ public class IreneEntity extends Animal implements GeoEntity {
 													entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))), this),
 															(float) (damage * 2.5));
 													if (world instanceof Level _level) {
-														if (!_level.isClientSide()) {
 															_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_skill_gun")), SoundSource.NEUTRAL, 3, 1);
-														} else {
-															_level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_skill_gun")), SoundSource.NEUTRAL, 3, 1, false);
-														}
 													}
 													if (world instanceof ServerLevel _level)
 														_level.sendParticles(ParticleTypes.END_ROD, (entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()), 72, 2.5, 2.5, 2.5, 0.1);
@@ -565,11 +537,7 @@ public class IreneEntity extends Animal implements GeoEntity {
                             CaerulaArborMod.queueServerWork(59, () -> {
                                 if (this.isAlive()) {
                                     if (world instanceof Level _level) {
-                                        if (!_level.isClientSide()) {
                                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_reload")), SoundSource.NEUTRAL, 3, 1);
-                                        } else {
-                                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_reload")), SoundSource.NEUTRAL, 3, 1, false);
-                                        }
                                     }
                                 }
                             });

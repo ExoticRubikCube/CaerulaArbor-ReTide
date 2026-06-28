@@ -229,13 +229,7 @@ public class ScreamChestFishEntity extends SeaMonster {
 		}
 		if (this.isShiftKeyDown()) {
 			this.setAnimation("animation.scream_chest_fish.open");
-			if (this.level() instanceof Level level) {
-				if (!level.isClientSide()) {
-					level.playSound(null, BlockPos.containing(this.getX(), this.getY(), this.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.chest.open")), SoundSource.HOSTILE, 1, 1);
-				} else {
-					level.playLocalSound(this.getX(), this.getY(), this.getZ(), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.chest.open")), SoundSource.HOSTILE, 1, 1, false);
-				}
-			}
+			this.level().playSound(null, BlockPos.containing(this.getX(), this.getY(), this.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.chest.open")), SoundSource.HOSTILE, 1, 1);
 			this.setShiftKeyDown(false);
 			this.getEntityData().set(DATA_release, true);
 			this.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
@@ -342,11 +336,7 @@ public class ScreamChestFishEntity extends SeaMonster {
                         t = tickCount;
                         if (scream % 10 == 0) {
                             if (world instanceof Level _level) {
-                                if (!_level.isClientSide()) {
                                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_shrieker.shriek")), SoundSource.HOSTILE, 1, 1);
-                                } else {
-                                    _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_shrieker.shriek")), SoundSource.HOSTILE, 1, 1, false);
-                                }
                             }
                         }
                         for (int index0 = 0; index0 < 60; index0++) {

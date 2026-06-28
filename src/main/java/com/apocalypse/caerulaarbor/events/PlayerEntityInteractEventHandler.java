@@ -84,11 +84,7 @@ public class PlayerEntityInteractEventHandler {
             } else {
                 double dama = Math.min((entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) * 0.33, (sourceentity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) * 1.5);
                 if (world instanceof Level _level) {
-                    if (!_level.isClientSide()) {
                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.lava.extinguish")), SoundSource.HOSTILE, 1, 1);
-                    } else {
-                        _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.lava.extinguish")), SoundSource.HOSTILE, 1, 1, false);
-                    }
                 }
                 entity.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "extractor_damage")))), (float) 0.5);
                 EntityUtils.deductSanity(entity, 256);

@@ -45,11 +45,7 @@ public class SurvivorContractItem extends Item {
         if (entity != null) {
             if ((((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).relic_SURVIVOR < 0) {
                 if ((LevelAccessor) world instanceof Level _level) {
-                    if (!_level.isClientSide()) {
                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.beacon.activate")), SoundSource.NEUTRAL, (float) 3.2, 1);
-                    } else {
-                        _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.beacon.activate")), SoundSource.NEUTRAL, (float) 3.2, 1, false);
-                    }
                 }
                 if ((LevelAccessor) world instanceof ServerLevel _level)
                     _level.sendParticles(ParticleTypes.GLOW, x, y, z, 72, 1, 1, 1, 1);

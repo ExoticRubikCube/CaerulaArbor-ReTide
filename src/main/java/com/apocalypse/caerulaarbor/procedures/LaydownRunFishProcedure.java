@@ -23,11 +23,7 @@ public class LaydownRunFishProcedure {
 		if (direction == null || entity == null)
 			return InteractionResult.PASS;
 		if (world instanceof Level _level) {
-			if (!_level.isClientSide()) {
 				_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.bucket.empty_fish")), SoundSource.NEUTRAL, 1, 1);
-			} else {
-				_level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.bucket.empty_fish")), SoundSource.NEUTRAL, 1, 1, false);
-			}
 		}
 		if (itemstack.getItem() == CaerulaArborModItems.BUCKET_RUNFISH.get()) {
 			if (world instanceof ServerLevel _level) {

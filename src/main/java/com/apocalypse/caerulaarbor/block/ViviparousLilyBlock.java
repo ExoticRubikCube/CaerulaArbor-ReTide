@@ -197,11 +197,7 @@ public class ViviparousLilyBlock extends BaseEntityBlock implements SimpleWaterl
                     if (!(dx == 0 && dz == 0)) {
                         ((LevelAccessor) world).setBlock(BlockPos.containing((double) x + dx, y, (double) z + dz), Blocks.AIR.defaultBlockState(), 3);
                         if ((LevelAccessor) world instanceof Level _level) {
-                            if (!_level.isClientSide()) {
                                 _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.fungus.break")), SoundSource.BLOCKS, 1, 1);
-                            } else {
-                                _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.fungus.break")), SoundSource.BLOCKS, 1, 1, false);
-                            }
                         }
                     }
                 }
@@ -261,11 +257,7 @@ public class ViviparousLilyBlock extends BaseEntityBlock implements SimpleWaterl
                         }
                     }
                     if ((LevelAccessor) world instanceof Level _level) {
-                        if (!_level.isClientSide()) {
                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.puffer_fish.blow_out")), SoundSource.BLOCKS, 1, 1);
-                        } else {
-                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.puffer_fish.blow_out")), SoundSource.BLOCKS, 1, 1, false);
-                        }
                     }
                     ((LevelAccessor) world).setBlock(BlockPos.containing(x, y, z), Blocks.AIR.defaultBlockState(), 3);
                 }

@@ -1,7 +1,6 @@
 package com.apocalypse.caerulaarbor.block;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
 import net.minecraft.core.BlockPos;
@@ -151,11 +150,7 @@ public class AnchorMediumBlock extends Block {
                     }
                 }.getDirection(blockstate))) {
                     if ((LevelAccessor) world instanceof Level _level) {
-                        if (!_level.isClientSide()) {
                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.conduit.activate")), SoundSource.NEUTRAL, 2, 1);
-                        } else {
-                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.conduit.activate")), SoundSource.NEUTRAL, 2, 1, false);
-                        }
                     }
                     {
                         int _value = 1;
@@ -249,11 +244,7 @@ public class AnchorMediumBlock extends Block {
                         ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_booleanProp, false), 3);
                 }
                 if ((LevelAccessor) world instanceof Level _level) {
-                    if (!_level.isClientSide()) {
                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.conduit.deactivate")), SoundSource.NEUTRAL, 2, 1);
-                    } else {
-                        _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.conduit.deactivate")), SoundSource.NEUTRAL, 2, 1, false);
-                    }
                 }
             }
             for (int index0 = 0; index0 < 24; index0++) {
@@ -348,11 +339,7 @@ public class AnchorMediumBlock extends Block {
             }.getDirection(blockstate))) {
                 if (blockstate.getBlock().getStateDefinition().getProperty("activated") instanceof BooleanProperty _getbp5 && blockstate.getValue(_getbp5)) {
                     if ((LevelAccessor) world instanceof Level _level) {
-                        if (!_level.isClientSide()) {
                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.conduit.deactivate")), SoundSource.NEUTRAL, 2, 1);
-                        } else {
-                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.conduit.deactivate")), SoundSource.NEUTRAL, 2, 1, false);
-                        }
                     }
                     {
                         int _value = 0;
@@ -414,11 +401,7 @@ public class AnchorMediumBlock extends Block {
                     }
                 }.getDirection(blockstate))) {
                     if ((LevelAccessor) world instanceof Level _level) {
-                        if (!_level.isClientSide()) {
                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.conduit.activate")), SoundSource.NEUTRAL, 2, 1);
-                        } else {
-                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.conduit.activate")), SoundSource.NEUTRAL, 2, 1, false);
-                        }
                     }
                     {
                         int _value = 1;

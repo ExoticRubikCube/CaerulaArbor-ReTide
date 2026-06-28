@@ -243,13 +243,8 @@ public class ThirsterEntity extends SeaMonster {
 					}
 				}.timedLoop(0, 5, 1);
 				if (world instanceof Level _level) {
-					if (!_level.isClientSide()) {
 						_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "bishopfish_attack")), SoundSource.HOSTILE,
 								(float) 2.5, 1);
-					} else {
-						_level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "bishopfish_attack")), SoundSource.HOSTILE,
-								(float) 2.5, 1, false);
-					}
 				}
 				final Vec3 _center = new Vec3(x, y, z);
 				List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(40 / 2d), e -> true).stream()
@@ -602,11 +597,7 @@ public class ThirsterEntity extends SeaMonster {
 		}.timedLoop(0, 5, 1);
 
 		if (world instanceof Level _level) {
-			if (!_level.isClientSide()) {
 				_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "creeper_fish_explode")), SoundSource.HOSTILE, 3, 1);
-			} else {
-				_level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "creeper_fish_explode")), SoundSource.HOSTILE, 3, 1, false);
-			}
 		}
 
 		this.getEntityData().set(DATA_DIZZY_NUM, this.getEntityData().get(DATA_DIZZY_NUM) + 1);

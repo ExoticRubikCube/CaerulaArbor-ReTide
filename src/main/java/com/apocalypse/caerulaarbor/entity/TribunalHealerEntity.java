@@ -308,11 +308,7 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
 												double count1 = 0;
 												atk1 = (Entity) this instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity0.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
 												if (world instanceof Level _level) {
-													if (!_level.isClientSide()) {
 														_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "medic_strong")), SoundSource.NEUTRAL, 2, 1);
-													} else {
-														_level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "medic_strong")), SoundSource.NEUTRAL, 2, 1, false);
-													}
 												}
 												{
 													final Vec3 _center1 = new Vec3(x, y, z);
@@ -366,11 +362,7 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
 								double vz = 0;
 								double dist = 0;
 								if (world instanceof Level _level) {
-									if (!_level.isClientSide()) {
 										_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "medic_blast")), SoundSource.PLAYERS, 2, 1);
-									} else {
-										_level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "medic_blast")), SoundSource.PLAYERS, 2, 1, false);
-									}
 								}
 								{
 									final Vec3 _center = new Vec3((getX()), (getY()), (getZ()));
@@ -410,11 +402,7 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
 								CaerulaArborMod.queueServerWork(7, () -> {
 									if (this.isAlive()) {
 										if (world instanceof Level _level) {
-											if (!_level.isClientSide()) {
 												_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "medic_attack")), SoundSource.PLAYERS, (float) 1.25, 1);
-											} else {
-												_level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "medic_attack")), SoundSource.PLAYERS, (float) 1.25, 1, false);
-											}
 										}
 										new Object() {
 											void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {

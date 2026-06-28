@@ -6,7 +6,6 @@ import com.apocalypse.caerulaarbor.entity.*;
 import com.apocalypse.caerulaarbor.init.*;
 import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import com.apocalypse.caerulaarbor.procedures.SummonFractalProcedure;
-import com.apocalypse.caerulaarbor.procedures.SummonRandomSeabornProcedure;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.client.Minecraft;
@@ -755,11 +754,7 @@ public class EntityUtils {
 			tz = sacrifice.getZ();
 			r = 1 + phase;
 			if (world instanceof Level _level) {
-				if (!_level.isClientSide()) {
 					_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "endspeaker_eat")), SoundSource.HOSTILE, 4, 1);
-				} else {
-					_level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "endspeaker_eat")), SoundSource.HOSTILE, 4, 1, false);
-				}
 			}
 			{
 				final Vec3 _center = new Vec3(tx, ty, tz);
@@ -830,11 +825,7 @@ public class EntityUtils {
 		vz = toZ - fromZ;
 		size = Math.max(Math.min(Math.round(Math.sqrt(Math.pow(vx, 2) + Math.pow(vy, 2) + Math.pow(vz, 2))), 32), 1);
 		if (world instanceof Level _level) {
-			if (!_level.isClientSide()) {
 				_level.playSound(null, BlockPos.containing(fromX, fromY, fromZ), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.enderman.teleport")), SoundSource.HOSTILE, 1, 1);
-			} else {
-				_level.playLocalSound(fromX, fromY, fromZ, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.enderman.teleport")), SoundSource.HOSTILE, 1, 1, false);
-			}
 		}
 		for (int index0 = 0; index0 < (int) size; index0++) {
 			if (world instanceof ServerLevel _level)
@@ -1015,11 +1006,7 @@ public class EntityUtils {
 						_player.giveExperienceLevels(-((int) exp));
 				}
 				if (world instanceof Level _level) {
-					if (!_level.isClientSide()) {
 						_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.experience_orb.pickup")), SoundSource.PLAYERS, 2, 1);
-					} else {
-						_level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.experience_orb.pickup")), SoundSource.PLAYERS, 2, 1, false);
-					}
 				}
 				itemstack.shrink(1);
 			} else {
@@ -1230,11 +1217,7 @@ public class EntityUtils {
 		if (entity == null)
 			return;
 		if (world instanceof Level _level) {
-			if (!_level.isClientSide()) {
 				_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.guardian.attack")), SoundSource.HOSTILE, 2, 1);
-			} else {
-				_level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.guardian.attack")), SoundSource.HOSTILE, 2, 1, false);
-			}
 		}
 		{
 			final Vec3 _center = new Vec3((x + 1.8 * entity.getLookAngle().x), (y + 1.5), (z + 1.8 * entity.getLookAngle().z));
@@ -1830,13 +1813,8 @@ public class EntityUtils {
 		} else {
 			if (!(sourceentity instanceof LivingEntity _livEnt5 && _livEnt5.hasEffect(CaerulaArborModMobEffects.FROZEN.get()))) {
 				if (world instanceof Level _level) {
-					if (!_level.isClientSide()) {
 						_level.playSound(null, BlockPos.containing(sourceentity.getX(), sourceentity.getY(), sourceentity.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "last_jnight_freeze")), SoundSource.HOSTILE,
 								4, (float) Mth.nextDouble(RandomSource.create(), 1, 1.15));
-					} else {
-						_level.playLocalSound((sourceentity.getX()), (sourceentity.getY()), (sourceentity.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "last_jnight_freeze")), SoundSource.HOSTILE, 4,
-								(float) Mth.nextDouble(RandomSource.create(), 1, 1.15), false);
-					}
 				}
 			}
 			if ((entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5) {
@@ -1922,11 +1900,7 @@ public class EntityUtils {
 		double vz = toZ - fromZ;
 		double size = Math.max(Math.min(Math.round(Math.sqrt(vx * vx + vy * vy + vz * vz)), 32), 1);
 		if (world instanceof Level _level) {
-			if (!_level.isClientSide()) {
 				_level.playSound(null, BlockPos.containing(fromX, fromY, fromZ), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.enderman.teleport")), SoundSource.HOSTILE, 1, 1);
-			} else {
-				_level.playLocalSound(fromX, fromY, fromZ, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.enderman.teleport")), SoundSource.HOSTILE, 1, 1, false);
-			}
 		}
 		for (int index0 = 0; index0 < (int) size; index0++) {
 			if (world instanceof ServerLevel _level)

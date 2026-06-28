@@ -1,7 +1,6 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
 import net.minecraft.client.Minecraft;
@@ -218,11 +217,7 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity {
                 if (t % 20 == 11) {
                     if (!world.isClientSide()) {
                         if (world instanceof Level _level) {
-                            if (!_level.isClientSide()) {
                                 _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "gladiia_skill_rim")), SoundSource.NEUTRAL, 3, 1);
-                            } else {
-                                _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "gladiia_skill_rim")), SoundSource.NEUTRAL, 3, 1, false);
-                            }
                         }
                     }
                     {

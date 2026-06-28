@@ -487,11 +487,7 @@ public class OceanizedWitherEntity extends SeaMonster implements RangedAttackMob
                         if (world instanceof Level _level && !_level.isClientSide())
                             _level.explode(null, x, y, z, 16, Level.ExplosionInteraction.MOB);
                         if (world instanceof Level _level) {
-                            if (!_level.isClientSide()) {
                                 _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "ocean_wither_spawn")), SoundSource.HOSTILE, 4, 1);
-                            } else {
-                                _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "ocean_wither_spawn")), SoundSource.HOSTILE, 4, 1, false);
-                            }
                         }
                         if (world instanceof ServerLevel _level)
                             _level.sendParticles(ParticleTypes.EXPLOSION, x, y, z, 4, 3, 3, 3, 1);

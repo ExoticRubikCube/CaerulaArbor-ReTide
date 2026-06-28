@@ -219,11 +219,7 @@ public class OceanizedSheepEntity extends SeaMonster {
             if (entity instanceof OceanizedSheepEntity animatable)
                 animatable.setTexture("oceanized_sheep_furless");
             if ((LevelAccessor) world instanceof Level _level) {
-                if (!_level.isClientSide()) {
                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.sheep.shear")), SoundSource.PLAYERS, 1, 1);
-                } else {
-                    _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.sheep.shear")), SoundSource.PLAYERS, 1, 1, false);
-                }
             }
             if ((LevelAccessor) world instanceof ServerLevel _level) {
                 ItemEntity entityToSpawn = new ItemEntity(_level, x, (y + 0.65), z, new ItemStack(Blocks.WHITE_WOOL));

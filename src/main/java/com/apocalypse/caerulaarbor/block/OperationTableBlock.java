@@ -142,11 +142,7 @@ public class OperationTableBlock extends Block {
                                     }
                                     ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                                     if ((LevelAccessor) world instanceof Level _level) {
-                                        if (!_level.isClientSide()) {
                                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.armor.equip_leather")), SoundSource.BLOCKS, 1, 1);
-                                        } else {
-                                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.armor.equip_leather")), SoundSource.BLOCKS, 1, 1, false);
-                                        }
                                     }
                                     result = InteractionResult.SUCCESS;
                                 }

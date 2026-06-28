@@ -292,11 +292,7 @@ public class ReaperFishEntity extends SeaMonster {
                         _datEntSetL.getEntityData().set(DATA_IS_CHARGING, true);
                     if (!world.isClientSide()) {
                         if (world instanceof Level _level) {
-                            if (!_level.isClientSide()) {
                                 _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "reaper_angry")), SoundSource.HOSTILE, (float) 1.5, 1);
-                            } else {
-                                _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "reaper_angry")), SoundSource.HOSTILE, (float) 1.5, 1, false);
-                            }
                         }
                     }
                 }

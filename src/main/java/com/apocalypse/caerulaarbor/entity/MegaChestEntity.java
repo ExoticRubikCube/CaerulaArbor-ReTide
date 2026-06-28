@@ -281,11 +281,7 @@ public class MegaChestEntity extends SeaMonster {
                                     world.setBlock(_bp, _bs, 3);
                                 }
                                 if (world instanceof Level _level) {
-                                    if (!_level.isClientSide()) {
                                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.ender_chest.close")), SoundSource.BLOCKS, 1, 1);
-                                    } else {
-                                        _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.ender_chest.close")), SoundSource.BLOCKS, 1, 1, false);
-                                    }
                                 }
                             }
                         }
@@ -340,11 +336,7 @@ public class MegaChestEntity extends SeaMonster {
 			double z = this.getZ();
 
 			if (world instanceof Level _level) {
-				if (!_level.isClientSide()) {
 					_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.ender_chest.open")), SoundSource.HOSTILE, 1, 1);
-				} else {
-					_level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.ender_chest.open")), SoundSource.HOSTILE, 1, 1, false);
-				}
 			}
 
 			this.setShiftKeyDown(false);

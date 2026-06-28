@@ -288,11 +288,7 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity {
             if (entity instanceof LivingEntity _entity)
                 _entity.setHealth((float) ((entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) + (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * scale));
             if ((LevelAccessor) world instanceof Level _level) {
-                if (!_level.isClientSide()) {
                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.iron_golem.repair")), SoundSource.PLAYERS, 1, 1);
-                } else {
-                    _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.iron_golem.repair")), SoundSource.PLAYERS, 1, 1, false);
-                }
             }
             return InteractionResult.SUCCESS;
         }
@@ -369,22 +365,14 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity {
                             CaerulaArborMod.queueServerWork(6, () -> {
                                 if (this.isAlive()) {
                                     if (world instanceof Level _level) {
-                                        if (!_level.isClientSide()) {
                                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.piston.extend")), SoundSource.NEUTRAL, 2, 1);
-                                        } else {
-                                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.piston.extend")), SoundSource.NEUTRAL, 2, 1, false);
-                                        }
                                     }
                                 }
                             });
                             CaerulaArborMod.queueServerWork(13, () -> {
                                 if (this.isAlive()) {
                                     if (world instanceof Level _level) {
-                                        if (!_level.isClientSide()) {
                                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.piston.contract")), SoundSource.NEUTRAL, 2, 1);
-                                        } else {
-                                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.piston.contract")), SoundSource.NEUTRAL, 2, 1, false);
-                                        }
                                     }
                                 }
                             });
@@ -427,11 +415,7 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity {
                             CaerulaArborMod.queueServerWork(90, () -> {
                                 if (this.isAlive()) {
                                     if (world instanceof Level _level) {
-                                        if (!_level.isClientSide()) {
                                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.piston.contract")), SoundSource.NEUTRAL, 2, 1);
-                                        } else {
-                                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.piston.contract")), SoundSource.NEUTRAL, 2, 1, false);
-                                        }
                                     }
                                 }
                             });

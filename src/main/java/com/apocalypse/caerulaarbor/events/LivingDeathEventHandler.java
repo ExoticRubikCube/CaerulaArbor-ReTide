@@ -150,13 +150,8 @@ public class LivingDeathEventHandler {
                     }
                 }
                 if (world instanceof Level _level) {
-                    if (!_level.isClientSide()) {
                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.totem.use")), SoundSource.PLAYERS, (float) 0.33, 1);
                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "target_damaged")), SoundSource.PLAYERS, (float) 0.33, 1);
-                    } else {
-                        _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.totem.use")), SoundSource.PLAYERS, (float) 0.33, 1, false);
-                        _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "target_damaged")), SoundSource.PLAYERS, (float) 0.33, 1, false);
-                    }
                 }
                 if (entity.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY.get()))
                     entity.getAttribute(CaerulaArborModAttributes.SANITY.get()).setBaseValue(1000);
@@ -479,11 +474,7 @@ public class LivingDeathEventHandler {
                     if (entity instanceof SkadiEntity _datEntSetI)
                         _datEntSetI.getEntityData().set(SkadiEntity.DATA_phase, 1);
                     if (world instanceof Level _level) {
-                        if (!_level.isClientSide()) {
                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "skadi_talk")), SoundSource.HOSTILE, 2, 1);
-                        } else {
-                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "skadi_talk")), SoundSource.HOSTILE, 2, 1, false);
-                        }
                     }
                     if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
                         _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 100, 1, false, false));
@@ -504,11 +495,7 @@ public class LivingDeathEventHandler {
                     if (entity instanceof SkadiEntity _datEntSetI)
                         _datEntSetI.getEntityData().set(SkadiEntity.DATA_phase, 2);
                     if (world instanceof Level _level) {
-                        if (!_level.isClientSide()) {
                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "skadi_talk")), SoundSource.HOSTILE, 2, 1);
-                        } else {
-                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "skadi_talk")), SoundSource.HOSTILE, 2, 1, false);
-                        }
                     }
                     if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
                         _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 100, 1, false, false));
@@ -634,11 +621,7 @@ public class LivingDeathEventHandler {
             if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
                 if (Math.random() < 0.1) {
                     if (world instanceof Level _level) {
-                        if (!_level.isClientSide()) {
                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.amethyst_cluster.break")), SoundSource.AMBIENT, 1, 1);
-                        } else {
-                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.amethyst_cluster.break")), SoundSource.AMBIENT, 1, 1, false);
-                        }
                     }
                     if (world instanceof ServerLevel _level) {
                         ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "common_relics"))).getRandomElement(RandomSource.create()).orElseGet(() -> Items.AIR))));
@@ -893,11 +876,7 @@ public class LivingDeathEventHandler {
                 }
             }
             if (world instanceof Level _level) {
-                if (!_level.isClientSide()) {
                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.place")), SoundSource.PLAYERS, (float) 0.75, 1);
-                } else {
-                    _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.place")), SoundSource.PLAYERS, (float) 0.75, 1, false);
-                }
             }
             if ((entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).player_oceanization < 2.9) {
                 entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {

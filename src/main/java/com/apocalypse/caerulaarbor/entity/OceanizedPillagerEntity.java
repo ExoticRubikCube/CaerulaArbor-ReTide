@@ -328,11 +328,7 @@ public class OceanizedPillagerEntity extends SeaMonster implements RangedAttackM
                                     }
                                     if (((Entity) OceanizedPillagerEntity.this).isAlive()) {
                                         if (world instanceof Level _level) {
-                                            if (!_level.isClientSide()) {
                                                 _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.crossbow.shoot")), SoundSource.HOSTILE, 1, 1);
-                                            } else {
-                                                _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.crossbow.shoot")), SoundSource.HOSTILE, 1, 1, false);
-                                            }
                                         }
                                         {
                                             Entity _shootFrom = OceanizedPillagerEntity.this;

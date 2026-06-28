@@ -141,11 +141,7 @@ public class InjectorBlock extends Block implements SimpleWaterloggedBlock {
                 if (input.getItem() == CaerulaArborModItems.TARGETED_BASE.get()) {
                     ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                     if ((LevelAccessor) world instanceof Level _level) {
-                        if (!_level.isClientSide()) {
                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.glow_item_frame.add_item")), SoundSource.BLOCKS, 1, 1);
-                        } else {
-                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.glow_item_frame.add_item")), SoundSource.BLOCKS, 1, 1, false);
-                        }
                     }
                     {
                         int _value = 1;
@@ -182,11 +178,7 @@ public class InjectorBlock extends Block implements SimpleWaterloggedBlock {
                             ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
                     }
                     if ((LevelAccessor) world instanceof Level _level) {
-                        if (!_level.isClientSide()) {
                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "notice")), SoundSource.BLOCKS, 2, 1);
-                        } else {
-                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "notice")), SoundSource.BLOCKS, 2, 1, false);
-                        }
                     }
                     if ((LevelAccessor) world instanceof ServerLevel _level) {
                         ItemEntity entityToSpawn = new ItemEntity(_level, ((double) x + 0.5), ((double) y + 1), ((double) z + 0.5), res);

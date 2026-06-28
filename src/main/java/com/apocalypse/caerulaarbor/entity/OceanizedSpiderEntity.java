@@ -398,22 +398,14 @@ public class OceanizedSpiderEntity extends SeaMonster {
                         if (Math.random() < 0.25) {
                             world.levelEvent(2001, BlockPos.containing(x, y, z), Block.getId(CaerulaArborModBlocks.RED_OVARY.get().defaultBlockState()));
                             if (world instanceof Level _level) {
-                                if (!_level.isClientSide()) {
                                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.place")), SoundSource.HOSTILE, 1, (float) 0.8);
-                                } else {
-                                    _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.place")), SoundSource.HOSTILE, 1, (float) 0.8, false);
-                                }
                             }
                             if (world instanceof ServerLevel _level)
                                 FallingBlockEntity.fall(_level, BlockPos.containing(x, y, z), CaerulaArborModBlocks.RED_OVARY.get().defaultBlockState());
                         } else {
                             world.levelEvent(2001, BlockPos.containing(x, y, z), Block.getId(CaerulaArborModBlocks.OCEAN_OVARY.get().defaultBlockState()));
                             if (world instanceof Level _level) {
-                                if (!_level.isClientSide()) {
                                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.place")), SoundSource.HOSTILE, 1, 1);
-                                } else {
-                                    _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.place")), SoundSource.HOSTILE, 1, 1, false);
-                                }
                             }
                             if (world instanceof ServerLevel _level)
                                 FallingBlockEntity.fall(_level, BlockPos.containing(x, y, z), CaerulaArborModBlocks.OCEAN_OVARY.get().defaultBlockState());

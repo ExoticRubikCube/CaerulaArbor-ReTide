@@ -378,11 +378,7 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
                             }
                             if (!world.isClientSide()) {
                                 if (world instanceof Level _level) {
-                                    if (!_level.isClientSide()) {
                                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.illusioner.mirror_move")), SoundSource.HOSTILE, 1, 1);
-                                    } else {
-                                        _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.illusioner.mirror_move")), SoundSource.HOSTILE, 1, 1, false);
-                                    }
                                 }
                             }
                             flag = true;
@@ -476,22 +472,14 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
                         _datEntSetI.getEntityData().set(DATA_spellP, (int) (sklp1 - 1));
                     if (sklp1 == 100) {
                         if (world instanceof Level _level) {
-                            if (!_level.isClientSide()) {
                                 _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.illusioner.prepare_blindness")), SoundSource.HOSTILE, 1, 1);
-                            } else {
-                                _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.illusioner.prepare_blindness")), SoundSource.HOSTILE, 1, 1, false);
-                            }
                         }
                     }
                 } else if (dura <= 0) {
                     if (!(enemy == null) && enemy.isAlive()) {
                         if ((enemy != null ? distanceTo(enemy) : -1) <= 12) {
                             if (world instanceof Level _level) {
-                                if (!_level.isClientSide()) {
                                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.illusioner.cast_spell")), SoundSource.HOSTILE, 1, 1);
-                                } else {
-                                    _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.illusioner.cast_spell")), SoundSource.HOSTILE, 1, 1, false);
-                                }
                             }
                             if (this instanceof OceanizedIllusionerEntity) {
                                 ((OceanizedIllusionerEntity) this).setAnimation("animation.oceanized_illusioner.cast");
@@ -517,22 +505,14 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
                         _datEntSetI.getEntityData().set(DATA_mirrorP, (int) (sklp2 - 1));
                     if (sklp2 == 100) {
                         if (world instanceof Level _level) {
-                            if (!_level.isClientSide()) {
                                 _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.illusioner.prepare_mirror")), SoundSource.HOSTILE, 1, 1);
-                            } else {
-                                _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.illusioner.prepare_mirror")), SoundSource.HOSTILE, 1, 1, false);
-                            }
                         }
                     }
                 } else if (dura <= 0) {
                     if (!(enemy == null) && enemy.isAlive()) {
                         if (EntityUtils.getIllusionNum(world, x, y, z) < 8 && EntityUtils.getSeabornAround(world, x, y, z, this) < (world.getLevelData().getGameRules().getInt(CaerulaArborModGameRules.CLONE_NUMBER_LIMIT))) {
                             if (world instanceof Level _level) {
-                                if (!_level.isClientSide()) {
                                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.illusioner.cast_spell")), SoundSource.HOSTILE, 1, 1);
-                                } else {
-                                    _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.illusioner.cast_spell")), SoundSource.HOSTILE, 1, 1, false);
-                                }
                             }
                             if (this instanceof OceanizedIllusionerEntity) {
                                 ((OceanizedIllusionerEntity) this).setAnimation("animation.oceanized_illusioner.fission");

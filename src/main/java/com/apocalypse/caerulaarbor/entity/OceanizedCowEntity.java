@@ -230,11 +230,7 @@ public class OceanizedCowEntity extends SeaMonster {
             if (entity instanceof OceanizedCowEntity animatable)
                 animatable.setTexture("oceanzied_cow_trailless");
             if ((LevelAccessor) world instanceof Level _level) {
-                if (!_level.isClientSide()) {
                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.mooshroom.shear")), SoundSource.PLAYERS, 1, 1);
-                } else {
-                    _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.mooshroom.shear")), SoundSource.PLAYERS, 1, 1, false);
-                }
             }
             for (int index0 = 0; index0 < Mth.nextInt(RandomSource.create(), 3, 5); index0++) {
                 if ((LevelAccessor) world instanceof ServerLevel _level) {

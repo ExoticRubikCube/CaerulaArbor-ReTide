@@ -275,11 +275,7 @@ public class NautilusHeadhunterEntity extends Animal implements GeoEntity {
                         if (!(vehicle == null) && vehicle.isAlive()) {
                             if (!world.isClientSide()) {
                                 if (world instanceof Level _level) {
-                                    if (!_level.isClientSide()) {
                                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.dolphin.eat")), SoundSource.HOSTILE, 1, 1);
-                                    } else {
-                                        _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.dolphin.eat")), SoundSource.HOSTILE, 1, 1, false);
-                                    }
                                 }
                             }
                             vehicle.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.IN_WALL), this),
@@ -291,11 +287,7 @@ public class NautilusHeadhunterEntity extends Animal implements GeoEntity {
                             if ((enemy != null ? distanceTo(enemy) : -1) <= 2 && !enemy.isVehicle()) {
                                 if (!world.isClientSide()) {
                                     if (world instanceof Level _level) {
-                                        if (!_level.isClientSide()) {
                                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.strider.saddle")), SoundSource.HOSTILE, 1, 1);
-                                        } else {
-                                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.strider.saddle")), SoundSource.HOSTILE, 1, 1, false);
-                                        }
                                     }
                                 }
                                 startRiding(enemy);

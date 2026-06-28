@@ -145,11 +145,7 @@ public class PlayerLeftClickEventHandler {
             if (helper instanceof LittleHelperEntity || helper instanceof Al1SHelperEntity) {
                 if (!world.isClientSide() && helper instanceof Al1SHelperEntity) {
                     if (world instanceof Level _level) {
-                        if (!_level.isClientSide()) {
                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "al1s_work")), SoundSource.BLOCKS, 3, 1);
-                        } else {
-                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "al1s_work")), SoundSource.BLOCKS, 3, 1, false);
-                        }
                     }
                 }
                 WorldUtils.clearNetherseaAround(world, helper.getX(), helper.getY() - 1, helper.getZ(), helper);
@@ -166,11 +162,7 @@ public class PlayerLeftClickEventHandler {
                 CaerulaArborMod.queueServerWork(10, () -> {
                     if ((entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CaerulaArborModItems.HIGHMORE_SCYTHE.get()) {
                         if (world instanceof Level _level) {
-                            if (!_level.isClientSide()) {
                                 _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "scythe_highmore")), SoundSource.PLAYERS, (float) 1.5, 1);
-                            } else {
-                                _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "scythe_highmore")), SoundSource.PLAYERS, (float) 1.5, 1, false);
-                            }
                         }
                         final Vec3 _center = new Vec3(x, (y + 0.5), z);
                         List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(8 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();

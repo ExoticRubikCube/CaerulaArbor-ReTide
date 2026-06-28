@@ -186,11 +186,7 @@ public class HighmoreSpawningBlockBlock extends BaseEntityBlock implements Simpl
                 if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CaerulaArborModItems.HIGHMORE_SCYTHE.get()) {
                     ((LevelAccessor) world).setBlock(BlockPos.containing(x, y, z), CaerulaArborModBlocks.HIGHMORE_SPAWNBLOCK.get().defaultBlockState(), 3);
                     if ((LevelAccessor) world instanceof Level _level) {
-                        if (!_level.isClientSide()) {
                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.end_portal_frame.fill")), SoundSource.BLOCKS, (float) 1.5, 1);
-                        } else {
-                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.end_portal_frame.fill")), SoundSource.BLOCKS, (float) 1.5, 1, false);
-                        }
                     }
                     if ((LevelAccessor) world instanceof ServerLevel _level)
                         _level.sendParticles(ParticleTypes.WAX_ON, ((double) x + 0.5), ((double) y + 0.5), ((double) z + 0.5), 16, 2, 2, 2, 0.15);

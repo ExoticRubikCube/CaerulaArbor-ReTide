@@ -174,11 +174,7 @@ public class TidelinkedWandItem extends Item {
                     _player.giveExperiencePoints(-(10));
             }
             if ((LevelAccessor) world instanceof Level _level) {
-                if (!_level.isClientSide()) {
                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.guardian.attack")), SoundSource.PLAYERS, (float) 1.25, 1);
-                } else {
-                    _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.guardian.attack")), SoundSource.PLAYERS, (float) 1.25, 1, false);
-                }
             }
             if ((Entity) entity instanceof Player _player)
                 _player.getCooldowns().addCooldown(itemstack.getItem(), 40);

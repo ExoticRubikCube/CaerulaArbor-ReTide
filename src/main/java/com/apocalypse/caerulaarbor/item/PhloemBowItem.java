@@ -180,11 +180,7 @@ public class PhloemBowItem extends Item implements GeoItem {
                     if ((LevelAccessor) world instanceof ServerLevel _level)
                         _level.sendParticles(ParticleTypes.ENCHANT, x, y, z, 72, 1.2, 2, 1.2, 0.2);
                     if ((LevelAccessor) world instanceof Level _level) {
-                        if (!_level.isClientSide()) {
                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.enchantment_table.use")), SoundSource.PLAYERS, 3, 1);
-                        } else {
-                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.enchantment_table.use")), SoundSource.PLAYERS, 3, 1, false);
-                        }
                     }
                     valid = false;
                 } else if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY)) != 0
@@ -207,11 +203,7 @@ public class PhloemBowItem extends Item implements GeoItem {
                     if ((LevelAccessor) world instanceof ServerLevel _level)
                         _level.sendParticles(ParticleTypes.ENCHANT, x, y, z, 72, 1.2, 2, 1.2, 0.2);
                     if ((LevelAccessor) world instanceof Level _level) {
-                        if (!_level.isClientSide()) {
                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.enchantment_table.use")), SoundSource.PLAYERS, 3, 1);
-                        } else {
-                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.enchantment_table.use")), SoundSource.PLAYERS, 3, 1, false);
-                        }
                     }
                     valid = false;
                 }
@@ -245,11 +237,7 @@ public class PhloemBowItem extends Item implements GeoItem {
 										&& (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == itemstack.getItem()
 										|| ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == itemstack.getItem())) {
 									if ((LevelAccessor) world instanceof Level _level1) {
-										if (!_level1.isClientSide()) {
 											_level1.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.arrow.shoot")), SoundSource.PLAYERS, (float) 1.8, 1);
-										} else {
-											_level1.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.arrow.shoot")), SoundSource.PLAYERS, (float) 1.8, 1, false);
-										}
 									}
 									if (!(new Object() {
 										public boolean checkGamemode(Entity _ent) {
@@ -365,11 +353,7 @@ public class PhloemBowItem extends Item implements GeoItem {
 						if (itemstack.getItem() instanceof PhloemBowItem)
                             itemstack.getOrCreateTag().putString("geckoAnim", "animation.bluebow.pull");
                         if ((LevelAccessor) world instanceof Level _level) {
-                            if (!_level.isClientSide()) {
                                 _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.crossbow.quick_charge_1")), SoundSource.NEUTRAL, (float) 1.8, 1);
-                            } else {
-                                _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.crossbow.quick_charge_1")), SoundSource.NEUTRAL, (float) 1.8, 1, false);
-                            }
                         }
                         if ((Entity) entity instanceof Player _player)
                             _player.getCooldowns().addCooldown(itemstack.getItem(), 30);

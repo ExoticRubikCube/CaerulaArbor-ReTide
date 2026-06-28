@@ -123,11 +123,7 @@ public class LancXiaoItem extends SwordItem {
                                             if ((LevelAccessor) world instanceof ServerLevel _level)
                                                 _level.sendParticles((SimpleParticleType) (CaerulaArborModParticleTypes.ENDSPEAKER_PARTICLE.get()), tx, (ty + 0.75), tz, 18, 0.75, 0.75, 0.75, 0.15);
                                             if ((LevelAccessor) world instanceof Level _level) {
-                                                if (!_level.isClientSide()) {
                                                     _level.playSound(null, BlockPos.containing(tx, ty, tz), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "endspeaker_attack_hit")), SoundSource.PLAYERS, (float) 1.5, 1);
-                                                } else {
-                                                    _level.playLocalSound(tx, ty, tz, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "endspeaker_attack_hit")), SoundSource.PLAYERS, (float) 1.5, 1, false);
-                                                }
                                             }
                                             entityiterator.hurt(new DamageSource(((LevelAccessor) world).registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "endspeaker_attack"))), entity), (float) (atk * 2));
                                         }
@@ -145,11 +141,7 @@ public class LancXiaoItem extends SwordItem {
                 }
                 if (count > 0) {
                     if ((LevelAccessor) world instanceof Level _level) {
-                        if (!_level.isClientSide()) {
                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "skill_release")), SoundSource.PLAYERS, (float) 0.75, 1);
-                        } else {
-                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "skill_release")), SoundSource.PLAYERS, (float) 0.75, 1, false);
-                        }
                     }
                     if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
                         _entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 20, 2, false, false));

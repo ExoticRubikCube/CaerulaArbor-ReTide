@@ -66,11 +66,7 @@ public class NetherseaChickenEggItem extends Item {
         if (world.isClientSide()) return InteractionResult.SUCCESS;
         if (Math.random() < 0.75) {
             if (world instanceof Level _level) {
-                if (!_level.isClientSide()) {
                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sniffer_egg.crack")), SoundSource.PLAYERS, 1, 1);
-                } else {
-                    _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sniffer_egg.crack")), SoundSource.PLAYERS, 1, 1, false);
-                }
             }
             return InteractionResult.FAIL;
         }
@@ -78,11 +74,7 @@ public class NetherseaChickenEggItem extends Item {
         double rrr = Math.max(1, itemstack.getOrCreateTag().getDouble("rate") * 0.001);
         double ooo = Math.max(4, itemstack.getOrCreateTag().getDouble("offset"));
         if (world instanceof Level _level) {
-            if (!_level.isClientSide()) {
                 _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sniffer_egg.hatch")), SoundSource.PLAYERS, 1, 1);
-            } else {
-                _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sniffer_egg.crack")), SoundSource.PLAYERS, 1, 1, false);
-            }
         }
         itemstack.shrink(1);
         BlockPos pos = BlockPos.containing(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ());

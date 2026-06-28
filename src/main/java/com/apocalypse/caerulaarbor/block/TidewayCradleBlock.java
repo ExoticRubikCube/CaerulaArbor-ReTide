@@ -154,11 +154,7 @@ public class TidewayCradleBlock extends BaseEntityBlock implements SimpleWaterlo
                     }
                 }
                 if ((LevelAccessor) world instanceof Level _level) {
-                    if (!_level.isClientSide()) {
                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.axe.wax_off")), SoundSource.NEUTRAL, 1, 1);
-                    } else {
-                        _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.axe.wax_off")), SoundSource.NEUTRAL, 1, 1, false);
-                    }
                 }
                 if ((LevelAccessor) world instanceof ServerLevel _level)
                     _level.sendParticles(ParticleTypes.GLOW, ((double) x + 0.5), ((double) y + 0.5), ((double) z + 0.5), 5, 0.75, 0.75, 0.75, 0.1);

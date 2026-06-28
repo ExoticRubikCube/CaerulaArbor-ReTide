@@ -292,11 +292,7 @@ public class GladiiaEntity extends Animal implements GeoEntity {
                             if ((Entity) this instanceof GladiiaEntity _datEntSetI)
                                 _datEntSetI.getEntityData().set(DATA_duration, 30);
                             if (world instanceof Level _level) {
-                                if (!_level.isClientSide()) {
                                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "gladiia_pull_pre")), SoundSource.NEUTRAL, (float) 2.5, 1);
-                                } else {
-                                    _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "gladiia_pull_pre")), SoundSource.NEUTRAL, (float) 2.5, 1, false);
-                                }
                             }
                             ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY() + 1.6), (enemy.getZ())));
                             CaerulaArborMod.queueServerWork(10, () -> {
@@ -307,11 +303,7 @@ public class GladiiaEntity extends Animal implements GeoEntity {
                                     Entity side = null;
                                     double damage = 0;
                                     if (world instanceof Level _level) {
-                                        if (!_level.isClientSide()) {
                                             _level.playSound(null, BlockPos.containing(ene.getX(), ene.getY(), ene.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "gladiia_pull_pull")), SoundSource.NEUTRAL, 3, 1);
-                                        } else {
-                                            _level.playLocalSound((ene.getX()), (ene.getY()), (ene.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "gladiia_pull_pull")), SoundSource.NEUTRAL, 3, 1, false);
-                                        }
                                     }
                                     EntityUtils.pullToGladiia(ene, this);
                                     EntityUtils.gladiiaLinkPtcToEntity(world, this, ene);
@@ -325,11 +317,7 @@ public class GladiiaEntity extends Animal implements GeoEntity {
                                     }
                                     CaerulaArborMod.queueServerWork(10, () -> {
                                         if (world instanceof Level _level) {
-                                            if (!_level.isClientSide()) {
                                                 _level.playSound(null, BlockPos.containing(ene.getX(), ene.getY(), ene.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "gladiia_attack_pre")), SoundSource.NEUTRAL, 3, 1);
-                                            } else {
-                                                _level.playLocalSound((ene.getX()), (ene.getY()), (ene.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "gladiia_attack_pre")), SoundSource.NEUTRAL, 3, 1, false);
-                                            }
                                         }
                                         if (ene instanceof LivingEntity _entity && !this.level().isClientSide())
                                             this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.DIZZY.get(), 40, 0, false, false));
@@ -360,18 +348,10 @@ public class GladiiaEntity extends Animal implements GeoEntity {
                             if ((Entity) this instanceof GladiiaEntity _datEntSetI)
                                 _datEntSetI.getEntityData().set(DATA_duration, 120);
                             if (world instanceof Level _level) {
-                                if (!_level.isClientSide()) {
                                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "gladiia_skill_release")), SoundSource.NEUTRAL, 3, 1);
-                                } else {
-                                    _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "gladiia_skill_release")), SoundSource.NEUTRAL, 3, 1, false);
-                                }
                             }
                             if (world instanceof Level _level) {
-                                if (!_level.isClientSide()) {
                                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "gladiia_skill")), SoundSource.NEUTRAL, 2, 1);
-                                } else {
-                                    _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "gladiia_skill")), SoundSource.NEUTRAL, 2, 1, false);
-                                }
                             }
                             ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY() + 1.6), (enemy.getZ())));
                             if (!this.level().isClientSide())
@@ -389,11 +369,7 @@ public class GladiiaEntity extends Animal implements GeoEntity {
                             CaerulaArborMod.queueServerWork(111, () -> {
                                 if (this.isAlive()) {
                                     if (world instanceof Level _level) {
-                                        if (!_level.isClientSide()) {
                                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "gladiia_pull_pre")), SoundSource.NEUTRAL, (float) 2.5, 1);
-                                        } else {
-                                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "gladiia_pull_pre")), SoundSource.NEUTRAL, (float) 2.5, 1, false);
-                                        }
                                     }
                                 }
                             });
@@ -406,11 +382,7 @@ public class GladiiaEntity extends Animal implements GeoEntity {
                                     double damage = 0;
                                     double d = 0;
                                     if (world instanceof Level _level) {
-                                        if (!_level.isClientSide()) {
                                             _level.playSound(null, BlockPos.containing(ene.getX(), ene.getY(), ene.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "gladiia_pull_pull")), SoundSource.NEUTRAL, 3, 1);
-                                        } else {
-                                            _level.playLocalSound((ene.getX()), (ene.getY()), (ene.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "gladiia_pull_pull")), SoundSource.NEUTRAL, 3, 1, false);
-                                        }
                                     }
                                     damage = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
                                     {

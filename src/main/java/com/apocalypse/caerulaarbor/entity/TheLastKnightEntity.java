@@ -514,11 +514,7 @@ public class TheLastKnightEntity extends Animal implements GeoEntity {
 		}
 
 		if (world instanceof Level _level) {
-			if (!_level.isClientSide()) {
 				_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "last_knight_attack")), SoundSource.HOSTILE, 5, 1);
-			} else {
-				_level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "last_knight_attack")), SoundSource.HOSTILE, 5, 1, false);
-			}
 		}
 
 		for (Entity entityiterator : world.getEntities(this, new AABB((x + 16), (y + 4), (z + 1.5), (x - 16), (y - 2), (z - 1.5)))) {

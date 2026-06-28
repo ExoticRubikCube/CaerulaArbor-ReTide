@@ -54,11 +54,7 @@ public class MusicBoxFixedItem extends Item {
 		double z = entity.getZ();
         if (entity != null) {
             if ((LevelAccessor) world instanceof Level _level) {
-                if (!_level.isClientSide()) {
                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "pceanwish")), SoundSource.MUSIC, (float) 2.5, 1);
-                } else {
-                    _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "pceanwish")), SoundSource.MUSIC, (float) 2.5, 1, false);
-                }
             }
             if ((Entity) entity instanceof Player _player)
                 _player.getCooldowns().addCooldown(itemstack.getItem(), 900);

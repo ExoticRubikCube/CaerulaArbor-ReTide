@@ -358,11 +358,7 @@ public class OceanizedChickenEntity extends SeaMonster {
                     }
                     CaerulaArborMod.queueServerWork(5, () -> {
                         if (world instanceof Level _level) {
-                            if (!_level.isClientSide()) {
                                 _level.playSound(null, BlockPos.containing(getX(), getY(), getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.chicken.egg")), SoundSource.NEUTRAL, 1, 1);
-                            } else {
-                                _level.playLocalSound((getX()), (getY()), (getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.chicken.egg")), SoundSource.NEUTRAL, 1, 1, false);
-                            }
                         }
                         if (world instanceof ServerLevel _level) {
                             ItemStack result;

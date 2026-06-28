@@ -157,11 +157,7 @@ public class MartusBookItem extends Item implements GeoItem {
                     }
                     CaerulaArborMod.queueServerWork(10, () -> {
                         if ((LevelAccessor) world instanceof Level _level) {
-                            if (!_level.isClientSide()) {
                                 _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.enchantment_table.use")), SoundSource.PLAYERS, 2, 1);
-                            } else {
-                                _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.enchantment_table.use")), SoundSource.PLAYERS, 2, 1, false);
-                            }
                         }
                         if ((Entity) entity instanceof LivingEntity _entity)
                             _entity.setHealth((float) Math.max(((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5 + 1, (Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1));
@@ -211,11 +207,7 @@ public class MartusBookItem extends Item implements GeoItem {
                 if (entity instanceof Player _player)
                     _player.getCooldowns().addCooldown(itemstack.getItem(), 1200);
                 if ((LevelAccessor) world instanceof Level _level) {
-                    if (!_level.isClientSide()) {
                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.enchantment_table.use")), SoundSource.PLAYERS, 2, 1);
-                    } else {
-                        _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.enchantment_table.use")), SoundSource.PLAYERS, 2, 1, false);
-                    }
                 }
                 if (entity instanceof LivingEntity _entity)
                     _entity.setHealth((float) ((entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5 + 1));

@@ -232,11 +232,7 @@ public class OceanOvaryBlock extends AbstractOvaryBlock {
 							((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
 					}
 					if ((LevelAccessor) world instanceof Level _level) {
-						if (!_level.isClientSide()) {
 							_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.panda.eat")), SoundSource.BLOCKS, (float) 0.95, 1);
-						} else {
-							_level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.panda.eat")), SoundSource.BLOCKS, (float) 0.95, 1, false);
-						}
 					}
 					fed.shrink(1);
 					result = InteractionResult.SUCCESS;

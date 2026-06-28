@@ -317,33 +317,21 @@ public class TideChimeraEntity extends SeaMonster {
             CaerulaArborMod.queueServerWork(60, () -> {
                 if (this.isAlive()) {
                     if ((LevelAccessor) world instanceof Level _level) {
-                        if (!_level.isClientSide()) {
                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.slime.jump")), SoundSource.HOSTILE, (float) 2.5, 1);
-                        } else {
-                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.slime.jump")), SoundSource.HOSTILE, (float) 2.5, 1, false);
-                        }
                     }
                 }
             });
             CaerulaArborMod.queueServerWork(66, () -> {
                 if (this.isAlive()) {
                     if ((LevelAccessor) world instanceof Level _level) {
-                        if (!_level.isClientSide()) {
                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.slime.jump")), SoundSource.HOSTILE, (float) 2.5, 1);
-                        } else {
-                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.slime.jump")), SoundSource.HOSTILE, (float) 2.5, 1, false);
-                        }
                     }
                 }
             });
             CaerulaArborMod.queueServerWork(83, () -> {
                 if (this.isAlive()) {
                     if ((LevelAccessor) world instanceof Level _level) {
-                        if (!_level.isClientSide()) {
                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.slime_block.place")), SoundSource.HOSTILE, (float) 2.5, 1);
-                        } else {
-                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.slime_block.place")), SoundSource.HOSTILE, (float) 2.5, 1, false);
-                        }
                     }
                 }
             });
@@ -392,11 +380,7 @@ public class TideChimeraEntity extends SeaMonster {
             boolean maySummon = false;
             if (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.deathTime : 0) == 10) {
                 if (world instanceof Level _level) {
-                    if (!_level.isClientSide()) {
                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.dragon_fireball.explode")), SoundSource.HOSTILE, 2, 1);
-                    } else {
-                        _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.dragon_fireball.explode")), SoundSource.HOSTILE, 2, 1, false);
-                    }
                 }
                 Entity entityToSpawn = null;
                 BlockPos pos = BlockPos.containing(x, y, z);
@@ -511,11 +495,7 @@ public class TideChimeraEntity extends SeaMonster {
                                     if (world instanceof ServerLevel _level)
                                         _level.sendParticles(ParticleTypes.EXPLOSION, x, (y + 4), z, 3, 0, 0, 0, 0.1);
                                     if (world instanceof Level _level) {
-                                        if (!_level.isClientSide()) {
                                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "firstteller_attack")), SoundSource.HOSTILE, (float) 1.5, 1);
-                                        } else {
-                                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "firstteller_attack")), SoundSource.HOSTILE, (float) 1.5, 1, false);
-                                        }
                                     }
                                     this.distributeBullets(world, x, y, z);
                                 }
@@ -525,11 +505,7 @@ public class TideChimeraEntity extends SeaMonster {
                                     if (world instanceof ServerLevel _level)
                                         _level.sendParticles(ParticleTypes.EXPLOSION, x, (y + 4), z, 3, 0, 0, 0, 0.1);
                                     if (world instanceof Level _level) {
-                                        if (!_level.isClientSide()) {
                                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "firstteller_attack")), SoundSource.HOSTILE, (float) 1.5, 1);
-                                        } else {
-                                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "firstteller_attack")), SoundSource.HOSTILE, (float) 1.5, 1, false);
-                                        }
                                     }
                                     this.distributeBullets(world, x, y, z);
                                 }
@@ -539,11 +515,7 @@ public class TideChimeraEntity extends SeaMonster {
                                     if (world instanceof ServerLevel _level)
                                         _level.sendParticles(ParticleTypes.EXPLOSION, x, (y + 4), z, 3, 0, 0, 0, 0.1);
                                     if (world instanceof Level _level) {
-                                        if (!_level.isClientSide()) {
                                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "firstteller_attack")), SoundSource.HOSTILE, (float) 1.5, 1);
-                                        } else {
-                                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "firstteller_attack")), SoundSource.HOSTILE, (float) 1.5, 1, false);
-                                        }
                                     }
                                     this.distributeBullets(world, x, y, z);
                                 }
@@ -595,11 +567,7 @@ public class TideChimeraEntity extends SeaMonster {
 	private void summonRandomChimera(LevelAccessor world, double x, double y, double z) {
 		double randomValue = Math.random();
 		if (world instanceof Level level) {
-			if (!level.isClientSide()) {
 				level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.lingering_potion.throw")), SoundSource.HOSTILE, 3, 1);
-			} else {
-				level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.lingering_potion.throw")), SoundSource.HOSTILE, 3, 1, false);
-			}
 		}
 		Entity entityToSpawn = null;
 		BlockPos pos = BlockPos.containing(x, y + 3, z);
@@ -621,7 +589,7 @@ public class TideChimeraEntity extends SeaMonster {
 				entityToSpawn = CaerulaArborModEntities.FIRST_TO_TALK.get().spawn(serverLevel, pos, MobSpawnType.MOB_SUMMONED);
 			} else {
 				entityToSpawn = CaerulaArborModEntities.MEGA_CHEST.get().spawn(serverLevel, pos, MobSpawnType.MOB_SUMMONED);
-				if (this instanceof MegaChestEntity megaChest) {
+				if (entityToSpawn instanceof MegaChestEntity megaChest) {
 					megaChest.getEntityData().set(MegaChestEntity.DATA_released, true);
 				}
 			}

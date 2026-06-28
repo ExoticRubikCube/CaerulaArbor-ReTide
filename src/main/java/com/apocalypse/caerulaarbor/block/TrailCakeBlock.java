@@ -186,11 +186,7 @@ public class TrailCakeBlock extends Block implements SimpleWaterloggedBlock {
             }
             world.destroyBlock(BlockPos.containing(x, y, z), false);
             if ((LevelAccessor) world instanceof Level _level) {
-                if (!_level.isClientSide()) {
                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.sheep.shear")), SoundSource.NEUTRAL, 1, 1);
-                } else {
-                    _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.sheep.shear")), SoundSource.NEUTRAL, 1, 1, false);
-                }
             }
         } else {
             result = InteractionResult.PASS;

@@ -294,11 +294,7 @@ public class MoistEnderCrystalEntity extends PathfinderMob implements GeoEntity 
                 return;
             }
             if (world instanceof Level _level) {
-                if (!_level.isClientSide()) {
                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "caster_crystal_explode")), SoundSource.NEUTRAL, 3, 1);
-                } else {
-                    _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "caster_crystal_explode")), SoundSource.NEUTRAL, 3, 1, false);
-                }
             }
             if (world instanceof ServerLevel _level)
                 _level.sendParticles(ParticleTypes.EXPLOSION, x, (y + 0.5), z, 4, 0.5, 0.5, 0.5, 0.1);

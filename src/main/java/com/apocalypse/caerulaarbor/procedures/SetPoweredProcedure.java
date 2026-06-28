@@ -15,11 +15,7 @@ public class SetPoweredProcedure {
 	public static void execute(LevelAccessor world, double x, double y, double z, BlockState blockstate) {
 		if (!(blockstate.getBlock().getStateDefinition().getProperty("powered") instanceof BooleanProperty _getbp1 && blockstate.getValue(_getbp1))) {
 			if (world instanceof Level _level) {
-				if (!_level.isClientSide()) {
 					_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "bell_ring")), SoundSource.BLOCKS, (float) 1.25, 1);
-				} else {
-					_level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "bell_ring")), SoundSource.BLOCKS, (float) 1.25, 1, false);
-				}
 			}
 		}
 		{

@@ -1,8 +1,7 @@
 package com.apocalypse.caerulaarbor.entity;
 
-import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
@@ -285,11 +284,7 @@ public class FirstTellerEntity extends SeaMonster implements RangedAttackMob {
             if (((Entity) this instanceof FirstTellerEntity _datEntI ? _datEntI.getEntityData().get(DATA_sklp) : 0) >= 400 && !(enemy == null)) {
                 if (distanceTo(enemy) <= 8) {
                     if (world instanceof Level _level) {
-                        if (!_level.isClientSide()) {
                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "firstteller_skill")), SoundSource.HOSTILE, 3, 1);
-                        } else {
-                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "firstteller_skill")), SoundSource.HOSTILE, 3, 1, false);
-                        }
                     }
                     if (!this.level().isClientSide())
                         this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 65, 0, false, false));

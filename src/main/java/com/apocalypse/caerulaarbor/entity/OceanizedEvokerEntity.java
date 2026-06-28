@@ -397,11 +397,7 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
                         _datEntSetI.getEntityData().set(DATA_skillp1, (int) (sklp1 - 1));
                     if (sklp1 == 20) {
                         if (world instanceof Level _level) {
-                            if (!_level.isClientSide()) {
                                 _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.evoker.prepare_attack")), SoundSource.NEUTRAL, 1, 1);
-                            } else {
-                                _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.evoker.prepare_attack")), SoundSource.NEUTRAL, 1, 1, false);
-                            }
                         }
                     }
                 }
@@ -411,11 +407,7 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
                             ((OceanizedEvokerEntity) this).setAnimation("animation.oceanized_evoker.spell");
                         }
                         if (world instanceof Level _level) {
-                            if (!_level.isClientSide()) {
                                 _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.evoker.cast_spell")), SoundSource.NEUTRAL, 1, 1);
-                            } else {
-                                _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.evoker.cast_spell")), SoundSource.NEUTRAL, 1, 1, false);
-                            }
                         }
                         if ((Entity) this instanceof OceanizedEvokerEntity _datEntSetI)
                             _datEntSetI.getEntityData().set(DATA_skillp2, 300);
@@ -502,11 +494,7 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
                         _datEntSetI.getEntityData().set(DATA_skillp2, (int) (sklp2 - 1));
                     if (sklp2 == 20) {
                         if (world instanceof Level _level) {
-                            if (!_level.isClientSide()) {
                                 _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.evoker.prepare_summon")), SoundSource.NEUTRAL, 1, 1);
-                            } else {
-                                _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.evoker.prepare_summon")), SoundSource.NEUTRAL, 1, 1, false);
-                            }
                         }
                     }
                 }

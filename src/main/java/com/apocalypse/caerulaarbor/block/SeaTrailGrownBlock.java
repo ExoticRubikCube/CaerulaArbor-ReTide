@@ -249,21 +249,13 @@ public class SeaTrailGrownBlock extends Block implements SimpleWaterloggedBlock,
                                     3);
                             world.levelEvent(2001, BlockPos.containing((double) x + dx, y, (double) z + dz), getId(CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState()));
                             if ((LevelAccessor) world instanceof Level _level) {
-                                if (!_level.isClientSide()) {
                                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.place")), SoundSource.NEUTRAL, 1, 1);
-                                } else {
-                                    _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.place")), SoundSource.NEUTRAL, 1, 1, false);
-                                }
                             }
                         } else if (WorldUtils.isOrganic(((LevelAccessor) world).getBlockState(BlockPos.containing((double) x + dx, y, (double) z + dz))) && !((((LevelAccessor) world).getBlockState(BlockPos.containing((double) x + dx, y, (double) z + dz))).getBlock() == CaerulaArborModBlocks.TRAIL_PULSE.get())) {
                             ((LevelAccessor) world).setBlock(BlockPos.containing((double) x + dx, y, (double) z + dz), CaerulaArborModBlocks.TRAIL_PULSE.get().defaultBlockState(), 3);
                             world.levelEvent(2001, BlockPos.containing((double) x + dx, y, (double) z + dz), getId(CaerulaArborModBlocks.TRAIL_PULSE.get().defaultBlockState()));
                             if ((LevelAccessor) world instanceof Level _level) {
-                                if (!_level.isClientSide()) {
                                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.place")), SoundSource.NEUTRAL, 1, 1);
-                                } else {
-                                    _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.place")), SoundSource.NEUTRAL, 1, 1, false);
-                                }
                             }
                         } else {
                             blocktoplace = (new Object() {
@@ -452,11 +444,7 @@ public class SeaTrailGrownBlock extends Block implements SimpleWaterloggedBlock,
                 }
                 if (change) {
                     if ((LevelAccessor) world instanceof Level _level) {
-                        if (!_level.isClientSide()) {
                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.break")), SoundSource.BLOCKS, 1, 1);
-                        } else {
-                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.break")), SoundSource.BLOCKS, 1, 1, false);
-                        }
                     }
                 }
                 blocktoplace = Blocks.AIR.defaultBlockState();

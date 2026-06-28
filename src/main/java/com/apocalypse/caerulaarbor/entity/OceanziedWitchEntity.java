@@ -306,11 +306,7 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob 
                             if (this != null && entityiterator != null) {
                                 double potion = 0;
                                 if (world instanceof Level _level) {
-                                    if (!_level.isClientSide()) {
                                         _level.playSound(null, BlockPos.containing(xx, yy, zz), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.witch.throw")), SoundSource.HOSTILE, 1, 1);
-                                    } else {
-                                        _level.playLocalSound(xx, yy, zz, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.witch.throw")), SoundSource.HOSTILE, 1, 1, false);
-                                    }
                                 }
                                 potion = Mth.nextInt(RandomSource.create(), 0, 4);
                                 if (potion == 0) {

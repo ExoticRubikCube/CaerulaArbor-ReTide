@@ -138,11 +138,7 @@ public class SpikeChestEntity extends SeaMonster {
 		Entity entity = this;
 		Level world = this.level();
         if ((LevelAccessor) world instanceof Level _level) {
-            if (!_level.isClientSide()) {
                 _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.chest.locked")), SoundSource.NEUTRAL, 1, 1);
-            } else {
-                _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.chest.locked")), SoundSource.NEUTRAL, 1, 1, false);
-            }
         }
         return InteractionResult.PASS;
     }

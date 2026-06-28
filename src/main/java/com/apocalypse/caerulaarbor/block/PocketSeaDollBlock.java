@@ -137,11 +137,7 @@ public class PocketSeaDollBlock extends BaseEntityBlock implements SimpleWaterlo
         if (entity != null) {
             if (((Entity) entity instanceof LivingEntity _entity) ? _entity.isHolding(Items.FLINT_AND_STEEL) : false) {
                 if ((LevelAccessor) world instanceof Level _level) {
-                    if (!_level.isClientSide()) {
                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.creeper.primed")), SoundSource.BLOCKS, 1, 1);
-                    } else {
-                        _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.creeper.primed")), SoundSource.BLOCKS, 1, 1, false);
-                    }
                 }
                 {
                     int _value = 1;

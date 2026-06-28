@@ -411,11 +411,7 @@ public class SaintCarmenEntity extends Animal implements GeoEntity {
                         if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
                             _datEntSetI.getEntityData().set(DATA_shootP, 20);
                         if (world instanceof Level _level) {
-                            if (!_level.isClientSide()) {
                                 _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_reload")), SoundSource.NEUTRAL, 2, 1);
-                            } else {
-                                _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_reload")), SoundSource.NEUTRAL, 2, 1, false);
-                            }
                         }
                     }
                 }
@@ -553,11 +549,7 @@ public class SaintCarmenEntity extends Animal implements GeoEntity {
 		double zz = 0;
 		Entity target = null;
 		if (world instanceof Level _level) {
-			if (!_level.isClientSide()) {
 				_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "carmen_big_shoot")), SoundSource.NEUTRAL, 3, 1);
-			} else {
-				_level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "carmen_big_shoot")), SoundSource.NEUTRAL, 3, 1, false);
-			}
 		}
 		dama = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
 		target = this.getTarget();
@@ -617,11 +609,7 @@ public class SaintCarmenEntity extends Animal implements GeoEntity {
 		enemy.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "generic_warrior_attack"))), this),
 				(float) (dama * rate));
 		if (world instanceof Level _level) {
-			if (!_level.isClientSide()) {
 				_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "carmen_shoot")), SoundSource.NEUTRAL, 3, 1);
-			} else {
-				_level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "carmen_shoot")), SoundSource.NEUTRAL, 3, 1, false);
-			}
 		}
 		if (world instanceof ServerLevel _level)
 			_level.sendParticles(ParticleTypes.END_ROD, xx, (yy + 0.75), zz, 32, 0.75, 0.75, 0.75, 0.1);
@@ -657,11 +645,7 @@ public class SaintCarmenEntity extends Animal implements GeoEntity {
 		dama = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
 		this.teleportTo((xx + Mth.nextDouble(RandomSource.create(), -0.5, 0.5)), yy, (zz + Mth.nextDouble(RandomSource.create(), -0.5, 0.5)));
 		if (world instanceof Level _level) {
-			if (!_level.isClientSide()) {
 				_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "carmen_melee")), SoundSource.NEUTRAL, 3, 1);
-			} else {
-				_level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "carmen_melee")), SoundSource.NEUTRAL, 3, 1, false);
-			}
 		}
 		enemy.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "generic_warrior_attack"))), this),
 				(float) (dama * 2));

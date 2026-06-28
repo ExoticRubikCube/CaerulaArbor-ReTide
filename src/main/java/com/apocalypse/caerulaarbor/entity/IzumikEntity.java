@@ -496,11 +496,7 @@ public class IzumikEntity extends SeaMonster {
                             double rate = 0;
                             double range = 0;
                             if (world instanceof Level _level) {
-                                if (!_level.isClientSide()) {
                                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "izumik_learn")), SoundSource.HOSTILE, (float) 2.5, 1);
-                                } else {
-                                    _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "izumik_learn")), SoundSource.HOSTILE, (float) 2.5, 1, false);
-                                }
                             }
                             rate = 1;
                             range = 16;
@@ -609,11 +605,7 @@ public class IzumikEntity extends SeaMonster {
                                         return;
                                     double range = 0;
                                     if (world instanceof Level _level) {
-                                        if (!_level.isClientSide()) {
                                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "izumik_shock")), SoundSource.HOSTILE, (float) 3.5, 1);
-                                        } else {
-                                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "izumik_shock")), SoundSource.HOSTILE, (float) 3.5, 1, false);
-                                        }
                                     }
                                     range = 11;
                                     if (CaerulaArborModVariables.MapVariables.get(world).strategy_grow >= 4) {
@@ -819,11 +811,7 @@ public class IzumikEntity extends SeaMonster {
 	private double findValidYOffspr(LevelAccessor world, double x, double y, double z, double xx, double yy, double zz) {
 		double y_found = 0;
 		if (world instanceof Level _level) {
-			if (!_level.isClientSide()) {
 				_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.azalea.hit")), SoundSource.NEUTRAL, 0, 1);
-			} else {
-				_level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.azalea.hit")), SoundSource.NEUTRAL, 0, 1, false);
-			}
 		}
 		y_found = yy;
 		for (int index0 = 0; index0 < 12; index0++) {

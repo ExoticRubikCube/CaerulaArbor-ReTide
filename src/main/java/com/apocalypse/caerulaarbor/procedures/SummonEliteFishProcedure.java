@@ -81,11 +81,7 @@ public class SummonEliteFishProcedure {
 		if (world instanceof ServerLevel _level)
 			_level.sendParticles(ParticleTypes.CLOUD, xx, yy, zz, 32, 1, 1, 1, 0.1);
 		if (world instanceof Level _level) {
-			if (!_level.isClientSide()) {
 				_level.playSound(null, BlockPos.containing(xx, yy, zz), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.phantom.swoop")), SoundSource.NEUTRAL, 1, 1);
-			} else {
-				_level.playLocalSound(xx, yy, zz, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.phantom.swoop")), SoundSource.NEUTRAL, 1, 1, false);
-			}
 		}
 	}
 }

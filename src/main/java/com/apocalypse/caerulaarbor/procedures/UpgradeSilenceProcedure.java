@@ -65,49 +65,29 @@ public class UpgradeSilenceProcedure {
 						for (Entity entityiterator : new ArrayList<>(world.players())) {
 							if (stra == 1) {
 								if (world instanceof Level _level) {
-									if (!_level.isClientSide()) {
 										_level.playSound(null, BlockPos.containing(entityiterator.getX(), entityiterator.getY(), entityiterator.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "silence1")),
 												SoundSource.NEUTRAL, 6, 1);
-									} else {
-										_level.playLocalSound((entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "silence1")), SoundSource.NEUTRAL, 6, 1,
-												false);
-									}
 								}
 								if (entityiterator instanceof Player _player && !_player.level().isClientSide())
 									_player.displayClientMessage(Component.literal((Component.translatable("item.caerula_arbor.language_key.description_6").getString())), true);
 							} else if (stra == 2) {
 								if (world instanceof Level _level) {
-									if (!_level.isClientSide()) {
 										_level.playSound(null, BlockPos.containing(entityiterator.getX(), entityiterator.getY(), entityiterator.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "silence2")),
 												SoundSource.NEUTRAL, 6, 1);
-									} else {
-										_level.playLocalSound((entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "silence2")), SoundSource.NEUTRAL, 6, 1,
-												false);
-									}
 								}
 								if (entityiterator instanceof Player _player && !_player.level().isClientSide())
 									_player.displayClientMessage(Component.literal((Component.translatable("item.caerula_arbor.language_key.description_7").getString())), true);
 							} else if (stra == 3) {
 								if (world instanceof Level _level) {
-									if (!_level.isClientSide()) {
 										_level.playSound(null, BlockPos.containing(entityiterator.getX(), entityiterator.getY(), entityiterator.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "silence3")),
 												SoundSource.NEUTRAL, 6, 1);
-									} else {
-										_level.playLocalSound((entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "silence3")), SoundSource.NEUTRAL, 6, 1,
-												false);
-									}
 								}
 								if (entityiterator instanceof Player _player && !_player.level().isClientSide())
 									_player.displayClientMessage(Component.literal((Component.translatable("item.caerula_arbor.language_key.description_8").getString())), true);
 							} else if (stra == 4) {
 								if (world instanceof Level _level) {
-									if (!_level.isClientSide()) {
 										_level.playSound(null, BlockPos.containing(entityiterator.getX(), entityiterator.getY(), entityiterator.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "silence4")),
 												SoundSource.NEUTRAL, 6, 1);
-									} else {
-										_level.playLocalSound((entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "silence4")), SoundSource.NEUTRAL, 6, 1,
-												false);
-									}
 								}
 								if (entityiterator instanceof Player _player && !_player.level().isClientSide())
 									_player.displayClientMessage(Component.literal((Component.translatable("item.caerula_arbor.language_key.description_9").getString())), true);

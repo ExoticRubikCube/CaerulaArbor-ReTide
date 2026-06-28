@@ -173,11 +173,7 @@ public class ReaperEggBlock extends Block implements SimpleWaterloggedBlock {
                     ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
             }
             if ((LevelAccessor) world instanceof Level _level) {
-                if (!_level.isClientSide()) {
                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.turtle.egg_crack")), SoundSource.BLOCKS, 1, 1);
-                } else {
-                    _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.turtle.egg_crack")), SoundSource.BLOCKS, 1, 1, false);
-                }
             }
         }
         if ((blockstate.getBlock().getStateDefinition().getProperty("hatch") instanceof IntegerProperty _getip13 ? blockstate.getValue(_getip13) : -1) >= 2
@@ -190,11 +186,7 @@ public class ReaperEggBlock extends Block implements SimpleWaterloggedBlock {
                 }
             }
             if ((LevelAccessor) world instanceof Level _level) {
-                if (!_level.isClientSide()) {
                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.turtle.egg_hatch")), SoundSource.BLOCKS, 1, 1);
-                } else {
-                    _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.turtle.egg_hatch")), SoundSource.BLOCKS, 1, 1, false);
-                }
             }
         }
         {

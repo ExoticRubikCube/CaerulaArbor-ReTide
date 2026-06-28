@@ -81,11 +81,7 @@ public class TrailriteSwordItem extends SwordItem {
                             if ((Entity) sourceentity instanceof LivingEntity _entity)
                                 _entity.setHealth((float) (((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) + absorp));
                             if (world instanceof Level _level) {
-                                if (!_level.isClientSide()) {
                                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.amethyst_block.resonate")), SoundSource.PLAYERS, 1, 1);
-                                } else {
-                                    _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.amethyst_block.resonate")), SoundSource.PLAYERS, 1, 1, false);
-                                }
                             }
                             if (world instanceof ServerLevel _level)
                                 _level.sendParticles(ParticleTypes.INSTANT_EFFECT, x, (y + 1), z, 32, 2, 2, 2, 0.25);

@@ -440,11 +440,7 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity {
                                                 if (entityiterator instanceof Player _player)
                                                     _player.getCooldowns().addCooldown((entityiterator instanceof LivingEntity _entUseItem14 ? _entUseItem14.getUseItem() : ItemStack.EMPTY).getItem(), 100);
                                                 if (world instanceof Level _level) {
-                                                    if (!_level.isClientSide()) {
                                                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.shield.break")), SoundSource.HOSTILE, 1, 1);
-                                                    } else {
-                                                        _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.shield.break")), SoundSource.HOSTILE, 1, 1, false);
-                                                    }
                                                 }
                                             }
                                             CaerulaArborMod.queueServerWork(7, () -> {

@@ -90,11 +90,7 @@ public class IncandescentAnimaItem extends Item {
                     if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
                         _player.displayClientMessage(Component.literal(info), true);
                     if ((LevelAccessor) world instanceof Level _level) {
-                        if (!_level.isClientSide()) {
                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.fire.extinguish")), SoundSource.PLAYERS, 3, 1);
-                        } else {
-                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.fire.extinguish")), SoundSource.PLAYERS, 3, 1, false);
-                        }
                     }
                     if ((LevelAccessor) world instanceof ServerLevel _level)
                         _level.sendParticles(ParticleTypes.ASH, x, (y + 0.75), z, 32, 0.75, 0.75, 0.75, 0.1);
@@ -136,11 +132,7 @@ public class IncandescentAnimaItem extends Item {
                         if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
                             _player.displayClientMessage(Component.literal(info), true);
                         if ((LevelAccessor) world instanceof Level _level) {
-                            if (!_level.isClientSide()) {
                                 _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.fire.extinguish")), SoundSource.PLAYERS, 3, 1);
-                            } else {
-                                _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.fire.extinguish")), SoundSource.PLAYERS, 3, 1, false);
-                            }
                         }
                         if ((LevelAccessor) world instanceof ServerLevel _level)
                             _level.sendParticles(ParticleTypes.ASH, x, (y + 0.75), z, 32, 0.75, 0.75, 0.75, 0.1);
@@ -199,11 +191,7 @@ public class IncandescentAnimaItem extends Item {
                         CaerulaArborModVariables.MapVariables.get(world).incandescentAnimaUseTick = gameTick;
                         CaerulaArborModVariables.MapVariables.get(world).syncData(world);
                         if ((LevelAccessor) world instanceof Level _level) {
-                            if (!_level.isClientSide()) {
                                 _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.end_portal.spawn")), SoundSource.PLAYERS, 3, 1);
-                            } else {
-                                _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.end_portal.spawn")), SoundSource.PLAYERS, 3, 1, false);
-                            }
                         }
                         if ((LevelAccessor) world instanceof ServerLevel _level)
                             _level.sendParticles(ParticleTypes.END_ROD, x, (y + 0.75), z, 32, 0.75, 0.75, 0.75, 0.1);

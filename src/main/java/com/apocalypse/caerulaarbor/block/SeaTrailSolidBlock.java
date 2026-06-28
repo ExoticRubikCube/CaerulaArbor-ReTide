@@ -102,11 +102,7 @@ public class SeaTrailSolidBlock extends Block {
             }
             if (shouldConvert) {
                 if ((LevelAccessor) world instanceof Level _level) {
-                    if (!_level.isClientSide()) {
                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.end_portal_frame.fill")), SoundSource.BLOCKS, 1, 1);
-                    } else {
-                        _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.end_portal_frame.fill")), SoundSource.BLOCKS, 1, 1, false);
-                    }
                 }
                 ((LevelAccessor) world).setBlock(BlockPos.containing(x, y, z), CaerulaArborModBlocks.DRAGON_BRAND.get().defaultBlockState(), 3);
             }

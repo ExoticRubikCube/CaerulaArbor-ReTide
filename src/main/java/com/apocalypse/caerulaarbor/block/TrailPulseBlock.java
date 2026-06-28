@@ -452,11 +452,7 @@ public class TrailPulseBlock extends Block {
         if ((blockstate.getBlock().getStateDefinition().getProperty("nurtr") instanceof IntegerProperty _getip93 ? blockstate.getValue(_getip93) : -1) <= 0) {
             world.destroyBlock(BlockPos.containing(x, y, z), false);
             if ((LevelAccessor) world instanceof Level _level) {
-                if (!_level.isClientSide()) {
                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.break")), SoundSource.BLOCKS, (float) 0.33, 1);
-                } else {
-                    _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.break")), SoundSource.BLOCKS, (float) 0.33, 1, false);
-                }
             }
             if (Math.random() < 0.025) {
                 if (Math.random() < 0.012) {
@@ -469,11 +465,7 @@ public class TrailPulseBlock extends Block {
         if ((blockstate.getBlock().getStateDefinition().getProperty("grow_age") instanceof IntegerProperty _getip99 ? blockstate.getValue(_getip99) : -1) <= 0 && Math.random() < 0.33) {
             world.destroyBlock(BlockPos.containing(x, y, z), false);
             if ((LevelAccessor) world instanceof Level _level) {
-                if (!_level.isClientSide()) {
                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.break")), SoundSource.BLOCKS, (float) 0.33, 1);
-                } else {
-                    _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.break")), SoundSource.BLOCKS, (float) 0.33, 1, false);
-                }
             }
             if (Math.random() < 0.025) {
                 if (Math.random() < 0.012) {
@@ -485,11 +477,7 @@ public class TrailPulseBlock extends Block {
         }
         if (put) {
             if ((LevelAccessor) world instanceof Level _level) {
-                if (!_level.isClientSide()) {
                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.place")), SoundSource.BLOCKS, (float) 0.33, 1);
-                } else {
-                    _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.place")), SoundSource.BLOCKS, (float) 0.33, 1, false);
-                }
             }
             {
                 int _value = (int) ((blockstate.getBlock().getStateDefinition().getProperty("nurtr") instanceof IntegerProperty _getip106 ? blockstate.getValue(_getip106) : -1) - 1);

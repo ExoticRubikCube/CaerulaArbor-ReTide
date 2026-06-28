@@ -97,11 +97,7 @@ public class PathInauguratorItem extends AxeItem {
                 world.setBlock(_bp, _bs, 3);
             }
             if (world instanceof Level _level) {
-                if (!_level.isClientSide()) {
                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.hoe.till")), SoundSource.PLAYERS, 1, 1);
-                } else {
-                    _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.hoe.till")), SoundSource.PLAYERS, 1, 1, false);
-                }
             }
             if (!(new Object() {
                 public boolean checkGamemode(Entity _ent) {
@@ -139,11 +135,7 @@ public class PathInauguratorItem extends AxeItem {
                 world.setBlock(_bp, _bs, 3);
             }
             if (world instanceof Level _level) {
-                if (!_level.isClientSide()) {
                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.hoe.till")), SoundSource.PLAYERS, 1, 1);
-                } else {
-                    _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.hoe.till")), SoundSource.PLAYERS, 1, 1, false);
-                }
             }
             if (world instanceof ServerLevel _level) {
                 ItemEntity entityToSpawn = new ItemEntity(_level, (x + 0.5 + direction.getStepX()), (y + 0.5 + direction.getStepY()), (z + 0.5 + direction.getStepZ()), new ItemStack(Blocks.HANGING_ROOTS));

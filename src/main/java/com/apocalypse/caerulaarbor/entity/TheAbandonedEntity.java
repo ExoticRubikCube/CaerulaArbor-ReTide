@@ -228,11 +228,7 @@ public class TheAbandonedEntity extends SeaMonster {
                             new Object() {
                                 void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                                     if (world instanceof Level _level) {
-                                        if (!_level.isClientSide()) {
                                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.shulker.shoot")), SoundSource.HOSTILE, 1, 1);
-                                        } else {
-                                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.shulker.shoot")), SoundSource.HOSTILE, 1, 1, false);
-                                        }
                                     }
                                     {
                                         Entity _shootFrom = TheAbandonedEntity.this;

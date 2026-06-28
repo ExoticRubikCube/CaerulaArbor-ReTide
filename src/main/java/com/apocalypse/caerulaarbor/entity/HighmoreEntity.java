@@ -497,11 +497,7 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
                             ((HighmoreEntity) this).setAnimation("animation.highmore.skill");
                         }
                         if (world instanceof Level _level) {
-                            if (!_level.isClientSide()) {
                                 _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "highmore_preamble")), SoundSource.HOSTILE, 4, 1);
-                            } else {
-                                _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "highmore_preamble")), SoundSource.HOSTILE, 4, 1, false);
-                            }
                         }
                         if (lvl == 0) {
                             CaerulaArborMod.queueServerWork(15, () -> {

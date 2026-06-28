@@ -248,11 +248,7 @@ public class SpecterEntity extends Animal implements GeoEntity {
         double y = this.getY();
         double z = this.getZ();
         if ((LevelAccessor) world instanceof Level _level) {
-            if (!_level.isClientSide()) {
                 _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "saw_spect_skill")), SoundSource.NEUTRAL, (float) 2.5, 1);
-            } else {
-                _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "saw_spect_skill")), SoundSource.NEUTRAL, (float) 2.5, 1, false);
-            }
         }
         this.setAnimation("animation.specter.start");
         if (this.getAttributes().hasAttribute(ForgeMod.SWIM_SPEED.get()))
@@ -315,11 +311,7 @@ public class SpecterEntity extends Animal implements GeoEntity {
                                 this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 35, 0, false, false));
                             CaerulaArborMod.queueServerWork(8, () -> {
                                 if (world instanceof Level _level) {
-                                    if (!_level.isClientSide()) {
                                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "saw_heavy")), SoundSource.NEUTRAL, 3, 1);
-                                    } else {
-                                        _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "saw_heavy")), SoundSource.NEUTRAL, 3, 1, false);
-                                    }
                                 }
                             });
                             CaerulaArborMod.queueServerWork(15, () -> {
@@ -329,11 +321,7 @@ public class SpecterEntity extends Animal implements GeoEntity {
                             });
                             CaerulaArborMod.queueServerWork(25, () -> {
                                 if (world instanceof Level _level) {
-                                    if (!_level.isClientSide()) {
                                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "saw_cut_spect")), SoundSource.NEUTRAL, 3, 1);
-                                    } else {
-                                        _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "saw_cut_spect")), SoundSource.NEUTRAL, 3, 1, false);
-                                    }
                                 }
                             });
                             CaerulaArborMod.queueServerWork(31, () -> {
@@ -354,18 +342,10 @@ public class SpecterEntity extends Animal implements GeoEntity {
                     if (!(enemy == null) && enemy.isAlive()) {
                         if (EntityUtils.getHealthPerc(this) <= 0.5) {
                             if (world instanceof Level _level) {
-                                if (!_level.isClientSide()) {
                                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "specter_skill_on")), SoundSource.NEUTRAL, 3, 1);
-                                } else {
-                                    _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "specter_skill_on")), SoundSource.NEUTRAL, 3, 1, false);
-                                }
                             }
                             if (world instanceof Level _level) {
-                                if (!_level.isClientSide()) {
                                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "specter_skill")), SoundSource.NEUTRAL, 3, 1);
-                                } else {
-                                    _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "specter_skill")), SoundSource.NEUTRAL, 3, 1, false);
-                                }
                             }
                             this.getEntityData().set(DATA_skillp2, 1000);
                             if (!this.level().isClientSide())

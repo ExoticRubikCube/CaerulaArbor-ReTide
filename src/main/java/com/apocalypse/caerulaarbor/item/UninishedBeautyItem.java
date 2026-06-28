@@ -221,19 +221,11 @@ public class UninishedBeautyItem extends Item implements GeoItem {
                 if (itemstack.getItem() instanceof UninishedBeautyItem)
                     itemstack.getOrCreateTag().putString("geckoAnim", "animation.unfinished_beautuy.attack");
                 if (world instanceof Level _level) {
-                    if (!_level.isClientSide()) {
                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "saw_cut_spect")), SoundSource.PLAYERS, (float) 2.4, 1);
-                    } else {
-                        _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "saw_cut_spect")), SoundSource.PLAYERS, (float) 2.4, 1, false);
-                    }
                 }
                 CaerulaArborMod.queueServerWork(12, () -> {
                     if (world instanceof Level _level) {
-                        if (!_level.isClientSide()) {
                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "saw_spect_1")), SoundSource.PLAYERS, (float) 2.4, 1);
-                        } else {
-                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "saw_spect_1")), SoundSource.PLAYERS, (float) 2.4, 1, false);
-                        }
                     }
                     new Object() {
                         void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {

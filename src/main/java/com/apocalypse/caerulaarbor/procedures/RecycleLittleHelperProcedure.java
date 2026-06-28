@@ -27,11 +27,7 @@ public class RecycleLittleHelperProcedure {
 			if (world instanceof ServerLevel _level)
 				_level.sendParticles(ParticleTypes.FLAME, x, y, z, 32, 0.75, 0.75, 0.75, 0.15);
 			if (world instanceof Level _level) {
-				if (!_level.isClientSide()) {
 					_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "al1s_spec")), SoundSource.BLOCKS, 3, 1);
-				} else {
-					_level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "al1s_spec")), SoundSource.BLOCKS, 3, 1, false);
-				}
 			}
 			return InteractionResult.SUCCESS;
 		}

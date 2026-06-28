@@ -26,11 +26,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.block.state.properties.*;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
@@ -218,11 +214,7 @@ public class BlockKettleBlock extends Block implements SimpleWaterloggedBlock {
                             _player.getInventory().setChanged();
                     }
                     if ((LevelAccessor) world instanceof Level _level) {
-                        if (!_level.isClientSide()) {
                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.bucket.fill")), SoundSource.NEUTRAL, 1, 1);
-                        } else {
-                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.bucket.fill")), SoundSource.NEUTRAL, 1, 1, false);
-                        }
                     }
                     result = InteractionResult.SUCCESS;
                     finished = true;
@@ -240,11 +232,7 @@ public class BlockKettleBlock extends Block implements SimpleWaterloggedBlock {
                         ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
                     }
                     if ((LevelAccessor) world instanceof Level _level) {
-                        if (!_level.isClientSide()) {
                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.bucket.fill")), SoundSource.NEUTRAL, 1, 1);
-                        } else {
-                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.bucket.fill")), SoundSource.NEUTRAL, 1, 1, false);
-                        }
                     }
                     result = InteractionResult.SUCCESS;
                     finished = true;
@@ -335,11 +323,7 @@ public class BlockKettleBlock extends Block implements SimpleWaterloggedBlock {
                                     ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_booleanProp, false), 3);
                             }
                             if ((LevelAccessor) world instanceof Level _level) {
-                                if (!_level.isClientSide()) {
                                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.bottle.fill")), SoundSource.NEUTRAL, 1, 1);
-                                } else {
-                                    _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.bottle.fill")), SoundSource.NEUTRAL, 1, 1, false);
-                                }
                             }
                             result = InteractionResult.SUCCESS;
                             finished = true;
@@ -357,11 +341,7 @@ public class BlockKettleBlock extends Block implements SimpleWaterloggedBlock {
                                     ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_booleanProp, false), 3);
                             }
                             if ((LevelAccessor) world instanceof Level _level) {
-                                if (!_level.isClientSide()) {
                                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.bottle.fill")), SoundSource.NEUTRAL, 1, 1);
-                                } else {
-                                    _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.bottle.fill")), SoundSource.NEUTRAL, 1, 1, false);
-                                }
                             }
                             result = InteractionResult.SUCCESS;
                             finished = true;
@@ -384,11 +364,7 @@ public class BlockKettleBlock extends Block implements SimpleWaterloggedBlock {
                                     ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
                                 }
                                 if ((LevelAccessor) world instanceof Level _level) {
-                                    if (!_level.isClientSide()) {
                                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("intentionally_empty")), SoundSource.NEUTRAL, 1, 1);
-                                    } else {
-                                        _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("intentionally_empty")), SoundSource.NEUTRAL, 1, 1, false);
-                                    }
                                 }
                                 result = InteractionResult.SUCCESS;
                             } else if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CaerulaArborModItems.CANNED_LAVA.get()) {
@@ -410,11 +386,7 @@ public class BlockKettleBlock extends Block implements SimpleWaterloggedBlock {
                                     ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
                                 }
                                 if ((LevelAccessor) world instanceof Level _level) {
-                                    if (!_level.isClientSide()) {
                                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.lava.extinguish")), SoundSource.NEUTRAL, 1, 1);
-                                    } else {
-                                        _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.lava.extinguish")), SoundSource.NEUTRAL, 1, 1, false);
-                                    }
                                 }
                                 result = InteractionResult.SUCCESS;
                             } else if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CaerulaArborModItems.REAL_EGG.get()

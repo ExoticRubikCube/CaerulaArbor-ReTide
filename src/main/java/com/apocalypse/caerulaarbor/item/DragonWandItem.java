@@ -1,7 +1,6 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEnchantments;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
@@ -164,12 +163,8 @@ public class DragonWandItem extends Item {
                     }
                     if (!((LevelAccessor) world).isClientSide()) {
                         if ((LevelAccessor) world instanceof Level _level) {
-                            if (!_level.isClientSide()) {
                                 _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "caster_cast")), SoundSource.PLAYERS, 2,
                                         (float) Mth.nextDouble(RandomSource.create(), 0.9, 1.1));
-                            } else {
-                                _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "caster_cast")), SoundSource.PLAYERS, 2, (float) Mth.nextDouble(RandomSource.create(), 0.9, 1.1), false);
-                            }
                         }
                     }
                     EntityUtils.castDragonBreath(world, x, y, z, entity, t0, 1);

@@ -2,7 +2,6 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.procedures.SingleHealProcedure;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.protocol.Packet;
@@ -117,12 +116,8 @@ public class HealBullletEntity extends AbstractArrow implements ItemSupplier {
                         }
                     }
                     if (world instanceof Level _level) {
-                        if (!_level.isClientSide()) {
                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "medic_normal")), SoundSource.HOSTILE, (float) 1.8,
                                     (float) Mth.nextDouble(RandomSource.create(), 0.8, 1.2));
-                        } else {
-                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "medic_normal")), SoundSource.HOSTILE, (float) 1.8, (float) Mth.nextDouble(RandomSource.create(), 0.8, 1.2), false);
-                        }
                     }
                 }
             });

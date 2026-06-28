@@ -381,11 +381,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
                             _level.addFreshEntity(entityToSpawn);
                         }
                         if (world instanceof Level _level) {
-                            if (!_level.isClientSide()) {
                                 _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "corrupted_convert")), SoundSource.HOSTILE, 2, 1);
-                            } else {
-                                _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "corrupted_convert")), SoundSource.HOSTILE, 2, 1, false);
-                            }
                         }
                         if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetL)
                             _datEntSetL.getEntityData().set(DATA_mayCorrupt, false);
@@ -438,11 +434,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
                             this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 60, 9, false, false));
                         if (!world.isClientSide()) {
                             if (world instanceof Level _level) {
-                                if (!_level.isClientSide()) {
                                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "silence3")), SoundSource.HOSTILE, 2, 1);
-                                } else {
-                                    _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "silence3")), SoundSource.HOSTILE, 2, 1, false);
-                                }
                             }
                         }
                     } else if (phase < 1.5) {
@@ -475,11 +467,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
                             this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 80, 9, false, false));
                         if (!world.isClientSide()) {
                             if (world instanceof Level _level) {
-                                if (!_level.isClientSide()) {
                                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "silence4")), SoundSource.HOSTILE, 2, 1);
-                                } else {
-                                    _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "silence4")), SoundSource.HOSTILE, 2, 1, false);
-                                }
                             }
                         }
                     }
@@ -809,11 +797,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
             if ((Entity) this instanceof SkadiCorruptedEntity _datEntL0 && _datEntL0.getEntityData().get(DATA_mayCorrupt)) {
                 if (!world.isClientSide()) {
                     if (world instanceof Level _level) {
-                        if (!_level.isClientSide()) {
                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "corrupted_corrupt")), SoundSource.HOSTILE, 2, 1);
-                        } else {
-                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "corrupted_corrupt")), SoundSource.HOSTILE, 2, 1, false);
-                        }
                     }
                 }
                 for (Entity entityiterator : new ArrayList<>(world.players())) {
@@ -831,11 +815,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
             } else {
                 if (!world.isClientSide()) {
                     if (world instanceof Level _level) {
-                        if (!_level.isClientSide()) {
                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "corrupted_convert")), SoundSource.HOSTILE, 2, 1);
-                        } else {
-                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "corrupted_convert")), SoundSource.HOSTILE, 2, 1, false);
-                        }
                     }
                 }
                 for (Entity entityiterator : new ArrayList<>(world.players())) {

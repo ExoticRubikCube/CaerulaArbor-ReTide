@@ -186,11 +186,7 @@ public class WorldUtils {
 				}
 			}
 			if (world instanceof Level _level) {
-				if (!_level.isClientSide()) {
 					_level.playSound(null, BlockPos.containing(px, py, pz), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.fire.extinguish")), SoundSource.BLOCKS, (float) 0.6, 1);
-				} else {
-					_level.playLocalSound(px, py, pz, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.fire.extinguish")), SoundSource.BLOCKS, (float) 0.6, 1, false);
-				}
 			}
 		}
 	}
@@ -491,11 +487,7 @@ public class WorldUtils {
 	public static double findValidYForCat(LevelAccessor world, double x, double y, double z, double xx, double yy, double zz) {
 		double y_found = 0;
 		if (world instanceof Level _level) {
-			if (!_level.isClientSide()) {
 				_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.azalea.hit")), SoundSource.NEUTRAL, 0, 1);
-			} else {
-				_level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.azalea.hit")), SoundSource.NEUTRAL, 0, 1, false);
-			}
 		}
 		y_found = yy;
 		for (int index0 = 0; index0 < 12; index0++) {
@@ -527,11 +519,7 @@ public class WorldUtils {
 
 	public static void playFractalSummonSound(LevelAccessor world, double x, double y, double z) {
 		if (world instanceof Level _level) {
-			if (!_level.isClientSide()) {
 				_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.axolotl.splash")), SoundSource.HOSTILE, (float) 0.75, 1);
-			} else {
-				_level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.axolotl.splash")), SoundSource.HOSTILE, (float) 0.75, 1, false);
-			}
 		}
 	}
 
@@ -590,11 +578,7 @@ public class WorldUtils {
 		}
 		CaerulaArborMod.queueServerWork(Mth.nextInt(RandomSource.create(), 0, 4), () -> {
 			if (world instanceof Level _level) {
-				if (!_level.isClientSide()) {
 					_level.playSound(null, BlockPos.containing(xx, yy, zz), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.wither.shoot")), SoundSource.HOSTILE, (float) 0.85, 1);
-				} else {
-					_level.playLocalSound(xx, yy, zz, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.wither.shoot")), SoundSource.HOSTILE, (float) 0.85, 1, false);
-				}
 			}
 		});
 		if (world instanceof ServerLevel projectileLevel) {
@@ -717,11 +701,7 @@ public class WorldUtils {
 				CaerulaArborMod.queueServerWork(15, () -> {
 					world.destroyBlock(BlockPos.containing(x, y, z), false);
 					if (world instanceof Level _level) {
-						if (!_level.isClientSide()) {
 							_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.ender_chest.close")), SoundSource.BLOCKS, 1, 1);
-						} else {
-							_level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.ender_chest.close")), SoundSource.BLOCKS, 1, 1, false);
-						}
 					}
 					if (world instanceof ServerLevel _level) {
 						Entity entityToSpawn = CaerulaArborModEntities.MEGA_CHEST.get().spawn(_level, BlockPos.containing(x + 0.5, y, z + 0.5), MobSpawnType.MOB_SUMMONED);
@@ -744,11 +724,7 @@ public class WorldUtils {
 				CaerulaArborMod.queueServerWork(15, () -> {
 					world.destroyBlock(BlockPos.containing(x, y, z), false);
 					if (world instanceof Level _level) {
-						if (!_level.isClientSide()) {
 							_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.ender_chest.close")), SoundSource.BLOCKS, 1, 1);
-						} else {
-							_level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.ender_chest.close")), SoundSource.BLOCKS, 1, 1, false);
-						}
 					}
 					if (world instanceof ServerLevel _level) {
 						Entity entityToSpawn = CaerulaArborModEntities.MEGA_CHEST.get().spawn(_level, BlockPos.containing(x + 0.5, y, z + 0.5), MobSpawnType.MOB_SUMMONED);
@@ -768,11 +744,7 @@ public class WorldUtils {
 				CaerulaArborMod.queueServerWork(15, () -> {
 					world.destroyBlock(BlockPos.containing(x, y, z), false);
 					if (world instanceof Level _level) {
-						if (!_level.isClientSide()) {
 							_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.ender_chest.close")), SoundSource.BLOCKS, 1, 1);
-						} else {
-							_level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.ender_chest.close")), SoundSource.BLOCKS, 1, 1, false);
-						}
 					}
 					if (world instanceof ServerLevel _level) {
 						Entity entityToSpawn = CaerulaArborModEntities.MEGA_CHEST.get().spawn(_level, BlockPos.containing(x + 0.5, y, z + 0.5), MobSpawnType.MOB_SUMMONED);
@@ -787,11 +759,7 @@ public class WorldUtils {
 				CaerulaArborMod.queueServerWork(15, () -> {
 					world.destroyBlock(BlockPos.containing(x, y, z), false);
 					if (world instanceof Level _level) {
-						if (!_level.isClientSide()) {
 							_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.ender_chest.close")), SoundSource.BLOCKS, 1, 1);
-						} else {
-							_level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.ender_chest.close")), SoundSource.BLOCKS, 1, 1, false);
-						}
 					}
 					if (world instanceof ServerLevel _level) {
 						Entity entityToSpawn = CaerulaArborModEntities.MEGA_CHEST.get().spawn(_level, BlockPos.containing(x + 0.5, y, z + 0.5), MobSpawnType.MOB_SUMMONED);

@@ -186,11 +186,7 @@ public class LegendarySpearItem extends Item implements GeoItem {
                         _player.getCooldowns().addCooldown(itemstack.getItem(), 25);
                     CaerulaArborMod.queueServerWork(10, () -> {
                         if (world instanceof Level _level) {
-                            if (!_level.isClientSide()) {
                                 _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.player.attack.sweep")), SoundSource.NEUTRAL, (float) 3.5, 1);
-                            } else {
-                                _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.player.attack.sweep")), SoundSource.NEUTRAL, (float) 3.5, 1, false);
-                            }
                         }
                         {
                             final Vec3 _center = new Vec3(x, y, z);
@@ -215,11 +211,7 @@ public class LegendarySpearItem extends Item implements GeoItem {
                     CaerulaArborMod.queueServerWork(10, () -> {
                         if (((Entity) entity).isAlive()) {
                             if (world instanceof Level _level) {
-                                if (!_level.isClientSide()) {
                                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.trident.hit_ground")), SoundSource.NEUTRAL, (float) 3.5, 1);
-                                } else {
-                                    _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.trident.hit_ground")), SoundSource.NEUTRAL, (float) 3.5, 1, false);
-                                }
                             }
                             if ((sourceentity != null ? entity.distanceTo(sourceentity) : -1) <= 4) {
                                 ((Entity) entity).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.TRIDENT), sourceentity),
@@ -236,11 +228,7 @@ public class LegendarySpearItem extends Item implements GeoItem {
                     CaerulaArborMod.queueServerWork(10, () -> {
                         if (((Entity) entity).isAlive()) {
                             if (world instanceof Level _level) {
-                                if (!_level.isClientSide()) {
                                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.trident.throw")), SoundSource.NEUTRAL, (float) 3.5, 1);
-                                } else {
-                                    _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.trident.throw")), SoundSource.NEUTRAL, (float) 3.5, 1, false);
-                                }
                             }
                             if ((sourceentity != null ? entity.distanceTo(sourceentity) : -1) <= 4) {
                                 ((Entity) entity).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.TRIDENT), sourceentity),
@@ -258,11 +246,7 @@ public class LegendarySpearItem extends Item implements GeoItem {
                     CaerulaArborMod.queueServerWork(10, () -> {
                         if (((Entity) entity).isAlive()) {
                             if (world instanceof Level _level) {
-                                if (!_level.isClientSide()) {
                                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.trident.hit")), SoundSource.NEUTRAL, (float) 3.5, 1);
-                                } else {
-                                    _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.trident.hit")), SoundSource.NEUTRAL, (float) 3.5, 1, false);
-                                }
                             }
                             if ((sourceentity != null ? entity.distanceTo(sourceentity) : -1) <= 4) {
                                 ((Entity) entity).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.TRIDENT), sourceentity),

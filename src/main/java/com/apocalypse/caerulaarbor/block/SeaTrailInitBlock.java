@@ -212,11 +212,7 @@ public class SeaTrailInitBlock extends Block implements SimpleWaterloggedBlock, 
                             }.getValue())), "longevity", blockstate.getBlock().getStateDefinition().getProperty("longevity") instanceof IntegerProperty _getip9 ? blockstate.getValue(_getip9) : -1))),
                     3);
             if ((LevelAccessor) world instanceof Level _level) {
-                if (!_level.isClientSide()) {
                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.step")), SoundSource.NEUTRAL, 1, 1);
-                } else {
-                    _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.step")), SoundSource.NEUTRAL, 1, 1, false);
-                }
             }
         }
         world.scheduleTick(pos, this, 20);

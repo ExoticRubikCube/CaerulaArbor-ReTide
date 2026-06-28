@@ -41,11 +41,7 @@ public class TrailReplaceProcedure {
 				world.setBlock(BlockPos.containing(xx, yy, zz), (toPlace.getBlock().getStateDefinition().getProperty("waterlogged") instanceof BooleanProperty _withbp6 ? toPlace.setValue(_withbp6, water) : toPlace), 3);
 				world.levelEvent(2001, BlockPos.containing(xx, yy, zz), Block.getId(CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState()));
 				if (world instanceof Level _level) {
-					if (!_level.isClientSide()) {
 						_level.playSound(null, BlockPos.containing(xx, yy, zz), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.place")), SoundSource.NEUTRAL, 1, 1);
-					} else {
-						_level.playLocalSound(xx, yy, zz, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.place")), SoundSource.NEUTRAL, 1, 1, false);
-					}
 				}
 			}
 		}

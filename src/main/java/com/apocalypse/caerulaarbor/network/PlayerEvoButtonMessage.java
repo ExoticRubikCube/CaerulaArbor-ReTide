@@ -381,11 +381,7 @@ public class PlayerEvoButtonMessage {
             }
             if (quantity_cost > 0) {
                 if ((LevelAccessor) world instanceof Level _level) {
-                    if (!_level.isClientSide()) {
                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "tap")), SoundSource.PLAYERS, 2, 1);
-                    } else {
-                        _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "tap")), SoundSource.PLAYERS, 2, 1, false);
-                    }
                 }
                 {
                     double _setval = quantity - quantity_cost;
@@ -411,11 +407,7 @@ public class PlayerEvoButtonMessage {
             }
             if (quality_cost > 0) {
                 if ((LevelAccessor) world instanceof Level _level) {
-                    if (!_level.isClientSide()) {
                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "alert")), SoundSource.PLAYERS, 2, 1);
-                    } else {
-                        _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "alert")), SoundSource.PLAYERS, 2, 1, false);
-                    }
                 }
                 {
                     double _setval = quality - quality_cost;

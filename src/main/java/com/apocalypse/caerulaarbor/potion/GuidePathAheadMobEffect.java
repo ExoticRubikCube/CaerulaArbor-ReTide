@@ -5,19 +5,18 @@ import com.apocalypse.caerulaarbor.entity.GuideAbyssalEntity;
 import com.apocalypse.caerulaarbor.entity.OceanizedHorseEntity;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
-
+import com.apocalypse.caerulaarbor.utils.MathUtils;
+import com.apocalypse.caerulaarbor.utils.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffect;
-
-import com.apocalypse.caerulaarbor.utils.MathUtils;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
@@ -25,9 +24,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.List;
 import java.util.ArrayList;
-import com.apocalypse.caerulaarbor.utils.WorldUtils;
+import java.util.List;
 
 public class GuidePathAheadMobEffect extends MobEffect {
     public GuidePathAheadMobEffect() {
@@ -65,11 +63,7 @@ public class GuidePathAheadMobEffect extends MobEffect {
                                 }
                                 world.setBlock(BlockPos.containing(x, y, z), CaerulaArborModBlocks.SEA_TRAIL_GROWN.get().defaultBlockState(), 3);
                                 if (world instanceof Level _level) {
-                                    if (!_level.isClientSide()) {
                                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.step")), SoundSource.NEUTRAL, 2, 1);
-                                    } else {
-                                        _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.step")), SoundSource.NEUTRAL, 2, 1, false);
-                                    }
                                 }
                                 if ((Entity) entity instanceof GuideAbyssalEntity _datEntSetI)
                                     _datEntSetI.getEntityData().set(GuideAbyssalEntity.DATA_laylimit, (int) (((Entity) entity instanceof GuideAbyssalEntity _datEntI ? _datEntI.getEntityData().get(GuideAbyssalEntity.DATA_laylimit) : 0) - 1));
@@ -85,11 +79,7 @@ public class GuidePathAheadMobEffect extends MobEffect {
                                 }
                                 world.setBlock(BlockPos.containing(x, y, z), CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState(), 3);
                                 if (world instanceof Level _level) {
-                                    if (!_level.isClientSide()) {
                                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.step")), SoundSource.NEUTRAL, 2, 1);
-                                    } else {
-                                        _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.step")), SoundSource.NEUTRAL, 2, 1, false);
-                                    }
                                 }
                                 if ((Entity) entity instanceof OceanizedHorseEntity _datEntSetI)
                                     _datEntSetI.getEntityData().set(OceanizedHorseEntity.DATA_lay_limit, (int) (((Entity) entity instanceof OceanizedHorseEntity _datEntI ? _datEntI.getEntityData().get(OceanizedHorseEntity.DATA_lay_limit) : 0) - 1));
