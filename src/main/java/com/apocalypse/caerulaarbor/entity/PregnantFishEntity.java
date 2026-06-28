@@ -106,13 +106,12 @@ public class PregnantFishEntity extends SeaMonster implements RangedAttackMob, P
 		this.targetSelector.addGoal(9, new NearestAttackableTargetGoal<>(this, Piglin.class, true, true));
 		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, true));
 		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, true));
-		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal(this, Player.class, true, true) {
+		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, Player.class, true, true) {
 			@Override
 			public boolean canUse() {
 				double x = PregnantFishEntity.this.getX();
 				double y = PregnantFishEntity.this.getY();
 				double z = PregnantFishEntity.this.getZ();
-				Entity entity = PregnantFishEntity.this;
 				Level world = PregnantFishEntity.this.level();
 				return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -122,7 +121,6 @@ public class PregnantFishEntity extends SeaMonster implements RangedAttackMob, P
 				double x = PregnantFishEntity.this.getX();
 				double y = PregnantFishEntity.this.getY();
 				double z = PregnantFishEntity.this.getZ();
-				Entity entity = PregnantFishEntity.this;
 				Level world = PregnantFishEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -130,21 +128,11 @@ public class PregnantFishEntity extends SeaMonster implements RangedAttackMob, P
 		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal(this, Animal.class, true, true) {
 			@Override
 			public boolean canUse() {
-				double x = PregnantFishEntity.this.getX();
-				double y = PregnantFishEntity.this.getY();
-				double z = PregnantFishEntity.this.getZ();
-				Entity entity = PregnantFishEntity.this;
-				Level world = PregnantFishEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = PregnantFishEntity.this.getX();
-				double y = PregnantFishEntity.this.getY();
-				double z = PregnantFishEntity.this.getZ();
-				Entity entity = PregnantFishEntity.this;
-				Level world = PregnantFishEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
@@ -295,12 +283,9 @@ public class PregnantFishEntity extends SeaMonster implements RangedAttackMob, P
 	@Override
 	public void baseTick() {
 		super.baseTick();
-        LevelAccessor world = this.level();
-        if (this != null) {
-            if (!((Entity) this instanceof Mob _mobEnt0 && _mobEnt0.isAggressive()) && Math.random() < 0.001) {
-                if (this instanceof PregnantFishEntity) {
-                    this.setAnimation("animation.pregnant.random");
-                }
+        if (!this.isAggressive() && Math.random() < 0.001) {
+            if (this instanceof PregnantFishEntity) {
+                this.setAnimation("animation.pregnant.random");
             }
         }
         this.refreshDimensions();
@@ -350,7 +335,6 @@ public class PregnantFishEntity extends SeaMonster implements RangedAttackMob, P
 	private PlayState attackingPredicate(AnimationState event) {
 		double d1 = this.getX() - this.xOld;
 		double d0 = this.getZ() - this.zOld;
-		float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
 		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();

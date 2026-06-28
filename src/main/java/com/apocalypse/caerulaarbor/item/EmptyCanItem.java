@@ -34,29 +34,26 @@ public class EmptyCanItem extends Item {
         double y = entity.getY();
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
-        if (entity != null) {
-            BlockState target = Blocks.AIR.defaultBlockState();
-            target = (((LevelAccessor) world).getFluidState(BlockPos.containing(x + entity.getLookAngle().x, y + entity.getLookAngle().y + 1.6, z + entity.getLookAngle().z)).createLegacyBlock());
-            if (Blocks.WATER == target.getBlock()) {
-                if ((Entity) entity instanceof Player _player) {
-                    ItemStack _setstack = new ItemStack(CaerulaArborModItems.CANNED_WATER.get()).copy();
-                    _setstack.setCount(1);
-                    ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
-                }
-                itemstack.shrink(1);
-                if ((LevelAccessor) world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.bottle.fill")), SoundSource.NEUTRAL, 1, 1);
-                }
-            } else if (Blocks.LAVA == target.getBlock()) {
-                if ((Entity) entity instanceof Player _player) {
-                    ItemStack _setstack = new ItemStack(CaerulaArborModItems.CANNED_LAVA.get()).copy();
-                    _setstack.setCount(1);
-                    ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
-                }
-                itemstack.shrink(1);
-                if ((LevelAccessor) world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.bottle.fill")), SoundSource.NEUTRAL, 1, 1);
-                }
+        BlockState target = (((LevelAccessor) world).getFluidState(BlockPos.containing(x + entity.getLookAngle().x, y + entity.getLookAngle().y + 1.6, z + entity.getLookAngle().z)).createLegacyBlock());
+        if (Blocks.WATER == target.getBlock()) {
+            if ((Entity) entity instanceof Player _player) {
+                ItemStack _setstack = new ItemStack(CaerulaArborModItems.CANNED_WATER.get()).copy();
+                _setstack.setCount(1);
+                ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
+            }
+            itemstack.shrink(1);
+            if ((LevelAccessor) world instanceof Level _level) {
+                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.bottle.fill")), SoundSource.NEUTRAL, 1, 1);
+            }
+        } else if (Blocks.LAVA == target.getBlock()) {
+            if ((Entity) entity instanceof Player _player) {
+                ItemStack _setstack = new ItemStack(CaerulaArborModItems.CANNED_LAVA.get()).copy();
+                _setstack.setCount(1);
+                ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
+            }
+            itemstack.shrink(1);
+            if ((LevelAccessor) world instanceof Level _level) {
+                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.bottle.fill")), SoundSource.NEUTRAL, 1, 1);
             }
         }
         return ar;

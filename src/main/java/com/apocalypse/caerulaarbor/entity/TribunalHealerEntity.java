@@ -166,7 +166,7 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
 		}
 
 		public boolean canContinueToUse() {
-			return this.canUse() || this.target.isAlive() && !this.mob.getNavigation().isDone();
+			return this.canUse() || this.target!=null && this.target.isAlive() && !this.mob.getNavigation().isDone();
 		}
 
 		public void stop() {
@@ -181,8 +181,11 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
 		}
 
 		public void tick() {
-			double d0 = this.mob.distanceToSqr(this.target.getX(), this.target.getY(), this.target.getZ());
-			boolean flag = this.mob.getSensing().hasLineOfSight(this.target);
+            double d0 = 0;
+            if (this.target != null) {
+                d0 = this.mob.distanceToSqr(this.target.getX(), this.target.getY(), this.target.getZ());
+            }
+            boolean flag = this.mob.getSensing().hasLineOfSight(this.target);
 			if (flag) {
 				++this.seeTime;
 			} else {
@@ -239,10 +242,8 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this != null) {
-            if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-                this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(50);
-        }
+        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
+            this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(50);
         return retval;
 	}
 
@@ -272,156 +273,152 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if (this != null) {
-            Entity enemy = null;
-            double sklp1 = 0;
-            double sklp2 = 0;
-            double count = 0;
-            double atk = 0;
-            if (this.isAlive()) {
-                sklp1 = (Entity) this instanceof TribunalHealerEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp1) : 0;
-                sklp2 = (Entity) this instanceof TribunalHealerEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp2) : 0;
-                if (sklp1 > 0) {
-                    if ((Entity) this instanceof TribunalHealerEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_skillp1, (int) (sklp1 - 1));
-                } else {
-                    if (tickCount % 5 == 0) {
-                        atk = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
-                        {
-                            final Vec3 _center = new Vec3(x, y, z);
-                            List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(16 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                            for (Entity entityiterator : _entfound) {
-                                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "homo_sapiens")))) {
-                                    if (!(this == entityiterator)) {
-                                        if ((Entity) this instanceof TribunalHealerEntity _datEntSetI)
-                                            _datEntSetI.getEntityData().set(DATA_skillp1, 100);
-                                        if (this instanceof TribunalHealerEntity) {
-                                            this.setAnimation("animation.tribunal_healer.concentratedheal");
-                                        }
-                                        CaerulaArborMod.queueServerWork(20, () -> {
-                                            if (this.isAlive()) {
-												if (this == null)
-													return;
-												double atk1 = 0;
-												double count1 = 0;
-												atk1 = (Entity) this instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity0.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
-												if (world instanceof Level _level) {
-														_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "medic_strong")), SoundSource.NEUTRAL, 2, 1);
-												}
-												{
-													final Vec3 _center1 = new Vec3(x, y, z);
-													List<Entity> _entfound1 = world.getEntitiesOfClass(Entity.class, new AABB(_center1, _center1).inflate(18 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center1))).toList();
-													for (Entity entityiterator1 : _entfound1) {
-														if (entityiterator1.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "inquisition")))) {
-															if ((entityiterator1 instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < (entityiterator1 instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1)) {
-																if (entityiterator1 instanceof LivingEntity _entity && !_entity.level().isClientSide())
-																	_entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 60, 1));
-																if ((entityiterator1 instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < (entityiterator1 instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5) {
-																	if ((Entity) this instanceof LivingEntity _entity && !_entity.level().isClientSide())
-																		_entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 200, 1));
-																	if ((Entity) this instanceof LivingEntity _entity && !_entity.level().isClientSide())
-																		_entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 200, 1));
-																	com.apocalypse.caerulaarbor.util.EntityUtils.healWithParticles(world, entityiterator1, atk1 * 2, 20);
-																} else {
-																	com.apocalypse.caerulaarbor.util.EntityUtils.healWithParticles(world, entityiterator1, atk1 * 2, 0);
-																}
-																if (!(this == entityiterator1)) {
-																	count1 = count1 + 1;
-																	if (count1 >= 7) {
-																		break;
-																	}
-																}
+        Entity enemy = null;
+        double sklp1 = 0;
+        double sklp2 = 0;
+        double count = 0;
+        double atk = 0;
+        if (this.isAlive()) {
+            sklp1 = (Entity) this instanceof TribunalHealerEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp1) : 0;
+            sklp2 = (Entity) this instanceof TribunalHealerEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp2) : 0;
+            if (sklp1 > 0) {
+                if ((Entity) this instanceof TribunalHealerEntity _datEntSetI)
+                    _datEntSetI.getEntityData().set(DATA_skillp1, (int) (sklp1 - 1));
+            } else {
+                if (tickCount % 5 == 0) {
+                    atk = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
+                    {
+                        final Vec3 _center = new Vec3(x, y, z);
+                        List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(16 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+                        for (Entity entityiterator : _entfound) {
+                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "homo_sapiens")))) {
+                                if (!(this == entityiterator)) {
+                                    if ((Entity) this instanceof TribunalHealerEntity _datEntSetI)
+                                        _datEntSetI.getEntityData().set(DATA_skillp1, 100);
+                                    if (this instanceof TribunalHealerEntity) {
+                                        this.setAnimation("animation.tribunal_healer.concentratedheal");
+                                    }
+                                    CaerulaArborMod.queueServerWork(20, () -> {
+                                        if (this.isAlive()) {
+                                            if (this == null)
+                                                return;
+                                            double atk1 = 0;
+                                            double count1 = 0;
+                                            atk1 = (Entity) this instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity0.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
+                                            if (world instanceof Level _level) {
+                                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "medic_strong")), SoundSource.NEUTRAL, 2, 1);
+                                            }
+											final Vec3 _center1 = new Vec3(x, y, z);
+											List<Entity> _entfound1 = world.getEntitiesOfClass(Entity.class, new AABB(_center1, _center1).inflate(18 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center1))).toList();
+											for (Entity entityiterator1 : _entfound1) {
+												if (entityiterator1.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "inquisition")))) {
+													if ((entityiterator1 instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < (entityiterator1 instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1)) {
+														if (entityiterator1 instanceof LivingEntity _entity && !_entity.level().isClientSide())
+															_entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 60, 1));
+														if ((entityiterator1 instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < (entityiterator1 instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5) {
+															if ((Entity) this instanceof LivingEntity _entity && !_entity.level().isClientSide())
+																_entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 200, 1));
+															if ((Entity) this instanceof LivingEntity _entity && !_entity.level().isClientSide())
+																_entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 200, 1));
+															com.apocalypse.caerulaarbor.util.EntityUtils.healWithParticles(world, entityiterator1, atk1 * 2, 20);
+														} else {
+															com.apocalypse.caerulaarbor.util.EntityUtils.healWithParticles(world, entityiterator1, atk1 * 2, 0);
+														}
+														if (!(this == entityiterator1)) {
+															count1 = count1 + 1;
+															if (count1 >= 7) {
+																break;
 															}
 														}
 													}
 												}
 											}
-                                        });
-                                        break;
-                                    }
+                                        }
+                                    });
+                                    break;
                                 }
                             }
                         }
                     }
                 }
-                if (sklp2 > 0) {
+            }
+            if (sklp2 > 0) {
+                if ((Entity) this instanceof TribunalHealerEntity _datEntSetI)
+                    _datEntSetI.getEntityData().set(DATA_skillp2, (int) (sklp2 - 1));
+            } else {
+                if (tickCount % 5 == 0 && hasAggresiveMobAround(world, x, y, z)) {
                     if ((Entity) this instanceof TribunalHealerEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_skillp2, (int) (sklp2 - 1));
-                } else {
-                    if (tickCount % 5 == 0 && hasAggresiveMobAround(world, x, y, z)) {
-                        if ((Entity) this instanceof TribunalHealerEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_skillp2, 240);
-                        if (this instanceof TribunalHealerEntity) {
-                            this.setAnimation("animation.tribunal_healer.shockwave");
-                        }
-                        CaerulaArborMod.queueServerWork(40, () -> {
-                            if (this.isAlive()) {
-                                double vx = 0;
-								double vz = 0;
-								double dist = 0;
-								if (world instanceof Level _level) {
-										_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "medic_blast")), SoundSource.PLAYERS, 2, 1);
-								}
-								{
-									final Vec3 _center = new Vec3((getX()), (getY()), (getZ()));
-									List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(12 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-									for (Entity entityiterator : _entfound) {
-										if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "is_humanside")))) {
-											continue;
-										}
-										if (entityiterator instanceof TamableAnimal _tamEnt && _tamEnt.isTame()) {
-											continue;
-										}
-										if (!(entityiterator instanceof Mob)) {
-											continue;
-										}
-										if (distanceTo(entityiterator) <= 6) {
-											vx = entityiterator.getX() - getX();
-											vz = entityiterator.getZ() - getZ();
-											if (vx == 0) {
-												vx = 1;
-											}
-											if (vz == 0) {
-												vz = 1;
-											}
-											dist = Math.sqrt(vx * vx + vz * vz);
-											entityiterator.push((0.85 / Math.max(vx, vx / dist)), 0.25, (0.85 / Math.max(vz, vz / dist)));
-											if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
-												_entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.MUTE.get(), 60, 0, false, false));
-											CaerulaArborMod.queueServerWork(8, () -> {
-												if (this.isAlive()) {
-													entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.INDIRECT_MAGIC), this),
-															(float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 2));
-												}
-											});
-										}
-									}
-								}
-								CaerulaArborMod.queueServerWork(7, () -> {
-									if (this.isAlive()) {
-										if (world instanceof Level _level) {
-												_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "medic_attack")), SoundSource.PLAYERS, (float) 1.25, 1);
-										}
-										new Object() {
-											void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
-												for (int index0 = 0; index0 < 60; index0++) {
-													if (world instanceof ServerLevel _level)
-														_level.sendParticles(CaerulaArborModParticleTypes.PURPLE_FLAME.get(), (getX() + 1 * (timedloopiterator + 1) * Math.sin(Math.toRadians(index0 * 6))), (getY()),
-																(getZ() + 1 * (timedloopiterator + 1) * Math.cos(Math.toRadians(index0 * 6))), 2, 0.1, 0.15, 0.1, 0.1);
-												}
-												final int tick2 = ticks;
-												CaerulaArborMod.queueServerWork(tick2, () -> {
-													if (timedlooptotal > timedloopiterator + 1) {
-														timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
-													}
-												});
-											}
-										}.timedLoop(0, 6, 1);
-									}
-								});
-							}
-                        });
+                        _datEntSetI.getEntityData().set(DATA_skillp2, 240);
+                    if (this instanceof TribunalHealerEntity) {
+                        this.setAnimation("animation.tribunal_healer.shockwave");
                     }
+                    CaerulaArborMod.queueServerWork(40, () -> {
+                        if (this.isAlive()) {
+                            double vx = 0;
+                            double vz = 0;
+                            double dist = 0;
+                            if (world instanceof Level _level) {
+                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "medic_blast")), SoundSource.PLAYERS, 2, 1);
+                            }
+                            {
+                                final Vec3 _center = new Vec3((getX()), (getY()), (getZ()));
+                                List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(12 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+                                for (Entity entityiterator : _entfound) {
+                                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "is_humanside")))) {
+                                        continue;
+                                    }
+                                    if (entityiterator instanceof TamableAnimal _tamEnt && _tamEnt.isTame()) {
+                                        continue;
+                                    }
+                                    if (!(entityiterator instanceof Mob)) {
+                                        continue;
+                                    }
+                                    if (distanceTo(entityiterator) <= 6) {
+                                        vx = entityiterator.getX() - getX();
+                                        vz = entityiterator.getZ() - getZ();
+                                        if (vx == 0) {
+                                            vx = 1;
+                                        }
+                                        if (vz == 0) {
+                                            vz = 1;
+                                        }
+                                        dist = Math.sqrt(vx * vx + vz * vz);
+                                        entityiterator.push((0.85 / Math.max(vx, vx / dist)), 0.25, (0.85 / Math.max(vz, vz / dist)));
+                                        if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
+                                            _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.MUTE.get(), 60, 0, false, false));
+                                        CaerulaArborMod.queueServerWork(8, () -> {
+                                            if (this.isAlive()) {
+                                                entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.INDIRECT_MAGIC), this),
+                                                        (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 2));
+                                            }
+                                        });
+                                    }
+                                }
+                            }
+                            CaerulaArborMod.queueServerWork(7, () -> {
+                                if (this.isAlive()) {
+                                    if (world instanceof Level _level) {
+                                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "medic_attack")), SoundSource.PLAYERS, (float) 1.25, 1);
+                                    }
+                                    new Object() {
+                                        void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
+                                            for (int index0 = 0; index0 < 60; index0++) {
+                                                if (world instanceof ServerLevel _level)
+                                                    _level.sendParticles(CaerulaArborModParticleTypes.PURPLE_FLAME.get(), (getX() + 1 * (timedloopiterator + 1) * Math.sin(Math.toRadians(index0 * 6))), (getY()),
+                                                            (getZ() + 1 * (timedloopiterator + 1) * Math.cos(Math.toRadians(index0 * 6))), 2, 0.1, 0.15, 0.1, 0.1);
+                                            }
+                                            final int tick2 = ticks;
+                                            CaerulaArborMod.queueServerWork(tick2, () -> {
+                                                if (timedlooptotal > timedloopiterator + 1) {
+                                                    timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
+                                                }
+                                            });
+                                        }
+                                    }.timedLoop(0, 6, 1);
+                                }
+                            });
+                        }
+                    });
                 }
             }
         }
@@ -502,7 +499,6 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
 	private PlayState attackingPredicate(AnimationState event) {
 		double d1 = this.getX() - this.xOld;
 		double d0 = this.getZ() - this.zOld;
-		float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
 		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();

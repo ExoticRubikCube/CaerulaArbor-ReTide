@@ -1,11 +1,12 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.api.event.SanityEvent;
+import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
-import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
@@ -40,7 +41,6 @@ import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -114,21 +114,13 @@ public class ScreamChestFishEntity extends SeaMonster {
 
 			@Override
 			public boolean canUse() {
-				double x = ScreamChestFishEntity.this.getX();
-				double y = ScreamChestFishEntity.this.getY();
-				double z = ScreamChestFishEntity.this.getZ();
 				ScreamChestFishEntity entity = ScreamChestFishEntity.this;
-				Level world = ScreamChestFishEntity.this.level();
 				return super.canUse() && EntityPredicateUtils.isNotShiftKeyDown(entity) && !entity.isScreaming();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = ScreamChestFishEntity.this.getX();
-				double y = ScreamChestFishEntity.this.getY();
-				double z = ScreamChestFishEntity.this.getZ();
 				ScreamChestFishEntity entity = ScreamChestFishEntity.this;
-				Level world = ScreamChestFishEntity.this.level();
 				return super.canContinueToUse() && EntityPredicateUtils.isNotShiftKeyDown(entity) && !entity.isScreaming();
 			}
 
@@ -136,42 +128,26 @@ public class ScreamChestFishEntity extends SeaMonster {
 		this.goalSelector.addGoal(3, new RandomStrollGoal(this, 1) {
 			@Override
 			public boolean canUse() {
-				double x = ScreamChestFishEntity.this.getX();
-				double y = ScreamChestFishEntity.this.getY();
-				double z = ScreamChestFishEntity.this.getZ();
 				ScreamChestFishEntity entity = ScreamChestFishEntity.this;
-				Level world = ScreamChestFishEntity.this.level();
 				return super.canUse() && EntityPredicateUtils.isNotShiftKeyDown(entity) && !entity.isScreaming();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = ScreamChestFishEntity.this.getX();
-				double y = ScreamChestFishEntity.this.getY();
-				double z = ScreamChestFishEntity.this.getZ();
 				ScreamChestFishEntity entity = ScreamChestFishEntity.this;
-				Level world = ScreamChestFishEntity.this.level();
 				return super.canContinueToUse() && EntityPredicateUtils.isNotShiftKeyDown(entity) && !entity.isScreaming();
 			}
 		});
 		this.goalSelector.addGoal(4, new RandomLookAroundGoal(this) {
 			@Override
 			public boolean canUse() {
-				double x = ScreamChestFishEntity.this.getX();
-				double y = ScreamChestFishEntity.this.getY();
-				double z = ScreamChestFishEntity.this.getZ();
 				Entity entity = ScreamChestFishEntity.this;
-				Level world = ScreamChestFishEntity.this.level();
 				return super.canUse() && EntityPredicateUtils.isNotShiftKeyDown(entity);
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = ScreamChestFishEntity.this.getX();
-				double y = ScreamChestFishEntity.this.getY();
-				double z = ScreamChestFishEntity.this.getZ();
 				Entity entity = ScreamChestFishEntity.this;
-				Level world = ScreamChestFishEntity.this.level();
 				return super.canContinueToUse() && EntityPredicateUtils.isNotShiftKeyDown(entity);
 			}
 		});
@@ -244,7 +220,7 @@ public class ScreamChestFishEntity extends SeaMonster {
 	public void die(DamageSource source) {
 		super.die(source);
         Entity sourceentity = source.getEntity();
-        if (this == null || sourceentity == null)
+        if (sourceentity == null)
             return;
         if (((Entity) this instanceof ScreamChestFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_SCREAM_TICK) : 0) > 0) {
             if (sourceentity instanceof ServerPlayer _player) {
@@ -261,23 +237,21 @@ public class ScreamChestFishEntity extends SeaMonster {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this != null) {
-            {
-                Entity _ent = this;
-                _ent.setYRot((float) (90 * Mth.nextInt(RandomSource.create(), 0, 3)));
-                _ent.setXRot(0);
-                _ent.setYBodyRot(_ent.getYRot());
-                _ent.setYHeadRot(_ent.getYRot());
-                _ent.yRotO = _ent.getYRot();
-                _ent.xRotO = _ent.getXRot();
-                if (_ent instanceof LivingEntity _entity) {
-                    _entity.yBodyRotO = _entity.getYRot();
-                    _entity.yHeadRotO = _entity.getYRot();
-                }
+        {
+            Entity _ent = this;
+            _ent.setYRot((float) (90 * Mth.nextInt(RandomSource.create(), 0, 3)));
+            _ent.setXRot(0);
+            _ent.setYBodyRot(_ent.getYRot());
+            _ent.setYHeadRot(_ent.getYRot());
+            _ent.yRotO = _ent.getYRot();
+            _ent.xRotO = _ent.getXRot();
+            if (_ent instanceof LivingEntity _entity) {
+                _entity.yBodyRotO = _entity.getYRot();
+                _entity.yHeadRotO = _entity.getYRot();
             }
-            if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-                this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(25);
         }
+        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
+            this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(25);
         return retval;
 	}
 
@@ -302,8 +276,6 @@ public class ScreamChestFishEntity extends SeaMonster {
 
 	@Override
 	public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
-		ItemStack itemstack = sourceentity.getItemInHand(hand);
-		InteractionResult retval = InteractionResult.sidedSuccess(this.level().isClientSide());
 		super.mobInteract(sourceentity, hand);
 		return startScreamChest(sourceentity);
 	}
@@ -315,48 +287,46 @@ public class ScreamChestFishEntity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if (this != null) {
-            double scream = 0;
-            double d = 0;
-            double angle = 0;
-            double t = 0;
-            if (!((Entity) this instanceof ScreamChestFishEntity _datEntL0 && _datEntL0.getEntityData().get(DATA_release))) {
-                setShiftKeyDown(true);
-                if (!this.level().isClientSide())
-                    this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, 8, false, false));
-            } else {
-                if (this.isAlive()) {
-                    setShiftKeyDown(false);
-                    scream = (Entity) this instanceof ScreamChestFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_SCREAM_TICK) : 0;
-                    if (scream > 0) {
-                        if ((Entity) this instanceof ScreamChestFishEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_SCREAM_TICK, (int) (scream - 1));
-                        t = tickCount;
-                        if (scream % 10 == 0) {
-                            if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_shrieker.shriek")), SoundSource.HOSTILE, 1, 1);
-                            }
+        double scream = 0;
+        double d = 0;
+        double angle = 0;
+        double t = 0;
+        if (!((Entity) this instanceof ScreamChestFishEntity _datEntL0 && _datEntL0.getEntityData().get(DATA_release))) {
+            setShiftKeyDown(true);
+            if (!this.level().isClientSide())
+                this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, 8, false, false));
+        } else {
+            if (this.isAlive()) {
+                setShiftKeyDown(false);
+                scream = (Entity) this instanceof ScreamChestFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_SCREAM_TICK) : 0;
+                if (scream > 0) {
+                    if ((Entity) this instanceof ScreamChestFishEntity _datEntSetI)
+                        _datEntSetI.getEntityData().set(DATA_SCREAM_TICK, (int) (scream - 1));
+                    t = tickCount;
+                    if (scream % 10 == 0) {
+                        if (world instanceof Level _level) {
+                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_shrieker.shriek")), SoundSource.HOSTILE, 1, 1);
                         }
-                        for (int index0 = 0; index0 < 60; index0++) {
-                            angle = Math.toRadians(index0 * 6 + t * 0.6);
-                            d = (t * 0.5) % 5;
-                            if (world instanceof ServerLevel _level)
-                                _level.sendParticles(ParticleTypes.ELECTRIC_SPARK, (x + d * Math.sin(angle)), (y + 0.25), (z + d * Math.cos(angle)), 2, 0.1, 0.1, 0.1, 0.1);
-                        }
-                        for (Entity entityiterator : world.getEntities(this, new AABB((x - 5), (y - 2), (z - 5), (x + 5), (y + 3), (z + 5)))) {
-                            if ((entityiterator != null ? distanceTo(entityiterator) : -1) <= 5) {
-                                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
-                                    if (!(entityiterator == ((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null))) {
-                                        continue;
-                                    }
-                                }
-                                if (!(entityiterator instanceof LivingEntity)) {
+                    }
+                    for (int index0 = 0; index0 < 60; index0++) {
+                        angle = Math.toRadians(index0 * 6 + t * 0.6);
+                        d = (t * 0.5) % 5;
+                        if (world instanceof ServerLevel _level)
+                            _level.sendParticles(ParticleTypes.ELECTRIC_SPARK, (x + d * Math.sin(angle)), (y + 0.25), (z + d * Math.cos(angle)), 2, 0.1, 0.1, 0.1, 0.1);
+                    }
+                    for (Entity entityiterator : world.getEntities(this, new AABB((x - 5), (y - 2), (z - 5), (x + 5), (y + 3), (z + 5)))) {
+                        if ((entityiterator != null ? distanceTo(entityiterator) : -1) <= 5) {
+                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                                if (!(entityiterator == ((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null))) {
                                     continue;
                                 }
-                                EntityUtils.deductSanity(entityiterator, 5);
-                                if (!this.level().isClientSide())
-                                    this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 10, 1));
                             }
+                            if (!(entityiterator instanceof LivingEntity)) {
+                                continue;
+                            }
+                            SIHelper.causeSanityInjury((LivingEntity) entityiterator, this, 5, SanityEvent.Hurt.Type.ENTITY);
+                            if (!this.level().isClientSide())
+                                this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 10, 1));
                         }
                     }
                 }
@@ -393,9 +363,7 @@ public class ScreamChestFishEntity extends SeaMonster {
 			if (this.isShiftKeyDown()) {
 				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.scream_chest_fish.chest"));
 			}
-			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.1F && event.getLimbSwingAmount() < 0.1F))
-			&& this.entityData.get(DATA_release)
-) {
+			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.1F && event.getLimbSwingAmount() < 0.1F)) && this.entityData.get(DATA_release)) {
 				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.scream_chest_fish.move"));
 			}
 			return event.setAndContinue(RawAnimation.begin().thenLoop("animation.scream_chest_fish.idle"));

@@ -87,18 +87,16 @@ public class CorrectinalPhalaxVanguardEntity extends Animal implements GeoEntity
 		double y = this.getY();
 		double z = this.getZ();
 		LevelAccessor world = this.level();
-		{
-			final Vec3 _center = new Vec3((x + 2 * this.getLookAngle().x), (y + 2 * this.getLookAngle().y), (z + 2 * this.getLookAngle().z));
-			List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, net.minecraft.world.phys.AABB.ofSize(_center, 7, 7, 7), e -> true).stream().sorted(java.util.Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-			for (Entity entityiterator : _entfound) {
-				if (!(entityiterator instanceof Mob) || entityiterator.getType().is(net.minecraft.tags.TagKey.create(net.minecraft.core.registries.Registries.ENTITY_TYPE, new net.minecraft.resources.ResourceLocation("caerula_arbor:inquisition")))) {
+		final Vec3 _center = new Vec3((x + 2 * this.getLookAngle().x), (y + 2 * this.getLookAngle().y), (z + 2 * this.getLookAngle().z));
+		List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, net.minecraft.world.phys.AABB.ofSize(_center, 7, 7, 7), e -> true).stream().sorted(java.util.Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+		for (Entity entityiterator : _entfound) {
+			if (!(entityiterator instanceof Mob) || entityiterator.getType().is(net.minecraft.tags.TagKey.create(net.minecraft.core.registries.Registries.ENTITY_TYPE, new net.minecraft.resources.ResourceLocation("caerula_arbor:inquisition")))) {
 				if (!(entityiterator == this.getTarget())) {
-						continue;
-					}
+					continue;
 				}
-				entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(net.minecraft.core.registries.Registries.DAMAGE_TYPE).getHolderOrThrow(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.DAMAGE_TYPE, new net.minecraft.resources.ResourceLocation("caerula_arbor:generic_warrior_attack")))),
-						(float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * rate));
 			}
+			entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(net.minecraft.core.registries.Registries.DAMAGE_TYPE).getHolderOrThrow(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.DAMAGE_TYPE, new net.minecraft.resources.ResourceLocation("caerula_arbor:generic_warrior_attack")))),
+					(float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * rate));
 		}
 	}
 
@@ -195,40 +193,38 @@ public class CorrectinalPhalaxVanguardEntity extends Animal implements GeoEntity
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if (this != null) {
-            double sklp1 = 0;
-            double less = 0;
-            Entity enemy = null;
-            if (this.isAlive()) {
-                sklp1 = (Entity) this instanceof CorrectinalPhalaxVanguardEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp) : 0;
-                if (sklp1 > 0) {
-                    if ((Entity) this instanceof CorrectinalPhalaxVanguardEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_skillp, (int) (sklp1 - 1));
-                } else {
-                    enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
-                    if (!(enemy == null)) {
-                        if ((enemy != null ? distanceTo(enemy) : -1) <= 5 && enemy.isAlive()) {
-                            if ((Entity) this instanceof CorrectinalPhalaxVanguardEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_skillp, 300);
-                            if (this instanceof CorrectinalPhalaxVanguardEntity) {
-                                this.setAnimation("animation.correctional_phalanx _vanguard.swing");
-                            }
-                            ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY()), (enemy.getZ())));
-                            CaerulaArborMod.queueServerWork(11, () -> {
-                                if (this.isAlive()) {
-                                    vanguardSwing(1.8);
-                                }
-                            });
-                            CaerulaArborMod.queueServerWork(21, () -> {
-                                if (this.isAlive()) {
-                                    vanguardSwing(2.1);
-                                }
-                            });
+        double sklp1 = 0;
+        double less = 0;
+        Entity enemy = null;
+        if (this.isAlive()) {
+            sklp1 = (Entity) this instanceof CorrectinalPhalaxVanguardEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp) : 0;
+            if (sklp1 > 0) {
+                if ((Entity) this instanceof CorrectinalPhalaxVanguardEntity _datEntSetI)
+                    _datEntSetI.getEntityData().set(DATA_skillp, (int) (sklp1 - 1));
+            } else {
+                enemy = this.getTarget();
+                if (!(enemy == null)) {
+                    if (distanceTo(enemy) <= 5 && enemy.isAlive()) {
+                        if ((Entity) this instanceof CorrectinalPhalaxVanguardEntity _datEntSetI)
+                            _datEntSetI.getEntityData().set(DATA_skillp, 300);
+                        if (this instanceof CorrectinalPhalaxVanguardEntity) {
+                            this.setAnimation("animation.correctional_phalanx _vanguard.swing");
                         }
+                        ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY()), (enemy.getZ())));
+                        CaerulaArborMod.queueServerWork(11, () -> {
+                            if (this.isAlive()) {
+                                vanguardSwing(1.8);
+                            }
+                        });
+                        CaerulaArborMod.queueServerWork(21, () -> {
+                            if (this.isAlive()) {
+                                vanguardSwing(2.1);
+                            }
+                        });
                     }
                 }
-                EntityUtils.vanguardBuff(world, x, y, z, this);
             }
+            EntityUtils.vanguardBuff(world, x, y, z, this);
         }
         this.refreshDimensions();
 	}
@@ -272,9 +268,7 @@ public class CorrectinalPhalaxVanguardEntity extends Animal implements GeoEntity
 
 	private PlayState movementPredicate(AnimationState event) {
 		if (this.animationprocedure.equals("empty")) {
-			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
-
-			) {
+			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))) {
 				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.correctional_phalanx _vanguard.move"));
 			}
 			if (this.isDeadOrDying()) {

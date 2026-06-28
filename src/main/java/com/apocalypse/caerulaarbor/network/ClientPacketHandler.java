@@ -1,5 +1,6 @@
 package com.apocalypse.caerulaarbor.network;
 
+import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.network.message.receive.PlayerVariablesSyncMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.LogicalSide;
@@ -22,6 +23,6 @@ public class ClientPacketHandler {
 			return;
 		}
 
-		Minecraft.getInstance().player.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(variables -> variables.readNBT(message.data().writeNBT()));
+		Minecraft.getInstance().player.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(variables -> variables.readNBT(message.data().writeNBT()));
 	}
 }

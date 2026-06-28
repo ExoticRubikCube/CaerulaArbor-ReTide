@@ -1,9 +1,10 @@
 package com.apocalypse.caerulaarbor.item;
 
+import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
+import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.registries.Registries;
@@ -57,14 +58,14 @@ public class OilAndCreamItem extends Item {
         if (entity != null) {
             {
                 double _setval = 0;
-                ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                     capability.disoclusion = _setval;
                     capability.syncPlayerVariables(entity);
                 });
             }
             {
-                double _setval = Math.max((((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).player_light - 30, 0);
-                ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                double _setval = Math.max((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_light - 30, 0);
+                ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                     capability.player_light = _setval;
                     capability.syncPlayerVariables(entity);
                 });

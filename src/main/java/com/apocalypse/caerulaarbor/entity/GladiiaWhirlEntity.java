@@ -104,21 +104,19 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if (this != null) {
-            Entity gladiia = null;
-            gladiia = world.getEntitiesOfClass(GladiiaEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true).stream().sorted(new Object() {
-                Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
-                    return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
-                }
-            }.compareDistOf(x, y, z)).findFirst().orElse(null);
-            if (!(gladiia == null)) {
-                if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
-                    this.getAttribute(Attributes.ATTACK_DAMAGE)
-                            .setBaseValue((gladiia instanceof LivingEntity _livingEntity2 && this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
+        Entity gladiia = null;
+        gladiia = world.getEntitiesOfClass(GladiiaEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true).stream().sorted(new Object() {
+            Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
+                return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
             }
-            if (this.getAttributes().hasAttribute(ForgeMod.ENTITY_GRAVITY.get()))
-                this.getAttribute(ForgeMod.ENTITY_GRAVITY.get()).setBaseValue(0);
+        }.compareDistOf(x, y, z)).findFirst().orElse(null);
+        if (!(gladiia == null)) {
+            if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
+                this.getAttribute(Attributes.ATTACK_DAMAGE)
+                        .setBaseValue((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
         }
+        if (this.getAttributes().hasAttribute(ForgeMod.ENTITY_GRAVITY.get()))
+            this.getAttribute(ForgeMod.ENTITY_GRAVITY.get()).setBaseValue(0);
         return retval;
 	}
 
@@ -144,33 +142,96 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if (this != null) {
-            Entity enemy = null;
-            double t = 0;
-            double damage = 0;
-            double d = 0;
-            t = tickCount;
-            if (t >= 120) {
-                if (!level().isClientSide())
-                    discard();
+        Entity enemy = null;
+        double t = 0;
+        double damage = 0;
+        double d = 0;
+        t = tickCount;
+        if (t >= 120) {
+            if (!level().isClientSide())
+                discard();
+        }
+        if (!(t >= 111)) {
+            damage = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.9;
+            {
+                final Vec3 _center = new Vec3(x, y, z);
+                List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(18 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+                for (Entity entityiterator : _entfound) {
+                    d = entityiterator != null ? distanceTo(entityiterator) : -1;
+                    if (entityiterator instanceof GladiiaEntity) {
+                        continue;
+                    }
+                    if (entityiterator instanceof GladiiaWhirlEntity) {
+                        continue;
+                    }
+                    if (!(entityiterator instanceof LivingEntity)) {
+                        if (entityiterator != null && entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "no_join_whirl")))) {
+                            continue;
+                        }
+                    }
+                    enemy = entityiterator instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+                    if (entityiterator instanceof Player || (entityiterator instanceof TamableAnimal _tamEnt && _tamEnt.isTame())) {
+                        if (new Object() {
+                            public boolean checkGamemode(Entity _ent) {
+                                if (_ent instanceof ServerPlayer _serverPlayer) {
+                                    return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                                } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
+                                    return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
+                                            && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                                }
+                                return false;
+                            }
+                        }.checkGamemode(entityiterator)) {
+                            continue;
+                        }
+                        if (new Object() {
+                            public boolean checkGamemode(Entity _ent) {
+                                if (_ent instanceof ServerPlayer _serverPlayer) {
+                                    return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.SPECTATOR;
+                                } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
+                                    return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
+                                            && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.SPECTATOR;
+                                }
+                                return false;
+                            }
+                        }.checkGamemode(entityiterator)) {
+                            continue;
+                        }
+                        if (!(enemy instanceof GladiiaEntity)) {
+                            continue;
+                        }
+                    }
+                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "is_humanside")))) {
+                        if (!(enemy instanceof GladiiaEntity)) {
+                            continue;
+                        }
+                    }
+                    if (d <= 9) {
+                        EntityUtils.turnRounds(entityiterator, this);
+                    }
+                }
             }
-            if (!(t >= 111)) {
-                damage = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.9;
+            if (t % 20 == 11) {
+                if (!world.isClientSide()) {
+                    if (world instanceof Level _level) {
+                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "gladiia_skill_rim")), SoundSource.NEUTRAL, 3, 1);
+                    }
+                }
                 {
                     final Vec3 _center = new Vec3(x, y, z);
-                    List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(18 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+                    List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(24 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
                     for (Entity entityiterator : _entfound) {
                         d = entityiterator != null ? distanceTo(entityiterator) : -1;
+                        if (!(entityiterator instanceof LivingEntity)) {
+                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "no_join_whirl")))) {
+                                continue;
+                            }
+                        }
                         if (entityiterator instanceof GladiiaEntity) {
                             continue;
                         }
                         if (entityiterator instanceof GladiiaWhirlEntity) {
                             continue;
-                        }
-                        if (!(entityiterator instanceof LivingEntity)) {
-                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "no_join_whirl")))) {
-                                continue;
-                            }
                         }
                         enemy = entityiterator instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                         if (entityiterator instanceof Player || (entityiterator instanceof TamableAnimal _tamEnt && _tamEnt.isTame())) {
@@ -209,80 +270,15 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity {
                                 continue;
                             }
                         }
-                        if (d <= 9) {
-                            EntityUtils.turnRounds(entityiterator, this);
-                        }
-                    }
-                }
-                if (t % 20 == 11) {
-                    if (!world.isClientSide()) {
-                        if (world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "gladiia_skill_rim")), SoundSource.NEUTRAL, 3, 1);
-                        }
-                    }
-                    {
-                        final Vec3 _center = new Vec3(x, y, z);
-                        List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(24 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                        for (Entity entityiterator : _entfound) {
-                            d = entityiterator != null ? distanceTo(entityiterator) : -1;
-                            if (!(entityiterator instanceof LivingEntity)) {
-                                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "no_join_whirl")))) {
-                                    continue;
-                                }
+                        if (d <= 12) {
+                            if (entityiterator instanceof LivingEntity) {
+                                entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "gladiia_magic")))),
+                                        (float) damage);
+                                if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
+                                    _entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, 1, false, false));
                             }
-                            if (entityiterator instanceof GladiiaEntity) {
-                                continue;
-                            }
-                            if (entityiterator instanceof GladiiaWhirlEntity) {
-                                continue;
-                            }
-                            enemy = entityiterator instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
-                            if (entityiterator instanceof Player || (entityiterator instanceof TamableAnimal _tamEnt && _tamEnt.isTame())) {
-                                if (new Object() {
-                                    public boolean checkGamemode(Entity _ent) {
-                                        if (_ent instanceof ServerPlayer _serverPlayer) {
-                                            return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                                        } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                                            return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                                    && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
-                                        }
-                                        return false;
-                                    }
-                                }.checkGamemode(entityiterator)) {
-                                    continue;
-                                }
-                                if (new Object() {
-                                    public boolean checkGamemode(Entity _ent) {
-                                        if (_ent instanceof ServerPlayer _serverPlayer) {
-                                            return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.SPECTATOR;
-                                        } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                                            return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                                    && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.SPECTATOR;
-                                        }
-                                        return false;
-                                    }
-                                }.checkGamemode(entityiterator)) {
-                                    continue;
-                                }
-                                if (!(enemy instanceof GladiiaEntity)) {
-                                    continue;
-                                }
-                            }
-                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "is_humanside")))) {
-                                if (!(enemy instanceof GladiiaEntity)) {
-                                    continue;
-                                }
-                            }
-                            if (d <= 12) {
-                                if (entityiterator instanceof LivingEntity) {
-                                    entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "gladiia_magic")))),
-                                            (float) damage);
-                                    if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                                        _entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, 1, false, false));
-                                }
-                                if (d >= 3) {
-                                    EntityUtils.pullToGladiia(entityiterator, this);
-                                }
+                            if (d >= 3) {
+                                EntityUtils.pullToGladiia(entityiterator, this);
                             }
                         }
                     }

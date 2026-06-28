@@ -39,7 +39,6 @@ import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -111,13 +110,12 @@ public class SplasherAbyssalEntity extends SeaMonster implements RangedAttackMob
 		this.targetSelector.addGoal(9, new NearestAttackableTargetGoal<>(this, Piglin.class, true, true));
 		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, true));
 		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, true));
-		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal(this, Player.class, true, true) {
+		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, Player.class, true, true) {
 			@Override
 			public boolean canUse() {
 				double x = SplasherAbyssalEntity.this.getX();
 				double y = SplasherAbyssalEntity.this.getY();
 				double z = SplasherAbyssalEntity.this.getZ();
-				Entity entity = SplasherAbyssalEntity.this;
 				Level world = SplasherAbyssalEntity.this.level();
 				return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -127,29 +125,18 @@ public class SplasherAbyssalEntity extends SeaMonster implements RangedAttackMob
 				double x = SplasherAbyssalEntity.this.getX();
 				double y = SplasherAbyssalEntity.this.getY();
 				double z = SplasherAbyssalEntity.this.getZ();
-				Entity entity = SplasherAbyssalEntity.this;
 				Level world = SplasherAbyssalEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
 		});
-		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal(this, Animal.class, true, true) {
+		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Animal.class, true, true) {
 			@Override
 			public boolean canUse() {
-				double x = SplasherAbyssalEntity.this.getX();
-				double y = SplasherAbyssalEntity.this.getY();
-				double z = SplasherAbyssalEntity.this.getZ();
-				Entity entity = SplasherAbyssalEntity.this;
-				Level world = SplasherAbyssalEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = SplasherAbyssalEntity.this.getX();
-				double y = SplasherAbyssalEntity.this.getY();
-				double z = SplasherAbyssalEntity.this.getZ();
-				Entity entity = SplasherAbyssalEntity.this;
-				Level world = SplasherAbyssalEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
@@ -311,12 +298,9 @@ public class SplasherAbyssalEntity extends SeaMonster implements RangedAttackMob
 	@Override
 	public void baseTick() {
 		super.baseTick();
-        LevelAccessor world = this.level();
-        if (this != null) {
-            if (!((Entity) this instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CaerulaArborModMobEffects.SPLASHER_ATTACK.get()))) {
-                if (!this.level().isClientSide())
-                    this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.SPLASHER_ATTACK.get(), 10000, 0, false, false));
-            }
+        if (!this.hasEffect(CaerulaArborModMobEffects.SPLASHER_ATTACK.get())) {
+            if (!this.level().isClientSide())
+                this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.SPLASHER_ATTACK.get(), 10000, 0, false, false));
         }
         this.refreshDimensions();
 	}
@@ -366,7 +350,6 @@ public class SplasherAbyssalEntity extends SeaMonster implements RangedAttackMob
 	private PlayState attackingPredicate(AnimationState event) {
 		double d1 = this.getX() - this.xOld;
 		double d0 = this.getZ() - this.zOld;
-		float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
 		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();

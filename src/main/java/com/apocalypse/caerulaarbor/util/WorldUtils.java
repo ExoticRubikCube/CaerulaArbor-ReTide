@@ -1,12 +1,12 @@
 package com.apocalypse.caerulaarbor.util;
 
+import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
 import com.apocalypse.caerulaarbor.entity.Al1SHelperEntity;
 import com.apocalypse.caerulaarbor.entity.LittleHelperEntity;
 import com.apocalypse.caerulaarbor.entity.OceanizedWitherEntity;
 import com.apocalypse.caerulaarbor.init.*;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import com.apocalypse.caerulaarbor.procedures.SummonEliteFishProcedure;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -88,6 +88,7 @@ public class WorldUtils {
 		throw new UnsupportedOperationException("Utility class");
 	}
 
+	//TODO可疑,或许可以下放到基类
 	public static InteractionResult convertToOceanFarmland(LevelAccessor world, BlockPos pos, BlockState blockstate, Entity entity) {
 		if (entity == null)
 			return InteractionResult.PASS;
@@ -98,6 +99,7 @@ public class WorldUtils {
 		return InteractionResult.SUCCESS;
 	}
 
+	//或许可以使用基类或接口
 	public static void addGrowAge(LevelAccessor world, BlockPos pos, BlockState blockstate) {
 		if ((blockstate.getBlock().getStateDefinition().getProperty("grow_age") instanceof IntegerProperty _getip1 ? blockstate.getValue(_getip1) : -1) < 30) {
 			int value = (blockstate.getBlock().getStateDefinition().getProperty("grow_age") instanceof IntegerProperty _getip3 ? blockstate.getValue(_getip3) : -1) + 8;
@@ -107,11 +109,12 @@ public class WorldUtils {
 		}
 	}
 
+	//TODO下放回实体
 	public static void bestowAbility(LevelAccessor world, double index) {
-		CaerulaArborModVariables.MapVariables.get(world).endspeaker_abolities = (int)CaerulaArborModVariables.MapVariables.get(world).endspeaker_abolities | (int)Math.pow(2, index);
-		CaerulaArborModVariables.MapVariables.get(world).syncData(world);
+		MapVariablesHandler.bestowAbility(world, index);
 	}
 
+	//可疑
 	public static void burndownTrail(LevelAccessor world, BlockState toBeBurn, double px, double py, double pz) {
 		BlockState output = Blocks.AIR.defaultBlockState();
 		boolean success = false;
@@ -162,23 +165,19 @@ public class WorldUtils {
 		}
 	}
 
-	public static void bulletParticle(LevelAccessor world, double x, double y, double z) {
-		world.addParticle(CaerulaArborModParticleTypes.SEA_SPLASH.get(), x, y, z, 0, 0, 0);
-	}
-
+	//下放或使用基类或接口
 	public static boolean canLilyExist(LevelAccessor world, double x, double y, double z) {
 		return world.getBlockState(BlockPos.containing(x, y - 1, z)).isFaceSturdy(world, BlockPos.containing(x, y - 1, z), Direction.UP);
 	}
 
+	//或许可以使用基类或接口
 	public static boolean canPutTrail(LevelAccessor world, double x, double y, double z) {
 		return (world.getBlockState(BlockPos.containing(x, y - 1, z)).isFaceSturdy(world, BlockPos.containing(x, y - 1, z), Direction.UP)
 				|| (world.getBlockState(BlockPos.containing(x, y - 1, z))).is(BlockTags.create(new ResourceLocation(CaerulaArborMod.MODID, "trail_existable"))))
 				&& !((world.getBlockState(BlockPos.containing(x, y - 1, z))).getBlock() == CaerulaArborModBlocks.SEA_TRAIL_SOLID.get());
 	}
 
-	/**
-	 * Checks for the Oceanized Wither T-shaped summon structure and consumes it when matched.
-	 */
+	//TODO:下放,应该为两个凋零制作一个共同的基类，然后置入那里,其他两个凋零都调用的utils方法同理
 	public static boolean checkTShape(LevelAccessor world, double x, double y, double z, BlockState target) {
 		double direction = 0;
 		boolean verticalMatched = false;
@@ -215,6 +214,7 @@ public class WorldUtils {
 		return false;
 	}
 
+	//可疑
 	public static void clearNetherseaAround(LevelAccessor world, double x, double y, double z, Entity entity) {
 		if (entity == null)
 			return;
@@ -276,6 +276,7 @@ public class WorldUtils {
 		}
 	}
 
+	//可以安排到那个BaseSeaborn
 	public static boolean canCommonSeabornSpawn(LevelAccessor world, double x, double y, double z) {
 		if (!world.getBiome(BlockPos.containing(x, y, z)).is(TagKey.create(Registries.BIOME, new ResourceLocation(CaerulaArborMod.MODID, "common_spawn_biome")))) {
 			return false;
@@ -292,6 +293,7 @@ public class WorldUtils {
 		return false;
 	}
 
+	//或许放到其他util比较好?可以专门制作一个海嗣util
 	public static boolean canDangerSeabornSpawn(LevelAccessor world, double x, double y, double z) {
 		if (!world.getBiome(BlockPos.containing(x, y, z)).is(TagKey.create(Registries.BIOME, new ResourceLocation(CaerulaArborMod.MODID, "danger_spawn_biome")))) {
 			return false;
@@ -308,6 +310,7 @@ public class WorldUtils {
 		return false;
 	}
 
+	//可疑
 	public static boolean canRareSeabornSpawn(LevelAccessor world, double x, double y, double z) {
 		if (!world.getBiome(BlockPos.containing(x, y, z)).is(TagKey.create(Registries.BIOME, new ResourceLocation(CaerulaArborMod.MODID, "rare_spawn_biome")))) {
 			return false;
@@ -324,6 +327,7 @@ public class WorldUtils {
 		return false;
 	}
 
+	//TODO:下放
 	public static void corruptedSpawnMobs(LevelAccessor world, double x, double y, double z, double n) {
 		double tx = 0;
 		double ty = 0;
@@ -351,6 +355,7 @@ public class WorldUtils {
 		}
 	}
 
+	//可疑，为什么不放在其他util
 	public static void dropRelicRoute(LevelAccessor world, double x, double y, double z) {
 		if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
 			if (!world.isClientSide() && world.getServer() != null) {
@@ -367,9 +372,9 @@ public class WorldUtils {
 		}
 	}
 
+	//可疑
 	public static boolean isDistFromGround(LevelAccessor world, double x, double y, double z) {
-		double block = 0;
-		if (y < -32) {
+        if (y < -32) {
 			return false;
 		}
 		for (int index0 = 0; index0 < 20; index0++) {
@@ -380,6 +385,7 @@ public class WorldUtils {
 		return true;
 	}
 
+	//TODO:或许可以下放
 	public static void dropRelicTidebi(LevelAccessor world, double x, double y, double z) {
 		if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
 			if (!world.isClientSide() && world.getServer() != null) {
@@ -396,6 +402,7 @@ public class WorldUtils {
 		}
 	}
 
+	//还行，暂时不动
 	public static void summonRandomSeaborn(LevelAccessor world, double eliteChance, double x, double y, double z) {
 		if (Math.random() < eliteChance) {
 			SummonEliteFishProcedure.execute(world, x, y, z);
@@ -430,6 +437,7 @@ public class WorldUtils {
 		}
 	}
 
+	//TODO:下放,应该为两个凋零制作一个共同的基类，然后置入那里
 	public static void dropMoistStar(LevelAccessor world, double x, double y, double z, Entity entity) {
 		if (entity == null)
 			return;
@@ -455,6 +463,7 @@ public class WorldUtils {
 		}
 	}
 
+	//TODO:下放回SuperBigCatEntity作为辅助方法并更新调用
 	public static double findValidYForCat(LevelAccessor world, double x, double y, double z, double xx, double yy, double zz) {
 		double y_found = 0;
 		if (world instanceof Level _level) {
@@ -473,6 +482,7 @@ public class WorldUtils {
 	/**
 	 * Finds the nearest valid standing Y around the given Y within a small vertical range.
 	 */
+	//可以，需要解释
 	public static double findValidY(LevelAccessor world, double xx, double yy, double zz) {
 		double yFound;
 		for (int index0 = 0; index0 < 12; index0++) {
@@ -488,12 +498,14 @@ public class WorldUtils {
 		return 114514;
 	}
 
+	//或许可以下放或制作接口
 	public static void playFractalSummonSound(LevelAccessor world, double x, double y, double z) {
 		if (world instanceof Level _level) {
 				_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.axolotl.splash")), SoundSource.HOSTILE, (float) 0.75, 1);
 		}
 	}
 
+	//同，需要解释
 	public static double findYzforTear(LevelAccessor world, double xx, double yy, double zz) {
 		double y_found = 0;
 		y_found = yy;
@@ -506,6 +518,7 @@ public class WorldUtils {
 		return 114514;
 	}
 
+	//TODO;下放
 	public static double findGround(LevelAccessor world, double xx, double yy, double zz) {
 		BlockState target = Blocks.AIR.defaultBlockState();
 		double findY = 0;
@@ -525,6 +538,7 @@ public class WorldUtils {
 		return findY;
 	}
 
+	//TODO:也下放回WitherShootPreEntity
 	public static void shootWitherTo(LevelAccessor world, Entity from, Entity target) {
 		if (from == null || target == null)
 			return;
@@ -534,6 +548,7 @@ public class WorldUtils {
 		shootWitherSkull(world, from, 0.1, vx, vy, vz, 1, Mth.nextDouble(RandomSource.create(), 0.42, 0.56), from.getX(), from.getY() + 2.7, from.getZ());
 	}
 
+	//TODO:之后也进行下放
 	public static void shootWitherSkull(LevelAccessor world, Entity from, double a, double dx, double dy, double dz, double inaccu, double speed, double xx, double yy, double zz) {
 		if (from == null)
 			return;
@@ -569,6 +584,7 @@ public class WorldUtils {
 		}
 	}
 
+	//TODO:下放
 	public static void ireneBurnBrandAround(LevelAccessor world, double x, double y, double z) {
 		BlockState toBeBurn = Blocks.AIR.defaultBlockState();
 		double px = 0;
@@ -592,6 +608,7 @@ public class WorldUtils {
 		}
 	}
 
+	//需要评估然后添加文档注释解释作用
 	public static boolean isOrganic(BlockState block) {
 		if (block.getBlock() == CaerulaArborModBlocks.TRAIL_PULSE.get() || block.getBlock() == CaerulaArborModBlocks.TRAIL_LOG.get() || block.getBlock() == CaerulaArborModBlocks.TRAIL_LEAVE.get()
 				|| block.getBlock() == CaerulaArborModBlocks.STRIPPED_TRAIL_LOG.get()) {
@@ -603,6 +620,7 @@ public class WorldUtils {
 		return block.is(BlockTags.create(new ResourceLocation(CaerulaArborMod.MODID, "organic")));
 	}
 
+	//同，需要注释
 	public static boolean isValidPlace(LevelAccessor world, double xx, double yy, double zz) {
 		if (world instanceof Level _level) {
 			if (_level.isClientSide()) {
@@ -617,6 +635,7 @@ public class WorldUtils {
 		return true;
 	}
 
+	//TODO:可疑
 	public static boolean isValidForMan(LevelAccessor world, double xx, double yy, double zz) {
 		if (world instanceof Level _level) {
 			if (_level.isClientSide()) {
@@ -631,6 +650,7 @@ public class WorldUtils {
 		return true;
 	}
 
+	//TODO:下放回实体
 	public static void isharmlaLinkPtcToEntity(LevelAccessor world, double x, double y, double z, Entity tgt) {
 		if (tgt == null)
 			return;
@@ -644,6 +664,7 @@ public class WorldUtils {
 		}
 	}
 
+	//TODO:下放回方块
 	public static InteractionResult summonMegachest(LevelAccessor world, double x, double y, double z, BlockState blockstate) {
 		if ((blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _getip1 ? blockstate.getValue(_getip1) : -1) == 0) {
 			{
@@ -699,9 +720,7 @@ public class WorldUtils {
 					}
 					if (world instanceof ServerLevel _level) {
 						Entity entityToSpawn = CaerulaArborModEntities.MEGA_CHEST.get().spawn(_level, BlockPos.containing(x + 0.5, y, z + 0.5), MobSpawnType.MOB_SUMMONED);
-						if (entityToSpawn != null) {
-						}
-					}
+                    }
 				});
 			} else if ((new Object() {
 				public Direction getDirection(BlockState _bs) {
@@ -726,7 +745,7 @@ public class WorldUtils {
 						}
 					}
 				});
-			} else if (true) {
+			} else if (true) {//可疑，应该查看待移植文件对应的代码
 				CaerulaArborMod.queueServerWork(15, () -> {
 					world.destroyBlock(BlockPos.containing(x, y, z), false);
 					if (world instanceof Level _level) {
@@ -747,6 +766,7 @@ public class WorldUtils {
 		return InteractionResult.PASS;
 	}
 
+	//TODO:下放
 	public static void witheriaDestroyBlocks(LevelAccessor world, double x, double y, double z) {
 		boolean once = false;
 		double dx = 0;
@@ -793,6 +813,7 @@ public class WorldUtils {
 		}
 	}
 
+	//需要注释解释
 	public static boolean canGrief(LevelAccessor world) {
 		if (world.isClientSide()) {
 			return false;
@@ -803,6 +824,7 @@ public class WorldUtils {
 		return false;
 	}
 
+	//需要注释解释，或许可以移动到别的util
 	public static boolean canSpawnUnderwaterSeaborn(LevelAccessor world, double x, double y, double z) {
 		if (!world.getBiome(BlockPos.containing(x, y, z)).is(TagKey.create(Registries.BIOME, new ResourceLocation(CaerulaArborMod.MODID, "underwater_spawn_biome")))) {
 			return false;
@@ -813,6 +835,7 @@ public class WorldUtils {
 		return false;
 	}
 
+	//同上
 	public static boolean canSpawnMarineSeaborn(LevelAccessor world, double x, double y, double z) {
 		if (!world.getBiome(BlockPos.containing(x, y, z)).is(TagKey.create(Registries.BIOME, new ResourceLocation(CaerulaArborMod.MODID, "marine_spawn_biome")))) {
 			return false;
@@ -823,6 +846,7 @@ public class WorldUtils {
 		return false;
 	}
 
+	//需要查看原版mc是怎么处理的
 	public static void saveWaterloggedState(LevelAccessor world, double x, double y, double z, BlockState oldState) {
 		if (oldState.getBlock() == Blocks.WATER) {
 			BlockPos _pos = BlockPos.containing(x, y, z);

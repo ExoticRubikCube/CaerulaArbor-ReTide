@@ -1,6 +1,7 @@
 package com.apocalypse.caerulaarbor.util;
 
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
+import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
+import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import net.minecraft.world.entity.Entity;
 
 public class NodeUtils {
@@ -12,7 +13,7 @@ public class NodeUtils {
 	public static double getNodeAddDamage(Entity entity) {
 		if (entity == null)
 			return 0;
-		return entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables()).PEVO_NODE_add_damage;
+		return entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable()).PEVO_NODE_add_damage;
 	}
 
 	public static boolean isNodeAddDamageAtLeast(Entity entity, int value) {
@@ -22,7 +23,7 @@ public class NodeUtils {
 	public static double getNodeRealDamage(Entity entity) {
 		if (entity == null)
 			return 0;
-		return entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables()).PEVO_NODE_real_damage;
+		return entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable()).PEVO_NODE_real_damage;
 	}
 
 	public static boolean isNodeRealDamageAtLeast(Entity entity, int value) {
@@ -32,7 +33,7 @@ public class NodeUtils {
 	public static double getNodeAddSanity(Entity entity) {
 		if (entity == null)
 			return 0;
-		return entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables()).PEVO_NODE_add_sanity;
+		return entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable()).PEVO_NODE_add_sanity;
 	}
 
 	public static boolean isNodeAddSanityAtLeast(Entity entity, int value) {
@@ -42,7 +43,7 @@ public class NodeUtils {
 	public static double getNodeLessDamage(Entity entity) {
 		if (entity == null)
 			return 0;
-		return entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables()).PEVO_NODE_less_damage;
+		return entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable()).PEVO_NODE_less_damage;
 	}
 
 	public static boolean isNodeLessDamageAtLeast(Entity entity, int value) {
@@ -52,7 +53,7 @@ public class NodeUtils {
 	public static double getNodeLessArmor(Entity entity) {
 		if (entity == null)
 			return 0;
-		return entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables()).PEVO_NODE_less_armor;
+		return entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable()).PEVO_NODE_less_armor;
 	}
 
 	public static boolean isNodeLessArmorAtLeast(Entity entity, int value) {
@@ -62,7 +63,7 @@ public class NodeUtils {
 	public static double getNodeHealDamage(Entity entity) {
 		if (entity == null)
 			return 0;
-		return entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables()).PEVO_NODE_heal_damage;
+		return entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable()).PEVO_NODE_heal_damage;
 	}
 
 	public static boolean isNodeHealDamageAtLeast(Entity entity, int value) {
@@ -72,7 +73,7 @@ public class NodeUtils {
 	public static double getNodeWorseBreak(Entity entity) {
 		if (entity == null)
 			return 0;
-		return entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables()).PEVO_NODE_worse_break;
+		return entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable()).PEVO_NODE_worse_break;
 	}
 
 	public static boolean isNodeWorseBreakAtLeast(Entity entity, int value) {
@@ -82,7 +83,7 @@ public class NodeUtils {
 	public static double getNodeAddSpeed(Entity entity) {
 		if (entity == null)
 			return 0;
-		return entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables()).PEVO_NODE_add_speed;
+		return entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable()).PEVO_NODE_add_speed;
 	}
 
 	public static boolean isNodeAddSpeedAtLeast(Entity entity, int value) {
@@ -92,7 +93,7 @@ public class NodeUtils {
 	public static double getNodeAddResis(Entity entity) {
 		if (entity == null)
 			return 0;
-		return entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables()).PEVO_NODE_add_resis;
+		return entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable()).PEVO_NODE_add_resis;
 	}
 
 	public static boolean isNodeAddResisAtLeast(Entity entity, int value) {
@@ -102,7 +103,7 @@ public class NodeUtils {
 	public static double getNodeAddMiss(Entity entity) {
 		if (entity == null)
 			return 0;
-		return entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables()).PEVO_NODE_add_miss;
+		return entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable()).PEVO_NODE_add_miss;
 	}
 
 	public static boolean isNodeAddMissAtLeast(Entity entity, int value) {
@@ -112,7 +113,7 @@ public class NodeUtils {
 	public static double getNodeAddDef(Entity entity) {
 		if (entity == null)
 			return 0;
-		return entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables()).PEVO_NODE_add_def;
+		return entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable()).PEVO_NODE_add_def;
 	}
 
 	public static boolean isNodeAddDefAtLeast(Entity entity, int value) {
@@ -122,7 +123,7 @@ public class NodeUtils {
 	public static double getNodeEunectes(Entity entity) {
 		if (entity == null)
 			return 0;
-		return entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables()).PEVO_NODE_eunectes;
+		return entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable()).PEVO_NODE_eunectes;
 	}
 
 	public static boolean isNodeEunectesAtLeast(Entity entity, int value) {
@@ -132,7 +133,7 @@ public class NodeUtils {
 	public static double getNodeLivingBarrier(Entity entity) {
 		if (entity == null)
 			return 0;
-		return entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables()).PEVO_NODE_living_barrier;
+		return entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable()).PEVO_NODE_living_barrier;
 	}
 
 	public static boolean isNodeLivingBarrierAtLeast(Entity entity, int value) {

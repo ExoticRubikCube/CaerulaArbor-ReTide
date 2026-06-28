@@ -124,21 +124,11 @@ public class IreneEntity extends Animal implements GeoEntity {
 
 			@Override
 			public boolean canUse() {
-				double x = IreneEntity.this.getX();
-				double y = IreneEntity.this.getY();
-				double z = IreneEntity.this.getZ();
-				Entity entity = IreneEntity.this;
-				Level world = IreneEntity.this.level();
 				return super.canUse() && isIreneDurative();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = IreneEntity.this.getX();
-				double y = IreneEntity.this.getY();
-				double z = IreneEntity.this.getZ();
-				Entity entity = IreneEntity.this;
-				Level world = IreneEntity.this.level();
 				return super.canContinueToUse() && isIreneDurative();
 			}
 
@@ -149,63 +139,33 @@ public class IreneEntity extends Animal implements GeoEntity {
 		this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, (float) 6) {
 			@Override
 			public boolean canUse() {
-				double x = IreneEntity.this.getX();
-				double y = IreneEntity.this.getY();
-				double z = IreneEntity.this.getZ();
-				Entity entity = IreneEntity.this;
-				Level world = IreneEntity.this.level();
 				return super.canUse() && isIreneDurative();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = IreneEntity.this.getX();
-				double y = IreneEntity.this.getY();
-				double z = IreneEntity.this.getZ();
-				Entity entity = IreneEntity.this;
-				Level world = IreneEntity.this.level();
 				return super.canContinueToUse() && isIreneDurative();
 			}
 		});
 		this.goalSelector.addGoal(7, new RandomStrollGoal(this, 1) {
 			@Override
 			public boolean canUse() {
-				double x = IreneEntity.this.getX();
-				double y = IreneEntity.this.getY();
-				double z = IreneEntity.this.getZ();
-				Entity entity = IreneEntity.this;
-				Level world = IreneEntity.this.level();
 				return super.canUse() && isIreneDurative();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = IreneEntity.this.getX();
-				double y = IreneEntity.this.getY();
-				double z = IreneEntity.this.getZ();
-				Entity entity = IreneEntity.this;
-				Level world = IreneEntity.this.level();
 				return super.canContinueToUse() && isIreneDurative();
 			}
 		});
 		this.goalSelector.addGoal(8, new RandomLookAroundGoal(this) {
 			@Override
 			public boolean canUse() {
-				double x = IreneEntity.this.getX();
-				double y = IreneEntity.this.getY();
-				double z = IreneEntity.this.getZ();
-				Entity entity = IreneEntity.this;
-				Level world = IreneEntity.this.level();
 				return super.canUse() && isIreneDurative();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = IreneEntity.this.getX();
-				double y = IreneEntity.this.getY();
-				double z = IreneEntity.this.getZ();
-				Entity entity = IreneEntity.this;
-				Level world = IreneEntity.this.level();
 				return super.canContinueToUse() && isIreneDurative();
 			}
 		});
@@ -331,16 +291,12 @@ public class IreneEntity extends Animal implements GeoEntity {
 
 	@Override
 	public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
-		ItemStack itemstack = sourceentity.getItemInHand(hand);
-		InteractionResult retval = InteractionResult.sidedSuccess(this.level().isClientSide());
 		super.mobInteract(sourceentity, hand);
 		double x = this.getX();
 		double y = this.getY();
 		double z = this.getZ();
 		Entity entity = this;
 		Level world = this.level();
-        if (entity == null || sourceentity == null)
-            return InteractionResult.PASS;
         double tap = 0;
         Entity enemy = null;
         if (!entity.isAlive()) {
@@ -379,173 +335,169 @@ public class IreneEntity extends Animal implements GeoEntity {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if (this != null) {
-            Entity enemy = null;
-            double sklp1 = 0;
-            double dura = 0;
-            double skillp2 = 0;
-            double tap = 0;
-            double less = 0;
-            if (this.isAlive()) {
-                if (tickCount % 40 == 15) {
-                    WorldUtils.ireneBurnBrandAround(world, x, y, z);
-                }
-                sklp1 = (Entity) this instanceof IreneEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp1) : 0;
-                skillp2 = (Entity) this instanceof IreneEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp2) : 0;
-                dura = (Entity) this instanceof IreneEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
-                tap = (Entity) this instanceof IreneEntity _datEntI ? _datEntI.getEntityData().get(DATA_tapTick) : 0;
-                enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
-                if (dura > 0) {
-                    if ((Entity) this instanceof IreneEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_duration, (int) (dura - 1));
-                }
-                if (tap > 0) {
-                    if ((Entity) this instanceof IreneEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_tapTick, (int) (tap - 1));
-                }
-                if (sklp1 >= 4 && dura <= 0) {
-                    if (!(enemy == null) && enemy.isAlive()) {
-                        if (distanceTo(enemy) <= 4) {
-                            if (this instanceof IreneEntity) {
-                                this.setAnimation("animation.irene.skill_1");
-                            }
-                            if ((Entity) this instanceof IreneEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_skillp1, 0);
-                            if ((Entity) this instanceof IreneEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_duration, 27);
-                            CaerulaArborMod.queueServerWork(10, () -> {
-                                if (this.isAlive()) {
-                                    if (world instanceof Level _level) {
-                                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_fly")), SoundSource.NEUTRAL, 3, 1);
-                                    }
-									Entity enemy1 = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
-									if (enemy1 == null || this == null)
-										return;
-									enemy1.push(0, 0.4, 0);
-									if (world instanceof ServerLevel _level)
-										_level.sendParticles(ParticleTypes.FIREWORK, (enemy1.getX()), (enemy1.getY() + 1), (enemy1.getZ()), 48, 0.15, 1, 0.15, 0.15);
-									if (enemy1 instanceof LivingEntity _entity && !_entity.level().isClientSide())
-										_entity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, (int) (double) 30, 0));
-									enemy1.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))), this),
-											(float) (((Entity) this instanceof LivingEntity _livingEntity6 && _livingEntity6.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity6.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * (double) 3));
-									CaerulaArborMod.queueServerWork(6, () -> {
-										if (world instanceof Level _level) {
-												_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_gun")), SoundSource.NEUTRAL, 3, 1);
-										}
-										if (world instanceof ServerLevel _level)
-											_level.sendParticles(ParticleTypes.END_ROD, (enemy1.getX()), (enemy1.getY() + 0.75), (enemy1.getZ()), 32, 0.75, 0.75, 0.75, 0.15);
-										enemy1.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))), this),
-												(float) (((Entity) this instanceof LivingEntity _livingEntity14 && _livingEntity14.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity14.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 2));
-									});
-								}
-                            });
+        Entity enemy = null;
+        double sklp1 = 0;
+        double dura = 0;
+        double skillp2 = 0;
+        double tap = 0;
+        double less = 0;
+        if (this.isAlive()) {
+            if (tickCount % 40 == 15) {
+                WorldUtils.ireneBurnBrandAround(world, x, y, z);
+            }
+            sklp1 = (Entity) this instanceof IreneEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp1) : 0;
+            skillp2 = (Entity) this instanceof IreneEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp2) : 0;
+            dura = (Entity) this instanceof IreneEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
+            tap = (Entity) this instanceof IreneEntity _datEntI ? _datEntI.getEntityData().get(DATA_tapTick) : 0;
+            enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+            if (dura > 0) {
+                if ((Entity) this instanceof IreneEntity _datEntSetI)
+                    _datEntSetI.getEntityData().set(DATA_duration, (int) (dura - 1));
+            }
+            if (tap > 0) {
+                if ((Entity) this instanceof IreneEntity _datEntSetI)
+                    _datEntSetI.getEntityData().set(DATA_tapTick, (int) (tap - 1));
+            }
+            if (sklp1 >= 4 && dura <= 0) {
+                if (!(enemy == null) && enemy.isAlive()) {
+                    if (distanceTo(enemy) <= 4) {
+                        if (this instanceof IreneEntity) {
+                            this.setAnimation("animation.irene.skill_1");
                         }
-                    }
-                } else if (skillp2 >= 16 && dura <= 0) {
-                    if (!(enemy == null) && enemy.isAlive()) {
-                        if ((enemy != null ? distanceTo(enemy) : -1) <= 6) {
-                            if (this instanceof IreneEntity) {
-                                this.setAnimation("animation.irene.skill_2");
-                            }
-                            if (!this.level().isClientSide())
-                                this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 60, 9, false, false));
-                            if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_skill")), SoundSource.NEUTRAL, 3, 1);
-                            }
-                            if ((Entity) this instanceof IreneEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_skillp2, 0);
-                            if ((Entity) this instanceof IreneEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_duration, 70);
-                            CaerulaArborMod.queueServerWork(9, () -> {
-                                if (this.isAlive()) {
-									if (this == null)
-										return;
-									double damage = 0;
-									damage = (Entity) this instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity0.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
-									if (world instanceof Level _level) {
-											_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_skill_fly")), SoundSource.NEUTRAL, 3, 1);
-									}
-									{
-										final Vec3 _center = new Vec3(x, y, z);
-										List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(14 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-										for (Entity entityiterator : _entfound) {
-											if (EntityPredicateUtils.isValidEnemyForIrene(entityiterator, this) && (entityiterator != null ? distanceTo(entityiterator) : -1) <= 7) {
-												entityiterator.push(0, 0.5, 0);
-												if (world instanceof ServerLevel _level)
-													_level.sendParticles(ParticleTypes.FIREWORK, (entityiterator.getX()), (entityiterator.getY() + 0.75), (entityiterator.getZ()), 48, 0.15, 1, 0.15, 0.15);
-												if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
-													_entity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 80, 0));
-												entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))), this),
-														(float) (damage * 3));
-											}
-										}
-									}
-								}
-                            });
-                            CaerulaArborMod.queueServerWork(16, () -> {
-                                if (this.isAlive()) {
-                                    if (world instanceof Level _level) {
-                                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_skill_loop")), SoundSource.NEUTRAL, 2, 1);
-                                    }
+                        if ((Entity) this instanceof IreneEntity _datEntSetI)
+                            _datEntSetI.getEntityData().set(DATA_skillp1, 0);
+                        if ((Entity) this instanceof IreneEntity _datEntSetI)
+                            _datEntSetI.getEntityData().set(DATA_duration, 27);
+                        CaerulaArborMod.queueServerWork(10, () -> {
+                            if (this.isAlive()) {
+                                if (world instanceof Level _level) {
+                                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_fly")), SoundSource.NEUTRAL, 3, 1);
                                 }
-                            });
-                            for (int index0 = 0; index0 < 10; index0++) {
-                                CaerulaArborMod.queueServerWork(Math.toIntExact(Math.round(20 + index0 * 3.778)), () -> {
-                                    if (this.isAlive()) {
-                                        Entity selected = null;
-										double damage = 0;
-										double tx = 0;
-										double ty = 0;
-										double tz = 0;
-										damage = (Entity) this instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity0.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
-										Entity result = null;
-										Vec3 pos = position();
-										AABB area = new AABB(pos.add(-7,-7,-7),pos.add(7,7,7));
-										List<LivingEntity> entities = world.getEntitiesOfClass(LivingEntity.class, area, e1 ->{
-											return EntityPredicateUtils.isValidEnemyForIrene(e1, this)
-											&& e1.position().vectorTo(pos).horizontalDistanceSqr()<= 49;
-										});
-										if(!entities.isEmpty()) {
-											int index = Mth.nextInt(world.getRandom(), 0, entities.size() - 1);
-											result = entities.get(index);
-										}
-										selected = result;
-										if (selected == null) {
-											return;
-										}
-										tx = selected.getX();
-										ty = selected.getY();
-										tz = selected.getZ();
-										{
-											final Vec3 _center = new Vec3(tx, ty, tz);
-											List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(6 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-											for (Entity entityiterator : _entfound) {
-												if (EntityPredicateUtils.isValidEnemyForIrene(entityiterator, this) && (entityiterator != null ? selected.distanceTo(entityiterator) : -1) <= 3) {
-													entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))), this),
-															(float) (damage * 2.5));
-													if (world instanceof Level _level) {
-															_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_skill_gun")), SoundSource.NEUTRAL, 3, 1);
-													}
-													if (world instanceof ServerLevel _level)
-														_level.sendParticles(ParticleTypes.END_ROD, (entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()), 72, 2.5, 2.5, 2.5, 0.1);
-												}
-											}
-										}
-									}
+                                Entity enemy1 = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+                                if (enemy1 == null || this == null)
+                                    return;
+                                enemy1.push(0, 0.4, 0);
+                                if (world instanceof ServerLevel _level)
+                                    _level.sendParticles(ParticleTypes.FIREWORK, (enemy1.getX()), (enemy1.getY() + 1), (enemy1.getZ()), 48, 0.15, 1, 0.15, 0.15);
+                                if (enemy1 instanceof LivingEntity _entity && !_entity.level().isClientSide())
+                                    _entity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, (int) (double) 30, 0));
+                                enemy1.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))), this),
+                                        (float) (((Entity) this instanceof LivingEntity _livingEntity6 && _livingEntity6.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity6.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * (double) 3));
+                                CaerulaArborMod.queueServerWork(6, () -> {
+                                    if (world instanceof Level _level) {
+                                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_gun")), SoundSource.NEUTRAL, 3, 1);
+                                    }
+                                    if (world instanceof ServerLevel _level)
+                                        _level.sendParticles(ParticleTypes.END_ROD, (enemy1.getX()), (enemy1.getY() + 0.75), (enemy1.getZ()), 32, 0.75, 0.75, 0.75, 0.15);
+                                    enemy1.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))), this),
+                                            (float) (((Entity) this instanceof LivingEntity _livingEntity14 && _livingEntity14.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity14.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 2));
                                 });
                             }
-                            CaerulaArborMod.queueServerWork(59, () -> {
+                        });
+                    }
+                }
+            } else if (skillp2 >= 16 && dura <= 0) {
+                if (!(enemy == null) && enemy.isAlive()) {
+                    if ((enemy != null ? distanceTo(enemy) : -1) <= 6) {
+                        if (this instanceof IreneEntity) {
+                            this.setAnimation("animation.irene.skill_2");
+                        }
+                        if (!this.level().isClientSide())
+                            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 60, 9, false, false));
+                        if (world instanceof Level _level) {
+                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_skill")), SoundSource.NEUTRAL, 3, 1);
+                        }
+                        if ((Entity) this instanceof IreneEntity _datEntSetI)
+                            _datEntSetI.getEntityData().set(DATA_skillp2, 0);
+                        if ((Entity) this instanceof IreneEntity _datEntSetI)
+                            _datEntSetI.getEntityData().set(DATA_duration, 70);
+                        CaerulaArborMod.queueServerWork(9, () -> {
+                            if (this.isAlive()) {
+                                double damage = 0;
+                                damage = (Entity) this instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity0.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
+                                if (world instanceof Level _level) {
+                                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_skill_fly")), SoundSource.NEUTRAL, 3, 1);
+                                }
+                                {
+                                    final Vec3 _center = new Vec3(x, y, z);
+                                    List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(14 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+                                    for (Entity entityiterator : _entfound) {
+                                        if (EntityPredicateUtils.isValidEnemyForIrene(entityiterator, this) && (entityiterator != null ? distanceTo(entityiterator) : -1) <= 7) {
+                                            entityiterator.push(0, 0.5, 0);
+                                            if (world instanceof ServerLevel _level)
+                                                _level.sendParticles(ParticleTypes.FIREWORK, (entityiterator.getX()), (entityiterator.getY() + 0.75), (entityiterator.getZ()), 48, 0.15, 1, 0.15, 0.15);
+                                            if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
+                                                _entity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 80, 0));
+                                            entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))), this),
+                                                    (float) (damage * 3));
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                        CaerulaArborMod.queueServerWork(16, () -> {
+                            if (this.isAlive()) {
+                                if (world instanceof Level _level) {
+                                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_skill_loop")), SoundSource.NEUTRAL, 2, 1);
+                                }
+                            }
+                        });
+                        for (int index0 = 0; index0 < 10; index0++) {
+                            CaerulaArborMod.queueServerWork(Math.toIntExact(Math.round(20 + index0 * 3.778)), () -> {
                                 if (this.isAlive()) {
-                                    if (world instanceof Level _level) {
-                                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_reload")), SoundSource.NEUTRAL, 3, 1);
+                                    Entity selected = null;
+                                    double damage = 0;
+                                    double tx = 0;
+                                    double ty = 0;
+                                    double tz = 0;
+                                    damage = (Entity) this instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity0.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
+                                    Entity result = null;
+                                    Vec3 pos = position();
+                                    AABB area = new AABB(pos.add(-7,-7,-7),pos.add(7,7,7));
+                                    List<LivingEntity> entities = world.getEntitiesOfClass(LivingEntity.class, area, e1 ->{
+                                        return EntityPredicateUtils.isValidEnemyForIrene(e1, this)
+                                        && e1.position().vectorTo(pos).horizontalDistanceSqr()<= 49;
+                                    });
+                                    if(!entities.isEmpty()) {
+                                        int index = Mth.nextInt(world.getRandom(), 0, entities.size() - 1);
+                                        result = entities.get(index);
+                                    }
+                                    selected = result;
+                                    if (selected == null) {
+                                        return;
+                                    }
+                                    tx = selected.getX();
+                                    ty = selected.getY();
+                                    tz = selected.getZ();
+                                    {
+                                        final Vec3 _center = new Vec3(tx, ty, tz);
+                                        List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(6 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+                                        for (Entity entityiterator : _entfound) {
+                                            if (EntityPredicateUtils.isValidEnemyForIrene(entityiterator, this) && (entityiterator != null ? selected.distanceTo(entityiterator) : -1) <= 3) {
+                                                entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))), this),
+                                                        (float) (damage * 2.5));
+                                                if (world instanceof Level _level) {
+                                                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_skill_gun")), SoundSource.NEUTRAL, 3, 1);
+                                                }
+                                                if (world instanceof ServerLevel _level)
+                                                    _level.sendParticles(ParticleTypes.END_ROD, (entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()), 72, 2.5, 2.5, 2.5, 0.1);
+                                            }
+                                        }
                                     }
                                 }
                             });
                         }
+                        CaerulaArborMod.queueServerWork(59, () -> {
+                            if (this.isAlive()) {
+                                if (world instanceof Level _level) {
+                                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_reload")), SoundSource.NEUTRAL, 3, 1);
+                                }
+                            }
+                        });
                     }
                 }
-                EntityUtils.vanguardBuff(world, x, y, z, this);
             }
+            EntityUtils.vanguardBuff(world, x, y, z, this);
         }
         this.refreshDimensions();
 	}

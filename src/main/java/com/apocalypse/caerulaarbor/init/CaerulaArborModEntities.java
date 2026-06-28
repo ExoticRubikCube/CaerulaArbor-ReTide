@@ -515,6 +515,7 @@ public class CaerulaArborModEntities {
 		return REGISTRY.register(registryname, () -> entityTypeBuilder.build(registryname));
 	}
 
+	//TODO:之后会清理
 	@SubscribeEvent
 	public static void init(FMLCommonSetupEvent event) {
 		event.enqueueWork(() -> {
@@ -601,10 +602,6 @@ public class CaerulaArborModEntities {
 			TidutantExcrescenceEntity.init();
 			OceanizedPolarBearEntity.init();
 			TideutantRockSpiderEntity.init();
-			Endspeaker0Entity.init();
-			Endspeaker1Entity.init();
-			Endspeaker2Entity.init();
-			Endspeaker3Entity.init();
 			LineringPathshaperEntity.init();
 			LingeringFractalEntity.init();
 			LittleHelperEntity.init();

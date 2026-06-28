@@ -1,10 +1,12 @@
 package com.apocalypse.caerulaarbor.entity;
 
+import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.api.event.SanityEvent;
+import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -158,9 +160,9 @@ public class ReaperFishEntity extends SeaMonster {
         double hardness = 0;
         boolean once = false;
         limithard = -1;
-        if (CaerulaArborModVariables.MapVariables.get(world).strategy_migration >= 4) {
+        if (MapVariables.get(world).strategy_migration >= 4) {
             limithard = 5;
-        } else if (CaerulaArborModVariables.MapVariables.get(world).strategy_migration >= 2) {
+        } else if (MapVariables.get(world).strategy_migration >= 2) {
             limithard = 3.5;
         }
         if (!world.isClientSide()) {
@@ -267,7 +269,12 @@ public class ReaperFishEntity extends SeaMonster {
                             }
                             if ((entityiterator != null ? distanceTo(entityiterator) : -1) < 5) {
                                 if (!(entityiterator == this)) {
-                                    EntityUtils.deductSanity(entityiterator, (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 12);
+                                    if (entityiterator instanceof LivingEntity target) {
+                                        SIHelper.causeSanityInjury(target,
+                                                this,
+                                                (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 12,
+                                                SanityEvent.Hurt.Type.ENTITY);
+                                    }
                                 }
                             }
                         }

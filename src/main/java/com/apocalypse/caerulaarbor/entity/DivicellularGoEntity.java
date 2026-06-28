@@ -88,14 +88,9 @@ public class DivicellularGoEntity extends SeaMonster {
 				return 1.5625;
 			}
 		});
-		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal(this, Pufferfish.class, true, false) {
+		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Pufferfish.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = DivicellularGoEntity.this.getX();
-				double y = DivicellularGoEntity.this.getY();
-				double z = DivicellularGoEntity.this.getZ();
-				Entity entity = DivicellularGoEntity.this;
-				Level world = DivicellularGoEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
@@ -109,87 +104,47 @@ public class DivicellularGoEntity extends SeaMonster {
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
-		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal(this, GlowSquid.class, true, false) {
+		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, GlowSquid.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = DivicellularGoEntity.this.getX();
-				double y = DivicellularGoEntity.this.getY();
-				double z = DivicellularGoEntity.this.getZ();
-				Entity entity = DivicellularGoEntity.this;
-				Level world = DivicellularGoEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = DivicellularGoEntity.this.getX();
-				double y = DivicellularGoEntity.this.getY();
-				double z = DivicellularGoEntity.this.getZ();
-				Entity entity = DivicellularGoEntity.this;
-				Level world = DivicellularGoEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
-		this.targetSelector.addGoal(5, new NearestAttackableTargetGoal(this, Squid.class, true, false) {
+		this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Squid.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = DivicellularGoEntity.this.getX();
-				double y = DivicellularGoEntity.this.getY();
-				double z = DivicellularGoEntity.this.getZ();
-				Entity entity = DivicellularGoEntity.this;
-				Level world = DivicellularGoEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = DivicellularGoEntity.this.getX();
-				double y = DivicellularGoEntity.this.getY();
-				double z = DivicellularGoEntity.this.getZ();
-				Entity entity = DivicellularGoEntity.this;
-				Level world = DivicellularGoEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
-		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal(this, TropicalFish.class, true, false) {
+		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, TropicalFish.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = DivicellularGoEntity.this.getX();
-				double y = DivicellularGoEntity.this.getY();
-				double z = DivicellularGoEntity.this.getZ();
-				Entity entity = DivicellularGoEntity.this;
-				Level world = DivicellularGoEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = DivicellularGoEntity.this.getX();
-				double y = DivicellularGoEntity.this.getY();
-				double z = DivicellularGoEntity.this.getZ();
-				Entity entity = DivicellularGoEntity.this;
-				Level world = DivicellularGoEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
-		this.targetSelector.addGoal(7, new NearestAttackableTargetGoal(this, Salmon.class, true, false) {
+		this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, Salmon.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = DivicellularGoEntity.this.getX();
-				double y = DivicellularGoEntity.this.getY();
-				double z = DivicellularGoEntity.this.getZ();
-				Entity entity = DivicellularGoEntity.this;
-				Level world = DivicellularGoEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = DivicellularGoEntity.this.getX();
-				double y = DivicellularGoEntity.this.getY();
-				double z = DivicellularGoEntity.this.getZ();
-				Entity entity = DivicellularGoEntity.this;
-				Level world = DivicellularGoEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});

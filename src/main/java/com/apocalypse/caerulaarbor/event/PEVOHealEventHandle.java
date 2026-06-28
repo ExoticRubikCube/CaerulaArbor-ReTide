@@ -1,7 +1,8 @@
 package com.apocalypse.caerulaarbor.event;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
+import com.apocalypse.caerulaarbor.api.event.SanityEvent;
+import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
@@ -86,8 +87,8 @@ public class PEVOHealEventHandle {
 				continue;
 			}
 			nearbyEntity.hurt(wipeMagicDamage, (float) damage);
-			if (sanityDamage > 0) {
-				EntityUtils.deductSanity(nearbyEntity, sanityDamage);
+			if (sanityDamage > 0 && entity instanceof LivingEntity attacker && nearbyEntity instanceof LivingEntity target) {
+				SIHelper.causeSanityInjury(target, attacker, sanityDamage, SanityEvent.Hurt.Type.ENTITY);
 			}
 		}
 	}

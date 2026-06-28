@@ -98,21 +98,11 @@ public class ApocataEntity extends PathfinderMob implements GeoEntity {
 		this.goalSelector.addGoal(1, new RandomStrollGoal(this, 1) {
 			@Override
 			public boolean canUse() {
-				double x = ApocataEntity.this.getX();
-				double y = ApocataEntity.this.getY();
-				double z = ApocataEntity.this.getZ();
-				Entity entity = ApocataEntity.this;
-				Level world = ApocataEntity.this.level();
 				return super.canUse() && isApocataDurative();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = ApocataEntity.this.getX();
-				double y = ApocataEntity.this.getY();
-				double z = ApocataEntity.this.getZ();
-				Entity entity = ApocataEntity.this;
-				Level world = ApocataEntity.this.level();
 				return super.canContinueToUse() && isApocataDurative();
 			}
 		});
@@ -152,7 +142,7 @@ public class ApocataEntity extends PathfinderMob implements GeoEntity {
         double y = this.getY();
         double z = this.getZ();
         Entity sourceentity = source.getEntity();
-        if (this == null || sourceentity == null)
+        if (sourceentity == null)
             return;
         String name = "";
         if (!world.isClientSide()) {
@@ -191,16 +181,12 @@ public class ApocataEntity extends PathfinderMob implements GeoEntity {
 
 	@Override
 	public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
-		ItemStack itemstack = sourceentity.getItemInHand(hand);
-		InteractionResult retval = InteractionResult.sidedSuccess(this.level().isClientSide());
 		super.mobInteract(sourceentity, hand);
 		double x = this.getX();
 		double y = this.getY();
 		double z = this.getZ();
 		Entity entity = this;
 		Level world = this.level();
-        if (entity == null || sourceentity == null)
-            return InteractionResult.PASS;
         if ((entity instanceof ApocataEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0) > 0) {
             return InteractionResult.PASS;
         }
@@ -224,13 +210,11 @@ public class ApocataEntity extends PathfinderMob implements GeoEntity {
 	@Override
 	public void baseTick() {
 		super.baseTick();
-        if (this != null) {
-            double dura = 0;
-            dura = (Entity) this instanceof ApocataEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
-            if (dura > 0) {
-                if ((Entity) this instanceof ApocataEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_duration, (int) (dura - 1));
-            }
+        double dura = 0;
+        dura = (Entity) this instanceof ApocataEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
+        if (dura > 0) {
+            if ((Entity) this instanceof ApocataEntity _datEntSetI)
+                _datEntSetI.getEntityData().set(DATA_duration, (int) (dura - 1));
         }
         this.refreshDimensions();
 	}

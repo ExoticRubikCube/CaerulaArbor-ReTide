@@ -1,7 +1,7 @@
 
 package com.apocalypse.caerulaarbor.item;
 
-import com.apocalypse.caerulaarbor.util.EntityUtils;
+import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
@@ -20,7 +20,7 @@ public class CaramelMorItem extends Item {
 		double x = entity.getX();
 		double y = entity.getY();
 		double z = entity.getZ();
-		EntityUtils.restoreSanity15(entity);
+		ModCapabilities.getSanityInjury(entity).heal(15);
 		return retval;
 	}
 }

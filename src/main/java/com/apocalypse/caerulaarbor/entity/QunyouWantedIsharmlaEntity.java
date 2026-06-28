@@ -160,17 +160,15 @@ public class QunyouWantedIsharmlaEntity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if (this != null) {
-            if (this instanceof QunyouWantedIsharmlaEntity) {
-                this.setAnimation("animation.isharmla.to_monster");
-            }
-            if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()))
-                this.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).setBaseValue(1656);
-            if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-                this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(90);
-            if ((LevelAccessor) world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "isharmla_to_monsterr")), SoundSource.HOSTILE, 2, 1);
-            }
+        if (this instanceof QunyouWantedIsharmlaEntity) {
+            this.setAnimation("animation.isharmla.to_monster");
+        }
+        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()))
+            this.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).setBaseValue(1656);
+        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
+            this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(90);
+        if ((LevelAccessor) world instanceof Level _level) {
+                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "isharmla_to_monsterr")), SoundSource.HOSTILE, 2, 1);
         }
         return retval;
 	}

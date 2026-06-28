@@ -123,21 +123,11 @@ public class TheLastKnightEntity extends Animal implements GeoEntity {
 
 			@Override
 			public boolean canUse() {
-				double x = TheLastKnightEntity.this.getX();
-				double y = TheLastKnightEntity.this.getY();
-				double z = TheLastKnightEntity.this.getZ();
-				Entity entity = TheLastKnightEntity.this;
-				Level world = TheLastKnightEntity.this.level();
 				return super.canUse() && isLastKnightDurative();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = TheLastKnightEntity.this.getX();
-				double y = TheLastKnightEntity.this.getY();
-				double z = TheLastKnightEntity.this.getZ();
-				Entity entity = TheLastKnightEntity.this;
-				Level world = TheLastKnightEntity.this.level();
 				return super.canContinueToUse() && isLastKnightDurative();
 			}
 
@@ -145,63 +135,33 @@ public class TheLastKnightEntity extends Animal implements GeoEntity {
 		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal(this, Monster.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = TheLastKnightEntity.this.getX();
-				double y = TheLastKnightEntity.this.getY();
-				double z = TheLastKnightEntity.this.getZ();
-				Entity entity = TheLastKnightEntity.this;
-				Level world = TheLastKnightEntity.this.level();
 				return super.canUse() && isLastKnightDurative();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = TheLastKnightEntity.this.getX();
-				double y = TheLastKnightEntity.this.getY();
-				double z = TheLastKnightEntity.this.getZ();
-				Entity entity = TheLastKnightEntity.this;
-				Level world = TheLastKnightEntity.this.level();
 				return super.canContinueToUse() && isLastKnightDurative();
 			}
 		});
 		this.goalSelector.addGoal(4, new RandomStrollGoal(this, 1) {
 			@Override
 			public boolean canUse() {
-				double x = TheLastKnightEntity.this.getX();
-				double y = TheLastKnightEntity.this.getY();
-				double z = TheLastKnightEntity.this.getZ();
-				Entity entity = TheLastKnightEntity.this;
-				Level world = TheLastKnightEntity.this.level();
 				return super.canUse() && isLastKnightDurative();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = TheLastKnightEntity.this.getX();
-				double y = TheLastKnightEntity.this.getY();
-				double z = TheLastKnightEntity.this.getZ();
-				Entity entity = TheLastKnightEntity.this;
-				Level world = TheLastKnightEntity.this.level();
 				return super.canContinueToUse() && isLastKnightDurative();
 			}
 		});
 		this.goalSelector.addGoal(5, new RandomLookAroundGoal(this) {
 			@Override
 			public boolean canUse() {
-				double x = TheLastKnightEntity.this.getX();
-				double y = TheLastKnightEntity.this.getY();
-				double z = TheLastKnightEntity.this.getZ();
-				Entity entity = TheLastKnightEntity.this;
-				Level world = TheLastKnightEntity.this.level();
 				return super.canUse() && isLastKnightDurative();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = TheLastKnightEntity.this.getX();
-				double y = TheLastKnightEntity.this.getY();
-				double z = TheLastKnightEntity.this.getZ();
-				Entity entity = TheLastKnightEntity.this;
-				Level world = TheLastKnightEntity.this.level();
 				return super.canContinueToUse() && isLastKnightDurative();
 			}
 		});
@@ -280,59 +240,52 @@ public class TheLastKnightEntity extends Animal implements GeoEntity {
 	@Override
 	public void baseTick() {
 		super.baseTick();
-        LevelAccessor world = this.level();
-        double x = this.getX();
-        double y = this.getY();
-        double z = this.getZ();
-        if (this != null) {
-            Entity enemy = null;
-            boolean shelled = false;
-            double spawn = 0;
-            double skillp = 0;
-            double duration = 0;
-            double idle = 0;
-            if (this.isAlive()) {
-                skillp = (Entity) this instanceof TheLastKnightEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp) : 0;
-                duration = (Entity) this instanceof TheLastKnightEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
-                if (duration > 0) {
-                    if ((Entity) this instanceof TheLastKnightEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_duration, (int) (duration - 1));
-                }
-                setTicksFrozen(0);
-                if ((Entity) this instanceof LivingEntity _entity)
-                    _entity.removeEffect(CaerulaArborModMobEffects.FROZEN.get());
-                enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
-                if (skillp > 0) {
-                    if ((Entity) this instanceof TheLastKnightEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_skillp, (int) (skillp - 1));
-                } else {
-                    if (!(enemy == null) && enemy.isAlive()) {
-                        if ((enemy != null ? distanceTo(enemy) : -1) < 4) {
-                            if ((Entity) this instanceof TheLastKnightEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_duration, 90);
-                            if ((Entity) this instanceof TheLastKnightEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_skillp, 390);
-                            if (!this.level().isClientSide())
-                                this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 30, 0, false, false));
-                            if (this instanceof TheLastKnightEntity) {
-                                this.setAnimation("animation.last_knight.skill");
-                            }
-                            CaerulaArborMod.queueServerWork(27, () -> {
-                                if (this.isAlive()) {
-                                    this.performCrossAttack();
-                                }
-                            });
-                            CaerulaArborMod.queueServerWork(45, () -> {
-                                if (this.isAlive()) {
-                                    this.performCrossAttack();
-                                }
-                            });
-                            CaerulaArborMod.queueServerWork(57, () -> {
-                                if (this.isAlive()) {
-                                    this.performCrossAttack();
-                                }
-                            });
+        Entity enemy = null;
+        boolean shelled = false;
+        double spawn = 0;
+        double skillp = 0;
+        double duration = 0;
+        double idle = 0;
+        if (this.isAlive()) {
+            skillp = (Entity) this instanceof TheLastKnightEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp) : 0;
+            duration = (Entity) this instanceof TheLastKnightEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
+            if (duration > 0) {
+                if ((Entity) this instanceof TheLastKnightEntity _datEntSetI)
+                    _datEntSetI.getEntityData().set(DATA_duration, (int) (duration - 1));
+            }
+            setTicksFrozen(0);
+            this.removeEffect(CaerulaArborModMobEffects.FROZEN.get());
+            enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+            if (skillp > 0) {
+                if ((Entity) this instanceof TheLastKnightEntity _datEntSetI)
+                    _datEntSetI.getEntityData().set(DATA_skillp, (int) (skillp - 1));
+            } else {
+                if (!(enemy == null) && enemy.isAlive()) {
+                    if ((enemy != null ? distanceTo(enemy) : -1) < 4) {
+                        if ((Entity) this instanceof TheLastKnightEntity _datEntSetI)
+                            _datEntSetI.getEntityData().set(DATA_duration, 90);
+                        if ((Entity) this instanceof TheLastKnightEntity _datEntSetI)
+                            _datEntSetI.getEntityData().set(DATA_skillp, 390);
+                        if (!this.level().isClientSide())
+                            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 30, 0, false, false));
+                        if (this instanceof TheLastKnightEntity) {
+                            this.setAnimation("animation.last_knight.skill");
                         }
+                        CaerulaArborMod.queueServerWork(27, () -> {
+                            if (this.isAlive()) {
+                                this.performCrossAttack();
+                            }
+                        });
+                        CaerulaArborMod.queueServerWork(45, () -> {
+                            if (this.isAlive()) {
+                                this.performCrossAttack();
+                            }
+                        });
+                        CaerulaArborMod.queueServerWork(57, () -> {
+                            if (this.isAlive()) {
+                                this.performCrossAttack();
+                            }
+                        });
                     }
                 }
             }
@@ -418,7 +371,6 @@ public class TheLastKnightEntity extends Animal implements GeoEntity {
 	private PlayState attackingPredicate(AnimationState event) {
 		double d1 = this.getX() - this.xOld;
 		double d0 = this.getZ() - this.zOld;
-		float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
 		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
@@ -459,8 +411,6 @@ public class TheLastKnightEntity extends Animal implements GeoEntity {
 			this.remove(TheLastKnightEntity.RemovalReason.KILLED);
 			this.dropExperience();
             LevelAccessor world = this.level();
-            if (this == null)
-                return;
             if (world instanceof ServerLevel _level) {
                 Entity entityToSpawn = CaerulaArborModEntities.LAST_KNIGHT_AND_HORSE.get().spawn(_level, BlockPos.containing(this.getX(), this.getY(), this.getZ()), MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn != null) {

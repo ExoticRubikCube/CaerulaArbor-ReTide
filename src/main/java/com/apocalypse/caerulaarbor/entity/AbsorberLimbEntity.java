@@ -177,11 +177,9 @@ public class AbsorberLimbEntity extends SeaMonster {
 	public void baseTick() {
 		super.baseTick();
         LevelAccessor world = this.level();
-        if (this != null) {
-            setDeltaMovement(new Vec3(0, 0, 0));
-            if (tickCount >= 16 && ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) >= ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1)) {
-                ((Entity) this).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.GENERIC_KILL)), 999999);
-            }
+        setDeltaMovement(new Vec3(0, 0, 0));
+        if (tickCount >= 16 && ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) >= ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1)) {
+            ((Entity) this).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.GENERIC_KILL)), 999999);
         }
         this.refreshDimensions();
 	}

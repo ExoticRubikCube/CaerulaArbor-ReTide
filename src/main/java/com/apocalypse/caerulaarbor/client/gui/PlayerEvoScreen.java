@@ -1,9 +1,10 @@
 package com.apocalypse.caerulaarbor.client.gui;
 
+import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.menu.PlayerEvoMenu;
 import com.apocalypse.caerulaarbor.network.CaerulaArborModNetwork;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
+import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import com.apocalypse.caerulaarbor.network.message.send.PlayerEvoButtonMessage;
 import com.apocalypse.caerulaarbor.util.NodeUtils;
 import com.apocalypse.caerulaarbor.util.PlayerStateUtils;
@@ -399,14 +400,14 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
                 result1, 9, 192, -1, false);
         String result2 = "";
         if (entity != null) {
-            result2 = Component.translatable("p_evo.caerula_arbor.quantity_reserve").getString() + (int) ((((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).reserve_quantity);
+            result2 = Component.translatable("p_evo.caerula_arbor.quantity_reserve").getString() + (int) ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).reserve_quantity);
         }
         guiGraphics.drawString(this.font,
 
                 result2, 3, 3, -13158601, false);
         String result = "";
         if (entity != null) {
-            result = Component.translatable("p_evo.caerula_arbor.quality_reserve").getString() + (int) ((((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).reserve_quality);
+            result = Component.translatable("p_evo.caerula_arbor.quality_reserve").getString() + (int) ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).reserve_quality);
         }
         guiGraphics.drawString(this.font,
 

@@ -1,6 +1,8 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.api.event.SanityEvent;
+import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
@@ -141,7 +143,6 @@ public class OceanizedVexEntity extends SeaMonster {
 				double x = OceanizedVexEntity.this.getX();
 				double y = OceanizedVexEntity.this.getY();
 				double z = OceanizedVexEntity.this.getZ();
-				Entity entity = OceanizedVexEntity.this;
 				Level world = OceanizedVexEntity.this.level();
 				return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -151,7 +152,6 @@ public class OceanizedVexEntity extends SeaMonster {
 				double x = OceanizedVexEntity.this.getX();
 				double y = OceanizedVexEntity.this.getY();
 				double z = OceanizedVexEntity.this.getZ();
-				Entity entity = OceanizedVexEntity.this;
 				Level world = OceanizedVexEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -205,7 +205,7 @@ public class OceanizedVexEntity extends SeaMonster {
 	public void die(DamageSource source) {
 		super.die(source);
         Entity sourceentity = source.getEntity();
-        if (this == null || sourceentity == null)
+        if (sourceentity == null)
             return;
         setDeltaMovement(new Vec3(0, 0, 0));
         if ((Entity) this instanceof OceanizedVexEntity _datEntSetS)
@@ -215,10 +215,8 @@ public class OceanizedVexEntity extends SeaMonster {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this != null) {
-            if ((Entity) this instanceof OceanizedVexEntity _datEntSetI)
-                _datEntSetI.getEntityData().set(DATA_leftSurvivalTick, 600 + Mth.nextInt(RandomSource.create(), 0, 1800));
-        }
+        if ((Entity) this instanceof OceanizedVexEntity _datEntSetI)
+            _datEntSetI.getEntityData().set(DATA_leftSurvivalTick, 600 + Mth.nextInt(RandomSource.create(), 0, 1800));
         return retval;
 	}
 
@@ -244,58 +242,54 @@ public class OceanizedVexEntity extends SeaMonster {
 	@Override
 	public void baseTick() {
 		super.baseTick();
-        LevelAccessor world = this.level();
-        if (this != null) {
-            Entity enemy = null;
-            double sklp1 = 0;
-            String uuid1 = "";
-            if (this.isAlive()) {
-                enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
-                sklp1 = (Entity) this instanceof OceanizedVexEntity _datEntI ? _datEntI.getEntityData().get(DATA_leftSurvivalTick) : 0;
-                if (sklp1 <= 0) {
-                    ((Entity) this).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.STARVE)), (float) Math.max(0.075 * ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1), 1));
-                } else {
-                    if ((Entity) this instanceof OceanizedVexEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_leftSurvivalTick, (int) (sklp1 - 1));
-                }
-                if ((Entity) this instanceof Mob _mobEnt7 && _mobEnt7.isAggressive()) {
-                    if ((Entity) this instanceof OceanizedVexEntity animatable)
-                        animatable.setTexture("oceanized_vex_charging");
-                } else {
-                    if ((Entity) this instanceof OceanizedVexEntity animatable)
-                        animatable.setTexture("oceanized_vex");
-                }
+        Level world = this.level();
+        Entity enemy = null;
+        double sklp1 = 0;
+        String uuid1 = "";
+        if (this.isAlive()) {
+            enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+            sklp1 = (Entity) this instanceof OceanizedVexEntity _datEntI ? _datEntI.getEntityData().get(DATA_leftSurvivalTick) : 0;
+            if (sklp1 <= 0) {
+                ((Entity) this).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.STARVE)), (float) Math.max(0.075 * ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1), 1));
             } else {
-                uuid1 = (Entity) this instanceof OceanizedVexEntity _datEntS ? _datEntS.getEntityData().get(DATA_SAYER) : "";
-                enemy = new Object() {
-                    Entity entityFromStringUUID(String uuid2, Level world) {
-                        Entity _uuidentity = null;
-                        if (world instanceof ServerLevel _server) {
-                            try {
-                                _uuidentity = _server.getEntity(UUID.fromString(uuid2));
-                            } catch (Exception e) {
-                            }
+                if ((Entity) this instanceof OceanizedVexEntity _datEntSetI)
+                    _datEntSetI.getEntityData().set(DATA_leftSurvivalTick, (int) (sklp1 - 1));
+            }
+            if ((Entity) this instanceof Mob _mobEnt7 && _mobEnt7.isAggressive()) {
+                if ((Entity) this instanceof OceanizedVexEntity animatable)
+                    animatable.setTexture("oceanized_vex_charging");
+            } else {
+                if ((Entity) this instanceof OceanizedVexEntity animatable)
+                    animatable.setTexture("oceanized_vex");
+            }
+        } else {
+            uuid1 = (Entity) this instanceof OceanizedVexEntity _datEntS ? _datEntS.getEntityData().get(DATA_SAYER) : "";
+            enemy = new Object() {
+                Entity entityFromStringUUID(String uuid2, Level world) {
+                    Entity _uuidentity = null;
+                    if (world instanceof ServerLevel _server) {
+                        try {
+                            _uuidentity = _server.getEntity(UUID.fromString(uuid2));
+                        } catch (Exception e) {
                         }
-                        return _uuidentity;
                     }
-                }.entityFromStringUUID(uuid1, (Level) world);
-                if (!(enemy == null) && enemy.isAlive()) {
-                    ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY()), (enemy.getZ())));
-                    if (this != null && enemy != null) {
-                        Vec3 offset = enemy.position().add(0, 1, 0).add(position().reverse());
-                        if (!(offset.lengthSqr() <= 9)) {
-                            offset = offset.normalize().scale(0.5);
-                            setDeltaMovement(offset);
-                        }
-                    }
+                    return _uuidentity;
+                }
+            }.entityFromStringUUID(uuid1, world);
+            if (!(enemy == null) && enemy.isAlive()) {
+                ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY()), (enemy.getZ())));
+                Vec3 offset = enemy.position().add(0, 1, 0).add(position().reverse());
+                if (!(offset.lengthSqr() <= 9)) {
+                    offset = offset.normalize().scale(0.5);
+                    setDeltaMovement(offset);
                 }
             }
-            if (tickCount % 40 == 15) {
-                if (getY() <= -64) {
-                    push(0, 0.64, 0);
-                } else if (WorldUtils.isDistFromGround(world, this.getX(), this.getY(), this.getZ())) {
-                    push(0, (-0.64), 0);
-                }
+        }
+        if (tickCount % 40 == 15) {
+            if (getY() <= -64) {
+                push(0, 0.64, 0);
+            } else if (WorldUtils.isDistFromGround(world, this.getX(), this.getY(), this.getZ())) {
+                push(0, (-0.64), 0);
             }
         }
         this.refreshDimensions();
@@ -427,8 +421,6 @@ public class OceanizedVexEntity extends SeaMonster {
             double x = this.getX();
             double y = this.getY();
             double z = this.getZ();
-            if (this == null)
-                return;
             double sanity = 0;
             if (world instanceof ServerLevel _level)
                 _level.sendParticles(ParticleTypes.EXPLOSION, x, (y + 0.4), z, 4, 1, 1, 1, 0.1);
@@ -449,12 +441,13 @@ public class OceanizedVexEntity extends SeaMonster {
                     if ((entityiterator != null ? distanceTo(entityiterator) : -1) <= 4) {
                         entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_magic"))), this),
                                 (float) (sanity * 3));
-                        EntityUtils.deductSanity(entityiterator, sanity * 20);
+                        if (entityiterator instanceof LivingEntity target) {
+                            SIHelper.causeSanityInjury(target, this, sanity * 20, SanityEvent.Hurt.Type.ENTITY);
+                        }
                     }
                 }
             }
-        }
- else if (this.deathTime > 10 && this.deathTime < 70){
+        } else if (this.deathTime > 10 && this.deathTime < 70){
 			String uuid = this.getEntityData().get(DATA_SAYER);
 			if (uuid.isEmpty()){
 				this.deathTime = 79;

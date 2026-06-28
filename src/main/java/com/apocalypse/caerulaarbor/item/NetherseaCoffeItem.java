@@ -3,7 +3,8 @@ package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
-import com.apocalypse.caerulaarbor.util.EntityUtils;
+import com.apocalypse.caerulaarbor.api.event.SanityEvent;
+import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -53,7 +54,7 @@ public class NetherseaCoffeItem extends Item {
             entity.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 400, 2));
             entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 500, 1));
         }
-        EntityUtils.deductSanity(entity, 45);
+        SIHelper.causeSanityInjury(entity, 45, SanityEvent.Hurt.Type.FOOD);
         if (!(entity instanceof Player)) {
             resultStack.shrink(1);
             ItemStack emptyCup = new ItemStack(CaerulaArborModItems.OCEANGLASS_CUP.get());

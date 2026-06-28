@@ -114,13 +114,8 @@ public class DamageTesterEntity extends PathfinderMob {
 		ItemStack itemstack = sourceentity.getItemInHand(hand);
 		InteractionResult retval = InteractionResult.sidedSuccess(this.level().isClientSide());
 		super.mobInteract(sourceentity, hand);
-		double x = this.getX();
-		double y = this.getY();
-		double z = this.getZ();
 		Entity entity = this;
 		Level world = this.level();
-        if (entity == null || sourceentity == null)
-            return InteractionResult.PASS;
         if (sourceentity.isHolding(CaerulaArborModItems.APOCALYPSE.get()) || sourceentity.isHolding(CaerulaArborModItems.BANNED_ITEM.get())) {
             entity.hurt(new DamageSource(((LevelAccessor) world).registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "inv_killer")))), 114514);
             return InteractionResult.SUCCESS;

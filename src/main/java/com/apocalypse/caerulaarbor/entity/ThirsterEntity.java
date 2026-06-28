@@ -1,13 +1,14 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.api.event.SanityEvent;
+import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
 import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
-import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -129,42 +130,22 @@ public class ThirsterEntity extends SeaMonster {
 		this.goalSelector.addGoal(3, new RandomStrollGoal(this, 1) {
 			@Override
 			public boolean canUse() {
-				double x = ThirsterEntity.this.getX();
-				double y = ThirsterEntity.this.getY();
-				double z = ThirsterEntity.this.getZ();
-				Entity entity = ThirsterEntity.this;
-				Level world = ThirsterEntity.this.level();
 				return super.canUse() && isThirsterDurative();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = ThirsterEntity.this.getX();
-				double y = ThirsterEntity.this.getY();
-				double z = ThirsterEntity.this.getZ();
-				Entity entity = ThirsterEntity.this;
-				Level world = ThirsterEntity.this.level();
 				return super.canContinueToUse() && isThirsterDurative();
 			}
 		});
 		this.goalSelector.addGoal(4, new RandomLookAroundGoal(this) {
 			@Override
 			public boolean canUse() {
-				double x = ThirsterEntity.this.getX();
-				double y = ThirsterEntity.this.getY();
-				double z = ThirsterEntity.this.getZ();
-				Entity entity = ThirsterEntity.this;
-				Level world = ThirsterEntity.this.level();
 				return super.canUse() && isThirsterDurative();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = ThirsterEntity.this.getX();
-				double y = ThirsterEntity.this.getY();
-				double z = ThirsterEntity.this.getZ();
-				Entity entity = ThirsterEntity.this;
-				Level world = ThirsterEntity.this.level();
 				return super.canContinueToUse() && isThirsterDurative();
 			}
 		});
@@ -268,14 +249,12 @@ public class ThirsterEntity extends SeaMonster {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this != null) {
-            if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()))
-                this.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).setBaseValue(10);
-            if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-                this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(95);
-            if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get()))
-                this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(50);
-        }
+        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()))
+            this.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).setBaseValue(10);
+        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
+            this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(95);
+        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get()))
+            this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(50);
         return retval;
 	}
 
@@ -311,203 +290,201 @@ public class ThirsterEntity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if (this != null) {
-            Entity enemy = null;
-            double barr = 0;
-            double perc = 0;
-            double sklp1 = 0;
-            double d = 0;
-            double maxH = 0;
-            double angle = 0;
-            double interg = 0;
-            double dura = 0;
-            if (!world.isClientSide()) {
-                if (this.isAlive()) {
-                    sklp1 = (Entity) this instanceof ThirsterEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILL_P) : 0;
-                    dura = (Entity) this instanceof ThirsterEntity _datEntI ? _datEntI.getEntityData().get(DATA_DURATION) : 0;
-                    interg = (Entity) this instanceof ThirsterEntity _datEntI ? _datEntI.getEntityData().get(DATA_INTEGRATION) : 0;
-                    enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
-                    barr = this.getAttributes().hasAttribute(CaerulaArborModAttributes.LIVING_BARRIER.get())
-                            ? this.getAttribute(CaerulaArborModAttributes.LIVING_BARRIER.get()).getBaseValue()
-                            : 0;
-                    if (dura > 0) {
+        Entity enemy = null;
+        double barr = 0;
+        double perc = 0;
+        double sklp1 = 0;
+        double d = 0;
+        double maxH = 0;
+        double angle = 0;
+        double interg = 0;
+        double dura = 0;
+        if (!world.isClientSide()) {
+            if (this.isAlive()) {
+                sklp1 = (Entity) this instanceof ThirsterEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILL_P) : 0;
+                dura = (Entity) this instanceof ThirsterEntity _datEntI ? _datEntI.getEntityData().get(DATA_DURATION) : 0;
+                interg = (Entity) this instanceof ThirsterEntity _datEntI ? _datEntI.getEntityData().get(DATA_INTEGRATION) : 0;
+                enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+                barr = this.getAttributes().hasAttribute(CaerulaArborModAttributes.LIVING_BARRIER.get())
+                        ? this.getAttribute(CaerulaArborModAttributes.LIVING_BARRIER.get()).getBaseValue()
+                        : 0;
+                if (dura > 0) {
+                    if ((Entity) this instanceof ThirsterEntity _datEntSetI)
+                        _datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura - 1));
+                    if (barr <= 0) {
                         if ((Entity) this instanceof ThirsterEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura - 1));
-                        if (barr <= 0) {
-                            if ((Entity) this instanceof ThirsterEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_DURATION, 0);
-                            if ((Entity) this instanceof ThirsterEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_DIZZY_NUM, 2);
-                        }
-                    } else {
-                        if (barr > 0) {
-                            if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.LIVING_BARRIER.get()))
-                                this.getAttribute(CaerulaArborModAttributes.LIVING_BARRIER.get()).setBaseValue(0);
-                            this.performSanityAttack();
-                        }
+                            _datEntSetI.getEntityData().set(DATA_DURATION, 0);
+                        if ((Entity) this instanceof ThirsterEntity _datEntSetI)
+                            _datEntSetI.getEntityData().set(DATA_DIZZY_NUM, 2);
                     }
-                    if (sklp1 > 0) {
+                } else {
+                    if (barr > 0) {
+                        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.LIVING_BARRIER.get()))
+                            this.getAttribute(CaerulaArborModAttributes.LIVING_BARRIER.get()).setBaseValue(0);
+                        this.performSanityAttack();
+                    }
+                }
+                if (sklp1 > 0) {
+                    if ((Entity) this instanceof ThirsterEntity _datEntSetI)
+                        _datEntSetI.getEntityData().set(DATA_SKILL_P, (int) (sklp1 - 1));
+                } else {
+                    if (!(enemy == null) && enemy.isAlive()) {
                         if ((Entity) this instanceof ThirsterEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_SKILL_P, (int) (sklp1 - 1));
-                    } else {
-                        if (!(enemy == null) && enemy.isAlive()) {
-                            if ((Entity) this instanceof ThirsterEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_SKILL_P, 600);
-                            if (this instanceof ThirsterEntity) {
-                                this.setAnimation("animation.thirster.skill");
+                            _datEntSetI.getEntityData().set(DATA_SKILL_P, 600);
+                        if (this instanceof ThirsterEntity) {
+                            this.setAnimation("animation.thirster.skill");
+                        }
+                        CaerulaArborMod.queueServerWork(5, () -> {
+                            if (this == null)
+                                return;
+                            Entity enemy1 = null;
+                            double num = 0;
+                            double tX = 0;
+                            double tZ = 0;
+                            double tY = 0;
+                            num = 2;
+                            enemy1 = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+                            {
+                                final Vec3 _center = new Vec3(x, y, z);
+                                List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(40 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+                                for (Entity entityiterator : _entfound) {
+                                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                                        if (!(entityiterator == enemy1)) {
+                                            continue;
+                                        }
+                                    }
+                                    if (!(entityiterator instanceof LivingEntity)) {
+                                        continue;
+                                    }
+                                    if (entityiterator instanceof Player) {
+                                        if (new Object() {
+                                            public boolean checkGamemode(Entity _ent) {
+                                                if (_ent instanceof ServerPlayer _serverPlayer) {
+                                                    return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                                                } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
+                                                    return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
+                                                            && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                                                }
+                                                return false;
+                                            }
+                                        }.checkGamemode(entityiterator) || new Object() {
+                                            public boolean checkGamemode(Entity _ent) {
+                                                if (_ent instanceof ServerPlayer _serverPlayer) {
+                                                    return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.SPECTATOR;
+                                                } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
+                                                    return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
+                                                            && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.SPECTATOR;
+                                                }
+                                                return false;
+                                            }
+                                        }.checkGamemode(entityiterator)) {
+                                            continue;
+                                        }
+                                    }
+                                    if (distanceTo(entityiterator) < 20) {
+                                        num = num - 1;
+                                        tX = tX + entityiterator.getX();
+                                        tZ = tZ + entityiterator.getZ();
+                                        if (world instanceof ServerLevel _level)
+                                            _level.sendParticles(CaerulaArborModParticleTypes.MOIST_BOOM.get(), (entityiterator.getX()), (entityiterator.getY() + 0.75), (entityiterator.getZ()), 8, 0.75, 0.75, 0.75, 0.1);
+                                        CaerulaArborMod.queueServerWork(15, () -> {
+                                            entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_magic"))), this),
+                                                    (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
+                                        });
+                                        if (num <= 0) {
+                                            break;
+                                        }
+                                    }
+                                }
                             }
-                            CaerulaArborMod.queueServerWork(5, () -> {
-								if (this == null)
-									return;
-								Entity enemy1 = null;
-								double num = 0;
-								double tX = 0;
-								double tZ = 0;
-								double tY = 0;
-								num = 2;
-								enemy1 = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
-								{
-									final Vec3 _center = new Vec3(x, y, z);
-									List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(40 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-									for (Entity entityiterator : _entfound) {
-										if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
-											if (!(entityiterator == enemy1)) {
-												continue;
-											}
-										}
-										if (!(entityiterator instanceof LivingEntity)) {
-											continue;
-										}
-										if (entityiterator instanceof Player) {
-											if (new Object() {
-												public boolean checkGamemode(Entity _ent) {
-													if (_ent instanceof ServerPlayer _serverPlayer) {
-														return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-													} else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-														return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-																&& Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
-													}
-													return false;
-												}
-											}.checkGamemode(entityiterator) || new Object() {
-												public boolean checkGamemode(Entity _ent) {
-													if (_ent instanceof ServerPlayer _serverPlayer) {
-														return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.SPECTATOR;
-													} else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-														return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-																&& Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.SPECTATOR;
-													}
-													return false;
-												}
-											}.checkGamemode(entityiterator)) {
-												continue;
-											}
-										}
-										if ((entityiterator != null ? distanceTo(entityiterator) : -1) < 20) {
-											num = num - 1;
-											tX = tX + entityiterator.getX();
-											tZ = tZ + entityiterator.getZ();
-											if (world instanceof ServerLevel _level)
-												_level.sendParticles(CaerulaArborModParticleTypes.MOIST_BOOM.get(), (entityiterator.getX()), (entityiterator.getY() + 0.75), (entityiterator.getZ()), 8, 0.75, 0.75, 0.75, 0.1);
-											CaerulaArborMod.queueServerWork(15, () -> {
-												entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_magic"))), this),
-														(float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
-											});
-											if (num <= 0) {
-												break;
-											}
-										}
-									}
-								}
-								if (num < 2) {
-									tX = tX / (2 - num);
-									tZ = tZ / (2 - num);
-									tY = WorldUtils.findYzforTear(world, tX, y, tZ);
-									if (tY < 1111) {
-										if (world instanceof ServerLevel _level) {
-											Entity entityToSpawn = CaerulaArborModEntities.ABSORBER_LIMB.get().spawn(_level, BlockPos.containing(tX, tY, tZ), MobSpawnType.MOB_SUMMONED);
-											if (entityToSpawn != null) {
-												entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-											}
-										}
-									}
-								}
-							});
+                            if (num < 2) {
+                                tX = tX / (2 - num);
+                                tZ = tZ / (2 - num);
+                                tY = WorldUtils.findYzforTear(world, tX, y, tZ);
+                                if (tY < 1111) {
+                                    if (world instanceof ServerLevel _level) {
+                                        Entity entityToSpawn = CaerulaArborModEntities.ABSORBER_LIMB.get().spawn(_level, BlockPos.containing(tX, tY, tZ), MobSpawnType.MOB_SUMMONED);
+                                        if (entityToSpawn != null) {
+                                            entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+                maxH = this.getMaxHealth();
+                if (maxH > 0) {
+                    perc = barr / maxH;
+                    if (perc > 0) {
+                        for (int index0 = 0; index0 < 5; index0++) {
+                            if (Math.random() < perc) {
+                                angle = Mth.nextDouble(RandomSource.create(), 0, 6.283);
+                                d = Mth.nextDouble(RandomSource.create(), 2, 2.5);
+                                if (world instanceof ServerLevel _level)
+                                    _level.sendParticles(ParticleTypes.ENCHANTED_HIT, (x + d * Math.sin(angle)), (y + 1), (z + d * Math.cos(angle)), 2, 0.1, 0.1, 0.1, 0.1);
+                            }
                         }
                     }
-                    maxH = (Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1;
-                    if (maxH > 0) {
-                        perc = barr / maxH;
-                        if (perc > 0) {
-                            for (int index0 = 0; index0 < 5; index0++) {
-                                if (Math.random() < perc) {
-                                    angle = Mth.nextDouble(RandomSource.create(), 0, 6.283);
-                                    d = Mth.nextDouble(RandomSource.create(), 2, 2.5);
-                                    if (world instanceof ServerLevel _level)
-                                        _level.sendParticles(ParticleTypes.ENCHANTED_HIT, (x + d * Math.sin(angle)), (y + 1), (z + d * Math.cos(angle)), 2, 0.1, 0.1, 0.1, 0.1);
+                }
+                if (tickCount % 20 == 10) {
+                    double num = 0;
+                    Entity enemy1;
+                    double result = 0;
+                    final Vec3 _center1 = new Vec3(x, y, z);
+                    List<AbsorberLimbEntity> _entfound1 = world.getEntitiesOfClass(AbsorberLimbEntity.class,
+                            new AABB(_center1, _center1).inflate(48 / 2d), AbsorberLimbEntity::isAlive);
+                    result = _entfound1.size();
+                    num = result;
+                    enemy1 = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+                    if (num > 0) {
+                        {
+                            final Vec3 _center = new Vec3(x, y, z);
+                            List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(40 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+                            for (Entity entityiterator : _entfound) {
+                                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                                    if (!(entityiterator == enemy1)) {
+                                        continue;
+                                    }
+                                }
+                                if (!(entityiterator instanceof LivingEntity)) {
+                                    continue;
+                                }
+                                if (entityiterator instanceof Player) {
+                                    if (new Object() {
+                                        public boolean checkGamemode(Entity _ent) {
+                                            if (_ent instanceof ServerPlayer _serverPlayer) {
+                                                return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                                            } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
+                                                return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
+                                                        && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                                            }
+                                            return false;
+                                        }
+                                    }.checkGamemode(entityiterator) || new Object() {
+                                        public boolean checkGamemode(Entity _ent) {
+                                            if (_ent instanceof ServerPlayer _serverPlayer) {
+                                                return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.SPECTATOR;
+                                            } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
+                                                return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
+                                                        && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.SPECTATOR;
+                                            }
+                                            return false;
+                                        }
+                                    }.checkGamemode(entityiterator)) {
+                                        continue;
+                                    }
+                                }
+                                if (distanceTo(entityiterator) < 20) {
+                                    entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "trail_damage")))),
+                                            (float) num);
+                                    if (entityiterator instanceof LivingEntity target) {
+                                        SIHelper.causeSanityInjury(target, this, num * 25, SanityEvent.Hurt.Type.ENTITY);
+                                    }
                                 }
                             }
                         }
                     }
-                    if (tickCount % 20 == 10) {
-						if (this != null) {
-							double num = 0;
-							Entity enemy1;
-							double result = 0;
-							final Vec3 _center1 = new Vec3(x, y, z);
-							List<AbsorberLimbEntity> _entfound1 = world.getEntitiesOfClass(AbsorberLimbEntity.class,
-									new AABB(_center1, _center1).inflate(48 / 2d), AbsorberLimbEntity::isAlive);
-							result = _entfound1.size();
-							num = result;
-							enemy1 = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
-							if (num > 0) {
-								{
-									final Vec3 _center = new Vec3(x, y, z);
-									List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(40 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-									for (Entity entityiterator : _entfound) {
-										if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
-											if (!(entityiterator == enemy1)) {
-												continue;
-											}
-										}
-										if (!(entityiterator instanceof LivingEntity)) {
-											continue;
-										}
-										if (entityiterator instanceof Player) {
-											if (new Object() {
-												public boolean checkGamemode(Entity _ent) {
-													if (_ent instanceof ServerPlayer _serverPlayer) {
-														return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-													} else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-														return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-																&& Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
-													}
-													return false;
-												}
-											}.checkGamemode(entityiterator) || new Object() {
-												public boolean checkGamemode(Entity _ent) {
-													if (_ent instanceof ServerPlayer _serverPlayer) {
-														return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.SPECTATOR;
-													} else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-														return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-																&& Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.SPECTATOR;
-													}
-													return false;
-												}
-											}.checkGamemode(entityiterator)) {
-												continue;
-											}
-										}
-										if (distanceTo(entityiterator) < 20) {
-											entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "trail_damage")))),
-													(float) num);
-											EntityUtils.deductSanity(entityiterator, num * 25);
-										}
-									}
-								}
-							}
-						}
-					}
                 }
             }
         }
@@ -601,7 +578,9 @@ public class ThirsterEntity extends SeaMonster {
 				continue;
 			}
 			if (this.distanceTo(entityiterator) < 20) {
-				EntityUtils.deductSanity(entityiterator, 1000);
+				if (entityiterator instanceof LivingEntity target) {
+					SIHelper.causeSanityInjury(target, this, 1000, SanityEvent.Hurt.Type.ENTITY);
+				}
 			}
 		}
 	}

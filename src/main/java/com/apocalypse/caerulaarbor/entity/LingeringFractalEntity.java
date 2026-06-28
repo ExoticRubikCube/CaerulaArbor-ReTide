@@ -119,13 +119,12 @@ public class LingeringFractalEntity extends SeaMonster {
 		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, Piglin.class, false, false));
 		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, false, false));
 		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, false, false));
-		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal(this, Player.class, false, false) {
+		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Player.class, false, false) {
 			@Override
 			public boolean canUse() {
 				double x = LingeringFractalEntity.this.getX();
 				double y = LingeringFractalEntity.this.getY();
 				double z = LingeringFractalEntity.this.getZ();
-				Entity entity = LingeringFractalEntity.this;
 				Level world = LingeringFractalEntity.this.level();
 				return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -135,7 +134,6 @@ public class LingeringFractalEntity extends SeaMonster {
 				double x = LingeringFractalEntity.this.getX();
 				double y = LingeringFractalEntity.this.getY();
 				double z = LingeringFractalEntity.this.getZ();
-				Entity entity = LingeringFractalEntity.this;
 				Level world = LingeringFractalEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -204,24 +202,22 @@ public class LingeringFractalEntity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if (this != null) {
-            if (tickCount > 1200 && tickCount % 20 == 7) {
-                if (world.getEntitiesOfClass(LineringPathshaperEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).isEmpty()) {
-                    {
-                        final Vec3 _center = new Vec3(x, y, z);
-                        List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(64 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                        for (Entity entityiterator : _entfound) {
-                            if (entityiterator instanceof LingeringFractalEntity) {
-                                entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceankiller_damage")))),
-                                        1145141919);
-                            }
+        if (tickCount > 1200 && tickCount % 20 == 7) {
+            if (world.getEntitiesOfClass(LineringPathshaperEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).isEmpty()) {
+                {
+                    final Vec3 _center = new Vec3(x, y, z);
+                    List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(64 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+                    for (Entity entityiterator : _entfound) {
+                        if (entityiterator instanceof LingeringFractalEntity) {
+                            entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceankiller_damage")))),
+                                    1145141919);
                         }
                     }
-                    if (world instanceof ServerLevel _level) {
-                        Entity entityToSpawn = CaerulaArborModEntities.LINGERING_PATHSHAPER.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
-                        if (entityToSpawn != null) {
-                            entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-                        }
+                }
+                if (world instanceof ServerLevel _level) {
+                    Entity entityToSpawn = CaerulaArborModEntities.LINGERING_PATHSHAPER.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+                    if (entityToSpawn != null) {
+                        entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                     }
                 }
             }

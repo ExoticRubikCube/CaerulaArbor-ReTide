@@ -107,22 +107,14 @@ public class LineringPathshaperEntity extends SeaMonster {
 
 			@Override
 			public boolean canUse() {
-				double x = LineringPathshaperEntity.this.getX();
-				double y = LineringPathshaperEntity.this.getY();
-				double z = LineringPathshaperEntity.this.getZ();
 				Entity entity = LineringPathshaperEntity.this;
-				Level world = LineringPathshaperEntity.this.level();
                 if (!super.canUse()) return false;
                 return EntityPredicateUtils.isNotFakeDying(entity);
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = LineringPathshaperEntity.this.getX();
-				double y = LineringPathshaperEntity.this.getY();
-				double z = LineringPathshaperEntity.this.getZ();
 				Entity entity = LineringPathshaperEntity.this;
-				Level world = LineringPathshaperEntity.this.level();
                 if (!super.canContinueToUse()) return false;
                 return EntityPredicateUtils.isNotFakeDying(entity);
 			}
@@ -138,13 +130,12 @@ public class LineringPathshaperEntity extends SeaMonster {
 		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
 		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
 		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
-		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal(this, Player.class, true, false) {
+		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Player.class, true, false) {
 			@Override
 			public boolean canUse() {
 				double x = LineringPathshaperEntity.this.getX();
 				double y = LineringPathshaperEntity.this.getY();
 				double z = LineringPathshaperEntity.this.getZ();
-				Entity entity = LineringPathshaperEntity.this;
 				Level world = LineringPathshaperEntity.this.level();
 				return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -154,29 +145,18 @@ public class LineringPathshaperEntity extends SeaMonster {
 				double x = LineringPathshaperEntity.this.getX();
 				double y = LineringPathshaperEntity.this.getY();
 				double z = LineringPathshaperEntity.this.getZ();
-				Entity entity = LineringPathshaperEntity.this;
 				Level world = LineringPathshaperEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
 		});
-		this.targetSelector.addGoal(14, new NearestAttackableTargetGoal(this, Animal.class, true, false) {
+		this.targetSelector.addGoal(14, new NearestAttackableTargetGoal<>(this, Animal.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = LineringPathshaperEntity.this.getX();
-				double y = LineringPathshaperEntity.this.getY();
-				double z = LineringPathshaperEntity.this.getZ();
-				Entity entity = LineringPathshaperEntity.this;
-				Level world = LineringPathshaperEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = LineringPathshaperEntity.this.getX();
-				double y = LineringPathshaperEntity.this.getY();
-				double z = LineringPathshaperEntity.this.getZ();
-				Entity entity = LineringPathshaperEntity.this;
-				Level world = LineringPathshaperEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});

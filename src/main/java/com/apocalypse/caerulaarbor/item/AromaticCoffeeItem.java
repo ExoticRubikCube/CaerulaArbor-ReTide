@@ -1,7 +1,8 @@
 
 package com.apocalypse.caerulaarbor.item;
 
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
+import com.apocalypse.caerulaarbor.capability.ModCapabilities;
+import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -38,15 +39,15 @@ public class AromaticCoffeeItem extends Item {
 		if (!entity.level().isClientSide())
 			entity.addEffect(new MobEffectInstance(MobEffects.JUMP, 240, 0));
 		{
-			double _setval = (entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).player_shield + 1;
-			entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+			double _setval = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_shield + 1;
+			entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
 				capability.player_shield = _setval;
 				capability.syncPlayerVariables(entity);
 			});
 		}
 		{
 			boolean _setval = true;
-			entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+			entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
 				capability.player_util_AROMATIC = _setval;
 				capability.syncPlayerVariables(entity);
 			});

@@ -1,7 +1,8 @@
 package com.apocalypse.caerulaarbor.command;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
+import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler;
+import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler.StrategyType;
 import com.apocalypse.caerulaarbor.system.UpgradeBreedProcedure;
 import com.apocalypse.caerulaarbor.system.UpgradeGrowProcedure;
 import com.apocalypse.caerulaarbor.system.UpgradeMigraProcedure;
@@ -56,8 +57,7 @@ public class EvolutionCommand {
 				direction = entity.getDirection();
 
             String info = "";
-            CaerulaArborModVariables.MapVariables.get(world).strategy_grow = Math.round(DoubleArgumentType.getDouble(arguments, "lvl"));
-            CaerulaArborModVariables.MapVariables.get(world).syncData(world);
+            MapVariablesHandler.setStrategyLevel(world, StrategyType.GROW, Math.round(DoubleArgumentType.getDouble(arguments, "lvl")));
             if (DoubleArgumentType.getDouble(arguments, "lvl") >= 3) {
                 if ((LevelAccessor) world instanceof Level _level) {
                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "grow2")), SoundSource.NEUTRAL, 4, 1);
@@ -68,8 +68,7 @@ public class EvolutionCommand {
                 }
             }
             if (DoubleArgumentType.getDouble(arguments, "lvl") < 4) {
-                CaerulaArborModVariables.MapVariables.get(world).strategy_silence = 0;
-                CaerulaArborModVariables.MapVariables.get(world).syncData(world);
+                MapVariablesHandler.setStrategyLevel(world, StrategyType.SILENCE, 0);
             }
             info = Component.translatable("command.evolution.grow").getString();
             info = info.replace("<num>", "" + Math.round(DoubleArgumentType.getDouble(arguments, "lvl")));
@@ -106,8 +105,7 @@ public class EvolutionCommand {
 				direction = entity.getDirection();
 
             String info = "";
-            CaerulaArborModVariables.MapVariables.get(world).strategy_breed = Math.round(DoubleArgumentType.getDouble(arguments, "lvl"));
-            CaerulaArborModVariables.MapVariables.get(world).syncData(world);
+            MapVariablesHandler.setStrategyLevel(world, StrategyType.BREED, Math.round(DoubleArgumentType.getDouble(arguments, "lvl")));
             if (DoubleArgumentType.getDouble(arguments, "lvl") >= 3) {
                 if ((LevelAccessor) world instanceof Level _level) {
                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "breed2")), SoundSource.NEUTRAL, 4, 1);
@@ -118,8 +116,7 @@ public class EvolutionCommand {
                 }
             }
             if (DoubleArgumentType.getDouble(arguments, "lvl") < 4) {
-                CaerulaArborModVariables.MapVariables.get(world).strategy_silence = 0;
-                CaerulaArborModVariables.MapVariables.get(world).syncData(world);
+                MapVariablesHandler.setStrategyLevel(world, StrategyType.SILENCE, 0);
             }
             info = Component.translatable("command.evolution.breed").getString();
             info = info.replace("<num>", "" + Math.round(DoubleArgumentType.getDouble(arguments, "lvl")));
@@ -156,8 +153,7 @@ public class EvolutionCommand {
 				direction = entity.getDirection();
 
             String info = "";
-            CaerulaArborModVariables.MapVariables.get(world).strategy_migration = Math.round(DoubleArgumentType.getDouble(arguments, "lvl"));
-            CaerulaArborModVariables.MapVariables.get(world).syncData(world);
+            MapVariablesHandler.setStrategyLevel(world, StrategyType.MIGRATION, Math.round(DoubleArgumentType.getDouble(arguments, "lvl")));
             if (DoubleArgumentType.getDouble(arguments, "lvl") >= 3) {
                 if ((LevelAccessor) world instanceof Level _level) {
                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "migration2")), SoundSource.NEUTRAL, 4, 1);
@@ -168,8 +164,7 @@ public class EvolutionCommand {
                 }
             }
             if (DoubleArgumentType.getDouble(arguments, "lvl") < 4) {
-                CaerulaArborModVariables.MapVariables.get(world).strategy_silence = 0;
-                CaerulaArborModVariables.MapVariables.get(world).syncData(world);
+                MapVariablesHandler.setStrategyLevel(world, StrategyType.SILENCE, 0);
             }
             info = Component.translatable("command.evolution.migration").getString();
             info = info.replace("<num>", "" + Math.round(DoubleArgumentType.getDouble(arguments, "lvl")));
@@ -206,8 +201,7 @@ public class EvolutionCommand {
 				direction = entity.getDirection();
 
             String info = "";
-            CaerulaArborModVariables.MapVariables.get(world).strategy_subsisting = Math.round(DoubleArgumentType.getDouble(arguments, "lvl"));
-            CaerulaArborModVariables.MapVariables.get(world).syncData(world);
+            MapVariablesHandler.setStrategyLevel(world, StrategyType.SUBSISTING, Math.round(DoubleArgumentType.getDouble(arguments, "lvl")));
             if (DoubleArgumentType.getDouble(arguments, "lvl") >= 3) {
                 if ((LevelAccessor) world instanceof Level _level) {
                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "subsisting2")), SoundSource.NEUTRAL, 4, 1);
@@ -218,8 +212,7 @@ public class EvolutionCommand {
                 }
             }
             if (DoubleArgumentType.getDouble(arguments, "lvl") < 4) {
-                CaerulaArborModVariables.MapVariables.get(world).strategy_silence = 0;
-                CaerulaArborModVariables.MapVariables.get(world).syncData(world);
+                MapVariablesHandler.setStrategyLevel(world, StrategyType.SILENCE, 0);
             }
             info = Component.translatable("command.evolution.subsisting").getString();
             info = info.replace("<num>", "" + Math.round(DoubleArgumentType.getDouble(arguments, "lvl")));
@@ -244,8 +237,7 @@ public class EvolutionCommand {
             if (entity != null) {
                 String info = "";
                 if (StrategyUtils.canEnableSilence(world)) {
-                    CaerulaArborModVariables.MapVariables.get(world).strategy_silence = Math.round(DoubleArgumentType.getDouble(arguments, "lvl"));
-                    CaerulaArborModVariables.MapVariables.get(world).syncData(world);
+                    MapVariablesHandler.setStrategyLevel(world, StrategyType.SILENCE, Math.round(DoubleArgumentType.getDouble(arguments, "lvl")));
                     if (DoubleArgumentType.getDouble(arguments, "lvl") == 1) {
                         if ((LevelAccessor) world instanceof Level _level) {
                                 _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "silence1")), SoundSource.NEUTRAL, 6, 1);

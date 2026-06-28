@@ -1,7 +1,7 @@
 
 package com.apocalypse.caerulaarbor.potion;
 
-import com.apocalypse.caerulaarbor.util.EntityUtils;
+import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.client.extensions.common.IClientMobEffectExtensions;
 
@@ -37,8 +37,9 @@ public class PowerOfAnchorMobEffect extends MobEffect {
         if (entity == null)
             return;
         if (entity instanceof Player) {
-            EntityUtils.restorePlayerLights(entity, 0.125);
-            EntityUtils.restoreSanity(entity, 10);
+            ModCapabilities.getSanityInjury(entity).heal(10);
+            ModCapabilities.getPlayerVariables(entity).player_light = Math.min(ModCapabilities.getPlayerVariables(entity).player_light + 0.125, 100.0);
+            ModCapabilities.getPlayerVariables(entity).syncPlayerVariables(entity);
         }
     }
 

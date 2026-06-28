@@ -1,7 +1,7 @@
 
 package com.apocalypse.caerulaarbor.item;
 
-import com.apocalypse.caerulaarbor.util.EntityUtils;
+import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -37,7 +37,7 @@ public class BrokenCellClusterItem extends Item {
 		double z = entity.getZ();
 		if (!entity.level().isClientSide())
 			entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 80, 0));
-		EntityUtils.deductSanity75(entity);
+		SIHelper.causeSanityInjury(entity, 75);
 		if (world instanceof ServerLevel level)
 			level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, (y + 1), z, 32, 0.5, 1, 0.5, 0.1);
 		return retval;

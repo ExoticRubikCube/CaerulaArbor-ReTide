@@ -1,8 +1,8 @@
 
 package com.apocalypse.caerulaarbor.item;
 
+import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -47,7 +47,7 @@ public class CannedCherryItem extends Item {
 			entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 240, 1));
 		{
 			boolean _setval = true;
-			entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+			entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
 				capability.relic_util_BERRIES = _setval;
 				capability.syncPlayerVariables(entity);
 			});

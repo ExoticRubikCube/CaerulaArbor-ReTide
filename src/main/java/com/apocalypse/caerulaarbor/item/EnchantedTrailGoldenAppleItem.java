@@ -1,8 +1,9 @@
 
 package com.apocalypse.caerulaarbor.item;
 
+import com.apocalypse.caerulaarbor.api.event.SanityEvent;
+import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
-import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -38,7 +39,7 @@ public class EnchantedTrailGoldenAppleItem extends Item {
 		double x = entity.getX();
 		double y = entity.getY();
 		double z = entity.getZ();
-		EntityUtils.deductSanity(entity, 120);
+		SIHelper.causeSanityInjury(entity, 120, SanityEvent.Hurt.Type.FOOD);
 		if (!entity.level().isClientSide()) {
 			entity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 1750, 4));
 			entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 100, 3));

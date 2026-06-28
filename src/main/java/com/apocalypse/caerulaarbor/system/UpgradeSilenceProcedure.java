@@ -1,8 +1,10 @@
 package com.apocalypse.caerulaarbor.system;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.capability.map.MapVariables;
+import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler;
+import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler.StrategyType;
 import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import com.apocalypse.caerulaarbor.util.StrategyUtils;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
@@ -24,10 +26,9 @@ public class UpgradeSilenceProcedure {
 		double stra;
 		String num = "";
 		String prefix = "";
-		stra = CaerulaArborModVariables.MapVariables.get(world).strategy_silence;
+		stra = MapVariables.get(world).strategy_silence;
 		if (StrategyUtils.canEnableSilence(world)) {
-			CaerulaArborModVariables.MapVariables.get(world).evo_point_silence = CaerulaArborModVariables.MapVariables.get(world).evo_point_silence + point;
-			CaerulaArborModVariables.MapVariables.get(world).syncData(world);
+			MapVariablesHandler.addEvoPoint(world, StrategyType.SILENCE, point);
 			if (stra > 0) {
 				for (Entity entityiterator : new ArrayList<>(world.players())) {
 					if (entityiterator instanceof ServerPlayer _player) {
@@ -41,12 +42,10 @@ public class UpgradeSilenceProcedure {
 				}
 			}
 			if (stra < 4) {
-				if (CaerulaArborModVariables.MapVariables.get(world).evo_point_silence >= Math.pow(stra + 1, 3) * CaerulaConfigsConfiguration.COEFFICIENT.get() * 8) {
-					CaerulaArborModVariables.MapVariables.get(world).strategy_silence = stra + 1;
-					CaerulaArborModVariables.MapVariables.get(world).syncData(world);
-					stra = CaerulaArborModVariables.MapVariables.get(world).strategy_silence;
-					CaerulaArborModVariables.MapVariables.get(world).evo_point_silence = 0;
-					CaerulaArborModVariables.MapVariables.get(world).syncData(world);
+				if (MapVariables.get(world).evo_point_silence >= Math.pow(stra + 1, 3) * CaerulaConfigsConfiguration.COEFFICIENT.get() * 8) {
+					MapVariablesHandler.setStrategyLevel(world, StrategyType.SILENCE, stra + 1);
+					stra = MapVariables.get(world).strategy_silence;
+					MapVariablesHandler.setEvoPoint(world, StrategyType.SILENCE, 0);
 					if (stra == 1) {
 						num = "I";
 						prefix = "§p";
@@ -97,8 +96,7 @@ public class UpgradeSilenceProcedure {
 						world.getServer().getPlayerList().broadcastSystemMessage(Component.literal((prefix + Component.translatable("item.caerula_arbor.language_key.description_4").getString() + num)), false);
 				}
 			} else {
-				CaerulaArborModVariables.MapVariables.get(world).evo_point_silence = 0;
-				CaerulaArborModVariables.MapVariables.get(world).syncData(world);
+				MapVariablesHandler.setEvoPoint(world, StrategyType.SILENCE, 0);
 				for (Entity entityiterator : new ArrayList<>(world.players())) {
 					if (entityiterator instanceof ServerPlayer _player) {
 						Advancement _adv = _player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "hymn_of_land"));
@@ -111,8 +109,7 @@ public class UpgradeSilenceProcedure {
 				}
 			}
 		} else {
-			CaerulaArborModVariables.MapVariables.get(world).strategy_silence = 0;
-			CaerulaArborModVariables.MapVariables.get(world).syncData(world);
+			MapVariablesHandler.setStrategyLevel(world, StrategyType.SILENCE, 0);
 		}
 	}
 }

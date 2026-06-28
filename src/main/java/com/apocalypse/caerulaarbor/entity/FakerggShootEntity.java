@@ -76,7 +76,7 @@ public class FakerggShootEntity extends AbstractArrow implements ItemSupplier {
         LevelAccessor world = this.level();
         Entity entity = entityHitResult.getEntity();
         Entity sourceentity = this.getOwner();
-        if (entity == null || this == null || sourceentity == null)
+        if (sourceentity == null)
             return;
         if (!(entity == sourceentity)) {
             if (world instanceof ServerLevel _level) {
@@ -98,8 +98,6 @@ public class FakerggShootEntity extends AbstractArrow implements ItemSupplier {
         double x = blockHitResult.getBlockPos().getX();
         double y = blockHitResult.getBlockPos().getY();
         double z = blockHitResult.getBlockPos().getZ();
-        if (this == null)
-            return;
         if (world instanceof ServerLevel _level) {
             Entity entityToSpawn = CaerulaArborModEntities.FAKE_OFFSPRING.get().spawn(_level, BlockPos.containing(x + Mth.nextDouble(RandomSource.create(), 0, 1), y + 1, z + Mth.nextDouble(RandomSource.create(), 0, 1)), MobSpawnType.MOB_SUMMONED);
             if (entityToSpawn != null) {

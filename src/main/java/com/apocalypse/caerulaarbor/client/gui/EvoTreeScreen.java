@@ -1,9 +1,9 @@
-﻿package com.apocalypse.caerulaarbor.client.gui;
+package com.apocalypse.caerulaarbor.client.gui;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.menu.EvoTreeMenu;
 import com.apocalypse.caerulaarbor.network.CaerulaArborModNetwork;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import com.apocalypse.caerulaarbor.network.message.send.EvoTreeButtonMessage;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.StrategyUtils;
@@ -73,25 +73,25 @@ public class EvoTreeScreen extends AbstractContainerScreen<EvoTreeMenu> {
 		RenderSystem.defaultBlendFunc();
 
         double result = 0;
-        if (CaerulaArborModVariables.MapVariables.get(world).strategy_subsisting >= 4) {
+        if (MapVariables.get(world).strategy_subsisting >= 4) {
             result = 1;
         }
         guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/evo_arrow.png"), this.leftPos + 14, this.topPos + 40, Mth.clamp((int) result * 161, 0, 161), 0, 161, 8, 322, 8);
 
         double result2 = 0;
-        if (CaerulaArborModVariables.MapVariables.get(world).strategy_breed >= 4) {
+        if (MapVariables.get(world).strategy_breed >= 4) {
             result2 = 1;
         }
         guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/evo_arrow.png"), this.leftPos + 14, this.topPos + 80, Mth.clamp((int) result2 * 161, 0, 161), 0, 161, 8, 322, 8);
 
         double result3 = 0;
-        if (CaerulaArborModVariables.MapVariables.get(world).strategy_grow >= 4) {
+        if (MapVariables.get(world).strategy_grow >= 4) {
             result3 = 1;
         }
         guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/evo_arrow.png"), this.leftPos + 14, this.topPos + 120, Mth.clamp((int) result3 * 161, 0, 161), 0, 161, 8, 322, 8);
 
         double result4 = 0;
-        if (CaerulaArborModVariables.MapVariables.get(world).strategy_migration >= 4) {
+        if (MapVariables.get(world).strategy_migration >= 4) {
             result4 = 1;
         }
         guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/evo_arrow.png"), this.leftPos + 14, this.topPos + 160, Mth.clamp((int) result4 * 161, 0, 161), 0, 161, 8, 322, 8);
@@ -105,7 +105,7 @@ public class EvoTreeScreen extends AbstractContainerScreen<EvoTreeMenu> {
 		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/evo_complete.png"), this.leftPos + 32, this.topPos + 148, Mth.clamp((int) EntityUtils.getStraMigration(world) * 128, 0, 512), 0, 128, 33, 640, 33);
 
         double result1 = 0;
-        if (CaerulaArborModVariables.MapVariables.get(world).strategy_silence >= 1) {
+        if (MapVariables.get(world).strategy_silence >= 1) {
             result1 = 1;
         }
         guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/side_arrow.png"), this.leftPos + 176, this.topPos + 42, 0, Mth.clamp((int) result1 * 123, 0, 123), 39, 123, 39, 246);

@@ -126,21 +126,11 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity {
 		this.targetSelector.addGoal(1, new HurtByTargetGoal(this) {
 			@Override
 			public boolean canUse() {
-				double x = LastKnightAndHorseEntity.this.getX();
-				double y = LastKnightAndHorseEntity.this.getY();
-				double z = LastKnightAndHorseEntity.this.getZ();
-				Entity entity = LastKnightAndHorseEntity.this;
-				Level world = LastKnightAndHorseEntity.this.level();
 				return super.canUse() && isLastKnightStarting();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = LastKnightAndHorseEntity.this.getX();
-				double y = LastKnightAndHorseEntity.this.getY();
-				double z = LastKnightAndHorseEntity.this.getZ();
-				Entity entity = LastKnightAndHorseEntity.this;
-				Level world = LastKnightAndHorseEntity.this.level();
 				return super.canContinueToUse() && isLastKnightStarting();
 			}
 		});
@@ -152,85 +142,45 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity {
 
 			@Override
 			public boolean canUse() {
-				double x = LastKnightAndHorseEntity.this.getX();
-				double y = LastKnightAndHorseEntity.this.getY();
-				double z = LastKnightAndHorseEntity.this.getZ();
-				Entity entity = LastKnightAndHorseEntity.this;
-				Level world = LastKnightAndHorseEntity.this.level();
 				return super.canUse() && isLastKnightStarting();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = LastKnightAndHorseEntity.this.getX();
-				double y = LastKnightAndHorseEntity.this.getY();
-				double z = LastKnightAndHorseEntity.this.getZ();
-				Entity entity = LastKnightAndHorseEntity.this;
-				Level world = LastKnightAndHorseEntity.this.level();
 				return super.canContinueToUse() && isLastKnightStarting();
 			}
 
 		});
-		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal(this, Monster.class, true, false) {
+		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Monster.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = LastKnightAndHorseEntity.this.getX();
-				double y = LastKnightAndHorseEntity.this.getY();
-				double z = LastKnightAndHorseEntity.this.getZ();
-				Entity entity = LastKnightAndHorseEntity.this;
-				Level world = LastKnightAndHorseEntity.this.level();
 				return super.canUse() && isLastKnightStarting();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = LastKnightAndHorseEntity.this.getX();
-				double y = LastKnightAndHorseEntity.this.getY();
-				double z = LastKnightAndHorseEntity.this.getZ();
-				Entity entity = LastKnightAndHorseEntity.this;
-				Level world = LastKnightAndHorseEntity.this.level();
 				return super.canContinueToUse() && isLastKnightStarting();
 			}
 		});
 		this.goalSelector.addGoal(4, new RandomStrollGoal(this, 1) {
 			@Override
 			public boolean canUse() {
-				double x = LastKnightAndHorseEntity.this.getX();
-				double y = LastKnightAndHorseEntity.this.getY();
-				double z = LastKnightAndHorseEntity.this.getZ();
-				Entity entity = LastKnightAndHorseEntity.this;
-				Level world = LastKnightAndHorseEntity.this.level();
 				return super.canUse() && isLastKnightStarting();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = LastKnightAndHorseEntity.this.getX();
-				double y = LastKnightAndHorseEntity.this.getY();
-				double z = LastKnightAndHorseEntity.this.getZ();
-				Entity entity = LastKnightAndHorseEntity.this;
-				Level world = LastKnightAndHorseEntity.this.level();
 				return super.canContinueToUse() && isLastKnightStarting();
 			}
 		});
 		this.goalSelector.addGoal(5, new RandomLookAroundGoal(this) {
 			@Override
 			public boolean canUse() {
-				double x = LastKnightAndHorseEntity.this.getX();
-				double y = LastKnightAndHorseEntity.this.getY();
-				double z = LastKnightAndHorseEntity.this.getZ();
-				Entity entity = LastKnightAndHorseEntity.this;
-				Level world = LastKnightAndHorseEntity.this.level();
 				return super.canUse() && isLastKnightStarting();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = LastKnightAndHorseEntity.this.getX();
-				double y = LastKnightAndHorseEntity.this.getY();
-				double z = LastKnightAndHorseEntity.this.getZ();
-				Entity entity = LastKnightAndHorseEntity.this;
-				Level world = LastKnightAndHorseEntity.this.level();
 				return super.canContinueToUse() && isLastKnightStarting();
 			}
 		});
@@ -281,11 +231,14 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity {
             return;
         if (sourceentity instanceof ServerPlayer _player) {
             Advancement _adv = _player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "kill_knight_and_horse"));
-            AdvancementProgress _ap = _player.getAdvancements().getOrStartProgress(_adv);
-            if (!_ap.isDone()) {
-                for (String criteria : _ap.getRemainingCriteria())
-                    _player.getAdvancements().award(_adv, criteria);
-            }
+            AdvancementProgress _ap = null;
+            if (_adv != null) {
+				_ap = _player.getAdvancements().getOrStartProgress(_adv);
+				if (!_ap.isDone()) {
+					for (String criteria : _ap.getRemainingCriteria())
+						_player.getAdvancements().award(_adv, criteria);
+				}
+			}
         }
     }
 
@@ -339,8 +292,6 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity {
 	public void awardKillScore(Entity entity, int score, DamageSource damageSource) {
 		super.awardKillScore(entity, score, damageSource);
         LevelAccessor world = this.level();
-        if (this == null)
-            return;
         if ((this.getHealth()) < (this.getMaxHealth())) {
             this.setHealth((float) ((this.getHealth()) + (this.getMaxHealth()) * 0.03));
             if (world instanceof ServerLevel _level)
@@ -355,107 +306,102 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if (this != null) {
-            Entity enemy = null;
-            double add = 0;
-            double duration = 0;
-            double skillp = 0;
-            if (this.isAlive()) {
-                if (tickCount % 10 == 0) {
-                    this.removeEffect(CaerulaArborModMobEffects.DIZZY.get());
-                    this.removeEffect(CaerulaArborModMobEffects.FROZEN.get());
-                    this.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
-                    if (!this.level().isClientSide())
-                        this.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 20, 0, false, false));
-                    if ((this.getHealth()) > (this.getMaxHealth()) * 0.5) {
-                        {
-                            final Vec3 _center = new Vec3(x, y, z);
-                            List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(48 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                            for (Entity entityiterator : _entfound) {
-                                if (entityiterator.getTicksFrozen() >= 125 && entityiterator.isAlive()) {
-                                    entityiterator.setTicksFrozen(200);
-                                    if (entityiterator instanceof LivingEntity _entity && !this.level().isClientSide())
-                                        this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.FROZEN.get(), 20, 0, false, false));
-                                }
-                            }
-                        }
-                    }
-                    enemy = this.getTarget();
-                    if (!(enemy == null) && enemy.isAlive()) {
-                        add = this.getEntityData().get(DATA_addiiton);
-                        if (add < 20) {
-                            this.getEntityData().set(DATA_addiiton, (int) (add + 1));
-                        }
-                    }
-                }
-                if (EntityUtils.getSpeed(this) > (this.getAttributes().hasAttribute(Attributes.MOVEMENT_SPEED) ? this.getAttribute(Attributes.MOVEMENT_SPEED).getValue() : 0)
-                        * 1.25) {
-                    setDeltaMovement(new Vec3(0, 0, 0));
-                }
-                setTicksFrozen(0);
+        Entity enemy = null;
+        double add = 0;
+        double duration = 0;
+        double skillp = 0;
+        if (this.isAlive()) {
+            if (tickCount % 10 == 0) {
+                this.removeEffect(CaerulaArborModMobEffects.DIZZY.get());
                 this.removeEffect(CaerulaArborModMobEffects.FROZEN.get());
                 this.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
-                this.removeEffect(CaerulaArborModMobEffects.DIZZY.get());
-                skillp = this.getEntityData().get(DATA_skillp);
-                duration = this.getEntityData().get(DATA_duration);
-                if (duration > 0) {
-                    this.getEntityData().set(DATA_duration, (int) (duration - 1));
+                if (!this.level().isClientSide())
+                    this.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 20, 0, false, false));
+                if ((this.getHealth()) > (this.getMaxHealth()) * 0.5) {
+					final Vec3 _center = new Vec3(x, y, z);
+					List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(48 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+					for (Entity entityiterator : _entfound) {
+						if (entityiterator.getTicksFrozen() >= 125 && entityiterator.isAlive()) {
+							entityiterator.setTicksFrozen(200);
+							if (entityiterator instanceof LivingEntity _entity && !this.level().isClientSide())
+								this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.FROZEN.get(), 20, 0, false, false));
+						}
+					}
                 }
                 enemy = this.getTarget();
-                if (skillp > 0) {
-                    this.getEntityData().set(DATA_skillp, (int) (skillp - 1));
-                } else {
-                    if (!(enemy == null) && enemy.isAlive()) {
-                        if ((enemy != null ? distanceTo(enemy) : -1) < 4) {
-                            this.getEntityData().set(DATA_duration, 40);
-                            this.getEntityData().set(DATA_skillp, 240);
-                            if (!this.level().isClientSide())
-                                this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 32, 0, false, false));
-                            this.setAnimation("animation.last_knight_horse.skill");
-                            CaerulaArborMod.queueServerWork(13, () -> {
-                                if (this == null)
-                                    return;
-                                Entity enemy1 = null;
-                                double damage = 0;
-                                damage = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
-                                enemy1 = this.getTarget();
-                                {
-                                    final Vec3 _center = new Vec3((x + 2 * getLookAngle().x), y, (z + 2 * getLookAngle().z));
-                                    List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(8 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                                    for (Entity entityiterator : _entfound) {
-                                        if (!(entityiterator instanceof LivingEntity)) {
-                                            continue;
-                                        }
-                                        if (entityiterator == this) {
-                                            continue;
-                                        }
-                                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "is_humanside"))) && !(entityiterator == enemy1)) {
-                                            continue;
-                                        }
-                                        if ((entityiterator != null ? distanceTo(entityiterator) : -1) <= 4) {
-                                            entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "last_knight_attack"))), this),
-                                                    (float) (damage * 1.5));
-                                            entityiterator.push(0, 0.64, 0);
-                                            if ((entityiterator instanceof LivingEntity _entUseItem12 ? _entUseItem12.getUseItem() : ItemStack.EMPTY).getItem() instanceof ShieldItem) {
-                                                if (entityiterator instanceof Player _player)
-                                                    _player.getCooldowns().addCooldown((entityiterator instanceof LivingEntity _entUseItem14 ? _entUseItem14.getUseItem() : ItemStack.EMPTY).getItem(), 100);
-                                                if (world instanceof Level _level) {
-                                                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.shield.break")), SoundSource.HOSTILE, 1, 1);
-                                                }
+                if (!(enemy == null) && enemy.isAlive()) {
+                    add = this.getEntityData().get(DATA_addiiton);
+                    if (add < 20) {
+                        this.getEntityData().set(DATA_addiiton, (int) (add + 1));
+                    }
+                }
+            }
+            if (EntityUtils.getSpeed(this) > (this.getAttributes().hasAttribute(Attributes.MOVEMENT_SPEED) ? this.getAttribute(Attributes.MOVEMENT_SPEED).getValue() : 0)
+                    * 1.25) {
+                setDeltaMovement(new Vec3(0, 0, 0));
+            }
+            setTicksFrozen(0);
+            this.removeEffect(CaerulaArborModMobEffects.FROZEN.get());
+            this.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
+            this.removeEffect(CaerulaArborModMobEffects.DIZZY.get());
+            skillp = this.getEntityData().get(DATA_skillp);
+            duration = this.getEntityData().get(DATA_duration);
+            if (duration > 0) {
+                this.getEntityData().set(DATA_duration, (int) (duration - 1));
+            }
+            enemy = this.getTarget();
+            if (skillp > 0) {
+                this.getEntityData().set(DATA_skillp, (int) (skillp - 1));
+            } else {
+                if (!(enemy == null) && enemy.isAlive()) {
+                    if (distanceTo(enemy) < 4) {
+                        this.getEntityData().set(DATA_duration, 40);
+                        this.getEntityData().set(DATA_skillp, 240);
+                        if (!this.level().isClientSide())
+                            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 32, 0, false, false));
+                        this.setAnimation("animation.last_knight_horse.skill");
+                        CaerulaArborMod.queueServerWork(13, () -> {
+                            Entity enemy1 = null;
+                            double damage = 0;
+                            damage = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
+                            enemy1 = this.getTarget();
+                            {
+                                final Vec3 _center = new Vec3((x + 2 * getLookAngle().x), y, (z + 2 * getLookAngle().z));
+                                List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(8 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+                                for (Entity entityiterator : _entfound) {
+                                    if (!(entityiterator instanceof LivingEntity)) {
+                                        continue;
+                                    }
+                                    if (entityiterator == this) {
+                                        continue;
+                                    }
+                                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "is_humanside"))) && !(entityiterator == enemy1)) {
+                                        continue;
+                                    }
+                                    if (distanceTo(entityiterator) <= 4) {
+                                        entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "last_knight_attack"))), this),
+                                                (float) (damage * 1.5));
+                                        entityiterator.push(0, 0.64, 0);
+                                        if ((entityiterator instanceof LivingEntity _entUseItem12 ? _entUseItem12.getUseItem() : ItemStack.EMPTY).getItem() instanceof ShieldItem) {
+                                            if (entityiterator instanceof Player _player) {
+                                                _player.getCooldowns().addCooldown(_player.getUseItem().getItem(), 100);
                                             }
-                                            CaerulaArborMod.queueServerWork(7, () -> {
-                                                entityiterator.hurt(
-                                                        new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "last_knight_attack"))), this),
-                                                        (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 2));
-                                                if (entityiterator instanceof LivingEntity _entity && !this.level().isClientSide())
-                                                    this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ROCK_BREAK.get(), 150, 0, false, false));
-                                                entityiterator.push(0, (-1), 0);
-                                            });
+                                            if (world instanceof Level _level) {
+                                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.shield.break")), SoundSource.HOSTILE, 1, 1);
+                                            }
                                         }
+                                        CaerulaArborMod.queueServerWork(7, () -> {
+                                            entityiterator.hurt(
+                                                    new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "last_knight_attack"))), this),
+                                                    (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 2));
+                                            if (entityiterator instanceof LivingEntity _entity && !this.level().isClientSide())
+                                                this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ROCK_BREAK.get(), 150, 0, false, false));
+                                            entityiterator.push(0, (-1), 0);
+                                        });
                                     }
                                 }
-                            });
-                        }
+                            }
+                        });
                     }
                 }
             }

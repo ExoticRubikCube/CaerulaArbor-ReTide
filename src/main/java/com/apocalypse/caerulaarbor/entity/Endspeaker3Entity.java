@@ -1,9 +1,9 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.*;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
@@ -302,10 +302,7 @@ public class Endspeaker3Entity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if (this == null)
-            return;
-        CaerulaArborModVariables.MapVariables.get(world).endspeaker_abolities = 0;
-        CaerulaArborModVariables.MapVariables.get(world).syncData(world);
+        MapVariablesHandler.resetAllEndspeakerAbilities(world);
         if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
             if ((world.getBlockState(BlockPos.containing(x, y, z))).canBeReplaced()) {
                 world.setBlock(BlockPos.containing(x, y, z), CaerulaArborModBlocks.ENDSPEAKER_NEST.get().defaultBlockState(), 3);
@@ -330,18 +327,16 @@ public class Endspeaker3Entity extends SeaMonster {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-		if (this != null) {
-			if (this instanceof Endspeaker3Entity) {
-				this.setAnimation("animation.endspeaker_3.start");
-			}
-			if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-				this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(30);
-			if (!this.level().isClientSide())
-				this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 50, 9, false, false));
-			EntityUtils.initEndspeakerAbilities(world, this);
-			EntityUtils.getEndspeakerPrefixes(world, this);
-		}
-		return retval;
+        if (this instanceof Endspeaker3Entity) {
+            this.setAnimation("animation.endspeaker_3.start");
+        }
+        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
+            this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(30);
+        if (!this.level().isClientSide())
+            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 50, 9, false, false));
+        EntityUtils.initEndspeakerAbilities(world, this);
+        EntityUtils.getEndspeakerPrefixes(world, this);
+        return retval;
 	}
 
 	@Override
@@ -396,9 +391,6 @@ public class Endspeaker3Entity extends SeaMonster {
 	public void customServerAiStep() {
 		super.customServerAiStep();
 		this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
-	}
-
-	public static void init() {
 	}
 
 	public static AttributeSupplier.Builder createAttributes() {

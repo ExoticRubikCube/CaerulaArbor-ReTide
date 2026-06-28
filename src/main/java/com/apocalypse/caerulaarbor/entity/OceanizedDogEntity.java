@@ -103,63 +103,33 @@ public class OceanizedDogEntity extends TamableAnimal implements GeoEntity {
 		this.goalSelector.addGoal(1, new OwnerHurtByTargetGoal(this) {
 			@Override
 			public boolean canUse() {
-				double x = OceanizedDogEntity.this.getX();
-				double y = OceanizedDogEntity.this.getY();
-				double z = OceanizedDogEntity.this.getZ();
-				Entity entity = OceanizedDogEntity.this;
-				Level world = OceanizedDogEntity.this.level();
 				return super.canUse() && isNotSitting();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = OceanizedDogEntity.this.getX();
-				double y = OceanizedDogEntity.this.getY();
-				double z = OceanizedDogEntity.this.getZ();
-				Entity entity = OceanizedDogEntity.this;
-				Level world = OceanizedDogEntity.this.level();
 				return super.canContinueToUse() && isNotSitting();
 			}
 		});
 		this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this) {
 			@Override
 			public boolean canUse() {
-				double x = OceanizedDogEntity.this.getX();
-				double y = OceanizedDogEntity.this.getY();
-				double z = OceanizedDogEntity.this.getZ();
-				Entity entity = OceanizedDogEntity.this;
-				Level world = OceanizedDogEntity.this.level();
 				return super.canUse() && isNotSitting();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = OceanizedDogEntity.this.getX();
-				double y = OceanizedDogEntity.this.getY();
-				double z = OceanizedDogEntity.this.getZ();
-				Entity entity = OceanizedDogEntity.this;
-				Level world = OceanizedDogEntity.this.level();
 				return super.canContinueToUse() && isNotSitting();
 			}
 		});
 		this.goalSelector.addGoal(3, new FollowOwnerGoal(this, 0.8, (float) 4, (float) 16, false) {
 			@Override
 			public boolean canUse() {
-				double x = OceanizedDogEntity.this.getX();
-				double y = OceanizedDogEntity.this.getY();
-				double z = OceanizedDogEntity.this.getZ();
-				Entity entity = OceanizedDogEntity.this;
-				Level world = OceanizedDogEntity.this.level();
 				return super.canUse() && isNotSitting();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = OceanizedDogEntity.this.getX();
-				double y = OceanizedDogEntity.this.getY();
-				double z = OceanizedDogEntity.this.getZ();
-				Entity entity = OceanizedDogEntity.this;
-				Level world = OceanizedDogEntity.this.level();
 				return super.canContinueToUse() && isNotSitting();
 			}
 		});
@@ -173,21 +143,11 @@ public class OceanizedDogEntity extends TamableAnimal implements GeoEntity {
 		this.goalSelector.addGoal(6, new RandomStrollGoal(this, 0.5) {
 			@Override
 			public boolean canUse() {
-				double x = OceanizedDogEntity.this.getX();
-				double y = OceanizedDogEntity.this.getY();
-				double z = OceanizedDogEntity.this.getZ();
-				Entity entity = OceanizedDogEntity.this;
-				Level world = OceanizedDogEntity.this.level();
 				return super.canUse() && isNotSitting();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = OceanizedDogEntity.this.getX();
-				double y = OceanizedDogEntity.this.getY();
-				double z = OceanizedDogEntity.this.getZ();
-				Entity entity = OceanizedDogEntity.this;
-				Level world = OceanizedDogEntity.this.level();
 				return super.canContinueToUse() && isNotSitting();
 			}
 		});
@@ -217,10 +177,8 @@ public class OceanizedDogEntity extends TamableAnimal implements GeoEntity {
 
 	@Override
 	public boolean hurt(DamageSource source, float amount) {
-        if (this != null) {
-            if ((Entity) this instanceof OceanizedDogEntity _datEntSetL)
-                _datEntSetL.getEntityData().set(DATA_sitting, false);
-        }
+        if ((Entity) this instanceof OceanizedDogEntity _datEntSetL)
+            _datEntSetL.getEntityData().set(DATA_sitting, false);
         if (source.is(DamageTypes.DROWN))
 			return false;
 		return super.hurt(source, amount);
@@ -287,8 +245,6 @@ public class OceanizedDogEntity extends TamableAnimal implements GeoEntity {
 		double z = this.getZ();
 		Entity entity = this;
 		Level world = this.level();
-        if (entity == null || sourceentity == null)
-            return InteractionResult.PASS;
         if ((entity instanceof TamableAnimal _tamEnt ? (Entity) _tamEnt.getOwner() : null) == sourceentity) {
             if (((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()
                     && ((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()) {
@@ -315,26 +271,24 @@ public class OceanizedDogEntity extends TamableAnimal implements GeoEntity {
 	@Override
 	public void baseTick() {
 		super.baseTick();
-        if (this != null) {
-            Entity owner = null;
-            Entity enemy = null;
-            owner = (Entity) this instanceof TamableAnimal _tamEnt ? _tamEnt.getOwner() : null;
-            enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
-            if ((Entity) this instanceof OceanizedDogEntity _datEntL2 && _datEntL2.getEntityData().get(DATA_sitting)) {
-                setShiftKeyDown(true);
-                if (!((Entity) this instanceof LivingEntity _livEnt4 && _livEnt4.hasEffect(MobEffects.MOVEMENT_SLOWDOWN))) {
-                    if (!this.level().isClientSide())
-                        this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 5, 9, false, false));
-                }
-                if ((Entity) this instanceof Mob _entity)
-                    _entity.setTarget(null);
-            } else {
-                setShiftKeyDown(false);
+        Entity owner = null;
+        Entity enemy = null;
+        owner = (Entity) this instanceof TamableAnimal _tamEnt ? _tamEnt.getOwner() : null;
+        enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+        if ((Entity) this instanceof OceanizedDogEntity _datEntL2 && _datEntL2.getEntityData().get(DATA_sitting)) {
+            setShiftKeyDown(true);
+            if (!((Entity) this instanceof LivingEntity _livEnt4 && _livEnt4.hasEffect(MobEffects.MOVEMENT_SLOWDOWN))) {
+                if (!this.level().isClientSide())
+                    this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 5, 9, false, false));
             }
-            if (enemy == owner || (enemy instanceof TamableAnimal _tamEnt ? (Entity) _tamEnt.getOwner() : null) == owner) {
-                if ((Entity) this instanceof Mob _entity)
-                    _entity.setTarget(null);
-            }
+            if ((Entity) this instanceof Mob _entity)
+                _entity.setTarget(null);
+        } else {
+            setShiftKeyDown(false);
+        }
+        if (enemy == owner || (enemy instanceof TamableAnimal _tamEnt ? (Entity) _tamEnt.getOwner() : null) == owner) {
+            if ((Entity) this instanceof Mob _entity)
+                _entity.setTarget(null);
         }
         this.refreshDimensions();
 	}

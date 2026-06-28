@@ -2,7 +2,7 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.util.EntityUtils;
+import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -51,7 +51,7 @@ public class TrailedDiamondSwordItem extends SwordItem {
         if (entity != null) {
             double dam = 0;
             dam = 70 + 14 * itemstack.getEnchantmentLevel(Enchantments.SHARPNESS);
-            EntityUtils.deductSanity(entity, dam);
+            SIHelper.causeSanityInjury(entity, dam);
             new Object() {
                 void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                     if (world instanceof ServerLevel _level)

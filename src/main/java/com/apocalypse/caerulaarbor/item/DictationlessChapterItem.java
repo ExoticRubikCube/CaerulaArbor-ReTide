@@ -1,9 +1,11 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.capability.map.MapVariables;
+import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler;
+import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler.StrategyType;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -63,14 +65,14 @@ public class DictationlessChapterItem extends Item {
         double l3 = 0;
         double l0 = 0;
         if (blockstate.getBlock() == CaerulaArborModBlocks.TIDE_OBSERVATION.get() && !world.isClientSide()) {
-            p0 = CaerulaArborModVariables.MapVariables.get(world).evo_point_grow;
-            p1 = CaerulaArborModVariables.MapVariables.get(world).evo_point_subsisting;
-            p2 = CaerulaArborModVariables.MapVariables.get(world).evo_point_breed;
-            p3 = CaerulaArborModVariables.MapVariables.get(world).evo_point_migration;
-            l0 = CaerulaArborModVariables.MapVariables.get(world).strategy_grow;
-            l1 = CaerulaArborModVariables.MapVariables.get(world).strategy_subsisting;
-            l2 = CaerulaArborModVariables.MapVariables.get(world).strategy_breed;
-            l3 = CaerulaArborModVariables.MapVariables.get(world).strategy_migration;
+            p0 = MapVariables.get(world).evo_point_grow;
+            p1 = MapVariables.get(world).evo_point_subsisting;
+            p2 = MapVariables.get(world).evo_point_breed;
+            p3 = MapVariables.get(world).evo_point_migration;
+            l0 = MapVariables.get(world).strategy_grow;
+            l1 = MapVariables.get(world).strategy_subsisting;
+            l2 = MapVariables.get(world).strategy_breed;
+            l3 = MapVariables.get(world).strategy_migration;
             if (l0 + l1 + l2 + l3 >= 16) {
                 if (entity instanceof Player _player && !_player.level().isClientSide())
                     _player.displayClientMessage(Component.literal((Component.translatable("item.caerula_arbor.dictationless_chapter.late").getString())), true);
@@ -101,29 +103,25 @@ public class DictationlessChapterItem extends Item {
                 if (world instanceof Level _level) {
                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "grow1")), SoundSource.PLAYERS, 1, 1);
                 }
-                CaerulaArborModVariables.MapVariables.get(world).evo_point_grow = 0;
-                CaerulaArborModVariables.MapVariables.get(world).syncData(world);
+                MapVariablesHandler.setEvoPoint(world, StrategyType.GROW, 0);
                 stra = Component.translatable("gui.caerula_arbor.evo_tree.label_sreategy_grow").getString();
             } else if (target == 1) {
                 if (world instanceof Level _level) {
                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "subsisting1")), SoundSource.PLAYERS, 1, 1);
                 }
-                CaerulaArborModVariables.MapVariables.get(world).evo_point_subsisting = 0;
-                CaerulaArborModVariables.MapVariables.get(world).syncData(world);
+                MapVariablesHandler.setEvoPoint(world, StrategyType.SUBSISTING, 0);
                 stra = Component.translatable("gui.caerula_arbor.evo_tree.label_strategy_subsisting").getString();
             } else if (target == 2) {
                 if (world instanceof Level _level) {
                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "breed1")), SoundSource.PLAYERS, 1, 1);
                 }
-                CaerulaArborModVariables.MapVariables.get(world).evo_point_breed = 0;
-                CaerulaArborModVariables.MapVariables.get(world).syncData(world);
+                MapVariablesHandler.setEvoPoint(world, StrategyType.BREED, 0);
                 stra = Component.translatable("gui.caerula_arbor.evo_tree.label_strategy_breed").getString();
             } else if (target == 3) {
                 if (world instanceof Level _level) {
                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "migration1")), SoundSource.PLAYERS, 1, 1);
                 }
-                CaerulaArborModVariables.MapVariables.get(world).evo_point_migration = 0;
-                CaerulaArborModVariables.MapVariables.get(world).syncData(world);
+                MapVariablesHandler.setEvoPoint(world, StrategyType.MIGRATION, 0);
                 stra = Component.translatable("gui.caerula_arbor.evo_tree.label_strategy_migration").getString();
             }
             if (world instanceof ServerLevel _level)

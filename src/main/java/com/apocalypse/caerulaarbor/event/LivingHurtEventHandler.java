@@ -1,10 +1,14 @@
 package com.apocalypse.caerulaarbor.event;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.api.event.SanityEvent;
+import com.apocalypse.caerulaarbor.capability.ModCapabilities;
+import com.apocalypse.caerulaarbor.capability.map.MapVariables;
+import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
+import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
 import com.apocalypse.caerulaarbor.entity.*;
 import com.apocalypse.caerulaarbor.init.*;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import com.apocalypse.caerulaarbor.util.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -452,7 +456,7 @@ public class LivingHurtEventHandler {
         boolean valid = false;
         String regName = "";
 
-        if (entity instanceof Player && (entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).relic_TREATY) {
+        if (entity instanceof Player && (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_TREATY) {
             if (sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation("forge:nether_mobs")))) {
                 valid = true;
             } else {
@@ -531,12 +535,12 @@ public class LivingHurtEventHandler {
 
         if (damagesource == null || entity == null || sourceentity == null) return;
 
-        if (CaerulaArborModVariables.MapVariables.get(world).strategy_grow >= 3) {
+        if (MapVariables.get(world).strategy_grow >= 3) {
             if (sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))
                     && !damagesource.is(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_magic")))) {
                 if (entity.isAlive() && sourceentity.isAlive()) {
                     entity.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_magic")))),
-                            (float) (amount * 0.2 * (CaerulaArborModVariables.MapVariables.get(world).strategy_grow - 2)));
+                            (float) (amount * 0.2 * (MapVariables.get(world).strategy_grow - 2)));
                 }
             }
         }
@@ -582,7 +586,7 @@ public class LivingHurtEventHandler {
         if (sourceentity instanceof Player && damagesource.is(DamageTypes.PLAYER_ATTACK)) {
             ItemStack item_temp = (sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).copy();
             if (item_temp.getItem() instanceof HoeItem || item_temp.is(ItemTags.create(new ResourceLocation("minecraft:hoes")))) {
-                if ((sourceentity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).relic_hand_FERTILITY) {
+                if ((sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_FERTILITY) {
                     entity.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hand_of_choker"))), sourceentity),
                             (float) ((entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) * 0.075));
                     if (world instanceof ServerLevel _level)
@@ -590,7 +594,7 @@ public class LivingHurtEventHandler {
                 }
             }
             if (item_temp.getItem() instanceof SwordItem || item_temp.is(ItemTags.create(new ResourceLocation("minecraft:swords")))) {
-                if ((sourceentity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).relic_hand_SWORD) {
+                if ((sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_SWORD) {
                     if (!(entity instanceof LivingEntity _livEnt11 && _livEnt11.hasEffect(CaerulaArborModMobEffects.ROCK_BREAK.get()))) {
                         if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
                             _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ROCK_BREAK.get(), 120, 1));
@@ -612,7 +616,7 @@ public class LivingHurtEventHandler {
         if (damagesource == null || entity == null || sourceentity == null) return;
 
         if (entity instanceof Player && entity.tickCount - (entity instanceof LivingEntity _livEnt ? _livEnt.getLastHurtByMobTimestamp() : 0) >= 5) {
-            if ((entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).relic_hand_THORNS) {
+            if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_THORNS) {
                 if (!entity.isShiftKeyDown() && sourceentity.isAlive() && entity.isAlive()) {
                     if (!(sourceentity instanceof Player)) {
                         if (!damagesource.is(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hand_spike"))) && !damagesource.is(DamageTypes.THORNS)
@@ -768,7 +772,9 @@ public class LivingHurtEventHandler {
         Entity arrow = damagesource.getDirectEntity();
         if (arrow instanceof Arrow) {
             if (arrow.getPersistentData().getBoolean("ComplexChitin")) {
-                EntityUtils.deductSanity(entity, amount * 4);
+                if (entity instanceof LivingEntity target) {
+                    SIHelper.causeSanityInjury(target, amount * 4, SanityEvent.Hurt.Type.ENTITY);
+                }
                 for (int index0 = 0; index0 < 3; index0++) {
                     double yaw = Mth.nextInt(RandomSource.create(), -30, 30);
                     double sine = Math.sin(Math.toRadians(yaw));
@@ -838,7 +844,13 @@ public class LivingHurtEventHandler {
                 if (lll > 4) {
                     if (world instanceof ServerLevel _level)
                         _level.sendParticles(CaerulaArborModParticleTypes.MOIST_BOOM.get(), x, (y + 0.5), z, 2, 0.1, 0.1, 0.1, 0.1);
-                    EntityUtils.deductSanity(entity, amount * 5);
+                    if (entity instanceof LivingEntity target) {
+                        if (entity1 instanceof LivingEntity attacker) {
+                            SIHelper.causeSanityInjury(target, attacker, amount * 5, SanityEvent.Hurt.Type.ENTITY);
+                        } else {
+                            SIHelper.causeSanityInjury(target, amount * 5, SanityEvent.Hurt.Type.ENTITY);
+                        }
+                    }
                     EntityUtils.giveLessArmor(entity, 16);
                 }
             }
@@ -859,7 +871,9 @@ public class LivingHurtEventHandler {
         ItemStack mainHandItem = (sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).copy();
         if (EnchantmentHelper.getItemEnchantmentLevel(CaerulaArborModEnchantments.SANITY_REAPER.get(), mainHandItem) != 0) {
             double lvl = mainHandItem.getEnchantmentLevel(CaerulaArborModEnchantments.SANITY_REAPER.get());
-            EntityUtils.deductSanity(entity, amount * 2 * lvl);
+            if (entity instanceof LivingEntity target && sourceentity instanceof LivingEntity attacker) {
+                SIHelper.causeSanityInjury(target, attacker, amount * 2 * lvl, SanityEvent.Hurt.Type.ENTITY);
+            }
             if (world instanceof ServerLevel _level)
                 _level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, (y + 1 + entity.getBbHeight() * 0.5), z, (int) Math.min(8 * lvl, 40), 1, 1, 1.2, 0.1);
         }
@@ -1036,7 +1050,7 @@ public class LivingHurtEventHandler {
 
         boolean isIndirect = damagesource.isIndirect();
         double rate = 1;
-        double e = (player.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).PEVO_NODE_less_damage;
+        double e = (player.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).PEVO_NODE_less_damage;
         double finalAmount = amount;
 
         if (PlayerStateUtils.isNexusExpoShieldSelected(player)) {
@@ -1105,7 +1119,7 @@ public class LivingHurtEventHandler {
             }
         }
 
-        e = (attacker.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).PEVO_NODE_less_armor;
+        e = (attacker.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).PEVO_NODE_less_armor;
 
         if (e > 0) {
             double lll = 0;

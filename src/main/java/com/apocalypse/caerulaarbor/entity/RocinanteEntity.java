@@ -186,7 +186,6 @@ public class RocinanteEntity extends Animal implements GeoEntity {
 
 	@Override
 	public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
-		ItemStack itemstack = sourceentity.getItemInHand(hand);
 		InteractionResult retval = InteractionResult.sidedSuccess(this.level().isClientSide());
 		super.mobInteract(sourceentity, hand);
 		sourceentity.startRiding(this);
@@ -196,22 +195,20 @@ public class RocinanteEntity extends Animal implements GeoEntity {
 	@Override
 	public void baseTick() {
 		super.baseTick();
-        if (this != null) {
-            Entity passanger = null;
-            double yRot = 0;
-            if (tickCount % 5 == 0) {
-                passanger = getFirstPassenger();
-                if (passanger != null) {
-                    yRot = (-1) * passanger.getXRot();
-                    if (EntityUtils.getSpeed(this) > 0) {
-                        if (yRot > 15 || yRot < -15) {
-                            setDeltaMovement(new Vec3((getDeltaMovement().x()),
-                                    ((this.getAttributes().hasAttribute(Attributes.MOVEMENT_SPEED) ? this.getAttribute(Attributes.MOVEMENT_SPEED).getValue() : 0)
-                                            * Math.sin(Math.toRadians(yRot))),
-                                    (getDeltaMovement().z())));
-                        } else {
-                            setDeltaMovement(new Vec3((getDeltaMovement().x()), 0, (getDeltaMovement().z())));
-                        }
+        Entity passanger = null;
+        double yRot = 0;
+        if (tickCount % 5 == 0) {
+            passanger = getFirstPassenger();
+            if (passanger != null) {
+                yRot = (-1) * passanger.getXRot();
+                if (EntityUtils.getSpeed(this) > 0) {
+                    if (yRot > 15 || yRot < -15) {
+                        setDeltaMovement(new Vec3((getDeltaMovement().x()),
+                                ((this.getAttributes().hasAttribute(Attributes.MOVEMENT_SPEED) ? this.getAttribute(Attributes.MOVEMENT_SPEED).getValue() : 0)
+                                        * Math.sin(Math.toRadians(yRot))),
+                                (getDeltaMovement().z())));
+                    } else {
+                        setDeltaMovement(new Vec3((getDeltaMovement().x()), 0, (getDeltaMovement().z())));
                     }
                 }
             }

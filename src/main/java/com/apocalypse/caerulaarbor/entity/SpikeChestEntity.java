@@ -1,7 +1,6 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
@@ -44,9 +43,6 @@ public class SpikeChestEntity extends SeaMonster {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(SpikeChestEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(SpikeChestEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(SpikeChestEntity.class, EntityDataSerializers.STRING);
-	private boolean swinging;
-	private boolean lastloop;
-	private long lastSwing;
 	public String animationprocedure = "empty";
 
 	public SpikeChestEntity(PlayMessages.SpawnEntity packet, Level world) {

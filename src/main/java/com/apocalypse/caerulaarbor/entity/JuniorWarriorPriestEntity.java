@@ -150,10 +150,10 @@ public class JuniorWarriorPriestEntity extends Animal implements GeoEntity {
         double y = this.getY();
         double z = this.getZ();
         Entity sourceentity = source.getEntity();
-        if (this != null && sourceentity != null) {
+        if (sourceentity != null) {
             double dist = 0;
             if (this.isAlive() && sourceentity.isAlive()) {
-                if ((sourceentity != null ? distanceTo(sourceentity) : -1) <= 2.4 && ((Entity) this instanceof JuniorWarriorPriestEntity _datEntI ? _datEntI.getEntityData().get(DATA_skill_p) : 0) <= 0) {
+                if (distanceTo(sourceentity) <= 2.4 && ((Entity) this instanceof JuniorWarriorPriestEntity _datEntI ? _datEntI.getEntityData().get(DATA_skill_p) : 0) <= 0) {
                     if (this instanceof JuniorWarriorPriestEntity) {
                         this.setAnimation("animation.warriorpriest.shieldattack");
                     }
@@ -196,14 +196,12 @@ public class JuniorWarriorPriestEntity extends Animal implements GeoEntity {
 	@Override
 	public void baseTick() {
 		super.baseTick();
-        if (this != null) {
-            double sklp1 = 0;
-            if (this.isAlive()) {
-                sklp1 = (Entity) this instanceof JuniorWarriorPriestEntity _datEntI ? _datEntI.getEntityData().get(DATA_skill_p) : 0;
-                if (sklp1 > 0) {
-                    if ((Entity) this instanceof JuniorWarriorPriestEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_skill_p, (int) (sklp1 - 1));
-                }
+        double sklp1 = 0;
+        if (this.isAlive()) {
+            sklp1 = (Entity) this instanceof JuniorWarriorPriestEntity _datEntI ? _datEntI.getEntityData().get(DATA_skill_p) : 0;
+            if (sklp1 > 0) {
+                if ((Entity) this instanceof JuniorWarriorPriestEntity _datEntSetI)
+                    _datEntSetI.getEntityData().set(DATA_skill_p, (int) (sklp1 - 1));
             }
         }
         this.refreshDimensions();

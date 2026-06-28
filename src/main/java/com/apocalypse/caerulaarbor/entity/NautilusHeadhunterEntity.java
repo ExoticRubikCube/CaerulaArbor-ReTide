@@ -1,5 +1,7 @@
 package com.apocalypse.caerulaarbor.entity;
 
+import com.apocalypse.caerulaarbor.api.event.SanityEvent;
+import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
@@ -64,9 +66,6 @@ public class NautilusHeadhunterEntity extends Animal implements GeoEntity {
 	public static final EntityDataAccessor<Integer> DATA_DRY_TICK = SynchedEntityData.defineId(NautilusHeadhunterEntity.class, EntityDataSerializers.INT);
 	public static final EntityDataAccessor<Integer> DATA_BONUS = SynchedEntityData.defineId(NautilusHeadhunterEntity.class, EntityDataSerializers.INT);
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
-	private boolean swinging;
-	private boolean lastloop;
-	private long lastSwing;
 	public String animationprocedure = "empty";
 
 	public NautilusHeadhunterEntity(PlayMessages.SpawnEntity packet, Level world) {
@@ -200,9 +199,7 @@ public class NautilusHeadhunterEntity extends Animal implements GeoEntity {
 
 	@Override
 	public boolean hurt(DamageSource source, float amount) {
-        if (this != null) {
-            ((Entity) this).stopRiding();
-        }
+        ((Entity) this).stopRiding();
         if (source.is(DamageTypes.DROWN))
 			return false;
 		return super.hurt(source, amount);
@@ -230,8 +227,6 @@ public class NautilusHeadhunterEntity extends Animal implements GeoEntity {
 	@Override
 	public void awardKillScore(Entity entity, int score, DamageSource damageSource) {
 		super.awardKillScore(entity, score, damageSource);
-        if (this == null)
-            return;
         double bonus = 0;
         bonus = (Entity) this instanceof NautilusHeadhunterEntity _datEntI ? _datEntI.getEntityData().get(DATA_BONUS) : 0;
         if (bonus < 10) {
@@ -250,48 +245,48 @@ public class NautilusHeadhunterEntity extends Animal implements GeoEntity {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if (this != null) {
-            double dryTick = 0;
-            boolean isMounting = false;
-            Entity enemy = null;
-            Entity vehicle = null;
-            if (this.isAlive()) {
-                dryTick = (Entity) this instanceof NautilusHeadhunterEntity _datEntI ? _datEntI.getEntityData().get(DATA_DRY_TICK) : 0;
-                enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
-                isMounting = isPassenger();
-                if (isInWaterRainOrBubble() || isMounting) {
-                    if ((Entity) this instanceof NautilusHeadhunterEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_DRY_TICK, 0);
-                } else {
-                    if ((Entity) this instanceof NautilusHeadhunterEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_DRY_TICK, (int) (dryTick + 1));
+        double dryTick = 0;
+        boolean isMounting = false;
+        Entity enemy = null;
+        Entity vehicle = null;
+        if (this.isAlive()) {
+            dryTick = (Entity) this instanceof NautilusHeadhunterEntity _datEntI ? _datEntI.getEntityData().get(DATA_DRY_TICK) : 0;
+            enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+            isMounting = isPassenger();
+            if (isInWaterRainOrBubble() || isMounting) {
+                if ((Entity) this instanceof NautilusHeadhunterEntity _datEntSetI)
+                    _datEntSetI.getEntityData().set(DATA_DRY_TICK, 0);
+            } else {
+                if ((Entity) this instanceof NautilusHeadhunterEntity _datEntSetI)
+                    _datEntSetI.getEntityData().set(DATA_DRY_TICK, (int) (dryTick + 1));
+            }
+            if (tickCount % 20 == 5) {
+                if (dryTick > 300) {
+                    ((Entity) this).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.DRY_OUT)), (float) (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.05));
                 }
-                if (tickCount % 20 == 5) {
-                    if (dryTick > 300) {
-                        ((Entity) this).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.DRY_OUT)), (float) (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.05));
+                if (isMounting) {
+                    vehicle = getVehicle();
+                    if (!(vehicle == null) && vehicle.isAlive()) {
+                        if (!world.isClientSide()) {
+                            if (world instanceof Level _level) {
+                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.dolphin.eat")), SoundSource.HOSTILE, 1, 1);
+                            }
+                        }
+                        vehicle.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.IN_WALL), this),
+                                (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
+                        if (vehicle instanceof LivingEntity target) {
+                            SIHelper.causeSanityInjury(target, this, 50, SanityEvent.Hurt.Type.ENTITY);
+                        }
                     }
-                    if (isMounting) {
-                        vehicle = getVehicle();
-                        if (!(vehicle == null) && vehicle.isAlive()) {
+                } else {
+                    if (!(enemy == null) && enemy.isAlive() && !(enemy instanceof Player)) {
+                        if (distanceTo(enemy) <= 2 && !enemy.isVehicle()) {
                             if (!world.isClientSide()) {
                                 if (world instanceof Level _level) {
-                                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.dolphin.eat")), SoundSource.HOSTILE, 1, 1);
+                                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.strider.saddle")), SoundSource.HOSTILE, 1, 1);
                                 }
                             }
-                            vehicle.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.IN_WALL), this),
-                                    (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
-                            EntityUtils.deductSanity(vehicle, 50);
-                        }
-                    } else {
-                        if (!(enemy == null) && enemy.isAlive() && !(enemy instanceof Player)) {
-                            if ((enemy != null ? distanceTo(enemy) : -1) <= 2 && !enemy.isVehicle()) {
-                                if (!world.isClientSide()) {
-                                    if (world instanceof Level _level) {
-                                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.strider.saddle")), SoundSource.HOSTILE, 1, 1);
-                                    }
-                                }
-                                startRiding(enemy);
-                            }
+                            startRiding(enemy);
                         }
                     }
                 }

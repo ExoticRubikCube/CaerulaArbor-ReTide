@@ -1,7 +1,8 @@
 
 package com.apocalypse.caerulaarbor.item;
 
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
+import com.apocalypse.caerulaarbor.capability.ModCapabilities;
+import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -43,7 +44,7 @@ public class SurvivorContractItem extends Item {
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
         if (entity != null) {
-            if ((((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).relic_SURVIVOR < 0) {
+            if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_SURVIVOR < 0) {
                 if ((LevelAccessor) world instanceof Level _level) {
                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.beacon.activate")), SoundSource.NEUTRAL, (float) 3.2, 1);
                 }
@@ -53,7 +54,7 @@ public class SurvivorContractItem extends Item {
                     Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);
                 {
                     double _setval = 0;
-                    ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                    ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                         capability.relic_SURVIVOR = _setval;
                         capability.syncPlayerVariables(entity);
                     });

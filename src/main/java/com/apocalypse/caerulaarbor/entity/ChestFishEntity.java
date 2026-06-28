@@ -35,7 +35,6 @@ import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -116,21 +115,13 @@ public class ChestFishEntity extends SeaMonster {
 
 			@Override
 			public boolean canUse() {
-				double x = ChestFishEntity.this.getX();
-				double y = ChestFishEntity.this.getY();
-				double z = ChestFishEntity.this.getZ();
 				Entity entity = ChestFishEntity.this;
-				Level world = ChestFishEntity.this.level();
 				return super.canUse() && EntityPredicateUtils.isNotShiftKeyDown(entity);
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = ChestFishEntity.this.getX();
-				double y = ChestFishEntity.this.getY();
-				double z = ChestFishEntity.this.getZ();
 				Entity entity = ChestFishEntity.this;
-				Level world = ChestFishEntity.this.level();
 				return super.canContinueToUse() && EntityPredicateUtils.isNotShiftKeyDown(entity);
 			}
 
@@ -138,42 +129,26 @@ public class ChestFishEntity extends SeaMonster {
 		this.goalSelector.addGoal(3, new RandomStrollGoal(this, 1) {
 			@Override
 			public boolean canUse() {
-				double x = ChestFishEntity.this.getX();
-				double y = ChestFishEntity.this.getY();
-				double z = ChestFishEntity.this.getZ();
 				Entity entity = ChestFishEntity.this;
-				Level world = ChestFishEntity.this.level();
 				return super.canUse() && EntityPredicateUtils.isNotShiftKeyDown(entity);
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = ChestFishEntity.this.getX();
-				double y = ChestFishEntity.this.getY();
-				double z = ChestFishEntity.this.getZ();
 				Entity entity = ChestFishEntity.this;
-				Level world = ChestFishEntity.this.level();
 				return super.canContinueToUse() && EntityPredicateUtils.isNotShiftKeyDown(entity);
 			}
 		});
 		this.goalSelector.addGoal(4, new RandomLookAroundGoal(this) {
 			@Override
 			public boolean canUse() {
-				double x = ChestFishEntity.this.getX();
-				double y = ChestFishEntity.this.getY();
-				double z = ChestFishEntity.this.getZ();
 				Entity entity = ChestFishEntity.this;
-				Level world = ChestFishEntity.this.level();
 				return super.canUse() && EntityPredicateUtils.isNotShiftKeyDown(entity);
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = ChestFishEntity.this.getX();
-				double y = ChestFishEntity.this.getY();
-				double z = ChestFishEntity.this.getZ();
 				Entity entity = ChestFishEntity.this;
-				Level world = ChestFishEntity.this.level();
 				return super.canContinueToUse() && EntityPredicateUtils.isNotShiftKeyDown(entity);
 			}
 		});
@@ -243,8 +218,6 @@ public class ChestFishEntity extends SeaMonster {
 
 	@Override
 	public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
-		ItemStack itemstack = sourceentity.getItemInHand(hand);
-		InteractionResult retval = InteractionResult.sidedSuccess(this.level().isClientSide());
 		super.mobInteract(sourceentity, hand);
 		double x = this.getX();
 		double y = this.getY();
@@ -257,14 +230,12 @@ public class ChestFishEntity extends SeaMonster {
 	@Override
 	public void baseTick() {
 		super.baseTick();
-        if (this != null) {
-            if (!((Entity) this instanceof ChestFishEntity _datEntL0 && _datEntL0.getEntityData().get(DATA_release))) {
-                setShiftKeyDown(true);
-                if (!this.level().isClientSide())
-                    this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, 8, false, false));
-            } else {
-                setShiftKeyDown(false);
-            }
+        if (!((Entity) this instanceof ChestFishEntity _datEntL0 && _datEntL0.getEntityData().get(DATA_release))) {
+            setShiftKeyDown(true);
+            if (!this.level().isClientSide())
+                this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, 8, false, false));
+        } else {
+            setShiftKeyDown(false);
         }
         this.refreshDimensions();
 	}
@@ -311,7 +282,6 @@ public class ChestFishEntity extends SeaMonster {
 	private PlayState attackingPredicate(AnimationState event) {
 		double d1 = this.getX() - this.xOld;
 		double d0 = this.getZ() - this.zOld;
-		float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
 		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();

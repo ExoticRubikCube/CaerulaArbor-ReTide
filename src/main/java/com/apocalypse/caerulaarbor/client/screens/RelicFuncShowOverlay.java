@@ -1,9 +1,10 @@
 package com.apocalypse.caerulaarbor.client.screens;
 
+import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
+import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import net.minecraft.world.entity.Entity;
 
 import net.minecraft.world.entity.LivingEntity;
@@ -38,19 +39,19 @@ public class RelicFuncShowOverlay {
 		}
         boolean result2 = false;
         if (entity != null) {
-            result2 = !(((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).kingShowPtc;
+            result2 = !(((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).kingShowPtc;
         }
         if (result2) {
 
             double result = 0;
             if (entity != null) {
-                result = (((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).player_king_suit;
+                result = (((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_king_suit;
             }
             event.getGuiGraphics().blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/icon_king.png"), 6, 8, Mth.clamp((int) result * 16, 0, 32), 0, 16, 16, 48, 16);
 
             double result3 = 0;
             if (entity != null) {
-                result3 = (((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).player_demon_suit;
+                result3 = (((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_demon_suit;
             }
             event.getGuiGraphics().blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/icon_artifi.png"), 22, 8, Mth.clamp((int) result3 * 16, 0, 32), 0, 16, 16, 48, 16);
 

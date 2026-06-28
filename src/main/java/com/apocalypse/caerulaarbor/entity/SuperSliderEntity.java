@@ -2,6 +2,7 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
+import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
@@ -109,13 +110,12 @@ public class SuperSliderEntity extends SeaMonster {
 				return 4;
 			}
 		});
-		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal(this, Player.class, false, false) {
+		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Player.class, false, false) {
 			@Override
 			public boolean canUse() {
 				double x = SuperSliderEntity.this.getX();
 				double y = SuperSliderEntity.this.getY();
 				double z = SuperSliderEntity.this.getZ();
-				Entity entity = SuperSliderEntity.this;
 				Level world = SuperSliderEntity.this.level();
 				return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -125,7 +125,6 @@ public class SuperSliderEntity extends SeaMonster {
 				double x = SuperSliderEntity.this.getX();
 				double y = SuperSliderEntity.this.getY();
 				double z = SuperSliderEntity.this.getZ();
-				Entity entity = SuperSliderEntity.this;
 				Level world = SuperSliderEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -188,7 +187,9 @@ public class SuperSliderEntity extends SeaMonster {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-		EntityUtils.initSliderSanity(this);
+		if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get())) {
+			this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(10);
+		}
 		return retval;
 	}
 

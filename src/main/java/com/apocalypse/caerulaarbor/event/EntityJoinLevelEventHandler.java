@@ -1,11 +1,11 @@
 package com.apocalypse.caerulaarbor.event;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModGameRules;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
@@ -108,8 +108,8 @@ public class EntityJoinLevelEventHandler {
                             .setBaseValue(((entity instanceof LivingEntity _livingEntity3 && _livingEntity3.getAttributes().hasAttribute(Attributes.MOVEMENT_SPEED) ? _livingEntity3.getAttribute(Attributes.MOVEMENT_SPEED).getBaseValue() : 0) * 10));
             }
             if ((entity instanceof LivingEntity _livingEntity5 && _livingEntity5.getAttributes().hasAttribute(CaerulaArborModAttributes.EVOLVED.get()) ? _livingEntity5.getAttribute(CaerulaArborModAttributes.EVOLVED.get()).getBaseValue() : 0) == 0) {
-                health_index = 1 + 0.3 * CaerulaArborModVariables.MapVariables.get(world).strategy_subsisting;
-                attack_index = 1 + 0.25 * CaerulaArborModVariables.MapVariables.get(world).strategy_grow;
+                health_index = 1 + 0.3 * MapVariables.get(world).strategy_subsisting;
+                attack_index = 1 + 0.25 * MapVariables.get(world).strategy_grow;
                 armor_index = 1;
                 n = Math.min((world.getLevelData().getGameRules().getInt(CaerulaArborModGameRules.SURGING_WAVES)), 18);
                 if (n > 0) {
@@ -154,16 +154,16 @@ public class EntityJoinLevelEventHandler {
                 if (entity instanceof LivingEntity _livingEntity22 && _livingEntity22.getAttributes().hasAttribute(Attributes.ARMOR))
                     _livingEntity22.getAttribute(Attributes.ARMOR)
                             .setBaseValue((((entity instanceof LivingEntity _livingEntity21 && _livingEntity21.getAttributes().hasAttribute(Attributes.ARMOR) ? _livingEntity21.getAttribute(Attributes.ARMOR).getBaseValue() : 0)
-                                    + 2 * CaerulaArborModVariables.MapVariables.get(world).strategy_subsisting) * armor_index));
+                                    + 2 * MapVariables.get(world).strategy_subsisting) * armor_index));
                 if (entity instanceof LivingEntity _livingEntity24 && _livingEntity24.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()))
                     _livingEntity24.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get())
                             .setBaseValue((((entity instanceof LivingEntity _livingEntity23 && _livingEntity23.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get())
                                     ? _livingEntity23.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).getBaseValue()
-                                    : 0) + 1 * CaerulaArborModVariables.MapVariables.get(world).strategy_subsisting) * armor_index));
+                                    : 0) + 1 * MapVariables.get(world).strategy_subsisting) * armor_index));
                 if (entity instanceof LivingEntity _livingEntity26 && _livingEntity26.getAttributes().hasAttribute(Attributes.ARMOR_TOUGHNESS))
                     _livingEntity26.getAttribute(Attributes.ARMOR_TOUGHNESS)
                             .setBaseValue((((entity instanceof LivingEntity _livingEntity25 && _livingEntity25.getAttributes().hasAttribute(Attributes.ARMOR_TOUGHNESS) ? _livingEntity25.getAttribute(Attributes.ARMOR_TOUGHNESS).getBaseValue() : 0)
-                                    + 2 * CaerulaArborModVariables.MapVariables.get(world).strategy_subsisting) * armor_index));
+                                    + 2 * MapVariables.get(world).strategy_subsisting) * armor_index));
                 if (entity instanceof LivingEntity _livingEntity28 && _livingEntity28.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
                     _livingEntity28.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
                             ((entity instanceof LivingEntity _livingEntity27 && _livingEntity27.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity27.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) * attack_index));
@@ -174,12 +174,12 @@ public class EntityJoinLevelEventHandler {
                 final LevelAccessor finalWorld = world;
                 CaerulaArborMod.queueServerWork(10, () -> {
                     if (!(finalEntity instanceof LivingEntity _livEnt29 && _livEnt29.hasEffect(CaerulaArborModMobEffects.POWER_OF_ANCHOR.get()))) {
-                        if (CaerulaArborModVariables.MapVariables.get(finalWorld).strategy_breed > 0) {
+                        if (MapVariables.get(finalWorld).strategy_breed > 0) {
                             if (!finalEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "bossoffspring")))
                                     && !finalEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanspawn")))
                                     && !finalEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanpet")))) {
                                 if (EntityUtils.getFellowAround(finalWorld, finalX, finalY, finalZ, finalEntity) < 5) {
-                                    if (Math.random() < 0.05 + 0.05 * CaerulaArborModVariables.MapVariables.get(finalWorld).strategy_breed) {
+                                    if (Math.random() < 0.05 + 0.05 * MapVariables.get(finalWorld).strategy_breed) {
                                         Entity _ent = finalEntity;
                                         if (!_ent.level().isClientSide() && _ent.getServer() != null) {
                                             _ent.getServer().getCommands().performPrefixedCommand(
@@ -189,8 +189,8 @@ public class EntityJoinLevelEventHandler {
                                         }
                                     }
                                     if (EntityUtils.getFellowAround(finalWorld, finalX, finalY, finalZ, finalEntity) < 5) {
-                                        if (CaerulaArborModVariables.MapVariables.get(finalWorld).strategy_breed >= 3) {
-                                            if (Math.random() < 0.05 * (CaerulaArborModVariables.MapVariables.get(finalWorld).strategy_breed - 2)) {
+                                        if (MapVariables.get(finalWorld).strategy_breed >= 3) {
+                                            if (Math.random() < 0.05 * (MapVariables.get(finalWorld).strategy_breed - 2)) {
                                                 Entity _ent = finalEntity;
                                                 if (!_ent.level().isClientSide() && _ent.getServer() != null) {
                                                     _ent.getServer().getCommands().performPrefixedCommand(
@@ -219,27 +219,27 @@ public class EntityJoinLevelEventHandler {
                 if (entity instanceof LivingEntity _livingEntity48 && _livingEntity48.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
                     _livingEntity48.getAttribute(Attributes.MAX_HEALTH)
                             .setBaseValue(((entity instanceof LivingEntity _livingEntity47 && _livingEntity47.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? _livingEntity47.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0)
-                                    * (1 + 0.3 * CaerulaArborModVariables.MapVariables.get(world).strategy_subsisting)));
+                                    * (1 + 0.3 * MapVariables.get(world).strategy_subsisting)));
                 if (entity instanceof LivingEntity _entity)
                     _entity.setHealth(
                             (float) ((entity instanceof LivingEntity _livingEntity49 && _livingEntity49.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? _livingEntity49.getAttribute(Attributes.MAX_HEALTH).getValue() : 0) * percentage));
                 if (entity instanceof LivingEntity _livingEntity52 && _livingEntity52.getAttributes().hasAttribute(Attributes.ARMOR))
                     _livingEntity52.getAttribute(Attributes.ARMOR)
                             .setBaseValue(((entity instanceof LivingEntity _livingEntity51 && _livingEntity51.getAttributes().hasAttribute(Attributes.ARMOR) ? _livingEntity51.getAttribute(Attributes.ARMOR).getBaseValue() : 0)
-                                    + 2 * CaerulaArborModVariables.MapVariables.get(world).strategy_subsisting));
+                                    + 2 * MapVariables.get(world).strategy_subsisting));
                 if (entity instanceof LivingEntity _livingEntity54 && _livingEntity54.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()))
                     _livingEntity54.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get())
                             .setBaseValue(((entity instanceof LivingEntity _livingEntity53 && _livingEntity53.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get())
                                     ? _livingEntity53.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).getBaseValue()
-                                    : 0) + 2 * CaerulaArborModVariables.MapVariables.get(world).strategy_subsisting));
+                                    : 0) + 2 * MapVariables.get(world).strategy_subsisting));
                 if (entity instanceof LivingEntity _livingEntity56 && _livingEntity56.getAttributes().hasAttribute(Attributes.ARMOR_TOUGHNESS))
                     _livingEntity56.getAttribute(Attributes.ARMOR_TOUGHNESS)
                             .setBaseValue(((entity instanceof LivingEntity _livingEntity55 && _livingEntity55.getAttributes().hasAttribute(Attributes.ARMOR_TOUGHNESS) ? _livingEntity55.getAttribute(Attributes.ARMOR_TOUGHNESS).getBaseValue() : 0)
-                                    + 2 * CaerulaArborModVariables.MapVariables.get(world).strategy_subsisting));
+                                    + 2 * MapVariables.get(world).strategy_subsisting));
                 if (entity instanceof LivingEntity _livingEntity58 && _livingEntity58.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
                     _livingEntity58.getAttribute(Attributes.ATTACK_DAMAGE)
                             .setBaseValue(((entity instanceof LivingEntity _livingEntity57 && _livingEntity57.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity57.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0)
-                                    * (1 + 0.25 * CaerulaArborModVariables.MapVariables.get(world).strategy_grow)));
+                                    * (1 + 0.25 * MapVariables.get(world).strategy_grow)));
                 if (entity instanceof LivingEntity _livingEntity59 && _livingEntity59.getAttributes().hasAttribute(CaerulaArborModAttributes.EVOLVED.get()))
                     _livingEntity59.getAttribute(CaerulaArborModAttributes.EVOLVED.get()).setBaseValue(1);
             }

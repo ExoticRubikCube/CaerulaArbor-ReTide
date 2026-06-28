@@ -1,11 +1,11 @@
 package com.apocalypse.caerulaarbor.entity;
 
+import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -230,7 +230,7 @@ public class PredatorAbyssalEntity extends SeaMonster {
             }
             if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MISSRATE.get()))
                 this.getAttribute(CaerulaArborModAttributes.MISSRATE.get()).setBaseValue(80);
-            if (CaerulaArborModVariables.MapVariables.get(world).strategy_subsisting >= 4) {
+            if (MapVariables.get(world).strategy_subsisting >= 4) {
                 if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MISSRATE.get()))
                     this.getAttribute(CaerulaArborModAttributes.MISSRATE.get()).setBaseValue(90);
             }

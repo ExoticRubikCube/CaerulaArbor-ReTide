@@ -142,118 +142,67 @@ public class DepositerProkaryoteEntity extends SeaMonster {
 				return 2.25;
 			}
 		});
-		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal(this, Pufferfish.class, true, false) {
+		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Pufferfish.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = DepositerProkaryoteEntity.this.getX();
-				double y = DepositerProkaryoteEntity.this.getY();
-				double z = DepositerProkaryoteEntity.this.getZ();
-				Entity entity = DepositerProkaryoteEntity.this;
-				Level world = DepositerProkaryoteEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = DepositerProkaryoteEntity.this.getX();
-				double y = DepositerProkaryoteEntity.this.getY();
-				double z = DepositerProkaryoteEntity.this.getZ();
-				Entity entity = DepositerProkaryoteEntity.this;
-				Level world = DepositerProkaryoteEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
-		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal(this, GlowSquid.class, true, false) {
+		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, GlowSquid.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = DepositerProkaryoteEntity.this.getX();
-				double y = DepositerProkaryoteEntity.this.getY();
-				double z = DepositerProkaryoteEntity.this.getZ();
-				Entity entity = DepositerProkaryoteEntity.this;
-				Level world = DepositerProkaryoteEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = DepositerProkaryoteEntity.this.getX();
-				double y = DepositerProkaryoteEntity.this.getY();
-				double z = DepositerProkaryoteEntity.this.getZ();
-				Entity entity = DepositerProkaryoteEntity.this;
-				Level world = DepositerProkaryoteEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
-		this.targetSelector.addGoal(5, new NearestAttackableTargetGoal(this, Squid.class, true, false) {
+		this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Squid.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = DepositerProkaryoteEntity.this.getX();
-				double y = DepositerProkaryoteEntity.this.getY();
-				double z = DepositerProkaryoteEntity.this.getZ();
-				Entity entity = DepositerProkaryoteEntity.this;
-				Level world = DepositerProkaryoteEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = DepositerProkaryoteEntity.this.getX();
-				double y = DepositerProkaryoteEntity.this.getY();
-				double z = DepositerProkaryoteEntity.this.getZ();
-				Entity entity = DepositerProkaryoteEntity.this;
-				Level world = DepositerProkaryoteEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
-		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal(this, TropicalFish.class, true, false) {
+		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, TropicalFish.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = DepositerProkaryoteEntity.this.getX();
-				double y = DepositerProkaryoteEntity.this.getY();
-				double z = DepositerProkaryoteEntity.this.getZ();
-				Entity entity = DepositerProkaryoteEntity.this;
-				Level world = DepositerProkaryoteEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = DepositerProkaryoteEntity.this.getX();
-				double y = DepositerProkaryoteEntity.this.getY();
-				double z = DepositerProkaryoteEntity.this.getZ();
-				Entity entity = DepositerProkaryoteEntity.this;
-				Level world = DepositerProkaryoteEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
-		this.targetSelector.addGoal(7, new NearestAttackableTargetGoal(this, Salmon.class, true, false) {
+		this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, Salmon.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = DepositerProkaryoteEntity.this.getX();
-				double y = DepositerProkaryoteEntity.this.getY();
-				double z = DepositerProkaryoteEntity.this.getZ();
-				Entity entity = DepositerProkaryoteEntity.this;
-				Level world = DepositerProkaryoteEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = DepositerProkaryoteEntity.this.getX();
-				double y = DepositerProkaryoteEntity.this.getY();
-				double z = DepositerProkaryoteEntity.this.getZ();
-				Entity entity = DepositerProkaryoteEntity.this;
-				Level world = DepositerProkaryoteEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
-		this.targetSelector.addGoal(8, new NearestAttackableTargetGoal(this, Player.class, true, false) {
+		this.targetSelector.addGoal(8, new NearestAttackableTargetGoal<>(this, Player.class, true, false) {
 			@Override
 			public boolean canUse() {
 				double x = DepositerProkaryoteEntity.this.getX();
 				double y = DepositerProkaryoteEntity.this.getY();
 				double z = DepositerProkaryoteEntity.this.getZ();
-				Entity entity = DepositerProkaryoteEntity.this;
 				Level world = DepositerProkaryoteEntity.this.level();
 				return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -263,7 +212,6 @@ public class DepositerProkaryoteEntity extends SeaMonster {
 				double x = DepositerProkaryoteEntity.this.getX();
 				double y = DepositerProkaryoteEntity.this.getY();
 				double z = DepositerProkaryoteEntity.this.getZ();
-				Entity entity = DepositerProkaryoteEntity.this;
 				Level world = DepositerProkaryoteEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -374,7 +322,6 @@ public class DepositerProkaryoteEntity extends SeaMonster {
 	private PlayState attackingPredicate(AnimationState event) {
 		double d1 = this.getX() - this.xOld;
 		double d0 = this.getZ() - this.zOld;
-		float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
 		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
@@ -419,13 +366,11 @@ public class DepositerProkaryoteEntity extends SeaMonster {
             double y = this.getY();
             double z = this.getZ();
             if ((world.getBlockState(BlockPos.containing(x, y, z))).canBeReplaced()) {
-                {
-                    BlockPos _bp = BlockPos.containing(x, y, z);
-                    BlockState _bs = CaerulaArborModBlocks.WHITE_CHITIN_BLOCK.get().withPropertiesOf(world.getBlockState(_bp));
-                    if (_bs.getBlock().getStateDefinition().getProperty("waterlogged") instanceof BooleanProperty _waterlogged)
-                        _bs = _bs.setValue(_waterlogged, (world.getFluidState(BlockPos.containing(x, y, z)).createLegacyBlock()).getBlock() == Blocks.WATER);
-                    world.setBlock(_bp, _bs, 3);
-                }
+				BlockPos _bp = BlockPos.containing(x, y, z);
+				BlockState _bs = CaerulaArborModBlocks.WHITE_CHITIN_BLOCK.get().withPropertiesOf(world.getBlockState(_bp));
+				if (_bs.getBlock().getStateDefinition().getProperty("waterlogged") instanceof BooleanProperty _waterlogged)
+					_bs = _bs.setValue(_waterlogged, (world.getFluidState(BlockPos.containing(x, y, z)).createLegacyBlock()).getBlock() == Blocks.WATER);
+				world.setBlock(_bp, _bs, 3);
                 world.levelEvent(2001, BlockPos.containing(x, y, z), Block.getId(CaerulaArborModBlocks.WHITE_CHITIN_BLOCK.get().defaultBlockState()));
             }
             for (Direction directioniterator : Direction.values()) {

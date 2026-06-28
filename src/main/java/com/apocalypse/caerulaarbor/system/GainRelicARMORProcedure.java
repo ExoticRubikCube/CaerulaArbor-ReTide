@@ -1,6 +1,7 @@
 package com.apocalypse.caerulaarbor.system;
 
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
+import com.apocalypse.caerulaarbor.capability.ModCapabilities;
+import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -18,8 +19,8 @@ public class GainRelicARMORProcedure {
 	public static void execute(LevelAccessor world, double x, double y, double z, Entity entity, ItemStack itemstack) {
 		if (entity == null)
 			return;
-		CaerulaArborModVariables.PlayerVariables playerVariables = entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null)
-				.orElse(new CaerulaArborModVariables.PlayerVariables());
+		PlayerVariable playerVariables = entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null)
+				.orElse(new PlayerVariable());
 		if (playerVariables.relic_king_ARMOR)
 			return;
 
@@ -32,7 +33,7 @@ public class GainRelicARMORProcedure {
 		if (world instanceof ServerLevel level)
 			level.sendParticles(ParticleTypes.ENCHANTED_HIT, x, y, z, 72, 1, 1, 1, 1);
 
-		entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+		entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
 			capability.relic_king_ARMOR = true;
 			capability.syncPlayerVariables(entity);
 		});
@@ -41,19 +42,19 @@ public class GainRelicARMORProcedure {
 			Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);
 
 		if (storedLives > 1) {
-			entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+			entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
 				capability.player_lives = 1;
 				capability.syncPlayerVariables(entity);
 			});
 		}
 
 		double shieldAfterLifeTransfer = playerVariables.player_shield + storedLives;
-		entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+		entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
 			capability.player_shield = shieldAfterLifeTransfer;
 			capability.syncPlayerVariables(entity);
 		});
 
-		entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+		entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
 			capability.player_shield = shieldAfterLifeTransfer + 3;
 			capability.syncPlayerVariables(entity);
 		});

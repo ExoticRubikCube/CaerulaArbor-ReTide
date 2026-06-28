@@ -1,8 +1,8 @@
 
 package com.apocalypse.caerulaarbor.item;
 
+import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
-import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -46,30 +46,30 @@ public class ColourfulAppleJuiceItem extends Item {
 	@Override
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
 		ItemStack resultStack = super.finishUsingItem(itemstack, world, entity);
-		double x = entity.getX();
-		double y = entity.getY();
-		double z = entity.getZ();
-		if (entity != null) {
-			if (!entity.level().isClientSide()) {
-				entity.addEffect(new MobEffectInstance(MobEffects.SATURATION, 1, 2));
+		if (!entity.level().isClientSide()) {
+			entity.addEffect(new MobEffectInstance(MobEffects.SATURATION, 1, 2));
+		}
+		ModCapabilities.getSanityInjury(entity).heal(80);
+		if (entity instanceof Player player) {
+			entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+				capability.player_light = Math.min(capability.player_light + 12, 100.0);
+				capability.syncPlayerVariables(entity);
+			});
+		}
+		if (!(entity instanceof Player)) {
+			resultStack.shrink(1);
+			ItemStack emptyCup = new ItemStack(CaerulaArborModItems.OCEANGLASS_CUP.get());
+			if (resultStack.isEmpty()) {
+				return emptyCup;
 			}
-			EntityUtils.restoreSanity(entity, 80);
-			EntityUtils.restorePlayerLights(entity, 12);
-			if (!(entity instanceof Player)) {
-				resultStack.shrink(1);
-				ItemStack emptyCup = new ItemStack(CaerulaArborModItems.OCEANGLASS_CUP.get());
-				if (resultStack.isEmpty()) {
-					return emptyCup;
-				}
-			} else if (entity instanceof Player player && !player.getAbilities().instabuild) {
-				resultStack.shrink(1);
-				ItemStack emptyCup = new ItemStack(CaerulaArborModItems.OCEANGLASS_CUP.get());
-				if (resultStack.isEmpty()) {
-					return emptyCup;
-				}
-				if (!player.getInventory().add(emptyCup)) {
-					player.drop(emptyCup, false);
-				}
+		} else if (entity instanceof Player player && !player.getAbilities().instabuild) {
+			resultStack.shrink(1);
+			ItemStack emptyCup = new ItemStack(CaerulaArborModItems.OCEANGLASS_CUP.get());
+			if (resultStack.isEmpty()) {
+				return emptyCup;
+			}
+			if (!player.getInventory().add(emptyCup)) {
+				player.drop(emptyCup, false);
 			}
 		}
 		return resultStack;

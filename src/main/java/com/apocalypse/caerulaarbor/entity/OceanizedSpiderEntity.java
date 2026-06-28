@@ -152,8 +152,11 @@ public class OceanizedSpiderEntity extends SeaMonster {
 			@Override
 			public void start() {
 				LivingEntity livingentity = OceanizedSpiderEntity.this.getTarget();
-				Vec3 vec3d = livingentity.getEyePosition(1);
-				OceanizedSpiderEntity.this.moveControl.setWantedPosition(vec3d.x, vec3d.y, vec3d.z, 1.25);
+				Vec3 vec3d = null;
+				if (livingentity != null) {
+					vec3d = livingentity.getEyePosition(1);
+					OceanizedSpiderEntity.this.moveControl.setWantedPosition(vec3d.x, vec3d.y, vec3d.z, 1.25);
+				}
 			}
 
 			@Override
@@ -180,7 +183,7 @@ public class OceanizedSpiderEntity extends SeaMonster {
 		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
 		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
 		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
-		this.targetSelector.addGoal(14, new NearestAttackableTargetGoal(this, Player.class, true, false) {
+		this.targetSelector.addGoal(14, new NearestAttackableTargetGoal<>(this, Player.class, true, false) {
 			@Override
 			public boolean canUse() {
 				double x = OceanizedSpiderEntity.this.getX();
@@ -201,24 +204,14 @@ public class OceanizedSpiderEntity extends SeaMonster {
 				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
 		});
-		this.targetSelector.addGoal(15, new NearestAttackableTargetGoal(this, Animal.class, true, false) {
+		this.targetSelector.addGoal(15, new NearestAttackableTargetGoal<>(this, Animal.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = OceanizedSpiderEntity.this.getX();
-				double y = OceanizedSpiderEntity.this.getY();
-				double z = OceanizedSpiderEntity.this.getZ();
-				Entity entity = OceanizedSpiderEntity.this;
-				Level world = OceanizedSpiderEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = OceanizedSpiderEntity.this.getX();
-				double y = OceanizedSpiderEntity.this.getY();
-				double z = OceanizedSpiderEntity.this.getZ();
-				Entity entity = OceanizedSpiderEntity.this;
-				Level world = OceanizedSpiderEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
@@ -341,7 +334,6 @@ public class OceanizedSpiderEntity extends SeaMonster {
 	private PlayState attackingPredicate(AnimationState event) {
 		double d1 = this.getX() - this.xOld;
 		double d0 = this.getZ() - this.zOld;
-		float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
 		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
@@ -385,8 +377,6 @@ public class OceanizedSpiderEntity extends SeaMonster {
             double x = this.getX();
             double y = this.getY();
             double z = this.getZ();
-            if (this == null)
-                return;
             if (WorldUtils.canGrief(world)) {
                 if ((world.getBlockState(BlockPos.containing(x, y, z))).canBeReplaced()) {
                     if (((Entity) this instanceof OceanizedSpiderEntity _datEntI ? _datEntI.getEntityData().get(DATA_mute_time) : 0) <= 0) {

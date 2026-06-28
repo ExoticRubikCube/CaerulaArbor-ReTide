@@ -72,7 +72,7 @@ public class FleefishBulletEntity extends AbstractArrow implements ItemSupplier 
         this.level();
         Entity entity = entityHitResult.getEntity();
         Entity sourceentity = this.getOwner();
-        if (entity == null || this == null || sourceentity == null)
+        if (sourceentity == null)
             return;
         if (!(entity == sourceentity)) {
             EntityUtils.giveLessArmor(entity, 3);

@@ -139,9 +139,6 @@ public class OceanizedWitherEntity extends SeaMonster implements RangedAttackMob
 		this.targetSelector.addGoal(1, new HurtByTargetGoal(this) {
 			@Override
 			public boolean canUse() {
-				double x = OceanizedWitherEntity.this.getX();
-				double y = OceanizedWitherEntity.this.getY();
-				double z = OceanizedWitherEntity.this.getZ();
 				Entity entity = OceanizedWitherEntity.this;
 				Level world = OceanizedWitherEntity.this.level();
 				return super.canUse() && EntityPredicateUtils.isWitherDurative(entity);
@@ -149,9 +146,6 @@ public class OceanizedWitherEntity extends SeaMonster implements RangedAttackMob
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = OceanizedWitherEntity.this.getX();
-				double y = OceanizedWitherEntity.this.getY();
-				double z = OceanizedWitherEntity.this.getZ();
 				Entity entity = OceanizedWitherEntity.this;
 				Level world = OceanizedWitherEntity.this.level();
 				return super.canContinueToUse() && EntityPredicateUtils.isWitherDurative(entity);
@@ -172,9 +166,6 @@ public class OceanizedWitherEntity extends SeaMonster implements RangedAttackMob
 
 			@Override
 			public boolean canUse() {
-				double x = OceanizedWitherEntity.this.getX();
-				double y = OceanizedWitherEntity.this.getY();
-				double z = OceanizedWitherEntity.this.getZ();
 				Entity entity = OceanizedWitherEntity.this;
 				Level world = OceanizedWitherEntity.this.level();
 				return super.canUse() && EntityPredicateUtils.isWitherDurative(entity);
@@ -182,8 +173,6 @@ public class OceanizedWitherEntity extends SeaMonster implements RangedAttackMob
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = OceanizedWitherEntity.this.getX();
-				double y = OceanizedWitherEntity.this.getY();
 				double z = OceanizedWitherEntity.this.getZ();
 				Entity entity = OceanizedWitherEntity.this;
 				Level world = OceanizedWitherEntity.this.level();
@@ -194,9 +183,6 @@ public class OceanizedWitherEntity extends SeaMonster implements RangedAttackMob
 		this.goalSelector.addGoal(6, new RandomLookAroundGoal(this) {
 			@Override
 			public boolean canUse() {
-				double x = OceanizedWitherEntity.this.getX();
-				double y = OceanizedWitherEntity.this.getY();
-				double z = OceanizedWitherEntity.this.getZ();
 				Entity entity = OceanizedWitherEntity.this;
 				Level world = OceanizedWitherEntity.this.level();
 				return super.canUse() && EntityPredicateUtils.isWitherDurative(entity);
@@ -204,9 +190,6 @@ public class OceanizedWitherEntity extends SeaMonster implements RangedAttackMob
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = OceanizedWitherEntity.this.getX();
-				double y = OceanizedWitherEntity.this.getY();
-				double z = OceanizedWitherEntity.this.getZ();
 				Entity entity = OceanizedWitherEntity.this;
 				Level world = OceanizedWitherEntity.this.level();
 				return super.canContinueToUse() && EntityPredicateUtils.isWitherDurative(entity);

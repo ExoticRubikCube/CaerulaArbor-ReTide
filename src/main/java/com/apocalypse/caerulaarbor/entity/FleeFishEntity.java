@@ -120,7 +120,7 @@ public class FleeFishEntity extends SeaMonster implements RangedAttackMob {
 		this.targetSelector.addGoal(8, new NearestAttackableTargetGoal<>(this, Piglin.class, true, true));
 		this.targetSelector.addGoal(9, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, true));
 		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, true));
-		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal(this, Player.class, true, true) {
+		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, Player.class, true, true) {
 			@Override
 			public boolean canUse() {
 				double x = FleeFishEntity.this.getX();
@@ -213,7 +213,7 @@ public class FleeFishEntity extends SeaMonster implements RangedAttackMob {
 		}
 
 		public boolean canContinueToUse() {
-			return this.canUse() || this.target.isAlive() && !this.mob.getNavigation().isDone();
+			return this.canUse() || this.target != null && this.target.isAlive() && !this.mob.getNavigation().isDone();
 		}
 
 		public void stop() {
@@ -228,8 +228,11 @@ public class FleeFishEntity extends SeaMonster implements RangedAttackMob {
 		}
 
 		public void tick() {
-			double d0 = this.mob.distanceToSqr(this.target.getX(), this.target.getY(), this.target.getZ());
-			boolean flag = this.mob.getSensing().hasLineOfSight(this.target);
+            double d0 = 0;
+            if (this.target != null) {
+                d0 = this.mob.distanceToSqr(this.target.getX(), this.target.getY(), this.target.getZ());
+            }
+            boolean flag = this.mob.getSensing().hasLineOfSight(this.target);
 			if (flag) {
 				++this.seeTime;
 			} else {

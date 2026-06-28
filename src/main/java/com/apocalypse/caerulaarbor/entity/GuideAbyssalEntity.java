@@ -109,13 +109,12 @@ public class GuideAbyssalEntity extends SeaMonster {
 		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
 		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
 		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
-		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal(this, Player.class, true, false) {
+		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Player.class, true, false) {
 			@Override
 			public boolean canUse() {
 				double x = GuideAbyssalEntity.this.getX();
 				double y = GuideAbyssalEntity.this.getY();
 				double z = GuideAbyssalEntity.this.getZ();
-				Entity entity = GuideAbyssalEntity.this;
 				Level world = GuideAbyssalEntity.this.level();
 				return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -125,29 +124,18 @@ public class GuideAbyssalEntity extends SeaMonster {
 				double x = GuideAbyssalEntity.this.getX();
 				double y = GuideAbyssalEntity.this.getY();
 				double z = GuideAbyssalEntity.this.getZ();
-				Entity entity = GuideAbyssalEntity.this;
 				Level world = GuideAbyssalEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
 		});
-		this.targetSelector.addGoal(14, new NearestAttackableTargetGoal(this, Animal.class, true, false) {
+		this.targetSelector.addGoal(14, new NearestAttackableTargetGoal<>(this, Animal.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = GuideAbyssalEntity.this.getX();
-				double y = GuideAbyssalEntity.this.getY();
-				double z = GuideAbyssalEntity.this.getZ();
-				Entity entity = GuideAbyssalEntity.this;
-				Level world = GuideAbyssalEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = GuideAbyssalEntity.this.getX();
-				double y = GuideAbyssalEntity.this.getY();
-				double z = GuideAbyssalEntity.this.getZ();
-				Entity entity = GuideAbyssalEntity.this;
-				Level world = GuideAbyssalEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});

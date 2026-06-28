@@ -1,9 +1,9 @@
 package com.apocalypse.caerulaarbor.entity;
 
+import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.*;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -308,7 +308,7 @@ public class MartusEntity extends SeaMonster {
                         double num = 0;
                         double limit = 0;
                         limit = 2;
-                        if (CaerulaArborModVariables.MapVariables.get(world).strategy_subsisting > 3) {
+                        if (MapVariables.get(world).strategy_subsisting > 3) {
                             limit = 3;
                         }
                         {
@@ -354,7 +354,7 @@ public class MartusEntity extends SeaMonster {
                     if (sklp1 > 0) {
                         if ((Entity) this instanceof MartusEntity _datEntSetI)
                             _datEntSetI.getEntityData().set(DATA_skillp1, (int) (sklp1 - 1));
-                        if (CaerulaArborModVariables.MapVariables.get(world).strategy_subsisting > 3) {
+                        if (MapVariables.get(world).strategy_subsisting > 3) {
                             if ((Entity) this instanceof MartusEntity _datEntSetI)
                                 _datEntSetI.getEntityData().set(DATA_skillp1, (int) (sklp1 - 1));
                         }
@@ -367,7 +367,7 @@ public class MartusEntity extends SeaMonster {
                                 double max_h = 0;
                                 double limit = 0;
                                 limit = 2;
-                                if (CaerulaArborModVariables.MapVariables.get(world).strategy_subsisting > 3) {
+                                if (MapVariables.get(world).strategy_subsisting > 3) {
                                     limit = 3;
                                 }
                                 for (Entity entityiterator : world.getEntities(this, new AABB((x + 32), (y + 32), (z + 32), (x - 32), (y - 32), (z - 32)))) {

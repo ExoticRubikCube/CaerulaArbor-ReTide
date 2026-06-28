@@ -148,7 +148,7 @@ public class AccumulatorProkaryoteEntity extends SeaMonster {
 				return 9;
 			}
 		});
-		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal(this, Pufferfish.class, true, false) {
+		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Pufferfish.class, true, false) {
 			@Override
 			public boolean canUse() {
 				double x = AccumulatorProkaryoteEntity.this.getX();
@@ -161,105 +161,59 @@ public class AccumulatorProkaryoteEntity extends SeaMonster {
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = AccumulatorProkaryoteEntity.this.getX();
-				double y = AccumulatorProkaryoteEntity.this.getY();
-				double z = AccumulatorProkaryoteEntity.this.getZ();
-				Entity entity = AccumulatorProkaryoteEntity.this;
-				Level world = AccumulatorProkaryoteEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
-		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal(this, GlowSquid.class, true, false) {
+		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, GlowSquid.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = AccumulatorProkaryoteEntity.this.getX();
-				double y = AccumulatorProkaryoteEntity.this.getY();
-				double z = AccumulatorProkaryoteEntity.this.getZ();
-				Entity entity = AccumulatorProkaryoteEntity.this;
-				Level world = AccumulatorProkaryoteEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = AccumulatorProkaryoteEntity.this.getX();
-				double y = AccumulatorProkaryoteEntity.this.getY();
-				double z = AccumulatorProkaryoteEntity.this.getZ();
-				Entity entity = AccumulatorProkaryoteEntity.this;
-				Level world = AccumulatorProkaryoteEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
-		this.targetSelector.addGoal(5, new NearestAttackableTargetGoal(this, Squid.class, true, false) {
+		this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Squid.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = AccumulatorProkaryoteEntity.this.getX();
-				double y = AccumulatorProkaryoteEntity.this.getY();
-				double z = AccumulatorProkaryoteEntity.this.getZ();
-				Entity entity = AccumulatorProkaryoteEntity.this;
-				Level world = AccumulatorProkaryoteEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = AccumulatorProkaryoteEntity.this.getX();
-				double y = AccumulatorProkaryoteEntity.this.getY();
-				double z = AccumulatorProkaryoteEntity.this.getZ();
-				Entity entity = AccumulatorProkaryoteEntity.this;
-				Level world = AccumulatorProkaryoteEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
-		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal(this, TropicalFish.class, true, false) {
+		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, TropicalFish.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = AccumulatorProkaryoteEntity.this.getX();
-				double y = AccumulatorProkaryoteEntity.this.getY();
-				double z = AccumulatorProkaryoteEntity.this.getZ();
-				Entity entity = AccumulatorProkaryoteEntity.this;
-				Level world = AccumulatorProkaryoteEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = AccumulatorProkaryoteEntity.this.getX();
-				double y = AccumulatorProkaryoteEntity.this.getY();
-				double z = AccumulatorProkaryoteEntity.this.getZ();
-				Entity entity = AccumulatorProkaryoteEntity.this;
-				Level world = AccumulatorProkaryoteEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
-		this.targetSelector.addGoal(7, new NearestAttackableTargetGoal(this, Salmon.class, true, false) {
+		this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, Salmon.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = AccumulatorProkaryoteEntity.this.getX();
-				double y = AccumulatorProkaryoteEntity.this.getY();
-				double z = AccumulatorProkaryoteEntity.this.getZ();
-				Entity entity = AccumulatorProkaryoteEntity.this;
-				Level world = AccumulatorProkaryoteEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = AccumulatorProkaryoteEntity.this.getX();
-				double y = AccumulatorProkaryoteEntity.this.getY();
-				double z = AccumulatorProkaryoteEntity.this.getZ();
-				Entity entity = AccumulatorProkaryoteEntity.this;
-				Level world = AccumulatorProkaryoteEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
-		this.targetSelector.addGoal(8, new NearestAttackableTargetGoal(this, Player.class, true, false) {
+		this.targetSelector.addGoal(8, new NearestAttackableTargetGoal<>(this, Player.class, true, false) {
 			@Override
 			public boolean canUse() {
 				double x = AccumulatorProkaryoteEntity.this.getX();
 				double y = AccumulatorProkaryoteEntity.this.getY();
 				double z = AccumulatorProkaryoteEntity.this.getZ();
-				Entity entity = AccumulatorProkaryoteEntity.this;
 				Level world = AccumulatorProkaryoteEntity.this.level();
 				return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -269,7 +223,6 @@ public class AccumulatorProkaryoteEntity extends SeaMonster {
 				double x = AccumulatorProkaryoteEntity.this.getX();
 				double y = AccumulatorProkaryoteEntity.this.getY();
 				double z = AccumulatorProkaryoteEntity.this.getZ();
-				Entity entity = AccumulatorProkaryoteEntity.this;
 				Level world = AccumulatorProkaryoteEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -332,41 +285,39 @@ public class AccumulatorProkaryoteEntity extends SeaMonster {
 	public void baseTick() {
 		super.baseTick();
         LevelAccessor world = this.level();
-        if (this != null) {
-            if (this.isAlive() && tickCount % 10 == 0) {
-                if (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) <= ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5 && (Entity) this instanceof AccumulatorProkaryoteEntity _datEntL4
-                        && _datEntL4.getEntityData().get(DATA_split)) {
-                    if (this instanceof AccumulatorProkaryoteEntity) {
-                        this.setAnimation("animation.accumulator.split");
-                    }
-                    if ((Entity) this instanceof LivingEntity _entity)
-                        _entity.setHealth((float) (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5));
-                    if ((Entity) this instanceof AccumulatorProkaryoteEntity _datEntSetL)
-                        _datEntSetL.getEntityData().set(DATA_split, false);
-                    if (!((Entity) this instanceof LivingEntity _livEnt9 && _livEnt9.hasEffect(CaerulaArborModMobEffects.MUTE.get()))) {
-                        CaerulaArborMod.queueServerWork(10, () -> {
-                            if (isInWater()) {
-                                if (world instanceof ServerLevel _level) {
-                                    Entity entityToSpawn = CaerulaArborModEntities.ACCUMULATOR_CLONE.get().spawn(_level,
-                                            BlockPos.containing(getX() + Mth.nextDouble(RandomSource.create(), -1, 1), getY() + 0.5, getZ() + Mth.nextDouble(RandomSource.create(), -1, 1)), MobSpawnType.MOB_SUMMONED);
-                                    if (entityToSpawn != null) {
-                                        entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-                                    }
-                                }
-                            } else {
-                                if (world instanceof ServerLevel _level) {
-                                    Entity entityToSpawn = CaerulaArborModEntities.DIVICELLULAR_GO.get().spawn(_level,
-                                            BlockPos.containing(getX() + Mth.nextDouble(RandomSource.create(), -1, 1), getY() + 0.5, getZ() + Mth.nextDouble(RandomSource.create(), -1, 1)), MobSpawnType.MOB_SUMMONED);
-                                    if (entityToSpawn != null) {
-                                        entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-                                    }
+        if (this.isAlive() && tickCount % 10 == 0) {
+            if (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) <= ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5 && (Entity) this instanceof AccumulatorProkaryoteEntity _datEntL4
+                    && _datEntL4.getEntityData().get(DATA_split)) {
+                if (this instanceof AccumulatorProkaryoteEntity) {
+                    this.setAnimation("animation.accumulator.split");
+                }
+                if ((Entity) this instanceof LivingEntity _entity)
+                    _entity.setHealth((float) (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5));
+                if ((Entity) this instanceof AccumulatorProkaryoteEntity _datEntSetL)
+                    _datEntSetL.getEntityData().set(DATA_split, false);
+                if (!((Entity) this instanceof LivingEntity _livEnt9 && _livEnt9.hasEffect(CaerulaArborModMobEffects.MUTE.get()))) {
+                    CaerulaArborMod.queueServerWork(10, () -> {
+                        if (isInWater()) {
+                            if (world instanceof ServerLevel _level) {
+                                Entity entityToSpawn = CaerulaArborModEntities.ACCUMULATOR_CLONE.get().spawn(_level,
+                                        BlockPos.containing(getX() + Mth.nextDouble(RandomSource.create(), -1, 1), getY() + 0.5, getZ() + Mth.nextDouble(RandomSource.create(), -1, 1)), MobSpawnType.MOB_SUMMONED);
+                                if (entityToSpawn != null) {
+                                    entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                                 }
                             }
-                            if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(getX(), getY(), getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.puffer_fish.blow_out")), SoundSource.HOSTILE, 2, 1);
+                        } else {
+                            if (world instanceof ServerLevel _level) {
+                                Entity entityToSpawn = CaerulaArborModEntities.DIVICELLULAR_GO.get().spawn(_level,
+                                        BlockPos.containing(getX() + Mth.nextDouble(RandomSource.create(), -1, 1), getY() + 0.5, getZ() + Mth.nextDouble(RandomSource.create(), -1, 1)), MobSpawnType.MOB_SUMMONED);
+                                if (entityToSpawn != null) {
+                                    entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+                                }
                             }
-                        });
-                    }
+                        }
+                        if (world instanceof Level _level) {
+                            _level.playSound(null, BlockPos.containing(getX(), getY(), getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.puffer_fish.blow_out")), SoundSource.HOSTILE, 2, 1);
+                        }
+                    });
                 }
             }
         }
@@ -428,7 +379,6 @@ public class AccumulatorProkaryoteEntity extends SeaMonster {
 	private PlayState attackingPredicate(AnimationState event) {
 		double d1 = this.getX() - this.xOld;
 		double d0 = this.getZ() - this.zOld;
-		float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
 		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();

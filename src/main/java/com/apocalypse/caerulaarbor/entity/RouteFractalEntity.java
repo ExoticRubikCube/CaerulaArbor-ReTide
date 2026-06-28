@@ -114,7 +114,7 @@ public class RouteFractalEntity extends SeaMonster {
 		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, Piglin.class, false, false));
 		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, false, false));
 		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, false, false));
-		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal(this, Player.class, false, false) {
+		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Player.class, false, false) {
 			@Override
 			public boolean canUse() {
 				double x = RouteFractalEntity.this.getX();
@@ -198,16 +198,13 @@ public class RouteFractalEntity extends SeaMonster {
 	@Override
 	public void baseTick() {
 		super.baseTick();
-        LevelAccessor world = this.level();
-        if (this != null) {
-            double timel = 0;
-            timel = (Entity) this instanceof RouteFractalEntity _datEntI ? _datEntI.getEntityData().get(DATA_time_left) : 0;
-            if (timel <= 0) {
-                ((Entity) this).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.FELL_OUT_OF_WORLD)), 999999);
-            }
-            if ((Entity) this instanceof RouteFractalEntity _datEntSetI)
-                _datEntSetI.getEntityData().set(DATA_time_left, (int) (timel - 1));
+        double timel = 0;
+        timel = (Entity) this instanceof RouteFractalEntity _datEntI ? _datEntI.getEntityData().get(DATA_time_left) : 0;
+        if (timel <= 0) {
+            ((Entity) this).hurt(new DamageSource((this.level()).registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.FELL_OUT_OF_WORLD)), 999999);
         }
+        if ((Entity) this instanceof RouteFractalEntity _datEntSetI)
+            _datEntSetI.getEntityData().set(DATA_time_left, (int) (timel - 1));
         this.refreshDimensions();
 	}
 

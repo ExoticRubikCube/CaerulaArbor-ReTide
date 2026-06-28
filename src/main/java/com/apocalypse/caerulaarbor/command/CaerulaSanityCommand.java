@@ -1,13 +1,13 @@
 
 package com.apocalypse.caerulaarbor.command;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.util.EntityUtils;
+import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
@@ -52,9 +52,7 @@ public class CaerulaSanityCommand {
             info = Component.translatable("command.sanity.check.success").getString();
             info = info.replace("{name}", ent.getDisplayName().getString());
             info = info.replace("{num}",
-                    "" + Math.round(Math.pow(10, 1)
-                            * (ent instanceof LivingEntity _livingEntity6 && _livingEntity6.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY.get()) ? _livingEntity6.getAttribute(CaerulaArborModAttributes.SANITY.get()).getBaseValue() : 0))
-                            / Math.pow(10, 1));
+                    "" + Math.round(Math.pow(10, 1) * (ent instanceof LivingEntity livingEntity ? ModCapabilities.getSanityInjury(livingEntity).getValue() : 0)) / Math.pow(10, 1));
             {
                 final String _success = info;
                 final boolean _informAdmins = true;
@@ -81,8 +79,11 @@ public class CaerulaSanityCommand {
                     ent = entityiterator;
                     if (!(ent == null) && ent instanceof LivingEntity) {
                         num = num + 1;
-                        if (ent instanceof LivingEntity _livingEntity3 && _livingEntity3.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY.get()))
-                            _livingEntity3.getAttribute(CaerulaArborModAttributes.SANITY.get()).setBaseValue((DoubleArgumentType.getDouble(arguments, "amount")));
+                        CompoundTag sanityData = ModCapabilities.getSanityInjury((LivingEntity) ent).serializeNBT();
+                        sanityData.putDouble("SanityInjury", DoubleArgumentType.getDouble(arguments, "amount"));
+                        sanityData.putBoolean("SanityRecovering", false);
+                        sanityData.putBoolean("SanityLocked", false);
+                        ModCapabilities.getSanityInjury((LivingEntity) ent).deserializeNBT(sanityData);
                         if (num == 1) {
                             info = Component.translatable("command.sanity.set.single").getString();
                             info = info.replace("{name}", ent.getDisplayName().getString());
@@ -122,7 +123,7 @@ public class CaerulaSanityCommand {
                     ent = entityiterator;
                     if (!(ent == null) && ent instanceof LivingEntity) {
                         num = num + 1;
-                        EntityUtils.deductSanity(ent, DoubleArgumentType.getDouble(arguments, "amount"));
+                        ModCapabilities.getSanityInjury((LivingEntity) ent).hurt(DoubleArgumentType.getDouble(arguments, "amount"));
                         if (num == 1) {
                             info = Component.translatable("command.sanity.hurt.single").getString();
                             info = info.replace("{name}", ent.getDisplayName().getString());
@@ -162,7 +163,7 @@ public class CaerulaSanityCommand {
                     ent = entityiterator;
                     if (!(ent == null) && ent instanceof LivingEntity) {
                         num = num + 1;
-                        EntityUtils.restoreSanity(ent, DoubleArgumentType.getDouble(arguments, "amount"));
+                        ModCapabilities.getSanityInjury((LivingEntity) ent).heal(DoubleArgumentType.getDouble(arguments, "amount"));
                         if (num == 1) {
                             info = Component.translatable("command.sanity.heal.single").getString();
                             info = info.replace("{name}", ent.getDisplayName().getString());

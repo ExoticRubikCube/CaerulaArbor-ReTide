@@ -1,7 +1,7 @@
 package com.apocalypse.caerulaarbor.block;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.util.EntityUtils;
+import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -132,10 +132,12 @@ public class EmergencyAidBuildingBlock extends Block implements SimpleWaterlogge
 				if (center.distanceTo(new Vec3(entity.getX(), entity.getY(), entity.getZ())) > 16) {
 					continue;
 				}
-				if (entity instanceof Player) {
-					EntityUtils.restoreSanity(entity, 20);
-				} else {
-					EntityUtils.restoreSanity(entity, 10);
+				if (entity instanceof LivingEntity livingEntity) {
+					if (entity instanceof Player) {
+						ModCapabilities.getSanityInjury(livingEntity).heal(20);
+					} else {
+						ModCapabilities.getSanityInjury(livingEntity).heal(10);
+					}
 				}
 			}
 			for (int index0 = 0; index0 < 120; index0++) {

@@ -1,8 +1,9 @@
 package com.apocalypse.caerulaarbor.client.screens;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.capability.ModCapabilities;
+import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.PlayerStateUtils;
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -56,7 +57,7 @@ public class LightShowOverlay {
 		RenderSystem.setShaderColor(1, 1, 1, 1);
         boolean result1 = false;
         if (entity != null) {
-            result1 = ((Entity) entity).isAlive() && (((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).show_stats;
+            result1 = ((Entity) entity).isAlive() && (((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).show_stats;
         }
         if (result1) {
 			boolean isNeat = CaerulaConfigsConfiguration.LIGHTS_NEAT_STYLE.get();
@@ -107,7 +108,7 @@ public class LightShowOverlay {
 
             boolean result = false;
             if (entity != null) {
-                result = (((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).player_shield > 0;
+                result = (((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_shield > 0;
             }
             if (result) {
 				event.getGuiGraphics().blit(SHIELD_POINT, 

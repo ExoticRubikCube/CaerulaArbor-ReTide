@@ -1,7 +1,8 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
+import com.apocalypse.caerulaarbor.api.event.SanityEvent;
+import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 
 import com.apocalypse.caerulaarbor.init.*;
@@ -203,12 +204,10 @@ public class NucleicMaleficentEntity extends SeaMonster {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this != null) {
-            if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-                this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(45);
-            if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get()))
-                this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(6);
-        }
+        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
+            this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(45);
+        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get()))
+            this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(6);
         return retval;
 	}
 
@@ -232,91 +231,92 @@ public class NucleicMaleficentEntity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if (this != null) {
-            double angle = 0;
-            if (!(((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == null) && ((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null).isAlive()) {
-                if ((Entity) this instanceof Mob _mobEnt4 && _mobEnt4.isAggressive() && this.isAlive() && tickCount % 20 == 0) {
-                    for (int index0 = 0; index0 < 120; index0++) {
-                        angle = Mth.nextDouble(RandomSource.create(), 0, 6.283);
-                        if (world instanceof ServerLevel _level)
-                            _level.sendParticles(ParticleTypes.ELECTRIC_SPARK, (x + 5 * Math.sin(angle)), (y + 0.33), (z + 5 * Math.cos(angle)), 3, 0.1, 0.1, 0.1, 0.2);
-                    }
-                    {
-                        final Vec3 _center = new Vec3(x, y, z);
-                        List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(10 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                        for (Entity entityiterator : _entfound) {
-                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring"))) && !(entityiterator == ((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null))) {
-                                continue;
-                            }
-                            if ((entityiterator != null ? distanceTo(entityiterator) : -1) < 5) {
-                                if (!(entityiterator == this)) {
-                                    EntityUtils.deductSanity(entityiterator, (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 6);
+        double angle = 0;
+        if (this.getTarget() != null && ((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null).isAlive()) {
+            if ((Entity) this instanceof Mob _mobEnt4 && _mobEnt4.isAggressive() && this.isAlive() && tickCount % 20 == 0) {
+                for (int index0 = 0; index0 < 120; index0++) {
+                    angle = Mth.nextDouble(RandomSource.create(), 0, 6.283);
+                    if (world instanceof ServerLevel _level)
+                        _level.sendParticles(ParticleTypes.ELECTRIC_SPARK, (x + 5 * Math.sin(angle)), (y + 0.33), (z + 5 * Math.cos(angle)), 3, 0.1, 0.1, 0.1, 0.2);
+                }
+                {
+                    final Vec3 _center = new Vec3(x, y, z);
+                    List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(10 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+                    for (Entity entityiterator : _entfound) {
+                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring"))) && !(entityiterator == ((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null))) {
+                            continue;
+                        }
+                        if ((entityiterator != null ? distanceTo(entityiterator) : -1) < 5) {
+                            if (!(entityiterator == this)) {
+                                if (entityiterator instanceof LivingEntity target) {
+                                    SIHelper.causeSanityInjury(target,
+                                            this,
+                                            (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 6,
+                                            SanityEvent.Hurt.Type.ENTITY);
                                 }
                             }
                         }
                     }
-                    if (this != null) {
-                        boolean once = false;
-                        double dx = 0;
-                        double dy = 0;
-                        double dz = 0;
-                        double hardness = 0;
-                        double lose = 0;
-                        BlockState block;
-                        if (WorldUtils.canGrief(world)) {
-                            once = false;
-                            dx = -1;
-                            for (int index0 = 0; index0 < 3; index0++) {
-                                dz = -1;
-                                for (int index1 = 0; index1 < 3; index1++) {
-                                    dy = 0;
-                                    for (int index2 = 0; index2 < 2; index2++) {
-                                        block = (world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz)));
-                                        hardness = block.getDestroySpeed(world, BlockPos.containing(0, 0, 0));
-                                        if (hardness <= 5 && hardness >= 0 && world.getBlockFloorHeight(BlockPos.containing(x + dx, y + dy, z + dz)) > 0 || block.getBlock() == CaerulaArborModBlocks.WHITE_CHITIN_BLOCK.get()) {
-                                            {
-                                                BlockPos _pos = BlockPos.containing(x + dx, y + dy, z + dz);
-                                                Block.dropResources(world.getBlockState(_pos), world, BlockPos.containing(x, y, z), null);
-                                                world.destroyBlock(_pos, false);
-                                            }
-                                            if (world instanceof Level _level)
-                                                _level.updateNeighborsAt(BlockPos.containing(x + dx, y + dy, z + dz), _level.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz)).getBlock());
-                                            once = true;
-                                            if (block.getBlock() == CaerulaArborModBlocks.WHITE_CHITIN_BLOCK.get()) {
-                                                lose = lose + 0.1;
-                                            } else {
-                                                if (hardness < 1) {
-                                                    lose = lose + 0.01;
-                                                } else if (hardness < 2.5) {
-                                                    lose = lose + 0.025;
-                                                } else {
-                                                    lose = lose + 0.05;
-                                                }
-                                            }
-                                        }
-                                        dy = dy + 1;
+                }
+                boolean once = false;
+                double dx = 0;
+                double dy = 0;
+                double dz = 0;
+                double hardness = 0;
+                double lose = 0;
+                BlockState block;
+                if (WorldUtils.canGrief(world)) {
+                    once = false;
+                    dx = -1;
+                    for (int index0 = 0; index0 < 3; index0++) {
+                        dz = -1;
+                        for (int index1 = 0; index1 < 3; index1++) {
+                            dy = 0;
+                            for (int index2 = 0; index2 < 2; index2++) {
+                                block = (world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz)));
+                                hardness = block.getDestroySpeed(world, BlockPos.containing(0, 0, 0));
+                                if (hardness <= 5 && hardness >= 0 && world.getBlockFloorHeight(BlockPos.containing(x + dx, y + dy, z + dz)) > 0 || block.getBlock() == CaerulaArborModBlocks.WHITE_CHITIN_BLOCK.get()) {
+                                    {
+                                        BlockPos _pos = BlockPos.containing(x + dx, y + dy, z + dz);
+                                        Block.dropResources(world.getBlockState(_pos), world, BlockPos.containing(x, y, z), null);
+                                        world.destroyBlock(_pos, false);
                                     }
-                                    dz = dz + 1;
-                                }
-                                dx = dx + 1;
-                            }
-                            if (once) {
-                                if (world instanceof Level _level) {
-                                    if (!_level.isClientSide()) {
-                                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.wither.break_block")), SoundSource.NEUTRAL, 1, 1);
+                                    if (world instanceof Level _level)
+                                        _level.updateNeighborsAt(BlockPos.containing(x + dx, y + dy, z + dz), _level.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz)).getBlock());
+                                    once = true;
+                                    if (block.getBlock() == CaerulaArborModBlocks.WHITE_CHITIN_BLOCK.get()) {
+                                        lose = lose + 0.1;
                                     } else {
-                                        _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.wither.break_block")), SoundSource.NEUTRAL, 1, 1, false);
+                                        if (hardness < 1) {
+                                            lose = lose + 0.01;
+                                        } else if (hardness < 2.5) {
+                                            lose = lose + 0.025;
+                                        } else {
+                                            lose = lose + 0.05;
+                                        }
                                     }
                                 }
-                                ((Entity) this).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "sanity_break")))),
-                                        (float) (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * lose));
+                                dy = dy + 1;
+                            }
+                            dz = dz + 1;
+                        }
+                        dx = dx + 1;
+                    }
+                    if (once) {
+                        if (world instanceof Level _level) {
+                            if (!_level.isClientSide()) {
+                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.wither.break_block")), SoundSource.NEUTRAL, 1, 1);
+                            } else {
+                                _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.wither.break_block")), SoundSource.NEUTRAL, 1, 1, false);
                             }
                         }
+                        ((Entity) this).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "sanity_break")))),
+                                (float) (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * lose));
                     }
-                    if (!((Entity) this instanceof LivingEntity _livEnt16 && _livEnt16.hasEffect(CaerulaArborModMobEffects.FAST_SWIM.get()))) {
-                        if (!this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.FAST_SWIM.get(), 20, 2, false, false));
-                    }
+                }
+                if (!_mobEnt4.hasEffect(CaerulaArborModMobEffects.FAST_SWIM.get())) {
+                    if (!this.level().isClientSide())
+                        this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.FAST_SWIM.get(), 20, 2, false, false));
                 }
             }
         }

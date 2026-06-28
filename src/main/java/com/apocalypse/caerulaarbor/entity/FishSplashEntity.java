@@ -77,12 +77,10 @@ public class FishSplashEntity extends AbstractArrow implements ItemSupplier {
 	public void tick() {
 		super.tick();
         LevelAccessor world = this.level();
-        if (this != null) {
-            world.addParticle(ParticleTypes.DOLPHIN, this.getX(), this.getY(), this.getZ(), ((-0.05) * getDeltaMovement().x()), ((-0.05) * getDeltaMovement().y()), ((-0.05) * getDeltaMovement().z()));
-            if (tickCount >= 200) {
-                if (!level().isClientSide())
-                    discard();
-            }
+        world.addParticle(ParticleTypes.DOLPHIN, this.getX(), this.getY(), this.getZ(), ((-0.05) * getDeltaMovement().x()), ((-0.05) * getDeltaMovement().y()), ((-0.05) * getDeltaMovement().z()));
+        if (tickCount >= 200) {
+            if (!level().isClientSide())
+                discard();
         }
         if (this.inGround)
 			this.discard();

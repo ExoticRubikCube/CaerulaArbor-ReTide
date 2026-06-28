@@ -1,9 +1,10 @@
 
 package com.apocalypse.caerulaarbor.item;
 
-import com.apocalypse.caerulaarbor.util.EntityUtils;
+import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -27,8 +28,13 @@ public class FruitJellyItem extends Item {
 	@Override
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
 		ItemStack retval = super.finishUsingItem(itemstack, world, entity);
-        EntityUtils.restorePlayerLights(entity, 16);
-        EntityUtils.restoreSanity(entity, 150);
-        return retval;
+		ModCapabilities.getSanityInjury(entity).heal(150);
+		if (entity instanceof Player) {
+			entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+				capability.player_light = Math.min(capability.player_light + 16, 100.0);
+				capability.syncPlayerVariables(entity);
+			});
+		}
+		return retval;
 	}
 }

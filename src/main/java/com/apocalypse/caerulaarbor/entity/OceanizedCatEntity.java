@@ -2,6 +2,7 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
+import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
@@ -117,13 +118,12 @@ public class OceanizedCatEntity extends SeaMonster {
 		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
 		this.targetSelector.addGoal(14, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
 		this.targetSelector.addGoal(15, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
-		this.targetSelector.addGoal(16, new NearestAttackableTargetGoal(this, Player.class, true, false) {
+		this.targetSelector.addGoal(16, new NearestAttackableTargetGoal<>(this, Player.class, true, false) {
 			@Override
 			public boolean canUse() {
 				double x = OceanizedCatEntity.this.getX();
 				double y = OceanizedCatEntity.this.getY();
 				double z = OceanizedCatEntity.this.getZ();
-				Entity entity = OceanizedCatEntity.this;
 				Level world = OceanizedCatEntity.this.level();
 				return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -133,29 +133,18 @@ public class OceanizedCatEntity extends SeaMonster {
 				double x = OceanizedCatEntity.this.getX();
 				double y = OceanizedCatEntity.this.getY();
 				double z = OceanizedCatEntity.this.getZ();
-				Entity entity = OceanizedCatEntity.this;
 				Level world = OceanizedCatEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
 		});
-		this.targetSelector.addGoal(17, new NearestAttackableTargetGoal(this, Animal.class, true, false) {
+		this.targetSelector.addGoal(17, new NearestAttackableTargetGoal<>(this, Animal.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = OceanizedCatEntity.this.getX();
-				double y = OceanizedCatEntity.this.getY();
-				double z = OceanizedCatEntity.this.getZ();
-				Entity entity = OceanizedCatEntity.this;
-				Level world = OceanizedCatEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = OceanizedCatEntity.this.getX();
-				double y = OceanizedCatEntity.this.getY();
-				double z = OceanizedCatEntity.this.getZ();
-				Entity entity = OceanizedCatEntity.this;
-				Level world = OceanizedCatEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
@@ -219,11 +208,9 @@ public class OceanizedCatEntity extends SeaMonster {
 
 	@Override
 	public boolean hurt(DamageSource source, float amount) {
-        if (this != null) {
-            setShiftKeyDown(false);
-            if ((Entity) this instanceof OceanizedCatEntity _datEntSetL)
-                _datEntSetL.getEntityData().set(DATA_stateSneaking, false);
-        }
+        setShiftKeyDown(false);
+        if ((Entity) this instanceof OceanizedCatEntity _datEntSetL)
+            _datEntSetL.getEntityData().set(DATA_stateSneaking, false);
         if (source.is(DamageTypes.FALL))
 			return false;
 		if (source.is(DamageTypes.DROWN))
@@ -234,7 +221,12 @@ public class OceanizedCatEntity extends SeaMonster {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-		EntityUtils.initCatSanity(this);
+		if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get())) {
+			this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(4);
+		}
+		if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get())) {
+			this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(35);
+		}
 		return retval;
 	}
 
@@ -260,35 +252,33 @@ public class OceanizedCatEntity extends SeaMonster {
 	@Override
 	public void baseTick() {
 		super.baseTick();
-        if (this != null) {
-            double time_stamp = 0;
-            boolean sneak = false;
-            if (this.isAlive() && tickCount % 10 == 0) {
-                time_stamp = (Entity) this instanceof OceanizedCatEntity _datEntI ? _datEntI.getEntityData().get(DATA_action_time) : 0;
-                sneak = (Entity) this instanceof OceanizedCatEntity _datEntL3 && _datEntL3.getEntityData().get(DATA_stateSneaking);
-                if (time_stamp > 0) {
+        double time_stamp = 0;
+        boolean sneak = false;
+        if (this.isAlive() && tickCount % 10 == 0) {
+            time_stamp = (Entity) this instanceof OceanizedCatEntity _datEntI ? _datEntI.getEntityData().get(DATA_action_time) : 0;
+            sneak = (Entity) this instanceof OceanizedCatEntity _datEntL3 && _datEntL3.getEntityData().get(DATA_stateSneaking);
+            if (time_stamp > 0) {
+                if ((Entity) this instanceof OceanizedCatEntity _datEntSetI)
+                    _datEntSetI.getEntityData().set(DATA_action_time, (int) (time_stamp - 1));
+            } else if (Math.random() < 0.02) {
+                if (sneak) {
+                    if ((Entity) this instanceof OceanizedCatEntity _datEntSetL)
+                        _datEntSetL.getEntityData().set(DATA_stateSneaking, false);
                     if ((Entity) this instanceof OceanizedCatEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_action_time, (int) (time_stamp - 1));
-                } else if (Math.random() < 0.02) {
-                    if (sneak) {
-                        if ((Entity) this instanceof OceanizedCatEntity _datEntSetL)
-                            _datEntSetL.getEntityData().set(DATA_stateSneaking, false);
-                        if ((Entity) this instanceof OceanizedCatEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_action_time, 10);
-                    } else if (!((Entity) this instanceof Mob _mobEnt7 && _mobEnt7.isAggressive())) {
-                        if ((Entity) this instanceof OceanizedCatEntity _datEntSetL)
-                            _datEntSetL.getEntityData().set(DATA_stateSneaking, true);
-                        if ((Entity) this instanceof OceanizedCatEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_action_time, 10);
-                    }
-                }
-                setShiftKeyDown(sneak);
+                        _datEntSetI.getEntityData().set(DATA_action_time, 10);
+                } else if (!this.isAggressive()) {
+					if ((Entity) this instanceof OceanizedCatEntity _datEntSetL)
+						_datEntSetL.getEntityData().set(DATA_stateSneaking, true);
+					if ((Entity) this instanceof OceanizedCatEntity _datEntSetI)
+						_datEntSetI.getEntityData().set(DATA_action_time, 10);
+				}
             }
-            if ((Entity) this instanceof Mob _mobEnt11 && _mobEnt11.isAggressive()) {
-                setShiftKeyDown(false);
-                if ((Entity) this instanceof OceanizedCatEntity _datEntSetL)
-                    _datEntSetL.getEntityData().set(DATA_stateSneaking, false);
-            }
+            setShiftKeyDown(sneak);
+        }
+        if (this.isAggressive()) {
+            setShiftKeyDown(false);
+            if ((Entity) this instanceof OceanizedCatEntity _datEntSetL)
+                _datEntSetL.getEntityData().set(DATA_stateSneaking, false);
         }
         this.refreshDimensions();
 	}

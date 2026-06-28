@@ -73,7 +73,7 @@ public class WitherShootPreEntity extends AbstractArrow implements ItemSupplier 
         double z = this.getZ();
         Entity entity = entityHitResult.getEntity();
         Entity sourceentity = this.getOwner();
-        if (entity == null || this == null || sourceentity == null)
+        if (sourceentity == null)
             return;
         Entity enemy = null;
         Entity otherOne = null;

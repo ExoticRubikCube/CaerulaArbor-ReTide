@@ -1,10 +1,10 @@
 package com.apocalypse.caerulaarbor.block;
 
+import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 
 import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModGameRules;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -141,10 +141,10 @@ public class OceanOvaryBlock extends AbstractOvaryBlock {
 			if (!(world.getBlockFloorHeight(BlockPos.containing(x, (double) y + 1, z)) > 0) && !(world.getBlockFloorHeight(BlockPos.containing(x, (double) y + 2, z)) > 0)) {
 				if (blockstate.getValue(BLOCKSTATE) == 0) {
 					rate = 0.05;
-					if (CaerulaArborModVariables.MapVariables.get(world).strategy_breed >= 2) {
+					if (MapVariables.get(world).strategy_breed >= 2) {
 						rate = 0.08;
 					}
-					if (CaerulaArborModVariables.MapVariables.get(world).strategy_breed >= 4) {
+					if (MapVariables.get(world).strategy_breed >= 4) {
 						rate = 0.1;
 					}
 					chance = blockstate.getValue(OUTPUT);

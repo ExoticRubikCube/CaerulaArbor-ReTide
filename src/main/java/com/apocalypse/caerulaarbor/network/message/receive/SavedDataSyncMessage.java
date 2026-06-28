@@ -1,6 +1,7 @@
 package com.apocalypse.caerulaarbor.network.message.receive;
 
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
+import com.apocalypse.caerulaarbor.capability.map.MapVariables;
+import com.apocalypse.caerulaarbor.capability.world.WorldVariables;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.saveddata.SavedData;
@@ -22,10 +23,10 @@ public class SavedDataSyncMessage {
 		CompoundTag nbt = buffer.readNbt();
 		SavedData data = null;
 		if (nbt != null) {
-			data = type == 0 ? new CaerulaArborModVariables.MapVariables() : new CaerulaArborModVariables.WorldVariables();
-			if (data instanceof CaerulaArborModVariables.MapVariables mapVariables) {
+			data = type == 0 ? new MapVariables() : new WorldVariables();
+			if (data instanceof MapVariables mapVariables) {
 				mapVariables.read(nbt);
-			} else if (data instanceof CaerulaArborModVariables.WorldVariables worldVariables) {
+			} else if (data instanceof WorldVariables worldVariables) {
 				worldVariables.read(nbt);
 			}
 		}
@@ -44,9 +45,9 @@ public class SavedDataSyncMessage {
 		context.enqueueWork(() -> {
 			if (context.getDirection().getReceptionSide().isClient() && message.data != null) {
 				if (message.type == 0) {
-					CaerulaArborModVariables.MapVariables.clientSide = (CaerulaArborModVariables.MapVariables) message.data;
+					MapVariables.clientSide = (MapVariables) message.data;
 				} else {
-					CaerulaArborModVariables.WorldVariables.clientSide = (CaerulaArborModVariables.WorldVariables) message.data;
+					WorldVariables.clientSide = (WorldVariables) message.data;
 				}
 			}
 		});

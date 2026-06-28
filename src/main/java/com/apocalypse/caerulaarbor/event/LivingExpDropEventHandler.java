@@ -1,6 +1,7 @@
 package com.apocalypse.caerulaarbor.event;
 
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
+import com.apocalypse.caerulaarbor.capability.ModCapabilities;
+import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -27,8 +28,8 @@ public class LivingExpDropEventHandler {
 		if (sourceentity == null)
 			return;
 		double exp_left = 0;
-		if (sourceentity instanceof Player && (sourceentity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).relic_king_EXTENSION) {
-			if ((sourceentity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).player_lives <= 1) {
+		if (sourceentity instanceof Player && (sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_king_EXTENSION) {
+			if ((sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_lives <= 1) {
 				exp_left = originalexperience;
 				while (exp_left >= 11) {
 					if (world instanceof ServerLevel _level)

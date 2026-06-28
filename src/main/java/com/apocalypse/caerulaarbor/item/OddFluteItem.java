@@ -1,9 +1,9 @@
 
 package com.apocalypse.caerulaarbor.item;
 
+import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
@@ -71,7 +71,7 @@ public class OddFluteItem extends Item {
                     _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ADD_REACH.get(), 300, 0, false, false));
                 {
                     boolean _setval = true;
-                    ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                    ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                         capability.relic_util_FLUTE = _setval;
                         capability.syncPlayerVariables(entity);
                     });

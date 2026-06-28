@@ -141,118 +141,67 @@ public class AccumulatorCloneEntity extends SeaMonster {
 				return 9;
 			}
 		});
-		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal(this, Pufferfish.class, true, false) {
+		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Pufferfish.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = AccumulatorCloneEntity.this.getX();
-				double y = AccumulatorCloneEntity.this.getY();
-				double z = AccumulatorCloneEntity.this.getZ();
-				Entity entity = AccumulatorCloneEntity.this;
-				Level world = AccumulatorCloneEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = AccumulatorCloneEntity.this.getX();
-				double y = AccumulatorCloneEntity.this.getY();
-				double z = AccumulatorCloneEntity.this.getZ();
-				Entity entity = AccumulatorCloneEntity.this;
-				Level world = AccumulatorCloneEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
-		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal(this, GlowSquid.class, true, false) {
+		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, GlowSquid.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = AccumulatorCloneEntity.this.getX();
-				double y = AccumulatorCloneEntity.this.getY();
-				double z = AccumulatorCloneEntity.this.getZ();
-				Entity entity = AccumulatorCloneEntity.this;
-				Level world = AccumulatorCloneEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = AccumulatorCloneEntity.this.getX();
-				double y = AccumulatorCloneEntity.this.getY();
-				double z = AccumulatorCloneEntity.this.getZ();
-				Entity entity = AccumulatorCloneEntity.this;
-				Level world = AccumulatorCloneEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
-		this.targetSelector.addGoal(5, new NearestAttackableTargetGoal(this, Squid.class, true, false) {
+		this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Squid.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = AccumulatorCloneEntity.this.getX();
-				double y = AccumulatorCloneEntity.this.getY();
-				double z = AccumulatorCloneEntity.this.getZ();
-				Entity entity = AccumulatorCloneEntity.this;
-				Level world = AccumulatorCloneEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = AccumulatorCloneEntity.this.getX();
-				double y = AccumulatorCloneEntity.this.getY();
-				double z = AccumulatorCloneEntity.this.getZ();
-				Entity entity = AccumulatorCloneEntity.this;
-				Level world = AccumulatorCloneEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
-		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal(this, TropicalFish.class, true, false) {
+		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, TropicalFish.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = AccumulatorCloneEntity.this.getX();
-				double y = AccumulatorCloneEntity.this.getY();
-				double z = AccumulatorCloneEntity.this.getZ();
-				Entity entity = AccumulatorCloneEntity.this;
-				Level world = AccumulatorCloneEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = AccumulatorCloneEntity.this.getX();
-				double y = AccumulatorCloneEntity.this.getY();
-				double z = AccumulatorCloneEntity.this.getZ();
-				Entity entity = AccumulatorCloneEntity.this;
-				Level world = AccumulatorCloneEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
-		this.targetSelector.addGoal(7, new NearestAttackableTargetGoal(this, Salmon.class, true, false) {
+		this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, Salmon.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = AccumulatorCloneEntity.this.getX();
-				double y = AccumulatorCloneEntity.this.getY();
-				double z = AccumulatorCloneEntity.this.getZ();
-				Entity entity = AccumulatorCloneEntity.this;
-				Level world = AccumulatorCloneEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = AccumulatorCloneEntity.this.getX();
-				double y = AccumulatorCloneEntity.this.getY();
-				double z = AccumulatorCloneEntity.this.getZ();
-				Entity entity = AccumulatorCloneEntity.this;
-				Level world = AccumulatorCloneEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
-		this.targetSelector.addGoal(8, new NearestAttackableTargetGoal(this, Player.class, true, false) {
+		this.targetSelector.addGoal(8, new NearestAttackableTargetGoal<>(this, Player.class, true, false) {
 			@Override
 			public boolean canUse() {
 				double x = AccumulatorCloneEntity.this.getX();
 				double y = AccumulatorCloneEntity.this.getY();
 				double z = AccumulatorCloneEntity.this.getZ();
-				Entity entity = AccumulatorCloneEntity.this;
 				Level world = AccumulatorCloneEntity.this.level();
 				return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -262,7 +211,6 @@ public class AccumulatorCloneEntity extends SeaMonster {
 				double x = AccumulatorCloneEntity.this.getX();
 				double y = AccumulatorCloneEntity.this.getY();
 				double z = AccumulatorCloneEntity.this.getZ();
-				Entity entity = AccumulatorCloneEntity.this;
 				Level world = AccumulatorCloneEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -306,10 +254,7 @@ public class AccumulatorCloneEntity extends SeaMonster {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this != null) {
-            if ((Entity) this instanceof LivingEntity _entity)
-                _entity.setHealth((float) (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5));
-        }
+        this.setHealth((float) (this.getMaxHealth() * 0.5));
         return retval;
 	}
 

@@ -136,21 +136,13 @@ public class SkadiCorruptedEntity extends SeaMonster {
 
 			@Override
 			public boolean canUse() {
-				double x = SkadiCorruptedEntity.this.getX();
-				double y = SkadiCorruptedEntity.this.getY();
-				double z = SkadiCorruptedEntity.this.getZ();
 				Entity entity = SkadiCorruptedEntity.this;
-				Level world = SkadiCorruptedEntity.this.level();
 				return super.canUse() && EntityPredicateUtils.isCorruptedDurative(entity);
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = SkadiCorruptedEntity.this.getX();
-				double y = SkadiCorruptedEntity.this.getY();
-				double z = SkadiCorruptedEntity.this.getZ();
 				Entity entity = SkadiCorruptedEntity.this;
-				Level world = SkadiCorruptedEntity.this.level();
 				return super.canContinueToUse() && EntityPredicateUtils.isCorruptedDurative(entity);
 			}
 
@@ -160,21 +152,13 @@ public class SkadiCorruptedEntity extends SeaMonster {
 		this.goalSelector.addGoal(5, new RandomStrollGoal(this, 1) {
 			@Override
 			public boolean canUse() {
-				double x = SkadiCorruptedEntity.this.getX();
-				double y = SkadiCorruptedEntity.this.getY();
-				double z = SkadiCorruptedEntity.this.getZ();
 				Entity entity = SkadiCorruptedEntity.this;
-				Level world = SkadiCorruptedEntity.this.level();
 				return super.canUse() && EntityPredicateUtils.isCorruptedDurative(entity);
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = SkadiCorruptedEntity.this.getX();
-				double y = SkadiCorruptedEntity.this.getY();
-				double z = SkadiCorruptedEntity.this.getZ();
 				Entity entity = SkadiCorruptedEntity.this;
-				Level world = SkadiCorruptedEntity.this.level();
 				return super.canContinueToUse() && EntityPredicateUtils.isCorruptedDurative(entity);
 			}
 		});
@@ -183,21 +167,13 @@ public class SkadiCorruptedEntity extends SeaMonster {
 		this.goalSelector.addGoal(8, new RandomLookAroundGoal(this) {
 			@Override
 			public boolean canUse() {
-				double x = SkadiCorruptedEntity.this.getX();
-				double y = SkadiCorruptedEntity.this.getY();
-				double z = SkadiCorruptedEntity.this.getZ();
 				Entity entity = SkadiCorruptedEntity.this;
-				Level world = SkadiCorruptedEntity.this.level();
 				return super.canUse() && EntityPredicateUtils.isCorruptedDurative(entity);
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = SkadiCorruptedEntity.this.getX();
-				double y = SkadiCorruptedEntity.this.getY();
-				double z = SkadiCorruptedEntity.this.getZ();
 				Entity entity = SkadiCorruptedEntity.this;
-				Level world = SkadiCorruptedEntity.this.level();
 				return super.canContinueToUse() && EntityPredicateUtils.isCorruptedDurative(entity);
 			}
 		});
@@ -341,318 +317,310 @@ public class SkadiCorruptedEntity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if (this != null) {
-            Entity enemy = null;
-            double dura = 0;
-            double conv = 0;
-            double deal = 0;
-            double phase = 0;
-            double converT = 0;
-            double gap = 0;
-            double nn = 0;
-            converT = (Entity) this instanceof SkadiCorruptedEntity _datEntI ? _datEntI.getEntityData().get(DATA_convertTick) : 0;
-            if (converT < 999) {
-                if (converT > 0) {
+        Entity enemy = null;
+        double dura = 0;
+        double conv = 0;
+        double deal = 0;
+        double phase = 0;
+        double converT = 0;
+        double gap = 0;
+        double nn = 0;
+        converT = (Entity) this instanceof SkadiCorruptedEntity _datEntI ? _datEntI.getEntityData().get(DATA_convertTick) : 0;
+        if (converT < 999) {
+            if (converT > 0) {
+                if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetL)
+                    _datEntSetL.getEntityData().set(DATA_mayCorrupt, false);
+                if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetI)
+                    _datEntSetI.getEntityData().set(DATA_convertTick, (int) (converT - 1));
+            } else {
+                if (phase < 0.5) {
+                    for (Entity entityiterator : new ArrayList<>(world.players())) {
+                        if ((entityiterator != null ? distanceTo(entityiterator) : -1) < 32) {
+                            if (entityiterator instanceof Player _player && !_player.level().isClientSide())
+                                _player.displayClientMessage(Component.literal((Component.translatable("entity.caerula_arbor.skadi_corrupted.convert").getString())), false);
+                        }
+                    }
+                    if (world instanceof ServerLevel _level) {
+                        ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, new ItemStack(CaerulaArborModItems.INCANDESCENT_ANIMA.get()));
+                        entityToSpawn.setPickUpDelay(10);
+                        entityToSpawn.setUnlimitedLifetime();
+                        _level.addFreshEntity(entityToSpawn);
+                    }
+                    if (world instanceof ServerLevel _level) {
+                        ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, new ItemStack(CaerulaArborModItems.RECORD_UNDERTIDES.get()));
+                        entityToSpawn.setPickUpDelay(10);
+                        entityToSpawn.setUnlimitedLifetime();
+                        _level.addFreshEntity(entityToSpawn);
+                    }
+                    if (world instanceof Level _level) {
+                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "corrupted_convert")), SoundSource.HOSTILE, 2, 1);
+                    }
                     if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetL)
                         _datEntSetL.getEntityData().set(DATA_mayCorrupt, false);
+                    if (!level().isClientSide())
+                        discard();
+                    EntityUtils.summonHurtSkadi(world, x, y, z);
+                }
+            }
+        }
+        if (this.isAlive()) {
+            if (!this.level().isClientSide())
+                this.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 20, 0, false, false));
+            conv = (Entity) this instanceof SkadiCorruptedEntity _datEntI ? _datEntI.getEntityData().get(DATA_convertP) : 0;
+            dura = (Entity) this instanceof SkadiCorruptedEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
+            deal = (Entity) this instanceof SkadiCorruptedEntity _datEntI ? _datEntI.getEntityData().get(DATA_deal) : 0;
+            phase = (Entity) this instanceof SkadiCorruptedEntity _datEntI ? _datEntI.getEntityData().get(DATA_phase) : 0;
+            enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+            if (dura > 0) {
+                if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetI)
+                    _datEntSetI.getEntityData().set(DATA_duration, (int) (dura - 1));
+            }
+            if (conv > 0) {
+                if (phase < 1.9) {
                     if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_convertTick, (int) (converT - 1));
-                } else {
-                    if (phase < 0.5) {
-                        for (Entity entityiterator : new ArrayList<>(world.players())) {
-                            if ((entityiterator != null ? distanceTo(entityiterator) : -1) < 32) {
-                                if (entityiterator instanceof Player _player && !_player.level().isClientSide())
-                                    _player.displayClientMessage(Component.literal((Component.translatable("entity.caerula_arbor.skadi_corrupted.convert").getString())), false);
-                            }
-                        }
-                        if (world instanceof ServerLevel _level) {
-                            ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, new ItemStack(CaerulaArborModItems.INCANDESCENT_ANIMA.get()));
-                            entityToSpawn.setPickUpDelay(10);
-                            entityToSpawn.setUnlimitedLifetime();
-                            _level.addFreshEntity(entityToSpawn);
-                        }
-                        if (world instanceof ServerLevel _level) {
-                            ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, new ItemStack(CaerulaArborModItems.RECORD_UNDERTIDES.get()));
-                            entityToSpawn.setPickUpDelay(10);
-                            entityToSpawn.setUnlimitedLifetime();
-                            _level.addFreshEntity(entityToSpawn);
-                        }
+                        _datEntSetI.getEntityData().set(DATA_convertP, (int) (conv - 1));
+                }
+            } else if (dura <= 0) {
+                if (phase < 0.5) {
+                    if (this instanceof SkadiCorruptedEntity) {
+                        this.setAnimation("animation.skadi_corrupted.to_phase_2");
+                    }
+                    if ((Entity) this instanceof SkadiCorruptedEntity animatable)
+                        animatable.setTexture("skadi_corrupted_1");
+                    if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetI)
+                        _datEntSetI.getEntityData().set(DATA_convertP, 1120);
+                    if ((Entity) this instanceof LivingEntity _entity)
+                        _entity.setHealth((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1);
+                    if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetI)
+                        _datEntSetI.getEntityData().set(DATA_phase, 1);
+                    if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetI)
+                        _datEntSetI.getEntityData().set(DATA_deal, 0);
+                    if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetI)
+                        _datEntSetI.getEntityData().set(DATA_duration, 60);
+                    if (this.getAttributes().hasAttribute(Attributes.ARMOR))
+                        this.getAttribute(Attributes.ARMOR)
+                                .setBaseValue(((this.getAttributes().hasAttribute(Attributes.ARMOR) ? this.getAttribute(Attributes.ARMOR).getBaseValue() : 0) * 1.5));
+                    if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetL)
+                        _datEntSetL.getEntityData().set(DATA_mayCorrupt, true);
+                    if (!this.level().isClientSide())
+                        this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 60, 9, false, false));
+                    if (!world.isClientSide()) {
                         if (world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "corrupted_convert")), SoundSource.HOSTILE, 2, 1);
+                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "silence3")), SoundSource.HOSTILE, 2, 1);
                         }
-                        if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetL)
-                            _datEntSetL.getEntityData().set(DATA_mayCorrupt, false);
-                        if (!level().isClientSide())
-                            discard();
-                        EntityUtils.summonHurtSkadi(world, x, y, z);
+                    }
+                } else if (phase < 1.5) {
+                    if (this instanceof SkadiCorruptedEntity) {
+                        this.setAnimation("animation.skadi_corrupted.to_phase_3");
+                    }
+                    if ((Entity) this instanceof SkadiCorruptedEntity animatable)
+                        animatable.setTexture("skadi_corrupted");
+                    if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetI)
+                        _datEntSetI.getEntityData().set(DATA_convertP, 99999);
+                    if ((Entity) this instanceof LivingEntity _entity)
+                        _entity.setHealth((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1);
+                    if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetI)
+                        _datEntSetI.getEntityData().set(DATA_phase, 2);
+                    if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetI)
+                        _datEntSetI.getEntityData().set(DATA_deal, 0);
+                    if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetI)
+                        _datEntSetI.getEntityData().set(DATA_duration, 80);
+                    if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
+                        this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get())
+                                .setBaseValue(((this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get())
+                                        ? this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).getBaseValue()
+                                        : 0) + 50));
+                    if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
+                        this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
+                                ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) * 1.25));
+                    if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetL)
+                        _datEntSetL.getEntityData().set(DATA_mayCorrupt, true);
+                    if (!this.level().isClientSide())
+                        this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 80, 9, false, false));
+                    if (!world.isClientSide()) {
+                        if (world instanceof Level _level) {
+                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "silence4")), SoundSource.HOSTILE, 2, 1);
+                        }
                     }
                 }
             }
-            if (this.isAlive()) {
-                if (!this.level().isClientSide())
-                    this.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 20, 0, false, false));
-                conv = (Entity) this instanceof SkadiCorruptedEntity _datEntI ? _datEntI.getEntityData().get(DATA_convertP) : 0;
-                dura = (Entity) this instanceof SkadiCorruptedEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
-                deal = (Entity) this instanceof SkadiCorruptedEntity _datEntI ? _datEntI.getEntityData().get(DATA_deal) : 0;
-                phase = (Entity) this instanceof SkadiCorruptedEntity _datEntI ? _datEntI.getEntityData().get(DATA_phase) : 0;
-                enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
-                if (dura > 0) {
-                    if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_duration, (int) (dura - 1));
-                }
-                if (conv > 0) {
-                    if (phase < 1.9) {
-                        if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_convertP, (int) (conv - 1));
-                    }
-                } else if (dura <= 0) {
-                    if (phase < 0.5) {
-                        if (this instanceof SkadiCorruptedEntity) {
-                            this.setAnimation("animation.skadi_corrupted.to_phase_2");
-                        }
-                        if ((Entity) this instanceof SkadiCorruptedEntity animatable)
-                            animatable.setTexture("skadi_corrupted_1");
-                        if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_convertP, 1120);
-                        if ((Entity) this instanceof LivingEntity _entity)
-                            _entity.setHealth((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1);
-                        if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_phase, 1);
-                        if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_deal, 0);
-                        if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_duration, 60);
-                        if (this.getAttributes().hasAttribute(Attributes.ARMOR))
-                            this.getAttribute(Attributes.ARMOR)
-                                    .setBaseValue(((this.getAttributes().hasAttribute(Attributes.ARMOR) ? this.getAttribute(Attributes.ARMOR).getBaseValue() : 0) * 1.5));
-                        if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetL)
-                            _datEntSetL.getEntityData().set(DATA_mayCorrupt, true);
-                        if (!this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 60, 9, false, false));
-                        if (!world.isClientSide()) {
-                            if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "silence3")), SoundSource.HOSTILE, 2, 1);
+            if (phase < 0.5) {
+                gap = 300;
+                nn = 3;
+            } else if (phase < 1.5) {
+                gap = 360;
+                nn = 4;
+            } else {
+                gap = 300;
+                nn = 5;
+                if (tickCount % 20 == 5) {
+                    Entity enemy1 = null;
+                    double ddd = 0;
+                    double dama = 0;
+                    ddd = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
+                    enemy1 = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+                    {
+                        final Vec3 _center = new Vec3(x, y, z);
+                        List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(24 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+                        for (Entity entityiterator : _entfound) {
+                            if (!(entityiterator instanceof LivingEntity)) {
+                                continue;
                             }
-                        }
-                    } else if (phase < 1.5) {
-                        if (this instanceof SkadiCorruptedEntity) {
-                            this.setAnimation("animation.skadi_corrupted.to_phase_3");
-                        }
-                        if ((Entity) this instanceof SkadiCorruptedEntity animatable)
-                            animatable.setTexture("skadi_corrupted");
-                        if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_convertP, 99999);
-                        if ((Entity) this instanceof LivingEntity _entity)
-                            _entity.setHealth((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1);
-                        if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_phase, 2);
-                        if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_deal, 0);
-                        if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_duration, 80);
-                        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-                            this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get())
-                                    .setBaseValue(((this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get())
-                                            ? this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).getBaseValue()
-                                            : 0) + 50));
-                        if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
-                            this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
-                                    ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) * 1.25));
-                        if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetL)
-                            _datEntSetL.getEntityData().set(DATA_mayCorrupt, true);
-                        if (!this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 80, 9, false, false));
-                        if (!world.isClientSide()) {
-                            if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "silence4")), SoundSource.HOSTILE, 2, 1);
-                            }
-                        }
-                    }
-                }
-                if (phase < 0.5) {
-                    gap = 300;
-                    nn = 3;
-                } else if (phase < 1.5) {
-                    gap = 360;
-                    nn = 4;
-                } else {
-                    gap = 300;
-                    nn = 5;
-                    if (tickCount % 20 == 5) {
-                        if (this != null) {
-                            Entity enemy1 = null;
-                            double ddd = 0;
-                            double dama = 0;
-                            ddd = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
-                            enemy1 = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
-                            {
-                                final Vec3 _center = new Vec3(x, y, z);
-                                List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(24 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                                for (Entity entityiterator : _entfound) {
-                                    if (!(entityiterator instanceof LivingEntity)) {
-                                        continue;
-                                    }
-                                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
-                                        if (!(entityiterator == enemy1)) {
-                                            continue;
-                                        }
-                                    }
-                                    if (entityiterator == this) {
-                                        continue;
-                                    }
-                                    if (new Object() {
-                                        public boolean checkGamemode(Entity _ent) {
-                                            if (_ent instanceof ServerPlayer _serverPlayer) {
-                                                return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                                            } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                                                return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                                        && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
-                                            }
-                                            return false;
-                                        }
-                                    }.checkGamemode(entityiterator)) {
-                                        continue;
-                                    }
-                                    if (new Object() {
-                                        public boolean checkGamemode(Entity _ent) {
-                                            if (_ent instanceof ServerPlayer _serverPlayer) {
-                                                return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.SPECTATOR;
-                                            } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                                                return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                                        && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.SPECTATOR;
-                                            }
-                                            return false;
-                                        }
-                                    }.checkGamemode(entityiterator)) {
-                                        continue;
-                                    }
-                                    if ((entityiterator != null ? distanceTo(entityiterator) : -1) <= 12) {
-                                        entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "sanity_break")))),
-                                                (float) (ddd * 1.1));
-                                    }
+                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                                if (!(entityiterator == enemy1)) {
+                                    continue;
                                 }
                             }
-                            dama = ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.01;
-                            if (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) > dama) {
-                                if ((Entity) this instanceof LivingEntity _entity)
-                                    _entity.setHealth((float) (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) - dama));
-                            } else {
-                                ((Entity) this).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceankiller_damage")))), 99999);
+                            if (entityiterator == this) {
+                                continue;
                             }
-                        }
-                    }
-                    if (this != null) {
-                        double phase1 = 0;
-                        double ang = 0;
-                        double r = 0;
-                        double t = 0;
-                        t = tickCount % 90;
-                        for (int index0 = 0; index0 < 20; index0++) {
-                            ang = Math.toRadians(index0 * 6 + t * 4);
-                            r = 11.5 + Math.sin(index0 * 12);
-                            if (world instanceof ServerLevel _level)
-                                _level.sendParticles(CaerulaArborModParticleTypes.CORRUPTED_FISH.get(), (x + r * Math.sin(ang)), (y + 0.15), (z + r * Math.cos(ang)), 1, 0, 0.25, 0, 0.2);
-                        }
-                    }
-                }
-                if (tickCount % 20 == 10) {
-                    if (this != null) {
-                        double ddd = 0;
-                        double healPerc = 0;
-                        boolean mayBonus = false;
-                        boolean isSeaborn = false;
-                        Entity enemy1 = null;
-                        ddd = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
-                        healPerc = 0.1;
-                        enemy1 = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
-                        if (phase > 0.5) {
-                            healPerc = 0.2;
-                        }
-                        if (phase <= 1) {
-                            EntityUtils.heal(this, ddd * healPerc * 3);
-                            if (phase > 0.5) {
-                                if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetI)
-                                    _datEntSetI.getEntityData().set(DATA_deal, (int) (((Entity) this instanceof SkadiCorruptedEntity _datEntI ? _datEntI.getEntityData().get(DATA_deal) : 0) - ddd * healPerc * 3));
-                            }
-                        }
-                        {
-                            final Vec3 _center = new Vec3(x, y, z);
-                            List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(32 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                            for (Entity entityiterator : _entfound) {
-                                mayBonus = false;
-                                isSeaborn = false;
-                                if ((entityiterator != null ? distanceTo(entityiterator) : -1) <= 16) {
-                                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
-                                        mayBonus = true;
-                                        isSeaborn = true;
+                            if (new Object() {
+                                public boolean checkGamemode(Entity _ent) {
+                                    if (_ent instanceof ServerPlayer _serverPlayer) {
+                                        return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                                    } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
+                                        return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
+                                                && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                                     }
-                                    if (phase <= 1 && entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "is_humanside")))) {
-                                        mayBonus = true;
-                                        isSeaborn = false;
-                                    }
-                                    if (entityiterator == this) {
-                                        continue;
-                                    }
-                                    if (mayBonus) {
-                                        EntityUtils.heal(entityiterator, ddd * healPerc);
-                                        if (phase == 1 && !entityiterator.getPersistentData().getBoolean("corruptedBonus1")) {
-                                            if (entityiterator instanceof LivingEntity _livingEntity10 && _livingEntity10.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
-                                                _livingEntity10.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
-                                                        ((entityiterator instanceof LivingEntity _livingEntity9 && _livingEntity9.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity9.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0)
-                                                                + ddd * 0.4));
-                                            if (entityiterator instanceof LivingEntity _livingEntity12 && _livingEntity12.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()))
-                                                _livingEntity12.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get())
-                                                        .setBaseValue(((entityiterator instanceof LivingEntity _livingEntity11 && _livingEntity11.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get())
-                                                                ? _livingEntity11.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).getBaseValue()
-                                                                : 0) + ddd * 0.4));
-                                            entityiterator.getPersistentData().putBoolean("corruptedBonus1", true);
-                                        }
-                                        if (phase == 2 && !entityiterator.getPersistentData().getBoolean("corruptedBonus2")) {
-                                            if (entityiterator instanceof LivingEntity _livingEntity16 && _livingEntity16.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
-                                                _livingEntity16.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
-                                                        ((entityiterator instanceof LivingEntity _livingEntity15 && _livingEntity15.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity15.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0)
-                                                                + ddd));
-                                            if (entityiterator instanceof LivingEntity _livingEntity18 && _livingEntity18.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
-                                                _livingEntity18.getAttribute(Attributes.MAX_HEALTH).setBaseValue(
-                                                        ((entityiterator instanceof LivingEntity _livingEntity17 && _livingEntity17.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? _livingEntity17.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0) + ddd));
-                                            entityiterator.getPersistentData().putBoolean("corruptedBonus2", true);
-                                        }
-                                        if (phase > 0.5 && isSeaborn) {
-                                            if (!entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "bossoffspring")))
-                                                    && !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanpet")))) {
-                                                if (entityiterator instanceof Mob _entity && enemy1 instanceof LivingEntity _ent)
-                                                    _entity.setTarget(_ent);
-                                            }
-                                        }
-                                    }
+                                    return false;
                                 }
+                            }.checkGamemode(entityiterator)) {
+                                continue;
+                            }
+                            if (new Object() {
+                                public boolean checkGamemode(Entity _ent) {
+                                    if (_ent instanceof ServerPlayer _serverPlayer) {
+                                        return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.SPECTATOR;
+                                    } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
+                                        return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
+                                                && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.SPECTATOR;
+                                    }
+                                    return false;
+                                }
+                            }.checkGamemode(entityiterator)) {
+                                continue;
+                            }
+                            if ((entityiterator != null ? distanceTo(entityiterator) : -1) <= 12) {
+                                entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "sanity_break")))),
+                                        (float) (ddd * 1.1));
                             }
                         }
                     }
-                }
-                if (tickCount % gap == 99) {
-                    assert Boolean.TRUE; //#dbg:SkadiCorruptedSkills:corruptedSpawnCheck
-                    WorldUtils.corruptedSpawnMobs(world, x, y, z, nn);
+                    dama = ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.01;
+                    if (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) > dama) {
+                        if ((Entity) this instanceof LivingEntity _entity)
+                            _entity.setHealth((float) (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) - dama));
+                    } else {
+                        ((Entity) this).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceankiller_damage")))), 99999);
+                    }
                 }
                 double phase1 = 0;
                 double ang = 0;
                 double r = 0;
-                ang = Mth.nextDouble(RandomSource.create(), 0, 6.283);
-                phase1 = (Entity) this instanceof SkadiCorruptedEntity _datEntI ? _datEntI.getEntityData().get(DATA_phase) : 0;
-                for (int index0 = 0; index0 < (int) (phase1 + 1); index0++) {
-                    r = Mth.nextDouble(RandomSource.create(), 2, 3.5);
+                double t = 0;
+                t = tickCount % 90;
+                for (int index0 = 0; index0 < 20; index0++) {
+                    ang = Math.toRadians(index0 * 6 + t * 4);
+                    r = 11.5 + Math.sin(index0 * 12);
                     if (world instanceof ServerLevel _level)
-                        _level.sendParticles(CaerulaArborModParticleTypes.CORRUPTED_FISH.get(), (x + r * Math.sin(ang)), (y + 0.25), (z + r * Math.cos(ang)), 1, 0, 0, 0, 0.2);
+                        _level.sendParticles(CaerulaArborModParticleTypes.CORRUPTED_FISH.get(), (x + r * Math.sin(ang)), (y + 0.15), (z + r * Math.cos(ang)), 1, 0, 0.25, 0, 0.2);
                 }
-                if (!(phase > 1.5)) {
-                    LivingEntity _livEnt =  this;
-                    if (deal >= _livEnt.getMaxHealth() * 0.75) {
-                        if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetL)
-                            _datEntSetL.getEntityData().set(DATA_mayCorrupt, false);
-                    } else {
-                        if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetL)
-                            _datEntSetL.getEntityData().set(DATA_mayCorrupt, true);
+            }
+            if (tickCount % 20 == 10) {
+                double ddd = 0;
+                double healPerc = 0;
+                boolean mayBonus = false;
+                boolean isSeaborn = false;
+                Entity enemy1 = null;
+                ddd = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
+                healPerc = 0.1;
+                enemy1 = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+                if (phase > 0.5) {
+                    healPerc = 0.2;
+                }
+                if (phase <= 1) {
+                    EntityUtils.heal(this, ddd * healPerc * 3);
+                    if (phase > 0.5) {
+                        if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetI)
+                            _datEntSetI.getEntityData().set(DATA_deal, (int) (((Entity) this instanceof SkadiCorruptedEntity _datEntI ? _datEntI.getEntityData().get(DATA_deal) : 0) - ddd * healPerc * 3));
                     }
+                }
+                {
+                    final Vec3 _center = new Vec3(x, y, z);
+                    List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(32 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+                    for (Entity entityiterator : _entfound) {
+                        mayBonus = false;
+                        isSeaborn = false;
+                        if ((entityiterator != null ? distanceTo(entityiterator) : -1) <= 16) {
+                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                                mayBonus = true;
+                                isSeaborn = true;
+                            }
+                            if (phase <= 1 && entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "is_humanside")))) {
+                                mayBonus = true;
+                                isSeaborn = false;
+                            }
+                            if (entityiterator == this) {
+                                continue;
+                            }
+                            if (mayBonus) {
+                                EntityUtils.heal(entityiterator, ddd * healPerc);
+                                if (phase == 1 && !entityiterator.getPersistentData().getBoolean("corruptedBonus1")) {
+                                    if (entityiterator instanceof LivingEntity _livingEntity10 && _livingEntity10.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
+                                        _livingEntity10.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
+                                                ((entityiterator instanceof LivingEntity _livingEntity9 && _livingEntity9.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity9.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0)
+                                                        + ddd * 0.4));
+                                    if (entityiterator instanceof LivingEntity _livingEntity12 && _livingEntity12.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()))
+                                        _livingEntity12.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get())
+                                                .setBaseValue(((entityiterator instanceof LivingEntity _livingEntity11 && _livingEntity11.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get())
+                                                        ? _livingEntity11.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).getBaseValue()
+                                                        : 0) + ddd * 0.4));
+                                    entityiterator.getPersistentData().putBoolean("corruptedBonus1", true);
+                                }
+                                if (phase == 2 && !entityiterator.getPersistentData().getBoolean("corruptedBonus2")) {
+                                    if (entityiterator instanceof LivingEntity _livingEntity16 && _livingEntity16.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
+                                        _livingEntity16.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
+                                                ((entityiterator instanceof LivingEntity _livingEntity15 && _livingEntity15.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity15.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0)
+                                                        + ddd));
+                                    if (entityiterator instanceof LivingEntity _livingEntity18 && _livingEntity18.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
+                                        _livingEntity18.getAttribute(Attributes.MAX_HEALTH).setBaseValue(
+                                                ((entityiterator instanceof LivingEntity _livingEntity17 && _livingEntity17.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? _livingEntity17.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0) + ddd));
+                                    entityiterator.getPersistentData().putBoolean("corruptedBonus2", true);
+                                }
+                                if (phase > 0.5 && isSeaborn) {
+                                    if (!entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "bossoffspring")))
+                                            && !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanpet")))) {
+                                        if (entityiterator instanceof Mob _entity && enemy1 instanceof LivingEntity _ent)
+                                            _entity.setTarget(_ent);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if (tickCount % gap == 99) {
+                assert Boolean.TRUE; //#dbg:SkadiCorruptedSkills:corruptedSpawnCheck
+                WorldUtils.corruptedSpawnMobs(world, x, y, z, nn);
+            }
+            double phase1 = 0;
+            double ang = 0;
+            double r = 0;
+            ang = Mth.nextDouble(RandomSource.create(), 0, 6.283);
+            phase1 = (Entity) this instanceof SkadiCorruptedEntity _datEntI ? _datEntI.getEntityData().get(DATA_phase) : 0;
+            for (int index0 = 0; index0 < (int) (phase1 + 1); index0++) {
+                r = Mth.nextDouble(RandomSource.create(), 2, 3.5);
+                if (world instanceof ServerLevel _level)
+                    _level.sendParticles(CaerulaArborModParticleTypes.CORRUPTED_FISH.get(), (x + r * Math.sin(ang)), (y + 0.25), (z + r * Math.cos(ang)), 1, 0, 0, 0, 0.2);
+            }
+            if (!(phase > 1.5)) {
+                LivingEntity _livEnt =  this;
+                if (deal >= _livEnt.getMaxHealth() * 0.75) {
+                    if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetL)
+                        _datEntSetL.getEntityData().set(DATA_mayCorrupt, false);
+                } else {
+                    if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetL)
+                        _datEntSetL.getEntityData().set(DATA_mayCorrupt, true);
                 }
             }
         }
@@ -789,8 +757,6 @@ public class SkadiCorruptedEntity extends SeaMonster {
             double x = this.getX();
             double y = this.getY();
             double z = this.getZ();
-            if (this == null)
-                return;
             if ((Entity) this instanceof SkadiCorruptedEntity _datEntL0 && _datEntL0.getEntityData().get(DATA_mayCorrupt)) {
                 if (!world.isClientSide()) {
                     if (world instanceof Level _level) {

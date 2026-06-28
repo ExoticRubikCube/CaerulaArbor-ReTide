@@ -1,8 +1,9 @@
 
 package com.apocalypse.caerulaarbor.item;
 
+import com.apocalypse.caerulaarbor.capability.map.MapVariables;
+import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import com.apocalypse.caerulaarbor.system.UpgradeSilenceProcedure;
 import com.apocalypse.caerulaarbor.util.StrategyUtils;
 import net.minecraft.core.BlockPos;
@@ -57,9 +58,8 @@ public class LeviathanAnimusItem extends Item {
 		double x = entity.getX();
 		double y = entity.getY();
 		double z = entity.getZ();
-        if (!CaerulaArborModVariables.MapVariables.get(world).silence_enabled) {
-            CaerulaArborModVariables.MapVariables.get(world).silence_enabled = true;
-            CaerulaArborModVariables.MapVariables.get(world).syncData(world);
+        if (!MapVariables.get(world).silence_enabled) {
+            MapVariablesHandler.setSilenceEnabled(world, true);
             if ((LevelAccessor) world instanceof Level _level) {
                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.end_portal.spawn")), SoundSource.PLAYERS, 4, (float) 0.85);
             }
@@ -69,7 +69,7 @@ public class LeviathanAnimusItem extends Item {
                 ((LevelAccessor) world).getServer().getPlayerList().broadcastSystemMessage(Component.literal((Component.translatable("item.caerula_arbor.language_key.description_14").getString())), false);
             itemstack.shrink(1);
         } else {
-            if (CaerulaArborModVariables.MapVariables.get(world).strategy_silence < 4 && StrategyUtils.canEnableSilence(world)) {
+            if (MapVariables.get(world).strategy_silence < 4 && StrategyUtils.canEnableSilence(world)) {
                 UpgradeSilenceProcedure.execute(world, 99999999);
                 itemstack.shrink(1);
             } else {

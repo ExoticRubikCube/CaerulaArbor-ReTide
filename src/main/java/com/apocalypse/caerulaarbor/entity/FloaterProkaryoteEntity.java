@@ -40,7 +40,6 @@ import net.minecraft.world.entity.animal.Squid;
 import net.minecraft.world.entity.animal.TropicalFish;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -111,118 +110,67 @@ public class FloaterProkaryoteEntity extends SeaMonster implements RangedAttackM
 	protected void registerGoals() {
 		super.registerGoals();
 		this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal(this, Pufferfish.class, true, false) {
+		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Pufferfish.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = FloaterProkaryoteEntity.this.getX();
-				double y = FloaterProkaryoteEntity.this.getY();
-				double z = FloaterProkaryoteEntity.this.getZ();
-				Entity entity = FloaterProkaryoteEntity.this;
-				Level world = FloaterProkaryoteEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = FloaterProkaryoteEntity.this.getX();
-				double y = FloaterProkaryoteEntity.this.getY();
-				double z = FloaterProkaryoteEntity.this.getZ();
-				Entity entity = FloaterProkaryoteEntity.this;
-				Level world = FloaterProkaryoteEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
-		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal(this, GlowSquid.class, true, false) {
+		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, GlowSquid.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = FloaterProkaryoteEntity.this.getX();
-				double y = FloaterProkaryoteEntity.this.getY();
-				double z = FloaterProkaryoteEntity.this.getZ();
-				Entity entity = FloaterProkaryoteEntity.this;
-				Level world = FloaterProkaryoteEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = FloaterProkaryoteEntity.this.getX();
-				double y = FloaterProkaryoteEntity.this.getY();
-				double z = FloaterProkaryoteEntity.this.getZ();
-				Entity entity = FloaterProkaryoteEntity.this;
-				Level world = FloaterProkaryoteEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
-		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal(this, Squid.class, true, false) {
+		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Squid.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = FloaterProkaryoteEntity.this.getX();
-				double y = FloaterProkaryoteEntity.this.getY();
-				double z = FloaterProkaryoteEntity.this.getZ();
-				Entity entity = FloaterProkaryoteEntity.this;
-				Level world = FloaterProkaryoteEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = FloaterProkaryoteEntity.this.getX();
-				double y = FloaterProkaryoteEntity.this.getY();
-				double z = FloaterProkaryoteEntity.this.getZ();
-				Entity entity = FloaterProkaryoteEntity.this;
-				Level world = FloaterProkaryoteEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
-		this.targetSelector.addGoal(5, new NearestAttackableTargetGoal(this, TropicalFish.class, true, false) {
+		this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, TropicalFish.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = FloaterProkaryoteEntity.this.getX();
-				double y = FloaterProkaryoteEntity.this.getY();
-				double z = FloaterProkaryoteEntity.this.getZ();
-				Entity entity = FloaterProkaryoteEntity.this;
-				Level world = FloaterProkaryoteEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = FloaterProkaryoteEntity.this.getX();
-				double y = FloaterProkaryoteEntity.this.getY();
-				double z = FloaterProkaryoteEntity.this.getZ();
-				Entity entity = FloaterProkaryoteEntity.this;
-				Level world = FloaterProkaryoteEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
-		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal(this, Salmon.class, true, false) {
+		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, Salmon.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = FloaterProkaryoteEntity.this.getX();
-				double y = FloaterProkaryoteEntity.this.getY();
-				double z = FloaterProkaryoteEntity.this.getZ();
-				Entity entity = FloaterProkaryoteEntity.this;
-				Level world = FloaterProkaryoteEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = FloaterProkaryoteEntity.this.getX();
-				double y = FloaterProkaryoteEntity.this.getY();
-				double z = FloaterProkaryoteEntity.this.getZ();
-				Entity entity = FloaterProkaryoteEntity.this;
-				Level world = FloaterProkaryoteEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
-		this.targetSelector.addGoal(7, new NearestAttackableTargetGoal(this, Player.class, true, false) {
+		this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, Player.class, true, false) {
 			@Override
 			public boolean canUse() {
 				double x = FloaterProkaryoteEntity.this.getX();
 				double y = FloaterProkaryoteEntity.this.getY();
 				double z = FloaterProkaryoteEntity.this.getZ();
-				Entity entity = FloaterProkaryoteEntity.this;
 				Level world = FloaterProkaryoteEntity.this.level();
 				return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -232,7 +180,6 @@ public class FloaterProkaryoteEntity extends SeaMonster implements RangedAttackM
 				double x = FloaterProkaryoteEntity.this.getX();
 				double y = FloaterProkaryoteEntity.this.getY();
 				double z = FloaterProkaryoteEntity.this.getZ();
-				Entity entity = FloaterProkaryoteEntity.this;
 				Level world = FloaterProkaryoteEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -300,8 +247,8 @@ public class FloaterProkaryoteEntity extends SeaMonster implements RangedAttackM
 		}
 
 		public boolean canContinueToUse() {
-			return this.canUse() || this.target.isAlive() && !this.mob.getNavigation().isDone();
-		}
+            return this.canUse() || this.target != null && this.target.isAlive() && !this.mob.getNavigation().isDone();
+        }
 
 		public void stop() {
 			this.target = null;
@@ -315,8 +262,11 @@ public class FloaterProkaryoteEntity extends SeaMonster implements RangedAttackM
 		}
 
 		public void tick() {
-			double d0 = this.mob.distanceToSqr(this.target.getX(), this.target.getY(), this.target.getZ());
-			boolean flag = this.mob.getSensing().hasLineOfSight(this.target);
+            double d0 = 0;
+            if (this.target != null) {
+                d0 = this.mob.distanceToSqr(this.target.getX(), this.target.getY(), this.target.getZ());
+            }
+            boolean flag = this.mob.getSensing().hasLineOfSight(this.target);
 			if (flag) {
 				++this.seeTime;
 			} else {
@@ -382,12 +332,10 @@ public class FloaterProkaryoteEntity extends SeaMonster implements RangedAttackM
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this != null) {
-            if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get()))
-                this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(10);
-            if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-                this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(18);
-        }
+        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get()))
+            this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(10);
+        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
+            this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(18);
         return retval;
 	}
 
@@ -406,15 +354,8 @@ public class FloaterProkaryoteEntity extends SeaMonster implements RangedAttackM
 
 	@Override
 	public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
-		ItemStack itemstack = sourceentity.getItemInHand(hand);
-		InteractionResult retval = InteractionResult.sidedSuccess(this.level().isClientSide());
 		super.mobInteract(sourceentity, hand);
-		double x = this.getX();
-		double y = this.getY();
-		double z = this.getZ();
-		Entity entity = this;
-		Level world = this.level();
-		return EntityUtils.containFish(entity, sourceentity);
+        return EntityUtils.containFish(this, sourceentity);
 	}
 
 	@Override

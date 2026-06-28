@@ -1,8 +1,9 @@
 package com.apocalypse.caerulaarbor.event;
 
+import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
+import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -54,12 +55,12 @@ public class PlayerEatEventHandler {
 						messageText = Component.translatable("gameplay.life_point.revive.0").getString();
 					}
 					lifeGain = Mth.nextInt(RandomSource.create(), 1, (int) maxReviveAmount);
-					maxLives = (entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).player_maxlive;
-					currentLives = (entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).player_lives;
+					maxLives = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_maxlive;
+					currentLives = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_lives;
 					if (currentLives < maxLives) {
 						{
 							double _setval = Math.min(currentLives + lifeGain, maxLives);
-							entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+							entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
 								capability.player_lives = _setval;
 								capability.syncPlayerVariables(entity);
 							});
@@ -96,9 +97,9 @@ public class PlayerEatEventHandler {
 				}
 				{
 					double _setval = Math.min(100,
-							(entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).player_light
+							(entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_light
 									+ Mth.nextInt(RandomSource.create(), (int) minimumLightGain, (int) maximumLightGain));
-					entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+					entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
 						capability.player_light = _setval;
 						capability.syncPlayerVariables(entity);
 					});

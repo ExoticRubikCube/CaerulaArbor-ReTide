@@ -1,18 +1,17 @@
 
 package com.apocalypse.caerulaarbor.potion;
 
-import com.apocalypse.caerulaarbor.util.EntityUtils;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.effect.MobEffect;
-
+import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.item.ItemStack;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 public class SanityImmueMobEffect extends MobEffect {
     public SanityImmueMobEffect() {
@@ -30,7 +29,7 @@ public class SanityImmueMobEffect extends MobEffect {
         if (entity == null)
             return;
         if (((Entity) entity).isAlive()) {
-            EntityUtils.restoreSanity(entity, 5);
+            ModCapabilities.getSanityInjury(entity).heal(5);
         }
     }
 

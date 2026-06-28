@@ -1,6 +1,8 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.api.event.SanityEvent;
+import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
@@ -139,21 +141,11 @@ public class BishopFishEntity extends SeaMonster {
 
 			@Override
 			public boolean canUse() {
-				double x = BishopFishEntity.this.getX();
-				double y = BishopFishEntity.this.getY();
-				double z = BishopFishEntity.this.getZ();
-				Entity entity = BishopFishEntity.this;
-				Level world = BishopFishEntity.this.level();
 				return super.canUse() && isBishopStarted();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = BishopFishEntity.this.getX();
-				double y = BishopFishEntity.this.getY();
-				double z = BishopFishEntity.this.getZ();
-				Entity entity = BishopFishEntity.this;
-				Level world = BishopFishEntity.this.level();
 				return super.canContinueToUse() && isBishopStarted();
 			}
 
@@ -168,7 +160,7 @@ public class BishopFishEntity extends SeaMonster {
 		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
 		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
 		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
-		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal(this, Player.class, true, false) {
+		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Player.class, true, false) {
 			@Override
 			public boolean canUse() {
 				double x = BishopFishEntity.this.getX();
@@ -184,7 +176,6 @@ public class BishopFishEntity extends SeaMonster {
 				double x = BishopFishEntity.this.getX();
 				double y = BishopFishEntity.this.getY();
 				double z = BishopFishEntity.this.getZ();
-				Entity entity = BishopFishEntity.this;
 				Level world = BishopFishEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -223,138 +214,141 @@ public class BishopFishEntity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if (this != null) {
-            double rate = 0;
-            double sklp = 0;
-            double dx = 0;
-            double dz = 0;
-            double yfnl = 0;
-            if (this.isAlive()) {
-                if (((Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_sklp) : 0) <= 0) {
-                    if (this instanceof BishopFishEntity) {
-                        this.setAnimation("animation.bishop.skill");
-                    }
-                    if ((Entity) this instanceof BishopFishEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_duration, ((Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0) + 20);
-                    if (world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "bishopfish_flap")), SoundSource.HOSTILE, 3, 1);
-                    }
-                    new Object() {
-                        void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
-                            for (int index0 = 0; index0 < 180; index0++) {
-                                if (world instanceof ServerLevel _level)
-                                    _level.sendParticles(ParticleTypes.ELECTRIC_SPARK, (x + timedloopiterator * 2 * Math.sin(Math.toRadians(2 * index0))), (y + 0.5), (z + timedloopiterator * 2 * Math.cos(Math.toRadians(2 * index0))), 16, 0.15, 0.5, 0.15,
-                                            0.1);
-                            }
-                            final int tick2 = ticks;
-                            CaerulaArborMod.queueServerWork(tick2, () -> {
-                                if (timedlooptotal > timedloopiterator + 1) {
-                                    timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
-                                }
-                            });
+        double rate = 0;
+        double sklp = 0;
+        double dx = 0;
+        double dz = 0;
+        double yfnl = 0;
+        if (this.isAlive()) {
+            if (((Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_sklp) : 0) <= 0) {
+                if (this instanceof BishopFishEntity) {
+                    this.setAnimation("animation.bishop.skill");
+                }
+                if ((Entity) this instanceof BishopFishEntity _datEntSetI)
+                    _datEntSetI.getEntityData().set(DATA_duration, ((Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0) + 20);
+                if (world instanceof Level _level) {
+                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "bishopfish_flap")), SoundSource.HOSTILE, 3, 1);
+                }
+                new Object() {
+                    void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
+                        for (int index0 = 0; index0 < 180; index0++) {
+                            if (world instanceof ServerLevel _level)
+                                _level.sendParticles(ParticleTypes.ELECTRIC_SPARK, (x + timedloopiterator * 2 * Math.sin(Math.toRadians(2 * index0))), (y + 0.5), (z + timedloopiterator * 2 * Math.cos(Math.toRadians(2 * index0))), 16, 0.15, 0.5, 0.15,
+                                        0.1);
                         }
-                    }.timedLoop(0, 10, 2);
-                    for (Entity entityiterator : world.getEntities(this, new AABB((x + 20), (y - 4), (z + 20), (x - 20), (y + 8), (z - 20)))) {
-                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
-                            if (!(entityiterator == ((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null))) {
-                                continue;
+                        final int tick2 = ticks;
+                        CaerulaArborMod.queueServerWork(tick2, () -> {
+                            if (timedlooptotal > timedloopiterator + 1) {
+                                timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
                             }
-                        }
-                        if (new Object() {
-                            public boolean checkGamemode(Entity _ent) {
-                                if (_ent instanceof ServerPlayer _serverPlayer) {
-                                    return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                                } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                                    return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                            && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
-                                }
-                                return false;
-                            }
-                        }.checkGamemode(entityiterator)) {
+                        });
+                    }
+                }.timedLoop(0, 10, 2);
+                for (Entity entityiterator : world.getEntities(this, new AABB((x + 20), (y - 4), (z + 20), (x - 20), (y + 8), (z - 20)))) {
+                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                        if (!(entityiterator == this.getTarget())) {
                             continue;
                         }
-                        if (!(entityiterator instanceof Mob) && !(entityiterator instanceof Player)) {
-                            continue;
+                    }
+                    if (new Object() {
+                        public boolean checkGamemode(Entity _ent) {
+                            if (_ent instanceof ServerPlayer _serverPlayer) {
+                                return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                            } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
+                                return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
+                                        && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                            }
+                            return false;
                         }
-                        if ((entityiterator != null ? distanceTo(entityiterator) : -1) <= 20) {
-                            dx = entityiterator.getX() - getX();
-                            if ((dx) > (0) && (dx) < (1)) {
-                                dx = 1;
-                            } else if ((dx) > ((-1)) && (dx) < (0)) {
-                                dx = -1;
-                            } else if (dx == 0) {
-                                dx = 1;
-                            }
-                            dz = entityiterator.getZ() - getZ();
-                            if ((dz) > (0) && (dz) < (1)) {
-                                dz = 1;
-                            } else if ((dz) > ((-1)) && (dz) < (0)) {
-                                dz = -1;
-                            } else if (dz == 0) {
-                                dz = 1;
-                            }
-                            entityiterator.push((1.5 / dx), 0.25, (1.5 / dz));
-                            entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_magic")))),
-                                    (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.5));
-                            EntityUtils.deductSanity(entityiterator, (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
+                    }.checkGamemode(entityiterator)) {
+                        continue;
+                    }
+                    if (!(entityiterator instanceof Mob) && !(entityiterator instanceof Player)) {
+                        continue;
+                    }
+                    if (distanceTo(entityiterator) <= 20) {
+                        dx = entityiterator.getX() - getX();
+                        if ((dx) > (0) && (dx) < (1)) {
+                            dx = 1;
+                        } else if ((dx) > ((-1)) && (dx) < (0)) {
+                            dx = -1;
+                        } else if (dx == 0) {
+                            dx = 1;
+                        }
+                        dz = entityiterator.getZ() - getZ();
+                        if ((dz) > (0) && (dz) < (1)) {
+                            dz = 1;
+                        } else if ((dz) > ((-1)) && (dz) < (0)) {
+                            dz = -1;
+                        } else if (dz == 0) {
+                            dz = 1;
+                        }
+                        entityiterator.push((1.5 / dx), 0.25, (1.5 / dz));
+                        entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_magic")))),
+                                (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.5));
+                        if (entityiterator instanceof LivingEntity target) {
+                            SIHelper.causeSanityInjury(target,
+                                    this,
+                                    (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
                                             * (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get())
                                             ? this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).getValue()
                                             : 0)
-                                            * 1.5);
-                            if (entityiterator instanceof LivingEntity _entity && !this.level().isClientSide())
-                                this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.DIZZY.get(), 60, 0, false, false));
+                                            * 1.5,
+                                    SanityEvent.Hurt.Type.ENTITY);
                         }
-                    }
-                    if ((Entity) this instanceof LivingEntity _livEnt33 && _livEnt33.hasEffect(CaerulaArborModMobEffects.ANGER_OF_BISHOP.get())) {
-                        if (((Entity) this instanceof LivingEntity _livEnt && _livEnt.hasEffect(CaerulaArborModMobEffects.ANGER_OF_BISHOP.get()) ? _livEnt.getEffect(CaerulaArborModMobEffects.ANGER_OF_BISHOP.get()).getAmplifier() : 0) >= 1) {
-                            if ((Entity) this instanceof BishopFishEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_sklp, 100);
-                        } else {
-                            if ((Entity) this instanceof BishopFishEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_sklp, 300);
-                        }
-                    } else {
-                        if ((Entity) this instanceof BishopFishEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_sklp, 500);
+                        if (entityiterator instanceof LivingEntity _entity && !this.level().isClientSide())
+                            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.DIZZY.get(), 60, 0, false, false));
                     }
                 }
-                if (((Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_summonp) : 0) <= 0) {
-                    for (Entity entityiterator : world.getEntities(this, new AABB((x - 32), (y - 16), (z - 32), (x + 32), (y + 16), (z + 32)))) {
-                        if (entityiterator instanceof SonsEntity) {
-                            if ((entityiterator != null ? distanceTo(entityiterator) : -1) <= 6) {
-                                entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.FELL_OUT_OF_WORLD)), 99999);
-                            } else {
-                                rate = rate + 1;
-                            }
+                if (this.hasEffect(CaerulaArborModMobEffects.ANGER_OF_BISHOP.get())) {
+                    if ((this.hasEffect(CaerulaArborModMobEffects.ANGER_OF_BISHOP.get()) ? this.getEffect(CaerulaArborModMobEffects.ANGER_OF_BISHOP.get()).getAmplifier() : 0) >= 1) {
+                        if ((Entity) this instanceof BishopFishEntity _datEntSetI)
+                            _datEntSetI.getEntityData().set(DATA_sklp, 100);
+                    } else {
+                        if ((Entity) this instanceof BishopFishEntity _datEntSetI)
+                            _datEntSetI.getEntityData().set(DATA_sklp, 300);
+                    }
+                } else {
+                    if ((Entity) this instanceof BishopFishEntity _datEntSetI)
+                        _datEntSetI.getEntityData().set(DATA_sklp, 500);
+                }
+            }
+            if (((Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_summonp) : 0) <= 0) {
+                for (Entity entityiterator : world.getEntities(this, new AABB((x - 32), (y - 16), (z - 32), (x + 32), (y + 16), (z + 32)))) {
+                    if (entityiterator instanceof SonsEntity) {
+                        if (distanceTo(entityiterator) <= 6) {
+                            entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.FELL_OUT_OF_WORLD)), 99999);
+                        } else {
+                            rate = rate + 1;
                         }
                     }
-                    if (rate < 32) {
-                        for (int index1 = 0; index1 < 8; index1++) {
-                            dx = Mth.nextDouble(RandomSource.create(), -22, 22);
-                            dz = Mth.nextDouble(RandomSource.create(), -22, 22);
-                            yfnl = world.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (int) (x + dx), (int) (z + dz));
-                            if (yfnl > y + 3) {
-                                yfnl = y + 3;
-                            }
-                            if (world instanceof ServerLevel _level) {
-                                Entity entityToSpawn = CaerulaArborModEntities.SONS.get().spawn(_level, BlockPos.containing(x + dx, yfnl, z + dz), MobSpawnType.MOB_SUMMONED);
-                                if (entityToSpawn != null) {
-                                    entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-                                }
-                            }
-                            if (world instanceof ServerLevel _level)
-                                _level.sendParticles(ParticleTypes.SMOKE, (x + dx), (yfnl + 0.5), (z + dz), 16, 0.5, 0.5, 0.5, 0.2);
-                            if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x + dx, yfnl, z + dz), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.guardian.flop")), SoundSource.HOSTILE, 1, 1);
+                }
+                if (rate < 32) {
+                    for (int index1 = 0; index1 < 8; index1++) {
+                        dx = Mth.nextDouble(RandomSource.create(), -22, 22);
+                        dz = Mth.nextDouble(RandomSource.create(), -22, 22);
+                        yfnl = world.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (int) (x + dx), (int) (z + dz));
+                        if (yfnl > y + 3) {
+                            yfnl = y + 3;
+                        }
+                        if (world instanceof ServerLevel _level) {
+                            Entity entityToSpawn = CaerulaArborModEntities.SONS.get().spawn(_level, BlockPos.containing(x + dx, yfnl, z + dz), MobSpawnType.MOB_SUMMONED);
+                            if (entityToSpawn != null) {
+                                entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                             }
                         }
-                        if ((Entity) this instanceof LivingEntity _livEnt50 && _livEnt50.hasEffect(CaerulaArborModMobEffects.ANGER_OF_BISHOP.get())) {
-                            if ((Entity) this instanceof BishopFishEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_summonp, 360);
-                        } else {
-                            if ((Entity) this instanceof BishopFishEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_summonp, 600);
+                        if (world instanceof ServerLevel _level)
+                            _level.sendParticles(ParticleTypes.SMOKE, (x + dx), (yfnl + 0.5), (z + dz), 16, 0.5, 0.5, 0.5, 0.2);
+                        if (world instanceof Level _level) {
+                                _level.playSound(null, BlockPos.containing(x + dx, yfnl, z + dz), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.guardian.flop")), SoundSource.HOSTILE, 1, 1);
                         }
+                    }
+                    if (this.hasEffect(CaerulaArborModMobEffects.ANGER_OF_BISHOP.get())) {
+                        if ((Entity) this instanceof BishopFishEntity _datEntSetI)
+                            _datEntSetI.getEntityData().set(DATA_summonp, 360);
+                    } else {
+                        if ((Entity) this instanceof BishopFishEntity _datEntSetI)
+                            _datEntSetI.getEntityData().set(DATA_summonp, 600);
                     }
                 }
             }
@@ -376,26 +370,24 @@ public class BishopFishEntity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if (this != null) {
-            if ((Entity) this instanceof BishopFishEntity _datEntSetI)
-                _datEntSetI.getEntityData().set(DATA_locx, (int) Math.round(x));
-            if ((Entity) this instanceof BishopFishEntity _datEntSetI)
-                _datEntSetI.getEntityData().set(DATA_locy, (int) Math.round(y));
-            if ((Entity) this instanceof BishopFishEntity _datEntSetI)
-                _datEntSetI.getEntityData().set(DATA_locz, (int) Math.round(z));
-            if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get()))
-                this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(10);
-            if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-                this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(24);
-            setNoGravity(true);
-            if (!this.level().isClientSide())
-                this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 80, 1, false, false));
-            if ((LevelAccessor) world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.emerge")), SoundSource.HOSTILE, 3, 1);
-            }
-            if (this instanceof BishopFishEntity) {
-                this.setAnimation("animation.bishop.start1");
-            }
+        if ((Entity) this instanceof BishopFishEntity _datEntSetI)
+            _datEntSetI.getEntityData().set(DATA_locx, (int) Math.round(x));
+        if ((Entity) this instanceof BishopFishEntity _datEntSetI)
+            _datEntSetI.getEntityData().set(DATA_locy, (int) Math.round(y));
+        if ((Entity) this instanceof BishopFishEntity _datEntSetI)
+            _datEntSetI.getEntityData().set(DATA_locz, (int) Math.round(z));
+        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get()))
+            this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(10);
+        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
+            this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(24);
+        setNoGravity(true);
+        if (!this.level().isClientSide())
+            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 80, 1, false, false));
+        if ((LevelAccessor) world instanceof Level _level) {
+                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.emerge")), SoundSource.HOSTILE, 3, 1);
+        }
+        if (this instanceof BishopFishEntity) {
+            this.setAnimation("animation.bishop.start1");
         }
         return retval;
 	}
@@ -441,123 +433,116 @@ public class BishopFishEntity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if (this != null) {
-            double skl = 0;
-            double end = 0;
-            double smm = 0;
-            double dx = 0;
-            double rate = 0;
-            double dz = 0;
-            double d = 0;
-            if (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) <= ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.67) {
-                if (!((Entity) this instanceof LivingEntity _livEnt2 && _livEnt2.hasEffect(CaerulaArborModMobEffects.ANGER_OF_BISHOP.get()))) {
-                    if (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) <= ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.33) {
-                        if (!this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ANGER_OF_BISHOP.get(), 20, 1));
-                    } else {
-                        if (!this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ANGER_OF_BISHOP.get(), 20, 0));
-                    }
+        double skl = 0;
+        double end = 0;
+        double smm = 0;
+        double d = 0;
+        if (this.getHealth() <= this.getMaxHealth() * 0.67) {
+            if (!this.level().isClientSide() && !this.hasEffect(CaerulaArborModMobEffects.ANGER_OF_BISHOP.get())) {;
+                if (this.getHealth() <= this.getMaxHealth() * 0.33) {
+                    this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ANGER_OF_BISHOP.get(), 20, 1));
+                } else {
+                    this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ANGER_OF_BISHOP.get(), 20, 0));
                 }
             }
-            skl = (Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_sklp) : 0;
-            smm = (Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_summonp) : 0;
-            end = (Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_endp) : 0;
-            d = (Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
-            if (d > 0) {
+        }
+        skl = (Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_sklp) : 0;
+        smm = (Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_summonp) : 0;
+        end = (Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_endp) : 0;
+        d = (Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
+        if (d > 0) {
+            if ((Entity) this instanceof BishopFishEntity _datEntSetI)
+                _datEntSetI.getEntityData().set(DATA_duration, (int) (d - 1));
+        }
+        if (skl > 0) {
+            if ((Entity) this instanceof BishopFishEntity _datEntSetI)
+                _datEntSetI.getEntityData().set(DATA_sklp, (int) (skl - 1));
+        }
+        if (smm > 0) {
+            if ((Entity) this instanceof BishopFishEntity _datEntSetI)
+                _datEntSetI.getEntityData().set(DATA_summonp, (int) (smm - 1));
+        }
+        if (end <= 0) {
+            if (EntityUtils.getSeabornAround(world, x, y, z, this) < 32) {
+                if (this instanceof BishopFishEntity) {
+                    this.setAnimation("animation.bishop.blast");
+                }
                 if ((Entity) this instanceof BishopFishEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_duration, (int) (d - 1));
-            }
-            if (skl > 0) {
+                    _datEntSetI.getEntityData().set(DATA_duration, (int) (d + 40));
+                if (world instanceof Level _level) {
+                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "bishopfish_blast")), SoundSource.HOSTILE, 4, 1);
+                }
+                if (!this.level().isClientSide())
+                    this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 40, 0));
                 if ((Entity) this instanceof BishopFishEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_sklp, (int) (skl - 1));
-            }
-            if (smm > 0) {
-                if ((Entity) this instanceof BishopFishEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_summonp, (int) (smm - 1));
-            }
-            if (end <= 0) {
-                if (EntityUtils.getSeabornAround(world, x, y, z, this) < 32) {
-                    if (this instanceof BishopFishEntity) {
-                        this.setAnimation("animation.bishop.blast");
-                    }
-                    if ((Entity) this instanceof BishopFishEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_duration, (int) (d + 40));
-                    if (world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "bishopfish_blast")), SoundSource.HOSTILE, 4, 1);
-                    }
-                    if (!this.level().isClientSide())
-                        this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 40, 0));
-                    if ((Entity) this instanceof BishopFishEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_endp, 2400);
-                    new Object() {
-                        void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
-                            double dx1 = 0;
-                            double dz1 = 0;
-                            double yfnl = 0;
-                            dx1 = Mth.nextInt(RandomSource.create(), -18, 18);
-                            dz1 = Mth.nextInt(RandomSource.create(), -18, 18);
-                            yfnl = world.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (int) (x + dx1), (int) (z + dz1));
-                            if (yfnl < y - 6) {
-                                yfnl = y;
-                            }
-                            if (yfnl > y + 3) {
-                                yfnl = y + 3;
-                            }
-                            com.apocalypse.caerulaarbor.util.WorldUtils.summonRandomSeaborn(world, 0.75, x + dx1, yfnl, z + dz1);
-                            if (world instanceof ServerLevel _level)
-                                FallingBlockEntity.fall(_level, BlockPos.containing(x + dx1, yfnl + 6, z + dz1), CaerulaArborModBlocks.SEA_TRAIL_GROWN.get().defaultBlockState());
-                            if (world instanceof ServerLevel _level)
-                                _level.sendParticles(ParticleTypes.CLOUD, (x + dx1), (yfnl + 1), (z + dz1), 64, 1, 1, 1, 0.1);
-                            if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x + dx1, yfnl + 1, z + dz1), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("ambient.underwater.enter")), SoundSource.NEUTRAL, (float) 1.5, 1);
-                            }
-                            for (Entity entityiterator : world.getEntities(BishopFishEntity.this, new AABB((x + 18), y, (z + 18), (x - 18), (y + 12), (z - 18)))) {
-                                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
-                                    if (!(entityiterator == ((Entity) BishopFishEntity.this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null))) {
-                                        continue;
-                                    }
-                                }
-                                if (!(entityiterator instanceof Mob) && !(entityiterator instanceof Player)) {
+                    _datEntSetI.getEntityData().set(DATA_endp, 2400);
+                new Object() {
+                    void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
+                        double dx1 = 0;
+                        double dz1 = 0;
+                        double yfnl = 0;
+                        dx1 = Mth.nextInt(RandomSource.create(), -18, 18);
+                        dz1 = Mth.nextInt(RandomSource.create(), -18, 18);
+                        yfnl = world.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (int) (x + dx1), (int) (z + dz1));
+                        if (yfnl < y - 6) {
+                            yfnl = y;
+                        }
+                        if (yfnl > y + 3) {
+                            yfnl = y + 3;
+                        }
+                        com.apocalypse.caerulaarbor.util.WorldUtils.summonRandomSeaborn(world, 0.75, x + dx1, yfnl, z + dz1);
+                        if (world instanceof ServerLevel _level)
+                            FallingBlockEntity.fall(_level, BlockPos.containing(x + dx1, yfnl + 6, z + dz1), CaerulaArborModBlocks.SEA_TRAIL_GROWN.get().defaultBlockState());
+                        if (world instanceof ServerLevel _level)
+                            _level.sendParticles(ParticleTypes.CLOUD, (x + dx1), (yfnl + 1), (z + dz1), 64, 1, 1, 1, 0.1);
+                        if (world instanceof Level _level) {
+                                _level.playSound(null, BlockPos.containing(x + dx1, yfnl + 1, z + dz1), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("ambient.underwater.enter")), SoundSource.NEUTRAL, (float) 1.5, 1);
+                        }
+                        for (Entity entityiterator : world.getEntities(BishopFishEntity.this, new AABB((x + 18), y, (z + 18), (x - 18), (y + 12), (z - 18)))) {
+                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                                if (!(entityiterator == ((Entity) BishopFishEntity.this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null))) {
                                     continue;
                                 }
-                                if ((entityiterator != null ? distanceTo(entityiterator) : -1) <= 20) {
-                                    entityiterator.hurt(
-                                            new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_magic"))), BishopFishEntity.this),
-                                            (float) (((Entity) BishopFishEntity.this instanceof LivingEntity _livingEntity25 && _livingEntity25.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity25.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 3));
-                                }
                             }
-                            final int tick2 = ticks;
-                            CaerulaArborMod.queueServerWork(tick2, () -> {
-                                if (timedlooptotal > timedloopiterator + 1) {
-                                    timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
-                                }
-                            });
+                            if (!(entityiterator instanceof Mob) && !(entityiterator instanceof Player)) {
+                                continue;
+                            }
+                            if (distanceTo(entityiterator) <= 20) {
+                                entityiterator.hurt(
+                                        new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_magic"))), BishopFishEntity.this),
+                                        (float) (((Entity) BishopFishEntity.this instanceof LivingEntity _livingEntity25 && _livingEntity25.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity25.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 3));
+                            }
                         }
-                    }.timedLoop(0, 16, 5);
-                }
-            } else {
-                if ((Entity) this instanceof BishopFishEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_endp, (int) (end - 1));
-            }
-            if (tickCount % 10 == 0 && new Vec3(x, y, z).distanceTo(new Vec3(((Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_locx) : 0),
-                    ((Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_locy) : 0), ((Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_locz) : 0))) >= 3) {
-                setDeltaMovement(new Vec3(0, 0, 0));
-                {
-                    Entity _ent = this;
-                    _ent.teleportTo(((Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_locx) : 0),
-                            ((Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_locy) : 0), ((Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_locz) : 0));
-                    if (_ent instanceof ServerPlayer _serverPlayer)
-                        _serverPlayer.connection.teleport(((Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_locx) : 0),
-                                ((Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_locy) : 0), ((Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_locz) : 0),
-                                _ent.getYRot(), _ent.getXRot());
-                }
-            }
-            for (Entity entityiterator : world.getEntities(this, new AABB((x - 6), (y - 6), (z - 6), (x + 6), (y + 6), (z + 6)))) {
-                if (entityiterator instanceof SonsEntity) {
-                    if ((entityiterator != null ? distanceTo(entityiterator) : -1) <= 6) {
-                        entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.FELL_OUT_OF_WORLD)), 99999);
+                        final int tick2 = ticks;
+                        CaerulaArborMod.queueServerWork(tick2, () -> {
+                            if (timedlooptotal > timedloopiterator + 1) {
+                                timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
+                            }
+                        });
                     }
+                }.timedLoop(0, 16, 5);
+            }
+        } else {
+            if ((Entity) this instanceof BishopFishEntity _datEntSetI)
+                _datEntSetI.getEntityData().set(DATA_endp, (int) (end - 1));
+        }
+        if (tickCount % 10 == 0 && new Vec3(x, y, z).distanceTo(new Vec3(((Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_locx) : 0),
+                ((Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_locy) : 0), ((Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_locz) : 0))) >= 3) {
+            setDeltaMovement(new Vec3(0, 0, 0));
+            {
+                Entity _ent = this;
+                _ent.teleportTo(((Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_locx) : 0),
+                        ((Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_locy) : 0), ((Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_locz) : 0));
+                if (_ent instanceof ServerPlayer _serverPlayer)
+                    _serverPlayer.connection.teleport(((Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_locx) : 0),
+                            ((Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_locy) : 0), ((Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_locz) : 0),
+                            _ent.getYRot(), _ent.getXRot());
+            }
+        }
+        for (Entity entityiterator : world.getEntities(this, new AABB((x - 6), (y - 6), (z - 6), (x + 6), (y + 6), (z + 6)))) {
+            if (entityiterator instanceof SonsEntity) {
+                if (distanceTo(entityiterator) <= 6) {
+                    entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.FELL_OUT_OF_WORLD)), 99999);
                 }
             }
         }
@@ -632,7 +617,6 @@ public class BishopFishEntity extends SeaMonster {
 	private PlayState attackingPredicate(AnimationState event) {
 		double d1 = this.getX() - this.xOld;
 		double d0 = this.getZ() - this.zOld;
-		float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
 		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();

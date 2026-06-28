@@ -1,6 +1,8 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.api.event.SanityEvent;
+import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
@@ -117,13 +119,12 @@ public class OceanizedSheepEntity extends SeaMonster {
 		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
 		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
 		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
-		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal(this, Player.class, true, false) {
+		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Player.class, true, false) {
 			@Override
 			public boolean canUse() {
 				double x = OceanizedSheepEntity.this.getX();
 				double y = OceanizedSheepEntity.this.getY();
 				double z = OceanizedSheepEntity.this.getZ();
-				Entity entity = OceanizedSheepEntity.this;
 				Level world = OceanizedSheepEntity.this.level();
 				return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -133,29 +134,18 @@ public class OceanizedSheepEntity extends SeaMonster {
 				double x = OceanizedSheepEntity.this.getX();
 				double y = OceanizedSheepEntity.this.getY();
 				double z = OceanizedSheepEntity.this.getZ();
-				Entity entity = OceanizedSheepEntity.this;
 				Level world = OceanizedSheepEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
 		});
-		this.targetSelector.addGoal(14, new NearestAttackableTargetGoal(this, Animal.class, true, false) {
+		this.targetSelector.addGoal(14, new NearestAttackableTargetGoal<>(this, Animal.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = OceanizedSheepEntity.this.getX();
-				double y = OceanizedSheepEntity.this.getY();
-				double z = OceanizedSheepEntity.this.getZ();
-				Entity entity = OceanizedSheepEntity.this;
-				Level world = OceanizedSheepEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = OceanizedSheepEntity.this.getX();
-				double y = OceanizedSheepEntity.this.getY();
-				double z = OceanizedSheepEntity.this.getZ();
-				Entity entity = OceanizedSheepEntity.this;
-				Level world = OceanizedSheepEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
@@ -202,17 +192,13 @@ public class OceanizedSheepEntity extends SeaMonster {
 
 	@Override
 	public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
-		ItemStack itemstack = sourceentity.getItemInHand(hand);
-		InteractionResult retval = InteractionResult.sidedSuccess(this.level().isClientSide());
 		super.mobInteract(sourceentity, hand);
 		double x = this.getX();
 		double y = this.getY();
 		double z = this.getZ();
 		Entity entity = this;
 		Level world = this.level();
-        if (entity == null || sourceentity == null)
-            return InteractionResult.PASS;
-        if (((Entity) sourceentity instanceof LivingEntity _entity && _entity.isHolding(Items.SHEARS)) && entity instanceof OceanizedSheepEntity _datEntL1 && _datEntL1.getEntityData().get(DATA_fur)) {
+        if (sourceentity.isHolding(Items.SHEARS) && entity instanceof OceanizedSheepEntity _datEntL1 && _datEntL1.getEntityData().get(DATA_fur)) {
             if (entity instanceof OceanizedSheepEntity _datEntSetL)
                 _datEntSetL.getEntityData().set(DATA_fur, false);
             if (entity instanceof OceanizedSheepEntity animatable)
@@ -232,7 +218,9 @@ public class OceanizedSheepEntity extends SeaMonster {
                     _level.addFreshEntity(entityToSpawn);
                 }
             }
-            EntityUtils.deductSanity(sourceentity, 64);
+            if (sourceentity instanceof LivingEntity target) {
+                SIHelper.causeSanityInjury(target, this, 64, SanityEvent.Hurt.Type.ENTITY);
+            }
             return InteractionResult.SUCCESS;
         }
         return InteractionResult.PASS;
@@ -245,22 +233,20 @@ public class OceanizedSheepEntity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if (this != null) {
-            if (!((Entity) this instanceof OceanizedSheepEntity _datEntL0 && _datEntL0.getEntityData().get(DATA_fur))) {
-                if ((world.getBlockState(BlockPos.containing(x + getLookAngle().x, y, z + getLookAngle().z))).getBlock() == CaerulaArborModBlocks.TRAIL_MUSHROOM.get()) {
-                    if (this instanceof OceanizedSheepEntity) {
-                        this.setAnimation("animation.oceanized_sheep.eat");
-                    }
-                    if ((Entity) this instanceof OceanizedSheepEntity _datEntSetL)
-                        _datEntSetL.getEntityData().set(DATA_fur, true);
-                    world.setBlock(BlockPos.containing(x + getLookAngle().x, y, z + getLookAngle().z), Blocks.AIR.defaultBlockState(), 3);
-                    CaerulaArborMod.queueServerWork(20, () -> {
-                        if ((Entity) this instanceof OceanizedSheepEntity _datEntL10 && _datEntL10.getEntityData().get(DATA_fur)) {
-                            if ((Entity) this instanceof OceanizedSheepEntity animatable)
-                                animatable.setTexture("oceanized_sheep");
-                        }
-                    });
+        if (!((Entity) this instanceof OceanizedSheepEntity _datEntL0 && _datEntL0.getEntityData().get(DATA_fur))) {
+            if ((world.getBlockState(BlockPos.containing(x + getLookAngle().x, y, z + getLookAngle().z))).getBlock() == CaerulaArborModBlocks.TRAIL_MUSHROOM.get()) {
+                if (this instanceof OceanizedSheepEntity) {
+                    this.setAnimation("animation.oceanized_sheep.eat");
                 }
+                if ((Entity) this instanceof OceanizedSheepEntity _datEntSetL)
+                    _datEntSetL.getEntityData().set(DATA_fur, true);
+                world.setBlock(BlockPos.containing(x + getLookAngle().x, y, z + getLookAngle().z), Blocks.AIR.defaultBlockState(), 3);
+                CaerulaArborMod.queueServerWork(20, () -> {
+                    if ((Entity) this instanceof OceanizedSheepEntity _datEntL10 && _datEntL10.getEntityData().get(DATA_fur)) {
+                        if ((Entity) this instanceof OceanizedSheepEntity animatable)
+                            animatable.setTexture("oceanized_sheep");
+                    }
+                });
             }
         }
         this.refreshDimensions();
@@ -299,7 +285,6 @@ public class OceanizedSheepEntity extends SeaMonster {
 	private PlayState attackingPredicate(AnimationState event) {
 		double d1 = this.getX() - this.xOld;
 		double d0 = this.getZ() - this.zOld;
-		float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
 		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();

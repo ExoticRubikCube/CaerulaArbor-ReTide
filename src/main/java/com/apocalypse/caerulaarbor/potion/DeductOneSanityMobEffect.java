@@ -1,18 +1,16 @@
 
 package com.apocalypse.caerulaarbor.potion;
 
-import com.apocalypse.caerulaarbor.util.EntityUtils;
+import com.apocalypse.caerulaarbor.api.event.SanityEvent;
+import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraftforge.client.extensions.common.IClientMobEffectExtensions;
 
 import java.util.ArrayList;
@@ -34,12 +32,9 @@ public class DeductOneSanityMobEffect extends MobEffect {
 
 	@Override
 	public void applyEffectTick(LivingEntity entity, int amplifier) {
-        LevelAccessor world = entity.level();
         if (entity == null)
             return;
-        EntityUtils.deductSanity(entity, (double) amplifier + 1);
-        if (world instanceof ServerLevel _level)
-            _level.sendParticles(ParticleTypes.ELECTRIC_SPARK, entity.getX(), (entity.getY() + 1), entity.getZ(), (int) ((double) amplifier + 1), 0.5, 0.8, 0.5, 0.1);
+        SIHelper.causeSanityInjury(entity, (double) amplifier + 1, SanityEvent.Hurt.Type.POTION);
     }
 
 	@Override

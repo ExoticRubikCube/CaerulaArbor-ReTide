@@ -137,97 +137,56 @@ public class BoneFishEntity extends SeaMonster {
 				return this.mob.getBbWidth() * this.mob.getBbWidth() + entity.getBbWidth();
 			}
 		});
-		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal(this, GlowSquid.class, true, false) {
+		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, GlowSquid.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = BoneFishEntity.this.getX();
-				double y = BoneFishEntity.this.getY();
-				double z = BoneFishEntity.this.getZ();
-				Entity entity = BoneFishEntity.this;
-				Level world = BoneFishEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = BoneFishEntity.this.getX();
-				double y = BoneFishEntity.this.getY();
-				double z = BoneFishEntity.this.getZ();
-				Entity entity = BoneFishEntity.this;
-				Level world = BoneFishEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
-		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal(this, Squid.class, true, false) {
+		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Squid.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = BoneFishEntity.this.getX();
-				double y = BoneFishEntity.this.getY();
-				double z = BoneFishEntity.this.getZ();
-				Entity entity = BoneFishEntity.this;
-				Level world = BoneFishEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = BoneFishEntity.this.getX();
-				double y = BoneFishEntity.this.getY();
-				double z = BoneFishEntity.this.getZ();
-				Entity entity = BoneFishEntity.this;
-				Level world = BoneFishEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
-		this.targetSelector.addGoal(5, new NearestAttackableTargetGoal(this, TropicalFish.class, true, false) {
+		this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, TropicalFish.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = BoneFishEntity.this.getX();
-				double y = BoneFishEntity.this.getY();
-				double z = BoneFishEntity.this.getZ();
-				Entity entity = BoneFishEntity.this;
-				Level world = BoneFishEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = BoneFishEntity.this.getX();
-				double y = BoneFishEntity.this.getY();
-				double z = BoneFishEntity.this.getZ();
-				Entity entity = BoneFishEntity.this;
-				Level world = BoneFishEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
-		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal(this, Salmon.class, true, false) {
+		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, Salmon.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = BoneFishEntity.this.getX();
-				double y = BoneFishEntity.this.getY();
-				double z = BoneFishEntity.this.getZ();
-				Entity entity = BoneFishEntity.this;
-				Level world = BoneFishEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = BoneFishEntity.this.getX();
-				double y = BoneFishEntity.this.getY();
-				double z = BoneFishEntity.this.getZ();
-				Entity entity = BoneFishEntity.this;
-				Level world = BoneFishEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
-		this.targetSelector.addGoal(7, new NearestAttackableTargetGoal(this, Player.class, true, false) {
+		this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, Player.class, true, false) {
 			@Override
 			public boolean canUse() {
 				double x = BoneFishEntity.this.getX();
 				double y = BoneFishEntity.this.getY();
 				double z = BoneFishEntity.this.getZ();
-				Entity entity = BoneFishEntity.this;
 				Level world = BoneFishEntity.this.level();
 				return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -237,7 +196,6 @@ public class BoneFishEntity extends SeaMonster {
 				double x = BoneFishEntity.this.getX();
 				double y = BoneFishEntity.this.getY();
 				double z = BoneFishEntity.this.getZ();
-				Entity entity = BoneFishEntity.this;
 				Level world = BoneFishEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -293,14 +251,8 @@ public class BoneFishEntity extends SeaMonster {
 
 	@Override
 	public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
-		ItemStack itemstack = sourceentity.getItemInHand(hand);
-		InteractionResult retval = InteractionResult.sidedSuccess(this.level().isClientSide());
 		super.mobInteract(sourceentity, hand);
-		double x = this.getX();
-		double y = this.getY();
-		double z = this.getZ();
 		Entity entity = this;
-		Level world = this.level();
 		return EntityUtils.containFish(entity, sourceentity);
 	}
 
@@ -360,7 +312,6 @@ public class BoneFishEntity extends SeaMonster {
 	private PlayState attackingPredicate(AnimationState event) {
 		double d1 = this.getX() - this.xOld;
 		double d0 = this.getZ() - this.zOld;
-		float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
 		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();

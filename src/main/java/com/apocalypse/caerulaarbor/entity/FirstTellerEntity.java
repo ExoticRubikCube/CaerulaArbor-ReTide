@@ -1,11 +1,11 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -276,7 +276,7 @@ public class FirstTellerEntity extends SeaMonster implements RangedAttackMob {
         if (this.isAlive()) {
             if ((Entity) this instanceof FirstTellerEntity _datEntSetI)
                 _datEntSetI.getEntityData().set(DATA_sklp, ((Entity) this instanceof FirstTellerEntity _datEntI ? _datEntI.getEntityData().get(DATA_sklp) : 0) + 1);
-            if (CaerulaArborModVariables.MapVariables.get(world).strategy_grow >= 4) {
+            if (MapVariables.get(world).strategy_grow >= 4) {
                 if ((Entity) this instanceof FirstTellerEntity _datEntSetI)
                     _datEntSetI.getEntityData().set(DATA_sklp, ((Entity) this instanceof FirstTellerEntity _datEntI ? _datEntI.getEntityData().get(DATA_sklp) : 0) + 1);
             }

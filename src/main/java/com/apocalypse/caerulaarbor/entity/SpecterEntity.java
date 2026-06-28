@@ -303,7 +303,7 @@ public class SpecterEntity extends Animal implements GeoEntity {
                 }
                 if (sklp1 >= 5) {
                     if (!(enemy == null) && enemy.isAlive()) {
-                        if ((enemy != null ? distanceTo(enemy) : -1) <= 4) {
+                        if (distanceTo(enemy) <= 4) {
                             this.setAnimation("animation.specter.skill");
                             this.getEntityData().set(DATA_skillp1, 0);
                             this.getEntityData().set(DATA_duration, (int) (dura + 45));
@@ -439,7 +439,6 @@ public class SpecterEntity extends Animal implements GeoEntity {
 	private PlayState attackingPredicate(AnimationState event) {
 		double d1 = this.getX() - this.xOld;
 		double d0 = this.getZ() - this.zOld;
-		float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
 		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();

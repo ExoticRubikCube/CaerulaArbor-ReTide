@@ -64,9 +64,6 @@ public class IzumikOffspringEntity extends SeaMonster {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(IzumikOffspringEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(IzumikOffspringEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(IzumikOffspringEntity.class, EntityDataSerializers.STRING);
-	private boolean swinging;
-	private boolean lastloop;
-	private long lastSwing;
 	public String animationprocedure = "empty";
 
 	public IzumikOffspringEntity(PlayMessages.SpawnEntity packet, Level world) {
@@ -168,7 +165,7 @@ public class IzumikOffspringEntity extends SeaMonster {
         double y = this.getY();
         double z = this.getZ();
         Entity sourceentity = source.getEntity();
-        if (this != null && sourceentity != null) {
+        if (sourceentity != null) {
             if (!isRemoved()) {
                 if (this.isAlive()) {
                     boolean success = false;
@@ -221,69 +218,64 @@ public class IzumikOffspringEntity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if (this != null) {
-            boolean success = false;
-            Entity owner = null;
-            if (tickCount % 5 == 0) {
-                owner = world.getEntitiesOfClass(IzumikEntity.class, AABB.ofSize(new Vec3(x, y, z), 85, 32, 85), e -> true).stream().sorted(new Object() {
-                    Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
-                        return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
-                    }
-                }.compareDistOf(x, y, z)).findFirst().orElse(null);
-                if (!(owner == null)) {
-                    if (((Entity) this instanceof Mob _entity) && (owner.getEntityData().get(IzumikEntity.DATA_phase) == 0))
-                        _entity.getNavigation().moveTo((owner.getX()), (owner.getY() + 4), (owner.getZ()), 0.75);
-                } else {
-                    if ((Entity) this instanceof Mob _entity)
-                        _entity.getNavigation().stop();
+        boolean success = false;
+        Entity owner = null;
+        if (tickCount % 5 == 0) {
+            owner = world.getEntitiesOfClass(IzumikEntity.class, AABB.ofSize(new Vec3(x, y, z), 85, 32, 85), e -> true).stream().sorted(new Object() {
+                Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
+                    return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
                 }
-                {
-                    final Vec3 _center = new Vec3(x, y, z);
-                    List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(4 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                    for (Entity entityiterator : _entfound) {
-                        if (entityiterator == this) {
-                            continue;
-                        }
-                        if (!(entityiterator instanceof Mob)) {
-                            if (!(entityiterator instanceof Player)) {
-                                continue;
-                            } else {
-                                if (new Object() {
-                                    public boolean checkGamemode(Entity _ent) {
-                                        if (_ent instanceof ServerPlayer _serverPlayer) {
-                                            return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                                        } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                                            return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                                    && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
-                                        }
-                                        return false;
-                                    }
-                                }.checkGamemode(entityiterator)) {
-                                    continue;
-                                }
-                            }
-                        }
-                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
-                            continue;
-                        }
-                        if (distanceTo(entityiterator) <= 2) {
-                            if (!world.isClientSide()) {
-                                if (world instanceof ServerLevel serverLevel) {
-                                    success = EntitySpawnUtils.spawnRandomEntityFromTag(serverLevel, x, y, z);
-                                }
-                            }
-                            if (success) {
-                                CaerulaArborMod.LOGGER.info(("offspring at " + x + " " + y + " " + z + " changes"));
-                                if (world instanceof ServerLevel _level)
-                                    _level.sendParticles(ParticleTypes.CLOUD, x, (y + 0.75), z, 32, 0.75, 0.75, 0.75, 0.1);
-                                if (!level().isClientSide())
-                                    discard();
-                                break;
-                            }
-                        }
-                    }
-                }
+            }.compareDistOf(x, y, z)).findFirst().orElse(null);
+            if (!(owner == null)) {
+                if (owner.getEntityData().get(IzumikEntity.DATA_phase) == 0)
+					this.getNavigation().moveTo((owner.getX()), (owner.getY() + 4), (owner.getZ()), 0.75);
+            } else {
+                this.getNavigation().stop();
             }
+			final Vec3 _center = new Vec3(x, y, z);
+			List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(4 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+			for (Entity entityiterator : _entfound) {
+				if (entityiterator == this) {
+					continue;
+				}
+				if (!(entityiterator instanceof Mob)) {
+					if (!(entityiterator instanceof Player)) {
+						continue;
+					} else {
+						if (new Object() {
+							public boolean checkGamemode(Entity _ent) {
+								if (_ent instanceof ServerPlayer _serverPlayer) {
+									return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+								} else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
+									return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
+											&& Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+								}
+								return false;
+							}
+						}.checkGamemode(entityiterator)) {
+							continue;
+						}
+					}
+				}
+				if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+					continue;
+				}
+				if (distanceTo(entityiterator) <= 2) {
+					if (!world.isClientSide()) {
+						if (world instanceof ServerLevel serverLevel) {
+							success = EntitySpawnUtils.spawnRandomEntityFromTag(serverLevel, x, y, z);
+						}
+					}
+					if (success) {
+						CaerulaArborMod.LOGGER.info(("offspring at " + x + " " + y + " " + z + " changes"));
+						if (world instanceof ServerLevel _level)
+							_level.sendParticles(ParticleTypes.CLOUD, x, (y + 0.75), z, 32, 0.75, 0.75, 0.75, 0.1);
+						if (!level().isClientSide())
+							discard();
+						break;
+					}
+				}
+			}
         }
 
         this.refreshDimensions();

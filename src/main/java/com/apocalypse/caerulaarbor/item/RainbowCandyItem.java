@@ -1,8 +1,8 @@
 
 package com.apocalypse.caerulaarbor.item;
 
+import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -39,7 +39,7 @@ public class RainbowCandyItem extends Item {
 			entity.addEffect(new MobEffectInstance(MobEffects.HEALTH_BOOST, 560, 1));
 		}
 		boolean _setval = true;
-		entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+		entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
 			capability.player_util_RAINBOW = _setval;
 			capability.syncPlayerVariables(entity);
 		});

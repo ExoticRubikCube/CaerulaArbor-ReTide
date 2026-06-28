@@ -1,7 +1,8 @@
 package com.apocalypse.caerulaarbor.util;
 
+import com.apocalypse.caerulaarbor.capability.ModCapabilities;
+import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 
@@ -11,10 +12,10 @@ public class PlayerStateUtils {
 		throw new UnsupportedOperationException("Utility class");
 	}
 
-	private static CaerulaArborModVariables.PlayerVariables getPlayerVariables(Entity entity) {
+	private static PlayerVariable getPlayerVariables(Entity entity) {
 		if (entity == null)
-			return new CaerulaArborModVariables.PlayerVariables();
-		return entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables());
+			return new PlayerVariable();
+		return ModCapabilities.getPlayerVariables(entity);
 	}
 
 	public static double getPlayerLight(Entity entity) {

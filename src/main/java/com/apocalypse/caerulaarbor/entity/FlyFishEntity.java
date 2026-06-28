@@ -106,13 +106,12 @@ public class FlyFishEntity extends SeaMonster implements RangedAttackMob {
 	@Override
 	protected void registerGoals() {
 		super.registerGoals();
-		this.targetSelector.addGoal(1, new NearestAttackableTargetGoal(this, Player.class, true, true) {
+		this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true, true) {
 			@Override
 			public boolean canUse() {
 				double x = FlyFishEntity.this.getX();
 				double y = FlyFishEntity.this.getY();
 				double z = FlyFishEntity.this.getZ();
-				Entity entity = FlyFishEntity.this;
 				Level world = FlyFishEntity.this.level();
 				return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -122,7 +121,6 @@ public class FlyFishEntity extends SeaMonster implements RangedAttackMob {
 				double x = FlyFishEntity.this.getX();
 				double y = FlyFishEntity.this.getY();
 				double z = FlyFishEntity.this.getZ();
-				Entity entity = FlyFishEntity.this;
 				Level world = FlyFishEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -134,24 +132,14 @@ public class FlyFishEntity extends SeaMonster implements RangedAttackMob {
 		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, Pillager.class, true, true));
 		this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, Vindicator.class, true, true));
 		this.targetSelector.addGoal(8, new NearestAttackableTargetGoal<>(this, Witch.class, true, true));
-		this.targetSelector.addGoal(9, new NearestAttackableTargetGoal(this, Animal.class, true, true) {
+		this.targetSelector.addGoal(9, new NearestAttackableTargetGoal<>(this, Animal.class, true, true) {
 			@Override
 			public boolean canUse() {
-				double x = FlyFishEntity.this.getX();
-				double y = FlyFishEntity.this.getY();
-				double z = FlyFishEntity.this.getZ();
-				Entity entity = FlyFishEntity.this;
-				Level world = FlyFishEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = FlyFishEntity.this.getX();
-				double y = FlyFishEntity.this.getY();
-				double z = FlyFishEntity.this.getZ();
-				Entity entity = FlyFishEntity.this;
-				Level world = FlyFishEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
@@ -218,7 +206,7 @@ public class FlyFishEntity extends SeaMonster implements RangedAttackMob {
 		}
 
 		public boolean canContinueToUse() {
-			return this.canUse() || this.target.isAlive() && !this.mob.getNavigation().isDone();
+			return this.canUse() || this.target != null && this.target.isAlive() && !this.mob.getNavigation().isDone();
 		}
 
 		public void stop() {
@@ -233,8 +221,11 @@ public class FlyFishEntity extends SeaMonster implements RangedAttackMob {
 		}
 
 		public void tick() {
-			double d0 = this.mob.distanceToSqr(this.target.getX(), this.target.getY(), this.target.getZ());
-			boolean flag = this.mob.getSensing().hasLineOfSight(this.target);
+            double d0 = 0;
+            if (this.target != null) {
+                d0 = this.mob.distanceToSqr(this.target.getX(), this.target.getY(), this.target.getZ());
+            }
+            boolean flag = this.mob.getSensing().hasLineOfSight(this.target);
 			if (flag) {
 				++this.seeTime;
 			} else {
@@ -303,10 +294,8 @@ public class FlyFishEntity extends SeaMonster implements RangedAttackMob {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this != null) {
-            if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get()))
-                this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(12);
-        }
+        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get()))
+            this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(12);
         return retval;
 	}
 
@@ -389,7 +378,6 @@ public class FlyFishEntity extends SeaMonster implements RangedAttackMob {
 	private PlayState attackingPredicate(AnimationState event) {
 		double d1 = this.getX() - this.xOld;
 		double d0 = this.getZ() - this.zOld;
-		float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
 		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();

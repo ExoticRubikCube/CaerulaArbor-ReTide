@@ -3,6 +3,7 @@ package com.apocalypse.caerulaarbor.entity;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.PolarMountRider;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
+import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
@@ -120,24 +121,14 @@ public class OceanizedPiglinEntity extends SeaMonster implements PolarMountRider
 		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
 		this.targetSelector.addGoal(14, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
 		this.targetSelector.addGoal(15, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
-		this.targetSelector.addGoal(16, new NearestAttackableTargetGoal(this, Animal.class, true, false) {
+		this.targetSelector.addGoal(16, new NearestAttackableTargetGoal<>(this, Animal.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = OceanizedPiglinEntity.this.getX();
-				double y = OceanizedPiglinEntity.this.getY();
-				double z = OceanizedPiglinEntity.this.getZ();
-				Entity entity = OceanizedPiglinEntity.this;
-				Level world = OceanizedPiglinEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = OceanizedPiglinEntity.this.getX();
-				double y = OceanizedPiglinEntity.this.getY();
-				double z = OceanizedPiglinEntity.this.getZ();
-				Entity entity = OceanizedPiglinEntity.this;
-				Level world = OceanizedPiglinEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
@@ -183,7 +174,9 @@ public class OceanizedPiglinEntity extends SeaMonster implements PolarMountRider
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-		EntityUtils.initPigSanity(this);
+		if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get())) {
+			this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(6);
+		}
 		return retval;
 	}
 
@@ -210,8 +203,6 @@ public class OceanizedPiglinEntity extends SeaMonster implements PolarMountRider
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if (entity == null || this == null)
-            return;
         double ablty = 0;
         ablty = (Entity) this instanceof OceanizedPiglinEntity _datEntI ? _datEntI.getEntityData().get(DATA_ability) : 0;
         if (ablty < 5) {
@@ -223,9 +214,8 @@ public class OceanizedPiglinEntity extends SeaMonster implements PolarMountRider
             if (world instanceof ServerLevel _level)
                 _level.sendParticles(ParticleTypes.LAVA, x, (y + 0.75), z, 32, 0.75, 0.75, 0.75, 0.1);
         }
-        if (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1)) {
-            if ((Entity) this instanceof LivingEntity _entity)
-                _entity.setHealth((float) (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) + ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.15));
+        if (this.getHealth() < this.getMaxHealth()) {;
+            this.heal((float) (this.getMaxHealth() * 0.15));
             if (world instanceof ServerLevel _level)
                 _level.sendParticles(ParticleTypes.HAPPY_VILLAGER, x, (y + 0.75), z, 32, 0.75, 0.75, 0.75, 0.1);
         }

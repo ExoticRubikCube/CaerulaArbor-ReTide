@@ -34,10 +34,8 @@ public class Al1SHelperEntity extends LittleHelperEntity {
 
 	@Override
 	protected InteractionResult handleApocalypseInteract(Player sourceentity) {
-		if (!this.level().isClientSide() && sourceentity.isHolding(CaerulaArborModItems.APOCALYPSE.get())) {
-			if (this.level() instanceof ServerLevel serverLevel) {
-				serverLevel.sendParticles(ParticleTypes.FLAME, this.getX(), this.getY(), this.getZ(), 32, 0.75, 0.75, 0.75, 0.15);
-			}
+		if (this.level() instanceof ServerLevel serverLevel && sourceentity.isHolding(CaerulaArborModItems.APOCALYPSE.get())) {
+			serverLevel.sendParticles(ParticleTypes.FLAME, this.getX(), this.getY(), this.getZ(), 32, 0.75, 0.75, 0.75, 0.15);
 			this.level().playSound(null, BlockPos.containing(this.getX(), this.getY(), this.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "al1s_spec")), SoundSource.BLOCKS, 3, 1);
 			return InteractionResult.SUCCESS;
 		}

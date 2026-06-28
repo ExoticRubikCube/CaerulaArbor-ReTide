@@ -1,15 +1,20 @@
 
 package com.apocalypse.caerulaarbor.item;
 
+import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
-import com.apocalypse.caerulaarbor.util.EntityUtils;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 
 import java.util.List;
+import java.util.UUID;
 
 public class ComplexChitinAxeItem extends AxeItem {
 	public ComplexChitinAxeItem() {
@@ -41,10 +46,14 @@ public class ComplexChitinAxeItem extends AxeItem {
 	}
 
 	@Override
-	public boolean hurtEnemy(ItemStack itemstack, LivingEntity entity, LivingEntity sourceentity) {
-		boolean retval = super.hurtEnemy(itemstack, entity, sourceentity);
-		EntityUtils.deductSanityWithParticles(entity.level(), entity.getX(), entity.getY(), entity.getZ(), entity, 120);
-		return retval;
+	public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot equipmentSlot) {
+		Multimap<Attribute, AttributeModifier> map = super.getDefaultAttributeModifiers(equipmentSlot);
+		if (equipmentSlot == EquipmentSlot.MAINHAND) {
+			map = HashMultimap.create(map);
+			map.put(CaerulaArborModAttributes.SANITY_INJURY_DAMAGE.get(),
+					new AttributeModifier(new UUID(equipmentSlot.toString().hashCode(), 0), "caerula_arbor_attribute_modifier", 120, AttributeModifier.Operation.ADDITION));
+		}
+		return map;
 	}
 
 	@Override

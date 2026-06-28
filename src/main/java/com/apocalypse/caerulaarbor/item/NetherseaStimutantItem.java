@@ -2,9 +2,10 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.api.event.SanityEvent;
+import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
-import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -59,7 +60,7 @@ public class NetherseaStimutantItem extends Item {
 				entity.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 300, 3));
 				entity.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 480, 0));
 			}
-			EntityUtils.deductSanity75(entity);
+			SIHelper.causeSanityInjury(entity, 75, SanityEvent.Hurt.Type.FOOD);
 			if (!(entity instanceof Player)) {
 				resultStack.shrink(1);
 				ItemStack emptyCup = new ItemStack(CaerulaArborModItems.OCEANGLASS_CUP.get());
@@ -85,7 +86,7 @@ public class NetherseaStimutantItem extends Item {
 					} else if (!entity.level().isClientSide()) {
 						entity.addEffect(new MobEffectInstance(MobEffects.WITHER, 280, 0));
 					}
-					EntityUtils.deductSanity(entity, 125);
+					SIHelper.causeSanityInjury(entity, 125, SanityEvent.Hurt.Type.FOOD);
 				}
 			});
 		}

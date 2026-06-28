@@ -1,7 +1,6 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
@@ -111,11 +110,7 @@ public class GunmuEntity extends Monster {
 
 	@Override
 	public boolean hurt(DamageSource damagesource, float amount) {
-		double x = this.getX();
-		double y = this.getY();
-		double z = this.getZ();
 		Level world = this.level();
-		Entity entity = this;
 		Entity sourceentity = damagesource.getEntity();
 		Entity immediatesourceentity = damagesource.getDirectEntity();
         if (immediatesourceentity == null || sourceentity == null)
@@ -165,18 +160,15 @@ public class GunmuEntity extends Monster {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this != null) {
-            if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-                this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(100);
-            if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()))
-                this.getAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()).setBaseValue(0);
-        }
+        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
+            this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(100);
+        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()))
+            this.getAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()).setBaseValue(0);
         return retval;
 	}
 
 	@Override
 	public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
-		ItemStack itemstack = sourceentity.getItemInHand(hand);
 		if (sourceentity.isHolding(CaerulaArborModItems.BANNED_ITEM.get())){
 			this.setRemoved(RemovalReason.CHANGED_DIMENSION);
 			return InteractionResult.SUCCESS;
@@ -203,12 +195,9 @@ public class GunmuEntity extends Monster {
 	@Override
 	public void baseTick() {
 		super.baseTick();
-        if (this == null)
-            return;
         if (tickCount % 10 == 0) {
             clearFire();
-            if ((Entity) this instanceof LivingEntity _entity)
-                _entity.removeAllEffects();
+            this.removeAllEffects();
             if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.NUMB.get()))
                 this.getAttribute(CaerulaArborModAttributes.NUMB.get()).setBaseValue(0);
             if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY.get()))
@@ -218,11 +207,6 @@ public class GunmuEntity extends Monster {
 
 	@Override
 	public boolean isPushedByFluid() {
-		double x = this.getX();
-		double y = this.getY();
-		double z = this.getZ();
-		Level world = this.level();
-		Entity entity = this;
 		return false;
 	}
 

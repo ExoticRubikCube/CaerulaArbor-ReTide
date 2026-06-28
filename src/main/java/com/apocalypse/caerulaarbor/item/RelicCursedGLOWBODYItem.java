@@ -1,8 +1,10 @@
 
 package com.apocalypse.caerulaarbor.item;
 
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
-import com.apocalypse.caerulaarbor.util.EntityUtils;
+import com.apocalypse.caerulaarbor.api.event.SanityEvent;
+import com.apocalypse.caerulaarbor.capability.ModCapabilities;
+import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
+import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.util.ItemUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -67,7 +69,7 @@ public class RelicCursedGLOWBODYItem extends Item {
 			entity.addEffect(new MobEffectInstance(MobEffects.GLOWING, 100, 0));
 		if (world instanceof ServerLevel level)
 			level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, y, z, 72, 1, 2, 1, 0.1);
-		EntityUtils.deductSanity(entity, 500);
+		SIHelper.causeSanityInjury(entity, 500, SanityEvent.Hurt.Type.FOOD);
 		if (entity instanceof Player player)
 			player.getCooldowns().addCooldown(itemstack.getItem(), 200);
 		return retval;
@@ -80,7 +82,7 @@ public class RelicCursedGLOWBODYItem extends Item {
         double y = entity.getY();
         double z = entity.getZ();
         if (!itemstack.getOrCreateTag().getBoolean("used")) {
-            if (!(entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).relic_cursed_GLOWBODY) {
+            if (!(entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_cursed_GLOWBODY) {
                 if ((LevelAccessor) world instanceof Level _level) {
                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("ambient.soul_sand_valley.mood")), SoundSource.NEUTRAL, 2, 1);
                 }
@@ -88,7 +90,7 @@ public class RelicCursedGLOWBODYItem extends Item {
                     _level.sendParticles(ParticleTypes.CRIMSON_SPORE, x, y, z, 99, 1, 1, 1, 1);
                 {
                     boolean _setval = true;
-                    entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                    entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                         capability.relic_cursed_GLOWBODY = _setval;
                         capability.syncPlayerVariables(entity);
                     });

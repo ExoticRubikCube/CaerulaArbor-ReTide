@@ -90,7 +90,7 @@ public class AnchorFlyEntity extends AbstractArrow implements ItemSupplier {
         double z = this.getZ();
         Entity entity = entityHitResult.getEntity();
         Entity sourceentity = this.getOwner();
-        if (entity == null || this == null || sourceentity == null)
+        if (sourceentity == null)
             return;
         double perc = 0;
         if (!(entity == sourceentity)) {
@@ -114,9 +114,6 @@ public class AnchorFlyEntity extends AbstractArrow implements ItemSupplier {
                     if (!(entityiterator instanceof Mob)) {
                         continue;
                     }
-                    if (entityiterator instanceof Player) {
-                        continue;
-                    }
                     if (new Vec3((entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ())).distanceTo(new Vec3(x, y, z)) <= 6) {
                         entityiterator.hurt(
                                 new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "anchor_smash"))), sourceentity),
@@ -126,12 +123,9 @@ public class AnchorFlyEntity extends AbstractArrow implements ItemSupplier {
                     }
                 }
             }
-            {
-                Entity _ent = sourceentity;
-                _ent.teleportTo(x, y, z);
-                if (_ent instanceof ServerPlayer _serverPlayer)
-                    _serverPlayer.connection.teleport(x, y, z, _ent.getYRot(), _ent.getXRot());
-            }
+            sourceentity.teleportTo(x, y, z);
+            if (sourceentity instanceof ServerPlayer _serverPlayer)
+                _serverPlayer.connection.teleport(x, y, z, sourceentity.getYRot(), sourceentity.getXRot());
             if (sourceentity instanceof LivingEntity _entity)
                 _entity.removeEffect(CaerulaArborModMobEffects.DIZZY.get());
             if (sourceentity instanceof LivingEntity _entity)
@@ -188,12 +182,9 @@ public class AnchorFlyEntity extends AbstractArrow implements ItemSupplier {
                 }
             }
         }
-        {
-            Entity _ent = entity;
-            _ent.teleportTo((getX()), (getY()), (getZ()));
-            if (_ent instanceof ServerPlayer _serverPlayer)
-                _serverPlayer.connection.teleport((getX()), (getY()), (getZ()), _ent.getYRot(), _ent.getXRot());
-        }
+        entity.teleportTo((getX()), (getY()), (getZ()));
+        if (entity instanceof ServerPlayer _serverPlayer)
+            _serverPlayer.connection.teleport((getX()), (getY()), (getZ()), entity.getYRot(), entity.getXRot());
         if (entity instanceof LivingEntity _entity)
             _entity.removeEffect(CaerulaArborModMobEffects.DIZZY.get());
         if (entity instanceof LivingEntity _entity)
@@ -213,7 +204,7 @@ public class AnchorFlyEntity extends AbstractArrow implements ItemSupplier {
         double y = this.getY();
         double z = this.getZ();
         Entity entity = this.getOwner();
-        if (entity != null && this != null) {
+        if (entity != null) {
             double perc = 0;
             if (tickCount >= 160) {
                 perc = (entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) / (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1);

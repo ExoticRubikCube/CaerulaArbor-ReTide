@@ -1,8 +1,10 @@
 package com.apocalypse.caerulaarbor.system;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.capability.map.MapVariables;
+import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler;
+import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler.StrategyType;
 import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
@@ -22,9 +24,9 @@ public class UpgradeGrowProcedure {
 		double stra = 0;
 		String num = "";
 		String prefix = "";
-		stra = CaerulaArborModVariables.MapVariables.get(world).strategy_grow;
+		stra = MapVariables.get(world).strategy_grow;
 		if (stra < 4) {
-			if (CaerulaArborModVariables.MapVariables.get(world).evo_point_grow >= Math.pow(stra + 1, 3) * CaerulaConfigsConfiguration.COEFFICIENT.get()) {
+			if (MapVariables.get(world).evo_point_grow >= Math.pow(stra + 1, 3) * CaerulaConfigsConfiguration.COEFFICIENT.get()) {
 				for (Entity entityiterator : new ArrayList<>(world.players())) {
 					if (entityiterator instanceof ServerPlayer _player) {
 						Advancement _adv = _player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "to_experience_evolution"));
@@ -35,11 +37,9 @@ public class UpgradeGrowProcedure {
 						}
 					}
 				}
-				CaerulaArborModVariables.MapVariables.get(world).strategy_grow = stra + 1;
-				CaerulaArborModVariables.MapVariables.get(world).syncData(world);
-				stra = CaerulaArborModVariables.MapVariables.get(world).strategy_grow;
-				CaerulaArborModVariables.MapVariables.get(world).evo_point_grow = 0;
-				CaerulaArborModVariables.MapVariables.get(world).syncData(world);
+				MapVariablesHandler.setStrategyLevel(world, StrategyType.GROW, stra + 1);
+				stra = MapVariables.get(world).strategy_grow;
+				MapVariablesHandler.setEvoPoint(world, StrategyType.GROW, 0);
 				if (stra == 1) {
 					num = "I";
 					prefix = "\u00A7p";
@@ -82,8 +82,7 @@ public class UpgradeGrowProcedure {
 					}
 				}
 			}
-			CaerulaArborModVariables.MapVariables.get(world).evo_point_grow = 1;
-			CaerulaArborModVariables.MapVariables.get(world).syncData(world);
+			MapVariablesHandler.setEvoPoint(world, StrategyType.GROW, 1);
 		}
 	}
 }

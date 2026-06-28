@@ -62,9 +62,6 @@ public class MoistEnderCrystalEntity extends PathfinderMob implements GeoEntity 
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(MoistEnderCrystalEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(MoistEnderCrystalEntity.class, EntityDataSerializers.STRING);
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
-	private boolean swinging;
-	private boolean lastloop;
-	private long lastSwing;
 	public String animationprocedure = "empty";
 	public boolean IS_STATIC= false;
 
@@ -157,16 +154,14 @@ public class MoistEnderCrystalEntity extends PathfinderMob implements GeoEntity 
 	public void baseTick() {
 		super.baseTick();
 		if (this.IS_STATIC) this.setDeltaMovement(Vec3.ZERO);
-        if (this != null) {
-            if (!this.isAlive()) {
+        if (!this.isAlive()) {
+            setDeltaMovement(new Vec3(0, 0, 0));
+        } else {
+            if (tickCount < 5) {
                 setDeltaMovement(new Vec3(0, 0, 0));
-            } else {
-                if (tickCount < 5) {
-                    setDeltaMovement(new Vec3(0, 0, 0));
-                }
-                clearFire();
-                setAirSupply(20);
             }
+            clearFire();
+            setAirSupply(20);
         }
         this.refreshDimensions();
 	}
@@ -284,8 +279,6 @@ public class MoistEnderCrystalEntity extends PathfinderMob implements GeoEntity 
             double x = this.getX();
             double y = this.getY();
             double z = this.getZ();
-            if (this == null)
-                return;
             double d = 0;
             Entity enderina = null;
             if (world.isClientSide()) {
@@ -310,17 +303,17 @@ public class MoistEnderCrystalEntity extends PathfinderMob implements GeoEntity 
                         if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
                             continue;
                         }
-                        if ((entityiterator != null ? distanceTo(entityiterator) : -1) <= 4) {
+                        if (distanceTo(entityiterator) <= 4) {
                             entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.EXPLOSION), this), (float) d);
                         }
                     }
                 }
             }
-            enderina = world.getEntitiesOfClass(OceanizedEnderinaEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).stream().sorted(new Object() {
+            enderina = world.getEntitiesOfClass(OceanizedEnderinaEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).stream().min(new Object() {
                 Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
                     return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
                 }
-            }.compareDistOf(x, y, z)).findFirst().orElse(null);
+            }.compareDistOf(x, y, z)).orElse(null);
             if (enderina == null) {
                 return;
             }

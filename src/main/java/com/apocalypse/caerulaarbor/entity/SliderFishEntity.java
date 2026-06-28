@@ -2,6 +2,7 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
+import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
@@ -103,13 +104,12 @@ public class SliderFishEntity extends SeaMonster {
 				return 1;
 			}
 		});
-		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal(this, Player.class, true, false) {
+		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true, false) {
 			@Override
 			public boolean canUse() {
 				double x = SliderFishEntity.this.getX();
 				double y = SliderFishEntity.this.getY();
 				double z = SliderFishEntity.this.getZ();
-				Entity entity = SliderFishEntity.this;
 				Level world = SliderFishEntity.this.level();
 				return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -119,7 +119,6 @@ public class SliderFishEntity extends SeaMonster {
 				double x = SliderFishEntity.this.getX();
 				double y = SliderFishEntity.this.getY();
 				double z = SliderFishEntity.this.getZ();
-				Entity entity = SliderFishEntity.this;
 				Level world = SliderFishEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -130,24 +129,14 @@ public class SliderFishEntity extends SeaMonster {
 		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, Illusioner.class, true, false));
 		this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, Pillager.class, true, false));
 		this.targetSelector.addGoal(8, new NearestAttackableTargetGoal<>(this, Vindicator.class, true, false));
-		this.targetSelector.addGoal(9, new NearestAttackableTargetGoal(this, Animal.class, true, false) {
+		this.targetSelector.addGoal(9, new NearestAttackableTargetGoal<>(this, Animal.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = SliderFishEntity.this.getX();
-				double y = SliderFishEntity.this.getY();
-				double z = SliderFishEntity.this.getZ();
-				Entity entity = SliderFishEntity.this;
-				Level world = SliderFishEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = SliderFishEntity.this.getX();
-				double y = SliderFishEntity.this.getY();
-				double z = SliderFishEntity.this.getZ();
-				Entity entity = SliderFishEntity.this;
-				Level world = SliderFishEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
@@ -192,7 +181,9 @@ public class SliderFishEntity extends SeaMonster {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-		EntityUtils.initSliderSanity(this);
+		if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get())) {
+			this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(10);
+		}
 		return retval;
 	}
 
@@ -211,14 +202,8 @@ public class SliderFishEntity extends SeaMonster {
 
 	@Override
 	public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
-		ItemStack itemstack = sourceentity.getItemInHand(hand);
-		InteractionResult retval = InteractionResult.sidedSuccess(this.level().isClientSide());
 		super.mobInteract(sourceentity, hand);
-		double x = this.getX();
-		double y = this.getY();
-		double z = this.getZ();
 		Entity entity = this;
-		Level world = this.level();
 		return EntityUtils.containFish(entity, sourceentity);
 	}
 
@@ -266,9 +251,6 @@ public class SliderFishEntity extends SeaMonster {
 	}
 
 	private PlayState attackingPredicate(AnimationState event) {
-		double d1 = this.getX() - this.xOld;
-		double d0 = this.getZ() - this.zOld;
-		float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
 		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();

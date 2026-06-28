@@ -1,7 +1,8 @@
 package com.apocalypse.caerulaarbor.event;
 
+import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
+import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -22,8 +23,8 @@ public class PlayerAttackEventHandler {
 			return;
 		}
 
-		if (!(attacker.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null)
-				.orElse(new CaerulaArborModVariables.PlayerVariables())).relic_hand_BARREN) {
+		if (!(attacker.getCapability(ModCapabilities.PLAYER_VARIABLE, null)
+				.orElse(new PlayerVariable())).relic_hand_BARREN) {
 			return;
 		}
 

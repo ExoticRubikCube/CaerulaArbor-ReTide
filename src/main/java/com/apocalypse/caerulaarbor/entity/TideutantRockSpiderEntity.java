@@ -114,21 +114,11 @@ public class TideutantRockSpiderEntity extends SeaMonster {
 
 			@Override
 			public boolean canUse() {
-				double x = TideutantRockSpiderEntity.this.getX();
-				double y = TideutantRockSpiderEntity.this.getY();
-				double z = TideutantRockSpiderEntity.this.getZ();
-				Entity entity = TideutantRockSpiderEntity.this;
-				Level world = TideutantRockSpiderEntity.this.level();
 				return super.canUse() && isRockSpiderDurative();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = TideutantRockSpiderEntity.this.getX();
-				double y = TideutantRockSpiderEntity.this.getY();
-				double z = TideutantRockSpiderEntity.this.getZ();
-				Entity entity = TideutantRockSpiderEntity.this;
-				Level world = TideutantRockSpiderEntity.this.level();
 				return super.canContinueToUse() && isRockSpiderDurative();
 			}
 
@@ -143,13 +133,12 @@ public class TideutantRockSpiderEntity extends SeaMonster {
 		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
 		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
 		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
-		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal(this, Player.class, true, false) {
+		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Player.class, true, false) {
 			@Override
 			public boolean canUse() {
 				double x = TideutantRockSpiderEntity.this.getX();
 				double y = TideutantRockSpiderEntity.this.getY();
 				double z = TideutantRockSpiderEntity.this.getZ();
-				Entity entity = TideutantRockSpiderEntity.this;
 				Level world = TideutantRockSpiderEntity.this.level();
 				return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -159,7 +148,6 @@ public class TideutantRockSpiderEntity extends SeaMonster {
 				double x = TideutantRockSpiderEntity.this.getX();
 				double y = TideutantRockSpiderEntity.this.getY();
 				double z = TideutantRockSpiderEntity.this.getZ();
-				Entity entity = TideutantRockSpiderEntity.this;
 				Level world = TideutantRockSpiderEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -167,42 +155,22 @@ public class TideutantRockSpiderEntity extends SeaMonster {
 		this.targetSelector.addGoal(14, new NearestAttackableTargetGoal(this, Animal.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = TideutantRockSpiderEntity.this.getX();
-				double y = TideutantRockSpiderEntity.this.getY();
-				double z = TideutantRockSpiderEntity.this.getZ();
-				Entity entity = TideutantRockSpiderEntity.this;
-				Level world = TideutantRockSpiderEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = TideutantRockSpiderEntity.this.getX();
-				double y = TideutantRockSpiderEntity.this.getY();
-				double z = TideutantRockSpiderEntity.this.getZ();
-				Entity entity = TideutantRockSpiderEntity.this;
-				Level world = TideutantRockSpiderEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
 		this.goalSelector.addGoal(15, new RandomStrollGoal(this, 1) {
 			@Override
 			public boolean canUse() {
-				double x = TideutantRockSpiderEntity.this.getX();
-				double y = TideutantRockSpiderEntity.this.getY();
-				double z = TideutantRockSpiderEntity.this.getZ();
-				Entity entity = TideutantRockSpiderEntity.this;
-				Level world = TideutantRockSpiderEntity.this.level();
 				return super.canUse() && isRockSpiderDurative();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = TideutantRockSpiderEntity.this.getX();
-				double y = TideutantRockSpiderEntity.this.getY();
-				double z = TideutantRockSpiderEntity.this.getZ();
-				Entity entity = TideutantRockSpiderEntity.this;
-				Level world = TideutantRockSpiderEntity.this.level();
 				return super.canContinueToUse() && isRockSpiderDurative();
 			}
 		});
@@ -242,17 +210,15 @@ public class TideutantRockSpiderEntity extends SeaMonster {
         if (sourceentity != null) {
             double sklp = 0;
             if (!(sourceentity instanceof TideutantRockSpiderEntity) && !(sourceentity instanceof TidutantExcrescenceEntity)) {
-                {
-                    final Vec3 _center = new Vec3(this.getX(), this.getY(), this.getZ());
-                    List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(32 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                    for (Entity entityiterator : _entfound) {
-                        if (entityiterator instanceof TidutantExcrescenceEntity) {
-                            if (entityiterator instanceof Mob _entity && sourceentity instanceof LivingEntity _ent)
-                                _entity.setTarget(_ent);
-                        }
-                    }
-                }
-            }
+				{
+					final Vec3 _center = new Vec3(this.getX(), this.getY(), this.getZ());
+					List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(32 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+					for (Entity entityiterator : _entfound) {
+						if (entityiterator instanceof TidutantExcrescenceEntity entity && sourceentity instanceof LivingEntity _ent)
+							entity.setTarget(_ent);
+					}
+				}
+			}
         }
         if (source.is(DamageTypes.FALL))
 			return false;
@@ -284,48 +250,46 @@ public class TideutantRockSpiderEntity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if (this != null) {
-            double dura = 0;
-            if (this.isAlive()) {
-                dura = (Entity) this instanceof TideutantRockSpiderEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
-                if (dura > 0) {
-                    if ((Entity) this instanceof TideutantRockSpiderEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_duration, (int) (dura - 1));
-                }
-                double count = 0;
-                {
-                    final Vec3 _center = new Vec3(x, y, z);
-                    List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(48 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                    for (Entity entityiterator : _entfound) {
-                        if (entityiterator instanceof TidutantExcrescenceEntity) {
-                            count = count + 1;
-                        }
+        double dura = 0;
+        if (this.isAlive()) {
+            dura = (Entity) this instanceof TideutantRockSpiderEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
+            if (dura > 0) {
+                if ((Entity) this instanceof TideutantRockSpiderEntity _datEntSetI)
+                    _datEntSetI.getEntityData().set(DATA_duration, (int) (dura - 1));
+            }
+            double count = 0;
+            {
+                final Vec3 _center = new Vec3(x, y, z);
+                List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(48 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+                for (Entity entityiterator : _entfound) {
+                    if (entityiterator instanceof TidutantExcrescenceEntity) {
+                        count = count + 1;
                     }
                 }
-                if (!(count > 32)) {
-                    if (tickCount % 120 == 75) {
-                        if (this instanceof TideutantRockSpiderEntity) {
-                            this.setAnimation("animation.tidutant_rock_spider.skill");
-                        }
-                        if ((Entity) this instanceof TideutantRockSpiderEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_duration, 20);
-                        CaerulaArborMod.queueServerWork(11, () -> {
-                            if (this.isAlive()) {
-                                if (world instanceof Level _level) {
-                                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.zombie.destroy_egg")), SoundSource.HOSTILE, 1, 1);
-                                }
-                                if (world instanceof ServerLevel _level) {
-                                    Entity entityToSpawn = CaerulaArborModEntities.TIDUTANT_EXCRESCENCE.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
-                                    if (entityToSpawn != null) {
-                                        entityToSpawn.setYRot((float) Mth.nextDouble(RandomSource.create(), 0, 360));
-                                        entityToSpawn.setYBodyRot((float) Mth.nextDouble(RandomSource.create(), 0, 360));
-                                        entityToSpawn.setYHeadRot((float) Mth.nextDouble(RandomSource.create(), 0, 360));
-                                        entityToSpawn.setDeltaMovement((Mth.nextDouble(RandomSource.create(), -0.2, 0.2)), 0, (Mth.nextDouble(RandomSource.create(), -0.2, 0.2)));
-                                    }
+            }
+            if (!(count > 32)) {
+                if (tickCount % 120 == 75) {
+                    if (this instanceof TideutantRockSpiderEntity) {
+                        this.setAnimation("animation.tidutant_rock_spider.skill");
+                    }
+                    if ((Entity) this instanceof TideutantRockSpiderEntity _datEntSetI)
+                        _datEntSetI.getEntityData().set(DATA_duration, 20);
+                    CaerulaArborMod.queueServerWork(11, () -> {
+                        if (this.isAlive()) {
+                            if (world instanceof Level _level) {
+                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.zombie.destroy_egg")), SoundSource.HOSTILE, 1, 1);
+                            }
+                            if (world instanceof ServerLevel _level) {
+                                Entity entityToSpawn = CaerulaArborModEntities.TIDUTANT_EXCRESCENCE.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+                                if (entityToSpawn != null) {
+                                    entityToSpawn.setYRot((float) Mth.nextDouble(RandomSource.create(), 0, 360));
+                                    entityToSpawn.setYBodyRot((float) Mth.nextDouble(RandomSource.create(), 0, 360));
+                                    entityToSpawn.setYHeadRot((float) Mth.nextDouble(RandomSource.create(), 0, 360));
+                                    entityToSpawn.setDeltaMovement((Mth.nextDouble(RandomSource.create(), -0.2, 0.2)), 0, (Mth.nextDouble(RandomSource.create(), -0.2, 0.2)));
                                 }
                             }
-                        });
-                    }
+                        }
+                    });
                 }
             }
         }
@@ -367,9 +331,7 @@ public class TideutantRockSpiderEntity extends SeaMonster {
 
 	private PlayState movementPredicate(AnimationState event) {
 		if (this.animationprocedure.equals("empty")) {
-			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
-
-			) {
+			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))) {
 				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.tidutant_rock_spider.move"));
 			}
 			if (this.isDeadOrDying()) {
@@ -381,9 +343,6 @@ public class TideutantRockSpiderEntity extends SeaMonster {
 	}
 
 	private PlayState attackingPredicate(AnimationState event) {
-		double d1 = this.getX() - this.xOld;
-		double d0 = this.getZ() - this.zOld;
-		float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
 		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();

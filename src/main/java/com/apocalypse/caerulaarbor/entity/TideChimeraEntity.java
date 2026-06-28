@@ -1,6 +1,8 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.api.event.SanityEvent;
+import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.entity.base.RangedSanityAttacker;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
@@ -133,21 +135,11 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
 
 			@Override
 			public boolean canUse() {
-				double x = TideChimeraEntity.this.getX();
-				double y = TideChimeraEntity.this.getY();
-				double z = TideChimeraEntity.this.getZ();
-				Entity entity = TideChimeraEntity.this;
-				Level world = TideChimeraEntity.this.level();
 				return super.canUse() && isChimeraDurative();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = TideChimeraEntity.this.getX();
-				double y = TideChimeraEntity.this.getY();
-				double z = TideChimeraEntity.this.getZ();
-				Entity entity = TideChimeraEntity.this;
-				Level world = TideChimeraEntity.this.level();
 				return super.canContinueToUse() && isChimeraDurative();
 			}
 
@@ -158,42 +150,22 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
 		this.goalSelector.addGoal(5, new RandomStrollGoal(this, 1) {
 			@Override
 			public boolean canUse() {
-				double x = TideChimeraEntity.this.getX();
-				double y = TideChimeraEntity.this.getY();
-				double z = TideChimeraEntity.this.getZ();
-				Entity entity = TideChimeraEntity.this;
-				Level world = TideChimeraEntity.this.level();
 				return super.canUse() && isChimeraDurative();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = TideChimeraEntity.this.getX();
-				double y = TideChimeraEntity.this.getY();
-				double z = TideChimeraEntity.this.getZ();
-				Entity entity = TideChimeraEntity.this;
-				Level world = TideChimeraEntity.this.level();
 				return super.canContinueToUse() && isChimeraDurative();
 			}
 		});
 		this.goalSelector.addGoal(6, new RandomLookAroundGoal(this) {
 			@Override
 			public boolean canUse() {
-				double x = TideChimeraEntity.this.getX();
-				double y = TideChimeraEntity.this.getY();
-				double z = TideChimeraEntity.this.getZ();
-				Entity entity = TideChimeraEntity.this;
-				Level world = TideChimeraEntity.this.level();
 				return super.canUse() && isChimeraDurative();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = TideChimeraEntity.this.getX();
-				double y = TideChimeraEntity.this.getY();
-				double z = TideChimeraEntity.this.getZ();
-				Entity entity = TideChimeraEntity.this;
-				Level world = TideChimeraEntity.this.level();
 				return super.canContinueToUse() && isChimeraDurative();
 			}
 		});
@@ -248,7 +220,7 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
 	public boolean hurt(DamageSource source, float amount) {
         LevelAccessor world = this.level();
         Entity sourceentity = source.getEntity();
-        if (this != null && sourceentity != null) {
+        if (sourceentity != null) {
             if (!(sourceentity instanceof Player) && !(sourceentity instanceof ApocataEntity)) {
                 if (!sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
                     {
@@ -290,51 +262,49 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if (this != null) {
-            if (!this.level().isClientSide())
-                this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 100, 9, false, false));
-            if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get()))
-                this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(4);
-            if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MISSRATE.get()))
-                this.getAttribute(CaerulaArborModAttributes.MISSRATE.get()).setBaseValue(50);
-            if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-                this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(45);
-            if (this instanceof TideChimeraEntity) {
-                this.setAnimation("animation.super_apocata.start");
-            }
-            CaerulaArborMod.queueServerWork(36, () -> {
-                if (this.isAlive()) {
-                    if ((LevelAccessor) world instanceof Level _level) {
-                        if (!_level.isClientSide()) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.anvil.land")), SoundSource.HOSTILE, (float) 2.5, 1);
-                        } else {
-                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.anvil.land")), SoundSource.HOSTILE, (float) 2.5, 1, false);
-                        }
-                    }
-                }
-            });
-            CaerulaArborMod.queueServerWork(60, () -> {
-                if (this.isAlive()) {
-                    if ((LevelAccessor) world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.slime.jump")), SoundSource.HOSTILE, (float) 2.5, 1);
-                    }
-                }
-            });
-            CaerulaArborMod.queueServerWork(66, () -> {
-                if (this.isAlive()) {
-                    if ((LevelAccessor) world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.slime.jump")), SoundSource.HOSTILE, (float) 2.5, 1);
-                    }
-                }
-            });
-            CaerulaArborMod.queueServerWork(83, () -> {
-                if (this.isAlive()) {
-                    if ((LevelAccessor) world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.slime_block.place")), SoundSource.HOSTILE, (float) 2.5, 1);
-                    }
-                }
-            });
+        if (!this.level().isClientSide())
+            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 100, 9, false, false));
+        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get()))
+            this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(4);
+        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MISSRATE.get()))
+            this.getAttribute(CaerulaArborModAttributes.MISSRATE.get()).setBaseValue(50);
+        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
+            this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(45);
+        if (this instanceof TideChimeraEntity) {
+            this.setAnimation("animation.super_apocata.start");
         }
+        CaerulaArborMod.queueServerWork(36, () -> {
+            if (this.isAlive()) {
+                if ((LevelAccessor) world instanceof Level _level) {
+                    if (!_level.isClientSide()) {
+                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.anvil.land")), SoundSource.HOSTILE, (float) 2.5, 1);
+                    } else {
+                        _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.anvil.land")), SoundSource.HOSTILE, (float) 2.5, 1, false);
+                    }
+                }
+            }
+        });
+        CaerulaArborMod.queueServerWork(60, () -> {
+            if (this.isAlive()) {
+                if ((LevelAccessor) world instanceof Level _level) {
+                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.slime.jump")), SoundSource.HOSTILE, (float) 2.5, 1);
+                }
+            }
+        });
+        CaerulaArborMod.queueServerWork(66, () -> {
+            if (this.isAlive()) {
+                if ((LevelAccessor) world instanceof Level _level) {
+                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.slime.jump")), SoundSource.HOSTILE, (float) 2.5, 1);
+                }
+            }
+        });
+        CaerulaArborMod.queueServerWork(83, () -> {
+            if (this.isAlive()) {
+                if ((LevelAccessor) world instanceof Level _level) {
+                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.slime_block.place")), SoundSource.HOSTILE, (float) 2.5, 1);
+                }
+            }
+        });
         return retval;
 	}
 
@@ -370,191 +340,190 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if (this != null) {
-            Entity enemy = null;
-            double sklp1 = 0;
-            double dura = 0;
-            double tap = 0;
-            double perc = 0;
-            boolean maySummon = false;
-            if (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.deathTime : 0) == 10) {
-                if (world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.dragon_fireball.explode")), SoundSource.HOSTILE, 2, 1);
+        Entity enemy = null;
+        double sklp1 = 0;
+        double dura = 0;
+        double tap = 0;
+        double perc = 0;
+        boolean maySummon = false;
+        LivingEntity _livEnt = this;
+        if (_livEnt.deathTime == 10) {
+            if (world instanceof Level _level) {
+                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.dragon_fireball.explode")), SoundSource.HOSTILE, 2, 1);
+            }
+            Entity entityToSpawn = null;
+            BlockPos pos = BlockPos.containing(x, y, z);
+            if (world instanceof ServerLevel _level) {
+                entityToSpawn = CaerulaArborModEntities.CRACKER_ABYSSAL.get().spawn(_level, pos, MobSpawnType.MOB_SUMMONED);
+                if (entityToSpawn != null) {
+                    entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                 }
-                Entity entityToSpawn = null;
-                BlockPos pos = BlockPos.containing(x, y, z);
-                if (world instanceof ServerLevel _level) {
-                    entityToSpawn = CaerulaArborModEntities.CRACKER_ABYSSAL.get().spawn(_level, pos, MobSpawnType.MOB_SUMMONED);
-                    if (entityToSpawn != null) {
-                        entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-                    }
-                    entityToSpawn = CaerulaArborModEntities.GUIDE_ABYSSAL.get().spawn(_level, pos, MobSpawnType.MOB_SUMMONED);
-                    if (entityToSpawn != null) {
-                        entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-                    }
-                    entityToSpawn = CaerulaArborModEntities.UMBRELLA_ABYSSAL.get().spawn(_level, pos, MobSpawnType.MOB_SUMMONED);
-                    if (entityToSpawn != null) {
-                        entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-                    }
-                    entityToSpawn = CaerulaArborModEntities.CREEPER_FISH.get().spawn(_level, pos, MobSpawnType.MOB_SUMMONED);
-                    if (entityToSpawn != null) {
-                        entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-                    }
-                    entityToSpawn = CaerulaArborModEntities.PREGNANT_FISH.get().spawn(_level, pos, MobSpawnType.MOB_SUMMONED);
-                    if (entityToSpawn != null) {
-                        entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-                    }
-                    entityToSpawn = CaerulaArborModEntities.BASELAYER_ABYSSAL.get().spawn(_level, pos, MobSpawnType.MOB_SUMMONED);
-                    if (entityToSpawn != null) {
-                        entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-                    }
-                    entityToSpawn = CaerulaArborModEntities.PREDATOR_ABYSSAL.get().spawn(_level, pos, MobSpawnType.MOB_SUMMONED);
-                    if (entityToSpawn != null) {
-                        entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-                    }
-                    entityToSpawn = CaerulaArborModEntities.SPLASHER_ABYSSAL.get().spawn(_level, pos, MobSpawnType.MOB_SUMMONED);
-                    if (entityToSpawn != null) {
-                        entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-                    }
-                    entityToSpawn = CaerulaArborModEntities.APOSTLE_PROKARYOTE.get().spawn(_level, pos, MobSpawnType.MOB_SUMMONED);
-                    if (entityToSpawn != null) {
-                        entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-                    }
-                    entityToSpawn = CaerulaArborModEntities.DIVICELLULAR_GO.get().spawn(_level, pos, MobSpawnType.MOB_SUMMONED);
-                    if (entityToSpawn != null) {
-                        entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-                    }
-                    entityToSpawn = CaerulaArborModEntities.PUNCTURE_FISH.get().spawn(_level, pos, MobSpawnType.MOB_SUMMONED);
-                    if (entityToSpawn != null) {
-                        entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-                    }
-                    entityToSpawn = CaerulaArborModEntities.NUCLEIC_MALEFICENT.get().spawn(_level, pos, MobSpawnType.MOB_SUMMONED);
-                    if (entityToSpawn != null) {
-                        entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+                entityToSpawn = CaerulaArborModEntities.GUIDE_ABYSSAL.get().spawn(_level, pos, MobSpawnType.MOB_SUMMONED);
+                if (entityToSpawn != null) {
+                    entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+                }
+                entityToSpawn = CaerulaArborModEntities.UMBRELLA_ABYSSAL.get().spawn(_level, pos, MobSpawnType.MOB_SUMMONED);
+                if (entityToSpawn != null) {
+                    entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+                }
+                entityToSpawn = CaerulaArborModEntities.CREEPER_FISH.get().spawn(_level, pos, MobSpawnType.MOB_SUMMONED);
+                if (entityToSpawn != null) {
+                    entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+                }
+                entityToSpawn = CaerulaArborModEntities.PREGNANT_FISH.get().spawn(_level, pos, MobSpawnType.MOB_SUMMONED);
+                if (entityToSpawn != null) {
+                    entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+                }
+                entityToSpawn = CaerulaArborModEntities.BASELAYER_ABYSSAL.get().spawn(_level, pos, MobSpawnType.MOB_SUMMONED);
+                if (entityToSpawn != null) {
+                    entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+                }
+                entityToSpawn = CaerulaArborModEntities.PREDATOR_ABYSSAL.get().spawn(_level, pos, MobSpawnType.MOB_SUMMONED);
+                if (entityToSpawn != null) {
+                    entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+                }
+                entityToSpawn = CaerulaArborModEntities.SPLASHER_ABYSSAL.get().spawn(_level, pos, MobSpawnType.MOB_SUMMONED);
+                if (entityToSpawn != null) {
+                    entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+                }
+                entityToSpawn = CaerulaArborModEntities.APOSTLE_PROKARYOTE.get().spawn(_level, pos, MobSpawnType.MOB_SUMMONED);
+                if (entityToSpawn != null) {
+                    entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+                }
+                entityToSpawn = CaerulaArborModEntities.DIVICELLULAR_GO.get().spawn(_level, pos, MobSpawnType.MOB_SUMMONED);
+                if (entityToSpawn != null) {
+                    entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+                }
+                entityToSpawn = CaerulaArborModEntities.PUNCTURE_FISH.get().spawn(_level, pos, MobSpawnType.MOB_SUMMONED);
+                if (entityToSpawn != null) {
+                    entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+                }
+                entityToSpawn = CaerulaArborModEntities.NUCLEIC_MALEFICENT.get().spawn(_level, pos, MobSpawnType.MOB_SUMMONED);
+                if (entityToSpawn != null) {
+                    entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+                }
+            }
+        }
+        if (this.isAlive()) {
+            sklp1 = (Entity) this instanceof TideChimeraEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillP) : 0;
+            dura = (Entity) this instanceof TideChimeraEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
+            tap = (Entity) this instanceof TideChimeraEntity _datEntI ? _datEntI.getEntityData().get(DATA_summonP) : 0;
+            perc = EntityUtils.getHealthPerc(this);
+            enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+            if (dura > 0) {
+                if ((Entity) this instanceof TideChimeraEntity _datEntSetI)
+                    _datEntSetI.getEntityData().set(DATA_duration, (int) (dura - 1));
+            }
+            if (dura <= 0) {
+                if (perc <= 0.25 && tap >= 1) {
+                    maySummon = true;
+                    if (!this.level().isClientSide())
+                        this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.IMMORTAL.get(), 600, 0, false, false));
+                    CaerulaArborMod.queueServerWork(10, () -> {
+                        summonRandomChimera(world, x, y, z);
+                    });
+                } else if (perc <= 0.5 && tap >= 2) {
+                    maySummon = true;
+                    CaerulaArborMod.queueServerWork(10, () -> {
+                        summonRandomChimera(world, x, y, z);
+                    });
+                } else if (perc <= 0.75 && tap >= 3) {
+                    maySummon = true;
+                    CaerulaArborMod.queueServerWork(10, () -> {
+                        summonRandomChimera(world, x, y, z);
+                    });
+                }
+                if (maySummon) {
+                    if (!this.level().isClientSide())
+                        this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 20, 0, false, false));
+                    if ((Entity) this instanceof TideChimeraEntity _datEntSetI)
+                        _datEntSetI.getEntityData().set(DATA_summonP, (int) (tap - 1));
+                    if ((Entity) this instanceof TideChimeraEntity _datEntSetI)
+                        _datEntSetI.getEntityData().set(DATA_duration, 18);
+                    dura = 18;
+                    if (this instanceof TideChimeraEntity) {
+                        this.setAnimation("animation.super_apocata.throw");
                     }
                 }
             }
-            if (this.isAlive()) {
-                sklp1 = (Entity) this instanceof TideChimeraEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillP) : 0;
-                dura = (Entity) this instanceof TideChimeraEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
-                tap = (Entity) this instanceof TideChimeraEntity _datEntI ? _datEntI.getEntityData().get(DATA_summonP) : 0;
-                perc = EntityUtils.getHealthPerc(this);
-                enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
-                if (dura > 0) {
-                    if ((Entity) this instanceof TideChimeraEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_duration, (int) (dura - 1));
-                }
-                if (dura <= 0) {
-                    if (perc <= 0.25 && tap >= 1) {
-                        maySummon = true;
-                        if (!this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.IMMORTAL.get(), 600, 0, false, false));
-                        CaerulaArborMod.queueServerWork(10, () -> {
-                            summonRandomChimera(world, x, y, z);
-                        });
-                    } else if (perc <= 0.5 && tap >= 2) {
-                        maySummon = true;
-                        CaerulaArborMod.queueServerWork(10, () -> {
-                            summonRandomChimera(world, x, y, z);
-                        });
-                    } else if (perc <= 0.75 && tap >= 3) {
-                        maySummon = true;
-                        CaerulaArborMod.queueServerWork(10, () -> {
-                            summonRandomChimera(world, x, y, z);
-                        });
-                    }
-                    if (maySummon) {
-                        if (!this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 20, 0, false, false));
-                        if ((Entity) this instanceof TideChimeraEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_summonP, (int) (tap - 1));
-                        if ((Entity) this instanceof TideChimeraEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_duration, 18);
-                        dura = 18;
+            if (sklp1 > 0) {
+                if ((Entity) this instanceof TideChimeraEntity _datEntSetI)
+                    _datEntSetI.getEntityData().set(DATA_skillP, (int) (sklp1 - 1));
+            } else if (dura <= 0) {
+                if (!(enemy == null) && enemy.isAlive()) {
+                    if ((enemy != null ? distanceTo(enemy) : -1) <= 8) {
                         if (this instanceof TideChimeraEntity) {
-                            this.setAnimation("animation.super_apocata.throw");
+                            this.setAnimation("animation.super_apocata.ranged");
                         }
-                    }
-                }
-                if (sklp1 > 0) {
-                    if ((Entity) this instanceof TideChimeraEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_skillP, (int) (sklp1 - 1));
-                } else if (dura <= 0) {
-                    if (!(enemy == null) && enemy.isAlive()) {
-                        if ((enemy != null ? distanceTo(enemy) : -1) <= 8) {
-                            if (this instanceof TideChimeraEntity) {
-                                this.setAnimation("animation.super_apocata.ranged");
+                        if ((Entity) this instanceof TideChimeraEntity _datEntSetI)
+                            _datEntSetI.getEntityData().set(DATA_skillP, 300);
+                        if ((Entity) this instanceof TideChimeraEntity _datEntSetI)
+                            _datEntSetI.getEntityData().set(DATA_duration, 28);
+                        CaerulaArborMod.queueServerWork(12, () -> {
+                            if (this.isAlive()) {
+                                if (world instanceof ServerLevel _level)
+                                    _level.sendParticles(ParticleTypes.EXPLOSION, x, (y + 4), z, 3, 0, 0, 0, 0.1);
+                                if (world instanceof Level _level) {
+                                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "firstteller_attack")), SoundSource.HOSTILE, (float) 1.5, 1);
+                                }
+                                this.distributeBullets(world, x, y, z);
                             }
-                            if ((Entity) this instanceof TideChimeraEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_skillP, 300);
-                            if ((Entity) this instanceof TideChimeraEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_duration, 28);
-                            CaerulaArborMod.queueServerWork(12, () -> {
-                                if (this.isAlive()) {
-                                    if (world instanceof ServerLevel _level)
-                                        _level.sendParticles(ParticleTypes.EXPLOSION, x, (y + 4), z, 3, 0, 0, 0, 0.1);
-                                    if (world instanceof Level _level) {
-                                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "firstteller_attack")), SoundSource.HOSTILE, (float) 1.5, 1);
-                                    }
-                                    this.distributeBullets(world, x, y, z);
+                        });
+                        CaerulaArborMod.queueServerWork(13, () -> {
+                            if (this.isAlive()) {
+                                if (world instanceof ServerLevel _level)
+                                    _level.sendParticles(ParticleTypes.EXPLOSION, x, (y + 4), z, 3, 0, 0, 0, 0.1);
+                                if (world instanceof Level _level) {
+                                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "firstteller_attack")), SoundSource.HOSTILE, (float) 1.5, 1);
                                 }
-                            });
-                            CaerulaArborMod.queueServerWork(13, () -> {
-                                if (this.isAlive()) {
-                                    if (world instanceof ServerLevel _level)
-                                        _level.sendParticles(ParticleTypes.EXPLOSION, x, (y + 4), z, 3, 0, 0, 0, 0.1);
-                                    if (world instanceof Level _level) {
-                                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "firstteller_attack")), SoundSource.HOSTILE, (float) 1.5, 1);
-                                    }
-                                    this.distributeBullets(world, x, y, z);
+                                this.distributeBullets(world, x, y, z);
+                            }
+                        });
+                        CaerulaArborMod.queueServerWork(14, () -> {
+                            if (this.isAlive()) {
+                                if (world instanceof ServerLevel _level)
+                                    _level.sendParticles(ParticleTypes.EXPLOSION, x, (y + 4), z, 3, 0, 0, 0, 0.1);
+                                if (world instanceof Level _level) {
+                                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "firstteller_attack")), SoundSource.HOSTILE, (float) 1.5, 1);
                                 }
-                            });
-                            CaerulaArborMod.queueServerWork(14, () -> {
-                                if (this.isAlive()) {
-                                    if (world instanceof ServerLevel _level)
-                                        _level.sendParticles(ParticleTypes.EXPLOSION, x, (y + 4), z, 3, 0, 0, 0, 0.1);
-                                    if (world instanceof Level _level) {
-                                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "firstteller_attack")), SoundSource.HOSTILE, (float) 1.5, 1);
-                                    }
-                                    this.distributeBullets(world, x, y, z);
-                                }
-                            });
-                        }
+                                this.distributeBullets(world, x, y, z);
+                            }
+                        });
                     }
                 }
-                EntityUtils.giveGuideLay(this);
-                if (this != null) {
-                    double angle = 0;
-                    double d = 0;
-                    double daam = 0;
-                    if ((Entity) this instanceof LivingEntity _entity)
-                        _entity.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
-                    for (int index0 = 0; index0 < 8; index0++) {
-                        angle = Mth.nextDouble(RandomSource.create(), 0, 6.283);
-                        d = Mth.nextDouble(RandomSource.create(), 6.5, 6.75);
-                        if (world instanceof ServerLevel _level)
-                            _level.sendParticles(ParticleTypes.BUBBLE_COLUMN_UP, (x + d * Math.sin(angle)), (y + 0.4), (z + d * Math.cos(angle)), 2, 0.1, 0.1, 0.1, 0.1);
-                        angle = Mth.nextDouble(RandomSource.create(), 0, 6.283);
-                        d = Mth.nextDouble(RandomSource.create(), 6.5, 6.75);
-                        if (world instanceof ServerLevel _level)
-                            _level.sendParticles(ParticleTypes.ELECTRIC_SPARK, (x + d * Math.sin(angle)), (y + 0.4), (z + d * Math.cos(angle)), 2, 0.1, 0.1, 0.1, 0.1);
-                    }
-                    if (tickCount % 20 == 0) {
-                        angle = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
-                        for (Entity entityiterator : world.getEntities(this, new AABB((x - 6.5), (y - 2), (z - 6.5), (x + 6.5), (y + 5), (z + 6.5)))) {
-                            if ((entityiterator != null ? distanceTo(entityiterator) : -1) <= 6.5) {
-                                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
-                                    if (!(entityiterator == ((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null))) {
-                                        continue;
-                                    }
-                                }
-                                if (!(entityiterator instanceof LivingEntity)) {
+            }
+            EntityUtils.giveGuideLay(this);
+            if (this != null) {
+                double angle = 0;
+                double d = 0;
+                double daam = 0;
+                if ((Entity) this instanceof LivingEntity _entity)
+                    _entity.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
+                for (int index0 = 0; index0 < 8; index0++) {
+                    angle = Mth.nextDouble(RandomSource.create(), 0, 6.283);
+                    d = Mth.nextDouble(RandomSource.create(), 6.5, 6.75);
+                    if (world instanceof ServerLevel _level)
+                        _level.sendParticles(ParticleTypes.BUBBLE_COLUMN_UP, (x + d * Math.sin(angle)), (y + 0.4), (z + d * Math.cos(angle)), 2, 0.1, 0.1, 0.1, 0.1);
+                    angle = Mth.nextDouble(RandomSource.create(), 0, 6.283);
+                    d = Mth.nextDouble(RandomSource.create(), 6.5, 6.75);
+                    if (world instanceof ServerLevel _level)
+                        _level.sendParticles(ParticleTypes.ELECTRIC_SPARK, (x + d * Math.sin(angle)), (y + 0.4), (z + d * Math.cos(angle)), 2, 0.1, 0.1, 0.1, 0.1);
+                }
+                if (tickCount % 20 == 0) {
+                    angle = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
+                    for (Entity entityiterator : world.getEntities(this, new AABB((x - 6.5), (y - 2), (z - 6.5), (x + 6.5), (y + 5), (z + 6.5)))) {
+                        if ((entityiterator != null ? distanceTo(entityiterator) : -1) <= 6.5) {
+                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                                if (!(entityiterator == ((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null))) {
                                     continue;
                                 }
-                                EntityUtils.deductSanity(entityiterator, daam * 4);
-                                entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_magic")))),
-                                        (float) (daam * 0.5));
                             }
+                            if (!(entityiterator instanceof LivingEntity)) {
+                                continue;
+                            }
+                            SIHelper.causeSanityInjury((LivingEntity) entityiterator, this, daam * 4, SanityEvent.Hurt.Type.ENTITY);
+                            entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_magic")))),
+                                    (float) (daam * 0.5));
                         }
                     }
                 }

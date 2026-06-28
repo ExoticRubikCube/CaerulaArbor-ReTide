@@ -2,6 +2,7 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
+import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModGameRules;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
@@ -126,7 +127,7 @@ public class SuperBigCatEntity extends SeaMonster {
 		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
 		this.targetSelector.addGoal(14, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
 		this.targetSelector.addGoal(15, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
-		this.targetSelector.addGoal(16, new NearestAttackableTargetGoal(this, Player.class, true, false) {
+		this.targetSelector.addGoal(16, new NearestAttackableTargetGoal<>(this, Player.class, true, false) {
 			@Override
 			public boolean canUse() {
 				double x = SuperBigCatEntity.this.getX();
@@ -147,24 +148,14 @@ public class SuperBigCatEntity extends SeaMonster {
 				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
 		});
-		this.targetSelector.addGoal(17, new NearestAttackableTargetGoal(this, Animal.class, true, false) {
+		this.targetSelector.addGoal(17, new NearestAttackableTargetGoal<>(this, Animal.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = SuperBigCatEntity.this.getX();
-				double y = SuperBigCatEntity.this.getY();
-				double z = SuperBigCatEntity.this.getZ();
-				Entity entity = SuperBigCatEntity.this;
-				Level world = SuperBigCatEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = SuperBigCatEntity.this.getX();
-				double y = SuperBigCatEntity.this.getY();
-				double z = SuperBigCatEntity.this.getZ();
-				Entity entity = SuperBigCatEntity.this;
-				Level world = SuperBigCatEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
@@ -258,11 +249,9 @@ public class SuperBigCatEntity extends SeaMonster {
                     final Vec3 _center = new Vec3(this.getX(), this.getY(), this.getZ());
                     List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(32 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
                     for (Entity entityiterator : _entfound) {
-                        if (entityiterator instanceof OceanizedCatEntity) {
-                            if (entityiterator instanceof Mob _entity && sourceentity instanceof LivingEntity _ent)
-                                _entity.setTarget(_ent);
-                        }
-                    }
+						if (entityiterator instanceof OceanizedCatEntity entity && sourceentity instanceof LivingEntity _ent)
+							entity.setTarget(_ent);
+					}
                 }
             }
         }
@@ -276,7 +265,12 @@ public class SuperBigCatEntity extends SeaMonster {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-		EntityUtils.initCatSanity(this);
+		if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get())) {
+			this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(4);
+		}
+		if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get())) {
+			this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(35);
+		}
 		return retval;
 	}
 
@@ -300,21 +294,19 @@ public class SuperBigCatEntity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if (this != null) {
-            double t = 0;
-            double angl = 0;
-            if (tickCount % 400 == 40) {
-                if (EntityUtils.getSeabornAround(world, x, y, z, this) < (world.getLevelData().getGameRules().getInt(CaerulaArborModGameRules.CLONE_NUMBER_LIMIT))) {
-                    t = Mth.nextInt(RandomSource.create(), 2, 4);
-                    for (int index0 = 0; index0 < (int) t; index0++) {
-                        angl = Mth.nextDouble(RandomSource.create(), 0, 6.283);
-                        if (world instanceof ServerLevel _level) {
-                            Entity entityToSpawn = CaerulaArborModEntities.OCEANIZED_CAT.get().spawn(_level, BlockPos.containing(x + 4 * Math.sin(angl), y + 1, z + 4 * Math.cos(angl)), MobSpawnType.MOB_SUMMONED);
-                            if (entityToSpawn != null) {
-                                entityToSpawn.setYRot(getYRot());
-                                entityToSpawn.setYBodyRot(getYRot());
-                                entityToSpawn.setYHeadRot(getYRot());
-                            }
+        double t = 0;
+        double angl = 0;
+        if (tickCount % 400 == 40) {
+            if (EntityUtils.getSeabornAround(world, x, y, z, this) < (world.getLevelData().getGameRules().getInt(CaerulaArborModGameRules.CLONE_NUMBER_LIMIT))) {
+                t = Mth.nextInt(RandomSource.create(), 2, 4);
+                for (int index0 = 0; index0 < (int) t; index0++) {
+                    angl = Mth.nextDouble(RandomSource.create(), 0, 6.283);
+                    if (world instanceof ServerLevel _level) {
+                        Entity entityToSpawn = CaerulaArborModEntities.OCEANIZED_CAT.get().spawn(_level, BlockPos.containing(x + 4 * Math.sin(angl), y + 1, z + 4 * Math.cos(angl)), MobSpawnType.MOB_SUMMONED);
+                        if (entityToSpawn != null) {
+                            entityToSpawn.setYRot(getYRot());
+                            entityToSpawn.setYBodyRot(getYRot());
+                            entityToSpawn.setYHeadRot(getYRot());
                         }
                     }
                 }
@@ -386,7 +378,6 @@ public class SuperBigCatEntity extends SeaMonster {
 	private PlayState attackingPredicate(AnimationState event) {
 		double d1 = this.getX() - this.xOld;
 		double d0 = this.getZ() - this.zOld;
-		float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
 		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
@@ -430,8 +421,6 @@ public class SuperBigCatEntity extends SeaMonster {
             double x = this.getX();
             double y = this.getY();
             double z = this.getZ();
-            if (this == null)
-                return;
             double t = 0;
             double angl = 0;
             double yyy = 0;

@@ -1,8 +1,9 @@
 package com.apocalypse.caerulaarbor.block;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.capability.ModCapabilities;
+import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -158,7 +159,7 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
             String output = "";
             double balance = 0;
             double amount = 0;
-            balance = (((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).plauyer_balance;
+            balance = (((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).plauyer_balance;
             if (balance >= 131072) {
                 if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
                     _player.displayClientMessage(Component.literal((Component.translatable("block.golden_chalise.inquiry").getString())), true);
@@ -170,7 +171,7 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
                         balance = Math.min(balance + amount, 131072);
                         {
                             double _setval = balance;
-                            ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                            ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                                 capability.plauyer_balance = _setval;
                                 capability.syncPlayerVariables(entity);
                             });
@@ -184,7 +185,7 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
                         balance = balance + 1;
                         {
                             double _setval = balance;
-                            ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                            ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                                 capability.plauyer_balance = _setval;
                                 capability.syncPlayerVariables(entity);
                             });
@@ -204,7 +205,7 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
                         balance = Math.min(balance + amount * 9, 131072);
                         {
                             double _setval = balance;
-                            ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                            ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                                 capability.plauyer_balance = _setval;
                                 capability.syncPlayerVariables(entity);
                             });
@@ -218,7 +219,7 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
                         balance = Math.min(balance + 9, 131072);
                         {
                             double _setval = balance;
-                            ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                            ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                                 capability.plauyer_balance = _setval;
                                 capability.syncPlayerVariables(entity);
                             });
@@ -243,7 +244,7 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
                                 balance = balance - 9;
                                 {
                                     double _setval = balance;
-                                    ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                                    ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                                         capability.plauyer_balance = _setval;
                                         capability.syncPlayerVariables(entity);
                                     });
@@ -268,7 +269,7 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
                                 balance = 0;
                                 {
                                     double _setval = balance;
-                                    ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                                    ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                                         capability.plauyer_balance = _setval;
                                         capability.syncPlayerVariables(entity);
                                     });
@@ -282,7 +283,7 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
                             balance = balance - 1;
                             {
                                 double _setval = balance;
-                                ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                                ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                                     capability.plauyer_balance = _setval;
                                     capability.syncPlayerVariables(entity);
                                 });

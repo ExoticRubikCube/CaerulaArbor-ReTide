@@ -135,21 +135,13 @@ public class OceanizedShulkerEntity extends SeaMonster {
 
 			@Override
 			public boolean canUse() {
-				double x = OceanizedShulkerEntity.this.getX();
-				double y = OceanizedShulkerEntity.this.getY();
-				double z = OceanizedShulkerEntity.this.getZ();
 				Entity entity = OceanizedShulkerEntity.this;
-				Level world = OceanizedShulkerEntity.this.level();
 				return super.canUse() && EntityUtils.isShulkerWalking(entity);
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = OceanizedShulkerEntity.this.getX();
-				double y = OceanizedShulkerEntity.this.getY();
-				double z = OceanizedShulkerEntity.this.getZ();
 				Entity entity = OceanizedShulkerEntity.this;
-				Level world = OceanizedShulkerEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.isShulkerWalking(entity);
 			}
 
@@ -158,42 +150,26 @@ public class OceanizedShulkerEntity extends SeaMonster {
 		this.goalSelector.addGoal(3, new RandomStrollGoal(this, 1) {
 			@Override
 			public boolean canUse() {
-				double x = OceanizedShulkerEntity.this.getX();
-				double y = OceanizedShulkerEntity.this.getY();
-				double z = OceanizedShulkerEntity.this.getZ();
 				Entity entity = OceanizedShulkerEntity.this;
-				Level world = OceanizedShulkerEntity.this.level();
 				return super.canUse() && EntityUtils.isShulkerWalking(entity);
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = OceanizedShulkerEntity.this.getX();
-				double y = OceanizedShulkerEntity.this.getY();
-				double z = OceanizedShulkerEntity.this.getZ();
 				Entity entity = OceanizedShulkerEntity.this;
-				Level world = OceanizedShulkerEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.isShulkerWalking(entity);
 			}
 		});
 		this.goalSelector.addGoal(4, new RandomLookAroundGoal(this) {
 			@Override
 			public boolean canUse() {
-				double x = OceanizedShulkerEntity.this.getX();
-				double y = OceanizedShulkerEntity.this.getY();
-				double z = OceanizedShulkerEntity.this.getZ();
 				Entity entity = OceanizedShulkerEntity.this;
-				Level world = OceanizedShulkerEntity.this.level();
 				return super.canUse() && EntityUtils.isShulkerWalking(entity);
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = OceanizedShulkerEntity.this.getX();
-				double y = OceanizedShulkerEntity.this.getY();
-				double z = OceanizedShulkerEntity.this.getZ();
 				Entity entity = OceanizedShulkerEntity.this;
-				Level world = OceanizedShulkerEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.isShulkerWalking(entity);
 			}
 		});
@@ -250,11 +226,9 @@ public class OceanizedShulkerEntity extends SeaMonster {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this != null) {
-            if (((Entity) this instanceof OceanizedShulkerEntity _datEntI ? _datEntI.getEntityData().get(DATA_VARIANT) : 0) == 0) {
-                if ((Entity) this instanceof OceanizedShulkerEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_VARIANT, Mth.nextInt(RandomSource.create(), 0, 1));
-            }
+        if (((Entity) this instanceof OceanizedShulkerEntity _datEntI ? _datEntI.getEntityData().get(DATA_VARIANT) : 0) == 0) {
+            if ((Entity) this instanceof OceanizedShulkerEntity _datEntSetI)
+                _datEntSetI.getEntityData().set(DATA_VARIANT, Mth.nextInt(RandomSource.create(), 0, 1));
         }
         return retval;
 	}
@@ -267,87 +241,83 @@ public class OceanizedShulkerEntity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if (this != null && player != null) {
-            if (((Entity) this instanceof OceanizedShulkerEntity _datEntI ? _datEntI.getEntityData().get(DATA_VARIANT) : 0) < 2) {
-                if (((Entity) player instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CaerulaArborModItems.COMPLEX_CHITIN.get()) {
-                    if ((Entity) this instanceof OceanizedShulkerEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_VARIANT, 2);
-                    if (this.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
-                        this.getAttribute(Attributes.MAX_HEALTH)
-                                .setBaseValue(((this.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? this.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0) * 2));
-                    if (this.getAttributes().hasAttribute(Attributes.ARMOR))
-                        this.getAttribute(Attributes.ARMOR)
-                                .setBaseValue(((this.getAttributes().hasAttribute(Attributes.ARMOR) ? this.getAttribute(Attributes.ARMOR).getBaseValue() : 0) * 1.5));
-                    if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()))
-                        this.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get())
-                                .setBaseValue(((this.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get())
-                                        ? this.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).getBaseValue()
-                                        : 0) + 5));
-                    if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-                        this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get())
-                                .setBaseValue(((this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get())
-                                        ? this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).getBaseValue()
-                                        : 0) + 35));
-                    if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RESISTANCE.get()))
-                        this.getAttribute(CaerulaArborModAttributes.SANITY_RESISTANCE.get())
-                                .setBaseValue(((this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RESISTANCE.get())
-                                        ? this.getAttribute(CaerulaArborModAttributes.SANITY_RESISTANCE.get()).getBaseValue()
-                                        : 0) + 35));
-                    ((Entity) player instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
-                    if (world instanceof Level _level) {
-                        if (!_level.isClientSide()) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.smithing_table.use")), SoundSource.HOSTILE, 1, 1);
-                        } else {
-                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.smithing_table.use")), SoundSource.HOSTILE, 1, 1, false);
-                        }
+        if (((Entity) this instanceof OceanizedShulkerEntity _datEntI ? _datEntI.getEntityData().get(DATA_VARIANT) : 0) < 2) {
+            if (player.getMainHandItem().getItem() == CaerulaArborModItems.COMPLEX_CHITIN.get()) {
+                if ((Entity) this instanceof OceanizedShulkerEntity _datEntSetI)
+                    _datEntSetI.getEntityData().set(DATA_VARIANT, 2);
+                if (this.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
+                    this.getAttribute(Attributes.MAX_HEALTH)
+                            .setBaseValue(((this.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? this.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0) * 2));
+                if (this.getAttributes().hasAttribute(Attributes.ARMOR))
+                    this.getAttribute(Attributes.ARMOR)
+                            .setBaseValue(((this.getAttributes().hasAttribute(Attributes.ARMOR) ? this.getAttribute(Attributes.ARMOR).getBaseValue() : 0) * 1.5));
+                if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()))
+                    this.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get())
+                            .setBaseValue(((this.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get())
+                                    ? this.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).getBaseValue()
+                                    : 0) + 5));
+                if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
+                    this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get())
+                            .setBaseValue(((this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get())
+                                    ? this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).getBaseValue()
+                                    : 0) + 35));
+                if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RESISTANCE.get()))
+                    this.getAttribute(CaerulaArborModAttributes.SANITY_RESISTANCE.get())
+                            .setBaseValue(((this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RESISTANCE.get())
+                                    ? this.getAttribute(CaerulaArborModAttributes.SANITY_RESISTANCE.get()).getBaseValue()
+                                    : 0) + 35));
+                player.getMainHandItem().shrink(1);
+                if (world instanceof Level _level) {
+                    if (!_level.isClientSide()) {
+                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.smithing_table.use")), SoundSource.HOSTILE, 1, 1);
+                    } else {
+                        _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.smithing_table.use")), SoundSource.HOSTILE, 1, 1, false);
                     }
-                    if ((Entity) this instanceof LivingEntity _entity)
-                        _entity.setHealth((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1);
-                    if ((Entity) player instanceof ServerPlayer _player) {
-                        Advancement _adv = _player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "construction"));
-                        AdvancementProgress _ap = _player.getAdvancements().getOrStartProgress(_adv);
-                        if (!_ap.isDone()) {
-                            for (String criteria : _ap.getRemainingCriteria())
-                                _player.getAdvancements().award(_adv, criteria);
-                        }
-                    }
-                    ths = InteractionResult.SUCCESS;
-                } else if (((Entity) player instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == Blocks.BEDROCK.asItem()) {
-                    if ((Entity) this instanceof OceanizedShulkerEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_VARIANT, 3);
-                    if (this.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
-                        this.getAttribute(Attributes.MAX_HEALTH)
-                                .setBaseValue(((this.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? this.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0) * 18));
-                    if (this.getAttributes().hasAttribute(Attributes.ARMOR))
-                        this.getAttribute(Attributes.ARMOR)
-                                .setBaseValue(((this.getAttributes().hasAttribute(Attributes.ARMOR) ? this.getAttribute(Attributes.ARMOR).getBaseValue() : 0) * 10));
-                    if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()))
-                        this.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get())
-                                .setBaseValue(((this.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get())
-                                        ? this.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).getBaseValue()
-                                        : 0) + 32767));
-                    if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-                        this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get())
-                                .setBaseValue(((this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get())
-                                        ? this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).getBaseValue()
-                                        : 0) + 100));
-                    if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RESISTANCE.get()))
-                        this.getAttribute(CaerulaArborModAttributes.SANITY_RESISTANCE.get())
-                                .setBaseValue(((this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RESISTANCE.get())
-                                        ? this.getAttribute(CaerulaArborModAttributes.SANITY_RESISTANCE.get()).getBaseValue()
-                                        : 0) + 100));
-                    ((Entity) player instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
-                    if ((Entity) this instanceof LivingEntity _entity)
-                        _entity.setHealth((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1);
-                    if (world instanceof Level _level) {
-                        if (!_level.isClientSide()) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.smithing_table.use")), SoundSource.HOSTILE, 1, 1);
-                        } else {
-                            _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.smithing_table.use")), SoundSource.HOSTILE, 1, 1, false);
-                        }
-                    }
-                    ths = InteractionResult.SUCCESS;
                 }
+                this.setHealth(this.getMaxHealth());
+                if ((Entity) player instanceof ServerPlayer _player) {
+                    Advancement _adv = _player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "construction"));
+                    AdvancementProgress _ap = _player.getAdvancements().getOrStartProgress(_adv);
+                    if (!_ap.isDone()) {
+                        for (String criteria : _ap.getRemainingCriteria())
+                            _player.getAdvancements().award(_adv, criteria);
+                    }
+                }
+                ths = InteractionResult.SUCCESS;
+            } else if (((Entity) player instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == Blocks.BEDROCK.asItem()) {
+                if ((Entity) this instanceof OceanizedShulkerEntity _datEntSetI)
+                    _datEntSetI.getEntityData().set(DATA_VARIANT, 3);
+                if (this.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
+                    this.getAttribute(Attributes.MAX_HEALTH)
+                            .setBaseValue(((this.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? this.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0) * 18));
+                if (this.getAttributes().hasAttribute(Attributes.ARMOR))
+                    this.getAttribute(Attributes.ARMOR)
+                            .setBaseValue(((this.getAttributes().hasAttribute(Attributes.ARMOR) ? this.getAttribute(Attributes.ARMOR).getBaseValue() : 0) * 10));
+                if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()))
+                    this.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get())
+                            .setBaseValue(((this.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get())
+                                    ? this.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).getBaseValue()
+                                    : 0) + 32767));
+                if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
+                    this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get())
+                            .setBaseValue(((this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get())
+                                    ? this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).getBaseValue()
+                                    : 0) + 100));
+                if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RESISTANCE.get()))
+                    this.getAttribute(CaerulaArborModAttributes.SANITY_RESISTANCE.get())
+                            .setBaseValue(((this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RESISTANCE.get())
+                                    ? this.getAttribute(CaerulaArborModAttributes.SANITY_RESISTANCE.get()).getBaseValue()
+                                    : 0) + 100));
+                player.getMainHandItem().shrink(1);
+                this.setHealth(this.getMaxHealth());
+                if (world instanceof Level _level) {
+                    if (!_level.isClientSide()) {
+                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.smithing_table.use")), SoundSource.HOSTILE, 1, 1);
+                    } else {
+                        _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.smithing_table.use")), SoundSource.HOSTILE, 1, 1, false);
+                    }
+                }
+                ths = InteractionResult.SUCCESS;
             }
         }
         if (ths == InteractionResult.PASS) return sup;
@@ -389,180 +359,174 @@ public class OceanizedShulkerEntity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if (this != null) {
-            Direction dire = Direction.NORTH;
-            Direction curDire = Direction.NORTH;
-            String curDIreName = "";
-            boolean isAttached = false;
-            Entity enemy = null;
-            double peekTime = 0;
-            double shootDelay = 0;
-            double variant = 0;
-            if (this.isAlive()) {
-                if (tickCount <= 3) {
-                    {
-                        Entity _ent = this;
-                        _ent.setYRot(0);
-                        _ent.setXRot(0);
-                        _ent.setYBodyRot(_ent.getYRot());
-                        _ent.setYHeadRot(_ent.getYRot());
-                        _ent.yRotO = _ent.getYRot();
-                        _ent.xRotO = _ent.getXRot();
-                        if (_ent instanceof LivingEntity _entity) {
-                            _entity.yBodyRotO = _entity.getYRot();
-                            _entity.yHeadRotO = _entity.getYRot();
-                        }
-                    }
+        Direction dire = Direction.NORTH;
+        Direction curDire = Direction.NORTH;
+        String curDIreName = "";
+        boolean isAttached = false;
+        Entity enemy = null;
+        double peekTime = 0;
+        double shootDelay = 0;
+        double variant = 0;
+        if (this.isAlive()) {
+            if (tickCount <= 3) {
+                {
+                    Entity _ent = this;
+                    _ent.setYRot(0);
+                    _ent.setXRot(0);
+                    _ent.setYBodyRot(_ent.getYRot());
+                    _ent.setYHeadRot(_ent.getYRot());
+                    _ent.yRotO = _ent.getYRot();
+                    _ent.xRotO = _ent.getXRot();
+                    LivingEntity _entity = (LivingEntity) _ent;
+                    _entity.yBodyRotO = _entity.getYRot();
+                    _entity.yHeadRotO = _entity.getYRot();
                 }
-                variant = (Entity) this instanceof OceanizedShulkerEntity _datEntI ? _datEntI.getEntityData().get(DATA_VARIANT) : 0;
-                if (variant == 1) {
-                    if ((Entity) this instanceof OceanizedShulkerEntity animatable)
-                        animatable.setTexture("oceanized_shulker_white");
-                } else if (variant == 2) {
-                    if ((Entity) this instanceof OceanizedShulkerEntity animatable)
-                        animatable.setTexture("oceanized_shulker_complex");
-                } else if (variant == 3) {
-                    if ((Entity) this instanceof OceanizedShulkerEntity animatable)
-                        animatable.setTexture("oceanized_shulker_bedrock");
-                } else {
-                    if ((Entity) this instanceof OceanizedShulkerEntity animatable)
-                        animatable.setTexture("oceanized_shulker");
-                }
-                curDIreName = (Entity) this instanceof OceanizedShulkerEntity _datEntS ? _datEntS.getEntityData().get(DATA_DIRECTION) : "";
-                dire = Direction.byName(curDIreName);
-                peekTime = (Entity) this instanceof OceanizedShulkerEntity _datEntI ? _datEntI.getEntityData().get(DATA_PEEK_TIME) : 0;
-                shootDelay = (Entity) this instanceof OceanizedShulkerEntity _datEntI ? _datEntI.getEntityData().get(DATA_SHOOT_DELAY) : 0;
-                isAttached = !((Entity) this instanceof OceanizedShulkerEntity _datEntL11 && _datEntL11.getEntityData().get(DATA_WALKING));
-                if (isAttached) {
-                    if (!canStay(world, curDire)) {
-                        dire = getShulkerDirection(world);
-                        if (!(dire == null)) {
-                            if ((Entity) this instanceof OceanizedShulkerEntity _datEntSetS)
-                                _datEntSetS.getEntityData().set(DATA_DIRECTION, dire.toString());
-                        } else {
-                            if (this != null) {
-                                double dx = 0;
-                                double dy = 0;
-                                double dz = 0;
-                                Direction tDIre = Direction.NORTH;
-                                for (int index0 = 0; index0 < 5; index0++) {
-                                    dx = Mth.nextInt(RandomSource.create(), -9, 9);
-                                    dy = Mth.nextInt(RandomSource.create(), -9, 9);
-                                    dz = Mth.nextInt(RandomSource.create(), -9, 9);
-                                    if (y + dy < -63) {
-                                        continue;
-                                    }
-                                    tDIre = getShulkerDirection(world, x + dx, y + dy, z + dz);
-                                    if (!(tDIre == null)) {
-                                        if (world instanceof Level _level) {
-                                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.shulker.teleport")), SoundSource.HOSTILE, 1, 1);
-                                        }
-                                        {
-                                            Entity _ent = this;
-                                            _ent.teleportTo((x + dx), (y + dy), (z + dz));
-                                            if (_ent instanceof ServerPlayer _serverPlayer)
-                                                _serverPlayer.connection.teleport((x + dx), (y + dy), (z + dz), _ent.getYRot(), _ent.getXRot());
-                                        }
-                                        if ((Entity) this instanceof OceanizedShulkerEntity _datEntSetS)
-                                            _datEntSetS.getEntityData().set(DATA_DIRECTION, tDIre.toString());
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    setDeltaMovement(new Vec3(0, 0, 0));
-                    if (!world.isClientSide()) {
-                        if (peekTime <= 0) {
-                            if (Math.random() < 0.01) {
-                                if ((Entity) this instanceof OceanizedShulkerEntity _datEntSetI)
-                                    _datEntSetI.getEntityData().set(DATA_PEEK_TIME, Mth.nextInt(RandomSource.create(), 60, 160));
-                                if (Math.random() < 0.5) {
-                                    if (this instanceof OceanizedShulkerEntity) {
-                                        this.setAnimation("animation.oceanized_shulker.open1");
-                                    }
-                                } else {
-                                    if (this instanceof OceanizedShulkerEntity) {
-                                        this.setAnimation("animation.oceanized_shulker.open2");
-                                    }
-                                }
-                                if (world instanceof Level _level) {
-                                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.shulker.open")), SoundSource.HOSTILE, 1, 1);
-                                }
-                            }
-                        } else {
-                            if (peekTime <= 1) {
-                                if (Math.random() < 0.5) {
-                                    if (this instanceof OceanizedShulkerEntity) {
-                                        this.setAnimation("animation.oceanized_shulker.close1");
-                                    }
-                                } else {
-                                    if (this instanceof OceanizedShulkerEntity) {
-                                        this.setAnimation("animation.oceanized_shulker.close2");
-                                    }
-                                }
-                                if (world instanceof Level _level) {
-                                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.shulker.close")), SoundSource.HOSTILE, 1, 1);
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    if ((Entity) this instanceof OceanizedShulkerEntity _datEntSetS)
-                        _datEntSetS.getEntityData().set(DATA_DIRECTION, "up");
-                }
-                if (peekTime <= 0) {
-                    if (variant == 2) {
-                        if (!this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.SHULKER_BUFF.get(), 5, 2, false, false));
-                    } else if (variant == 3) {
-                        if (!this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.SHULKER_BUFF.get(), 5, 9, false, false));
+            }
+            variant = (Entity) this instanceof OceanizedShulkerEntity _datEntI ? _datEntI.getEntityData().get(DATA_VARIANT) : 0;
+            if (variant == 1) {
+                if ((Entity) this instanceof OceanizedShulkerEntity animatable)
+                    animatable.setTexture("oceanized_shulker_white");
+            } else if (variant == 2) {
+                if ((Entity) this instanceof OceanizedShulkerEntity animatable)
+                    animatable.setTexture("oceanized_shulker_complex");
+            } else if (variant == 3) {
+                if ((Entity) this instanceof OceanizedShulkerEntity animatable)
+                    animatable.setTexture("oceanized_shulker_bedrock");
+            } else {
+                if ((Entity) this instanceof OceanizedShulkerEntity animatable)
+                    animatable.setTexture("oceanized_shulker");
+            }
+            curDIreName = (Entity) this instanceof OceanizedShulkerEntity _datEntS ? _datEntS.getEntityData().get(DATA_DIRECTION) : "";
+            dire = Direction.byName(curDIreName);
+            peekTime = (Entity) this instanceof OceanizedShulkerEntity _datEntI ? _datEntI.getEntityData().get(DATA_PEEK_TIME) : 0;
+            shootDelay = (Entity) this instanceof OceanizedShulkerEntity _datEntI ? _datEntI.getEntityData().get(DATA_SHOOT_DELAY) : 0;
+            isAttached = !((Entity) this instanceof OceanizedShulkerEntity _datEntL11 && _datEntL11.getEntityData().get(DATA_WALKING));
+            if (isAttached) {
+                if (!canStay(world, curDire)) {
+                    dire = getShulkerDirection(world);
+                    if (!(dire == null)) {
+                        if ((Entity) this instanceof OceanizedShulkerEntity _datEntSetS)
+                            _datEntSetS.getEntityData().set(DATA_DIRECTION, dire.toString());
                     } else {
-                        if (!this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.SHULKER_BUFF.get(), 5, 0, false, false));
+                        double dx = 0;
+                        double dy = 0;
+                        double dz = 0;
+                        Direction tDIre = Direction.NORTH;
+                        for (int index0 = 0; index0 < 5; index0++) {
+                            dx = Mth.nextInt(RandomSource.create(), -9, 9);
+                            dy = Mth.nextInt(RandomSource.create(), -9, 9);
+                            dz = Mth.nextInt(RandomSource.create(), -9, 9);
+                            if (y + dy < -63) {
+                                continue;
+                            }
+                            tDIre = getShulkerDirection(world, x + dx, y + dy, z + dz);
+                            if (!(tDIre == null)) {
+                                if (world instanceof Level _level) {
+                                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.shulker.teleport")), SoundSource.HOSTILE, 1, 1);
+                                }
+                                {
+                                    Entity _ent = this;
+                                    _ent.teleportTo((x + dx), (y + dy), (z + dz));
+                                    if (_ent instanceof ServerPlayer _serverPlayer)
+                                        _serverPlayer.connection.teleport((x + dx), (y + dy), (z + dz), _ent.getYRot(), _ent.getXRot());
+                                }
+                                if ((Entity) this instanceof OceanizedShulkerEntity _datEntSetS)
+                                    _datEntSetS.getEntityData().set(DATA_DIRECTION, tDIre.toString());
+                                break;
+                            }
+                        }
                     }
-                } else {
-                    if ((Entity) this instanceof OceanizedShulkerEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_PEEK_TIME, (int) (peekTime - 1));
-                    if ((Entity) this instanceof LivingEntity _entity)
-                        _entity.removeEffect(CaerulaArborModMobEffects.SHULKER_BUFF.get());
                 }
-                enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
-                if (shootDelay <= 0) {
-                    if (!(enemy == null) && enemy.isAlive()) {
-                        if ((enemy != null ? distanceTo(enemy) : -1) <= 24) {
+                setDeltaMovement(new Vec3(0, 0, 0));
+                if (!world.isClientSide()) {
+                    if (peekTime <= 0) {
+                        if (Math.random() < 0.01) {
                             if ((Entity) this instanceof OceanizedShulkerEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_SHOOT_DELAY, Mth.nextInt(RandomSource.create(), 40, 60));
-                            if ((Entity) this instanceof OceanizedShulkerEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_PEEK_TIME, 20);
-                            if (isAttached) {
-                                if (Math.random() < 0.5) {
-                                    if (this instanceof OceanizedShulkerEntity) {
-                                        this.setAnimation("animation.oceanized_shulker.attack1");
-                                    }
-                                } else {
-                                    if (this instanceof OceanizedShulkerEntity) {
-                                        this.setAnimation("animation.oceanized_shulker.attack2");
-                                    }
+                                _datEntSetI.getEntityData().set(DATA_PEEK_TIME, Mth.nextInt(RandomSource.create(), 60, 160));
+                            if (Math.random() < 0.5) {
+                                if (this instanceof OceanizedShulkerEntity) {
+                                    this.setAnimation("animation.oceanized_shulker.open1");
                                 }
                             } else {
                                 if (this instanceof OceanizedShulkerEntity) {
-                                    this.setAnimation("animation.oceanized_shulker.attack_withfeet");
+                                    this.setAnimation("animation.oceanized_shulker.open2");
                                 }
-                                if (!this.level().isClientSide())
-                                    this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, 9, false, false));
                             }
-                            shootShulkerBullet(enemy);
+                            if (world instanceof Level _level) {
+                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.shulker.open")), SoundSource.HOSTILE, 1, 1);
+                            }
+                        }
+                    } else {
+                        if (peekTime <= 1) {
                             if (Math.random() < 0.5) {
-                                shootShulkerBullet(enemy);
+                                if (this instanceof OceanizedShulkerEntity) {
+                                    this.setAnimation("animation.oceanized_shulker.close1");
+                                }
+                            } else {
+                                if (this instanceof OceanizedShulkerEntity) {
+                                    this.setAnimation("animation.oceanized_shulker.close2");
+                                }
+                            }
+                            if (world instanceof Level _level) {
+                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.shulker.close")), SoundSource.HOSTILE, 1, 1);
                             }
                         }
                     }
-                } else {
-                    if ((Entity) this instanceof OceanizedShulkerEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_SHOOT_DELAY, (int) (shootDelay - 1));
                 }
+            } else {
+                if ((Entity) this instanceof OceanizedShulkerEntity _datEntSetS)
+                    _datEntSetS.getEntityData().set(DATA_DIRECTION, "up");
+            }
+            if (peekTime <= 0) {
+                if (variant == 2) {
+                    if (!this.level().isClientSide())
+                        this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.SHULKER_BUFF.get(), 5, 2, false, false));
+                } else if (variant == 3) {
+                    if (!this.level().isClientSide())
+                        this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.SHULKER_BUFF.get(), 5, 9, false, false));
+                } else {
+                    if (!this.level().isClientSide())
+                        this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.SHULKER_BUFF.get(), 5, 0, false, false));
+                }
+            } else {
+                if ((Entity) this instanceof OceanizedShulkerEntity _datEntSetI)
+                    _datEntSetI.getEntityData().set(DATA_PEEK_TIME, (int) (peekTime - 1));
+                this.removeEffect(CaerulaArborModMobEffects.SHULKER_BUFF.get());
+            }
+            enemy = this.getTarget();
+            if (shootDelay <= 0) {
+                if (!(enemy == null) && enemy.isAlive()) {
+                    if (distanceTo(enemy) <= 24) {
+                        if ((Entity) this instanceof OceanizedShulkerEntity _datEntSetI)
+                            _datEntSetI.getEntityData().set(DATA_SHOOT_DELAY, Mth.nextInt(RandomSource.create(), 40, 60));
+                        if ((Entity) this instanceof OceanizedShulkerEntity _datEntSetI)
+                            _datEntSetI.getEntityData().set(DATA_PEEK_TIME, 20);
+                        if (isAttached) {
+                            if (Math.random() < 0.5) {
+                                if (this instanceof OceanizedShulkerEntity) {
+                                    this.setAnimation("animation.oceanized_shulker.attack1");
+                                }
+                            } else {
+                                if (this instanceof OceanizedShulkerEntity) {
+                                    this.setAnimation("animation.oceanized_shulker.attack2");
+                                }
+                            }
+                        } else {
+                            if (this instanceof OceanizedShulkerEntity) {
+                                this.setAnimation("animation.oceanized_shulker.attack_withfeet");
+                            }
+                            if (!this.level().isClientSide())
+                                this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, 9, false, false));
+                        }
+                        shootShulkerBullet(enemy);
+                        if (Math.random() < 0.5) {
+                            shootShulkerBullet(enemy);
+                        }
+                    }
+                }
+            } else {
+                if ((Entity) this instanceof OceanizedShulkerEntity _datEntSetI)
+                    _datEntSetI.getEntityData().set(DATA_SHOOT_DELAY, (int) (shootDelay - 1));
             }
         }
         this.refreshDimensions();
@@ -625,8 +589,7 @@ public class OceanizedShulkerEntity extends SeaMonster {
 			return event.setAndContinue(RawAnimation.begin().thenPlay("animation.oceanized_shulker.die"));
 		}
 		if (this.animationprocedure.equals("empty")) {
-			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.1F && event.getLimbSwingAmount() < 0.1F))
-) {
+			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.1F && event.getLimbSwingAmount() < 0.1F))) {
 				if (this.isWalking())
 					return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_shulker.move"));
 				if (peekTime() <= 0) event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_shulker.idle"));
@@ -670,24 +633,22 @@ public class OceanizedShulkerEntity extends SeaMonster {
             double x = this.getX();
             double y = this.getY();
             double z = this.getZ();
-            if (this != null) {
-                double v = 0;
-                if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
-                    v = (Entity) this instanceof OceanizedShulkerEntity _datEntI ? _datEntI.getEntityData().get(DATA_VARIANT) : 0;
-                    if (v == 2) {
-                        if (world instanceof ServerLevel _level) {
-                            ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, new ItemStack(CaerulaArborModItems.COMPLEX_CHITIN.get()));
-                            entityToSpawn.setPickUpDelay(10);
-                            entityToSpawn.setUnlimitedLifetime();
-                            _level.addFreshEntity(entityToSpawn);
-                        }
-                    } else if (v == 3) {
-                        if (world instanceof ServerLevel _level) {
-                            ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, new ItemStack(Blocks.BEDROCK));
-                            entityToSpawn.setPickUpDelay(5);
-                            entityToSpawn.setUnlimitedLifetime();
-                            _level.addFreshEntity(entityToSpawn);
-                        }
+            double v = 0;
+            if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
+                v = (Entity) this instanceof OceanizedShulkerEntity _datEntI ? _datEntI.getEntityData().get(DATA_VARIANT) : 0;
+                if (v == 2) {
+                    if (world instanceof ServerLevel _level) {
+                        ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, new ItemStack(CaerulaArborModItems.COMPLEX_CHITIN.get()));
+                        entityToSpawn.setPickUpDelay(10);
+                        entityToSpawn.setUnlimitedLifetime();
+                        _level.addFreshEntity(entityToSpawn);
+                    }
+                } else if (v == 3) {
+                    if (world instanceof ServerLevel _level) {
+                        ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, new ItemStack(Blocks.BEDROCK));
+                        entityToSpawn.setPickUpDelay(5);
+                        entityToSpawn.setUnlimitedLifetime();
+                        _level.addFreshEntity(entityToSpawn);
                     }
                 }
             }

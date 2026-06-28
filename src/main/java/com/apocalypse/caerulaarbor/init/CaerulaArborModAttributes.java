@@ -27,6 +27,8 @@ public class CaerulaArborModAttributes {
 	public static final RegistryObject<Attribute> SANITY = REGISTRY.register("sanity", () -> new RangedAttribute("attribute.caerula_arbor.sanity", 1000, -1, 1000).setSyncable(true));
 	public static final RegistryObject<Attribute> SANITY_MODIFIER = REGISTRY.register("sanity_modifier", () -> new RangedAttribute("attribute.caerula_arbor.sanity_modifier", 1, 0, 999).setSyncable(true));
 	public static final RegistryObject<Attribute> SANITY_RATE = REGISTRY.register("sanity_rate", () -> new RangedAttribute("attribute.caerula_arbor.sanity_rate", 0, 0, 999).setSyncable(true));
+	public static final RegistryObject<Attribute> SANITY_INJURY_DAMAGE = REGISTRY.register("sanity_injury_damage",
+			() -> new RangedAttribute("attribute.caerula_arbor.sanity_injury_damage", 0, 0, Integer.MAX_VALUE).setSyncable(true));
 	public static final RegistryObject<Attribute> EVOLVED = REGISTRY.register("evolved", () -> new RangedAttribute("attribute.caerula_arbor.evolved", 0, 0, 1).setSyncable(true));
 	public static final RegistryObject<Attribute> SUMMONABLE = REGISTRY.register("summonable", () -> new RangedAttribute("attribute.caerula_arbor.summonable", 1, 0, 1).setSyncable(true));
 	public static final RegistryObject<Attribute> MISSRATE = REGISTRY.register("missrate", () -> new RangedAttribute("attribute.caerula_arbor.missrate", 0, 0, 100).setSyncable(true));
@@ -41,6 +43,7 @@ public class CaerulaArborModAttributes {
 		event.getTypes().forEach(entity -> event.add(entity, SANITY.get()));
 		event.getTypes().forEach(entity -> event.add(entity, SANITY_MODIFIER.get()));
 		event.getTypes().forEach(entity -> event.add(entity, SANITY_RATE.get()));
+		event.getTypes().forEach(entity -> event.add(entity, SANITY_INJURY_DAMAGE.get()));
 		List.of(CaerulaArborModEntities.ACCUMULATOR_CLONE.get(), CaerulaArborModEntities.ACCUMULATOR_PROKARYOTE.get(), CaerulaArborModEntities.APOSTLE_PROKARYOTE.get(), CaerulaArborModEntities.BASELAYER_ABYSSAL.get(),
 				CaerulaArborModEntities.BISHOP_FISH.get(), CaerulaArborModEntities.BONE_FISH.get(), CaerulaArborModEntities.CHEST_FISH.get(), CaerulaArborModEntities.CHISELER_FISH.get(), CaerulaArborModEntities.CHITIN_GOLEM.get(),
 				CaerulaArborModEntities.COLLECTOR_PROKARYOTE.get(), CaerulaArborModEntities.CRACKER_ABYSSAL.get(), CaerulaArborModEntities.CREEPER_FISH.get(), CaerulaArborModEntities.DEPOSITER_PROKARYOTE.get(),
@@ -109,6 +112,7 @@ public class CaerulaArborModAttributes {
 			newPlayer.getAttribute(SANITY.get()).setBaseValue(oldPlayer.getAttribute(SANITY.get()).getBaseValue());
 			newPlayer.getAttribute(SANITY_MODIFIER.get()).setBaseValue(oldPlayer.getAttribute(SANITY_MODIFIER.get()).getBaseValue());
 			newPlayer.getAttribute(SANITY_RATE.get()).setBaseValue(oldPlayer.getAttribute(SANITY_RATE.get()).getBaseValue());
+			newPlayer.getAttribute(SANITY_INJURY_DAMAGE.get()).setBaseValue(oldPlayer.getAttribute(SANITY_INJURY_DAMAGE.get()).getBaseValue());
 			newPlayer.getAttribute(MISSRATE.get()).setBaseValue(oldPlayer.getAttribute(MISSRATE.get()).getBaseValue());
 			newPlayer.getAttribute(MAGIC_RESISTANCE.get()).setBaseValue(oldPlayer.getAttribute(MAGIC_RESISTANCE.get()).getBaseValue());
 			newPlayer.getAttribute(GENERAL_DEFENSE.get()).setBaseValue(oldPlayer.getAttribute(GENERAL_DEFENSE.get()).getBaseValue());

@@ -1,10 +1,12 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.api.event.SanityEvent;
+import com.apocalypse.caerulaarbor.capability.map.MapVariables;
+import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -219,7 +221,7 @@ public class UmbrellaAbyssalEntity extends SeaMonster {
                 if (world instanceof ServerLevel _level)
                     _level.sendParticles(CaerulaArborModParticleTypes.SEA_RIPPLE.get(), (x + d * Math.sin(angle)), (y + 0.4), (z + d * Math.cos(angle)), 0, (float) Math.sin(angle), 0.0, (float) Math.cos(angle), 0.11);
             }
-            if (CaerulaArborModVariables.MapVariables.get(world).strategy_grow >= 3) {
+            if (MapVariables.get(world).strategy_grow >= 3) {
                 for (int index1 = 0; index1 < 14; index1++) {
                     angle = Mth.nextDouble(RandomSource.create(), 0, 6.283);
                     d = Mth.nextDouble(RandomSource.create(), 3.6, 4.3);
@@ -244,12 +246,17 @@ public class UmbrellaAbyssalEntity extends SeaMonster {
                                 continue;
                             }
                         }
-                        EntityUtils.deductSanity(entityiterator, (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 4);
+                        if (entityiterator instanceof LivingEntity target) {
+                            SIHelper.causeSanityInjury(target,
+                                    this,
+                                    (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 4,
+                                    SanityEvent.Hurt.Type.ENTITY);
+                        }
                         entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_magic")))),
                                 (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
                     }
                 }
-                if (CaerulaArborModVariables.MapVariables.get(world).strategy_grow >= 3) {
+                if (MapVariables.get(world).strategy_grow >= 3) {
                     for (Entity entityiterator : world.getEntities(this, new AABB((x - 7), (y - 1.75), (z - 7), (x + 7), (y + 3), (z + 7)))) {
                         if ((entityiterator != null ? distanceTo(entityiterator) : -1) <= 7) {
                             if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
@@ -260,7 +267,12 @@ public class UmbrellaAbyssalEntity extends SeaMonster {
                             if (!(entityiterator instanceof Mob)) {
                                 continue;
                             }
-                            EntityUtils.deductSanity(entityiterator, (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 4);
+                            if (entityiterator instanceof LivingEntity target) {
+                                SIHelper.causeSanityInjury(target,
+                                        this,
+                                        (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 4,
+                                        SanityEvent.Hurt.Type.ENTITY);
+                            }
                             entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_magic")))),
                                     (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
                         }

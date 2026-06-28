@@ -157,21 +157,19 @@ public class CorrectionalPhalanxyInfantryEntity extends Animal implements GeoEnt
 	public boolean hurt(DamageSource source, float amount) {
         LevelAccessor world = this.level();
         Entity sourceentity = source.getEntity();
-        if (this != null && sourceentity != null) {
+        if (sourceentity != null) {
             if (!(sourceentity instanceof Player)) {
                 if (((Entity) this instanceof CorrectionalPhalanxyInfantryEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp1) : 0) <= 0) {
-                    if ((sourceentity != null ? distanceTo(sourceentity) : -1) <= 5 && this.isAlive()) {
+                    if (distanceTo(sourceentity) <= 5 && this.isAlive()) {
                         if ((Entity) this instanceof CorrectionalPhalanxyInfantryEntity _datEntSetI)
                             _datEntSetI.getEntityData().set(DATA_skillp1, 100);
                         if (this instanceof CorrectionalPhalanxyInfantryEntity) {
                             this.setAnimation("animation.correctional_phalanx _infantry.heavyattack");
                         }
                         CaerulaArborMod.queueServerWork(20, () -> {
-                            if (!(sourceentity == null)) {
-                                sourceentity.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "generic_warrior_attack")))),
-                                        (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 2));
-                                sourceentity.push((getLookAngle().x * 0.64), 0, (getLookAngle().z * 0.64));
-                            }
+                            sourceentity.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "generic_warrior_attack")))),
+                                    (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 2));
+                            sourceentity.push((getLookAngle().x * 0.64), 0, (getLookAngle().z * 0.64));
                         });
                     }
                 }
@@ -203,50 +201,44 @@ public class CorrectionalPhalanxyInfantryEntity extends Animal implements GeoEnt
 	public void baseTick() {
 		super.baseTick();
         LevelAccessor world = this.level();
-        if (this != null) {
-            double sklp1 = 0;
-            double sklp2 = 0;
-            Entity enemy = null;
-            if (this.isAlive()) {
-                sklp1 = (Entity) this instanceof CorrectionalPhalanxyInfantryEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp1) : 0;
-                sklp2 = (Entity) this instanceof CorrectionalPhalanxyInfantryEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp2) : 0;
-                if (sklp1 > 0) {
-                    if ((Entity) this instanceof CorrectionalPhalanxyInfantryEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_skillp1, (int) (sklp1 - 1));
-                }
-                if (sklp2 > 0) {
-                    if ((Entity) this instanceof CorrectionalPhalanxyInfantryEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_skillp2, (int) (sklp2 - 1));
-                } else {
-                    enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
-                    if (!(enemy == null)) {
-                        if ((enemy != null ? distanceTo(enemy) : -1) <= 5 && enemy.isAlive()) {
-                            if ((Entity) this instanceof CorrectionalPhalanxyInfantryEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_skillp2, 200);
-                            if (this instanceof CorrectionalPhalanxyInfantryEntity) {
-                                this.setAnimation("animation.correctional_phalanx _infantry.swing");
-                            }
-                            ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY()), (enemy.getZ())));
-                            CaerulaArborMod.queueServerWork(16, () -> {
-                                if (this.isAlive()) {
-                                    if (this == null)
-                                        return;
-                                    {
-                                        final Vec3 _center = new Vec3((this.getX() + 2 * getLookAngle().x), (this.getY() + 2 * getLookAngle().y), (this.getZ() + 2 * getLookAngle().z));
-                                        List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(6 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                                        for (Entity entityiterator : _entfound) {
-                                            if (!(entityiterator instanceof Mob) || entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "inquisition")))) {
-                                                if (!(entityiterator == ((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null))) {
-                                                    continue;
-                                                }
-                                            }
-                                            entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "generic_warrior_attack")))),
-                                                    (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.5));
-                                        }
-                                    }
-                                }
-                            });
+        double sklp1 = 0;
+        double sklp2 = 0;
+        Entity enemy = null;
+        if (this.isAlive()) {
+            sklp1 = (Entity) this instanceof CorrectionalPhalanxyInfantryEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp1) : 0;
+            sklp2 = (Entity) this instanceof CorrectionalPhalanxyInfantryEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp2) : 0;
+            if (sklp1 > 0) {
+                if ((Entity) this instanceof CorrectionalPhalanxyInfantryEntity _datEntSetI)
+                    _datEntSetI.getEntityData().set(DATA_skillp1, (int) (sklp1 - 1));
+            }
+            if (sklp2 > 0) {
+                if ((Entity) this instanceof CorrectionalPhalanxyInfantryEntity _datEntSetI)
+                    _datEntSetI.getEntityData().set(DATA_skillp2, (int) (sklp2 - 1));
+            } else {
+                enemy = this.getTarget();
+                if (!(enemy == null)) {
+                    if (distanceTo(enemy) <= 5 && enemy.isAlive()) {
+                        if ((Entity) this instanceof CorrectionalPhalanxyInfantryEntity _datEntSetI)
+                            _datEntSetI.getEntityData().set(DATA_skillp2, 200);
+                        if (this instanceof CorrectionalPhalanxyInfantryEntity) {
+                            this.setAnimation("animation.correctional_phalanx _infantry.swing");
                         }
+                        ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY()), (enemy.getZ())));
+                        CaerulaArborMod.queueServerWork(16, () -> {
+                            if (this.isAlive()) {
+								final Vec3 _center = new Vec3((this.getX() + 2 * getLookAngle().x), (this.getY() + 2 * getLookAngle().y), (this.getZ() + 2 * getLookAngle().z));
+								List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(6 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+								for (Entity entityiterator : _entfound) {
+									if (!(entityiterator instanceof Mob) || entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "inquisition")))) {
+                                        if (!(entityiterator == this.getTarget())) {
+											continue;
+										}
+									}
+									entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "generic_warrior_attack")))),
+											(float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.5));
+								}
+                            }
+                        });
                     }
                 }
             }

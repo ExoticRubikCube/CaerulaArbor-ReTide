@@ -1,7 +1,8 @@
 package com.apocalypse.caerulaarbor.event;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
+import com.apocalypse.caerulaarbor.api.event.SanityEvent;
+import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.entity.*;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
@@ -87,7 +88,9 @@ public class PlayerEntityInteractEventHandler {
                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.lava.extinguish")), SoundSource.HOSTILE, 1, 1);
                 }
                 entity.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "extractor_damage")))), (float) 0.5);
-                EntityUtils.deductSanity(entity, 256);
+                if (entity instanceof LivingEntity target && sourceentity instanceof LivingEntity attacker) {
+                    SIHelper.causeSanityInjury(target, attacker, 256, SanityEvent.Hurt.Type.ENTITY);
+                }
                 if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
                     _entity.addEffect(new MobEffectInstance(MobEffects.POISON, 200, 1));
                 if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())

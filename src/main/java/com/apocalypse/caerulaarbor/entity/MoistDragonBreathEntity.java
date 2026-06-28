@@ -1,6 +1,8 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.api.event.SanityEvent;
+import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
@@ -62,9 +64,6 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity 
 	public static final EntityDataAccessor<String> DATA_OWNER = SynchedEntityData.defineId(MoistDragonBreathEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<Integer> DATA_TYPE = SynchedEntityData.defineId(MoistDragonBreathEntity.class, EntityDataSerializers.INT);
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
-	private boolean swinging;
-	private boolean lastloop;
-	private long lastSwing;
 	public String animationprocedure = "empty";
 
 	public MoistDragonBreathEntity(PlayMessages.SpawnEntity packet, Level world) {
@@ -106,12 +105,6 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity 
 	@Override
 	protected PathNavigation createNavigation(Level world) {
 		return new FlyingPathNavigation(this, world);
-	}
-
-	@Override
-	protected void registerGoals() {
-		super.registerGoals();
-
 	}
 
 	@Override
@@ -207,23 +200,21 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity 
                 if (!(enemy == null) && enemy.isAlive()) {
                     ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY() + 0.5), (enemy.getZ())));
                     if (tickCount > 20) {
-                        if ((enemy != null ? distanceTo(enemy) : -1) > 0.5) {
-                            if (this != null && enemy != null) {
-                                Vec3 offset = position()
-                                        .vectorTo(enemy.position().add(0, 0.25, 0));
-                                if (offset.lengthSqr() <= 0.05) {
-                                    setDeltaMovement(Vec3.ZERO);
-                                } else {
-                                    offset = offset.normalize().scale(0.4);
-                                    setDeltaMovement(offset);
-                                }
+                        if (distanceTo(enemy) > 0.5) {
+                            Vec3 offset = position()
+                                    .vectorTo(enemy.position().add(0, 0.25, 0));
+                            if (offset.lengthSqr() <= 0.05) {
+                                setDeltaMovement(Vec3.ZERO);
+                            } else {
+                                offset = offset.normalize().scale(0.4);
+                                setDeltaMovement(offset);
                             }
                         } else {
                             dragonBreathExplode(world, x, y, z, this);
                         }
                     }
                 } else {
-                    enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+                    enemy = this.getTarget();
                     if (!(enemy == null) && enemy.isAlive()) {
                         if ((Entity) this instanceof MoistDragonBreathEntity _datEntSetS)
                             _datEntSetS.getEntityData().set(DATA_TARGET, (enemy.getStringUUID()));
@@ -459,7 +450,7 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity 
 						continue;
 					}
                     boolean result = true;
-                    if (entityiterator == null || enemy == null || owner == null) {
+                    if (enemy == null || owner == null) {
                         result = false;
                     } else {
                         Entity recentVictim = null;
@@ -485,11 +476,17 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity 
                         }
                     }
                     if (result) {
-						if ((entityiterator != null ? entity.distanceTo(entityiterator) : -1) <= 2.5) {
+						if (entity.distanceTo(entityiterator) <= 2.5) {
 							entityiterator.hurt(
 									new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_magic"))), entity, owner),
 									(float) d);
-							EntityUtils.deductSanity(entityiterator, d * 20);
+							if (entityiterator instanceof LivingEntity target) {
+								if (owner instanceof LivingEntity attacker) {
+									SIHelper.causeSanityInjury(target, attacker, d * 20, SanityEvent.Hurt.Type.ENTITY);
+								} else {
+									SIHelper.causeSanityInjury(target, d * 20, SanityEvent.Hurt.Type.ENTITY);
+								}
+							}
 						}
 					}
 				}

@@ -1,7 +1,8 @@
 
 package com.apocalypse.caerulaarbor.command;
 
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
+import com.apocalypse.caerulaarbor.capability.map.MapVariables;
+import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import com.mojang.brigadier.arguments.BoolArgumentType;
@@ -40,7 +41,7 @@ public class CaerulaArborEndspeakerCommand {
                 String res_line_2 = "";
                 String code = "";
                 String res_line_3 = "";
-                code = "" + Math.round(CaerulaArborModVariables.MapVariables.get(world).endspeaker_abolities);
+                code = "" + Math.round(MapVariables.get(world).endspeaker_abolities);
                 res_line_1 = Component.translatable("command.endspeaker.inquiry.0").getString();
                 res_line_1 = res_line_1.replace("{code}", code);
                 res_line_2 = Component.translatable("command.endspeaker.inquiry.1").getString();
@@ -170,8 +171,7 @@ public class CaerulaArborEndspeakerCommand {
             String info = "";
             boolean cancanneed = false;
             cancanneed = BoolArgumentType.getBool(arguments, "can");
-            CaerulaArborModVariables.MapVariables.get(world).endspeakerSummon = cancanneed;
-            CaerulaArborModVariables.MapVariables.get(world).syncData(world);
+            MapVariablesHandler.setEndspeakerSummon(world, cancanneed);
             if (cancanneed) {
                 info = Component.translatable("command.endspeaker.summon.true").getString();
             } else {
@@ -188,8 +188,7 @@ public class CaerulaArborEndspeakerCommand {
 
     private static void revokeAbility(Level world, double index) {
 		if (EntityUtils.inquirybility(world, index)) {
-			CaerulaArborModVariables.MapVariables.get(world).endspeaker_abolities = (int) CaerulaArborModVariables.MapVariables.get(world).endspeaker_abolities - (int) Math.pow(2, index);
-			CaerulaArborModVariables.MapVariables.get(world).syncData(world);
+			MapVariablesHandler.revokeAbility(world, index);
 		}
 	}
 }

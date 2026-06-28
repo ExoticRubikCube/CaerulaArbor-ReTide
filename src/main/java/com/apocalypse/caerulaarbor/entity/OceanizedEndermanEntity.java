@@ -182,31 +182,29 @@ public class OceanizedEndermanEntity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if (this != null) {
-            double ratio = 0;
-            double angl = 0;
-            double dist = 0;
-            double validY = 0;
-            double tX = 0;
-            double tZ = 0;
-            if (this.isAlive()) {
-                ratio = 0.2;
-                if (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) <= ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5) {
-                    ratio = 0.45;
-                }
-                if (Math.random() < ratio) {
-                    for (int index0 = 0; index0 < 64; index0++) {
-                        angl = Mth.nextDouble(RandomSource.create(), 0, 6.283);
-                        dist = Mth.nextDouble(RandomSource.create(), 3, 6);
-                        tX = x + dist * Math.sin(angl);
-                        tZ = z + dist * Math.cos(angl);
-                        validY = WorldUtils.findValidY(world, tX, y, tZ);
-                        if (validY <= 114513) {
-                            EntityUtils.teleportTo(world, this, x, y, z, tX, validY, tZ);
-                            if ((Entity) this instanceof LivingEntity _entity)
-                                _entity.setHealth((float) (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) + ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.075));
-                            break;
-                        }
+        double ratio = 0;
+        double angl = 0;
+        double dist = 0;
+        double validY = 0;
+        double tX = 0;
+        double tZ = 0;
+        if (this.isAlive()) {
+            ratio = 0.2;
+            if (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) <= ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5) {
+                ratio = 0.45;
+            }
+            if (Math.random() < ratio) {
+                for (int index0 = 0; index0 < 64; index0++) {
+                    angl = Mth.nextDouble(RandomSource.create(), 0, 6.283);
+                    dist = Mth.nextDouble(RandomSource.create(), 3, 6);
+                    tX = x + dist * Math.sin(angl);
+                    tZ = z + dist * Math.cos(angl);
+                    validY = WorldUtils.findValidY(world, tX, y, tZ);
+                    if (validY <= 114513) {
+                        EntityUtils.teleportTo(world, this, x, y, z, tX, validY, tZ);
+                        if ((Entity) this instanceof LivingEntity _entity)
+                            _entity.setHealth((float) (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) + ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.075));
+                        break;
                     }
                 }
             }
@@ -251,95 +249,93 @@ public class OceanizedEndermanEntity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if (this != null) {
-            Entity enemy = null;
-            double sklp = 0;
-            double cool = 0;
-            if (this.isAlive()) {
-                sklp = (Entity) this instanceof OceanizedEndermanEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp) : 0;
-                cool = (Entity) this instanceof OceanizedEndermanEntity _datEntI ? _datEntI.getEntityData().get(DATA_cooldown) : 0;
-                enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
-                if (!(enemy == null)) {
-                    if (sklp <= 0) {
-                        if ((Entity) this instanceof OceanizedEndermanEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_skillp, 300);
-                        if (this instanceof OceanizedEndermanEntity) {
-                            this.setAnimation("animation.oceanzied_enderman.skill");
+        Entity enemy = null;
+        double sklp = 0;
+        double cool = 0;
+        if (this.isAlive()) {
+            sklp = (Entity) this instanceof OceanizedEndermanEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp) : 0;
+            cool = (Entity) this instanceof OceanizedEndermanEntity _datEntI ? _datEntI.getEntityData().get(DATA_cooldown) : 0;
+            enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+            if (!(enemy == null)) {
+                if (sklp <= 0) {
+                    if ((Entity) this instanceof OceanizedEndermanEntity _datEntSetI)
+                        _datEntSetI.getEntityData().set(DATA_skillp, 300);
+                    if (this instanceof OceanizedEndermanEntity) {
+                        this.setAnimation("animation.oceanzied_enderman.skill");
+                    }
+                    if (!this.level().isClientSide())
+                        this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 35, 0, false, false));
+                    if (world instanceof Level _level) {
+                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.enderman.stare")), SoundSource.HOSTILE, 1, 1);
+                    }
+                    CaerulaArborMod.queueServerWork(13, () -> {
+                        if (this == null)
+                            return;
+                        double sklp1 = 0;
+                        Entity enemy1 = null;
+                        enemy1 = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+                        if (!(enemy1 == null)) {
+                            ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy1.getX()), (enemy1.getY()), (enemy1.getZ())));
                         }
+                        new Object() {
+                            void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
+                                double tgtX = 0;
+                                double tgtY = 0;
+                                double tgtZ = 0;
+                                double ctX = 0;
+                                double ctZ = 0;
+                                ctX = x + getLookAngle().x * (double) (2 * (timedloopiterator + 1));
+                                ctZ = z + getLookAngle().z * (double) (2 * (timedloopiterator + 1));
+                                {
+                                    final Vec3 _center = new Vec3(ctX, y, ctZ);
+                                    List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(6 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+                                    for (Entity entityiterator : _entfound) {
+                                        tgtX = entityiterator.getX();
+                                        tgtY = entityiterator.getY();
+                                        tgtZ = entityiterator.getZ();
+                                        if (new Vec3(ctX, y, ctZ).distanceTo(new Vec3(tgtX, tgtY, tgtZ)) <= 3) {
+                                            if (!(entityiterator instanceof Mob)) {
+                                                continue;
+                                            }
+                                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                                                if (!(((Entity) OceanizedEndermanEntity.this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == entityiterator)) {
+                                                    continue;
+                                                }
+                                            }
+                                            entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_magic"))), OceanizedEndermanEntity.this),
+                                                    (float) (((Entity) OceanizedEndermanEntity.this instanceof LivingEntity _livingEntity10 && _livingEntity10.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity10.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.9));
+                                            if (WorldUtils.canGrief(world)) {
+                                                if ((world.getBlockState(BlockPos.containing(tgtX, tgtY, tgtZ))).canBeReplaced() && CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing(tgtX, tgtY, tgtZ))) {
+                                                    world.setBlock(BlockPos.containing(tgtX, tgtY, tgtZ), CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState(), 3);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                final int tick2 = ticks;
+                                CaerulaArborMod.queueServerWork(tick2, () -> {
+                                    if (timedlooptotal > timedloopiterator + 1) {
+                                        timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
+                                    }
+                                });
+                            }
+                        }.timedLoop(0, 12, 1);
+                    });
+                } else {
+                    if ((Entity) this instanceof OceanizedEndermanEntity _datEntSetI)
+                        _datEntSetI.getEntityData().set(DATA_skillp, (int) (sklp - 1));
+                }
+                if (cool <= 0 && enemy.isAlive()) {
+                    if ((enemy != null ? distanceTo(enemy) : -1) >= 8 && !((Entity) this instanceof LivingEntity _livEnt13 && _livEnt13.hasEffect(CaerulaArborModMobEffects.COOLDOWN_SINAL.get()))) {
+                        if ((Entity) this instanceof OceanizedEndermanEntity _datEntSetI)
+                            _datEntSetI.getEntityData().set(DATA_cooldown, 100);
+                        EntityUtils.teleportTo(world, this, x, y, z, enemy.getX(), enemy.getY(), enemy.getZ());
                         if (!this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 35, 0, false, false));
-                        if (world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.enderman.stare")), SoundSource.HOSTILE, 1, 1);
-                        }
-                        CaerulaArborMod.queueServerWork(13, () -> {
-							if (this == null)
-								return;
-							double sklp1 = 0;
-							Entity enemy1 = null;
-							enemy1 = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
-							if (!(enemy1 == null)) {
-								((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy1.getX()), (enemy1.getY()), (enemy1.getZ())));
-							}
-							new Object() {
-								void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
-									double tgtX = 0;
-									double tgtY = 0;
-									double tgtZ = 0;
-									double ctX = 0;
-									double ctZ = 0;
-									ctX = x + getLookAngle().x * (double) (2 * (timedloopiterator + 1));
-									ctZ = z + getLookAngle().z * (double) (2 * (timedloopiterator + 1));
-									{
-										final Vec3 _center = new Vec3(ctX, y, ctZ);
-										List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(6 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-										for (Entity entityiterator : _entfound) {
-											tgtX = entityiterator.getX();
-											tgtY = entityiterator.getY();
-											tgtZ = entityiterator.getZ();
-											if (new Vec3(ctX, y, ctZ).distanceTo(new Vec3(tgtX, tgtY, tgtZ)) <= 3) {
-												if (!(entityiterator instanceof Mob)) {
-													continue;
-												}
-												if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
-													if (!(((Entity) OceanizedEndermanEntity.this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == entityiterator)) {
-														continue;
-													}
-												}
-												entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_magic"))), OceanizedEndermanEntity.this),
-														(float) (((Entity) OceanizedEndermanEntity.this instanceof LivingEntity _livingEntity10 && _livingEntity10.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity10.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.9));
-												if (WorldUtils.canGrief(world)) {
-													if ((world.getBlockState(BlockPos.containing(tgtX, tgtY, tgtZ))).canBeReplaced() && CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing(tgtX, tgtY, tgtZ))) {
-														world.setBlock(BlockPos.containing(tgtX, tgtY, tgtZ), CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState(), 3);
-													}
-												}
-											}
-										}
-									}
-									final int tick2 = ticks;
-									CaerulaArborMod.queueServerWork(tick2, () -> {
-										if (timedlooptotal > timedloopiterator + 1) {
-											timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
-										}
-									});
-								}
-							}.timedLoop(0, 12, 1);
-						});
-                    } else {
-                        if ((Entity) this instanceof OceanizedEndermanEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_skillp, (int) (sklp - 1));
+                            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.COOLDOWN_SINAL.get(), 100, 0, false, false));
                     }
-                    if (cool <= 0 && enemy.isAlive()) {
-                        if ((enemy != null ? distanceTo(enemy) : -1) >= 8 && !((Entity) this instanceof LivingEntity _livEnt13 && _livEnt13.hasEffect(CaerulaArborModMobEffects.COOLDOWN_SINAL.get()))) {
-                            if ((Entity) this instanceof OceanizedEndermanEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_cooldown, 100);
-                            EntityUtils.teleportTo(world, this, x, y, z, enemy.getX(), enemy.getY(), enemy.getZ());
-                            if (!this.level().isClientSide())
-                                this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.COOLDOWN_SINAL.get(), 100, 0, false, false));
-                        }
-                    } else {
-                        if ((Entity) this instanceof OceanizedEndermanEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_cooldown, (int) (cool - 1));
-                    }
+                } else {
+                    if ((Entity) this instanceof OceanizedEndermanEntity _datEntSetI)
+                        _datEntSetI.getEntityData().set(DATA_cooldown, (int) (cool - 1));
                 }
             }
         }

@@ -84,31 +84,29 @@ public class HealBullletEntity extends AbstractArrow implements ItemSupplier {
         double y = this.getY();
         double z = this.getZ();
         Entity entity = this.getOwner();
-        if (entity != null && this != null) {
+        if (entity != null) {
             if (!level().isClientSide())
                 discard();
             CaerulaArborMod.queueServerWork(16, () -> {
                 if (entity.isAlive()) {
-                    if (entity != null) {
-                        double atk = 0;
-                        double count = 0;
-                        double curH = 0;
-                        double maxH = 0;
-                        atk = entity instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity0.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
-                        {
-                            final Vec3 _center = new Vec3(x, y, z);
-                            List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(12 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                            for (Entity entityiterator : _entfound) {
-                                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "homo_sapiens")))) {
-                                    if ((entityiterator instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < (entityiterator instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1)) {
-                                        if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                                            _entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 40, 1));
-                                        com.apocalypse.caerulaarbor.util.EntityUtils.healWithParticles(world, entityiterator, atk, 0);
-                                        if (!(entityiterator == entity)) {
-                                            count = count + 1;
-                                            if (count >= 3) {
-                                                break;
-                                            }
+                    double atk = 0;
+                    double count = 0;
+                    double curH = 0;
+                    double maxH = 0;
+                    atk = entity instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity0.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
+                    {
+                        final Vec3 _center = new Vec3(x, y, z);
+                        List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(12 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+                        for (Entity entityiterator : _entfound) {
+                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "homo_sapiens")))) {
+                                if ((entityiterator instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < (entityiterator instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1)) {
+                                    if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
+                                        _entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 40, 1));
+                                    com.apocalypse.caerulaarbor.util.EntityUtils.healWithParticles(world, entityiterator, atk, 0);
+                                    if (!(entityiterator == entity)) {
+                                        count = count + 1;
+                                        if (count >= 3) {
+                                            break;
                                         }
                                     }
                                 }

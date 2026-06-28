@@ -1,13 +1,13 @@
 package com.apocalypse.caerulaarbor.procedures;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.entity.TellerShotEntity;
 import com.apocalypse.caerulaarbor.entity.TideBishopEntity;
 import com.apocalypse.caerulaarbor.entity.TideDeathrepellerEntity;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.particles.ParticleTypes;
@@ -138,7 +138,7 @@ public class TideBiDeathProcedure {
                     } else {
                         if (entity instanceof TideDeathrepellerEntity _datEntSetI)
                             _datEntSetI.getEntityData().set(TideDeathrepellerEntity.DATA_skillp, (int) (sklp - 1));
-                        if (CaerulaArborModVariables.MapVariables.get(world).strategy_grow >= 3) {
+                        if (MapVariables.get(world).strategy_grow >= 3) {
                             if (entity instanceof TideDeathrepellerEntity _datEntSetI)
                                 _datEntSetI.getEntityData().set(TideDeathrepellerEntity.DATA_skillp, (int) (sklp - 2));
                         }
@@ -151,10 +151,10 @@ public class TideBiDeathProcedure {
 				}.compareDistOf(x, y, z)).findFirst().orElse(null);
 				if (!(nearest == null) && nearest instanceof LivingEntity _livEnt15 && _livEnt15.hasEffect(CaerulaArborModMobEffects.FAKE_DEATH.get())) {
 					EntityUtils.spawnLinkParticles(world, entity, nearest);
-					if (CaerulaArborModVariables.MapVariables.get(world).strategy_silence >= 3) {
+					if (MapVariables.get(world).strategy_silence >= 3) {
 						if (entity instanceof LivingEntity _livingEntity16 && _livingEntity16.getAttributes().hasAttribute(CaerulaArborModAttributes.MISSRATE.get()))
 							_livingEntity16.getAttribute(CaerulaArborModAttributes.MISSRATE.get()).setBaseValue(40);
-					} else if (CaerulaArborModVariables.MapVariables.get(world).strategy_subsisting >= 4) {
+					} else if (MapVariables.get(world).strategy_subsisting >= 4) {
 						if (entity instanceof LivingEntity _livingEntity17 && _livingEntity17.getAttributes().hasAttribute(CaerulaArborModAttributes.MISSRATE.get()))
 							_livingEntity17.getAttribute(CaerulaArborModAttributes.MISSRATE.get()).setBaseValue(20);
 					}
@@ -231,10 +231,10 @@ public class TideBiDeathProcedure {
 				}.compareDistOf(x, y, z)).findFirst().orElse(null);
 				if (!(nearest == null) && nearest instanceof LivingEntity _livEnt21 && _livEnt21.hasEffect(CaerulaArborModMobEffects.FAKE_DEATH.get())) {
 					EntityUtils.spawnLinkParticles(world, entity, nearest);
-					if (CaerulaArborModVariables.MapVariables.get(world).strategy_silence >= 3) {
+					if (MapVariables.get(world).strategy_silence >= 3) {
 						if (entity instanceof LivingEntity _livingEntity22 && _livingEntity22.getAttributes().hasAttribute(CaerulaArborModAttributes.MISSRATE.get()))
 							_livingEntity22.getAttribute(CaerulaArborModAttributes.MISSRATE.get()).setBaseValue(30);
-					} else if (CaerulaArborModVariables.MapVariables.get(world).strategy_subsisting >= 4) {
+					} else if (MapVariables.get(world).strategy_subsisting >= 4) {
 						if (entity instanceof LivingEntity _livingEntity23 && _livingEntity23.getAttributes().hasAttribute(CaerulaArborModAttributes.MISSRATE.get()))
 							_livingEntity23.getAttribute(CaerulaArborModAttributes.MISSRATE.get()).setBaseValue(15);
 					}

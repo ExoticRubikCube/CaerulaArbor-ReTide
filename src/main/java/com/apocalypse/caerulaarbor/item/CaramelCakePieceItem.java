@@ -1,7 +1,7 @@
 
 package com.apocalypse.caerulaarbor.item;
 
-import com.apocalypse.caerulaarbor.util.EntityUtils;
+import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -21,7 +21,7 @@ public class CaramelCakePieceItem extends Item {
 		ItemStack retval = super.finishUsingItem(itemstack, world, entity);
 		if (!entity.level().isClientSide())
 			entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 80, 1));
-		EntityUtils.restoreSanity(entity, 125);
+		ModCapabilities.getSanityInjury(entity).heal(125);
 		return retval;
 	}
 }

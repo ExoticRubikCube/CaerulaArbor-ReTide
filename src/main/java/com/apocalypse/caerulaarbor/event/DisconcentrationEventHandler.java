@@ -1,9 +1,10 @@
 package com.apocalypse.caerulaarbor.event;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.capability.ModCapabilities;
+import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEnchantments;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.client.KeyMapping;
@@ -106,7 +107,7 @@ public class DisconcentrationEventHandler {
             return;
         }
 
-        CaerulaArborModVariables.PlayerVariables playerVariables = getPlayerVariables(player);
+        PlayerVariable playerVariables = getPlayerVariables(player);
         if (playerVariables.player_oceanization > 2) {
             return;
         }
@@ -135,7 +136,7 @@ public class DisconcentrationEventHandler {
         }
 
         int rejectionStage = Mth.nextInt(RandomSource.create(), DISCONCENTRATION_REJECTION_STAGE, FLESHDEFORMITY_REJECTION_STAGE);
-        player.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+        player.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
             capability.disoclusion = rejectionStage;
             capability.syncPlayerVariables(player);
         });
@@ -165,9 +166,9 @@ public class DisconcentrationEventHandler {
         }
     }
 
-    private static CaerulaArborModVariables.PlayerVariables getPlayerVariables(Entity entity) {
-        return entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null)
-                .orElse(new CaerulaArborModVariables.PlayerVariables());
+    private static PlayerVariable getPlayerVariables(Entity entity) {
+        return entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null)
+                .orElse(new PlayerVariable());
     }
 
     private static boolean hasRejectionCurseArmor(Entity entity) {

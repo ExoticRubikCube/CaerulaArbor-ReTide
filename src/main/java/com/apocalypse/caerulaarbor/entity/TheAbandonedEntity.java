@@ -114,7 +114,6 @@ public class TheAbandonedEntity extends SeaMonster implements PolarMountRider {
 				double x = TheAbandonedEntity.this.getX();
 				double y = TheAbandonedEntity.this.getY();
 				double z = TheAbandonedEntity.this.getZ();
-				Entity entity = TheAbandonedEntity.this;
 				Level world = TheAbandonedEntity.this.level();
 				return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -124,7 +123,6 @@ public class TheAbandonedEntity extends SeaMonster implements PolarMountRider {
 				double x = TheAbandonedEntity.this.getX();
 				double y = TheAbandonedEntity.this.getY();
 				double z = TheAbandonedEntity.this.getZ();
-				Entity entity = TheAbandonedEntity.this;
 				Level world = TheAbandonedEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -164,9 +162,8 @@ public class TheAbandonedEntity extends SeaMonster implements PolarMountRider {
 		if (!this.level().isClientSide()) {
 			CaerulaArborMod.queueServerWork(10, () -> {
 				if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 3) {
-					target.hurt(
-							new DamageSource(
-									this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
+					target.hurt(new DamageSource(
+							this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
 											.getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "general_seaborn_attack"))),
 									this),
 							(float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
@@ -206,63 +203,61 @@ public class TheAbandonedEntity extends SeaMonster implements PolarMountRider {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if (this != null) {
-            double sklp = 0;
-            Entity enemy = null;
-            sklp = (Entity) this instanceof TheAbandonedEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp) : 0;
-            if (sklp > 0) {
+        double sklp = 0;
+        Entity enemy = null;
+        sklp = (Entity) this instanceof TheAbandonedEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp) : 0;
+        if (sklp > 0) {
+            if ((Entity) this instanceof TheAbandonedEntity _datEntSetI)
+                _datEntSetI.getEntityData().set(DATA_skillp, (int) (sklp - 1));
+        } else {
+            enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+            if (!(enemy == null) && enemy.isAlive() && (enemy != null ? distanceTo(enemy) : -1) < 7) {
                 if ((Entity) this instanceof TheAbandonedEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_skillp, (int) (sklp - 1));
-            } else {
-                enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
-                if (!(enemy == null) && enemy.isAlive() && (enemy != null ? distanceTo(enemy) : -1) < 7) {
-                    if ((Entity) this instanceof TheAbandonedEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_skillp, 100);
-                    ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY() + enemy.getBbHeight()), (enemy.getZ())));
-                    if (this instanceof TheAbandonedEntity) {
-                        this.setAnimation("animation.the_abandoned.shoot");
-                    }
-                    CaerulaArborMod.queueServerWork(23, () -> {
-                        if (this.isAlive()) {
-                            new Object() {
-                                void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
-                                    if (world instanceof Level _level) {
-                                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.shulker.shoot")), SoundSource.HOSTILE, 1, 1);
-                                    }
-                                    {
-                                        Entity _shootFrom = TheAbandonedEntity.this;
-                                        Level projectileLevel = _shootFrom.level();
-                                        if (!projectileLevel.isClientSide()) {
-                                            Projectile _entityToSpawn = new Object() {
-                                                public Projectile getArrow(Level level, Entity shooter, float damage, int knockback) {
-                                                    AbstractArrow entityToSpawn = new AbandonedShootEntity(CaerulaArborModEntities.ABANDONED_SHOOT.get(), level);
-                                                    entityToSpawn.setOwner(shooter);
-                                                    entityToSpawn.setBaseDamage(damage);
-                                                    entityToSpawn.setKnockback(knockback);
-                                                    entityToSpawn.setSilent(true);
-                                                    return entityToSpawn;
-                                                }
-                                            }.getArrow(projectileLevel, (Entity) TheAbandonedEntity.this,
-                                                    (float) (((Entity) TheAbandonedEntity.this instanceof LivingEntity _livingEntity15 && _livingEntity15.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)
-                                                            ? _livingEntity15.getAttribute(Attributes.ATTACK_DAMAGE).getValue()
-                                                            : 0) * 0.85),
-                                                    0);
-                                            _entityToSpawn.setPos(_shootFrom.getX(), _shootFrom.getEyeY() - 0.1, _shootFrom.getZ());
-                                            _entityToSpawn.shoot(_shootFrom.getLookAngle().x, _shootFrom.getLookAngle().y, _shootFrom.getLookAngle().z, (float) 1.25, 2);
-                                            projectileLevel.addFreshEntity(_entityToSpawn);
-                                        }
-                                    }
-                                    final int tick2 = ticks;
-                                    CaerulaArborMod.queueServerWork(tick2, () -> {
-                                        if (timedlooptotal > timedloopiterator + 1) {
-                                            timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
-                                        }
-                                    });
-                                }
-                            }.timedLoop(0, 3, 1);
-                        }
-                    });
+                    _datEntSetI.getEntityData().set(DATA_skillp, 100);
+                ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY() + enemy.getBbHeight()), (enemy.getZ())));
+                if (this instanceof TheAbandonedEntity) {
+                    this.setAnimation("animation.the_abandoned.shoot");
                 }
+                CaerulaArborMod.queueServerWork(23, () -> {
+                    if (this.isAlive()) {
+                        new Object() {
+                            void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
+                                if (world instanceof Level _level) {
+                                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.shulker.shoot")), SoundSource.HOSTILE, 1, 1);
+                                }
+                                {
+                                    Entity _shootFrom = TheAbandonedEntity.this;
+                                    Level projectileLevel = _shootFrom.level();
+                                    if (!projectileLevel.isClientSide()) {
+                                        Projectile _entityToSpawn = new Object() {
+                                            public Projectile getArrow(Level level, Entity shooter, float damage, int knockback) {
+                                                AbstractArrow entityToSpawn = new AbandonedShootEntity(CaerulaArborModEntities.ABANDONED_SHOOT.get(), level);
+                                                entityToSpawn.setOwner(shooter);
+                                                entityToSpawn.setBaseDamage(damage);
+                                                entityToSpawn.setKnockback(knockback);
+                                                entityToSpawn.setSilent(true);
+                                                return entityToSpawn;
+                                            }
+                                        }.getArrow(projectileLevel, (Entity) TheAbandonedEntity.this,
+                                                (float) (((Entity) TheAbandonedEntity.this instanceof LivingEntity _livingEntity15 && _livingEntity15.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)
+                                                        ? _livingEntity15.getAttribute(Attributes.ATTACK_DAMAGE).getValue()
+                                                        : 0) * 0.85),
+                                                0);
+                                        _entityToSpawn.setPos(_shootFrom.getX(), _shootFrom.getEyeY() - 0.1, _shootFrom.getZ());
+                                        _entityToSpawn.shoot(_shootFrom.getLookAngle().x, _shootFrom.getLookAngle().y, _shootFrom.getLookAngle().z, (float) 1.25, 2);
+                                        projectileLevel.addFreshEntity(_entityToSpawn);
+                                    }
+                                }
+                                final int tick2 = ticks;
+                                CaerulaArborMod.queueServerWork(tick2, () -> {
+                                    if (timedlooptotal > timedloopiterator + 1) {
+                                        timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
+                                    }
+                                });
+                            }
+                        }.timedLoop(0, 3, 1);
+                    }
+                });
             }
         }
         this.refreshDimensions();

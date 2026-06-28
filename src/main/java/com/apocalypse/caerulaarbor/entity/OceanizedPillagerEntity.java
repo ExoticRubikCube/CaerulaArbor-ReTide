@@ -110,13 +110,12 @@ public class OceanizedPillagerEntity extends SeaMonster implements RangedAttackM
 		this.targetSelector.addGoal(9, new NearestAttackableTargetGoal<>(this, Piglin.class, true, true));
 		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, true));
 		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, true));
-		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal(this, Player.class, true, true) {
+		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, Player.class, true, true) {
 			@Override
 			public boolean canUse() {
 				double x = OceanizedPillagerEntity.this.getX();
 				double y = OceanizedPillagerEntity.this.getY();
 				double z = OceanizedPillagerEntity.this.getZ();
-				Entity entity = OceanizedPillagerEntity.this;
 				Level world = OceanizedPillagerEntity.this.level();
 				return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -126,7 +125,6 @@ public class OceanizedPillagerEntity extends SeaMonster implements RangedAttackM
 				double x = OceanizedPillagerEntity.this.getX();
 				double y = OceanizedPillagerEntity.this.getY();
 				double z = OceanizedPillagerEntity.this.getZ();
-				Entity entity = OceanizedPillagerEntity.this;
 				Level world = OceanizedPillagerEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -134,21 +132,11 @@ public class OceanizedPillagerEntity extends SeaMonster implements RangedAttackM
 		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal(this, Animal.class, true, true) {
 			@Override
 			public boolean canUse() {
-				double x = OceanizedPillagerEntity.this.getX();
-				double y = OceanizedPillagerEntity.this.getY();
-				double z = OceanizedPillagerEntity.this.getZ();
-				Entity entity = OceanizedPillagerEntity.this;
-				Level world = OceanizedPillagerEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = OceanizedPillagerEntity.this.getX();
-				double y = OceanizedPillagerEntity.this.getY();
-				double z = OceanizedPillagerEntity.this.getZ();
-				Entity entity = OceanizedPillagerEntity.this;
-				Level world = OceanizedPillagerEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
@@ -208,8 +196,8 @@ public class OceanizedPillagerEntity extends SeaMonster implements RangedAttackM
 		}
 
 		public boolean canContinueToUse() {
-			return this.canUse() || this.target.isAlive() && !this.mob.getNavigation().isDone();
-		}
+            return this.canUse() || this.target != null && this.target.isAlive() && !this.mob.getNavigation().isDone();
+        }
 
 		public void stop() {
 			this.target = null;
@@ -223,8 +211,11 @@ public class OceanizedPillagerEntity extends SeaMonster implements RangedAttackM
 		}
 
 		public void tick() {
-			double d0 = this.mob.distanceToSqr(this.target.getX(), this.target.getY(), this.target.getZ());
-			boolean flag = this.mob.getSensing().hasLineOfSight(this.target);
+            double d0 = 0;
+            if (this.target != null) {
+                d0 = this.mob.distanceToSqr(this.target.getX(), this.target.getY(), this.target.getZ());
+            }
+            boolean flag = this.mob.getSensing().hasLineOfSight(this.target);
 			if (flag) {
 				++this.seeTime;
 			} else {
@@ -303,72 +294,70 @@ public class OceanizedPillagerEntity extends SeaMonster implements RangedAttackM
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if (this != null) {
-            double sklp = 0;
-            Entity enemy = null;
-            if (this.isAlive()) {
-                sklp = (Entity) this instanceof OceanizedPillagerEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp) : 0;
-                if (sklp <= 0) {
-                    enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
-                    if (!(enemy == null) && enemy.isAlive()) {
-                        if (((Entity) this instanceof LivingEntity _liveEnt && enemy != null && _liveEnt.hasLineOfSight(enemy)) && (enemy != null ? distanceTo(enemy) : -1) <= 12) {
-                            if (this instanceof OceanizedPillagerEntity) {
-                                this.setAnimation("animation.oceanized_pillager.pour");
-                            }
-                            if ((Entity) this instanceof OceanizedPillagerEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_skillp, 300);
-                            new Object() {
-                                void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
-                                    if (!(((Entity) OceanizedPillagerEntity.this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == null)) {
-                                        ((Entity) OceanizedPillagerEntity.this).lookAt(EntityAnchorArgument.Anchor.EYES,
-                                                new Vec3((((Entity) OceanizedPillagerEntity.this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null).getX()),
-                                                        (((Entity) OceanizedPillagerEntity.this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null).getY() + ((Entity) OceanizedPillagerEntity.this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null).getBbHeight()),
-                                                        (((Entity) OceanizedPillagerEntity.this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null).getZ())));
-                                    }
-                                    if (((Entity) OceanizedPillagerEntity.this).isAlive()) {
-                                        if (world instanceof Level _level) {
-                                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.crossbow.shoot")), SoundSource.HOSTILE, 1, 1);
-                                        }
-                                        {
-                                            Entity _shootFrom = OceanizedPillagerEntity.this;
-                                            Level projectileLevel = _shootFrom.level();
-                                            if (!projectileLevel.isClientSide()) {
-                                                Projectile _entityToSpawn = new Object() {
-                                                    public Projectile getArrow(Level level, Entity shooter, float damage, int knockback, byte piercing) {
-                                                        AbstractArrow entityToSpawn = new ShotOceanArrowEntity(CaerulaArborModEntities.SHOT_OCEAN_ARROW.get(), level);
-                                                        entityToSpawn.setOwner(shooter);
-                                                        entityToSpawn.setBaseDamage(damage);
-                                                        entityToSpawn.setKnockback(knockback);
-                                                        entityToSpawn.setSilent(true);
-                                                        entityToSpawn.setPierceLevel(piercing);
-                                                        entityToSpawn.setCritArrow(true);
-                                                        return entityToSpawn;
-                                                    }
-                                                }.getArrow(projectileLevel, (Entity) OceanizedPillagerEntity.this,
-                                                        (float) ((Entity) OceanizedPillagerEntity.this instanceof LivingEntity _livingEntity22 && _livingEntity22.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)
-                                                                ? _livingEntity22.getAttribute(Attributes.ATTACK_DAMAGE).getValue()
-                                                                : 0),
-                                                        0, (byte) 1);
-                                                _entityToSpawn.setPos(_shootFrom.getX(), _shootFrom.getEyeY() - 0.1, _shootFrom.getZ());
-                                                _entityToSpawn.shoot(_shootFrom.getLookAngle().x, _shootFrom.getLookAngle().y, _shootFrom.getLookAngle().z, 2, 5);
-                                                projectileLevel.addFreshEntity(_entityToSpawn);
-                                            }
-                                        }
-                                    }
-                                    final int tick2 = ticks;
-                                    CaerulaArborMod.queueServerWork(tick2, () -> {
-                                        if (timedlooptotal > timedloopiterator + 1) {
-                                            timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
-                                        }
-                                    });
-                                }
-                            }.timedLoop(0, 10, 4);
+        double sklp = 0;
+        Entity enemy = null;
+        if (this.isAlive()) {
+            sklp = (Entity) this instanceof OceanizedPillagerEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp) : 0;
+            if (sklp <= 0) {
+                enemy = this.getTarget();
+                if (!(enemy == null) && enemy.isAlive()) {
+                    if (this.hasLineOfSight(enemy) && distanceTo(enemy) <= 12) {
+                        if (this instanceof OceanizedPillagerEntity) {
+                            this.setAnimation("animation.oceanized_pillager.pour");
                         }
+                        if ((Entity) this instanceof OceanizedPillagerEntity _datEntSetI)
+                            _datEntSetI.getEntityData().set(DATA_skillp, 300);
+                        new Object() {
+                            void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
+                                if (OceanizedPillagerEntity.this.getTarget() != null) {
+                                    ((Entity) OceanizedPillagerEntity.this).lookAt(EntityAnchorArgument.Anchor.EYES,
+                                            new Vec3((((Entity) OceanizedPillagerEntity.this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null).getX()),
+                                                    (((Entity) OceanizedPillagerEntity.this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null).getY() + ((Entity) OceanizedPillagerEntity.this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null).getBbHeight()),
+                                                    (((Entity) OceanizedPillagerEntity.this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null).getZ())));
+                                }
+                                if (((Entity) OceanizedPillagerEntity.this).isAlive()) {
+                                    if (world instanceof Level _level) {
+                                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.crossbow.shoot")), SoundSource.HOSTILE, 1, 1);
+                                    }
+                                    {
+                                        Entity _shootFrom = OceanizedPillagerEntity.this;
+                                        Level projectileLevel = _shootFrom.level();
+                                        if (!projectileLevel.isClientSide()) {
+                                            Projectile _entityToSpawn = new Object() {
+                                                public Projectile getArrow(Level level, Entity shooter, float damage, int knockback, byte piercing) {
+                                                    AbstractArrow entityToSpawn = new ShotOceanArrowEntity(CaerulaArborModEntities.SHOT_OCEAN_ARROW.get(), level);
+                                                    entityToSpawn.setOwner(shooter);
+                                                    entityToSpawn.setBaseDamage(damage);
+                                                    entityToSpawn.setKnockback(knockback);
+                                                    entityToSpawn.setSilent(true);
+                                                    entityToSpawn.setPierceLevel(piercing);
+                                                    entityToSpawn.setCritArrow(true);
+                                                    return entityToSpawn;
+                                                }
+                                            }.getArrow(projectileLevel, (Entity) OceanizedPillagerEntity.this,
+                                                    (float) ((Entity) OceanizedPillagerEntity.this instanceof LivingEntity _livingEntity22 && _livingEntity22.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)
+                                                            ? _livingEntity22.getAttribute(Attributes.ATTACK_DAMAGE).getValue()
+                                                            : 0),
+                                                    0, (byte) 1);
+                                            _entityToSpawn.setPos(_shootFrom.getX(), _shootFrom.getEyeY() - 0.1, _shootFrom.getZ());
+                                            _entityToSpawn.shoot(_shootFrom.getLookAngle().x, _shootFrom.getLookAngle().y, _shootFrom.getLookAngle().z, 2, 5);
+                                            projectileLevel.addFreshEntity(_entityToSpawn);
+                                        }
+                                    }
+                                }
+                                final int tick2 = ticks;
+                                CaerulaArborMod.queueServerWork(tick2, () -> {
+                                    if (timedlooptotal > timedloopiterator + 1) {
+                                        timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
+                                    }
+                                });
+                            }
+                        }.timedLoop(0, 10, 4);
                     }
-                } else {
-                    if ((Entity) this instanceof OceanizedPillagerEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_skillp, (int) (sklp - 1));
                 }
+            } else {
+                if ((Entity) this instanceof OceanizedPillagerEntity _datEntSetI)
+                    _datEntSetI.getEntityData().set(DATA_skillp, (int) (sklp - 1));
             }
         }
         this.refreshDimensions();
@@ -410,9 +399,6 @@ public class OceanizedPillagerEntity extends SeaMonster implements RangedAttackM
 	}
 
 	private PlayState attackingPredicate(AnimationState event) {
-		double d1 = this.getX() - this.xOld;
-		double d0 = this.getZ() - this.zOld;
-		float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
 		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();

@@ -128,13 +128,12 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
 		this.targetSelector.addGoal(9, new NearestAttackableTargetGoal<>(this, Piglin.class, true, true));
 		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, true));
 		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, true));
-		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal(this, Player.class, true, true) {
+		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, Player.class, true, true) {
 			@Override
 			public boolean canUse() {
 				double x = OceanziedWitchEntity.this.getX();
 				double y = OceanziedWitchEntity.this.getY();
 				double z = OceanziedWitchEntity.this.getZ();
-				Entity entity = OceanziedWitchEntity.this;
 				Level world = OceanziedWitchEntity.this.level();
 				return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -144,7 +143,6 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
 				double x = OceanziedWitchEntity.this.getX();
 				double y = OceanziedWitchEntity.this.getY();
 				double z = OceanziedWitchEntity.this.getZ();
-				Entity entity = OceanziedWitchEntity.this;
 				Level world = OceanziedWitchEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -152,21 +150,11 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
 		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal(this, Animal.class, true, true) {
 			@Override
 			public boolean canUse() {
-				double x = OceanziedWitchEntity.this.getX();
-				double y = OceanziedWitchEntity.this.getY();
-				double z = OceanziedWitchEntity.this.getZ();
-				Entity entity = OceanziedWitchEntity.this;
-				Level world = OceanziedWitchEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = OceanziedWitchEntity.this.getX();
-				double y = OceanziedWitchEntity.this.getY();
-				double z = OceanziedWitchEntity.this.getZ();
-				Entity entity = OceanziedWitchEntity.this;
-				Level world = OceanziedWitchEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
@@ -292,116 +280,112 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
 	@Override
 	public boolean hurt(DamageSource source, float amount) {
         LevelAccessor world = this.level();
-        if (this != null) {
-            if (!((Entity) this instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CaerulaArborModMobEffects.COOLDOWN_SINAL.get()))) {
-                {
-                    final Vec3 _center = new Vec3(this.getX(), this.getY(), this.getZ());
-                    List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(16 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                    for (Entity entityiterator : _entfound) {
-                        if (Math.random() < 0.33 && entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
-                            double xx = entityiterator.getX();
-                            double yy = entityiterator.getY() + entityiterator.getBbHeight();
-                            double zz = entityiterator.getZ();
-                            if (this != null && entityiterator != null) {
-                                double potion = 0;
-                                if (world instanceof Level _level) {
-                                        _level.playSound(null, BlockPos.containing(xx, yy, zz), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.witch.throw")), SoundSource.HOSTILE, 1, 1);
-                                }
-                                potion = Mth.nextInt(RandomSource.create(), 0, 4);
-                                if (potion == 0) {
-                                    if (entityiterator instanceof LivingEntity _entity1 && !_entity1.level().isClientSide())
-                                        _entity1.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.SANITY_HEAL.get(), 1, 2));
-                                    if (world instanceof ServerLevel projectileLevel) {
-                                        Projectile _entityToSpawn = new Object() {
-                                            public Projectile getPotion(Level level, Entity shooter) {
-                                                ThrownPotion entityToSpawn = new ThrownPotion(EntityType.POTION, level);
-                                                entityToSpawn.setItem(PotionUtils.setPotion(Items.SPLASH_POTION.getDefaultInstance(), CaerulaArborModPotions.SANITY_CURE.get()));
-                                                entityToSpawn.setOwner(shooter);
-                                                return entityToSpawn;
-                                            }
-                                        }.getPotion(projectileLevel, (Entity) this);
-                                        _entityToSpawn.setPos(xx, yy, zz);
-                                        _entityToSpawn.shoot(0, (-1), 0, 1, 0);
-                                        projectileLevel.addFreshEntity(_entityToSpawn);
-                                    }
-                                } else if (potion == 1) {
-                                    if (entityiterator instanceof LivingEntity _entity1 && !_entity1.level().isClientSide())
-                                        _entity1.addEffect(new MobEffectInstance(MobEffects.HEAL, 1, 2));
-                                    if (world instanceof ServerLevel projectileLevel) {
-                                        Projectile _entityToSpawn = new Object() {
-                                            public Projectile getPotion(Level level, Entity shooter) {
-                                                ThrownPotion entityToSpawn = new ThrownPotion(EntityType.POTION, level);
-                                                entityToSpawn.setItem(PotionUtils.setPotion(Items.SPLASH_POTION.getDefaultInstance(), Potions.HEALING));
-                                                entityToSpawn.setOwner(shooter);
-                                                return entityToSpawn;
-                                            }
-                                        }.getPotion(projectileLevel, (Entity) this);
-                                        _entityToSpawn.setPos(xx, yy, zz);
-                                        _entityToSpawn.shoot(0, (-1), 0, 1, 0);
-                                        projectileLevel.addFreshEntity(_entityToSpawn);
-                                    }
-                                } else if (potion == 2) {
-                                    if (entityiterator instanceof LivingEntity _entity1 && !_entity1.level().isClientSide())
-                                        _entity1.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 600, 2));
-                                    if (world instanceof ServerLevel projectileLevel) {
-                                        Projectile _entityToSpawn = new Object() {
-                                            public Projectile getPotion(Level level, Entity shooter) {
-                                                ThrownPotion entityToSpawn = new ThrownPotion(EntityType.POTION, level);
-                                                entityToSpawn.setItem(PotionUtils.setPotion(Items.LINGERING_POTION.getDefaultInstance(), Potions.REGENERATION));
-                                                entityToSpawn.setOwner(shooter);
-                                                return entityToSpawn;
-                                            }
-                                        }.getPotion(projectileLevel, (Entity) this);
-                                        _entityToSpawn.setPos(xx, yy, zz);
-                                        _entityToSpawn.shoot(0, (-1), 0, 1, 0);
-                                        projectileLevel.addFreshEntity(_entityToSpawn);
-                                    }
-                                } else if (potion == 3) {
-                                    if (entityiterator instanceof LivingEntity _entity1 && !_entity1.level().isClientSide())
-                                        _entity1.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 600, 0));
-                                    if (world instanceof ServerLevel projectileLevel) {
-                                        Projectile _entityToSpawn = new Object() {
-                                            public Projectile getPotion(Level level, Entity shooter) {
-                                                ThrownPotion entityToSpawn = new ThrownPotion(EntityType.POTION, level);
-                                                entityToSpawn.setItem(PotionUtils.setPotion(Items.SPLASH_POTION.getDefaultInstance(), Potions.FIRE_RESISTANCE));
-                                                entityToSpawn.setOwner(shooter);
-                                                return entityToSpawn;
-                                            }
-                                        }.getPotion(projectileLevel, (Entity) this);
-                                        _entityToSpawn.setPos(xx, yy, zz);
-                                        _entityToSpawn.shoot(0, (-1), 0, 1, 0);
-                                        projectileLevel.addFreshEntity(_entityToSpawn);
-                                    }
-                                } else if (potion == 4) {
-                                    if (entityiterator instanceof LivingEntity _entity1 && !_entity1.level().isClientSide())
-                                        _entity1.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 600, 1));
-                                    if (world instanceof ServerLevel projectileLevel) {
-                                        Projectile _entityToSpawn = new Object() {
-                                            public Projectile getPotion(Level level, Entity shooter) {
-                                                ThrownPotion entityToSpawn = new ThrownPotion(EntityType.POTION, level);
-                                                entityToSpawn.setItem(PotionUtils.setPotion(Items.SPLASH_POTION.getDefaultInstance(), Potions.STRENGTH));
-                                                entityToSpawn.setOwner(shooter);
-                                                return entityToSpawn;
-                                            }
-                                        }.getPotion(projectileLevel, (Entity) this);
-                                        _entityToSpawn.setPos(xx, yy, zz);
-                                        _entityToSpawn.shoot(0, (-1), 0, 1, 0);
-                                        projectileLevel.addFreshEntity(_entityToSpawn);
-                                    }
-                                }
-                            }
-                            if (entityiterator instanceof LivingEntity _entity)
-                                _entity.removeEffect(MobEffects.POISON);
-                            if (entityiterator instanceof LivingEntity _entity)
-                                _entity.removeEffect(MobEffects.WEAKNESS);
-                            if (entityiterator instanceof LivingEntity _entity)
-                                _entity.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
+        if (!this.hasEffect(CaerulaArborModMobEffects.COOLDOWN_SINAL.get())) {
+            {
+                final Vec3 _center = new Vec3(this.getX(), this.getY(), this.getZ());
+                List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(16 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+                for (Entity entityiterator : _entfound) {
+                    if (Math.random() < 0.33 && entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                        double xx = entityiterator.getX();
+                        double yy = entityiterator.getY() + entityiterator.getBbHeight();
+                        double zz = entityiterator.getZ();
+                        double potion = 0;
+                        if (world instanceof Level _level) {
+                            _level.playSound(null, BlockPos.containing(xx, yy, zz), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.witch.throw")), SoundSource.HOSTILE, 1, 1);
                         }
+                        potion = Mth.nextInt(RandomSource.create(), 0, 4);
+                        if (potion == 0) {
+                            if (entityiterator instanceof LivingEntity _entity1 && !_entity1.level().isClientSide())
+                                _entity1.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.SANITY_HEAL.get(), 1, 2));
+                            if (world instanceof ServerLevel projectileLevel) {
+                                Projectile _entityToSpawn = new Object() {
+                                    public Projectile getPotion(Level level, Entity shooter) {
+                                        ThrownPotion entityToSpawn = new ThrownPotion(EntityType.POTION, level);
+                                        entityToSpawn.setItem(PotionUtils.setPotion(Items.SPLASH_POTION.getDefaultInstance(), CaerulaArborModPotions.SANITY_CURE.get()));
+                                        entityToSpawn.setOwner(shooter);
+                                        return entityToSpawn;
+                                    }
+                                }.getPotion(projectileLevel, (Entity) this);
+                                _entityToSpawn.setPos(xx, yy, zz);
+                                _entityToSpawn.shoot(0, (-1), 0, 1, 0);
+                                projectileLevel.addFreshEntity(_entityToSpawn);
+                            }
+                        } else if (potion == 1) {
+                            if (entityiterator instanceof LivingEntity _entity1 && !_entity1.level().isClientSide())
+                                _entity1.addEffect(new MobEffectInstance(MobEffects.HEAL, 1, 2));
+                            if (world instanceof ServerLevel projectileLevel) {
+                                Projectile _entityToSpawn = new Object() {
+                                    public Projectile getPotion(Level level, Entity shooter) {
+                                        ThrownPotion entityToSpawn = new ThrownPotion(EntityType.POTION, level);
+                                        entityToSpawn.setItem(PotionUtils.setPotion(Items.SPLASH_POTION.getDefaultInstance(), Potions.HEALING));
+                                        entityToSpawn.setOwner(shooter);
+                                        return entityToSpawn;
+                                    }
+                                }.getPotion(projectileLevel, (Entity) this);
+                                _entityToSpawn.setPos(xx, yy, zz);
+                                _entityToSpawn.shoot(0, (-1), 0, 1, 0);
+                                projectileLevel.addFreshEntity(_entityToSpawn);
+                            }
+                        } else if (potion == 2) {
+                            if (entityiterator instanceof LivingEntity _entity1 && !_entity1.level().isClientSide())
+                                _entity1.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 600, 2));
+                            if (world instanceof ServerLevel projectileLevel) {
+                                Projectile _entityToSpawn = new Object() {
+                                    public Projectile getPotion(Level level, Entity shooter) {
+                                        ThrownPotion entityToSpawn = new ThrownPotion(EntityType.POTION, level);
+                                        entityToSpawn.setItem(PotionUtils.setPotion(Items.LINGERING_POTION.getDefaultInstance(), Potions.REGENERATION));
+                                        entityToSpawn.setOwner(shooter);
+                                        return entityToSpawn;
+                                    }
+                                }.getPotion(projectileLevel, (Entity) this);
+                                _entityToSpawn.setPos(xx, yy, zz);
+                                _entityToSpawn.shoot(0, (-1), 0, 1, 0);
+                                projectileLevel.addFreshEntity(_entityToSpawn);
+                            }
+                        } else if (potion == 3) {
+                            if (entityiterator instanceof LivingEntity _entity1 && !_entity1.level().isClientSide())
+                                _entity1.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 600, 0));
+                            if (world instanceof ServerLevel projectileLevel) {
+                                Projectile _entityToSpawn = new Object() {
+                                    public Projectile getPotion(Level level, Entity shooter) {
+                                        ThrownPotion entityToSpawn = new ThrownPotion(EntityType.POTION, level);
+                                        entityToSpawn.setItem(PotionUtils.setPotion(Items.SPLASH_POTION.getDefaultInstance(), Potions.FIRE_RESISTANCE));
+                                        entityToSpawn.setOwner(shooter);
+                                        return entityToSpawn;
+                                    }
+                                }.getPotion(projectileLevel, (Entity) this);
+                                _entityToSpawn.setPos(xx, yy, zz);
+                                _entityToSpawn.shoot(0, (-1), 0, 1, 0);
+                                projectileLevel.addFreshEntity(_entityToSpawn);
+                            }
+                        } else if (potion == 4) {
+                            if (entityiterator instanceof LivingEntity _entity1 && !_entity1.level().isClientSide())
+                                _entity1.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 600, 1));
+                            if (world instanceof ServerLevel projectileLevel) {
+                                Projectile _entityToSpawn = new Object() {
+                                    public Projectile getPotion(Level level, Entity shooter) {
+                                        ThrownPotion entityToSpawn = new ThrownPotion(EntityType.POTION, level);
+                                        entityToSpawn.setItem(PotionUtils.setPotion(Items.SPLASH_POTION.getDefaultInstance(), Potions.STRENGTH));
+                                        entityToSpawn.setOwner(shooter);
+                                        return entityToSpawn;
+                                    }
+                                }.getPotion(projectileLevel, (Entity) this);
+                                _entityToSpawn.setPos(xx, yy, zz);
+                                _entityToSpawn.shoot(0, (-1), 0, 1, 0);
+                                projectileLevel.addFreshEntity(_entityToSpawn);
+                            }
+                        }
+                        if (entityiterator instanceof LivingEntity _entity)
+                            _entity.removeEffect(MobEffects.POISON);
+                        if (entityiterator instanceof LivingEntity _entity)
+                            _entity.removeEffect(MobEffects.WEAKNESS);
+                        if (entityiterator instanceof LivingEntity _entity)
+                            _entity.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
                     }
                 }
-                if (!this.level().isClientSide())
-                    this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.COOLDOWN_SINAL.get(), 100, 0, false, false));
             }
+            if (!this.level().isClientSide())
+                this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.COOLDOWN_SINAL.get(), 100, 0, false, false));
         }
         if (source.is(DamageTypes.DROWN))
 			return false;
@@ -411,10 +395,8 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this != null) {
-            if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-                this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(90);
-        }
+        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
+            this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(90);
         return retval;
 	}
 
@@ -437,42 +419,36 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
 	@Override
 	public void baseTick() {
 		super.baseTick();
-        LevelAccessor world = this.level();
-        if (this != null) {
-            double sklp = 0;
-            Entity enemy = null;
-            if (this.isAlive()) {
-                sklp = (Entity) this instanceof OceanziedWitchEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp) : 0;
-                if (sklp <= 0) {
-                    enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
-                    if (!(enemy == null) && enemy.isAlive() && (enemy != null ? distanceTo(enemy) : -1) <= 9) {
-                        if (this instanceof OceanziedWitchEntity) {
-                            this.setAnimation("animation.oceanized_witch.throw");
-                        }
-                        if ((Entity) this instanceof OceanziedWitchEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_skillp, 250);
-                        if (!this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 60, 0, false, false));
-                        CaerulaArborMod.queueServerWork(14, this::shootRandomPotion);
-                        CaerulaArborMod.queueServerWork(19, this::shootRandomPotion);
-                        CaerulaArborMod.queueServerWork(23, this::shootRandomPotion);
-                        CaerulaArborMod.queueServerWork(28, this::shootRandomPotion);
-                        CaerulaArborMod.queueServerWork(29, this::shootRandomPotion);
-                        CaerulaArborMod.queueServerWork(34, this::shootRandomPotion);
-                        CaerulaArborMod.queueServerWork(36, this::shootRandomPotion);
-                        CaerulaArborMod.queueServerWork(41, this::shootRandomPotion);
+        double sklp = 0;
+        Entity enemy = null;
+        if (this.isAlive()) {
+            sklp = (Entity) this instanceof OceanziedWitchEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp) : 0;
+            if (sklp <= 0) {
+                enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+                if (!(enemy == null) && enemy.isAlive() && (enemy != null ? distanceTo(enemy) : -1) <= 9) {
+                    if (this instanceof OceanziedWitchEntity) {
+                        this.setAnimation("animation.oceanized_witch.throw");
                     }
-                } else {
                     if ((Entity) this instanceof OceanziedWitchEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_skillp, (int) (sklp - 1));
+                        _datEntSetI.getEntityData().set(DATA_skillp, 250);
+                    if (!this.level().isClientSide())
+                        this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 60, 0, false, false));
+                    CaerulaArborMod.queueServerWork(14, this::shootRandomPotion);
+                    CaerulaArborMod.queueServerWork(19, this::shootRandomPotion);
+                    CaerulaArborMod.queueServerWork(23, this::shootRandomPotion);
+                    CaerulaArborMod.queueServerWork(28, this::shootRandomPotion);
+                    CaerulaArborMod.queueServerWork(29, this::shootRandomPotion);
+                    CaerulaArborMod.queueServerWork(34, this::shootRandomPotion);
+                    CaerulaArborMod.queueServerWork(36, this::shootRandomPotion);
+                    CaerulaArborMod.queueServerWork(41, this::shootRandomPotion);
                 }
-                if ((Entity) this instanceof LivingEntity _entity)
-                    _entity.removeEffect(MobEffects.POISON);
-                if ((Entity) this instanceof LivingEntity _entity)
-                    _entity.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
-                if ((Entity) this instanceof LivingEntity _entity)
-                    _entity.removeEffect(MobEffects.WEAKNESS);
+            } else {
+                if ((Entity) this instanceof OceanziedWitchEntity _datEntSetI)
+                    _datEntSetI.getEntityData().set(DATA_skillp, (int) (sklp - 1));
             }
+			this.removeEffect(MobEffects.POISON);
+			this.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
+			this.removeEffect(MobEffects.WEAKNESS);
         }
         this.refreshDimensions();
 	}

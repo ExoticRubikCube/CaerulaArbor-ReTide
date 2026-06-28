@@ -1,7 +1,8 @@
 package com.apocalypse.caerulaarbor.potion;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.util.EntityUtils;
+import com.apocalypse.caerulaarbor.api.event.SanityEvent;
+import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.core.registries.Registries;
@@ -39,7 +40,7 @@ public class InstantSanityMobEffect extends MobEffect {
         if (entity == null)
             return;
         if (!entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "immue_to_inst_sanity")))) {
-            EntityUtils.deductSanity(entity, 125 * ((double) amplifier + 1));
+            SIHelper.causeSanityInjury(entity, 125 * ((double) amplifier + 1), SanityEvent.Hurt.Type.POTION);
         }
     }
 

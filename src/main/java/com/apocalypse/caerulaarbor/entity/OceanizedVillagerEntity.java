@@ -115,7 +115,6 @@ public class OceanizedVillagerEntity extends SeaMonster implements PolarMountRid
 				double x = OceanizedVillagerEntity.this.getX();
 				double y = OceanizedVillagerEntity.this.getY();
 				double z = OceanizedVillagerEntity.this.getZ();
-				Entity entity = OceanizedVillagerEntity.this;
 				Level world = OceanizedVillagerEntity.this.level();
 				return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -125,7 +124,6 @@ public class OceanizedVillagerEntity extends SeaMonster implements PolarMountRid
 				double x = OceanizedVillagerEntity.this.getX();
 				double y = OceanizedVillagerEntity.this.getY();
 				double z = OceanizedVillagerEntity.this.getZ();
-				Entity entity = OceanizedVillagerEntity.this;
 				Level world = OceanizedVillagerEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -133,21 +131,11 @@ public class OceanizedVillagerEntity extends SeaMonster implements PolarMountRid
 		this.targetSelector.addGoal(14, new NearestAttackableTargetGoal(this, Animal.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = OceanizedVillagerEntity.this.getX();
-				double y = OceanizedVillagerEntity.this.getY();
-				double z = OceanizedVillagerEntity.this.getZ();
-				Entity entity = OceanizedVillagerEntity.this;
-				Level world = OceanizedVillagerEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = OceanizedVillagerEntity.this.getX();
-				double y = OceanizedVillagerEntity.this.getY();
-				double z = OceanizedVillagerEntity.this.getZ();
-				Entity entity = OceanizedVillagerEntity.this;
-				Level world = OceanizedVillagerEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
@@ -188,8 +176,6 @@ public class OceanizedVillagerEntity extends SeaMonster implements PolarMountRid
 	public void thunderHit(ServerLevel serverWorld, LightningBolt lightningBolt) {
 		super.thunderHit(serverWorld, lightningBolt);
         LevelAccessor world = this.level();
-        if (this == null)
-            return;
         if (world instanceof ServerLevel _level) {
             Entity entityToSpawn = CaerulaArborModEntities.OCEANIZED_WITCH.get().spawn(_level, BlockPos.containing(this.getX(), this.getY(), this.getZ()), MobSpawnType.MOB_SUMMONED);
             if (entityToSpawn != null) {
@@ -210,10 +196,8 @@ public class OceanizedVillagerEntity extends SeaMonster implements PolarMountRid
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this != null) {
-            if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get()))
-                this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(6);
-        }
+        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get()))
+            this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(6);
         return retval;
 	}
 
@@ -256,9 +240,7 @@ public class OceanizedVillagerEntity extends SeaMonster implements PolarMountRid
 
 	private PlayState movementPredicate(AnimationState event) {
 		if (this.animationprocedure.equals("empty")) {
-			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
-
-			) {
+			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))) {
 				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_villager.move"));
 			}
 			return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_villager.idle"));

@@ -112,13 +112,12 @@ public class SonsEntity extends SeaMonster {
 		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
 		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
 		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
-		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal(this, Player.class, true, false) {
+		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Player.class, true, false) {
 			@Override
 			public boolean canUse() {
 				double x = SonsEntity.this.getX();
 				double y = SonsEntity.this.getY();
 				double z = SonsEntity.this.getZ();
-				Entity entity = SonsEntity.this;
 				Level world = SonsEntity.this.level();
 				return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -128,7 +127,6 @@ public class SonsEntity extends SeaMonster {
 				double x = SonsEntity.this.getX();
 				double y = SonsEntity.this.getY();
 				double z = SonsEntity.this.getZ();
-				Entity entity = SonsEntity.this;
 				Level world = SonsEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -136,21 +134,11 @@ public class SonsEntity extends SeaMonster {
 		this.targetSelector.addGoal(14, new NearestAttackableTargetGoal(this, Animal.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = SonsEntity.this.getX();
-				double y = SonsEntity.this.getY();
-				double z = SonsEntity.this.getZ();
-				Entity entity = SonsEntity.this;
-				Level world = SonsEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = SonsEntity.this.getX();
-				double y = SonsEntity.this.getY();
-				double z = SonsEntity.this.getZ();
-				Entity entity = SonsEntity.this;
-				Level world = SonsEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
@@ -173,11 +161,9 @@ public class SonsEntity extends SeaMonster {
 
 	@Override
 	public boolean hurt(DamageSource source, float amount) {
-        if (this != null) {
-            if (Math.random() == 0.15) {
-                if (!this.level().isClientSide())
-                    this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.COOLDOWN_SINAL.get(), 40, 0, false, false));
-            }
+        if (Math.random() == 0.15) {
+            if (!this.level().isClientSide())
+                this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.COOLDOWN_SINAL.get(), 40, 0, false, false));
         }
         if (source.is(DamageTypes.FALL))
 			return false;
@@ -189,10 +175,8 @@ public class SonsEntity extends SeaMonster {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this != null) {
-            if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get()))
-                this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(50);
-        }
+        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get()))
+            this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(50);
         return retval;
 	}
 
@@ -212,8 +196,6 @@ public class SonsEntity extends SeaMonster {
 	@Override
 	public void awardKillScore(Entity entity, int score, DamageSource damageSource) {
 		super.awardKillScore(entity, score, damageSource);
-        if (this == null)
-            return;
         if (this instanceof SonsEntity) {
             this.setAnimation("animation.bishopson.end");
         }
@@ -226,37 +208,33 @@ public class SonsEntity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if (this != null) {
-            Entity owner = null;
-            Entity tgt = null;
-            owner = world.getEntitiesOfClass(BishopFishEntity.class, AABB.ofSize(new Vec3(x, y, z), 96, 96, 96), e -> true).stream().sorted(new Object() {
-                Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
-                    return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
-                }
-            }.compareDistOf(x, y, z)).findFirst().orElse(null);
-            if (!(owner == null)) {
-                if ((Entity) this instanceof Mob _entity)
-                    _entity.getNavigation().moveTo((owner.getX()), (owner.getY()), (owner.getZ()), 0.33);
-            } else {
-                if ((Entity) this instanceof Mob _entity)
-                    _entity.getNavigation().stop();
+        Entity owner = null;
+        Entity tgt = null;
+        owner = world.getEntitiesOfClass(BishopFishEntity.class, AABB.ofSize(new Vec3(x, y, z), 96, 96, 96), e -> true).stream().sorted(new Object() {
+            Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
+                return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
             }
-            if (!((Entity) this instanceof LivingEntity _livEnt7 && _livEnt7.hasEffect(CaerulaArborModMobEffects.COOLDOWN_SINAL.get()))) {
-                tgt = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
-                if (!(null == tgt)) {
-                    if ((tgt != null ? distanceTo(tgt) : -1) <= 3.5) {
-                        if (tgt instanceof LivingEntity _entity && !this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 30, 3, false, false));
-                        {
-                            Entity _ent = tgt;
-                            _ent.teleportTo((getX() + getLookAngle().x * 0.33), (getY()), (getZ() + getLookAngle().z * 0.33));
-                            if (_ent instanceof ServerPlayer _serverPlayer)
-                                _serverPlayer.connection.teleport((getX() + getLookAngle().x * 0.33), (getY()), (getZ() + getLookAngle().z * 0.33), _ent.getYRot(), _ent.getXRot());
-                        }
-                        tgt.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3(x, y, z));
-                        if (this instanceof SonsEntity) {
-                            this.setAnimation("animation.bishopson.loop");
-                        }
+        }.compareDistOf(x, y, z)).findFirst().orElse(null);
+        if (!(owner == null)) {
+            this.getNavigation().moveTo((owner.getX()), (owner.getY()), (owner.getZ()), 0.33);
+        } else {
+            this.getNavigation().stop();
+        }
+        if (!((Entity) this instanceof LivingEntity _livEnt7 && _livEnt7.hasEffect(CaerulaArborModMobEffects.COOLDOWN_SINAL.get()))) {
+            tgt = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+            if (!(null == tgt)) {
+                if ((tgt != null ? distanceTo(tgt) : -1) <= 3.5) {
+                    if (tgt instanceof LivingEntity _entity && !this.level().isClientSide())
+                        this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 30, 3, false, false));
+                    {
+                        Entity _ent = tgt;
+                        _ent.teleportTo((getX() + getLookAngle().x * 0.33), (getY()), (getZ() + getLookAngle().z * 0.33));
+                        if (_ent instanceof ServerPlayer _serverPlayer)
+                            _serverPlayer.connection.teleport((getX() + getLookAngle().x * 0.33), (getY()), (getZ() + getLookAngle().z * 0.33), _ent.getYRot(), _ent.getXRot());
+                    }
+                    tgt.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3(x, y, z));
+                    if (this instanceof SonsEntity) {
+                        this.setAnimation("animation.bishopson.loop");
                     }
                 }
             }

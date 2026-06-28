@@ -1,9 +1,10 @@
 
 package com.apocalypse.caerulaarbor.item;
 
+import com.apocalypse.caerulaarbor.api.event.SanityEvent;
+import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
 import com.apocalypse.caerulaarbor.util.EffectUtils;
-import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
@@ -60,7 +61,7 @@ public class TrailriteSwordItem extends SwordItem {
         double z = entity.getZ();
         double absorp = 0;
         double rate = 0;
-        EntityUtils.deductSanity(entity, 330);
+        SIHelper.causeSanityInjury(entity, sourceentity, 330, SanityEvent.Hurt.Type.ENTITY);
         if (!(entity instanceof Player)) {
             if (Math.random() < 0.2 + itemstack.getEnchantmentLevel(Enchantments.MOB_LOOTING) * 0.02) {
                 rate = 0.025 + itemstack.getEnchantmentLevel(Enchantments.SHARPNESS) * 0.005;

@@ -85,7 +85,7 @@ public class TellerShotEntity extends AbstractArrow implements ItemSupplier {
 	}
 
 	public static TellerShotEntity shoot(Level world, LivingEntity entity, RandomSource source, float pullingPower) {
-		return shoot(world, entity, source, pullingPower * 1f, 4, 0);
+		return shoot(world, entity, source, pullingPower, 4, 0);
 	}
 
 	public static TellerShotEntity shoot(Level world, LivingEntity entity, RandomSource random, float power, double damage, int knockback) {

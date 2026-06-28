@@ -1,6 +1,8 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.api.event.SanityEvent;
+import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
@@ -140,7 +142,7 @@ public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMo
 		this.targetSelector.addGoal(9, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
 		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
 		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
-		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal(this, Player.class, true, false) {
+		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, Player.class, true, false) {
 			@Override
 			public boolean canUse() {
 				double x = CompassionPrayerEntity.this.getX();
@@ -164,22 +166,14 @@ public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMo
 		this.goalSelector.addGoal(13, new RandomStrollGoal(this, 0.8) {
 			@Override
 			public boolean canUse() {
-				double x = CompassionPrayerEntity.this.getX();
-				double y = CompassionPrayerEntity.this.getY();
-				double z = CompassionPrayerEntity.this.getZ();
 				Entity entity = CompassionPrayerEntity.this;
-				Level world = CompassionPrayerEntity.this.level();
                 if (!super.canUse()) return false;
                 return EntityPredicateUtils.isNotFakeDying(entity);
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = CompassionPrayerEntity.this.getX();
-				double y = CompassionPrayerEntity.this.getY();
-				double z = CompassionPrayerEntity.this.getZ();
 				Entity entity = CompassionPrayerEntity.this;
-				Level world = CompassionPrayerEntity.this.level();
                 if (!super.canContinueToUse()) return false;
                 return EntityPredicateUtils.isNotFakeDying(entity);
             }
@@ -187,22 +181,14 @@ public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMo
 		this.goalSelector.addGoal(14, new RandomLookAroundGoal(this) {
 			@Override
 			public boolean canUse() {
-				double x = CompassionPrayerEntity.this.getX();
-				double y = CompassionPrayerEntity.this.getY();
-				double z = CompassionPrayerEntity.this.getZ();
 				Entity entity = CompassionPrayerEntity.this;
-				Level world = CompassionPrayerEntity.this.level();
                 if (!super.canUse()) return false;
                 return EntityPredicateUtils.isNotFakeDying(entity);
             }
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = CompassionPrayerEntity.this.getX();
-				double y = CompassionPrayerEntity.this.getY();
-				double z = CompassionPrayerEntity.this.getZ();
 				Entity entity = CompassionPrayerEntity.this;
-				Level world = CompassionPrayerEntity.this.level();
                 if (!super.canContinueToUse()) return false;
                 return EntityPredicateUtils.isNotFakeDying(entity);
             }
@@ -258,7 +244,6 @@ public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMo
 				return false;
 			}
 		}
-
 
 		public boolean canContinueToUse() {
 			return this.canUse() || this.target.isAlive() && !this.mob.getNavigation().isDone();
@@ -427,7 +412,9 @@ public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMo
                             if (distanceTo(entityiterator) <= 5) {
                                 entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_magic")))),
                                         (float) (d * 0.2));
-                                EntityUtils.deductSanity(entityiterator, d * 30);
+                                if (entityiterator instanceof LivingEntity target) {
+                                    SIHelper.causeSanityInjury(target, d * 30, SanityEvent.Hurt.Type.ENTITY);
+                                }
                             }
                         }
                     }
@@ -474,8 +461,7 @@ public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMo
 			if (this.isDeadOrDying()) {
 				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.compassion_prayer.die"));
 			}
-			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.1F && event.getLimbSwingAmount() < 0.1F))
-) {
+			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.1F && event.getLimbSwingAmount() < 0.1F))) {
 				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.compassion_prayer.move"));
 			}
 			if (this.isShiftKeyDown()) {
@@ -489,7 +475,6 @@ public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMo
 	private PlayState attackingPredicate(AnimationState event) {
 		double d1 = this.getX() - this.xOld;
 		double d0 = this.getZ() - this.zOld;
-		float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
 		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
@@ -503,7 +488,6 @@ public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMo
 		}
 		return PlayState.CONTINUE;
 	}
-
 	String prevAnim = "empty";
 
 	private PlayState procedurePredicate(AnimationState event) {

@@ -2,7 +2,8 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.util.EntityUtils;
+import com.apocalypse.caerulaarbor.api.event.SanityEvent;
+import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -42,7 +43,7 @@ public class OceanPeduncleItem extends Item {
         if (entity != null) {
             new Object() {
                 void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
-                    EntityUtils.deductSanity(entity, 20);
+                    SIHelper.causeSanityInjury(entity, 20, SanityEvent.Hurt.Type.FOOD);
                     if ((LevelAccessor) world instanceof ServerLevel _level)
                         _level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, (y + 0.9), z, 16, 0.55, 1, 0.55, 0.1);
                     if ((LevelAccessor) world instanceof Level _level) {

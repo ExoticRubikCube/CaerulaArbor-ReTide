@@ -1,11 +1,11 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
@@ -179,21 +179,11 @@ public class IzumikEntity extends SeaMonster {
 
 			@Override
 			public boolean canUse() {
-				double x = IzumikEntity.this.getX();
-				double y = IzumikEntity.this.getY();
-				double z = IzumikEntity.this.getZ();
-				Entity entity = IzumikEntity.this;
-				Level world = IzumikEntity.this.level();
 				return super.canUse() && IzumikEntity.this.getEntityData().get(DATA_phase) > 0;
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = IzumikEntity.this.getX();
-				double y = IzumikEntity.this.getY();
-				double z = IzumikEntity.this.getZ();
-				Entity entity = IzumikEntity.this;
-				Level world = IzumikEntity.this.level();
 				return super.canContinueToUse() && IzumikEntity.this.getEntityData().get(DATA_phase) > 0;
 			}
 
@@ -252,7 +242,7 @@ public class IzumikEntity extends SeaMonster {
 							(float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
 					if (this.getEntityData().get(DATA_phase) >= 1) {
 						float oceanMagicDamage = (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0);
-						if (CaerulaArborModVariables.MapVariables.get(this.level()).strategy_grow >= 4) {
+						if (MapVariables.get(this.level()).strategy_grow >= 4) {
 							oceanMagicDamage *= 1.5F;
 						}
 						target.hurt(
@@ -321,19 +311,17 @@ public class IzumikEntity extends SeaMonster {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this != null) {
-            if (this instanceof IzumikEntity) {
-                this.setAnimation("animation.izumik.start");
-            }
-            if (!this.level().isClientSide())
-                this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 30, 1, false, false));
-            if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()))
-                this.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).setBaseValue(10);
-            if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-                this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(50);
-            if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()))
-                this.getAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()).setBaseValue(0.01);
+        if (this instanceof IzumikEntity) {
+            this.setAnimation("animation.izumik.start");
         }
+        if (!this.level().isClientSide())
+            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 30, 1, false, false));
+        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()))
+            this.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).setBaseValue(10);
+        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
+            this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(50);
+        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()))
+            this.getAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()).setBaseValue(0.01);
         return retval;
 	}
 
@@ -370,16 +358,8 @@ public class IzumikEntity extends SeaMonster {
 
 	@Override
 	public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
-		ItemStack itemstack = sourceentity.getItemInHand(hand);
-		InteractionResult retval = InteractionResult.sidedSuccess(this.level().isClientSide());
 		super.mobInteract(sourceentity, hand);
-		double x = this.getX();
-		double y = this.getY();
-		double z = this.getZ();
 		Entity entity = this;
-		Level world = this.level();
-        if (entity == null || sourceentity == null)
-            return InteractionResult.PASS;
         if ((entity instanceof IzumikEntity _datEntI ? _datEntI.getEntityData().get(DATA_phase) : 0) == 0) {
             if (new Object() {
                 public boolean checkGamemode(Entity _ent) {
@@ -410,229 +390,223 @@ public class IzumikEntity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if (this != null) {
-            Entity enemy = null;
-            double sklp = 0;
-            double grow = 0;
-            double phase = 0;
-            double sklp1 = 0;
-            double waves = 0;
-            double amplifi = 0;
-            if (this.isAlive()) {
-                this.removeEffect(CaerulaArborModMobEffects.DIZZY.get());
-                this.removeEffect(CaerulaArborModMobEffects.FROZEN.get());
-                enemy = this.getTarget();
-                sklp = this.getEntityData().get(DATA_skillp);
-                sklp1 = this.getEntityData().get(DATA_skillp_1);
-                grow = this.getEntityData().get(DATA_growth_p);
-                phase = this.getEntityData().get(DATA_phase);
-                waves = this.getEntityData().get(DATA_wave);
-                if (!this.hasEffect(CaerulaArborModMobEffects.IZUMIK_LEARN.get())) {
-                    amplifi = Math.floor(grow / 5);
-                    if (CaerulaArborModVariables.MapVariables.get(world).strategy_silence > 3) {
-                        amplifi = amplifi * 4;
-                    } else if (CaerulaArborModVariables.MapVariables.get(world).strategy_grow > 3) {
-                        amplifi = amplifi * 3;
-                    } else {
-                        amplifi = amplifi * 2;
-                    }
-                    if (amplifi > 0) {
-                        if (!this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.IZUMIK_LEARN.get(), 20, (int) (amplifi - 1), false, false));
-                    }
+        Entity enemy = null;
+        double sklp = 0;
+        double grow = 0;
+        double phase = 0;
+        double sklp1 = 0;
+        double waves = 0;
+        double amplifi = 0;
+        if (this.isAlive()) {
+            this.removeEffect(CaerulaArborModMobEffects.DIZZY.get());
+            this.removeEffect(CaerulaArborModMobEffects.FROZEN.get());
+            enemy = this.getTarget();
+            sklp = this.getEntityData().get(DATA_skillp);
+            sklp1 = this.getEntityData().get(DATA_skillp_1);
+            grow = this.getEntityData().get(DATA_growth_p);
+            phase = this.getEntityData().get(DATA_phase);
+            waves = this.getEntityData().get(DATA_wave);
+            if (!this.hasEffect(CaerulaArborModMobEffects.IZUMIK_LEARN.get())) {
+                amplifi = Math.floor(grow / 5);
+                if (MapVariables.get(world).strategy_silence > 3) {
+                    amplifi = amplifi * 4;
+                } else if (MapVariables.get(world).strategy_grow > 3) {
+                    amplifi = amplifi * 3;
+                } else {
+                    amplifi = amplifi * 2;
                 }
-                if (phase == 0) {
-                    this.removeEffect(MobEffects.REGENERATION);
-                    if (!this.hasEffect(CaerulaArborModMobEffects.INVULNERABLE.get())) {
-                        if (!this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 35, 2, false, false));
-                    }
-                    if (grow < 20) {
-                        {
-                            final Vec3 _center = new Vec3(x, y, z);
-                            List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(14 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                            for (Entity entityiterator : _entfound) {
-                                if (entityiterator instanceof IzumikOffspringEntity && (entityiterator != null ? distanceTo(entityiterator) : -1) <= 7) {
-                                    if (!entityiterator.level().isClientSide())
-                                        entityiterator.discard();
-                                    this.getEntityData().set(DATA_growth_p, (int) (grow + 1));
-                                    this.getEntityData().set(DATA_skillp, (int) (sklp - 1));
-                                    if (world instanceof ServerLevel _level)
-                                        _level.sendParticles(ParticleTypes.CLOUD, (entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()), 32, 0.6, 0.6, 0.6, 0.1);
-                                    CaerulaArborMod.LOGGER.info(("Izumik absorb offspr and grow to " + Math.round(grow + 1)));
-                                    break;
-                                }
-                            }
-                        }
-                    } else {
-                        if (this instanceof IzumikEntity) {
-                            this.setAnimation("animation.izumik.revive");
-                        }
-                        this.getEntityData().set(DATA_phase, 1);
-                        this.removeEffect(CaerulaArborModMobEffects.INVULNERABLE.get());
-                        if (!this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 300, 1, false, false));
-                        this.getEntityData().set(DATA_skillp, 300);
-                        {
-                            final Vec3 _center = new Vec3(x, y, z);
-                            List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(72 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                            for (Entity entityiterator : _entfound) {
-                                if (entityiterator instanceof Player _player && !_player.level().isClientSide())
-                                    _player.displayClientMessage(Component.literal((Component.translatable("izumik.saying").getString())), false);
-                            }
-                        }
-                    }
-                    if (sklp <= 0) {
-                        this.getEntityData().set(DATA_skillp, 5);
-                        if (grow + 1 < 20) {
-                            if (this instanceof IzumikEntity) {
-                                this.setAnimation("animation.izumik.grow");
-                            }
-                        }
-                        CaerulaArborMod.queueServerWork(25, () -> {
-                            if (this == null)
-                                return;
-                            double rate = 0;
-                            double range = 0;
-                            if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "izumik_learn")), SoundSource.HOSTILE, (float) 2.5, 1);
-                            }
-                            rate = 1;
-                            range = 16;
-                            if (CaerulaArborModVariables.MapVariables.get(world).strategy_grow >= 4) {
-                                rate = 1.5;
-                                range = 24;
-                            }
-                            for (int index0 = 0; index0 < 120; index0++) {
+                if (amplifi > 0) {
+                    if (!this.level().isClientSide())
+                        this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.IZUMIK_LEARN.get(), 20, (int) (amplifi - 1), false, false));
+                }
+            }
+            if (phase == 0) {
+                this.removeEffect(MobEffects.REGENERATION);
+                if (!this.hasEffect(CaerulaArborModMobEffects.INVULNERABLE.get())) {
+                    if (!this.level().isClientSide())
+                        this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 35, 2, false, false));
+                }
+                if (grow < 20) {
+                    {
+                        final Vec3 _center = new Vec3(x, y, z);
+                        List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(14 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+                        for (Entity entityiterator : _entfound) {
+                            if (entityiterator instanceof IzumikOffspringEntity && (entityiterator != null ? distanceTo(entityiterator) : -1) <= 7) {
+                                if (!entityiterator.level().isClientSide())
+                                    entityiterator.discard();
+                                this.getEntityData().set(DATA_growth_p, (int) (grow + 1));
+                                this.getEntityData().set(DATA_skillp, (int) (sklp - 1));
                                 if (world instanceof ServerLevel _level)
-                                    _level.sendParticles(ParticleTypes.END_ROD, (x + range * Math.sin(Math.toRadians(index0 * 3))), (y + 0.5), (z + range * Math.cos(Math.toRadians(index0 * 3))), 3, 0.15, 0.5, 0.15, 0.15);
-                            }
-                            {
-                                final Vec3 _center = new Vec3(x, y, z);
-                                List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate((2 * range) / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                                for (Entity entityiterator : _entfound) {
-                                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
-                                        if (!(entityiterator == this.getTarget())) {
-                                            continue;
-                                        }
-                                    }
-                                    if (!(entityiterator instanceof Mob) && !(entityiterator instanceof Player)) {
-                                        continue;
-                                    }
-                                    if (distanceTo(entityiterator) <= range) {
-                                        entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "izumik_skill")))),
-                                                (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * rate));
-                                    }
-                                }
-                            }
-                        });
-                    }
-                    if (waves <= 0) {
-                        if (this instanceof IzumikEntity) {
-                            this.setAnimation("animation.izumik.revive");
-                        }
-                        this.getEntityData().set(DATA_phase, 1);
-                        this.removeEffect(CaerulaArborModMobEffects.INVULNERABLE.get());
-                        if (!this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 300, 1, false, false));
-                        this.getEntityData().set(DATA_skillp, 300);
-                        {
-                            final Vec3 _center = new Vec3(x, y, z);
-                            List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(72 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                            for (Entity entityiterator : _entfound) {
-                                if (entityiterator instanceof Player _player && !_player.level().isClientSide())
-                                    _player.displayClientMessage(Component.literal((Component.translatable("izumik.saying").getString())), false);
+                                    _level.sendParticles(ParticleTypes.CLOUD, (entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()), 32, 0.6, 0.6, 0.6, 0.1);
+                                CaerulaArborMod.LOGGER.info(("Izumik absorb offspr and grow to " + Math.round(grow + 1)));
+                                break;
                             }
                         }
-                    }
-                    if (sklp1 <= 0 && waves > 0) {
-                        for (int index0 = 0; index0 < 12; index0++) {
-                            double range = 0;
-                            double t = 0;
-                            double tgtX = 0;
-                            double tgtZ = 0;
-                            double validY = 0;
-                            validY = 114514;
-                            for (int index1 = 0; index1 < 24; index1++) {
-                                range = Mth.nextInt(RandomSource.create(), 28, 42);
-                                t = Mth.nextDouble(RandomSource.create(), 0, 6.283);
-                                tgtX = x + range * Math.sin(t);
-                                tgtZ = z + range * Math.cos(t);
-                                validY = findValidYOffspr(world, x, y, z, tgtX, y + 4, tgtZ);
-                                if (validY < 114513) {
-                                    break;
-                                }
-                            }
-                            if (validY < 114513) {
-                                if (world instanceof ServerLevel _level) {
-                                    Entity entityToSpawn = CaerulaArborModEntities.IZUMIK_OFFSPRING.get().spawn(_level, BlockPos.containing(tgtX, validY, tgtZ), MobSpawnType.MOB_SUMMONED);
-                                    if (entityToSpawn != null) {
-                                        entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-                                    }
-                                }
-                                if (world instanceof ServerLevel _level)
-                                    _level.sendParticles(ParticleTypes.CLOUD, tgtX, validY, tgtZ, 32, 0.5, 0.5, 0.5, 0.15);
-                            }
-                        }
-                        this.getEntityData().set(DATA_wave, (int) (waves - 1));
-                        this.getEntityData().set(DATA_skillp_1, 600);
-                    } else {
-                        this.getEntityData().set(DATA_skillp_1, (int) (sklp1 - 1));
                     }
                 } else {
-                    if (sklp <= 0) {
-                        if (!(this.getTarget() == null) && ((Entity) this.getTarget()).isAlive()) {
-                            if ((this.getTarget() != null ? distanceTo(this.getTarget()) : -1) <= 24) {
-                                if (phase >= 2) {
-                                    this.getEntityData().set(DATA_skillp, 400);
-                                } else {
-                                    this.getEntityData().set(DATA_skillp, 600);
+                    if (this instanceof IzumikEntity) {
+                        this.setAnimation("animation.izumik.revive");
+                    }
+                    this.getEntityData().set(DATA_phase, 1);
+                    this.removeEffect(CaerulaArborModMobEffects.INVULNERABLE.get());
+                    if (!this.level().isClientSide())
+                        this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 300, 1, false, false));
+                    this.getEntityData().set(DATA_skillp, 300);
+                    {
+                        final Vec3 _center = new Vec3(x, y, z);
+                        List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(72 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+                        for (Entity entityiterator : _entfound) {
+                            if (entityiterator instanceof Player _player && !_player.level().isClientSide())
+                                _player.displayClientMessage(Component.literal((Component.translatable("izumik.saying").getString())), false);
+                        }
+                    }
+                }
+                if (sklp <= 0) {
+                    this.getEntityData().set(DATA_skillp, 5);
+                    if (grow + 1 < 20) {
+                        if (this instanceof IzumikEntity) {
+                            this.setAnimation("animation.izumik.grow");
+                        }
+                    }
+                    CaerulaArborMod.queueServerWork(25, () -> {
+                        double rate = 0;
+                        double range = 0;
+                        if (world instanceof Level _level) {
+                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "izumik_learn")), SoundSource.HOSTILE, (float) 2.5, 1);
+                        }
+                        rate = 1;
+                        range = 16;
+                        if (MapVariables.get(world).strategy_grow >= 4) {
+                            rate = 1.5;
+                            range = 24;
+                        }
+                        for (int index0 = 0; index0 < 120; index0++) {
+                            if (world instanceof ServerLevel _level)
+                                _level.sendParticles(ParticleTypes.END_ROD, (x + range * Math.sin(Math.toRadians(index0 * 3))), (y + 0.5), (z + range * Math.cos(Math.toRadians(index0 * 3))), 3, 0.15, 0.5, 0.15, 0.15);
+                        }
+                        {
+                            final Vec3 _center = new Vec3(x, y, z);
+                            List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate((2 * range) / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+                            for (Entity entityiterator : _entfound) {
+                                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                                    if (!(entityiterator == this.getTarget())) {
+                                        continue;
+                                    }
                                 }
-                                if (!this.level().isClientSide())
-                                    this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 50, 0, false, false));
-                                if (this instanceof IzumikEntity) {
-                                    this.setAnimation("animation.izumik.skill");
+                                if (!(entityiterator instanceof Mob) && !(entityiterator instanceof Player)) {
+                                    continue;
                                 }
-                                CaerulaArborMod.queueServerWork(35, () -> {
-                                    this.setHealth((float) ((this.getHealth()) + (this.getMaxHealth()) * 0.03));
-                                    if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()))
-                                        this.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get())
-                                                .setBaseValue(Math.min((this.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get())
-                                                        ? this.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).getBaseValue()
-                                                        : 0) + 1, (this.getMaxHealth()) * 0.05));
-                                    if (this == null)
-                                        return;
-                                    double range = 0;
-                                    if (world instanceof Level _level) {
-                                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "izumik_shock")), SoundSource.HOSTILE, (float) 3.5, 1);
-                                    }
-                                    range = 11;
-                                    if (CaerulaArborModVariables.MapVariables.get(world).strategy_grow >= 4) {
-                                        range = 14;
-                                    }
-                                    if ((this.getEntityData().get(DATA_phase)) >= 2) {
-                                        range = range + 3;
-                                    }
-                                    new Object() {
-                                        void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
-                                            IzumikEntity.this.performShockAttack((timedloopiterator + 1) * 2);
-                                            final int tick2 = ticks;
-                                            CaerulaArborMod.queueServerWork(tick2, () -> {
-                                                if (timedlooptotal > timedloopiterator + 1) {
-                                                    timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
-                                                }
-                                            });
-                                        }
-                                    }.timedLoop(0, (int) range, 1);
-                                });
+                                if (distanceTo(entityiterator) <= range) {
+                                    entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "izumik_skill")))),
+                                            (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * rate));
+                                }
                             }
                         }
-                    } else {
-                        if ((this.getHealth()) < (this.getMaxHealth()) * 0.33) {
-                            this.getEntityData().set(DATA_skillp, (int) (sklp - 2));
-                        } else {
-                            this.getEntityData().set(DATA_skillp, (int) (sklp - 1));
+                    });
+                }
+                if (waves <= 0) {
+                    if (this instanceof IzumikEntity) {
+                        this.setAnimation("animation.izumik.revive");
+                    }
+                    this.getEntityData().set(DATA_phase, 1);
+                    this.removeEffect(CaerulaArborModMobEffects.INVULNERABLE.get());
+                    if (!this.level().isClientSide())
+                        this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 300, 1, false, false));
+                    this.getEntityData().set(DATA_skillp, 300);
+                    {
+                        final Vec3 _center = new Vec3(x, y, z);
+                        List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(72 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+                        for (Entity entityiterator : _entfound) {
+                            if (entityiterator instanceof Player _player && !_player.level().isClientSide())
+                                _player.displayClientMessage(Component.literal((Component.translatable("izumik.saying").getString())), false);
                         }
+                    }
+                }
+                if (sklp1 <= 0 && waves > 0) {
+                    for (int index0 = 0; index0 < 12; index0++) {
+                        double range = 0;
+                        double t = 0;
+                        double tgtX = 0;
+                        double tgtZ = 0;
+                        double validY = 0;
+                        validY = 114514;
+                        for (int index1 = 0; index1 < 24; index1++) {
+                            range = Mth.nextInt(RandomSource.create(), 28, 42);
+                            t = Mth.nextDouble(RandomSource.create(), 0, 6.283);
+                            tgtX = x + range * Math.sin(t);
+                            tgtZ = z + range * Math.cos(t);
+                            validY = findValidYOffspr(world, x, y, z, tgtX, y + 4, tgtZ);
+                            if (validY < 114513) {
+                                break;
+                            }
+                        }
+                        if (validY < 114513) {
+                            if (world instanceof ServerLevel _level) {
+                                Entity entityToSpawn = CaerulaArborModEntities.IZUMIK_OFFSPRING.get().spawn(_level, BlockPos.containing(tgtX, validY, tgtZ), MobSpawnType.MOB_SUMMONED);
+                                if (entityToSpawn != null) {
+                                    entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+                                }
+                            }
+                            if (world instanceof ServerLevel _level)
+                                _level.sendParticles(ParticleTypes.CLOUD, tgtX, validY, tgtZ, 32, 0.5, 0.5, 0.5, 0.15);
+                        }
+                    }
+                    this.getEntityData().set(DATA_wave, (int) (waves - 1));
+                    this.getEntityData().set(DATA_skillp_1, 600);
+                } else {
+                    this.getEntityData().set(DATA_skillp_1, (int) (sklp1 - 1));
+                }
+            } else {
+                if (sklp <= 0) {
+                    if (!(this.getTarget() == null) && ((Entity) this.getTarget()).isAlive()) {
+                        if ((this.getTarget() != null ? distanceTo(this.getTarget()) : -1) <= 24) {
+                            if (phase >= 2) {
+                                this.getEntityData().set(DATA_skillp, 400);
+                            } else {
+                                this.getEntityData().set(DATA_skillp, 600);
+                            }
+                            if (!this.level().isClientSide())
+                                this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 50, 0, false, false));
+                            if (this instanceof IzumikEntity) {
+                                this.setAnimation("animation.izumik.skill");
+                            }
+                            CaerulaArborMod.queueServerWork(35, () -> {
+                                this.setHealth((float) ((this.getHealth()) + (this.getMaxHealth()) * 0.03));
+                                if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()))
+                                    this.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get())
+                                            .setBaseValue(Math.min((this.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get())
+                                                    ? this.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).getBaseValue()
+                                                    : 0) + 1, (this.getMaxHealth()) * 0.05));
+                                double range = 0;
+                                if (world instanceof Level _level) {
+                                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "izumik_shock")), SoundSource.HOSTILE, (float) 3.5, 1);
+                                }
+                                range = 11;
+                                if (MapVariables.get(world).strategy_grow >= 4) {
+                                    range = 14;
+                                }
+                                if ((this.getEntityData().get(DATA_phase)) >= 2) {
+                                    range = range + 3;
+                                }
+                                new Object() {
+                                    void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
+                                        IzumikEntity.this.performShockAttack((timedloopiterator + 1) * 2);
+                                        final int tick2 = ticks;
+                                        CaerulaArborMod.queueServerWork(tick2, () -> {
+                                            if (timedlooptotal > timedloopiterator + 1) {
+                                                timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
+                                            }
+                                        });
+                                    }
+                                }.timedLoop(0, (int) range, 1);
+                            });
+                        }
+                    }
+                } else {
+                    if ((this.getHealth()) < (this.getMaxHealth()) * 0.33) {
+                        this.getEntityData().set(DATA_skillp, (int) (sklp - 2));
+                    } else {
+                        this.getEntityData().set(DATA_skillp, (int) (sklp - 1));
                     }
                 }
             }
@@ -719,7 +693,7 @@ public class IzumikEntity extends SeaMonster {
 		double z = this.getZ();
 
 		double rate = 0.25;
-		if (CaerulaArborModVariables.MapVariables.get(world).strategy_grow >= 4) {
+		if (MapVariables.get(world).strategy_grow >= 4) {
 			rate = 0.35;
 		}
 
@@ -775,7 +749,7 @@ public class IzumikEntity extends SeaMonster {
 
 				if ((this.getEntityData().get(DATA_phase) >= 2)) {
 					if (Math.random() < 0.33) {
-						if (CaerulaArborModVariables.MapVariables.get(world).strategy_grow >= 4) {
+						if (MapVariables.get(world).strategy_grow >= 4) {
 							if (entityiterator instanceof LivingEntity _livingEntity20 && _livingEntity20.getAttributes().hasAttribute(CaerulaArborModAttributes.NUMB.get()))
 								_livingEntity20.getAttribute(CaerulaArborModAttributes.NUMB.get())
 										.setBaseValue(((entityiterator instanceof LivingEntity _livingEntity19 && _livingEntity19.getAttributes().hasAttribute(CaerulaArborModAttributes.NUMB.get())

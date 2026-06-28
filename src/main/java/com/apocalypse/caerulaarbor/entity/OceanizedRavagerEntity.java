@@ -111,13 +111,12 @@ public class OceanizedRavagerEntity extends SeaMonster {
 		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
 		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
 		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
-		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal(this, Player.class, true, false) {
+		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Player.class, true, false) {
 			@Override
 			public boolean canUse() {
 				double x = OceanizedRavagerEntity.this.getX();
 				double y = OceanizedRavagerEntity.this.getY();
 				double z = OceanizedRavagerEntity.this.getZ();
-				Entity entity = OceanizedRavagerEntity.this;
 				Level world = OceanizedRavagerEntity.this.level();
 				return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -127,7 +126,6 @@ public class OceanizedRavagerEntity extends SeaMonster {
 				double x = OceanizedRavagerEntity.this.getX();
 				double y = OceanizedRavagerEntity.this.getY();
 				double z = OceanizedRavagerEntity.this.getZ();
-				Entity entity = OceanizedRavagerEntity.this;
 				Level world = OceanizedRavagerEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -135,21 +133,11 @@ public class OceanizedRavagerEntity extends SeaMonster {
 		this.targetSelector.addGoal(14, new NearestAttackableTargetGoal(this, Animal.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = OceanizedRavagerEntity.this.getX();
-				double y = OceanizedRavagerEntity.this.getY();
-				double z = OceanizedRavagerEntity.this.getZ();
-				Entity entity = OceanizedRavagerEntity.this;
-				Level world = OceanizedRavagerEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = OceanizedRavagerEntity.this.getX();
-				double y = OceanizedRavagerEntity.this.getY();
-				double z = OceanizedRavagerEntity.this.getZ();
-				Entity entity = OceanizedRavagerEntity.this;
-				Level world = OceanizedRavagerEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
@@ -231,9 +219,9 @@ public class OceanizedRavagerEntity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        BlockState target = Blocks.AIR.defaultBlockState();
+        BlockState target;
         boolean breaked = false;
-        if (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.deathTime : 0) == 22) {
+        if (this.deathTime == 22) {
             RavagerSummonFellowsProcedure.execute(world, x, y, z, 3);
         }
         Mob _mobEnt1 = this;
@@ -307,8 +295,7 @@ public class OceanizedRavagerEntity extends SeaMonster {
 	private PlayState attackingPredicate(AnimationState event) {
 		double d1 = this.getX() - this.xOld;
 		double d0 = this.getZ() - this.zOld;
-		float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
-		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
+        if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
 		}

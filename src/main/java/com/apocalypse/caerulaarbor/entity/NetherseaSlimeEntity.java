@@ -52,9 +52,6 @@ public class NetherseaSlimeEntity extends SeaMonster {
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(NetherseaSlimeEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(NetherseaSlimeEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<Integer> DATA_SIZE = SynchedEntityData.defineId(NetherseaSlimeEntity.class, EntityDataSerializers.INT);
-	private boolean swinging;
-	private boolean lastloop;
-	private long lastSwing;
 	public String animationprocedure = "empty";
 
 	public NetherseaSlimeEntity(PlayMessages.SpawnEntity packet, Level world) {
@@ -169,23 +166,20 @@ public class NetherseaSlimeEntity extends SeaMonster {
 		super.baseTick();
 		CompoundTag tag = this.getPersistentData();
 		if(!tag.getBoolean("Resized")){
-            if (this != null) {
-                double size = 0;
-                size = (Entity) this instanceof NetherseaSlimeEntity _datEntI ? _datEntI.getEntityData().get(DATA_SIZE) : 0;
-                if (size > 1) {
-                    if (this.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
-                        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(
-                                ((this.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? this.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0) * Math.pow(size, 2)));
-                    if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
-                        this.getAttribute(Attributes.ATTACK_DAMAGE)
-                                .setBaseValue(((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) * size));
-                    if (this.getAttributes().hasAttribute(Attributes.MOVEMENT_SPEED))
-                        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue((0.1 + 0.025 * Math.max(size, 4)));
-                    if (this.getAttributes().hasAttribute(Attributes.KNOCKBACK_RESISTANCE))
-                        this.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue((size * 0.2));
-                    if ((Entity) this instanceof LivingEntity _entity)
-                        _entity.setHealth((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1);
-                }
+            double size = 0;
+            size = (Entity) this instanceof NetherseaSlimeEntity _datEntI ? _datEntI.getEntityData().get(DATA_SIZE) : 0;
+            if (size > 1) {
+                if (this.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
+                    this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(
+                            ((this.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? this.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0) * Math.pow(size, 2)));
+                if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
+                    this.getAttribute(Attributes.ATTACK_DAMAGE)
+                            .setBaseValue(((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) * size));
+                if (this.getAttributes().hasAttribute(Attributes.MOVEMENT_SPEED))
+                    this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue((0.1 + 0.025 * Math.max(size, 4)));
+                if (this.getAttributes().hasAttribute(Attributes.KNOCKBACK_RESISTANCE))
+                    this.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue((size * 0.2));
+                this.setHealth(this.getMaxHealth());
             }
             tag.putBoolean("Resized", true);
 		}
@@ -195,10 +189,6 @@ public class NetherseaSlimeEntity extends SeaMonster {
 	@Override
 	public EntityDimensions getDimensions(Pose p_33597_) {
 		Entity entity = this;
-		Level world = this.level();
-		double x = this.getX();
-		double y = entity.getY();
-		double z = entity.getZ();
 		return super.getDimensions(p_33597_).scale((float) EntityUtils.getSlimeSize(entity));
 	}
 
@@ -218,9 +208,7 @@ public class NetherseaSlimeEntity extends SeaMonster {
 
 	private PlayState movementPredicate(AnimationState event) {
 		if (this.animationprocedure.equals("empty")) {
-			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.05F && event.getLimbSwingAmount() < 0.05F))
-
-			) {
+			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.05F && event.getLimbSwingAmount() < 0.05F))) {
 				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.nethersea_slime.move"));
 			}
 			if (this.isDeadOrDying()) {
@@ -260,8 +248,6 @@ public class NetherseaSlimeEntity extends SeaMonster {
             double x = this.getX();
             double y = this.getY();
             double z = this.getZ();
-            if (this == null)
-                return;
             int size = (Entity) this instanceof NetherseaSlimeEntity _datEntI ? _datEntI.getEntityData().get(DATA_SIZE) : 0;
             if (size > 1) {
                 size = (int) (size * 0.5);

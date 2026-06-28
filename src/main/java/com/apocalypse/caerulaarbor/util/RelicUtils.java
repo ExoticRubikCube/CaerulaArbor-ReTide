@@ -1,6 +1,7 @@
 package com.apocalypse.caerulaarbor.util;
 
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
+import com.apocalypse.caerulaarbor.capability.ModCapabilities;
+import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -19,10 +20,10 @@ public class RelicUtils {
 		throw new UnsupportedOperationException("Utility class");
 	}
 
-	private static CaerulaArborModVariables.PlayerVariables getPlayerVariables(Entity entity) {
+	private static PlayerVariable getPlayerVariables(Entity entity) {
 		if (entity == null)
-			return new CaerulaArborModVariables.PlayerVariables();
-		return entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables());
+			return new PlayerVariable();
+		return entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable());
 	}
 
 	public static boolean hasSpear(Entity entity) {
@@ -260,7 +261,7 @@ public class RelicUtils {
 				_level.sendParticles(ParticleTypes.ENCHANTED_HIT, x, y, z, 72, 1, 1, 1, 1);
 			{
 				boolean _setval = true;
-				entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+				entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
 					capability.relic_king_SPEAR = _setval;
 					capability.syncPlayerVariables(entity);
 				});

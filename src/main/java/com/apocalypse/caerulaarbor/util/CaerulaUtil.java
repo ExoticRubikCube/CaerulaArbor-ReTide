@@ -1,7 +1,9 @@
 package com.apocalypse.caerulaarbor.util;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
+import com.apocalypse.caerulaarbor.capability.ModCapabilities;
+import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
+import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -15,14 +17,14 @@ public class CaerulaUtil {
 	// Shared utility methods migrated from procedures.
 	// Life points
 	public static int getLifePoint(Player player){
-		return (int) player.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null)
-		.orElse(new CaerulaArborModVariables.PlayerVariables()).player_lives;
+		return (int) player.getCapability(ModCapabilities.PLAYER_VARIABLE, null)
+		.orElse(new PlayerVariable()).player_lives;
 	}
 
 	public static void setLifePoint(Player player, int value){
 		if(value < 1) return;
 		int maxPoint = getMaxLifePoint(player);
-		player.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null)
+		player.getCapability(ModCapabilities.PLAYER_VARIABLE, null)
 		.ifPresent(c -> {
 			c.player_lives = Math.min(value,maxPoint);
 			c.syncPlayerVariables(player);
@@ -30,13 +32,13 @@ public class CaerulaUtil {
 	}
 
 	public static int getMaxLifePoint(Player player){
-		return (int) player.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null)
-		.orElse(new CaerulaArborModVariables.PlayerVariables()).player_maxlive;
+		return (int) player.getCapability(ModCapabilities.PLAYER_VARIABLE, null)
+		.orElse(new PlayerVariable()).player_maxlive;
 	}
 
 	public static void setMaxLifePoint(Player player, int value){
 		if(value < 1) return;
-		player.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null)
+		player.getCapability(ModCapabilities.PLAYER_VARIABLE, null)
 		.ifPresent(c -> {
 			c.player_maxlive = value;
 			c.syncPlayerVariables(player);
@@ -46,12 +48,12 @@ public class CaerulaUtil {
 
 	// Shield points
 	public static int getShieldPoint(Player player){
-		return (int) player.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null)
-		.orElse(new CaerulaArborModVariables.PlayerVariables()).player_shield;
+		return (int) player.getCapability(ModCapabilities.PLAYER_VARIABLE, null)
+		.orElse(new PlayerVariable()).player_shield;
 	}
 	public static void setShieldPoint(Player player, int value){
 		if(value < 0) return;
-		player.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null)
+		player.getCapability(ModCapabilities.PLAYER_VARIABLE, null)
 		.ifPresent(c -> {
 			c.player_shield = value;
 			c.syncPlayerVariables(player);
@@ -60,11 +62,11 @@ public class CaerulaUtil {
 
 	// Lights
 	public static double getLights(Player player){
-		return player.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null)
-		.orElse(new CaerulaArborModVariables.PlayerVariables()).player_light;
+		return player.getCapability(ModCapabilities.PLAYER_VARIABLE, null)
+		.orElse(new PlayerVariable()).player_light;
 	}
 	public static void setLights(Player player, double value){
-		player.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null)
+		player.getCapability(ModCapabilities.PLAYER_VARIABLE, null)
 		.ifPresent(c -> {
 			c.player_light = Mth.clamp(value, 0, 100);
 			c.syncPlayerVariables(player);
@@ -76,10 +78,10 @@ public class CaerulaUtil {
 
 	// Sanity injury
 	public static void dealSanityInjury(LivingEntity living, double amount){
-		EntityUtils.deductSanity(living, amount);
+		SIHelper.causeSanityInjury(living, amount);
 	}
 	public static void healSanityInjury(LivingEntity living, double amount){
-		EntityUtils.restoreSanity(living, amount);
+		ModCapabilities.getSanityInjury(living).heal(amount);
 	}
 
 	// Armor erosion

@@ -111,13 +111,12 @@ public class TidutantExcrescenceEntity extends SeaMonster {
 		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
 		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
 		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
-		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal(this, Player.class, true, false) {
+		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Player.class, true, false) {
 			@Override
 			public boolean canUse() {
 				double x = TidutantExcrescenceEntity.this.getX();
 				double y = TidutantExcrescenceEntity.this.getY();
 				double z = TidutantExcrescenceEntity.this.getZ();
-				Entity entity = TidutantExcrescenceEntity.this;
 				Level world = TidutantExcrescenceEntity.this.level();
 				return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -127,7 +126,6 @@ public class TidutantExcrescenceEntity extends SeaMonster {
 				double x = TidutantExcrescenceEntity.this.getX();
 				double y = TidutantExcrescenceEntity.this.getY();
 				double z = TidutantExcrescenceEntity.this.getZ();
-				Entity entity = TidutantExcrescenceEntity.this;
 				Level world = TidutantExcrescenceEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -185,16 +183,14 @@ public class TidutantExcrescenceEntity extends SeaMonster {
 	@Override
 	public void baseTick() {
 		super.baseTick();
-        if (this != null) {
-            if (this.isAlive()) {
-                if ((Entity) this instanceof LivingEntity _livEnt1 && _livEnt1.hasEffect(CaerulaArborModMobEffects.MUTE.get())) {
-                    if ((Entity) this instanceof TidutantExcrescenceEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_mute_time,
-                                (Entity) this instanceof LivingEntity _livEnt && _livEnt.hasEffect(CaerulaArborModMobEffects.MUTE.get()) ? _livEnt.getEffect(CaerulaArborModMobEffects.MUTE.get()).getDuration() : 0);
-                } else if (((Entity) this instanceof TidutantExcrescenceEntity _datEntI ? _datEntI.getEntityData().get(DATA_mute_time) : 0) == 1) {
-                    if ((Entity) this instanceof TidutantExcrescenceEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_mute_time, 0);
-                }
+        if (this.isAlive()) {
+            if ((Entity) this instanceof LivingEntity _livEnt1 && _livEnt1.hasEffect(CaerulaArborModMobEffects.MUTE.get())) {
+                if ((Entity) this instanceof TidutantExcrescenceEntity _datEntSetI)
+                    _datEntSetI.getEntityData().set(DATA_mute_time,
+                            (Entity) this instanceof LivingEntity _livEnt && _livEnt.hasEffect(CaerulaArborModMobEffects.MUTE.get()) ? _livEnt.getEffect(CaerulaArborModMobEffects.MUTE.get()).getDuration() : 0);
+            } else if (((Entity) this instanceof TidutantExcrescenceEntity _datEntI ? _datEntI.getEntityData().get(DATA_mute_time) : 0) == 1) {
+                if ((Entity) this instanceof TidutantExcrescenceEntity _datEntSetI)
+                    _datEntSetI.getEntityData().set(DATA_mute_time, 0);
             }
         }
         this.refreshDimensions();

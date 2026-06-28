@@ -110,63 +110,33 @@ public class ReaperPetEntity extends TamableAnimal implements GeoEntity {
 		this.goalSelector.addGoal(1, new OwnerHurtByTargetGoal(this) {
 			@Override
 			public boolean canUse() {
-				double x = ReaperPetEntity.this.getX();
-				double y = ReaperPetEntity.this.getY();
-				double z = ReaperPetEntity.this.getZ();
-				Entity entity = ReaperPetEntity.this;
-				Level world = ReaperPetEntity.this.level();
 				return super.canUse() && ReaperPetEntity.this.isFollowable();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = ReaperPetEntity.this.getX();
-				double y = ReaperPetEntity.this.getY();
-				double z = ReaperPetEntity.this.getZ();
-				Entity entity = ReaperPetEntity.this;
-				Level world = ReaperPetEntity.this.level();
 				return super.canContinueToUse() && ReaperPetEntity.this.isFollowable();
 			}
 		});
 		this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this) {
 			@Override
 			public boolean canUse() {
-				double x = ReaperPetEntity.this.getX();
-				double y = ReaperPetEntity.this.getY();
-				double z = ReaperPetEntity.this.getZ();
-				Entity entity = ReaperPetEntity.this;
-				Level world = ReaperPetEntity.this.level();
 				return super.canUse() && ReaperPetEntity.this.isFollowable();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = ReaperPetEntity.this.getX();
-				double y = ReaperPetEntity.this.getY();
-				double z = ReaperPetEntity.this.getZ();
-				Entity entity = ReaperPetEntity.this;
-				Level world = ReaperPetEntity.this.level();
 				return super.canContinueToUse() && ReaperPetEntity.this.isFollowable();
 			}
 		});
 		this.goalSelector.addGoal(3, new FollowOwnerGoal(this, 1.5, (float) 4, (float) 16, false) {
 			@Override
 			public boolean canUse() {
-				double x = ReaperPetEntity.this.getX();
-				double y = ReaperPetEntity.this.getY();
-				double z = ReaperPetEntity.this.getZ();
-				Entity entity = ReaperPetEntity.this;
-				Level world = ReaperPetEntity.this.level();
 				return super.canUse() && ReaperPetEntity.this.isFollowable();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = ReaperPetEntity.this.getX();
-				double y = ReaperPetEntity.this.getY();
-				double z = ReaperPetEntity.this.getZ();
-				Entity entity = ReaperPetEntity.this;
-				Level world = ReaperPetEntity.this.level();
 				return super.canContinueToUse() && ReaperPetEntity.this.isFollowable();
 			}
 		});
@@ -181,21 +151,11 @@ public class ReaperPetEntity extends TamableAnimal implements GeoEntity {
 		this.goalSelector.addGoal(7, new TemptGoal(this, 0.4, Ingredient.of(CaerulaArborModItems.OCEAN_EYE.get()), false) {
 			@Override
 			public boolean canUse() {
-				double x = ReaperPetEntity.this.getX();
-				double y = ReaperPetEntity.this.getY();
-				double z = ReaperPetEntity.this.getZ();
-				Entity entity = ReaperPetEntity.this;
-				Level world = ReaperPetEntity.this.level();
 				return super.canUse() && ReaperPetEntity.this.isMovable();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = ReaperPetEntity.this.getX();
-				double y = ReaperPetEntity.this.getY();
-				double z = ReaperPetEntity.this.getZ();
-				Entity entity = ReaperPetEntity.this;
-				Level world = ReaperPetEntity.this.level();
 				return super.canContinueToUse() && ReaperPetEntity.this.isMovable();
 			}
 		});
@@ -203,21 +163,11 @@ public class ReaperPetEntity extends TamableAnimal implements GeoEntity {
 		this.goalSelector.addGoal(9, new RandomStrollGoal(this, 1) {
 			@Override
 			public boolean canUse() {
-				double x = ReaperPetEntity.this.getX();
-				double y = ReaperPetEntity.this.getY();
-				double z = ReaperPetEntity.this.getZ();
-				Entity entity = ReaperPetEntity.this;
-				Level world = ReaperPetEntity.this.level();
 				return super.canUse() && ReaperPetEntity.this.isMovable();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = ReaperPetEntity.this.getX();
-				double y = ReaperPetEntity.this.getY();
-				double z = ReaperPetEntity.this.getZ();
-				Entity entity = ReaperPetEntity.this;
-				Level world = ReaperPetEntity.this.level();
 				return super.canContinueToUse() && ReaperPetEntity.this.isMovable();
 			}
 		});
@@ -252,10 +202,7 @@ public class ReaperPetEntity extends TamableAnimal implements GeoEntity {
 
 	@Override
 	public boolean hurt(DamageSource source, float amount) {
-        if (this != null) {
-            if ((Entity) this instanceof ReaperPetEntity _datEntSetI)
-                _datEntSetI.getEntityData().set(DATA_state, 0);
-        }
+		this.getEntityData().set(DATA_state, 0);
         if (source.is(DamageTypes.DROWN))
 			return false;
 		return super.hurt(source, amount);
@@ -327,32 +274,29 @@ public class ReaperPetEntity extends TamableAnimal implements GeoEntity {
 		double x = this.getX();
 		double y = this.getY();
 		double z = this.getZ();
-		Entity entity = this;
-		Level world = this.level();
-        if (entity == null || sourceentity == null)
-            return InteractionResult.PASS;
-        if ((entity instanceof TamableAnimal _tamEnt ? (Entity) _tamEnt.getOwner() : null) == sourceentity) {
+        Level world = this.level();
+        if (((Entity) this instanceof TamableAnimal _tamEnt ? (Entity) _tamEnt.getOwner() : null) == sourceentity) {
             if (((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()
                     && ((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()) {
                 if ((LevelAccessor) world instanceof ServerLevel _level)
                     _level.sendParticles(ParticleTypes.HEART, x, y, z, 4, 0.8, 0.5, 0.8, 0.3);
-                entity.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((sourceentity.getX()), (sourceentity.getY()), (sourceentity.getZ())));
-                if (entity instanceof Mob _entity)
+                ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((sourceentity.getX()), (sourceentity.getY()), (sourceentity.getZ())));
+                if ((Entity) this instanceof Mob _entity)
                     _entity.getNavigation().stop();
-                if (entity instanceof ReaperPetEntity) {
-                    ((ReaperPetEntity) entity).setAnimation("animation.reaperpet.interact");
+                if (this instanceof ReaperPetEntity) {
+                    this.setAnimation("animation.reaperpet.interact");
                 }
                 return InteractionResult.SUCCESS;
             } else if (((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).is(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "fish_food")))) {
-                if (entity instanceof LivingEntity _entity)
-                    _entity.setHealth(entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1);
+                if ((Entity) this instanceof LivingEntity _entity)
+                    _entity.setHealth((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1);
                 ((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                 if ((LevelAccessor) world instanceof Level _level) {
                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.dolphin.eat")), SoundSource.NEUTRAL, 1, 1);
                 }
                 return InteractionResult.SUCCESS;
             } else if (((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).is(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "fish_food")))) {
-                if (entity instanceof LivingEntity _entity && !this.level().isClientSide())
+                if ((Entity) this instanceof LivingEntity _entity && !this.level().isClientSide())
                     this.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 200, 1));
                 ((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).shrink(1);
                 if ((LevelAccessor) world instanceof Level _level) {
@@ -361,21 +305,21 @@ public class ReaperPetEntity extends TamableAnimal implements GeoEntity {
                 return InteractionResult.SUCCESS;
             } else if (((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == Items.STICK) {
                 if (sourceentity.isShiftKeyDown()) {
-                    if (entity instanceof ReaperPetEntity _datEntSetI)
+                    if ((Entity) this instanceof ReaperPetEntity _datEntSetI)
                         _datEntSetI.getEntityData().set(DATA_state, 2);
                     if ((Entity) sourceentity instanceof Player _player && !_player.level().isClientSide())
-                        _player.displayClientMessage(Component.literal((entity.getDisplayName().getString() + Component.translatable("item.caerula_arbor.a_second_key.description_2").getString())), true);
+                        _player.displayClientMessage(Component.literal((this.getDisplayName().getString() + Component.translatable("item.caerula_arbor.a_second_key.description_2").getString())), true);
                 } else {
-                    if ((entity instanceof ReaperPetEntity _datEntI ? _datEntI.getEntityData().get(DATA_state) : 0) == 0) {
-                        if (entity instanceof ReaperPetEntity _datEntSetI)
+                    if (((Entity) this instanceof ReaperPetEntity _datEntI ? _datEntI.getEntityData().get(DATA_state) : 0) == 0) {
+                        if ((Entity) this instanceof ReaperPetEntity _datEntSetI)
                             _datEntSetI.getEntityData().set(DATA_state, 1);
                         if ((Entity) sourceentity instanceof Player _player && !_player.level().isClientSide())
-                            _player.displayClientMessage(Component.literal((entity.getDisplayName().getString() + Component.translatable("item.caerula_arbor.a_second_key.description_1").getString())), true);
+                            _player.displayClientMessage(Component.literal((this.getDisplayName().getString() + Component.translatable("item.caerula_arbor.a_second_key.description_1").getString())), true);
                     } else {
-                        if (entity instanceof ReaperPetEntity _datEntSetI)
+                        if ((Entity) this instanceof ReaperPetEntity _datEntSetI)
                             _datEntSetI.getEntityData().set(DATA_state, 0);
                         if ((Entity) sourceentity instanceof Player _player && !_player.level().isClientSide())
-                            _player.displayClientMessage(Component.literal((entity.getDisplayName().getString() + Component.translatable("item.caerula_arbor.a_second_key.description_0").getString())), true);
+                            _player.displayClientMessage(Component.literal((this.getDisplayName().getString() + Component.translatable("item.caerula_arbor.a_second_key.description_0").getString())), true);
                     }
                 }
                 return InteractionResult.SUCCESS;
@@ -388,23 +332,21 @@ public class ReaperPetEntity extends TamableAnimal implements GeoEntity {
 	@Override
 	public void baseTick() {
 		super.baseTick();
-        if (this != null) {
-            Entity owner = null;
-            Entity enemy = null;
-            if ((Entity) this instanceof Mob _mobEnt0 && _mobEnt0.isAggressive() && !((Entity) this instanceof LivingEntity _livEnt1 && _livEnt1.hasEffect(CaerulaArborModMobEffects.PET_REAP.get()))) {
-                if (!this.level().isClientSide())
-                    this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.PET_REAP.get(), 100, 0, false, false));
-            }
-            if (((Entity) this instanceof ReaperPetEntity _datEntI ? _datEntI.getEntityData().get(DATA_state) : 0) == 2) {
-                if ((Entity) this instanceof Mob _entity)
-                    _entity.setTarget(null);
-            }
-            owner = (Entity) this instanceof TamableAnimal _tamEnt ? _tamEnt.getOwner() : null;
-            enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
-            if (enemy == owner || (enemy instanceof TamableAnimal _tamEnt ? (Entity) _tamEnt.getOwner() : null) == owner) {
-                if ((Entity) this instanceof Mob _entity)
-                    _entity.setTarget(null);
-            }
+        Entity owner = null;
+        Entity enemy = null;
+        if ((Entity) this instanceof Mob _mobEnt0 && _mobEnt0.isAggressive() && !((Entity) this instanceof LivingEntity _livEnt1 && _livEnt1.hasEffect(CaerulaArborModMobEffects.PET_REAP.get()))) {
+            if (!this.level().isClientSide())
+                this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.PET_REAP.get(), 100, 0, false, false));
+        }
+        if (((Entity) this instanceof ReaperPetEntity _datEntI ? _datEntI.getEntityData().get(DATA_state) : 0) == 2) {
+            if ((Entity) this instanceof Mob _entity)
+                _entity.setTarget(null);
+        }
+        owner = (Entity) this instanceof TamableAnimal _tamEnt ? _tamEnt.getOwner() : null;
+        enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+        if (enemy == owner || (enemy instanceof TamableAnimal _tamEnt ? (Entity) _tamEnt.getOwner() : null) == owner) {
+            if ((Entity) this instanceof Mob _entity)
+                _entity.setTarget(null);
         }
         this.refreshDimensions();
 	}
@@ -461,9 +403,6 @@ public class ReaperPetEntity extends TamableAnimal implements GeoEntity {
 	}
 
 	private PlayState attackingPredicate(AnimationState event) {
-		double d1 = this.getX() - this.xOld;
-		double d0 = this.getZ() - this.zOld;
-		float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
 		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();

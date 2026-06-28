@@ -1,12 +1,12 @@
 package com.apocalypse.caerulaarbor.entity;
 
+import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.RavagerMountRider;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModGameRules;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -427,7 +427,7 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
 											tx = x + d * Math.sin(angl);
 											tz = z + d * Math.cos(angl);
 											rd = Mth.nextDouble(RandomSource.create(), 0, 1);
-											if (CaerulaArborModVariables.MapVariables.get(world).strategy_grow >= 4) {
+											if (MapVariables.get(world).strategy_grow >= 4) {
 												rd = Mth.nextDouble(RandomSource.create(), 0, 1.025);
 											}
 											if (rd < 0.5) {

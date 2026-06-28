@@ -39,7 +39,6 @@ import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -120,13 +119,12 @@ public class ChiselerFishEntity extends SeaMonster implements RangedAttackMob {
 		this.targetSelector.addGoal(9, new NearestAttackableTargetGoal<>(this, Piglin.class, true, true));
 		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, true));
 		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, true));
-		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal(this, Player.class, true, true) {
+		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, Player.class, true, true) {
 			@Override
 			public boolean canUse() {
 				double x = ChiselerFishEntity.this.getX();
 				double y = ChiselerFishEntity.this.getY();
 				double z = ChiselerFishEntity.this.getZ();
-				Entity entity = ChiselerFishEntity.this;
 				Level world = ChiselerFishEntity.this.level();
 				return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -136,7 +134,6 @@ public class ChiselerFishEntity extends SeaMonster implements RangedAttackMob {
 				double x = ChiselerFishEntity.this.getX();
 				double y = ChiselerFishEntity.this.getY();
 				double z = ChiselerFishEntity.this.getZ();
-				Entity entity = ChiselerFishEntity.this;
 				Level world = ChiselerFishEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -144,21 +141,11 @@ public class ChiselerFishEntity extends SeaMonster implements RangedAttackMob {
 		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal(this, Animal.class, true, true) {
 			@Override
 			public boolean canUse() {
-				double x = ChiselerFishEntity.this.getX();
-				double y = ChiselerFishEntity.this.getY();
-				double z = ChiselerFishEntity.this.getZ();
-				Entity entity = ChiselerFishEntity.this;
-				Level world = ChiselerFishEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = ChiselerFishEntity.this.getX();
-				double y = ChiselerFishEntity.this.getY();
-				double z = ChiselerFishEntity.this.getZ();
-				Entity entity = ChiselerFishEntity.this;
-				Level world = ChiselerFishEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
@@ -308,30 +295,21 @@ public class ChiselerFishEntity extends SeaMonster implements RangedAttackMob {
 
 	@Override
 	public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
-		ItemStack itemstack = sourceentity.getItemInHand(hand);
-		InteractionResult retval = InteractionResult.sidedSuccess(this.level().isClientSide());
 		super.mobInteract(sourceentity, hand);
-		double x = this.getX();
-		double y = this.getY();
-		double z = this.getZ();
 		Entity entity = this;
-		Level world = this.level();
 		return EntityUtils.containFish(entity, sourceentity);
 	}
 
 	@Override
 	public void baseTick() {
 		super.baseTick();
-        if (this != null) {
-            if ((Entity) this instanceof Mob _mobEnt0 && _mobEnt0.isAggressive() && !((Entity) this instanceof LivingEntity _livEnt1 && _livEnt1.hasEffect(CaerulaArborModMobEffects.COOLDOWN_SINAL.get()))) {
-                if (!this.level().isClientSide())
-                    this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 2, false, false));
-                if (!this.level().isClientSide())
-                    this.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 400, 1));
-                if (!this.level().isClientSide())
-                    this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.COOLDOWN_SINAL.get(), 800, 0, false, false));
-            }
-        }
+        if (this.isAggressive() && !this.hasEffect(CaerulaArborModMobEffects.COOLDOWN_SINAL.get())) {
+			if (!this.level().isClientSide()) {
+				this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 2, false, false));
+				this.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 400, 1));
+				this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.COOLDOWN_SINAL.get(), 800, 0, false, false));
+			}
+		}
         this.refreshDimensions();
 	}
 
@@ -367,9 +345,7 @@ public class ChiselerFishEntity extends SeaMonster implements RangedAttackMob {
 
 	private PlayState movementPredicate(AnimationState event) {
 		if (this.animationprocedure.equals("empty")) {
-			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
-
-			) {
+			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))) {
 				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.chiseler.move"));
 			}
 			if (this.isDeadOrDying()) {
@@ -381,9 +357,6 @@ public class ChiselerFishEntity extends SeaMonster implements RangedAttackMob {
 	}
 
 	private PlayState attackingPredicate(AnimationState event) {
-		double d1 = this.getX() - this.xOld;
-		double d0 = this.getZ() - this.zOld;
-		float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
 		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();

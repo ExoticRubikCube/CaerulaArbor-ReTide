@@ -120,42 +120,26 @@ public class MegaChestEntity extends SeaMonster {
 		this.goalSelector.addGoal(3, new RandomStrollGoal(this, 0.4) {
 			@Override
 			public boolean canUse() {
-				double x = MegaChestEntity.this.getX();
-				double y = MegaChestEntity.this.getY();
-				double z = MegaChestEntity.this.getZ();
 				Entity entity = MegaChestEntity.this;
-				Level world = MegaChestEntity.this.level();
 				return super.canUse() && EntityPredicateUtils.isNotShiftKeyDown(entity);
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = MegaChestEntity.this.getX();
-				double y = MegaChestEntity.this.getY();
-				double z = MegaChestEntity.this.getZ();
 				Entity entity = MegaChestEntity.this;
-				Level world = MegaChestEntity.this.level();
 				return super.canContinueToUse() && EntityPredicateUtils.isNotShiftKeyDown(entity);
 			}
 		});
 		this.goalSelector.addGoal(4, new RandomLookAroundGoal(this) {
 			@Override
 			public boolean canUse() {
-				double x = MegaChestEntity.this.getX();
-				double y = MegaChestEntity.this.getY();
-				double z = MegaChestEntity.this.getZ();
 				Entity entity = MegaChestEntity.this;
-				Level world = MegaChestEntity.this.level();
 				return super.canUse() && EntityPredicateUtils.isNotShiftKeyDown(entity);
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = MegaChestEntity.this.getX();
-				double y = MegaChestEntity.this.getY();
-				double z = MegaChestEntity.this.getZ();
 				Entity entity = MegaChestEntity.this;
-				Level world = MegaChestEntity.this.level();
 				return super.canContinueToUse() && EntityPredicateUtils.isNotShiftKeyDown(entity);
 			}
 		});
@@ -228,14 +212,7 @@ public class MegaChestEntity extends SeaMonster {
 
 	@Override
 	public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
-		ItemStack itemstack = sourceentity.getItemInHand(hand);
-		InteractionResult retval = InteractionResult.sidedSuccess(this.level().isClientSide());
 		super.mobInteract(sourceentity, hand);
-		double x = this.getX();
-		double y = this.getY();
-		double z = this.getZ();
-		Entity entity = this;
-		Level world = this.level();
 		return this.handleChestStart(sourceentity);
 	}
 
@@ -246,36 +223,32 @@ public class MegaChestEntity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if (this != null) {
-            Entity enemy = null;
-            if (!((Entity) this instanceof MegaChestEntity _datEntL0 && _datEntL0.getEntityData().get(DATA_released))) {
-                setShiftKeyDown(true);
-                if (!this.level().isClientSide())
-                    this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, 8, false, false));
-            }
-            enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
-            if (enemy == null || !enemy.isAlive()) {
-                if (!world.isClientSide()) {
-                    if (((Entity) this instanceof LivingEntity _entity ? _entity.getNoActionTime() : 0) >= 1200) {
-                        if (this.isAlive()) {
-                            if ((world.getBlockState(BlockPos.containing(x, y, z))).canBeReplaced()) {
-                                if (!level().isClientSide())
-                                    discard();
-                                {
-                                    BlockPos _bp = BlockPos.containing(x, y, z);
-                                    BlockState _bs = CaerulaArborModBlocks.CHESTMEGA_SPAWNER.get().withPropertiesOf(world.getBlockState(_bp));
-                                    if (_bs.getBlock().getStateDefinition().getProperty("facing") instanceof DirectionProperty _directionProperty)
-                                        _bs = _bs.setValue(_directionProperty, getDirection());
-                                    world.setBlock(_bp, _bs, 3);
-                                }
-                                if (world instanceof Level _level) {
-                                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.ender_chest.close")), SoundSource.BLOCKS, 1, 1);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+        Entity enemy = null;
+        if (!((Entity) this instanceof MegaChestEntity _datEntL0 && _datEntL0.getEntityData().get(DATA_released))) {
+            setShiftKeyDown(true);
+            if (!this.level().isClientSide())
+                this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, 8, false, false));
+        }
+        enemy = this.getTarget();
+        if (enemy == null || !enemy.isAlive()) {
+            if (!world.isClientSide() && this.getNoActionTime() >= 1200) {
+				if (this.isAlive()) {
+					if ((world.getBlockState(BlockPos.containing(x, y, z))).canBeReplaced()) {
+						if (!level().isClientSide())
+							discard();
+						{
+							BlockPos _bp = BlockPos.containing(x, y, z);
+							BlockState _bs = CaerulaArborModBlocks.CHESTMEGA_SPAWNER.get().withPropertiesOf(world.getBlockState(_bp));
+							if (_bs.getBlock().getStateDefinition().getProperty("facing") instanceof DirectionProperty _directionProperty)
+								_bs = _bs.setValue(_directionProperty, getDirection());
+							world.setBlock(_bp, _bs, 3);
+						}
+						if (world instanceof Level _level) {
+							_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.ender_chest.close")), SoundSource.BLOCKS, 1, 1);
+						}
+					}
+				}
+			}
         }
         this.refreshDimensions();
 	}

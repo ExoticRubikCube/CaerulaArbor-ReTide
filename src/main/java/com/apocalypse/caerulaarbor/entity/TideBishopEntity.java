@@ -116,7 +116,7 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
 		this.targetSelector.addGoal(9, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
 		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
 		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
-		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal(this, Player.class, true, false) {
+		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, Player.class, true, false) {
 			@Override
 			public boolean canUse() {
 				double x = TideBishopEntity.this.getX();
@@ -137,7 +137,7 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
 				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
 		});
-		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal(this, Animal.class, true, false) {
+		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Animal.class, true, false) {
 			@Override
 			public boolean canUse() {
 				double x = TideBishopEntity.this.getX();
@@ -227,8 +227,11 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
 		}
 
 		public void tick() {
-			double d0 = this.mob.distanceToSqr(this.target.getX(), this.target.getY(), this.target.getZ());
-			boolean flag = this.mob.getSensing().hasLineOfSight(this.target);
+            double d0 = 0;
+            if (this.target != null) {
+                d0 = this.mob.distanceToSqr(this.target.getX(), this.target.getY(), this.target.getZ());
+            }
+            boolean flag = this.mob.getSensing().hasLineOfSight(this.target);
 			if (flag) {
 				++this.seeTime;
 			} else {
@@ -283,19 +286,16 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if (this != null) {
-            Entity call = null;
-            call = world.getEntitiesOfClass(TideDeathrepellerEntity.class, AABB.ofSize(new Vec3(x, y, z), 96, 96, 96), e -> true).stream().sorted(new Object() {
-                Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
-                    return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
-                }
-            }.compareDistOf(x, y, z)).findFirst().orElse(null);
-            if (!(call == null)) {
-                if (call instanceof Mob _entity)
-                    _entity.getNavigation().moveTo(x, y, z, 0.8);
+        Entity call = null;
+        call = world.getEntitiesOfClass(TideDeathrepellerEntity.class, AABB.ofSize(new Vec3(x, y, z), 96, 96, 96), e -> true).stream().sorted(new Object() {
+            Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
+                return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
             }
-            if ((Entity) this instanceof LivingEntity _livEnt3 && _livEnt3.hasEffect(CaerulaArborModMobEffects.INVULNERABLE.get())) {
-            }
+        }.compareDistOf(x, y, z)).findFirst().orElse(null);
+		if (call instanceof Mob _entity)
+			_entity.getNavigation().moveTo(x, y, z, 0.8);
+		if ((Entity) this instanceof LivingEntity _livEnt3 && _livEnt3.hasEffect(CaerulaArborModMobEffects.INVULNERABLE.get())) {
+
         }
         if (source.is(DamageTypes.DROWN))
 			return false;
@@ -408,7 +408,6 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
 	private PlayState attackingPredicate(AnimationState event) {
 		double d1 = this.getX() - this.xOld;
 		double d0 = this.getZ() - this.zOld;
-		float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
 		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();

@@ -1,23 +1,21 @@
 
 package com.apocalypse.caerulaarbor.command;
 
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.minecraft.network.chat.Component;
-
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.common.util.FakePlayerFactory;
-
-import net.minecraft.world.level.Level;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.core.Direction;
-import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.commands.Commands;
-
+import com.apocalypse.caerulaarbor.capability.ModCapabilities;
+import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.common.util.FakePlayerFactory;
+import net.minecraftforge.event.RegisterCommandsEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber
 public class SetPlayerLifeCommand {
@@ -40,10 +38,10 @@ public class SetPlayerLifeCommand {
                     double lfs = 0;
                     try {
                         for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
-                            lfs = Math.min(DoubleArgumentType.getDouble(arguments, "life"), (entityiterator.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).player_maxlive);
+                            lfs = Math.min(DoubleArgumentType.getDouble(arguments, "life"), (entityiterator.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_maxlive);
                             {
                                 double _setval = lfs;
-                                entityiterator.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                                entityiterator.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                                     capability.player_lives = _setval;
                                     capability.syncPlayerVariables(entityiterator);
                                 });
@@ -78,7 +76,7 @@ public class SetPlayerLifeCommand {
                         for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
                             {
                                 double _setval = DoubleArgumentType.getDouble(arguments, "life");
-                                entityiterator.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                                entityiterator.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                                     capability.player_maxlive = _setval;
                                     capability.syncPlayerVariables(entityiterator);
                                 });
@@ -113,7 +111,7 @@ public class SetPlayerLifeCommand {
                         for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
                             {
                                 double _setval = DoubleArgumentType.getDouble(arguments, "shield");
-                                entityiterator.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                                entityiterator.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                                     capability.player_shield = _setval;
                                     capability.syncPlayerVariables(entityiterator);
                                 });
@@ -148,7 +146,7 @@ public class SetPlayerLifeCommand {
                         for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
                             {
                                 double _setval = 100;
-                                entityiterator.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                                entityiterator.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                                     capability.player_light = _setval;
                                     capability.syncPlayerVariables(entityiterator);
                                 });
@@ -183,7 +181,7 @@ public class SetPlayerLifeCommand {
                         for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
                             {
                                 double _setval = 80;
-                                entityiterator.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                                entityiterator.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                                     capability.player_light = _setval;
                                     capability.syncPlayerVariables(entityiterator);
                                 });
@@ -218,7 +216,7 @@ public class SetPlayerLifeCommand {
                         for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
                             {
                                 double _setval = 40;
-                                entityiterator.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                                entityiterator.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                                     capability.player_light = _setval;
                                     capability.syncPlayerVariables(entityiterator);
                                 });
@@ -253,7 +251,7 @@ public class SetPlayerLifeCommand {
                         for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
                             {
                                 double _setval = 0;
-                                entityiterator.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                                entityiterator.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                                     capability.player_light = _setval;
                                     capability.syncPlayerVariables(entityiterator);
                                 });
@@ -288,7 +286,7 @@ public class SetPlayerLifeCommand {
                         for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
                             {
                                 double _setval = DoubleArgumentType.getDouble(arguments, "light");
-                                entityiterator.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                                entityiterator.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                                     capability.player_light = _setval;
                                     capability.syncPlayerVariables(entityiterator);
                                 });
@@ -323,7 +321,7 @@ public class SetPlayerLifeCommand {
                         for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
                             {
                                 double _setval = DoubleArgumentType.getDouble(arguments, "state");
-                                entityiterator.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                                entityiterator.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                                     capability.player_oceanization = _setval;
                                     capability.syncPlayerVariables(entityiterator);
                                 });
@@ -358,7 +356,7 @@ public class SetPlayerLifeCommand {
                         for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
                             {
                                 double _setval = 0;
-                                entityiterator.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                                entityiterator.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                                     capability.disoclusion = _setval;
                                     capability.syncPlayerVariables(entityiterator);
                                 });
@@ -392,7 +390,7 @@ public class SetPlayerLifeCommand {
                         for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
                             {
                                 double _setval = 1;
-                                entityiterator.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                                entityiterator.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                                     capability.disoclusion = _setval;
                                     capability.syncPlayerVariables(entityiterator);
                                 });
@@ -426,7 +424,7 @@ public class SetPlayerLifeCommand {
                         for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
                             {
                                 double _setval = 2;
-                                entityiterator.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                                entityiterator.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                                     capability.disoclusion = _setval;
                                     capability.syncPlayerVariables(entityiterator);
                                 });
@@ -460,7 +458,7 @@ public class SetPlayerLifeCommand {
                         for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
                             {
                                 double _setval = 3;
-                                entityiterator.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                                entityiterator.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                                     capability.disoclusion = _setval;
                                     capability.syncPlayerVariables(entityiterator);
                                 });
@@ -494,7 +492,7 @@ public class SetPlayerLifeCommand {
                         for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
                             {
                                 double _setval = 1;
-                                entityiterator.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                                entityiterator.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                                     capability.disoclusion = _setval;
                                     capability.syncPlayerVariables(entityiterator);
                                 });

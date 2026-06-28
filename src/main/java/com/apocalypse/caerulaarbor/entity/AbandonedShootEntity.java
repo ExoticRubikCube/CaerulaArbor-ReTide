@@ -88,7 +88,7 @@ public class AbandonedShootEntity extends AbstractArrow implements ItemSupplier 
         double z = this.getZ();
         Entity entity = entityHitResult.getEntity();
         Entity sourceentity = this.getOwner();
-        if (entity == null || this == null || sourceentity == null)
+        if (sourceentity == null)
             return;
         entity.invulnerableTime = 0;
         if (world instanceof ServerLevel _level)
@@ -142,14 +142,11 @@ public class AbandonedShootEntity extends AbstractArrow implements ItemSupplier 
 	@Override
 	public void tick() {
 		super.tick();
-        LevelAccessor world = this.level();
-        if (this != null) {
-            world.addParticle(CaerulaArborModParticleTypes.SEA_SPLASH.get(), this.getX(), this.getY(), this.getZ(), ((-0.05) * getDeltaMovement().x()), ((-0.05) * getDeltaMovement().y()),
-                    ((-0.05) * getDeltaMovement().z()));
-            if (tickCount >= 200) {
-                if (!level().isClientSide())
-                    discard();
-            }
+        this.level().addParticle(CaerulaArborModParticleTypes.SEA_SPLASH.get(), this.getX(), this.getY(), this.getZ(), ((-0.05) * getDeltaMovement().x()), ((-0.05) * getDeltaMovement().y()),
+                ((-0.05) * getDeltaMovement().z()));
+        if (tickCount >= 200) {
+            if (!level().isClientSide())
+                discard();
         }
         if (this.inGround)
 			this.discard();

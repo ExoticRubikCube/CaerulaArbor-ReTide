@@ -180,18 +180,16 @@ public class IsharmlaTearEntity extends PathfinderMob implements GeoEntity {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if (this != null) {
-            if ((LevelAccessor) world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "isharmla_tear_place")), SoundSource.HOSTILE, 2, 1);
-            }
-            if (this instanceof IsharmlaTearEntity) {
-                this.setAnimation("animation.isharmla_tear.start");
-            }
-            if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-                this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(60);
-            if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()))
-                this.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).setBaseValue(6);
+        if ((LevelAccessor) world instanceof Level _level) {
+            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "isharmla_tear_place")), SoundSource.HOSTILE, 2, 1);
         }
+        if (this instanceof IsharmlaTearEntity) {
+            this.setAnimation("animation.isharmla_tear.start");
+        }
+        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
+            this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(60);
+        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()))
+            this.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).setBaseValue(6);
         return retval;
 	}
 
@@ -218,44 +216,40 @@ public class IsharmlaTearEntity extends PathfinderMob implements GeoEntity {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if (this != null) {
-            double dura = 0;
-            boolean isAttack = false;
-            {
-                Entity _ent = this;
-                _ent.setYRot(0);
-                _ent.setXRot(0);
-                _ent.setYBodyRot(_ent.getYRot());
-                _ent.setYHeadRot(_ent.getYRot());
-                _ent.yRotO = _ent.getYRot();
-                _ent.xRotO = _ent.getXRot();
-                if (_ent instanceof LivingEntity _entity) {
-                    _entity.yBodyRotO = _entity.getYRot();
-                    _entity.yHeadRotO = _entity.getYRot();
-                }
-            }
-            setDeltaMovement(new Vec3(0, 0, 0));
-            if (this.isAlive()) {
-                dura = (Entity) this instanceof IsharmlaTearEntity _datEntI ? _datEntI.getEntityData().get(DATA_FUNC_COOLDOWN) : 0;
-                if (dura > 0) {
+        double dura = 0;
+        boolean isAttack = false;
+        {
+            LivingEntity _ent = this;
+            _ent.setYRot(0);
+            _ent.setXRot(0);
+            _ent.setYBodyRot(_ent.getYRot());
+            _ent.setYHeadRot(_ent.getYRot());
+            _ent.yRotO = _ent.getYRot();
+            _ent.xRotO = _ent.getXRot();
+            _ent.yBodyRotO = _ent.getYRot();
+            _ent.yHeadRotO = _ent.getYRot();
+        }
+        setDeltaMovement(new Vec3(0, 0, 0));
+        if (this.isAlive()) {
+            dura = (Entity) this instanceof IsharmlaTearEntity _datEntI ? _datEntI.getEntityData().get(DATA_FUNC_COOLDOWN) : 0;
+            if (dura > 0) {
+                if ((Entity) this instanceof IsharmlaTearEntity _datEntSetI)
+                    _datEntSetI.getEntityData().set(DATA_FUNC_COOLDOWN, (int) (dura - 1));
+            } else {
+                isAttack = this.performHurtAttack();
+                if (isAttack || this.tryConsumeIsharmlaSkillPoint()) {
+                    if (this instanceof IsharmlaTearEntity) {
+                        this.setAnimation("animation.isharmla_tear.attack");
+                    }
                     if ((Entity) this instanceof IsharmlaTearEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_FUNC_COOLDOWN, (int) (dura - 1));
-                } else {
-                    isAttack = this.performHurtAttack();
-                    if (isAttack || this.tryConsumeIsharmlaSkillPoint()) {
-                        if (this instanceof IsharmlaTearEntity) {
-                            this.setAnimation("animation.isharmla_tear.attack");
+                        _datEntSetI.getEntityData().set(DATA_FUNC_COOLDOWN, 60);
+                    if (isAttack) {
+                        if (world instanceof Level _level) {
+                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "isharmla_tear_hurt_1")), SoundSource.HOSTILE, 2, 1);
                         }
-                        if ((Entity) this instanceof IsharmlaTearEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_FUNC_COOLDOWN, 60);
-                        if (isAttack) {
-                            if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "isharmla_tear_hurt_1")), SoundSource.HOSTILE, 2, 1);
-                            }
-                        } else {
-                            if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "isharmla_tear_hurt_0")), SoundSource.HOSTILE, 2, 1);
-                            }
+                    } else {
+                        if (world instanceof Level _level) {
+                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "isharmla_tear_hurt_0")), SoundSource.HOSTILE, 2, 1);
                         }
                     }
                 }

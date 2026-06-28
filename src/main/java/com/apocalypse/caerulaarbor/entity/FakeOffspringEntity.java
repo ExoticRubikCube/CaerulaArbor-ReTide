@@ -117,13 +117,12 @@ public class FakeOffspringEntity extends SeaMonster {
 		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, Piglin.class, false, false));
 		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, false, false));
 		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, false, false));
-		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal(this, Player.class, false, false) {
+		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Player.class, false, false) {
 			@Override
 			public boolean canUse() {
 				double x = FakeOffspringEntity.this.getX();
 				double y = FakeOffspringEntity.this.getY();
 				double z = FakeOffspringEntity.this.getZ();
-				Entity entity = FakeOffspringEntity.this;
 				Level world = FakeOffspringEntity.this.level();
 				return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -133,7 +132,6 @@ public class FakeOffspringEntity extends SeaMonster {
 				double x = FakeOffspringEntity.this.getX();
 				double y = FakeOffspringEntity.this.getY();
 				double z = FakeOffspringEntity.this.getZ();
-				Entity entity = FakeOffspringEntity.this;
 				Level world = FakeOffspringEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -173,13 +171,11 @@ public class FakeOffspringEntity extends SeaMonster {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this != null) {
-            if ((Entity) this instanceof FakeOffspringEntity _datEntSetI)
-                _datEntSetI.getEntityData().set(DATA_dx, Mth.nextInt(RandomSource.create(), -50, 50));
-            if ((Entity) this instanceof FakeOffspringEntity _datEntSetI)
-                _datEntSetI.getEntityData().set(DATA_dz, Mth.nextInt(RandomSource.create(), -50, 50));
-        }
-        return retval;
+        if ((Entity) this instanceof FakeOffspringEntity _datEntSetI){
+			_datEntSetI.getEntityData().set(DATA_dx, Mth.nextInt(RandomSource.create(), -50, 50));
+			_datEntSetI.getEntityData().set(DATA_dz, Mth.nextInt(RandomSource.create(), -50, 50));
+		}
+		return retval;
 	}
 
 	@Override
@@ -205,37 +201,34 @@ public class FakeOffspringEntity extends SeaMonster {
 	public void baseTick() {
 		super.baseTick();
         LevelAccessor world = this.level();
-        if (this != null) {
-            Entity obj = null;
-            double ToHurt = 0;
-            double amplifi = 0;
-            if ((Entity) this instanceof Mob _mobEnt0 && _mobEnt0.isAggressive()) {
-                obj = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
-                if (!(obj == null)) {
-                    if ((obj != null ? distanceTo(obj) : -1) <= 4) {
-                        {
-                            Entity _ent = this;
-                            _ent.teleportTo((obj.getX() + obj.getBbWidth() * ((Entity) this instanceof FakeOffspringEntity _datEntI ? _datEntI.getEntityData().get(DATA_dx) : 0) * 0.01), (obj.getY()),
-                                    (obj.getZ() + obj.getBbWidth() * ((Entity) this instanceof FakeOffspringEntity _datEntI ? _datEntI.getEntityData().get(DATA_dz) : 0) * 0.01));
-                            if (_ent instanceof ServerPlayer _serverPlayer)
-                                _serverPlayer.connection.teleport((obj.getX() + obj.getBbWidth() * ((Entity) this instanceof FakeOffspringEntity _datEntI ? _datEntI.getEntityData().get(DATA_dx) : 0) * 0.01), (obj.getY()),
-                                        (obj.getZ() + obj.getBbWidth() * ((Entity) this instanceof FakeOffspringEntity _datEntI ? _datEntI.getEntityData().get(DATA_dz) : 0) * 0.01), _ent.getYRot(), _ent.getXRot());
-                        }
+        Entity obj = null;
+        double ToHurt = 0;
+        double amplifi = 0;
+        if (this.isAggressive()) {
+            obj = this.getTarget();
+            if (!(obj == null)) {
+                if (distanceTo(obj) <= 4) {
+                    {
+                        Entity _ent = this;
+                        _ent.teleportTo((obj.getX() + obj.getBbWidth() * ((Entity) this instanceof FakeOffspringEntity _datEntI ? _datEntI.getEntityData().get(DATA_dx) : 0) * 0.01), (obj.getY()),
+                                (obj.getZ() + obj.getBbWidth() * ((Entity) this instanceof FakeOffspringEntity _datEntI ? _datEntI.getEntityData().get(DATA_dz) : 0) * 0.01));
+                        if (_ent instanceof ServerPlayer _serverPlayer)
+                            _serverPlayer.connection.teleport((obj.getX() + obj.getBbWidth() * ((Entity) this instanceof FakeOffspringEntity _datEntI ? _datEntI.getEntityData().get(DATA_dx) : 0) * 0.01), (obj.getY()),
+                                    (obj.getZ() + obj.getBbWidth() * ((Entity) this instanceof FakeOffspringEntity _datEntI ? _datEntI.getEntityData().get(DATA_dz) : 0) * 0.01), _ent.getYRot(), _ent.getXRot());
                     }
                 }
             }
-            if (tickCount % 20 == 0) {
-                amplifi = 1;
-                if (tickCount >= 320) {
-                    amplifi = 10;
-                }
-                ToHurt = ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.125 * amplifi;
-                if (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) > ToHurt) {
-                    if ((Entity) this instanceof LivingEntity _entity)
-                        _entity.setHealth((float) (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) - ToHurt));
-                } else {
-                    ((Entity) this).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceankiller_damage")))), 99999);
-                }
+        }
+        if (tickCount % 20 == 0) {
+            amplifi = 1;
+            if (tickCount >= 320) {
+                amplifi = 10;
+            }
+            ToHurt = this.getMaxHealth() * 0.125 * amplifi;
+            if (this.getHealth() > ToHurt) {
+                this.setHealth((float) (this.getHealth() - ToHurt));
+            } else {
+                ((Entity) this).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceankiller_damage")))), 99999);
             }
         }
         this.refreshDimensions();
@@ -285,7 +278,6 @@ public class FakeOffspringEntity extends SeaMonster {
 	private PlayState attackingPredicate(AnimationState event) {
 		double d1 = this.getX() - this.xOld;
 		double d0 = this.getZ() - this.zOld;
-		float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
 		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();

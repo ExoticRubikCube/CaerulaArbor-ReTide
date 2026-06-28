@@ -121,22 +121,14 @@ public class SkadiEntity extends Animal implements GeoEntity {
 
 			@Override
 			public boolean canUse() {
-				double x = SkadiEntity.this.getX();
-				double y = SkadiEntity.this.getY();
-				double z = SkadiEntity.this.getZ();
 				Entity entity = SkadiEntity.this;
-				Level world = SkadiEntity.this.level();
                 if (!super.canUse()) return false;
                 return EntityPredicateUtils.isNotFakeDying(entity);
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = SkadiEntity.this.getX();
-				double y = SkadiEntity.this.getY();
-				double z = SkadiEntity.this.getZ();
 				Entity entity = SkadiEntity.this;
-				Level world = SkadiEntity.this.level();
                 if (!super.canContinueToUse()) return false;
                 return EntityPredicateUtils.isNotFakeDying(entity);
 			}
@@ -178,7 +170,7 @@ public class SkadiEntity extends Animal implements GeoEntity {
         double y = this.getY();
         double z = this.getZ();
         Entity sourceentity = source.getEntity();
-        if (this != null && sourceentity != null) {
+        if (sourceentity != null) {
             double sklp = 0;
             if (!new Object() {
                 public boolean checkGamemode(Entity _ent) {
@@ -206,7 +198,7 @@ public class SkadiEntity extends Animal implements GeoEntity {
                                 this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, 9, false, false));
                             CaerulaArborMod.queueServerWork(16, () -> {
                                 if (this.isAlive()) {
-                                    if ((sourceentity != null ? distanceTo(sourceentity) : -1) <= 5) {
+                                    if (distanceTo(sourceentity) <= 5) {
                                         sourceentity.hurt(
                                                 new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))), this),
                                                 (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
@@ -218,8 +210,6 @@ public class SkadiEntity extends Animal implements GeoEntity {
                                     if (world instanceof Level _level) {
                                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.dragon_fireball.explode")), SoundSource.HOSTILE, 2, 1);
                                     }
-                                    if (this == null || sourceentity == null)
-                                        return;
                                     double sklp1 = 0;
                                     double ddd = 0;
                                     ddd = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 2.25;
@@ -236,7 +226,7 @@ public class SkadiEntity extends Animal implements GeoEntity {
                                             if (!(entityiterator == sourceentity)) {
                                                 continue;
                                             }
-                                            if ((entityiterator != null ? distanceTo(entityiterator) : -1) <= 3) {
+                                            if (distanceTo(entityiterator) <= 3) {
                                                 entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))), this),
                                                         (float) ddd);
                                                 if (entityiterator instanceof LivingEntity _entity && !this.level().isClientSide())
@@ -296,80 +286,76 @@ public class SkadiEntity extends Animal implements GeoEntity {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if (this != null) {
-            double rlx = 0;
-            double sklp = 0;
-            double sklp2 = 0;
-            if (this.isAlive()) {
-                if (Math.random() < 0.001) {
-                    rlx = (Entity) this instanceof SkadiEntity _datEntI ? _datEntI.getEntityData().get(DATA_relax_cooldown) : 0;
-                    if (rlx <= 0) {
-                        if (!((Entity) this instanceof Mob _mobEnt2 && _mobEnt2.isAggressive())) {
-                            if ((Entity) this instanceof Mob _entity)
-                                _entity.getNavigation().stop();
-                            if (this instanceof SkadiEntity) {
-                                this.setAnimation("animation.skadi.relax");
-                            }
-                            rlx = 320;
+        double rlx = 0;
+        double sklp = 0;
+        double sklp2 = 0;
+        if (this.isAlive()) {
+            if (Math.random() < 0.001) {
+                rlx = (Entity) this instanceof SkadiEntity _datEntI ? _datEntI.getEntityData().get(DATA_relax_cooldown) : 0;
+                if (rlx <= 0) {
+                    if (!((Entity) this instanceof Mob _mobEnt2 && _mobEnt2.isAggressive())) {
+                        if ((Entity) this instanceof Mob _entity)
+                            _entity.getNavigation().stop();
+                        if (this instanceof SkadiEntity) {
+                            this.setAnimation("animation.skadi.relax");
+                        }
+                        rlx = 320;
+                    }
+                }
+            }
+            if (rlx > 0) {
+                rlx = rlx - 1;
+            }
+            sklp = (Entity) this instanceof SkadiEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp) : 0;
+            sklp2 = (Entity) this instanceof SkadiEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp2) : 0;
+            if (sklp <= 0) {
+                if (!(((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == null)) {
+                    if ((((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) != null ? distanceTo(((Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null)) : -1) < 3) {
+                        if (this instanceof SkadiEntity) {
+                            this.setAnimation("animation.skadi.spin");
+                        }
+                        if (!this.level().isClientSide())
+                            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 40, 0, false, false));
+                        CaerulaArborMod.queueServerWork(10, () -> {
+                            spinAttack(1.5);
+                        });
+                        CaerulaArborMod.queueServerWork(14, () -> {
+                            spinAttack(2);
+                        });
+                        CaerulaArborMod.queueServerWork(20, () -> {
+                            spinAttack(1.5);
+                        });
+                        if (EntityPredicateUtils.isSpecterAround(world, x, y, z)) {
+                            sklp = 170;
+                        } else {
+                            sklp = 200;
                         }
                     }
                 }
-                if (rlx > 0) {
-                    rlx = rlx - 1;
-                }
-                sklp = (Entity) this instanceof SkadiEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp) : 0;
-                sklp2 = (Entity) this instanceof SkadiEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp2) : 0;
-                if (sklp <= 0) {
-                    if (!(((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == null)) {
-                        if ((((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) != null ? distanceTo(((Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null)) : -1) < 3) {
-                            if (this instanceof SkadiEntity) {
-                                this.setAnimation("animation.skadi.spin");
-                            }
-                            if (!this.level().isClientSide())
-                                this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 40, 0, false, false));
-                            CaerulaArborMod.queueServerWork(10, () -> {
-                                spinAttack(1.5);
-                            });
-                            CaerulaArborMod.queueServerWork(14, () -> {
-                                spinAttack(2);
-                            });
-                            CaerulaArborMod.queueServerWork(20, () -> {
-                                spinAttack(1.5);
-                            });
-                            if (EntityPredicateUtils.isSpecterAround(world, x, y, z)) {
-                                sklp = 170;
-                            } else {
-                                sklp = 200;
-                            }
+            } else {
+                sklp = sklp - 1;
+            }
+            if (sklp2 > 0) {
+                if ((Entity) this instanceof SkadiEntity _datEntSetI)
+                    _datEntSetI.getEntityData().set(DATA_skillp2, (int) (sklp2 - 1));
+            }
+            if ((Entity) this instanceof SkadiEntity _datEntSetI)
+                _datEntSetI.getEntityData().set(DATA_relax_cooldown, (int) rlx);
+            if ((Entity) this instanceof SkadiEntity _datEntSetI)
+                _datEntSetI.getEntityData().set(DATA_skillp, (int) sklp);
+            EntityUtils.healFromGladiia(world, x, y, z, this);
+            if (tickCount % 10 == 0) {
+                {
+                    final Vec3 _center = new Vec3(x, y, z);
+                    List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(48 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+                    for (Entity entityiterator : _entfound) {
+                        if (!entityiterator.isAlive()) {
+                            continue;
                         }
-                    }
-                } else {
-                    sklp = sklp - 1;
-                }
-                if (sklp2 > 0) {
-                    if ((Entity) this instanceof SkadiEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_skillp2, (int) (sklp2 - 1));
-                }
-                if ((Entity) this instanceof SkadiEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_relax_cooldown, (int) rlx);
-                if ((Entity) this instanceof SkadiEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_skillp, (int) sklp);
-                EntityUtils.healFromGladiia(world, x, y, z, this);
-                if (this != null) {
-                    if (tickCount % 10 == 0) {
-                        {
-                            final Vec3 _center = new Vec3(x, y, z);
-                            List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(48 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                            for (Entity entityiterator : _entfound) {
-                                if (!entityiterator.isAlive()) {
-                                    continue;
-                                }
-                                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunters")))) {
-                                    if (!(entityiterator instanceof LivingEntity _livEnt3 && _livEnt3.hasEffect(CaerulaArborModMobEffects.ADD_ATTACK_PERCLY.get()))) {
-                                        if (entityiterator instanceof LivingEntity _entity && !this.level().isClientSide())
-                                            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ADD_ATTACK_PERCLY.get(), 32768, 0, false, false));
-                                    }
-                                }
+                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunters")))) {
+                            if (!(entityiterator instanceof LivingEntity _livEnt3 && _livEnt3.hasEffect(CaerulaArborModMobEffects.ADD_ATTACK_PERCLY.get()))) {
+                                if (entityiterator instanceof LivingEntity _entity && !this.level().isClientSide())
+                                    this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ADD_ATTACK_PERCLY.get(), 32768, 0, false, false));
                             }
                         }
                     }

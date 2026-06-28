@@ -148,46 +148,43 @@ public class OceanizeRabbitEntity extends SeaMonster {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this != null) {
-            double variant = 0;
-            double rrr = 0;
-            double curVar = 0;
-            curVar = (Entity) this instanceof OceanizeRabbitEntity _datEntI ? _datEntI.getEntityData().get(DATA_variant) : 0;
-            if (curVar == 0) {
-                rrr = Math.random();
-                if (rrr < 0.35) {
-                    variant = 0;
-                } else if (rrr < 0.7) {
-                    variant = 2;
-                } else if (rrr < 0.82) {
-                    variant = 1;
-                } else if (rrr < 0.94) {
-                    variant = 4;
-                } else {
-                    variant = 3;
-                }
-                if (variant != 0) {
-                    if ((Entity) this instanceof OceanizeRabbitEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_variant, (int) variant);
-                    if (variant != 2) {
-                        if (this.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
-                            this.getAttribute(Attributes.MAX_HEALTH)
-                                    .setBaseValue(((this.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? this.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0) * 1.25));
-                        if ((Entity) this instanceof LivingEntity _entity)
-                            _entity.setHealth((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1);
-                    }
-                    if (variant == 3) {
-                        if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
-                            this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
-                                    ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) * 1.25));
-                    }
-                }
+        double variant = 0;
+        double rrr = 0;
+        double curVar = 0;
+        curVar = (Entity) this instanceof OceanizeRabbitEntity _datEntI ? _datEntI.getEntityData().get(DATA_variant) : 0;
+        if (curVar == 0) {
+            rrr = Math.random();
+            if (rrr < 0.35) {
+                variant = 0;
+            } else if (rrr < 0.7) {
+                variant = 2;
+            } else if (rrr < 0.82) {
+                variant = 1;
+            } else if (rrr < 0.94) {
+                variant = 4;
             } else {
-                variant = curVar;
+                variant = 3;
             }
-            if ((Entity) this instanceof OceanizeRabbitEntity animatable)
-                animatable.setTexture(("oceanized_rabbit_" + (int) variant));
+            if (variant != 0) {
+                if ((Entity) this instanceof OceanizeRabbitEntity _datEntSetI)
+                    _datEntSetI.getEntityData().set(DATA_variant, (int) variant);
+                if (variant != 2) {
+                    if (this.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
+                        this.getAttribute(Attributes.MAX_HEALTH)
+                                .setBaseValue(((this.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? this.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0) * 1.25));
+                    this.setHealth(this.getMaxHealth());
+                }
+                if (variant == 3) {
+                    if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
+                        this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
+                                ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) * 1.25));
+                }
+            }
+        } else {
+            variant = curVar;
         }
+        if ((Entity) this instanceof OceanizeRabbitEntity animatable)
+            animatable.setTexture(("oceanized_rabbit_" + (int) variant));
         return retval;
 	}
 
@@ -212,20 +209,12 @@ public class OceanizeRabbitEntity extends SeaMonster {
 
 	@Override
 	public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
-		ItemStack itemstack = sourceentity.getItemInHand(hand);
-		InteractionResult retval = InteractionResult.sidedSuccess(this.level().isClientSide());
 		super.mobInteract(sourceentity, hand);
-		double x = this.getX();
-		double y = this.getY();
-		double z = this.getZ();
 		Entity entity = this;
-		Level world = this.level();
-        if (entity == null || sourceentity == null)
-            return InteractionResult.PASS;
         if ((entity instanceof OceanizeRabbitEntity _datEntI ? _datEntI.getEntityData().get(DATA_variant) : 0) > 4.5) {
             return InteractionResult.PASS;
         }
-        if ((Entity) sourceentity instanceof LivingEntity _entity && _entity.isHolding(CaerulaArborModItems.APOCALYPSE.get())) {
+        if (sourceentity.isHolding(CaerulaArborModItems.APOCALYPSE.get())) {
             if (entity instanceof OceanizeRabbitEntity _datEntSetI)
                 _datEntSetI.getEntityData().set(DATA_variant, 5);
             if (entity instanceof OceanizeRabbitEntity animatable)
@@ -259,33 +248,31 @@ public class OceanizeRabbitEntity extends SeaMonster {
 	public void baseTick() {
 		super.baseTick();
         LevelAccessor world = this.level();
-        if (this != null) {
-            Entity enemy = null;
-            double sklp1 = 0;
-            if (!(((Entity) this instanceof OceanizeRabbitEntity _datEntI ? _datEntI.getEntityData().get(DATA_variant) : 0) < 4.5)) {
-                if (this.isAlive()) {
-                    sklp1 = (Entity) this instanceof OceanizeRabbitEntity _datEntI ? _datEntI.getEntityData().get(DATA_swallowP) : 0;
-                    enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
-                    if (sklp1 > 0) {
-                        if ((Entity) this instanceof OceanizeRabbitEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_swallowP, (int) (sklp1 - 1));
-                    } else {
-                        if (!(enemy == null) && enemy.isAlive()) {
-                            if ((enemy != null ? distanceTo(enemy) : -1) <= 5) {
-                                if (this instanceof OceanizeRabbitEntity) {
-                                    this.setAnimation("animation.oceanized_rabbit.swallow");
-                                }
-                                if ((Entity) this instanceof OceanizeRabbitEntity _datEntSetI)
-                                    _datEntSetI.getEntityData().set(DATA_swallowP, 200);
-                                if (!this.level().isClientSide())
-                                    this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 15, 9, false, false));
-                                CaerulaArborMod.queueServerWork(8, () -> {
-                                    if (this.isAlive() && !(((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == null) && ((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null).isAlive()) {
-                                        ((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.OUTSIDE_BORDER), this),
-                                                (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 7.99));
-                                    }
-                                });
+        Entity enemy = null;
+        double sklp1 = 0;
+        if (!(((Entity) this instanceof OceanizeRabbitEntity _datEntI ? _datEntI.getEntityData().get(DATA_variant) : 0) < 4.5)) {
+            if (this.isAlive()) {
+                sklp1 = (Entity) this instanceof OceanizeRabbitEntity _datEntI ? _datEntI.getEntityData().get(DATA_swallowP) : 0;
+                enemy = this.getTarget();
+                if (sklp1 > 0) {
+                    if ((Entity) this instanceof OceanizeRabbitEntity _datEntSetI)
+                        _datEntSetI.getEntityData().set(DATA_swallowP, (int) (sklp1 - 1));
+                } else {
+                    if (!(enemy == null) && enemy.isAlive()) {
+                        if ((enemy != null ? distanceTo(enemy) : -1) <= 5) {
+                            if (this instanceof OceanizeRabbitEntity) {
+                                this.setAnimation("animation.oceanized_rabbit.swallow");
                             }
+                            if ((Entity) this instanceof OceanizeRabbitEntity _datEntSetI)
+                                _datEntSetI.getEntityData().set(DATA_swallowP, 200);
+                            if (!this.level().isClientSide())
+                                this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 15, 9, false, false));
+                            CaerulaArborMod.queueServerWork(8, () -> {
+                                if (this.isAlive() && !(((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == null) && ((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null).isAlive()) {
+                                    ((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.OUTSIDE_BORDER), this),
+                                            (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 7.99));
+                                }
+                            });
                         }
                     }
                 }
@@ -369,8 +356,6 @@ public class OceanizeRabbitEntity extends SeaMonster {
 			this.remove(OceanizeRabbitEntity.RemovalReason.KILLED);
 			this.dropExperience();
             LevelAccessor world = this.level();
-            if (this == null)
-                return;
             double vvv = 0;
             ItemStack coral = ItemStack.EMPTY;
             if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {

@@ -1,8 +1,10 @@
 package com.apocalypse.caerulaarbor.system;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.capability.map.MapVariables;
+import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler;
+import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler.StrategyType;
 import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
@@ -22,9 +24,9 @@ public class UpgradeBreedProcedure {
 		double stra = 0;
 		String num = "";
 		String prefix = "";
-		stra = CaerulaArborModVariables.MapVariables.get(world).strategy_breed;
+		stra = MapVariables.get(world).strategy_breed;
 		if (stra < 4) {
-			if (CaerulaArborModVariables.MapVariables.get(world).evo_point_breed >= Math.pow(stra + 1, 3) * CaerulaConfigsConfiguration.COEFFICIENT.get()) {
+			if (MapVariables.get(world).evo_point_breed >= Math.pow(stra + 1, 3) * CaerulaConfigsConfiguration.COEFFICIENT.get()) {
 				for (Entity entityiterator : new ArrayList<>(world.players())) {
 					if (entityiterator instanceof ServerPlayer _player) {
 						Advancement _adv = _player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "to_experience_evolution"));
@@ -35,11 +37,9 @@ public class UpgradeBreedProcedure {
 						}
 					}
 				}
-				CaerulaArborModVariables.MapVariables.get(world).strategy_breed = stra + 1;
-				CaerulaArborModVariables.MapVariables.get(world).syncData(world);
-				stra = CaerulaArborModVariables.MapVariables.get(world).strategy_breed;
-				CaerulaArborModVariables.MapVariables.get(world).evo_point_breed = 0;
-				CaerulaArborModVariables.MapVariables.get(world).syncData(world);
+				MapVariablesHandler.setStrategyLevel(world, StrategyType.BREED, stra + 1);
+				stra = MapVariables.get(world).strategy_breed;
+				MapVariablesHandler.setEvoPoint(world, StrategyType.BREED, 0);
 				if (stra == 1) {
 					num = "I";
 					prefix = "§p";
@@ -82,8 +82,7 @@ public class UpgradeBreedProcedure {
 					}
 				}
 			}
-			CaerulaArborModVariables.MapVariables.get(world).evo_point_breed = 1;
-			CaerulaArborModVariables.MapVariables.get(world).syncData(world);
+			MapVariablesHandler.setEvoPoint(world, StrategyType.BREED, 1);
 		}
 	}
 }

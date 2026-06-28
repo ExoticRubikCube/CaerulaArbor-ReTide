@@ -71,10 +71,9 @@ public class ShotOceanArrowEntity extends AbstractArrow implements ItemSupplier 
 	@Override
 	public void onHitEntity(EntityHitResult entityHitResult) {
 		super.onHitEntity(entityHitResult);
-        this.level();
         Entity entity = entityHitResult.getEntity();
         Entity sourceentity = this.getOwner();
-        if (entity == null || this == null || sourceentity == null)
+        if (sourceentity == null)
             return;
         if (!(entity == sourceentity)) {
             entity.invulnerableTime = 0;
@@ -89,7 +88,7 @@ public class ShotOceanArrowEntity extends AbstractArrow implements ItemSupplier 
 	public void tick() {
 		super.tick();
         Entity entity = this.getOwner();
-        if (entity != null && this != null) {
+        if (entity != null) {
             Entity enemy = null;
             enemy = entity instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
             if (!(enemy == null)) {

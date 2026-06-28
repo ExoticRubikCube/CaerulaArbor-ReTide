@@ -113,22 +113,14 @@ public class RouteShaperEntity extends SeaMonster {
 
 			@Override
 			public boolean canUse() {
-				double x = RouteShaperEntity.this.getX();
-				double y = RouteShaperEntity.this.getY();
-				double z = RouteShaperEntity.this.getZ();
 				Entity entity = RouteShaperEntity.this;
-				Level world = RouteShaperEntity.this.level();
                 if (!super.canUse()) return false;
                 return EntityPredicateUtils.isNotFakeDying(entity);
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = RouteShaperEntity.this.getX();
-				double y = RouteShaperEntity.this.getY();
-				double z = RouteShaperEntity.this.getZ();
 				Entity entity = RouteShaperEntity.this;
-				Level world = RouteShaperEntity.this.level();
                 if (!super.canContinueToUse()) return false;
                 return EntityPredicateUtils.isNotFakeDying(entity);
 			}
@@ -144,7 +136,7 @@ public class RouteShaperEntity extends SeaMonster {
 		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
 		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
 		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
-		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal(this, Player.class, true, false) {
+		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Player.class, true, false) {
 			@Override
 			public boolean canUse() {
 				double x = RouteShaperEntity.this.getX();
@@ -160,7 +152,6 @@ public class RouteShaperEntity extends SeaMonster {
 				double x = RouteShaperEntity.this.getX();
 				double y = RouteShaperEntity.this.getY();
 				double z = RouteShaperEntity.this.getZ();
-				Entity entity = RouteShaperEntity.this;
 				Level world = RouteShaperEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -168,21 +159,11 @@ public class RouteShaperEntity extends SeaMonster {
 		this.targetSelector.addGoal(14, new NearestAttackableTargetGoal(this, Animal.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = RouteShaperEntity.this.getX();
-				double y = RouteShaperEntity.this.getY();
-				double z = RouteShaperEntity.this.getZ();
-				Entity entity = RouteShaperEntity.this;
-				Level world = RouteShaperEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = RouteShaperEntity.this.getX();
-				double y = RouteShaperEntity.this.getY();
-				double z = RouteShaperEntity.this.getZ();
-				Entity entity = RouteShaperEntity.this;
-				Level world = RouteShaperEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
@@ -230,15 +211,13 @@ public class RouteShaperEntity extends SeaMonster {
 	public void die(DamageSource source) {
 		super.die(source);
         LevelAccessor world = this.level();
-        {
-            final Vec3 _center = new Vec3(this.getX(), this.getY(), this.getZ());
-            List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(64 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-            for (Entity entityiterator : _entfound) {
-                if (entityiterator instanceof RouteFractalEntity) {
-                    entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.FELL_OUT_OF_WORLD)), 999999);
-                }
-            }
-        }
+		final Vec3 _center = new Vec3(this.getX(), this.getY(), this.getZ());
+		List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(64 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+		for (Entity entityiterator : _entfound) {
+			if (entityiterator instanceof RouteFractalEntity) {
+				entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.FELL_OUT_OF_WORLD)), 999999);
+			}
+		}
     }
 
 	@Override

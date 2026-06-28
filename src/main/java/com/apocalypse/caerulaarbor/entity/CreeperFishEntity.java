@@ -165,21 +165,18 @@ public class CreeperFishEntity extends SeaMonster implements RangedSanityAttacke
 	@Override
 	public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
 		ItemStack itemstack = sourceentity.getItemInHand(hand);
-		InteractionResult retval = InteractionResult.sidedSuccess(this.level().isClientSide());
 		super.mobInteract(sourceentity, hand);
 		double x = this.getX();
 		double y = this.getY();
 		double z = this.getZ();
-		Entity entity = this;
+		CreeperFishEntity entity = this;
 		Level world = this.level();
-        if (entity == null)
-            return InteractionResult.PASS;
         if (itemstack.getItem() == Items.FLINT_AND_STEEL) {
             if ((LevelAccessor) world instanceof Level _level) {
                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.creeper.primed")), SoundSource.HOSTILE, 2, 1);
             }
             if (entity instanceof CreeperFishEntity) {
-                ((CreeperFishEntity) entity).setAnimation("animation.explosivefish.jump");
+                entity.setAnimation("animation.explosivefish.jump");
             }
             new Object() {
                 void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {

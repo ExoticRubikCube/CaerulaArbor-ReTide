@@ -1,6 +1,7 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
+import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
@@ -115,13 +116,12 @@ public class OceanizedPigEntity extends SeaMonster {
 		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
 		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
 		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
-		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal(this, Player.class, true, false) {
+		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Player.class, true, false) {
 			@Override
 			public boolean canUse() {
 				double x = OceanizedPigEntity.this.getX();
 				double y = OceanizedPigEntity.this.getY();
 				double z = OceanizedPigEntity.this.getZ();
-				Entity entity = OceanizedPigEntity.this;
 				Level world = OceanizedPigEntity.this.level();
 				return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -131,29 +131,18 @@ public class OceanizedPigEntity extends SeaMonster {
 				double x = OceanizedPigEntity.this.getX();
 				double y = OceanizedPigEntity.this.getY();
 				double z = OceanizedPigEntity.this.getZ();
-				Entity entity = OceanizedPigEntity.this;
 				Level world = OceanizedPigEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
 		});
-		this.targetSelector.addGoal(14, new NearestAttackableTargetGoal(this, Animal.class, true, false) {
+		this.targetSelector.addGoal(14, new NearestAttackableTargetGoal<>(this, Animal.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = OceanizedPigEntity.this.getX();
-				double y = OceanizedPigEntity.this.getY();
-				double z = OceanizedPigEntity.this.getZ();
-				Entity entity = OceanizedPigEntity.this;
-				Level world = OceanizedPigEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = OceanizedPigEntity.this.getX();
-				double y = OceanizedPigEntity.this.getY();
-				double z = OceanizedPigEntity.this.getZ();
-				Entity entity = OceanizedPigEntity.this;
-				Level world = OceanizedPigEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
@@ -192,7 +181,9 @@ public class OceanizedPigEntity extends SeaMonster {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-		EntityUtils.initPigSanity(this);
+		if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get())) {
+			this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(6);
+		}
 		return retval;
 	}
 
@@ -215,16 +206,15 @@ public class OceanizedPigEntity extends SeaMonster {
 	@Override
 	public void baseTick() {
 		super.baseTick();
-        if (this != null) {
-            if (this.isAlive()) {
-                if ((Entity) this instanceof LivingEntity _livEnt1 && _livEnt1.hasEffect(CaerulaArborModMobEffects.MUTE.get())) {
-                    if ((Entity) this instanceof OceanizedPigEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_mute_time,
-                                (Entity) this instanceof LivingEntity _livEnt && _livEnt.hasEffect(CaerulaArborModMobEffects.MUTE.get()) ? _livEnt.getEffect(CaerulaArborModMobEffects.MUTE.get()).getDuration() : 0);
-                } else if (((Entity) this instanceof OceanizedPigEntity _datEntI ? _datEntI.getEntityData().get(DATA_mute_time) : 0) == 1) {
-                    if ((Entity) this instanceof OceanizedPigEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_mute_time, 0);
+        if (this.isAlive()) {
+            if (this.hasEffect(CaerulaArborModMobEffects.MUTE.get())) {
+                if ((Entity) this instanceof OceanizedPigEntity _datEntSetI) {
+                    _datEntSetI.getEntityData().set(DATA_mute_time,
+                            _datEntSetI.hasEffect(CaerulaArborModMobEffects.MUTE.get()) ? _datEntSetI.getEffect(CaerulaArborModMobEffects.MUTE.get()).getDuration() : 0);
                 }
+            } else if (((Entity) this instanceof OceanizedPigEntity _datEntI ? _datEntI.getEntityData().get(DATA_mute_time) : 0) == 1) {
+                if ((Entity) this instanceof OceanizedPigEntity _datEntSetI)
+                    _datEntSetI.getEntityData().set(DATA_mute_time, 0);
             }
         }
         this.refreshDimensions();
@@ -266,7 +256,6 @@ public class OceanizedPigEntity extends SeaMonster {
 	private PlayState attackingPredicate(AnimationState event) {
 		double d1 = this.getX() - this.xOld;
 		double d0 = this.getZ() - this.zOld;
-		float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
 		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
@@ -310,8 +299,6 @@ public class OceanizedPigEntity extends SeaMonster {
             double x = this.getX();
             double y = this.getY();
             double z = this.getZ();
-            if (this == null)
-                return;
             if (WorldUtils.canGrief(world)) {
                 if (((Entity) this instanceof OceanizedPigEntity _datEntI ? _datEntI.getEntityData().get(DATA_mute_time) : 0) <= 0) {
                     if (CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing(x, y, z)) && !(world.getBlockFloorHeight(BlockPos.containing(x, y, z)) > 0)) {

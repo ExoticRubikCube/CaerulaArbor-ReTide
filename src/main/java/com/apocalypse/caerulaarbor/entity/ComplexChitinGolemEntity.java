@@ -132,21 +132,11 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity {
 
 			@Override
 			public boolean canUse() {
-				double x = ComplexChitinGolemEntity.this.getX();
-				double y = ComplexChitinGolemEntity.this.getY();
-				double z = ComplexChitinGolemEntity.this.getZ();
-				Entity entity = ComplexChitinGolemEntity.this;
-				Level world = ComplexChitinGolemEntity.this.level();
 				return super.canUse() && isDurative();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = ComplexChitinGolemEntity.this.getX();
-				double y = ComplexChitinGolemEntity.this.getY();
-				double z = ComplexChitinGolemEntity.this.getZ();
-				Entity entity = ComplexChitinGolemEntity.this;
-				Level world = ComplexChitinGolemEntity.this.level();
 				return super.canContinueToUse() && isDurative();
 			}
 
@@ -190,16 +180,14 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this != null) {
-            if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get()))
-                this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(8);
-            if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()))
-                this.getAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()).setBaseValue(0.05);
-            if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-                this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(50);
-            if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()))
-                this.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).setBaseValue(12);
-        }
+        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get()))
+            this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(8);
+        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()))
+            this.getAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()).setBaseValue(0.05);
+        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
+            this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(50);
+        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()))
+            this.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).setBaseValue(12);
         return retval;
 	}
 
@@ -239,15 +227,12 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity {
 		double x = this.getX();
 		double y = this.getY();
 		double z = this.getZ();
-		Entity entity = this;
-		Level world = this.level();
-        if (entity == null || sourceentity == null)
-            return InteractionResult.PASS;
+        Level world = this.level();
         double scale = 0;
-        if ((entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) >= (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1)) {
+        if (this.getHealth() >= this.getMaxHealth()) {
             return InteractionResult.PASS;
         }
-        if (((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CaerulaArborModItems.OCEAN_CHITIN.get()) {
+        if (sourceentity.getMainHandItem().getItem() == CaerulaArborModItems.OCEAN_CHITIN.get()) {
             scale = 0.15;
             if (!(new Object() {
                 public boolean checkGamemode(Entity _ent) {
@@ -265,28 +250,29 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity {
                     _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
                 }
             }
-        } else if (((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CaerulaArborModItems.COMPLEX_CHITIN.get()) {
-            scale = 0.25;
-            if (!(new Object() {
-                public boolean checkGamemode(Entity _ent) {
-                    if (_ent instanceof ServerPlayer _serverPlayer) {
-                        return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                    } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                        return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+        } else {
+            if (sourceentity.getMainHandItem().getItem() == CaerulaArborModItems.COMPLEX_CHITIN.get()) {
+                scale = 0.25;
+                if (!(new Object() {
+                    public boolean checkGamemode(Entity _ent) {
+                        if (_ent instanceof ServerPlayer _serverPlayer) {
+                            return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                        } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
+                            return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
+                                    && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                        }
+                        return false;
                     }
-                    return false;
-                }
-            }.checkGamemode((Entity) sourceentity))) {
-                if ((Entity) sourceentity instanceof Player _player) {
-                    ItemStack _stktoremove = new ItemStack(CaerulaArborModItems.COMPLEX_CHITIN.get());
-                    _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
+                }.checkGamemode((Entity) sourceentity))) {
+                    if ((Entity) sourceentity instanceof Player _player) {
+                        ItemStack _stktoremove = new ItemStack(CaerulaArborModItems.COMPLEX_CHITIN.get());
+                        _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
+                    }
                 }
             }
         }
         if (scale > 0) {
-            if (entity instanceof LivingEntity _entity)
-                _entity.setHealth((float) ((entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) + (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * scale));
+            this.setHealth((float) (this.getHealth() + this.getMaxHealth() * scale));
             if ((LevelAccessor) world instanceof Level _level) {
                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.iron_golem.repair")), SoundSource.PLAYERS, 1, 1);
             }
@@ -302,124 +288,119 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if (this != null) {
-            Entity enemy = null;
-            double sklp1 = 0;
-            double sklp2 = 0;
-            double perc = 0;
-            double dura = 0;
-            updateTexture();
-            if (this.isAlive()) {
-                if ((Entity) this instanceof LivingEntity _entity)
-                    _entity.removeEffect(CaerulaArborModMobEffects.DIZZY.get());
-                if (this != null) {
-                    boolean root = false;
-                    double rx = 0;
-                    double rz = 0;
-                    double dist = 0;
-                    double dist1 = 0;
-                    root = (Entity) this instanceof ComplexChitinGolemEntity _datEntL0 && _datEntL0.getEntityData().get(DATA_rooted);
-                    if (!root) {
-                        if (!(getDisplayName().getString()).equals(getType().getDescription().getString())) {
-                            if ((Entity) this instanceof ComplexChitinGolemEntity _datEntSetI1)
-                                _datEntSetI1.getEntityData().set(DATA_rootX, (int) Math.round(x));
-                            if ((Entity) this instanceof ComplexChitinGolemEntity _datEntSetI1)
-                                _datEntSetI1.getEntityData().set(DATA_rootZ, (int) Math.round(z));
-                            if ((Entity) this instanceof ComplexChitinGolemEntity _datEntSetL)
-                                _datEntSetL.getEntityData().set(DATA_rooted, true);
-                            CaerulaArborMod.LOGGER.info(("Complex Chitin Golem " + getDisplayName().getString() + "has recognize x:" + Math.round(x) + " z:" + Math.round(z) + " as base"));
-                        }
-                    } else if (Math.random() < 0.01 && !((Entity) this instanceof Mob _mobEnt8 && _mobEnt8.isAggressive())) {
-                        rx = x - ((Entity) this instanceof ComplexChitinGolemEntity _datEntI1 ? _datEntI1.getEntityData().get(DATA_rootX) : 0);
-                        rz = z - ((Entity) this instanceof ComplexChitinGolemEntity _datEntI1 ? _datEntI1.getEntityData().get(DATA_rootZ) : 0);
-                        dist = new Vec3(0, 0, 0).distanceTo(new Vec3(rx, 0, rz));
-                        if (dist >= 24) {
-                            dist1 = Mth.nextDouble(RandomSource.create(), 4, 16);
-                            if ((Entity) this instanceof Mob _entity1)
-                                _entity1.getNavigation().moveTo(x - rx * dist1 / dist, y, z - rz * dist1 / dist, 1);
-                        }
-                    }
+        Entity enemy = null;
+        double sklp1 = 0;
+        double dura = 0;
+        updateTexture();
+        if (this.isAlive()) {
+            LivingEntity _entity = (LivingEntity) (Entity) this;
+            _entity.removeEffect(CaerulaArborModMobEffects.DIZZY.get());
+            boolean root = false;
+            double rx = 0;
+            double rz = 0;
+            double dist = 0;
+            double dist1 = 0;
+            root = (Entity) this instanceof ComplexChitinGolemEntity _datEntL0 && _datEntL0.getEntityData().get(DATA_rooted);
+            if (!root) {
+                if (!(getDisplayName().getString()).equals(getType().getDescription().getString())) {
+                    if ((Entity) this instanceof ComplexChitinGolemEntity _datEntSetI1)
+                        _datEntSetI1.getEntityData().set(DATA_rootX, (int) Math.round(x));
+                    if ((Entity) this instanceof ComplexChitinGolemEntity _datEntSetI1)
+                        _datEntSetI1.getEntityData().set(DATA_rootZ, (int) Math.round(z));
+                    if ((Entity) this instanceof ComplexChitinGolemEntity _datEntSetL)
+                        _datEntSetL.getEntityData().set(DATA_rooted, true);
+                    CaerulaArborMod.LOGGER.info(("Complex Chitin Golem " + getDisplayName().getString() + "has recognize x:" + Math.round(x) + " z:" + Math.round(z) + " as base"));
                 }
-                sklp1 = (Entity) this instanceof ComplexChitinGolemEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp) : 0;
-                dura = (Entity) this instanceof ComplexChitinGolemEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
-                enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
-                if (dura > 0) {
-                    if ((Entity) this instanceof ComplexChitinGolemEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_duration, (int) (dura - 1));
-                }
-                if (sklp1 > 0) {
-                    if ((Entity) this instanceof ComplexChitinGolemEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_skillp, (int) (sklp1 - 1));
-                } else {
-                    if (!(enemy == null) && enemy.isAlive()) {
-                        if ((enemy != null ? distanceTo(enemy) : -1) <= 5 && dura < 1) {
-                            if ((Entity) this instanceof ComplexChitinGolemEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_duration, 110);
-                            if (this instanceof ComplexChitinGolemEntity) {
-                                this.setAnimation("animation.complex_chitin_golem.spin");
+            } else if (Math.random() < 0.01) {
+				Mob _mobEnt8 = (Mob) (Entity) this;
+				if (!_mobEnt8.isAggressive()) {
+					rx = x - ((Entity) this instanceof ComplexChitinGolemEntity _datEntI1 ? _datEntI1.getEntityData().get(DATA_rootX) : 0);
+					rz = z - ((Entity) this instanceof ComplexChitinGolemEntity _datEntI1 ? _datEntI1.getEntityData().get(DATA_rootZ) : 0);
+					dist = new Vec3(0, 0, 0).distanceTo(new Vec3(rx, 0, rz));
+					if (dist >= 24) {
+						dist1 = Mth.nextDouble(RandomSource.create(), 4, 16);
+						Mob _entity1 = (Mob) (Entity) this;
+						_entity1.getNavigation().moveTo(x - rx * dist1 / dist, y, z - rz * dist1 / dist, 1);
+					}
+				}
+			}
+            sklp1 = (Entity) this instanceof ComplexChitinGolemEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp) : 0;
+            dura = (Entity) this instanceof ComplexChitinGolemEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
+            enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+            if (dura > 0) {
+                if ((Entity) this instanceof ComplexChitinGolemEntity _datEntSetI)
+                    _datEntSetI.getEntityData().set(DATA_duration, (int) (dura - 1));
+            }
+            if (sklp1 > 0) {
+                if ((Entity) this instanceof ComplexChitinGolemEntity _datEntSetI)
+                    _datEntSetI.getEntityData().set(DATA_skillp, (int) (sklp1 - 1));
+            } else {
+                if (!(enemy == null) && enemy.isAlive()) {
+                    if (distanceTo(enemy) <= 5 && dura < 1) {
+                        if ((Entity) this instanceof ComplexChitinGolemEntity _datEntSetI)
+                            _datEntSetI.getEntityData().set(DATA_duration, 110);
+                        if (this instanceof ComplexChitinGolemEntity) {
+                            this.setAnimation("animation.complex_chitin_golem.spin");
+                        }
+                        if (!this.level().isClientSide())
+                            this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 110, 9, false, false));
+                        if ((Entity) this instanceof ComplexChitinGolemEntity _datEntSetI)
+                            _datEntSetI.getEntityData().set(DATA_skillp, 400);
+                        CaerulaArborMod.queueServerWork(6, () -> {
+                            if (this.isAlive()) {
+                                if (world instanceof Level _level) {
+                                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.piston.extend")), SoundSource.NEUTRAL, 2, 1);
+                                }
                             }
-                            if (!this.level().isClientSide())
-                                this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 110, 9, false, false));
-                            if ((Entity) this instanceof ComplexChitinGolemEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_skillp, 400);
-                            CaerulaArborMod.queueServerWork(6, () -> {
-                                if (this.isAlive()) {
-                                    if (world instanceof Level _level) {
-                                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.piston.extend")), SoundSource.NEUTRAL, 2, 1);
-                                    }
+                        });
+                        CaerulaArborMod.queueServerWork(13, () -> {
+                            if (this.isAlive()) {
+                                if (world instanceof Level _level) {
+                                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.piston.contract")), SoundSource.NEUTRAL, 2, 1);
                                 }
-                            });
-                            CaerulaArborMod.queueServerWork(13, () -> {
+                            }
+                        });
+                        CaerulaArborMod.queueServerWork(20, () -> {
+                            if (this.isAlive()) {
+                                if (!this.level().isClientSide())
+                                    this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 60, 0, false, false));
+                            }
+                        });
+                        for (int index0 = 0; index0 < 16; index0++) {
+                            CaerulaArborMod.queueServerWork(index0 * 3 + 26, () -> {
                                 if (this.isAlive()) {
-                                    if (world instanceof Level _level) {
-                                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.piston.contract")), SoundSource.NEUTRAL, 2, 1);
-                                    }
-                                }
-                            });
-                            CaerulaArborMod.queueServerWork(20, () -> {
-                                if (this.isAlive()) {
-                                    if (!this.level().isClientSide())
-                                        this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 60, 0, false, false));
-                                }
-                            });
-                            for (int index0 = 0; index0 < 16; index0++) {
-                                CaerulaArborMod.queueServerWork(index0 * 3 + 26, () -> {
-                                    if (this.isAlive()) {
-                                        if (this == null)
-                                            return;
-                                        Entity enemy1 = null;
-                                        double damage = 0;
-                                        double r = 0;
-                                        {
-                                            final Vec3 _center = new Vec3((getX()), (getY()), (getZ()));
-                                            List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(10 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                                            for (Entity entityiterator : _entfound) {
-                                                if (!(entityiterator instanceof Monster)) {
-                                                    if (!(entityiterator == ((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null))) {
-                                                        continue;
-                                                    }
-                                                }
-                                                if (entityiterator == this) {
+                                    Entity enemy1 = null;
+                                    double damage = 0;
+                                    double r = 0;
+                                    {
+                                        final Vec3 _center = new Vec3((getX()), (getY()), (getZ()));
+                                        List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(10 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+                                        for (Entity entityiterator : _entfound) {
+                                            if (!(entityiterator instanceof Monster)) {
+                                                if (!(entityiterator == this.getTarget())) {
                                                     continue;
                                                 }
-                                                if ((entityiterator != null ? distanceTo(entityiterator) : -1) <= 5) {
-                                                    damage = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.75;
-                                                    entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "golem_attack"))), this),
-                                                            (float) damage);
-                                                }
                                             }
+                                            if (entityiterator == this) {
+                                                continue;
+                                            }
+                                            if (entityiterator != null && distanceTo(entityiterator) <= 5) {
+												damage = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.75;
+												entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "golem_attack"))), this),
+														(float) damage);
+											}
                                         }
-                                    }
-                                });
-                            }
-                            CaerulaArborMod.queueServerWork(90, () -> {
-                                if (this.isAlive()) {
-                                    if (world instanceof Level _level) {
-                                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.piston.contract")), SoundSource.NEUTRAL, 2, 1);
                                     }
                                 }
                             });
                         }
+                        CaerulaArborMod.queueServerWork(90, () -> {
+                            if (this.isAlive()) {
+                                if (world instanceof Level _level) {
+                                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.piston.contract")), SoundSource.NEUTRAL, 2, 1);
+                                }
+                            }
+                        });
                     }
                 }
             }

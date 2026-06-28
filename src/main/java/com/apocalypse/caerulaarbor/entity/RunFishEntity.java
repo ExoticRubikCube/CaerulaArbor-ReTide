@@ -109,7 +109,6 @@ public class RunFishEntity extends SeaMonster {
 				double x = RunFishEntity.this.getX();
 				double y = RunFishEntity.this.getY();
 				double z = RunFishEntity.this.getZ();
-				Entity entity = RunFishEntity.this;
 				Level world = RunFishEntity.this.level();
 				return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -119,7 +118,6 @@ public class RunFishEntity extends SeaMonster {
 				double x = RunFishEntity.this.getX();
 				double y = RunFishEntity.this.getY();
 				double z = RunFishEntity.this.getZ();
-				Entity entity = RunFishEntity.this;
 				Level world = RunFishEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -133,21 +131,11 @@ public class RunFishEntity extends SeaMonster {
 		this.targetSelector.addGoal(9, new NearestAttackableTargetGoal(this, Animal.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = RunFishEntity.this.getX();
-				double y = RunFishEntity.this.getY();
-				double z = RunFishEntity.this.getZ();
-				Entity entity = RunFishEntity.this;
-				Level world = RunFishEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = RunFishEntity.this.getX();
-				double y = RunFishEntity.this.getY();
-				double z = RunFishEntity.this.getZ();
-				Entity entity = RunFishEntity.this;
-				Level world = RunFishEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
@@ -216,14 +204,8 @@ public class RunFishEntity extends SeaMonster {
 
 	@Override
 	public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
-		ItemStack itemstack = sourceentity.getItemInHand(hand);
-		InteractionResult retval = InteractionResult.sidedSuccess(this.level().isClientSide());
 		super.mobInteract(sourceentity, hand);
-		double x = this.getX();
-		double y = this.getY();
-		double z = this.getZ();
 		Entity entity = this;
-		Level world = this.level();
 		return EntityUtils.containFish(entity, sourceentity);
 	}
 

@@ -166,10 +166,10 @@ public class WarriorPriestEntity extends Animal implements GeoEntity {
         double y = this.getY();
         double z = this.getZ();
         Entity sourceentity = source.getEntity();
-        if (this != null && sourceentity != null) {
+        if (sourceentity != null) {
             double dist = 0;
             if (this.isAlive() && sourceentity.isAlive()) {
-                if ((sourceentity != null ? distanceTo(sourceentity) : -1) <= 2.5 && ((Entity) this instanceof WarriorPriestEntity _datEntI ? _datEntI.getEntityData().get(DATA_skill_p) : 0) <= 0) {
+                if (distanceTo(sourceentity) <= 2.5 && ((Entity) this instanceof WarriorPriestEntity _datEntI ? _datEntI.getEntityData().get(DATA_skill_p) : 0) <= 0) {
                     if (this instanceof WarriorPriestEntity) {
                         this.setAnimation("animation.warriorpriest.shieldattack");
                     }
@@ -216,35 +216,33 @@ public class WarriorPriestEntity extends Animal implements GeoEntity {
 	public void baseTick() {
 		super.baseTick();
         LevelAccessor world = this.level();
-        if (this != null) {
-            double sklp1 = 0;
-            double skillp = 0;
-            if (this.isAlive()) {
-                skillp = (Entity) this instanceof WarriorPriestEntity _datEntI ? _datEntI.getEntityData().get(DATA_skill_p) : 0;
-                sklp1 = (Entity) this instanceof WarriorPriestEntity _datEntI ? _datEntI.getEntityData().get(DATA_skill_p1) : 0;
-                if (skillp > 0) {
-                    if ((Entity) this instanceof WarriorPriestEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_skill_p, (int) (skillp - 1));
+        double sklp1 = 0;
+        double skillp = 0;
+        if (this.isAlive()) {
+            skillp = (Entity) this instanceof WarriorPriestEntity _datEntI ? _datEntI.getEntityData().get(DATA_skill_p) : 0;
+            sklp1 = (Entity) this instanceof WarriorPriestEntity _datEntI ? _datEntI.getEntityData().get(DATA_skill_p1) : 0;
+            if (skillp > 0) {
+                if ((Entity) this instanceof WarriorPriestEntity _datEntSetI)
+                    _datEntSetI.getEntityData().set(DATA_skill_p, (int) (skillp - 1));
+            }
+            if (sklp1 > 0) {
+                if ((Entity) this instanceof WarriorPriestEntity _datEntSetI)
+                    _datEntSetI.getEntityData().set(DATA_skill_p1, (int) (sklp1 - 1));
+            } else {
+                if (this instanceof WarriorPriestEntity) {
+                    this.setAnimation("animation.warriorpriest.givebuff");
                 }
-                if (sklp1 > 0) {
-                    if ((Entity) this instanceof WarriorPriestEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_skill_p1, (int) (sklp1 - 1));
-                } else {
-                    if (this instanceof WarriorPriestEntity) {
-                        this.setAnimation("animation.warriorpriest.givebuff");
-                    }
-                    if ((Entity) this instanceof WarriorPriestEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_skill_p1, 400);
-                    {
-                        final Vec3 _center = new Vec3(this.getX(), this.getY(), this.getZ());
-                        List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(16 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                        for (Entity entityiterator : _entfound) {
-                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "homo_sapiens")))) {
-                                if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                                    _entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 400, 0));
-                                if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                                    _entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 400, 0));
-                            }
+                if ((Entity) this instanceof WarriorPriestEntity _datEntSetI)
+                    _datEntSetI.getEntityData().set(DATA_skill_p1, 400);
+                {
+                    final Vec3 _center = new Vec3(this.getX(), this.getY(), this.getZ());
+                    List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(16 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+                    for (Entity entityiterator : _entfound) {
+                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "homo_sapiens")))) {
+                            if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
+                                _entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 400, 0));
+                            if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
+                                _entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 400, 0));
                         }
                     }
                 }
@@ -306,9 +304,6 @@ public class WarriorPriestEntity extends Animal implements GeoEntity {
 	}
 
 	private PlayState attackingPredicate(AnimationState event) {
-		double d1 = this.getX() - this.xOld;
-		double d0 = this.getZ() - this.zOld;
-		float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
 		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();

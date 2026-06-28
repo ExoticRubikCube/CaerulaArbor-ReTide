@@ -1,6 +1,7 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
+import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
@@ -121,13 +122,12 @@ public class OceanizedCowEntity extends SeaMonster {
 		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
 		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
 		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
-		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal(this, Player.class, true, false) {
+		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Player.class, true, false) {
 			@Override
 			public boolean canUse() {
 				double x = OceanizedCowEntity.this.getX();
 				double y = OceanizedCowEntity.this.getY();
 				double z = OceanizedCowEntity.this.getZ();
-				Entity entity = OceanizedCowEntity.this;
 				Level world = OceanizedCowEntity.this.level();
 				return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -137,7 +137,6 @@ public class OceanizedCowEntity extends SeaMonster {
 				double x = OceanizedCowEntity.this.getX();
 				double y = OceanizedCowEntity.this.getY();
 				double z = OceanizedCowEntity.this.getZ();
-				Entity entity = OceanizedCowEntity.this;
 				Level world = OceanizedCowEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -145,21 +144,11 @@ public class OceanizedCowEntity extends SeaMonster {
 		this.targetSelector.addGoal(14, new NearestAttackableTargetGoal(this, Animal.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = OceanizedCowEntity.this.getX();
-				double y = OceanizedCowEntity.this.getY();
-				double z = OceanizedCowEntity.this.getZ();
-				Entity entity = OceanizedCowEntity.this;
-				Level world = OceanizedCowEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = OceanizedCowEntity.this.getX();
-				double y = OceanizedCowEntity.this.getY();
-				double z = OceanizedCowEntity.this.getZ();
-				Entity entity = OceanizedCowEntity.this;
-				Level world = OceanizedCowEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
@@ -191,7 +180,9 @@ public class OceanizedCowEntity extends SeaMonster {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-		EntityUtils.initPigSanity(this);
+		if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get())) {
+			this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(6);
+		}
 		return retval;
 	}
 
@@ -213,17 +204,13 @@ public class OceanizedCowEntity extends SeaMonster {
 
 	@Override
 	public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
-		ItemStack itemstack = sourceentity.getItemInHand(hand);
-		InteractionResult retval = InteractionResult.sidedSuccess(this.level().isClientSide());
 		super.mobInteract(sourceentity, hand);
 		double x = this.getX();
 		double y = this.getY();
 		double z = this.getZ();
 		Entity entity = this;
 		Level world = this.level();
-        if (entity == null || sourceentity == null)
-            return InteractionResult.PASS;
-        if (((Entity) sourceentity instanceof LivingEntity _entity && _entity.isHolding(Items.SHEARS)) && entity instanceof OceanizedCowEntity _datEntL1 && _datEntL1.getEntityData().get(DATA_skill)) {
+        if (sourceentity.isHolding(Items.SHEARS) && entity instanceof OceanizedCowEntity _datEntL1 && _datEntL1.getEntityData().get(DATA_skill)) {
             if (entity instanceof OceanizedCowEntity _datEntSetL)
                 _datEntSetL.getEntityData().set(DATA_skill, false);
             if (entity instanceof OceanizedCowEntity animatable)
@@ -247,13 +234,9 @@ public class OceanizedCowEntity extends SeaMonster {
 	public void baseTick() {
 		super.baseTick();
         LevelAccessor world = this.level();
-        if (this != null) {
-            if (!((Entity) this instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CaerulaArborModMobEffects.MUTE.get())) && (Entity) this instanceof OceanizedCowEntity _datEntL1 && _datEntL1.getEntityData().get(DATA_skill)
-                    && WorldUtils.canGrief(world)) {
-                if (!((Entity) this instanceof LivingEntity _livEnt2 && _livEnt2.hasEffect(CaerulaArborModMobEffects.COW_BUFF.get()))) {
-                    if (!this.level().isClientSide())
-                        this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.COW_BUFF.get(), 20, 0, false, false));
-                }
+        if (!this.hasEffect(CaerulaArborModMobEffects.MUTE.get()) && (Entity) this instanceof OceanizedCowEntity _datEntL1 && _datEntL1.getEntityData().get(DATA_skill) && WorldUtils.canGrief(world)) {
+            if (!this.level().isClientSide() && !_datEntL1.hasEffect(CaerulaArborModMobEffects.COW_BUFF.get())) {
+                this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.COW_BUFF.get(), 20, 0, false, false));
             }
         }
         this.refreshDimensions();
@@ -281,9 +264,7 @@ public class OceanizedCowEntity extends SeaMonster {
 
 	private PlayState movementPredicate(AnimationState event) {
 		if (this.animationprocedure.equals("empty")) {
-			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
-
-			) {
+			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))) {
 				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_cow.move"));
 			}
 			return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_cow.idle"));
@@ -292,9 +273,6 @@ public class OceanizedCowEntity extends SeaMonster {
 	}
 
 	private PlayState attackingPredicate(AnimationState event) {
-		double d1 = this.getX() - this.xOld;
-		double d0 = this.getZ() - this.zOld;
-		float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
 		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();

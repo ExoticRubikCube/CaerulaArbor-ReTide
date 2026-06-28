@@ -1,13 +1,15 @@
 package com.apocalypse.caerulaarbor.event;
 
+import com.apocalypse.caerulaarbor.api.event.SanityEvent;
+import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.living.ShieldBlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -24,7 +26,9 @@ public class ShieldEventHandler {
 		ItemStack activeItem = blocker instanceof LivingEntity livingBlocker ? livingBlocker.getUseItem() : ItemStack.EMPTY;
 		double blockedDamage = event.getBlockedDamage();
 		if (activeItem.getItem() == CaerulaArborModItems.COMPLEX_CHITIN_SHIELD.get()) {
-			EntityUtils.deductSanity(attacker, Math.min(blockedDamage * 2, 333));
+			if (attacker instanceof LivingEntity livingAttacker && blocker instanceof LivingEntity livingBlocker) {
+				SIHelper.causeSanityInjury(livingAttacker, livingBlocker, Math.min(blockedDamage * 2, 333), SanityEvent.Hurt.Type.ENTITY);
+			}
 			if (blocker.level() instanceof ServerLevel serverLevel)
 				serverLevel.sendParticles(ParticleTypes.ELECTRIC_SPARK, attacker.getX(), attacker.getY() + 0.5, attacker.getZ(), 8, 0.5, 0.5, 0.5, 0.1);
 		} else if (activeItem.getItem() == CaerulaArborModItems.TIDELINKED_SHIELD.get()) {

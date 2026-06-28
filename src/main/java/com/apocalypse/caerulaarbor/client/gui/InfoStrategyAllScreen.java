@@ -1,10 +1,10 @@
-﻿package com.apocalypse.caerulaarbor.client.gui;
+package com.apocalypse.caerulaarbor.client.gui;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
 import com.apocalypse.caerulaarbor.menu.InfoStrategyAllMenu;
 import com.apocalypse.caerulaarbor.network.CaerulaArborModNetwork;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import com.apocalypse.caerulaarbor.network.message.send.InfoStrategyNavigationButtonMessage;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.StrategyUtils;
@@ -54,9 +54,9 @@ public class InfoStrategyAllScreen extends AbstractContainerScreen<InfoStrategyA
 			if (mouseX > leftPos + -12 && mouseX < leftPos + 12 && mouseY > topPos + -13 && mouseY < topPos + 11) {
                 String result = "\u00A74^&$%!!";
                 double rate = 0;
-                if (!(CaerulaArborModVariables.MapVariables.get(world).strategy_silence >= 4)) {
-                    result = Math.round(CaerulaArborModVariables.MapVariables.get(world).evo_point_silence) + "\u00A7c/"
-                            + Math.round(Math.pow(CaerulaArborModVariables.MapVariables.get(world).strategy_silence + 1, 3) * CaerulaConfigsConfiguration.COEFFICIENT.get() * 8);
+                if (!(MapVariables.get(world).strategy_silence >= 4)) {
+                    result = Math.round(MapVariables.get(world).evo_point_silence) + "\u00A7c/"
+                            + Math.round(Math.pow(MapVariables.get(world).strategy_silence + 1, 3) * CaerulaConfigsConfiguration.COEFFICIENT.get() * 8);
                 }
                 guiGraphics.renderTooltip(font, Component.literal(result), mouseX, mouseY);
             }

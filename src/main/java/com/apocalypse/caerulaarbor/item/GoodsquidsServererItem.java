@@ -39,8 +39,6 @@ public class GoodsquidsServererItem extends Item {
         double x = entity.getX();
         double y = entity.getY();
         double z = entity.getZ();
-        if (entity == null)
-            return;
         if (entity.tickCount % 20 == 10) {
             itemstack.setDamageValue(Math.min(100 + itemstack.getDamageValue(), 800));
             if (itemstack.getDamageValue() >= 799) {
@@ -51,8 +49,10 @@ public class GoodsquidsServererItem extends Item {
                     }
                     if ((LevelAccessor) world instanceof ServerLevel _level) {
                         LightningBolt entityToSpawn = EntityType.LIGHTNING_BOLT.create(_level);
-                        entityToSpawn.moveTo(Vec3.atBottomCenterOf(BlockPos.containing(x, y, z)));
-                        _level.addFreshEntity(entityToSpawn);
+                        if (entityToSpawn != null) {
+                            entityToSpawn.moveTo(Vec3.atBottomCenterOf(BlockPos.containing(x, y, z)));
+                            _level.addFreshEntity(entityToSpawn);
+                        }
                     }
                     if ((LevelAccessor) world instanceof ServerLevel _level)
                         _level.sendParticles(ParticleTypes.EXPLOSION, x, y, z, 6, 4, 4, 4, 0);

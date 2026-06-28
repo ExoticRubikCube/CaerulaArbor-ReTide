@@ -1,8 +1,9 @@
 package com.apocalypse.caerulaarbor.network.message.send;
 
+import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.menu.PlayerEvoMenu;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
+import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.NodeUtils;
 import com.apocalypse.caerulaarbor.util.PlayerStateUtils;
@@ -82,13 +83,13 @@ public class PlayerEvoButtonMessage {
             double quantity_cost = 0;
             double quality_cost = 0;
             double add_def = 0;
-            quantity = (((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).reserve_quantity;
-            quality = (((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).reserve_quality;
+            quantity = (((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).reserve_quantity;
+            quality = (((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).reserve_quality;
             title = entity.getPersistentData().getString("showcasingEvoNode");
             if (!PlayerStateUtils.isNexusNoRejectionSelected(entity) && (title).equals("nexus.no_rejection") && quality >= 1) {
                 {
                     boolean _setval = true;
-                    ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                    ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                         capability.PEVO_NEXUS_no_rejection = _setval;
                         capability.syncPlayerVariables(entity);
                     });
@@ -97,7 +98,7 @@ public class PlayerEvoButtonMessage {
             } else if (!PlayerStateUtils.isNexusRegSanitySelected(entity) && (title).equals("nexus.reg_sanity") && quantity >= 1) {
                 {
                     boolean _setval = true;
-                    ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                    ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                         capability.PEVO_NEXUS_reg_sanity = _setval;
                         capability.syncPlayerVariables(entity);
                     });
@@ -106,7 +107,7 @@ public class PlayerEvoButtonMessage {
             } else if (!PlayerStateUtils.isNexusRegLightsSelected(entity) && (title).equals("nexus.reg_lights") && quality >= 2) {
                 {
                     boolean _setval = true;
-                    ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                    ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                         capability.PEVO_NEXUS_reg_lights = _setval;
                         capability.syncPlayerVariables(entity);
                     });
@@ -115,7 +116,7 @@ public class PlayerEvoButtonMessage {
             } else if (!PlayerStateUtils.isNexusPercDamageSelected(entity) && (title).equals("nexus.perc_damage") && quality >= 3) {
                 {
                     boolean _setval = true;
-                    ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                    ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                         capability.PEVO_NEXUS_perc_damage = _setval;
                         capability.syncPlayerVariables(entity);
                     });
@@ -124,7 +125,7 @@ public class PlayerEvoButtonMessage {
             } else if (!PlayerStateUtils.isNexusExpoShieldSelected(entity) && (title).equals("nexus.expo_shield") && quality >= 4) {
                 {
                     boolean _setval = true;
-                    ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                    ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                         capability.PEVO_NEXUS_expo_shield = _setval;
                         capability.syncPlayerVariables(entity);
                     });
@@ -137,7 +138,7 @@ public class PlayerEvoButtonMessage {
                         if (quantity >= index0 + 1) {
                             {
                                 double _setval = index0 + 1;
-                                ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                                ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                                     capability.PEVO_NODE_add_def = _setval;
                                     capability.syncPlayerVariables(entity);
                                 });
@@ -154,7 +155,7 @@ public class PlayerEvoButtonMessage {
                         if (quantity >= index1 + 1) {
                             {
                                 double _setval = index1 + 1;
-                                ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                                ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                                     capability.PEVO_NODE_add_resis = _setval;
                                     capability.syncPlayerVariables(entity);
                                 });
@@ -171,7 +172,7 @@ public class PlayerEvoButtonMessage {
                         if (quantity >= index2 + 1) {
                             {
                                 double _setval = index2 + 1;
-                                ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                                ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                                     capability.PEVO_NODE_add_speed = _setval;
                                     capability.syncPlayerVariables(entity);
                                 });
@@ -182,13 +183,13 @@ public class PlayerEvoButtonMessage {
                     }
                 }
             } else if (title.contains("node.add_sanity")) {
-                add_def = EntityUtils.getNodeAddSanity(entity);
+                add_def = NodeUtils.getNodeAddSanity(entity);
                 for (int index3 = 0; index3 < 4; index3++) {
                     if (add_def < index3 + 1) {
                         if (quantity >= index3 + 1) {
                             {
                                 double _setval = index3 + 1;
-                                ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                                ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                                     capability.PEVO_NODE_add_sanity = _setval;
                                     capability.syncPlayerVariables(entity);
                                 });
@@ -210,7 +211,7 @@ public class PlayerEvoButtonMessage {
                         if (quantity >= quantity_cost) {
                             {
                                 double _setval = index4 + 1;
-                                ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                                ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                                     capability.PEVO_NODE_add_damage = _setval;
                                     capability.syncPlayerVariables(entity);
                                 });
@@ -221,7 +222,7 @@ public class PlayerEvoButtonMessage {
                     }
                 }
             } else if (title.contains("node.less_damage")) {
-                add_def = (((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).PEVO_NODE_less_damage;
+                add_def = (((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).PEVO_NODE_less_damage;
                 for (int index5 = 0; index5 < 4; index5++) {
                     if (add_def < index5 + 1) {
                         if (index5 + 1 <= 2) {
@@ -232,7 +233,7 @@ public class PlayerEvoButtonMessage {
                         if (quantity >= quantity_cost) {
                             {
                                 double _setval = index5 + 1;
-                                ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                                ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                                     capability.PEVO_NODE_less_damage = _setval;
                                     capability.syncPlayerVariables(entity);
                                 });
@@ -250,7 +251,7 @@ public class PlayerEvoButtonMessage {
                         if (quantity >= quantity_cost) {
                             {
                                 double _setval = index6 + 1;
-                                ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                                ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                                     capability.PEVO_NODE_living_barrier = _setval;
                                     capability.syncPlayerVariables(entity);
                                 });
@@ -268,7 +269,7 @@ public class PlayerEvoButtonMessage {
                         if (quantity >= quantity_cost) {
                             {
                                 double _setval = index7 + 1;
-                                ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                                ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                                     capability.PEVO_NODE_add_miss = _setval;
                                     capability.syncPlayerVariables(entity);
                                 });
@@ -286,7 +287,7 @@ public class PlayerEvoButtonMessage {
                         if (quantity >= quantity_cost) {
                             {
                                 double _setval = index8 + 1;
-                                ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                                ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                                     capability.PEVO_NODE_real_damage = _setval;
                                     capability.syncPlayerVariables(entity);
                                 });
@@ -304,7 +305,7 @@ public class PlayerEvoButtonMessage {
                         if (quantity >= quantity_cost) {
                             {
                                 double _setval = index9 + 1;
-                                ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                                ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                                     capability.PEVO_NODE_heal_damage = _setval;
                                     capability.syncPlayerVariables(entity);
                                 });
@@ -322,7 +323,7 @@ public class PlayerEvoButtonMessage {
                         if (quantity >= quantity_cost) {
                             {
                                 double _setval = index10 + 1;
-                                ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                                ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                                     capability.PEVO_NODE_worse_break = _setval;
                                     capability.syncPlayerVariables(entity);
                                 });
@@ -340,7 +341,7 @@ public class PlayerEvoButtonMessage {
                         if (quantity >= quantity_cost) {
                             {
                                 double _setval = index11 + 1;
-                                ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                                ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                                     capability.PEVO_NODE_eunectes = _setval;
                                     capability.syncPlayerVariables(entity);
                                 });
@@ -352,7 +353,7 @@ public class PlayerEvoButtonMessage {
                 }
             } else if (title.contains("node.less_armor")) {
                 double result = 0;
-                result = (((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).PEVO_NODE_less_armor;
+                result = (((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).PEVO_NODE_less_armor;
                 add_def = result;
                 for (int index12 = 0; index12 < 4; index12++) {
                     if (add_def < index12 + 1) {
@@ -360,7 +361,7 @@ public class PlayerEvoButtonMessage {
                         if (quantity >= quantity_cost) {
                             {
                                 double _setval = index12 + 1;
-                                ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                                ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                                     capability.PEVO_NODE_less_armor = _setval;
                                     capability.syncPlayerVariables(entity);
                                 });
@@ -377,7 +378,7 @@ public class PlayerEvoButtonMessage {
                 }
                 {
                     double _setval = quantity - quantity_cost;
-                    ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                    ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                         capability.reserve_quantity = _setval;
                         capability.syncPlayerVariables(entity);
                     });
@@ -403,7 +404,7 @@ public class PlayerEvoButtonMessage {
                 }
                 {
                     double _setval = quality - quality_cost;
-                    ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                    ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                         capability.reserve_quality = _setval;
                         capability.syncPlayerVariables(entity);
                     });

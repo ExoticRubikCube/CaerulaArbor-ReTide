@@ -1,12 +1,14 @@
 package com.apocalypse.caerulaarbor.event;
 
+import com.apocalypse.caerulaarbor.capability.map.MapVariables;
+import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler;
+import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler.StrategyType;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
 import com.apocalypse.caerulaarbor.entity.*;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModGameRules;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import com.apocalypse.caerulaarbor.system.UpgradeMigraProcedure;
 import com.apocalypse.caerulaarbor.system.UpgradeSilenceProcedure;
 import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
@@ -280,32 +282,32 @@ public class LivingTickEventHandler {
     }
 
     private static void handleMobBuffs(LevelAccessor world, double x, double y, double z, Entity entity) {
-        if (CaerulaArborModVariables.MapVariables.get(world).strategy_subsisting >= 3) {
+        if (MapVariables.get(world).strategy_subsisting >= 3) {
             if (!(entity instanceof LivingEntity _livEnt1 && _livEnt1.hasEffect(MobEffects.DAMAGE_RESISTANCE))) {
                 if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                    _entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 9999, (int) (CaerulaArborModVariables.MapVariables.get(world).strategy_subsisting - 3)));
+                    _entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 9999, (int) (MapVariables.get(world).strategy_subsisting - 3)));
             }
         }
 
         if (entity instanceof LivingEntity _livEnt3 && _livEnt3.hasEffect(CaerulaArborModMobEffects.POWER_OF_ANCHOR.get())) return;
 
-        if (CaerulaArborModVariables.MapVariables.get(world).strategy_silence > 0) {
+        if (MapVariables.get(world).strategy_silence > 0) {
             handleSilenceBuffs(world, x, y, z, entity);
         }
     }
 
     private static void handleSilenceBuffs(LevelAccessor world, double x, double y, double z, Entity entity) {
-        if (CaerulaArborModVariables.MapVariables.get(world).strategy_silence >= 3) {
+        if (MapVariables.get(world).strategy_silence >= 3) {
             if (!(entity instanceof LivingEntity _livEnt4 && _livEnt4.hasEffect(CaerulaArborModMobEffects.BOOST_OF_SILENCE.get()))) {
                 if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                    _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.BOOST_OF_SILENCE.get(), 9999, (int) (CaerulaArborModVariables.MapVariables.get(world).strategy_silence - 1)));
+                    _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.BOOST_OF_SILENCE.get(), 9999, (int) (MapVariables.get(world).strategy_silence - 1)));
             }
 
             if (!(entity instanceof LivingEntity _livEnt6 && _livEnt6.hasEffect(CaerulaArborModMobEffects.STRENGTH_OF_CROWD.get()))) {
                 double amplifi = -1;
-                double range = CaerulaArborModVariables.MapVariables.get(world).strategy_silence >= 4 ? 64 : 32;
-                double maxAmp = CaerulaArborModVariables.MapVariables.get(world).strategy_silence >= 4 ? 29 : 9;
-                int ampStep = CaerulaArborModVariables.MapVariables.get(world).strategy_silence >= 4 ? 2 : 1;
+                double range = MapVariables.get(world).strategy_silence >= 4 ? 64 : 32;
+                double maxAmp = MapVariables.get(world).strategy_silence >= 4 ? 29 : 9;
+                int ampStep = MapVariables.get(world).strategy_silence >= 4 ? 2 : 1;
 
                 final Vec3 _center = new Vec3(x, y, z);
                 List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(range / 2d), e -> true).stream()
@@ -329,7 +331,7 @@ public class LivingTickEventHandler {
             if ((entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5) {
                 if (!(entity instanceof LivingEntity _livEnt16 && _livEnt16.hasEffect(CaerulaArborModMobEffects.BOOST_OF_SILENCE.get()))) {
                     if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                        _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.BOOST_OF_SILENCE.get(), 9999, (int) (CaerulaArborModVariables.MapVariables.get(world).strategy_silence - 1)));
+                        _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.BOOST_OF_SILENCE.get(), 9999, (int) (MapVariables.get(world).strategy_silence - 1)));
                 }
             } else {
                 if (entity instanceof LivingEntity _entity)
@@ -341,13 +343,13 @@ public class LivingTickEventHandler {
 
         if (!(entity instanceof LivingEntity _livEnt20 && _livEnt20.hasEffect(MobEffects.REGENERATION)) && !(entity instanceof MartusEntity)) {
             if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                _entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 9999, (int) (CaerulaArborModVariables.MapVariables.get(world).strategy_silence - 1)));
+                _entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 9999, (int) (MapVariables.get(world).strategy_silence - 1)));
         }
 
         if (entity instanceof Mob _mobEnt23 && _mobEnt23.isAggressive()) {
             if (!(entity instanceof LivingEntity _livEnt24 && _livEnt24.hasEffect(MobEffects.MOVEMENT_SPEED))) {
                 if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                    _entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 9999, (int) (CaerulaArborModVariables.MapVariables.get(world).strategy_silence - 1)));
+                    _entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 9999, (int) (MapVariables.get(world).strategy_silence - 1)));
             }
         }
     }
@@ -359,9 +361,8 @@ public class LivingTickEventHandler {
 
         if (Math.random() < 0.16 && !world.getEntitiesOfClass(Player.class, AABB.ofSize(new Vec3(x, y, z), 96, 96, 96), e -> true).isEmpty()) {
             double pnt = Mth.nextDouble(RandomSource.create(), 0, 0.005);
-            CaerulaArborModVariables.MapVariables.get(world).evo_point_migration = CaerulaArborModVariables.MapVariables.get(world).evo_point_migration + pnt
-                    * Math.max(CaerulaArborModVariables.MapVariables.get(world).strategy_subsisting + CaerulaArborModVariables.MapVariables.get(world).strategy_grow + CaerulaArborModVariables.MapVariables.get(world).strategy_breed, 1);
-            CaerulaArborModVariables.MapVariables.get(world).syncData(world);
+            MapVariablesHandler.addEvoPoint(world, StrategyType.MIGRATION,
+                    pnt * Math.max(MapVariables.get(world).strategy_subsisting + MapVariables.get(world).strategy_grow + MapVariables.get(world).strategy_breed, 1));
             UpgradeMigraProcedure.execute(world);
             UpgradeSilenceProcedure.execute(world, pnt);
         }

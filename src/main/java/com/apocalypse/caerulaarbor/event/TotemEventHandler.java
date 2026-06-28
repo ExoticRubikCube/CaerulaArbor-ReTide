@@ -1,9 +1,10 @@
 package com.apocalypse.caerulaarbor.event;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.capability.ModCapabilities;
+import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import com.apocalypse.caerulaarbor.entity.OceanizedEvokerEntity;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.living.LivingUseTotemEvent;
@@ -33,9 +34,9 @@ public class TotemEventHandler {
 		}
 
 		if (event.getEntity() instanceof Player player) {
-			double nextShield = player.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null)
-					.orElse(new CaerulaArborModVariables.PlayerVariables()).player_shield + 1;
-			player.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+			double nextShield = player.getCapability(ModCapabilities.PLAYER_VARIABLE, null)
+					.orElse(new PlayerVariable()).player_shield + 1;
+			player.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
 				capability.player_shield = nextShield;
 				capability.syncPlayerVariables(player);
 			});

@@ -2,7 +2,7 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.util.WorldUtils;
+import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -76,7 +76,7 @@ public class HighmoreShootEntity extends AbstractArrow implements ItemSupplier {
         LevelAccessor world = this.level();
         Entity entity = entityHitResult.getEntity();
         Entity sourceentity = this.getOwner();
-        if (entity == null || this == null || sourceentity == null)
+        if (sourceentity == null)
             return;
         entity.invulnerableTime = 0;
         if (!(sourceentity == entity)) {
@@ -100,9 +100,10 @@ public class HighmoreShootEntity extends AbstractArrow implements ItemSupplier {
                 CaerulaArborMod.queueServerWork(3, () -> {
                     new Object() {
                         void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
+                            LivingEntity _livingEntity9 = (LivingEntity) sourceentity;
                             entity.hurt(
                                     new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "highmore_attack"))), sourceentity),
-                                    (float) (sourceentity instanceof LivingEntity _livingEntity9 && _livingEntity9.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity9.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
+                                    (float) (_livingEntity9.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity9.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
                             final int tick2 = ticks;
                             CaerulaArborMod.queueServerWork(tick2, () -> {
                                 if (timedlooptotal > timedloopiterator + 1) {
@@ -116,9 +117,10 @@ public class HighmoreShootEntity extends AbstractArrow implements ItemSupplier {
                 CaerulaArborMod.queueServerWork(3, () -> {
                     new Object() {
                         void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
+                            LivingEntity _livingEntity14 = (LivingEntity) sourceentity;
                             entity.hurt(
                                     new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "highmore_attack"))), sourceentity),
-                                    (float) (sourceentity instanceof LivingEntity _livingEntity14 && _livingEntity14.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity14.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
+                                    (float) (_livingEntity14.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity14.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
                             final int tick2 = ticks;
                             CaerulaArborMod.queueServerWork(tick2, () -> {
                                 if (timedlooptotal > timedloopiterator + 1) {
@@ -130,10 +132,8 @@ public class HighmoreShootEntity extends AbstractArrow implements ItemSupplier {
                 });
             }
             CaerulaArborMod.queueServerWork(10, () -> {
-                if (!(this == null)) {
-                    if (!level().isClientSide())
-                        discard();
-                }
+                if (!level().isClientSide())
+                    discard();
             });
         }
     }
@@ -142,16 +142,13 @@ public class HighmoreShootEntity extends AbstractArrow implements ItemSupplier {
 	public void tick() {
 		super.tick();
         LevelAccessor world = this.level();
-        if (this != null) {
-            Entity enemy = null;
-            setNoGravity(true);
-            if (tickCount > 160) {
-                if (!level().isClientSide())
-                    discard();
-            }
-            WorldUtils.bulletParticle(world, this.getX(), this.getY(), this.getZ());
+        setNoGravity(true);
+        if (tickCount > 160) {
+            if (!level().isClientSide())
+                discard();
         }
-        if (this.inGround)
+		world.addParticle(CaerulaArborModParticleTypes.SEA_SPLASH.get(), this.getX(), this.getY(), this.getZ(), 0, 0, 0);
+		if (this.inGround)
 			this.discard();
 	}
 

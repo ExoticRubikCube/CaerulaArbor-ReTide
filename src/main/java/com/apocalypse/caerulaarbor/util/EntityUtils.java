@@ -1,13 +1,14 @@
 package com.apocalypse.caerulaarbor.util;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.capability.ModCapabilities;
+import com.apocalypse.caerulaarbor.capability.map.MapVariables;
+import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
+import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
 import com.apocalypse.caerulaarbor.entity.*;
 import com.apocalypse.caerulaarbor.init.*;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import com.apocalypse.caerulaarbor.procedures.SummonFractalProcedure;
-import net.minecraft.advancements.Advancement;
-import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -59,6 +60,7 @@ public class EntityUtils {
 		throw new UnsupportedOperationException("Utility class");
 	}
 
+	//TODO需要下放回实体
 	public static void spawnLinkParticles(LevelAccessor world, Entity a, Entity b) {
 		if (a == null || b == null || !(world instanceof ServerLevel level))
 			return;
@@ -82,8 +84,7 @@ public class EntityUtils {
 			return;
 		double sklp = 0;
 		boolean isLingering = entity instanceof LineringPathshaperEntity;
-		isLingering = entity instanceof LineringPathshaperEntity;
-		if (isLingering) {
+        if (isLingering) {
 			sklp = entity instanceof LineringPathshaperEntity _datEntI ? _datEntI.getEntityData().get(LineringPathshaperEntity.DATA_skillp) : 0;
 		} else {
 			sklp = entity instanceof RouteShaperEntity _datEntI ? _datEntI.getEntityData().get(RouteShaperEntity.DATA_skillp) : 0;
@@ -124,8 +125,8 @@ public class EntityUtils {
 					final Vec3 _center = new Vec3(x, y, z);
 					List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(64 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
 					for (Entity entityiterator : _entfound) {
-						if (entityiterator instanceof RouteFractalEntity) {
-							if (!(entityiterator instanceof LivingEntity _livEnt4 && _livEnt4.hasEffect(CaerulaArborModMobEffects.SEEK_OF_FRACTAL.get()))) {
+						if (entityiterator instanceof RouteFractalEntity livEnt4) {
+							if (!livEnt4.hasEffect(CaerulaArborModMobEffects.SEEK_OF_FRACTAL.get())) {
 								if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
 									_entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.SEEK_OF_FRACTAL.get(), 999, 0));
 							}
@@ -143,8 +144,8 @@ public class EntityUtils {
 	public static boolean canPlayerEvo(Entity entity) {
 		if (entity == null)
 			return false;
-		return (entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).can_player_evo
-				&& (RelicUtils.hasDiso(entity) || (entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).player_oceanization > 2.9);
+		return (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).can_player_evo
+				&& (RelicUtils.hasDiso(entity) || (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization > 2.9);
 	}
 
 	public static Entity catchNearestEnemy(LevelAccessor world, double x, double y, double z, Entity obj) {
@@ -159,7 +160,7 @@ public class EntityUtils {
 				continue;
 			}
 			if (entityiterator instanceof Monster || (entityiterator instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == obj) {
-				d = entityiterator != null ? obj.distanceTo(entityiterator) : -1;
+				d = obj.distanceTo(entityiterator);
 				if (d <= 4) {
 					if (d < minDist) {
 						minDist = d;
@@ -171,120 +172,17 @@ public class EntityUtils {
 		return enemy;
 	}
 
-	public static void deductSanity(Entity entity, double amount) {
-		if (entity == null)
-			return;
-		double snt = 0;
-		double deletion = 0;
-		double resis = 0;
-		if ((entity instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY.get()) ? _livingEntity0.getAttribute(CaerulaArborModAttributes.SANITY.get()).getBaseValue() : 0) < 0) {
-			return;
-		}
-		if (entity instanceof LivingEntity _livEnt1 && _livEnt1.hasEffect(CaerulaArborModMobEffects.UNDER_BREAK.get())) {
-			return;
-		}
-		if (!(entity instanceof LivingEntity _livEnt2 && _livEnt2.hasEffect(CaerulaArborModMobEffects.SANITY_IMMUE.get()))) {
-			resis = 0.01 * (100 - (entity instanceof LivingEntity _livingEntity3 && _livingEntity3.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RESISTANCE.get())
-					? _livingEntity3.getAttribute(CaerulaArborModAttributes.SANITY_RESISTANCE.get()).getValue()
-					: 0));
-			deletion = amount * (entity instanceof LivingEntity _livingEntity4 && _livingEntity4.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get())
-					? _livingEntity4.getAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()).getValue()
-					: 0) * resis;
-			snt = (entity instanceof LivingEntity _livingEntity5 && _livingEntity5.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY.get()) ? _livingEntity5.getAttribute(CaerulaArborModAttributes.SANITY.get()).getBaseValue() : 0)
-					- deletion;
-			if (snt < -1) {
-				snt = -1;
-			}
-			if (snt > 1000) {
-				snt = 1000;
-			}
-			if (new Object() {
-				public boolean checkGamemode(Entity _ent) {
-					if (_ent instanceof ServerPlayer _serverPlayer) {
-						return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-					} else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-						return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-								&& Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
-					}
-					return false;
-				}
-			}.checkGamemode(entity)) {
-				snt = entity instanceof LivingEntity _livingEntity7 && _livingEntity7.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY.get()) ? _livingEntity7.getAttribute(CaerulaArborModAttributes.SANITY.get()).getBaseValue() : 0;
-			}
-			if (new Object() {
-				public boolean checkGamemode(Entity _ent) {
-					if (_ent instanceof ServerPlayer _serverPlayer) {
-						return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.SPECTATOR;
-					} else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-						return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-								&& Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.SPECTATOR;
-					}
-					return false;
-				}
-			}.checkGamemode(entity)) {
-				snt = entity instanceof LivingEntity _livingEntity9 && _livingEntity9.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY.get()) ? _livingEntity9.getAttribute(CaerulaArborModAttributes.SANITY.get()).getBaseValue() : 0;
-			}
-			if (entity instanceof LivingEntity _livingEntity10 && _livingEntity10.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY.get()))
-				_livingEntity10.getAttribute(CaerulaArborModAttributes.SANITY.get()).setBaseValue(snt);
-			if (entity instanceof ServerPlayer _player) {
-				Advancement _adv = _player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "terror_of_knowing"));
-				AdvancementProgress _ap = _player.getAdvancements().getOrStartProgress(_adv);
-				if (!_ap.isDone()) {
-					for (String criteria : _ap.getRemainingCriteria())
-						_player.getAdvancements().award(_adv, criteria);
-				}
-			}
-		}
-	}
-
-	public static void deductSanity50(Entity entity) {
-		deductSanity(entity, 50);
-	}
-
-	public static void deductSanity75(Entity entity) {
-		deductSanity(entity, 75);
-	}
-
-	public static void deductSanity128(Entity entity) {
-		deductSanity(entity, 128);
-	}
-
-	public static void restoreSanity(Entity entity, double amount) {
-		if (entity == null)
-			return;
-		if (amount <= 0)
-			return;
-		double snt = (entity instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY.get()) ? _livingEntity0.getAttribute(CaerulaArborModAttributes.SANITY.get()).getBaseValue() : 0) + amount;
-		if (snt > 1000) {
-			snt = 1000;
-		}
-		if (entity instanceof LivingEntity _livingEntity1 && _livingEntity1.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY.get()))
-			_livingEntity1.getAttribute(CaerulaArborModAttributes.SANITY.get()).setBaseValue(snt);
-	}
-
-	public static void restoreSanity15(Entity entity) {
-		restoreSanity(entity, 15);
-	}
-
-	public static void restoreSanity50(Entity entity) {
-		restoreSanity(entity, 50);
-	}
-
-	public static void restoreSanity125(Entity entity) {
-		restoreSanity(entity, 125);
-	}
-
 	public static void restorePlayerLights(Entity player, double num) {
 		if (player == null)
 			return;
 		if (num <= 0)
 			return;
-		double snt = (player.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).player_light + num;
+		double snt = (player.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_light + num;
 		if (snt > 100) {
 			snt = 100;
 		}
 		double _setval = snt;
-		player.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+		player.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
 			capability.player_light = _setval;
 			capability.syncPlayerVariables(player);
 		});
@@ -323,7 +221,7 @@ public class EntityUtils {
 		if (!(entity instanceof LivingEntity living)) {
 			return;
 		}
-		CaerulaArborModVariables.MapVariables mapVars = CaerulaArborModVariables.MapVariables.get(world);
+		MapVariables mapVars = MapVariables.get(world);
 		if (entity.getType().is(OCEAN_OFFSPRING)) {
 			if (mapVars.strategy_silence >= 2) {
 				living.setHealth((float) (living.getHealth() + living.getMaxHealth() * 0.0025));
@@ -334,8 +232,8 @@ public class EntityUtils {
 				living.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.RUNNING_ON_TRAIL.get(), 5, 0, false, false));
 			}
 		} else if (entity instanceof Player) {
-			if ((entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null)
-					.orElse(new CaerulaArborModVariables.PlayerVariables())).player_oceanization >= 3) {
+			if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null)
+					.orElse(new PlayerVariable())).player_oceanization >= 3) {
 				if (mapVars.strategy_silence >= 2) {
 					living.heal((float) (living.getMaxHealth() * 0.0025));
 				} else if (mapVars.strategy_subsisting >= 3) {
@@ -349,29 +247,7 @@ public class EntityUtils {
 		}
 	}
 
-	public static void initPigSanity(Entity entity) {
-		if (entity == null)
-			return;
-		if (entity instanceof LivingEntity living && living.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get()))
-			living.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(6);
-	}
-
-	public static void initCatSanity(Entity entity) {
-		if (entity == null)
-			return;
-		if (entity instanceof LivingEntity living && living.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get()))
-			living.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(4);
-		if (entity instanceof LivingEntity living && living.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-			living.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(35);
-	}
-
-	public static void initSliderSanity(Entity entity) {
-		if (entity == null)
-			return;
-		if (entity instanceof LivingEntity living && living.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get()))
-			living.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(10);
-	}
-
+	//TODO:这些init需要下放回实体
 	public static void initAplusMagic(Entity entity) {
 		if (entity == null)
 			return;
@@ -437,24 +313,7 @@ public class EntityUtils {
 		}
 	}
 
-	public static void deductSanityWithParticles(LevelAccessor world, double x, double y, double z, Entity entity, double amount) {
-		if (entity == null)
-			return;
-		deductSanity(entity, amount);
-		new Object() {
-			void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
-				if (world instanceof ServerLevel _level)
-					_level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, (y + 0.5 * entity.getBbHeight()), z, 16, 0.86, 1.2, 0.86, 0.1);
-				final int tick2 = ticks;
-				CaerulaArborMod.queueServerWork(tick2, () -> {
-					if (timedlooptotal > timedloopiterator + 1) {
-						timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
-					}
-				});
-			}
-		}.timedLoop(0, 3, 5);
-	}
-
+	//TODO可能需要下放回实体
 	public static void castDragonBreath(LevelAccessor world, double x, double y, double z, Entity owner, Entity target, double type) {
 		if (owner == null) return;
 		if (world instanceof ServerLevel _level) {
@@ -482,6 +341,7 @@ public class EntityUtils {
 		}
 	}
 
+	//需要解释，大概率需要处理
 	public static InteractionResult containFish(Entity entity, Entity sourceentity) {
 		if (entity == null || sourceentity == null)
 			return InteractionResult.PASS;
@@ -543,6 +403,7 @@ public class EntityUtils {
 		return InteractionResult.FAIL;
 	}
 
+	//TODO需要下放
 	public static void initDirection(Entity entity) {
 		if (entity == null)
 			return;
@@ -563,6 +424,7 @@ public class EntityUtils {
 			_livingEntity2.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(18);
 	}
 
+	//可能需要评估放到哪个util合适
 	public static void damagedByNethseabrand(LevelAccessor world, Entity entity) {
 		if (entity == null)
 			return;
@@ -626,18 +488,21 @@ public class EntityUtils {
 					if (Math.random() < 0.2 * lvl + 0.05 * lvl1) {
 						return;
 					}
-					if ((entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).player_oceanization >= 3) {
+					if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization >= 3) {
 						return;
 					}
 				}
 				if (!(entity instanceof LivingEntity _livEnt28 && _livEnt28.getMobType() == MobType.UNDEAD)) {
 					entity.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "trail_damage")))), 2);
 				}
-				EntityUtils.deductSanity(entity, 20);
+				if (entity instanceof LivingEntity livingEntity) {
+					SIHelper.causeSanityInjury(livingEntity, 20);
+				}
 			}
 		}
 	}
 
+	//TODO:需要下放回实体
 	public static void endspeakerRevive(Entity entity) {
 		if (entity == null)
 			return;
@@ -656,6 +521,7 @@ public class EntityUtils {
 		}
 	}
 
+	//TODO下放
 	public static void endspeakerToPhase2(LevelAccessor world, double x, double y, double z, Entity entity, double phase) {
 		if (entity == null)
 			return;
@@ -761,7 +627,7 @@ public class EntityUtils {
 					if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffpsring"))) && entityiterator instanceof Player) {
 						continue;
 					}
-					if ((entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).player_oceanization > 2) {
+					if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization > 2) {
 						continue;
 					}
 					if ((entityiterator != null ? sacrifice.distanceTo(entityiterator) : -1) < r) {
@@ -810,6 +676,7 @@ public class EntityUtils {
 		}
 	}
 
+	//需要解释，大概率需要下放
 	public static void endspeakerLinkPtcTo(LevelAccessor world, double fromX, double fromY, double fromZ, double toX, double toY, double toZ) {
 		double vx = 0;
 		double vy = 0;
@@ -828,6 +695,7 @@ public class EntityUtils {
 		}
 	}
 
+	//同上
 	public static void enderinaLinkPtcTo(LevelAccessor world, double fromX, double fromY, double fromZ, double toX, double toY, double toZ) {
 		double vx = 0;
 		double vy = 0;
@@ -846,35 +714,41 @@ public class EntityUtils {
 	public static double getNodeLivingBarrier(Entity entity) {
 		if (entity == null)
 			return 0;
-		return (entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).PEVO_NODE_living_barrier;
+		return (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).PEVO_NODE_living_barrier;
 	}
 
+	//评估是否需要下放甚至内联
 	public static String getSilenceMigration(LevelAccessor world) {
-		return Component.translatable(("item.caerula_arbor.sample_migration.description_" + Math.round(CaerulaArborModVariables.MapVariables.get(world).strategy_silence + 5))).getString();
+		return Component.translatable(("item.caerula_arbor.sample_migration.description_" + Math.round(MapVariables.get(world).strategy_silence + 5))).getString();
 	}
 
+	//同上
 	public static double getNodeRealDamage(Entity entity) {
 		if (entity == null)
 			return 0;
-		return (entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).PEVO_NODE_real_damage;
+		return (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).PEVO_NODE_real_damage;
 	}
 
+	//同上
 	public static double getNodeHealDamage(Entity entity) {
 		if (entity == null)
 			return 0;
-		return (entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).PEVO_NODE_heal_damage;
+		return (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).PEVO_NODE_heal_damage;
 	}
 
+	//同上
 	public static double getNodeWorseBreak(Entity entity) {
 		if (entity == null)
 			return 0;
-		return (entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).PEVO_NODE_worse_break;
+		return (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).PEVO_NODE_worse_break;
 	}
 
+	//同上
 	public static String getSilenceSubsis(LevelAccessor world) {
-		return Component.translatable(("item.caerula_arbor.sample_subsisting.description_" + Math.round(CaerulaArborModVariables.MapVariables.get(world).strategy_silence + 5))).getString();
+		return Component.translatable(("item.caerula_arbor.sample_subsisting.description_" + Math.round(MapVariables.get(world).strategy_silence + 5))).getString();
 	}
 
+	//TODO评估是否需要需要下放，然后处理或跳过
 	public static double getComplexPulling(Entity entity, ItemStack itemstack) {
 		if (entity == null)
 			return 0;
@@ -884,24 +758,20 @@ public class EntityUtils {
 		return 0;
 	}
 
+	//同上，需要评估
 	public static double getNodeAddDamage(Entity entity) {
 		if (entity == null)
 			return 0;
-		return (entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).PEVO_NODE_add_damage;
+		return (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).PEVO_NODE_add_damage;
 	}
 
 	public static String getPlayerSurvconta(Entity entity) {
 		if (entity == null)
 			return "";
-		return "" + Math.round((entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).relic_SURVIVOR);
+		return "" + Math.round((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_SURVIVOR);
 	}
 
-	public static double getNodeAddSanity(Entity entity) {
-		if (entity == null)
-			return 0;
-		return (entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).PEVO_NODE_add_sanity;
-	}
-
+	//需要评估是否下放到海嗣的基类
 	public static double getSeabornAround(LevelAccessor world, double x, double y, double z, Entity center) {
 		if (center == null)
 			return 0;
@@ -924,6 +794,7 @@ public class EntityUtils {
 		return count;
 	}
 
+	//查看参考文件是怎么做的，很可能需要下放
 	public static double getSeabornNum(LevelAccessor world, double x, double y, double z) {
 		double count = 0;
 		{
@@ -941,6 +812,7 @@ public class EntityUtils {
 		return count;
 	}
 
+	//需要解释
 	public static Entity getGladiiaAround(LevelAccessor world, double x, double y, double z) {
 		Entity g = world.getEntitiesOfClass(GladiiaEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).stream().sorted(new Object() {
 			Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
@@ -953,6 +825,7 @@ public class EntityUtils {
 		return null;
 	}
 
+	//解释并评估是否需要放在其他util类
 	public static void givePlayerReserve(LevelAccessor world, double x, double y, double z, Entity entity, ItemStack itemstack) {
 		if (entity == null)
 			return;
@@ -983,15 +856,15 @@ public class EntityUtils {
 		if (exp > 0) {
 			if ((entity instanceof Player _plr ? _plr.experienceLevel : 0) >= exp || creative) {
 				{
-					double _setval = (entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).reserve_quantity + r;
-					entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+					double _setval = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).reserve_quantity + r;
+					entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
 						capability.reserve_quantity = _setval;
 						capability.syncPlayerVariables(entity);
 					});
 				}
 				{
-					double _setval = (entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).reserve_quality + r_a;
-					entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+					double _setval = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).reserve_quality + r_a;
+					entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
 						capability.reserve_quality = _setval;
 						capability.syncPlayerVariables(entity);
 					});
@@ -1011,33 +884,31 @@ public class EntityUtils {
 		}
 	}
 
+	//依旧是同类型，这种有很多
 	public static String getDescrSubsis(LevelAccessor world) {
-		return Component.translatable(("item.caerula_arbor.sample_subsisting.description_" + Math.round(CaerulaArborModVariables.MapVariables.get(world).strategy_subsisting))).getString();
+		return Component.translatable(("item.caerula_arbor.sample_subsisting.description_" + Math.round(MapVariables.get(world).strategy_subsisting))).getString();
 	}
 
-	public static double getSanityIndex(Entity entity) {
-		if (entity == null)
-			return 0;
-		return Math.ceil(
-				(entity instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY.get()) ? _livingEntity0.getAttribute(CaerulaArborModAttributes.SANITY.get()).getBaseValue() : 0) / 50);
-	}
-
+	//同上
 	public static String getSilenceBreed(LevelAccessor world) {
-		return Component.translatable(("item.caerula_arbor.sample_breed.description_" + Math.round(CaerulaArborModVariables.MapVariables.get(world).strategy_silence + 5))).getString();
+		return Component.translatable(("item.caerula_arbor.sample_breed.description_" + Math.round(MapVariables.get(world).strategy_silence + 5))).getString();
 	}
 
+	//同
 	public static double getNodeAddResis(Entity entity) {
 		if (entity == null)
 			return 0;
-		return (entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).PEVO_NODE_add_resis;
+		return (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).PEVO_NODE_add_resis;
 	}
 
+	//同
 	public static String getPlayerEnrave(Entity entity) {
 		if (entity == null)
 			return "";
-		return "" + Math.round((entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).relic_hand_ENGRAVE);
+		return "" + Math.round((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_ENGRAVE);
 	}
 
+	//需要解释，可能需要参考参考文件来处理
 	public static Entity getNearestEnemy(LevelAccessor world, double x, double y, double z, Entity exception0, Entity exception1, Entity obj) {
 		if (exception0 == null || exception1 == null || obj == null)
 			return null;
@@ -1085,32 +956,39 @@ public class EntityUtils {
 		return enemy;
 	}
 
+	//他们真的需要放在这里吗
 	public static double getStraSilence(LevelAccessor world) {
-		return CaerulaArborModVariables.MapVariables.get(world).strategy_silence;
+		return MapVariables.get(world).strategy_silence;
 	}
 
+	//他们真的需要放在这里吗
 	public static double getStraSubsis(LevelAccessor world) {
-		return CaerulaArborModVariables.MapVariables.get(world).strategy_subsisting;
+		return MapVariables.get(world).strategy_subsisting;
 	}
 
+	//他们真的需要放在这里吗
 	public static double getStraBreed(LevelAccessor world) {
-		return CaerulaArborModVariables.MapVariables.get(world).strategy_breed;
+		return MapVariables.get(world).strategy_breed;
 	}
 
+	//他们真的需要放在这里吗
 	public static double getStraGrow(LevelAccessor world) {
-		return CaerulaArborModVariables.MapVariables.get(world).strategy_grow;
+		return MapVariables.get(world).strategy_grow;
 	}
 
+	//他们真的需要放在这里吗
 	public static double getStraMigration(LevelAccessor world) {
-		return CaerulaArborModVariables.MapVariables.get(world).strategy_migration;
+		return MapVariables.get(world).strategy_migration;
 	}
 
+	//需要解释
 	public static double getEntityCosine(Entity A, Entity B) {
 		if (A == null || B == null)
 			return 0;
 		return MathUtils.getCosine(B.getX() - A.getX(), B.getZ() - A.getZ(), A.getLookAngle().x, A.getLookAngle().z);
 	}
 
+	//需要下放
 	public static double getFellowAround(LevelAccessor world, double x, double y, double z, Entity entity) {
 		if (entity == null)
 			return 0;
@@ -1130,10 +1008,11 @@ public class EntityUtils {
 		return num;
 	}
 
+	//同上
 	public static double getNodeAddSpeed(Entity entity) {
 		if (entity == null)
 			return 0;
-		return (entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).PEVO_NODE_add_speed;
+		return (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).PEVO_NODE_add_speed;
 	}
 
 	public static double getIllusionNum(LevelAccessor world, double x, double y, double z) {
@@ -1153,23 +1032,23 @@ public class EntityUtils {
 	public static double getNodeAddMiss(Entity entity) {
 		if (entity == null)
 			return 0;
-		return (entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).PEVO_NODE_add_miss;
+		return (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).PEVO_NODE_add_miss;
 	}
 
 	public static String getLiveMaxShown(Entity entity) {
 		if (entity == null)
 			return "";
-		return "/" + Math.round((entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).player_maxlive);
+		return "/" + Math.round((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_maxlive);
 	}
 
 	public static double getNodeEutectes(Entity entity) {
 		if (entity == null)
 			return 0;
-		return (entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).PEVO_NODE_eunectes;
+		return (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).PEVO_NODE_eunectes;
 	}
 
 	public static String getSilenceGrow(LevelAccessor world) {
-		return Component.translatable(("item.caerula_arbor.sample_grow.description_" + Math.round(CaerulaArborModVariables.MapVariables.get(world).strategy_silence + 5))).getString();
+		return Component.translatable(("item.caerula_arbor.sample_grow.description_" + Math.round(MapVariables.get(world).strategy_silence + 5))).getString();
 	}
 
 	public static void giveSpearFight(Entity entity) {
@@ -1180,11 +1059,11 @@ public class EntityUtils {
 	}
 
 	public static String getDescrBreed(LevelAccessor world) {
-		return Component.translatable(("item.caerula_arbor.sample_breed.description_" + Math.round(CaerulaArborModVariables.MapVariables.get(world).strategy_breed))).getString();
+		return Component.translatable(("item.caerula_arbor.sample_breed.description_" + Math.round(MapVariables.get(world).strategy_breed))).getString();
 	}
 
 	public static String getDescrGrow(LevelAccessor world) {
-		return Component.translatable(("item.caerula_arbor.sample_grow.description_" + Math.round(CaerulaArborModVariables.MapVariables.get(world).strategy_grow))).getString();
+		return Component.translatable(("item.caerula_arbor.sample_grow.description_" + Math.round(MapVariables.get(world).strategy_grow))).getString();
 	}
 
 	public static double getSlimeSize(Entity entity) {
@@ -1238,7 +1117,7 @@ public class EntityUtils {
 	}
 
 	public static String getDescrMigra(LevelAccessor world) {
-		return Component.translatable(("item.caerula_arbor.sample_migration.description_" + Math.round(CaerulaArborModVariables.MapVariables.get(world).strategy_migration))).getString();
+		return Component.translatable(("item.caerula_arbor.sample_migration.description_" + Math.round(MapVariables.get(world).strategy_migration))).getString();
 	}
 
 	public static void gainLessSpeed(Entity entity) {
@@ -1263,31 +1142,16 @@ public class EntityUtils {
 		}
 	}
 
-	public static String getSanity(Entity entity) {
-		if (entity == null)
-			return "";
-		double modi = 0;
-		modi = entity instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get())
-				? _livingEntity0.getAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()).getValue()
-				: 0;
-		if (modi <= 0) {
-			return "Infinity";
-		}
-		return ""
-				+ ((int) ((entity instanceof LivingEntity _livingEntity1 && _livingEntity1.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY.get()) ? _livingEntity1.getAttribute(CaerulaArborModAttributes.SANITY.get()).getBaseValue() : 0)
-						/ modi));
-	}
-
 	public static String getLives(Entity entity) {
 		if (entity == null)
 			return "";
-		return "" + Math.round((entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).player_lives);
+		return "" + Math.round((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_lives);
 	}
 
 	public static String getShield(Entity entity) {
 		if (entity == null)
 			return "";
-		return "" + Math.round((entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).player_shield);
+		return "" + Math.round((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_shield);
 	}
 
 	public static String getPalsy(Entity entity) {
@@ -1312,13 +1176,14 @@ public class EntityUtils {
 	public static String getLight(Entity entity) {
 		if (entity == null)
 			return "";
-		return "" + Math.round((entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).player_light);
+		return "" + Math.round((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_light);
 	}
 
 	public static Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
 		return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
 	}
 
+	//TODO 需要下放 解释
 	public static void gladiiaLinkPtcToEntity(LevelAccessor world, Entity entity, Entity tgt) {
 		if (entity == null || tgt == null)
 			return;
@@ -1351,12 +1216,14 @@ public class EntityUtils {
 		return entity.getBbWidth() * entity.getBbHeight();
 	}
 
+	//需要注释
 	public static boolean inquirybility(LevelAccessor world, double index) {
 		int comparator = (int) Math.pow(2, index);
-		int inq = (int) CaerulaArborModVariables.MapVariables.get(world).endspeaker_abolities & comparator;
+		int inq = (int) MapVariables.get(world).endspeaker_abolities & comparator;
 		return inq == comparator;
 	}
 
+	//TODO下放回实体
 	public static void getEndspeakerPrefixes(LevelAccessor world, Entity entity) {
 		if (entity == null)
 			return;
@@ -1386,6 +1253,7 @@ public class EntityUtils {
 		}
 	}
 
+	//需要解释
 	public static void healFromGladiia(LevelAccessor world, double x, double y, double z, Entity entity) {
 		if (entity == null)
 			return;
@@ -1397,14 +1265,7 @@ public class EntityUtils {
 		}
 	}
 
-	public static void setFastSwim(Entity entity) {
-		if (entity == null)
-			return;
-		if (entity instanceof LivingEntity _livingEntity1 && _livingEntity1.getAttributes().hasAttribute(ForgeMod.SWIM_SPEED.get()))
-			_livingEntity1.getAttribute(ForgeMod.SWIM_SPEED.get())
-					.setBaseValue(((entity instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(Attributes.MOVEMENT_SPEED) ? _livingEntity0.getAttribute(Attributes.MOVEMENT_SPEED).getBaseValue() : 0) * 10));
-	}
-
+	//TODO:需要下放
 	public static void initHunter(Entity entity) {
 		if (entity == null)
 			return;
@@ -1446,7 +1307,9 @@ public class EntityUtils {
 					if (isSonic) {
 						entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "warden_sonic"))), obj),
 								(float) damage);
-						deductSanity(entityiterator, damage * 1.5);
+						if (entityiterator instanceof LivingEntity livingEntity) {
+							SIHelper.causeSanityInjury(livingEntity, damage * 1.5);
+						}
 					} else {
 						entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "warden_attack"))), obj),
 								(float) damage);
@@ -1456,6 +1319,7 @@ public class EntityUtils {
 		}
 	}
 
+	//TODO:需要下放回实体，理念同WorldUtils的对凋零的处理
 	public static void wardenSonicBoom(LevelAccessor world, Entity obj, Entity target) {
 		if (obj == null || target == null)
 			return;
@@ -1489,6 +1353,7 @@ public class EntityUtils {
 		}
 	}
 
+	//TODO:下放，同处理
 	public static void wardenLightBoom(LevelAccessor world, Entity obj, Entity target) {
 		if (obj == null || target == null)
 			return;
@@ -1522,6 +1387,7 @@ public class EntityUtils {
 		}
 	}
 
+	//TODO:制作他俩的基类并下放
 	public static void dropWardenExp(LevelAccessor world, double x, double y, double z) {
 		if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
 			for (int index0 = 0; index0 < 64; index0++) {
@@ -1531,6 +1397,7 @@ public class EntityUtils {
 		}
 	}
 
+	//TODO:endspeaker的几个类可以合并为一个类，使用状态机，模型和渲染就参考原版mc的河豚
 	public static void endspeakerTick(LevelAccessor world, Entity entity) {
 		if (entity == null)
 			return;
@@ -1579,11 +1446,12 @@ public class EntityUtils {
 		}
 	}
 
+	//TODO同下放处理，理念同上
 	public static void spawnEndspeakerMobs(LevelAccessor world, double x, double y, double z, double elite_chan, double n) {
 		double tx = 0;
 		double ty = 0;
 		double tz = 0;
-		if (!CaerulaArborModVariables.MapVariables.get(world).endspeakerSummon) {
+		if (!MapVariables.get(world).endspeakerSummon) {
 			return;
 		}
 		if (getSeabornNum(world, x, y, z) >= (world.getLevelData().getGameRules().getInt(CaerulaArborModGameRules.CLONE_NUMBER_LIMIT))) {
@@ -1659,6 +1527,7 @@ public class EntityUtils {
 		}
 	}
 
+	//需要解释
 	public static void hurtMartus(LevelAccessor world, Entity obj, Entity source, double num, double perc) {
 		if (obj == null)
 			return;
@@ -1689,6 +1558,7 @@ public class EntityUtils {
 		return at.isAlliedTo(bt);
 	}
 
+	//需要解释
 	public static final TagKey<EntityType<?>> HUMAN = TagKey.create(
 			Registries.ENTITY_TYPE,
 			new ResourceLocation(CaerulaArborMod.MODID, "is_humanside")
@@ -1699,6 +1569,7 @@ public class EntityUtils {
 			new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")
 		);
 
+	//TODO:下放回实体
 	public static boolean isCorruptedSource(DamageSource source) {
 		Entity entity = source.getEntity();
 		if(entity == null) return true;
@@ -1706,6 +1577,7 @@ public class EntityUtils {
 		return entity instanceof Player;
 	}
 
+	//可能需要评估，低优先级
 	public static void killSelf(LevelAccessor world, Entity entity, Entity immediatesourceentity) {
 		if (entity == null || immediatesourceentity == null)
 			return;
@@ -1716,6 +1588,7 @@ public class EntityUtils {
 		});
 	}
 
+	//TODO下放到实体并作为辅助方法
 	public static void swallowCrystals(LevelAccessor world, double x, double y, double z, Entity entity) {
 		if (entity == null)
 			return;
@@ -1732,6 +1605,7 @@ public class EntityUtils {
 		}
 	}
 
+	//TODO需要下放回实体
 	public static boolean isShulkerWalking(Entity entity) {
 		if (entity == null)
 			return false;
@@ -1741,6 +1615,7 @@ public class EntityUtils {
 		return false;
 	}
 
+	//TODO下放回实体
 	public static void summonHurtSkadi(LevelAccessor world, double x, double y, double z) {
 		if (world instanceof ServerLevel _level) {
 			LivingEntity entityToSpawn = CaerulaArborModEntities.SKADI.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
@@ -1751,6 +1626,7 @@ public class EntityUtils {
 		}
 	}
 
+	//需要解释，特别可疑
 	public static void vanguardBuff(LevelAccessor world, double x, double y, double z, Entity entity) {
 		if (entity == null)
 			return;
@@ -1780,13 +1656,14 @@ public class EntityUtils {
 		}
 	}
 
+	//TODO可以放入海嗣的基类,参考参考文件
 	public static boolean isOceanizedPlayerNearby(LevelAccessor world, double x, double y, double z) {
 		{
 			final Vec3 _center = new Vec3(x, y, z);
 			List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(72 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
 			for (Entity entityiterator : _entfound) {
 				if (entityiterator instanceof Player) {
-					if ((entityiterator.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).player_oceanization >= 2.9) {
+					if ((entityiterator.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization >= 2.9) {
 						return false;
 					}
 				}
@@ -1795,6 +1672,7 @@ public class EntityUtils {
 		return true;
 	}
 
+	//TODO下放回骑士实体，马调用骑士的就行
 	public static void applyLastKnightFreeze(LevelAccessor world, Entity entity, Entity sourceentity) {
 		if (entity == null || sourceentity == null)
 			return;
@@ -1822,6 +1700,7 @@ public class EntityUtils {
 		}
 	}
 
+	//需要解释
 	public static void turnRounds(Entity another, Entity me) {
 		if (another == null || me == null)
 			return;
@@ -1832,6 +1711,7 @@ public class EntityUtils {
 		another.setDeltaMovement(delta);
 	}
 
+	//可疑，需要解释并评估怎么处理
 	public static void pullToGladiia(Entity another, Entity me) {
 		if (another == null || me == null)
 			return;
@@ -1842,6 +1722,7 @@ public class EntityUtils {
 		another.push(offset.x, offset.y, offset.z);
 	}
 
+	//需要评估
 	public static void clearTarget(Entity entity) {
 		if (entity instanceof LivingEntity living) {
 			Brain<?> brain = living.getBrain();
@@ -1866,6 +1747,7 @@ public class EntityUtils {
 		}
 	}
 
+	//评估他和接口的关系是否合适
 	public static Entity findNearestRidable(LevelAccessor world, double x, double y, double z, Entity entity, double distLimit, Class<? extends Entity> entityType) {
 		if (entity == null)
 			return null;
@@ -1887,6 +1769,7 @@ public class EntityUtils {
 		return result;
 	}
 
+	//TODO需要下放回OceanizedEndermanEntity,LivingAttackEventHandler之后需要整个处理
 	public static void teleportTo(LevelAccessor world, Entity entity, double fromX, double fromY, double fromZ, double toX, double toY, double toZ) {
 		if (entity == null || !entity.isAlive())
 			return;

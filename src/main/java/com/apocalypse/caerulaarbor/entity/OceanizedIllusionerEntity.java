@@ -132,7 +132,7 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
 		this.targetSelector.addGoal(9, new NearestAttackableTargetGoal<>(this, Piglin.class, true, true));
 		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, true));
 		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, true));
-		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal(this, Player.class, true, true) {
+		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, Player.class, true, true) {
 			@Override
 			public boolean canUse() {
 				double x = OceanizedIllusionerEntity.this.getX();
@@ -153,24 +153,14 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
 				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
 		});
-		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal(this, Animal.class, true, true) {
+		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Animal.class, true, true) {
 			@Override
 			public boolean canUse() {
-				double x = OceanizedIllusionerEntity.this.getX();
-				double y = OceanizedIllusionerEntity.this.getY();
-				double z = OceanizedIllusionerEntity.this.getZ();
-				Entity entity = OceanizedIllusionerEntity.this;
-				Level world = OceanizedIllusionerEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = OceanizedIllusionerEntity.this.getX();
-				double y = OceanizedIllusionerEntity.this.getY();
-				double z = OceanizedIllusionerEntity.this.getZ();
-				Entity entity = OceanizedIllusionerEntity.this;
-				Level world = OceanizedIllusionerEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
@@ -179,21 +169,11 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
 		this.goalSelector.addGoal(16, new RandomStrollGoal(this, 1) {
 			@Override
 			public boolean canUse() {
-				double x = OceanizedIllusionerEntity.this.getX();
-				double y = OceanizedIllusionerEntity.this.getY();
-				double z = OceanizedIllusionerEntity.this.getZ();
-				Entity entity = OceanizedIllusionerEntity.this;
-				Level world = OceanizedIllusionerEntity.this.level();
 				return super.canUse() && isIllusionerDurative();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = OceanizedIllusionerEntity.this.getX();
-				double y = OceanizedIllusionerEntity.this.getY();
-				double z = OceanizedIllusionerEntity.this.getZ();
-				Entity entity = OceanizedIllusionerEntity.this;
-				Level world = OceanizedIllusionerEntity.this.level();
 				return super.canContinueToUse() && isIllusionerDurative();
 			}
 		});
@@ -201,21 +181,11 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
 		this.goalSelector.addGoal(18, new RandomLookAroundGoal(this) {
 			@Override
 			public boolean canUse() {
-				double x = OceanizedIllusionerEntity.this.getX();
-				double y = OceanizedIllusionerEntity.this.getY();
-				double z = OceanizedIllusionerEntity.this.getZ();
-				Entity entity = OceanizedIllusionerEntity.this;
-				Level world = OceanizedIllusionerEntity.this.level();
 				return super.canUse() && isIllusionerDurative();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = OceanizedIllusionerEntity.this.getX();
-				double y = OceanizedIllusionerEntity.this.getY();
-				double z = OceanizedIllusionerEntity.this.getZ();
-				Entity entity = OceanizedIllusionerEntity.this;
-				Level world = OceanizedIllusionerEntity.this.level();
 				return super.canContinueToUse() && isIllusionerDurative();
 			}
 		});
@@ -352,36 +322,33 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if (this != null) {
-            Entity illusion = null;
-            if (!isPassenger()) {
-                if (Math.random() < 0.75) {
-                    illusion = world.getEntitiesOfClass(OceanIllusionEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true).stream().sorted(new Object() {
-                        Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
-                            return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
+        Entity illusion = null;
+        if (!isPassenger()) {
+            if (Math.random() < 0.75) {
+                illusion = world.getEntitiesOfClass(OceanIllusionEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true).stream().sorted(new Object() {
+                    Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
+                        return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
+                    }
+                }.compareDistOf(x, y, z)).findFirst().orElse(null);
+                if (illusion != null) {
+                    if (illusion.isAlive()) {
+                        {
+                            Entity _ent = this;
+                            _ent.teleportTo((illusion.getX()), (illusion.getY()), (illusion.getZ()));
+                            if (_ent instanceof ServerPlayer _serverPlayer)
+                                _serverPlayer.connection.teleport((illusion.getX()), (illusion.getY()), (illusion.getZ()), _ent.getYRot(), _ent.getXRot());
                         }
-                    }.compareDistOf(x, y, z)).findFirst().orElse(null);
-                    if (illusion != null) {
-                        if (illusion.isAlive()) {
-                            {
-                                Entity _ent = this;
-                                _ent.teleportTo((illusion.getX()), (illusion.getY()), (illusion.getZ()));
-                                if (_ent instanceof ServerPlayer _serverPlayer)
-                                    _serverPlayer.connection.teleport((illusion.getX()), (illusion.getY()), (illusion.getZ()), _ent.getYRot(), _ent.getXRot());
-                            }
-                            {
-                                Entity _ent = illusion;
-                                _ent.teleportTo(x, y, z);
-                                if (_ent instanceof ServerPlayer _serverPlayer)
-                                    _serverPlayer.connection.teleport(x, y, z, _ent.getYRot(), _ent.getXRot());
-                            }
-                            if (!world.isClientSide()) {
-                                if (world instanceof Level _level) {
-                                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.illusioner.mirror_move")), SoundSource.HOSTILE, 1, 1);
-                                }
-                            }
-                            flag = true;
+                        {
+                            illusion.teleportTo(x, y, z);
+                            if (illusion instanceof ServerPlayer _serverPlayer)
+                                _serverPlayer.connection.teleport(x, y, z, illusion.getYRot(), illusion.getXRot());
                         }
+                        if (!world.isClientSide()) {
+                            if (world instanceof Level _level) {
+                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.illusioner.mirror_move")), SoundSource.HOSTILE, 1, 1);
+                            }
+                        }
+                        flag = true;
                     }
                 }
             }
@@ -397,20 +364,16 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this != null) {
-            if ((LevelAccessor) world instanceof ServerLevel _level) {
-                Entity entityToSpawn = CaerulaArborModEntities.OCEANIZED_RAVAGER.get().spawn(_level, BlockPos.containing(this.getX(), this.getY(), this.getZ()), MobSpawnType.MOB_SUMMONED);
-                if (entityToSpawn != null) {
-                    entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-                    if (entityToSpawn instanceof LivingEntity living) {
-                        AttributeInstance instance = living.getAttribute(Attributes.MAX_HEALTH);
-                        if (instance != null) {
-                            instance.setBaseValue(instance.getBaseValue() * 1.5);
-                        }
-                        living.setHealth(living.getMaxHealth());
-                    }
-                    startRiding(entityToSpawn);
+        if ((LevelAccessor) world instanceof ServerLevel _level) {
+            LivingEntity entityToSpawn = CaerulaArborModEntities.OCEANIZED_RAVAGER.get().spawn(_level, BlockPos.containing(this.getX(), this.getY(), this.getZ()), MobSpawnType.MOB_SUMMONED);
+            if (entityToSpawn != null) {
+                entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+                AttributeInstance instance = entityToSpawn.getAttribute(Attributes.MAX_HEALTH);
+                if (instance != null) {
+                    instance.setBaseValue(instance.getBaseValue() * 1.5);
                 }
+                entityToSpawn.setHealth(entityToSpawn.getMaxHealth());
+                startRiding(entityToSpawn);
             }
         }
         return retval;
@@ -445,134 +408,129 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if (this != null) {
-            Entity enemy = null;
-            double sklp1 = 0;
-            double sklp2 = 0;
-            double dura = 0;
-            if (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5) {
-                if ((Entity) this instanceof OceanizedIllusionerEntity animatable)
-                    animatable.setTexture("oceanized_illusioner_broken");
+        Entity enemy = null;
+        double sklp1 = 0;
+        double sklp2 = 0;
+        double dura = 0;
+        if (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5) {
+            if ((Entity) this instanceof OceanizedIllusionerEntity animatable)
+                animatable.setTexture("oceanized_illusioner_broken");
+        }
+        if (!this.isAlive()) {
+            this.removeEffect(MobEffects.INVISIBILITY);
+        } else {
+            sklp1 = (Entity) this instanceof OceanizedIllusionerEntity _datEntI ? _datEntI.getEntityData().get(DATA_spellP) : 0;
+            sklp2 = (Entity) this instanceof OceanizedIllusionerEntity _datEntI ? _datEntI.getEntityData().get(DATA_mirrorP) : 0;
+            dura = (Entity) this instanceof OceanizedIllusionerEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
+            enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+            if (dura > 0) {
+                if ((Entity) this instanceof OceanizedIllusionerEntity _datEntSetI)
+                    _datEntSetI.getEntityData().set(DATA_duration, (int) (dura - 1));
             }
-            if (!this.isAlive()) {
-                if ((Entity) this instanceof LivingEntity _entity)
-                    _entity.removeEffect(MobEffects.INVISIBILITY);
-            } else {
-                sklp1 = (Entity) this instanceof OceanizedIllusionerEntity _datEntI ? _datEntI.getEntityData().get(DATA_spellP) : 0;
-                sklp2 = (Entity) this instanceof OceanizedIllusionerEntity _datEntI ? _datEntI.getEntityData().get(DATA_mirrorP) : 0;
-                dura = (Entity) this instanceof OceanizedIllusionerEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
-                enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
-                if (dura > 0) {
-                    if ((Entity) this instanceof OceanizedIllusionerEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_duration, (int) (dura - 1));
-                }
-                if (sklp1 > 0) {
-                    if ((Entity) this instanceof OceanizedIllusionerEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_spellP, (int) (sklp1 - 1));
-                    if (sklp1 == 100) {
-                        if (world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.illusioner.prepare_blindness")), SoundSource.HOSTILE, 1, 1);
-                        }
-                    }
-                } else if (dura <= 0) {
-                    if (!(enemy == null) && enemy.isAlive()) {
-                        if ((enemy != null ? distanceTo(enemy) : -1) <= 12) {
-                            if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.illusioner.cast_spell")), SoundSource.HOSTILE, 1, 1);
-                            }
-                            if (this instanceof OceanizedIllusionerEntity) {
-                                this.setAnimation("animation.oceanized_illusioner.cast");
-                            }
-                            if (enemy instanceof LivingEntity _entity && !this.level().isClientSide())
-                                this.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 400, 0));
-                            if (enemy instanceof LivingEntity _entity && !this.level().isClientSide())
-                                this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.DEDUCT_ONE_SANITY.get(), 200, 1));
-                            if ((Entity) this instanceof OceanizedIllusionerEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_spellP, 180);
-                            if ((Entity) this instanceof OceanizedIllusionerEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_duration, 15);
-                            dura = 15;
-                        }
+            if (sklp1 > 0) {
+                if ((Entity) this instanceof OceanizedIllusionerEntity _datEntSetI)
+                    _datEntSetI.getEntityData().set(DATA_spellP, (int) (sklp1 - 1));
+                if (sklp1 == 100) {
+                    if (world instanceof Level _level) {
+                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.illusioner.prepare_blindness")), SoundSource.HOSTILE, 1, 1);
                     }
                 }
-                if ((Entity) this instanceof LivingEntity _entity)
-                    _entity.removeEffect(CaerulaArborModMobEffects.DEDUCT_ONE_SANITY.get());
-                if ((Entity) this instanceof LivingEntity _entity)
-                    _entity.removeEffect(MobEffects.BLINDNESS);
-                if (sklp2 > 0) {
-                    if ((Entity) this instanceof OceanizedIllusionerEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_mirrorP, (int) (sklp2 - 1));
-                    if (sklp2 == 100) {
+            } else if (dura <= 0) {
+                if (!(enemy == null) && enemy.isAlive()) {
+                    if (distanceTo(enemy) <= 12) {
                         if (world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.illusioner.prepare_mirror")), SoundSource.HOSTILE, 1, 1);
+                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.illusioner.cast_spell")), SoundSource.HOSTILE, 1, 1);
                         }
+                        if (this instanceof OceanizedIllusionerEntity) {
+                            this.setAnimation("animation.oceanized_illusioner.cast");
+                        }
+                        if (enemy instanceof LivingEntity _entity && !this.level().isClientSide())
+                            this.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 400, 0));
+                        if (enemy instanceof LivingEntity _entity && !this.level().isClientSide())
+                            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.DEDUCT_ONE_SANITY.get(), 200, 1));
+                        if ((Entity) this instanceof OceanizedIllusionerEntity _datEntSetI)
+                            _datEntSetI.getEntityData().set(DATA_spellP, 180);
+                        if ((Entity) this instanceof OceanizedIllusionerEntity _datEntSetI)
+                            _datEntSetI.getEntityData().set(DATA_duration, 15);
+                        dura = 15;
                     }
-                } else if (dura <= 0) {
-                    if (!(enemy == null) && enemy.isAlive()) {
-                        if (EntityUtils.getIllusionNum(world, x, y, z) < 8 && EntityUtils.getSeabornAround(world, x, y, z, this) < (world.getLevelData().getGameRules().getInt(CaerulaArborModGameRules.CLONE_NUMBER_LIMIT))) {
-                            if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.illusioner.cast_spell")), SoundSource.HOSTILE, 1, 1);
-                            }
-                            if (this instanceof OceanizedIllusionerEntity) {
-                                this.setAnimation("animation.oceanized_illusioner.fission");
-                            }
-                            for (int index0 = 0; index0 < 5; index0++) {
-                                if (WorldUtils.isValidForMan(world, x + 4 - index0, y, z)) {
-                                    if (world instanceof ServerLevel _level) {
-                                        Entity entityToSpawn = CaerulaArborModEntities.OCEAN_ILLUSION.get().spawn(_level, BlockPos.containing(x + 4 - index0, y, z), MobSpawnType.MOB_SUMMONED);
-                                        if (entityToSpawn != null) {
-                                            entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-                                        }
-                                    }
-                                    break;
-                                }
-                            }
-                            for (int index1 = 0; index1 < 5; index1++) {
-                                if (WorldUtils.isValidForMan(world, x - (4 - index1), y, z)) {
-                                    if (world instanceof ServerLevel _level) {
-                                        Entity entityToSpawn = CaerulaArborModEntities.OCEAN_ILLUSION.get().spawn(_level, BlockPos.containing(x - (4 - index1), y, z), MobSpawnType.MOB_SUMMONED);
-                                        if (entityToSpawn != null) {
-                                            entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-                                        }
-                                    }
-                                    break;
-                                }
-                            }
-                            for (int index2 = 0; index2 < 5; index2++) {
-                                if (WorldUtils.isValidForMan(world, x, y, z + 4 - index2)) {
-                                    if (world instanceof ServerLevel _level) {
-                                        Entity entityToSpawn = CaerulaArborModEntities.OCEAN_ILLUSION.get().spawn(_level, BlockPos.containing(x, y, z + 4 - index2), MobSpawnType.MOB_SUMMONED);
-                                        if (entityToSpawn != null) {
-                                            entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-                                        }
-                                    }
-                                    break;
-                                }
-                            }
-                            for (int index3 = 0; index3 < 5; index3++) {
-                                if (WorldUtils.isValidForMan(world, x, y, z - (4 - index3))) {
-                                    if (world instanceof ServerLevel _level) {
-                                        Entity entityToSpawn = CaerulaArborModEntities.OCEAN_ILLUSION.get().spawn(_level, BlockPos.containing(x, y, z - (4 - index3)), MobSpawnType.MOB_SUMMONED);
-                                        if (entityToSpawn != null) {
-                                            entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-                                        }
-                                    }
-                                    break;
-                                }
-                            }
-                            if (!this.level().isClientSide())
-                                this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 20, 0));
-                            CaerulaArborMod.queueServerWork(18, () -> {
-                                if (!isPassenger()) {
-                                    if (!this.level().isClientSide())
-                                        this.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 2400, 0));
-                                }
-                            });
-                            if ((Entity) this instanceof OceanizedIllusionerEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_mirrorP, 340);
-                            if ((Entity) this instanceof OceanizedIllusionerEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_duration, 20);
+                }
+            }
+            this.removeEffect(CaerulaArborModMobEffects.DEDUCT_ONE_SANITY.get());
+            this.removeEffect(MobEffects.BLINDNESS);
+            if (sklp2 > 0) {
+                if ((Entity) this instanceof OceanizedIllusionerEntity _datEntSetI)
+                    _datEntSetI.getEntityData().set(DATA_mirrorP, (int) (sklp2 - 1));
+                if (sklp2 == 100) {
+                    if (world instanceof Level _level) {
+                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.illusioner.prepare_mirror")), SoundSource.HOSTILE, 1, 1);
+                    }
+                }
+            } else if (dura <= 0) {
+                if (!(enemy == null) && enemy.isAlive()) {
+                    if (EntityUtils.getIllusionNum(world, x, y, z) < 8 && EntityUtils.getSeabornAround(world, x, y, z, this) < (world.getLevelData().getGameRules().getInt(CaerulaArborModGameRules.CLONE_NUMBER_LIMIT))) {
+                        if (world instanceof Level _level) {
+                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.illusioner.cast_spell")), SoundSource.HOSTILE, 1, 1);
                         }
+                        if (this instanceof OceanizedIllusionerEntity) {
+                            this.setAnimation("animation.oceanized_illusioner.fission");
+                        }
+                        for (int index0 = 0; index0 < 5; index0++) {
+                            if (WorldUtils.isValidForMan(world, x + 4 - index0, y, z)) {
+                                if (world instanceof ServerLevel _level) {
+                                    Entity entityToSpawn = CaerulaArborModEntities.OCEAN_ILLUSION.get().spawn(_level, BlockPos.containing(x + 4 - index0, y, z), MobSpawnType.MOB_SUMMONED);
+                                    if (entityToSpawn != null) {
+                                        entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                        for (int index1 = 0; index1 < 5; index1++) {
+                            if (WorldUtils.isValidForMan(world, x - (4 - index1), y, z)) {
+                                if (world instanceof ServerLevel _level) {
+                                    Entity entityToSpawn = CaerulaArborModEntities.OCEAN_ILLUSION.get().spawn(_level, BlockPos.containing(x - (4 - index1), y, z), MobSpawnType.MOB_SUMMONED);
+                                    if (entityToSpawn != null) {
+                                        entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                        for (int index2 = 0; index2 < 5; index2++) {
+                            if (WorldUtils.isValidForMan(world, x, y, z + 4 - index2)) {
+                                if (world instanceof ServerLevel _level) {
+                                    Entity entityToSpawn = CaerulaArborModEntities.OCEAN_ILLUSION.get().spawn(_level, BlockPos.containing(x, y, z + 4 - index2), MobSpawnType.MOB_SUMMONED);
+                                    if (entityToSpawn != null) {
+                                        entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                        for (int index3 = 0; index3 < 5; index3++) {
+                            if (WorldUtils.isValidForMan(world, x, y, z - (4 - index3))) {
+                                if (world instanceof ServerLevel _level) {
+                                    Entity entityToSpawn = CaerulaArborModEntities.OCEAN_ILLUSION.get().spawn(_level, BlockPos.containing(x, y, z - (4 - index3)), MobSpawnType.MOB_SUMMONED);
+                                    if (entityToSpawn != null) {
+                                        entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                        if (!this.level().isClientSide())
+                            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 20, 0));
+                        CaerulaArborMod.queueServerWork(18, () -> {
+                            if (!isPassenger()) {
+                                if (!this.level().isClientSide())
+                                    this.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 2400, 0));
+                            }
+                        });
+                        if ((Entity) this instanceof OceanizedIllusionerEntity _datEntSetI)
+                            _datEntSetI.getEntityData().set(DATA_mirrorP, 340);
+                        if ((Entity) this instanceof OceanizedIllusionerEntity _datEntSetI)
+                            _datEntSetI.getEntityData().set(DATA_duration, 20);
                     }
                 }
             }
@@ -649,8 +607,7 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
 			if (this.isAttacking() && event.isMoving()) {
 				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_illusioner.aggre_move"));
 			}
-			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.1F && event.getLimbSwingAmount() < 0.1F))
-) {
+			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.1F && event.getLimbSwingAmount() < 0.1F))) {
 				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_illusioner.aggre_move"));
 			}
 			if (this.isDeadOrDying()) {
@@ -664,7 +621,6 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
 	private PlayState attackingPredicate(AnimationState event) {
 		double d1 = this.getX() - this.xOld;
 		double d0 = this.getZ() - this.zOld;
-		float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
 		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();

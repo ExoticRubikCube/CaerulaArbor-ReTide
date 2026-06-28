@@ -1,7 +1,8 @@
 package com.apocalypse.caerulaarbor.entity.base;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.util.EntityUtils;
+import com.apocalypse.caerulaarbor.api.event.SanityEvent;
+import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
@@ -59,7 +60,9 @@ public interface RangedSanityAttacker {
 			}
 			entity.hurt(new DamageSource(level.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_magic")))),
 					(float) attackDamage);
-			EntityUtils.deductSanity(entity, attackDamage * 150);
+			if (center instanceof LivingEntity attacker && entity instanceof LivingEntity target) {
+				SIHelper.causeSanityInjury(target, attacker, attackDamage * 150, SanityEvent.Hurt.Type.ENTITY);
+			}
 		}
 	}
 }

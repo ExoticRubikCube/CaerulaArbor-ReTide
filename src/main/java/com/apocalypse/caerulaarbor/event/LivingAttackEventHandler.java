@@ -1,11 +1,17 @@
 package com.apocalypse.caerulaarbor.event;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.api.event.SanityEvent;
+import com.apocalypse.caerulaarbor.capability.ModCapabilities;
+import com.apocalypse.caerulaarbor.capability.map.MapVariables;
+import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler;
+import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler.StrategyType;
+import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
+import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
 import com.apocalypse.caerulaarbor.entity.*;
 import com.apocalypse.caerulaarbor.init.*;
 import com.apocalypse.caerulaarbor.item.HighmoreScytheItem;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import com.apocalypse.caerulaarbor.procedures.SummonFractalProcedure;
 import com.apocalypse.caerulaarbor.system.UpgradeGrowProcedure;
 import com.apocalypse.caerulaarbor.system.UpgradeSilenceProcedure;
@@ -375,8 +381,12 @@ public class LivingAttackEventHandler {
                     if (!sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))
                             || (entity instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == sourceentity) {
                         EntityUtils.teleportTo(world, entity, x, y, z, sx, sy, sz);
-                        EntityUtils.deductSanity(sourceentity, (entity instanceof LivingEntity _livingEntity8 && _livingEntity8.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)
-                                ? _livingEntity8.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 15);
+                        if (sourceentity instanceof LivingEntity target && entity instanceof LivingEntity attacker) {
+                            SIHelper.causeSanityInjury(target,
+                                    attacker,
+                                    (attacker.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? attacker.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 15,
+                                    SanityEvent.Hurt.Type.ENTITY);
+                        }
                         if (entity instanceof Mob _entity && sourceentity instanceof LivingEntity _ent)
                             _entity.setTarget(_ent);
                         sourceentity.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_magic"))), entity),
@@ -619,11 +629,11 @@ public class LivingAttackEventHandler {
                 && !sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))
                 && !entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanpet")))
                 && !entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "skip_migration")))) {
-            if (CaerulaArborModVariables.MapVariables.get(world).strategy_migration > 0) {
+            if (MapVariables.get(world).strategy_migration > 0) {
                 if (!isCreativePlayer(sourceentity) && !damagesource.is(TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "bypasses_migration")))) {
                     for (Entity entityiterator : world.getEntities(entity,
-                            new AABB((x - (8 + CaerulaArborModVariables.MapVariables.get(world).strategy_migration * 16)), (y - 16), (z - (8 + CaerulaArborModVariables.MapVariables.get(world).strategy_migration * 16)),
-                                    (x + 8 + CaerulaArborModVariables.MapVariables.get(world).strategy_migration * 24), (y + 16), (z + 8 + CaerulaArborModVariables.MapVariables.get(world).strategy_migration * 24)))) {
+                            new AABB((x - (8 + MapVariables.get(world).strategy_migration * 16)), (y - 16), (z - (8 + MapVariables.get(world).strategy_migration * 16)),
+                                    (x + 8 + MapVariables.get(world).strategy_migration * 24), (y + 16), (z + 8 + MapVariables.get(world).strategy_migration * 24)))) {
                         if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))
                                 && !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanpet")))) {
                             if (entityiterator == sourceentity) continue;
@@ -638,11 +648,11 @@ public class LivingAttackEventHandler {
             }
         }
 
-        if (entity instanceof Player && (entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).player_oceanization >= 3) {
-            if (CaerulaArborModVariables.MapVariables.get(world).strategy_migration > 0 && !sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+        if (entity instanceof Player && (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization >= 3) {
+            if (MapVariables.get(world).strategy_migration > 0 && !sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
                 for (Entity entityiterator : world.getEntities(entity,
-                        new AABB((x - (8 + CaerulaArborModVariables.MapVariables.get(world).strategy_migration * 24)), (y - 16), (z - (8 + CaerulaArborModVariables.MapVariables.get(world).strategy_migration * 24)),
-                                (x + 8 + CaerulaArborModVariables.MapVariables.get(world).strategy_migration * 24), (y + 16), (z + 8 + CaerulaArborModVariables.MapVariables.get(world).strategy_migration * 24)))) {
+                        new AABB((x - (8 + MapVariables.get(world).strategy_migration * 24)), (y - 16), (z - (8 + MapVariables.get(world).strategy_migration * 24)),
+                                (x + 8 + MapVariables.get(world).strategy_migration * 24), (y + 16), (z + 8 + MapVariables.get(world).strategy_migration * 24)))) {
                     if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))
                             && !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanpet")))) {
                         if (entityiterator == sourceentity) continue;
@@ -659,8 +669,7 @@ public class LivingAttackEventHandler {
     private static void handleMobHitEvolution(LivingAttackEvent event, LevelAccessor world, double x, double y, double z, DamageSource damagesource, Entity entity, Entity sourceentity, double amount) {
         if (sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
             if (world.getLevelData().getGameRules().getBoolean(CaerulaArborModGameRules.NATURAL_EVOLUTION)) {
-                CaerulaArborModVariables.MapVariables.get(world).evo_point_grow = CaerulaArborModVariables.MapVariables.get(world).evo_point_grow + amount * 0.025;
-                CaerulaArborModVariables.MapVariables.get(world).syncData(world);
+                MapVariablesHandler.addEvoPoint(world, StrategyType.GROW, amount * 0.025);
                 UpgradeGrowProcedure.execute(world);
                 UpgradeSilenceProcedure.execute(world, amount * 0.025);
             }
@@ -678,9 +687,8 @@ public class LivingAttackEventHandler {
 
             if (world.getLevelData().getGameRules().getBoolean(CaerulaArborModGameRules.NATURAL_EVOLUTION)
                     && !damagesource.is(TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "bypasses_evolution")))) {
-                CaerulaArborModVariables.MapVariables.get(world).evo_point_subsisting = CaerulaArborModVariables.MapVariables.get(world).evo_point_subsisting
-                        + Math.min(amount, entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.025;
-                CaerulaArborModVariables.MapVariables.get(world).syncData(world);
+                MapVariablesHandler.addEvoPoint(world, StrategyType.SUBSISTING,
+                        Math.min(amount, entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.025);
                 UpgradeSubsisProcedure.execute(world);
                 UpgradeSilenceProcedure.execute(world, Math.min(amount, entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.025);
             }
@@ -755,7 +763,7 @@ public class LivingAttackEventHandler {
             String rname = ForgeRegistries.ITEMS.getKey(mainHandItem.getItem()).toString();
             boolean validItem;
 
-            if ((sourceentity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).relic_hand_STRANGLE) {
+            if ((sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_STRANGLE) {
                 validItem = false;
                 if (mainHandItem.is(ItemTags.create(new ResourceLocation("forge:tools/crossbows")))) {
                     validItem = true;
@@ -783,7 +791,7 @@ public class LivingAttackEventHandler {
                 }
             }
 
-            if ((sourceentity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).relic_hand_FIREWORK) {
+            if ((sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_FIREWORK) {
                 validItem = false;
                 if (mainHandItem.getItem() == Items.BOW) {
                     validItem = true;
@@ -826,10 +834,10 @@ public class LivingAttackEventHandler {
             }
         }
 
-        if ((sourceentity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).relic_legend_CHITIN) {
+        if ((sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_legend_CHITIN) {
             if (Math.random() < 0.05) {
                 ItemStack _setval = (sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY);
-                sourceentity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                     capability.chitin_knife_selected = _setval.copy();
                     capability.syncPlayerVariables(sourceentity);
                 });

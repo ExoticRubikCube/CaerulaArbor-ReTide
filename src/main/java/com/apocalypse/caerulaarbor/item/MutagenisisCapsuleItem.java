@@ -1,8 +1,10 @@
 package com.apocalypse.caerulaarbor.item;
 
+import com.apocalypse.caerulaarbor.api.event.SanityEvent;
+import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
-import com.apocalypse.caerulaarbor.util.EntityUtils;
+import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
+import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.registries.Registries;
@@ -45,9 +47,9 @@ public class MutagenisisCapsuleItem extends Item {
 		double z = entity.getZ();
         if (entity != null) {
             double ocean = 0;
-            ocean = (((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).player_oceanization;
+            ocean = (((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization;
             if (ocean < 2.9) {
-                EntityUtils.deductSanity(entity, (ocean + 1) * 40);
+                SIHelper.causeSanityInjury(entity, (ocean + 1) * 40, SanityEvent.Hurt.Type.FOOD);
                 ((Entity) entity).hurt(new DamageSource(((LevelAccessor) world).registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanize_damage")))), (float) (3 * (ocean + 1)));
                 if (!entity.level().isClientSide()) {
                     entity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 2400, (int) ocean));
@@ -56,7 +58,7 @@ public class MutagenisisCapsuleItem extends Item {
                 if (((Entity) entity).isAlive()) {
                     {
                         double _setval = ocean + 1;
-                        ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                        ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                             capability.player_oceanization = _setval;
                             capability.syncPlayerVariables(entity);
                         });

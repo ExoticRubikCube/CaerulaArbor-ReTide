@@ -129,21 +129,11 @@ public class SaintCarmenEntity extends Animal implements GeoEntity {
 
 			@Override
 			public boolean canUse() {
-				double x = SaintCarmenEntity.this.getX();
-				double y = SaintCarmenEntity.this.getY();
-				double z = SaintCarmenEntity.this.getZ();
-				Entity entity = SaintCarmenEntity.this;
-				Level world = SaintCarmenEntity.this.level();
 				return super.canUse() && isCarmenDurative();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = SaintCarmenEntity.this.getX();
-				double y = SaintCarmenEntity.this.getY();
-				double z = SaintCarmenEntity.this.getZ();
-				Entity entity = SaintCarmenEntity.this;
-				Level world = SaintCarmenEntity.this.level();
 				return super.canContinueToUse() && isCarmenDurative();
 			}
 
@@ -153,42 +143,22 @@ public class SaintCarmenEntity extends Animal implements GeoEntity {
 		this.goalSelector.addGoal(4, new RandomStrollGoal(this, 1) {
 			@Override
 			public boolean canUse() {
-				double x = SaintCarmenEntity.this.getX();
-				double y = SaintCarmenEntity.this.getY();
-				double z = SaintCarmenEntity.this.getZ();
-				Entity entity = SaintCarmenEntity.this;
-				Level world = SaintCarmenEntity.this.level();
 				return super.canUse() && isCarmenDurative();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = SaintCarmenEntity.this.getX();
-				double y = SaintCarmenEntity.this.getY();
-				double z = SaintCarmenEntity.this.getZ();
-				Entity entity = SaintCarmenEntity.this;
-				Level world = SaintCarmenEntity.this.level();
 				return super.canContinueToUse() && isCarmenDurative();
 			}
 		});
 		this.goalSelector.addGoal(5, new RandomLookAroundGoal(this) {
 			@Override
 			public boolean canUse() {
-				double x = SaintCarmenEntity.this.getX();
-				double y = SaintCarmenEntity.this.getY();
-				double z = SaintCarmenEntity.this.getZ();
-				Entity entity = SaintCarmenEntity.this;
-				Level world = SaintCarmenEntity.this.level();
 				return super.canUse() && isCarmenDurative();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = SaintCarmenEntity.this.getX();
-				double y = SaintCarmenEntity.this.getY();
-				double z = SaintCarmenEntity.this.getZ();
-				Entity entity = SaintCarmenEntity.this;
-				Level world = SaintCarmenEntity.this.level();
 				return super.canContinueToUse() && isCarmenDurative();
 			}
 		});
@@ -276,54 +246,115 @@ public class SaintCarmenEntity extends Animal implements GeoEntity {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if (this != null) {
-            Entity enemy = null;
-            double sklp1 = 0;
-            double dura = 0;
-            double sklp2 = 0;
-            double shootCooldown = 0;
-            double bullet = 0;
-            double reloadP = 0;
-            boolean canShoot = false;
-            if (this.isAlive()) {
-                if (tickCount % 40 == 20) {
-                    WorldUtils.ireneBurnBrandAround(world, x, y, z);
+        Entity enemy = null;
+        double sklp1 = 0;
+        double dura = 0;
+        double sklp2 = 0;
+        double shootCooldown = 0;
+        double bullet = 0;
+        double reloadP = 0;
+        boolean canShoot = false;
+        if (this.isAlive()) {
+            if (tickCount % 40 == 20) {
+                WorldUtils.ireneBurnBrandAround(world, x, y, z);
+            }
+            sklp1 = (Entity) this instanceof SaintCarmenEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillP1) : 0;
+            sklp2 = (Entity) this instanceof SaintCarmenEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillP2) : 0;
+            shootCooldown = (Entity) this instanceof SaintCarmenEntity _datEntI ? _datEntI.getEntityData().get(DATA_shootP) : 0;
+            bullet = (Entity) this instanceof SaintCarmenEntity _datEntI ? _datEntI.getEntityData().get(DATA_bullet) : 0;
+            reloadP = (Entity) this instanceof SaintCarmenEntity _datEntI ? _datEntI.getEntityData().get(DATA_reloadP) : 0;
+            dura = (Entity) this instanceof SaintCarmenEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
+            enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+            if (dura > 0) {
+                if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
+                    _datEntSetI.getEntityData().set(DATA_duration, (int) (dura - 1));
+            }
+            if (shootCooldown > 0) {
+                if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
+                    _datEntSetI.getEntityData().set(DATA_shootP, (int) (shootCooldown - 1));
+            }
+            if (sklp1 > 0) {
+                if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
+                    _datEntSetI.getEntityData().set(DATA_skillP1, (int) (sklp1 - 1));
+            } else if (dura <= 0) {
+                if (!(enemy == null) && enemy.isAlive()) {
+                    if ((enemy != null ? distanceTo(enemy) : -1) <= 24) {
+                        if (this instanceof SaintCarmenEntity) {
+                            this.setAnimation("animation.saint_carmen.melee_skill");
+                        }
+                        if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
+                            _datEntSetI.getEntityData().set(DATA_skillP1, 240);
+                        if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
+                            _datEntSetI.getEntityData().set(DATA_duration, 33);
+                        dura = 33;
+                        CaerulaArborMod.queueServerWork(10, () -> {
+                            if (this.isAlive()) {
+                                carmenTeleport(world, x, y, z);
+                            }
+                        });
+                        CaerulaArborMod.queueServerWork(21, () -> {
+                            if (this.isAlive()) {
+                                shoot(world, x, y, z, 2);
+                            }
+                        });
+                    }
                 }
-                sklp1 = (Entity) this instanceof SaintCarmenEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillP1) : 0;
-                sklp2 = (Entity) this instanceof SaintCarmenEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillP2) : 0;
-                shootCooldown = (Entity) this instanceof SaintCarmenEntity _datEntI ? _datEntI.getEntityData().get(DATA_shootP) : 0;
-                bullet = (Entity) this instanceof SaintCarmenEntity _datEntI ? _datEntI.getEntityData().get(DATA_bullet) : 0;
-                reloadP = (Entity) this instanceof SaintCarmenEntity _datEntI ? _datEntI.getEntityData().get(DATA_reloadP) : 0;
-                dura = (Entity) this instanceof SaintCarmenEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
-                enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
-                if (dura > 0) {
-                    if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_duration, (int) (dura - 1));
+            }
+            canShoot = bullet > 0 && shootCooldown <= 0;
+            if (sklp2 > 0) {
+                if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
+                    _datEntSetI.getEntityData().set(DATA_skillP2, (int) (sklp2 - 1));
+            } else if (dura <= 0 && canShoot) {
+                if (!(enemy == null) && enemy.isAlive()) {
+                    if ((enemy != null ? distanceTo(enemy) : -1) <= 24) {
+                        if (this instanceof SaintCarmenEntity) {
+                            this.setAnimation("animation.saint_carmen.gun_skill");
+                        }
+                        if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
+                            _datEntSetI.getEntityData().set(DATA_skillP2, 480);
+                        if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
+                            _datEntSetI.getEntityData().set(DATA_duration, 50);
+                        if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
+                            _datEntSetI.getEntityData().set(DATA_shootP, 50);
+                        shootCooldown = 50;
+                        dura = 50;
+                        push((getLookAngle().x * (-1.5)), 0, (getLookAngle().z * (-1.5)));
+                        ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (getY() + 1.8), (enemy.getZ())));
+                        CaerulaArborMod.queueServerWork(12, () -> {
+                            if (this.isAlive()) {
+                                shootAbundant(world, x, y, z, 1);
+                            }
+                        });
+                        CaerulaArborMod.queueServerWork(23, () -> {
+                            if (this.isAlive()) {
+                                shootAbundant(world, x, y, z, 2);
+                            }
+                        });
+                        CaerulaArborMod.queueServerWork(35, () -> {
+                            if (this.isAlive()) {
+                                shootAbundant(world, x, y, z, 3);
+                            }
+                        });
+                    }
                 }
-                if (shootCooldown > 0) {
-                    if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_shootP, (int) (shootCooldown - 1));
-                }
-                if (sklp1 > 0) {
-                    if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_skillP1, (int) (sklp1 - 1));
-                } else if (dura <= 0) {
+            }
+            if (canShoot) {
+                if (dura <= 0) {
                     if (!(enemy == null) && enemy.isAlive()) {
-                        if ((enemy != null ? distanceTo(enemy) : -1) <= 24) {
+                        if ((enemy != null ? distanceTo(enemy) : -1) <= 6) {
                             if (this instanceof SaintCarmenEntity) {
-                                this.setAnimation("animation.saint_carmen.melee_skill");
+                                this.setAnimation("animation.saint_carmen.gun");
                             }
                             if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_skillP1, 240);
+                                _datEntSetI.getEntityData().set(DATA_duration, 20);
                             if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_duration, 33);
-                            dura = 33;
-                            CaerulaArborMod.queueServerWork(10, () -> {
-                                if (this.isAlive()) {
-                                    carmenTeleport(world, x, y, z);
-                                }
-                            });
-                            CaerulaArborMod.queueServerWork(21, () -> {
+                                _datEntSetI.getEntityData().set(DATA_shootP, 80);
+                            if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
+                                _datEntSetI.getEntityData().set(DATA_bullet, (int) (bullet - 1));
+                            shootCooldown = 80;
+                            dura = 20;
+                            ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (getY() + 1.8), (enemy.getZ())));
+                            CaerulaArborMod.queueServerWork(9, () -> {
                                 if (this.isAlive()) {
                                     shoot(world, x, y, z, 2);
                                 }
@@ -331,91 +362,28 @@ public class SaintCarmenEntity extends Animal implements GeoEntity {
                         }
                     }
                 }
-                canShoot = bullet > 0 && shootCooldown <= 0;
-                if (sklp2 > 0) {
+            } else {
+                if (reloadP > 0) {
                     if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_skillP2, (int) (sklp2 - 1));
-                } else if (dura <= 0 && canShoot) {
-                    if (!(enemy == null) && enemy.isAlive()) {
-                        if ((enemy != null ? distanceTo(enemy) : -1) <= 24) {
-                            if (this instanceof SaintCarmenEntity) {
-                                this.setAnimation("animation.saint_carmen.gun_skill");
-                            }
-                            if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_skillP2, 480);
-                            if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_duration, 50);
-                            if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_shootP, 50);
-                            shootCooldown = 50;
-                            dura = 50;
-                            push((getLookAngle().x * (-1.5)), 0, (getLookAngle().z * (-1.5)));
-                            ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (getY() + 1.8), (enemy.getZ())));
-                            CaerulaArborMod.queueServerWork(12, () -> {
-                                if (this.isAlive()) {
-                                    shootAbundant(world, x, y, z, 1);
-                                }
-                            });
-                            CaerulaArborMod.queueServerWork(23, () -> {
-                                if (this.isAlive()) {
-                                    shootAbundant(world, x, y, z, 2);
-                                }
-                            });
-                            CaerulaArborMod.queueServerWork(35, () -> {
-                                if (this.isAlive()) {
-                                    shootAbundant(world, x, y, z, 3);
-                                }
-                            });
-                        }
+                        _datEntSetI.getEntityData().set(DATA_reloadP, (int) (reloadP - 1));
+                } else if (dura <= 0) {
+                    if (this instanceof SaintCarmenEntity) {
+                        this.setAnimation("animation.saint_carmen.reload");
+                    }
+                    if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
+                        _datEntSetI.getEntityData().set(DATA_bullet, 3);
+                    if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
+                        _datEntSetI.getEntityData().set(DATA_duration, 20);
+                    if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
+                        _datEntSetI.getEntityData().set(DATA_reloadP, 600);
+                    if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
+                        _datEntSetI.getEntityData().set(DATA_shootP, 20);
+                    if (world instanceof Level _level) {
+                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_reload")), SoundSource.NEUTRAL, 2, 1);
                     }
                 }
-                if (canShoot) {
-                    if (dura <= 0) {
-                        if (!(enemy == null) && enemy.isAlive()) {
-                            if ((enemy != null ? distanceTo(enemy) : -1) <= 6) {
-                                if (this instanceof SaintCarmenEntity) {
-                                    this.setAnimation("animation.saint_carmen.gun");
-                                }
-                                if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
-                                    _datEntSetI.getEntityData().set(DATA_duration, 20);
-                                if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
-                                    _datEntSetI.getEntityData().set(DATA_shootP, 80);
-                                if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
-                                    _datEntSetI.getEntityData().set(DATA_bullet, (int) (bullet - 1));
-                                shootCooldown = 80;
-                                dura = 20;
-                                ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (getY() + 1.8), (enemy.getZ())));
-                                CaerulaArborMod.queueServerWork(9, () -> {
-                                    if (this.isAlive()) {
-                                        shoot(world, x, y, z, 2);
-                                    }
-                                });
-                            }
-                        }
-                    }
-                } else {
-                    if (reloadP > 0) {
-                        if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_reloadP, (int) (reloadP - 1));
-                    } else if (dura <= 0) {
-                        if (this instanceof SaintCarmenEntity) {
-                            this.setAnimation("animation.saint_carmen.reload");
-                        }
-                        if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_bullet, 3);
-                        if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_duration, 20);
-                        if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_reloadP, 600);
-                        if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_shootP, 20);
-                        if (world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_reload")), SoundSource.NEUTRAL, 2, 1);
-                        }
-                    }
-                }
-                showBullets(bullet);
             }
+            showBullets(bullet);
         }
         this.refreshDimensions();
 	}

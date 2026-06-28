@@ -1,6 +1,7 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
+import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
@@ -111,13 +112,12 @@ public class OceanizedHorseEntity extends SeaMonster {
 		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
 		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
 		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
-		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal(this, Player.class, true, false) {
+		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Player.class, true, false) {
 			@Override
 			public boolean canUse() {
 				double x = OceanizedHorseEntity.this.getX();
 				double y = OceanizedHorseEntity.this.getY();
 				double z = OceanizedHorseEntity.this.getZ();
-				Entity entity = OceanizedHorseEntity.this;
 				Level world = OceanizedHorseEntity.this.level();
 				return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -127,7 +127,6 @@ public class OceanizedHorseEntity extends SeaMonster {
 				double x = OceanizedHorseEntity.this.getX();
 				double y = OceanizedHorseEntity.this.getY();
 				double z = OceanizedHorseEntity.this.getZ();
-				Entity entity = OceanizedHorseEntity.this;
 				Level world = OceanizedHorseEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -135,21 +134,11 @@ public class OceanizedHorseEntity extends SeaMonster {
 		this.targetSelector.addGoal(14, new NearestAttackableTargetGoal(this, Animal.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = OceanizedHorseEntity.this.getX();
-				double y = OceanizedHorseEntity.this.getY();
-				double z = OceanizedHorseEntity.this.getZ();
-				Entity entity = OceanizedHorseEntity.this;
-				Level world = OceanizedHorseEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = OceanizedHorseEntity.this.getX();
-				double y = OceanizedHorseEntity.this.getY();
-				double z = OceanizedHorseEntity.this.getZ();
-				Entity entity = OceanizedHorseEntity.this;
-				Level world = OceanizedHorseEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
@@ -188,7 +177,9 @@ public class OceanizedHorseEntity extends SeaMonster {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-		EntityUtils.initPigSanity(this);
+		if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get())) {
+			this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(6);
+		}
 		return retval;
 	}
 
@@ -212,22 +203,20 @@ public class OceanizedHorseEntity extends SeaMonster {
 	public void baseTick() {
 		super.baseTick();
         LevelAccessor world = this.level();
-        if (this != null) {
-            Entity rider = null;
-            if (WorldUtils.canGrief(world) && ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5) {
-                if (!((Entity) this instanceof LivingEntity _livEnt2 && _livEnt2.hasEffect(CaerulaArborModMobEffects.MUTE.get()))) {
-                    if (!((Entity) this instanceof LivingEntity _livEnt3 && _livEnt3.hasEffect(CaerulaArborModMobEffects.GUIDE_PATH_AHEAD.get()))) {
-                        if (!this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.GUIDE_PATH_AHEAD.get(), 20, 0));
-                    }
+        Entity rider = null;
+        if (WorldUtils.canGrief(world) && ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5) {
+            if (!((Entity) this instanceof LivingEntity _livEnt2 && _livEnt2.hasEffect(CaerulaArborModMobEffects.MUTE.get()))) {
+                if (!((Entity) this instanceof LivingEntity _livEnt3 && _livEnt3.hasEffect(CaerulaArborModMobEffects.GUIDE_PATH_AHEAD.get()))) {
+                    if (!this.level().isClientSide())
+                        this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.GUIDE_PATH_AHEAD.get(), 20, 0));
                 }
             }
-            if ((tickCount - ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getLastHurtMobTimestamp() : 0)) % 10 == 0) {
-                rider = getFirstPassenger();
-                if (!(rider == null) && rider.isAlive()) {
-                    if (rider instanceof LivingEntity _entity && !this.level().isClientSide())
-                        this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ADD_ATTACK_PERCLY.get(), 40, 1, false, true));
-                }
+        }
+        if ((tickCount - ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getLastHurtMobTimestamp() : 0)) % 10 == 0) {
+            rider = getFirstPassenger();
+            if (!(rider == null) && rider.isAlive()) {
+                if (rider instanceof LivingEntity _entity && !this.level().isClientSide())
+                    this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ADD_ATTACK_PERCLY.get(), 40, 1, false, true));
             }
         }
         this.refreshDimensions();

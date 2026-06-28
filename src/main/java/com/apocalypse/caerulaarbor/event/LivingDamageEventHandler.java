@@ -1,8 +1,9 @@
 package com.apocalypse.caerulaarbor.event;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.capability.ModCapabilities;
+import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
@@ -41,8 +42,8 @@ public class LivingDamageEventHandler {
 
         if (entity instanceof Player) {
             double light_cost = Math.min(amount * 0.0025, 0.25);
-            double _setval = Math.max((entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).player_light - light_cost, 0);
-            entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+            double _setval = Math.max((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_light - light_cost, 0);
+            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                 capability.player_light = _setval;
                 capability.syncPlayerVariables(entity);
             });
@@ -58,22 +59,27 @@ public class LivingDamageEventHandler {
         Entity sourceentity = event.getSource().getEntity();
         double amount = event.getAmount();
 
-        if (entity == null || sourceentity == null) return;
+        if (!(entity instanceof LivingEntity target) || !(sourceentity instanceof LivingEntity attacker)) return;
         if (event.isCanceled()) return;
 
-        if ((sourceentity instanceof LivingEntity _livingEntity1 && _livingEntity1.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get())
-                ? _livingEntity1.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).getValue()
-                : 0) > 0) {
-            EntityUtils.deductSanity(entity, amount * (sourceentity instanceof LivingEntity _livingEntity2 && _livingEntity2.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get())
-                    ? _livingEntity2.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).getValue()
-                    : 0));
+        double sanityRate = attacker.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get())
+                ? attacker.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).getValue()
+                : 0;
+        double sanityInjuryDamage = attacker.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_INJURY_DAMAGE.get())
+                ? attacker.getAttribute(CaerulaArborModAttributes.SANITY_INJURY_DAMAGE.get()).getValue()
+                : 0;
+        double sanityDamage = sanityInjuryDamage + amount * sanityRate;
+
+        if (sanityDamage > 0) {
+            ModCapabilities.getSanityInjury(target).hurt(sanityDamage);
+        }
+
+        if (sanityRate > 0) {
             new Object() {
                 void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                     if (world instanceof ServerLevel _level)
                         _level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, (y + entity.getBbHeight() * 0.5), z,
-                                (int) Math.min(1 * (sourceentity instanceof LivingEntity _livingEntity4 && _livingEntity4.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get())
-                                        ? _livingEntity4.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).getValue()
-                                        : 0), 16),
+                                (int) Math.min(sanityRate, 16),
                                 1.2, 1.5, 1.2, 0.1);
                     final int tick2 = ticks;
                     CaerulaArborMod.queueServerWork(tick2, () -> {

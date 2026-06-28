@@ -113,7 +113,7 @@ public class PunctureFishEntity extends SeaMonster implements PolarMountRider {
 		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
 		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
 		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
-		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal(this, Player.class, true, false) {
+		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Player.class, true, false) {
 			@Override
 			public boolean canUse() {
 				double x = PunctureFishEntity.this.getX();
@@ -129,29 +129,18 @@ public class PunctureFishEntity extends SeaMonster implements PolarMountRider {
 				double x = PunctureFishEntity.this.getX();
 				double y = PunctureFishEntity.this.getY();
 				double z = PunctureFishEntity.this.getZ();
-				Entity entity = PunctureFishEntity.this;
 				Level world = PunctureFishEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
 		});
-		this.targetSelector.addGoal(14, new NearestAttackableTargetGoal(this, Animal.class, true, false) {
+		this.targetSelector.addGoal(14, new NearestAttackableTargetGoal<>(this, Animal.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = PunctureFishEntity.this.getX();
-				double y = PunctureFishEntity.this.getY();
-				double z = PunctureFishEntity.this.getZ();
-				Entity entity = PunctureFishEntity.this;
-				Level world = PunctureFishEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = PunctureFishEntity.this.getX();
-				double y = PunctureFishEntity.this.getY();
-				double z = PunctureFishEntity.this.getZ();
-				Entity entity = PunctureFishEntity.this;
-				Level world = PunctureFishEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});

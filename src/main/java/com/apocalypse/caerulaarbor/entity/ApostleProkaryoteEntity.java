@@ -1,10 +1,10 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
@@ -356,7 +356,7 @@ public class ApostleProkaryoteEntity extends SeaMonster {
                     }
                     if (found) {
                         perc = ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) / ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1);
-                        if (CaerulaArborModVariables.MapVariables.get(world).strategy_subsisting >= 4) {
+                        if (MapVariables.get(world).strategy_subsisting >= 4) {
                             if (this.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
                                 this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(
                                         ((this.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? this.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0) * 2.2));

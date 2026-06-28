@@ -116,42 +116,22 @@ public class XantisEntity extends TamableAnimal implements GeoEntity {
 		this.goalSelector.addGoal(7, new RandomStrollGoal(this, 1) {
 			@Override
 			public boolean canUse() {
-				double x = XantisEntity.this.getX();
-				double y = XantisEntity.this.getY();
-				double z = XantisEntity.this.getZ();
-				Entity entity = XantisEntity.this;
-				Level world = XantisEntity.this.level();
 				return super.canUse() && isXantisTapative();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = XantisEntity.this.getX();
-				double y = XantisEntity.this.getY();
-				double z = XantisEntity.this.getZ();
-				Entity entity = XantisEntity.this;
-				Level world = XantisEntity.this.level();
 				return super.canContinueToUse() && isXantisTapative();
 			}
 		});
 		this.goalSelector.addGoal(8, new RandomLookAroundGoal(this) {
 			@Override
 			public boolean canUse() {
-				double x = XantisEntity.this.getX();
-				double y = XantisEntity.this.getY();
-				double z = XantisEntity.this.getZ();
-				Entity entity = XantisEntity.this;
-				Level world = XantisEntity.this.level();
 				return super.canUse() && isXantisTapative();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = XantisEntity.this.getX();
-				double y = XantisEntity.this.getY();
-				double z = XantisEntity.this.getZ();
-				Entity entity = XantisEntity.this;
-				Level world = XantisEntity.this.level();
 				return super.canContinueToUse() && isXantisTapative();
 			}
 		});
@@ -272,8 +252,6 @@ public class XantisEntity extends TamableAnimal implements GeoEntity {
 		double z = this.getZ();
 		Entity entity = this;
 		Level world = this.level();
-        if (entity == null || sourceentity == null)
-            return InteractionResult.PASS;
         double tapTick = 0;
         boolean isNiubi = false;
         tapTick = entity instanceof XantisEntity _datEntI ? _datEntI.getEntityData().get(DATA_TAP_TICK) : 0;
@@ -302,26 +280,24 @@ public class XantisEntity extends TamableAnimal implements GeoEntity {
 	public void baseTick() {
 		super.baseTick();
         LevelAccessor world = this.level();
-        if (this != null) {
-            double tapTick = 0;
-            if (tickCount % 40 == 0) {
-                {
-                    final Vec3 _center = new Vec3(this.getX(), this.getY(), this.getZ());
-                    List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(32 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                    for (Entity entityiterator : _entfound) {
-                        if (entityiterator instanceof XantisEntity) {
-                            continue;
-                        }
-                        if (entityiterator instanceof Mob _entity && (Entity) this instanceof LivingEntity _ent)
-                            _entity.setTarget(_ent);
+        double tapTick = 0;
+        if (tickCount % 40 == 0) {
+            {
+                final Vec3 _center = new Vec3(this.getX(), this.getY(), this.getZ());
+                List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(32 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+                for (Entity entityiterator : _entfound) {
+                    if (entityiterator instanceof XantisEntity) {
+                        continue;
                     }
+                    if (entityiterator instanceof Mob _entity && (Entity) this instanceof LivingEntity _ent)
+                        _entity.setTarget(_ent);
                 }
             }
-            tapTick = (Entity) this instanceof XantisEntity _datEntI ? _datEntI.getEntityData().get(DATA_TAP_TICK) : 0;
-            if (tapTick > 0) {
-                if ((Entity) this instanceof XantisEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_TAP_TICK, (int) (tapTick - 1));
-            }
+        }
+        tapTick = (Entity) this instanceof XantisEntity _datEntI ? _datEntI.getEntityData().get(DATA_TAP_TICK) : 0;
+        if (tapTick > 0) {
+            if ((Entity) this instanceof XantisEntity _datEntSetI)
+                _datEntSetI.getEntityData().set(DATA_TAP_TICK, (int) (tapTick - 1));
         }
         AttributeInstance MAX_H = this.getAttribute(Attributes.MAX_HEALTH);
         if (MAX_H != null && MAX_H.getBaseValue() != 10) MAX_H.setBaseValue(10);
@@ -390,9 +366,7 @@ public class XantisEntity extends TamableAnimal implements GeoEntity {
 
 	private PlayState movementPredicate(AnimationState event) {
 		if (this.animationprocedure.equals("empty")) {
-			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
-
-			) {
+			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))) {
 				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.xantis.move"));
 			}
 			if (this.isDeadOrDying()) {
@@ -406,7 +380,6 @@ public class XantisEntity extends TamableAnimal implements GeoEntity {
 	private PlayState attackingPredicate(AnimationState event) {
 		double d1 = this.getX() - this.xOld;
 		double d0 = this.getZ() - this.zOld;
-		float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
 		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();

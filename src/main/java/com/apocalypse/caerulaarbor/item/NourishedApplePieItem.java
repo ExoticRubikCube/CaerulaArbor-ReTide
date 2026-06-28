@@ -1,8 +1,9 @@
 
 package com.apocalypse.caerulaarbor.item;
 
+import com.apocalypse.caerulaarbor.api.event.SanityEvent;
+import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
-import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -43,7 +44,7 @@ public class NourishedApplePieItem extends Item {
 			entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ESSENCE_RESISTANCE.get(), 3600, 0));
 		}
 		entity.setHealth((float) (entity.getHealth() + entity.getMaxHealth() * 0.15));
-		EntityUtils.deductSanity75(entity);
+		SIHelper.causeSanityInjury(entity, 75, SanityEvent.Hurt.Type.FOOD);
 		return retval;
 	}
 }

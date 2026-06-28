@@ -1,12 +1,12 @@
-﻿package com.apocalypse.caerulaarbor.client.gui;
+package com.apocalypse.caerulaarbor.client.gui;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
 import com.apocalypse.caerulaarbor.entity.CreeperFishEntity;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.menu.InfoStrategyGrowMenu;
 import com.apocalypse.caerulaarbor.network.CaerulaArborModNetwork;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import com.apocalypse.caerulaarbor.network.message.send.InfoStrategyReturnButtonMessage;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.StrategyUtils;
@@ -57,9 +57,9 @@ public class InfoStrategyGrowScreen extends AbstractContainerScreen<InfoStrategy
 		if (mouseX > leftPos + 244 && mouseX < leftPos + 253 && mouseY > topPos + 20 && mouseY < topPos + 92) {
             String result = "\u00A7bFinished";
             double rate = 0;
-            if (!(CaerulaArborModVariables.MapVariables.get(world).strategy_grow >= 4)) {
-                result = Math.round(CaerulaArborModVariables.MapVariables.get(world).evo_point_grow) + "\u00A7b/"
-                        + Math.round(Math.pow(CaerulaArborModVariables.MapVariables.get(world).strategy_grow + 1, 3) * CaerulaConfigsConfiguration.COEFFICIENT.get());
+            if (!(MapVariables.get(world).strategy_grow >= 4)) {
+                result = Math.round(MapVariables.get(world).evo_point_grow) + "\u00A7b/"
+                        + Math.round(Math.pow(MapVariables.get(world).strategy_grow + 1, 3) * CaerulaConfigsConfiguration.COEFFICIENT.get());
             }
             guiGraphics.renderTooltip(font, Component.literal(result), mouseX, mouseY);
         }
@@ -77,8 +77,8 @@ public class InfoStrategyGrowScreen extends AbstractContainerScreen<InfoStrategy
 
         double result = 18;
         double rate = 0;
-        if (!(CaerulaArborModVariables.MapVariables.get(world).strategy_grow >= 4)) {
-            rate = CaerulaArborModVariables.MapVariables.get(world).evo_point_grow / (Math.pow(CaerulaArborModVariables.MapVariables.get(world).strategy_grow + 1, 3) * CaerulaConfigsConfiguration.COEFFICIENT.get());
+        if (!(MapVariables.get(world).strategy_grow >= 4)) {
+            rate = MapVariables.get(world).evo_point_grow / (Math.pow(MapVariables.get(world).strategy_grow + 1, 3) * CaerulaConfigsConfiguration.COEFFICIENT.get());
             if (rate > 1) {
                 rate = 1;
             }

@@ -1,9 +1,9 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -449,7 +449,7 @@ public class FeederProkaryoteEntity extends SeaMonster {
                     }
                 }
             }
-            if (CaerulaArborModVariables.MapVariables.get(world).strategy_breed >= 4) {
+            if (MapVariables.get(world).strategy_breed >= 4) {
                 if (Math.random() <= 0.33) {
                     rand = Math.random();
                     if (rand < 0.35) {
@@ -490,7 +490,7 @@ public class FeederProkaryoteEntity extends SeaMonster {
                     }
                 }
             }
-            if (CaerulaArborModVariables.MapVariables.get(world).strategy_silence >= 4) {
+            if (MapVariables.get(world).strategy_silence >= 4) {
                 if (Math.random() <= 0.001 && EntityUtils.getSeabornAround(world, x, y, z, this) >= 8) {
                     rand = Math.random();
                     if (rand < 0.45) {

@@ -60,9 +60,6 @@ public class OceanIllusionEntity extends SeaMonster implements RangedAttackMob {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanIllusionEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanIllusionEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(OceanIllusionEntity.class, EntityDataSerializers.STRING);
-	private boolean swinging;
-	private boolean lastloop;
-	private long lastSwing;
 	public String animationprocedure = "empty";
 
 	public OceanIllusionEntity(PlayMessages.SpawnEntity packet, Level world) {
@@ -112,13 +109,12 @@ public class OceanIllusionEntity extends SeaMonster implements RangedAttackMob {
 		this.targetSelector.addGoal(9, new NearestAttackableTargetGoal<>(this, Piglin.class, true, true));
 		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, true));
 		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, true));
-		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal(this, Player.class, true, true) {
+		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, Player.class, true, true) {
 			@Override
 			public boolean canUse() {
 				double x = OceanIllusionEntity.this.getX();
 				double y = OceanIllusionEntity.this.getY();
 				double z = OceanIllusionEntity.this.getZ();
-				Entity entity = OceanIllusionEntity.this;
 				Level world = OceanIllusionEntity.this.level();
 				return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -128,7 +124,6 @@ public class OceanIllusionEntity extends SeaMonster implements RangedAttackMob {
 				double x = OceanIllusionEntity.this.getX();
 				double y = OceanIllusionEntity.this.getY();
 				double z = OceanIllusionEntity.this.getZ();
-				Entity entity = OceanIllusionEntity.this;
 				Level world = OceanIllusionEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -136,21 +131,11 @@ public class OceanIllusionEntity extends SeaMonster implements RangedAttackMob {
 		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal(this, Animal.class, true, true) {
 			@Override
 			public boolean canUse() {
-				double x = OceanIllusionEntity.this.getX();
-				double y = OceanIllusionEntity.this.getY();
-				double z = OceanIllusionEntity.this.getZ();
-				Entity entity = OceanIllusionEntity.this;
-				Level world = OceanIllusionEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = OceanIllusionEntity.this.getX();
-				double y = OceanIllusionEntity.this.getY();
-				double z = OceanIllusionEntity.this.getZ();
-				Entity entity = OceanIllusionEntity.this;
-				Level world = OceanIllusionEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
@@ -319,47 +304,45 @@ public class OceanIllusionEntity extends SeaMonster implements RangedAttackMob {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if (this != null) {
-            Entity illusioner = null;
-            Entity enemy = null;
-            if (this.isAlive()) {
-                if (tickCount % 40 == 20) {
-                    enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
-                    if (!(enemy == null) && enemy.isAlive()) {
+        Entity illusioner = null;
+        Entity enemy = null;
+        if (this.isAlive()) {
+            if (tickCount % 40 == 20) {
+                enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+                if (!(enemy == null) && enemy.isAlive()) {
+                    finished = true;
+                } else {
+                    illusioner = world.getEntitiesOfClass(OceanizedIllusionerEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true).stream().sorted(new Object() {
+                        Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
+                            return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
+                        }
+                    }.compareDistOf(x, y, z)).findFirst().orElse(null);
+                    if (illusioner == null) {
                         finished = true;
                     } else {
-                        illusioner = world.getEntitiesOfClass(OceanizedIllusionerEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true).stream().sorted(new Object() {
-                            Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
-                                return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
+                        Vec3 ownerPos = illusioner.position();
+                        Vec3 goal;
+                        Vec3 v = ownerPos.vectorTo(position());
+                        Vec3 v1 = new Vec3(v.x, 0, v.z);
+                        if (v1.lengthSqr() > 30.25)
+                            goal = ownerPos.add(v1.normalize().scale(5));
+                        else{
+                            RandomSource random1 = level().random;
+                            int yaw = Mth.nextInt(random1, 30, 90);
+                            double r = Mth.nextDouble(random1, 3, 5);
+                            goal = ownerPos.add(v1.normalize().scale(r).yRot((float) Math.toRadians(yaw)));
+                        }
+                        if (goal.distanceToSqr(position()) > 0.25) {
+                            if ((Entity) this instanceof Mob mob){
+                                mob.getNavigation().moveTo(goal.x, goal.y, goal.z, 1);
                             }
-                        }.compareDistOf(x, y, z)).findFirst().orElse(null);
-                        if (illusioner == null) {
-                            finished = true;
-                        } else {
-							Vec3 ownerPos = illusioner.position();
-							Vec3 goal;
-							Vec3 v = ownerPos.vectorTo(position());
-							Vec3 v1 = new Vec3(v.x, 0, v.z);
-							if (v1.lengthSqr() > 30.25)
-								goal = ownerPos.add(v1.normalize().scale(5));
-							else{
-								RandomSource random1 = level().random;
-								int yaw = Mth.nextInt(random1, 30, 90);
-								double r = Mth.nextDouble(random1, 3, 5);
-								goal = ownerPos.add(v1.normalize().scale(r).yRot((float) Math.toRadians(yaw)));
-							}
-							if (goal.distanceToSqr(position()) > 0.25) {
-								if ((Entity) this instanceof Mob mob){
-									mob.getNavigation().moveTo(goal.x, goal.y, goal.z, 1);
-								}
-							}
-						}
+                        }
                     }
                 }
-                if (!finished) {
-                    if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()))
-                        this.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).setBaseValue(0);
-                }
+            }
+            if (!finished) {
+                if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()))
+                    this.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).setBaseValue(0);
             }
         }
         if (!this.level().isClientSide() && this.hasEffect(CaerulaArborModMobEffects.MUTE.get())) this.discard();

@@ -77,9 +77,8 @@ public class CarmenBulletEntity extends AbstractArrow implements ItemSupplier {
 		super.tick();
         LevelAccessor world = this.level();
         world.addParticle(ParticleTypes.END_ROD, this.getX(), this.getY(), this.getZ(), ((-0.05) * getDeltaMovement().x()), ((-0.05) * getDeltaMovement().y()), ((-0.05) * getDeltaMovement().z()));
-        if (tickCount >= 200) {
-            if (!level().isClientSide())
-                discard();
+        if (!level().isClientSide() && tickCount >= 200) {
+            discard();
         }
         if (this.inGround)
 			this.discard();

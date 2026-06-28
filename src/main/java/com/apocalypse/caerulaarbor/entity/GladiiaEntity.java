@@ -134,42 +134,22 @@ public class GladiiaEntity extends Animal implements GeoEntity {
 		this.goalSelector.addGoal(6, new RandomStrollGoal(this, 1) {
 			@Override
 			public boolean canUse() {
-				double x = GladiiaEntity.this.getX();
-				double y = GladiiaEntity.this.getY();
-				double z = GladiiaEntity.this.getZ();
-				Entity entity = GladiiaEntity.this;
-				Level world = GladiiaEntity.this.level();
 				return super.canUse() && isGladiiaDurative();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = GladiiaEntity.this.getX();
-				double y = GladiiaEntity.this.getY();
-				double z = GladiiaEntity.this.getZ();
-				Entity entity = GladiiaEntity.this;
-				Level world = GladiiaEntity.this.level();
 				return super.canContinueToUse() && isGladiiaDurative();
 			}
 		});
 		this.goalSelector.addGoal(7, new RandomLookAroundGoal(this) {
 			@Override
 			public boolean canUse() {
-				double x = GladiiaEntity.this.getX();
-				double y = GladiiaEntity.this.getY();
-				double z = GladiiaEntity.this.getZ();
-				Entity entity = GladiiaEntity.this;
-				Level world = GladiiaEntity.this.level();
 				return super.canUse() && isGladiiaDurative();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = GladiiaEntity.this.getX();
-				double y = GladiiaEntity.this.getY();
-				double z = GladiiaEntity.this.getZ();
-				Entity entity = GladiiaEntity.this;
-				Level world = GladiiaEntity.this.level();
 				return super.canContinueToUse() && isGladiiaDurative();
 			}
 		});
@@ -263,153 +243,151 @@ public class GladiiaEntity extends Animal implements GeoEntity {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if (this != null) {
-            Entity enemy = null;
-            double gap = 0;
-            double sklp1 = 0;
-            double dura = 0;
-            double skillp2 = 0;
-            if (this.isAlive()) {
-                sklp1 = (Entity) this instanceof GladiiaEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillP) : 0;
-                skillp2 = (Entity) this instanceof GladiiaEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillP2) : 0;
-                dura = (Entity) this instanceof GladiiaEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
-                enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
-                if (dura > 0) {
-                    if ((Entity) this instanceof GladiiaEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_duration, (int) (dura - 1));
-                }
-                if (sklp1 > 0) {
-                    if ((Entity) this instanceof GladiiaEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_skillP, (int) (sklp1 - 1));
-                } else {
-                    if (!(enemy == null) && enemy.isAlive()) {
-                        if ((enemy != null ? distanceTo(enemy) : -1) <= 7.5 && dura <= 0) {
-                            if (this instanceof GladiiaEntity) {
-                                this.setAnimation("animation.gladiia.pull");
-                            }
-                            if ((Entity) this instanceof GladiiaEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_skillP, 160);
-                            if ((Entity) this instanceof GladiiaEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_duration, 30);
-                            if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "gladiia_pull_pre")), SoundSource.NEUTRAL, (float) 2.5, 1);
-                            }
-                            ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY() + 1.6), (enemy.getZ())));
-                            CaerulaArborMod.queueServerWork(10, () -> {
-                                if (this.isAlive()) {
-                                    Entity ene = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
-                                    if (ene == null || this == null)
-                                        return;
-                                    Entity side = null;
-                                    double damage = 0;
-                                    if (world instanceof Level _level) {
-                                            _level.playSound(null, BlockPos.containing(ene.getX(), ene.getY(), ene.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "gladiia_pull_pull")), SoundSource.NEUTRAL, 3, 1);
-                                    }
-                                    EntityUtils.pullToGladiia(ene, this);
-                                    EntityUtils.gladiiaLinkPtcToEntity(world, this, ene);
-                                    damage = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
-                                    ene.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))), this), (float) (damage * 3));
-                                    side = EntityUtils.catchNearestEnemy(world, ene.getX(), ene.getY(), ene.getZ(), ene);
-                                    if (!(side == null)) {
-                                        EntityUtils.pullToGladiia(side, this);
-                                        EntityUtils.gladiiaLinkPtcToEntity(world, this, side);
-                                        side.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))), this), (float) (damage * 3));
-                                    }
-                                    CaerulaArborMod.queueServerWork(10, () -> {
-                                        if (world instanceof Level _level) {
-                                                _level.playSound(null, BlockPos.containing(ene.getX(), ene.getY(), ene.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "gladiia_attack_pre")), SoundSource.NEUTRAL, 3, 1);
-                                        }
-                                        if (ene instanceof LivingEntity _entity && !this.level().isClientSide())
-                                            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.DIZZY.get(), 40, 0, false, false));
-                                        if (EntityUtils.catchNearestEnemy(world, ene.getX(), ene.getY(), ene.getZ(), ene) instanceof LivingEntity _entity && !this.level().isClientSide())
-                                            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.DIZZY.get(), 40, 0, false, false));
-                                    });
-                                }
-                            });
-                        }
-                    }
-                }
-                if (skillp2 > 0) {
-                    if ((Entity) this instanceof GladiiaEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_skillP2, (int) (skillp2 - 1));
-                } else {
-                    if (!(enemy == null) && enemy.isAlive()) {
-                        if ((enemy != null ? distanceTo(enemy) : -1) <= 21 && dura <= 0) {
-                            if (this instanceof GladiiaEntity) {
-                                this.setAnimation("animation.gladiia.float");
-                            }
-                            if (EntityPredicateUtils.isSpecterAround(world, x, y, z)) {
-                                if ((Entity) this instanceof GladiiaEntity _datEntSetI)
-                                    _datEntSetI.getEntityData().set(DATA_skillP2, 400);
-                            } else {
-                                if ((Entity) this instanceof GladiiaEntity _datEntSetI)
-                                    _datEntSetI.getEntityData().set(DATA_skillP2, 500);
-                            }
-                            if ((Entity) this instanceof GladiiaEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_duration, 120);
-                            if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "gladiia_skill_release")), SoundSource.NEUTRAL, 3, 1);
-                            }
-                            if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "gladiia_skill")), SoundSource.NEUTRAL, 2, 1);
-                            }
-                            ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY() + 1.6), (enemy.getZ())));
-                            if (!this.level().isClientSide())
-                                this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ADD_ATTACK_PERCLY.get(), 120, 4, false, false));
-                            if (!this.level().isClientSide())
-                                this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 120, 9, false, false));
-                            if (enemy instanceof LivingEntity _entity && !this.level().isClientSide())
-                                this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 120, 3, false, false));
-                            if (world instanceof ServerLevel _level) {
-                                Entity entityToSpawn = CaerulaArborModEntities.GLADIIA_WHIRL.get().spawn(_level, BlockPos.containing(enemy.getX(), enemy.getY(), enemy.getZ()), MobSpawnType.MOB_SUMMONED);
-                                if (entityToSpawn != null) {
-                                    entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-                                }
-                            }
-                            CaerulaArborMod.queueServerWork(111, () -> {
-                                if (this.isAlive()) {
-                                    if (world instanceof Level _level) {
-                                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "gladiia_pull_pre")), SoundSource.NEUTRAL, (float) 2.5, 1);
-                                    }
-                                }
-                            });
-                            CaerulaArborMod.queueServerWork(114, () -> {
-                                if (this.isAlive()) {
-                                    Entity ene = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
-                                    if (ene == null || this == null)
-                                        return;
-                                    Entity side = null;
-                                    double damage = 0;
-                                    double d = 0;
-                                    if (world instanceof Level _level) {
-                                            _level.playSound(null, BlockPos.containing(ene.getX(), ene.getY(), ene.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "gladiia_pull_pull")), SoundSource.NEUTRAL, 3, 1);
-                                    }
-                                    damage = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
-                                    {
-                                        final Vec3 _center = new Vec3((ene.getX()), (ene.getY()), (ene.getZ()));
-                                        List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(8 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                                        for (Entity entityiterator : _entfound) {
-                                            if (!(entityiterator instanceof LivingEntity)) {
-                                                continue;
-                                            }
-                                            if (entityiterator instanceof Monster || (entityiterator instanceof Mob _mobEnt1 ? (Entity) _mobEnt1.getTarget() : null) == this) {
-                                                d = entityiterator != null ? ene.distanceTo(entityiterator) : -1;
-                                                if (d <= 4) {
-                                                    EntityUtils.pullToGladiia(entityiterator, this);
-                                                    EntityUtils.gladiiaLinkPtcToEntity(world, this, entityiterator);
-                                                    entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))), this),
-                                                            (float) (damage * 1.8));
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            });
-                        }
-                    }
-                }
-                EntityUtils.healFromGladiia(world, x, y, z, this);
+        Entity enemy = null;
+        double gap = 0;
+        double sklp1 = 0;
+        double dura = 0;
+        double skillp2 = 0;
+        if (this.isAlive()) {
+            sklp1 = (Entity) this instanceof GladiiaEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillP) : 0;
+            skillp2 = (Entity) this instanceof GladiiaEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillP2) : 0;
+            dura = (Entity) this instanceof GladiiaEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
+            enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+            if (dura > 0) {
+                if ((Entity) this instanceof GladiiaEntity _datEntSetI)
+                    _datEntSetI.getEntityData().set(DATA_duration, (int) (dura - 1));
             }
+            if (sklp1 > 0) {
+                if ((Entity) this instanceof GladiiaEntity _datEntSetI)
+                    _datEntSetI.getEntityData().set(DATA_skillP, (int) (sklp1 - 1));
+            } else {
+                if (!(enemy == null) && enemy.isAlive()) {
+                    if (distanceTo(enemy) <= 7.5 && dura <= 0) {
+                        if (this instanceof GladiiaEntity) {
+                            this.setAnimation("animation.gladiia.pull");
+                        }
+                        if ((Entity) this instanceof GladiiaEntity _datEntSetI)
+                            _datEntSetI.getEntityData().set(DATA_skillP, 160);
+                        if ((Entity) this instanceof GladiiaEntity _datEntSetI)
+                            _datEntSetI.getEntityData().set(DATA_duration, 30);
+                        if (world instanceof Level _level) {
+                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "gladiia_pull_pre")), SoundSource.NEUTRAL, (float) 2.5, 1);
+                        }
+                        ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY() + 1.6), (enemy.getZ())));
+                        CaerulaArborMod.queueServerWork(10, () -> {
+                            if (this.isAlive()) {
+                                Entity ene = this.getTarget();
+                                if (ene == null)
+                                    return;
+                                Entity side = null;
+                                double damage = 0;
+                                if (world instanceof Level _level) {
+                                        _level.playSound(null, BlockPos.containing(ene.getX(), ene.getY(), ene.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "gladiia_pull_pull")), SoundSource.NEUTRAL, 3, 1);
+                                }
+                                EntityUtils.pullToGladiia(ene, this);
+                                EntityUtils.gladiiaLinkPtcToEntity(world, this, ene);
+                                damage = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
+                                ene.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))), this), (float) (damage * 3));
+                                side = EntityUtils.catchNearestEnemy(world, ene.getX(), ene.getY(), ene.getZ(), ene);
+                                if (!(side == null)) {
+                                    EntityUtils.pullToGladiia(side, this);
+                                    EntityUtils.gladiiaLinkPtcToEntity(world, this, side);
+                                    side.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))), this), (float) (damage * 3));
+                                }
+                                CaerulaArborMod.queueServerWork(10, () -> {
+                                    if (world instanceof Level _level) {
+                                            _level.playSound(null, BlockPos.containing(ene.getX(), ene.getY(), ene.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "gladiia_attack_pre")), SoundSource.NEUTRAL, 3, 1);
+                                    }
+                                    if (ene instanceof LivingEntity _entity && !this.level().isClientSide())
+                                        this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.DIZZY.get(), 40, 0, false, false));
+                                    if (EntityUtils.catchNearestEnemy(world, ene.getX(), ene.getY(), ene.getZ(), ene) instanceof LivingEntity _entity && !this.level().isClientSide())
+                                        this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.DIZZY.get(), 40, 0, false, false));
+                                });
+                            }
+                        });
+                    }
+                }
+            }
+            if (skillp2 > 0) {
+                if ((Entity) this instanceof GladiiaEntity _datEntSetI)
+                    _datEntSetI.getEntityData().set(DATA_skillP2, (int) (skillp2 - 1));
+            } else {
+                if (!(enemy == null) && enemy.isAlive()) {
+                    if (distanceTo(enemy) <= 21 && dura <= 0) {
+                        if (this instanceof GladiiaEntity) {
+                            this.setAnimation("animation.gladiia.float");
+                        }
+                        if (EntityPredicateUtils.isSpecterAround(world, x, y, z)) {
+                            if ((Entity) this instanceof GladiiaEntity _datEntSetI)
+                                _datEntSetI.getEntityData().set(DATA_skillP2, 400);
+                        } else {
+                            if ((Entity) this instanceof GladiiaEntity _datEntSetI)
+                                _datEntSetI.getEntityData().set(DATA_skillP2, 500);
+                        }
+                        if ((Entity) this instanceof GladiiaEntity _datEntSetI)
+                            _datEntSetI.getEntityData().set(DATA_duration, 120);
+                        if (world instanceof Level _level) {
+                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "gladiia_skill_release")), SoundSource.NEUTRAL, 3, 1);
+                        }
+                        if (world instanceof Level _level) {
+                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "gladiia_skill")), SoundSource.NEUTRAL, 2, 1);
+                        }
+                        ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY() + 1.6), (enemy.getZ())));
+                        if (!this.level().isClientSide())
+                            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ADD_ATTACK_PERCLY.get(), 120, 4, false, false));
+                        if (!this.level().isClientSide())
+                            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 120, 9, false, false));
+                        if (enemy instanceof LivingEntity _entity && !this.level().isClientSide())
+                            this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 120, 3, false, false));
+                        if (world instanceof ServerLevel _level) {
+                            Entity entityToSpawn = CaerulaArborModEntities.GLADIIA_WHIRL.get().spawn(_level, BlockPos.containing(enemy.getX(), enemy.getY(), enemy.getZ()), MobSpawnType.MOB_SUMMONED);
+                            if (entityToSpawn != null) {
+                                entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+                            }
+                        }
+                        CaerulaArborMod.queueServerWork(111, () -> {
+                            if (this.isAlive()) {
+                                if (world instanceof Level _level) {
+                                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "gladiia_pull_pre")), SoundSource.NEUTRAL, (float) 2.5, 1);
+                                }
+                            }
+                        });
+                        CaerulaArborMod.queueServerWork(114, () -> {
+                            if (this.isAlive()) {
+                                Entity ene = this.getTarget();
+                                if (ene == null)
+                                    return;
+                                Entity side = null;
+                                double damage = 0;
+                                double d = 0;
+                                if (world instanceof Level _level) {
+                                        _level.playSound(null, BlockPos.containing(ene.getX(), ene.getY(), ene.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "gladiia_pull_pull")), SoundSource.NEUTRAL, 3, 1);
+                                }
+                                damage = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
+                                {
+                                    final Vec3 _center = new Vec3((ene.getX()), (ene.getY()), (ene.getZ()));
+                                    List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(8 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+                                    for (Entity entityiterator : _entfound) {
+                                        if (!(entityiterator instanceof LivingEntity)) {
+                                            continue;
+                                        }
+                                        if (entityiterator instanceof Monster || (entityiterator instanceof Mob _mobEnt1 ? (Entity) _mobEnt1.getTarget() : null) == this) {
+                                            d = ene.distanceTo(entityiterator);
+                                            if (d <= 4) {
+                                                EntityUtils.pullToGladiia(entityiterator, this);
+                                                EntityUtils.gladiiaLinkPtcToEntity(world, this, entityiterator);
+                                                entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))), this),
+                                                        (float) (damage * 1.8));
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+            EntityUtils.healFromGladiia(world, x, y, z, this);
         }
         this.refreshDimensions();
 	}
@@ -472,7 +450,6 @@ public class GladiiaEntity extends Animal implements GeoEntity {
 	private PlayState attackingPredicate(AnimationState event) {
 		double d1 = this.getX() - this.xOld;
 		double d0 = this.getZ() - this.zOld;
-		float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
 		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();

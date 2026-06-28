@@ -1,6 +1,6 @@
 package com.apocalypse.caerulaarbor.network.message.receive;
 
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
+import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import com.apocalypse.caerulaarbor.network.ClientPacketHandler;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -10,10 +10,10 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public record PlayerVariablesSyncMessage(CaerulaArborModVariables.PlayerVariables data) {
+public record PlayerVariablesSyncMessage(PlayerVariable data) {
 
 	public static PlayerVariablesSyncMessage decode(FriendlyByteBuf buffer) {
-		CaerulaArborModVariables.PlayerVariables data = new CaerulaArborModVariables.PlayerVariables();
+		PlayerVariable data = new PlayerVariable();
 		data.readNBT(buffer.readNbt());
 		return new PlayerVariablesSyncMessage(data);
 	}

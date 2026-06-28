@@ -112,21 +112,11 @@ public class TideDeathrepellerEntity extends SeaMonster {
 		this.targetSelector.addGoal(1, new HurtByTargetGoal(this) {
 			@Override
 			public boolean canUse() {
-				double x = TideDeathrepellerEntity.this.getX();
-				double y = TideDeathrepellerEntity.this.getY();
-				double z = TideDeathrepellerEntity.this.getZ();
-				Entity entity = TideDeathrepellerEntity.this;
-				Level world = TideDeathrepellerEntity.this.level();
 				return super.canUse() && TideDeathrepellerEntity.this.isFaking();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = TideDeathrepellerEntity.this.getX();
-				double y = TideDeathrepellerEntity.this.getY();
-				double z = TideDeathrepellerEntity.this.getZ();
-				Entity entity = TideDeathrepellerEntity.this;
-				Level world = TideDeathrepellerEntity.this.level();
 				return super.canContinueToUse() && TideDeathrepellerEntity.this.isFaking();
 			}
 		});
@@ -138,43 +128,23 @@ public class TideDeathrepellerEntity extends SeaMonster {
 
 			@Override
 			public boolean canUse() {
-				double x = TideDeathrepellerEntity.this.getX();
-				double y = TideDeathrepellerEntity.this.getY();
-				double z = TideDeathrepellerEntity.this.getZ();
-				Entity entity = TideDeathrepellerEntity.this;
-				Level world = TideDeathrepellerEntity.this.level();
 				return super.canUse() && TideDeathrepellerEntity.this.isFaking();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = TideDeathrepellerEntity.this.getX();
-				double y = TideDeathrepellerEntity.this.getY();
-				double z = TideDeathrepellerEntity.this.getZ();
-				Entity entity = TideDeathrepellerEntity.this;
-				Level world = TideDeathrepellerEntity.this.level();
 				return super.canContinueToUse() && TideDeathrepellerEntity.this.isFaking();
 			}
 
 		});
-		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal(this, IronGolem.class, true, false) {
+		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = TideDeathrepellerEntity.this.getX();
-				double y = TideDeathrepellerEntity.this.getY();
-				double z = TideDeathrepellerEntity.this.getZ();
-				Entity entity = TideDeathrepellerEntity.this;
-				Level world = TideDeathrepellerEntity.this.level();
 				return super.canUse() && TideDeathrepellerEntity.this.isFaking();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = TideDeathrepellerEntity.this.getX();
-				double y = TideDeathrepellerEntity.this.getY();
-				double z = TideDeathrepellerEntity.this.getZ();
-				Entity entity = TideDeathrepellerEntity.this;
-				Level world = TideDeathrepellerEntity.this.level();
 				return super.canContinueToUse() && TideDeathrepellerEntity.this.isFaking();
 			}
 		});
@@ -187,7 +157,7 @@ public class TideDeathrepellerEntity extends SeaMonster {
 		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
 		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
 		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
-		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal(this, Player.class, true, false) {
+		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Player.class, true, false) {
 			@Override
 			public boolean canUse() {
 				double x = TideDeathrepellerEntity.this.getX();
@@ -208,24 +178,14 @@ public class TideDeathrepellerEntity extends SeaMonster {
 				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
 		});
-		this.targetSelector.addGoal(14, new NearestAttackableTargetGoal(this, Animal.class, true, false) {
+		this.targetSelector.addGoal(14, new NearestAttackableTargetGoal<>(this, Animal.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = TideDeathrepellerEntity.this.getX();
-				double y = TideDeathrepellerEntity.this.getY();
-				double z = TideDeathrepellerEntity.this.getZ();
-				Entity entity = TideDeathrepellerEntity.this;
-				Level world = TideDeathrepellerEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = TideDeathrepellerEntity.this.getX();
-				double y = TideDeathrepellerEntity.this.getY();
-				double z = TideDeathrepellerEntity.this.getZ();
-				Entity entity = TideDeathrepellerEntity.this;
-				Level world = TideDeathrepellerEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
@@ -261,11 +221,11 @@ public class TideDeathrepellerEntity extends SeaMonster {
         double y = this.getY();
         double z = this.getZ();
         Entity sourceentity = source.getEntity();
-        if (this != null && sourceentity != null) {
+        if (sourceentity != null) {
             double num = 0;
             if (this.isAlive() && !((Entity) this instanceof LivingEntity _livEnt1 && _livEnt1.hasEffect(CaerulaArborModMobEffects.COOLDOWN_SINAL.get()))
                     && !((Entity) this instanceof LivingEntity _livEnt2 && _livEnt2.hasEffect(CaerulaArborModMobEffects.FAKE_DEATH.get()))) {
-                if ((sourceentity != null ? distanceTo(sourceentity) : -1) <= 6) {
+                if (distanceTo(sourceentity) <= 6) {
                     num = 0;
                     {
                         final Vec3 _center = new Vec3(x, y, z);
@@ -402,7 +362,6 @@ public class TideDeathrepellerEntity extends SeaMonster {
 	private PlayState attackingPredicate(AnimationState event) {
 		double d1 = this.getX() - this.xOld;
 		double d0 = this.getZ() - this.zOld;
-		float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
 		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();

@@ -3,7 +3,6 @@ package com.apocalypse.caerulaarbor.entity;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
-import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -32,6 +31,7 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -109,12 +109,6 @@ public class LittleHelperEntity extends PathfinderMob implements GeoEntity {
 	}
 
 	@Override
-	protected void registerGoals() {
-		super.registerGoals();
-
-	}
-
-	@Override
 	public MobType getMobType() {
 		return MobType.UNDEFINED;
 	}
@@ -177,7 +171,11 @@ public class LittleHelperEntity extends PathfinderMob implements GeoEntity {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-		EntityUtils.setFastSwim(this);
+		if (this != null) {
+			if ((Entity) this instanceof LivingEntity _livingEntity1 && _livingEntity1.getAttributes().hasAttribute(ForgeMod.SWIM_SPEED.get()))
+				_livingEntity1.getAttribute(ForgeMod.SWIM_SPEED.get())
+						.setBaseValue((((Entity) this instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(Attributes.MOVEMENT_SPEED) ? _livingEntity0.getAttribute(Attributes.MOVEMENT_SPEED).getBaseValue() : 0) * 10));
+		}
 		return retval;
 	}
 
@@ -235,9 +233,9 @@ public class LittleHelperEntity extends PathfinderMob implements GeoEntity {
 	@Override
 	public void travel(Vec3 dir) {
 		Entity entity = this.getPassengers().isEmpty() ? null : this.getPassengers().get(0);
-		if (this.isVehicle()) {
-			this.setYRot(entity.getYRot());
-			this.yRotO = this.getYRot();
+		if (this.isVehicle() && entity != null) {
+            this.setYRot(entity.getYRot());
+            this.yRotO = this.getYRot();
 			this.setXRot(entity.getXRot() * 0.5F);
 			this.setRot(this.getYRot(), this.getXRot());
 			this.yBodyRot = entity.getYRot();

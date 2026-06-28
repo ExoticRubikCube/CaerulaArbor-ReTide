@@ -1,10 +1,11 @@
-﻿package com.apocalypse.caerulaarbor.client.gui;
+package com.apocalypse.caerulaarbor.client.gui;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.capability.ModCapabilities;
+import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModGameRules;
 import com.apocalypse.caerulaarbor.menu.CaerulaRecordGUIMenu;
 import com.apocalypse.caerulaarbor.network.CaerulaArborModNetwork;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import com.apocalypse.caerulaarbor.network.message.send.CaerulaRecordGUIButtonMessage;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.PlayerStateUtils;
@@ -85,11 +86,11 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
             String result;
             if (entity == null) {
                 result = "";
-            } else if ((((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).player_oceanization == 3) {
+            } else if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization == 3) {
                 result = Component.translatable("item.caerula_arbor.language_key.description_13").getString();
-            } else if ((((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).player_oceanization == 2) {
+            } else if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization == 2) {
                 result = Component.translatable("item.caerula_arbor.language_key.description_12").getString();
-            } else if ((((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).player_oceanization == 1) {
+            } else if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization == 1) {
                 result = Component.translatable("item.caerula_arbor.language_key.description_11").getString();
             } else {
                 result = Component.translatable("item.caerula_arbor.language_key.description_10").getString();
@@ -132,7 +133,8 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 			guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/light_extinguish.png"), this.leftPos + 36, this.topPos + -37, 0, 0, 64, 32, 64, 32);
 		}
 
-		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/sanity.png"), this.leftPos + 106, this.topPos + 43, Mth.clamp((int) EntityUtils.getSanityIndex(entity) * 16, 0, 304), 0, 16, 16, 320, 16);
+		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/sanity.png"), this.leftPos + 106, this.topPos + 43,
+				Mth.clamp((int) (ModCapabilities.getSanityInjury(entity).getValue() / 50) * 16, 0, 304), 0, 16, 16, 320, 16);
 
 		if (RelicUtils.hasDisoNeuro(entity)) {
 			guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/disoclution_neuro.png"), this.leftPos + 101, this.topPos + 90, 0, 0, 64, 64, 64, 64);
@@ -143,7 +145,7 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 
         double result = 0;
         if (entity != null) {
-            result = (((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).player_oceanization;
+            result = (((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization;
         }
         guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/oceanize_icon.png"), this.leftPos + 137, this.topPos + 7, Mth.clamp((int) result * 24, 0, 72), 0, 24, 20, 96, 20);
 
@@ -191,7 +193,7 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 		guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.caerula_record_gui.label_disoclution"), 101, 86, -3368449, false);
         String result = "";
         if (entity != null) {
-            result = new java.text.DecimalFormat("##.##").format((((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).player_light);
+            result = new java.text.DecimalFormat("##.##").format((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_light);
         }
         guiGraphics.drawString(this.font,
 
@@ -208,12 +210,13 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 			guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.caerula_record_gui.label_disconcentration"), 101, 147, -3368449, false);
 		if (RelicUtils.hasDisoBlood(entity))
 			guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.caerula_record_gui.label_haemophilia"), 101, 147, -3368449, false);
+		String sanity = "" + Math.round(ModCapabilities.getSanityInjury(entity).getValue());
 		guiGraphics.drawString(this.font,
 
-				EntityUtils.getSanity(entity), 124, 50, -16737895, false);
+				sanity, 124, 50, -16737895, false);
 		guiGraphics.drawString(this.font,
 
-				EntityUtils.getSanity(entity), 123, 50, -1, false);
+				sanity, 123, 50, -1, false);
 		guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.caerula_record_gui.label_sanity1"), 124, 41, -16737895, false);
 		guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.caerula_record_gui.label_sanity"), 123, 41, -1, false);
 		if (RelicUtils.hasDisoNeuro(entity))
