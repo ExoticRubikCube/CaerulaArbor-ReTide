@@ -1,9 +1,7 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-
 import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.utils.EntityPredicateUtils;

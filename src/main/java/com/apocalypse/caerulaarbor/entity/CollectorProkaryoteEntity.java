@@ -1,7 +1,6 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
@@ -169,10 +168,7 @@ public class CollectorProkaryoteEntity extends SeaMonster {
 			public boolean canUse() {
 				double x = CollectorProkaryoteEntity.this.getX();
 				double y = CollectorProkaryoteEntity.this.getY();
-				double z = CollectorProkaryoteEntity.this.getZ();
-				Entity entity = CollectorProkaryoteEntity.this;
-				Level world = CollectorProkaryoteEntity.this.level();
-				return super.canUse() && EntityUtils.canAttackAnimals();
+                return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override

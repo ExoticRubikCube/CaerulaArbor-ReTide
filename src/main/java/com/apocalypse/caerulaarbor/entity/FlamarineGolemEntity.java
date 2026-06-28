@@ -252,7 +252,7 @@ public class FlamarineGolemEntity extends SeaMonster {
                     List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(32 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
                     for (Entity entityiterator : _entfound) {
                         if (entityiterator instanceof FlamarineStatueEntity) {
-                            if (entityiterator instanceof Mob _entity && sourceentity instanceof LivingEntity _ent)
+                            if (entityiterator instanceof Mob _entity && sourceentity instanceof LivingEntity _ent && _ent.canBeSeenAsEnemy())
                                 _entity.setTarget(_ent);
                         }
                     }
