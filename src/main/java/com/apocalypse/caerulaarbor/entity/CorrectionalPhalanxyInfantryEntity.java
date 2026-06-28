@@ -102,7 +102,7 @@ public class CorrectionalPhalanxyInfantryEntity extends Animal implements GeoEnt
 				return 6.25;
 			}
 		});
-		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal(this, Monster.class, true, false));
+		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Monster.class, true, false));
 		this.targetSelector.addGoal(3, new HurtByTargetGoal(this));
 		this.goalSelector.addGoal(4, new RandomStrollGoal(this, 1));
 		this.goalSelector.addGoal(5, new OpenDoorGoal(this, false));

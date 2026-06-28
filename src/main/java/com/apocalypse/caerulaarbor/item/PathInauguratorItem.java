@@ -74,7 +74,7 @@ public class PathInauguratorItem extends AxeItem {
         Direction direction = context.getClickedFace();
         Entity entity = context.getPlayer();
         ItemStack itemstack = context.getItemInHand();
-        if (direction == null || entity == null)
+        if (entity == null)
             return InteractionResult.PASS;
         if (blockstate.getBlock() == Blocks.GRASS_BLOCK || blockstate.getBlock() == Blocks.DIRT_PATH || blockstate.getBlock() == Blocks.DIRT) {
             {
@@ -83,9 +83,9 @@ public class PathInauguratorItem extends AxeItem {
                 BlockState _bso = world.getBlockState(_bp);
                 for (Map.Entry<Property<?>, Comparable<?>> entry : _bso.getValues().entrySet()) {
                     Property<?> _property = _bs.getBlock().getStateDefinition().getProperty(entry.getKey().getName());
-                    if (_property != null && _bs.getValue(_property) != null)
+                    if (_property != null && _bs.hasProperty(_property))
                         try {
-                            _bs = _bs.setValue(_property, (Comparable) entry.getValue());
+                            _bs = setBlockStateValue(_bs, _property, entry.getValue());
                         } catch (Exception ignored) {
                         }
                 }
@@ -105,12 +105,9 @@ public class PathInauguratorItem extends AxeItem {
                     return false;
                 }
             }.checkGamemode(entity))) {
-                {
-                    ItemStack _ist = itemstack;
-                    if (_ist.hurt(1, RandomSource.create(), null)) {
-                        _ist.shrink(1);
-                        _ist.setDamageValue(0);
-                    }
+                if (itemstack.hurt(1, RandomSource.create(), null)) {
+                    itemstack.shrink(1);
+                    itemstack.setDamageValue(0);
                 }
             }
             return InteractionResult.SUCCESS;
@@ -121,9 +118,9 @@ public class PathInauguratorItem extends AxeItem {
                 BlockState _bso = world.getBlockState(_bp);
                 for (Map.Entry<Property<?>, Comparable<?>> entry : _bso.getValues().entrySet()) {
                     Property<?> _property = _bs.getBlock().getStateDefinition().getProperty(entry.getKey().getName());
-                    if (_property != null && _bs.getValue(_property) != null)
+                    if (_property != null && _bs.hasProperty(_property))
                         try {
-                            _bs = _bs.setValue(_property, (Comparable) entry.getValue());
+                            _bs = setBlockStateValue(_bs, _property, entry.getValue());
                         } catch (Exception ignored) {
                         }
                 }
@@ -156,5 +153,10 @@ public class PathInauguratorItem extends AxeItem {
             return InteractionResult.SUCCESS;
         }
         return InteractionResult.PASS;
+    }
+
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    private static BlockState setBlockStateValue(BlockState blockState, Property property, Comparable value) {
+        return blockState.setValue(property, value);
     }
 }

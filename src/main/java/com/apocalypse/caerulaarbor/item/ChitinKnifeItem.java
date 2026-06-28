@@ -44,28 +44,26 @@ public class ChitinKnifeItem extends Item {
         double y = entity.getY();
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
-        if (entity != null) {
-            if (!(((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).relic_legend_CHITIN) {
-                if ((LevelAccessor) world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.bell.use")), SoundSource.NEUTRAL, (float) 3.5, 1);
-                }
-                if ((LevelAccessor) world instanceof ServerLevel _level)
-                    _level.sendParticles(ParticleTypes.DOLPHIN, x, y, z, 72, 1, 1, 1, 0.1);
-                {
-                    boolean _setval = true;
-                    ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
-                        capability.relic_legend_CHITIN = _setval;
-                        capability.syncPlayerVariables(entity);
-                    });
-                }
-                if (((LevelAccessor) world).isClientSide())
-                    Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);
-                if ((LevelAccessor) world instanceof ServerLevel _level) {
-                    ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, new ItemStack(CaerulaArborModItems.OCEAN_TRIM_TEMPLATE.get()));
-                    entityToSpawn.setPickUpDelay(5);
-                    entityToSpawn.setUnlimitedLifetime();
-                    _level.addFreshEntity(entityToSpawn);
-                }
+        if (!(((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).relic_legend_CHITIN) {
+            if ((LevelAccessor) world instanceof Level _level) {
+                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.bell.use")), SoundSource.NEUTRAL, (float) 3.5, 1);
+            }
+            if ((LevelAccessor) world instanceof ServerLevel _level)
+                _level.sendParticles(ParticleTypes.DOLPHIN, x, y, z, 72, 1, 1, 1, 0.1);
+            {
+                boolean _setval = true;
+                ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                    capability.relic_legend_CHITIN = _setval;
+                    capability.syncPlayerVariables(entity);
+                });
+            }
+            if (((LevelAccessor) world).isClientSide())
+                Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);
+            if ((LevelAccessor) world instanceof ServerLevel _level) {
+                ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, new ItemStack(CaerulaArborModItems.OCEAN_TRIM_TEMPLATE.get()));
+                entityToSpawn.setPickUpDelay(5);
+                entityToSpawn.setUnlimitedLifetime();
+                _level.addFreshEntity(entityToSpawn);
             }
         }
         return ar;

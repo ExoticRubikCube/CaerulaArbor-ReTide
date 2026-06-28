@@ -83,78 +83,74 @@ public class LancXiaoItem extends SwordItem {
         double y = entity.getY();
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
-        if (entity != null) {
-            double count = 0;
-            if (isLancXiaoReady(itemstack)) {
-                for (int index0 = 0; index0 < 9; index0++) {
-                    {
-                        final Vec3 _center = new Vec3(x, y, z);
-                        List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(32 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                        for (Entity entityiterator : _entfound) {
-                            if (entityiterator instanceof Monster || (entityiterator instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == entity) {
-                                if (entityiterator instanceof LivingEntity _livEnt3 && _livEnt3.hasEffect(CaerulaArborModMobEffects.INVULNERABLE.get())) {
-                                    continue;
-                                }
-                                if (!entityiterator.isAlive()) {
-                                    continue;
-                                }
-                                if (entity.distanceTo(entityiterator) <= 16) {
-                                    count = count + 1;
-                                    CaerulaArborMod.queueServerWork((int) (count * 2), () -> {
-                                        if (entity.distanceTo(entityiterator) <= 16) {
-                                            if (entityiterator == null || entity == null)
-                                                return;
-                                            double atk = 0;
-                                            double tz = 0;
-                                            double ty = 0;
-                                            double tx = 0;
-                                            atk = (Entity) entity instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity0.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
-                                            tx = entityiterator.getX() + Mth.nextDouble(RandomSource.create(), -0.25, 0.25);
-                                            ty = entityiterator.getY();
-                                            tz = entityiterator.getZ() + Mth.nextDouble(RandomSource.create(), -0.25, 0.25);
-                                            EntityUtils.endspeakerLinkPtcTo(world, entity.getX(), entity.getY(), entity.getZ(), tx, ty, tz);
-                                            {
-                                                Entity _ent = entity;
-                                                _ent.teleportTo(tx, ty, tz);
-                                                if (_ent instanceof ServerPlayer _serverPlayer)
-                                                    _serverPlayer.connection.teleport(tx, ty, tz, _ent.getYRot(), _ent.getXRot());
-                                            }
-                                            if ((LevelAccessor) world instanceof ServerLevel _level)
-                                                _level.sendParticles(CaerulaArborModParticleTypes.ENDSPEAKER_PARTICLE.get(), tx, (ty + 0.75), tz, 18, 0.75, 0.75, 0.75, 0.15);
-                                            if ((LevelAccessor) world instanceof Level _level) {
-                                                    _level.playSound(null, BlockPos.containing(tx, ty, tz), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "endspeaker_attack_hit")), SoundSource.PLAYERS, (float) 1.5, 1);
-                                            }
-                                            entityiterator.hurt(new DamageSource(((LevelAccessor) world).registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "endspeaker_attack"))), entity), (float) (atk * 2));
+        double count = 0;
+        if (isLancXiaoReady(itemstack)) {
+            for (int index0 = 0; index0 < 9; index0++) {
+                {
+                    final Vec3 _center = new Vec3(x, y, z);
+                    List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(32 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+                    for (Entity entityiterator : _entfound) {
+                        if (entityiterator instanceof Monster || (entityiterator instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == entity) {
+                            LivingEntity _livEnt3 = (LivingEntity) entityiterator;
+                            if (_livEnt3.hasEffect(CaerulaArborModMobEffects.INVULNERABLE.get())) {
+                                continue;
+                            }
+                            if (!entityiterator.isAlive()) {
+                                continue;
+                            }
+                            if (entity.distanceTo(entityiterator) <= 16) {
+                                count = count + 1;
+                                CaerulaArborMod.queueServerWork((int) (count * 2), () -> {
+                                    if (entity.distanceTo(entityiterator) <= 16) {
+                                        double atk = 0;
+                                        double tz = 0;
+                                        double ty = 0;
+                                        double tx = 0;
+                                        atk = entity.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? entity.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
+                                        tx = entityiterator.getX() + Mth.nextDouble(RandomSource.create(), -0.25, 0.25);
+                                        ty = entityiterator.getY();
+                                        tz = entityiterator.getZ() + Mth.nextDouble(RandomSource.create(), -0.25, 0.25);
+                                        EntityUtils.endspeakerLinkPtcTo(world, entity.getX(), entity.getY(), entity.getZ(), tx, ty, tz);
+                                        Entity _ent = entity;
+                                        _ent.teleportTo(tx, ty, tz);
+                                        if (_ent instanceof ServerPlayer _serverPlayer)
+                                            _serverPlayer.connection.teleport(tx, ty, tz, _ent.getYRot(), _ent.getXRot());
+                                        if ((LevelAccessor) world instanceof ServerLevel _level)
+                                            _level.sendParticles(CaerulaArborModParticleTypes.ENDSPEAKER_PARTICLE.get(), tx, (ty + 0.75), tz, 18, 0.75, 0.75, 0.75, 0.15);
+                                        if ((LevelAccessor) world instanceof Level _level) {
+                                                _level.playSound(null, BlockPos.containing(tx, ty, tz), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "endspeaker_attack_hit")), SoundSource.PLAYERS, (float) 1.5, 1);
                                         }
-                                    });
-                                }
-                            }
-                            if (count >= 9) {
-                                break;
+                                        entityiterator.hurt(new DamageSource(((LevelAccessor) world).registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "endspeaker_attack"))), entity), (float) (atk * 2));
+                                    }
+                                });
                             }
                         }
-                    }
-                    if (count >= 9) {
-                        break;
-                    }
-                }
-                if (count > 0) {
-                    if ((LevelAccessor) world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "skill_release")), SoundSource.PLAYERS, (float) 0.75, 1);
-                    }
-                    if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                        _entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 20, 2, false, false));
-                    CaerulaArborMod.queueServerWork((int) ((count + 2) * 2), () -> {
-                        EntityUtils.endspeakerLinkPtcTo(world, entity.getX(), entity.getY(), entity.getZ(), x, y, z);
-                        {
-                            Entity _ent = entity;
-                            _ent.teleportTo(x, y, z);
-                            if (_ent instanceof ServerPlayer _serverPlayer)
-                                _serverPlayer.connection.teleport(x, y, z, _ent.getYRot(), _ent.getXRot());
+                        if (count >= 9) {
+                            break;
                         }
-                    });
-                    itemstack.getOrCreateTag().putDouble("sklp", 6);
+                    }
                 }
+                if (count >= 9) {
+                    break;
+                }
+            }
+            if (count > 0) {
+                if ((LevelAccessor) world instanceof Level _level) {
+                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "skill_release")), SoundSource.PLAYERS, (float) 0.75, 1);
+                }
+                LivingEntity _entity = (LivingEntity) (Entity) entity;
+                if (!_entity.level().isClientSide())
+                    _entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 20, 2, false, false));
+                CaerulaArborMod.queueServerWork((int) ((count + 2) * 2), () -> {
+                    EntityUtils.endspeakerLinkPtcTo(world, entity.getX(), entity.getY(), entity.getZ(), x, y, z);
+                    {
+                        Entity _ent = entity;
+                        _ent.teleportTo(x, y, z);
+                        if (_ent instanceof ServerPlayer _serverPlayer)
+                            _serverPlayer.connection.teleport(x, y, z, _ent.getYRot(), _ent.getXRot());
+                    }
+                });
+                itemstack.getOrCreateTag().putDouble("sklp", 6);
             }
         }
         return ar;
@@ -194,12 +190,10 @@ public class LancXiaoItem extends SwordItem {
         }
         String hoverText = Component.translatable("item.caerula_arbor.lanc_xiao.description_0").getString() + "\n" + Component.translatable("item.caerula_arbor.lanc_xiao.description_1").getString() + "\n"
                 + Component.translatable("item.caerula_arbor.lanc_xiao.description_2").getString() + "\n" + prefix + Math.round(sklp) + " / 6";
-		if (hoverText != null) {
-			for (String line : hoverText.split("\n")) {
-				list.add(Component.literal(line));
-			}
-		}
-	}
+        for (String line : hoverText.split("\n")) {
+            list.add(Component.literal(line));
+        }
+    }
 
 	@Override
 	@OnlyIn(Dist.CLIENT)

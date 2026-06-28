@@ -11,6 +11,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
+
 import java.util.List;
 
 public class CaramelSeagrassJuiceItem extends Item {
@@ -47,29 +48,27 @@ public class CaramelSeagrassJuiceItem extends Item {
 		double x = entity.getX();
 		double y = entity.getY();
 		double z = entity.getZ();
-		if (entity != null) {
-			if (!entity.level().isClientSide()) {
-				entity.addEffect(new MobEffectInstance(MobEffects.SATURATION, 1, 2, false, false));
-				entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 300, 1));
-				entity.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 400, 0));
-			}
-			if (!(entity instanceof Player)) {
-				resultStack.shrink(1);
-				ItemStack emptyCup = new ItemStack(CaerulaArborModItems.OCEANGLASS_CUP.get());
-				if (resultStack.isEmpty()) {
-					return emptyCup;
-				}
-			} else if (entity instanceof Player player && !player.getAbilities().instabuild) {
-				resultStack.shrink(1);
-				ItemStack emptyCup = new ItemStack(CaerulaArborModItems.OCEANGLASS_CUP.get());
-				if (resultStack.isEmpty()) {
-					return emptyCup;
-				}
-				if (!player.getInventory().add(emptyCup)) {
-					player.drop(emptyCup, false);
-				}
-			}
-		}
-		return resultStack;
+        if (!entity.level().isClientSide()) {
+            entity.addEffect(new MobEffectInstance(MobEffects.SATURATION, 1, 2, false, false));
+            entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 300, 1));
+            entity.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 400, 0));
+        }
+        if (!(entity instanceof Player)) {
+            resultStack.shrink(1);
+            ItemStack emptyCup = new ItemStack(CaerulaArborModItems.OCEANGLASS_CUP.get());
+            if (resultStack.isEmpty()) {
+                return emptyCup;
+            }
+        } else if (entity instanceof Player player && !player.getAbilities().instabuild) {
+            resultStack.shrink(1);
+            ItemStack emptyCup = new ItemStack(CaerulaArborModItems.OCEANGLASS_CUP.get());
+            if (resultStack.isEmpty()) {
+                return emptyCup;
+            }
+            if (!player.getInventory().add(emptyCup)) {
+                player.drop(emptyCup, false);
+            }
+        }
+        return resultStack;
 	}
 }

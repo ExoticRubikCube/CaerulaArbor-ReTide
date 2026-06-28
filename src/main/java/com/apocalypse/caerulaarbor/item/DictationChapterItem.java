@@ -1,4 +1,4 @@
-﻿package com.apocalypse.caerulaarbor.item;
+package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.helper.UpgradeBreedProcedure;

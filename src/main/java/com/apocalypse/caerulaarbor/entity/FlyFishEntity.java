@@ -127,13 +127,13 @@ public class FlyFishEntity extends SeaMonster implements RangedAttackMob {
 				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
 		});
-		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal(this, IronGolem.class, true, true));
-		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal(this, SnowGolem.class, true, true));
-		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal(this, Villager.class, true, true));
-		this.targetSelector.addGoal(5, new NearestAttackableTargetGoal(this, Illusioner.class, true, true));
-		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal(this, Pillager.class, true, true));
-		this.targetSelector.addGoal(7, new NearestAttackableTargetGoal(this, Vindicator.class, true, true));
-		this.targetSelector.addGoal(8, new NearestAttackableTargetGoal(this, Witch.class, true, true));
+		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, IronGolem.class, true, true));
+		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, SnowGolem.class, true, true));
+		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Villager.class, true, true));
+		this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Illusioner.class, true, true));
+		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, Pillager.class, true, true));
+		this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, Vindicator.class, true, true));
+		this.targetSelector.addGoal(8, new NearestAttackableTargetGoal<>(this, Witch.class, true, true));
 		this.targetSelector.addGoal(9, new NearestAttackableTargetGoal(this, Animal.class, true, true) {
 			@Override
 			public boolean canUse() {

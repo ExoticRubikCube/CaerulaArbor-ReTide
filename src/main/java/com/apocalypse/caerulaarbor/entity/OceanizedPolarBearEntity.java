@@ -1,7 +1,6 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
 import net.minecraft.core.BlockPos;
@@ -86,9 +85,9 @@ public class OceanizedPolarBearEntity extends SeaMonster {
 				return 6.25;
 			}
 		});
-		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal(this, Fox.class, true, false));
-		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal(this, SnowGolem.class, true, false));
-		this.targetSelector.addGoal(5, new NearestAttackableTargetGoal(this, IronGolem.class, true, false));
+		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Fox.class, true, false));
+		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, SnowGolem.class, true, false));
+		this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, IronGolem.class, true, false));
 		this.goalSelector.addGoal(6, new RandomStrollGoal(this, 0.8));
 		this.goalSelector.addGoal(7, new RandomSwimmingGoal(this, 1.5, 40));
 		this.goalSelector.addGoal(8, new RandomLookAroundGoal(this));

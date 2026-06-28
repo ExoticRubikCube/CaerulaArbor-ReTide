@@ -2,58 +2,53 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.item.renderer.UninishedBeautyItemRenderer;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
+import com.google.common.collect.ImmutableMultimap;
+import com.google.common.collect.Multimap;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.registries.ForgeRegistries;
-import software.bernie.geckolib.util.GeckoLibUtil;
-import software.bernie.geckolib.core.object.PlayState;
-import software.bernie.geckolib.core.animation.RawAnimation;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animation.AnimationController;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animatable.GeoItem;
-
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.Rarity;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.network.chat.Component;
-import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import net.minecraftforge.registries.ForgeRegistries;
+import software.bernie.geckolib.animatable.GeoItem;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
-import com.apocalypse.caerulaarbor.item.renderer.UninishedBeautyItemRenderer;
-
-import java.util.function.Consumer;
 import java.util.List;
-
-import com.google.common.collect.Multimap;
-import com.google.common.collect.ImmutableMultimap;
+import java.util.function.Consumer;
 
 public class UninishedBeautyItem extends Item implements GeoItem {
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
@@ -164,7 +159,7 @@ public class UninishedBeautyItem extends Item implements GeoItem {
         ItemStack itemstack = context.getItemInHand();
         if (entity == null)
             return InteractionResult.PASS;
-        BlockState tgt = Blocks.AIR.defaultBlockState();
+        BlockState tgt;
         if (blockstate.is(BlockTags.create(new ResourceLocation("minecraft:mineable/axe")))) {
             {
                 BlockPos _pos = BlockPos.containing(x, y, z);
@@ -196,13 +191,10 @@ public class UninishedBeautyItem extends Item implements GeoItem {
                     return false;
                 }
             }.checkGamemode(entity))) {
-                {
-                    ItemStack _ist = itemstack;
-                    if (_ist.hurt(1, RandomSource.create(), null)) {
-                        _ist.shrink(1);
-                        _ist.setDamageValue(0);
-                    }
-                }
+				if (itemstack.hurt(1, RandomSource.create(), null)) {
+					itemstack.shrink(1);
+					itemstack.setDamageValue(0);
+				}
             }
             return InteractionResult.SUCCESS;
         }
@@ -216,46 +208,44 @@ public class UninishedBeautyItem extends Item implements GeoItem {
         double x = entity.getX();
         double y = entity.getY();
         double z = entity.getZ();
-        if (entity != null && sourceentity != null) {
-            if (((Entity) sourceentity instanceof Player _plr ? _plr.getAttackStrengthScale(0) : 0) >= 0.95) {
-                if (itemstack.getItem() instanceof UninishedBeautyItem)
-                    itemstack.getOrCreateTag().putString("geckoAnim", "animation.unfinished_beautuy.attack");
-                if (world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "saw_cut_spect")), SoundSource.PLAYERS, (float) 2.4, 1);
-                }
-                CaerulaArborMod.queueServerWork(12, () -> {
-                    if (world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "saw_spect_1")), SoundSource.PLAYERS, (float) 2.4, 1);
-                    }
-                    new Object() {
-                        void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
-                            if ((sourceentity != null ? entity.distanceTo(sourceentity) : -1) <= 5 && ((Entity) entity).isAlive() && ((Entity) sourceentity).isAlive()) {
-                                if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) / ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) >= ((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1)
-                                        / ((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1)) {
-                                    ((Entity) entity).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "saw_cut"))), sourceentity),
-                                            (float) (((Entity) sourceentity instanceof LivingEntity _livingEntity12 && _livingEntity12.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity12.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
-                                                    * 1));
-                                    if (((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < ((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1)) {
-                                        if ((Entity) sourceentity instanceof LivingEntity _entity)
-                                            _entity.setHealth((float) Math.min(((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) + ((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.025,
-                                                    (Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1));
-                                    }
-                                } else {
-                                    ((Entity) entity).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "saw_cut"))), sourceentity),
-                                            (float) (((Entity) sourceentity instanceof LivingEntity _livingEntity21 && _livingEntity21.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity21.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
-                                                    * 0.5));
-                                }
-                            }
-                            final int tick2 = ticks;
-                            CaerulaArborMod.queueServerWork(tick2, () -> {
-                                if (timedlooptotal > timedloopiterator + 1) {
-                                    timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
-                                }
-                            });
-                        }
-                    }.timedLoop(0, 10, 1);
-                });
+        if (((Entity) sourceentity instanceof Player _plr ? _plr.getAttackStrengthScale(0) : 0) >= 0.95) {
+            if (itemstack.getItem() instanceof UninishedBeautyItem)
+                itemstack.getOrCreateTag().putString("geckoAnim", "animation.unfinished_beautuy.attack");
+            if (world instanceof Level _level) {
+                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "saw_cut_spect")), SoundSource.PLAYERS, (float) 2.4, 1);
             }
+            CaerulaArborMod.queueServerWork(12, () -> {
+                if (world instanceof Level _level) {
+                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "saw_spect_1")), SoundSource.PLAYERS, (float) 2.4, 1);
+                }
+                new Object() {
+                    void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
+                        if (entity.distanceTo(sourceentity) <= 5 && ((Entity) entity).isAlive() && ((Entity) sourceentity).isAlive()) {
+                            if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) / ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) >= ((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1)
+                                    / ((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1)) {
+                                ((Entity) entity).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "saw_cut"))), sourceentity),
+                                        (float) (((Entity) sourceentity instanceof LivingEntity _livingEntity12 && _livingEntity12.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity12.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
+                                                * 1));
+                                if (((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < ((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1)) {
+                                    if ((Entity) sourceentity instanceof LivingEntity _entity)
+                                        _entity.setHealth((float) Math.min(((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) + ((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.025,
+                                                (Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1));
+                                }
+                            } else {
+                                ((Entity) entity).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "saw_cut"))), sourceentity),
+                                        (float) (((Entity) sourceentity instanceof LivingEntity _livingEntity21 && _livingEntity21.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity21.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
+                                                * 0.5));
+                            }
+                        }
+                        final int tick2 = ticks;
+                        CaerulaArborMod.queueServerWork(tick2, () -> {
+                            if (timedlooptotal > timedloopiterator + 1) {
+                                timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
+                            }
+                        });
+                    }
+                }.timedLoop(0, 10, 1);
+            });
         }
         return retval;
 	}

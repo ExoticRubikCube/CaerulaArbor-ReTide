@@ -157,9 +157,9 @@ public class OceanizedWitherEntity extends SeaMonster implements RangedAttackMob
 				return super.canContinueToUse() && EntityPredicateUtils.isWitherDurative(entity);
 			}
 		});
-		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal(this, IronGolem.class, false, false));
-		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal(this, Villager.class, false, false));
-		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal(this, Animal.class, false, false));
+		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, IronGolem.class, false, false));
+		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Villager.class, false, false));
+		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Animal.class, false, false));
 		this.goalSelector.addGoal(5, new RandomStrollGoal(this, 1, 20) {
 			@Override
 			protected Vec3 getPosition() {

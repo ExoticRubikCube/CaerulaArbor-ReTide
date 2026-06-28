@@ -175,8 +175,8 @@ public class KnightIronItem extends ArmorItem implements GeoItem {
 
 	@Override
 	public void registerControllers(AnimatableManager.ControllerRegistrar data) {
-		data.add(new AnimationController(this, "controller", 5, this::predicate));
-		data.add(new AnimationController(this, "procedureController", 5, this::procedurePredicate));
+		data.add(new AnimationController<>(this, "controller", 5, this::predicate));
+		data.add(new AnimationController<>(this, "procedureController", 5, this::procedurePredicate));
 	}
 
 	@Override

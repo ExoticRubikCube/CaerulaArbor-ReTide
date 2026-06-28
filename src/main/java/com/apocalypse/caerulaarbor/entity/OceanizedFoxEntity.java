@@ -1,8 +1,7 @@
 package com.apocalypse.caerulaarbor.entity;
 
-import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
@@ -128,12 +127,12 @@ public class OceanizedFoxEntity extends SeaMonster {
 			}
 
 		});
-		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal(this, Chicken.class, true, false));
-		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal(this, Rabbit.class, true, false));
-		this.targetSelector.addGoal(5, new NearestAttackableTargetGoal(this, Turtle.class, true, false));
-		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal(this, Salmon.class, true, true));
-		this.targetSelector.addGoal(7, new NearestAttackableTargetGoal(this, TropicalFish.class, true, true));
-		this.targetSelector.addGoal(8, new NearestAttackableTargetGoal(this, Pufferfish.class, true, true));
+		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Chicken.class, true, false));
+		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Rabbit.class, true, false));
+		this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Turtle.class, true, false));
+		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, Salmon.class, true, true));
+		this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, TropicalFish.class, true, true));
+		this.targetSelector.addGoal(8, new NearestAttackableTargetGoal<>(this, Pufferfish.class, true, true));
 		this.goalSelector.addGoal(9, new TemptGoal(this, 1, Ingredient.of(CaerulaArborModItems.CANNED_CHERRY.get()), false));
 		this.goalSelector.addGoal(10, new RemoveBlockGoal(Blocks.SWEET_BERRY_BUSH, this, 1, 3));
 		this.goalSelector.addGoal(11, new RandomStrollGoal(this, 1) {

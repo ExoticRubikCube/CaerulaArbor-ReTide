@@ -35,12 +35,10 @@ public class GuardianStareItem extends Item {
 		super.appendHoverText(itemstack, level, list, flag);
 		Entity entity = itemstack.getEntityRepresentation();
 		String hoverText = ItemUtils.getOneUseItemDescription(itemstack);
-		if (hoverText != null) {
-			for (String line : hoverText.split("\n")) {
-				list.add(Component.literal(line));
-			}
-		}
-	}
+        for (String line : hoverText.split("\n")) {
+            list.add(Component.literal(line));
+        }
+    }
 
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level world, Player entity, InteractionHand hand) {
@@ -49,24 +47,22 @@ public class GuardianStareItem extends Item {
         double y = entity.getY();
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
-        if (entity != null) {
-            if (!itemstack.getOrCreateTag().getBoolean("used")) {
-                {
-                    boolean _setval = true;
-                    ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
-                        capability.relic_util_STARE = _setval;
-                        capability.syncPlayerVariables(entity);
-                    });
-                }
-                if ((LevelAccessor) world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.player.levelup")), SoundSource.NEUTRAL, 2, 1);
-                }
-                if ((Entity) entity instanceof Player _player)
-                    _player.giveExperienceLevels(4);
-                if ((LevelAccessor) world instanceof ServerLevel _level)
-                    _level.sendParticles(ParticleTypes.NAUTILUS, x, (y + 0.5), z, 72, 1, 1, 1, 1);
-                itemstack.getOrCreateTag().putBoolean("used", true);
+        if (!itemstack.getOrCreateTag().getBoolean("used")) {
+            {
+                boolean _setval = true;
+                ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                    capability.relic_util_STARE = _setval;
+                    capability.syncPlayerVariables(entity);
+                });
             }
+            if ((LevelAccessor) world instanceof Level _level) {
+                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.player.levelup")), SoundSource.NEUTRAL, 2, 1);
+            }
+            if ((Entity) entity instanceof Player _player)
+                _player.giveExperienceLevels(4);
+            if ((LevelAccessor) world instanceof ServerLevel _level)
+                _level.sendParticles(ParticleTypes.NAUTILUS, x, (y + 0.5), z, 72, 1, 1, 1, 1);
+            itemstack.getOrCreateTag().putBoolean("used", true);
         }
         return ar;
 	}
@@ -74,8 +70,6 @@ public class GuardianStareItem extends Item {
 	@Override
 	public void inventoryTick(ItemStack itemstack, Level world, Entity entity, int slot, boolean selected) {
 		super.inventoryTick(itemstack, world, entity, slot, selected);
-        if (entity == null)
-            return;
         if (entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(MobEffects.DIG_SLOWDOWN)) {
             if (entity instanceof LivingEntity _entity)
                 _entity.removeEffect(MobEffects.DIG_SLOWDOWN);

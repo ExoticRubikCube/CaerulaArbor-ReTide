@@ -1,10 +1,8 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
-import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.entity.base.PolarMountRider;
-
+import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
 import net.minecraft.core.BlockPos;
@@ -109,19 +107,19 @@ public class OceanizedPiglinEntity extends SeaMonster implements PolarMountRider
 				return 5.76;
 			}
 		});
-		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal(this, Hoglin.class, true, false));
-		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal(this, WitherSkeleton.class, true, false));
-		this.targetSelector.addGoal(5, new NearestAttackableTargetGoal(this, WitherBoss.class, true, false));
-		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal(this, IronGolem.class, true, false));
-		this.targetSelector.addGoal(7, new NearestAttackableTargetGoal(this, SnowGolem.class, true, false));
-		this.targetSelector.addGoal(8, new NearestAttackableTargetGoal(this, Villager.class, true, false));
-		this.targetSelector.addGoal(9, new NearestAttackableTargetGoal(this, Illusioner.class, true, false));
-		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal(this, Pillager.class, true, false));
-		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal(this, Vindicator.class, true, false));
-		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal(this, Witch.class, true, false));
-		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal(this, Piglin.class, true, false));
-		this.targetSelector.addGoal(14, new NearestAttackableTargetGoal(this, PiglinBrute.class, true, false));
-		this.targetSelector.addGoal(15, new NearestAttackableTargetGoal(this, ZombifiedPiglin.class, true, false));
+		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Hoglin.class, true, false));
+		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, WitherSkeleton.class, true, false));
+		this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, WitherBoss.class, true, false));
+		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, IronGolem.class, true, false));
+		this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, SnowGolem.class, true, false));
+		this.targetSelector.addGoal(8, new NearestAttackableTargetGoal<>(this, Villager.class, true, false));
+		this.targetSelector.addGoal(9, new NearestAttackableTargetGoal<>(this, Illusioner.class, true, false));
+		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, Pillager.class, true, false));
+		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, Vindicator.class, true, false));
+		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, Witch.class, true, false));
+		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
+		this.targetSelector.addGoal(14, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
+		this.targetSelector.addGoal(15, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
 		this.targetSelector.addGoal(16, new NearestAttackableTargetGoal(this, Animal.class, true, false) {
 			@Override
 			public boolean canUse() {

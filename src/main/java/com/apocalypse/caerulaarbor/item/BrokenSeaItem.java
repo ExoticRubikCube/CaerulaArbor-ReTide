@@ -93,19 +93,62 @@ public class BrokenSeaItem extends SwordItem {
         double y = entity.getY();
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
-        if (entity != null) {
-            double damage = 0;
-            double count = 0;
-            if (!((Entity) entity instanceof Player _plrCldCheck1 && _plrCldCheck1.getCooldowns().isOnCooldown(itemstack.getItem()))) {
-                if (entity.isShiftKeyDown() && ((Entity) entity instanceof Player _plr ? _plr.experienceLevel : 0) >= 5) {
-                    if ((LevelAccessor) world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "gladiia_skill_release")), SoundSource.PLAYERS, 2, 1);
+        double damage = 0;
+        double count = 0;
+        if (!((Entity) entity instanceof Player _plrCldCheck1 && _plrCldCheck1.getCooldowns().isOnCooldown(itemstack.getItem()))) {
+            if (entity.isShiftKeyDown() && ((Entity) entity instanceof Player _plr ? _plr.experienceLevel : 0) >= 5) {
+                if ((LevelAccessor) world instanceof Level _level) {
+                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "gladiia_skill_release")), SoundSource.PLAYERS, 2, 1);
+                }
+                if ((LevelAccessor) world instanceof ServerLevel _level) {
+                    Entity entityToSpawn = CaerulaArborModEntities.GLADIIA_WHIRL.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+                    if (entityToSpawn != null) {
+                        entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
                     }
-                    if ((LevelAccessor) world instanceof ServerLevel _level) {
-                        Entity entityToSpawn = CaerulaArborModEntities.GLADIIA_WHIRL.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
-                        if (entityToSpawn != null) {
-                            entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
+                }
+                if (!(new Object() {
+                    public boolean checkGamemode(Entity _ent) {
+                        if (_ent instanceof ServerPlayer _serverPlayer) {
+                            return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                        } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
+                            return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
+                                    && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                         }
+                        return false;
+                    }
+                }.checkGamemode((Entity) entity))) {
+                    if ((Entity) entity instanceof Player _player)
+                        _player.getCooldowns().addCooldown(itemstack.getItem(), 400);
+                    if ((Entity) entity instanceof Player _player)
+                        _player.giveExperienceLevels(-(5));
+                }
+            } else {
+                damage = entity.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? entity.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
+                {
+                    final Vec3 _center = new Vec3(x, y, z);
+                    List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(12 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+                    for (Entity entityiterator : _entfound) {
+                        if (entityiterator instanceof Monster || (entityiterator instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == entity) {
+                            if (entity.distanceTo(entityiterator) <= 6) {
+                                EntityUtils.pullToGladiia(entityiterator, entity);
+                                EntityUtils.gladiiaLinkPtcToEntity(world, entity, entityiterator);
+                                LivingEntity _entity = (LivingEntity) entityiterator;
+                                if (!_entity.level().isClientSide())
+                                    _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.DIZZY.get(), 40, 0, false, false));
+                                entityiterator.hurt(
+                                        new DamageSource(((LevelAccessor) world).registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))), entity),
+                                        (float) (damage * 3));
+                                count = count + 1;
+                            }
+                        }
+                        if (count >= 6) {
+                            break;
+                        }
+                    }
+                }
+                if (count > 0 && !((LevelAccessor) world).isClientSide()) {
+                    if ((LevelAccessor) world instanceof Level _level) {
+                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "gladiia_pull_pull")), SoundSource.PLAYERS, 2, 1);
                     }
                     if (!(new Object() {
                         public boolean checkGamemode(Entity _ent) {
@@ -119,51 +162,7 @@ public class BrokenSeaItem extends SwordItem {
                         }
                     }.checkGamemode((Entity) entity))) {
                         if ((Entity) entity instanceof Player _player)
-                            _player.getCooldowns().addCooldown(itemstack.getItem(), 400);
-                        if ((Entity) entity instanceof Player _player)
-                            _player.giveExperienceLevels(-(5));
-                    }
-                } else {
-                    damage = (Entity) entity instanceof LivingEntity _livingEntity10 && _livingEntity10.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity10.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
-                    {
-                        final Vec3 _center = new Vec3(x, y, z);
-                        List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(12 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                        for (Entity entityiterator : _entfound) {
-                            if (entityiterator instanceof Monster || (entityiterator instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == entity) {
-                                if ((entityiterator != null ? entity.distanceTo(entityiterator) : -1) <= 6) {
-                                    EntityUtils.pullToGladiia(entityiterator, entity);
-                                    EntityUtils.gladiiaLinkPtcToEntity(world, entity, entityiterator);
-                                    if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                                        _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.DIZZY.get(), 40, 0, false, false));
-                                    entityiterator.hurt(
-                                            new DamageSource(((LevelAccessor) world).registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))), entity),
-                                            (float) (damage * 3));
-                                    count = count + 1;
-                                }
-                            }
-                            if (count >= 6) {
-                                break;
-                            }
-                        }
-                    }
-                    if (count > 0 && !((LevelAccessor) world).isClientSide()) {
-                        if ((LevelAccessor) world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "gladiia_pull_pull")), SoundSource.PLAYERS, 2, 1);
-                        }
-                        if (!(new Object() {
-                            public boolean checkGamemode(Entity _ent) {
-                                if (_ent instanceof ServerPlayer _serverPlayer) {
-                                    return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                                } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                                    return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                            && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
-                                }
-                                return false;
-                            }
-                        }.checkGamemode((Entity) entity))) {
-                            if ((Entity) entity instanceof Player _player)
-                                _player.getCooldowns().addCooldown(itemstack.getItem(), 140);
-                        }
+                            _player.getCooldowns().addCooldown(itemstack.getItem(), 140);
                     }
                 }
             }

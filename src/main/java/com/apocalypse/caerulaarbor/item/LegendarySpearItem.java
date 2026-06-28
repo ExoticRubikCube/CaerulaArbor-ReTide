@@ -158,105 +158,100 @@ public class LegendarySpearItem extends Item implements GeoItem {
         double x = entity.getX();
         double y = entity.getY();
         double z = entity.getZ();
-        if (entity != null && sourceentity != null) {
-            if (!(new Object() {
-                public boolean checkGamemode(Entity _ent) {
-                    if (_ent instanceof ServerPlayer _serverPlayer) {
-                        return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                    } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                        return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
-                    }
-                    return false;
+        if (!(new Object() {
+            public boolean checkGamemode(Entity _ent) {
+                if (_ent instanceof ServerPlayer _serverPlayer) {
+                    return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
+                    return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                 }
-            }.checkGamemode((Entity) entity))) {
-                {
-                    ItemStack _ist = itemstack;
-                    if (_ist.hurt(1, RandomSource.create(), null)) {
-                        _ist.shrink(1);
-                        _ist.setDamageValue(0);
-                    }
-                }
+                return false;
             }
-            if (!((Entity) sourceentity instanceof Player _plrCldCheck4 && _plrCldCheck4.getCooldowns().isOnCooldown(itemstack.getItem()))
-                    && ((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == itemstack.getItem()) {
-                if (sourceentity.isShiftKeyDown()) {
-                    if (itemstack.getItem() instanceof LegendarySpearItem)
-                        itemstack.getOrCreateTag().putString("geckoAnim", "animation.lengendspear.swing2");
-                    if ((Entity) sourceentity instanceof Player _player)
-                        _player.getCooldowns().addCooldown(itemstack.getItem(), 25);
-                    CaerulaArborMod.queueServerWork(10, () -> {
-                        if (world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.player.attack.sweep")), SoundSource.NEUTRAL, (float) 3.5, 1);
-                        }
-                        {
-                            final Vec3 _center = new Vec3(x, y, z);
-                            List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(7 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                            for (Entity entityiterator : _entfound) {
-                                if (entityiterator.isAlive() && !(entityiterator == sourceentity)) {
-                                    if ((sourceentity != null ? entityiterator.distanceTo(sourceentity) : -1) <= 3) {
-                                        entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.TRIDENT), sourceentity),
-                                                (float) (((Entity) sourceentity instanceof LivingEntity _livingEntity17 && _livingEntity17.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)
-                                                        ? _livingEntity17.getAttribute(Attributes.ATTACK_DAMAGE).getValue()
-                                                        : 0) * (1 + 0.2 * itemstack.getEnchantmentLevel(CaerulaArborModEnchantments.SYNESTHESIA.get()))));
-                                    }
+        }.checkGamemode((Entity) entity))) {
+            if (itemstack.hurt(1, RandomSource.create(), null)) {
+                itemstack.shrink(1);
+                itemstack.setDamageValue(0);
+            }
+        }
+        if (!((Entity) sourceentity instanceof Player _plrCldCheck4 && _plrCldCheck4.getCooldowns().isOnCooldown(itemstack.getItem()))
+                && ((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == itemstack.getItem()) {
+            if (sourceentity.isShiftKeyDown()) {
+                if (itemstack.getItem() instanceof LegendarySpearItem)
+                    itemstack.getOrCreateTag().putString("geckoAnim", "animation.lengendspear.swing2");
+                if ((Entity) sourceentity instanceof Player _player)
+                    _player.getCooldowns().addCooldown(itemstack.getItem(), 25);
+                CaerulaArborMod.queueServerWork(10, () -> {
+                    if (world instanceof Level _level) {
+                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.player.attack.sweep")), SoundSource.NEUTRAL, (float) 3.5, 1);
+                    }
+                    {
+                        final Vec3 _center = new Vec3(x, y, z);
+                        List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(7 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+                        for (Entity entityiterator : _entfound) {
+                            if (entityiterator.isAlive() && !(entityiterator == sourceentity)) {
+                                if ((sourceentity != null ? entityiterator.distanceTo(sourceentity) : -1) <= 3) {
+                                    entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.TRIDENT), sourceentity),
+                                            (float) (((Entity) sourceentity instanceof LivingEntity _livingEntity17 && _livingEntity17.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)
+                                                    ? _livingEntity17.getAttribute(Attributes.ATTACK_DAMAGE).getValue()
+                                                    : 0) * (1 + 0.2 * itemstack.getEnchantmentLevel(CaerulaArborModEnchantments.SYNESTHESIA.get()))));
                                 }
                             }
                         }
-                    });
-                } else if (sourceentity.getDeltaMovement().y() < -0.1) {
-                    if (itemstack.getItem() instanceof LegendarySpearItem)
-                        itemstack.getOrCreateTag().putString("geckoAnim", "animation.lengendspear.srike");
-                    if ((Entity) sourceentity instanceof Player _player)
-                        _player.getCooldowns().addCooldown(itemstack.getItem(), 25);
-                    CaerulaArborMod.queueServerWork(10, () -> {
-                        if (((Entity) entity).isAlive()) {
-                            if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.trident.hit_ground")), SoundSource.NEUTRAL, (float) 3.5, 1);
-                            }
-                            if ((sourceentity != null ? entity.distanceTo(sourceentity) : -1) <= 4) {
-                                ((Entity) entity).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.TRIDENT), sourceentity),
-                                        (float) (((Entity) sourceentity instanceof LivingEntity _livingEntity32 && _livingEntity32.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity32.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
-                                                * (1 + 0.2 * itemstack.getEnchantmentLevel(CaerulaArborModEnchantments.SYNESTHESIA.get()))));
-                            }
+                    }
+                });
+            } else if (sourceentity.getDeltaMovement().y() < -0.1) {
+                if (itemstack.getItem() instanceof LegendarySpearItem)
+                    itemstack.getOrCreateTag().putString("geckoAnim", "animation.lengendspear.srike");
+                if ((Entity) sourceentity instanceof Player _player)
+                    _player.getCooldowns().addCooldown(itemstack.getItem(), 25);
+                CaerulaArborMod.queueServerWork(10, () -> {
+                    if (((Entity) entity).isAlive()) {
+                        if (world instanceof Level _level) {
+                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.trident.hit_ground")), SoundSource.NEUTRAL, (float) 3.5, 1);
                         }
-                    });
-                } else if (sourceentity.getDeltaMovement().y() > 0.1) {
-                    if (itemstack.getItem() instanceof LegendarySpearItem)
-                        itemstack.getOrCreateTag().putString("geckoAnim", "animation.lengendspear.swing");
-                    if ((Entity) sourceentity instanceof Player _player)
-                        _player.getCooldowns().addCooldown(itemstack.getItem(), 25);
-                    CaerulaArborMod.queueServerWork(10, () -> {
-                        if (((Entity) entity).isAlive()) {
-                            if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.trident.throw")), SoundSource.NEUTRAL, (float) 3.5, 1);
-                            }
-                            if ((sourceentity != null ? entity.distanceTo(sourceentity) : -1) <= 4) {
-                                ((Entity) entity).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.TRIDENT), sourceentity),
-                                        (float) (((Entity) sourceentity instanceof LivingEntity _livingEntity46 && _livingEntity46.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity46.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
-                                                * (1 + 0.2 * itemstack.getEnchantmentLevel(CaerulaArborModEnchantments.SYNESTHESIA.get()))));
-                                entity.push(0, 0.5, 0);
-                            }
+                        if ((sourceentity != null ? entity.distanceTo(sourceentity) : -1) <= 4) {
+                            ((Entity) entity).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.TRIDENT), sourceentity),
+                                    (float) (((Entity) sourceentity instanceof LivingEntity _livingEntity32 && _livingEntity32.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity32.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
+                                            * (1 + 0.2 * itemstack.getEnchantmentLevel(CaerulaArborModEnchantments.SYNESTHESIA.get()))));
                         }
-                    });
-                } else {
-                    if (itemstack.getItem() instanceof LegendarySpearItem)
-                        itemstack.getOrCreateTag().putString("geckoAnim", "animation.lengendspear.stab");
-                    if ((Entity) sourceentity instanceof Player _player)
-                        _player.getCooldowns().addCooldown(itemstack.getItem(), 25);
-                    CaerulaArborMod.queueServerWork(10, () -> {
-                        if (((Entity) entity).isAlive()) {
-                            if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.trident.hit")), SoundSource.NEUTRAL, (float) 3.5, 1);
-                            }
-                            if ((sourceentity != null ? entity.distanceTo(sourceentity) : -1) <= 4) {
-                                ((Entity) entity).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.TRIDENT), sourceentity),
-                                        (float) (((Entity) sourceentity instanceof LivingEntity _livingEntity60 && _livingEntity60.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity60.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
-                                                * (1 + 0.2 * itemstack.getEnchantmentLevel(CaerulaArborModEnchantments.SYNESTHESIA.get()))));
-                                entity.push((sourceentity.getLookAngle().x), 0, (sourceentity.getLookAngle().z));
-                            }
+                    }
+                });
+            } else if (sourceentity.getDeltaMovement().y() > 0.1) {
+                if (itemstack.getItem() instanceof LegendarySpearItem)
+                    itemstack.getOrCreateTag().putString("geckoAnim", "animation.lengendspear.swing");
+                if ((Entity) sourceentity instanceof Player _player)
+                    _player.getCooldowns().addCooldown(itemstack.getItem(), 25);
+                CaerulaArborMod.queueServerWork(10, () -> {
+                    if (((Entity) entity).isAlive()) {
+                        if (world instanceof Level _level) {
+                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.trident.throw")), SoundSource.NEUTRAL, (float) 3.5, 1);
                         }
-                    });
-                }
+                        if ((sourceentity != null ? entity.distanceTo(sourceentity) : -1) <= 4) {
+                            ((Entity) entity).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.TRIDENT), sourceentity),
+                                    (float) (((Entity) sourceentity instanceof LivingEntity _livingEntity46 && _livingEntity46.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity46.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
+                                            * (1 + 0.2 * itemstack.getEnchantmentLevel(CaerulaArborModEnchantments.SYNESTHESIA.get()))));
+                            entity.push(0, 0.5, 0);
+                        }
+                    }
+                });
+            } else {
+                if (itemstack.getItem() instanceof LegendarySpearItem)
+                    itemstack.getOrCreateTag().putString("geckoAnim", "animation.lengendspear.stab");
+                if ((Entity) sourceentity instanceof Player _player)
+                    _player.getCooldowns().addCooldown(itemstack.getItem(), 25);
+                CaerulaArborMod.queueServerWork(10, () -> {
+                    if (((Entity) entity).isAlive()) {
+                        if (world instanceof Level _level) {
+                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.trident.hit")), SoundSource.NEUTRAL, (float) 3.5, 1);
+                        }
+                        if ((sourceentity != null ? entity.distanceTo(sourceentity) : -1) <= 4) {
+                            ((Entity) entity).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.TRIDENT), sourceentity),
+                                    (float) (((Entity) sourceentity instanceof LivingEntity _livingEntity60 && _livingEntity60.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity60.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
+                                            * (1 + 0.2 * itemstack.getEnchantmentLevel(CaerulaArborModEnchantments.SYNESTHESIA.get()))));
+                            entity.push((sourceentity.getLookAngle().x), 0, (sourceentity.getLookAngle().z));
+                        }
+                    }
+                });
             }
         }
         return retval;

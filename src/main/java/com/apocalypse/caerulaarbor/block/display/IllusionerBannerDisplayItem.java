@@ -41,7 +41,7 @@ public class IllusionerBannerDisplayItem extends BlockItem implements GeoItem {
 
 	@Override
 	public void registerControllers(AnimatableManager.ControllerRegistrar data) {
-		data.add(new AnimationController(this, "controller", 0, this::predicate));
+		data.add(new AnimationController<>(this, "controller", 0, this::predicate));
 	}
 
 	@Override

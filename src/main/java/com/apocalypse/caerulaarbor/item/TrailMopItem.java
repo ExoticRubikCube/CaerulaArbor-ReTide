@@ -56,21 +56,19 @@ public class TrailMopItem extends Item {
 	public boolean hurtEnemy(ItemStack itemstack, LivingEntity entity, LivingEntity sourceentity) {
 		itemstack.hurtAndBreak(2, entity, i -> i.broadcastBreakEvent(EquipmentSlot.MAINHAND));
         LevelAccessor world = entity.level();
-        if (entity != null) {
-            EntityUtils.deductSanity(entity, 40);
-            new Object() {
-                void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
-                    if (world instanceof ServerLevel _level)
-                        _level.sendParticles(ParticleTypes.ELECTRIC_SPARK, entity.getX(), (entity.getY() + 0.5 * entity.getBbHeight()), entity.getZ(), 12, 0.86, 1.2, 0.86, 0.1);
-                    final int tick2 = ticks;
-                    CaerulaArborMod.queueServerWork(tick2, () -> {
-                        if (timedlooptotal > timedloopiterator + 1) {
-                            timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
-                        }
-                    });
-                }
-            }.timedLoop(0, 3, 5);
-        }
+        EntityUtils.deductSanity(entity, 40);
+        new Object() {
+            void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
+                if (world instanceof ServerLevel _level)
+                    _level.sendParticles(ParticleTypes.ELECTRIC_SPARK, entity.getX(), (entity.getY() + 0.5 * entity.getBbHeight()), entity.getZ(), 12, 0.86, 1.2, 0.86, 0.1);
+                final int tick2 = ticks;
+                CaerulaArborMod.queueServerWork(tick2, () -> {
+                    if (timedlooptotal > timedloopiterator + 1) {
+                        timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
+                    }
+                });
+            }
+        }.timedLoop(0, 3, 5);
         return true;
 	}
 
@@ -161,12 +159,9 @@ public class TrailMopItem extends Item {
                     return false;
                 }
             }.checkGamemode(entity))) {
-                {
-                    ItemStack _ist = itemstack;
-                    if (_ist.hurt(1, RandomSource.create(), null)) {
-                        _ist.shrink(1);
-                        _ist.setDamageValue(0);
-                    }
+                if (itemstack.hurt(1, RandomSource.create(), null)) {
+                    itemstack.shrink(1);
+                    itemstack.setDamageValue(0);
                 }
             }
             return InteractionResult.SUCCESS;

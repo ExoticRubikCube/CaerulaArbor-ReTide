@@ -46,12 +46,10 @@ public class VoyageOfGoldItem extends Item {
         } else {
             hoverText = first_two;
         }
-        if (hoverText != null) {
-			for (String line : hoverText.split("\n")) {
-				list.add(Component.literal(line));
-			}
-		}
-	}
+        for (String line : hoverText.split("\n")) {
+            list.add(Component.literal(line));
+        }
+    }
 
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level world, Player entity, InteractionHand hand) {

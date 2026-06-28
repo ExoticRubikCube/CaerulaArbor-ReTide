@@ -79,8 +79,6 @@ public class RelicCursedGLOWBODYItem extends Item {
         double x = entity.getX();
         double y = entity.getY();
         double z = entity.getZ();
-        if (entity == null)
-            return;
         if (!itemstack.getOrCreateTag().getBoolean("used")) {
             if (!(entity.getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).relic_cursed_GLOWBODY) {
                 if ((LevelAccessor) world instanceof Level _level) {

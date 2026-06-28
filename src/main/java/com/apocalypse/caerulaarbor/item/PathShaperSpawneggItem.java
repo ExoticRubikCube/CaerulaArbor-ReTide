@@ -43,7 +43,7 @@ public class PathShaperSpawneggItem extends ForgeSpawnEggItem {
         Direction direction = context.getClickedFace();
         Entity entity = context.getPlayer();
         ItemStack itemstack = context.getItemInHand();
-        if (direction == null || entity == null)
+        if (entity == null)
             return InteractionResult.PASS;
         if (entity.isShiftKeyDown()) {
             if (world instanceof ServerLevel _level) {

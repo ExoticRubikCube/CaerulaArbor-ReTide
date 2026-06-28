@@ -45,46 +45,44 @@ public class KettleItem extends Item {
         double y = entity.getY();
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
-        if (entity != null) {
-            {
-                boolean _setval = true;
-                ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
-                    capability.relic_util_KETTLE = _setval;
-                    capability.syncPlayerVariables(entity);
-                });
-            }
-            if ((LevelAccessor) world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.player.levelup")), SoundSource.NEUTRAL, 2, 1);
-            }
-            if ((LevelAccessor) world instanceof ServerLevel _level)
-                _level.sendParticles(ParticleTypes.HAPPY_VILLAGER, x, y, z, 72, 0.75, 1, 0.75, 1);
-            if (((LevelAccessor) world).isClientSide())
-                Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);
-            {
-                double _setval = (((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).player_maxlive + 1;
-                ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
-                    capability.player_maxlive = _setval;
-                    capability.syncPlayerVariables(entity);
-                });
-            }
-            {
-                double _setval = (((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).player_lives + 1;
-                ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
-                    capability.player_lives = _setval;
-                    capability.syncPlayerVariables(entity);
-                });
-            }
-            if ((Entity) entity instanceof Player _player) {
-                ItemStack _setstack = new ItemStack(CaerulaArborModBlocks.BLOCK_KETTLE.get()).copy();
-                _setstack.setCount(1);
-                ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
-            }
-            for (int index0 = 0; index0 < 2; index0++) {
-                if ((LevelAccessor) world instanceof ServerLevel _level)
-                    _level.addFreshEntity(new ExperienceOrb(_level, x, y, z, 4));
-            }
-            itemstack.shrink(1);
+        {
+            boolean _setval = true;
+            ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                capability.relic_util_KETTLE = _setval;
+                capability.syncPlayerVariables(entity);
+            });
         }
+        if ((LevelAccessor) world instanceof Level _level) {
+                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.player.levelup")), SoundSource.NEUTRAL, 2, 1);
+        }
+        if ((LevelAccessor) world instanceof ServerLevel _level)
+            _level.sendParticles(ParticleTypes.HAPPY_VILLAGER, x, y, z, 72, 0.75, 1, 0.75, 1);
+        if (((LevelAccessor) world).isClientSide())
+            Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);
+        {
+            double _setval = (((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).player_maxlive + 1;
+            ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                capability.player_maxlive = _setval;
+                capability.syncPlayerVariables(entity);
+            });
+        }
+        {
+            double _setval = (((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).player_lives + 1;
+            ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                capability.player_lives = _setval;
+                capability.syncPlayerVariables(entity);
+            });
+        }
+        if ((Entity) entity instanceof Player _player) {
+            ItemStack _setstack = new ItemStack(CaerulaArborModBlocks.BLOCK_KETTLE.get()).copy();
+            _setstack.setCount(1);
+            ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
+        }
+        for (int index0 = 0; index0 < 2; index0++) {
+            if ((LevelAccessor) world instanceof ServerLevel _level)
+                _level.addFreshEntity(new ExperienceOrb(_level, x, y, z, 4));
+        }
+        itemstack.shrink(1);
         return ar;
 	}
 }

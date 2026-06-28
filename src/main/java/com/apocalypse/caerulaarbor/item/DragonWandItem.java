@@ -91,8 +91,6 @@ public class DragonWandItem extends Item {
             double x = entity.getX();
             double y = entity.getY()+1.25;
             double z = entity.getZ();
-            if (entity == null)
-                return;
             Entity recentAttacker = null;
             Entity recentVictim = null;
             Entity t0 = null;
@@ -139,7 +137,7 @@ public class DragonWandItem extends Item {
                                     continue;
                                 }
                             }
-                            if ((entityiterator != null ? entity.distanceTo(entityiterator) : -1) <= 24) {
+                            if (entity.distanceTo(entityiterator) <= 24) {
                                 if (t0 == null) {
                                     t0 = entityiterator;
                                 } else if (t1 == null) {

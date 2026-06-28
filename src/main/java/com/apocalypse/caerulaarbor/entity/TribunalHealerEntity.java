@@ -108,7 +108,7 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
 	protected void registerGoals() {
 		super.registerGoals();
 		this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal(this, Monster.class, true, false));
+		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Monster.class, true, false));
 		this.goalSelector.addGoal(3, new LookAtPlayerGoal(this, Monster.class, (float) 6));
 		this.goalSelector.addGoal(4, new RandomStrollGoal(this, 1));
 		this.goalSelector.addGoal(5, new OpenDoorGoal(this, false));

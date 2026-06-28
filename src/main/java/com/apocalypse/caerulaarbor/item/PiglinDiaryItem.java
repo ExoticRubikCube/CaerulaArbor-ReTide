@@ -32,14 +32,11 @@ public class PiglinDiaryItem extends Item {
 	@Override
 	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
 		super.appendHoverText(itemstack, level, list, flag);
-		Entity entity = itemstack.getEntityRepresentation();
 		String hoverText = ItemUtils.getOneUseItemDescription(itemstack);
-		if (hoverText != null) {
-			for (String line : hoverText.split("\n")) {
-				list.add(Component.literal(line));
-			}
-		}
-	}
+        for (String line : hoverText.split("\n")) {
+            list.add(Component.literal(line));
+        }
+    }
 
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level world, Player entity, InteractionHand hand) {
@@ -48,30 +45,28 @@ public class PiglinDiaryItem extends Item {
         double y = entity.getY();
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
-        if (entity != null) {
-            if (!itemstack.getOrCreateTag().getBoolean("used")) {
-                {
-                    boolean _setval = true;
-                    ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
-                        capability.relic_util_DURIN = _setval;
-                        capability.syncPlayerVariables(entity);
-                    });
-                }
-                if ((LevelAccessor) world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.amethyst_block.resonate")), SoundSource.NEUTRAL, 2, 1);
-                }
-                if ((LevelAccessor) world instanceof ServerLevel _level)
-                    _level.sendParticles(ParticleTypes.NAUTILUS, x, y, z, 72, 0.75, 1, 0.75, 1);
-                itemstack.getOrCreateTag().putBoolean("used", true);
-                if (((LevelAccessor) world).isClientSide())
-                    Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);
-                {
-                    double _setval = (((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).player_shield + 4;
-                    ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
-                        capability.player_shield = _setval;
-                        capability.syncPlayerVariables(entity);
-                    });
-                }
+        if (!itemstack.getOrCreateTag().getBoolean("used")) {
+            {
+                boolean _setval = true;
+                ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                    capability.relic_util_DURIN = _setval;
+                    capability.syncPlayerVariables(entity);
+                });
+            }
+            if ((LevelAccessor) world instanceof Level _level) {
+                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.amethyst_block.resonate")), SoundSource.NEUTRAL, 2, 1);
+            }
+            if ((LevelAccessor) world instanceof ServerLevel _level)
+                _level.sendParticles(ParticleTypes.NAUTILUS, x, y, z, 72, 0.75, 1, 0.75, 1);
+            itemstack.getOrCreateTag().putBoolean("used", true);
+            if (((LevelAccessor) world).isClientSide())
+                Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);
+            {
+                double _setval = (((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).orElse(new CaerulaArborModVariables.PlayerVariables())).player_shield + 4;
+                ((Entity) entity).getCapability(CaerulaArborModVariables.PLAYER_VARIABLES_CAPABILITY, null).ifPresent(capability -> {
+                    capability.player_shield = _setval;
+                    capability.syncPlayerVariables(entity);
+                });
             }
         }
         return ar;

@@ -81,12 +81,12 @@ public class SkadiSwordItem extends SwordItem {
                     }
                 }
                 if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "is_humanside")))) {
-                    if (!(entityiterator == enemy || entityiterator == target)) {
+                    if (!(entityiterator == enemy)) {
                         continue;
                     }
                 }
                 if (entityiterator instanceof Player || (entityiterator instanceof TamableAnimal _tamEnt && _tamEnt.isTame())) {
-                    if (!(entityiterator == enemy || entityiterator == target)) {
+                    if (!(entityiterator == enemy)) {
                         continue;
                     }
                 }

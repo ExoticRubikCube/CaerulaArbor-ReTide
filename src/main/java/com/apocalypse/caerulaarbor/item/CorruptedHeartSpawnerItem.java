@@ -29,10 +29,8 @@ public class CorruptedHeartSpawnerItem extends ForgeSpawnEggItem {
 
 	@Override
 	public boolean hurtEnemy(ItemStack itemstack, LivingEntity entity, LivingEntity sourceentity) {
-        if (entity != null) {
-            if ((Entity) entity instanceof SkadiCorruptedEntity _datEntSetI)
-                _datEntSetI.getEntityData().set(SkadiCorruptedEntity.DATA_deal, 999999);
-        }
+        if ((Entity) entity instanceof SkadiCorruptedEntity _datEntSetI)
+            _datEntSetI.getEntityData().set(SkadiCorruptedEntity.DATA_deal, 999999);
         return true;
 	}
 }

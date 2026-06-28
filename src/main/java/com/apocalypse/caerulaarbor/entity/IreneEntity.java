@@ -143,7 +143,7 @@ public class IreneEntity extends Animal implements GeoEntity {
 			}
 
 		});
-		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal(this, Monster.class, true, false));
+		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Monster.class, true, false));
 		this.goalSelector.addGoal(4, new OpenDoorGoal(this, false));
 		this.goalSelector.addGoal(5, new OpenDoorGoal(this, true));
 		this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, (float) 6) {

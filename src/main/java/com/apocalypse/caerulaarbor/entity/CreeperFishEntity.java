@@ -97,7 +97,7 @@ public class CreeperFishEntity extends SeaMonster implements RangedSanityAttacke
 				return 1;
 			}
 		});
-		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal(this, Cat.class, false, false));
+		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Cat.class, false, false));
 		this.targetSelector.addGoal(3, new HurtByTargetGoal(this).setAlertOthers());
 		this.goalSelector.addGoal(4, new RandomStrollGoal(this, 1));
 		this.goalSelector.addGoal(5, new MoveBackToVillageGoal(this, 0.6, false));

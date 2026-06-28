@@ -129,7 +129,7 @@ public class TrailLogBlock extends Block {
                                 }.with(CaerulaArborModBlocks.TRAIL_LOG.get().defaultBlockState(), "longevity", (int) longev)), dire));
                                 BlockState _bso = ((LevelAccessor) world).getBlockState(_bp);
                                 for (Map.Entry<Property<?>, Comparable<?>> entry : _bso.getValues().entrySet()) {
-                                    Property _property = _bs.getBlock().getStateDefinition().getProperty(entry.getKey().getName());
+                                    Property<?> _property = _bs.getBlock().getStateDefinition().getProperty(entry.getKey().getName());
                                     if (_property != null && _bs.getValue(_property) != null)
                                         try {
                                             _bs = _bs.setValue(_property, (Comparable) entry.getValue());
@@ -144,7 +144,7 @@ public class TrailLogBlock extends Block {
                                 BlockState _bs = CaerulaArborModBlocks.TRAIL_LEAVE.get().defaultBlockState();
                                 BlockState _bso = ((LevelAccessor) world).getBlockState(_bp);
                                 for (Map.Entry<Property<?>, Comparable<?>> entry : _bso.getValues().entrySet()) {
-                                    Property _property = _bs.getBlock().getStateDefinition().getProperty(entry.getKey().getName());
+                                    Property<?> _property = _bs.getBlock().getStateDefinition().getProperty(entry.getKey().getName());
                                     if (_property != null && _bs.getValue(_property) != null)
                                         try {
                                             _bs = _bs.setValue(_property, (Comparable) entry.getValue());
@@ -211,7 +211,7 @@ public class TrailLogBlock extends Block {
                     }.getDirection(blockstate))));
                     BlockState _bso = ((LevelAccessor) world).getBlockState(_bp);
                     for (Map.Entry<Property<?>, Comparable<?>> entry : _bso.getValues().entrySet()) {
-                        Property _property = _bs.getBlock().getStateDefinition().getProperty(entry.getKey().getName());
+                        Property<?> _property = _bs.getBlock().getStateDefinition().getProperty(entry.getKey().getName());
                         if (_property != null && _bs.getValue(_property) != null)
                             try {
                                 _bs = _bs.setValue(_property, (Comparable) entry.getValue());

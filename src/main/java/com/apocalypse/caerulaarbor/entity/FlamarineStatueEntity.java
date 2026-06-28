@@ -93,7 +93,7 @@ public class FlamarineStatueEntity extends SeaMonster {
 			}
 		});
 		this.targetSelector.addGoal(2, new HurtByTargetGoal(this));
-		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal(this, Player.class, true, false));
+		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Player.class, true, false));
 		this.goalSelector.addGoal(4, new RandomStrollGoal(this, 1));
 	}
 
