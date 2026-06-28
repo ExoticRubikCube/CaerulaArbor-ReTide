@@ -2,7 +2,7 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
-import com.apocalypse.caerulaarbor.utils.RelicUtils;
+import com.apocalypse.caerulaarbor.util.RelicUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;

@@ -2,7 +2,7 @@ package com.apocalypse.caerulaarbor.entity.base;
 
 import com.apocalypse.caerulaarbor.entity.OceanizedHorseEntity;
 import com.apocalypse.caerulaarbor.entity.OceanizedPolarBearEntity;
-import com.apocalypse.caerulaarbor.utils.EntityUtils;
+import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
 

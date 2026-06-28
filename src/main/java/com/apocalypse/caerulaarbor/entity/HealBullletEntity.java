@@ -103,7 +103,7 @@ public class HealBullletEntity extends AbstractArrow implements ItemSupplier {
                                     if ((entityiterator instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < (entityiterator instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1)) {
                                         if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
                                             _entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 40, 1));
-                                        com.apocalypse.caerulaarbor.utils.EntityUtils.healWithParticles(world, entityiterator, atk, 0);
+                                        com.apocalypse.caerulaarbor.util.EntityUtils.healWithParticles(world, entityiterator, atk, 0);
                                         if (!(entityiterator == entity)) {
                                             count = count + 1;
                                             if (count >= 3) {
@@ -145,7 +145,7 @@ public class HealBullletEntity extends AbstractArrow implements ItemSupplier {
 		return entityarrow;
 	}
 
-	// TODO: Revisit this legacy two-arg helper when the healing projectile API is refactored.
+	// TODO: Revisit this legacy two-arg system when the healing projectile API is refactored.
 	public static HealBullletEntity shoot(LivingEntity entity, LivingEntity target) {
 		HealBullletEntity entityarrow = new HealBullletEntity(CaerulaArborModEntities.HEAL_BULLLET.get(), entity, entity.level());
 		double dx = target.getX() - entity.getX();

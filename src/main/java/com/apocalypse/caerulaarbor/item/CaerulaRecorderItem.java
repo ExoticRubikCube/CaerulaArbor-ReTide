@@ -1,7 +1,7 @@
 
 package com.apocalypse.caerulaarbor.item;
 
-import com.apocalypse.caerulaarbor.world.inventory.CaerulaRecordGUIMenu;
+import com.apocalypse.caerulaarbor.menu.CaerulaRecordGUIMenu;
 import io.netty.buffer.Unpooled;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;

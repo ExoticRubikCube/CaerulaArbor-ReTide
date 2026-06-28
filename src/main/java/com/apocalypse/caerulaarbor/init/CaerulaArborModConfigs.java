@@ -1,7 +1,7 @@
 package com.apocalypse.caerulaarbor.init;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.configuration.CaerulaConfigsConfiguration;
+import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;

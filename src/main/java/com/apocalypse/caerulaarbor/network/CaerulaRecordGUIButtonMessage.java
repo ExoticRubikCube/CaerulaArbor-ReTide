@@ -1,9 +1,9 @@
 
 package com.apocalypse.caerulaarbor.network;
 
-import com.apocalypse.caerulaarbor.world.inventory.CaerulaRecordGUIMenu;
-import com.apocalypse.caerulaarbor.world.inventory.PlayerEvoMenu;
-import com.apocalypse.caerulaarbor.world.inventory.RelicShowcaseMenu;
+import com.apocalypse.caerulaarbor.menu.CaerulaRecordGUIMenu;
+import com.apocalypse.caerulaarbor.menu.PlayerEvoMenu;
+import com.apocalypse.caerulaarbor.menu.RelicShowcaseMenu;
 import io.netty.buffer.Unpooled;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;

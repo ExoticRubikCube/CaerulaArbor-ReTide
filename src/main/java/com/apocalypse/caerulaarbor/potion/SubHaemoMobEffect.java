@@ -2,7 +2,7 @@
 package com.apocalypse.caerulaarbor.potion;
 
 import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
-import com.apocalypse.caerulaarbor.utils.MathUtils;
+import com.apocalypse.caerulaarbor.util.MathUtils;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffect;

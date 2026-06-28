@@ -2,8 +2,8 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.client.renderer.item.MartusBookItemRenderer;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
-import com.apocalypse.caerulaarbor.item.renderer.MartusBookItemRenderer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;

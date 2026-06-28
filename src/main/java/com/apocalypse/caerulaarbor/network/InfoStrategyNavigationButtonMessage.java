@@ -1,24 +1,17 @@
 package com.apocalypse.caerulaarbor.network;
 
-import com.apocalypse.caerulaarbor.world.inventory.EvoTreeMenu;
-import com.apocalypse.caerulaarbor.world.inventory.InfoStrategyBreedMenu;
-import com.apocalypse.caerulaarbor.world.inventory.InfoStrategyGrowMenu;
-import com.apocalypse.caerulaarbor.world.inventory.InfoStrategyMigrationMenu;
-import com.apocalypse.caerulaarbor.world.inventory.InfoStrategySubsisMenu;
+import com.apocalypse.caerulaarbor.menu.*;
 import io.netty.buffer.Unpooled;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraftforge.network.NetworkEvent;
-
-import net.minecraft.world.level.Level;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.core.BlockPos;
-
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.NetworkHooks;
 
 import java.util.function.Supplier;

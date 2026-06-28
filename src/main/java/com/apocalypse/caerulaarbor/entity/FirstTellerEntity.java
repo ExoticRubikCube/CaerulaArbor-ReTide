@@ -6,7 +6,7 @@ import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
 import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
-import com.apocalypse.caerulaarbor.utils.WorldUtils;
+import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;

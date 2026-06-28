@@ -1,7 +1,7 @@
 
 package com.apocalypse.caerulaarbor.potion;
 
-import com.apocalypse.caerulaarbor.utils.EntityUtils;
+import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.client.extensions.common.IClientMobEffectExtensions;
 
@@ -14,7 +14,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.client.gui.GuiGraphics;
 
-import com.apocalypse.caerulaarbor.utils.MathUtils;
+import com.apocalypse.caerulaarbor.util.MathUtils;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 
 import java.util.List;

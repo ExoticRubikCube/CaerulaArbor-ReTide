@@ -4,29 +4,26 @@ package com.apocalypse.caerulaarbor.potion;
 import com.apocalypse.caerulaarbor.entity.OceanizedCowEntity;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
-
 import com.apocalypse.caerulaarbor.procedures.TrailReplaceProcedure;
+import com.apocalypse.caerulaarbor.util.MathUtils;
+import com.apocalypse.caerulaarbor.util.WorldUtils;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.client.extensions.common.IClientMobEffectExtensions;
 
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
-import net.minecraft.client.gui.GuiGraphics;
-
-import com.apocalypse.caerulaarbor.utils.MathUtils;
-
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
-import com.apocalypse.caerulaarbor.utils.WorldUtils;
 
 public class CowBuffMobEffect extends MobEffect {
     public CowBuffMobEffect() {

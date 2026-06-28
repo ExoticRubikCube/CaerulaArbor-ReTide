@@ -5,7 +5,7 @@ package com.apocalypse.caerulaarbor.init;
  */
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.world.inventory.*;
+import com.apocalypse.caerulaarbor.menu.*;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.registries.DeferredRegister;

@@ -7,7 +7,7 @@ import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
 import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
-import com.apocalypse.caerulaarbor.utils.MathUtils;
+import com.apocalypse.caerulaarbor.util.MathUtils;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;

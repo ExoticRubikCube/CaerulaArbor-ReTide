@@ -1,7 +1,7 @@
 
 package com.apocalypse.caerulaarbor.block;
 
-import com.apocalypse.caerulaarbor.utils.EntityUtils;
+import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.BlockGetter;

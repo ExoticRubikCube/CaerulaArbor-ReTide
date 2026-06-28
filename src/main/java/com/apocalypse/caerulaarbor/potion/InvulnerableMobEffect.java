@@ -4,7 +4,7 @@ package com.apocalypse.caerulaarbor.potion;
 import com.apocalypse.caerulaarbor.entity.IzumikEntity;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
-import com.apocalypse.caerulaarbor.utils.EntityPredicateUtils;
+import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;

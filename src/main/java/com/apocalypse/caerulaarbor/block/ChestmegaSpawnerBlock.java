@@ -2,7 +2,7 @@
 package com.apocalypse.caerulaarbor.block;
 
 import com.apocalypse.caerulaarbor.init.CaerulaArborModBlockEntities;
-import com.apocalypse.caerulaarbor.utils.WorldUtils;
+import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;

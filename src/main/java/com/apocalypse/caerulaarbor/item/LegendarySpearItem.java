@@ -2,10 +2,10 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.client.renderer.item.LegendarySpearItemRenderer;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEnchantments;
-import com.apocalypse.caerulaarbor.item.renderer.LegendarySpearItemRenderer;
 import com.apocalypse.caerulaarbor.procedures.TridentEnchantProcedure;
-import com.apocalypse.caerulaarbor.utils.EntityUtils;
+import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.client.Minecraft;

@@ -5,7 +5,7 @@ import com.apocalypse.caerulaarbor.entity.LingeringFractalEntity;
 import com.apocalypse.caerulaarbor.entity.RouteFractalEntity;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModGameRules;
-import com.apocalypse.caerulaarbor.utils.EntityUtils;
+import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;

@@ -1,7 +1,7 @@
 
 package com.apocalypse.caerulaarbor.item;
 
-import com.apocalypse.caerulaarbor.client.model.ModelSealeatherChitinArmor;
+import com.apocalypse.caerulaarbor.client.model.entity.ModelSealeatherChitinArmor;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;

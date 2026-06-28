@@ -3,8 +3,8 @@ package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
-import com.apocalypse.caerulaarbor.item.renderer.WavecleaverItemRenderer;
-import com.apocalypse.caerulaarbor.utils.EffectUtils;
+import com.apocalypse.caerulaarbor.client.renderer.item.WavecleaverItemRenderer;
+import com.apocalypse.caerulaarbor.util.EffectUtils;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;

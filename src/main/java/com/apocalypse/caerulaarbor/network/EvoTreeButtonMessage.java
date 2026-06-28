@@ -1,18 +1,16 @@
 
 package com.apocalypse.caerulaarbor.network;
 
+import com.apocalypse.caerulaarbor.menu.EvoTreeMenu;
+import com.apocalypse.caerulaarbor.procedures.OpenStraGUIProcedure;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkEvent;
 
-import net.minecraft.world.level.Level;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.core.BlockPos;
-
-import com.apocalypse.caerulaarbor.world.inventory.EvoTreeMenu;
-import com.apocalypse.caerulaarbor.procedures.OpenStraGUIProcedure;
-
-import java.util.function.Supplier;
 import java.util.HashMap;
+import java.util.function.Supplier;
 
 public class EvoTreeButtonMessage {
 	private final int buttonID, x, y, z;

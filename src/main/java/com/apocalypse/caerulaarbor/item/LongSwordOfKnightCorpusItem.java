@@ -2,7 +2,7 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
-import com.apocalypse.caerulaarbor.utils.EffectUtils;
+import com.apocalypse.caerulaarbor.util.EffectUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.*;

@@ -2,7 +2,7 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
-import com.apocalypse.caerulaarbor.utils.EntityPredicateUtils;
+import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;

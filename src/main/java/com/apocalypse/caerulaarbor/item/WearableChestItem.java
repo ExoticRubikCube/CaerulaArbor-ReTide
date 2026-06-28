@@ -1,7 +1,7 @@
 
 package com.apocalypse.caerulaarbor.item;
 
-import com.apocalypse.caerulaarbor.helper.GainRelicARMORProcedure;
+import com.apocalypse.caerulaarbor.system.GainRelicARMORProcedure;
 import com.google.common.collect.Iterables;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;

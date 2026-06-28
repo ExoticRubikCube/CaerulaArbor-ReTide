@@ -3,7 +3,7 @@ package com.apocalypse.caerulaarbor.client.screens;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 
 import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.utils.EntityUtils;
+import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 

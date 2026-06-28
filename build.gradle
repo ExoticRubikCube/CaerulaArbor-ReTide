@@ -108,6 +108,18 @@ repositories {
             includeGroup "curse.maven"
         }
     }
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "Modrinth"
+                url "https://api.modrinth.com/maven"
+            }
+        }
+        forRepositories(fg.repository)
+        filter {
+            includeGroup "maven.modrinth"
+        }
+    }
 }
 
 processResources {
@@ -142,14 +154,23 @@ dependencies {
     runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:5.4.2+1.20.1")
     compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:5.4.2+1.20.1:api")
 
+    // Configured相关
+    runtimeOnly fg.deobf("curse.maven:configured-457570:${configured_version}")
+
+    //联动相关
+    runtimeOnly fg.deobf("maven.modrinth:A2l0YkuP:${bobs_originium_dream_version}")
+
     // 其他mod
     implementation fg.deobf("curse.maven:superb-warfare-1218165:6982132")
+
+    // 开发环境调试
+    runtimeOnly fg.deobf("curse.maven:spark-361579:4738952")
 }
 
 mixin {
-    add sourceSets.main, 'mixins.caerula_arbor.refmap.json'
+    add sourceSets.main, 'mixin.caerula_arbor.refmap.json'
 
-    config 'mixins.caerula_arbor.json'
+    config 'mixin.caerula_arbor.json'
 
     debug.verbose = true
     debug.export = true

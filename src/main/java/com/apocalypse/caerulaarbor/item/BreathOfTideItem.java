@@ -3,7 +3,7 @@ package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.utils.EntityUtils;
+import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -58,27 +58,23 @@ public class BreathOfTideItem extends Item {
 		double x = entity.getX();
 		double y = entity.getY();
 		double z = entity.getZ();
-        if (entity != null) {
-            if (!world.getBiome(BlockPos.containing(x, y, z)).is(TagKey.create(Registries.BIOME, new ResourceLocation(CaerulaArborMod.MODID, "danger_spawn_biome")))) {
+        if (!world.getBiome(BlockPos.containing(x, y, z)).is(TagKey.create(Registries.BIOME, new ResourceLocation(CaerulaArborMod.MODID, "danger_spawn_biome")))) {
+            if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
+                _player.displayClientMessage(Component.literal((Component.translatable("spawn.last_knight.fail_1").getString())), true);
+            CaerulaArborMod.queueServerWork(20, () -> {
                 if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
-                    _player.displayClientMessage(Component.literal((Component.translatable("spawn.last_knight.fail_1").getString())), true);
-                CaerulaArborMod.queueServerWork(20, () -> {
-                    if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
-                        _player.displayClientMessage(Component.literal((Component.translatable("spawn.last_knight.fail_2").getString())), true);
-                });
-            } else if (EntityUtils.getSeabornNum(world, x, y, z) < 6) {
-                if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
-                    _player.displayClientMessage(Component.literal((Component.translatable("spawn.last_knight.fail_3").getString())), true);
-            } else {
-                if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
-                    _player.displayClientMessage(Component.literal((Component.translatable("spawn.last_knight").getString())), false);
-                if ((LevelAccessor) world instanceof ServerLevel _level) {
-                    Entity entityToSpawn = CaerulaArborModEntities.THE_LAST_KNIGHT.get().spawn(_level, BlockPos.containing(x + Mth.nextInt(RandomSource.create(), -5, 5), y + 3, z + Mth.nextInt(RandomSource.create(), -5, 5)), MobSpawnType.MOB_SUMMONED);
-                    if (entityToSpawn != null) {
-                    }
-                }
-                itemstack.shrink(1);
+                    _player.displayClientMessage(Component.literal((Component.translatable("spawn.last_knight.fail_2").getString())), true);
+            });
+        } else if (EntityUtils.getSeabornNum(world, x, y, z) < 6) {
+            if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
+                _player.displayClientMessage(Component.literal((Component.translatable("spawn.last_knight.fail_3").getString())), true);
+        } else {
+            if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
+                _player.displayClientMessage(Component.literal((Component.translatable("spawn.last_knight").getString())), false);
+            if ((LevelAccessor) world instanceof ServerLevel _level) {
+                CaerulaArborModEntities.THE_LAST_KNIGHT.get().spawn(_level, BlockPos.containing(x + Mth.nextInt(RandomSource.create(), -5, 5), y + 3, z + Mth.nextInt(RandomSource.create(), -5, 5)), MobSpawnType.MOB_SUMMONED);
             }
+            itemstack.shrink(1);
         }
         return retval;
 	}

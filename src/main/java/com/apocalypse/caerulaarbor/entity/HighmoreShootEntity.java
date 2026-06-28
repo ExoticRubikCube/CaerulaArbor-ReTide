@@ -2,7 +2,7 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.utils.WorldUtils;
+import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;

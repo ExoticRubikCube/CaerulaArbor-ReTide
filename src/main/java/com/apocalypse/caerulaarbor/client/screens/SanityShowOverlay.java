@@ -3,7 +3,7 @@ package com.apocalypse.caerulaarbor.client.screens;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 
 import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.utils.EntityUtils;
+import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 
@@ -18,7 +18,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.util.Mth;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.client.Minecraft;
-import com.apocalypse.caerulaarbor.configuration.CaerulaConfigsConfiguration;
+import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
 
 @Mod.EventBusSubscriber({Dist.CLIENT})
 public class SanityShowOverlay {

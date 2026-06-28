@@ -1,10 +1,10 @@
 package com.apocalypse.caerulaarbor.network;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.utils.EntityUtils;
-import com.apocalypse.caerulaarbor.utils.NodeUtils;
-import com.apocalypse.caerulaarbor.utils.PlayerStateUtils;
-import com.apocalypse.caerulaarbor.world.inventory.PlayerEvoMenu;
+import com.apocalypse.caerulaarbor.util.EntityUtils;
+import com.apocalypse.caerulaarbor.util.NodeUtils;
+import com.apocalypse.caerulaarbor.util.PlayerStateUtils;
+import com.apocalypse.caerulaarbor.menu.PlayerEvoMenu;
 import io.netty.buffer.Unpooled;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -65,7 +65,7 @@ public class PlayerEvoButtonMessage {
 
 	public static void handleButtonAction(Player entity, int buttonID, int x, int y, int z) {
 		Level world = entity.level();
-		HashMap guistate = PlayerEvoMenu.guistate;
+		HashMap<String, Object> guistate = PlayerEvoMenu.guistate;
 		// security measure to prevent arbitrary chunk generation
 		if (!world.hasChunkAt(new BlockPos(x, y, z)))
 			return;

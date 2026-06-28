@@ -6,7 +6,7 @@ import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
-import com.apocalypse.caerulaarbor.utils.WorldUtils;
+import com.apocalypse.caerulaarbor.util.WorldUtils;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.client.Minecraft;

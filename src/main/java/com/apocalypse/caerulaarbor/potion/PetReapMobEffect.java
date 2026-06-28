@@ -1,7 +1,7 @@
 
 package com.apocalypse.caerulaarbor.potion;
 
-import com.apocalypse.caerulaarbor.utils.EntityUtils;
+import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
@@ -25,7 +25,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.client.gui.GuiGraphics;
 
-import com.apocalypse.caerulaarbor.utils.MathUtils;
+import com.apocalypse.caerulaarbor.util.MathUtils;
 
 import java.util.Comparator;
 import java.util.List;
@@ -48,8 +48,6 @@ public class PetReapMobEffect extends MobEffect {
         double x = entity.getX();
         double y = entity.getY();
         double z = entity.getZ();
-        if (entity == null)
-            return;
         double angle = 0;
         if ((Entity) entity instanceof Mob _mobEnt0 && _mobEnt0.isAggressive() && ((Entity) entity).isAlive()) {
             for (int index0 = 0; index0 < 120; index0++) {

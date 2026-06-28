@@ -2,22 +2,20 @@
 package com.apocalypse.caerulaarbor.potion;
 
 import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
-import net.minecraft.core.particles.SimpleParticleType;
+import com.apocalypse.caerulaarbor.util.MathUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.monster.Creeper;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffect;
-
-import com.apocalypse.caerulaarbor.utils.MathUtils;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.LevelAccessor;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MuteMobEffect extends MobEffect {
 	public MuteMobEffect() {

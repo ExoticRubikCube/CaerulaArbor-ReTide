@@ -9,6 +9,7 @@ displayName = "Caerula Arbor"
 displayURL = "https://modrinth.com/mod/caerula-arbor"
 logoFile = "logo.png"
 authors = "${mod_authors}"
+credits="SuSen36,Pigeon0129,翊凤xanters,飼飼,Goodsquid,Ranita,永世久,杜格Doggo,EE克,沐影,苟似白,PNaClNH3,憧憬成为赤石英雄"
 description = "${mod_description}"
 
 [[dependencies.caerula_arbor]]
@@ -30,4 +31,3 @@ modId = "geckolib"
 mandatory = true
 versionRange = "[4.4.9,)"
 ordering = "NONE"
-side = "BOTH"

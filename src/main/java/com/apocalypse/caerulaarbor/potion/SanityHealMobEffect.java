@@ -1,7 +1,7 @@
 
 package com.apocalypse.caerulaarbor.potion;
 
-import com.apocalypse.caerulaarbor.utils.EntityUtils;
+import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraftforge.client.extensions.common.IClientMobEffectExtensions;
 
 import net.minecraft.world.item.ItemStack;

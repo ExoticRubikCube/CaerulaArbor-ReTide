@@ -1,7 +1,7 @@
 
 package com.apocalypse.caerulaarbor.item;
 
-import com.apocalypse.caerulaarbor.client.renderer.WearableCrownArmorRenderer;
+import com.apocalypse.caerulaarbor.client.renderer.entity.WearableCrownArmorRenderer;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;

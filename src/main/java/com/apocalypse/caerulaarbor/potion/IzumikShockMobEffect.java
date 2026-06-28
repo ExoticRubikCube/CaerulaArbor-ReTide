@@ -3,7 +3,7 @@ package com.apocalypse.caerulaarbor.potion;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.IzumikEntity;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.utils.MathUtils;
+import com.apocalypse.caerulaarbor.util.MathUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.core.particles.ParticleTypes;

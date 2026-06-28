@@ -2,25 +2,21 @@
 package com.apocalypse.caerulaarbor.command;
 
 import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.utils.EntityUtils;
-import com.apocalypse.caerulaarbor.utils.EntityUtils;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.LivingEntity;
-
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.common.util.FakePlayerFactory;
-
-import net.minecraft.world.level.Level;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.core.Direction;
-import net.minecraft.commands.arguments.EntityArgument;
-import net.minecraft.commands.Commands;
-
+import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.common.util.FakePlayerFactory;
+import net.minecraftforge.event.RegisterCommandsEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber
 public class CaerulaSanityCommand {

@@ -1,7 +1,7 @@
 
 package com.apocalypse.caerulaarbor.item;
 
-import com.apocalypse.caerulaarbor.client.renderer.ChitinComplexArmorRenderer;
+import com.apocalypse.caerulaarbor.client.renderer.entity.ChitinComplexArmorRenderer;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
 import com.google.common.collect.HashMultimap;
@@ -128,7 +128,7 @@ public class ChitinComplexItem extends ArmorItem implements GeoItem {
 
 	private PlayState predicate(AnimationState event) {
 		if (this.animationprocedure.equals("empty")) {
-			event.getController().setAnimation(RawAnimation.begin().thenLoop("animation.model.idle"));
+			event.getController().setAnimation(RawAnimation.begin().thenLoop("animation.entity.idle"));
 			Entity entity = (Entity) event.getData(DataTickets.ENTITY);
 			if (entity instanceof ArmorStand) {
 				return PlayState.CONTINUE;

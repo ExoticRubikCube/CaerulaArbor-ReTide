@@ -1,8 +1,8 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.utils.EntityUtils;
-import com.apocalypse.caerulaarbor.utils.WorldUtils;
+import com.apocalypse.caerulaarbor.util.EntityUtils;
+import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.util.RandomSource;
@@ -167,7 +167,7 @@ public class WitherShootPreEntity extends AbstractArrow implements ItemSupplier 
 		return entityarrow;
 	}
 
-	// TODO: Revisit this legacy two-arg helper when the pre-shot wither projectile API is refactored.
+	// TODO: Revisit this legacy two-arg system when the pre-shot wither projectile API is refactored.
 	public static WitherShootPreEntity shoot(LivingEntity entity, LivingEntity target) {
 		WitherShootPreEntity entityarrow = new WitherShootPreEntity(CaerulaArborModEntities.WITHER_SHOOT_PRE.get(), entity, entity.level());
 		double dx = target.getX() - entity.getX();

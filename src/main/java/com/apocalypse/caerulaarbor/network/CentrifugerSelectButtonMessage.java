@@ -2,7 +2,7 @@ package com.apocalypse.caerulaarbor.network;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
-import com.apocalypse.caerulaarbor.world.inventory.CentrifugerSelectMenu;
+import com.apocalypse.caerulaarbor.menu.CentrifugerSelectMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;

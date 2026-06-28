@@ -2,10 +2,10 @@ package com.apocalypse.caerulaarbor.client.gui;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.network.RelicShowcaseButtonMessage;
-import com.apocalypse.caerulaarbor.utils.EntityUtils;
-import com.apocalypse.caerulaarbor.utils.PlayerStateUtils;
-import com.apocalypse.caerulaarbor.utils.RelicUtils;
-import com.apocalypse.caerulaarbor.world.inventory.RelicShowcaseMenu;
+import com.apocalypse.caerulaarbor.util.EntityUtils;
+import com.apocalypse.caerulaarbor.util.PlayerStateUtils;
+import com.apocalypse.caerulaarbor.util.RelicUtils;
+import com.apocalypse.caerulaarbor.menu.RelicShowcaseMenu;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;

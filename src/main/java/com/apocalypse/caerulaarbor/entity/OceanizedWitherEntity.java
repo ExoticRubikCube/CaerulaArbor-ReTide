@@ -6,9 +6,9 @@ import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
-import com.apocalypse.caerulaarbor.utils.EntityPredicateUtils;
-import com.apocalypse.caerulaarbor.utils.EntityUtils;
-import com.apocalypse.caerulaarbor.utils.WorldUtils;
+import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
+import com.apocalypse.caerulaarbor.util.EntityUtils;
+import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
@@ -633,7 +633,7 @@ public class OceanizedWitherEntity extends SeaMonster implements RangedAttackMob
 
 	@Override
 	public void performRangedAttack(LivingEntity target, float flval) {
-		// TODO: Revisit this legacy helper call when the pre-shot wither projectile path is cleaned up.
+		// TODO: Revisit this legacy system call when the pre-shot wither projectile path is cleaned up.
 		WitherShootPreEntity.shoot(this, target);
 	}
 

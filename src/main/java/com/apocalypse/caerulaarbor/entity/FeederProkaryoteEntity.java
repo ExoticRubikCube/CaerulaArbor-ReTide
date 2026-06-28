@@ -4,8 +4,8 @@ import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
-import com.apocalypse.caerulaarbor.utils.EntityUtils;
-import com.apocalypse.caerulaarbor.utils.WorldUtils;
+import com.apocalypse.caerulaarbor.util.EntityUtils;
+import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -363,15 +363,15 @@ public class FeederProkaryoteEntity extends SeaMonster {
 			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
 
 			) {
-				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.model.move"));
+				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.entity.move"));
 			}
 			if (this.isDeadOrDying()) {
-				return event.setAndContinue(RawAnimation.begin().thenPlay("animation.model.die"));
+				return event.setAndContinue(RawAnimation.begin().thenPlay("animation.entity.die"));
 			}
 			if (this.isInWaterOrBubble()) {
-				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.model.move"));
+				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.entity.move"));
 			}
-			return event.setAndContinue(RawAnimation.begin().thenLoop("animation.model.idle"));
+			return event.setAndContinue(RawAnimation.begin().thenLoop("animation.entity.idle"));
 		}
 		return PlayState.STOP;
 	}
@@ -389,7 +389,7 @@ public class FeederProkaryoteEntity extends SeaMonster {
 		}
 		if (this.swinging && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
 			event.getController().forceAnimationReset();
-			return event.setAndContinue(RawAnimation.begin().thenPlay("animation.model.attack"));
+			return event.setAndContinue(RawAnimation.begin().thenPlay("animation.entity.attack"));
 		}
 		return PlayState.CONTINUE;
 	}

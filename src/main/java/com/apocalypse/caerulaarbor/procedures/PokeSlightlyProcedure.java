@@ -3,7 +3,7 @@ package com.apocalypse.caerulaarbor.procedures;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 
 import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
-import com.apocalypse.caerulaarbor.utils.EntityUtils;
+import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;

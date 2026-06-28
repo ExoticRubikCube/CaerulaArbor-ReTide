@@ -321,9 +321,9 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
 																		_entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 200, 1));
 																	if ((Entity) this instanceof LivingEntity _entity && !_entity.level().isClientSide())
 																		_entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 200, 1));
-																	com.apocalypse.caerulaarbor.utils.EntityUtils.healWithParticles(world, entityiterator1, atk1 * 2, 20);
+																	com.apocalypse.caerulaarbor.util.EntityUtils.healWithParticles(world, entityiterator1, atk1 * 2, 20);
 																} else {
-																	com.apocalypse.caerulaarbor.utils.EntityUtils.healWithParticles(world, entityiterator1, atk1 * 2, 0);
+																	com.apocalypse.caerulaarbor.util.EntityUtils.healWithParticles(world, entityiterator1, atk1 * 2, 0);
 																}
 																if (!(this == entityiterator1)) {
 																	count1 = count1 + 1;
@@ -448,7 +448,7 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
 
 	@Override
 	public void performRangedAttack(LivingEntity target, float flval) {
-		// TODO: Revisit this legacy helper call when the healing projectile path is cleaned up.
+		// TODO: Revisit this legacy system call when the healing projectile path is cleaned up.
 		HealBullletEntity.shoot(this, target);
 	}
 

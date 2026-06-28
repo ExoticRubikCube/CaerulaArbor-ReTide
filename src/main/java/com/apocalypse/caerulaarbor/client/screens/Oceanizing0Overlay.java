@@ -2,8 +2,6 @@ package com.apocalypse.caerulaarbor.client.screens;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 
-import org.checkerframework.checker.units.qual.h;
-
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -16,7 +14,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.Minecraft;
 
-import com.apocalypse.caerulaarbor.utils.PlayerStateUtils;
+import com.apocalypse.caerulaarbor.util.PlayerStateUtils;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.platform.GlStateManager;

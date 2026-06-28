@@ -4,7 +4,7 @@ package com.apocalypse.caerulaarbor.item;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEnchantments;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
-import com.apocalypse.caerulaarbor.item.renderer.PhloemBowItemRenderer;
+import com.apocalypse.caerulaarbor.client.renderer.item.PhloemBowItemRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.core.BlockPos;

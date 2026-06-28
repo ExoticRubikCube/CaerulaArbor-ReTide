@@ -3,7 +3,7 @@
  */
 package com.apocalypse.caerulaarbor.init;
 
-import com.apocalypse.caerulaarbor.client.renderer.*;
+import com.apocalypse.caerulaarbor.client.renderer.entity.*;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;

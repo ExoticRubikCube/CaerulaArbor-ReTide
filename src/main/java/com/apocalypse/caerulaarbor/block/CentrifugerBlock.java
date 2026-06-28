@@ -3,7 +3,7 @@ package com.apocalypse.caerulaarbor.block;
 
 import com.apocalypse.caerulaarbor.init.CaerulaArborModBlockEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
-import com.apocalypse.caerulaarbor.world.inventory.CentrifugerSelectMenu;
+import com.apocalypse.caerulaarbor.menu.CentrifugerSelectMenu;
 import io.netty.buffer.Unpooled;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

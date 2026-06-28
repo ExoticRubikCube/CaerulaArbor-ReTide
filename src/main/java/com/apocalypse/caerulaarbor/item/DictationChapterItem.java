@@ -1,14 +1,14 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.helper.UpgradeBreedProcedure;
-import com.apocalypse.caerulaarbor.helper.UpgradeGrowProcedure;
-import com.apocalypse.caerulaarbor.helper.UpgradeMigraProcedure;
-import com.apocalypse.caerulaarbor.helper.UpgradeSubsisProcedure;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
 import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
-import com.apocalypse.caerulaarbor.utils.MathUtils;
+import com.apocalypse.caerulaarbor.system.UpgradeBreedProcedure;
+import com.apocalypse.caerulaarbor.system.UpgradeGrowProcedure;
+import com.apocalypse.caerulaarbor.system.UpgradeMigraProcedure;
+import com.apocalypse.caerulaarbor.system.UpgradeSubsisProcedure;
+import com.apocalypse.caerulaarbor.util.MathUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;

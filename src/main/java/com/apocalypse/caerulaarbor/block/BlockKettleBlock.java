@@ -2,7 +2,7 @@
 package com.apocalypse.caerulaarbor.block;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.configuration.CaerulaConfigsConfiguration;
+import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

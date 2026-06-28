@@ -6,8 +6,8 @@ import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
-import com.apocalypse.caerulaarbor.utils.EntityPredicateUtils;
-import com.apocalypse.caerulaarbor.utils.EntityUtils;
+import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
+import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -504,7 +504,7 @@ public class BishopFishEntity extends SeaMonster {
                             if (yfnl > y + 3) {
                                 yfnl = y + 3;
                             }
-                            com.apocalypse.caerulaarbor.utils.WorldUtils.summonRandomSeaborn(world, 0.75, x + dx1, yfnl, z + dz1);
+                            com.apocalypse.caerulaarbor.util.WorldUtils.summonRandomSeaborn(world, 0.75, x + dx1, yfnl, z + dz1);
                             if (world instanceof ServerLevel _level)
                                 FallingBlockEntity.fall(_level, BlockPos.containing(x + dx1, yfnl + 6, z + dz1), CaerulaArborModBlocks.SEA_TRAIL_GROWN.get().defaultBlockState());
                             if (world instanceof ServerLevel _level)

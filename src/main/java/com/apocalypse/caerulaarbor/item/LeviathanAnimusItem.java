@@ -1,10 +1,10 @@
 
 package com.apocalypse.caerulaarbor.item;
 
-import com.apocalypse.caerulaarbor.helper.UpgradeSilenceProcedure;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
 import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
-import com.apocalypse.caerulaarbor.utils.StrategyUtils;
+import com.apocalypse.caerulaarbor.system.UpgradeSilenceProcedure;
+import com.apocalypse.caerulaarbor.util.StrategyUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;

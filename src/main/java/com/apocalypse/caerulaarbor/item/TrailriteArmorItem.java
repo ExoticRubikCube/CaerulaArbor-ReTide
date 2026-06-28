@@ -1,7 +1,7 @@
 
 package com.apocalypse.caerulaarbor.item;
 
-import com.apocalypse.caerulaarbor.client.renderer.TrailriteArmorArmorRenderer;
+import com.apocalypse.caerulaarbor.client.renderer.entity.TrailriteArmorArmorRenderer;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
 import com.google.common.collect.HashMultimap;
