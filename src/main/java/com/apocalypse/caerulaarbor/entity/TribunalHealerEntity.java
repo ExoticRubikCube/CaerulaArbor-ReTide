@@ -5,7 +5,6 @@ import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
-import com.apocalypse.caerulaarbor.procedures.SingleHealProcedure;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.core.registries.Registries;
@@ -450,6 +449,7 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
 
 	@Override
 	public void performRangedAttack(LivingEntity target, float flval) {
+		// TODO: Revisit this legacy helper call when the healing projectile path is cleaned up.
 		HealBullletEntity.shoot(this, target);
 	}
 

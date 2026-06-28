@@ -7,6 +7,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.ItemSupplier;
 import net.minecraft.world.item.ItemStack;
@@ -94,14 +95,23 @@ public class ThrowablePotionEntity extends AbstractArrow implements ItemSupplier
 		return entityarrow;
 	}
 
+	/**
+	 * @deprecated Prefer {@link #shoot(LivingEntity, LivingEntity, double)} so callers can pass their own ranged damage scaling.
+	 * This fallback uses the average scaling ratio of current shooters.
+	 */
+	@Deprecated
 	public static ThrowablePotionEntity shoot(LivingEntity entity, LivingEntity target) {
+		return shoot(entity, target, (entity.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? entity.getAttributeValue(Attributes.ATTACK_DAMAGE) : 0) * (2.3 / 4.0));
+	}
+
+	public static ThrowablePotionEntity shoot(LivingEntity entity, LivingEntity target, double damage) {
 		ThrowablePotionEntity entityarrow = new ThrowablePotionEntity(CaerulaArborModEntities.THROWABLE_POTION.get(), entity, entity.level());
 		double dx = target.getX() - entity.getX();
 		double dy = target.getY() + target.getEyeHeight() - 1.1;
 		double dz = target.getZ() - entity.getZ();
 		entityarrow.shoot(dx, dy - entityarrow.getY() + Math.hypot(dx, dz) * 0.2F, dz, 0.9f * 2, 12.0F);
 		entityarrow.setSilent(true);
-		entityarrow.setBaseDamage(2.3);
+		entityarrow.setBaseDamage(damage);
 		entityarrow.setKnockback(0);
 		entityarrow.setCritArrow(false);
 		entity.level().addFreshEntity(entityarrow);

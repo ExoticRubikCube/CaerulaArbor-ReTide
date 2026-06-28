@@ -316,7 +316,7 @@ public class FirstTellerEntity extends SeaMonster implements RangedAttackMob {
 	@Override
 	public void performRangedAttack(LivingEntity target, float flval) {
 		this.addEffect(STOP);
-		TellerShotEntity.shoot(this, target);
+		TellerShotEntity.shoot(this, target, (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttributeValue(Attributes.ATTACK_DAMAGE) : 0) * (4.0 / 7.0));
 	}
 
 	public static void init() {

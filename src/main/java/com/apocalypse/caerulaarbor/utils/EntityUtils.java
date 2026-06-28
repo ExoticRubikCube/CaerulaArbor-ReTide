@@ -303,12 +303,12 @@ public class EntityUtils {
 		}
 	}
 
-	public static void healWithParticles(LevelAccessor world, Entity entity, double flatAmount, double percentMax) {
+	public static void healWithParticles(LevelAccessor world, Entity entity, double flatAmount, double maxHealthMultiplier) {
 		if (entity == null || !entity.isAlive())
 			return;
 		if (entity instanceof LivingEntity living) {
 			double maxHealth = living.getMaxHealth();
-			heal(entity, maxHealth * percentMax + flatAmount);
+			heal(entity, maxHealth * maxHealthMultiplier + flatAmount);
 			if (world instanceof ServerLevel level) {
 				level.sendParticles(ParticleTypes.CHERRY_LEAVES,
 					entity.getX(), entity.getY() + 1, entity.getZ(),

@@ -1,8 +1,7 @@
 package com.apocalypse.caerulaarbor.entity;
 
-import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModGameRules;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
@@ -606,7 +605,7 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
 
 	@Override
 	public void performRangedAttack(LivingEntity target, float flval) {
-		ShotOceanArrowEntity.shoot(this, target);
+		ShotOceanArrowEntity.shoot(this, target, (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttributeValue(Attributes.ATTACK_DAMAGE) : 0) * (2.5 / 9.0));
 	}
 
 	@Override

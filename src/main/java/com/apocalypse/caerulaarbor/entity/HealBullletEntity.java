@@ -145,6 +145,7 @@ public class HealBullletEntity extends AbstractArrow implements ItemSupplier {
 		return entityarrow;
 	}
 
+	// TODO: Revisit this legacy two-arg helper when the healing projectile API is refactored.
 	public static HealBullletEntity shoot(LivingEntity entity, LivingEntity target) {
 		HealBullletEntity entityarrow = new HealBullletEntity(CaerulaArborModEntities.HEAL_BULLLET.get(), entity, entity.level());
 		double dx = target.getX() - entity.getX();

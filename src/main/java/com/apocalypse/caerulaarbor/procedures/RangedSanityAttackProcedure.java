@@ -59,5 +59,3 @@ public class RangedSanityAttackProcedure {
 		}
 	}
 }
-
-// TODO: 调用次数 = 6，副作用密集（粒子效果、声音、伤害、理智扣除），保持原样不重构

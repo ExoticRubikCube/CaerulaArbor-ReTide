@@ -43,5 +43,3 @@ public class RaiderRideRavagerProcedure {
 		}
 	}
 }
-
-// TODO: 调用次数 = 8，副作用密集（骑乘），保持原样不重构

@@ -1,15 +1,14 @@
 package com.apocalypse.caerulaarbor.events;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.configuration.CaerulaConfigsConfiguration;
 import com.apocalypse.caerulaarbor.entity.*;
+import com.apocalypse.caerulaarbor.helper.UpgradeMigraProcedure;
+import com.apocalypse.caerulaarbor.helper.UpgradeSilenceProcedure;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModGameRules;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
 import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
-import com.apocalypse.caerulaarbor.procedures.UpgradeMigraProcedure;
-import com.apocalypse.caerulaarbor.procedures.UpgradeSilenceProcedure;
 import com.apocalypse.caerulaarbor.utils.EntityPredicateUtils;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;

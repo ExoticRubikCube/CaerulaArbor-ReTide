@@ -1,11 +1,11 @@
 package com.apocalypse.caerulaarbor.command;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.helper.UpgradeBreedProcedure;
+import com.apocalypse.caerulaarbor.helper.UpgradeGrowProcedure;
+import com.apocalypse.caerulaarbor.helper.UpgradeMigraProcedure;
+import com.apocalypse.caerulaarbor.helper.UpgradeSubsisProcedure;
 import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
-import com.apocalypse.caerulaarbor.procedures.UpgradeBreedProcedure;
-import com.apocalypse.caerulaarbor.procedures.UpgradeGrowProcedure;
-import com.apocalypse.caerulaarbor.procedures.UpgradeMigraProcedure;
-import com.apocalypse.caerulaarbor.procedures.UpgradeSubsisProcedure;
 import com.apocalypse.caerulaarbor.utils.StrategyUtils;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import net.minecraft.commands.Commands;

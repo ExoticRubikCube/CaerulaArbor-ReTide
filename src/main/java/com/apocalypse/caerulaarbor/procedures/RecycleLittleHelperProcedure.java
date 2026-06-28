@@ -1,7 +1,6 @@
 package com.apocalypse.caerulaarbor.procedures;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.entity.Al1SHelperEntity;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
 import net.minecraft.core.BlockPos;
@@ -55,5 +54,3 @@ public class RecycleLittleHelperProcedure {
 		return InteractionResult.PASS;
 	}
 }
-
-// TODO: 调用次数 = 2，副作用密集（粒子效果、声音、实体删除、物品生成），保持原样不重构

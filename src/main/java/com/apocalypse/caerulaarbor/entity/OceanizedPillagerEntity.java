@@ -1,8 +1,7 @@
 package com.apocalypse.caerulaarbor.entity;
 
-import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.procedures.RaiderRideRavagerProcedure;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
@@ -383,7 +382,7 @@ public class OceanizedPillagerEntity extends SeaMonster implements RangedAttackM
 
 	@Override
 	public void performRangedAttack(LivingEntity target, float flval) {
-		ShotOceanArrowEntity.shoot(this, target);
+		ShotOceanArrowEntity.shoot(this, target, (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttributeValue(Attributes.ATTACK_DAMAGE) : 0) * (2.5 / 6.0));
 	}
 
 	public static void init() {

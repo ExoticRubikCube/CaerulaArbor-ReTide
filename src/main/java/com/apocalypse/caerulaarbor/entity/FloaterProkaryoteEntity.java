@@ -1,9 +1,7 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-
 import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
@@ -432,7 +430,7 @@ public class FloaterProkaryoteEntity extends SeaMonster implements RangedAttackM
 
 	@Override
 	public void performRangedAttack(LivingEntity target, float flval) {
-		FishSplashEntity.shoot(this, target);
+		FishSplashEntity.shoot(this, target, (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttributeValue(Attributes.ATTACK_DAMAGE) : 0) * (2.5 / 3.0));
 	}
 
 	@Override

@@ -1,7 +1,6 @@
-package com.apocalypse.caerulaarbor.procedures;
+package com.apocalypse.caerulaarbor.helper;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.configuration.CaerulaConfigsConfiguration;
 import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import net.minecraft.advancements.Advancement;
@@ -18,14 +17,14 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 
-public class UpgradeBreedProcedure {
+public class UpgradeGrowProcedure {
 	public static void execute(LevelAccessor world) {
 		double stra = 0;
 		String num = "";
 		String prefix = "";
-		stra = CaerulaArborModVariables.MapVariables.get(world).strategy_breed;
+		stra = CaerulaArborModVariables.MapVariables.get(world).strategy_grow;
 		if (stra < 4) {
-			if (CaerulaArborModVariables.MapVariables.get(world).evo_point_breed >= Math.pow(stra + 1, 3) * (double) CaerulaConfigsConfiguration.COEFFICIENT.get()) {
+			if (CaerulaArborModVariables.MapVariables.get(world).evo_point_grow >= Math.pow(stra + 1, 3) * (double) CaerulaConfigsConfiguration.COEFFICIENT.get()) {
 				for (Entity entityiterator : new ArrayList<>(world.players())) {
 					if (entityiterator instanceof ServerPlayer _player) {
 						Advancement _adv = _player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "to_experience_evolution"));
@@ -36,41 +35,41 @@ public class UpgradeBreedProcedure {
 						}
 					}
 				}
-				CaerulaArborModVariables.MapVariables.get(world).strategy_breed = stra + 1;
+				CaerulaArborModVariables.MapVariables.get(world).strategy_grow = stra + 1;
 				CaerulaArborModVariables.MapVariables.get(world).syncData(world);
-				stra = CaerulaArborModVariables.MapVariables.get(world).strategy_breed;
-				CaerulaArborModVariables.MapVariables.get(world).evo_point_breed = 0;
+				stra = CaerulaArborModVariables.MapVariables.get(world).strategy_grow;
+				CaerulaArborModVariables.MapVariables.get(world).evo_point_grow = 0;
 				CaerulaArborModVariables.MapVariables.get(world).syncData(world);
 				if (stra == 1) {
 					num = "I";
-					prefix = "§p";
+					prefix = "\u00A7p";
 				} else if (stra == 2) {
 					num = "II";
-					prefix = "§b";
+					prefix = "\u00A7b";
 				} else if (stra == 3) {
 					num = "III";
-					prefix = "§9";
+					prefix = "\u00A79";
 				} else if (stra == 4) {
 					num = "IV";
-					prefix = "§1";
+					prefix = "\u00A71";
 				}
 				if (CaerulaConfigsConfiguration.EVOSOUND.get()) {
 					for (Entity entityiterator : new ArrayList<>(world.players())) {
 						if (stra >= 3) {
 							if (world instanceof Level _level) {
-									_level.playSound(null, BlockPos.containing(entityiterator.getX(), entityiterator.getY(), entityiterator.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "breed2")),
+									_level.playSound(null, BlockPos.containing(entityiterator.getX(), entityiterator.getY(), entityiterator.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "grow2")),
 											SoundSource.NEUTRAL, 4, 1);
 							}
 						} else if (stra > 0) {
 							if (world instanceof Level _level) {
-									_level.playSound(null, BlockPos.containing(entityiterator.getX(), entityiterator.getY(), entityiterator.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "breed1")),
+									_level.playSound(null, BlockPos.containing(entityiterator.getX(), entityiterator.getY(), entityiterator.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "grow1")),
 											SoundSource.NEUTRAL, 4, 1);
 							}
 						}
 					}
 				}
 				if (!world.isClientSide() && world.getServer() != null)
-					world.getServer().getPlayerList().broadcastSystemMessage(Component.literal((prefix + Component.translatable("item.caerula_arbor.sample_breed.description_5").getString() + num)), false);
+					world.getServer().getPlayerList().broadcastSystemMessage(Component.literal((prefix + "" + Component.translatable("item.caerula_arbor.sample_grow.description_5").getString() + num)), false);
 			}
 		} else {
 			for (Entity entityiterator : new ArrayList<>(world.players())) {
@@ -83,7 +82,7 @@ public class UpgradeBreedProcedure {
 					}
 				}
 			}
-			CaerulaArborModVariables.MapVariables.get(world).evo_point_breed = 1;
+			CaerulaArborModVariables.MapVariables.get(world).evo_point_grow = 1;
 			CaerulaArborModVariables.MapVariables.get(world).syncData(world);
 		}
 	}

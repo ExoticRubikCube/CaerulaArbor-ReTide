@@ -167,6 +167,7 @@ public class WitherShootPreEntity extends AbstractArrow implements ItemSupplier 
 		return entityarrow;
 	}
 
+	// TODO: Revisit this legacy two-arg helper when the pre-shot wither projectile API is refactored.
 	public static WitherShootPreEntity shoot(LivingEntity entity, LivingEntity target) {
 		WitherShootPreEntity entityarrow = new WitherShootPreEntity(CaerulaArborModEntities.WITHER_SHOOT_PRE.get(), entity, entity.level());
 		double dx = target.getX() - entity.getX();

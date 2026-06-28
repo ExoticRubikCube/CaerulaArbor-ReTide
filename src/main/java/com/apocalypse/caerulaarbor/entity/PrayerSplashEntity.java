@@ -1,7 +1,6 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
 import com.apocalypse.caerulaarbor.utils.EntityUtils;
@@ -155,14 +154,23 @@ public class PrayerSplashEntity extends AbstractArrow implements ItemSupplier {
 		return entityarrow;
 	}
 
+	/**
+	 * @deprecated Prefer {@link #shoot(LivingEntity, LivingEntity, double)} so callers can pass their own ranged damage scaling.
+	 * This fallback uses the average scaling ratio of current shooters.
+	 */
+	@Deprecated
 	public static PrayerSplashEntity shoot(LivingEntity entity, LivingEntity target) {
+		return shoot(entity, target, (entity.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? entity.getAttributeValue(Attributes.ATTACK_DAMAGE) : 0) * (5.0 / 14.0));
+	}
+
+	public static PrayerSplashEntity shoot(LivingEntity entity, LivingEntity target, double damage) {
 		PrayerSplashEntity entityarrow = new PrayerSplashEntity(CaerulaArborModEntities.PRAYER_SPLASH.get(), entity, entity.level());
 		double dx = target.getX() - entity.getX();
 		double dy = target.getY() + target.getEyeHeight() - 1.1;
 		double dz = target.getZ() - entity.getZ();
 		entityarrow.shoot(dx, dy - entityarrow.getY() + Math.hypot(dx, dz) * 0.2F, dz, 1.5f * 2, 12.0F);
 		entityarrow.setSilent(true);
-		entityarrow.setBaseDamage(2.5);
+		entityarrow.setBaseDamage(damage);
 		entityarrow.setKnockback(0);
 		entityarrow.setCritArrow(false);
 		entity.level().addFreshEntity(entityarrow);

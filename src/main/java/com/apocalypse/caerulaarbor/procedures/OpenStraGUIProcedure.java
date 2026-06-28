@@ -43,5 +43,3 @@ public class OpenStraGUIProcedure {
 		return InteractionResult.SUCCESS;
 	}
 }
-
-// TODO: 调用次数 = 6，副作用密集（打开 GUI），保持原样不重构

@@ -1,7 +1,6 @@
-package com.apocalypse.caerulaarbor.procedures;
+package com.apocalypse.caerulaarbor.helper;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.configuration.CaerulaConfigsConfiguration;
 import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import net.minecraft.advancements.Advancement;
@@ -18,14 +17,14 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 
-public class UpgradeMigraProcedure {
+public class UpgradeSubsisProcedure {
 	public static void execute(LevelAccessor world) {
 		double stra;
 		String num = "";
 		String prefix = "";
-		stra = CaerulaArborModVariables.MapVariables.get(world).strategy_migration;
+		stra = CaerulaArborModVariables.MapVariables.get(world).strategy_subsisting;
 		if (stra < 4) {
-			if (CaerulaArborModVariables.MapVariables.get(world).evo_point_migration >= Math.pow(stra + 1, 3) * (double) CaerulaConfigsConfiguration.COEFFICIENT.get()) {
+			if (CaerulaArborModVariables.MapVariables.get(world).evo_point_subsisting >= Math.pow(stra + 1, 3) * CaerulaConfigsConfiguration.COEFFICIENT.get()) {
 				for (Entity entityiterator : new ArrayList<>(world.players())) {
 					if (entityiterator instanceof ServerPlayer _player) {
 						Advancement _adv = _player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "to_experience_evolution"));
@@ -36,10 +35,10 @@ public class UpgradeMigraProcedure {
 						}
 					}
 				}
-				CaerulaArborModVariables.MapVariables.get(world).strategy_migration = stra + 1;
+				CaerulaArborModVariables.MapVariables.get(world).strategy_subsisting = stra + 1;
 				CaerulaArborModVariables.MapVariables.get(world).syncData(world);
-				stra = CaerulaArborModVariables.MapVariables.get(world).strategy_migration;
-				CaerulaArborModVariables.MapVariables.get(world).evo_point_migration = 0;
+				stra = CaerulaArborModVariables.MapVariables.get(world).strategy_subsisting;
+				CaerulaArborModVariables.MapVariables.get(world).evo_point_subsisting = 0;
 				CaerulaArborModVariables.MapVariables.get(world).syncData(world);
 				if (stra == 1) {
 					num = "I";
@@ -58,35 +57,38 @@ public class UpgradeMigraProcedure {
 					for (Entity entityiterator : new ArrayList<>(world.players())) {
 						if (stra >= 3) {
 							if (world instanceof Level _level) {
-									_level.playSound(null, BlockPos.containing(entityiterator.getX(), entityiterator.getY(), entityiterator.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "migration2")),
+									_level.playSound(null, BlockPos.containing(entityiterator.getX(), entityiterator.getY(), entityiterator.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "subsisting2")),
 											SoundSource.NEUTRAL, 4, 1);
 							}
 						} else if (stra > 0) {
 							if (world instanceof Level _level) {
-									_level.playSound(null, BlockPos.containing(entityiterator.getX(), entityiterator.getY(), entityiterator.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "migration1")),
+									_level.playSound(null, BlockPos.containing(entityiterator.getX(), entityiterator.getY(), entityiterator.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "subsisting1")),
 											SoundSource.NEUTRAL, 4, 1);
 							}
 						}
 					}
 				}
 				if (!world.isClientSide() && world.getServer() != null)
-					world.getServer().getPlayerList().broadcastSystemMessage(Component.literal((prefix + Component.translatable("item.caerula_arbor.sample_migration.description_5").getString() + num)), false);
+					world.getServer().getPlayerList().broadcastSystemMessage(Component.literal((prefix + Component.translatable("item.caerula_arbor.sample_subsisting.description_5").getString() + num)), false);
 			}
 		} else {
 			for (Entity entityiterator : new ArrayList<>(world.players())) {
 				if (entityiterator instanceof ServerPlayer _player) {
 					Advancement _adv = _player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "to_terminate_evolution"));
-					AdvancementProgress _ap = _player.getAdvancements().getOrStartProgress(_adv);
-					if (!_ap.isDone()) {
-						for (String criteria : _ap.getRemainingCriteria())
-							_player.getAdvancements().award(_adv, criteria);
+                    AdvancementProgress _ap;
+                    if (_adv != null) {
+						_ap = _player.getAdvancements().getOrStartProgress(_adv);
+						if (!_ap.isDone()) {
+							for (String criteria : _ap.getRemainingCriteria())
+								_player.getAdvancements().award(_adv, criteria);
+						}
 					}
 				}
 			}
-			CaerulaArborModVariables.MapVariables.get(world).evo_point_migration = 0;
+			CaerulaArborModVariables.MapVariables.get(world).evo_point_subsisting = 1;
 			CaerulaArborModVariables.MapVariables.get(world).syncData(world);
 		}
 	}
 }
 
-// TODO: 调用次数 = 6，但 procedure 非常长（98行），副作用密集（修改全局变量、同步数据、播放声音、给予玩家成就、显示消息），保持原样不重构
+// TODO: 调用次数 = 6，但 procedure 非常长（101行），副作用密集（修改全局变量、同步数据、播放声音、给予玩家成就、显示消息），保持原样不重构

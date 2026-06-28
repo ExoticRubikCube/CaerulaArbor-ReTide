@@ -1,7 +1,6 @@
-package com.apocalypse.caerulaarbor.procedures;
+package com.apocalypse.caerulaarbor.helper;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.configuration.CaerulaConfigsConfiguration;
 import com.apocalypse.caerulaarbor.network.CaerulaArborModVariables;
 import com.apocalypse.caerulaarbor.utils.StrategyUtils;
