@@ -37,8 +37,15 @@ minecraft {
 
     runs {
         configureEach {
-            //JBR 热重载增强 需要使用 JetBrains 的 JBR 作为运行时才能发挥作用
+            // 开发环境的JVM参数：使用JBR热重载，并补充较稳妥的G1GC优化配置
             jvmArgs = [
+                    "-Xms2G",
+                    "-Xmx4G",
+                    "-XX:+UseG1GC",
+                    "-XX:+ParallelRefProcEnabled",
+                    "-XX:MaxGCPauseMillis=100",
+                    "-XX:+DisableExplicitGC",
+                    "-XX:+UseStringDeduplication",
                     "-XX:+IgnoreUnrecognizedVMOptions",
                     "-XX:+AllowEnhancedClassRedefinition"
             ]
