@@ -134,12 +134,7 @@ public class TidutantExcrescenceEntity extends SeaMonster {
 		this.goalSelector.addGoal(15, new RandomLookAroundGoal(this));
 	}
 
-	@Override
-	public MobType getMobType() {
-		return MobType.WATER;
-	}
-
-	@Override
+    @Override
 	public SoundEvent getHurtSound(DamageSource ds) {
 		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "seaborn_generic_hit"));
 	}

@@ -36,7 +36,6 @@ import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.network.NetworkHooks;
@@ -235,12 +234,7 @@ public class PregnantFishEntity extends SeaMonster implements RangedAttackMob, P
 		}
 	}
 
-	@Override
-	public MobType getMobType() {
-		return MobType.WATER;
-	}
-
-	@Override
+    @Override
 	public SoundEvent getAmbientSound() {
 		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("intentionally_empty"));
 	}

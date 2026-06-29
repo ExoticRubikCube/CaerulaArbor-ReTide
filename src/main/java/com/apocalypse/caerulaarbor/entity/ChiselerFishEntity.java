@@ -248,12 +248,7 @@ public class ChiselerFishEntity extends SeaMonster implements RangedAttackMob {
 		}
 	}
 
-	@Override
-	public MobType getMobType() {
-		return MobType.WATER;
-	}
-
-	@Override
+    @Override
 	public SoundEvent getAmbientSound() {
 		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.turtle.ambient_land"));
 	}

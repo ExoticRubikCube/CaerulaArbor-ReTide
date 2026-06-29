@@ -154,12 +154,7 @@ public class OceanizedWolfEntity extends SeaMonster {
 		this.goalSelector.addGoal(24, new FloatGoal(this));
 	}
 
-	@Override
-	public MobType getMobType() {
-		return MobType.WATER;
-	}
-
-	@Override
+    @Override
 	public SoundEvent getAmbientSound() {
 		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.wolf.ambient"));
 	}

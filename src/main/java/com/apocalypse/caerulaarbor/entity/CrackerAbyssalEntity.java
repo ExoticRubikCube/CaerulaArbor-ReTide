@@ -174,12 +174,7 @@ public class CrackerAbyssalEntity extends SeaMonster implements PolarMountRider 
 		this.goalSelector.addGoal(18, new FloatGoal(this));
 	}
 
-	@Override
-	public MobType getMobType() {
-		return MobType.WATER;
-	}
-
-	@Override
+    @Override
 	public SoundEvent getAmbientSound() {
 		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.parrot.imitate.silverfish"));
 	}

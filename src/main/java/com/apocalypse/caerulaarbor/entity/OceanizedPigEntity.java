@@ -151,12 +151,7 @@ public class OceanizedPigEntity extends SeaMonster {
 		this.goalSelector.addGoal(17, new RandomLookAroundGoal(this));
 	}
 
-	@Override
-	public MobType getMobType() {
-		return MobType.WATER;
-	}
-
-	@Override
+    @Override
 	public SoundEvent getAmbientSound() {
 		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.pig.ambient"));
 	}

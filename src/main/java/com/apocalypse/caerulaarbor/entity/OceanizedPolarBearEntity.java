@@ -93,12 +93,7 @@ public class OceanizedPolarBearEntity extends SeaMonster {
 		this.goalSelector.addGoal(9, new FloatGoal(this));
 	}
 
-	@Override
-	public MobType getMobType() {
-		return MobType.WATER;
-	}
-
-	@Override
+    @Override
 	public SoundEvent getAmbientSound() {
 		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.polar_bear.ambient"));
 	}

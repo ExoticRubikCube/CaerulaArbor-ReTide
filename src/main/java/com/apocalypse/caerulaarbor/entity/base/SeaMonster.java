@@ -1,6 +1,7 @@
 package com.apocalypse.caerulaarbor.entity.base;
 
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -17,6 +18,11 @@ public abstract class SeaMonster extends Monster implements GeoEntity {
 	@Override
 	public AnimatableInstanceCache getAnimatableInstanceCache() {
 		return this.cache;
+	}
+
+	@Override
+	public MobType getMobType() {
+		return MobType.WATER;
 	}
 
 	@Override

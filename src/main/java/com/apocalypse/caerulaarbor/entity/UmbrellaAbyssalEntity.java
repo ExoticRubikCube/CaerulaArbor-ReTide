@@ -147,12 +147,7 @@ public class UmbrellaAbyssalEntity extends SeaMonster {
 		this.goalSelector.addGoal(15, new RandomLookAroundGoal(this));
 	}
 
-	@Override
-	public MobType getMobType() {
-		return MobType.WATER;
-	}
-
-	@Override
+    @Override
 	public SoundEvent getAmbientSound() {
 		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.glow_squid.ambient"));
 	}

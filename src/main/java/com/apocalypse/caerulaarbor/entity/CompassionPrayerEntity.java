@@ -291,12 +291,7 @@ public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMo
 		}
 	}
 
-	@Override
-	public MobType getMobType() {
-		return MobType.WATER;
-	}
-
-	@Override
+    @Override
 	public boolean removeWhenFarAway(double distanceToClosestPlayer) {
 		return false;
 	}

@@ -139,12 +139,7 @@ public class FakeOffspringEntity extends SeaMonster {
 		this.goalSelector.addGoal(14, new LeapAtTargetGoal(this, (float) 0.2));
 	}
 
-	@Override
-	public MobType getMobType() {
-		return MobType.WATER;
-	}
-
-	@Override
+    @Override
 	public SoundEvent getAmbientSound() {
 		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.parrot.imitate.slime"));
 	}

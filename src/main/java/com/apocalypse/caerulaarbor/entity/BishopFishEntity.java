@@ -183,12 +183,7 @@ public class BishopFishEntity extends SeaMonster {
 		this.goalSelector.addGoal(14, new RandomLookAroundGoal(this));
 	}
 
-	@Override
-	public MobType getMobType() {
-		return MobType.WATER;
-	}
-
-	@Override
+    @Override
 	public boolean removeWhenFarAway(double distanceToClosestPlayer) {
 		return false;
 	}

@@ -295,12 +295,7 @@ public class FloaterProkaryoteEntity extends SeaMonster implements RangedAttackM
 		}
 	}
 
-	@Override
-	public MobType getMobType() {
-		return MobType.WATER;
-	}
-
-	@Override
+    @Override
 	public SoundEvent getAmbientSound() {
 		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.glow_squid.ambient"));
 	}

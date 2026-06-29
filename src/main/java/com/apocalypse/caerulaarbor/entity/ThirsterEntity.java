@@ -152,12 +152,7 @@ public class ThirsterEntity extends SeaMonster {
 		this.goalSelector.addGoal(5, new FloatGoal(this));
 	}
 
-	@Override
-	public MobType getMobType() {
-		return MobType.WATER;
-	}
-
-	@Override
+    @Override
 	public boolean removeWhenFarAway(double distanceToClosestPlayer) {
 		return false;
 	}

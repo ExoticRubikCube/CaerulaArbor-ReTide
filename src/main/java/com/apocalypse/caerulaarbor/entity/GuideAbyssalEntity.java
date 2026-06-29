@@ -143,12 +143,7 @@ public class GuideAbyssalEntity extends SeaMonster {
 		this.goalSelector.addGoal(16, new RandomLookAroundGoal(this));
 	}
 
-	@Override
-	public MobType getMobType() {
-		return MobType.WATER;
-	}
-
-	@Override
+    @Override
 	public SoundEvent getAmbientSound() {
 		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.zombie_horse.ambient"));
 	}

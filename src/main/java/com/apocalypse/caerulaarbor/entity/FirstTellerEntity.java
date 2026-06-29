@@ -205,12 +205,7 @@ public class FirstTellerEntity extends SeaMonster implements RangedAttackMob {
 		}
 	}
 
-	@Override
-	public MobType getMobType() {
-		return MobType.WATER;
-	}
-
-	@Override
+    @Override
 	public boolean removeWhenFarAway(double distanceToClosestPlayer) {
 		return false;
 	}

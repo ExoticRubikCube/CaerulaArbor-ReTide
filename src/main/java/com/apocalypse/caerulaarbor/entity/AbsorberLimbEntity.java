@@ -89,12 +89,7 @@ public class AbsorberLimbEntity extends SeaMonster {
 		this.goalSelector.addGoal(1, new RandomLookAroundGoal(this));
 	}
 
-	@Override
-	public MobType getMobType() {
-		return MobType.WATER;
-	}
-
-	@Override
+    @Override
 	public boolean removeWhenFarAway(double distanceToClosestPlayer) {
 		return false;
 	}

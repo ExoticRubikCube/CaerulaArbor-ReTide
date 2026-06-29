@@ -136,12 +136,7 @@ public class LingeringFractalEntity extends AbstractFractalEntity {
 		this.goalSelector.addGoal(15, new RandomLookAroundGoal(this));
 	}
 
-	@Override
-	public MobType getMobType() {
-		return MobType.WATER;
-	}
-
-	@Override
+    @Override
 	public boolean removeWhenFarAway(double distanceToClosestPlayer) {
 		return false;
 	}

@@ -173,12 +173,7 @@ public class OceanizedWardenEntity extends SeaMonster {
 		});
 	}
 
-	@Override
-	public MobType getMobType() {
-		return MobType.WATER;
-	}
-
-	@Override
+    @Override
 	public boolean removeWhenFarAway(double distanceToClosestPlayer) {
 		return false;
 	}

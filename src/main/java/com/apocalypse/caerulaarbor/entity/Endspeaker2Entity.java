@@ -114,21 +114,11 @@ public class Endspeaker2Entity extends SeaMonster {
 		this.targetSelector.addGoal(1, new HurtByTargetGoal(this) {
 			@Override
 			public boolean canUse() {
-				double x = Endspeaker2Entity.this.getX();
-				double y = Endspeaker2Entity.this.getY();
-				double z = Endspeaker2Entity.this.getZ();
-				Entity entity = Endspeaker2Entity.this;
-				Level world = Endspeaker2Entity.this.level();
 				return super.canUse() && Endspeaker2Entity.this.isDurative();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = Endspeaker2Entity.this.getX();
-				double y = Endspeaker2Entity.this.getY();
-				double z = Endspeaker2Entity.this.getZ();
-				Entity entity = Endspeaker2Entity.this;
-				Level world = Endspeaker2Entity.this.level();
 				return super.canContinueToUse() && Endspeaker2Entity.this.isDurative();
 			}
 		});
@@ -140,21 +130,11 @@ public class Endspeaker2Entity extends SeaMonster {
 
 			@Override
 			public boolean canUse() {
-				double x = Endspeaker2Entity.this.getX();
-				double y = Endspeaker2Entity.this.getY();
-				double z = Endspeaker2Entity.this.getZ();
-				Entity entity = Endspeaker2Entity.this;
-				Level world = Endspeaker2Entity.this.level();
 				return super.canUse() && Endspeaker2Entity.this.isDurative();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = Endspeaker2Entity.this.getX();
-				double y = Endspeaker2Entity.this.getY();
-				double z = Endspeaker2Entity.this.getZ();
-				Entity entity = Endspeaker2Entity.this;
-				Level world = Endspeaker2Entity.this.level();
 				return super.canContinueToUse() && Endspeaker2Entity.this.isDurative();
 			}
 
@@ -169,13 +149,12 @@ public class Endspeaker2Entity extends SeaMonster {
 		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
 		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
 		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
-		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal(this, Player.class, true, false) {
+		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Player.class, true, false) {
 			@Override
 			public boolean canUse() {
 				double x = Endspeaker2Entity.this.getX();
 				double y = Endspeaker2Entity.this.getY();
 				double z = Endspeaker2Entity.this.getZ();
-				Entity entity = Endspeaker2Entity.this;
 				Level world = Endspeaker2Entity.this.level();
 				return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -185,7 +164,6 @@ public class Endspeaker2Entity extends SeaMonster {
 				double x = Endspeaker2Entity.this.getX();
 				double y = Endspeaker2Entity.this.getY();
 				double z = Endspeaker2Entity.this.getZ();
-				Entity entity = Endspeaker2Entity.this;
 				Level world = Endspeaker2Entity.this.level();
 				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -193,54 +171,29 @@ public class Endspeaker2Entity extends SeaMonster {
 		this.goalSelector.addGoal(14, new RandomStrollGoal(this, 1) {
 			@Override
 			public boolean canUse() {
-				double x = Endspeaker2Entity.this.getX();
-				double y = Endspeaker2Entity.this.getY();
-				double z = Endspeaker2Entity.this.getZ();
-				Entity entity = Endspeaker2Entity.this;
-				Level world = Endspeaker2Entity.this.level();
 				return super.canUse() && Endspeaker2Entity.this.isDurative();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = Endspeaker2Entity.this.getX();
-				double y = Endspeaker2Entity.this.getY();
-				double z = Endspeaker2Entity.this.getZ();
-				Entity entity = Endspeaker2Entity.this;
-				Level world = Endspeaker2Entity.this.level();
 				return super.canContinueToUse() && Endspeaker2Entity.this.isDurative();
 			}
 		});
 		this.goalSelector.addGoal(15, new RandomLookAroundGoal(this) {
 			@Override
 			public boolean canUse() {
-				double x = Endspeaker2Entity.this.getX();
-				double y = Endspeaker2Entity.this.getY();
-				double z = Endspeaker2Entity.this.getZ();
-				Entity entity = Endspeaker2Entity.this;
-				Level world = Endspeaker2Entity.this.level();
 				return super.canUse() && Endspeaker2Entity.this.isDurative();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = Endspeaker2Entity.this.getX();
-				double y = Endspeaker2Entity.this.getY();
-				double z = Endspeaker2Entity.this.getZ();
-				Entity entity = Endspeaker2Entity.this;
-				Level world = Endspeaker2Entity.this.level();
 				return super.canContinueToUse() && Endspeaker2Entity.this.isDurative();
 			}
 		});
 		this.goalSelector.addGoal(16, new FloatGoal(this));
 	}
 
-	@Override
-	public MobType getMobType() {
-		return MobType.WATER;
-	}
-
-	@Override
+    @Override
 	public boolean removeWhenFarAway(double distanceToClosestPlayer) {
 		return false;
 	}

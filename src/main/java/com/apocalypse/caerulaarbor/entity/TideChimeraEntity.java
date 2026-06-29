@@ -172,12 +172,7 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
 		this.goalSelector.addGoal(7, new FloatGoal(this));
 	}
 
-	@Override
-	public MobType getMobType() {
-		return MobType.WATER;
-	}
-
-	@Override
+    @Override
 	public boolean removeWhenFarAway(double distanceToClosestPlayer) {
 		return false;
 	}
