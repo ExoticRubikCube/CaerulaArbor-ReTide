@@ -2,9 +2,9 @@
 package com.apocalypse.caerulaarbor.block;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlockEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CABlockEntities;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CABlocks;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -61,7 +61,7 @@ public class ViviparousLilyBlock extends BaseEntityBlock implements SimpleWaterl
 	@Nullable
 	@Override
 	public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
-		return CaerulaArborModBlockEntities.VIVIPAROUS_LILY.get().create(blockPos, blockState);
+		return CABlockEntities.VIVIPAROUS_LILY.get().create(blockPos, blockState);
 	}
 
 	@Override
@@ -177,11 +177,11 @@ public class ViviparousLilyBlock extends BaseEntityBlock implements SimpleWaterl
 		int y = pos.getY();
 		int z = pos.getZ();
 
-        boolean huge = false;
+        boolean huge;
         huge = true;
         for (int dx = -1; dx <= 1; dx++) {
             for (int dz = -1; dz <= 1; dz++) {
-                if (!((((LevelAccessor) world).getBlockState(BlockPos.containing((double) x + dx, y, (double) z + dz))).getBlock() == CaerulaArborModBlocks.VIVIPAROUS_LILY.get())) {
+                if (!((((LevelAccessor) world).getBlockState(BlockPos.containing((double) x + dx, y, (double) z + dz))).getBlock() == CABlocks.VIVIPAROUS_LILY.get())) {
                     huge = false;
                     break;
                 }
@@ -211,10 +211,10 @@ public class ViviparousLilyBlock extends BaseEntityBlock implements SimpleWaterl
                     ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
             }
             CaerulaArborMod.queueServerWork(20, () -> {
-                if ((((LevelAccessor) world).getBlockState(BlockPos.containing(x, y, z))).getBlock() == CaerulaArborModBlocks.VIVIPAROUS_LILY.get()) {
+                if ((((LevelAccessor) world).getBlockState(BlockPos.containing(x, y, z))).getBlock() == CABlocks.VIVIPAROUS_LILY.get()) {
                     {
                         BlockPos _bp = BlockPos.containing(x, y, z);
-                        BlockState _bs = CaerulaArborModBlocks.HUGE_LILY.get().withPropertiesOf(blockstate);
+                        BlockState _bs = CABlocks.HUGE_LILY.get().withPropertiesOf(blockstate);
                         ((LevelAccessor) world).setBlock(_bp, _bs, 3);
                     }
                 }
@@ -223,7 +223,7 @@ public class ViviparousLilyBlock extends BaseEntityBlock implements SimpleWaterl
             if ((((LevelAccessor) world).getBlockState(BlockPos.containing(x, (double) y - 1, z))).is(BlockTags.create(new ResourceLocation(CaerulaArborMod.MODID, "trail")))) {
                 if (Math.random() < 0.33) {
                     if ((LevelAccessor) world instanceof ServerLevel _level) {
-                        Entity entityToSpawn = CaerulaArborModEntities.SLIDER_FISH.get().spawn(_level, BlockPos.containing((double) x + 0.5, y, (double) z + 0.5), MobSpawnType.MOB_SUMMONED);
+                        Entity entityToSpawn = CAEntities.SLIDER_FISH.get().spawn(_level, BlockPos.containing((double) x + 0.5, y, (double) z + 0.5), MobSpawnType.MOB_SUMMONED);
                         if (entityToSpawn != null) {
                             entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
                         }

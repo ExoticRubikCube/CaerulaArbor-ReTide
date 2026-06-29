@@ -1,7 +1,7 @@
 package com.apocalypse.caerulaarbor.event;
 
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
@@ -34,9 +34,9 @@ public class PlayerAttackEventHandler {
 		}
 
 		if (!attacker.level().isClientSide()) {
-			MobEffectInstance currentButchersPower = attacker.getEffect(CaerulaArborModMobEffects.BUTCHERS_POWER.get());
+			MobEffectInstance currentButchersPower = attacker.getEffect(CAMobEffects.BUTCHERS_POWER.get());
 			int nextAmplifier = currentButchersPower == null ? 0 : Math.min(currentButchersPower.getAmplifier() + 1, 7);
-			attacker.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.BUTCHERS_POWER.get(), 160, nextAmplifier, false, false));
+			attacker.addEffect(new MobEffectInstance(CAMobEffects.BUTCHERS_POWER.get(), 160, nextAmplifier, false, false));
 		}
 	}
 }

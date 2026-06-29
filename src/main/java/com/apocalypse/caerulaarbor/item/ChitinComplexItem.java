@@ -2,8 +2,8 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.client.renderer.entity.ChitinComplexArmorRenderer;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.client.model.HumanoidModel;
@@ -64,7 +64,7 @@ public class ChitinComplexItem extends ArmorItem implements GeoItem {
 
 			@Override
 			public Ingredient getRepairIngredient() {
-				return Ingredient.of(new ItemStack(CaerulaArborModItems.COMPLEX_CHITIN.get()));
+				return Ingredient.of(new ItemStack(CAItems.COMPLEX_CHITIN.get()));
 			}
 
 			@Override
@@ -111,11 +111,11 @@ public class ChitinComplexItem extends ArmorItem implements GeoItem {
         UUID uuid = new UUID(slot.toString().hashCode(), 0);
         if (slot == this.getEquipmentSlot()){
             map = HashMultimap.create(map);
-            map.put(CaerulaArborModAttributes.SANITY_RESISTANCE.get(),
+            map.put(CAAttributes.SANITY_RESISTANCE.get(),
                     new AttributeModifier(uuid, name , 15.0f, AttributeModifier.Operation.ADDITION));
-            map.put(CaerulaArborModAttributes.SANITY_RATE.get(),
+            map.put(CAAttributes.SANITY_RATE.get(),
                     new AttributeModifier(uuid, name , 1.0f, AttributeModifier.Operation.ADDITION));
-            map.put(CaerulaArborModAttributes.GENERAL_DEFENSE.get(),
+            map.put(CAAttributes.GENERAL_DEFENSE.get(),
                     new AttributeModifier(uuid, name , 2.5f, AttributeModifier.Operation.ADDITION));
         }
         return map;

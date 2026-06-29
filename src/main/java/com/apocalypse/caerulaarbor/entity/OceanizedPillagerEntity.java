@@ -3,7 +3,7 @@ package com.apocalypse.caerulaarbor.entity;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.RavagerMountRider;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
@@ -63,7 +63,7 @@ public class OceanizedPillagerEntity extends SeaMonster implements RangedAttackM
 	public String animationprocedure = "empty";
 
 	public OceanizedPillagerEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.OCEANIZED_PILLAGER.get(), world);
+		this(CAEntities.OCEANIZED_PILLAGER.get(), world);
 	}
 
 	public OceanizedPillagerEntity(EntityType<OceanizedPillagerEntity> type, Level world) {
@@ -289,8 +289,8 @@ public class OceanizedPillagerEntity extends SeaMonster implements RangedAttackM
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        double sklp = 0;
-        Entity enemy = null;
+        double sklp;
+        Entity enemy;
         if (this.isAlive()) {
             sklp = (Entity) this instanceof OceanizedPillagerEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp) : 0;
             if (sklp <= 0) {
@@ -320,7 +320,7 @@ public class OceanizedPillagerEntity extends SeaMonster implements RangedAttackM
                                         if (!projectileLevel.isClientSide()) {
                                             Projectile _entityToSpawn = new Object() {
                                                 public Projectile getArrow(Level level, Entity shooter, float damage, int knockback, byte piercing) {
-                                                    AbstractArrow entityToSpawn = new ShotOceanArrowEntity(CaerulaArborModEntities.SHOT_OCEAN_ARROW.get(), level);
+                                                    AbstractArrow entityToSpawn = new ShotOceanArrowEntity(CAEntities.SHOT_OCEAN_ARROW.get(), level);
                                                     entityToSpawn.setOwner(shooter);
                                                     entityToSpawn.setBaseDamage(damage);
                                                     entityToSpawn.setKnockback(knockback);

@@ -1,8 +1,8 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -33,7 +33,7 @@ public class HighmoreShootEntity extends AbstractArrow implements ItemSupplier {
 	public static final ItemStack PROJECTILE_ITEM = new ItemStack(Blocks.REDSTONE_BLOCK);
 
 	public HighmoreShootEntity(PlayMessages.SpawnEntity packet, Level world) {
-		super(CaerulaArborModEntities.HIGHMORE_SHOOT.get(), world);
+		super(CAEntities.HIGHMORE_SHOOT.get(), world);
 	}
 
 	public HighmoreShootEntity(EntityType<? extends HighmoreShootEntity> type, Level world) {
@@ -147,7 +147,7 @@ public class HighmoreShootEntity extends AbstractArrow implements ItemSupplier {
             if (!level().isClientSide())
                 discard();
         }
-		world.addParticle(CaerulaArborModParticleTypes.SEA_SPLASH.get(), this.getX(), this.getY(), this.getZ(), 0, 0, 0);
+		world.addParticle(CAParticleTypes.SEA_SPLASH.get(), this.getX(), this.getY(), this.getZ(), 0, 0, 0);
 		if (this.inGround)
 			this.discard();
 	}
@@ -161,7 +161,7 @@ public class HighmoreShootEntity extends AbstractArrow implements ItemSupplier {
 	}
 
 	public static HighmoreShootEntity shoot(Level world, LivingEntity entity, RandomSource random, float power, double damage, int knockback) {
-		HighmoreShootEntity entityarrow = new HighmoreShootEntity(CaerulaArborModEntities.HIGHMORE_SHOOT.get(), entity, world);
+		HighmoreShootEntity entityarrow = new HighmoreShootEntity(CAEntities.HIGHMORE_SHOOT.get(), entity, world);
 		entityarrow.shoot(entity.getViewVector(1).x, entity.getViewVector(1).y, entity.getViewVector(1).z, power * 2, 0);
 		entityarrow.setSilent(true);
 		entityarrow.setCritArrow(false);
@@ -182,7 +182,7 @@ public class HighmoreShootEntity extends AbstractArrow implements ItemSupplier {
 	}
 
 	public static HighmoreShootEntity shoot(LivingEntity entity, LivingEntity target, double damage) {
-		HighmoreShootEntity entityarrow = new HighmoreShootEntity(CaerulaArborModEntities.HIGHMORE_SHOOT.get(), entity, entity.level());
+		HighmoreShootEntity entityarrow = new HighmoreShootEntity(CAEntities.HIGHMORE_SHOOT.get(), entity, entity.level());
 		double dx = target.getX() - entity.getX();
 		double dy = target.getY() + target.getEyeHeight() - 1.1;
 		double dz = target.getZ() - entity.getZ();

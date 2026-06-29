@@ -1,6 +1,6 @@
 package com.apocalypse.caerulaarbor.entity;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -28,7 +28,7 @@ public class CarmenBulletEntity extends AbstractArrow implements ItemSupplier {
 	public static final ItemStack PROJECTILE_ITEM = new ItemStack(Items.IRON_INGOT);
 
 	public CarmenBulletEntity(PlayMessages.SpawnEntity packet, Level world) {
-		super(CaerulaArborModEntities.CARMEN_BULLET.get(), world);
+		super(CAEntities.CARMEN_BULLET.get(), world);
 	}
 
 	public CarmenBulletEntity(EntityType<? extends CarmenBulletEntity> type, Level world) {
@@ -93,7 +93,7 @@ public class CarmenBulletEntity extends AbstractArrow implements ItemSupplier {
 	}
 
 	public static CarmenBulletEntity shoot(Level world, LivingEntity entity, RandomSource random, float power, double damage, int knockback) {
-		CarmenBulletEntity entityarrow = new CarmenBulletEntity(CaerulaArborModEntities.CARMEN_BULLET.get(), entity, world);
+		CarmenBulletEntity entityarrow = new CarmenBulletEntity(CAEntities.CARMEN_BULLET.get(), entity, world);
 		entityarrow.shoot(entity.getViewVector(1).x, entity.getViewVector(1).y, entity.getViewVector(1).z, power * 2, 0);
 		entityarrow.setSilent(true);
 		entityarrow.setCritArrow(false);
@@ -105,7 +105,7 @@ public class CarmenBulletEntity extends AbstractArrow implements ItemSupplier {
 	}
 
 	public static CarmenBulletEntity shoot(LivingEntity entity, LivingEntity target) {
-		CarmenBulletEntity entityarrow = new CarmenBulletEntity(CaerulaArborModEntities.CARMEN_BULLET.get(), entity, entity.level());
+		CarmenBulletEntity entityarrow = new CarmenBulletEntity(CAEntities.CARMEN_BULLET.get(), entity, entity.level());
 		double dx = target.getX() - entity.getX();
 		double dy = target.getY() + target.getEyeHeight() - 1.1;
 		double dz = target.getZ() - entity.getZ();

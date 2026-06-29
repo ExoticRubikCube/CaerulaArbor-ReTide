@@ -1,7 +1,7 @@
 package com.apocalypse.caerulaarbor.block.entity;
 
 import com.apocalypse.caerulaarbor.block.MizukiStatueBlock;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlockEntities;
+import com.apocalypse.caerulaarbor.init.CABlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -42,7 +42,7 @@ public class MizukiStatueTileEntity extends RandomizableContainerBlockEntity imp
 	private int blockstateOld = this.getBlockState().getValue(MizukiStatueBlock.BLOCKSTATE);
 
 	public MizukiStatueTileEntity(BlockPos pos, BlockState state) {
-		super(CaerulaArborModBlockEntities.MIZUKI_STATUE.get(), pos, state);
+		super(CABlockEntities.MIZUKI_STATUE.get(), pos, state);
 	}
 
 	private PlayState predicate(AnimationState event) {

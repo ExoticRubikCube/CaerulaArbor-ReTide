@@ -2,9 +2,9 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CAParticleTypes;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
@@ -64,7 +64,7 @@ public class LancXiaoItem extends SwordItem {
 			}
 
 			public Ingredient getRepairIngredient() {
-				return Ingredient.of(new ItemStack(CaerulaArborModItems.OCEAN_CRYSTAL.get()));
+				return Ingredient.of(new ItemStack(CAItems.OCEAN_CRYSTAL.get()));
 			}
 		}, 3, -1.6f, new Item.Properties());
 	}
@@ -92,7 +92,7 @@ public class LancXiaoItem extends SwordItem {
                     for (Entity entityiterator : _entfound) {
                         if (entityiterator instanceof Monster || (entityiterator instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == entity) {
                             LivingEntity _livEnt3 = (LivingEntity) entityiterator;
-                            if (_livEnt3.hasEffect(CaerulaArborModMobEffects.INVULNERABLE.get())) {
+                            if (_livEnt3.hasEffect(CAMobEffects.INVULNERABLE.get())) {
                                 continue;
                             }
                             if (!entityiterator.isAlive()) {
@@ -102,10 +102,10 @@ public class LancXiaoItem extends SwordItem {
                                 count = count + 1;
                                 CaerulaArborMod.queueServerWork((int) (count * 2), () -> {
                                     if (entity.distanceTo(entityiterator) <= 16) {
-                                        double atk = 0;
-                                        double tz = 0;
-                                        double ty = 0;
-                                        double tx = 0;
+                                        double atk;
+                                        double tz;
+                                        double ty;
+                                        double tx;
                                         atk = entity.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? entity.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
                                         tx = entityiterator.getX() + Mth.nextDouble(RandomSource.create(), -0.25, 0.25);
                                         ty = entityiterator.getY();
@@ -116,7 +116,7 @@ public class LancXiaoItem extends SwordItem {
                                         if (_ent instanceof ServerPlayer _serverPlayer)
                                             _serverPlayer.connection.teleport(tx, ty, tz, _ent.getYRot(), _ent.getXRot());
                                         if ((LevelAccessor) world instanceof ServerLevel _level)
-                                            _level.sendParticles(CaerulaArborModParticleTypes.ENDSPEAKER_PARTICLE.get(), tx, (ty + 0.75), tz, 18, 0.75, 0.75, 0.75, 0.15);
+                                            _level.sendParticles(CAParticleTypes.ENDSPEAKER_PARTICLE.get(), tx, (ty + 0.75), tz, 18, 0.75, 0.75, 0.75, 0.15);
                                         if ((LevelAccessor) world instanceof Level _level) {
                                                 _level.playSound(null, BlockPos.containing(tx, ty, tz), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "endspeaker_attack_hit")), SoundSource.PLAYERS, (float) 1.5, 1);
                                         }
@@ -180,8 +180,8 @@ public class LancXiaoItem extends SwordItem {
 	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
 		super.appendHoverText(itemstack, level, list, flag);
 		Entity entity = itemstack.getEntityRepresentation();
-        double sklp = 0;
-        String prefix = "";
+        double sklp;
+        String prefix;
         sklp = 6 - itemstack.getOrCreateTag().getDouble("sklp");
         if (sklp >= 6) {
             prefix = Component.translatable("item.caerula_arbor.lanc_xiao.skill").getString() + "\u00A7b";

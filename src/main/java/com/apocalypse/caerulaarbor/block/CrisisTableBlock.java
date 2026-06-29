@@ -2,9 +2,9 @@
 package com.apocalypse.caerulaarbor.block;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlockEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CABlockEntities;
+import com.apocalypse.caerulaarbor.init.CABlocks;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
@@ -80,7 +80,7 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
 	@Nullable
 	@Override
 	public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
-		return CaerulaArborModBlockEntities.CRISIS_TABLE.get().create(blockPos, blockState);
+		return CABlockEntities.CRISIS_TABLE.get().create(blockPos, blockState);
 	}
 
 	@Override
@@ -213,7 +213,7 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "start")), SoundSource.BLOCKS, 1, 1);
                 }
                 CaerulaArborMod.queueServerWork(25, () -> {
-                    if ((((LevelAccessor) world).getBlockState(BlockPos.containing(x, y, z))).getBlock() == CaerulaArborModBlocks.CRISIS_TABLE.get()
+                    if ((((LevelAccessor) world).getBlockState(BlockPos.containing(x, y, z))).getBlock() == CABlocks.CRISIS_TABLE.get()
                             && ((((LevelAccessor) world).getBlockState(BlockPos.containing(x, y, z))).getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _getip8
                             ? (((LevelAccessor) world).getBlockState(BlockPos.containing(x, y, z))).getValue(_getip8)
                             : -1) == 1) {
@@ -225,7 +225,7 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
                     }
                 });
                 CaerulaArborMod.queueServerWork(45, () -> {
-                    if ((((LevelAccessor) world).getBlockState(BlockPos.containing(x, y, z))).getBlock() == CaerulaArborModBlocks.CRISIS_TABLE.get()
+                    if ((((LevelAccessor) world).getBlockState(BlockPos.containing(x, y, z))).getBlock() == CABlocks.CRISIS_TABLE.get()
                             && ((((LevelAccessor) world).getBlockState(BlockPos.containing(x, y, z))).getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _getip16
                             ? (((LevelAccessor) world).getBlockState(BlockPos.containing(x, y, z))).getValue(_getip16)
                             : -1) == 1) {
@@ -237,7 +237,7 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
                     }
                 });
                 CaerulaArborMod.queueServerWork(55, () -> {
-                    if ((((LevelAccessor) world).getBlockState(BlockPos.containing(x, y, z))).getBlock() == CaerulaArborModBlocks.CRISIS_TABLE.get()
+                    if ((((LevelAccessor) world).getBlockState(BlockPos.containing(x, y, z))).getBlock() == CABlocks.CRISIS_TABLE.get()
                             && ((((LevelAccessor) world).getBlockState(BlockPos.containing(x, y, z))).getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _getip24
                             ? (((LevelAccessor) world).getBlockState(BlockPos.containing(x, y, z))).getValue(_getip24)
                             : -1) == 1) {
@@ -249,12 +249,12 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
                     }
                 });
                 CaerulaArborMod.queueServerWork(65, () -> {
-                    if ((((LevelAccessor) world).getBlockState(BlockPos.containing(x, y, z))).getBlock() == CaerulaArborModBlocks.CRISIS_TABLE.get()
+                    if ((((LevelAccessor) world).getBlockState(BlockPos.containing(x, y, z))).getBlock() == CABlocks.CRISIS_TABLE.get()
                             && ((((LevelAccessor) world).getBlockState(BlockPos.containing(x, y, z))).getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _getip32
                             ? (((LevelAccessor) world).getBlockState(BlockPos.containing(x, y, z))).getValue(_getip32)
                             : -1) == 1) {
-                        double creeper = 0;
-                        double gap = 0;
+                        double creeper;
+                        double gap;
                         new Object() {
                             void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                                 summonShooter(world, x, y, z, blockstate);
@@ -320,7 +320,7 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
                     }
                 });
                 CaerulaArborMod.queueServerWork(95, () -> {
-                    if ((((LevelAccessor) world).getBlockState(BlockPos.containing(x, y, z))).getBlock() == CaerulaArborModBlocks.CRISIS_TABLE.get()
+                    if ((((LevelAccessor) world).getBlockState(BlockPos.containing(x, y, z))).getBlock() == CABlocks.CRISIS_TABLE.get()
                             && ((((LevelAccessor) world).getBlockState(BlockPos.containing(x, y, z))).getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _getip40
                             ? (((LevelAccessor) world).getBlockState(BlockPos.containing(x, y, z))).getValue(_getip40)
                             : -1) == 1) {
@@ -348,7 +348,7 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
                     }
                 });
                 CaerulaArborMod.queueServerWork(105, () -> {
-                    if ((((LevelAccessor) world).getBlockState(BlockPos.containing(x, y, z))).getBlock() == CaerulaArborModBlocks.CRISIS_TABLE.get()
+                    if ((((LevelAccessor) world).getBlockState(BlockPos.containing(x, y, z))).getBlock() == CABlocks.CRISIS_TABLE.get()
                             && ((((LevelAccessor) world).getBlockState(BlockPos.containing(x, y, z))).getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _getip52
                             ? (((LevelAccessor) world).getBlockState(BlockPos.containing(x, y, z))).getValue(_getip52)
                             : -1) == 1) {
@@ -364,10 +364,10 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
 	}
 
 	private void summonCreeper(LevelAccessor world, double x, double y, double z, BlockState blockstate) {
-		Direction dire = Direction.NORTH;
-		Direction dire1 = Direction.NORTH;
-		double offset0 = 0;
-		double offset1 = 0;
+		Direction dire;
+		Direction dire1;
+		double offset0;
+		double offset1;
 		dire = new Object() {
 			public Direction getDirection(BlockState _bs) {
 				Property<?> _prop = _bs.getBlock().getStateDefinition().getProperty("facing");
@@ -381,7 +381,7 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
 		offset0 = Mth.nextDouble(RandomSource.create(), -3, 4);
 		offset1 = Mth.nextDouble(RandomSource.create(), -5, 6);
 		if (world instanceof ServerLevel _level) {
-			Entity entityToSpawn = CaerulaArborModEntities.CREEPER_FISH.get().spawn(_level, BlockPos.containing(x + offset0 * dire.getStepX() + offset1 * dire1.getStepX(), y + 1, z + offset0 * dire.getStepZ() + offset1 * dire1.getStepZ()),
+			Entity entityToSpawn = CAEntities.CREEPER_FISH.get().spawn(_level, BlockPos.containing(x + offset0 * dire.getStepX() + offset1 * dire1.getStepX(), y + 1, z + offset0 * dire.getStepZ() + offset1 * dire1.getStepZ()),
 					MobSpawnType.MOB_SUMMONED);
 			if (entityToSpawn != null) {
 				entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
@@ -390,10 +390,10 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
 	}
 
 	private void summonReaper(LevelAccessor world, double x, double y, double z, BlockState blockstate) {
-		Direction dire = Direction.NORTH;
-		Direction dire1 = Direction.NORTH;
-		double offset0 = 0;
-		double offset1 = 0;
+		Direction dire;
+		Direction dire1;
+		double offset0;
+		double offset1;
 		dire = new Object() {
 			public Direction getDirection(BlockState _bs) {
 				Property<?> _prop = _bs.getBlock().getStateDefinition().getProperty("facing");
@@ -407,7 +407,7 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
 		offset0 = Mth.nextDouble(RandomSource.create(), -3, 4);
 		offset1 = Mth.nextDouble(RandomSource.create(), -5, 6);
 		if (world instanceof ServerLevel _level) {
-			Entity entityToSpawn = CaerulaArborModEntities.REAPER_FISH.get().spawn(_level, BlockPos.containing(x + offset0 * dire.getStepX() + offset1 * dire1.getStepX(), y + 1, z + offset0 * dire.getStepZ() + offset1 * dire1.getStepZ()),
+			Entity entityToSpawn = CAEntities.REAPER_FISH.get().spawn(_level, BlockPos.containing(x + offset0 * dire.getStepX() + offset1 * dire1.getStepX(), y + 1, z + offset0 * dire.getStepZ() + offset1 * dire1.getStepZ()),
 					MobSpawnType.MOB_SUMMONED);
 			if (entityToSpawn != null) {
 				entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
@@ -416,10 +416,10 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
 	}
 
 	private void summonShooter(LevelAccessor world, double x, double y, double z, BlockState blockstate) {
-		Direction dire = Direction.NORTH;
-		Direction dire1 = Direction.NORTH;
-		double offset0 = 0;
-		double offset1 = 0;
+		Direction dire;
+		Direction dire1;
+		double offset0;
+		double offset1;
 		dire = new Object() {
 			public Direction getDirection(BlockState _bs) {
 				Property<?> _prop = _bs.getBlock().getStateDefinition().getProperty("facing");
@@ -433,7 +433,7 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
 		offset0 = Mth.nextDouble(RandomSource.create(), -3, 4);
 		offset1 = Mth.nextDouble(RandomSource.create(), -5, 6);
 		if (world instanceof ServerLevel _level) {
-			Entity entityToSpawn = CaerulaArborModEntities.SHOOTER_FISH.get().spawn(_level, BlockPos.containing(x + offset0 * dire.getStepX() + offset1 * dire1.getStepX(), y + 1, z + offset0 * dire.getStepZ() + offset1 * dire1.getStepZ()),
+			Entity entityToSpawn = CAEntities.SHOOTER_FISH.get().spawn(_level, BlockPos.containing(x + offset0 * dire.getStepX() + offset1 * dire1.getStepX(), y + 1, z + offset0 * dire.getStepZ() + offset1 * dire1.getStepZ()),
 					MobSpawnType.MOB_SUMMONED);
 			if (entityToSpawn != null) {
 				entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
@@ -442,10 +442,10 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
 	}
 
 	private void summonFirst(LevelAccessor world, double x, double y, double z, BlockState blockstate) {
-		Direction dire = Direction.NORTH;
-		Direction dire1 = Direction.NORTH;
-		double offset0 = 0;
-		double offset1 = 0;
+		Direction dire;
+		Direction dire1;
+		double offset0;
+		double offset1;
 		dire = new Object() {
 			public Direction getDirection(BlockState _bs) {
 				Property<?> _prop = _bs.getBlock().getStateDefinition().getProperty("facing");
@@ -459,7 +459,7 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
 		offset0 = Mth.nextDouble(RandomSource.create(), -3, 4);
 		offset1 = Mth.nextDouble(RandomSource.create(), -5, 6);
 		if (world instanceof ServerLevel _level) {
-			Entity entityToSpawn = CaerulaArborModEntities.FIRST_TO_TALK.get().spawn(_level, BlockPos.containing(x + offset0 * dire.getStepX() + offset1 * dire1.getStepX(), y + 1, z + offset0 * dire.getStepZ() + offset1 * dire1.getStepZ()),
+			Entity entityToSpawn = CAEntities.FIRST_TO_TALK.get().spawn(_level, BlockPos.containing(x + offset0 * dire.getStepX() + offset1 * dire1.getStepX(), y + 1, z + offset0 * dire.getStepZ() + offset1 * dire1.getStepZ()),
 					MobSpawnType.MOB_SUMMONED);
 			if (entityToSpawn != null) {
 				entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);

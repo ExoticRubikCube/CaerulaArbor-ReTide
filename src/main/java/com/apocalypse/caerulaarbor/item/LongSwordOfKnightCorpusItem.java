@@ -1,8 +1,8 @@
 
 package com.apocalypse.caerulaarbor.item;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -37,7 +37,7 @@ public class LongSwordOfKnightCorpusItem extends SwordItem {
 			}
 
 			public Ingredient getRepairIngredient() {
-				return Ingredient.of(new ItemStack(CaerulaArborModItems.KNIGHT_CORPSE.get()));
+				return Ingredient.of(new ItemStack(CAItems.KNIGHT_CORPSE.get()));
 			}
 		}, 3, -2.9f, new Item.Properties().fireResistant());
 	}
@@ -76,9 +76,9 @@ public class LongSwordOfKnightCorpusItem extends SwordItem {
 		if (selected) {
             if (entity == null)
                 return;
-            if (!(entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CaerulaArborModMobEffects.ADD_REACH.get()))) {
+            if (!(entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CAMobEffects.ADD_REACH.get()))) {
                 if (entity instanceof LivingEntity living && !living.level().isClientSide())
-                    living.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ADD_REACH.get(), 20, 2, false, false));
+                    living.addEffect(new MobEffectInstance(CAMobEffects.ADD_REACH.get(), 20, 2, false, false));
             }
         }
 	}

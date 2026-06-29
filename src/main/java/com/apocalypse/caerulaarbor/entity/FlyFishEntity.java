@@ -2,9 +2,9 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -66,7 +66,7 @@ public class FlyFishEntity extends SeaMonster implements RangedAttackMob {
 	public String animationprocedure = "empty";
 
 	public FlyFishEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.FLY_FISH.get(), world);
+		this(CAEntities.FLY_FISH.get(), world);
 	}
 
 	public FlyFishEntity(EntityType<FlyFishEntity> type, Level world) {
@@ -256,7 +256,7 @@ public class FlyFishEntity extends SeaMonster implements RangedAttackMob {
 
     protected void dropCustomDeathLoot(DamageSource source, int looting, boolean recentlyHitIn) {
 		super.dropCustomDeathLoot(source, looting, recentlyHitIn);
-		this.spawnAtLocation(new ItemStack(CaerulaArborModItems.OCEAN_FIBRE.get()));
+		this.spawnAtLocation(new ItemStack(CAItems.OCEAN_FIBRE.get()));
 	}
 
 	@Override
@@ -289,8 +289,8 @@ public class FlyFishEntity extends SeaMonster implements RangedAttackMob {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get()))
-            this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(12);
+        if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get()))
+            this.getAttribute(CAAttributes.SANITY_RATE.get()).setBaseValue(12);
         return retval;
 	}
 
@@ -338,7 +338,7 @@ public class FlyFishEntity extends SeaMonster implements RangedAttackMob {
 	}
 
 	public static void init() {
-		SpawnPlacements.register(CaerulaArborModEntities.FLY_FISH.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
+		SpawnPlacements.register(CAEntities.FLY_FISH.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();
@@ -371,8 +371,6 @@ public class FlyFishEntity extends SeaMonster implements RangedAttackMob {
 	}
 
 	private PlayState attackingPredicate(AnimationState event) {
-		double d1 = this.getX() - this.xOld;
-		double d0 = this.getZ() - this.zOld;
 		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();

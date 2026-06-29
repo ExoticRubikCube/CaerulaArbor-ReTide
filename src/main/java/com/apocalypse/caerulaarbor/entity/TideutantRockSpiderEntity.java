@@ -2,7 +2,7 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
@@ -69,7 +69,7 @@ public class TideutantRockSpiderEntity extends SeaMonster {
 	public String animationprocedure = "empty";
 
 	public TideutantRockSpiderEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.TIDUTANT_ROCK_SPIDER.get(), world);
+		this(CAEntities.TIDUTANT_ROCK_SPIDER.get(), world);
 	}
 
 	public TideutantRockSpiderEntity(EntityType<TideutantRockSpiderEntity> type, Level world) {
@@ -245,7 +245,7 @@ public class TideutantRockSpiderEntity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        double dura = 0;
+        double dura;
         if (this.isAlive()) {
             dura = (Entity) this instanceof TideutantRockSpiderEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
             if (dura > 0) {
@@ -275,7 +275,7 @@ public class TideutantRockSpiderEntity extends SeaMonster {
                                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.zombie.destroy_egg")), SoundSource.HOSTILE, 1, 1);
                             }
                             if (world instanceof ServerLevel _level) {
-                                Entity entityToSpawn = CaerulaArborModEntities.TIDUTANT_EXCRESCENCE.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+                                Entity entityToSpawn = CAEntities.TIDUTANT_EXCRESCENCE.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                                 if (entityToSpawn != null) {
                                     entityToSpawn.setYRot((float) Mth.nextDouble(RandomSource.create(), 0, 360));
                                     entityToSpawn.setYBodyRot((float) Mth.nextDouble(RandomSource.create(), 0, 360));
@@ -381,7 +381,7 @@ public class TideutantRockSpiderEntity extends SeaMonster {
             double dura = 0;
             for (int index0 = 0; index0 < 4; index0++) {
                 if (world instanceof ServerLevel _level) {
-                    Entity entityToSpawn = CaerulaArborModEntities.TIDUTANT_EXCRESCENCE.get().spawn(_level, BlockPos.containing(this.getX(), this.getY(), this.getZ()), MobSpawnType.MOB_SUMMONED);
+                    Entity entityToSpawn = CAEntities.TIDUTANT_EXCRESCENCE.get().spawn(_level, BlockPos.containing(this.getX(), this.getY(), this.getZ()), MobSpawnType.MOB_SUMMONED);
                     if (entityToSpawn != null) {
                         entityToSpawn.setYRot((float) Mth.nextDouble(RandomSource.create(), 0, 360));
                         entityToSpawn.setYBodyRot((float) Mth.nextDouble(RandomSource.create(), 0, 360));

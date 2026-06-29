@@ -2,8 +2,8 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.procedures.TideBiDeathProcedure;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
@@ -72,7 +72,7 @@ public class TideDeathrepellerEntity extends SeaMonster {
 	private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.PROGRESS);
 
 	public TideDeathrepellerEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.TIDE_DEATHREPELLER.get(), world);
+		this(CAEntities.TIDE_DEATHREPELLER.get(), world);
 	}
 
 	public TideDeathrepellerEntity(EntityType<TideDeathrepellerEntity> type, Level world) {
@@ -217,9 +217,9 @@ public class TideDeathrepellerEntity extends SeaMonster {
         double z = this.getZ();
         Entity sourceentity = source.getEntity();
         if (sourceentity != null) {
-            double num = 0;
-            if (this.isAlive() && !((Entity) this instanceof LivingEntity _livEnt1 && _livEnt1.hasEffect(CaerulaArborModMobEffects.COOLDOWN_SINAL.get()))
-                    && !((Entity) this instanceof LivingEntity _livEnt2 && _livEnt2.hasEffect(CaerulaArborModMobEffects.FAKE_DEATH.get()))) {
+            double num;
+            if (this.isAlive() && !((Entity) this instanceof LivingEntity _livEnt1 && _livEnt1.hasEffect(CAMobEffects.COOLDOWN_SINAL.get()))
+                    && !((Entity) this instanceof LivingEntity _livEnt2 && _livEnt2.hasEffect(CAMobEffects.FAKE_DEATH.get()))) {
                 if (distanceTo(sourceentity) <= 6) {
                     num = 0;
                     {
@@ -236,7 +236,7 @@ public class TideDeathrepellerEntity extends SeaMonster {
                             this.setAnimation("animation.deathrepeller.enchantattack");
                         }
                         if (!this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.COOLDOWN_SINAL.get(), 60, 0, false, false));
+                            this.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL.get(), 60, 0, false, false));
                         ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((sourceentity.getX()), (sourceentity.getY()), (sourceentity.getZ())));
                         CaerulaArborMod.queueServerWork(12, () -> {
                             if (world instanceof Level _level) {
@@ -419,6 +419,6 @@ public class TideDeathrepellerEntity extends SeaMonster {
 		if (this.getEntityData().get(TideDeathrepellerEntity.DATA_duration) > 0) {
 			return false;
 		}
-		return !this.hasEffect(CaerulaArborModMobEffects.FAKE_DEATH.get());
+		return !this.hasEffect(CAMobEffects.FAKE_DEATH.get());
 	}
 }

@@ -2,10 +2,10 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -63,7 +63,7 @@ public class OceanizeRabbitEntity extends SeaMonster {
 	public String animationprocedure = "empty";
 
 	public OceanizeRabbitEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.OCEANIZE_RABBIT.get(), world);
+		this(CAEntities.OCEANIZE_RABBIT.get(), world);
 	}
 
 	public OceanizeRabbitEntity(EntityType<OceanizeRabbitEntity> type, Level world) {
@@ -142,9 +142,9 @@ public class OceanizeRabbitEntity extends SeaMonster {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        double variant = 0;
-        double rrr = 0;
-        double curVar = 0;
+        double variant;
+        double rrr;
+        double curVar;
         curVar = (Entity) this instanceof OceanizeRabbitEntity _datEntI ? _datEntI.getEntityData().get(DATA_variant) : 0;
         if (curVar == 0) {
             rrr = Math.random();
@@ -208,7 +208,7 @@ public class OceanizeRabbitEntity extends SeaMonster {
         if ((entity instanceof OceanizeRabbitEntity _datEntI ? _datEntI.getEntityData().get(DATA_variant) : 0) > 4.5) {
             return InteractionResult.PASS;
         }
-        if (sourceentity.isHolding(CaerulaArborModItems.APOCALYPSE.get())) {
+        if (sourceentity.isHolding(CAItems.APOCALYPSE.get())) {
             if (entity instanceof OceanizeRabbitEntity _datEntSetI)
                 _datEntSetI.getEntityData().set(DATA_variant, 5);
             if (entity instanceof OceanizeRabbitEntity animatable)
@@ -218,17 +218,17 @@ public class OceanizeRabbitEntity extends SeaMonster {
                     this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue((livingEntity.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) * 10);
                 if (livingEntity.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
                     livingEntity.getAttribute(Attributes.MAX_HEALTH).setBaseValue((this.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? this.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0) * 10);
-                if (livingEntity.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()))
-                    livingEntity.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).setBaseValue(32.5);
-                if (livingEntity.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-                    livingEntity.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(79.9);
+                if (livingEntity.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
+                    livingEntity.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).setBaseValue(32.5);
+                if (livingEntity.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
+                    livingEntity.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(79.9);
                 if (livingEntity.getAttributes().hasAttribute(Attributes.KNOCKBACK_RESISTANCE))
                     livingEntity.getAttribute(Attributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
                 if (!this.level().isClientSide()) {
                     this.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 99999, 2));
                     this.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 99999, 2));
                     this.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 99999, 0));
-                    this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.SANITY_IMMUE.get(), 99999, 0));
+                    this.addEffect(new MobEffectInstance(CAMobEffects.SANITY_IMMUE.get(), 99999, 0));
                     this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 99999, 1));
                 }
                 livingEntity.setHealth(livingEntity.getMaxHealth());
@@ -242,8 +242,8 @@ public class OceanizeRabbitEntity extends SeaMonster {
 	public void baseTick() {
 		super.baseTick();
         LevelAccessor world = this.level();
-        Entity enemy = null;
-        double sklp1 = 0;
+        Entity enemy;
+        double sklp1;
         if (!(((Entity) this instanceof OceanizeRabbitEntity _datEntI ? _datEntI.getEntityData().get(DATA_variant) : 0) < 4.5)) {
             if (this.isAlive()) {
                 sklp1 = (Entity) this instanceof OceanizeRabbitEntity _datEntI ? _datEntI.getEntityData().get(DATA_swallowP) : 0;
@@ -350,7 +350,7 @@ public class OceanizeRabbitEntity extends SeaMonster {
 			this.remove(OceanizeRabbitEntity.RemovalReason.KILLED);
 			this.dropExperience();
             LevelAccessor world = this.level();
-            double vvv = 0;
+            double vvv;
             ItemStack coral = ItemStack.EMPTY;
             if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
                 vvv = (Entity) this instanceof OceanizeRabbitEntity _datEntI ? _datEntI.getEntityData().get(DATA_variant) : 0;
@@ -365,7 +365,7 @@ public class OceanizeRabbitEntity extends SeaMonster {
                 } else if (vvv == 4) {
                     coral = new ItemStack(Blocks.TUBE_CORAL_FAN).copy();
                 } else if (vvv == 5) {
-                    coral = new ItemStack(CaerulaArborModItems.BLOODY_RECORD.get()).copy();
+                    coral = new ItemStack(CAItems.BLOODY_RECORD.get()).copy();
                 }
                 if (world instanceof ServerLevel _level) {
                     ItemEntity entityToSpawn = new ItemEntity(_level, this.getX(), this.getY(), this.getZ(), coral);

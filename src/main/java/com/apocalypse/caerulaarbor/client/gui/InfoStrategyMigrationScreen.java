@@ -4,7 +4,7 @@ import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
 import com.apocalypse.caerulaarbor.entity.ReaperFishEntity;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.menu.InfoStrategyMigrationMenu;
 import com.apocalypse.caerulaarbor.network.CaerulaArborModNetwork;
 import com.apocalypse.caerulaarbor.network.message.send.InfoStrategyReturnButtonMessage;
@@ -50,7 +50,7 @@ public class InfoStrategyMigrationScreen extends AbstractContainerScreen<InfoStr
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
 		this.renderBackground(guiGraphics);
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
-        if (((Entity) ((LevelAccessor) world instanceof Level _level ? new ReaperFishEntity(CaerulaArborModEntities.REAPER_FISH.get(), _level) : null)) instanceof LivingEntity livingEntity) {
+        if (((Entity) ((LevelAccessor) world instanceof Level _level ? new ReaperFishEntity(CAEntities.REAPER_FISH.get(), _level) : null)) instanceof LivingEntity livingEntity) {
 			InventoryScreen.renderEntityInInventoryFollowsAngle(guiGraphics, this.leftPos + 29, this.topPos + 96, 20, 0f + (float) Math.atan((this.leftPos + 29 - mouseX) / 40.0), (float) Math.atan((this.topPos + 47 - mouseY) / 40.0), livingEntity);
 		}
 		this.renderTooltip(guiGraphics, mouseX, mouseY);
@@ -76,7 +76,7 @@ public class InfoStrategyMigrationScreen extends AbstractContainerScreen<InfoStr
 		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/bg_migration.png"), this.leftPos, this.topPos, Mth.clamp((int) EntityUtils.getStraMigration(world) * 256, 0, 1024), 0, 256, 168, 1280, 168);
 
         double result = 18;
-        double rate = 0;
+        double rate;
         if (!(MapVariables.get(world).strategy_migration >= 4)) {
             rate = MapVariables.get(world).evo_point_migration / (Math.pow(MapVariables.get(world).strategy_migration + 1, 3) * CaerulaConfigsConfiguration.COEFFICIENT.get());
             if (rate > 1) {

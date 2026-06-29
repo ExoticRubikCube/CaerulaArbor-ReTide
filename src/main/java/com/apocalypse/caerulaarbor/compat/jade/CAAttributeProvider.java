@@ -2,7 +2,7 @@ package com.apocalypse.caerulaarbor.compat.jade;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -35,13 +35,13 @@ public enum CAAttributeProvider implements IEntityComponentProvider {
     }
 
     private double getDefense(LivingEntity living) {
-        AttributeInstance instance = living.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get());
+        AttributeInstance instance = living.getAttribute(CAAttributes.GENERAL_DEFENSE.get());
         if (instance != null) return instance.getValue();
         return 0;
     }
 
     private double getResistance(LivingEntity living) {
-        AttributeInstance instance = living.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get());
+        AttributeInstance instance = living.getAttribute(CAAttributes.MAGIC_RESISTANCE.get());
         if (instance != null) return instance.getValue();
         return 0;
     }

@@ -2,7 +2,7 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.entity.TellerShotEntity;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.client.Minecraft;
@@ -82,7 +82,7 @@ public class TidelinkedWandItem extends Item {
         double x = entity.getX();
         double y = entity.getY();
         double z = entity.getZ();
-        double damage = 0;
+        double damage;
         if (!(entity instanceof Player _plrCldCheck1 && _plrCldCheck1.getCooldowns().isOnCooldown(itemstack.getItem())) && (((Entity) entity instanceof Player _plr ? _plr.totalExperience : 0) >= 10 || new Object() {
             public boolean checkGamemode(Entity _ent) {
                 if (_ent instanceof ServerPlayer _serverPlayer) {
@@ -98,7 +98,7 @@ public class TidelinkedWandItem extends Item {
             if (!projectileLevel.isClientSide()) {
                 Projectile _entityToSpawn = new Object() {
                     public Projectile getArrow(Level level, Entity shooter, float damage, int knockback, byte piercing) {
-                        AbstractArrow entityToSpawn = new TellerShotEntity(CaerulaArborModEntities.TELLER_SHOT.get(), level);
+                        AbstractArrow entityToSpawn = new TellerShotEntity(CAEntities.TELLER_SHOT.get(), level);
                         entityToSpawn.setOwner(shooter);
                         entityToSpawn.setBaseDamage(damage);
                         entityToSpawn.setKnockback(knockback);
@@ -115,7 +115,7 @@ public class TidelinkedWandItem extends Item {
                 if (!projectileLevel.isClientSide()) {
                     Projectile _entityToSpawn = new Object() {
                         public Projectile getArrow(Level level, Entity shooter, float damage, int knockback, byte piercing) {
-                            AbstractArrow entityToSpawn = new TellerShotEntity(CaerulaArborModEntities.TELLER_SHOT.get(), level);
+                            AbstractArrow entityToSpawn = new TellerShotEntity(CAEntities.TELLER_SHOT.get(), level);
                             entityToSpawn.setOwner(shooter);
                             entityToSpawn.setBaseDamage(damage);
                             entityToSpawn.setKnockback(knockback);
@@ -133,7 +133,7 @@ public class TidelinkedWandItem extends Item {
                 if (!projectileLevel.isClientSide()) {
                     Projectile _entityToSpawn = new Object() {
                         public Projectile getArrow(Level level, Entity shooter, float damage, int knockback) {
-                            AbstractArrow entityToSpawn = new TellerShotEntity(CaerulaArborModEntities.TELLER_SHOT.get(), level);
+                            AbstractArrow entityToSpawn = new TellerShotEntity(CAEntities.TELLER_SHOT.get(), level);
                             entityToSpawn.setOwner(shooter);
                             entityToSpawn.setBaseDamage(damage);
                             entityToSpawn.setKnockback(knockback);

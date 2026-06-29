@@ -1,8 +1,8 @@
 
 package com.apocalypse.caerulaarbor.block;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -180,7 +180,7 @@ public class ReaperEggBlock extends Block implements SimpleWaterloggedBlock {
                 && (blockstate.getBlock().getStateDefinition().getProperty("process") instanceof IntegerProperty _getip15 ? blockstate.getValue(_getip15) : -1) >= 10) {
             world.destroyBlock(BlockPos.containing(x, y, z), false);
             if ((LevelAccessor) world instanceof ServerLevel _level) {
-                Entity entityToSpawn = CaerulaArborModEntities.REAPER_PET.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+                Entity entityToSpawn = CAEntities.REAPER_PET.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn != null) {
                     entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
                 }
@@ -211,7 +211,7 @@ public class ReaperEggBlock extends Block implements SimpleWaterloggedBlock {
 		Direction direction = hit.getDirection();
         InteractionResult result = InteractionResult.PASS;
         if (entity != null) {
-            if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CaerulaArborModItems.CELL_CLUSTER.get()) {
+            if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.CELL_CLUSTER.get()) {
                 if (new Object() {
                     public boolean checkGamemode(Entity _ent) {
                         if (_ent instanceof ServerPlayer _serverPlayer) {

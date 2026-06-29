@@ -1,9 +1,10 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.entity.EndspeakerEntity;
+import com.apocalypse.caerulaarbor.init.CABlocks;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -20,7 +21,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -61,19 +61,19 @@ public class OcarinaItem extends Item {
 		double y = entity.getY();
 		double z = entity.getZ();
         if (entity != null) {
-            BlockState cradle = Blocks.AIR.defaultBlockState();
+            BlockState cradle;
             boolean found = false;
-            double px = 0;
-            double py = 0;
-            double pz = 0;
-            double bs = 0;
+            double px;
+            double py;
+            double pz;
+            double bs;
             if ((LevelAccessor) world instanceof Level _level) {
                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "ocarino")), SoundSource.PLAYERS, 1, 1);
             }
             if ((Entity) entity instanceof Player _player)
                 _player.getCooldowns().addCooldown(itemstack.getItem(), 200);
             if (world.getDifficulty() != Difficulty.PEACEFUL) {
-                if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.WHIRL_EYE.get()))) {
+                if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CAItems.WHIRL_EYE.get()))) {
                     for (int index0 = 0; index0 < 64; index0++) {
                         for (int index1 = 0; index1 < 24; index1++) {
                             for (int index2 = 0; index2 < 64; index2++) {
@@ -82,7 +82,7 @@ public class OcarinaItem extends Item {
                                 pz = z + -32 + index2;
                                 cradle = (((LevelAccessor) world).getBlockState(BlockPos.containing(px, py, pz)));
                                 bs = cradle.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _getip6 ? cradle.getValue(_getip6) : -1;
-                                if (cradle.getBlock() == CaerulaArborModBlocks.TIDEWAY_CRADLE.get()) {
+                                if (cradle.getBlock() == CABlocks.TIDEWAY_CRADLE.get()) {
                                     if (bs == 0) {
                                         {
                                             int _value = 1;
@@ -93,14 +93,14 @@ public class OcarinaItem extends Item {
                                         }
                                         if (Math.random() < 0.05) {
                                             if ((LevelAccessor) world instanceof ServerLevel _level) {
-                                                Entity entityToSpawn = CaerulaArborModEntities.LINGERING_PATHSHAPER.get().spawn(_level, BlockPos.containing(px, py + 1, pz), MobSpawnType.MOB_SUMMONED);
+                                                Entity entityToSpawn = CAEntities.LINGERING_PATHSHAPER.get().spawn(_level, BlockPos.containing(px, py + 1, pz), MobSpawnType.MOB_SUMMONED);
                                                 if (entityToSpawn != null) {
                                                     entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
                                                 }
                                             }
                                         } else {
                                             if ((LevelAccessor) world instanceof ServerLevel _level) {
-                                                Entity entityToSpawn = CaerulaArborModEntities.ROUTE_SHAPER.get().spawn(_level, BlockPos.containing(px, py + 1, pz), MobSpawnType.MOB_SUMMONED);
+                                                Entity entityToSpawn = CAEntities.ROUTE_SHAPER.get().spawn(_level, BlockPos.containing(px, py + 1, pz), MobSpawnType.MOB_SUMMONED);
                                                 if (entityToSpawn != null) {
                                                     entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
                                                 }
@@ -116,12 +116,12 @@ public class OcarinaItem extends Item {
                                         if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
                                             _player.displayClientMessage(Component.literal((Component.translatable("item.caerula_arbor.language_key.description_15").getString())), false);
                                         if ((Entity) entity instanceof Player _player) {
-                                            ItemStack _stktoremove = new ItemStack(CaerulaArborModItems.WHIRL_EYE.get());
+                                            ItemStack _stktoremove = new ItemStack(CAItems.WHIRL_EYE.get());
                                             _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
                                         }
                                         found = true;
                                     }
-                                } else if (cradle.getBlock() == CaerulaArborModBlocks.ENDSPEAKER_NEST.get()) {
+                                } else if (cradle.getBlock() == CABlocks.ENDSPEAKER_NEST.get()) {
                                     {
                                         ItemStack _ist = itemstack;
                                         if (_ist.hurt(1, RandomSource.create(), null)) {
@@ -133,16 +133,13 @@ public class OcarinaItem extends Item {
                                     if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
                                         _player.displayClientMessage(Component.literal((Component.translatable("spawn.endspeaker").getString())), false);
                                     if ((Entity) entity instanceof Player _player) {
-                                        ItemStack _stktoremove = new ItemStack(CaerulaArborModItems.WHIRL_EYE.get());
+                                        ItemStack _stktoremove = new ItemStack(CAItems.WHIRL_EYE.get());
                                         _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
                                     }
-                                    if ((LevelAccessor) world instanceof ServerLevel _level) {
-                                        Entity entityToSpawn = CaerulaArborModEntities.ENDSPEAKER_0.get().spawn(_level, BlockPos.containing(px, py, pz), MobSpawnType.MOB_SUMMONED);
-                                        if (entityToSpawn != null) {
-                                            entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
-                                        }
+                                    if ((LevelAccessor) world instanceof ServerLevel level) {
+                                        EndspeakerEntity.spawnForPhase(level, BlockPos.containing(px, py, pz), MobSpawnType.MOB_SUMMONED, 0);
                                     }
-                                } else if (cradle.getBlock() == CaerulaArborModBlocks.MIZUKI_STATUE.get()) {
+                                } else if (cradle.getBlock() == CABlocks.MIZUKI_STATUE.get()) {
                                     if (bs == 0) {
                                         {
                                             int _value = 1;
@@ -159,7 +156,7 @@ public class OcarinaItem extends Item {
                                             }
                                         }
                                         if ((LevelAccessor) world instanceof ServerLevel _level) {
-                                            Entity entityToSpawn = CaerulaArborModEntities.IZUMIK.get().spawn(_level, BlockPos.containing(px, py, pz), MobSpawnType.MOB_SUMMONED);
+                                            Entity entityToSpawn = CAEntities.IZUMIK.get().spawn(_level, BlockPos.containing(px, py, pz), MobSpawnType.MOB_SUMMONED);
                                             if (entityToSpawn != null) {
                                                 entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
                                             }
@@ -167,13 +164,13 @@ public class OcarinaItem extends Item {
                                         if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
                                             _player.displayClientMessage(Component.literal((Component.translatable("spawn.izumik.init").getString())), false);
                                         if ((Entity) entity instanceof Player _player) {
-                                            ItemStack _stktoremove = new ItemStack(CaerulaArborModItems.WHIRL_EYE.get());
+                                            ItemStack _stktoremove = new ItemStack(CAItems.WHIRL_EYE.get());
                                             _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
                                         }
                                         found = true;
                                     }
-                                } else if (cradle.getBlock() == CaerulaArborModBlocks.HIGHMORE_SPAWNBLOCK.get()) {
-                                    ((LevelAccessor) world).setBlock(BlockPos.containing(px, py, pz), CaerulaArborModBlocks.HIGHMORE_SPAWNING_BLOCK.get().defaultBlockState(), 3);
+                                } else if (cradle.getBlock() == CABlocks.HIGHMORE_SPAWNBLOCK.get()) {
+                                    ((LevelAccessor) world).setBlock(BlockPos.containing(px, py, pz), CABlocks.HIGHMORE_SPAWNING_BLOCK.get().defaultBlockState(), 3);
                                     {
                                         ItemStack _ist = itemstack;
                                         if (_ist.hurt(1, RandomSource.create(), null)) {
@@ -184,12 +181,12 @@ public class OcarinaItem extends Item {
                                     if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
                                         _player.displayClientMessage(Component.literal((Component.translatable("spawn.highmore").getString())), false);
                                     if ((Entity) entity instanceof Player _player) {
-                                        ItemStack _stktoremove = new ItemStack(CaerulaArborModItems.WHIRL_EYE.get());
+                                        ItemStack _stktoremove = new ItemStack(CAItems.WHIRL_EYE.get());
                                         _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
                                     }
                                     found = true;
-                                } else if (cradle.getBlock() == CaerulaArborModBlocks.TIDE_BISHOP_CORE.get()) {
-                                    double hdns = 0;
+                                } else if (cradle.getBlock() == CABlocks.TIDE_BISHOP_CORE.get()) {
+                                    double hdns;
                                     for (int dx = -1; dx <= 1; dx++) {
                                         for (int dy = -1; dy <= 5; dy++) {
                                             for (int dz = -1; dz <= 1; dz++) {
@@ -201,7 +198,7 @@ public class OcarinaItem extends Item {
                                         }
                                     }
                                     if ((LevelAccessor) world instanceof ServerLevel _level) {
-                                        Entity entityToSpawn = CaerulaArborModEntities.TIDE_BISHOP.get().spawn(_level, BlockPos.containing(px + 0.5, py, pz + 0.5), MobSpawnType.MOB_SUMMONED);
+                                        Entity entityToSpawn = CAEntities.TIDE_BISHOP.get().spawn(_level, BlockPos.containing(px + 0.5, py, pz + 0.5), MobSpawnType.MOB_SUMMONED);
                                         if (entityToSpawn != null) {
                                             entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
                                         }
@@ -216,26 +213,26 @@ public class OcarinaItem extends Item {
                                     if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
                                         _player.displayClientMessage(Component.literal((Component.translatable("item.caerula_arbor.language_key.description_16").getString())), false);
                                     if ((Entity) entity instanceof Player _player) {
-                                        ItemStack _stktoremove = new ItemStack(CaerulaArborModItems.WHIRL_EYE.get());
+                                        ItemStack _stktoremove = new ItemStack(CAItems.WHIRL_EYE.get());
                                         _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
                                     }
                                     world.destroyBlock(BlockPos.containing(px, py, pz), false);
                                     found = true;
-                                } else if (cradle.getBlock() == CaerulaArborModBlocks.UNDERTIDE_TABLE.get()) {
+                                } else if (cradle.getBlock() == CABlocks.UNDERTIDE_TABLE.get()) {
                                     if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
                                         _player.displayClientMessage(Component.literal((Component.translatable("item.caerula_arbor.a_second_key.description_3").getString())), false);
                                     if ((Entity) entity instanceof Player _player) {
-                                        ItemStack _stktoremove = new ItemStack(CaerulaArborModItems.WHIRL_EYE.get());
+                                        ItemStack _stktoremove = new ItemStack(CAItems.WHIRL_EYE.get());
                                         _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
                                     }
                                     {
                                         BlockPos _bp = BlockPos.containing(px, py, pz);
-                                        BlockState _bs = CaerulaArborModBlocks.UNDERTIDE_SPAWN.get().withPropertiesOf(((LevelAccessor) world).getBlockState(_bp));
+                                        BlockState _bs = CABlocks.UNDERTIDE_SPAWN.get().withPropertiesOf(((LevelAccessor) world).getBlockState(_bp));
                                         ((LevelAccessor) world).setBlock(_bp, _bs, 3);
                                     }
                                     found = true;
                                     if ((LevelAccessor) world instanceof ServerLevel _level) {
-                                        Entity entityToSpawn = CaerulaArborModEntities.BISHOP_FISH.get().spawn(_level, BlockPos.containing(px + 0.5, py, pz + 0.5), MobSpawnType.MOB_SUMMONED);
+                                        Entity entityToSpawn = CAEntities.BISHOP_FISH.get().spawn(_level, BlockPos.containing(px + 0.5, py, pz + 0.5), MobSpawnType.MOB_SUMMONED);
                                         if (entityToSpawn != null) {
                                             entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
                                         }

@@ -10,7 +10,7 @@ public interface PolarMountRider {
 	default void tickMountBehavior() {
 		if (!(((Entity) this).isAlive()) || ((Entity) this).isPassenger())
 			return;
-		Entity mount = null;
+		Entity mount;
 		if (((Entity) this).tickCount % 40 == 10 && Math.random() < 0.33) {
 			mount = EntityUtils.findNearestRidable(((Entity) this).level(), ((Entity) this).getX(), ((Entity) this).getY(), ((Entity) this).getZ(), (Entity) this, 12, OceanizedPolarBearEntity.class);
 			if (mount != null && mount.isAlive() && !mount.isVehicle()) {

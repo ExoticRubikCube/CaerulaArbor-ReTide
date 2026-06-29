@@ -50,7 +50,7 @@ public class PetReapMobEffect extends MobEffect {
         double x = entity.getX();
         double y = entity.getY();
         double z = entity.getZ();
-        double angle = 0;
+        double angle;
         if ((Entity) entity instanceof Mob _mobEnt0 && _mobEnt0.isAggressive() && ((Entity) entity).isAlive()) {
             for (int index0 = 0; index0 < 120; index0++) {
                 angle = Mth.nextDouble(RandomSource.create(), 0, 6.283);

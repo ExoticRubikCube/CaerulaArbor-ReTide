@@ -3,7 +3,7 @@ package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.ItemUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -56,7 +56,7 @@ public class RescissionItem extends Item {
         double y = entity.getY();
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
-        Entity owner = null;
+        Entity owner;
         if (!itemstack.getOrCreateTag().getBoolean("used")) {
             {
                 boolean _setval = true;
@@ -86,14 +86,14 @@ public class RescissionItem extends Item {
                             owner = _tamEnt.getOwner();
                     }
                     if (owner == entity) {
-                        if (entityiterator instanceof LivingEntity _livEnt11 && _livEnt11.hasEffect(CaerulaArborModMobEffects.UNTAME_CONFIRM.get())) {
+                        if (entityiterator instanceof LivingEntity _livEnt11 && _livEnt11.hasEffect(CAMobEffects.UNTAME_CONFIRM.get())) {
                             if (entityiterator instanceof TamableAnimal _ent) {
                                 _ent.setTame(false);
                             }
                             if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
                                 _player.displayClientMessage(Component.literal((entityiterator.getDisplayName().getString() + Component.translatable("item.caerula_arbor.language_key.description_2").getString())), false);
                             if (entityiterator instanceof LivingEntity _entity)
-                                _entity.removeEffect(CaerulaArborModMobEffects.UNTAME_CONFIRM.get());
+                                _entity.removeEffect(CAMobEffects.UNTAME_CONFIRM.get());
                             if ((LevelAccessor) world instanceof ServerLevel _level)
                                 _level.sendParticles(ParticleTypes.ASH, (entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()), 72, 1, 1, 1, 0.5);
                             itemstack.shrink(1);
@@ -108,7 +108,7 @@ public class RescissionItem extends Item {
                                 _player.displayClientMessage(Component.literal(("\u00A7c" + Component.translatable("item.caerula_arbor.language_key.description_0").getString() + entityiterator.getDisplayName().getString()
                                         + Component.translatable("item.caerula_arbor.language_key.description_1").getString())), false);
                             if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                                _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.UNTAME_CONFIRM.get(), 300, 0, false, false));
+                                _entity.addEffect(new MobEffectInstance(CAMobEffects.UNTAME_CONFIRM.get(), 300, 0, false, false));
                         }
                         break;
                     }

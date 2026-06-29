@@ -3,7 +3,8 @@ package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.client.renderer.item.MartusBookItemRenderer;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -134,7 +135,7 @@ public class MartusBookItem extends Item implements GeoItem {
 		double z = entity.getZ();
 
         if (entity != null) {
-            boolean isCreative = false;
+            boolean isCreative;
             if (!((Entity) entity instanceof Player _plrCldCheck1) || !_plrCldCheck1.getCooldowns().isOnCooldown(itemstack.getItem())) {
                 isCreative = new Object() {
                     public boolean checkGamemode(Entity _ent) {
@@ -162,9 +163,9 @@ public class MartusBookItem extends Item implements GeoItem {
                         if ((Entity) entity instanceof LivingEntity _entity)
                             _entity.setHealth((float) Math.max(((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5 + 1, (Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1));
                         if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                            _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.MARTUS_PROTECTION.get(), 400, 0, false, false));
+                            _entity.addEffect(new MobEffectInstance(CAMobEffects.MARTUS_PROTECTION.get(), 400, 0, false, false));
                         if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                            _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 40, 9, false, false));
+                            _entity.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 40, 9, false, false));
                         if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
                             _entity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 500, 6, false, false));
                     });
@@ -182,7 +183,7 @@ public class MartusBookItem extends Item implements GeoItem {
         double z = entity.getZ();
         if (entity == null)
             return;
-        boolean isCreative = false;
+        boolean isCreative;
         if (entity instanceof Player _plrCldCheck1 && _plrCldCheck1.getCooldowns().isOnCooldown(itemstack.getItem())) {
             return;
         }
@@ -212,9 +213,9 @@ public class MartusBookItem extends Item implements GeoItem {
                 if (entity instanceof LivingEntity _entity)
                     _entity.setHealth((float) ((entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5 + 1));
                 if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                    _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.MARTUS_PROTECTION.get(), 400, 0, false, false));
+                    _entity.addEffect(new MobEffectInstance(CAMobEffects.MARTUS_PROTECTION.get(), 400, 0, false, false));
                 if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                    _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 40, 9, false, false));
+                    _entity.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 40, 9, false, false));
                 if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
                     _entity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 500, 5, false, false));
                 if (!isCreative) {

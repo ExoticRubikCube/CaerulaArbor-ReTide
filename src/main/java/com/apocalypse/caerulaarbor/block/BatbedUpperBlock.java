@@ -1,7 +1,7 @@
 
 package com.apocalypse.caerulaarbor.block;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
+import com.apocalypse.caerulaarbor.init.CABlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
@@ -95,7 +95,7 @@ public class BatbedUpperBlock extends Block {
                     _prop = _bs.getBlock().getStateDefinition().getProperty("axis");
                     return _prop instanceof EnumProperty _ep && _ep.getPossibleValues().toArray()[0] instanceof Direction.Axis ? Direction.fromAxisAndDirection((Direction.Axis) _bs.getValue(_ep), Direction.AxisDirection.POSITIVE) : Direction.NORTH;
                 }
-            }.getDirection(blockstate)).getStepZ()))).getBlock() == CaerulaArborModBlocks.BLOCK_BATBED.get();
+            }.getDirection(blockstate)).getStepZ()))).getBlock() == CABlocks.BLOCK_BATBED.get();
         }
 		return super.canSurvive(blockstate, worldIn, pos);
 	}
@@ -107,7 +107,7 @@ public class BatbedUpperBlock extends Block {
 
 	@Override
 	public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter world, BlockPos pos, Player player) {
-		return new ItemStack(CaerulaArborModBlocks.BLOCK_BATBED.get());
+		return new ItemStack(CABlocks.BLOCK_BATBED.get());
 	}
 
 	private void breakUpperbed(LevelAccessor world, double x, double y, double z) {

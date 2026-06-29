@@ -1,7 +1,7 @@
 package com.apocalypse.caerulaarbor.block;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
+import com.apocalypse.caerulaarbor.init.CABlocks;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -153,7 +153,7 @@ public class SeaTrailBurntBlock extends Block implements SimpleWaterloggedBlock,
                     _prop = _bs.getBlock().getStateDefinition().getProperty("axis");
                     return _prop instanceof EnumProperty _ep && _ep.getPossibleValues().contains(newValue.getAxis()) ? _bs.setValue(_ep, newValue.getAxis()) : _bs;
                 }
-            }.with(CaerulaArborModBlocks.SEA_TRAIL_GROWN.get().defaultBlockState(), new Object() {
+            }.with(CABlocks.SEA_TRAIL_GROWN.get().defaultBlockState(), new Object() {
                 public Direction getValue() {
                     Direction _dir = Direction.NORTH;
                     int _num = Mth.nextInt(RandomSource.create(), 1, 4);
@@ -180,7 +180,7 @@ public class SeaTrailBurntBlock extends Block implements SimpleWaterloggedBlock,
                             _prop = _bs.getBlock().getStateDefinition().getProperty("axis");
                             return _prop instanceof EnumProperty _ep && _ep.getPossibleValues().contains(newValue.getAxis()) ? _bs.setValue(_ep, newValue.getAxis()) : _bs;
                         }
-                    }.with(CaerulaArborModBlocks.SEA_TRAIL_GROWN.get().defaultBlockState(), new Object() {
+                    }.with(CABlocks.SEA_TRAIL_GROWN.get().defaultBlockState(), new Object() {
                         public Direction getValue() {
                             Direction _dir = Direction.NORTH;
                             int _num = Mth.nextInt(RandomSource.create(), 1, 4);
@@ -207,7 +207,7 @@ public class SeaTrailBurntBlock extends Block implements SimpleWaterloggedBlock,
                                     _prop = _bs.getBlock().getStateDefinition().getProperty("axis");
                                     return _prop instanceof EnumProperty _ep && _ep.getPossibleValues().contains(newValue.getAxis()) ? _bs.setValue(_ep, newValue.getAxis()) : _bs;
                                 }
-                            }.with(CaerulaArborModBlocks.SEA_TRAIL_GROWN.get().defaultBlockState(), new Object() {
+                            }.with(CABlocks.SEA_TRAIL_GROWN.get().defaultBlockState(), new Object() {
                                 public Direction getValue() {
                                     Direction _dir = Direction.NORTH;
                                     int _num = Mth.nextInt(RandomSource.create(), 1, 4);

@@ -4,8 +4,8 @@ import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler;
 import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler.StrategyType;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
+import com.apocalypse.caerulaarbor.init.CABlocks;
+import com.apocalypse.caerulaarbor.init.CAParticleTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -54,17 +54,17 @@ public class DictationlessChapterItem extends Item {
         if (entity == null)
             return InteractionResult.PASS;
         String stra = "";
-        String info = "";
-        double target = 0;
-        double p0 = 0;
-        double p1 = 0;
-        double p2 = 0;
-        double p3 = 0;
-        double l1 = 0;
-        double l2 = 0;
-        double l3 = 0;
-        double l0 = 0;
-        if (blockstate.getBlock() == CaerulaArborModBlocks.TIDE_OBSERVATION.get() && !world.isClientSide()) {
+        String info;
+        double target;
+        double p0;
+        double p1;
+        double p2;
+        double p3;
+        double l1;
+        double l2;
+        double l3;
+        double l0;
+        if (blockstate.getBlock() == CABlocks.TIDE_OBSERVATION.get() && !world.isClientSide()) {
             p0 = MapVariables.get(world).evo_point_grow;
             p1 = MapVariables.get(world).evo_point_subsisting;
             p2 = MapVariables.get(world).evo_point_breed;
@@ -125,7 +125,7 @@ public class DictationlessChapterItem extends Item {
                 stra = Component.translatable("gui.caerula_arbor.evo_tree.label_strategy_migration").getString();
             }
             if (world instanceof ServerLevel _level)
-                _level.sendParticles(CaerulaArborModParticleTypes.ENDSPEAKER_INV.get(), (x + 0.5), (y + 1), (z + 0.5), 32, 0.75, 1, 0.75, 0.15);
+                _level.sendParticles(CAParticleTypes.ENDSPEAKER_INV.get(), (x + 0.5), (y + 1), (z + 0.5), 32, 0.75, 1, 0.75, 0.15);
             info = (Component.translatable("item.caerula_arbor.dictationless_chapter.use").getString()).replace("{stra}", stra);
             if (entity instanceof Player _player && !_player.level().isClientSide())
                 _player.displayClientMessage(Component.literal(info), false);

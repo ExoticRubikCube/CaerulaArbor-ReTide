@@ -1,7 +1,7 @@
 
 package com.apocalypse.caerulaarbor.block;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
+import com.apocalypse.caerulaarbor.init.CABlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -97,7 +97,7 @@ public class AegirGlassArchBlock extends Block {
 	}
 
 	private void updateArchStyle(Level world, BlockPos pos) {
-		boolean lower = world.getBlockState(pos.below()).getBlock() == CaerulaArborModBlocks.AEGIR_GLASS_BAR.get();
+		boolean lower = world.getBlockState(pos.below()).getBlock() == CABlocks.AEGIR_GLASS_BAR.get();
 		int value = lower ? 1 : 0;
 		BlockState state = world.getBlockState(pos);
 		if (state.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))

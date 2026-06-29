@@ -11,7 +11,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.client.gui.GuiGraphics;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class AddDefPerclyTinyMobEffect extends MobEffect {
 	public AddDefPerclyTinyMobEffect() {
 		super(MobEffectCategory.BENEFICIAL, -1);
-		this.addAttributeModifier(CaerulaArborModAttributes.GENERAL_DEFENSE.get(), "932ea917-0899-3600-9b3f-78b376f74b5d", 0.05, AttributeModifier.Operation.MULTIPLY_BASE);
+		this.addAttributeModifier(CAAttributes.GENERAL_DEFENSE.get(), "932ea917-0899-3600-9b3f-78b376f74b5d", 0.05, AttributeModifier.Operation.MULTIPLY_BASE);
 	}
 
 	@Override

@@ -2,8 +2,8 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
@@ -77,7 +77,7 @@ public class OceanizedWardenisEntity extends SeaMonster {
 	private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.NOTCHED_6);
 
 	public OceanizedWardenisEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.OCEANIZED_WARDENIS.get(), world);
+		this(CAEntities.OCEANIZED_WARDENIS.get(), world);
 	}
 
 	public OceanizedWardenisEntity(EntityType<OceanizedWardenisEntity> type, Level world) {
@@ -231,7 +231,7 @@ public class OceanizedWardenisEntity extends SeaMonster {
 		this.setAnimation("animation.oceanized_wardenis.start");
 		this.getEntityData().set(DATA_duration, 80);
 		if (!this.level().isClientSide())
-			this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 80, 5, false, false));
+			this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 80, 5, false, false));
 		return retval;
 	}
 
@@ -264,11 +264,11 @@ public class OceanizedWardenisEntity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        Entity enemy = null;
-        double sklp1 = 0;
-        double sklp2 = 0;
+        Entity enemy;
+        double sklp1;
+        double sklp2;
         double perc = 0;
-        double dura = 0;
+        double dura;
         double gap = 0;
         if (this.isAlive()) {
             if (tickCount % 100 == 0) {
@@ -329,7 +329,7 @@ public class OceanizedWardenisEntity extends SeaMonster {
                             this.setAnimation("animation.oceanized_wardenis.sonic");
                         }
                         if (!this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 45, 0, false, false));
+                            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 45, 0, false, false));
                         if (!this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 45, 9, false, false));
                         ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY()), (enemy.getZ())));
@@ -543,7 +543,7 @@ public class OceanizedWardenisEntity extends SeaMonster {
     public void setHealth(float pHealth){
         float hlth = this.getHealth();
         float mhlth = this.getMaxHealth();
-        if(this.hasEffect(CaerulaArborModMobEffects.INVULNERABLE.get()) && pHealth < hlth) return;
+        if(this.hasEffect(CAMobEffects.INVULNERABLE.get()) && pHealth < hlth) return;
         float reduction = hlth - pHealth;
         super.setHealth(reduction >= mhlth * 0.3f ? hlth - mhlth * 0.3f : hlth - reduction);
     }

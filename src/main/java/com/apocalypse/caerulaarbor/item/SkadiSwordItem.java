@@ -1,7 +1,8 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -60,12 +61,14 @@ public class SkadiSwordItem extends SwordItem {
 	public boolean hurtEnemy(ItemStack itemstack, LivingEntity entity, LivingEntity sourceentity) {
 		boolean retval = super.hurtEnemy(itemstack, entity, sourceentity);
         LevelAccessor world = entity.level();
-        double damage = 0;
-        double r = 0;
-        Entity enemy = null;
+        double damage;
+        double r;
+        Entity enemy;
         Entity target = null;
         r = 3;
-        enemy = ((Entity) sourceentity instanceof LivingEntity _entity) ? _entity.getLastHurtByMob() : null;
+        if (((Entity) sourceentity instanceof LivingEntity _entity)) {
+            _entity.getLastHurtByMob();
+        }
         enemy = ((Entity) sourceentity instanceof LivingEntity _entity) ? _entity.getLastHurtMob() : null;
         damage = (Entity) sourceentity instanceof LivingEntity _livingEntity2 && _livingEntity2.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity2.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
         {
@@ -117,11 +120,11 @@ public class SkadiSwordItem extends SwordItem {
 	public void inventoryTick(ItemStack itemstack, Level world, Entity entity, int slot, boolean selected) {
 		super.inventoryTick(itemstack, world, entity, slot, selected);
 		if (selected && EntityUtils.getHealthPerc(entity) >= 0.5) {
-            if (!(entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CaerulaArborModMobEffects.BOOST_OF_SILENCE.get()))) {
+            if (!(entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CAMobEffects.BOOST_OF_SILENCE.get()))) {
                 if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                    _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.BOOST_OF_SILENCE.get(), 10, 6, false, false));
+                    _entity.addEffect(new MobEffectInstance(CAMobEffects.BOOST_OF_SILENCE.get(), 10, 6, false, false));
                 if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                    _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ADD_REACH.get(), 10, 2, false, false));
+                    _entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_REACH.get(), 10, 2, false, false));
             }
         }
 	}

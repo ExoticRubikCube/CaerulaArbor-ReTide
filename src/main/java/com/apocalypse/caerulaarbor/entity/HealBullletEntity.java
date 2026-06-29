@@ -1,7 +1,7 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.protocol.Packet;
@@ -39,7 +39,7 @@ public class HealBullletEntity extends AbstractArrow implements ItemSupplier {
 	public static final ItemStack PROJECTILE_ITEM = new ItemStack(Items.AMETHYST_SHARD);
 
 	public HealBullletEntity(PlayMessages.SpawnEntity packet, Level world) {
-		super(CaerulaArborModEntities.HEAL_BULLLET.get(), world);
+		super(CAEntities.HEAL_BULLLET.get(), world);
 	}
 
 	public HealBullletEntity(EntityType<? extends HealBullletEntity> type, Level world) {
@@ -89,7 +89,7 @@ public class HealBullletEntity extends AbstractArrow implements ItemSupplier {
                 discard();
             CaerulaArborMod.queueServerWork(16, () -> {
                 if (entity.isAlive()) {
-                    double atk = 0;
+                    double atk;
                     double count = 0;
                     double curH = 0;
                     double maxH = 0;
@@ -133,7 +133,7 @@ public class HealBullletEntity extends AbstractArrow implements ItemSupplier {
 	}
 
 	public static HealBullletEntity shoot(Level world, LivingEntity entity, RandomSource random, float power, double damage, int knockback) {
-		HealBullletEntity entityarrow = new HealBullletEntity(CaerulaArborModEntities.HEAL_BULLLET.get(), entity, world);
+		HealBullletEntity entityarrow = new HealBullletEntity(CAEntities.HEAL_BULLLET.get(), entity, world);
 		entityarrow.shoot(entity.getViewVector(1).x, entity.getViewVector(1).y, entity.getViewVector(1).z, power * 2, 0);
 		entityarrow.setSilent(true);
 		entityarrow.setCritArrow(false);
@@ -145,7 +145,7 @@ public class HealBullletEntity extends AbstractArrow implements ItemSupplier {
 
 	// TODO: Revisit this legacy two-arg system when the healing projectile API is refactored.
 	public static HealBullletEntity shoot(LivingEntity entity, LivingEntity target) {
-		HealBullletEntity entityarrow = new HealBullletEntity(CaerulaArborModEntities.HEAL_BULLLET.get(), entity, entity.level());
+		HealBullletEntity entityarrow = new HealBullletEntity(CAEntities.HEAL_BULLLET.get(), entity, entity.level());
 		double dx = target.getX() - entity.getX();
 		double dy = target.getY() + target.getEyeHeight() - 1.1;
 		double dz = target.getZ() - entity.getZ();

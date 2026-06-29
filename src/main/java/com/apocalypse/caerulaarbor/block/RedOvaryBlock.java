@@ -2,8 +2,9 @@ package com.apocalypse.caerulaarbor.block;
 
 import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModGameRules;
+import com.apocalypse.caerulaarbor.init.CAGameRules;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
+import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -53,8 +54,8 @@ public class RedOvaryBlock extends AbstractOvaryBlock {
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();
-		double chance = 0;
-		double rate = 0;
+		double chance;
+		double rate;
 		if (!(world.getDifficulty() == Difficulty.PEACEFUL)) {
 			if (!(world.getBlockFloorHeight(BlockPos.containing(x, (double) y + 1, z)) > 0) && !(world.getBlockFloorHeight(BlockPos.containing(x, (double) y + 2, z)) > 0)) {
 				rate = 0.5;
@@ -66,8 +67,8 @@ public class RedOvaryBlock extends AbstractOvaryBlock {
 				}
 				chance = blockstate.getValue(OUTPUT);
 				if (Math.random() < chance * 0.005) {
-					if (EntityUtils.getSeabornNum(world, x, y, z) < Math.min((((LevelAccessor) world).getLevelData().getGameRules().getInt(CaerulaArborModGameRules.CLONE_NUMBER_LIMIT)), CaerulaConfigsConfiguration.CLONE_NUM.get())) {
-						com.apocalypse.caerulaarbor.util.WorldUtils.summonRandomSeaborn(world, rate, (double) x + 0.5, (double) y + 1.5, (double) z + 0.5);
+					if (EntityUtils.getSeabornNum(world, x, y, z) < Math.min((((LevelAccessor) world).getLevelData().getGameRules().getInt(CAGameRules.CLONE_NUMBER_LIMIT)), CaerulaConfigsConfiguration.CLONE_NUM.get())) {
+						WorldUtils.summonRandomSeaborn(world, rate, (double) x + 0.5, (double) y + 1.5, (double) z + 0.5);
 						{
 							int _value = 0;
 							BlockPos _pos = BlockPos.containing(x, y, z);

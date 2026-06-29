@@ -1,9 +1,9 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
@@ -61,7 +61,7 @@ public class IsharmlaTearEntity extends PathfinderMob implements GeoEntity {
 	public String animationprocedure = "empty";
 
 	public IsharmlaTearEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.ISHARMLA_TEAR.get(), world);
+		this(CAEntities.ISHARMLA_TEAR.get(), world);
 	}
 
 	public IsharmlaTearEntity(EntityType<IsharmlaTearEntity> type, Level world) {
@@ -154,7 +154,7 @@ public class IsharmlaTearEntity extends PathfinderMob implements GeoEntity {
 
 	protected void dropCustomDeathLoot(DamageSource source, int looting, boolean recentlyHitIn) {
 		super.dropCustomDeathLoot(source, looting, recentlyHitIn);
-		this.spawnAtLocation(new ItemStack(CaerulaArborModItems.TEAR_ISHARMLA.get()));
+		this.spawnAtLocation(new ItemStack(CAItems.TEAR_ISHARMLA.get()));
 	}
 
 	@Override
@@ -186,10 +186,10 @@ public class IsharmlaTearEntity extends PathfinderMob implements GeoEntity {
         if (this instanceof IsharmlaTearEntity) {
             this.setAnimation("animation.isharmla_tear.start");
         }
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-            this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(60);
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()))
-            this.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).setBaseValue(6);
+        if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
+            this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(60);
+        if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
+            this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).setBaseValue(6);
         return retval;
 	}
 
@@ -216,8 +216,8 @@ public class IsharmlaTearEntity extends PathfinderMob implements GeoEntity {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        double dura = 0;
-        boolean isAttack = false;
+        double dura;
+        boolean isAttack;
         {
             LivingEntity _ent = this;
             _ent.setYRot(0);

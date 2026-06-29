@@ -11,9 +11,9 @@ public class MathUtils {
     }
 
     public static double getCosine(double a1, double a2, double b1, double b2) {
-        double dotProd = 0;
-        double norm = 0;
-        double norm1 = 0;
+        double dotProd;
+        double norm;
+        double norm1;
         dotProd = a1 * a2 + b1 * b2;
         norm = Math.pow(a1 * a1 + b1 * b1, 0.5);
         norm1 = Math.pow(a2 * a2 + b2 * b2, 0.5);

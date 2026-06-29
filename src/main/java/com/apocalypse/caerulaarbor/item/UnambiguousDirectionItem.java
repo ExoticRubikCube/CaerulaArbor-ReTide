@@ -2,8 +2,8 @@ package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.AnchorFlyEntity;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
@@ -91,7 +91,7 @@ public class UnambiguousDirectionItem extends Item {
         double x = entity.getX();
         double y = entity.getY();
         double z = entity.getZ();
-        if (sourceentity.hasEffect(CaerulaArborModMobEffects.PATH_TO_UNCOVER.get())) {
+        if (sourceentity.hasEffect(CAMobEffects.PATH_TO_UNCOVER.get())) {
             if (world instanceof Level _level) {
                 _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "anchor_skillattack")), SoundSource.PLAYERS, 2, 1);
             }
@@ -123,7 +123,7 @@ public class UnambiguousDirectionItem extends Item {
             if (!projectileLevel.isClientSide()) {
                 Projectile _entityToSpawn = new Object() {
                     public Projectile getArrow(Level level, Entity shooter, float damage, int knockback) {
-                        AbstractArrow entityToSpawn = new AnchorFlyEntity(CaerulaArborModEntities.ANCHOR_FLY.get(), level);
+                        AbstractArrow entityToSpawn = new AnchorFlyEntity(CAEntities.ANCHOR_FLY.get(), level);
                         entityToSpawn.setOwner(shooter);
                         entityToSpawn.setBaseDamage(damage);
                         entityToSpawn.setKnockback(knockback);

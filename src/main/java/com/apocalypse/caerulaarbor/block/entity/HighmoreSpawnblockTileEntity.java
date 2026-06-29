@@ -1,7 +1,7 @@
 package com.apocalypse.caerulaarbor.block.entity;
 
 import com.apocalypse.caerulaarbor.block.HighmoreSpawnblockBlock;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlockEntities;
+import com.apocalypse.caerulaarbor.init.CABlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -42,7 +42,7 @@ public class HighmoreSpawnblockTileEntity extends RandomizableContainerBlockEnti
 	private int blockstateOld = this.getBlockState().getValue(HighmoreSpawnblockBlock.BLOCKSTATE);
 
 	public HighmoreSpawnblockTileEntity(BlockPos pos, BlockState state) {
-		super(CaerulaArborModBlockEntities.HIGHMORE_SPAWNBLOCK.get(), pos, state);
+		super(CABlockEntities.HIGHMORE_SPAWNBLOCK.get(), pos, state);
 	}
 
 	private PlayState predicate(AnimationState event) {

@@ -2,10 +2,10 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
@@ -61,6 +61,7 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 
 import javax.annotation.Nullable;
+import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -80,7 +81,7 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 	private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.PINK, ServerBossEvent.BossBarOverlay.NOTCHED_10);
 
 	public OceanizedEnderinaEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.OCEANIZED_ENDERINA.get(), world);
+		this(CAEntities.OCEANIZED_ENDERINA.get(), world);
 	}
 
 	public OceanizedEnderinaEntity(EntityType<OceanizedEnderinaEntity> type, Level world) {
@@ -335,19 +336,19 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-            this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(85);
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()))
-            this.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).setBaseValue(4);
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()))
-            this.getAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()).setBaseValue(0.0125);
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RESISTANCE.get()))
-            this.getAttribute(CaerulaArborModAttributes.SANITY_RESISTANCE.get()).setBaseValue(75);
+        if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
+            this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(85);
+        if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
+            this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).setBaseValue(4);
+        if (this.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
+            this.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.0125);
+        if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RESISTANCE.get()))
+            this.getAttribute(CAAttributes.SANITY_RESISTANCE.get()).setBaseValue(75);
         if (this instanceof OceanizedEnderinaEntity) {
             this.setAnimation("animation.oceanized_enderina.start");
         }
         if (!this.level().isClientSide())
-            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 50, 9, false, false));
+            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 50, 9, false, false));
         return retval;
 	}
 
@@ -383,12 +384,12 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        Entity enemy = null;
-        double dura = 0;
-        double P = 0;
-        double sklp1 = 0;
-        double rev = 0;
-        double deadTime = 0;
+        Entity enemy;
+        double dura;
+        double P;
+        double sklp1;
+        double rev;
+        double deadTime;
         deadTime = this.deathTime;
         if (deadTime >= 30) {
             if ((Entity) this instanceof OceanizedEnderinaEntity animatable)
@@ -416,7 +417,7 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
                 setShiftKeyDown(true);
                 setDeltaMovement(new Vec3(0, 0, 0));
                 if (tickCount % 10 == 0) {
-                    EntityUtils.swallowCrystals(world, x, y, z, this);
+                    this.swallowNearbyCrystals();
                 }
                 if (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) >= ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1)) {
                     if ((Entity) this instanceof OceanizedEnderinaEntity _datEntSetI)
@@ -465,9 +466,8 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
                         _datEntSetI.getEntityData().set(DATA_SKILL_P, 370);
                     if ((Entity) this instanceof OceanizedEnderinaEntity _datEntSetI)
                         _datEntSetI.getEntityData().set(DATA_DURATION, 70);
-                    dura = 70;
                     if (!this.level().isClientSide())
-                        this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 50, 0, false, false));
+                        this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 50, 0, false, false));
                     if (world instanceof Level _level) {
                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "caster_skill")), SoundSource.HOSTILE, (float) 2.5, 1);
                     }
@@ -509,7 +509,7 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
                 for (Entity entityiterator : _entfound) {
                     if (entityiterator == null || this == null)
                         continue;
-                    Entity illusioner = null;
+                    Entity illusioner;
                     Entity enemy1 = null;
                     illusioner = this;
                     if (illusioner == null) {
@@ -673,7 +673,7 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
             double z = this.getZ();
             if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
                 if (world instanceof ServerLevel _level) {
-                    ItemEntity entityToSpawn = new ItemEntity(_level, x, (y + 1), z, new ItemStack(CaerulaArborModItems.MOIST_DRAGON_HEART.get()));
+                    ItemEntity entityToSpawn = new ItemEntity(_level, x, (y + 1), z, new ItemStack(CAItems.MOIST_DRAGON_HEART.get()));
                     entityToSpawn.setPickUpDelay(5);
                     _level.addFreshEntity(entityToSpawn);
                 }
@@ -728,11 +728,11 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 	}
 
 	private void distributeCrystal(LevelAccessor world, double x, double y, double z) {
-        double r = 0;
-		double d = 0;
-		double tx = 0;
-		double tz = 0;
-		double result = 0;
+        double r;
+		double d;
+		double tx;
+		double tz;
+		double result;
         final Vec3 _center = new Vec3(x, y, z);
         List<MoistEnderCrystalEntity> _entfound = world.getEntitiesOfClass(MoistEnderCrystalEntity.class,
                 new AABB(_center, _center).inflate(32 / 2d), MoistEnderCrystalEntity::isAlive);
@@ -743,13 +743,31 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 			tx = x + d * Math.cos(r);
 			tz = z + d * Math.sin(r);
 			if (world instanceof ServerLevel _level) {
-				Entity entityToSpawn = CaerulaArborModEntities.MOIST_ENDER_CRYSTAL.get().spawn(_level, BlockPos.containing(tx, y, tz), MobSpawnType.MOB_SUMMONED);
+				Entity entityToSpawn = CAEntities.MOIST_ENDER_CRYSTAL.get().spawn(_level, BlockPos.containing(tx, y, tz), MobSpawnType.MOB_SUMMONED);
 				if (entityToSpawn != null) {
 					entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
 				}
 			}
 			if (world instanceof ServerLevel _level)
 				_level.sendParticles(ParticleTypes.EXPLOSION, tx, (y + 1), tz, 1, 0, 0, 0, 0.1);
+		}
+	}
+
+	private void swallowNearbyCrystals() {
+		Vec3 center = this.position();
+		List<Entity> nearbyEntities = this.level().getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(5 / 2d), entity -> true).stream()
+				.sorted(Comparator.comparingDouble(entity -> entity.distanceToSqr(center)))
+				.toList();
+		for (Entity nearbyEntity : nearbyEntities) {
+			if (nearbyEntity instanceof MoistEnderCrystalEntity && this.distanceTo(nearbyEntity) < 2.5) {
+				if (!nearbyEntity.level().isClientSide()) {
+					nearbyEntity.discard();
+				}
+				EntityUtils.heal(this, this.getMaxHealth() * 0.05F);
+				if (this.level() instanceof ServerLevel level) {
+					level.sendParticles(ParticleTypes.DRAGON_BREATH, nearbyEntity.getX(), nearbyEntity.getY() + 0.5, nearbyEntity.getZ(), 16, 0.5, 0.5, 0.5, 0.1);
+				}
+			}
 		}
 	}
 

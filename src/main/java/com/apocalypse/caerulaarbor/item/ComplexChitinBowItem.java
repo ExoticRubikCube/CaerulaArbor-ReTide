@@ -1,7 +1,7 @@
 
 package com.apocalypse.caerulaarbor.item;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -52,7 +52,7 @@ public class ComplexChitinBowItem extends BowItem {
     
 
     public static final Predicate<ItemStack> ALSO_OCEAN_ARROW = (itemStack) -> {
-        return ARROW_ONLY.test(itemStack) || itemStack.getItem() == CaerulaArborModItems.OCEAN_ARROW.get();
+        return ARROW_ONLY.test(itemStack) || itemStack.getItem() == CAItems.OCEAN_ARROW.get();
     };
 
     private double getRate(Player player){
@@ -114,7 +114,7 @@ public class ComplexChitinBowItem extends BowItem {
                             abstractarrow.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
                         }
 
-                        if (itemstack.is(CaerulaArborModItems.OCEAN_ARROW.get())){
+                        if (itemstack.is(CAItems.OCEAN_ARROW.get())){
                         	abstractarrow.setBaseDamage(abstractarrow.getBaseDamage() * 1.25);
                         	abstractarrow.pickup = AbstractArrow.Pickup.DISALLOWED;
                         }

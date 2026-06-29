@@ -3,8 +3,8 @@ package com.apocalypse.caerulaarbor.event;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.Al1SHelperEntity;
 import com.apocalypse.caerulaarbor.entity.LittleHelperEntity;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEnchantments;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CAEnchantments;
 import com.apocalypse.caerulaarbor.item.HighmoreScytheItem;
 import com.apocalypse.caerulaarbor.network.CaerulaArborModNetwork;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
@@ -154,12 +154,12 @@ public class PlayerLeftClickEventHandler {
 
     public static void executeHighmoreScytheAirAttack(LevelAccessor world, double x, double y, double z, Entity entity) {
         if (entity == null) return;
-        if ((entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CaerulaArborModItems.HIGHMORE_SCYTHE.get()) {
+        if ((entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.HIGHMORE_SCYTHE.get()) {
             if ((entity instanceof Player _plr ? _plr.getAttackStrengthScale(0) : 0) >= 0.95) {
                 if ((entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() instanceof HighmoreScytheItem)
                     (entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getOrCreateTag().putString("geckoAnim", "animation.highmore_scythe.attack");
                 CaerulaArborMod.queueServerWork(10, () -> {
-                    if ((entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CaerulaArborModItems.HIGHMORE_SCYTHE.get()) {
+                    if ((entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.HIGHMORE_SCYTHE.get()) {
                         if (world instanceof Level _level) {
                                 _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "scythe_highmore")), SoundSource.PLAYERS, (float) 1.5, 1);
                         }
@@ -173,7 +173,7 @@ public class PlayerLeftClickEventHandler {
                                                 new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "highmore_attack"))), entity),
                                                 (float) ((entity instanceof LivingEntity _livingEntity10 && _livingEntity10.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)
                                                         ? _livingEntity10.getAttribute(Attributes.ATTACK_DAMAGE).getValue()
-                                                        : 0) * (1.5 + 0.2 * (entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getEnchantmentLevel(CaerulaArborModEnchantments.SYNESTHESIA.get()))));
+                                                        : 0) * (1.5 + 0.2 * (entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getEnchantmentLevel(CAEnchantments.SYNESTHESIA.get()))));
                                         EntityUtils.giveLessArmor(entityiterator, 15);
                                     }
                                 }
@@ -194,7 +194,7 @@ public class PlayerLeftClickEventHandler {
 
     public static void executeRangedLightning(LevelAccessor world, double x, double y, double z, Entity entity) {
         if (entity == null) return;
-        if (entity instanceof LivingEntity _entity && _entity.isHolding(CaerulaArborModItems.APOCATA_SWORD.get())) {
+        if (entity instanceof LivingEntity _entity && _entity.isHolding(CAItems.APOCATA_SWORD.get())) {
             final Vec3 _center = new Vec3(x, y, z);
             List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(64 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
             for (Entity entityiterator : _entfound) {

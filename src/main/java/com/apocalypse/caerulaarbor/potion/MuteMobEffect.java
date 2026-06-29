@@ -1,7 +1,7 @@
 
 package com.apocalypse.caerulaarbor.potion;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
+import com.apocalypse.caerulaarbor.init.CAParticleTypes;
 import com.apocalypse.caerulaarbor.util.MathUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
@@ -37,7 +37,7 @@ public class MuteMobEffect extends MobEffect {
         if (entity == null)
             return;
         if (world instanceof ServerLevel _level)
-            _level.sendParticles(CaerulaArborModParticleTypes.MUTENESS.get(), entity.getX(), entity.getY(), entity.getZ(), 2, 1, 1, 1, 0.1);
+            _level.sendParticles(CAParticleTypes.MUTENESS.get(), entity.getX(), entity.getY(), entity.getZ(), 2, 1, 1, 1, 0.1);
         if (entity instanceof Creeper) {
             CompoundTag dataIndex2 = new CompoundTag();
             entity.saveWithoutId(dataIndex2);

@@ -2,8 +2,8 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.util.EntitySpawnUtils;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
@@ -67,7 +67,7 @@ public class IzumikOffspringEntity extends SeaMonster {
 	public String animationprocedure = "empty";
 
 	public IzumikOffspringEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.IZUMIK_OFFSPRING.get(), world);
+		this(CAEntities.IZUMIK_OFFSPRING.get(), world);
 	}
 
 	public IzumikOffspringEntity(EntityType<IzumikOffspringEntity> type, Level world) {
@@ -130,7 +130,7 @@ public class IzumikOffspringEntity extends SeaMonster {
 
     protected void dropCustomDeathLoot(DamageSource source, int looting, boolean recentlyHitIn) {
 		super.dropCustomDeathLoot(source, looting, recentlyHitIn);
-		this.spawnAtLocation(new ItemStack(CaerulaArborModItems.COLOURFULL_JELLY.get()));
+		this.spawnAtLocation(new ItemStack(CAItems.COLOURFULL_JELLY.get()));
 	}
 
 	@Override
@@ -214,7 +214,7 @@ public class IzumikOffspringEntity extends SeaMonster {
         double y = this.getY();
         double z = this.getZ();
         boolean success = false;
-        Entity owner = null;
+        Entity owner;
         if (tickCount % 5 == 0) {
             owner = world.getEntitiesOfClass(IzumikEntity.class, AABB.ofSize(new Vec3(x, y, z), 85, 32, 85), e -> true).stream().sorted(new Object() {
                 Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
@@ -296,7 +296,7 @@ public class IzumikOffspringEntity extends SeaMonster {
 	}
 
 	public static void init() {
-		SpawnPlacements.register(CaerulaArborModEntities.IZUMIK_OFFSPRING.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
+		SpawnPlacements.register(CAEntities.IZUMIK_OFFSPRING.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();

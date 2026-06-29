@@ -29,21 +29,21 @@ public class CaerulaArborMod {
 		// End of user code block mod constructor
 		MinecraftForge.EVENT_BUS.register(this);
 		IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-		CaerulaArborModSounds.REGISTRY.register(bus);
-		CaerulaArborModBlocks.REGISTRY.register(bus);
-		CaerulaArborModBlockEntities.REGISTRY.register(bus);
-		CaerulaArborModItems.REGISTRY.register(bus);
-		CaerulaArborModEntities.REGISTRY.register(bus);
-		CaerulaArborModEnchantments.REGISTRY.register(bus);
-		CaerulaArborModTabs.REGISTRY.register(bus);
+		CASounds.REGISTRY.register(bus);
+		CABlocks.REGISTRY.register(bus);
+		CABlockEntities.REGISTRY.register(bus);
+		CAItems.REGISTRY.register(bus);
+		CAEntities.REGISTRY.register(bus);
+		CAEnchantments.REGISTRY.register(bus);
+		CATabs.REGISTRY.register(bus);
 
-		CaerulaArborModMobEffects.REGISTRY.register(bus);
-		CaerulaArborModPotions.REGISTRY.register(bus);
-		CaerulaArborModPaintings.REGISTRY.register(bus);
-		CaerulaArborModParticleTypes.REGISTRY.register(bus);
-		CaerulaArborModVillagerProfessions.PROFESSIONS.register(bus);
-		CaerulaArborModMenus.REGISTRY.register(bus);
-		CaerulaArborModAttributes.REGISTRY.register(bus);
+		CAMobEffects.REGISTRY.register(bus);
+		CAPotions.REGISTRY.register(bus);
+		CAPaintings.REGISTRY.register(bus);
+		CAParticleTypes.REGISTRY.register(bus);
+		CAVillagerProfessions.PROFESSIONS.register(bus);
+		CAMenus.REGISTRY.register(bus);
+		CAAttributes.REGISTRY.register(bus);
 		bus.addListener(this::onCommonSetup);
 		// Start of user code block mod init
 		// End of user code block mod init

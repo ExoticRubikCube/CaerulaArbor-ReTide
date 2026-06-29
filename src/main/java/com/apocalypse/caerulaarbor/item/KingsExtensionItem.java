@@ -3,7 +3,7 @@ package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
+import com.apocalypse.caerulaarbor.init.CABlocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -84,7 +84,7 @@ public class KingsExtensionItem extends Item {
         if (entity == null)
             return InteractionResult.PASS;
         if (blockstate.getBlock() == Blocks.DEEPSLATE_BRICK_SLAB) {
-            world.setBlock(BlockPos.containing(x, y, z), CaerulaArborModBlocks.BLOCK_EXTENSION.get().defaultBlockState(), 3);
+            world.setBlock(BlockPos.containing(x, y, z), CABlocks.BLOCK_EXTENSION.get().defaultBlockState(), 3);
             {
                 Direction _dir = ((entity.getDirection()).getOpposite());
                 BlockPos _pos = BlockPos.containing(x, y, z);

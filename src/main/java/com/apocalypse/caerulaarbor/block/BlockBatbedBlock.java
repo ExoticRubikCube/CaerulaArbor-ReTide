@@ -1,7 +1,7 @@
 
 package com.apocalypse.caerulaarbor.block;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
+import com.apocalypse.caerulaarbor.init.CABlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -123,7 +123,7 @@ public class BlockBatbedBlock extends Block {
                     _prop = _bs.getBlock().getStateDefinition().getProperty("axis");
                     return _prop instanceof EnumProperty _ep && _ep.getPossibleValues().toArray()[0] instanceof Direction.Axis ? Direction.fromAxisAndDirection((Direction.Axis) _bs.getValue(_ep), Direction.AxisDirection.POSITIVE) : Direction.NORTH;
                 }
-            }.getDirection(blockstate)).getOpposite()).getStepZ()))).getBlock() == CaerulaArborModBlocks.BATBED_UPPER.get();
+            }.getDirection(blockstate)).getOpposite()).getStepZ()))).getBlock() == CABlocks.BATBED_UPPER.get();
         }
 		return super.canSurvive(blockstate, worldIn, pos);
 	}
@@ -181,7 +181,7 @@ public class BlockBatbedBlock extends Block {
                     _prop = _bs.getBlock().getStateDefinition().getProperty("axis");
                     return _prop instanceof EnumProperty _ep && _ep.getPossibleValues().contains(newValue.getAxis()) ? _bs.setValue(_ep, newValue.getAxis()) : _bs;
                 }
-            }.with(CaerulaArborModBlocks.BATBED_UPPER.get().defaultBlockState(), (new Object() {
+            }.with(CABlocks.BATBED_UPPER.get().defaultBlockState(), (new Object() {
                 public Direction getDirection(BlockState _bs) {
                     Property<?> _prop = _bs.getBlock().getStateDefinition().getProperty("facing");
                     if (_prop instanceof DirectionProperty _dp)
@@ -215,7 +215,7 @@ public class BlockBatbedBlock extends Block {
                 _prop = _bs.getBlock().getStateDefinition().getProperty("axis");
                 return _prop instanceof EnumProperty _ep && _ep.getPossibleValues().toArray()[0] instanceof Direction.Axis ? Direction.fromAxisAndDirection((Direction.Axis) _bs.getValue(_ep), Direction.AxisDirection.POSITIVE) : Direction.NORTH;
             }
-        }.getDirection((((LevelAccessor) world).getBlockState(BlockPos.containing(x, y, z))))).getOpposite()).getStepZ()))).getBlock() == CaerulaArborModBlocks.BATBED_UPPER.get())) {
+        }.getDirection((((LevelAccessor) world).getBlockState(BlockPos.containing(x, y, z))))).getOpposite()).getStepZ()))).getBlock() == CABlocks.BATBED_UPPER.get())) {
             {
                 BlockPos _pos = BlockPos.containing(x, y, z);
                 dropResources(((LevelAccessor) world).getBlockState(_pos), world, BlockPos.containing(x, y, z), null);

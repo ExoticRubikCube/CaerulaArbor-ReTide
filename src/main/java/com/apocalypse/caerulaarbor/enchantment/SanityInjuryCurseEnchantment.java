@@ -1,7 +1,7 @@
 package com.apocalypse.caerulaarbor.enchantment;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEnchantments;
+import com.apocalypse.caerulaarbor.init.CAEnchantments;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -32,7 +32,7 @@ public class SanityInjuryCurseEnchantment extends Enchantment {
 
 	@Override
 	protected boolean checkCompatibility(Enchantment enchantment) {
-		return super.checkCompatibility(enchantment) && !Objects.equals(CaerulaArborModEnchantments.SANITY_DEFEND.get(), enchantment);
+		return super.checkCompatibility(enchantment) && !Objects.equals(CAEnchantments.SANITY_DEFEND.get(), enchantment);
 	}
 
 	@Override

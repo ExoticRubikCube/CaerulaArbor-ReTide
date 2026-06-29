@@ -1,7 +1,7 @@
 package com.apocalypse.caerulaarbor.network.message.send;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -75,15 +75,15 @@ public class CentrifugerSelectButtonMessage {
         }
 		if (buttonID == 3) {
 
-            String selection = "";
+            String selection;
             ItemStack res = ItemStack.EMPTY;
-            if (entity.getMainHandItem().getItem() == CaerulaArborModItems.HUNTER_GENE.get()) {
+            if (entity.getMainHandItem().getItem() == CAItems.HUNTER_GENE.get()) {
                 selection = entity.getPersistentData().getString("centrifugerSelection");
                 res = switch ((selection)) {
-                    case "skadi" -> new ItemStack(CaerulaArborModItems.HUNTER_GENE_SKADI.get()).copy();
-                    case "ulpians" -> new ItemStack(CaerulaArborModItems.HUNTER_GENE_ULPIANS.get()).copy();
-                    case "gladiia" -> new ItemStack(CaerulaArborModItems.HUNTER_GENE_GLADIIA.get()).copy();
-                    case "specter" -> new ItemStack(CaerulaArborModItems.HUNTER_GENE_SPECTER.get()).copy();
+                    case "skadi" -> new ItemStack(CAItems.HUNTER_GENE_SKADI.get()).copy();
+                    case "ulpians" -> new ItemStack(CAItems.HUNTER_GENE_ULPIANS.get()).copy();
+                    case "gladiia" -> new ItemStack(CAItems.HUNTER_GENE_GLADIIA.get()).copy();
+                    case "specter" -> new ItemStack(CAItems.HUNTER_GENE_SPECTER.get()).copy();
                     default -> res;
                 };
                 if (!(res.getItem() == ItemStack.EMPTY.getItem())) {

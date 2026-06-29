@@ -2,7 +2,7 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -65,7 +65,7 @@ public class FleeFishEntity extends SeaMonster implements RangedAttackMob {
 	public String animationprocedure = "empty";
 
 	public FleeFishEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.FLEE_FISH.get(), world);
+		this(CAEntities.FLEE_FISH.get(), world);
 	}
 
 	public FleeFishEntity(EntityType<FleeFishEntity> type, Level world) {
@@ -339,13 +339,13 @@ public class FleeFishEntity extends SeaMonster implements RangedAttackMob {
 	}
 
 	public static void init() {
-		SpawnPlacements.register(CaerulaArborModEntities.FLEE_FISH.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
+		SpawnPlacements.register(CAEntities.FLEE_FISH.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();
 			return WorldUtils.canRareSeabornSpawn(world, x, y, z);
 		});
-		DungeonHooks.addDungeonMob(CaerulaArborModEntities.FLEE_FISH.get(), 180);
+		DungeonHooks.addDungeonMob(CAEntities.FLEE_FISH.get(), 180);
 	}
 
 	public static AttributeSupplier.Builder createAttributes() {

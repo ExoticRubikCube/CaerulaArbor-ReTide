@@ -1,7 +1,7 @@
 package com.apocalypse.caerulaarbor.block.entity;
 
 import com.apocalypse.caerulaarbor.block.HugeLilyBlock;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlockEntities;
+import com.apocalypse.caerulaarbor.init.CABlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -40,7 +40,7 @@ public class HugeLilyTileEntity extends RandomizableContainerBlockEntity impleme
 	private final LazyOptional<? extends IItemHandler>[] handlers = SidedInvWrapper.create(this, Direction.values());
 
 	public HugeLilyTileEntity(BlockPos pos, BlockState state) {
-		super(CaerulaArborModBlockEntities.HUGE_LILY.get(), pos, state);
+		super(CABlockEntities.HUGE_LILY.get(), pos, state);
 	}
 
 	private PlayState predicate(AnimationState event) {

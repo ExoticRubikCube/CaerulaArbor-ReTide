@@ -2,10 +2,9 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.*;
+import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
@@ -81,7 +80,7 @@ public class OceanizedBruteEntity extends SeaMonster {
 	private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.YELLOW, ServerBossEvent.BossBarOverlay.PROGRESS);
 
 	public OceanizedBruteEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.OCEANIZED_BRUTE.get(), world);
+		this(CAEntities.OCEANIZED_BRUTE.get(), world);
 	}
 
 	public OceanizedBruteEntity(EntityType<OceanizedBruteEntity> type, Level world) {
@@ -208,28 +207,27 @@ public class OceanizedBruteEntity extends SeaMonster {
         double z = this.getZ();
         Entity sourceentity = source.getEntity();
         if (sourceentity != null) {
-            double sklp = 0;
+            double sklp;
             if (this.isAlive()) {
                 sklp = (Entity) this instanceof OceanizedBruteEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp) : 0;
                 if (sklp >= 0) {
                     if ((Entity) this instanceof OceanizedBruteEntity _datEntSetI)
                         _datEntSetI.getEntityData().set(DATA_skillp, (int) (sklp - 1));
                 } else {
-                    if (distanceTo(sourceentity) <= 5 && !this.hasEffect(CaerulaArborModMobEffects.COOLDOWN_SINAL.get())) {
+                    if (distanceTo(sourceentity) <= 5 && !this.hasEffect(CAMobEffects.COOLDOWN_SINAL.get())) {
 						if (this instanceof OceanizedBruteEntity) {
 							this.setAnimation("animation.oceanized_brute.skill");
 						}
 						if (!this.level().isClientSide())
-							this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 40, 1, false, false));
+							this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 40, 1, false, false));
 						((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((sourceentity.getX()), (sourceentity.getY()), (sourceentity.getZ())));
 						if ((Entity) this instanceof OceanizedBruteEntity _datEntSetI)
 							_datEntSetI.getEntityData().set(DATA_skillp, 5);
-						LivingEntity _entity = this;
-						if (!this.level().isClientSide())
-							this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.COOLDOWN_SINAL.get(), 80, 0, false, false));
+                        if (!this.level().isClientSide())
+							this.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL.get(), 80, 0, false, false));
 						CaerulaArborMod.queueServerWork(20, () -> {
 							if (this.isAlive()) {
-								double sklp1 = 0;
+								double sklp1;
 								sklp1 = Math.max(
 										Math.min((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 4,
 												((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.25),
@@ -240,9 +238,9 @@ public class OceanizedBruteEntity extends SeaMonster {
 										recordHurtPlayer(player);
 									}
 									if (sourceentity instanceof LivingEntity _entity1 && !_entity1.level().isClientSide())
-										_entity1.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.DIZZY.get(), 120, 0, false, false));
+										_entity1.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 120, 0, false, false));
 									if (sourceentity instanceof LivingEntity _entity1 && !_entity1.level().isClientSide())
-										_entity1.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ROCK_BREAK.get(), 120, 0, false, false));
+										_entity1.addEffect(new MobEffectInstance(CAMobEffects.ROCK_BREAK.get(), 120, 0, false, false));
 								}
 								if (world instanceof Level _level) {
 									_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.shield.break")), SoundSource.HOSTILE, 2, 1);
@@ -273,9 +271,9 @@ public class OceanizedBruteEntity extends SeaMonster {
 												new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "general_seaborn_attack"))), this),
 												(float) sklp1);
 										if (entityiterator instanceof LivingEntity _entity1 && !_entity1.level().isClientSide())
-											_entity1.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.DIZZY.get(), 120, 0, false, false));
+											_entity1.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 120, 0, false, false));
 										if (entityiterator instanceof LivingEntity _entity1 && !_entity1.level().isClientSide())
-											_entity1.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ROCK_BREAK.get(), 120, 0, false, false));
+											_entity1.addEffect(new MobEffectInstance(CAMobEffects.ROCK_BREAK.get(), 120, 0, false, false));
 									}
 								}
 							}
@@ -320,8 +318,8 @@ public class OceanizedBruteEntity extends SeaMonster {
         Entity sourceentity = source.getEntity();
         if (sourceentity == null)
             return;
-        String str = "";
-        String name = "";
+        String str;
+        String name;
         if (sourceentity instanceof Player && !(sourceentity instanceof ServerPlayer _plr1 && _plr1.level() instanceof ServerLevel
                 && _plr1.getAdvancements().getOrStartProgress(_plr1.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "kill_brute"))).isDone())) {
             str = getPersistentData().getString("hurtPlayer");
@@ -336,7 +334,7 @@ public class OceanizedBruteEntity extends SeaMonster {
                     }
                 }
                 if (world instanceof ServerLevel _level) {
-                    ItemEntity entityToSpawn = new ItemEntity(_level, this.getX(), (this.getY() + 0.5), this.getZ(), new ItemStack(CaerulaArborModItems.CRIMSON_TREATY.get()));
+                    ItemEntity entityToSpawn = new ItemEntity(_level, this.getX(), (this.getY() + 0.5), this.getZ(), new ItemStack(CAItems.CRIMSON_TREATY.get()));
                     entityToSpawn.setPickUpDelay(10);
                     entityToSpawn.setUnlimitedLifetime();
                     _level.addFreshEntity(entityToSpawn);
@@ -348,10 +346,10 @@ public class OceanizedBruteEntity extends SeaMonster {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get()))
-            this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(7);
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-            this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(20);
+        if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get()))
+            this.getAttribute(CAAttributes.SANITY_RATE.get()).setBaseValue(7);
+        if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
+            this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(20);
         return retval;
 	}
 
@@ -381,7 +379,7 @@ public class OceanizedBruteEntity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        double ablty = 0;
+        double ablty;
         ablty = (Entity) this instanceof OceanizedBruteEntity _datEntI ? _datEntI.getEntityData().get(DATA_ability) : 0;
         if (ablty < 7) {
             if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
@@ -464,10 +462,7 @@ public class OceanizedBruteEntity extends SeaMonster {
 	}
 
 	private PlayState attackingPredicate(AnimationState event) {
-		double d1 = this.getX() - this.xOld;
-		double d0 = this.getZ() - this.zOld;
-		float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
-		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
+        if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
 		}

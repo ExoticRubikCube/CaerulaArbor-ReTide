@@ -2,9 +2,9 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -55,7 +55,7 @@ public class NetherseaSlimeEntity extends SeaMonster {
 	public String animationprocedure = "empty";
 
 	public NetherseaSlimeEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.NETHERSEA_SLIME.get(), world);
+		this(CAEntities.NETHERSEA_SLIME.get(), world);
 	}
 
 	public NetherseaSlimeEntity(EntityType<NetherseaSlimeEntity> type, Level world) {
@@ -166,7 +166,7 @@ public class NetherseaSlimeEntity extends SeaMonster {
 		super.baseTick();
 		CompoundTag tag = this.getPersistentData();
 		if(!tag.getBoolean("Resized")){
-            double size = 0;
+            double size;
             size = (Entity) this instanceof NetherseaSlimeEntity _datEntI ? _datEntI.getEntityData().get(DATA_SIZE) : 0;
             if (size > 1) {
                 if (this.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
@@ -193,7 +193,7 @@ public class NetherseaSlimeEntity extends SeaMonster {
 	}
 
 	public static void init() {
-		DungeonHooks.addDungeonMob(CaerulaArborModEntities.NETHERSEA_SLIME.get(), 180);
+		DungeonHooks.addDungeonMob(CAEntities.NETHERSEA_SLIME.get(), 180);
 	}
 
 	public static AttributeSupplier.Builder createAttributes() {
@@ -257,7 +257,7 @@ public class NetherseaSlimeEntity extends SeaMonster {
                     int t = Mth.nextInt(levelRandom, 2, 4);
                     for (int index0 = 0; index0 < t; index0++) {
                         Vec3 offset = new Vec3(Mth.nextDouble(levelRandom, -1, 1), 0, Mth.nextDouble(levelRandom, -1, 1));
-                        Entity entityToSpawn = CaerulaArborModEntities.NETHERSEA_SLIME.get().create(_level);
+                        Entity entityToSpawn = CAEntities.NETHERSEA_SLIME.get().create(_level);
                         if (entityToSpawn instanceof NetherseaSlimeEntity slime){
                             slime.setPos(pos.add(offset));
                             slime.getEntityData().set(DATA_SIZE, size);
@@ -269,7 +269,7 @@ public class NetherseaSlimeEntity extends SeaMonster {
                 }
             } else if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
                 if (world instanceof ServerLevel _level) {
-                    ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, new ItemStack(CaerulaArborModItems.TRAIL_CREAM.get()));
+                    ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, new ItemStack(CAItems.TRAIL_CREAM.get()));
                     entityToSpawn.setPickUpDelay(10);
                     _level.addFreshEntity(entityToSpawn);
                 }
@@ -282,7 +282,7 @@ public class NetherseaSlimeEntity extends SeaMonster {
 		super.push(pEntity);
 		if (pEntity instanceof NetherseaSlimeEntity) return;
 		if (pEntity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-			_entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.DEDUCT_ONE_SANITY.get(), 70, 0));
+			_entity.addEffect(new MobEffectInstance(CAMobEffects.DEDUCT_ONE_SANITY.get(), 70, 0));
 	}
 
 	public String getSyncedAnimation() {

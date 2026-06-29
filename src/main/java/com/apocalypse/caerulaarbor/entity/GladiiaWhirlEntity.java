@@ -1,7 +1,7 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -61,7 +61,7 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity {
 	public String animationprocedure = "empty";
 
 	public GladiiaWhirlEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.GLADIIA_WHIRL.get(), world);
+		this(CAEntities.GLADIIA_WHIRL.get(), world);
 	}
 
 	public GladiiaWhirlEntity(EntityType<GladiiaWhirlEntity> type, Level world) {
@@ -104,7 +104,7 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        Entity gladiia = null;
+        Entity gladiia;
         gladiia = world.getEntitiesOfClass(GladiiaEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true).stream().sorted(new Object() {
             Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
                 return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
@@ -142,10 +142,10 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        Entity enemy = null;
-        double t = 0;
-        double damage = 0;
-        double d = 0;
+        Entity enemy;
+        double t;
+        double damage;
+        double d;
         t = tickCount;
         if (t >= 120) {
             if (!level().isClientSide())

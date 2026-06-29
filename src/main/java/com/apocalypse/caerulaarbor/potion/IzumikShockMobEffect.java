@@ -2,7 +2,7 @@ package com.apocalypse.caerulaarbor.potion;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.IzumikEntity;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.util.MathUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
@@ -49,8 +49,8 @@ public class IzumikShockMobEffect extends MobEffect {
         double z = entity.getZ();
         if (entity == null)
             return;
-        Entity izumik = null;
-        double dama = 0;
+        Entity izumik;
+        double dama;
         if (((Entity) entity).isAlive()) {
             izumik = world.getEntitiesOfClass(IzumikEntity.class, AABB.ofSize(new Vec3(x, y, z), 27, 27, 27), e -> true).stream().sorted(new Object() {
                 Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
@@ -65,9 +65,9 @@ public class IzumikShockMobEffect extends MobEffect {
             if (world instanceof ServerLevel _level)
                 _level.sendParticles(ParticleTypes.END_ROD, x, (y + 0.75), z, 24, 0.75, 0.75, 0.75, 0.1);
             if (Math.random() < 0.33) {
-                if ((Entity) entity instanceof LivingEntity _livingEntity8 && _livingEntity8.getAttributes().hasAttribute(CaerulaArborModAttributes.NUMB.get()))
-                    _livingEntity8.getAttribute(CaerulaArborModAttributes.NUMB.get()).setBaseValue(
-                            (((Entity) entity instanceof LivingEntity _livingEntity7 && _livingEntity7.getAttributes().hasAttribute(CaerulaArborModAttributes.NUMB.get()) ? _livingEntity7.getAttribute(CaerulaArborModAttributes.NUMB.get()).getBaseValue() : 0)
+                if ((Entity) entity instanceof LivingEntity _livingEntity8 && _livingEntity8.getAttributes().hasAttribute(CAAttributes.NUMB.get()))
+                    _livingEntity8.getAttribute(CAAttributes.NUMB.get()).setBaseValue(
+                            (((Entity) entity instanceof LivingEntity _livingEntity7 && _livingEntity7.getAttributes().hasAttribute(CAAttributes.NUMB.get()) ? _livingEntity7.getAttribute(CAAttributes.NUMB.get()).getBaseValue() : 0)
                                     + 1));
                 if (world instanceof ServerLevel _level)
                     _level.sendParticles(ParticleTypes.FIREWORK, x, (y + 0.75), z, 24, 0.75, 0.75, 0.75, 0.1);

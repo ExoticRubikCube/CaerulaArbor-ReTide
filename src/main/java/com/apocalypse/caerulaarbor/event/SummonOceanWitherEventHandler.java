@@ -2,6 +2,7 @@ package com.apocalypse.caerulaarbor.event;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.event.level.BlockEvent;
@@ -20,8 +21,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.advancements.Advancement;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CABlocks;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 
 @Mod.EventBusSubscriber
@@ -41,10 +41,10 @@ public class SummonOceanWitherEventHandler {
 		if (world.getDifficulty() == Difficulty.PEACEFUL) {
 			return;
 		}
-		if (placedBlockState.getBlock() == Blocks.WITHER_SKELETON_SKULL && placedAgainstState.getBlock() == CaerulaArborModBlocks.NETHERSEA_SOUL_SAND.get()) {
-			if (WorldUtils.checkTShape(world, x, y, z, CaerulaArborModBlocks.NETHERSEA_SOUL_SAND.get().defaultBlockState())) {
+		if (placedBlockState.getBlock() == Blocks.WITHER_SKELETON_SKULL && placedAgainstState.getBlock() == CABlocks.NETHERSEA_SOUL_SAND.get()) {
+			if (WorldUtils.checkTShape(world, x, y, z, CABlocks.NETHERSEA_SOUL_SAND.get().defaultBlockState())) {
 				if (world instanceof ServerLevel _level) {
-					Entity entityToSpawn = CaerulaArborModEntities.OCEANIZED_WITHER.get().spawn(_level, BlockPos.containing(x + 0.5, y - 2, z + 0.5), MobSpawnType.MOB_SUMMONED);
+					Entity entityToSpawn = CAEntities.OCEANIZED_WITHER.get().spawn(_level, BlockPos.containing(x + 0.5, y - 2, z + 0.5), MobSpawnType.MOB_SUMMONED);
 					if (entityToSpawn != null) {
 						entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
 					}
@@ -55,9 +55,9 @@ public class SummonOceanWitherEventHandler {
 					double adjacentSkullX = x + direction.getStepX();
 					double adjacentSkullZ = z + direction.getStepZ();
 					if ((world.getBlockState(BlockPos.containing(adjacentSkullX, y, adjacentSkullZ))).getBlock() == Blocks.WITHER_SKELETON_SKULL) {
-						if (WorldUtils.checkTShape(world, adjacentSkullX, y, adjacentSkullZ, CaerulaArborModBlocks.NETHERSEA_SOUL_SAND.get().defaultBlockState())) {
+						if (WorldUtils.checkTShape(world, adjacentSkullX, y, adjacentSkullZ, CABlocks.NETHERSEA_SOUL_SAND.get().defaultBlockState())) {
 							if (world instanceof ServerLevel _level) {
-								Entity entityToSpawn = CaerulaArborModEntities.OCEANIZED_WITHER.get().spawn(_level, BlockPos.containing(adjacentSkullX + 0.5, y - 2, adjacentSkullZ + 0.5),
+								Entity entityToSpawn = CAEntities.OCEANIZED_WITHER.get().spawn(_level, BlockPos.containing(adjacentSkullX + 0.5, y - 2, adjacentSkullZ + 0.5),
 										MobSpawnType.MOB_SUMMONED);
 								if (entityToSpawn != null) {
 									entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);

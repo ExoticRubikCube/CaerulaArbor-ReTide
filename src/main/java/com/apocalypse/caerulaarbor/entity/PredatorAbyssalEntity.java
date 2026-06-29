@@ -3,9 +3,9 @@ package com.apocalypse.caerulaarbor.entity;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -66,7 +66,7 @@ public class PredatorAbyssalEntity extends SeaMonster {
 	public String animationprocedure = "empty";
 
 	public PredatorAbyssalEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.PREDATOR_ABYSSAL.get(), world);
+		this(CAEntities.PREDATOR_ABYSSAL.get(), world);
 	}
 
 	public PredatorAbyssalEntity(EntityType<PredatorAbyssalEntity> type, Level world) {
@@ -195,8 +195,8 @@ public class PredatorAbyssalEntity extends SeaMonster {
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
         if (this != null) {
-            if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get()))
-                this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(9);
+            if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get()))
+                this.getAttribute(CAAttributes.SANITY_RATE.get()).setBaseValue(9);
         }
         return retval;
 	}
@@ -223,21 +223,21 @@ public class PredatorAbyssalEntity extends SeaMonster {
                 if (!this.level().isClientSide())
                     this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 40, 1));
             }
-            if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MISSRATE.get()))
-                this.getAttribute(CaerulaArborModAttributes.MISSRATE.get()).setBaseValue(80);
+            if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE.get()))
+                this.getAttribute(CAAttributes.MISSRATE.get()).setBaseValue(80);
             if (MapVariables.get(world).strategy_subsisting >= 4) {
-                if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MISSRATE.get()))
-                    this.getAttribute(CaerulaArborModAttributes.MISSRATE.get()).setBaseValue(90);
+                if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE.get()))
+                    this.getAttribute(CAAttributes.MISSRATE.get()).setBaseValue(90);
             }
             if (isOnFire() && !fireImmune()) {
-                if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MISSRATE.get()))
-                    this.getAttribute(CaerulaArborModAttributes.MISSRATE.get()).setBaseValue(0);
+                if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE.get()))
+                    this.getAttribute(CAAttributes.MISSRATE.get()).setBaseValue(0);
             }
-            if ((Entity) this instanceof LivingEntity _livEnt9 && _livEnt9.hasEffect(CaerulaArborModMobEffects.DIZZY.get()) || (Entity) this instanceof LivingEntity _livEnt10 && _livEnt10.hasEffect(CaerulaArborModMobEffects.FROZEN.get())
+            if ((Entity) this instanceof LivingEntity _livEnt9 && _livEnt9.hasEffect(CAMobEffects.DIZZY.get()) || (Entity) this instanceof LivingEntity _livEnt10 && _livEnt10.hasEffect(CAMobEffects.FROZEN.get())
                     || (Entity) this instanceof LivingEntity _livEnt11 && _livEnt11.hasEffect(MobEffects.LEVITATION) || (Entity) this instanceof LivingEntity _livEnt12 && _livEnt12.hasEffect(MobEffects.MOVEMENT_SLOWDOWN)
                     || (Entity) this instanceof LivingEntity _livEnt13 && _livEnt13.hasEffect(MobEffects.SLOW_FALLING)) {
-                if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MISSRATE.get()))
-                    this.getAttribute(CaerulaArborModAttributes.MISSRATE.get()).setBaseValue(0);
+                if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE.get()))
+                    this.getAttribute(CAAttributes.MISSRATE.get()).setBaseValue(0);
             }
         }
         this.refreshDimensions();
@@ -249,7 +249,7 @@ public class PredatorAbyssalEntity extends SeaMonster {
 	}
 
 	public static void init() {
-		SpawnPlacements.register(CaerulaArborModEntities.PREDATOR_ABYSSAL.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
+		SpawnPlacements.register(CAEntities.PREDATOR_ABYSSAL.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();

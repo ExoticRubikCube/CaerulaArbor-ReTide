@@ -1,7 +1,6 @@
 package com.apocalypse.caerulaarbor.util;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler;
 import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
 import com.apocalypse.caerulaarbor.entity.Al1SHelperEntity;
 import com.apocalypse.caerulaarbor.entity.LittleHelperEntity;
@@ -47,41 +46,41 @@ import net.minecraftforge.registries.RegistryObject;
 public class WorldUtils {
 	@SuppressWarnings("rawtypes")
 	private static final RegistryObject[] WATER_NORMAL_POOL = {
-		CaerulaArborModEntities.COLLECTOR_PROKARYOTE,
-		CaerulaArborModEntities.FLOATER_PROKARYOTE,
-		CaerulaArborModEntities.DEPOSITER_PROKARYOTE,
-		CaerulaArborModEntities.ACCUMULATOR_PROKARYOTE,
-		CaerulaArborModEntities.FEEDER_PROKARYOTE,
-		CaerulaArborModEntities.BONE_FISH
+		CAEntities.COLLECTOR_PROKARYOTE,
+		CAEntities.FLOATER_PROKARYOTE,
+		CAEntities.DEPOSITER_PROKARYOTE,
+		CAEntities.ACCUMULATOR_PROKARYOTE,
+		CAEntities.FEEDER_PROKARYOTE,
+		CAEntities.BONE_FISH
 	};
 
 	@SuppressWarnings("rawtypes")
 	private static final RegistryObject[] LAND_NORMAL_POOL = {
-		CaerulaArborModEntities.CHISELER_FISH,
-		CaerulaArborModEntities.FLY_FISH,
-		CaerulaArborModEntities.PREDATOR_ABYSSAL,
-		CaerulaArborModEntities.FAKE_OFFSPRING,
-		CaerulaArborModEntities.SLIDER_FISH,
-		CaerulaArborModEntities.RUN_FISH,
-		CaerulaArborModEntities.SHOOTER_FISH,
-		CaerulaArborModEntities.SPLASHER_ABYSSAL
+		CAEntities.CHISELER_FISH,
+		CAEntities.FLY_FISH,
+		CAEntities.PREDATOR_ABYSSAL,
+		CAEntities.FAKE_OFFSPRING,
+		CAEntities.SLIDER_FISH,
+		CAEntities.RUN_FISH,
+		CAEntities.SHOOTER_FISH,
+		CAEntities.SPLASHER_ABYSSAL
 	};
 
 	@SuppressWarnings("rawtypes")
 	private static final RegistryObject[] OCEANIZED_ANIMAL_POOL = {
-		CaerulaArborModEntities.OCEANIZED_PIG,
-		CaerulaArborModEntities.OCEANIZED_COW,
-		CaerulaArborModEntities.OCEANIZED_SHEEP,
-		CaerulaArborModEntities.OCEANIZED_HORSE,
-		CaerulaArborModEntities.OCEANIZED_WOLF,
-		CaerulaArborModEntities.OCEANIZED_SPIDER,
-		CaerulaArborModEntities.OCEANIZED_VILLAGER,
-		CaerulaArborModEntities.OCEANIZED_WITCH,
-		CaerulaArborModEntities.OCEANIZED_FOX,
-		CaerulaArborModEntities.OCEANIZED_POLAR_BEAR,
-		CaerulaArborModEntities.OCEANIZE_RABBIT,
-		CaerulaArborModEntities.OCEANIZED_CAT,
-		CaerulaArborModEntities.OCEANIZED_CHICKEN
+		CAEntities.OCEANIZED_PIG,
+		CAEntities.OCEANIZED_COW,
+		CAEntities.OCEANIZED_SHEEP,
+		CAEntities.OCEANIZED_HORSE,
+		CAEntities.OCEANIZED_WOLF,
+		CAEntities.OCEANIZED_SPIDER,
+		CAEntities.OCEANIZED_VILLAGER,
+		CAEntities.OCEANIZED_WITCH,
+		CAEntities.OCEANIZED_FOX,
+		CAEntities.OCEANIZED_POLAR_BEAR,
+		CAEntities.OCEANIZE_RABBIT,
+		CAEntities.OCEANIZED_CAT,
+		CAEntities.OCEANIZED_CHICKEN
 	};
 
 	private WorldUtils() {
@@ -93,7 +92,7 @@ public class WorldUtils {
 		if (entity == null)
 			return InteractionResult.PASS;
 		if (entity.isShiftKeyDown() && blockstate.getBlock() == Blocks.FARMLAND) {
-			BlockState _bs = CaerulaArborModBlocks.OCEAN_FARMLAND.get().withPropertiesOf(blockstate);
+			BlockState _bs = CABlocks.OCEAN_FARMLAND.get().withPropertiesOf(blockstate);
 			world.setBlock(pos, _bs, 3);
 		}
 		return InteractionResult.SUCCESS;
@@ -109,29 +108,24 @@ public class WorldUtils {
 		}
 	}
 
-	//TODO下放回实体
-	public static void bestowAbility(LevelAccessor world, double index) {
-		MapVariablesHandler.bestowAbility(world, index);
-	}
-
 	//可疑
 	public static void burndownTrail(LevelAccessor world, BlockState toBeBurn, double px, double py, double pz) {
 		BlockState output = Blocks.AIR.defaultBlockState();
 		boolean success = false;
-		boolean watered = false;
-		if (toBeBurn.getBlock() == CaerulaArborModBlocks.SEA_TRAIL_INIT.get() || toBeBurn.getBlock() == CaerulaArborModBlocks.SEA_TRAIL_GROWING.get()) {
+		boolean watered;
+		if (toBeBurn.getBlock() == CABlocks.SEA_TRAIL_INIT.get() || toBeBurn.getBlock() == CABlocks.SEA_TRAIL_GROWING.get()) {
 			output = Blocks.AIR.defaultBlockState();
 			success = true;
-		} else if (toBeBurn.getBlock() == CaerulaArborModBlocks.SEA_TRAIL_GROWN.get() || toBeBurn.getBlock() == CaerulaArborModBlocks.SEA_TRAIL_STOP.get()) {
+		} else if (toBeBurn.getBlock() == CABlocks.SEA_TRAIL_GROWN.get() || toBeBurn.getBlock() == CABlocks.SEA_TRAIL_STOP.get()) {
 			output = (new Object() {
 				public BlockState with(BlockState _bs, String _property, int _newValue) {
 					Property<?> _prop = _bs.getBlock().getStateDefinition().getProperty(_property);
 					return _prop instanceof IntegerProperty _ip && _prop.getPossibleValues().contains(_newValue) ? _bs.setValue(_ip, _newValue) : _bs;
 				}
-			}.with(CaerulaArborModBlocks.SEA_TRAIL_BURNT.get().defaultBlockState(), "longevity", toBeBurn.getBlock().getStateDefinition().getProperty("longevity") instanceof IntegerProperty _getip4 ? toBeBurn.getValue(_getip4) : -1));
+			}.with(CABlocks.SEA_TRAIL_BURNT.get().defaultBlockState(), "longevity", toBeBurn.getBlock().getStateDefinition().getProperty("longevity") instanceof IntegerProperty _getip4 ? toBeBurn.getValue(_getip4) : -1));
 			success = true;
-		} else if (toBeBurn.getBlock() == CaerulaArborModBlocks.SEA_TRAIL_SOLID.get() || toBeBurn.getBlock() == CaerulaArborModBlocks.TRAIL_PULSE.get()) {
-			output = CaerulaArborModBlocks.SEA_TRAIL_BURNT_SOLID.get().defaultBlockState();
+		} else if (toBeBurn.getBlock() == CABlocks.SEA_TRAIL_SOLID.get() || toBeBurn.getBlock() == CABlocks.TRAIL_PULSE.get()) {
+			output = CABlocks.SEA_TRAIL_BURNT_SOLID.get().defaultBlockState();
 			success = true;
 		}
 		watered = toBeBurn.getBlock().getStateDefinition().getProperty("waterlogged") instanceof BooleanProperty _getbp8 && toBeBurn.getValue(_getbp8);
@@ -174,7 +168,7 @@ public class WorldUtils {
 	public static boolean canPutTrail(LevelAccessor world, double x, double y, double z) {
 		return (world.getBlockState(BlockPos.containing(x, y - 1, z)).isFaceSturdy(world, BlockPos.containing(x, y - 1, z), Direction.UP)
 				|| (world.getBlockState(BlockPos.containing(x, y - 1, z))).is(BlockTags.create(new ResourceLocation(CaerulaArborMod.MODID, "trail_existable"))))
-				&& !((world.getBlockState(BlockPos.containing(x, y - 1, z))).getBlock() == CaerulaArborModBlocks.SEA_TRAIL_SOLID.get());
+				&& !((world.getBlockState(BlockPos.containing(x, y - 1, z))).getBlock() == CABlocks.SEA_TRAIL_SOLID.get());
 	}
 
 	//TODO:下放,应该为两个凋零制作一个共同的基类，然后置入那里,其他两个凋零都调用的utils方法同理
@@ -218,13 +212,13 @@ public class WorldUtils {
 	public static void clearNetherseaAround(LevelAccessor world, double x, double y, double z, Entity entity) {
 		if (entity == null)
 			return;
-		BlockState target = Blocks.AIR.defaultBlockState();
-		boolean canBreak = false;
-		boolean mayDrop = false;
-		double px = 0;
-		double pz = 0;
-		double py = 0;
-		double dur = 0;
+		BlockState target;
+		boolean canBreak;
+		boolean mayDrop;
+		double px;
+		double pz;
+		double py;
+		double dur;
 		if (entity.tickCount % 30 == 5) {
 			if (entity instanceof LittleHelperEntity) {
 				dur = entity instanceof LittleHelperEntity _datEntI ? _datEntI.getEntityData().get(LittleHelperEntity.DATA_durability) : 0;
@@ -253,7 +247,7 @@ public class WorldUtils {
 					mayDrop = false;
 					if (target.is(BlockTags.create(new ResourceLocation(CaerulaArborMod.MODID, "trail")))) {
 						canBreak = true;
-					} else if (target.getBlock() == CaerulaArborModBlocks.OCEAN_OVARY.get()) {
+					} else if (target.getBlock() == CABlocks.OCEAN_OVARY.get()) {
 						canBreak = true;
 						mayDrop = true;
 					} else if (target.canBeReplaced()) {
@@ -281,7 +275,7 @@ public class WorldUtils {
 		if (!world.getBiome(BlockPos.containing(x, y, z)).is(TagKey.create(Registries.BIOME, new ResourceLocation(CaerulaArborMod.MODID, "common_spawn_biome")))) {
 			return false;
 		}
-		if (Math.random() * 100 < (world.getLevelData().getGameRules().getInt(CaerulaArborModGameRules.SEABORN_SPAWN_RATE))) {
+		if (Math.random() * 100 < (world.getLevelData().getGameRules().getInt(CAGameRules.SEABORN_SPAWN_RATE))) {
 			if (world.getDifficulty() == Difficulty.PEACEFUL) {
 				return false;
 			}
@@ -298,7 +292,7 @@ public class WorldUtils {
 		if (!world.getBiome(BlockPos.containing(x, y, z)).is(TagKey.create(Registries.BIOME, new ResourceLocation(CaerulaArborMod.MODID, "danger_spawn_biome")))) {
 			return false;
 		}
-		if (Math.random() * 100 < (world.getLevelData().getGameRules().getInt(CaerulaArborModGameRules.SEABORN_SPAWN_RATE))) {
+		if (Math.random() * 100 < (world.getLevelData().getGameRules().getInt(CAGameRules.SEABORN_SPAWN_RATE))) {
 			if (world.getDifficulty() == Difficulty.PEACEFUL) {
 				return false;
 			}
@@ -315,7 +309,7 @@ public class WorldUtils {
 		if (!world.getBiome(BlockPos.containing(x, y, z)).is(TagKey.create(Registries.BIOME, new ResourceLocation(CaerulaArborMod.MODID, "rare_spawn_biome")))) {
 			return false;
 		}
-		if (Math.random() * 100 < (world.getLevelData().getGameRules().getInt(CaerulaArborModGameRules.SEABORN_SPAWN_RATE))) {
+		if (Math.random() * 100 < (world.getLevelData().getGameRules().getInt(CAGameRules.SEABORN_SPAWN_RATE))) {
 			if (world.getDifficulty() == Difficulty.PEACEFUL) {
 				return false;
 			}
@@ -329,12 +323,12 @@ public class WorldUtils {
 
 	//TODO:下放
 	public static void corruptedSpawnMobs(LevelAccessor world, double x, double y, double z, double n) {
-		double tx = 0;
-		double ty = 0;
-		double tz = 0;
-		double R = 0;
-		double T = 0;
-		if (EntityUtils.getSeabornNum(world, x, y, z) >= (world.getLevelData().getGameRules().getInt(CaerulaArborModGameRules.CLONE_NUMBER_LIMIT))) {
+		double tx;
+		double ty;
+		double tz;
+		double R;
+		double T;
+		if (EntityUtils.getSeabornNum(world, x, y, z) >= (world.getLevelData().getGameRules().getInt(CAGameRules.CLONE_NUMBER_LIMIT))) {
 			return;
 		}
 		for (int index0 = 0; index0 < (int) n; index0++) {
@@ -443,7 +437,7 @@ public class WorldUtils {
 			return;
 		if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
 			if (world instanceof ServerLevel _level) {
-				ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, new ItemStack(CaerulaArborModItems.MOIST_STAR.get()));
+				ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, new ItemStack(CAItems.MOIST_STAR.get()));
 				entityToSpawn.setPickUpDelay(10);
 				entityToSpawn.setUnlimitedLifetime();
 				_level.addFreshEntity(entityToSpawn);
@@ -455,7 +449,7 @@ public class WorldUtils {
 		}
 		if (entity instanceof OceanizedWitherEntity) {
 			if (world instanceof ServerLevel _level) {
-				Entity entityToSpawn = CaerulaArborModEntities.OCEANIZED_WITHERIA.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+				Entity entityToSpawn = CAEntities.OCEANIZED_WITHERIA.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
 				if (entityToSpawn != null) {
 					entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
 				}
@@ -465,12 +459,11 @@ public class WorldUtils {
 
 	//TODO:下放回SuperBigCatEntity作为辅助方法并更新调用
 	public static double findValidYForCat(LevelAccessor world, double x, double y, double z, double xx, double yy, double zz) {
-		double y_found = 0;
+		double y_found;
 		if (world instanceof Level _level) {
 				_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.azalea.hit")), SoundSource.NEUTRAL, 0, 1);
 		}
-		y_found = yy;
-		for (int index0 = 0; index0 < 12; index0++) {
+        for (int index0 = 0; index0 < 12; index0++) {
 			y_found = yy + index0;
 			if (!(world.getBlockFloorHeight(BlockPos.containing(xx, y_found, zz)) > 0)) {
 				return y_found;
@@ -507,45 +500,14 @@ public class WorldUtils {
 
 	//同，需要解释
 	public static double findYzforTear(LevelAccessor world, double xx, double yy, double zz) {
-		double y_found = 0;
-		y_found = yy;
-		for (int index0 = 0; index0 < 12; index0++) {
+		double y_found;
+        for (int index0 = 0; index0 < 12; index0++) {
 			y_found = yy + index0;
 			if (world.isEmptyBlock(BlockPos.containing(xx, y_found, zz))) {
 				return y_found;
 			}
 		}
 		return 114514;
-	}
-
-	//TODO;下放
-	public static double findGround(LevelAccessor world, double xx, double yy, double zz) {
-		BlockState target = Blocks.AIR.defaultBlockState();
-		double findY = 0;
-		findY = 114514;
-		for (int dy = 0; dy <= 3; dy++) {
-			target = (world.getBlockState(BlockPos.containing(xx, yy + dy, zz)));
-			if (target.canBeReplaced() && world.getBlockFloorHeight(BlockPos.containing(xx, yy + dy - 1, zz)) > 0) {
-				findY = yy + dy;
-				break;
-			}
-			target = (world.getBlockState(BlockPos.containing(xx, yy - dy, zz)));
-			if (target.canBeReplaced() && world.getBlockFloorHeight(BlockPos.containing(xx, yy - dy - 1, zz)) > 0) {
-				findY = yy - dy;
-				break;
-			}
-		}
-		return findY;
-	}
-
-	//TODO:也下放回WitherShootPreEntity
-	public static void shootWitherTo(LevelAccessor world, Entity from, Entity target) {
-		if (from == null || target == null)
-			return;
-		double vx = target.getX() - from.getX();
-		double vy = (target.getY() + target.getBbHeight() * 0.5) - (from.getY() + 2.7);
-		double vz = target.getZ() - from.getZ();
-		shootWitherSkull(world, from, 0.1, vx, vy, vz, 1, Mth.nextDouble(RandomSource.create(), 0.42, 0.56), from.getX(), from.getY() + 2.7, from.getZ());
 	}
 
 	//TODO:之后也进行下放
@@ -586,10 +548,10 @@ public class WorldUtils {
 
 	//TODO:下放
 	public static void ireneBurnBrandAround(LevelAccessor world, double x, double y, double z) {
-		BlockState toBeBurn = Blocks.AIR.defaultBlockState();
-		double px = 0;
-		double py = 0;
-		double pz = 0;
+		BlockState toBeBurn;
+		double px;
+		double py;
+		double pz;
 		for (int index0 = 0; index0 < 3; index0++) {
 			for (int index1 = 0; index1 < 3; index1++) {
 				for (int index2 = 0; index2 < 3; index2++) {
@@ -597,11 +559,11 @@ public class WorldUtils {
 					py = y + index1 - 1;
 					pz = z + index2 - 1;
 					toBeBurn = (world.getBlockState(BlockPos.containing(px, py, pz)));
-					if (toBeBurn.getBlock() == CaerulaArborModBlocks.SEA_TRAIL_INIT.get() || toBeBurn.getBlock() == CaerulaArborModBlocks.SEA_TRAIL_GROWING.get() || toBeBurn.getBlock() == CaerulaArborModBlocks.SEA_TRAIL_GROWN.get()
-							|| toBeBurn.getBlock() == CaerulaArborModBlocks.SEA_TRAIL_STOP.get() || toBeBurn.getBlock() == CaerulaArborModBlocks.SEA_TRAIL_SOLID.get() || toBeBurn.getBlock() == CaerulaArborModBlocks.TRAIL_PULSE.get()) {
+					if (toBeBurn.getBlock() == CABlocks.SEA_TRAIL_INIT.get() || toBeBurn.getBlock() == CABlocks.SEA_TRAIL_GROWING.get() || toBeBurn.getBlock() == CABlocks.SEA_TRAIL_GROWN.get()
+							|| toBeBurn.getBlock() == CABlocks.SEA_TRAIL_STOP.get() || toBeBurn.getBlock() == CABlocks.SEA_TRAIL_SOLID.get() || toBeBurn.getBlock() == CABlocks.TRAIL_PULSE.get()) {
 						burndownTrail(world, toBeBurn, px, py, pz);
 						if (world instanceof ServerLevel _level)
-							_level.sendParticles(CaerulaArborModParticleTypes.PURPLE_FLAME.get(), (x + 0.5), (y + 1), (z + 0.5), 16, 0.75, 0.75, 0.75, 0.15);
+							_level.sendParticles(CAParticleTypes.PURPLE_FLAME.get(), (x + 0.5), (y + 1), (z + 0.5), 16, 0.75, 0.75, 0.75, 0.15);
 					}
 				}
 			}
@@ -610,8 +572,8 @@ public class WorldUtils {
 
 	//需要评估然后添加文档注释解释作用
 	public static boolean isOrganic(BlockState block) {
-		if (block.getBlock() == CaerulaArborModBlocks.TRAIL_PULSE.get() || block.getBlock() == CaerulaArborModBlocks.TRAIL_LOG.get() || block.getBlock() == CaerulaArborModBlocks.TRAIL_LEAVE.get()
-				|| block.getBlock() == CaerulaArborModBlocks.STRIPPED_TRAIL_LOG.get()) {
+		if (block.getBlock() == CABlocks.TRAIL_PULSE.get() || block.getBlock() == CABlocks.TRAIL_LOG.get() || block.getBlock() == CABlocks.TRAIL_LEAVE.get()
+				|| block.getBlock() == CABlocks.STRIPPED_TRAIL_LOG.get()) {
 			return false;
 		}
 		if (block.is(BlockTags.create(new ResourceLocation("forge:phayrilesh"))) || block.is(BlockTags.create(new ResourceLocation("spore:fungal_blocks")))) {
@@ -650,129 +612,13 @@ public class WorldUtils {
 		return true;
 	}
 
-	//TODO:下放回实体
-	public static void isharmlaLinkPtcToEntity(LevelAccessor world, double x, double y, double z, Entity tgt) {
-		if (tgt == null)
-			return;
-		double vx = tgt.getX() - (x + 0.5);
-		double vy = tgt.getY() - (y + 0.5);
-		double vz = tgt.getZ() - (z + 0.5);
-		double size = Math.max(Math.min(Math.round(Math.sqrt(Math.pow(vx, 2) + Math.pow(vy, 2) + Math.pow(vz, 2))), 32), 1);
-		for (int index0 = 0; index0 < (int) size; index0++) {
-			if (world instanceof ServerLevel _level)
-				_level.sendParticles(CaerulaArborModParticleTypes.ISHARMLA_CURSE_PARTICLE.get(), (x + 0.5 + (vx / size) * index0), (y + 0.5 + (vy / size) * index0 + 0.5), (z + 0.5 + (vz / size) * index0), 5, 0.32, 0.5, 0.32, 0.05);
-		}
-	}
-
-	//TODO:下放回方块
-	public static InteractionResult summonMegachest(LevelAccessor world, double x, double y, double z, BlockState blockstate) {
-		if ((blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _getip1 ? blockstate.getValue(_getip1) : -1) == 0) {
-			{
-				int _value = 1;
-				BlockPos _pos = BlockPos.containing(x, y, z);
-				BlockState _bs = world.getBlockState(_pos);
-				if (_bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))
-					world.setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
-			}
-			{
-				int _value = 1;
-				BlockPos _pos = BlockPos.containing(x, y, z);
-				BlockState _bs = world.getBlockState(_pos);
-				if (_bs.getBlock().getStateDefinition().getProperty("animation") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))
-					world.setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
-			}
-			if ((new Object() {
-				public Direction getDirection(BlockState _bs) {
-					Property<?> _prop = _bs.getBlock().getStateDefinition().getProperty("facing");
-					if (_prop instanceof DirectionProperty _dp)
-						return _bs.getValue(_dp);
-					_prop = _bs.getBlock().getStateDefinition().getProperty("axis");
-					return _prop instanceof EnumProperty _ep && _ep.getPossibleValues().toArray()[0] instanceof Direction.Axis ? Direction.fromAxisAndDirection((Direction.Axis) _bs.getValue(_ep), Direction.AxisDirection.POSITIVE) : Direction.NORTH;
-				}
-			}.getDirection(blockstate)) == Direction.NORTH) {
-				CaerulaArborMod.queueServerWork(15, () -> {
-					world.destroyBlock(BlockPos.containing(x, y, z), false);
-					if (world instanceof Level _level) {
-							_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.ender_chest.close")), SoundSource.BLOCKS, 1, 1);
-					}
-					if (world instanceof ServerLevel _level) {
-						Entity entityToSpawn = CaerulaArborModEntities.MEGA_CHEST.get().spawn(_level, BlockPos.containing(x + 0.5, y, z + 0.5), MobSpawnType.MOB_SUMMONED);
-						if (entityToSpawn != null) {
-							entityToSpawn.setYRot(-180);
-							entityToSpawn.setYBodyRot(-180);
-							entityToSpawn.setYHeadRot(-180);
-						}
-					}
-				});
-			} else if ((new Object() {
-				public Direction getDirection(BlockState _bs) {
-					Property<?> _prop = _bs.getBlock().getStateDefinition().getProperty("facing");
-					if (_prop instanceof DirectionProperty _dp)
-						return _bs.getValue(_dp);
-					_prop = _bs.getBlock().getStateDefinition().getProperty("axis");
-					return _prop instanceof EnumProperty _ep && _ep.getPossibleValues().toArray()[0] instanceof Direction.Axis ? Direction.fromAxisAndDirection((Direction.Axis) _bs.getValue(_ep), Direction.AxisDirection.POSITIVE) : Direction.NORTH;
-				}
-			}.getDirection(blockstate)) == Direction.SOUTH) {
-				CaerulaArborMod.queueServerWork(15, () -> {
-					world.destroyBlock(BlockPos.containing(x, y, z), false);
-					if (world instanceof Level _level) {
-							_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.ender_chest.close")), SoundSource.BLOCKS, 1, 1);
-					}
-					if (world instanceof ServerLevel _level) {
-						Entity entityToSpawn = CaerulaArborModEntities.MEGA_CHEST.get().spawn(_level, BlockPos.containing(x + 0.5, y, z + 0.5), MobSpawnType.MOB_SUMMONED);
-                    }
-				});
-			} else if ((new Object() {
-				public Direction getDirection(BlockState _bs) {
-					Property<?> _prop = _bs.getBlock().getStateDefinition().getProperty("facing");
-					if (_prop instanceof DirectionProperty _dp)
-						return _bs.getValue(_dp);
-					_prop = _bs.getBlock().getStateDefinition().getProperty("axis");
-					return _prop instanceof EnumProperty _ep && _ep.getPossibleValues().toArray()[0] instanceof Direction.Axis ? Direction.fromAxisAndDirection((Direction.Axis) _bs.getValue(_ep), Direction.AxisDirection.POSITIVE) : Direction.NORTH;
-				}
-			}.getDirection(blockstate)) == Direction.WEST) {
-				CaerulaArborMod.queueServerWork(15, () -> {
-					world.destroyBlock(BlockPos.containing(x, y, z), false);
-					if (world instanceof Level _level) {
-							_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.ender_chest.close")), SoundSource.BLOCKS, 1, 1);
-					}
-					if (world instanceof ServerLevel _level) {
-						Entity entityToSpawn = CaerulaArborModEntities.MEGA_CHEST.get().spawn(_level, BlockPos.containing(x + 0.5, y, z + 0.5), MobSpawnType.MOB_SUMMONED);
-						if (entityToSpawn != null) {
-							entityToSpawn.setYRot(90);
-							entityToSpawn.setYBodyRot(90);
-							entityToSpawn.setYHeadRot(90);
-						}
-					}
-				});
-			} else if (true) {//可疑，应该查看待移植文件对应的代码
-				CaerulaArborMod.queueServerWork(15, () -> {
-					world.destroyBlock(BlockPos.containing(x, y, z), false);
-					if (world instanceof Level _level) {
-							_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.ender_chest.close")), SoundSource.BLOCKS, 1, 1);
-					}
-					if (world instanceof ServerLevel _level) {
-						Entity entityToSpawn = CaerulaArborModEntities.MEGA_CHEST.get().spawn(_level, BlockPos.containing(x + 0.5, y, z + 0.5), MobSpawnType.MOB_SUMMONED);
-						if (entityToSpawn != null) {
-							entityToSpawn.setYRot(-90);
-							entityToSpawn.setYBodyRot(-90);
-							entityToSpawn.setYHeadRot(-90);
-						}
-					}
-				});
-			}
-			return InteractionResult.SUCCESS;
-		}
-		return InteractionResult.PASS;
-	}
-
-	//TODO:下放
+	//TODO:下放，但是需要先制作基类
 	public static void witheriaDestroyBlocks(LevelAccessor world, double x, double y, double z) {
 		boolean once = false;
-		double dx = 0;
-		double dy = 0;
-		double dz = 0;
-		double hardness = 0;
+		double dx;
+		double dy;
+		double dz;
+		double hardness;
 		BlockState block;
 		if (canGrief(world)) {
 			dx = -1;
@@ -829,7 +675,7 @@ public class WorldUtils {
 		if (!world.getBiome(BlockPos.containing(x, y, z)).is(TagKey.create(Registries.BIOME, new ResourceLocation(CaerulaArborMod.MODID, "underwater_spawn_biome")))) {
 			return false;
 		}
-		if (Math.random() * 100 < (world.getLevelData().getGameRules().getInt(CaerulaArborModGameRules.SEABORN_SPAWN_RATE))) {
+		if (Math.random() * 100 < (world.getLevelData().getGameRules().getInt(CAGameRules.SEABORN_SPAWN_RATE))) {
 			return world.getDifficulty() != Difficulty.PEACEFUL;
 		}
 		return false;
@@ -840,19 +686,10 @@ public class WorldUtils {
 		if (!world.getBiome(BlockPos.containing(x, y, z)).is(TagKey.create(Registries.BIOME, new ResourceLocation(CaerulaArborMod.MODID, "marine_spawn_biome")))) {
 			return false;
 		}
-		if (Math.random() * 100 < (world.getLevelData().getGameRules().getInt(CaerulaArborModGameRules.SEABORN_SPAWN_RATE))) {
+		if (Math.random() * 100 < (world.getLevelData().getGameRules().getInt(CAGameRules.SEABORN_SPAWN_RATE))) {
 			return world.getDifficulty() != Difficulty.PEACEFUL;
 		}
 		return false;
 	}
 
-	//需要查看原版mc是怎么处理的
-	public static void saveWaterloggedState(LevelAccessor world, double x, double y, double z, BlockState oldState) {
-		if (oldState.getBlock() == Blocks.WATER) {
-			BlockPos _pos = BlockPos.containing(x, y, z);
-			BlockState _bs = world.getBlockState(_pos);
-			if (_bs.getBlock().getStateDefinition().getProperty("waterlogged") instanceof BooleanProperty _booleanProp)
-				world.setBlock(_pos, _bs.setValue(_booleanProp, true), 3);
-		}
-	}
 }

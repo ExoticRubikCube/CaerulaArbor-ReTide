@@ -1,7 +1,7 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -45,15 +45,15 @@ public class ItemHelperAl1sItem extends Item {
 		double z = context.getClickedPos().getZ();
 		Direction direction = context.getClickedFace();
 		ItemStack itemstack = context.getItemInHand();
-        double tgtX = 0;
-		double tgtY = 0;
-		double tgtZ = 0;
+        double tgtX;
+		double tgtY;
+		double tgtZ;
 		double random = 0;
 		tgtX = x + direction.getStepX() + 0.5;
 		tgtY = y + direction.getStepY() + 0.5;
 		tgtZ = z + direction.getStepZ() + 0.5;
 		if (world instanceof ServerLevel _level) {
-			Entity entityToSpawn = CaerulaArborModEntities.AL_1_S_HELPER.get().spawn(_level, BlockPos.containing(tgtX, tgtY, tgtZ), MobSpawnType.MOB_SUMMONED);
+			Entity entityToSpawn = CAEntities.AL_1_S_HELPER.get().spawn(_level, BlockPos.containing(tgtX, tgtY, tgtZ), MobSpawnType.MOB_SUMMONED);
 			if (entityToSpawn != null) {
 				entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
 			}

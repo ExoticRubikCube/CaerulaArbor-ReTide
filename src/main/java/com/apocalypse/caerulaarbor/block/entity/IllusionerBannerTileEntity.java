@@ -1,7 +1,7 @@
 package com.apocalypse.caerulaarbor.block.entity;
 
 import com.apocalypse.caerulaarbor.block.IllusionerBannerBlock;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlockEntities;
+import com.apocalypse.caerulaarbor.init.CABlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -42,7 +42,7 @@ public class IllusionerBannerTileEntity extends RandomizableContainerBlockEntity
 	private int blockstateOld = this.getBlockState().getValue(IllusionerBannerBlock.BLOCKSTATE);
 
 	public IllusionerBannerTileEntity(BlockPos pos, BlockState state) {
-		super(CaerulaArborModBlockEntities.ILLUSIONER_BANNER.get(), pos, state);
+		super(CABlockEntities.ILLUSIONER_BANNER.get(), pos, state);
 	}
 
 	private PlayState predicate(AnimationState event) {

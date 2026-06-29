@@ -1,7 +1,7 @@
 
 package com.apocalypse.caerulaarbor.block;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
+import com.apocalypse.caerulaarbor.init.CABlocks;
 import com.apocalypse.caerulaarbor.procedures.PokeSlightlyProcedure;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -93,13 +93,13 @@ public class NetherseaWoodBlock extends Block {
             if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() instanceof AxeItem
                     || ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).is(ItemTags.create(new ResourceLocation("minecraft:axes")))
                     || ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).is(ItemTags.create(new ResourceLocation("minecraft:axes")))) {
-                world.levelEvent(2001, BlockPos.containing(x, y, z), getId(CaerulaArborModBlocks.NETHERSEA_WOOD.get().defaultBlockState()));
+                world.levelEvent(2001, BlockPos.containing(x, y, z), getId(CABlocks.NETHERSEA_WOOD.get().defaultBlockState()));
                 if ((LevelAccessor) world instanceof Level _level) {
                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.axe.strip")), SoundSource.BLOCKS, 1, 1);
                 }
                 {
                     BlockPos _bp = BlockPos.containing(x, y, z);
-                    BlockState _bs = CaerulaArborModBlocks.STRIPPED_NETHERSEA_WOOD.get().withPropertiesOf(blockstate);
+                    BlockState _bs = CABlocks.STRIPPED_NETHERSEA_WOOD.get().withPropertiesOf(blockstate);
                     ((LevelAccessor) world).setBlock(_bp, _bs, 3);
                 }
                 result = InteractionResult.SUCCESS;

@@ -1,7 +1,7 @@
 
 package com.apocalypse.caerulaarbor.block;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
+import com.apocalypse.caerulaarbor.init.CABlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockAndTintGetter;
@@ -81,8 +81,8 @@ public class AegirGlassBarBlock extends Block {
 	}
 
 	private void updateBarStyle(Level world, BlockPos pos) {
-		boolean upper = world.getBlockState(pos.above()).getBlock() == CaerulaArborModBlocks.AEGIR_GLASS_BAR.get() || world.getBlockState(pos.above()).getBlock() == CaerulaArborModBlocks.AEGIR_GLASS_ARCH.get();
-		boolean lower = world.getBlockState(pos.below()).getBlock() == CaerulaArborModBlocks.AEGIR_GLASS_BAR.get();
+		boolean upper = world.getBlockState(pos.above()).getBlock() == CABlocks.AEGIR_GLASS_BAR.get() || world.getBlockState(pos.above()).getBlock() == CABlocks.AEGIR_GLASS_ARCH.get();
+		boolean lower = world.getBlockState(pos.below()).getBlock() == CABlocks.AEGIR_GLASS_BAR.get();
 		int value;
 		if (upper && lower) {
 			value = 3;

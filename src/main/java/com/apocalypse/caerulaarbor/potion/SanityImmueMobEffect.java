@@ -2,7 +2,7 @@
 package com.apocalypse.caerulaarbor.potion;
 
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.Entity;
@@ -16,7 +16,7 @@ import java.util.List;
 public class SanityImmueMobEffect extends MobEffect {
     public SanityImmueMobEffect() {
         super(MobEffectCategory.BENEFICIAL, -3342337);
-        this.addAttributeModifier(CaerulaArborModAttributes.SANITY_RESISTANCE.get(), "25ed2265-a53a-32f6-8c94-a83714a7ad23", 200, AttributeModifier.Operation.ADDITION);
+        this.addAttributeModifier(CAAttributes.SANITY_RESISTANCE.get(), "25ed2265-a53a-32f6-8c94-a83714a7ad23", 200, AttributeModifier.Operation.ADDITION);
     }
 
     @Override

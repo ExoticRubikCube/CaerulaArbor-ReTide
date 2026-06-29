@@ -1,8 +1,8 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -79,7 +79,7 @@ public class BrokenSeaItem extends SwordItem {
                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "gladiia_attack_hit")), SoundSource.PLAYERS, 1, 1);
                     }
                     if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                        _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.HAEMOPHILIA.get(), 260, 1, false, false));
+                        _entity.addEffect(new MobEffectInstance(CAMobEffects.HAEMOPHILIA.get(), 260, 1, false, false));
                 }
             }
         }
@@ -93,7 +93,7 @@ public class BrokenSeaItem extends SwordItem {
         double y = entity.getY();
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
-        double damage = 0;
+        double damage;
         double count = 0;
         if (!((Entity) entity instanceof Player _plrCldCheck1 && _plrCldCheck1.getCooldowns().isOnCooldown(itemstack.getItem()))) {
             if (entity.isShiftKeyDown() && ((Entity) entity instanceof Player _plr ? _plr.experienceLevel : 0) >= 5) {
@@ -101,7 +101,7 @@ public class BrokenSeaItem extends SwordItem {
                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "gladiia_skill_release")), SoundSource.PLAYERS, 2, 1);
                 }
                 if ((LevelAccessor) world instanceof ServerLevel _level) {
-                    Entity entityToSpawn = CaerulaArborModEntities.GLADIIA_WHIRL.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+                    Entity entityToSpawn = CAEntities.GLADIIA_WHIRL.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                     if (entityToSpawn != null) {
                         entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
                     }
@@ -134,7 +134,7 @@ public class BrokenSeaItem extends SwordItem {
                                 EntityUtils.gladiiaLinkPtcToEntity(world, entity, entityiterator);
                                 LivingEntity _entity = (LivingEntity) entityiterator;
                                 if (!_entity.level().isClientSide())
-                                    _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.DIZZY.get(), 40, 0, false, false));
+                                    _entity.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 40, 0, false, false));
                                 entityiterator.hurt(
                                         new DamageSource(((LevelAccessor) world).registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))), entity),
                                         (float) (damage * 3));

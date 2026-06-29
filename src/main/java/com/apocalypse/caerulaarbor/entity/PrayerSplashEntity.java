@@ -1,8 +1,8 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAParticleTypes;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
@@ -40,7 +40,7 @@ public class PrayerSplashEntity extends AbstractArrow implements ItemSupplier {
 	public static final ItemStack PROJECTILE_ITEM = new ItemStack(Items.GHAST_TEAR);
 
 	public PrayerSplashEntity(PlayMessages.SpawnEntity packet, Level world) {
-		super(CaerulaArborModEntities.PRAYER_SPLASH.get(), world);
+		super(CAEntities.PRAYER_SPLASH.get(), world);
 	}
 
 	public PrayerSplashEntity(EntityType<? extends PrayerSplashEntity> type, Level world) {
@@ -113,7 +113,7 @@ public class PrayerSplashEntity extends AbstractArrow implements ItemSupplier {
                                 if (entityiterator.isAlive()) {
                                     EntityUtils.heal(entityiterator, atk);
                                     if (world instanceof ServerLevel _level)
-                                        _level.sendParticles(CaerulaArborModParticleTypes.SEA_SPLASH.get(), (entityiterator.getX()), (entityiterator.getY() + 1), (entityiterator.getZ()), 24, 1, 1, 1, 0.1);
+                                        _level.sendParticles(CAParticleTypes.SEA_SPLASH.get(), (entityiterator.getX()), (entityiterator.getY() + 1), (entityiterator.getZ()), 24, 1, 1, 1, 0.1);
                                     count = count + 1;
                                     if (count >= 3) {
                                         break;
@@ -142,7 +142,7 @@ public class PrayerSplashEntity extends AbstractArrow implements ItemSupplier {
 	}
 
 	public static PrayerSplashEntity shoot(Level world, LivingEntity entity, RandomSource random, float power, double damage, int knockback) {
-		PrayerSplashEntity entityarrow = new PrayerSplashEntity(CaerulaArborModEntities.PRAYER_SPLASH.get(), entity, world);
+		PrayerSplashEntity entityarrow = new PrayerSplashEntity(CAEntities.PRAYER_SPLASH.get(), entity, world);
 		entityarrow.shoot(entity.getViewVector(1).x, entity.getViewVector(1).y, entity.getViewVector(1).z, power * 2, 0);
 		entityarrow.setSilent(true);
 		entityarrow.setCritArrow(false);
@@ -163,7 +163,7 @@ public class PrayerSplashEntity extends AbstractArrow implements ItemSupplier {
 	}
 
 	public static PrayerSplashEntity shoot(LivingEntity entity, LivingEntity target, double damage) {
-		PrayerSplashEntity entityarrow = new PrayerSplashEntity(CaerulaArborModEntities.PRAYER_SPLASH.get(), entity, entity.level());
+		PrayerSplashEntity entityarrow = new PrayerSplashEntity(CAEntities.PRAYER_SPLASH.get(), entity, entity.level());
 		double dx = target.getX() - entity.getX();
 		double dy = target.getY() + target.getEyeHeight() - 1.1;
 		double dz = target.getZ() - entity.getZ();

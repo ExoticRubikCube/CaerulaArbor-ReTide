@@ -46,17 +46,14 @@ public class EntitySpawnUtils {
 	private static boolean spawnEntity(ServerLevel level, double x, double y,double z) {
 		Optional<EntityType<?>> optionalEntityType = randomEntityTypeInTag(level, ENTITY_TAG);
 		if (optionalEntityType.isEmpty()) return false;
-		EntityType<?> entityType = optionalEntityType.get();
-		if(entityType == null) return false;
-		Entity entity = entityType.create(level);
-		if (entity == null) return false;
-
-		entity.moveTo(x,y,z,
-				level.getRandom().nextFloat() * 360.0F,
-				0.0F
-		);
-
-		level.addFreshEntity(entity);
+        Entity entity = optionalEntityType.get().create(level);
+		if (entity != null) {
+			entity.moveTo(x, y, z,
+					level.getRandom().nextFloat() * 360.0F,
+					0.0F
+			);
+			level.addFreshEntity(entity);
+		}
 		return true;
 	}
 }

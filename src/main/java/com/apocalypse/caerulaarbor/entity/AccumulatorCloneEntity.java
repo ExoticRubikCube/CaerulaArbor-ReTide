@@ -2,8 +2,8 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -62,7 +62,7 @@ public class AccumulatorCloneEntity extends SeaMonster {
 	public String animationprocedure = "empty";
 
 	public AccumulatorCloneEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.ACCUMULATOR_CLONE.get(), world);
+		this(CAEntities.ACCUMULATOR_CLONE.get(), world);
 	}
 
 	public AccumulatorCloneEntity(EntityType<AccumulatorCloneEntity> type, Level world) {
@@ -221,7 +221,7 @@ public class AccumulatorCloneEntity extends SeaMonster {
 
     protected void dropCustomDeathLoot(DamageSource source, int looting, boolean recentlyHitIn) {
 		super.dropCustomDeathLoot(source, looting, recentlyHitIn);
-		this.spawnAtLocation(new ItemStack(CaerulaArborModItems.OCEAN_CELL.get()));
+		this.spawnAtLocation(new ItemStack(CAItems.OCEAN_CELL.get()));
 	}
 
 	@Override

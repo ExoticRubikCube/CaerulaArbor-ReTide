@@ -1,8 +1,8 @@
 
 package com.apocalypse.caerulaarbor.menu;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMenus;
+import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CAMenus;
 import io.netty.buffer.Unpooled;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
@@ -42,11 +42,11 @@ public class InfoStrategyAllMenu extends AbstractContainerMenu implements Suppli
 	private final BlockEntity boundBlockEntity = null;
 
 	public InfoStrategyAllMenu(int id, Inventory inv, FriendlyByteBuf extraData) {
-		super(CaerulaArborModMenus.INFO_STRATEGY_ALL.get(), id);
+		super(CAMenus.INFO_STRATEGY_ALL.get(), id);
 		this.entity = inv.player;
 		this.world = inv.player.level();
 		this.internal = new ItemStackHandler(0);
-		BlockPos pos = null;
+		BlockPos pos;
 		if (extraData != null) {
 			pos = extraData.readBlockPos();
 			this.x = pos.getX();
@@ -81,10 +81,10 @@ public class InfoStrategyAllMenu extends AbstractContainerMenu implements Suppli
 	public static InteractionResult open(Entity entity, BlockPos blockPos) {
 		if (entity == null)
 			return InteractionResult.PASS;
-		if (entity instanceof LivingEntity livingEntity && livingEntity.isHolding(CaerulaArborModItems.DICTATIONLESS_CHAPTER.get())) {
+		if (entity instanceof LivingEntity livingEntity && livingEntity.isHolding(CAItems.DICTATIONLESS_CHAPTER.get())) {
 			return InteractionResult.PASS;
 		}
-		if (entity instanceof LivingEntity livingEntity && livingEntity.isHolding(CaerulaArborModItems.DICTATION_CHAPTER.get())) {
+		if (entity instanceof LivingEntity livingEntity && livingEntity.isHolding(CAItems.DICTATION_CHAPTER.get())) {
 			return InteractionResult.PASS;
 		}
 		if (entity instanceof ServerPlayer serverPlayer) {

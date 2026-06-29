@@ -1,8 +1,8 @@
 package com.apocalypse.caerulaarbor.entity.routeshaper;
 
 import com.apocalypse.caerulaarbor.capability.map.MapVariables;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
@@ -66,7 +66,7 @@ public class RouteShaperEntity extends AbstractPathshaperEntity {
 	private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.NOTCHED_6);
 
 	public RouteShaperEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.ROUTE_SHAPER.get(), world);
+		this(CAEntities.ROUTE_SHAPER.get(), world);
 	}
 
 	public RouteShaperEntity(EntityType<RouteShaperEntity> type, Level world) {
@@ -97,7 +97,7 @@ public class RouteShaperEntity extends AbstractPathshaperEntity {
 
 	@Override
 	protected EntityType<?> getSummonedFractalType() {
-		return CaerulaArborModEntities.ROUTE_FRACTAL.get();
+		return CAEntities.ROUTE_FRACTAL.get();
 	}
 
 	@Override
@@ -109,8 +109,8 @@ public class RouteShaperEntity extends AbstractPathshaperEntity {
 		if (MapVariables.get(this.level()).strategy_subsisting >= 4 && this.entityData.get(DATA_phase) == 0) {
 			this.entityData.set(DATA_phase, 1);
 			if (!this.level().isClientSide()) {
-				this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 200, 1, false, false));
-				this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.FAKE_DEATH.get(), 200, 1, false, false));
+				this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 200, 1, false, false));
+				this.addEffect(new MobEffectInstance(CAMobEffects.FAKE_DEATH.get(), 200, 1, false, false));
 			}
 			return true;
 		}
@@ -163,8 +163,7 @@ public class RouteShaperEntity extends AbstractPathshaperEntity {
 				double x = RouteShaperEntity.this.getX();
 				double y = RouteShaperEntity.this.getY();
 				double z = RouteShaperEntity.this.getZ();
-				Entity entity = RouteShaperEntity.this;
-				Level world = RouteShaperEntity.this.level();
+                Level world = RouteShaperEntity.this.level();
 				return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
 

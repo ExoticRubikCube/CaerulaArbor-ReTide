@@ -1,7 +1,7 @@
 
 package com.apocalypse.caerulaarbor.item;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -54,13 +54,13 @@ public class FluoreBerryJuiceItem extends Item {
         entity.removeEffect(MobEffects.BLINDNESS);
         if (!(entity instanceof Player)) {
             resultStack.shrink(1);
-            ItemStack emptyCup = new ItemStack(CaerulaArborModItems.OCEANGLASS_CUP.get());
+            ItemStack emptyCup = new ItemStack(CAItems.OCEANGLASS_CUP.get());
             if (resultStack.isEmpty()) {
                 return emptyCup;
             }
         } else if (entity instanceof Player player && !player.getAbilities().instabuild) {
             resultStack.shrink(1);
-            ItemStack emptyCup = new ItemStack(CaerulaArborModItems.OCEANGLASS_CUP.get());
+            ItemStack emptyCup = new ItemStack(CAItems.OCEANGLASS_CUP.get());
             if (resultStack.isEmpty()) {
                 return emptyCup;
             }

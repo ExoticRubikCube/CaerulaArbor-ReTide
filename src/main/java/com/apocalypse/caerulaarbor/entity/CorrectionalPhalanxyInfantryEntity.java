@@ -1,7 +1,7 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -59,7 +59,7 @@ public class CorrectionalPhalanxyInfantryEntity extends Animal implements GeoEnt
 	public String animationprocedure = "empty";
 
 	public CorrectionalPhalanxyInfantryEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.CORRECTIONAL_PHALANXY_INFANTRY.get(), world);
+		this(CAEntities.CORRECTIONAL_PHALANXY_INFANTRY.get(), world);
 	}
 
 	public CorrectionalPhalanxyInfantryEntity(EntityType<CorrectionalPhalanxyInfantryEntity> type, Level world) {
@@ -201,9 +201,9 @@ public class CorrectionalPhalanxyInfantryEntity extends Animal implements GeoEnt
 	public void baseTick() {
 		super.baseTick();
         LevelAccessor world = this.level();
-        double sklp1 = 0;
-        double sklp2 = 0;
-        Entity enemy = null;
+        double sklp1;
+        double sklp2;
+        Entity enemy;
         if (this.isAlive()) {
             sklp1 = (Entity) this instanceof CorrectionalPhalanxyInfantryEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp1) : 0;
             sklp2 = (Entity) this instanceof CorrectionalPhalanxyInfantryEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp2) : 0;
@@ -253,7 +253,7 @@ public class CorrectionalPhalanxyInfantryEntity extends Animal implements GeoEnt
 
 	@Override
 	public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
-		CorrectionalPhalanxyInfantryEntity retval = CaerulaArborModEntities.CORRECTIONAL_PHALANXY_INFANTRY.get().create(serverWorld);
+		CorrectionalPhalanxyInfantryEntity retval = CAEntities.CORRECTIONAL_PHALANXY_INFANTRY.get().create(serverWorld);
 		retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null, null);
 		return retval;
 	}

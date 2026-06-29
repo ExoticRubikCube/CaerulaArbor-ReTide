@@ -1,8 +1,8 @@
 
 package com.apocalypse.caerulaarbor.item;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.network.chat.Component;
@@ -40,7 +40,7 @@ public class ComplexChitinSwordItem extends SwordItem {
 			}
 
 			public Ingredient getRepairIngredient() {
-				return Ingredient.of(new ItemStack(CaerulaArborModItems.COMPLEX_CHITIN.get()));
+				return Ingredient.of(new ItemStack(CAItems.COMPLEX_CHITIN.get()));
 			}
 		}, 3, -2.4f, new Item.Properties().fireResistant());
 	}
@@ -50,7 +50,7 @@ public class ComplexChitinSwordItem extends SwordItem {
 		Multimap<Attribute, AttributeModifier> map = super.getDefaultAttributeModifiers(equipmentSlot);
 		if (equipmentSlot == EquipmentSlot.MAINHAND) {
 			map = HashMultimap.create(map);
-			map.put(CaerulaArborModAttributes.SANITY_INJURY_DAMAGE.get(),
+			map.put(CAAttributes.SANITY_INJURY_DAMAGE.get(),
 					new AttributeModifier(new UUID(equipmentSlot.toString().hashCode(), 0), "caerula_arbor_attribute_modifier", 120, AttributeModifier.Operation.ADDITION));
 		}
 		return map;

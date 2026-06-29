@@ -2,8 +2,8 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CABlocks;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.advancements.Advancement;
@@ -62,7 +62,7 @@ public class MegaChestEntity extends SeaMonster {
 	private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.WHITE, ServerBossEvent.BossBarOverlay.NOTCHED_10);
 
 	public MegaChestEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.MEGA_CHEST.get(), world);
+		this(CAEntities.MEGA_CHEST.get(), world);
 	}
 
 	public MegaChestEntity(EntityType<MegaChestEntity> type, Level world) {
@@ -217,7 +217,7 @@ public class MegaChestEntity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        Entity enemy = null;
+        Entity enemy;
         if (!((Entity) this instanceof MegaChestEntity _datEntL0 && _datEntL0.getEntityData().get(DATA_released))) {
             setShiftKeyDown(true);
             if (!this.level().isClientSide())
@@ -232,7 +232,7 @@ public class MegaChestEntity extends SeaMonster {
 							discard();
 						{
 							BlockPos _bp = BlockPos.containing(x, y, z);
-							BlockState _bs = CaerulaArborModBlocks.CHESTMEGA_SPAWNER.get().withPropertiesOf(world.getBlockState(_bp));
+							BlockState _bs = CABlocks.CHESTMEGA_SPAWNER.get().withPropertiesOf(world.getBlockState(_bp));
 							if (_bs.getBlock().getStateDefinition().getProperty("facing") instanceof DirectionProperty _directionProperty)
 								_bs = _bs.setValue(_directionProperty, getDirection());
 							world.setBlock(_bp, _bs, 3);
@@ -339,8 +339,7 @@ public class MegaChestEntity extends SeaMonster {
 	private PlayState attackingPredicate(AnimationState event) {
 		double d1 = this.getX() - this.xOld;
 		double d0 = this.getZ() - this.zOld;
-		float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
-		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
+        if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
 		}

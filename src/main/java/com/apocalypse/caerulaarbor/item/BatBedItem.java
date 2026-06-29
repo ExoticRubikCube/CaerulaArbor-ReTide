@@ -3,7 +3,7 @@ package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
+import com.apocalypse.caerulaarbor.init.CABlocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -75,7 +75,7 @@ public class BatBedItem extends Item {
             Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);
         itemstack.shrink(1);
         if ((Entity) entity instanceof Player _player) {
-            ItemStack _setstack = new ItemStack(CaerulaArborModBlocks.BLOCK_BATBED.get()).copy();
+            ItemStack _setstack = new ItemStack(CABlocks.BLOCK_BATBED.get()).copy();
             _setstack.setCount(1);
             ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
         }

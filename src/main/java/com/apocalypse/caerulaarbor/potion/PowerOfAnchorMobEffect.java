@@ -2,6 +2,7 @@
 package com.apocalypse.caerulaarbor.potion;
 
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.client.extensions.common.IClientMobEffectExtensions;
 
@@ -15,7 +16,6 @@ import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen
 import net.minecraft.client.gui.GuiGraphics;
 
 import com.apocalypse.caerulaarbor.util.MathUtils;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ import java.util.function.Consumer;
 public class PowerOfAnchorMobEffect extends MobEffect {
     public PowerOfAnchorMobEffect() {
         super(MobEffectCategory.NEUTRAL, -6684724);
-        this.addAttributeModifier(CaerulaArborModAttributes.SANITY_MODIFIER.get(), "fca8c1c6-9152-3107-9573-bd52fa24d2f9", -0.4, AttributeModifier.Operation.MULTIPLY_TOTAL);
+        this.addAttributeModifier(CAAttributes.SANITY_MODIFIER.get(), "fca8c1c6-9152-3107-9573-bd52fa24d2f9", -0.4, AttributeModifier.Operation.MULTIPLY_TOTAL);
     }
 
     @Override

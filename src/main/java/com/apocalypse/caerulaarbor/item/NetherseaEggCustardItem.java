@@ -1,7 +1,8 @@
 
 package com.apocalypse.caerulaarbor.item;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
@@ -33,8 +34,8 @@ public class NetherseaEggCustardItem extends Item {
 		ItemStack retval = new ItemStack(Items.BOWL);
 		super.finishUsingItem(itemstack, world, entity);
 		if (!entity.level().isClientSide()) {
-			entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.REGENERATION_PERCLY.get(), 100, 0, false, false));
-			entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.DEDUCT_ONE_SANITY.get(), 80, 0, false, false));
+			entity.addEffect(new MobEffectInstance(CAMobEffects.REGENERATION_PERCLY.get(), 100, 0, false, false));
+			entity.addEffect(new MobEffectInstance(CAMobEffects.DEDUCT_ONE_SANITY.get(), 80, 0, false, false));
 		}
 		if (itemstack.isEmpty()) {
 			return retval;

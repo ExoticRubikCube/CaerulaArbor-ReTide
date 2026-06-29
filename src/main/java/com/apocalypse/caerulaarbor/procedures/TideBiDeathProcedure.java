@@ -5,9 +5,9 @@ import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.entity.TellerShotEntity;
 import com.apocalypse.caerulaarbor.entity.TideBishopEntity;
 import com.apocalypse.caerulaarbor.entity.TideDeathrepellerEntity;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.particles.ParticleTypes;
@@ -36,7 +36,7 @@ public class TideBiDeathProcedure {
 			return;
 		boolean keepup;
 		Entity nearest = null;
-		if (entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CaerulaArborModMobEffects.FAKE_DEATH.get())) {
+		if (entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CAMobEffects.FAKE_DEATH.get())) {
 			keepup = true;
 			if (entity instanceof TideDeathrepellerEntity) {
 				nearest = world.getEntitiesOfClass(TideBishopEntity.class, AABB.ofSize(new Vec3(x, y, z), 128, 128, 128), e -> true).stream().sorted(new Object() {
@@ -57,7 +57,7 @@ public class TideBiDeathProcedure {
 				keepup = false;
 			} else {
                 LivingEntity _livEnt6 = (LivingEntity) nearest;
-                if (_livEnt6.hasEffect(CaerulaArborModMobEffects.FAKE_DEATH.get())) {
+                if (_livEnt6.hasEffect(CAMobEffects.FAKE_DEATH.get())) {
                     keepup = false;
                 }
             }
@@ -74,11 +74,11 @@ public class TideBiDeathProcedure {
 			}
 		} else {
 			if (entity instanceof TideDeathrepellerEntity livEnt0) {
-                Entity enemy = null;
-                double num = 0;
-                double sklp = 0;
-                double dura = 0;
-                if (!livEnt0.hasEffect(CaerulaArborModMobEffects.FAKE_DEATH.get())) {
+                Entity enemy;
+                double num;
+                double sklp;
+                double dura;
+                if (!livEnt0.hasEffect(CAMobEffects.FAKE_DEATH.get())) {
                     sklp = entity instanceof TideDeathrepellerEntity _datEntI ? _datEntI.getEntityData().get(TideDeathrepellerEntity.DATA_skillp) : 0;
                     dura = entity instanceof TideDeathrepellerEntity _datEntI ? _datEntI.getEntityData().get(TideDeathrepellerEntity.DATA_duration) : 0;
                     if (dura > 0) {
@@ -105,7 +105,7 @@ public class TideBiDeathProcedure {
                                 }
                                 LivingEntity _entity = (LivingEntity) entity;
                                 if (!_entity.level().isClientSide())
-                                    _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 50, 0, false, false));
+                                    _entity.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 50, 0, false, false));
                                 if (entity instanceof TideDeathrepellerEntity) {
                                     ((TideDeathrepellerEntity) entity).setAnimation("animation.deathrepeller.combo");
                                 }
@@ -149,20 +149,20 @@ public class TideBiDeathProcedure {
 						return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
 					}
 				}.compareDistOf(x, y, z)).findFirst().orElse(null);
-				if (!(nearest == null) && nearest instanceof LivingEntity _livEnt15 && _livEnt15.hasEffect(CaerulaArborModMobEffects.FAKE_DEATH.get())) {
+				if (!(nearest == null) && nearest instanceof LivingEntity _livEnt15 && _livEnt15.hasEffect(CAMobEffects.FAKE_DEATH.get())) {
 					EntityUtils.spawnLinkParticles(world, entity, nearest);
 					if (MapVariables.get(world).strategy_silence >= 3) {
-						if (entity instanceof LivingEntity _livingEntity16 && _livingEntity16.getAttributes().hasAttribute(CaerulaArborModAttributes.MISSRATE.get()))
-							_livingEntity16.getAttribute(CaerulaArborModAttributes.MISSRATE.get()).setBaseValue(40);
+						if (entity instanceof LivingEntity _livingEntity16 && _livingEntity16.getAttributes().hasAttribute(CAAttributes.MISSRATE.get()))
+							_livingEntity16.getAttribute(CAAttributes.MISSRATE.get()).setBaseValue(40);
 					} else if (MapVariables.get(world).strategy_subsisting >= 4) {
-						if (entity instanceof LivingEntity _livingEntity17 && _livingEntity17.getAttributes().hasAttribute(CaerulaArborModAttributes.MISSRATE.get()))
-							_livingEntity17.getAttribute(CaerulaArborModAttributes.MISSRATE.get()).setBaseValue(20);
+						if (entity instanceof LivingEntity _livingEntity17 && _livingEntity17.getAttributes().hasAttribute(CAAttributes.MISSRATE.get()))
+							_livingEntity17.getAttribute(CAAttributes.MISSRATE.get()).setBaseValue(20);
 					}
 				}
 			}
 			if (entity instanceof TideBishopEntity livEnt0) {
-                double sklp = 0;
-                if (!livEnt0.hasEffect(CaerulaArborModMobEffects.FAKE_DEATH.get())) {
+                double sklp;
+                if (!livEnt0.hasEffect(CAMobEffects.FAKE_DEATH.get())) {
                     sklp = entity instanceof TideBishopEntity _datEntI ? _datEntI.getEntityData().get(TideBishopEntity.DATA_skillp) : 0;
                     if (sklp <= 0) {
                         if (!((entity instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == null)) {
@@ -170,12 +170,12 @@ public class TideBiDeathProcedure {
                                 ((TideBishopEntity) entity).setAnimation("animation.tidebishop.cast");
                             }
                             if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                                _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 50, 0, false, false));
+                                _entity.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 50, 0, false, false));
                             CaerulaArborMod.queueServerWork(33, () -> {
                                 if (entity == null)
                                     return;
                                 double sklp1 = 0;
-                                Entity rep = null;
+                                Entity rep;
                                 if (entity.isAlive() && (entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1)) {
                                     {
                                         Entity _shootFrom = entity;
@@ -183,7 +183,7 @@ public class TideBiDeathProcedure {
                                         if (!projectileLevel.isClientSide()) {
                                             Projectile _entityToSpawn = new Object() {
                                                 public Projectile getArrow(Level level, Entity shooter, float damage, int knockback, byte piercing) {
-                                                    AbstractArrow entityToSpawn = new TellerShotEntity(CaerulaArborModEntities.TELLER_SHOT.get(), level);
+                                                    AbstractArrow entityToSpawn = new TellerShotEntity(CAEntities.TELLER_SHOT.get(), level);
                                                     entityToSpawn.setOwner(shooter);
                                                     entityToSpawn.setBaseDamage(damage);
                                                     entityToSpawn.setKnockback(knockback);
@@ -229,18 +229,18 @@ public class TideBiDeathProcedure {
 						return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
 					}
 				}.compareDistOf(x, y, z)).findFirst().orElse(null);
-				if (!(nearest == null) && nearest instanceof LivingEntity _livEnt21 && _livEnt21.hasEffect(CaerulaArborModMobEffects.FAKE_DEATH.get())) {
+				if (!(nearest == null) && nearest instanceof LivingEntity _livEnt21 && _livEnt21.hasEffect(CAMobEffects.FAKE_DEATH.get())) {
 					EntityUtils.spawnLinkParticles(world, entity, nearest);
 					if (MapVariables.get(world).strategy_silence >= 3) {
-						if (entity instanceof LivingEntity _livingEntity22 && _livingEntity22.getAttributes().hasAttribute(CaerulaArborModAttributes.MISSRATE.get()))
-							_livingEntity22.getAttribute(CaerulaArborModAttributes.MISSRATE.get()).setBaseValue(30);
+						if (entity instanceof LivingEntity _livingEntity22 && _livingEntity22.getAttributes().hasAttribute(CAAttributes.MISSRATE.get()))
+							_livingEntity22.getAttribute(CAAttributes.MISSRATE.get()).setBaseValue(30);
 					} else if (MapVariables.get(world).strategy_subsisting >= 4) {
-						if (entity instanceof LivingEntity _livingEntity23 && _livingEntity23.getAttributes().hasAttribute(CaerulaArborModAttributes.MISSRATE.get()))
-							_livingEntity23.getAttribute(CaerulaArborModAttributes.MISSRATE.get()).setBaseValue(15);
+						if (entity instanceof LivingEntity _livingEntity23 && _livingEntity23.getAttributes().hasAttribute(CAAttributes.MISSRATE.get()))
+							_livingEntity23.getAttribute(CAAttributes.MISSRATE.get()).setBaseValue(15);
 					}
 				} else {
-					if (entity instanceof LivingEntity _livingEntity24 && _livingEntity24.getAttributes().hasAttribute(CaerulaArborModAttributes.MISSRATE.get()))
-						_livingEntity24.getAttribute(CaerulaArborModAttributes.MISSRATE.get()).setBaseValue(0);
+					if (entity instanceof LivingEntity _livingEntity24 && _livingEntity24.getAttributes().hasAttribute(CAAttributes.MISSRATE.get()))
+						_livingEntity24.getAttribute(CAAttributes.MISSRATE.get()).setBaseValue(0);
 				}
 			}
 		}

@@ -1,7 +1,7 @@
 
 package com.apocalypse.caerulaarbor.block;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
+import com.apocalypse.caerulaarbor.init.CABlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -83,8 +83,8 @@ public class DeepSeagrassBlock extends Block implements SimpleWaterloggedBlock {
 			int y = pos.getY();
 			int z = pos.getZ();
             return (world.getBlockState(BlockPos.containing(x, (double) y - 1, z)).isFaceSturdy(world, BlockPos.containing(x, (double) y - 1, z), Direction.UP)
-                    || (world.getBlockState(BlockPos.containing(x, (double) y - 1, z))).getBlock() == CaerulaArborModBlocks.DEEP_SEAGRASS.get())
-                    && !((world.getBlockState(BlockPos.containing(x, (double) y - 1, z))).getBlock() == CaerulaArborModBlocks.DEEP_SEAGRASS.get() && (world.getBlockState(BlockPos.containing(x, (double) y - 2, z))).getBlock() == CaerulaArborModBlocks.DEEP_SEAGRASS.get());
+                    || (world.getBlockState(BlockPos.containing(x, (double) y - 1, z))).getBlock() == CABlocks.DEEP_SEAGRASS.get())
+                    && !((world.getBlockState(BlockPos.containing(x, (double) y - 1, z))).getBlock() == CABlocks.DEEP_SEAGRASS.get() && (world.getBlockState(BlockPos.containing(x, (double) y - 2, z))).getBlock() == CABlocks.DEEP_SEAGRASS.get());
         }
 		return super.canSurvive(blockstate, worldIn, pos);
 	}
@@ -115,7 +115,7 @@ public class DeepSeagrassBlock extends Block implements SimpleWaterloggedBlock {
 	}
 
 	private void updateSeagrassStyle(LevelAccessor world, BlockPos pos) {
-		int blockStateValue = world.getBlockState(pos.above()).getBlock() == CaerulaArborModBlocks.DEEP_SEAGRASS.get() ? 1 : 0;
+		int blockStateValue = world.getBlockState(pos.above()).getBlock() == CABlocks.DEEP_SEAGRASS.get() ? 1 : 0;
 		BlockState state = world.getBlockState(pos);
 		if (state.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProperty && integerProperty.getPossibleValues().contains(blockStateValue)) {
 			world.setBlock(pos, state.setValue(integerProperty, blockStateValue), 3);

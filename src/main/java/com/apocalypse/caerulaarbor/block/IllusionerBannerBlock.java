@@ -1,9 +1,9 @@
 
 package com.apocalypse.caerulaarbor.block;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlockEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CABlockEntities;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -67,7 +67,7 @@ public class IllusionerBannerBlock extends BaseEntityBlock implements SimpleWate
 	@Nullable
 	@Override
 	public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
-		return CaerulaArborModBlockEntities.ILLUSIONER_BANNER.get().create(blockPos, blockState);
+		return CABlockEntities.ILLUSIONER_BANNER.get().create(blockPos, blockState);
 	}
 
 	@Override
@@ -152,12 +152,12 @@ public class IllusionerBannerBlock extends BaseEntityBlock implements SimpleWate
 		Direction direction = hit.getDirection();
         InteractionResult result = InteractionResult.PASS;
         if (entity != null) {
-            double state = 0;
+            double state;
             state = blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _getip1 ? blockstate.getValue(_getip1) : -1;
             if (state == 0) {
-                if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CaerulaArborModItems.WHIRL_EYE.get()) {
+                if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.WHIRL_EYE.get()) {
                     if ((LevelAccessor) world instanceof ServerLevel _level) {
-                        Entity entityToSpawn = CaerulaArborModEntities.OCEANIZED_ILLUSIONER.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+                        Entity entityToSpawn = CAEntities.OCEANIZED_ILLUSIONER.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                         if (entityToSpawn != null) {
                             entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
                         }

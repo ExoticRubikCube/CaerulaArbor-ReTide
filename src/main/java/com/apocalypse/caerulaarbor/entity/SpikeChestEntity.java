@@ -1,7 +1,7 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -46,7 +46,7 @@ public class SpikeChestEntity extends SeaMonster {
 	public String animationprocedure = "empty";
 
 	public SpikeChestEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.SPIKE_CHEST.get(), world);
+		this(CAEntities.SPIKE_CHEST.get(), world);
 	}
 
 	public SpikeChestEntity(EntityType<SpikeChestEntity> type, Level world) {
@@ -151,7 +151,7 @@ public class SpikeChestEntity extends SeaMonster {
 	}
 
 	public static void init() {
-		SpawnPlacements.register(CaerulaArborModEntities.SPIKE_CHEST.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+		SpawnPlacements.register(CAEntities.SPIKE_CHEST.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
 				(entityType, world, reason, pos, random) -> (world.getDifficulty() != Difficulty.PEACEFUL && Monster.isDarkEnoughToSpawn(world, pos, random) && Mob.checkMobSpawnRules(entityType, world, reason, pos, random)));
 	}
 

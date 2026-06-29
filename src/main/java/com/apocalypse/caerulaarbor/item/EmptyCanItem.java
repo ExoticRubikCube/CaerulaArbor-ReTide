@@ -1,7 +1,7 @@
 
 package com.apocalypse.caerulaarbor.item;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -37,7 +37,7 @@ public class EmptyCanItem extends Item {
         BlockState target = (((LevelAccessor) world).getFluidState(BlockPos.containing(x + entity.getLookAngle().x, y + entity.getLookAngle().y + 1.6, z + entity.getLookAngle().z)).createLegacyBlock());
         if (Blocks.WATER == target.getBlock()) {
             if ((Entity) entity instanceof Player _player) {
-                ItemStack _setstack = new ItemStack(CaerulaArborModItems.CANNED_WATER.get()).copy();
+                ItemStack _setstack = new ItemStack(CAItems.CANNED_WATER.get()).copy();
                 _setstack.setCount(1);
                 ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
             }
@@ -47,7 +47,7 @@ public class EmptyCanItem extends Item {
             }
         } else if (Blocks.LAVA == target.getBlock()) {
             if ((Entity) entity instanceof Player _player) {
-                ItemStack _setstack = new ItemStack(CaerulaArborModItems.CANNED_LAVA.get()).copy();
+                ItemStack _setstack = new ItemStack(CAItems.CANNED_LAVA.get()).copy();
                 _setstack.setCount(1);
                 ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
             }
@@ -71,12 +71,12 @@ public class EmptyCanItem extends Item {
         ItemStack itemstack = context.getItemInHand();
         if (direction == null || entity == null)
             return InteractionResult.PASS;
-        BlockState target = Blocks.AIR.defaultBlockState();
+        BlockState target;
         target = (world.getFluidState(BlockPos.containing(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ())).createLegacyBlock());
         if (Blocks.WATER == target.getBlock()) {
             itemstack.shrink(1);
             if (entity instanceof Player _player) {
-                ItemStack _setstack = new ItemStack(CaerulaArborModItems.CANNED_WATER.get()).copy();
+                ItemStack _setstack = new ItemStack(CAItems.CANNED_WATER.get()).copy();
                 _setstack.setCount(1);
                 ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
             }
@@ -87,7 +87,7 @@ public class EmptyCanItem extends Item {
         } else if (Blocks.LAVA == target.getBlock()) {
             itemstack.shrink(1);
             if (entity instanceof Player _player) {
-                ItemStack _setstack = new ItemStack(CaerulaArborModItems.CANNED_LAVA.get()).copy();
+                ItemStack _setstack = new ItemStack(CAItems.CANNED_LAVA.get()).copy();
                 _setstack.setCount(1);
                 ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
             }

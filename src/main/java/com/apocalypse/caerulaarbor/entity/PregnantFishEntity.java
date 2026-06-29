@@ -3,7 +3,7 @@ package com.apocalypse.caerulaarbor.entity;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.PolarMountRider;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -60,7 +60,7 @@ public class PregnantFishEntity extends SeaMonster implements RangedAttackMob, P
 	public String animationprocedure = "empty";
 
 	public PregnantFishEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.PREGNANT_FISH.get(), world);
+		this(CAEntities.PREGNANT_FISH.get(), world);
 	}
 
 	public PregnantFishEntity(EntityType<PregnantFishEntity> type, Level world) {
@@ -296,7 +296,7 @@ public class PregnantFishEntity extends SeaMonster implements RangedAttackMob, P
 	}
 
 	public static void init() {
-		SpawnPlacements.register(CaerulaArborModEntities.PREGNANT_FISH.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
+		SpawnPlacements.register(CAEntities.PREGNANT_FISH.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();
@@ -327,9 +327,7 @@ public class PregnantFishEntity extends SeaMonster implements RangedAttackMob, P
 	}
 
 	private PlayState attackingPredicate(AnimationState event) {
-		double d1 = this.getX() - this.xOld;
-		double d0 = this.getZ() - this.zOld;
-		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
+        if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
 		}

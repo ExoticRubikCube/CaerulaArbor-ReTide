@@ -3,7 +3,7 @@ package com.apocalypse.caerulaarbor.block;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -199,7 +199,7 @@ public class BlockKettleBlock extends Block implements SimpleWaterloggedBlock {
         boolean finished = false;
         if (entity != null) {
             if (!(blockstate.getBlock().getStateDefinition().getProperty("watered") instanceof BooleanProperty _getbp1 && blockstate.getValue(_getbp1))) {
-                if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CaerulaArborModItems.CANNED_WATER.get()) {
+                if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.CANNED_WATER.get()) {
                     {
                         BlockPos _pos = BlockPos.containing(x, y, z);
                         BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
@@ -207,7 +207,7 @@ public class BlockKettleBlock extends Block implements SimpleWaterloggedBlock {
                             ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_booleanProp, true), 3);
                     }
                     if ((Entity) entity instanceof LivingEntity _entity) {
-                        ItemStack _setstack = new ItemStack(CaerulaArborModItems.EMPTY_CAN.get()).copy();
+                        ItemStack _setstack = new ItemStack(CAItems.EMPTY_CAN.get()).copy();
                         _setstack.setCount(((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getCount());
                         _entity.setItemInHand(InteractionHand.MAIN_HAND, _setstack);
                         if (_entity instanceof Player _player)
@@ -218,7 +218,7 @@ public class BlockKettleBlock extends Block implements SimpleWaterloggedBlock {
                     }
                     result = InteractionResult.SUCCESS;
                     finished = true;
-                } else if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CaerulaArborModItems.A_CUP_OF_WATER.get()) {
+                } else if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.A_CUP_OF_WATER.get()) {
                     {
                         BlockPos _pos = BlockPos.containing(x, y, z);
                         BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
@@ -227,7 +227,7 @@ public class BlockKettleBlock extends Block implements SimpleWaterloggedBlock {
                     }
                     ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                     if ((Entity) entity instanceof Player _player) {
-                        ItemStack _setstack = new ItemStack(CaerulaArborModItems.OCEANGLASS_CUP.get()).copy();
+                        ItemStack _setstack = new ItemStack(CAItems.OCEANGLASS_CUP.get()).copy();
                         _setstack.setCount(1);
                         ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
                     }
@@ -237,15 +237,15 @@ public class BlockKettleBlock extends Block implements SimpleWaterloggedBlock {
                     result = InteractionResult.SUCCESS;
                     finished = true;
                 }
-            } else if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CaerulaArborModItems.CANNED_WATER.get()
-                    || ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CaerulaArborModItems.A_CUP_OF_WATER.get()) {
+            } else if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.CANNED_WATER.get()
+                    || ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.A_CUP_OF_WATER.get()) {
                 if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
                     _player.displayClientMessage(Component.literal((Component.translatable("block.caerula_arbor.kettle.filled").getString())), true);
             }
             if (!finished) {
                 if (blockstate.getBlock().getStateDefinition().getProperty("watered") instanceof BooleanProperty _getbp25 && blockstate.getValue(_getbp25)
                         && blockstate.getBlock().getStateDefinition().getProperty("boiling") instanceof BooleanProperty _getbp27 && blockstate.getValue(_getbp27)) {
-                    if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CaerulaArborModItems.EMPTY_CAN.get()
+                    if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.EMPTY_CAN.get()
                             && blockstate.getBlock().getStateDefinition().getProperty("noodled") instanceof BooleanProperty _getbp31 && blockstate.getValue(_getbp31)) {
                         {
                             BlockPos _pos = BlockPos.containing(x, y, z);
@@ -261,13 +261,13 @@ public class BlockKettleBlock extends Block implements SimpleWaterloggedBlock {
                         }
                         ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                         if ((Entity) entity instanceof Player _player) {
-                            ItemStack _setstack = new ItemStack(CaerulaArborModItems.CANNED_NOODLE.get()).copy();
+                            ItemStack _setstack = new ItemStack(CAItems.CANNED_NOODLE.get()).copy();
                             _setstack.setCount(1);
                             ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
                         }
                         result = InteractionResult.SUCCESS;
                         finished = true;
-                    } else if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CaerulaArborModItems.EMPTY_CAN.get()
+                    } else if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.EMPTY_CAN.get()
                             && !(blockstate.getBlock().getStateDefinition().getProperty("noodled") instanceof BooleanProperty _getbp41 && blockstate.getValue(_getbp41))) {
                         {
                             BlockPos _pos = BlockPos.containing(x, y, z);
@@ -277,13 +277,13 @@ public class BlockKettleBlock extends Block implements SimpleWaterloggedBlock {
                         }
                         ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                         if ((Entity) entity instanceof Player _player) {
-                            ItemStack _setstack = new ItemStack(CaerulaArborModItems.CANNED_BOILED_WATER.get()).copy();
+                            ItemStack _setstack = new ItemStack(CAItems.CANNED_BOILED_WATER.get()).copy();
                             _setstack.setCount(1);
                             ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
                         }
                         result = InteractionResult.SUCCESS;
                         finished = true;
-                    } else if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CaerulaArborModItems.INSTANT_NOODLE.get()
+                    } else if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.INSTANT_NOODLE.get()
                             && !(blockstate.getBlock().getStateDefinition().getProperty("noodled") instanceof BooleanProperty _getbp50 && blockstate.getValue(_getbp50))) {
                         {
                             BlockPos _pos = BlockPos.containing(x, y, z);
@@ -301,7 +301,7 @@ public class BlockKettleBlock extends Block implements SimpleWaterloggedBlock {
                         }
                         result = InteractionResult.SUCCESS;
                         finished = true;
-                    } else if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CaerulaArborModItems.INSTANT_NOODLE.get()) {
+                    } else if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.INSTANT_NOODLE.get()) {
                         if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
                             _player.displayClientMessage(Component.literal((Component.translatable("block.caerula_arbor.kettle.noodled").getString())), true);
                     }
@@ -309,10 +309,10 @@ public class BlockKettleBlock extends Block implements SimpleWaterloggedBlock {
                 if (!finished) {
                     if (blockstate.getBlock().getStateDefinition().getProperty("watered") instanceof BooleanProperty _getbp61 && blockstate.getValue(_getbp61)
                             && !(blockstate.getBlock().getStateDefinition().getProperty("boiling") instanceof BooleanProperty _getbp63 && blockstate.getValue(_getbp63))) {
-                        if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CaerulaArborModItems.EMPTY_CAN.get()) {
+                        if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.EMPTY_CAN.get()) {
                             ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                             if ((Entity) entity instanceof Player _player) {
-                                ItemStack _setstack = new ItemStack(CaerulaArborModItems.CANNED_WATER.get()).copy();
+                                ItemStack _setstack = new ItemStack(CAItems.CANNED_WATER.get()).copy();
                                 _setstack.setCount(1);
                                 ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
                             }
@@ -327,10 +327,10 @@ public class BlockKettleBlock extends Block implements SimpleWaterloggedBlock {
                             }
                             result = InteractionResult.SUCCESS;
                             finished = true;
-                        } else if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CaerulaArborModItems.OCEANGLASS_CUP.get()) {
+                        } else if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.OCEANGLASS_CUP.get()) {
                             ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                             if ((Entity) entity instanceof Player _player) {
-                                ItemStack _setstack = new ItemStack(CaerulaArborModItems.A_CUP_OF_WATER.get()).copy();
+                                ItemStack _setstack = new ItemStack(CAItems.A_CUP_OF_WATER.get()).copy();
                                 _setstack.setCount(1);
                                 ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
                             }
@@ -367,7 +367,7 @@ public class BlockKettleBlock extends Block implements SimpleWaterloggedBlock {
                                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("intentionally_empty")), SoundSource.NEUTRAL, 1, 1);
                                 }
                                 result = InteractionResult.SUCCESS;
-                            } else if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CaerulaArborModItems.CANNED_LAVA.get()) {
+                            } else if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.CANNED_LAVA.get()) {
                                 ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                                 {
                                     BlockPos _pos = BlockPos.containing(x, y, z);
@@ -376,12 +376,12 @@ public class BlockKettleBlock extends Block implements SimpleWaterloggedBlock {
                                         ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_booleanProp, false), 3);
                                 }
                                 if ((Entity) entity instanceof Player _player) {
-                                    ItemStack _setstack = new ItemStack(CaerulaArborModItems.OBISIDIAN_BALL.get()).copy();
+                                    ItemStack _setstack = new ItemStack(CAItems.OBISIDIAN_BALL.get()).copy();
                                     _setstack.setCount(1);
                                     ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
                                 }
                                 if ((Entity) entity instanceof Player _player) {
-                                    ItemStack _setstack = new ItemStack(CaerulaArborModItems.EMPTY_CAN.get()).copy();
+                                    ItemStack _setstack = new ItemStack(CAItems.EMPTY_CAN.get()).copy();
                                     _setstack.setCount(1);
                                     ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
                                 }
@@ -389,7 +389,7 @@ public class BlockKettleBlock extends Block implements SimpleWaterloggedBlock {
                                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.lava.extinguish")), SoundSource.NEUTRAL, 1, 1);
                                 }
                                 result = InteractionResult.SUCCESS;
-                            } else if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CaerulaArborModItems.REAL_EGG.get()
+                            } else if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.REAL_EGG.get()
                                     && blockstate.getBlock().getStateDefinition().getProperty("boiling") instanceof BooleanProperty _getbp104 && blockstate.getValue(_getbp104)) {
                                 {
                                     BlockPos _pos = BlockPos.containing(x, y, z);
@@ -399,7 +399,7 @@ public class BlockKettleBlock extends Block implements SimpleWaterloggedBlock {
                                 }
                                 ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                                 if ((Entity) entity instanceof Player _player) {
-                                    ItemStack _setstack = new ItemStack(CaerulaArborModItems.BOILED_EGG.get()).copy();
+                                    ItemStack _setstack = new ItemStack(CAItems.BOILED_EGG.get()).copy();
                                     _setstack.setCount(1);
                                     ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
                                 }

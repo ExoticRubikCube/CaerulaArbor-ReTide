@@ -1,7 +1,7 @@
 
 package com.apocalypse.caerulaarbor.block;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
+import com.apocalypse.caerulaarbor.init.CABlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -64,11 +64,11 @@ public class UndertideSpawnBlock extends Block implements SimpleWaterloggedBlock
         double x = pos.getX();
         double y = pos.getY();
         double z = pos.getZ();
-        if ((((LevelAccessor) world).getBlockState(BlockPos.containing(x, y + 1, z))).getBlock() == CaerulaArborModBlocks.OCEAN_OVARY.get() || (((LevelAccessor) world).getBlockState(BlockPos.containing(x, y + 1, z))).getBlock() == CaerulaArborModBlocks.RED_OVARY.get()) {
+        if ((((LevelAccessor) world).getBlockState(BlockPos.containing(x, y + 1, z))).getBlock() == CABlocks.OCEAN_OVARY.get() || (((LevelAccessor) world).getBlockState(BlockPos.containing(x, y + 1, z))).getBlock() == CABlocks.RED_OVARY.get()) {
             world.destroyBlock(BlockPos.containing(x, y + 1, z), false);
             {
                 BlockPos _bp = BlockPos.containing(x, y, z);
-                BlockState _bs = CaerulaArborModBlocks.UNDERTIDE_TABLE.get().withPropertiesOf(blockstate);
+                BlockState _bs = CABlocks.UNDERTIDE_TABLE.get().withPropertiesOf(blockstate);
                 ((LevelAccessor) world).setBlock(_bp, _bs, 3);
             }
         }

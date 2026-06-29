@@ -1,12 +1,18 @@
 
 package com.apocalypse.caerulaarbor.block;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlockEntities;
-import com.apocalypse.caerulaarbor.util.WorldUtils;
+import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.init.CABlockEntities;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -28,6 +34,7 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -60,7 +67,7 @@ public class ChestmegaSpawnerBlock extends BaseEntityBlock implements SimpleWate
 	@Nullable
 	@Override
 	public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
-		return CaerulaArborModBlockEntities.CHESTMEGA_SPAWNER.get().create(blockPos, blockState);
+		return CABlockEntities.CHESTMEGA_SPAWNER.get().create(blockPos, blockState);
 	}
 
 	@Override
@@ -137,27 +144,62 @@ public class ChestmegaSpawnerBlock extends BaseEntityBlock implements SimpleWate
 	public void neighborChanged(BlockState blockstate, Level world, BlockPos pos, Block neighborBlock, BlockPos fromPos, boolean moving) {
 		super.neighborChanged(blockstate, world, pos, neighborBlock, fromPos, moving);
 		if (world.getBestNeighborSignal(pos) > 0) {
-			WorldUtils.summonMegachest(world, pos.getX(), pos.getY(), pos.getZ(), blockstate);
+			this.summonMegachest(world, pos, blockstate);
 		}
 	}
 
 	@Override
 	public void attack(BlockState blockstate, Level world, BlockPos pos, Player entity) {
 		super.attack(blockstate, world, pos, entity);
-		WorldUtils.summonMegachest(world, pos.getX(), pos.getY(), pos.getZ(), blockstate);
+		this.summonMegachest(world, pos, blockstate);
 	}
 
 	@Override
 	public InteractionResult use(BlockState blockstate, Level world, BlockPos pos, Player entity, InteractionHand hand, BlockHitResult hit) {
 		super.use(blockstate, world, pos, entity, hand, hit);
-		int x = pos.getX();
-		int y = pos.getY();
-		int z = pos.getZ();
-		double hitX = hit.getLocation().x;
-		double hitY = hit.getLocation().y;
-		double hitZ = hit.getLocation().z;
-		Direction direction = hit.getDirection();
-		InteractionResult result = WorldUtils.summonMegachest(world, x, y, z, blockstate);
-		return result;
+		return this.summonMegachest(world, pos, blockstate);
+	}
+
+	private InteractionResult summonMegachest(LevelAccessor world, BlockPos pos, BlockState blockstate) {
+		if (blockstate.getValue(BLOCKSTATE) != 0) {
+			return InteractionResult.PASS;
+		}
+
+		world.setBlock(pos, world.getBlockState(pos).setValue(BLOCKSTATE, 1), 3);
+		world.setBlock(pos, world.getBlockState(pos).setValue(ANIMATION, 1), 3);
+
+		Direction facing = blockstate.getValue(FACING);
+		CaerulaArborMod.queueServerWork(15, () -> {
+			world.destroyBlock(pos, false);
+			if (world instanceof Level level) {
+				level.playSound(null, pos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.ender_chest.close")), SoundSource.BLOCKS, 1, 1);
+			}
+			if (world instanceof ServerLevel level) {
+				Entity entityToSpawn = CAEntities.MEGA_CHEST.get().spawn(level, BlockPos.containing(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5), MobSpawnType.MOB_SUMMONED);
+				if (entityToSpawn != null) {
+					switch (facing) {
+						case NORTH -> {
+							entityToSpawn.setYRot(-180);
+							entityToSpawn.setYBodyRot(-180);
+							entityToSpawn.setYHeadRot(-180);
+						}
+						case WEST -> {
+							entityToSpawn.setYRot(90);
+							entityToSpawn.setYBodyRot(90);
+							entityToSpawn.setYHeadRot(90);
+						}
+						case EAST -> {
+							entityToSpawn.setYRot(-90);
+							entityToSpawn.setYBodyRot(-90);
+							entityToSpawn.setYHeadRot(-90);
+						}
+						default -> {
+						}
+					}
+				}
+			}
+		});
+
+		return InteractionResult.SUCCESS;
 	}
 }

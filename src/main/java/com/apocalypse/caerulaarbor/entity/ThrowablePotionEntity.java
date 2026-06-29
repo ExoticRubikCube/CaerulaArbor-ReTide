@@ -1,6 +1,6 @@
 package com.apocalypse.caerulaarbor.entity;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.util.RandomSource;
@@ -23,7 +23,7 @@ public class ThrowablePotionEntity extends AbstractArrow implements ItemSupplier
 	public static final ItemStack PROJECTILE_ITEM = new ItemStack(Items.SPLASH_POTION);
 
 	public ThrowablePotionEntity(PlayMessages.SpawnEntity packet, Level world) {
-		super(CaerulaArborModEntities.THROWABLE_POTION.get(), world);
+		super(CAEntities.THROWABLE_POTION.get(), world);
 	}
 
 	public ThrowablePotionEntity(EntityType<? extends ThrowablePotionEntity> type, Level world) {
@@ -85,7 +85,7 @@ public class ThrowablePotionEntity extends AbstractArrow implements ItemSupplier
 	}
 
 	public static ThrowablePotionEntity shoot(Level world, LivingEntity entity, RandomSource random, float power, double damage, int knockback) {
-		ThrowablePotionEntity entityarrow = new ThrowablePotionEntity(CaerulaArborModEntities.THROWABLE_POTION.get(), entity, world);
+		ThrowablePotionEntity entityarrow = new ThrowablePotionEntity(CAEntities.THROWABLE_POTION.get(), entity, world);
 		entityarrow.shoot(entity.getViewVector(1).x, entity.getViewVector(1).y, entity.getViewVector(1).z, power * 2, 0);
 		entityarrow.setSilent(true);
 		entityarrow.setCritArrow(false);
@@ -105,7 +105,7 @@ public class ThrowablePotionEntity extends AbstractArrow implements ItemSupplier
 	}
 
 	public static ThrowablePotionEntity shoot(LivingEntity entity, LivingEntity target, double damage) {
-		ThrowablePotionEntity entityarrow = new ThrowablePotionEntity(CaerulaArborModEntities.THROWABLE_POTION.get(), entity, entity.level());
+		ThrowablePotionEntity entityarrow = new ThrowablePotionEntity(CAEntities.THROWABLE_POTION.get(), entity, entity.level());
 		double dx = target.getX() - entity.getX();
 		double dy = target.getY() + target.getEyeHeight() - 1.1;
 		double dz = target.getZ() - entity.getZ();

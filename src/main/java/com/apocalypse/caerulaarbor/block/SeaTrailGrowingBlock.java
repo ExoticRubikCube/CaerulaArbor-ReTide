@@ -1,7 +1,7 @@
 
 package com.apocalypse.caerulaarbor.block;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
+import com.apocalypse.caerulaarbor.init.CABlocks;
 import com.apocalypse.caerulaarbor.procedures.PokeSlightlyProcedure;
 import com.apocalypse.caerulaarbor.util.StrategyUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
@@ -115,7 +115,7 @@ public class SeaTrailGrowingBlock extends Block implements SimpleWaterloggedBloc
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();
-        double expand = 0;
+        double expand;
         expand = 1;
         if (((LevelAccessor) world).getLevelData().isThundering()) {
             expand = 2;
@@ -144,7 +144,7 @@ public class SeaTrailGrowingBlock extends Block implements SimpleWaterloggedBloc
                     _prop = _bs.getBlock().getStateDefinition().getProperty("axis");
                     return _prop instanceof EnumProperty _ep && _ep.getPossibleValues().contains(newValue.getAxis()) ? _bs.setValue(_ep, newValue.getAxis()) : _bs;
                 }
-            }.with(CaerulaArborModBlocks.SEA_TRAIL_GROWN.get().defaultBlockState(), new Object() {
+            }.with(CABlocks.SEA_TRAIL_GROWN.get().defaultBlockState(), new Object() {
                 public Direction getValue() {
                     Direction _dir = Direction.NORTH;
                     int _num = Mth.nextInt(RandomSource.create(), 1, 4);
@@ -171,7 +171,7 @@ public class SeaTrailGrowingBlock extends Block implements SimpleWaterloggedBloc
                             _prop = _bs.getBlock().getStateDefinition().getProperty("axis");
                             return _prop instanceof EnumProperty _ep && _ep.getPossibleValues().contains(newValue.getAxis()) ? _bs.setValue(_ep, newValue.getAxis()) : _bs;
                         }
-                    }.with(CaerulaArborModBlocks.SEA_TRAIL_GROWN.get().defaultBlockState(), new Object() {
+                    }.with(CABlocks.SEA_TRAIL_GROWN.get().defaultBlockState(), new Object() {
                         public Direction getValue() {
                             Direction _dir = Direction.NORTH;
                             int _num = Mth.nextInt(RandomSource.create(), 1, 4);
@@ -198,7 +198,7 @@ public class SeaTrailGrowingBlock extends Block implements SimpleWaterloggedBloc
                                     _prop = _bs.getBlock().getStateDefinition().getProperty("axis");
                                     return _prop instanceof EnumProperty _ep && _ep.getPossibleValues().contains(newValue.getAxis()) ? _bs.setValue(_ep, newValue.getAxis()) : _bs;
                                 }
-                            }.with(CaerulaArborModBlocks.SEA_TRAIL_GROWN.get().defaultBlockState(), new Object() {
+                            }.with(CABlocks.SEA_TRAIL_GROWN.get().defaultBlockState(), new Object() {
                                 public Direction getValue() {
                                     Direction _dir = Direction.NORTH;
                                     int _num = Mth.nextInt(RandomSource.create(), 1, 4);

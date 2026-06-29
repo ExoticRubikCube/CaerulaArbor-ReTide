@@ -1,6 +1,6 @@
 package com.apocalypse.caerulaarbor.event;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModGameRules;
+import com.apocalypse.caerulaarbor.init.CAGameRules;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.context.ParsedCommandNode;
@@ -34,7 +34,7 @@ public class CommandEventHandler {
 			String nodeName = parsedNode.getNode().getName();
 			if ("gamerule".equals(nodeName)) {
 				hasGameRuleNode = true;
-			} else if (CaerulaArborModGameRules.SURGING_WAVES.getId().equals(nodeName)) {
+			} else if (CAGameRules.SURGING_WAVES.getId().equals(nodeName)) {
 				hasSurgingWavesNode = true;
 			} else if ("value".equals(nodeName)) {
 				hasValueNode = true;
@@ -46,7 +46,7 @@ public class CommandEventHandler {
 		}
 
 		int targetSurgingWavesLevel = IntegerArgumentType.getInteger(commandContext, "value");
-		int currentSurgingWavesLevel = player.level().getLevelData().getGameRules().getInt(CaerulaArborModGameRules.SURGING_WAVES);
+		int currentSurgingWavesLevel = player.level().getLevelData().getGameRules().getInt(CAGameRules.SURGING_WAVES);
 		if (targetSurgingWavesLevel <= currentSurgingWavesLevel) {
 			return;
 		}

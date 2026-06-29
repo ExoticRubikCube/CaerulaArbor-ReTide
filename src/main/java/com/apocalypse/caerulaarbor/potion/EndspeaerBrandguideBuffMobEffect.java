@@ -12,7 +12,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.client.gui.GuiGraphics;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ public class EndspeaerBrandguideBuffMobEffect extends MobEffect {
         super(MobEffectCategory.BENEFICIAL, -16763956);
         this.addAttributeModifier(Attributes.ARMOR, "7b0edc10-9817-37cf-89ee-2effc354738e", 4, AttributeModifier.Operation.MULTIPLY_BASE);
         this.addAttributeModifier(Attributes.ARMOR_TOUGHNESS, "8ff8a8b9-1316-3766-ad85-31afa0062e80", 2, AttributeModifier.Operation.MULTIPLY_BASE);
-        this.addAttributeModifier(CaerulaArborModAttributes.GENERAL_DEFENSE.get(), "53665cb1-9b07-3d88-b2b7-a3a4878cee0f", 4, AttributeModifier.Operation.MULTIPLY_BASE);
+        this.addAttributeModifier(CAAttributes.GENERAL_DEFENSE.get(), "53665cb1-9b07-3d88-b2b7-a3a4878cee0f", 4, AttributeModifier.Operation.MULTIPLY_BASE);
     }
 
     @Override

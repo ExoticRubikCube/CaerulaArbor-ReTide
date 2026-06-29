@@ -5,8 +5,8 @@ import com.apocalypse.caerulaarbor.api.event.SanityEvent;
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.network.chat.Component;
@@ -38,7 +38,7 @@ public class EliteCavairItem extends Item {
 
 	@Override
 	public ItemStack getCraftingRemainingItem(ItemStack itemstack) {
-		return new ItemStack(CaerulaArborModItems.EMPTY_CAN.get());
+		return new ItemStack(CAItems.EMPTY_CAN.get());
 	}
 
 	@Override
@@ -50,10 +50,10 @@ public class EliteCavairItem extends Item {
 
 	@Override
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
-		ItemStack retval = new ItemStack(CaerulaArborModItems.EMPTY_CAN.get());
+		ItemStack retval = new ItemStack(CAItems.EMPTY_CAN.get());
 		super.finishUsingItem(itemstack, world, entity);
         if (!entity.level().isClientSide()) {
-            entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ADD_ATTACK_PERCLY.get(), 1200, 3));
+            entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_ATTACK_PERCLY.get(), 1200, 3));
             entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 800, 1));
         }
         {

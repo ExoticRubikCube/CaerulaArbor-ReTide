@@ -10,8 +10,8 @@ public class ItemUtils {
 	}
 
 	public static String getCursedDescription(ItemStack itemstack) {
-		String first_two = "";
-		String locId = "";
+		String first_two;
+		String locId;
 		locId = itemstack.getDescriptionId();
 		first_two = Component.translatable((locId + ".description_0")).getString() + "\n" + Component.translatable((locId + ".description_1")).getString();
 		if (itemstack.getOrCreateTag().getBoolean("used")) {

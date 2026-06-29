@@ -1,8 +1,8 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.nbt.CompoundTag;
@@ -58,7 +58,7 @@ public class BoneFishEntity extends SeaMonster {
 	public String animationprocedure = "empty";
 
 	public BoneFishEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.BONE_FISH.get(), world);
+		this(CAEntities.BONE_FISH.get(), world);
 	}
 
 	public BoneFishEntity(EntityType<BoneFishEntity> type, Level world) {
@@ -206,7 +206,7 @@ public class BoneFishEntity extends SeaMonster {
 
     protected void dropCustomDeathLoot(DamageSource source, int looting, boolean recentlyHitIn) {
 		super.dropCustomDeathLoot(source, looting, recentlyHitIn);
-		this.spawnAtLocation(new ItemStack(CaerulaArborModItems.BONE_SHARD.get()));
+		this.spawnAtLocation(new ItemStack(CAItems.BONE_SHARD.get()));
 	}
 
 	@Override
@@ -278,7 +278,7 @@ public class BoneFishEntity extends SeaMonster {
 	}
 
 	public static void init() {
-		SpawnPlacements.register(CaerulaArborModEntities.BONE_FISH.get(), SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
+		SpawnPlacements.register(CAEntities.BONE_FISH.get(), SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();

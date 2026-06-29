@@ -2,8 +2,8 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -51,7 +51,7 @@ public class FlamarineStatueEntity extends SeaMonster {
 	public String animationprocedure = "empty";
 
 	public FlamarineStatueEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.FLAMARINE_STATUE.get(), world);
+		this(CAEntities.FLAMARINE_STATUE.get(), world);
 	}
 
 	public FlamarineStatueEntity(EntityType<FlamarineStatueEntity> type, Level world) {
@@ -167,12 +167,12 @@ public class FlamarineStatueEntity extends SeaMonster {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()))
-            this.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).setBaseValue(15);
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-            this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(80);
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RESISTANCE.get()))
-            this.getAttribute(CaerulaArborModAttributes.SANITY_RESISTANCE.get()).setBaseValue(50);
+        if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
+            this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).setBaseValue(15);
+        if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
+            this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(80);
+        if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RESISTANCE.get()))
+            this.getAttribute(CAAttributes.SANITY_RESISTANCE.get()).setBaseValue(50);
         return retval;
 	}
 

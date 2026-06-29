@@ -2,9 +2,9 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -63,7 +63,7 @@ public class SuperSliderEntity extends SeaMonster {
 	private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.PROGRESS);
 
 	public SuperSliderEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.SUPER_SLIDER.get(), world);
+		this(CAEntities.SUPER_SLIDER.get(), world);
 	}
 
 	public SuperSliderEntity(EntityType<SuperSliderEntity> type, Level world) {
@@ -149,7 +149,7 @@ public class SuperSliderEntity extends SeaMonster {
 
 	protected void dropCustomDeathLoot(DamageSource source, int looting, boolean recentlyHitIn) {
 		super.dropCustomDeathLoot(source, looting, recentlyHitIn);
-		this.spawnAtLocation(new ItemStack(CaerulaArborModItems.RECORD_WHISPER.get()));
+		this.spawnAtLocation(new ItemStack(CAItems.RECORD_WHISPER.get()));
 	}
 
 	@Override
@@ -182,8 +182,8 @@ public class SuperSliderEntity extends SeaMonster {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-		if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get())) {
-			this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(10);
+		if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get())) {
+			this.getAttribute(CAAttributes.SANITY_RATE.get()).setBaseValue(10);
 		}
 		return retval;
 	}

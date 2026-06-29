@@ -1,8 +1,8 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
@@ -31,7 +31,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class DamageTesterEntity extends PathfinderMob {
 	public DamageTesterEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.DAMAGE_TESTER.get(), world);
+		this(CAEntities.DAMAGE_TESTER.get(), world);
 	}
 
 	public DamageTesterEntity(EntityType<DamageTesterEntity> type, Level world) {
@@ -111,12 +111,10 @@ public class DamageTesterEntity extends PathfinderMob {
 
 	@Override
 	public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
-		ItemStack itemstack = sourceentity.getItemInHand(hand);
-		InteractionResult retval = InteractionResult.sidedSuccess(this.level().isClientSide());
-		super.mobInteract(sourceentity, hand);
+       super.mobInteract(sourceentity, hand);
 		Entity entity = this;
 		Level world = this.level();
-        if (sourceentity.isHolding(CaerulaArborModItems.APOCALYPSE.get()) || sourceentity.isHolding(CaerulaArborModItems.BANNED_ITEM.get())) {
+        if (sourceentity.isHolding(CAItems.APOCALYPSE.get()) || sourceentity.isHolding(CAItems.BANNED_ITEM.get())) {
             entity.hurt(new DamageSource(((LevelAccessor) world).registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "inv_killer")))), 114514);
             return InteractionResult.SUCCESS;
         }

@@ -1,13 +1,12 @@
 
 package com.apocalypse.caerulaarbor.item;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -50,13 +49,13 @@ public class CannedLavaItem extends Item {
 			entity.setSecondsOnFire(12);
 			if (!(entity instanceof Player)) {
 				resultStack.shrink(1);
-				ItemStack emptyCan = new ItemStack(CaerulaArborModItems.EMPTY_CAN.get());
+				ItemStack emptyCan = new ItemStack(CAItems.EMPTY_CAN.get());
 				if (resultStack.isEmpty()) {
 					return emptyCan;
 				}
 			} else if (entity instanceof Player player && !player.getAbilities().instabuild) {
 				resultStack.shrink(1);
-				ItemStack emptyCan = new ItemStack(CaerulaArborModItems.EMPTY_CAN.get());
+				ItemStack emptyCan = new ItemStack(CAItems.EMPTY_CAN.get());
 				if (resultStack.isEmpty()) {
 					return emptyCan;
 				}

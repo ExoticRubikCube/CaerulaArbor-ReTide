@@ -1,8 +1,8 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.procedures.TideBiDeathProcedure;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
@@ -70,7 +70,7 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
 	private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.GREEN, ServerBossEvent.BossBarOverlay.NOTCHED_6);
 
 	public TideBishopEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.TIDE_BISHOP.get(), world);
+		this(CAEntities.TIDE_BISHOP.get(), world);
 	}
 
 	public TideBishopEntity(EntityType<TideBishopEntity> type, Level world) {
@@ -286,7 +286,7 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        Entity call = null;
+        Entity call;
         call = world.getEntitiesOfClass(TideDeathrepellerEntity.class, AABB.ofSize(new Vec3(x, y, z), 96, 96, 96), e -> true).stream().sorted(new Object() {
             Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
                 return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
@@ -294,7 +294,7 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
         }.compareDistOf(x, y, z)).findFirst().orElse(null);
 		if (call instanceof Mob _entity)
 			_entity.getNavigation().moveTo(x, y, z, 0.8);
-		if ((Entity) this instanceof LivingEntity _livEnt3 && _livEnt3.hasEffect(CaerulaArborModMobEffects.INVULNERABLE.get())) {
+		if ((Entity) this instanceof LivingEntity _livEnt3 && _livEnt3.hasEffect(CAMobEffects.INVULNERABLE.get())) {
 
         }
         if (source.is(DamageTypes.DROWN))
@@ -306,7 +306,7 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
         if ((LevelAccessor) world instanceof ServerLevel _level) {
-            Entity entityToSpawn = CaerulaArborModEntities.TIDE_DEATHREPELLER.get().spawn(_level, BlockPos.containing(this.getX() + Mth.nextDouble(RandomSource.create(), -3, 3), this.getY(), this.getZ() + Mth.nextDouble(RandomSource.create(), -3, 3)), MobSpawnType.MOB_SUMMONED);
+            Entity entityToSpawn = CAEntities.TIDE_DEATHREPELLER.get().spawn(_level, BlockPos.containing(this.getX() + Mth.nextDouble(RandomSource.create(), -3, 3), this.getY(), this.getZ() + Mth.nextDouble(RandomSource.create(), -3, 3)), MobSpawnType.MOB_SUMMONED);
             if (entityToSpawn != null) {
                 entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
             }

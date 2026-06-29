@@ -1,7 +1,8 @@
 
 package com.apocalypse.caerulaarbor.item;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -23,7 +24,7 @@ public class SeabornSoupItem extends Item {
 		ItemStack retval = new ItemStack(Items.BOWL);
 		super.finishUsingItem(itemstack, world, entity);
 		if (!entity.level().isClientSide()) {
-			entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.SANITY_IMMUE.get(), 400, 0));
+			entity.addEffect(new MobEffectInstance(CAMobEffects.SANITY_IMMUE.get(), 400, 0));
 			entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 200, 1));
 		}
 		if (itemstack.isEmpty()) {

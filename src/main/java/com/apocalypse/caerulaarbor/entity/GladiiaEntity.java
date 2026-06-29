@@ -1,8 +1,9 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
@@ -38,6 +39,7 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -59,9 +61,7 @@ public class GladiiaEntity extends Animal implements GeoEntity {
 	private boolean isGladiiaDurative() {
 		return EntityPredicateUtils.isGladiiaDurative(this);
 	}
-	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(GladiiaEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(GladiiaEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(GladiiaEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<Integer> DATA_skillP = SynchedEntityData.defineId(GladiiaEntity.class, EntityDataSerializers.INT);
 	public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(GladiiaEntity.class, EntityDataSerializers.INT);
 	public static final EntityDataAccessor<Integer> DATA_skillP2 = SynchedEntityData.defineId(GladiiaEntity.class, EntityDataSerializers.INT);
@@ -72,7 +72,7 @@ public class GladiiaEntity extends Animal implements GeoEntity {
 	public String animationprocedure = "empty";
 
 	public GladiiaEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.GLADIIA.get(), world);
+		this(CAEntities.GLADIIA.get(), world);
 	}
 
 	public GladiiaEntity(EntityType<GladiiaEntity> type, Level world) {
@@ -86,20 +86,10 @@ public class GladiiaEntity extends Animal implements GeoEntity {
 	@Override
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(SHOOT, false);
 		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(TEXTURE, "hunter_gladiia");
 		this.entityData.define(DATA_skillP, 100);
 		this.entityData.define(DATA_duration, 0);
 		this.entityData.define(DATA_skillP2, 200);
-	}
-
-	public void setTexture(String texture) {
-		this.entityData.set(TEXTURE, texture);
-	}
-
-	public String getTexture() {
-		return this.entityData.get(TEXTURE);
 	}
 
 	@Override
@@ -210,30 +200,42 @@ public class GladiiaEntity extends Animal implements GeoEntity {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-		EntityUtils.initHunter(this);
+		if (this != null) {
+			if ((Entity) this instanceof LivingEntity _livingEntity1 && _livingEntity1.getAttributes().hasAttribute(ForgeMod.SWIM_SPEED.get()))
+				_livingEntity1.getAttribute(ForgeMod.SWIM_SPEED.get())
+						.setBaseValue((((Entity) this instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(ForgeMod.SWIM_SPEED.get()) ? _livingEntity0.getAttribute(ForgeMod.SWIM_SPEED.get()).getBaseValue() : 0) * 8));
+			if ((Entity) this instanceof LivingEntity _livingEntity2 && _livingEntity2.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
+				_livingEntity2.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.33);
+		}
 		return retval;
 	}
 
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
-		compound.putString("Texture", this.getTexture());
-		compound.putInt("DataskillP", this.entityData.get(DATA_skillP));
-		compound.putInt("Dataduration", this.entityData.get(DATA_duration));
-		compound.putInt("DataskillP2", this.entityData.get(DATA_skillP2));
+		compound.putInt("PrimarySkillCooldown", this.entityData.get(DATA_skillP));
+		compound.putInt("Duration", this.entityData.get(DATA_duration));
+		compound.putInt("SecondarySkillCooldown", this.entityData.get(DATA_skillP2));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
-		if (compound.contains("Texture"))
-			this.setTexture(compound.getString("Texture"));
-		if (compound.contains("DataskillP"))
+		if (compound.contains("PrimarySkillCooldown")) {
+			this.entityData.set(DATA_skillP, compound.getInt("PrimarySkillCooldown"));
+		} else if (compound.contains("DataskillP")) {
 			this.entityData.set(DATA_skillP, compound.getInt("DataskillP"));
-		if (compound.contains("Dataduration"))
+		}
+		if (compound.contains("Duration")) {
+			this.entityData.set(DATA_duration, compound.getInt("Duration"));
+		} else if (compound.contains("Dataduration")) {
 			this.entityData.set(DATA_duration, compound.getInt("Dataduration"));
-		if (compound.contains("DataskillP2"))
+		}
+		if (compound.contains("SecondarySkillCooldown")) {
+			this.entityData.set(DATA_skillP2, compound.getInt("SecondarySkillCooldown"));
+		} else if (compound.contains("DataskillP2")) {
 			this.entityData.set(DATA_skillP2, compound.getInt("DataskillP2"));
+		}
 	}
 
 	@Override
@@ -243,11 +245,11 @@ public class GladiiaEntity extends Animal implements GeoEntity {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        Entity enemy = null;
+        Entity enemy;
         double gap = 0;
-        double sklp1 = 0;
-        double dura = 0;
-        double skillp2 = 0;
+        double sklp1;
+        double dura;
+        double skillp2;
         if (this.isAlive()) {
             sklp1 = (Entity) this instanceof GladiiaEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillP) : 0;
             skillp2 = (Entity) this instanceof GladiiaEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillP2) : 0;
@@ -279,8 +281,8 @@ public class GladiiaEntity extends Animal implements GeoEntity {
                                 Entity ene = this.getTarget();
                                 if (ene == null)
                                     return;
-                                Entity side = null;
-                                double damage = 0;
+                                Entity side;
+                                double damage;
                                 if (world instanceof Level _level) {
                                         _level.playSound(null, BlockPos.containing(ene.getX(), ene.getY(), ene.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "gladiia_pull_pull")), SoundSource.NEUTRAL, 3, 1);
                                 }
@@ -299,9 +301,9 @@ public class GladiiaEntity extends Animal implements GeoEntity {
                                             _level.playSound(null, BlockPos.containing(ene.getX(), ene.getY(), ene.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "gladiia_attack_pre")), SoundSource.NEUTRAL, 3, 1);
                                     }
                                     if (ene instanceof LivingEntity _entity && !this.level().isClientSide())
-                                        this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.DIZZY.get(), 40, 0, false, false));
+                                        this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 40, 0, false, false));
                                     if (EntityUtils.catchNearestEnemy(world, ene.getX(), ene.getY(), ene.getZ(), ene) instanceof LivingEntity _entity && !this.level().isClientSide())
-                                        this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.DIZZY.get(), 40, 0, false, false));
+                                        this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 40, 0, false, false));
                                 });
                             }
                         });
@@ -334,13 +336,13 @@ public class GladiiaEntity extends Animal implements GeoEntity {
                         }
                         ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY() + 1.6), (enemy.getZ())));
                         if (!this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ADD_ATTACK_PERCLY.get(), 120, 4, false, false));
+                            this.addEffect(new MobEffectInstance(CAMobEffects.ADD_ATTACK_PERCLY.get(), 120, 4, false, false));
                         if (!this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 120, 9, false, false));
+                            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 120, 9, false, false));
                         if (enemy instanceof LivingEntity _entity && !this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 120, 3, false, false));
                         if (world instanceof ServerLevel _level) {
-                            Entity entityToSpawn = CaerulaArborModEntities.GLADIIA_WHIRL.get().spawn(_level, BlockPos.containing(enemy.getX(), enemy.getY(), enemy.getZ()), MobSpawnType.MOB_SUMMONED);
+                            Entity entityToSpawn = CAEntities.GLADIIA_WHIRL.get().spawn(_level, BlockPos.containing(enemy.getX(), enemy.getY(), enemy.getZ()), MobSpawnType.MOB_SUMMONED);
                             if (entityToSpawn != null) {
                                 entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                             }
@@ -358,8 +360,8 @@ public class GladiiaEntity extends Animal implements GeoEntity {
                                 if (ene == null)
                                     return;
                                 Entity side = null;
-                                double damage = 0;
-                                double d = 0;
+                                double damage;
+                                double d;
                                 if (world instanceof Level _level) {
                                         _level.playSound(null, BlockPos.containing(ene.getX(), ene.getY(), ene.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "gladiia_pull_pull")), SoundSource.NEUTRAL, 3, 1);
                                 }
@@ -399,7 +401,7 @@ public class GladiiaEntity extends Animal implements GeoEntity {
 
 	@Override
 	public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
-		GladiiaEntity retval = CaerulaArborModEntities.GLADIIA.get().create(serverWorld);
+		GladiiaEntity retval = CAEntities.GLADIIA.get().create(serverWorld);
 		retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null, null);
 		return retval;
 	}

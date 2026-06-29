@@ -1,8 +1,9 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.client.Minecraft;
@@ -43,6 +44,7 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -74,7 +76,7 @@ public class SkadiEntity extends Animal implements GeoEntity {
 	public String animationprocedure = "empty";
 
 	public SkadiEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.SKADI.get(), world);
+		this(CAEntities.SKADI.get(), world);
 	}
 
 	public SkadiEntity(EntityType<SkadiEntity> type, Level world) {
@@ -171,7 +173,7 @@ public class SkadiEntity extends Animal implements GeoEntity {
         double z = this.getZ();
         Entity sourceentity = source.getEntity();
         if (sourceentity != null) {
-            double sklp = 0;
+            double sklp;
             if (!new Object() {
                 public boolean checkGamemode(Entity _ent) {
                     if (_ent instanceof ServerPlayer _serverPlayer) {
@@ -204,14 +206,14 @@ public class SkadiEntity extends Animal implements GeoEntity {
                                                 (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
                                                         * 2.5));
                                         if (sourceentity instanceof LivingEntity _entity && !this.level().isClientSide())
-                                            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.DIZZY.get(), 100, 0, false, false));
+                                            this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 100, 0, false, false));
                                         sourceentity.push((getLookAngle().x + 0.33), 0, (getLookAngle().z + 0.33));
                                     }
                                     if (world instanceof Level _level) {
                                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.dragon_fireball.explode")), SoundSource.HOSTILE, 2, 1);
                                     }
                                     double sklp1 = 0;
-                                    double ddd = 0;
+                                    double ddd;
                                     ddd = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 2.25;
                                     {
                                         final Vec3 _center = new Vec3((x + 2 * getLookAngle().x), y, (z + 2 * getLookAngle().z));
@@ -230,7 +232,7 @@ public class SkadiEntity extends Animal implements GeoEntity {
                                                 entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))), this),
                                                         (float) ddd);
                                                 if (entityiterator instanceof LivingEntity _entity && !this.level().isClientSide())
-                                                    this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.DIZZY.get(), 100, 0, false, false));
+                                                    this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 100, 0, false, false));
                                                 entityiterator.push((getLookAngle().x + 0.33), 0, (getLookAngle().z + 0.33));
                                             }
                                         }
@@ -250,7 +252,13 @@ public class SkadiEntity extends Animal implements GeoEntity {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-		EntityUtils.initHunter(this);
+		if (this != null) {
+			if ((Entity) this instanceof LivingEntity _livingEntity1 && _livingEntity1.getAttributes().hasAttribute(ForgeMod.SWIM_SPEED.get()))
+				_livingEntity1.getAttribute(ForgeMod.SWIM_SPEED.get())
+						.setBaseValue((((Entity) this instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(ForgeMod.SWIM_SPEED.get()) ? _livingEntity0.getAttribute(ForgeMod.SWIM_SPEED.get()).getBaseValue() : 0) * 8));
+			if ((Entity) this instanceof LivingEntity _livingEntity2 && _livingEntity2.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
+				_livingEntity2.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.33);
+		}
 		return retval;
 	}
 
@@ -287,8 +295,8 @@ public class SkadiEntity extends Animal implements GeoEntity {
         double y = this.getY();
         double z = this.getZ();
         double rlx = 0;
-        double sklp = 0;
-        double sklp2 = 0;
+        double sklp;
+        double sklp2;
         if (this.isAlive()) {
             if (Math.random() < 0.001) {
                 rlx = (Entity) this instanceof SkadiEntity _datEntI ? _datEntI.getEntityData().get(DATA_relax_cooldown) : 0;
@@ -315,7 +323,7 @@ public class SkadiEntity extends Animal implements GeoEntity {
                             this.setAnimation("animation.skadi.spin");
                         }
                         if (!this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 40, 0, false, false));
+                            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 40, 0, false, false));
                         CaerulaArborMod.queueServerWork(10, () -> {
                             spinAttack(1.5);
                         });
@@ -353,9 +361,9 @@ public class SkadiEntity extends Animal implements GeoEntity {
                             continue;
                         }
                         if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunters")))) {
-                            if (!(entityiterator instanceof LivingEntity _livEnt3 && _livEnt3.hasEffect(CaerulaArborModMobEffects.ADD_ATTACK_PERCLY.get()))) {
+                            if (!(entityiterator instanceof LivingEntity _livEnt3 && _livEnt3.hasEffect(CAMobEffects.ADD_ATTACK_PERCLY.get()))) {
                                 if (entityiterator instanceof LivingEntity _entity && !this.level().isClientSide())
-                                    this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ADD_ATTACK_PERCLY.get(), 32768, 0, false, false));
+                                    this.addEffect(new MobEffectInstance(CAMobEffects.ADD_ATTACK_PERCLY.get(), 32768, 0, false, false));
                             }
                         }
                     }
@@ -372,7 +380,7 @@ public class SkadiEntity extends Animal implements GeoEntity {
 
 	@Override
 	public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
-		SkadiEntity retval = CaerulaArborModEntities.SKADI.get().create(serverWorld);
+		SkadiEntity retval = CAEntities.SKADI.get().create(serverWorld);
 		retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null, null);
 		return retval;
 	}

@@ -1,7 +1,7 @@
 
 package com.apocalypse.caerulaarbor.item;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -51,8 +51,8 @@ public class TrailriteBowItem extends BowItem {
     
     public static final Predicate<ItemStack> ALSO_OCEAN_ARROW = (itemStack) -> {
         return ARROW_ONLY.test(itemStack) 
-        || itemStack.getItem() == CaerulaArborModItems.OCEAN_ARROW.get()
-        || itemStack.getItem() == CaerulaArborModItems.TRAILRITE_ARROW.get();
+        || itemStack.getItem() == CAItems.OCEAN_ARROW.get()
+        || itemStack.getItem() == CAItems.TRAILRITE_ARROW.get();
     };
 
     private double getRate(Player player){
@@ -118,11 +118,11 @@ public class TrailriteBowItem extends BowItem {
 
                         double link = 4;
 
-                        if (itemstack.is(CaerulaArborModItems.OCEAN_ARROW.get())){
+                        if (itemstack.is(CAItems.OCEAN_ARROW.get())){
                         	abstractarrow.setBaseDamage(abstractarrow.getBaseDamage() * 1.25);
                         	abstractarrow.pickup = AbstractArrow.Pickup.DISALLOWED;
                         	link = 6;
-                        } else if(itemstack.is(CaerulaArborModItems.TRAILRITE_ARROW.get())) {
+                        } else if(itemstack.is(CAItems.TRAILRITE_ARROW.get())) {
                         	abstractarrow.setBaseDamage(abstractarrow.getBaseDamage() * 2);
                         	abstractarrow.pickup = AbstractArrow.Pickup.DISALLOWED;
                         	link = 12;

@@ -2,8 +2,8 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -64,7 +64,7 @@ public class FakeOffspringEntity extends SeaMonster {
 	public String animationprocedure = "empty";
 
 	public FakeOffspringEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.FAKE_OFFSPRING.get(), world);
+		this(CAEntities.FAKE_OFFSPRING.get(), world);
 	}
 
 	public FakeOffspringEntity(EntityType<FakeOffspringEntity> type, Level world) {
@@ -196,9 +196,9 @@ public class FakeOffspringEntity extends SeaMonster {
 	public void baseTick() {
 		super.baseTick();
         LevelAccessor world = this.level();
-        Entity obj = null;
-        double ToHurt = 0;
-        double amplifi = 0;
+        Entity obj;
+        double ToHurt;
+        double amplifi;
         if (this.isAggressive()) {
             obj = this.getTarget();
             if (!(obj == null)) {
@@ -271,9 +271,7 @@ public class FakeOffspringEntity extends SeaMonster {
 	}
 
 	private PlayState attackingPredicate(AnimationState event) {
-		double d1 = this.getX() - this.xOld;
-		double d0 = this.getZ() - this.zOld;
-		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
+        if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
 		}
@@ -315,7 +313,7 @@ public class FakeOffspringEntity extends SeaMonster {
             LevelAccessor world = this.level();
             if (Math.random() < 0.2) {
                 if (world instanceof ServerLevel _level) {
-                    ItemEntity entityToSpawn = new ItemEntity(_level, this.getX(), this.getY(), this.getZ(), new ItemStack(CaerulaArborModItems.FAKE_EGG.get()));
+                    ItemEntity entityToSpawn = new ItemEntity(_level, this.getX(), this.getY(), this.getZ(), new ItemStack(CAItems.FAKE_EGG.get()));
                     entityToSpawn.setPickUpDelay(10);
                     _level.addFreshEntity(entityToSpawn);
                 }

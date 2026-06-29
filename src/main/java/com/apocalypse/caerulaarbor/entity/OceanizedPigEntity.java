@@ -1,10 +1,10 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CABlocks;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.procedures.TrailReplaceProcedure;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
@@ -64,7 +64,7 @@ public class OceanizedPigEntity extends SeaMonster {
 	public String animationprocedure = "empty";
 
 	public OceanizedPigEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.OCEANIZED_PIG.get(), world);
+		this(CAEntities.OCEANIZED_PIG.get(), world);
 	}
 
 	public OceanizedPigEntity(EntityType<OceanizedPigEntity> type, Level world) {
@@ -176,8 +176,8 @@ public class OceanizedPigEntity extends SeaMonster {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-		if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get())) {
-			this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(6);
+		if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get())) {
+			this.getAttribute(CAAttributes.SANITY_RATE.get()).setBaseValue(6);
 		}
 		return retval;
 	}
@@ -202,10 +202,10 @@ public class OceanizedPigEntity extends SeaMonster {
 	public void baseTick() {
 		super.baseTick();
         if (this.isAlive()) {
-            if (this.hasEffect(CaerulaArborModMobEffects.MUTE.get())) {
+            if (this.hasEffect(CAMobEffects.MUTE.get())) {
                 if ((Entity) this instanceof OceanizedPigEntity _datEntSetI) {
                     _datEntSetI.getEntityData().set(DATA_mute_time,
-                            _datEntSetI.hasEffect(CaerulaArborModMobEffects.MUTE.get()) ? _datEntSetI.getEffect(CaerulaArborModMobEffects.MUTE.get()).getDuration() : 0);
+                            _datEntSetI.hasEffect(CAMobEffects.MUTE.get()) ? _datEntSetI.getEffect(CAMobEffects.MUTE.get()).getDuration() : 0);
                 }
             } else if (((Entity) this instanceof OceanizedPigEntity _datEntI ? _datEntI.getEntityData().get(DATA_mute_time) : 0) == 1) {
                 if ((Entity) this instanceof OceanizedPigEntity _datEntSetI)
@@ -249,9 +249,7 @@ public class OceanizedPigEntity extends SeaMonster {
 	}
 
 	private PlayState attackingPredicate(AnimationState event) {
-		double d1 = this.getX() - this.xOld;
-		double d0 = this.getZ() - this.zOld;
-		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
+        if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
 		}
@@ -296,14 +294,14 @@ public class OceanizedPigEntity extends SeaMonster {
             double z = this.getZ();
             if (WorldUtils.canGrief(world)) {
                 if (((Entity) this instanceof OceanizedPigEntity _datEntI ? _datEntI.getEntityData().get(DATA_mute_time) : 0) <= 0) {
-                    if (CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing(x, y, z)) && !(world.getBlockFloorHeight(BlockPos.containing(x, y, z)) > 0)) {
-                        TrailReplaceProcedure.execute(world, CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState(), (world.getFluidState(BlockPos.containing(x, y, z)).createLegacyBlock()).getBlock() == Blocks.WATER, x, y, z);
+                    if (CABlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing(x, y, z)) && !(world.getBlockFloorHeight(BlockPos.containing(x, y, z)) > 0)) {
+                        TrailReplaceProcedure.execute(world, CABlocks.SEA_TRAIL_INIT.get().defaultBlockState(), (world.getFluidState(BlockPos.containing(x, y, z)).createLegacyBlock()).getBlock() == Blocks.WATER, x, y, z);
                     }
                     for (Direction directioniterator : Direction.Plane.HORIZONTAL) {
-                        if (CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing(x + directioniterator.getStepX(), y, z + directioniterator.getStepZ()))
+                        if (CABlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing(x + directioniterator.getStepX(), y, z + directioniterator.getStepZ()))
                                 && !(world.getBlockFloorHeight(BlockPos.containing(x + directioniterator.getStepX(), y, z + directioniterator.getStepZ())) > 0)) {
                             if (Math.random() < 0.33) {
-                                TrailReplaceProcedure.execute(world, CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState(),
+                                TrailReplaceProcedure.execute(world, CABlocks.SEA_TRAIL_INIT.get().defaultBlockState(),
                                         (world.getFluidState(BlockPos.containing(x + directioniterator.getStepX(), y, z + directioniterator.getStepZ())).createLegacyBlock()).getBlock() == Blocks.WATER, x + directioniterator.getStepX(), y,
                                         z + directioniterator.getStepZ());
                             }

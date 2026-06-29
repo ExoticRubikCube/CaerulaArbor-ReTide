@@ -3,7 +3,7 @@ package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
+import com.apocalypse.caerulaarbor.init.CABlocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -74,7 +74,7 @@ public class AlleySculptureItem extends Item {
         if (((LevelAccessor) world).isClientSide())
             Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);
         if ((Entity) entity instanceof Player _player) {
-            ItemStack _setstack = new ItemStack(CaerulaArborModBlocks.ALLAY_BLOCK.get()).copy();
+            ItemStack _setstack = new ItemStack(CABlocks.ALLAY_BLOCK.get()).copy();
             _setstack.setCount(1);
             ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
         }

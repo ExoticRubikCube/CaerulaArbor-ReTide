@@ -1,8 +1,8 @@
 
 package com.apocalypse.caerulaarbor.block;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlockEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CABlockEntities;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -64,7 +64,7 @@ public class MizukiStatueBlock extends BaseEntityBlock implements SimpleWaterlog
 	@Nullable
 	@Override
 	public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
-		return CaerulaArborModBlockEntities.MIZUKI_STATUE.get().create(blockPos, blockState);
+		return CABlockEntities.MIZUKI_STATUE.get().create(blockPos, blockState);
 	}
 
 	@Override
@@ -142,7 +142,7 @@ public class MizukiStatueBlock extends BaseEntityBlock implements SimpleWaterlog
         double z = pos.getZ();
         if (entity == null)
             return;
-        if ((entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CaerulaArborModItems.MIZUKI_DETERMINATION.get()
+        if ((entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.MIZUKI_DETERMINATION.get()
                 && (blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _getip3 ? blockstate.getValue(_getip3) : -1) == 1) {
             (entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
             if ((LevelAccessor) world instanceof ServerLevel _level)

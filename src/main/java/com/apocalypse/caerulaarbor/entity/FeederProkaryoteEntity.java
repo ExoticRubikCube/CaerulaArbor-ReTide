@@ -3,7 +3,7 @@ package com.apocalypse.caerulaarbor.entity;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -62,7 +62,7 @@ public class FeederProkaryoteEntity extends SeaMonster {
 	public String animationprocedure = "empty";
 
 	public FeederProkaryoteEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.FEEDER_PROKARYOTE.get(), world);
+		this(CAEntities.FEEDER_PROKARYOTE.get(), world);
 	}
 
 	public FeederProkaryoteEntity(EntityType<FeederProkaryoteEntity> type, Level world) {
@@ -144,105 +144,55 @@ public class FeederProkaryoteEntity extends SeaMonster {
 		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal(this, Pufferfish.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = FeederProkaryoteEntity.this.getX();
-				double y = FeederProkaryoteEntity.this.getY();
-				double z = FeederProkaryoteEntity.this.getZ();
-				Entity entity = FeederProkaryoteEntity.this;
-				Level world = FeederProkaryoteEntity.this.level();
-				return super.canUse() && EntityUtils.canAttackAnimals();
+                return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = FeederProkaryoteEntity.this.getX();
-				double y = FeederProkaryoteEntity.this.getY();
-				double z = FeederProkaryoteEntity.this.getZ();
-				Entity entity = FeederProkaryoteEntity.this;
-				Level world = FeederProkaryoteEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
 		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal(this, GlowSquid.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = FeederProkaryoteEntity.this.getX();
-				double y = FeederProkaryoteEntity.this.getY();
-				double z = FeederProkaryoteEntity.this.getZ();
-				Entity entity = FeederProkaryoteEntity.this;
-				Level world = FeederProkaryoteEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = FeederProkaryoteEntity.this.getX();
-				double y = FeederProkaryoteEntity.this.getY();
-				double z = FeederProkaryoteEntity.this.getZ();
-				Entity entity = FeederProkaryoteEntity.this;
-				Level world = FeederProkaryoteEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
 		this.targetSelector.addGoal(5, new NearestAttackableTargetGoal(this, Squid.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = FeederProkaryoteEntity.this.getX();
-				double y = FeederProkaryoteEntity.this.getY();
-				double z = FeederProkaryoteEntity.this.getZ();
-				Entity entity = FeederProkaryoteEntity.this;
-				Level world = FeederProkaryoteEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = FeederProkaryoteEntity.this.getX();
-				double y = FeederProkaryoteEntity.this.getY();
-				double z = FeederProkaryoteEntity.this.getZ();
-				Entity entity = FeederProkaryoteEntity.this;
-				Level world = FeederProkaryoteEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
 		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal(this, TropicalFish.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = FeederProkaryoteEntity.this.getX();
-				double y = FeederProkaryoteEntity.this.getY();
-				double z = FeederProkaryoteEntity.this.getZ();
-				Entity entity = FeederProkaryoteEntity.this;
-				Level world = FeederProkaryoteEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = FeederProkaryoteEntity.this.getX();
-				double y = FeederProkaryoteEntity.this.getY();
-				double z = FeederProkaryoteEntity.this.getZ();
-				Entity entity = FeederProkaryoteEntity.this;
-				Level world = FeederProkaryoteEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
 		this.targetSelector.addGoal(7, new NearestAttackableTargetGoal(this, Salmon.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = FeederProkaryoteEntity.this.getX();
-				double y = FeederProkaryoteEntity.this.getY();
-				double z = FeederProkaryoteEntity.this.getZ();
-				Entity entity = FeederProkaryoteEntity.this;
-				Level world = FeederProkaryoteEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = FeederProkaryoteEntity.this.getX();
-				double y = FeederProkaryoteEntity.this.getY();
-				double z = FeederProkaryoteEntity.this.getZ();
-				Entity entity = FeederProkaryoteEntity.this;
-				Level world = FeederProkaryoteEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
@@ -252,7 +202,6 @@ public class FeederProkaryoteEntity extends SeaMonster {
 				double x = FeederProkaryoteEntity.this.getX();
 				double y = FeederProkaryoteEntity.this.getY();
 				double z = FeederProkaryoteEntity.this.getZ();
-				Entity entity = FeederProkaryoteEntity.this;
 				Level world = FeederProkaryoteEntity.this.level();
 				return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -262,7 +211,6 @@ public class FeederProkaryoteEntity extends SeaMonster {
 				double x = FeederProkaryoteEntity.this.getX();
 				double y = FeederProkaryoteEntity.this.getY();
 				double z = FeederProkaryoteEntity.this.getZ();
-				Entity entity = FeederProkaryoteEntity.this;
 				Level world = FeederProkaryoteEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -333,7 +281,7 @@ public class FeederProkaryoteEntity extends SeaMonster {
 	}
 
 	public static void init() {
-		SpawnPlacements.register(CaerulaArborModEntities.FEEDER_PROKARYOTE.get(), SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
+		SpawnPlacements.register(CAEntities.FEEDER_PROKARYOTE.get(), SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();
@@ -372,9 +320,6 @@ public class FeederProkaryoteEntity extends SeaMonster {
 	}
 
 	private PlayState attackingPredicate(AnimationState event) {
-		double d1 = this.getX() - this.xOld;
-		double d0 = this.getZ() - this.zOld;
-		float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
 		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
@@ -418,27 +363,25 @@ public class FeederProkaryoteEntity extends SeaMonster {
             double x = this.getX();
             double y = this.getY();
             double z = this.getZ();
-            if (this == null)
-                return;
-            double rand = 0;
+            double rand;
             rand = Math.random();
             if (rand < 0.2) {
                 if (world instanceof ServerLevel _level) {
-                    Entity entityToSpawn = CaerulaArborModEntities.DEPOSITER_PROKARYOTE.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+                    Entity entityToSpawn = CAEntities.DEPOSITER_PROKARYOTE.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                     if (entityToSpawn != null) {
                         entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                     }
                 }
             } else if (rand < 0.7) {
                 if (world instanceof ServerLevel _level) {
-                    Entity entityToSpawn = CaerulaArborModEntities.ACCUMULATOR_PROKARYOTE.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+                    Entity entityToSpawn = CAEntities.ACCUMULATOR_PROKARYOTE.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                     if (entityToSpawn != null) {
                         entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                     }
                 }
             } else {
                 if (world instanceof ServerLevel _level) {
-                    Entity entityToSpawn = CaerulaArborModEntities.COLLECTOR_PROKARYOTE.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+                    Entity entityToSpawn = CAEntities.COLLECTOR_PROKARYOTE.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                     if (entityToSpawn != null) {
                         entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                     }
@@ -449,35 +392,35 @@ public class FeederProkaryoteEntity extends SeaMonster {
                     rand = Math.random();
                     if (rand < 0.35) {
                         if (world instanceof ServerLevel _level) {
-                            Entity entityToSpawn = CaerulaArborModEntities.APOSTLE_PROKARYOTE.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+                            Entity entityToSpawn = CAEntities.APOSTLE_PROKARYOTE.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                             if (entityToSpawn != null) {
                                 entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                             }
                         }
                     } else if (rand < 0.65) {
                         if (world instanceof ServerLevel _level) {
-                            Entity entityToSpawn = CaerulaArborModEntities.CREEPER_FISH.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+                            Entity entityToSpawn = CAEntities.CREEPER_FISH.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                             if (entityToSpawn != null) {
                                 entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                             }
                         }
                     } else if (rand < 0.85) {
                         if (world instanceof ServerLevel _level) {
-                            Entity entityToSpawn = CaerulaArborModEntities.PUNCTURE_FISH.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+                            Entity entityToSpawn = CAEntities.PUNCTURE_FISH.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                             if (entityToSpawn != null) {
                                 entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                             }
                         }
                     } else if (rand < 0.95) {
                         if (world instanceof ServerLevel _level) {
-                            Entity entityToSpawn = CaerulaArborModEntities.NUCLEIC_MALEFICENT.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+                            Entity entityToSpawn = CAEntities.NUCLEIC_MALEFICENT.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                             if (entityToSpawn != null) {
                                 entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                             }
                         }
                     } else {
                         if (world instanceof ServerLevel _level) {
-                            Entity entityToSpawn = CaerulaArborModEntities.CRACKER_ABYSSAL.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+                            Entity entityToSpawn = CAEntities.CRACKER_ABYSSAL.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                             if (entityToSpawn != null) {
                                 entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                             }
@@ -490,35 +433,35 @@ public class FeederProkaryoteEntity extends SeaMonster {
                     rand = Math.random();
                     if (rand < 0.45) {
                         if (world instanceof ServerLevel _level) {
-                            Entity entityToSpawn = CaerulaArborModEntities.ROUTE_SHAPER.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+                            Entity entityToSpawn = CAEntities.ROUTE_SHAPER.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                             if (entityToSpawn != null) {
                                 entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                             }
                         }
                     } else if (rand < 0.9) {
                         if (world instanceof ServerLevel _level) {
-                            Entity entityToSpawn = CaerulaArborModEntities.OCEANIZED_RAVAGER.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+                            Entity entityToSpawn = CAEntities.OCEANIZED_RAVAGER.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                             if (entityToSpawn != null) {
                                 entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                             }
                         }
                     } else if (rand < 0.97) {
                         if (world instanceof ServerLevel _level) {
-                            Entity entityToSpawn = CaerulaArborModEntities.OCEANIZED_BRUTE.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+                            Entity entityToSpawn = CAEntities.OCEANIZED_BRUTE.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                             if (entityToSpawn != null) {
                                 entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                             }
                         }
                     } else if (rand < 0.99) {
                         if (world instanceof ServerLevel _level) {
-                            Entity entityToSpawn = CaerulaArborModEntities.OCEANIZED_ENDERMAN.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+                            Entity entityToSpawn = CAEntities.OCEANIZED_ENDERMAN.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                             if (entityToSpawn != null) {
                                 entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                             }
                         }
                     } else {
                         if (world instanceof ServerLevel _level) {
-                            Entity entityToSpawn = CaerulaArborModEntities.SUPER_BIG_CAT.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+                            Entity entityToSpawn = CAEntities.SUPER_BIG_CAT.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                             if (entityToSpawn != null) {
                                 entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                             }

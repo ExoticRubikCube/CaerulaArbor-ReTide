@@ -12,7 +12,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.client.gui.GuiGraphics;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ public class SurvivorsGuideMobEffect extends MobEffect {
         super(MobEffectCategory.NEUTRAL, -3407872);
         this.addAttributeModifier(Attributes.ATTACK_DAMAGE, "253a73d0-8589-3a25-8b5c-32b3035cce6e", 0.2, AttributeModifier.Operation.MULTIPLY_BASE);
         this.addAttributeModifier(Attributes.ARMOR, "1e800216-1635-33d1-a232-0f265561ee39", 1, AttributeModifier.Operation.ADDITION);
-        this.addAttributeModifier(CaerulaArborModAttributes.GENERAL_DEFENSE.get(), "616325a4-4df9-3089-a919-ffcea08ee504", 0.25, AttributeModifier.Operation.ADDITION);
+        this.addAttributeModifier(CAAttributes.GENERAL_DEFENSE.get(), "616325a4-4df9-3089-a919-ffcea08ee504", 0.25, AttributeModifier.Operation.ADDITION);
     }
 
     @Override

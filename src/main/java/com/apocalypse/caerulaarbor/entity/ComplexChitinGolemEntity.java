@@ -1,10 +1,10 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -83,7 +83,7 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity {
 	public String animationprocedure = "empty";
 
 	public ComplexChitinGolemEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.COMPLEX_CHITIN_GOLEM.get(), world);
+		this(CAEntities.COMPLEX_CHITIN_GOLEM.get(), world);
 	}
 
 	public ComplexChitinGolemEntity(EntityType<ComplexChitinGolemEntity> type, Level world) {
@@ -180,14 +180,14 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get()))
-            this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(8);
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()))
-            this.getAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()).setBaseValue(0.05);
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-            this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(50);
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()))
-            this.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).setBaseValue(12);
+        if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get()))
+            this.getAttribute(CAAttributes.SANITY_RATE.get()).setBaseValue(8);
+        if (this.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
+            this.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.05);
+        if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
+            this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(50);
+        if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
+            this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).setBaseValue(12);
         return retval;
 	}
 
@@ -230,7 +230,7 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity {
         if (this.getHealth() >= this.getMaxHealth()) {
             return InteractionResult.PASS;
         }
-        if (sourceentity.getMainHandItem().getItem() == CaerulaArborModItems.OCEAN_CHITIN.get()) {
+        if (sourceentity.getMainHandItem().getItem() == CAItems.OCEAN_CHITIN.get()) {
             scale = 0.15;
             if (!(new Object() {
                 public boolean checkGamemode(Entity _ent) {
@@ -244,12 +244,12 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity {
                 }
             }.checkGamemode((Entity) sourceentity))) {
                 if ((Entity) sourceentity instanceof Player _player) {
-                    ItemStack _stktoremove = new ItemStack(CaerulaArborModItems.OCEAN_CHITIN.get());
+                    ItemStack _stktoremove = new ItemStack(CAItems.OCEAN_CHITIN.get());
                     _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
                 }
             }
         } else {
-            if (sourceentity.getMainHandItem().getItem() == CaerulaArborModItems.COMPLEX_CHITIN.get()) {
+            if (sourceentity.getMainHandItem().getItem() == CAItems.COMPLEX_CHITIN.get()) {
                 scale = 0.25;
                 if (!(new Object() {
                     public boolean checkGamemode(Entity _ent) {
@@ -263,7 +263,7 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity {
                     }
                 }.checkGamemode((Entity) sourceentity))) {
                     if ((Entity) sourceentity instanceof Player _player) {
-                        ItemStack _stktoremove = new ItemStack(CaerulaArborModItems.COMPLEX_CHITIN.get());
+                        ItemStack _stktoremove = new ItemStack(CAItems.COMPLEX_CHITIN.get());
                         _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
                     }
                 }
@@ -286,18 +286,18 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        Entity enemy = null;
-        double sklp1 = 0;
-        double dura = 0;
+        Entity enemy;
+        double sklp1;
+        double dura;
         updateTexture();
         if (this.isAlive()) {
             LivingEntity _entity = (LivingEntity) (Entity) this;
-            _entity.removeEffect(CaerulaArborModMobEffects.DIZZY.get());
-            boolean root = false;
-            double rx = 0;
-            double rz = 0;
-            double dist = 0;
-            double dist1 = 0;
+            _entity.removeEffect(CAMobEffects.DIZZY.get());
+            boolean root;
+            double rx;
+            double rz;
+            double dist;
+            double dist1;
             root = (Entity) this instanceof ComplexChitinGolemEntity _datEntL0 && _datEntL0.getEntityData().get(DATA_rooted);
             if (!root) {
                 if (!(getDisplayName().getString()).equals(getType().getDescription().getString())) {
@@ -361,14 +361,14 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity {
                         CaerulaArborMod.queueServerWork(20, () -> {
                             if (this.isAlive()) {
                                 if (!this.level().isClientSide())
-                                    this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 60, 0, false, false));
+                                    this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 60, 0, false, false));
                             }
                         });
                         for (int index0 = 0; index0 < 16; index0++) {
                             CaerulaArborMod.queueServerWork(index0 * 3 + 26, () -> {
                                 if (this.isAlive()) {
                                     Entity enemy1 = null;
-                                    double damage = 0;
+                                    double damage;
                                     double r = 0;
                                     {
                                         final Vec3 _center = new Vec3((getX()), (getY()), (getZ()));

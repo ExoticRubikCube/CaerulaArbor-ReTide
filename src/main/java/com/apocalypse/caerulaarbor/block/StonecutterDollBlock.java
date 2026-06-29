@@ -1,7 +1,7 @@
 
 package com.apocalypse.caerulaarbor.block;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlockEntities;
+import com.apocalypse.caerulaarbor.init.CABlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -57,7 +57,7 @@ public class StonecutterDollBlock extends BaseEntityBlock implements SimpleWater
 	@Nullable
 	@Override
 	public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
-		return CaerulaArborModBlockEntities.STONECUTTER_DOLL.get().create(blockPos, blockState);
+		return CABlockEntities.STONECUTTER_DOLL.get().create(blockPos, blockState);
 	}
 
 	@Override

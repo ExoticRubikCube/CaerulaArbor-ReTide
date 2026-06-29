@@ -1,7 +1,7 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.registries.Registries;
@@ -54,7 +54,7 @@ public class CorrectinalPhalaxVanguardEntity extends Animal implements GeoEntity
 	public String animationprocedure = "empty";
 
 	public CorrectinalPhalaxVanguardEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.CORRECTIONAL_PHALAX_VANGUARD.get(), world);
+		this(CAEntities.CORRECTIONAL_PHALAX_VANGUARD.get(), world);
 	}
 
 	public CorrectinalPhalaxVanguardEntity(EntityType<CorrectinalPhalaxVanguardEntity> type, Level world) {
@@ -193,9 +193,9 @@ public class CorrectinalPhalaxVanguardEntity extends Animal implements GeoEntity
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        double sklp1 = 0;
+        double sklp1;
         double less = 0;
-        Entity enemy = null;
+        Entity enemy;
         if (this.isAlive()) {
             sklp1 = (Entity) this instanceof CorrectinalPhalaxVanguardEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp) : 0;
             if (sklp1 > 0) {
@@ -236,7 +236,7 @@ public class CorrectinalPhalaxVanguardEntity extends Animal implements GeoEntity
 
 	@Override
 	public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
-		CorrectinalPhalaxVanguardEntity retval = CaerulaArborModEntities.CORRECTIONAL_PHALAX_VANGUARD.get().create(serverWorld);
+		CorrectinalPhalaxVanguardEntity retval = CAEntities.CORRECTIONAL_PHALAX_VANGUARD.get().create(serverWorld);
 		retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null, null);
 		return retval;
 	}

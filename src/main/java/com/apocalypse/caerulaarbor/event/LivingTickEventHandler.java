@@ -5,8 +5,9 @@ import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler;
 import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler.StrategyType;
 import com.apocalypse.caerulaarbor.entity.*;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModGameRules;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.entity.EndspeakerEntity;
+import com.apocalypse.caerulaarbor.init.CAGameRules;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.system.UpgradeMigraProcedure;
 import com.apocalypse.caerulaarbor.system.UpgradeSilenceProcedure;
 import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
@@ -60,19 +61,19 @@ public class LivingTickEventHandler {
 
         Entity other = null;
 
-        if (enemy instanceof TideDeathrepellerEntity && enemy instanceof LivingEntity _livEnt5 && _livEnt5.hasEffect(CaerulaArborModMobEffects.FAKE_DEATH.get())) {
+        if (enemy instanceof TideDeathrepellerEntity && enemy instanceof LivingEntity _livEnt5 && _livEnt5.hasEffect(CAMobEffects.FAKE_DEATH.get())) {
             other = world.getEntitiesOfClass(TideBishopEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).stream()
                     .sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(x, y, z))).findFirst().orElse(null);
-        } else if (enemy instanceof TideBishopEntity && enemy instanceof LivingEntity _livEnt8 && _livEnt8.hasEffect(CaerulaArborModMobEffects.FAKE_DEATH.get())) {
+        } else if (enemy instanceof TideBishopEntity && enemy instanceof LivingEntity _livEnt8 && _livEnt8.hasEffect(CAMobEffects.FAKE_DEATH.get())) {
             other = world.getEntitiesOfClass(TideDeathrepellerEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).stream()
                     .sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(x, y, z))).findFirst().orElse(null);
-        } else if (enemy instanceof MartusEntity && enemy instanceof LivingEntity _livEnt11 && _livEnt11.hasEffect(CaerulaArborModMobEffects.INVULNERABLE.get())) {
+        } else if (enemy instanceof MartusEntity && enemy instanceof LivingEntity _livEnt11 && _livEnt11.hasEffect(CAMobEffects.INVULNERABLE.get())) {
             Entity tgt_ent = null;
             Entity tgt_blessed = null;
             double num = 0;
             double max_h = 999;
             double blesses_h = 999;
-            double d1 = 0;
+            double d1;
             for (Entity entityiterator : world.getEntities(entity, new AABB((x + 32), (y + 32), (z + 32), (x - 32), (y - 32), (z - 32)))) {
                 if (!(entityiterator instanceof Mob)) continue;
                 if (!entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) continue;
@@ -87,10 +88,10 @@ public class LivingTickEventHandler {
                 }
             }
             other = tgt_blessed != null ? tgt_blessed : tgt_ent;
-        } else if ((enemy instanceof Endspeaker0Entity || enemy instanceof Endspeaker1Entity || enemy instanceof Endspeaker2Entity)
-                && enemy instanceof LivingEntity _livEnt15 && _livEnt15.hasEffect(CaerulaArborModMobEffects.INVULNERABLE.get())) {
+        } else if (enemy instanceof EndspeakerEntity endspeaker && endspeaker.getPhase() < 3
+                && enemy instanceof LivingEntity _livEnt15 && _livEnt15.hasEffect(CAMobEffects.INVULNERABLE.get())) {
             double minDist = 999;
-            double d = 0;
+            double d;
             Entity enemy1 = null;
             for (Entity entityiterator : world.getEntities(enemy, new AABB((x + 32), (y + 32), (z + 32), (x - 32), (y - 32), (z - 32)))) {
                 if (!(entityiterator instanceof LivingEntity)) continue;
@@ -126,7 +127,7 @@ public class LivingTickEventHandler {
 
         if (entity == null) return;
         if (entity.tickCount % 30 != 15) return;
-        if (!world.getLevelData().getGameRules().getBoolean(CaerulaArborModGameRules.DEFENSIVE_MODE)) return;
+        if (!world.getLevelData().getGameRules().getBoolean(CAGameRules.DEFENSIVE_MODE)) return;
 
         double minDist = 999;
         Entity enemy = null;
@@ -164,10 +165,10 @@ public class LivingTickEventHandler {
 
         if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))
                 && !entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanpet")))
-                && world.getLevelData().getGameRules().getBoolean(CaerulaArborModGameRules.AGGRESIVE_MODE)) {
-            if (!(entity instanceof LivingEntity _livEnt4 && _livEnt4.hasEffect(CaerulaArborModMobEffects.ANGER_OF_TIDE.get()))) {
+                && world.getLevelData().getGameRules().getBoolean(CAGameRules.AGGRESIVE_MODE)) {
+            if (!(entity instanceof LivingEntity _livEnt4 && _livEnt4.hasEffect(CAMobEffects.ANGER_OF_TIDE.get()))) {
                 if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                    _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ANGER_OF_TIDE.get(), 20, 0, false, false));
+                    _entity.addEffect(new MobEffectInstance(CAMobEffects.ANGER_OF_TIDE.get(), 20, 0, false, false));
             }
         }
     }
@@ -217,7 +218,7 @@ public class LivingTickEventHandler {
             }
         }
 
-        if (entity instanceof LivingEntity _livEnt3 && _livEnt3.hasEffect(CaerulaArborModMobEffects.POWER_OF_ANCHOR.get())) return;
+        if (entity instanceof LivingEntity _livEnt3 && _livEnt3.hasEffect(CAMobEffects.POWER_OF_ANCHOR.get())) return;
 
         if (MapVariables.get(world).strategy_silence > 0) {
             handleSilenceBuffs(world, x, y, z, entity);
@@ -226,12 +227,12 @@ public class LivingTickEventHandler {
 
     private static void handleSilenceBuffs(LevelAccessor world, double x, double y, double z, Entity entity) {
         if (MapVariables.get(world).strategy_silence >= 3) {
-            if (!(entity instanceof LivingEntity _livEnt4 && _livEnt4.hasEffect(CaerulaArborModMobEffects.BOOST_OF_SILENCE.get()))) {
+            if (!(entity instanceof LivingEntity _livEnt4 && _livEnt4.hasEffect(CAMobEffects.BOOST_OF_SILENCE.get()))) {
                 if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                    _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.BOOST_OF_SILENCE.get(), 9999, (int) (MapVariables.get(world).strategy_silence - 1)));
+                    _entity.addEffect(new MobEffectInstance(CAMobEffects.BOOST_OF_SILENCE.get(), 9999, (int) (MapVariables.get(world).strategy_silence - 1)));
             }
 
-            if (!(entity instanceof LivingEntity _livEnt6 && _livEnt6.hasEffect(CaerulaArborModMobEffects.STRENGTH_OF_CROWD.get()))) {
+            if (!(entity instanceof LivingEntity _livEnt6 && _livEnt6.hasEffect(CAMobEffects.STRENGTH_OF_CROWD.get()))) {
                 double amplifi = -1;
                 double range = MapVariables.get(world).strategy_silence >= 4 ? 64 : 32;
                 double maxAmp = MapVariables.get(world).strategy_silence >= 4 ? 29 : 9;
@@ -252,21 +253,21 @@ public class LivingTickEventHandler {
 
                 if (amplifi >= 0) {
                     if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                        _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.STRENGTH_OF_CROWD.get(), 9999, (int) amplifi, false, false));
+                        _entity.addEffect(new MobEffectInstance(CAMobEffects.STRENGTH_OF_CROWD.get(), 9999, (int) amplifi, false, false));
                 }
             }
         } else {
             if ((entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5) {
-                if (!(entity instanceof LivingEntity _livEnt16 && _livEnt16.hasEffect(CaerulaArborModMobEffects.BOOST_OF_SILENCE.get()))) {
+                if (!(entity instanceof LivingEntity _livEnt16 && _livEnt16.hasEffect(CAMobEffects.BOOST_OF_SILENCE.get()))) {
                     if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                        _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.BOOST_OF_SILENCE.get(), 9999, (int) (MapVariables.get(world).strategy_silence - 1)));
+                        _entity.addEffect(new MobEffectInstance(CAMobEffects.BOOST_OF_SILENCE.get(), 9999, (int) (MapVariables.get(world).strategy_silence - 1)));
                 }
             } else {
                 if (entity instanceof LivingEntity _entity)
-                    _entity.removeEffect(CaerulaArborModMobEffects.BOOST_OF_SILENCE.get());
+                    _entity.removeEffect(CAMobEffects.BOOST_OF_SILENCE.get());
             }
             if (entity instanceof LivingEntity _entity)
-                _entity.removeEffect(CaerulaArborModMobEffects.STRENGTH_OF_CROWD.get());
+                _entity.removeEffect(CAMobEffects.STRENGTH_OF_CROWD.get());
         }
 
         if (!(entity instanceof LivingEntity _livEnt20 && _livEnt20.hasEffect(MobEffects.REGENERATION)) && !(entity instanceof MartusEntity)) {
@@ -283,7 +284,7 @@ public class LivingTickEventHandler {
     }
 
     private static void handleNaturalEvolution(LevelAccessor world, double x, double y, double z, Entity entity) {
-        if (!world.getLevelData().getGameRules().getBoolean(CaerulaArborModGameRules.NATURAL_EVOLUTION)) return;
+        if (!world.getLevelData().getGameRules().getBoolean(CAGameRules.NATURAL_EVOLUTION)) return;
         if (entity.tickCount % 10 != 0) return;
         if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanpet")))) return;
 

@@ -4,7 +4,6 @@ package com.apocalypse.caerulaarbor.command;
 import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
-import com.apocalypse.caerulaarbor.util.WorldUtils;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import net.minecraft.commands.Commands;
@@ -34,13 +33,13 @@ public class CaerulaArborEndspeakerCommand {
 				entity = FakePlayerFactory.getMinecraft(_servLevel);
 			Direction direction = Direction.DOWN;
 			if (entity != null)
-				direction = entity.getDirection();
+                entity.getDirection();
 
             if (entity != null) {
-                String res_line_1 = "";
-                String res_line_2 = "";
-                String code = "";
-                String res_line_3 = "";
+                String res_line_1;
+                String res_line_2;
+                String code;
+                String res_line_3;
                 code = "" + Math.round(MapVariables.get(world).endspeaker_abolities);
                 res_line_1 = Component.translatable("command.endspeaker.inquiry.0").getString();
                 res_line_1 = res_line_1.replace("{code}", code);
@@ -70,12 +69,12 @@ public class CaerulaArborEndspeakerCommand {
 				entity = FakePlayerFactory.getMinecraft(_servLevel);
 			Direction direction = Direction.DOWN;
 			if (entity != null)
-				direction = entity.getDirection();
+                entity.getDirection();
 
             double ind = 0;
-            String info = "";
+            String info;
             for (int index0 = 0; index0 < 6; index0++) {
-                WorldUtils.bestowAbility(world, index0);
+                MapVariablesHandler.bestowAbility(world, index0);
             }
             info = Component.translatable("command.endspeaker.bestow.all").getString();
             {
@@ -94,12 +93,12 @@ public class CaerulaArborEndspeakerCommand {
 				entity = FakePlayerFactory.getMinecraft(_servLevel);
 			Direction direction = Direction.DOWN;
 			if (entity != null)
-				direction = entity.getDirection();
+                entity.getDirection();
 
-            String info = "";
-            double ind = 0;
+            String info;
+            double ind;
             ind = Math.round(DoubleArgumentType.getDouble(arguments, "index"));
-            WorldUtils.bestowAbility(world, ind - 1);
+            MapVariablesHandler.bestowAbility(world, ind - 1);
             info = Component.translatable("command.endspeaker.bestow.one").getString();
             info = info.replace("{index}", "" + Math.round(ind));
             {
@@ -118,10 +117,10 @@ public class CaerulaArborEndspeakerCommand {
 				entity = FakePlayerFactory.getMinecraft(_servLevel);
 			Direction direction = Direction.DOWN;
 			if (entity != null)
-				direction = entity.getDirection();
+                entity.getDirection();
 
             double ind = 0;
-            String info = "";
+            String info;
             for (int index0 = 0; index0 < 6; index0++) {
                 revokeAbility(world, index0);
             }
@@ -142,10 +141,10 @@ public class CaerulaArborEndspeakerCommand {
 				entity = FakePlayerFactory.getMinecraft(_servLevel);
 			Direction direction = Direction.DOWN;
 			if (entity != null)
-				direction = entity.getDirection();
+                entity.getDirection();
 
-            String info = "";
-            double ind = 0;
+            String info;
+            double ind;
             ind = Math.round(DoubleArgumentType.getDouble(arguments, "index"));
             revokeAbility(world, ind - 1);
             info = Component.translatable("command.endspeaker.revoke.one").getString();
@@ -166,10 +165,10 @@ public class CaerulaArborEndspeakerCommand {
 				entity = FakePlayerFactory.getMinecraft(_servLevel);
 			Direction direction = Direction.DOWN;
 			if (entity != null)
-				direction = entity.getDirection();
+                entity.getDirection();
 
-            String info = "";
-            boolean cancanneed = false;
+            String info;
+            boolean cancanneed;
             cancanneed = BoolArgumentType.getBool(arguments, "can");
             MapVariablesHandler.setEndspeakerSummon(world, cancanneed);
             if (cancanneed) {

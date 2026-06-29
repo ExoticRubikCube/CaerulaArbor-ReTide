@@ -2,9 +2,9 @@
 package com.apocalypse.caerulaarbor.block;
 
 import com.apocalypse.caerulaarbor.entity.MartusEntity;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CABlocks;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -92,14 +92,14 @@ public class CaerulaBookShelfBlock extends Block {
         InteractionResult result = InteractionResult.PASS;
         if (entity != null) {
             double num = 0;
-            BlockState tgt = Blocks.AIR.defaultBlockState();
-            if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CaerulaArborModItems.WHIRL_EYE.get()) {
+            BlockState tgt;
+            if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.WHIRL_EYE.get()) {
                 if (world.getEntitiesOfClass(MartusEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).isEmpty()) {
                     for (int index0 = 0; index0 < 3; index0++) {
                         for (int index1 = 0; index1 < 3; index1++) {
                             for (int index2 = 0; index2 < 3; index2++) {
                                 tgt = (((LevelAccessor) world).getBlockState(BlockPos.containing((double) x + index0 - 1, (double) y + index1 - 1, (double) z + index2 - 1)));
-                                if (tgt.getBlock() == CaerulaArborModBlocks.CAERULA_BOOK_SHELF.get()) {
+                                if (tgt.getBlock() == CABlocks.CAERULA_BOOK_SHELF.get()) {
                                     num++;
                                 }
                                 if (num >= 9) {
@@ -119,7 +119,7 @@ public class CaerulaBookShelfBlock extends Block {
                             for (int index4 = 0; index4 < 3; index4++) {
                                 for (int index5 = 0; index5 < 3; index5++) {
                                     tgt = (((LevelAccessor) world).getBlockState(BlockPos.containing((double) x + index3 - 1, (double) y + index4 - 1, (double) z + index5 - 1)));
-                                    if (tgt.getBlock() == CaerulaArborModBlocks.CAERULA_BOOK_SHELF.get()) {
+                                    if (tgt.getBlock() == CABlocks.CAERULA_BOOK_SHELF.get()) {
                                         world.destroyBlock(BlockPos.containing((double) x + index3 - 1, (double) y + index4 - 1, (double) z + index5 - 1), false);
                                         num--;
                                     }
@@ -139,7 +139,7 @@ public class CaerulaBookShelfBlock extends Block {
                             _player.displayClientMessage(Component.literal((Component.translatable("spawn.martus").getString())), false);
                         ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                         if ((LevelAccessor) world instanceof ServerLevel _level) {
-                            Entity entityToSpawn = CaerulaArborModEntities.MARTUS.get().spawn(_level, BlockPos.containing((double) x + 0.5, y, (double) z + 0.5), MobSpawnType.MOB_SUMMONED);
+                            Entity entityToSpawn = CAEntities.MARTUS.get().spawn(_level, BlockPos.containing((double) x + 0.5, y, (double) z + 0.5), MobSpawnType.MOB_SUMMONED);
                             if (entityToSpawn != null) {
                                 entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
                             }

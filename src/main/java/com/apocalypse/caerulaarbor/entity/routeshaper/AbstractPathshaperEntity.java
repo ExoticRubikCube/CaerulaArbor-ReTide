@@ -1,8 +1,8 @@
 package com.apocalypse.caerulaarbor.entity.routeshaper;
 
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModGameRules;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAGameRules;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -68,7 +68,7 @@ public abstract class AbstractPathshaperEntity extends SeaMonster {
 	}
 
 	protected void summonFractal() {
-		if (EntityUtils.getSeabornNum(this.level(), this.getX(), this.getY(), this.getZ()) > this.level().getLevelData().getGameRules().getInt(CaerulaArborModGameRules.CLONE_NUMBER_LIMIT)) {
+		if (EntityUtils.getSeabornNum(this.level(), this.getX(), this.getY(), this.getZ()) > this.level().getLevelData().getGameRules().getInt(CAGameRules.CLONE_NUMBER_LIMIT)) {
 			return;
 		}
 		double nearbyCount = 0;
@@ -181,9 +181,9 @@ public abstract class AbstractPathshaperEntity extends SeaMonster {
 					.sorted(Comparator.comparingDouble(entity -> entity.distanceToSqr(center)))
 					.toList();
 				for (Entity nearbyEntity : nearbyEntities) {
-					if (nearbyEntity instanceof RouteFractalEntity routeFractal && !routeFractal.hasEffect(CaerulaArborModMobEffects.SEEK_OF_FRACTAL.get())) {
+					if (nearbyEntity instanceof RouteFractalEntity routeFractal && !routeFractal.hasEffect(CAMobEffects.SEEK_OF_FRACTAL.get())) {
 						if (!routeFractal.level().isClientSide()) {
-							routeFractal.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.SEEK_OF_FRACTAL.get(), 999, 0));
+							routeFractal.addEffect(new MobEffectInstance(CAMobEffects.SEEK_OF_FRACTAL.get(), 999, 0));
 						}
 					}
 				}

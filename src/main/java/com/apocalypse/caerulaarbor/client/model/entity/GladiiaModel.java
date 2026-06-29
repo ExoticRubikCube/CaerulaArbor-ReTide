@@ -23,7 +23,7 @@ public class GladiiaModel extends GeoModel<GladiiaEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(GladiiaEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/hunter_gladiia.png");
 	}
 
 	@Override

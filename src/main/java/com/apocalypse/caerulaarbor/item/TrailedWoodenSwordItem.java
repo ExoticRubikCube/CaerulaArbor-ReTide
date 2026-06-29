@@ -52,7 +52,7 @@ public class TrailedWoodenSwordItem extends SwordItem {
 		boolean retval = super.hurtEnemy(itemstack, entity, sourceentity);
         LevelAccessor world = entity.level();
         if (entity != null) {
-            double dam = 0;
+            double dam;
             dam = 40 + 8 * itemstack.getEnchantmentLevel(Enchantments.SHARPNESS);
             SIHelper.causeSanityInjury(entity, sourceentity, dam, SanityEvent.Hurt.Type.ENTITY);
             new Object() {

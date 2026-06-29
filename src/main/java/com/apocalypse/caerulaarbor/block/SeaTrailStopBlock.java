@@ -1,7 +1,7 @@
 
 package com.apocalypse.caerulaarbor.block;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
+import com.apocalypse.caerulaarbor.init.CABlocks;
 import com.apocalypse.caerulaarbor.procedures.PokePlayerProcedure;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
@@ -119,13 +119,12 @@ public class SeaTrailStopBlock extends Block implements SimpleWaterloggedBlock, 
 
 	@Override
 	public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter world, BlockPos pos, Player player) {
-		return new ItemStack(CaerulaArborModBlocks.SEA_TRAIL_GROWN.get());
+		return new ItemStack(CABlocks.SEA_TRAIL_GROWN.get());
 	}
 
 	@Override
 	public void onPlace(BlockState blockstate, Level world, BlockPos pos, BlockState oldState, boolean moving) {
 		super.onPlace(blockstate, world, pos, oldState, moving);
-		WorldUtils.saveWaterloggedState(world, pos.getX(), pos.getY(), pos.getZ(), oldState);
 	}
 
 	@Override

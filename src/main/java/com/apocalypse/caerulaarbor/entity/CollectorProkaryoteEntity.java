@@ -1,8 +1,8 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.nbt.CompoundTag;
@@ -63,7 +63,7 @@ public class CollectorProkaryoteEntity extends SeaMonster {
 	public String animationprocedure = "empty";
 
 	public CollectorProkaryoteEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.COLLECTOR_PROKARYOTE.get(), world);
+		this(CAEntities.COLLECTOR_PROKARYOTE.get(), world);
 	}
 
 	public CollectorProkaryoteEntity(EntityType<CollectorProkaryoteEntity> type, Level world) {
@@ -222,7 +222,7 @@ public class CollectorProkaryoteEntity extends SeaMonster {
 
     protected void dropCustomDeathLoot(DamageSource source, int looting, boolean recentlyHitIn) {
 		super.dropCustomDeathLoot(source, looting, recentlyHitIn);
-		this.spawnAtLocation(new ItemStack(CaerulaArborModItems.BROKEN_OCEAN_CELL.get()));
+		this.spawnAtLocation(new ItemStack(CAItems.BROKEN_OCEAN_CELL.get()));
 	}
 
 	@Override
@@ -262,7 +262,7 @@ public class CollectorProkaryoteEntity extends SeaMonster {
                 || (sourceentity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).is(ItemTags.create(new ResourceLocation("forge:tools/knives")))) {
             if (Math.random() < 0.33) {
                 if (world instanceof ServerLevel _level) {
-                    ItemEntity entityToSpawn = new ItemEntity(_level, this.getX(), this.getY(), this.getZ(), new ItemStack(CaerulaArborModItems.COLLECTOR_MEAT.get()));
+                    ItemEntity entityToSpawn = new ItemEntity(_level, this.getX(), this.getY(), this.getZ(), new ItemStack(CAItems.COLLECTOR_MEAT.get()));
                     entityToSpawn.setPickUpDelay(10);
                     _level.addFreshEntity(entityToSpawn);
                 }
@@ -317,7 +317,7 @@ public class CollectorProkaryoteEntity extends SeaMonster {
 	}
 
 	public static void init() {
-		SpawnPlacements.register(CaerulaArborModEntities.COLLECTOR_PROKARYOTE.get(), SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
+		SpawnPlacements.register(CAEntities.COLLECTOR_PROKARYOTE.get(), SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();

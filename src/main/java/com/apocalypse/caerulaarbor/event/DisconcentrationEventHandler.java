@@ -3,8 +3,8 @@ package com.apocalypse.caerulaarbor.event;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEnchantments;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAEnchantments;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.client.KeyMapping;
@@ -53,20 +53,20 @@ public class DisconcentrationEventHandler {
         Player player = event.player;
         double rejectionStage = getRejectionStage(player);
         if (rejectionStage == HAEMOPHILIA_REJECTION_STAGE) {
-            if (!player.hasEffect(CaerulaArborModMobEffects.HAEMOPHILIA.get()) && !player.level().isClientSide()) {
-                player.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.HAEMOPHILIA.get(), 10000, 1, false, false));
+            if (!player.hasEffect(CAMobEffects.HAEMOPHILIA.get()) && !player.level().isClientSide()) {
+                player.addEffect(new MobEffectInstance(CAMobEffects.HAEMOPHILIA.get(), 10000, 1, false, false));
             }
         } else {
-            player.removeEffect(CaerulaArborModMobEffects.HAEMOPHILIA.get());
+            player.removeEffect(CAMobEffects.HAEMOPHILIA.get());
         }
 
         if (rejectionStage == FLESHDEFORMITY_REJECTION_STAGE) {
             if (!player.level().isClientSide()) {
-                player.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.FLESHDEFORMITY.get(), 999, 1, false, false));
+                player.addEffect(new MobEffectInstance(CAMobEffects.FLESHDEFORMITY.get(), 999, 1, false, false));
             }
-        } else if (player.hasEffect(CaerulaArborModMobEffects.FLESHDEFORMITY.get())) {
+        } else if (player.hasEffect(CAMobEffects.FLESHDEFORMITY.get())) {
             // TODO: 待向原作者确认。待移植文件这里移除的是 HAEMOPHILIA，而不是 FLESHDEFORMITY，当前先保留原行为。
-            player.removeEffect(CaerulaArborModMobEffects.HAEMOPHILIA.get());
+            player.removeEffect(CAMobEffects.HAEMOPHILIA.get());
         }
     }
 
@@ -95,7 +95,7 @@ public class DisconcentrationEventHandler {
         }
 
         if (Math.random() < freezeChance && !player.level().isClientSide()) {
-            player.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.FROZEN.get(), freezeDuration, 0, false, false));
+            player.addEffect(new MobEffectInstance(CAMobEffects.FROZEN.get(), freezeDuration, 0, false, false));
         }
     }
 
@@ -177,7 +177,7 @@ public class DisconcentrationEventHandler {
         }
         for (int armorSlotIndex = 0; armorSlotIndex < 4; armorSlotIndex++) {
             ItemStack armorItem = livingEntity.getItemBySlot(EquipmentSlot.byTypeAndIndex(EquipmentSlot.Type.ARMOR, armorSlotIndex)).copy();
-            if (EnchantmentHelper.getItemEnchantmentLevel(CaerulaArborModEnchantments.REJECTION_CURSE.get(), armorItem) != 0) {
+            if (EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.REJECTION_CURSE.get(), armorItem) != 0) {
                 return true;
             }
         }

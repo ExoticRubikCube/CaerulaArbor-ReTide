@@ -5,7 +5,7 @@ import com.apocalypse.caerulaarbor.entity.GladiiaEntity;
 import com.apocalypse.caerulaarbor.entity.SkadiEntity;
 import com.apocalypse.caerulaarbor.entity.SpecterEntity;
 import com.apocalypse.caerulaarbor.entity.UlpiansEntity;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.menu.CentrifugerSelectMenu;
 import com.apocalypse.caerulaarbor.network.CaerulaArborModNetwork;
 import com.apocalypse.caerulaarbor.network.message.send.CentrifugerSelectButtonMessage;
@@ -55,16 +55,16 @@ public class CentrifugerSelectScreen extends AbstractContainerScreen<Centrifuger
         if (entity == null) {
             result = null;
         } else {
-            String selection = "";
+            String selection;
             selection = entity.getPersistentData().getString("centrifugerSelection");
             if ((selection).equals("skadi")) {
-                result = (LevelAccessor) world instanceof Level _level ? new SkadiEntity(CaerulaArborModEntities.SKADI.get(), _level) : null;
+                result = (LevelAccessor) world instanceof Level _level ? new SkadiEntity(CAEntities.SKADI.get(), _level) : null;
             } else if ((selection).equals("ulpians")) {
-                result = (LevelAccessor) world instanceof Level _level ? new UlpiansEntity(CaerulaArborModEntities.ULPIANS.get(), _level) : null;
+                result = (LevelAccessor) world instanceof Level _level ? new UlpiansEntity(CAEntities.ULPIANS.get(), _level) : null;
             } else if ((selection).equals("gladiia")) {
-                result = (LevelAccessor) world instanceof Level _level ? new GladiiaEntity(CaerulaArborModEntities.GLADIIA.get(), _level) : null;
+                result = (LevelAccessor) world instanceof Level _level ? new GladiiaEntity(CAEntities.GLADIIA.get(), _level) : null;
             } else if ((selection).equals("specter")) {
-                result = (LevelAccessor) world instanceof Level _level ? new SpecterEntity(CaerulaArborModEntities.SPECTER.get(), _level) : null;
+                result = (LevelAccessor) world instanceof Level _level ? new SpecterEntity(CAEntities.SPECTER.get(), _level) : null;
             } else {
                 result = entity;
             }

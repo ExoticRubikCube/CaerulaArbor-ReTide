@@ -1,8 +1,8 @@
 
 package com.apocalypse.caerulaarbor.potion;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CAParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
@@ -39,10 +39,10 @@ public class ReefCrackerMobEffect extends MobEffect {
             return;
         double angle = 0;
         if (world instanceof ServerLevel _level)
-            _level.sendParticles(CaerulaArborModParticleTypes.CRACKER_BUFF_0.get(), x, (y + entity.getBbHeight() * 0.5), z, (int) ((double) amplifier + 1), 0.8, 1.5, 0.8, 0.3);
+            _level.sendParticles(CAParticleTypes.CRACKER_BUFF_0.get(), x, (y + entity.getBbHeight() * 0.5), z, (int) ((double) amplifier + 1), 0.8, 1.5, 0.8, 0.3);
         if ((double) amplifier > 6) {
             if (world instanceof ServerLevel _level)
-                _level.sendParticles(CaerulaArborModParticleTypes.CRACKER_BUFF_1.get(), x, y, z, 3, 1, 0.5, 1, 0.3);
+                _level.sendParticles(CAParticleTypes.CRACKER_BUFF_1.get(), x, y, z, 3, 1, 0.5, 1, 0.3);
         }
     }
 
@@ -53,7 +53,7 @@ public class ReefCrackerMobEffect extends MobEffect {
             return;
         if ((double) amplifier >= 2) {
             if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.REEF_CRACKER.get(), 60, (int) ((double) amplifier - 2), false, false));
+                _entity.addEffect(new MobEffectInstance(CAMobEffects.REEF_CRACKER.get(), 60, (int) ((double) amplifier - 2), false, false));
         }
     }
 

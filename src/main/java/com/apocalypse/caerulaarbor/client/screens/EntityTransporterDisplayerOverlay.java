@@ -1,7 +1,7 @@
 
 package com.apocalypse.caerulaarbor.client.screens;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import com.apocalypse.caerulaarbor.util.ItemUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
@@ -31,16 +31,13 @@ public class EntityTransporterDisplayerOverlay {
 		double z = 0;
 		Player entity = Minecraft.getInstance().player;
 		if (entity != null) {
-			world = entity.level();
-			x = entity.getX();
-			y = entity.getY();
-			z = entity.getZ();
-		}
+            entity.level();
+        }
         boolean result = false;
         if (entity != null) {
-            ItemStack item = ItemStack.EMPTY;
+            ItemStack item;
             item = ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).copy();
-            if (item.getItem() == CaerulaArborModItems.PERSONNEL_TRANSPORTER.get()) {
+            if (item.getItem() == CAItems.PERSONNEL_TRANSPORTER.get()) {
                 result = ItemUtils.isFilledwithPersonnel(item);
             }
         }
@@ -50,8 +47,8 @@ public class EntityTransporterDisplayerOverlay {
                 result1 = null;
             } else {
                 String emptyNameHolder = "apocata";
-                ItemStack transp = ItemStack.EMPTY;
-                String name = "";
+                ItemStack transp;
+                String name;
                 transp = ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).copy();
                 if (ItemUtils.isFilledwithPersonnel(transp)) {
                     name = transp.getOrCreateTag().getString("name");

@@ -13,7 +13,7 @@ import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen
 import net.minecraft.client.gui.GuiGraphics;
 
 import com.apocalypse.caerulaarbor.util.EntityUtils;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ import java.util.function.Consumer;
 public class TrailBuffMobEffect extends MobEffect {
     public TrailBuffMobEffect() {
         super(MobEffectCategory.NEUTRAL, -10053121);
-        this.addAttributeModifier(CaerulaArborModAttributes.SANITY_RATE.get(), "204fd8a1-28dc-3106-bb46-8c9977e6079d", 1, AttributeModifier.Operation.MULTIPLY_BASE);
+        this.addAttributeModifier(CAAttributes.SANITY_RATE.get(), "204fd8a1-28dc-3106-bb46-8c9977e6079d", 1, AttributeModifier.Operation.MULTIPLY_BASE);
     }
 
     @Override

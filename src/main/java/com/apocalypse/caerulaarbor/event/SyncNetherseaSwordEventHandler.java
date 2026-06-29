@@ -1,6 +1,6 @@
 package com.apocalypse.caerulaarbor.event;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.Container;
@@ -22,7 +22,7 @@ public class SyncNetherseaSwordEventHandler {
 			ItemStack ingredient = inventory.getItem(slot);
 			if (ingredient.is(ItemTags.SWORDS) || ingredient.getItem() instanceof SwordItem) {
 				sourceSword = ingredient.copy();
-				if (slot < containerSize - 1 && inventory.getItem(slot + 1).is(CaerulaArborModItems.TRAIL_CREAM.get())) {
+				if (slot < containerSize - 1 && inventory.getItem(slot + 1).is(CAItems.TRAIL_CREAM.get())) {
 					break;
 				}
 				return;

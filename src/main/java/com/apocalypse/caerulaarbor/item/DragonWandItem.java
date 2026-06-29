@@ -1,9 +1,9 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEnchantments;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAEnchantments;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
@@ -63,7 +63,7 @@ public class DragonWandItem extends Item {
 			builder.putAll(super.getDefaultAttributeModifiers(equipmentSlot));
 			builder.put(Attributes.ATTACK_DAMAGE, 
 				new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Item modifier", 9.5d, AttributeModifier.Operation.ADDITION));
-			builder.put(CaerulaArborModAttributes.MAGIC_RESISTANCE.get(), 
+			builder.put(CAAttributes.MAGIC_RESISTANCE.get(),
 				new AttributeModifier(MAGIC_UUID, "Item modifier", 15d, AttributeModifier.Operation.ADDITION));
 			return builder.build();
 		}
@@ -91,19 +91,19 @@ public class DragonWandItem extends Item {
             double x = entity.getX();
             double y = entity.getY()+1.25;
             double z = entity.getZ();
-            Entity recentAttacker = null;
-            Entity recentVictim = null;
+            Entity recentAttacker;
+            Entity recentVictim;
             Entity t0 = null;
             Entity t1 = null;
             Entity t2 = null;
-            double gap = 0;
-            boolean IsCreative = false;
+            double gap;
+            boolean IsCreative;
             boolean ApocataMode = false;
             gap = 30;
-            if (EnchantmentHelper.getItemEnchantmentLevel(CaerulaArborModEnchantments.SYNESTHESIA.get(), itemstack) != 0) {
-                gap = Math.max(gap - itemstack.getEnchantmentLevel(CaerulaArborModEnchantments.SYNESTHESIA.get()) * 4, 10);
+            if (EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.SYNESTHESIA.get(), itemstack) != 0) {
+                gap = Math.max(gap - itemstack.getEnchantmentLevel(CAEnchantments.SYNESTHESIA.get()) * 4, 10);
             }
-            if ((entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == CaerulaArborModItems.APOCATA_SWORD.get()) {
+            if ((entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == CAItems.APOCATA_SWORD.get()) {
                 gap = 2;
                 ApocataMode = true;
             }

@@ -1,7 +1,8 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.client.Minecraft;
@@ -78,12 +79,12 @@ public class InterphoneItem extends Item {
 		if (chief == null)
 			return;
 		double num = 0;
-		double tX = 0;
-		double tZ = 0;
+		double tX;
+		double tZ;
 		double rand = 0;
-		double tY = 0;
-		String log = "";
-		String name = "";
+		double tY;
+		String log;
+		String name;
 		if (!(chief instanceof Player _plrCldCheck1 && _plrCldCheck1.getCooldowns().isOnCooldown(itemstack.getItem()))) {
 			tX = tx;
 			tY = ty;
@@ -134,11 +135,11 @@ public class InterphoneItem extends Item {
 		if (chief == null)
 			return;
 		double num = 0;
-		double tX = 0;
-		double tZ = 0;
-		double tY = 0;
-		double dx = 0;
-		double dz = 0;
+		double tX;
+		double tZ;
+		double tY;
+		double dx;
+		double dz;
 		String log;
 		String name;
 		if (!(chief instanceof Player _plrCldCheck1 && _plrCldCheck1.getCooldowns().isOnCooldown(itemstack.getItem()))) {
@@ -148,7 +149,7 @@ public class InterphoneItem extends Item {
 			name = chief.getDisplayName().getString();
 			if (world instanceof ServerLevel serverLevel) {
 				for (Entity entityiterator : serverLevel.getAllEntities()) {
-					if (entityiterator instanceof LivingEntity livingEntity && livingEntity.hasEffect(CaerulaArborModMobEffects.COOLDOWN_SINAL.get())) {
+					if (entityiterator instanceof LivingEntity livingEntity && livingEntity.hasEffect(CAMobEffects.COOLDOWN_SINAL.get())) {
 						continue;
 					}
 					if (entityiterator.level().dimension() != chief.level().dimension()) {
@@ -166,7 +167,7 @@ public class InterphoneItem extends Item {
 								if (entityiterator instanceof ServerPlayer serverPlayer)
 									serverPlayer.connection.teleport(tx + dx, tY, tz + dz, entityiterator.getYRot(), entityiterator.getXRot());
 								if (entityiterator instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-									livingEntity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.COOLDOWN_SINAL.get(), 300, 0, false, false));
+									livingEntity.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL.get(), 300, 0, false, false));
 								break;
 							}
 						}
@@ -237,7 +238,7 @@ public class InterphoneItem extends Item {
 		boolean retval = super.hurtEnemy(itemstack, entity, sourceentity);
         LevelAccessor world = entity.level();
         if (entity != null && sourceentity != null) {
-            String log = "";
+            String log;
             double rand = 0;
             double tX = 0;
             double tZ = 0;

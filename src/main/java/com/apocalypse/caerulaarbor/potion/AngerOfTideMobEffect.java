@@ -43,9 +43,9 @@ public class AngerOfTideMobEffect extends MobEffect {
         double x = entity.getX();
         double y = entity.getY();
         double z = entity.getZ();
-        double minDist = 0;
+        double minDist;
         Entity enemy = null;
-        Entity curEnemy = null;
+        Entity curEnemy;
         minDist = 999;
         if (entity instanceof IzumikOffspringEntity) {
             return;

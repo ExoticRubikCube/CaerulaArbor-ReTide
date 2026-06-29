@@ -1,8 +1,8 @@
 package com.apocalypse.caerulaarbor.recipe;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModPotions;
+import com.apocalypse.caerulaarbor.init.CAPotions;
+import com.apocalypse.caerulaarbor.init.CABlocks;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -23,29 +23,29 @@ public class BrewingRecipeHandler {
 	public static void onCommonSetup(FMLCommonSetupEvent event) {
 		event.enqueueWork(() -> {
 			// Fast Swim
-			addPotionRecipe(Potions.AWKWARD, CaerulaArborModItems.CORAL_FEET.get(), CaerulaArborModPotions.FAST_SWIM_POTION.get());
-			addPotionRecipe(CaerulaArborModPotions.FAST_SWIM_POTION.get(), Items.REDSTONE, CaerulaArborModPotions.FAST_SWIM_POTION_LONG.get());
-			addPotionRecipe(CaerulaArborModPotions.FAST_SWIM_POTION.get(), Items.GLOWSTONE_DUST, CaerulaArborModPotions.FAST_SWIM_POTION_II.get());
-			addPotionRecipe(CaerulaArborModPotions.FAST_SWIM_POTION_II.get(), CaerulaArborModItems.CELL_CLUSTER.get(), CaerulaArborModPotions.FAST_SWIM_POTION_III.get());
+			addPotionRecipe(Potions.AWKWARD, CAItems.CORAL_FEET.get(), CAPotions.FAST_SWIM_POTION.get());
+			addPotionRecipe(CAPotions.FAST_SWIM_POTION.get(), Items.REDSTONE, CAPotions.FAST_SWIM_POTION_LONG.get());
+			addPotionRecipe(CAPotions.FAST_SWIM_POTION.get(), Items.GLOWSTONE_DUST, CAPotions.FAST_SWIM_POTION_II.get());
+			addPotionRecipe(CAPotions.FAST_SWIM_POTION_II.get(), CAItems.CELL_CLUSTER.get(), CAPotions.FAST_SWIM_POTION_III.get());
 
 			// Instant Sanity
-			addPotionRecipe(Potions.AWKWARD, CaerulaArborModBlocks.TRAIL_MUSHROOM.get(), CaerulaArborModPotions.INST_SANITY.get());
-			addPotionRecipe(CaerulaArborModPotions.INST_SANITY.get(), Items.GLOWSTONE_DUST, CaerulaArborModPotions.INST_SANITY_II.get());
+			addPotionRecipe(Potions.AWKWARD, CABlocks.TRAIL_MUSHROOM.get(), CAPotions.INST_SANITY.get());
+			addPotionRecipe(CAPotions.INST_SANITY.get(), Items.GLOWSTONE_DUST, CAPotions.INST_SANITY_II.get());
 
 			// Sanity Cure
-			addPotionRecipe(CaerulaArborModPotions.INST_SANITY.get(), CaerulaArborModItems.TRAIL_APPLE.get(), CaerulaArborModPotions.SANITY_CURE.get());
-			addPotionRecipe(CaerulaArborModPotions.SANITY_CURE.get(), Items.GLOWSTONE_DUST, CaerulaArborModPotions.SANITY_CURE_II.get());
+			addPotionRecipe(CAPotions.INST_SANITY.get(), CAItems.TRAIL_APPLE.get(), CAPotions.SANITY_CURE.get());
+			addPotionRecipe(CAPotions.SANITY_CURE.get(), Items.GLOWSTONE_DUST, CAPotions.SANITY_CURE_II.get());
 
 			// Sanity Immunity
-			addPotionRecipe(CaerulaArborModPotions.SANITY_CURE.get(), CaerulaArborModItems.FERMENTED_OCEAN_EYE.get(), CaerulaArborModPotions.SANITY_IMMUE_POTION.get());
-			addPotionRecipe(CaerulaArborModPotions.SANITY_IMMUE_POTION.get(), CaerulaArborModItems.NERVOUS_REGENERATION.get(), CaerulaArborModPotions.LONG_SNT_IMMUE.get());
+			addPotionRecipe(CAPotions.SANITY_CURE.get(), CAItems.FERMENTED_OCEAN_EYE.get(), CAPotions.SANITY_IMMUE_POTION.get());
+			addPotionRecipe(CAPotions.SANITY_IMMUE_POTION.get(), CAItems.NERVOUS_REGENERATION.get(), CAPotions.LONG_SNT_IMMUE.get());
 
 			// Percentage Regeneration
-			addPotionRecipe(Potions.AWKWARD, CaerulaArborModItems.TEAR_ISHARMLA.get(), CaerulaArborModPotions.PERCENTAGE_REGENERATION.get());
-			addPotionRecipe(CaerulaArborModPotions.PERCENTAGE_REGENERATION.get(), Items.GLOWSTONE_DUST, CaerulaArborModPotions.PERCENTAGE_REGENERATION_II.get());
+			addPotionRecipe(Potions.AWKWARD, CAItems.TEAR_ISHARMLA.get(), CAPotions.PERCENTAGE_REGENERATION.get());
+			addPotionRecipe(CAPotions.PERCENTAGE_REGENERATION.get(), Items.GLOWSTONE_DUST, CAPotions.PERCENTAGE_REGENERATION_II.get());
 
 			// Make Berry (Item output)
-			addItemRecipe(Potions.AWKWARD, Items.SWEET_BERRIES, CaerulaArborModItems.CANNED_CHERRY.get());
+			addItemRecipe(Potions.AWKWARD, Items.SWEET_BERRIES, CAItems.CANNED_CHERRY.get());
 		});
 	}
 

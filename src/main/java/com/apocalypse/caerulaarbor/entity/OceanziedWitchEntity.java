@@ -3,10 +3,9 @@ package com.apocalypse.caerulaarbor.entity;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.RavagerMountRider;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModPotions;
+import com.apocalypse.caerulaarbor.init.*;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
@@ -82,7 +81,7 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
 	public String animationprocedure = "empty";
 
 	public OceanziedWitchEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.OCEANIZED_WITCH.get(), world);
+		this(CAEntities.OCEANIZED_WITCH.get(), world);
 	}
 
 	public OceanziedWitchEntity(EntityType<OceanziedWitchEntity> type, Level world) {
@@ -275,7 +274,7 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
 	@Override
 	public boolean hurt(DamageSource source, float amount) {
         LevelAccessor world = this.level();
-        if (!this.hasEffect(CaerulaArborModMobEffects.COOLDOWN_SINAL.get())) {
+        if (!this.hasEffect(CAMobEffects.COOLDOWN_SINAL.get())) {
             {
                 final Vec3 _center = new Vec3(this.getX(), this.getY(), this.getZ());
                 List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(16 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
@@ -284,19 +283,19 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
                         double xx = entityiterator.getX();
                         double yy = entityiterator.getY() + entityiterator.getBbHeight();
                         double zz = entityiterator.getZ();
-                        double potion = 0;
+                        double potion;
                         if (world instanceof Level _level) {
                             _level.playSound(null, BlockPos.containing(xx, yy, zz), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.witch.throw")), SoundSource.HOSTILE, 1, 1);
                         }
                         potion = Mth.nextInt(RandomSource.create(), 0, 4);
                         if (potion == 0) {
                             if (entityiterator instanceof LivingEntity _entity1 && !_entity1.level().isClientSide())
-                                _entity1.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.SANITY_HEAL.get(), 1, 2));
+                                _entity1.addEffect(new MobEffectInstance(CAMobEffects.SANITY_HEAL.get(), 1, 2));
                             if (world instanceof ServerLevel projectileLevel) {
                                 Projectile _entityToSpawn = new Object() {
                                     public Projectile getPotion(Level level, Entity shooter) {
                                         ThrownPotion entityToSpawn = new ThrownPotion(EntityType.POTION, level);
-                                        entityToSpawn.setItem(PotionUtils.setPotion(Items.SPLASH_POTION.getDefaultInstance(), CaerulaArborModPotions.SANITY_CURE.get()));
+                                        entityToSpawn.setItem(PotionUtils.setPotion(Items.SPLASH_POTION.getDefaultInstance(), CAPotions.SANITY_CURE.get()));
                                         entityToSpawn.setOwner(shooter);
                                         return entityToSpawn;
                                     }
@@ -380,7 +379,7 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
                 }
             }
             if (!this.level().isClientSide())
-                this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.COOLDOWN_SINAL.get(), 100, 0, false, false));
+                this.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL.get(), 100, 0, false, false));
         }
         if (source.is(DamageTypes.DROWN))
 			return false;
@@ -390,8 +389,8 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-            this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(90);
+        if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
+            this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(90);
         return retval;
 	}
 
@@ -414,8 +413,8 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
 	@Override
 	public void baseTick() {
 		super.baseTick();
-        double sklp = 0;
-        Entity enemy = null;
+        double sklp;
+        Entity enemy;
         if (this.isAlive()) {
             sklp = (Entity) this instanceof OceanziedWitchEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp) : 0;
             if (sklp <= 0) {
@@ -427,7 +426,7 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
                     if ((Entity) this instanceof OceanziedWitchEntity _datEntSetI)
                         _datEntSetI.getEntityData().set(DATA_skillp, 250);
                     if (!this.level().isClientSide())
-                        this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 60, 0, false, false));
+                        this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 60, 0, false, false));
                     CaerulaArborMod.queueServerWork(14, this::shootRandomPotion);
                     CaerulaArborMod.queueServerWork(19, this::shootRandomPotion);
                     CaerulaArborMod.queueServerWork(23, this::shootRandomPotion);
@@ -472,7 +471,7 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
 		if (potionIndex == 0) {
 			this.throwSplashPotion(Potions.HARMING);
 		} else if (potionIndex == 1) {
-			this.throwSplashPotion(CaerulaArborModPotions.INST_SANITY.get());
+			this.throwSplashPotion(CAPotions.INST_SANITY.get());
 		} else if (potionIndex == 2) {
 			this.throwSplashPotion(Potions.POISON);
 		} else if (potionIndex == 3) {
@@ -484,7 +483,7 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
 		if (this.getRandom().nextBoolean()) {
 			this.throwSplashPotion(Potions.HARMING);
 		} else {
-			this.throwSplashPotion(CaerulaArborModPotions.INST_SANITY.get());
+			this.throwSplashPotion(CAPotions.INST_SANITY.get());
 		}
 	}
 

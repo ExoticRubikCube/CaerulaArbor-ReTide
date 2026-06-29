@@ -58,10 +58,10 @@ public class BombTrailerBlock extends Block {
             double x = pos.getX();
             double y = pos.getY();
             double z = pos.getZ();
-            double dx = 0;
-            double dz = 0;
-            double dy = 0;
-            BlockState target = Blocks.AIR.defaultBlockState();
+            double dx;
+            double dz;
+            double dy;
+            BlockState target;
             dx = -10;
             for (int index0 = 0; index0 < 21; index0++) {
                 if ((LevelAccessor) world instanceof ServerLevel _level)

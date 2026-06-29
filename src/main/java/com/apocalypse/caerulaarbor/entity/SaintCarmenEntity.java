@@ -1,8 +1,8 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAParticleTypes;
 import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
@@ -75,7 +75,7 @@ public class SaintCarmenEntity extends Animal implements GeoEntity {
 	public String animationprocedure = "empty";
 
 	public SaintCarmenEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.SAINT_CARMEN.get(), world);
+		this(CAEntities.SAINT_CARMEN.get(), world);
 	}
 
 	public SaintCarmenEntity(EntityType<SaintCarmenEntity> type, Level world) {
@@ -246,14 +246,14 @@ public class SaintCarmenEntity extends Animal implements GeoEntity {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        Entity enemy = null;
-        double sklp1 = 0;
-        double dura = 0;
-        double sklp2 = 0;
-        double shootCooldown = 0;
-        double bullet = 0;
-        double reloadP = 0;
-        boolean canShoot = false;
+        Entity enemy;
+        double sklp1;
+        double dura;
+        double sklp2;
+        double shootCooldown;
+        double bullet;
+        double reloadP;
+        boolean canShoot;
         if (this.isAlive()) {
             if (tickCount % 40 == 20) {
                 WorldUtils.ireneBurnBrandAround(world, x, y, z);
@@ -316,7 +316,6 @@ public class SaintCarmenEntity extends Animal implements GeoEntity {
                             _datEntSetI.getEntityData().set(DATA_duration, 50);
                         if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
                             _datEntSetI.getEntityData().set(DATA_shootP, 50);
-                        shootCooldown = 50;
                         dura = 50;
                         push((getLookAngle().x * (-1.5)), 0, (getLookAngle().z * (-1.5)));
                         ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (getY() + 1.8), (enemy.getZ())));
@@ -351,8 +350,6 @@ public class SaintCarmenEntity extends Animal implements GeoEntity {
                                 _datEntSetI.getEntityData().set(DATA_shootP, 80);
                             if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
                                 _datEntSetI.getEntityData().set(DATA_bullet, (int) (bullet - 1));
-                            shootCooldown = 80;
-                            dura = 20;
                             ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (getY() + 1.8), (enemy.getZ())));
                             CaerulaArborMod.queueServerWork(9, () -> {
                                 if (this.isAlive()) {
@@ -395,7 +392,7 @@ public class SaintCarmenEntity extends Animal implements GeoEntity {
 
 	@Override
 	public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
-		SaintCarmenEntity retval = CaerulaArborModEntities.SAINT_CARMEN.get().create(serverWorld);
+		SaintCarmenEntity retval = CAEntities.SAINT_CARMEN.get().create(serverWorld);
 		retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null, null);
 		return retval;
 	}
@@ -510,11 +507,11 @@ public class SaintCarmenEntity extends Animal implements GeoEntity {
 	}
 
 	private void shootAbundant(LevelAccessor world, double x, double y, double z, double t) {
-		double dama = 0;
-		double xx = 0;
-		double yy = 0;
-		double zz = 0;
-		Entity target = null;
+		double dama;
+		double xx;
+		double yy;
+		double zz;
+		Entity target;
 		if (world instanceof Level _level) {
 				_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "carmen_big_shoot")), SoundSource.NEUTRAL, 3, 1);
 		}
@@ -534,7 +531,7 @@ public class SaintCarmenEntity extends Animal implements GeoEntity {
 					if (!projectileLevel.isClientSide()) {
 						Projectile _entityToSpawn = new Object() {
 							public Projectile getArrow(Level level, Entity shooter, float damage, int knockback, byte piercing) {
-								AbstractArrow entityToSpawn = new CarmenBulletEntity(CaerulaArborModEntities.CARMEN_BULLET.get(), level);
+								AbstractArrow entityToSpawn = new CarmenBulletEntity(CAEntities.CARMEN_BULLET.get(), level);
 								entityToSpawn.setOwner(shooter);
 								entityToSpawn.setBaseDamage(damage);
 								entityToSpawn.setKnockback(knockback);
@@ -553,11 +550,11 @@ public class SaintCarmenEntity extends Animal implements GeoEntity {
 	}
 
 	private void shoot(LevelAccessor world, double x, double y, double z, double rate) {
-		Entity enemy = null;
-		double xx = 0;
-		double yy = 0;
-		double zz = 0;
-		double dama = 0;
+		Entity enemy;
+		double xx;
+		double yy;
+		double zz;
+		double dama;
 		enemy = this.getTarget();
 		if (enemy == null) {
 			return;
@@ -585,17 +582,17 @@ public class SaintCarmenEntity extends Animal implements GeoEntity {
 	private void showBullets(double bulletCount) {
 		if (this.tickCount % 2 == 0) {
 			for (int index = 0; index < (int) bulletCount; index++) {
-				this.level().addParticle(CaerulaArborModParticleTypes.BULLETS.get(), (this.getX() + 1), (this.getY() + 1.5 + index * 0.25), (this.getZ() + 1), 0, 0, 0);
+				this.level().addParticle(CAParticleTypes.BULLETS.get(), (this.getX() + 1), (this.getY() + 1.5 + index * 0.25), (this.getZ() + 1), 0, 0, 0);
 			}
 		}
 	}
 
 	private void carmenTeleport(LevelAccessor world, double x, double y, double z) {
-		Entity enemy = null;
-		double xx = 0;
-		double yy = 0;
-		double zz = 0;
-		double dama = 0;
+		Entity enemy;
+		double xx;
+		double yy;
+		double zz;
+		double dama;
 		enemy = this.getTarget();
 		if (enemy == null) {
 			return;

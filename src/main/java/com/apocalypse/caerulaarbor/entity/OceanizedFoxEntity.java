@@ -2,9 +2,9 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
@@ -65,7 +65,7 @@ public class OceanizedFoxEntity extends SeaMonster {
 	public String animationprocedure = "empty";
 
 	public OceanizedFoxEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.OCEANIZED_FOX.get(), world);
+		this(CAEntities.OCEANIZED_FOX.get(), world);
 	}
 
 	public OceanizedFoxEntity(EntityType<OceanizedFoxEntity> type, Level world) {
@@ -128,7 +128,7 @@ public class OceanizedFoxEntity extends SeaMonster {
 		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, Salmon.class, true, true));
 		this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, TropicalFish.class, true, true));
 		this.targetSelector.addGoal(8, new NearestAttackableTargetGoal<>(this, Pufferfish.class, true, true));
-		this.goalSelector.addGoal(9, new TemptGoal(this, 1, Ingredient.of(CaerulaArborModItems.CANNED_CHERRY.get()), false));
+		this.goalSelector.addGoal(9, new TemptGoal(this, 1, Ingredient.of(CAItems.CANNED_CHERRY.get()), false));
 		this.goalSelector.addGoal(10, new RemoveBlockGoal(Blocks.SWEET_BERRY_BUSH, this, 1, 3));
 		this.goalSelector.addGoal(11, new RandomStrollGoal(this, 1) {
 			@Override
@@ -232,11 +232,11 @@ public class OceanizedFoxEntity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        boolean sneak = false;
-        double time_stamp = 0;
-        double skillp = 0;
-        double dura = 0;
-        Entity enemy = null;
+        boolean sneak;
+        double time_stamp;
+        double skillp;
+        double dura;
+        Entity enemy;
         if (this.isAlive()) {
             if (tickCount % 10 == 0) {
                 time_stamp = (Entity) this instanceof OceanizedFoxEntity _datEntI ? _datEntI.getEntityData().get(DATA_action_time) : 0;
@@ -285,7 +285,7 @@ public class OceanizedFoxEntity extends SeaMonster {
                             this.setAnimation("animation.oceanized_fox.jump");
                         }
                         if (!this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 25, 9, false, false));
+                            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 25, 9, false, false));
                         push((getLookAngle().x * 0.25), 0.25, (getLookAngle().z * 0.25));
                         CaerulaArborMod.queueServerWork(20, () -> {
                             if (this.isAlive() && !(((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == null)) {
@@ -304,8 +304,8 @@ public class OceanizedFoxEntity extends SeaMonster {
                         });
                         CaerulaArborMod.queueServerWork(30, () -> {
                             if (this.isAlive()) {
-                                Entity enemy1 = null;
-                                double damage = 0;
+                                Entity enemy1;
+                                double damage;
                                 if (world instanceof Level _level) {
                                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.fox.aggro")), SoundSource.HOSTILE, 2, 1);
                                 }

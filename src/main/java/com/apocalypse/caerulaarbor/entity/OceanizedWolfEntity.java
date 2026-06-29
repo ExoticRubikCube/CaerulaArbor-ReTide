@@ -1,7 +1,7 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -49,7 +49,7 @@ public class OceanizedWolfEntity extends SeaMonster {
 	public String animationprocedure = "empty";
 
 	public OceanizedWolfEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.OCEANIZED_WOLF.get(), world);
+		this(CAEntities.OCEANIZED_WOLF.get(), world);
 	}
 
 	public OceanizedWolfEntity(EntityType<OceanizedWolfEntity> type, Level world) {
@@ -113,7 +113,6 @@ public class OceanizedWolfEntity extends SeaMonster {
 				double x = OceanizedWolfEntity.this.getX();
 				double y = OceanizedWolfEntity.this.getY();
 				double z = OceanizedWolfEntity.this.getZ();
-				Entity entity = OceanizedWolfEntity.this;
 				Level world = OceanizedWolfEntity.this.level();
 				return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -123,7 +122,6 @@ public class OceanizedWolfEntity extends SeaMonster {
 				double x = OceanizedWolfEntity.this.getX();
 				double y = OceanizedWolfEntity.this.getY();
 				double z = OceanizedWolfEntity.this.getZ();
-				Entity entity = OceanizedWolfEntity.this;
 				Level world = OceanizedWolfEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
@@ -131,21 +129,11 @@ public class OceanizedWolfEntity extends SeaMonster {
 		this.targetSelector.addGoal(21, new NearestAttackableTargetGoal<>(this, Animal.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = OceanizedWolfEntity.this.getX();
-				double y = OceanizedWolfEntity.this.getY();
-				double z = OceanizedWolfEntity.this.getZ();
-				Entity entity = OceanizedWolfEntity.this;
-				Level world = OceanizedWolfEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = OceanizedWolfEntity.this.getX();
-				double y = OceanizedWolfEntity.this.getY();
-				double z = OceanizedWolfEntity.this.getZ();
-				Entity entity = OceanizedWolfEntity.this;
-				Level world = OceanizedWolfEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});

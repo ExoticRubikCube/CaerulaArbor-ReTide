@@ -4,7 +4,8 @@ import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import com.apocalypse.caerulaarbor.entity.OceanizedEvokerEntity;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.living.LivingUseTotemEvent;
@@ -22,7 +23,7 @@ public class TotemEventHandler {
 		if (event.getEntity() instanceof OceanizedEvokerEntity oceanizedEvoker) {
 			CaerulaArborMod.queueServerWork(2, () -> {
 				if (oceanizedEvoker.isAlive() && !oceanizedEvoker.level().isClientSide()) {
-					oceanizedEvoker.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 20, 0, false, false));
+					oceanizedEvoker.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 20, 0, false, false));
 				}
 			});
 			CaerulaArborMod.queueServerWork(5, () -> {

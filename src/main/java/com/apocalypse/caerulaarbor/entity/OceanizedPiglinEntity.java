@@ -3,8 +3,8 @@ package com.apocalypse.caerulaarbor.entity;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.PolarMountRider;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -66,7 +66,7 @@ public class OceanizedPiglinEntity extends SeaMonster implements PolarMountRider
 	public String animationprocedure = "empty";
 
 	public OceanizedPiglinEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.OCEANIZED_PIGLIN.get(), world);
+		this(CAEntities.OCEANIZED_PIGLIN.get(), world);
 	}
 
 	public OceanizedPiglinEntity(EntityType<OceanizedPiglinEntity> type, Level world) {
@@ -169,8 +169,8 @@ public class OceanizedPiglinEntity extends SeaMonster implements PolarMountRider
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-		if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get())) {
-			this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(6);
+		if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get())) {
+			this.getAttribute(CAAttributes.SANITY_RATE.get()).setBaseValue(6);
 		}
 		return retval;
 	}
@@ -198,7 +198,7 @@ public class OceanizedPiglinEntity extends SeaMonster implements PolarMountRider
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        double ablty = 0;
+        double ablty;
         ablty = (Entity) this instanceof OceanizedPiglinEntity _datEntI ? _datEntI.getEntityData().get(DATA_ability) : 0;
         if (ablty < 5) {
             if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))

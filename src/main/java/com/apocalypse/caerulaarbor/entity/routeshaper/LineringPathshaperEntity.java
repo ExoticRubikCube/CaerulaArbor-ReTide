@@ -1,6 +1,6 @@
 package com.apocalypse.caerulaarbor.entity.routeshaper;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
@@ -56,7 +56,7 @@ public class LineringPathshaperEntity extends AbstractPathshaperEntity {
 	private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.GREEN, ServerBossEvent.BossBarOverlay.NOTCHED_6);
 
 	public LineringPathshaperEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.LINGERING_PATHSHAPER.get(), world);
+		this(CAEntities.LINGERING_PATHSHAPER.get(), world);
 	}
 
 	public LineringPathshaperEntity(EntityType<LineringPathshaperEntity> type, Level world) {
@@ -87,7 +87,7 @@ public class LineringPathshaperEntity extends AbstractPathshaperEntity {
 
 	@Override
 	protected EntityType<?> getSummonedFractalType() {
-		return CaerulaArborModEntities.LINGERING_FRACTAL.get();
+		return CAEntities.LINGERING_FRACTAL.get();
 	}
 
 	@Override
@@ -275,8 +275,6 @@ public class LineringPathshaperEntity extends AbstractPathshaperEntity {
 	}
 
 	private PlayState attackingPredicate(AnimationState event) {
-		double d1 = this.getX() - this.xOld;
-		double d0 = this.getZ() - this.zOld;
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();

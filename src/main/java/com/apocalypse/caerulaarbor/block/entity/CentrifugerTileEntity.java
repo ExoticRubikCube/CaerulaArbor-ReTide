@@ -1,7 +1,7 @@
 package com.apocalypse.caerulaarbor.block.entity;
 
 import com.apocalypse.caerulaarbor.block.CentrifugerBlock;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlockEntities;
+import com.apocalypse.caerulaarbor.init.CABlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -40,7 +40,7 @@ public class CentrifugerTileEntity extends RandomizableContainerBlockEntity impl
 	private final LazyOptional<? extends IItemHandler>[] handlers = SidedInvWrapper.create(this, Direction.values());
 
 	public CentrifugerTileEntity(BlockPos pos, BlockState state) {
-		super(CaerulaArborModBlockEntities.CENTRIFUGER.get(), pos, state);
+		super(CABlockEntities.CENTRIFUGER.get(), pos, state);
 	}
 
 	private PlayState predicate(AnimationState event) {

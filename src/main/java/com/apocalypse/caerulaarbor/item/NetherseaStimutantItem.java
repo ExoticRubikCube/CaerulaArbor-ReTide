@@ -4,8 +4,9 @@ package com.apocalypse.caerulaarbor.item;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.api.event.SanityEvent;
 import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -55,7 +56,7 @@ public class NetherseaStimutantItem extends Item {
 		double z = entity.getZ();
 		if (entity != null) {
 			if (!entity.level().isClientSide()) {
-				entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ADD_ATTACK_PERCLY.get(), 280, 3));
+				entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_ATTACK_PERCLY.get(), 280, 3));
 				entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 300, 2));
 				entity.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 300, 3));
 				entity.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 480, 0));
@@ -63,13 +64,13 @@ public class NetherseaStimutantItem extends Item {
 			SIHelper.causeSanityInjury(entity, 75, SanityEvent.Hurt.Type.FOOD);
 			if (!(entity instanceof Player)) {
 				resultStack.shrink(1);
-				ItemStack emptyCup = new ItemStack(CaerulaArborModItems.OCEANGLASS_CUP.get());
+				ItemStack emptyCup = new ItemStack(CAItems.OCEANGLASS_CUP.get());
 				if (resultStack.isEmpty()) {
 					return emptyCup;
 				}
 			} else if (entity instanceof Player player && !player.getAbilities().instabuild) {
 				resultStack.shrink(1);
-				ItemStack emptyCup = new ItemStack(CaerulaArborModItems.OCEANGLASS_CUP.get());
+				ItemStack emptyCup = new ItemStack(CAItems.OCEANGLASS_CUP.get());
 				if (resultStack.isEmpty()) {
 					return emptyCup;
 				}
@@ -78,7 +79,7 @@ public class NetherseaStimutantItem extends Item {
 				}
 			}
 			CaerulaArborMod.queueServerWork(240, () -> {
-				if (entity.isAlive() && entity.hasEffect(CaerulaArborModMobEffects.ADD_ATTACK_PERCLY.get())) {
+				if (entity.isAlive() && entity.hasEffect(CAMobEffects.ADD_ATTACK_PERCLY.get())) {
 					if (Math.random() < 0.5) {
 						if (!entity.level().isClientSide()) {
 							entity.addEffect(new MobEffectInstance(MobEffects.POISON, 280, 0));

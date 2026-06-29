@@ -2,8 +2,8 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -68,7 +68,7 @@ public class AccumulatorProkaryoteEntity extends SeaMonster {
 	public String animationprocedure = "empty";
 
 	public AccumulatorProkaryoteEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.ACCUMULATOR_PROKARYOTE.get(), world);
+		this(CAEntities.ACCUMULATOR_PROKARYOTE.get(), world);
 	}
 
 	public AccumulatorProkaryoteEntity(EntityType<AccumulatorProkaryoteEntity> type, Level world) {
@@ -290,11 +290,11 @@ public class AccumulatorProkaryoteEntity extends SeaMonster {
                     _entity.setHealth((float) (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5));
                 if ((Entity) this instanceof AccumulatorProkaryoteEntity _datEntSetL)
                     _datEntSetL.getEntityData().set(DATA_split, false);
-                if (!((Entity) this instanceof LivingEntity _livEnt9 && _livEnt9.hasEffect(CaerulaArborModMobEffects.MUTE.get()))) {
+                if (!((Entity) this instanceof LivingEntity _livEnt9 && _livEnt9.hasEffect(CAMobEffects.MUTE.get()))) {
                     CaerulaArborMod.queueServerWork(10, () -> {
                         if (isInWater()) {
                             if (world instanceof ServerLevel _level) {
-                                Entity entityToSpawn = CaerulaArborModEntities.ACCUMULATOR_CLONE.get().spawn(_level,
+                                Entity entityToSpawn = CAEntities.ACCUMULATOR_CLONE.get().spawn(_level,
                                         BlockPos.containing(getX() + Mth.nextDouble(RandomSource.create(), -1, 1), getY() + 0.5, getZ() + Mth.nextDouble(RandomSource.create(), -1, 1)), MobSpawnType.MOB_SUMMONED);
                                 if (entityToSpawn != null) {
                                     entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
@@ -302,7 +302,7 @@ public class AccumulatorProkaryoteEntity extends SeaMonster {
                             }
                         } else {
                             if (world instanceof ServerLevel _level) {
-                                Entity entityToSpawn = CaerulaArborModEntities.DIVICELLULAR_GO.get().spawn(_level,
+                                Entity entityToSpawn = CAEntities.DIVICELLULAR_GO.get().spawn(_level,
                                         BlockPos.containing(getX() + Mth.nextDouble(RandomSource.create(), -1, 1), getY() + 0.5, getZ() + Mth.nextDouble(RandomSource.create(), -1, 1)), MobSpawnType.MOB_SUMMONED);
                                 if (entityToSpawn != null) {
                                     entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
@@ -340,7 +340,7 @@ public class AccumulatorProkaryoteEntity extends SeaMonster {
 	}
 
 	public static void init() {
-		SpawnPlacements.register(CaerulaArborModEntities.ACCUMULATOR_PROKARYOTE.get(), SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
+		SpawnPlacements.register(CAEntities.ACCUMULATOR_PROKARYOTE.get(), SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();
@@ -372,9 +372,7 @@ public class AccumulatorProkaryoteEntity extends SeaMonster {
 	}
 
 	private PlayState attackingPredicate(AnimationState event) {
-		double d1 = this.getX() - this.xOld;
-		double d0 = this.getZ() - this.zOld;
-		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
+        if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
 		}

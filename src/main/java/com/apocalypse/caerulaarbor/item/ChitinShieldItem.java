@@ -1,7 +1,7 @@
 
 package com.apocalypse.caerulaarbor.item;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShieldItem;
@@ -14,7 +14,7 @@ public class ChitinShieldItem extends ShieldItem {
 
 	@Override
 	public boolean isValidRepairItem(ItemStack itemstack, ItemStack repairitem) {
-		return Ingredient.of(new ItemStack(CaerulaArborModItems.OCEAN_CHITIN.get())).test(repairitem);
+		return Ingredient.of(new ItemStack(CAItems.OCEAN_CHITIN.get())).test(repairitem);
 	}
 
 	@Override

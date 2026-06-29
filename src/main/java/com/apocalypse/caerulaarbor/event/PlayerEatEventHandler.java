@@ -25,13 +25,13 @@ public class PlayerEatEventHandler {
 		if (entity == null)
 			return;
 		String itemId = ForgeRegistries.ITEMS.getKey(itemStack.getItem()).toString();
-		String messageText = "";
-		double minimumLightGain = 0;
-		double maximumLightGain = 0;
-		double separatorIndex = 0;
-		double lifeGain = 0;
-		double maxLives = 0;
-		double currentLives = 0;
+		String messageText;
+		double minimumLightGain;
+		double maximumLightGain;
+		double separatorIndex;
+		double lifeGain;
+		double maxLives;
+		double currentLives;
 		if (itemId.equals("alexscaves:biome_treat")) {
 			return;
 		}

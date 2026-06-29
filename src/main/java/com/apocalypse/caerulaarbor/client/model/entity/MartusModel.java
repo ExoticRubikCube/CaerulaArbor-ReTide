@@ -23,7 +23,7 @@ public class MartusModel extends GeoModel<MartusEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(MartusEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/martus.png");
 	}
 
 	@Override

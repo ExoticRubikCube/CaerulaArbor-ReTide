@@ -1,8 +1,8 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -43,7 +43,7 @@ public class OceanizedPolarBearEntity extends SeaMonster {
 	public String animationprocedure = "empty";
 
 	public OceanizedPolarBearEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.OCEANIZED_POLAR_BEAR.get(), world);
+		this(CAEntities.OCEANIZED_POLAR_BEAR.get(), world);
 	}
 
 	public OceanizedPolarBearEntity(EntityType<OceanizedPolarBearEntity> type, Level world) {
@@ -137,7 +137,7 @@ public class OceanizedPolarBearEntity extends SeaMonster {
 	public void baseTick() {
 		super.baseTick();
         setTicksFrozen(0);
-        this.removeEffect(CaerulaArborModMobEffects.FROZEN.get());
+        this.removeEffect(CAMobEffects.FROZEN.get());
         this.refreshDimensions();
 	}
 

@@ -1,8 +1,8 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -58,7 +58,7 @@ public class LittleHelperEntity extends PathfinderMob implements GeoEntity {
 	public String animationprocedure = "empty";
 
 	public LittleHelperEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.LITTLE_HELPER.get(), world);
+		this(CAEntities.LITTLE_HELPER.get(), world);
 	}
 
 	public LittleHelperEntity(EntityType<? extends LittleHelperEntity> type, Level world) {
@@ -100,7 +100,7 @@ public class LittleHelperEntity extends PathfinderMob implements GeoEntity {
 	}
 
 	protected ItemStack getRecycleItemStack() {
-		return new ItemStack(CaerulaArborModItems.ITEM_HELPER.get());
+		return new ItemStack(CAItems.ITEM_HELPER.get());
 	}
 
 	@Override
@@ -120,7 +120,7 @@ public class LittleHelperEntity extends PathfinderMob implements GeoEntity {
 
 	@Override
 	public double getPassengersRidingOffset() {
-		return super.getPassengersRidingOffset() + -0.33;
+		return super.getPassengersRidingOffset() - 0.33;
 	}
 
 	@Override
@@ -171,12 +171,10 @@ public class LittleHelperEntity extends PathfinderMob implements GeoEntity {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-		if (this != null) {
-			if ((Entity) this instanceof LivingEntity _livingEntity1 && _livingEntity1.getAttributes().hasAttribute(ForgeMod.SWIM_SPEED.get()))
-				_livingEntity1.getAttribute(ForgeMod.SWIM_SPEED.get())
-						.setBaseValue((((Entity) this instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(Attributes.MOVEMENT_SPEED) ? _livingEntity0.getAttribute(Attributes.MOVEMENT_SPEED).getBaseValue() : 0) * 10));
-		}
-		return retval;
+        if (this.getAttributes().hasAttribute(ForgeMod.SWIM_SPEED.get()))
+			this.getAttribute(ForgeMod.SWIM_SPEED.get())
+                    .setBaseValue((((Entity) this instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(Attributes.MOVEMENT_SPEED) ? _livingEntity0.getAttribute(Attributes.MOVEMENT_SPEED).getBaseValue() : 0) * 10));
+        return retval;
 	}
 
 	@Override

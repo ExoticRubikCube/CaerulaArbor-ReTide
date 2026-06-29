@@ -1,9 +1,9 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
@@ -41,10 +41,10 @@ import java.util.List;
 
 @OnlyIn(value = Dist.CLIENT, _interface = ItemSupplier.class)
 public class AnchorFlyEntity extends AbstractArrow implements ItemSupplier {
-	public static final ItemStack PROJECTILE_ITEM = new ItemStack(CaerulaArborModItems.UNAMBIGUOUS_DIRECTION.get());
+	public static final ItemStack PROJECTILE_ITEM = new ItemStack(CAItems.UNAMBIGUOUS_DIRECTION.get());
 
 	public AnchorFlyEntity(PlayMessages.SpawnEntity packet, Level world) {
-		super(CaerulaArborModEntities.ANCHOR_FLY.get(), world);
+		super(CAEntities.ANCHOR_FLY.get(), world);
 	}
 
 	public AnchorFlyEntity(EntityType<? extends AnchorFlyEntity> type, Level world) {
@@ -92,11 +92,11 @@ public class AnchorFlyEntity extends AbstractArrow implements ItemSupplier {
         Entity sourceentity = this.getOwner();
         if (sourceentity == null)
             return;
-        double perc = 0;
+        double perc;
         if (!(entity == sourceentity)) {
             perc = (sourceentity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) / (sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1);
             if (sourceentity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.PATH_TO_UNCOVER.get(), 500, 0, false, false));
+                _entity.addEffect(new MobEffectInstance(CAMobEffects.PATH_TO_UNCOVER.get(), 500, 0, false, false));
             if (sourceentity instanceof LivingEntity _entity)
                 _entity.setHealth((float) ((sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * perc));
             if (world instanceof ServerLevel _level)
@@ -119,7 +119,7 @@ public class AnchorFlyEntity extends AbstractArrow implements ItemSupplier {
                                 new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "anchor_smash"))), sourceentity),
                                 (float) ((sourceentity instanceof LivingEntity _livingEntity16 && _livingEntity16.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity16.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.5));
                         if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                            _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.DIZZY.get(), 120, 0, false, false));
+                            _entity.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 120, 0, false, false));
                     }
                 }
             }
@@ -127,7 +127,7 @@ public class AnchorFlyEntity extends AbstractArrow implements ItemSupplier {
             if (sourceentity instanceof ServerPlayer _serverPlayer)
                 _serverPlayer.connection.teleport(x, y, z, sourceentity.getYRot(), sourceentity.getXRot());
             if (sourceentity instanceof LivingEntity _entity)
-                _entity.removeEffect(CaerulaArborModMobEffects.DIZZY.get());
+                _entity.removeEffect(CAMobEffects.DIZZY.get());
             if (sourceentity instanceof LivingEntity _entity)
                 _entity.removeEffect(MobEffects.DIG_SLOWDOWN);
             if (sourceentity instanceof LivingEntity _entity)
@@ -148,12 +148,12 @@ public class AnchorFlyEntity extends AbstractArrow implements ItemSupplier {
         double y = blockHitResult.getBlockPos().getY();
         double z = blockHitResult.getBlockPos().getZ();
         Entity entity = this.getOwner();
-        if (entity == null || this == null)
+        if (entity == null)
             return;
-        double perc = 0;
+        double perc;
         perc = (entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) / (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1);
         if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-            _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.PATH_TO_UNCOVER.get(), 500, 0, false, false));
+            _entity.addEffect(new MobEffectInstance(CAMobEffects.PATH_TO_UNCOVER.get(), 500, 0, false, false));
         if (entity instanceof LivingEntity _entity)
             _entity.setHealth((float) ((entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * perc));
         if (world instanceof ServerLevel _level)
@@ -178,7 +178,7 @@ public class AnchorFlyEntity extends AbstractArrow implements ItemSupplier {
                     entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "anchor_smash"))), entity),
                             (float) ((entity instanceof LivingEntity _livingEntity15 && _livingEntity15.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity15.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.5));
                     if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                        _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.DIZZY.get(), 120, 0, false, false));
+                        _entity.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 120, 0, false, false));
                 }
             }
         }
@@ -186,7 +186,7 @@ public class AnchorFlyEntity extends AbstractArrow implements ItemSupplier {
         if (entity instanceof ServerPlayer _serverPlayer)
             _serverPlayer.connection.teleport((getX()), (getY()), (getZ()), entity.getYRot(), entity.getXRot());
         if (entity instanceof LivingEntity _entity)
-            _entity.removeEffect(CaerulaArborModMobEffects.DIZZY.get());
+            _entity.removeEffect(CAMobEffects.DIZZY.get());
         if (entity instanceof LivingEntity _entity)
             _entity.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
         if (entity instanceof LivingEntity _entity)
@@ -205,11 +205,11 @@ public class AnchorFlyEntity extends AbstractArrow implements ItemSupplier {
         double z = this.getZ();
         Entity entity = this.getOwner();
         if (entity != null) {
-            double perc = 0;
+            double perc;
             if (tickCount >= 160) {
                 perc = (entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) / (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1);
                 if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                    _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.PATH_TO_UNCOVER.get(), 500, 0, false, false));
+                    _entity.addEffect(new MobEffectInstance(CAMobEffects.PATH_TO_UNCOVER.get(), 500, 0, false, false));
                 if (entity instanceof LivingEntity _entity)
                     _entity.setHealth((float) ((entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * perc));
                 if (world instanceof ServerLevel _level)
@@ -234,12 +234,12 @@ public class AnchorFlyEntity extends AbstractArrow implements ItemSupplier {
                             entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "anchor_smash"))), entity),
                                     (float) ((entity instanceof LivingEntity _livingEntity16 && _livingEntity16.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity16.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.5));
                             if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                                _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.DIZZY.get(), 120, 0, false, false));
+                                _entity.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 120, 0, false, false));
                         }
                     }
                 }
                 if (entity instanceof LivingEntity _entity)
-                    _entity.removeEffect(CaerulaArborModMobEffects.DIZZY.get());
+                    _entity.removeEffect(CAMobEffects.DIZZY.get());
                 if (entity instanceof LivingEntity _entity)
                     _entity.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
                 if (entity instanceof LivingEntity _entity)
@@ -264,7 +264,7 @@ public class AnchorFlyEntity extends AbstractArrow implements ItemSupplier {
 	}
 
 	public static AnchorFlyEntity shoot(Level world, LivingEntity entity, RandomSource random, float power, double damage, int knockback) {
-		AnchorFlyEntity entityarrow = new AnchorFlyEntity(CaerulaArborModEntities.ANCHOR_FLY.get(), entity, world);
+		AnchorFlyEntity entityarrow = new AnchorFlyEntity(CAEntities.ANCHOR_FLY.get(), entity, world);
 		entityarrow.shoot(entity.getViewVector(1).x, entity.getViewVector(1).y, entity.getViewVector(1).z, power * 2, 0);
 		entityarrow.setSilent(true);
 		entityarrow.setCritArrow(false);
@@ -276,7 +276,7 @@ public class AnchorFlyEntity extends AbstractArrow implements ItemSupplier {
 	}
 
 	public static AnchorFlyEntity shoot(LivingEntity entity, LivingEntity target) {
-		AnchorFlyEntity entityarrow = new AnchorFlyEntity(CaerulaArborModEntities.ANCHOR_FLY.get(), entity, entity.level());
+		AnchorFlyEntity entityarrow = new AnchorFlyEntity(CAEntities.ANCHOR_FLY.get(), entity, entity.level());
 		double dx = target.getX() - entity.getX();
 		double dy = target.getY() + target.getEyeHeight() - 1.1;
 		double dz = target.getZ() - entity.getZ();

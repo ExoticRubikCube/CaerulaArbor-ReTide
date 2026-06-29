@@ -4,9 +4,9 @@ import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.api.event.SanityEvent;
 import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CABlocks;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -67,7 +67,7 @@ public class OceanizedSheepEntity extends SeaMonster {
 	public String animationprocedure = "empty";
 
 	public OceanizedSheepEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.OCEANIZED_SHEEP.get(), world);
+		this(CAEntities.OCEANIZED_SHEEP.get(), world);
 	}
 
 	public OceanizedSheepEntity(EntityType<OceanizedSheepEntity> type, Level world) {
@@ -213,7 +213,7 @@ public class OceanizedSheepEntity extends SeaMonster {
             }
             for (int index0 = 0; index0 < Mth.nextInt(RandomSource.create(), 1, 3); index0++) {
                 if ((LevelAccessor) world instanceof ServerLevel _level) {
-                    ItemEntity entityToSpawn = new ItemEntity(_level, x, (y + 0.65), z, new ItemStack(CaerulaArborModItems.SEA_TRAIL_MOR.get()));
+                    ItemEntity entityToSpawn = new ItemEntity(_level, x, (y + 0.65), z, new ItemStack(CAItems.SEA_TRAIL_MOR.get()));
                     entityToSpawn.setPickUpDelay(10);
                     _level.addFreshEntity(entityToSpawn);
                 }
@@ -232,7 +232,7 @@ public class OceanizedSheepEntity extends SeaMonster {
         double y = this.getY();
         double z = this.getZ();
         if (!((Entity) this instanceof OceanizedSheepEntity _datEntL0 && _datEntL0.getEntityData().get(DATA_fur))) {
-            if ((world.getBlockState(BlockPos.containing(x + getLookAngle().x, y, z + getLookAngle().z))).getBlock() == CaerulaArborModBlocks.TRAIL_MUSHROOM.get()) {
+            if ((world.getBlockState(BlockPos.containing(x + getLookAngle().x, y, z + getLookAngle().z))).getBlock() == CABlocks.TRAIL_MUSHROOM.get()) {
                 if (this instanceof OceanizedSheepEntity) {
                     this.setAnimation("animation.oceanized_sheep.eat");
                 }

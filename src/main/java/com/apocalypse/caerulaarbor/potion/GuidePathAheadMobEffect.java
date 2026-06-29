@@ -3,8 +3,8 @@ package com.apocalypse.caerulaarbor.potion;
 
 import com.apocalypse.caerulaarbor.entity.GuideAbyssalEntity;
 import com.apocalypse.caerulaarbor.entity.OceanizedHorseEntity;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CABlocks;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.MathUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -22,6 +22,8 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
@@ -47,21 +49,25 @@ public class GuidePathAheadMobEffect extends MobEffect {
         double z = entity.getZ();
         if (entity == null)
             return;
-        BlockState target = Blocks.AIR.defaultBlockState();
+        BlockState target;
         if (((Entity) entity).isAlive()) {
             if (WorldUtils.canGrief(world) && ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5) {
-                if (!((Entity) entity instanceof LivingEntity _livEnt3 && _livEnt3.hasEffect(CaerulaArborModMobEffects.MUTE.get()))) {
+                if (!((Entity) entity instanceof LivingEntity _livEnt3 && _livEnt3.hasEffect(CAMobEffects.MUTE.get()))) {
                     target = (world.getBlockState(BlockPos.containing(x, y, z)));
                     if (((Entity) entity instanceof GuideAbyssalEntity _datEntI ? _datEntI.getEntityData().get(GuideAbyssalEntity.DATA_laylimit) : 0) > 0) {
-                        if ((target.canBeReplaced() || !(world.getBlockFloorHeight(BlockPos.containing(x, y, z)) > 0)) && !(target.getBlock() == CaerulaArborModBlocks.SEA_TRAIL_GROWN.get())
+                        if ((target.canBeReplaced() || !(world.getBlockFloorHeight(BlockPos.containing(x, y, z)) > 0)) && !(target.getBlock() == CABlocks.SEA_TRAIL_GROWN.get())
                                 && target.getDestroySpeed(world, BlockPos.containing(0, 0, 0)) >= 0) {
-                            if (CaerulaArborModBlocks.SEA_TRAIL_GROWN.get().defaultBlockState().canSurvive(world, BlockPos.containing(x, y, z))) {
+                            if (CABlocks.SEA_TRAIL_GROWN.get().defaultBlockState().canSurvive(world, BlockPos.containing(x, y, z))) {
                                 {
                                     BlockPos _pos = BlockPos.containing(x, y, z);
                                     Block.dropResources(world.getBlockState(_pos), world, BlockPos.containing(x, y, z), null);
                                     world.destroyBlock(_pos, false);
                                 }
-                                world.setBlock(BlockPos.containing(x, y, z), CaerulaArborModBlocks.SEA_TRAIL_GROWN.get().defaultBlockState(), 3);
+                                BlockState placedState = CABlocks.SEA_TRAIL_GROWN.get().defaultBlockState();
+                                if (placedState.hasProperty(BlockStateProperties.WATERLOGGED)) {
+                                    placedState = placedState.setValue(BlockStateProperties.WATERLOGGED, world.getFluidState(BlockPos.containing(x, y, z)).getType() == Fluids.WATER);
+                                }
+                                world.setBlock(BlockPos.containing(x, y, z), placedState, 3);
                                 if (world instanceof Level _level) {
                                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.step")), SoundSource.NEUTRAL, 2, 1);
                                 }
@@ -71,13 +77,13 @@ public class GuidePathAheadMobEffect extends MobEffect {
                         }
                     } else if (((Entity) entity instanceof OceanizedHorseEntity _datEntI ? _datEntI.getEntityData().get(OceanizedHorseEntity.DATA_lay_limit) : 0) > 0) {
                         if (target.canBeReplaced()) {
-                            if (CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing(x, y, z))) {
+                            if (CABlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing(x, y, z))) {
                                 {
                                     BlockPos _pos = BlockPos.containing(x, y, z);
                                     Block.dropResources(world.getBlockState(_pos), world, BlockPos.containing(x, y, z), null);
                                     world.destroyBlock(_pos, false);
                                 }
-                                world.setBlock(BlockPos.containing(x, y, z), CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState(), 3);
+                                world.setBlock(BlockPos.containing(x, y, z), CABlocks.SEA_TRAIL_INIT.get().defaultBlockState(), 3);
                                 if (world instanceof Level _level) {
                                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.step")), SoundSource.NEUTRAL, 2, 1);
                                 }

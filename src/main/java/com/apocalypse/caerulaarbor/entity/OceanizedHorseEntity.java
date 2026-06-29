@@ -1,9 +1,10 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.nbt.CompoundTag;
@@ -60,7 +61,7 @@ public class OceanizedHorseEntity extends SeaMonster {
 	public String animationprocedure = "empty";
 
 	public OceanizedHorseEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.OCEANIZED_HORSE.get(), world);
+		this(CAEntities.OCEANIZED_HORSE.get(), world);
 	}
 
 	public OceanizedHorseEntity(EntityType<OceanizedHorseEntity> type, Level world) {
@@ -172,8 +173,8 @@ public class OceanizedHorseEntity extends SeaMonster {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-		if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get())) {
-			this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(6);
+		if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get())) {
+			this.getAttribute(CAAttributes.SANITY_RATE.get()).setBaseValue(6);
 		}
 		return retval;
 	}
@@ -198,12 +199,12 @@ public class OceanizedHorseEntity extends SeaMonster {
 	public void baseTick() {
 		super.baseTick();
         LevelAccessor world = this.level();
-        Entity rider = null;
+        Entity rider;
         if (WorldUtils.canGrief(world) && ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5) {
-            if (!((Entity) this instanceof LivingEntity _livEnt2 && _livEnt2.hasEffect(CaerulaArborModMobEffects.MUTE.get()))) {
-                if (!((Entity) this instanceof LivingEntity _livEnt3 && _livEnt3.hasEffect(CaerulaArborModMobEffects.GUIDE_PATH_AHEAD.get()))) {
+            if (!((Entity) this instanceof LivingEntity _livEnt2 && _livEnt2.hasEffect(CAMobEffects.MUTE.get()))) {
+                if (!((Entity) this instanceof LivingEntity _livEnt3 && _livEnt3.hasEffect(CAMobEffects.GUIDE_PATH_AHEAD.get()))) {
                     if (!this.level().isClientSide())
-                        this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.GUIDE_PATH_AHEAD.get(), 20, 0));
+                        this.addEffect(new MobEffectInstance(CAMobEffects.GUIDE_PATH_AHEAD.get(), 20, 0));
                 }
             }
         }
@@ -211,7 +212,7 @@ public class OceanizedHorseEntity extends SeaMonster {
             rider = getFirstPassenger();
             if (!(rider == null) && rider.isAlive()) {
                 if (rider instanceof LivingEntity _entity && !this.level().isClientSide())
-                    this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ADD_ATTACK_PERCLY.get(), 40, 1, false, true));
+                    this.addEffect(new MobEffectInstance(CAMobEffects.ADD_ATTACK_PERCLY.get(), 40, 1, false, true));
             }
         }
         this.refreshDimensions();

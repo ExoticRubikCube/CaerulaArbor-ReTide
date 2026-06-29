@@ -4,10 +4,10 @@ import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.api.event.SanityEvent;
 import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CAParticleTypes;
 import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.client.Minecraft;
@@ -81,7 +81,7 @@ public class ThirsterEntity extends SeaMonster {
 	private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.PROGRESS);
 
 	public ThirsterEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.THIRSTER.get(), world);
+		this(CAEntities.THIRSTER.get(), world);
 	}
 
 	public ThirsterEntity(EntityType<ThirsterEntity> type, Level world) {
@@ -225,7 +225,7 @@ public class ThirsterEntity extends SeaMonster {
 					}
 					if (this.distanceTo(entityiterator) < 20) {
 						if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
-							_entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.DIZZY.get(), 160, 0, false, false));
+							_entity.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 160, 0, false, false));
 						dizzyTargetCount = dizzyTargetCount - 1;
 						if (dizzyTargetCount <= 1) {
 							break;
@@ -234,8 +234,8 @@ public class ThirsterEntity extends SeaMonster {
 				}
 				this.getEntityData().set(DATA_INTEGRATION, 0);
 				this.getEntityData().set(DATA_DURATION, 400);
-				if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.LIVING_BARRIER.get()))
-					this.getAttribute(CaerulaArborModAttributes.LIVING_BARRIER.get()).setBaseValue((maxHealth - healthBeforeDamage));
+				if (this.getAttributes().hasAttribute(CAAttributes.LIVING_BARRIER.get()))
+					this.getAttribute(CAAttributes.LIVING_BARRIER.get()).setBaseValue((maxHealth - healthBeforeDamage));
 			}
 		}
 		return damaged;
@@ -244,12 +244,12 @@ public class ThirsterEntity extends SeaMonster {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()))
-            this.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).setBaseValue(10);
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-            this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(95);
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get()))
-            this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(50);
+        if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
+            this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).setBaseValue(10);
+        if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
+            this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(95);
+        if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get()))
+            this.getAttribute(CAAttributes.SANITY_RATE.get()).setBaseValue(50);
         return retval;
 	}
 
@@ -285,23 +285,25 @@ public class ThirsterEntity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        Entity enemy = null;
-        double barr = 0;
-        double perc = 0;
-        double sklp1 = 0;
-        double d = 0;
-        double maxH = 0;
-        double angle = 0;
+        Entity enemy;
+        double barr;
+        double perc;
+        double sklp1;
+        double d;
+        double maxH;
+        double angle;
         double interg = 0;
-        double dura = 0;
+        double dura;
         if (!world.isClientSide()) {
             if (this.isAlive()) {
                 sklp1 = (Entity) this instanceof ThirsterEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILL_P) : 0;
                 dura = (Entity) this instanceof ThirsterEntity _datEntI ? _datEntI.getEntityData().get(DATA_DURATION) : 0;
-                interg = (Entity) this instanceof ThirsterEntity _datEntI ? _datEntI.getEntityData().get(DATA_INTEGRATION) : 0;
+                if ((Entity) this instanceof ThirsterEntity _datEntI) {
+                    _datEntI.getEntityData().get(DATA_INTEGRATION);
+                }
                 enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
-                barr = this.getAttributes().hasAttribute(CaerulaArborModAttributes.LIVING_BARRIER.get())
-                        ? this.getAttribute(CaerulaArborModAttributes.LIVING_BARRIER.get()).getBaseValue()
+                barr = this.getAttributes().hasAttribute(CAAttributes.LIVING_BARRIER.get())
+                        ? this.getAttribute(CAAttributes.LIVING_BARRIER.get()).getBaseValue()
                         : 0;
                 if (dura > 0) {
                     if ((Entity) this instanceof ThirsterEntity _datEntSetI)
@@ -314,8 +316,8 @@ public class ThirsterEntity extends SeaMonster {
                     }
                 } else {
                     if (barr > 0) {
-                        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.LIVING_BARRIER.get()))
-                            this.getAttribute(CaerulaArborModAttributes.LIVING_BARRIER.get()).setBaseValue(0);
+                        if (this.getAttributes().hasAttribute(CAAttributes.LIVING_BARRIER.get()))
+                            this.getAttribute(CAAttributes.LIVING_BARRIER.get()).setBaseValue(0);
                         this.performSanityAttack();
                     }
                 }
@@ -330,15 +332,13 @@ public class ThirsterEntity extends SeaMonster {
                             this.setAnimation("animation.thirster.skill");
                         }
                         CaerulaArborMod.queueServerWork(5, () -> {
-                            if (this == null)
-                                return;
-                            Entity enemy1 = null;
-                            double num = 0;
+                            Entity enemy1;
+                            double num;
                             double tX = 0;
                             double tZ = 0;
-                            double tY = 0;
+                            double tY;
                             num = 2;
-                            enemy1 = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+                            enemy1 = this.getTarget();
                             {
                                 final Vec3 _center = new Vec3(x, y, z);
                                 List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(40 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
@@ -381,7 +381,7 @@ public class ThirsterEntity extends SeaMonster {
                                         tX = tX + entityiterator.getX();
                                         tZ = tZ + entityiterator.getZ();
                                         if (world instanceof ServerLevel _level)
-                                            _level.sendParticles(CaerulaArborModParticleTypes.MOIST_BOOM.get(), (entityiterator.getX()), (entityiterator.getY() + 0.75), (entityiterator.getZ()), 8, 0.75, 0.75, 0.75, 0.1);
+                                            _level.sendParticles(CAParticleTypes.MOIST_BOOM.get(), (entityiterator.getX()), (entityiterator.getY() + 0.75), (entityiterator.getZ()), 8, 0.75, 0.75, 0.75, 0.1);
                                         CaerulaArborMod.queueServerWork(15, () -> {
                                             entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_magic"))), this),
                                                     (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
@@ -398,7 +398,7 @@ public class ThirsterEntity extends SeaMonster {
                                 tY = WorldUtils.findYzforTear(world, tX, y, tZ);
                                 if (tY < 1111) {
                                     if (world instanceof ServerLevel _level) {
-                                        Entity entityToSpawn = CaerulaArborModEntities.ABSORBER_LIMB.get().spawn(_level, BlockPos.containing(tX, tY, tZ), MobSpawnType.MOB_SUMMONED);
+                                        Entity entityToSpawn = CAEntities.ABSORBER_LIMB.get().spawn(_level, BlockPos.containing(tX, tY, tZ), MobSpawnType.MOB_SUMMONED);
                                         if (entityToSpawn != null) {
                                             entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                                         }
@@ -423,15 +423,15 @@ public class ThirsterEntity extends SeaMonster {
                     }
                 }
                 if (tickCount % 20 == 10) {
-                    double num = 0;
+                    double num;
                     Entity enemy1;
-                    double result = 0;
+                    double result;
                     final Vec3 _center1 = new Vec3(x, y, z);
                     List<AbsorberLimbEntity> _entfound1 = world.getEntitiesOfClass(AbsorberLimbEntity.class,
                             new AABB(_center1, _center1).inflate(48 / 2d), AbsorberLimbEntity::isAlive);
                     result = _entfound1.size();
                     num = result;
-                    enemy1 = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+                    enemy1 = this.getTarget();
                     if (num > 0) {
                         {
                             final Vec3 _center = new Vec3(x, y, z);

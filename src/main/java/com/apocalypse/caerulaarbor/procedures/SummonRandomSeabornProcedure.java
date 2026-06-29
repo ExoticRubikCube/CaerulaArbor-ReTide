@@ -1,6 +1,6 @@
 package com.apocalypse.caerulaarbor.procedures;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
@@ -15,41 +15,41 @@ import net.minecraftforge.registries.RegistryObject;
 public class SummonRandomSeabornProcedure {
 	@SuppressWarnings("rawtypes")
 	private static final RegistryObject[] WATER_NORMAL_POOL = {
-		CaerulaArborModEntities.COLLECTOR_PROKARYOTE,
-		CaerulaArborModEntities.FLOATER_PROKARYOTE,
-		CaerulaArborModEntities.DEPOSITER_PROKARYOTE,
-		CaerulaArborModEntities.ACCUMULATOR_PROKARYOTE,
-		CaerulaArborModEntities.FEEDER_PROKARYOTE,
-		CaerulaArborModEntities.BONE_FISH
+		CAEntities.COLLECTOR_PROKARYOTE,
+		CAEntities.FLOATER_PROKARYOTE,
+		CAEntities.DEPOSITER_PROKARYOTE,
+		CAEntities.ACCUMULATOR_PROKARYOTE,
+		CAEntities.FEEDER_PROKARYOTE,
+		CAEntities.BONE_FISH
 	};
 
 	@SuppressWarnings("rawtypes")
 	private static final RegistryObject[] LAND_NORMAL_POOL = {
-		CaerulaArborModEntities.CHISELER_FISH,
-		CaerulaArborModEntities.FLY_FISH,
-		CaerulaArborModEntities.PREDATOR_ABYSSAL,
-		CaerulaArborModEntities.FAKE_OFFSPRING,
-		CaerulaArborModEntities.SLIDER_FISH,
-		CaerulaArborModEntities.RUN_FISH,
-		CaerulaArborModEntities.SHOOTER_FISH,
-		CaerulaArborModEntities.SPLASHER_ABYSSAL
+		CAEntities.CHISELER_FISH,
+		CAEntities.FLY_FISH,
+		CAEntities.PREDATOR_ABYSSAL,
+		CAEntities.FAKE_OFFSPRING,
+		CAEntities.SLIDER_FISH,
+		CAEntities.RUN_FISH,
+		CAEntities.SHOOTER_FISH,
+		CAEntities.SPLASHER_ABYSSAL
 	};
 
 	@SuppressWarnings("rawtypes")
 	private static final RegistryObject[] OCEANIZED_ANIMAL_POOL = {
-		CaerulaArborModEntities.OCEANIZED_PIG,
-		CaerulaArborModEntities.OCEANIZED_COW,
-		CaerulaArborModEntities.OCEANIZED_SHEEP,
-		CaerulaArborModEntities.OCEANIZED_HORSE,
-		CaerulaArborModEntities.OCEANIZED_WOLF,
-		CaerulaArborModEntities.OCEANIZED_SPIDER,
-		CaerulaArborModEntities.OCEANIZED_VILLAGER,
-		CaerulaArborModEntities.OCEANIZED_WITCH,
-		CaerulaArborModEntities.OCEANIZED_FOX,
-		CaerulaArborModEntities.OCEANIZED_POLAR_BEAR,
-		CaerulaArborModEntities.OCEANIZE_RABBIT,
-		CaerulaArborModEntities.OCEANIZED_CAT,
-		CaerulaArborModEntities.OCEANIZED_CHICKEN
+		CAEntities.OCEANIZED_PIG,
+		CAEntities.OCEANIZED_COW,
+		CAEntities.OCEANIZED_SHEEP,
+		CAEntities.OCEANIZED_HORSE,
+		CAEntities.OCEANIZED_WOLF,
+		CAEntities.OCEANIZED_SPIDER,
+		CAEntities.OCEANIZED_VILLAGER,
+		CAEntities.OCEANIZED_WITCH,
+		CAEntities.OCEANIZED_FOX,
+		CAEntities.OCEANIZED_POLAR_BEAR,
+		CAEntities.OCEANIZE_RABBIT,
+		CAEntities.OCEANIZED_CAT,
+		CAEntities.OCEANIZED_CHICKEN
 	};
 
 	public static void execute(LevelAccessor world, double elite_chan, double xx, double yy, double zz) {

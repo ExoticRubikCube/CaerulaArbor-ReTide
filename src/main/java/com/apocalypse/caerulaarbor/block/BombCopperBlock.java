@@ -69,10 +69,10 @@ public class BombCopperBlock extends Block {
             double x = pos.getX();
             double y = pos.getY();
             double z = pos.getZ();
-            BlockState target = Blocks.AIR.defaultBlockState();
-            double dx = 0;
-            double dz = 0;
-            double dy = 0;
+            BlockState target;
+            double dx;
+            double dz;
+            double dy;
             for (int index0 = 0; index0 < 60; index0++) {
                 if ((LevelAccessor) world instanceof ServerLevel _level)
                     _level.sendParticles(ParticleTypes.SMALL_FLAME, (x + 0.5 + 24 * Math.sin(Math.toRadians(index0 * 3))), (y + 0.5), (x + 0.5 + 24 * Math.cos(Math.toRadians(index0 * 3))), 4, 0.5, 2, 0.5, 0.1);

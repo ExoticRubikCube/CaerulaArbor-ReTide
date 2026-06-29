@@ -1,7 +1,8 @@
 package com.apocalypse.caerulaarbor.mixin;
 
 import com.apocalypse.caerulaarbor.entity.MartusEntity;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
@@ -26,7 +27,7 @@ public abstract class AddEffectMixinMixin {
         if(effect.isInstantenous()) return value;
         if(effect.getCategory() == MobEffectCategory.HARMFUL){
             LivingEntity me = (LivingEntity) (Object) this;
-            MobEffect resist = CaerulaArborModMobEffects.ESSENCE_RESISTANCE.get();
+            MobEffect resist = CAMobEffects.ESSENCE_RESISTANCE.get();
             if(!me.hasEffect(resist)) return value;
             MobEffectInstance resistInstance = me.getEffect(resist);
             int amplifier = 0;
@@ -48,7 +49,7 @@ public abstract class AddEffectMixinMixin {
     @Inject(method = "setHealth", at = @At("HEAD"), cancellable = true)
     public void immortalSetHealth(float pHealth, CallbackInfo ci){
         LivingEntity me = (LivingEntity)(Object) this;
-        if(me.hasEffect(CaerulaArborModMobEffects.IMMORTAL.get())){
+        if(me.hasEffect(CAMobEffects.IMMORTAL.get())){
             if(pHealth < 0.5) {
                 ci.cancel();
                 if (me.getMaxHealth() >= 0.5)
@@ -56,7 +57,7 @@ public abstract class AddEffectMixinMixin {
                 me.getPersistentData().putBoolean("immortalTriggered",true);
             }
         }
-        if(me.hasEffect(CaerulaArborModMobEffects.INVULNERABLE.get()) && !(me instanceof MartusEntity)){
+        if(me.hasEffect(CAMobEffects.INVULNERABLE.get()) && !(me instanceof MartusEntity)){
             if(pHealth < me.getHealth()) {
                 ci.cancel();
             }
@@ -66,11 +67,11 @@ public abstract class AddEffectMixinMixin {
     @Inject(method = "die", at = @At("HEAD"), cancellable = true)
     public void doNotDie(DamageSource pDamageSource, CallbackInfo ci){
         LivingEntity me = (LivingEntity)(Object) this;
-        if(me.hasEffect(CaerulaArborModMobEffects.IMMORTAL.get())){
+        if(me.hasEffect(CAMobEffects.IMMORTAL.get())){
             ci.cancel();
             me.getPersistentData().putBoolean("immortalTriggered",true);
         }
-        if(me.hasEffect(CaerulaArborModMobEffects.INVULNERABLE.get()) && !(me instanceof MartusEntity)){
+        if(me.hasEffect(CAMobEffects.INVULNERABLE.get()) && !(me instanceof MartusEntity)){
             ci.cancel();
         }
     }

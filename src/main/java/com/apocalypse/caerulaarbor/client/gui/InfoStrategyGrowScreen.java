@@ -4,7 +4,7 @@ import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
 import com.apocalypse.caerulaarbor.entity.CreeperFishEntity;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.menu.InfoStrategyGrowMenu;
 import com.apocalypse.caerulaarbor.network.CaerulaArborModNetwork;
 import com.apocalypse.caerulaarbor.network.message.send.InfoStrategyReturnButtonMessage;
@@ -50,7 +50,7 @@ public class InfoStrategyGrowScreen extends AbstractContainerScreen<InfoStrategy
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
 		this.renderBackground(guiGraphics);
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
-        if (((Entity) ((LevelAccessor) world instanceof Level _level ? new CreeperFishEntity(CaerulaArborModEntities.CREEPER_FISH.get(), _level) : null)) instanceof LivingEntity livingEntity) {
+        if (((Entity) ((LevelAccessor) world instanceof Level _level ? new CreeperFishEntity(CAEntities.CREEPER_FISH.get(), _level) : null)) instanceof LivingEntity livingEntity) {
 			InventoryScreen.renderEntityInInventoryFollowsAngle(guiGraphics, this.leftPos + 29, this.topPos + 96, 20, 0f + (float) Math.atan((this.leftPos + 29 - mouseX) / 40.0), (float) Math.atan((this.topPos + 47 - mouseY) / 40.0), livingEntity);
 		}
 		this.renderTooltip(guiGraphics, mouseX, mouseY);
@@ -76,7 +76,7 @@ public class InfoStrategyGrowScreen extends AbstractContainerScreen<InfoStrategy
 		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/bg_grow.png"), this.leftPos, this.topPos, Mth.clamp((int) EntityUtils.getStraGrow(world) * 256, 0, 1024), 0, 256, 168, 1280, 168);
 
         double result = 18;
-        double rate = 0;
+        double rate;
         if (!(MapVariables.get(world).strategy_grow >= 4)) {
             rate = MapVariables.get(world).evo_point_grow / (Math.pow(MapVariables.get(world).strategy_grow + 1, 3) * CaerulaConfigsConfiguration.COEFFICIENT.get());
             if (rate > 1) {

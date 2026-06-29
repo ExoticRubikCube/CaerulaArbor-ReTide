@@ -1,8 +1,8 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAParticleTypes;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.protocol.Packet;
@@ -42,7 +42,7 @@ public class AbandonedShootEntity extends AbstractArrow implements ItemSupplier 
 	public static final ItemStack PROJECTILE_ITEM = new ItemStack(Blocks.BLUE_CANDLE);
 
 	public AbandonedShootEntity(PlayMessages.SpawnEntity packet, Level world) {
-		super(CaerulaArborModEntities.ABANDONED_SHOOT.get(), world);
+		super(CAEntities.ABANDONED_SHOOT.get(), world);
 	}
 
 	public AbandonedShootEntity(EntityType<? extends AbandonedShootEntity> type, Level world) {
@@ -142,7 +142,7 @@ public class AbandonedShootEntity extends AbstractArrow implements ItemSupplier 
 	@Override
 	public void tick() {
 		super.tick();
-        this.level().addParticle(CaerulaArborModParticleTypes.SEA_SPLASH.get(), this.getX(), this.getY(), this.getZ(), ((-0.05) * getDeltaMovement().x()), ((-0.05) * getDeltaMovement().y()),
+        this.level().addParticle(CAParticleTypes.SEA_SPLASH.get(), this.getX(), this.getY(), this.getZ(), ((-0.05) * getDeltaMovement().x()), ((-0.05) * getDeltaMovement().y()),
                 ((-0.05) * getDeltaMovement().z()));
         if (tickCount >= 200) {
             if (!level().isClientSide())
@@ -161,7 +161,7 @@ public class AbandonedShootEntity extends AbstractArrow implements ItemSupplier 
 	}
 
 	public static AbandonedShootEntity shoot(Level world, LivingEntity entity, RandomSource random, float power, double damage, int knockback) {
-		AbandonedShootEntity entityarrow = new AbandonedShootEntity(CaerulaArborModEntities.ABANDONED_SHOOT.get(), entity, world);
+		AbandonedShootEntity entityarrow = new AbandonedShootEntity(CAEntities.ABANDONED_SHOOT.get(), entity, world);
 		entityarrow.shoot(entity.getViewVector(1).x, entity.getViewVector(1).y, entity.getViewVector(1).z, power * 2, 0);
 		entityarrow.setSilent(true);
 		entityarrow.setCritArrow(false);
@@ -173,7 +173,7 @@ public class AbandonedShootEntity extends AbstractArrow implements ItemSupplier 
 	}
 
 	public static AbandonedShootEntity shoot(LivingEntity entity, LivingEntity target) {
-		AbandonedShootEntity entityarrow = new AbandonedShootEntity(CaerulaArborModEntities.ABANDONED_SHOOT.get(), entity, entity.level());
+		AbandonedShootEntity entityarrow = new AbandonedShootEntity(CAEntities.ABANDONED_SHOOT.get(), entity, entity.level());
 		double dx = target.getX() - entity.getX();
 		double dy = target.getY() + target.getEyeHeight() - 1.1;
 		double dz = target.getZ() - entity.getZ();

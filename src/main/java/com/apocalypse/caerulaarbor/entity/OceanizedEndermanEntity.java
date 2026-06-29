@@ -2,9 +2,9 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CABlocks;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
@@ -74,7 +74,7 @@ public class OceanizedEndermanEntity extends SeaMonster {
 	public String animationprocedure = "empty";
 
 	public OceanizedEndermanEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.OCEANIZED_ENDERMAN.get(), world);
+		this(CAEntities.OCEANIZED_ENDERMAN.get(), world);
 	}
 
 	public OceanizedEndermanEntity(EntityType<OceanizedEndermanEntity> type, Level world) {
@@ -182,12 +182,12 @@ public class OceanizedEndermanEntity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        double ratio = 0;
-        double angl = 0;
-        double dist = 0;
-        double validY = 0;
-        double tX = 0;
-        double tZ = 0;
+        double ratio;
+        double angl;
+        double dist;
+        double validY;
+        double tX;
+        double tZ;
         if (this.isAlive()) {
             ratio = 0.2;
             if (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) <= ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5) {
@@ -249,9 +249,9 @@ public class OceanizedEndermanEntity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        Entity enemy = null;
-        double sklp = 0;
-        double cool = 0;
+        Entity enemy;
+        double sklp;
+        double cool;
         if (this.isAlive()) {
             sklp = (Entity) this instanceof OceanizedEndermanEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp) : 0;
             cool = (Entity) this instanceof OceanizedEndermanEntity _datEntI ? _datEntI.getEntityData().get(DATA_cooldown) : 0;
@@ -264,7 +264,7 @@ public class OceanizedEndermanEntity extends SeaMonster {
                         this.setAnimation("animation.oceanzied_enderman.skill");
                     }
                     if (!this.level().isClientSide())
-                        this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 35, 0, false, false));
+                        this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 35, 0, false, false));
                     if (world instanceof Level _level) {
                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.enderman.stare")), SoundSource.HOSTILE, 1, 1);
                     }
@@ -272,18 +272,18 @@ public class OceanizedEndermanEntity extends SeaMonster {
                         if (this == null)
                             return;
                         double sklp1 = 0;
-                        Entity enemy1 = null;
+                        Entity enemy1;
                         enemy1 = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                         if (!(enemy1 == null)) {
                             ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy1.getX()), (enemy1.getY()), (enemy1.getZ())));
                         }
                         new Object() {
                             void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
-                                double tgtX = 0;
-                                double tgtY = 0;
-                                double tgtZ = 0;
-                                double ctX = 0;
-                                double ctZ = 0;
+                                double tgtX;
+                                double tgtY;
+                                double tgtZ;
+                                double ctX;
+                                double ctZ;
                                 ctX = x + getLookAngle().x * (double) (2 * (timedloopiterator + 1));
                                 ctZ = z + getLookAngle().z * (double) (2 * (timedloopiterator + 1));
                                 {
@@ -305,8 +305,8 @@ public class OceanizedEndermanEntity extends SeaMonster {
                                             entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_magic"))), OceanizedEndermanEntity.this),
                                                     (float) (((Entity) OceanizedEndermanEntity.this instanceof LivingEntity _livingEntity10 && _livingEntity10.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity10.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.9));
                                             if (WorldUtils.canGrief(world)) {
-                                                if ((world.getBlockState(BlockPos.containing(tgtX, tgtY, tgtZ))).canBeReplaced() && CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing(tgtX, tgtY, tgtZ))) {
-                                                    world.setBlock(BlockPos.containing(tgtX, tgtY, tgtZ), CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState(), 3);
+                                                if ((world.getBlockState(BlockPos.containing(tgtX, tgtY, tgtZ))).canBeReplaced() && CABlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing(tgtX, tgtY, tgtZ))) {
+                                                    world.setBlock(BlockPos.containing(tgtX, tgtY, tgtZ), CABlocks.SEA_TRAIL_INIT.get().defaultBlockState(), 3);
                                                 }
                                             }
                                         }
@@ -326,12 +326,12 @@ public class OceanizedEndermanEntity extends SeaMonster {
                         _datEntSetI.getEntityData().set(DATA_skillp, (int) (sklp - 1));
                 }
                 if (cool <= 0 && enemy.isAlive()) {
-                    if ((enemy != null ? distanceTo(enemy) : -1) >= 8 && !((Entity) this instanceof LivingEntity _livEnt13 && _livEnt13.hasEffect(CaerulaArborModMobEffects.COOLDOWN_SINAL.get()))) {
+                    if ((enemy != null ? distanceTo(enemy) : -1) >= 8 && !((Entity) this instanceof LivingEntity _livEnt13 && _livEnt13.hasEffect(CAMobEffects.COOLDOWN_SINAL.get()))) {
                         if ((Entity) this instanceof OceanizedEndermanEntity _datEntSetI)
                             _datEntSetI.getEntityData().set(DATA_cooldown, 100);
                         EntityUtils.teleportTo(world, this, x, y, z, enemy.getX(), enemy.getY(), enemy.getZ());
                         if (!this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.COOLDOWN_SINAL.get(), 100, 0, false, false));
+                            this.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL.get(), 100, 0, false, false));
                     }
                 } else {
                     if ((Entity) this instanceof OceanizedEndermanEntity _datEntSetI)
@@ -429,7 +429,7 @@ public class OceanizedEndermanEntity extends SeaMonster {
             if (world instanceof ServerLevel _level)
                 _level.sendParticles(ParticleTypes.CLOUD, x, (y + 1.8), z, 32, 1, 1, 1, 0.1);
             if (world instanceof ServerLevel _level) {
-                Entity entityToSpawn = CaerulaArborModEntities.SLIDER_FISH.get().spawn(_level, BlockPos.containing(x, y + 1.8, z), MobSpawnType.MOB_SUMMONED);
+                Entity entityToSpawn = CAEntities.SLIDER_FISH.get().spawn(_level, BlockPos.containing(x, y + 1.8, z), MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn != null) {
                     entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                 }

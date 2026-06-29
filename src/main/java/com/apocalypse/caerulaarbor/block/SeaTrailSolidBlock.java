@@ -1,7 +1,7 @@
 
 package com.apocalypse.caerulaarbor.block;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
+import com.apocalypse.caerulaarbor.init.CABlocks;
 import com.apocalypse.caerulaarbor.procedures.PokePlayerProcedure;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
@@ -80,7 +80,7 @@ public class SeaTrailSolidBlock extends Block {
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();
-        BlockState target = Blocks.AIR.defaultBlockState();
+        BlockState target;
         boolean shouldConvert = false;
         if (Math.random() < 0.5) {
             target = (((LevelAccessor) world).getBlockState(BlockPos.containing(x, (double) y + 1, z)));
@@ -104,7 +104,7 @@ public class SeaTrailSolidBlock extends Block {
                 if ((LevelAccessor) world instanceof Level _level) {
                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.end_portal_frame.fill")), SoundSource.BLOCKS, 1, 1);
                 }
-                ((LevelAccessor) world).setBlock(BlockPos.containing(x, y, z), CaerulaArborModBlocks.DRAGON_BRAND.get().defaultBlockState(), 3);
+                ((LevelAccessor) world).setBlock(BlockPos.containing(x, y, z), CABlocks.DRAGON_BRAND.get().defaultBlockState(), 3);
             }
         }
     }

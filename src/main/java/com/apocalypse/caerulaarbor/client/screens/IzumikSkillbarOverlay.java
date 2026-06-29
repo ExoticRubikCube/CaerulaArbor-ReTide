@@ -37,9 +37,9 @@ public class IzumikSkillbarOverlay {
 		}
         if (!world.getEntitiesOfClass(IzumikEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e1 -> true).isEmpty()) {
 
-            Entity ent = null;
+            Entity ent;
             double ind = 0;
-            double phase = 0;
+            double phase;
             ent = world.getEntitiesOfClass(IzumikEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).stream().sorted(new Object() {
                 Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
                     return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));

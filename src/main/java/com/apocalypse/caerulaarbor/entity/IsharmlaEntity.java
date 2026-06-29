@@ -87,7 +87,7 @@ public class IsharmlaEntity extends SeaMonster {
 	public static final SoundEvent SKADI_HIT = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "skadi_hit"));
 	
 	public IsharmlaEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.ISHARMLA.get(), world);
+		this(CAEntities.ISHARMLA.get(), world);
 	}
 
 	public IsharmlaEntity(EntityType<IsharmlaEntity> type, Level world) {
@@ -203,7 +203,7 @@ public class IsharmlaEntity extends SeaMonster {
 					double sourceY = this.getY();
 					double sourceZ = this.getZ();
 					for (int index = 0; index < 12; index++) {
-						serverLevel.sendParticles(CaerulaArborModParticleTypes.MOIST_BOOM.get(), sourceX, sourceY + 10 + index, sourceZ, 6, index * 0.1, index * 0.1, index * 0.1, 0);
+						serverLevel.sendParticles(CAParticleTypes.MOIST_BOOM.get(), sourceX, sourceY + 10 + index, sourceZ, 6, index * 0.1, index * 0.1, index * 0.1, 0);
 					}
 				}
 			});
@@ -266,7 +266,7 @@ public class IsharmlaEntity extends SeaMonster {
 		for (int index = 0; index < 20; index++) {
             final double particleIndex = index;
 			CaerulaArborMod.queueServerWork(index, () -> {
-				level.sendParticles(CaerulaArborModParticleTypes.MOIST_BOOM.get(), x, y + 10 - particleIndex * 0.5, z, 1, 0, 0, 0, 0);
+				level.sendParticles(CAParticleTypes.MOIST_BOOM.get(), x, y + 10 - particleIndex * 0.5, z, 1, 0, 0, 0, 0);
 				double angle = Math.toRadians(particleIndex * 9);
 				level.sendParticles(ParticleTypes.END_ROD, x + radius * Math.cos(angle), y, z + radius * Math.sin(angle), 1, 0, 0, 0, 0);
 				double oppositeAngle = Math.toRadians(particleIndex * 9 + 180);
@@ -324,7 +324,7 @@ public class IsharmlaEntity extends SeaMonster {
 	@Override
 	public InteractionResult mobInteract(Player pPlayer, InteractionHand pHand){
 		ItemStack item = pPlayer.getMainHandItem();
-		if (item.is(CaerulaArborModItems.ISHARMLA_SPAWNER.get())){
+		if (item.is(CAItems.ISHARMLA_SPAWNER.get())){
 			this.transformToMonster();
 			return InteractionResult.SUCCESS;
 		}
@@ -341,16 +341,16 @@ public class IsharmlaEntity extends SeaMonster {
             this.setAnimation("animation.isharmla.start");
         }
         if (!this.level().isClientSide())
-            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 60, 9, false, false));
+            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 60, 9, false, false));
         if ((LevelAccessor) world instanceof Level _level) {
                 _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "isharmla_to_human")), SoundSource.HOSTILE, 2, 1);
         }
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()))
-            this.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).setBaseValue(4);
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-            this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(50);
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()))
-            this.getAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()).setBaseValue(0.01);
+        if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
+            this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).setBaseValue(4);
+        if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
+            this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(50);
+        if (this.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
+            this.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.01);
         for (Entity entityiterator : new ArrayList<>(world.players())) {
             if ((level().dimension()) == (entityiterator.level().dimension())) {
                 if (entityiterator instanceof ServerPlayer _player) {
@@ -422,14 +422,14 @@ public class IsharmlaEntity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        Entity enemy = null;
-        double sklp1 = 0;
-        double sklp2 = 0;
-        double dura = 0;
-        double healP = 0;
-        double absP = 0;
-        boolean isMonster = false;
-        boolean canAttack = false;
+        Entity enemy;
+        double sklp1;
+        double sklp2;
+        double dura;
+        double healP;
+        double absP;
+        boolean isMonster;
+        boolean canAttack;
         if (this.isAlive()) {
             sklp1 = (Entity) this instanceof IsharmlaEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP_1) : 0;
             sklp2 = (Entity) this instanceof IsharmlaEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP_2) : 0;
@@ -444,18 +444,17 @@ public class IsharmlaEntity extends SeaMonster {
             if (absP > 0) {
                 if (this != null) {
                     boolean isFullSecond = false;
-                    double damage = 0;
-                    double d = 0;
+                    double damage;
+                    double d;
                     double healthBonus = 0;
                     double attackBonus = 0;
-                    double itrHealth = 0;
-                    double itrAttack = 0;
-                    double beforeHealth = 0;
-                    double beforeAttack = 0;
-                    double t = 0;
+                    double itrHealth;
+                    double itrAttack;
+                    double beforeHealth;
+                    double beforeAttack;
+                    double t;
                     t = 60 - absP;
                     damage = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.15;
-                    isFullSecond = t > 0 && t % 20 == 0;
                     {
                         final Vec3 _center = new Vec3(x, y, z);
                         List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(64 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
@@ -486,7 +485,7 @@ public class IsharmlaEntity extends SeaMonster {
                                     itrHealth = (entityiterator instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.01;
                                     itrAttack = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) * 0.01;
                                     if (Math.random() < 0.25) {
-                                        WorldUtils.isharmlaLinkPtcToEntity(world, x - 0.5, y, z - 0.5, entityiterator);
+                                        sendLinkParticlesToEntity(world, x - 0.5, y, z - 0.5, entityiterator);
                                         if (d >= 3) {
                                             EntityUtils.pullToGladiia(entityiterator, this);
                                         }
@@ -514,9 +513,9 @@ public class IsharmlaEntity extends SeaMonster {
             if (isMonster) {
                 if (this != null) {
                     double p = 0;
-                    double r = 0;
-                    double t = 0;
-                    double ang = 0;
+                    double r;
+                    double t;
+                    double ang;
                     t = tickCount % 90;
                     for (int index0 = 0; index0 < 20; index0++) {
                         ang = Math.toRadians(index0 * 6 + t * 4);
@@ -526,14 +525,14 @@ public class IsharmlaEntity extends SeaMonster {
                                 _level1.sendParticles(ParticleTypes.END_ROD, (x + r * Math.sin(ang)), (y + 0.125), (z + r * Math.cos(ang)), 1, 0, 0.25, 0, 0.2);
                         }
                         if (world instanceof ServerLevel _level1)
-                            _level1.sendParticles(CaerulaArborModParticleTypes.EDERMAN_PTC.get(), (x + r * Math.sin(ang)), (y + 0.15), (z + r * Math.cos(ang)), 1, 0, 0.25, 0, 0.2);
+                            _level1.sendParticles(CAParticleTypes.EDERMAN_PTC.get(), (x + r * Math.sin(ang)), (y + 0.15), (z + r * Math.cos(ang)), 1, 0, 0.25, 0, 0.2);
                         r = 23 + Math.sin(index0 * 12);
                         if (Math.random() < 0.33) {
                             if (world instanceof ServerLevel _level1)
                                 _level1.sendParticles(ParticleTypes.END_ROD, (x + r * Math.sin(ang)), (y + 0.125), (z + r * Math.cos(ang)), 1, 0, 0.25, 0, 0.2);
                         }
                         if (world instanceof ServerLevel _level1)
-                            _level1.sendParticles(CaerulaArborModParticleTypes.EDERMAN_PTC.get(), (x + r * Math.sin(ang)), (y + 0.15), (z + r * Math.cos(ang)), 1, 0, 0.25, 0, 0.2);
+                            _level1.sendParticles(CAParticleTypes.EDERMAN_PTC.get(), (x + r * Math.sin(ang)), (y + 0.15), (z + r * Math.cos(ang)), 1, 0, 0.25, 0, 0.2);
                     }
                 }
                 if (sklp1 > 0) {
@@ -569,12 +568,11 @@ public class IsharmlaEntity extends SeaMonster {
                                 _datEntSetI.getEntityData().set(DATA_SKILLP_2, 200);
                             if ((Entity) this instanceof IsharmlaEntity _datEntSetI)
                                 _datEntSetI.getEntityData().set(DATA_DURATION, 40);
-                            dura = 40;
                             if (!this.level().isClientSide())
-                                this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 30, 9, false, false));
+                                this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 30, 9, false, false));
                             CaerulaArborMod.queueServerWork(15, () -> {
-                                Entity enemy1 = null;
-                                double d = 0;
+                                Entity enemy1;
+                                double d;
                                 enemy1 = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                                 d = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
                                 if (world instanceof Level _level) {
@@ -608,7 +606,7 @@ public class IsharmlaEntity extends SeaMonster {
                         _datEntSetI.getEntityData().set(DATA_DURATION, 30);
                     dura = 30;
                     CaerulaArborMod.queueServerWork(15, () -> {
-                        double atk = 0;
+                        double atk;
                         double count = 0;
                         atk = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
                         if (world instanceof Level _level) {
@@ -653,9 +651,8 @@ public class IsharmlaEntity extends SeaMonster {
                         _datEntSetI.getEntityData().set(DATA_SKILLP_2, 600);
                     if ((Entity) this instanceof IsharmlaEntity _datEntSetI)
                         _datEntSetI.getEntityData().set(DATA_DURATION, 30);
-                    dura = 30;
                     if (!this.level().isClientSide())
-                        this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 30, 9, false, false));
+                        this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 30, 9, false, false));
                     this.distributeIsharmlaTear(world, x, y, z);
                 }
                 if (tickCount % 400 == 80) {
@@ -718,9 +715,9 @@ public class IsharmlaEntity extends SeaMonster {
 		builder = builder.add(Attributes.ATTACK_DAMAGE, 16);
 		builder = builder.add(Attributes.FOLLOW_RANGE, 64);
 		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 1);
-		builder = builder.add(CaerulaArborModAttributes.GENERAL_DEFENSE.get(), 4);
-		builder = builder.add(CaerulaArborModAttributes.MAGIC_RESISTANCE.get(), 50);
-		builder = builder.add(CaerulaArborModAttributes.SANITY_MODIFIER.get(), 0.01);
+		builder = builder.add(CAAttributes.GENERAL_DEFENSE.get(), 4);
+		builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 50);
+		builder = builder.add(CAAttributes.SANITY_MODIFIER.get(), 0.01);
 		return builder;
 	}
 
@@ -743,8 +740,7 @@ public class IsharmlaEntity extends SeaMonster {
 	private PlayState attackingPredicate(AnimationState event) {
 		double d1 = this.getX() - this.xOld;
 		double d0 = this.getZ() - this.zOld;
-		float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
-		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
+        if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
 		}
@@ -825,11 +821,11 @@ public class IsharmlaEntity extends SeaMonster {
 	}
 
 	private void distributeIsharmlaTear(LevelAccessor world, double x, double y, double z) {
-		double r = 0;
-		double d = 0;
-		double tx = 0;
-		double tz = 0;
-		double ty = 0;
+		double r;
+		double d;
+		double tx;
+		double tz;
+		double ty;
 		for (int index0 = 0; index0 < 8; index0++) {
 			r = Mth.nextDouble(RandomSource.create(), 0, 6.283);
 			d = Mth.nextDouble(RandomSource.create(), 4, 18);
@@ -838,12 +834,27 @@ public class IsharmlaEntity extends SeaMonster {
 			ty = WorldUtils.findYzforTear(world, tx, y, tz);
 			if (ty < 114110) {
 				if (world instanceof ServerLevel _level) {
-					Entity entityToSpawn = CaerulaArborModEntities.ISHARMLA_TEAR.get().spawn(_level, BlockPos.containing(tx, ty, tz), MobSpawnType.MOB_SUMMONED);
+					Entity entityToSpawn = CAEntities.ISHARMLA_TEAR.get().spawn(_level, BlockPos.containing(tx, ty, tz), MobSpawnType.MOB_SUMMONED);
 					if (entityToSpawn != null) {
 						entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
 					}
 				}
 				break;
+			}
+		}
+	}
+
+	public static void sendLinkParticlesToEntity(LevelAccessor world, double x, double y, double z, Entity target) {
+		if (target == null) {
+			return;
+		}
+		double vx = target.getX() - (x + 0.5);
+		double vy = target.getY() - (y + 0.5);
+		double vz = target.getZ() - (z + 0.5);
+		double size = Math.max(Math.min(Math.round(Math.sqrt(vx * vx + vy * vy + vz * vz)), 32), 1);
+		for (int index = 0; index < (int) size; index++) {
+			if (world instanceof ServerLevel level) {
+				level.sendParticles(CAParticleTypes.ISHARMLA_CURSE_PARTICLE.get(), x + 0.5 + vx / size * index, y + 0.5 + vy / size * index + 0.5, z + 0.5 + vz / size * index, 5, 0.32, 0.5, 0.32, 0.05);
 			}
 		}
 	}
@@ -921,7 +932,7 @@ public class IsharmlaEntity extends SeaMonster {
 
 		this.setHealth((float) maxHealth);
 		if (!this.level().isClientSide())
-			this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 40, 9, false, false));
+			this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 40, 9, false, false));
 		if (!this.level().isClientSide())
 			this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 99999, 2, false, false));
 
@@ -965,10 +976,10 @@ public class IsharmlaEntity extends SeaMonster {
 		this.getEntityData().set(DATA_SKILLP_2, 280);
 		this.getEntityData().set(DATA_IS_MONSTER, false);
 
-		this.removeEffect(CaerulaArborModMobEffects.INVULNERABLE.get());
+		this.removeEffect(CAMobEffects.INVULNERABLE.get());
 		this.setHealth((float) Math.max(maxHealth * Math.min(recordedHealth * 0.001 + 0.03, 1), 1));
 		if (!this.level().isClientSide())
-			this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 40, 9, false, false));
+			this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 40, 9, false, false));
 
 		return true;
 	}
@@ -980,12 +991,12 @@ public class IsharmlaEntity extends SeaMonster {
 				for (int index0 = 0; index0 < 120; index0++) {
 					int radius = expanding ? currentIter : (10 - currentIter);
 					if (world instanceof ServerLevel _level)
-						_level.sendParticles(CaerulaArborModParticleTypes.EDERMAN_PTC.get(), (x + radius * Math.sin(Math.toRadians(3 * index0))), (y + 0.125),
+						_level.sendParticles(CAParticleTypes.EDERMAN_PTC.get(), (x + radius * Math.sin(Math.toRadians(3 * index0))), (y + 0.125),
 								(z + radius * Math.cos(Math.toRadians(3 * index0))), 2, 0.05, 0.05, 0.05, 0.1);
 					if (world instanceof ServerLevel _level)
 						_level.sendParticles(ParticleTypes.END_ROD, (x + radius * Math.sin(Math.toRadians(3 * index0))), (y + 0.125), (z + radius * Math.cos(Math.toRadians(3 * index0))), 1, 0.05, 0.05, 0.05, 0.1);
 					if (world instanceof ServerLevel _level)
-						_level.sendParticles(CaerulaArborModParticleTypes.EDERMAN_PTC.get(), (x + 2 * Math.sin(Math.toRadians(3 * index0))), (y + currentIter * 0.5), (z + 2 * Math.cos(Math.toRadians(3 * index0))), 2,
+						_level.sendParticles(CAParticleTypes.EDERMAN_PTC.get(), (x + 2 * Math.sin(Math.toRadians(3 * index0))), (y + currentIter * 0.5), (z + 2 * Math.cos(Math.toRadians(3 * index0))), 2,
 								0.05, 0.05, 0.05, 0.1);
 					if (world instanceof ServerLevel _level)
 						_level.sendParticles(ParticleTypes.END_ROD, (x + 2 * Math.sin(Math.toRadians(3 * index0))), (y + currentIter * 0.5), (z + 2 * Math.cos(Math.toRadians(3 * index0))), 1, 0.05, 0.05, 0.05, 0.1);

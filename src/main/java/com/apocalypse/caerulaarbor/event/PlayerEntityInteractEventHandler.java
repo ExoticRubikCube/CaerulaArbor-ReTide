@@ -4,10 +4,9 @@ import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.api.event.SanityEvent;
 import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.entity.*;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.system.TransformIndexProcedure;
-import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
@@ -69,7 +68,7 @@ public class PlayerEntityInteractEventHandler {
             return;
         }
 
-        if (itemstack.getItem() == CaerulaArborModItems.OCEANIZE_CATALYST.get()) {
+        if (itemstack.getItem() == CAItems.OCEANIZE_CATALYST.get()) {
             double perc = 1 - (entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) / (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1);
 
             if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "cannot_transform")))
@@ -110,10 +109,10 @@ public class PlayerEntityInteractEventHandler {
         if (entity == null || sourceentity == null) return;
 
         if (entity instanceof Sheep) {
-            if ((sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CaerulaArborModItems.RAINBOW_CANDY.get()) {
+            if ((sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.RAINBOW_CANDY.get()) {
                 (sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                 entity.setCustomName(Component.literal("jeb_"));
-            } else if ((sourceentity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == CaerulaArborModItems.RAINBOW_CANDY.get()) {
+            } else if ((sourceentity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == CAItems.RAINBOW_CANDY.get()) {
                 (sourceentity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).shrink(1);
                 entity.setCustomName(Component.literal("jeb_"));
             }
@@ -133,20 +132,20 @@ public class PlayerEntityInteractEventHandler {
         if (entity == null || sourceentity == null) return;
         if (clientside) return;
 
-        if (itemstack.getItem() == CaerulaArborModItems.OCEAN_EXTRACTOR.get()) {
+        if (itemstack.getItem() == CAItems.OCEAN_EXTRACTOR.get()) {
             boolean extracted = false;
 
             if (entity instanceof ReaperFishEntity) {
                 extracted = true;
                 if (sourceentity instanceof Player _player) {
-                    ItemStack _setstack = new ItemStack(CaerulaArborModItems.DNA_REAPER.get()).copy();
+                    ItemStack _setstack = new ItemStack(CAItems.DNA_REAPER.get()).copy();
                     _setstack.setCount(1);
                     ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
                 }
             } else if (entity instanceof OceanizedHorseEntity) {
                 extracted = true;
                 if (sourceentity instanceof Player _player) {
-                    ItemStack _setstack = new ItemStack(CaerulaArborModItems.DNA_HORSE.get()).copy();
+                    ItemStack _setstack = new ItemStack(CAItems.DNA_HORSE.get()).copy();
                     _setstack.setCount(1);
                     ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
                 }
@@ -157,7 +156,7 @@ public class PlayerEntityInteractEventHandler {
                 entity.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "extractor_damage"))), sourceentity),
                         (float) 0.5);
             }
-        } else if (itemstack.getItem() == CaerulaArborModItems.ROCINANTE_INJECTOR.get() && entity instanceof OceanizedHorseEntity) {
+        } else if (itemstack.getItem() == CAItems.ROCINANTE_INJECTOR.get() && entity instanceof OceanizedHorseEntity) {
             itemstack.shrink(1);
             if (world instanceof Level _level) {
                 if (!_level.isClientSide()) {
@@ -169,14 +168,14 @@ public class PlayerEntityInteractEventHandler {
             if (world instanceof ServerLevel _level)
                 _level.sendParticles(ParticleTypes.EXPLOSION_EMITTER, x, (y + 1), z, 32, 1, 1, 1, 1);
             if (sourceentity instanceof Player _player) {
-                ItemStack _setstack = new ItemStack(CaerulaArborModItems.OCEAN_EXTRACTOR.get()).copy();
+                ItemStack _setstack = new ItemStack(CAItems.OCEAN_EXTRACTOR.get()).copy();
                 _setstack.setCount(1);
                 ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
             }
             if (!entity.level().isClientSide())
                 entity.discard();
             if (world instanceof ServerLevel _level) {
-                Entity entityToSpawn = CaerulaArborModEntities.ROCINANTE.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+                Entity entityToSpawn = CAEntities.ROCINANTE.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn != null) {
                     entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                 }

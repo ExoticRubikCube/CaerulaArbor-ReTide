@@ -2,9 +2,9 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModGameRules;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAGameRules;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -72,7 +72,7 @@ public class SuperBigCatEntity extends SeaMonster {
 	private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.GREEN, ServerBossEvent.BossBarOverlay.PROGRESS);
 
 	public SuperBigCatEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.SUPER_BIG_CAT.get(), world);
+		this(CAEntities.SUPER_BIG_CAT.get(), world);
 	}
 
 	public SuperBigCatEntity(EntityType<SuperBigCatEntity> type, Level world) {
@@ -209,7 +209,7 @@ public class SuperBigCatEntity extends SeaMonster {
 
 	private void superCatRanged(double x, double y, double z) {
 		Entity enemy = this.getTarget();
-		double damage = 0;
+		double damage;
 		Vec3 center = new Vec3(x, y, z);
 		List<Entity> entities = this.level().getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(10 / 2d), entity -> true).stream()
 				.sorted(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(center))).toList();
@@ -260,11 +260,11 @@ public class SuperBigCatEntity extends SeaMonster {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-		if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get())) {
-			this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(4);
+		if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get())) {
+			this.getAttribute(CAAttributes.SANITY_RATE.get()).setBaseValue(4);
 		}
-		if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get())) {
-			this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(35);
+		if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())) {
+			this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(35);
 		}
 		return retval;
 	}
@@ -289,15 +289,15 @@ public class SuperBigCatEntity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        double t = 0;
-        double angl = 0;
+        double t;
+        double angl;
         if (tickCount % 400 == 40) {
-            if (EntityUtils.getSeabornAround(world, x, y, z, this) < (world.getLevelData().getGameRules().getInt(CaerulaArborModGameRules.CLONE_NUMBER_LIMIT))) {
+            if (EntityUtils.getSeabornAround(world, x, y, z, this) < (world.getLevelData().getGameRules().getInt(CAGameRules.CLONE_NUMBER_LIMIT))) {
                 t = Mth.nextInt(RandomSource.create(), 2, 4);
                 for (int index0 = 0; index0 < (int) t; index0++) {
                     angl = Mth.nextDouble(RandomSource.create(), 0, 6.283);
                     if (world instanceof ServerLevel _level) {
-                        Entity entityToSpawn = CaerulaArborModEntities.OCEANIZED_CAT.get().spawn(_level, BlockPos.containing(x + 4 * Math.sin(angl), y + 1, z + 4 * Math.cos(angl)), MobSpawnType.MOB_SUMMONED);
+                        Entity entityToSpawn = CAEntities.OCEANIZED_CAT.get().spawn(_level, BlockPos.containing(x + 4 * Math.sin(angl), y + 1, z + 4 * Math.cos(angl)), MobSpawnType.MOB_SUMMONED);
                         if (entityToSpawn != null) {
                             entityToSpawn.setYRot(getYRot());
                             entityToSpawn.setYBodyRot(getYRot());
@@ -416,11 +416,11 @@ public class SuperBigCatEntity extends SeaMonster {
             double x = this.getX();
             double y = this.getY();
             double z = this.getZ();
-            double t = 0;
-            double angl = 0;
-            double yyy = 0;
-            double xxx = 0;
-            double zzz = 0;
+            double t;
+            double angl;
+            double yyy;
+            double xxx;
+            double zzz;
             for (int index0 = 0; index0 < 6; index0++) {
                 angl = Mth.nextDouble(RandomSource.create(), 0, 6.283);
                 t = Mth.nextDouble(RandomSource.create(), 2, 6);
@@ -429,7 +429,7 @@ public class SuperBigCatEntity extends SeaMonster {
                 yyy = WorldUtils.findValidYForCat(world, x, y, z, xxx, y + 1, zzz);
                 if (yyy < 114513) {
                     if (world instanceof ServerLevel _level) {
-                        Entity entityToSpawn = CaerulaArborModEntities.OCEANIZED_CAT.get().spawn(_level, BlockPos.containing(xxx, yyy, zzz), MobSpawnType.MOB_SUMMONED);
+                        Entity entityToSpawn = CAEntities.OCEANIZED_CAT.get().spawn(_level, BlockPos.containing(xxx, yyy, zzz), MobSpawnType.MOB_SUMMONED);
                         if (entityToSpawn != null) {
                             entityToSpawn.setYRot(getYRot());
                             entityToSpawn.setYBodyRot(getYRot());

@@ -1,7 +1,7 @@
 
 package com.apocalypse.caerulaarbor.item;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -23,7 +23,7 @@ import java.util.List;
 
 public class PathShaperSpawneggItem extends ForgeSpawnEggItem {
 	public PathShaperSpawneggItem() {
-		super(CaerulaArborModEntities.ROUTE_SHAPER, -1, -1, new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON));
+		super(CAEntities.ROUTE_SHAPER, -1, -1, new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON));
 	}
 
 	@Override
@@ -47,14 +47,14 @@ public class PathShaperSpawneggItem extends ForgeSpawnEggItem {
             return InteractionResult.PASS;
         if (entity.isShiftKeyDown()) {
             if (world instanceof ServerLevel _level) {
-                Entity entityToSpawn = CaerulaArborModEntities.LINGERING_PATHSHAPER.get().spawn(_level, BlockPos.containing(x + direction.getStepX() + 0.5, y + direction.getStepY() + 0.5, z + direction.getStepZ() + 0.5), MobSpawnType.MOB_SUMMONED);
+                Entity entityToSpawn = CAEntities.LINGERING_PATHSHAPER.get().spawn(_level, BlockPos.containing(x + direction.getStepX() + 0.5, y + direction.getStepY() + 0.5, z + direction.getStepZ() + 0.5), MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn != null) {
                     entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                 }
             }
         } else {
             if (world instanceof ServerLevel _level) {
-                Entity entityToSpawn = CaerulaArborModEntities.ROUTE_SHAPER.get().spawn(_level, BlockPos.containing(x + direction.getStepX() + 0.5, y + direction.getStepY() + 0.5, z + direction.getStepZ() + 0.5), MobSpawnType.MOB_SUMMONED);
+                Entity entityToSpawn = CAEntities.ROUTE_SHAPER.get().spawn(_level, BlockPos.containing(x + direction.getStepX() + 0.5, y + direction.getStepY() + 0.5, z + direction.getStepZ() + 0.5), MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn != null) {
                     entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                 }

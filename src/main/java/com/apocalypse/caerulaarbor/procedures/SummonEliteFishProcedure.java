@@ -1,6 +1,6 @@
 package com.apocalypse.caerulaarbor.procedures;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
@@ -20,31 +20,31 @@ import net.minecraftforge.registries.RegistryObject;
 public class SummonEliteFishProcedure {
 	@SuppressWarnings("rawtypes")
 	private static final RegistryObject[] WATER_ELITE_POOL = {
-		CaerulaArborModEntities.APOSTLE_PROKARYOTE,
-		CaerulaArborModEntities.NUCLEIC_MALEFICENT
+		CAEntities.APOSTLE_PROKARYOTE,
+		CAEntities.NUCLEIC_MALEFICENT
 	};
 
 	@SuppressWarnings("rawtypes")
 	private static final RegistryObject[] LAND_ELITE_POOL = {
-		CaerulaArborModEntities.BASELAYER_ABYSSAL,
-		CaerulaArborModEntities.CRACKER_ABYSSAL,
-		CaerulaArborModEntities.CREEPER_FISH,
-		CaerulaArborModEntities.GUIDE_ABYSSAL,
-		CaerulaArborModEntities.PUNCTURE_FISH,
-		CaerulaArborModEntities.REAPER_FISH,
-		CaerulaArborModEntities.UMBRELLA_ABYSSAL,
-		CaerulaArborModEntities.PREGNANT_FISH,
-		CaerulaArborModEntities.FLEE_FISH,
-		CaerulaArborModEntities.CHEST_FISH
+		CAEntities.BASELAYER_ABYSSAL,
+		CAEntities.CRACKER_ABYSSAL,
+		CAEntities.CREEPER_FISH,
+		CAEntities.GUIDE_ABYSSAL,
+		CAEntities.PUNCTURE_FISH,
+		CAEntities.REAPER_FISH,
+		CAEntities.UMBRELLA_ABYSSAL,
+		CAEntities.PREGNANT_FISH,
+		CAEntities.FLEE_FISH,
+		CAEntities.CHEST_FISH
 	};
 
 	@SuppressWarnings("rawtypes")
 	private static final RegistryObject[] OCEANIZED_ELITE_POOL = {
-		CaerulaArborModEntities.OCEANIZED_VINDICATOR,
-		CaerulaArborModEntities.OCEANIZED_EVOKER,
-		CaerulaArborModEntities.OCEANIZED_RAVAGER,
-		CaerulaArborModEntities.OCEANIZED_ENDERMAN,
-		CaerulaArborModEntities.COMPASSION_PRAYER
+		CAEntities.OCEANIZED_VINDICATOR,
+		CAEntities.OCEANIZED_EVOKER,
+		CAEntities.OCEANIZED_RAVAGER,
+		CAEntities.OCEANIZED_ENDERMAN,
+		CAEntities.COMPASSION_PRAYER
 	};
 
 	public static void execute(LevelAccessor world, double xx, double yy, double zz) {

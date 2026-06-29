@@ -1,7 +1,7 @@
 
 package com.apocalypse.caerulaarbor.block;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
+import com.apocalypse.caerulaarbor.init.CABlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -63,11 +63,11 @@ public class TrailLeaveBlock extends LeavesBlock {
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();
-        BlockState targetBlock = Blocks.AIR.defaultBlockState();
-        Direction dire = Direction.NORTH;
+        BlockState targetBlock;
+        Direction dire;
         double expand = 0;
-        double longev = 0;
-        boolean drop = false;
+        double longev;
+        boolean drop;
         if ((blockstate.getBlock().getStateDefinition().getProperty("grow_age") instanceof IntegerProperty _getip1 ? blockstate.getValue(_getip1) : -1) < 64) {
             {
                 int _value = (blockstate.getBlock().getStateDefinition().getProperty("grow_age") instanceof IntegerProperty _getip3 ? blockstate.getValue(_getip3) : -1) + 1;
@@ -88,11 +88,11 @@ public class TrailLeaveBlock extends LeavesBlock {
                         }
                         dire = directioniterator;
                         targetBlock = (((LevelAccessor) world).getBlockState(BlockPos.containing((double) x + dire.getStepX(), (double) y + dire.getStepY(), (double) z + dire.getStepZ())));
-                        if (targetBlock.is(BlockTags.create(new ResourceLocation("minecraft:leaves"))) && !(targetBlock.getBlock() == CaerulaArborModBlocks.TRAIL_LEAVE.get())) {
+                        if (targetBlock.is(BlockTags.create(new ResourceLocation("minecraft:leaves"))) && !(targetBlock.getBlock() == CABlocks.TRAIL_LEAVE.get())) {
                             {
                                 BlockPos _bp = BlockPos.containing((double) x + dire.getStepX(), (double) y + dire.getStepY(), (double) z + dire.getStepZ());
                                 BlockState _bso = ((LevelAccessor) world).getBlockState(_bp);
-                                BlockState _bs = CaerulaArborModBlocks.TRAIL_LEAVE.get().withPropertiesOf(_bso).setValue(LONGEVITY, (int) longev);
+                                BlockState _bs = CABlocks.TRAIL_LEAVE.get().withPropertiesOf(_bso).setValue(LONGEVITY, (int) longev);
                                 ((LevelAccessor) world).setBlock(_bp, _bs, 3);
                             }
                         }
@@ -105,19 +105,19 @@ public class TrailLeaveBlock extends LeavesBlock {
                 for (int index0 = 0; index0 < 64; index0++) {
                     targetBlock = (((LevelAccessor) world).getBlockState(BlockPos.containing(x, (double) y - index0 - 1, z)));
                     if (world.isEmptyBlock(BlockPos.containing(x, (double) y - index0 - 1, z)) || targetBlock.canBeReplaced()) {
-                        if (CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing(x, (double) y - index0 - 1, z))) {
+                        if (CABlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing(x, (double) y - index0 - 1, z))) {
                             drop = true;
                             break;
                         }
                         continue;
                     } else {
-                        if (targetBlock.getBlock() == CaerulaArborModBlocks.TRAIL_LOG.get() || targetBlock.getBlock() == CaerulaArborModBlocks.STRIPPED_TRAIL_LOG.get()) {
+                        if (targetBlock.getBlock() == CABlocks.TRAIL_LOG.get() || targetBlock.getBlock() == CABlocks.STRIPPED_TRAIL_LOG.get()) {
                             drop = false;
                         }
-                        if (targetBlock.getBlock() == CaerulaArborModBlocks.NETHERSEA_WOOD.get() || targetBlock.getBlock() == CaerulaArborModBlocks.STRIPPED_NETHERSEA_WOOD.get()) {
+                        if (targetBlock.getBlock() == CABlocks.NETHERSEA_WOOD.get() || targetBlock.getBlock() == CABlocks.STRIPPED_NETHERSEA_WOOD.get()) {
                             drop = false;
                         }
-                        if (targetBlock.getBlock() == CaerulaArborModBlocks.TRAIL_LEAVE.get()) {
+                        if (targetBlock.getBlock() == CABlocks.TRAIL_LEAVE.get()) {
                             drop = false;
                         }
                         if (index0 > 0) {
@@ -129,7 +129,7 @@ public class TrailLeaveBlock extends LeavesBlock {
                 if (drop) {
                     ((LevelAccessor) world).setBlock(BlockPos.containing(x, y, z), Blocks.AIR.defaultBlockState(), 3);
                     if ((LevelAccessor) world instanceof ServerLevel _level)
-                        FallingBlockEntity.fall(_level, BlockPos.containing(x, y, z), CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState());
+                        FallingBlockEntity.fall(_level, BlockPos.containing(x, y, z), CABlocks.SEA_TRAIL_INIT.get().defaultBlockState());
                 }
             }
         }

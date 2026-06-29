@@ -1,7 +1,7 @@
 package com.apocalypse.caerulaarbor.block;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
+import com.apocalypse.caerulaarbor.init.CABlocks;
 import com.apocalypse.caerulaarbor.procedures.PokeSlightlyProcedure;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -88,7 +88,7 @@ public class TrailLogBlock extends Block {
 		int z = pos.getZ();
         BlockState targetBlock;
         Direction dire;
-        double longev = 0;
+        double longev;
         if ((blockstate.getBlock().getStateDefinition().getProperty("grow_age") instanceof IntegerProperty _getip1 ? blockstate.getValue(_getip1) : -1) < 64) {
             {
                 int _value = (blockstate.getBlock().getStateDefinition().getProperty("grow_age") instanceof IntegerProperty _getip3 ? blockstate.getValue(_getip3) : -1) + 1;
@@ -112,12 +112,12 @@ public class TrailLogBlock extends Block {
                         if (targetBlock.is(BlockTags.create(new ResourceLocation("minecraft:logs"))) && !targetBlock.is(BlockTags.create(new ResourceLocation(CaerulaArborMod.MODID, "cannot_cover")))) {
                             BlockPos _bp = BlockPos.containing((double) x + dire.getStepX(), (double) y + dire.getStepY(), (double) z + dire.getStepZ());
                             BlockState _bso = ((LevelAccessor) world).getBlockState(_bp);
-                            BlockState _bs = CaerulaArborModBlocks.TRAIL_LOG.get().withPropertiesOf(_bso).setValue(LONGEVITY, (int) longev);
+                            BlockState _bs = CABlocks.TRAIL_LOG.get().withPropertiesOf(_bso).setValue(LONGEVITY, (int) longev);
                             ((LevelAccessor) world).setBlock(_bp, _bs, 3);
-                        } else if (targetBlock.is(BlockTags.create(new ResourceLocation("minecraft:leaves"))) && !(targetBlock.getBlock() == CaerulaArborModBlocks.TRAIL_LEAVE.get())) {
+                        } else if (targetBlock.is(BlockTags.create(new ResourceLocation("minecraft:leaves"))) && !(targetBlock.getBlock() == CABlocks.TRAIL_LEAVE.get())) {
                             BlockPos _bp = BlockPos.containing((double) x + dire.getStepX(), (double) y + dire.getStepY(), (double) z + dire.getStepZ());
                             BlockState _bso = ((LevelAccessor) world).getBlockState(_bp);
-                            BlockState _bs = CaerulaArborModBlocks.TRAIL_LEAVE.get().withPropertiesOf(_bso);
+                            BlockState _bs = CABlocks.TRAIL_LEAVE.get().withPropertiesOf(_bso);
                             ((LevelAccessor) world).setBlock(_bp, _bs, 3);
                         } else if (targetBlock.getBlock() == Blocks.VINE) {
                             world.destroyBlock(BlockPos.containing((double) x + dire.getStepX(), (double) y + dire.getStepY(), (double) z + dire.getStepZ()), false);
@@ -144,12 +144,12 @@ public class TrailLogBlock extends Block {
 		int z = pos.getZ();
         InteractionResult result = InteractionResult.PASS;
         if (entity.getMainHandItem().is(ItemTags.create(new ResourceLocation("minecraft:axes"))) || ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).is(ItemTags.create(new ResourceLocation("minecraft:axes")))) {
-            world.levelEvent(2001, BlockPos.containing(x, y, z), getId(CaerulaArborModBlocks.TRAIL_LOG.get().defaultBlockState()));
+            world.levelEvent(2001, BlockPos.containing(x, y, z), getId(CABlocks.TRAIL_LOG.get().defaultBlockState()));
             if ((LevelAccessor) world instanceof Level _level) {
                 _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.axe.strip")), SoundSource.BLOCKS, 1, 1);
             }
             BlockPos _bp = BlockPos.containing(x, y, z);
-            BlockState _bs = CaerulaArborModBlocks.STRIPPED_TRAIL_LOG.get().withPropertiesOf(blockstate);
+            BlockState _bs = CABlocks.STRIPPED_TRAIL_LOG.get().withPropertiesOf(blockstate);
             ((LevelAccessor) world).setBlock(_bp, _bs, 3);
             result = InteractionResult.SUCCESS;
         }

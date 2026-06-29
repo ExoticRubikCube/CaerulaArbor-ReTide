@@ -1,8 +1,8 @@
 package com.apocalypse.caerulaarbor.potion;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -28,7 +28,7 @@ import java.util.List;
 public class ImmortalMobEffect extends MobEffect {
     public ImmortalMobEffect() {
         super(MobEffectCategory.NEUTRAL, -4648944);
-        this.addAttributeModifier(CaerulaArborModAttributes.SANITY_RESISTANCE.get(), "bcdd0e0f-6ece-3c18-9266-a804849cd8fc", 100, AttributeModifier.Operation.ADDITION);
+        this.addAttributeModifier(CAAttributes.SANITY_RESISTANCE.get(), "bcdd0e0f-6ece-3c18-9266-a804849cd8fc", 100, AttributeModifier.Operation.ADDITION);
         this.addAttributeModifier(Attributes.KNOCKBACK_RESISTANCE, "7626f02f-92bf-3575-935f-e06e87d78bd1", 10, AttributeModifier.Operation.ADDITION);
     }
 
@@ -50,7 +50,7 @@ public class ImmortalMobEffect extends MobEffect {
         LevelAccessor world = entity.level();
         if (entity == null)
             return;
-        double ang = 0;
+        double ang;
         double phase = 0;
         if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
             _entity.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 20, 0, false, false));
@@ -61,7 +61,7 @@ public class ImmortalMobEffect extends MobEffect {
         entity.invulnerableTime = 10;
         ang = Mth.nextDouble(RandomSource.create(), 0, 6.283);
         if (world instanceof ServerLevel _level)
-            _level.sendParticles(CaerulaArborModParticleTypes.IMMORTAL_PTC.get(), (entity.getX() + 1.5 * Math.sin(ang)), (entity.getY() + 1.25), (entity.getZ() + 1.5 * Math.cos(ang)), 1, 0.1, 2, 0.1, 0.2);
+            _level.sendParticles(CAParticleTypes.IMMORTAL_PTC.get(), (entity.getX() + 1.5 * Math.sin(ang)), (entity.getY() + 1.25), (entity.getZ() + 1.5 * Math.cos(ang)), 1, 0.1, 2, 0.1, 0.2);
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.apocalypse.caerulaarbor.procedures;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEnchantments;
+import com.apocalypse.caerulaarbor.init.CAEnchantments;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
@@ -24,15 +24,15 @@ public class TridentEnchantProcedure {
 			return;
         if ((entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == itemstack.getItem()) {
 			if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.SHARPNESS, (entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY)) != 0
-					&& (entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).getEnchantmentLevel(Enchantments.SHARPNESS) > itemstack.getEnchantmentLevel(CaerulaArborModEnchantments.SYNESTHESIA.get())) {
+					&& (entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).getEnchantmentLevel(Enchantments.SHARPNESS) > itemstack.getEnchantmentLevel(CAEnchantments.SYNESTHESIA.get())) {
 				{
 					Map<Enchantment, Integer> _enchantments = EnchantmentHelper.getEnchantments(itemstack);
-					if (_enchantments.containsKey(CaerulaArborModEnchantments.SYNESTHESIA.get())) {
-						_enchantments.remove(CaerulaArborModEnchantments.SYNESTHESIA.get());
+					if (_enchantments.containsKey(CAEnchantments.SYNESTHESIA.get())) {
+						_enchantments.remove(CAEnchantments.SYNESTHESIA.get());
 						EnchantmentHelper.setEnchantments(_enchantments, itemstack);
 					}
 				}
-				itemstack.enchant(CaerulaArborModEnchantments.SYNESTHESIA.get(), (entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).getEnchantmentLevel(Enchantments.SHARPNESS));
+				itemstack.enchant(CAEnchantments.SYNESTHESIA.get(), (entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).getEnchantmentLevel(Enchantments.SHARPNESS));
 				{
 					Map<Enchantment, Integer> _enchantments = EnchantmentHelper.getEnchantments((entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY));
 					if (_enchantments.containsKey(Enchantments.SHARPNESS)) {

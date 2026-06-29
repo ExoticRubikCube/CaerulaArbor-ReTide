@@ -23,7 +23,7 @@ public class OceanizedRavagerModel extends GeoModel<OceanizedRavagerEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(OceanizedRavagerEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/oceanized_ravager.png");
 	}
 
 	@Override

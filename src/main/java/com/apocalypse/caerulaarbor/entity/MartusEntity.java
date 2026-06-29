@@ -69,9 +69,7 @@ import java.util.List;
 public class MartusEntity extends SeaMonster {
 	private int releaseTime = 0;
 
-	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(MartusEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(MartusEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(MartusEntity.class, EntityDataSerializers.STRING);
 
 	public static final EntityDataAccessor<Integer> DATA_phase = SynchedEntityData.defineId(MartusEntity.class, EntityDataSerializers.INT);
 	public static final EntityDataAccessor<Integer> DATA_skillp1 = SynchedEntityData.defineId(MartusEntity.class, EntityDataSerializers.INT);
@@ -83,7 +81,7 @@ public class MartusEntity extends SeaMonster {
 	private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.NOTCHED_6);
 
 	public MartusEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.MARTUS.get(), world);
+		this(CAEntities.MARTUS.get(), world);
 	}
 
 	public MartusEntity(EntityType<MartusEntity> type, Level world) {
@@ -98,20 +96,10 @@ public class MartusEntity extends SeaMonster {
 	@Override
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(SHOOT, false);
 		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(TEXTURE, "martus");
 		this.entityData.define(DATA_phase, 0);
 		this.entityData.define(DATA_skillp1, 200);
 		this.entityData.define(DATA_skillp2, 200);
-	}
-
-	public void setTexture(String texture) {
-		this.entityData.set(TEXTURE, texture);
-	}
-
-	public String getTexture() {
-		return this.entityData.get(TEXTURE);
 	}
 
 	@Override
@@ -203,17 +191,17 @@ public class MartusEntity extends SeaMonster {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
         LevelAccessor world1 = this.level();
         if (this != null) {
-            if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()))
-                this.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).setBaseValue(16384);
-            if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-                this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(100);
+            if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
+                this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).setBaseValue(16384);
+            if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
+                this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(100);
             new Object() {
                 void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
-                    double r = 0;
-                    double d = 0;
-                    double tx = 0;
-                    double tz = 0;
-                    double ty = 0;
+                    double r;
+                    double d;
+                    double tx;
+                    double tz;
+                    double ty;
                     for (int index0 = 0; index0 < 8; index0++) {
                         r = Mth.nextDouble(RandomSource.create(), 0, 6.283);
                         d = Mth.nextDouble(RandomSource.create(), 6, 12);
@@ -230,7 +218,7 @@ public class MartusEntity extends SeaMonster {
                                         _prop = _bs.getBlock().getStateDefinition().getProperty("axis");
                                         return _prop instanceof EnumProperty _ep && _ep.getPossibleValues().contains(newValue.getAxis()) ? _bs.setValue(_ep, newValue.getAxis()) : _bs;
                                     }
-                                }.with(CaerulaArborModBlocks.ABANDONED_SULPTURE.get().defaultBlockState(), new Object() {
+                                }.with(CABlocks.ABANDONED_SULPTURE.get().defaultBlockState(), new Object() {
                                     public Direction getValue() {
                                         Direction _dir = Direction.NORTH;
                                         int _num = Mth.nextInt(RandomSource.create(), 1, 4);
@@ -262,23 +250,29 @@ public class MartusEntity extends SeaMonster {
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
-		compound.putString("Texture", this.getTexture());
-		compound.putInt("Dataphase", this.entityData.get(DATA_phase));
-		compound.putInt("Dataskillp1", this.entityData.get(DATA_skillp1));
-		compound.putInt("Dataskillp2", this.entityData.get(DATA_skillp2));
+		compound.putInt("Phase", this.entityData.get(DATA_phase));
+		compound.putInt("PrimarySkillCooldown", this.entityData.get(DATA_skillp1));
+		compound.putInt("SecondarySkillCooldown", this.entityData.get(DATA_skillp2));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
-		if (compound.contains("Texture"))
-			this.setTexture(compound.getString("Texture"));
-		if (compound.contains("Dataphase"))
+		if (compound.contains("Phase")) {
+			this.entityData.set(DATA_phase, compound.getInt("Phase"));
+		} else if (compound.contains("Dataphase")) {
 			this.entityData.set(DATA_phase, compound.getInt("Dataphase"));
-		if (compound.contains("Dataskillp1"))
+		}
+		if (compound.contains("PrimarySkillCooldown")) {
+			this.entityData.set(DATA_skillp1, compound.getInt("PrimarySkillCooldown"));
+		} else if (compound.contains("Dataskillp1")) {
 			this.entityData.set(DATA_skillp1, compound.getInt("Dataskillp1"));
-		if (compound.contains("Dataskillp2"))
+		}
+		if (compound.contains("SecondarySkillCooldown")) {
+			this.entityData.set(DATA_skillp2, compound.getInt("SecondarySkillCooldown"));
+		} else if (compound.contains("Dataskillp2")) {
 			this.entityData.set(DATA_skillp2, compound.getInt("Dataskillp2"));
+		}
 	}
 
 	@Override
@@ -288,239 +282,233 @@ public class MartusEntity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if (this != null) {
-            Entity tgt = null;
-            double sklp1 = 0;
-            double sklp2 = 0;
-            double phase = 0;
-            double perc = 0;
-            if (this.isAlive()) {
-                sklp1 = (Entity) this instanceof MartusEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp1) : 0;
-                sklp2 = (Entity) this instanceof MartusEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp2) : 0;
-                phase = (Entity) this instanceof MartusEntity _datEntI ? _datEntI.getEntityData().get(DATA_phase) : 0;
-                if (tickCount % 12 == 0) {
-                    if (this != null) {
+        Entity tgt;
+        double sklp1;
+        double sklp2;
+        double phase;
+        double perc;
+        if (this.isAlive()) {
+            sklp1 = (Entity) this instanceof MartusEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp1) : 0;
+            sklp2 = (Entity) this instanceof MartusEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp2) : 0;
+            phase = (Entity) this instanceof MartusEntity _datEntI ? _datEntI.getEntityData().get(DATA_phase) : 0;
+            if (tickCount % 12 == 0) {
+                double num = 0;
+                double limit;
+                limit = 2;
+                if (MapVariables.get(world).strategy_subsisting > 3) {
+                    limit = 3;
+                }
+                {
+                    final Vec3 _center = new Vec3(x, y, z);
+                    List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(96 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+                    for (Entity entityiterator : _entfound) {
+                        if (!(entityiterator instanceof Mob)) {
+                            continue;
+                        }
+                        if (entityiterator instanceof LivingEntity _livEnt1 && _livEnt1.hasEffect(CAMobEffects.GUIDED_EVO.get())) {
+                            num = num + 1;
+                            this.spawnParticleLink(entityiterator);
+                            CaerulaArborMod.queueServerWork(3, () -> {
+                                this.spawnParticleLink(entityiterator);
+                            });
+                            CaerulaArborMod.queueServerWork(6, () -> {
+                                this.spawnParticleLink(entityiterator);
+                            });
+                            CaerulaArborMod.queueServerWork(9, () -> {
+                                this.spawnParticleLink(entityiterator);
+                            });
+                        }
+                        if (num >= limit) {
+                            break;
+                        }
+                    }
+                }
+            }
+            if (tickCount % 100 == 0) {
+                if (WorldUtils.isDistFromGround(world, x, y, z)) {
+                    push(0, (-0.64), 0);
+                }
+            }
+            if (phase < 0.33) {
+                if (tickCount % 2 == 0) {
+                    this.spawnMartusParticleRim();
+                }
+                if (!this.hasEffect(CAMobEffects.INVULNERABLE.get())) {
+                    if (!this.level().isClientSide())
+                        this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 10000, 9, false, false));
+                }
+                if (sklp1 > 0) {
+                    if ((Entity) this instanceof MartusEntity _datEntSetI)
+                        _datEntSetI.getEntityData().set(DATA_skillp1, (int) (sklp1 - 1));
+                    if (MapVariables.get(world).strategy_subsisting > 3) {
+                        if ((Entity) this instanceof MartusEntity _datEntSetI)
+                            _datEntSetI.getEntityData().set(DATA_skillp1, (int) (sklp1 - 1));
+                    }
+                } else {
+                    if (tickCount % 10 == 0) {
+                        Entity result;
+                        Entity tgt_ent = null;
                         double num = 0;
-                        double limit = 0;
+                        double max_h = 0;
+                        double limit;
                         limit = 2;
                         if (MapVariables.get(world).strategy_subsisting > 3) {
                             limit = 3;
                         }
-                        {
-                            final Vec3 _center = new Vec3(x, y, z);
-                            List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(96 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                            for (Entity entityiterator : _entfound) {
-                                if (!(entityiterator instanceof Mob)) {
-                                    continue;
-                                }
-                                if (entityiterator instanceof LivingEntity _livEnt1 && _livEnt1.hasEffect(CaerulaArborModMobEffects.GUIDED_EVO.get())) {
-                                    num = num + 1;
-                                    this.spawnParticleLink(entityiterator);
-                                    CaerulaArborMod.queueServerWork(3, () -> {
-                                        this.spawnParticleLink(entityiterator);
-                                    });
-                                    CaerulaArborMod.queueServerWork(6, () -> {
-                                        this.spawnParticleLink(entityiterator);
-                                    });
-                                    CaerulaArborMod.queueServerWork(9, () -> {
-                                        this.spawnParticleLink(entityiterator);
-                                    });
-                                }
-                                if (num >= limit) {
-                                    break;
-                                }
+                        for (Entity entityiterator : world.getEntities(this, new AABB((x + 32), (y + 32), (z + 32), (x - 32), (y - 32), (z - 32)))) {
+                            if (!(entityiterator instanceof Mob)) {
+                                continue;
                             }
+                            if (!entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                                continue;
+                            }
+                            if (entityiterator instanceof MartusEntity) {
+                                continue;
+                            }
+                            if (entityiterator.getPersistentData().getBoolean("blessed")) {
+                                num = num + 1;
+                                continue;
+                            }
+                            if (num >= limit) {
+                                break;
+                            }
+                            if ((entityiterator instanceof LivingEntity _livEnt1 ? _livEnt1.getMaxHealth() : -1) > max_h) {
+                                max_h = entityiterator instanceof LivingEntity _livEnt1 ? _livEnt1.getMaxHealth() : -1;
+                                tgt_ent = entityiterator;
+                            }
+                        }
+                        result = tgt_ent;
+                        tgt = result;
+                        if (!(tgt == null) && tgt.isAlive() && !tgt.getPersistentData().getBoolean("blessed")) {
+                            if ((Entity) this instanceof MartusEntity _datEntSetI)
+                                _datEntSetI.getEntityData().set(DATA_skillp1, 400);
+                            if (this instanceof MartusEntity) {
+                                this.setAnimation("animation.martus.buff");
+                            }
+                            tgt.getPersistentData().putBoolean("blessed", true);
+                            perc = (tgt instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) / (tgt instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1);
+                            if (tgt instanceof LivingEntity _livingEntity22 && _livingEntity22.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
+                                _livingEntity22.getAttribute(Attributes.MAX_HEALTH)
+                                        .setBaseValue(((tgt instanceof LivingEntity _livingEntity21 && _livingEntity21.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? _livingEntity21.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0) * 2.5));
+                            if (tgt instanceof LivingEntity _livingEntity24 && _livingEntity24.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
+                                _livingEntity24.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
+                                        ((tgt instanceof LivingEntity _livingEntity23 && _livingEntity23.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity23.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) * 2.5));
+                            if (tgt instanceof LivingEntity _livingEntity26 && _livingEntity26.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get()))
+                                _livingEntity26.getAttribute(CAAttributes.SANITY_RATE.get())
+                                        .setBaseValue(((tgt instanceof LivingEntity _livingEntity25 && _livingEntity25.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get())
+                                                ? _livingEntity25.getAttribute(CAAttributes.SANITY_RATE.get()).getBaseValue()
+                                                : 0) + 25));
+                            if (tgt instanceof LivingEntity _entity)
+                                _entity.setHealth((float) ((tgt instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * perc));
+                            if (tgt instanceof LivingEntity _entity && !this.level().isClientSide())
+                                this.addEffect(new MobEffectInstance(CAMobEffects.GUIDED_EVO.get(), -1, 0));
                         }
                     }
                 }
-                if (tickCount % 100 == 0) {
-                    if (WorldUtils.isDistFromGround(world, x, y, z)) {
-                        push(0, (-0.64), 0);
-                    }
+                if (tickCount % 300 == 0) {
+                    martusTimedSpawn(world, x, y, z);
                 }
-                if (phase < 0.33) {
+            } else {
+                if (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) > ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.33) {
+                    if (!((Entity) this instanceof LivingEntity _livEnt33 && _livEnt33.hasEffect(CAMobEffects.INVULNERABLE.get()))) {
+                        if (!this.level().isClientSide())
+                            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 20, 9, false, false));
+                    }
                     if (tickCount % 2 == 0) {
                         this.spawnMartusParticleRim();
                     }
-                    if (!((Entity) this instanceof LivingEntity _livEnt8 && _livEnt8.hasEffect(CaerulaArborModMobEffects.INVULNERABLE.get()))) {
-                        if (!this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 10000, 9, false, false));
-                    }
-                    if (sklp1 > 0) {
-                        if ((Entity) this instanceof MartusEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_skillp1, (int) (sklp1 - 1));
-                        if (MapVariables.get(world).strategy_subsisting > 3) {
-                            if ((Entity) this instanceof MartusEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_skillp1, (int) (sklp1 - 1));
-                        }
-                    } else {
-                        if (tickCount % 10 == 0) {
-                            Entity result = null;
-                            if (this != null) {
-                                Entity tgt_ent = null;
-                                double num = 0;
-                                double max_h = 0;
-                                double limit = 0;
-                                limit = 2;
-                                if (MapVariables.get(world).strategy_subsisting > 3) {
-                                    limit = 3;
-                                }
-                                for (Entity entityiterator : world.getEntities(this, new AABB((x + 32), (y + 32), (z + 32), (x - 32), (y - 32), (z - 32)))) {
-                                    if (!(entityiterator instanceof Mob)) {
-                                        continue;
-                                    }
-                                    if (!entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
-                                        continue;
-                                    }
-                                    if (entityiterator instanceof MartusEntity) {
-                                        continue;
-                                    }
-                                    if (entityiterator.getPersistentData().getBoolean("blessed")) {
-                                        num = num + 1;
-                                        continue;
-                                    }
-                                    if (num >= limit) {
-                                        break;
-                                    }
-                                    if ((entityiterator instanceof LivingEntity _livEnt1 ? _livEnt1.getMaxHealth() : -1) > max_h) {
-                                        max_h = entityiterator instanceof LivingEntity _livEnt1 ? _livEnt1.getMaxHealth() : -1;
-                                        tgt_ent = entityiterator;
-                                    }
-                                }
-                                result = tgt_ent;
-                            }
-                            tgt = result;
-                            if (!(tgt == null) && tgt.isAlive() && !tgt.getPersistentData().getBoolean("blessed")) {
-                                if ((Entity) this instanceof MartusEntity _datEntSetI)
-                                    _datEntSetI.getEntityData().set(DATA_skillp1, 400);
-                                if (this instanceof MartusEntity) {
-                                    this.setAnimation("animation.martus.buff");
-                                }
-                                tgt.getPersistentData().putBoolean("blessed", true);
-                                perc = (tgt instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) / (tgt instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1);
-                                if (tgt instanceof LivingEntity _livingEntity22 && _livingEntity22.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
-                                    _livingEntity22.getAttribute(Attributes.MAX_HEALTH)
-                                            .setBaseValue(((tgt instanceof LivingEntity _livingEntity21 && _livingEntity21.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? _livingEntity21.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0) * 2.5));
-                                if (tgt instanceof LivingEntity _livingEntity24 && _livingEntity24.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
-                                    _livingEntity24.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
-                                            ((tgt instanceof LivingEntity _livingEntity23 && _livingEntity23.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity23.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) * 2.5));
-                                if (tgt instanceof LivingEntity _livingEntity26 && _livingEntity26.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get()))
-                                    _livingEntity26.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get())
-                                            .setBaseValue(((tgt instanceof LivingEntity _livingEntity25 && _livingEntity25.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get())
-                                                    ? _livingEntity25.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).getBaseValue()
-                                                    : 0) + 25));
-                                if (tgt instanceof LivingEntity _entity)
-                                    _entity.setHealth((float) ((tgt instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * perc));
-                                if (tgt instanceof LivingEntity _entity && !this.level().isClientSide())
-                                    this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.GUIDED_EVO.get(), -1, 0));
-                            }
-                        }
-                    }
-                    if (tickCount % 300 == 0) {
-                        martusTimedSpawn(world, x, y, z);
-                    }
+                }
+                if (sklp1 > 0) {
+                    if ((Entity) this instanceof MartusEntity _datEntSetI)
+                        _datEntSetI.getEntityData().set(DATA_skillp1, (int) (sklp1 - 1));
                 } else {
-                    if (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) > ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.33) {
-                        if (!((Entity) this instanceof LivingEntity _livEnt33 && _livEnt33.hasEffect(CaerulaArborModMobEffects.INVULNERABLE.get()))) {
-                            if (!this.level().isClientSide())
-                                this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 20, 9, false, false));
-                        }
-                        if (tickCount % 2 == 0) {
-                            this.spawnMartusParticleRim();
-                        }
-                    }
-                    if (sklp1 > 0) {
+                    if (tickCount % 10 == 0 && EntityUtils.getSeabornAround(world, x, y, z, this) > 0) {
                         if ((Entity) this instanceof MartusEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_skillp1, (int) (sklp1 - 1));
-                    } else {
-                        if (tickCount % 10 == 0 && EntityUtils.getSeabornAround(world, x, y, z, this) > 0) {
-                            if ((Entity) this instanceof MartusEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_skillp1, 1000);
-                            if (this instanceof MartusEntity) {
-                                this.setAnimation("animation.martus.cure");
-                            }
-                            new Object() {
-                                void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
-                                    if (((Entity) MartusEntity.this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) > ((Entity) MartusEntity.this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.02) {
-                                        EntityUtils.hurtMartus(world, MartusEntity.this, null, 0, 0.02);
-                                    }
-                                    final int tick2 = ticks;
-                                    CaerulaArborMod.queueServerWork(tick2, () -> {
-                                        if (timedlooptotal > timedloopiterator + 1) {
-                                            timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
-                                        }
-                                    });
-                                }
-                            }.timedLoop(0, 10, 20);
-                            CaerulaArborMod.queueServerWork(10, () -> {
-                                {
-                                    final Vec3 _center = new Vec3(x, y, z);
-                                    List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(64 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                                    for (Entity entityiterator : _entfound) {
-                                        if (!(entityiterator instanceof Mob)) {
-                                            continue;
-                                        }
-                                        if (!entityiterator.isAlive()) {
-                                            continue;
-                                        }
-                                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))
-                                                && !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "bossoffspring")))) {
-                                            if (entityiterator instanceof LivingEntity _entity && !this.level().isClientSide())
-                                                this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.FAKE_DEATH.get(), 200, 1));
-                                            if (entityiterator instanceof LivingEntity _entity && !this.level().isClientSide())
-                                                this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 200, 0));
-                                        }
-                                        if (world instanceof ServerLevel _level)
-                                            _level.sendParticles(ParticleTypes.DOLPHIN, (entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()), 32, 0.85, 0.85, 0.85, 0.1);
-                                    }
-                                }
-                            });
-                        }
-                    }
-                    if (sklp2 > 0) {
-                        if ((Entity) this instanceof MartusEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_skillp2, (int) (sklp2 - 1));
-                    } else {
-                        if ((Entity) this instanceof MartusEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_skillp2, 600);
+                            _datEntSetI.getEntityData().set(DATA_skillp1, 1000);
                         if (this instanceof MartusEntity) {
-                            this.setAnimation("animation.martus.reject");
+                            this.setAnimation("animation.martus.cure");
                         }
-                        CaerulaArborMod.queueServerWork(15, () -> {
-                            if (this == null)
-                                return;
-                            Entity tgt_ent = null;
-                            double max_h = 0;
-                            tgt_ent = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
-                            if (tgt_ent == null || tgt_ent instanceof LivingEntity _livEnt2 && _livEnt2.hasEffect(CaerulaArborModMobEffects.SUB_HAEMO.get())) {
-                                tgt_ent = ((Entity) this instanceof LivingEntity _entity) ? _entity.getLastHurtByMob() : null;
+                        new Object() {
+                            void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
+                                if (((Entity) MartusEntity.this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) > ((Entity) MartusEntity.this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.02) {
+                                    EntityUtils.hurtMartus(world, MartusEntity.this, null, 0, 0.02);
+                                }
+                                final int tick2 = ticks;
+                                CaerulaArborMod.queueServerWork(tick2, () -> {
+                                    if (timedlooptotal > timedloopiterator + 1) {
+                                        timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
+                                    }
+                                });
                             }
-                            if (tgt_ent == null || tgt_ent instanceof LivingEntity _livEnt5 && _livEnt5.hasEffect(CaerulaArborModMobEffects.SUB_HAEMO.get())) {
-                                for (Entity entityiterator : world.getEntities(this, new AABB((x + 32), (y + 32), (z + 32), (x - 32), (y - 32), (z - 32)))) {
+                        }.timedLoop(0, 10, 20);
+                        CaerulaArborMod.queueServerWork(10, () -> {
+                            {
+                                final Vec3 _center = new Vec3(x, y, z);
+                                List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(64 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+                                for (Entity entityiterator : _entfound) {
                                     if (!(entityiterator instanceof Mob)) {
                                         continue;
                                     }
-                                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                                    if (!entityiterator.isAlive()) {
                                         continue;
                                     }
-                                    if (entityiterator instanceof LivingEntity _livEnt8 && _livEnt8.hasEffect(CaerulaArborModMobEffects.SUB_HAEMO.get())) {
-                                        continue;
+                                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))
+                                            && !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "bossoffspring")))) {
+                                        if (entityiterator instanceof LivingEntity _entity && !this.level().isClientSide())
+                                            this.addEffect(new MobEffectInstance(CAMobEffects.FAKE_DEATH.get(), 200, 1));
+                                        if (entityiterator instanceof LivingEntity _entity && !this.level().isClientSide())
+                                            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 200, 0));
                                     }
-                                    if ((entityiterator instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) > max_h) {
-                                        max_h = entityiterator instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1;
-                                        tgt_ent = entityiterator;
-                                    }
+                                    if (world instanceof ServerLevel _level)
+                                        _level.sendParticles(ParticleTypes.DOLPHIN, (entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()), 32, 0.85, 0.85, 0.85, 0.1);
                                 }
-                            }
-                            if (!(tgt_ent == null) && !(tgt_ent instanceof LivingEntity _livEnt13 && _livEnt13.hasEffect(CaerulaArborModMobEffects.SUB_HAEMO.get()))) {
-                                if (tgt_ent instanceof LivingEntity _entity && !this.level().isClientSide())
-                                    this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.SUB_HAEMO.get(), 800, 0));
                             }
                         });
                     }
-                    if (tickCount % 200 == 0) {
-                        martusTimedSpawn(world, x, y, z);
+                }
+                if (sklp2 > 0) {
+                    if ((Entity) this instanceof MartusEntity _datEntSetI)
+                        _datEntSetI.getEntityData().set(DATA_skillp2, (int) (sklp2 - 1));
+                } else {
+                    if ((Entity) this instanceof MartusEntity _datEntSetI)
+                        _datEntSetI.getEntityData().set(DATA_skillp2, 600);
+                    if (this instanceof MartusEntity) {
+                        this.setAnimation("animation.martus.reject");
                     }
+                    CaerulaArborMod.queueServerWork(15, () -> {
+                        if (this == null)
+                            return;
+                        Entity tgt_ent;
+                        double max_h = 0;
+                        tgt_ent = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+                        if (tgt_ent == null || tgt_ent instanceof LivingEntity _livEnt2 && _livEnt2.hasEffect(CAMobEffects.SUB_HAEMO.get())) {
+                            tgt_ent = ((Entity) this instanceof LivingEntity _entity) ? _entity.getLastHurtByMob() : null;
+                        }
+                        if (tgt_ent == null || tgt_ent instanceof LivingEntity _livEnt5 && _livEnt5.hasEffect(CAMobEffects.SUB_HAEMO.get())) {
+                            for (Entity entityiterator : world.getEntities(this, new AABB((x + 32), (y + 32), (z + 32), (x - 32), (y - 32), (z - 32)))) {
+                                if (!(entityiterator instanceof Mob)) {
+                                    continue;
+                                }
+                                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                                    continue;
+                                }
+                                if (entityiterator instanceof LivingEntity _livEnt8 && _livEnt8.hasEffect(CAMobEffects.SUB_HAEMO.get())) {
+                                    continue;
+                                }
+                                if ((entityiterator instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) > max_h) {
+                                    max_h = entityiterator instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1;
+                                    tgt_ent = entityiterator;
+                                }
+                            }
+                        }
+                        if (!(tgt_ent == null) && !(tgt_ent instanceof LivingEntity _livEnt13 && _livEnt13.hasEffect(CAMobEffects.SUB_HAEMO.get()))) {
+                            if (tgt_ent instanceof LivingEntity _entity && !this.level().isClientSide())
+                                this.addEffect(new MobEffectInstance(CAMobEffects.SUB_HAEMO.get(), 800, 0));
+                        }
+                    });
+                }
+                if (tickCount % 200 == 0) {
+                    martusTimedSpawn(world, x, y, z);
                 }
             }
         }
@@ -572,9 +560,9 @@ public class MartusEntity extends SeaMonster {
 	}
 
 	private void martusTimedSpawn(LevelAccessor world, double x, double y, double z) {
-		if (EntityUtils.getSeabornAround(world, x, y, z, this) < (world.getLevelData().getGameRules().getInt(com.apocalypse.caerulaarbor.init.CaerulaArborModGameRules.CLONE_NUMBER_LIMIT))) {
+		if (EntityUtils.getSeabornAround(world, x, y, z, this) < (world.getLevelData().getGameRules().getInt(CAGameRules.CLONE_NUMBER_LIMIT))) {
 			for (int index0 = 0; index0 < 2; index0++) {
-				com.apocalypse.caerulaarbor.util.WorldUtils.summonRandomSeaborn(world, 0.33, x, y, z);
+				WorldUtils.summonRandomSeaborn(world, 0.33, x, y, z);
 				if (world instanceof ServerLevel _level)
 					_level.sendParticles(ParticleTypes.CLOUD, x, y, z, 18, 0.6, 0.6, 0.6, 0.16);
 			}
@@ -588,8 +576,8 @@ public class MartusEntity extends SeaMonster {
 			double radius = 2.5 + 0.5 * Math.sin(Math.toRadians(index0 * 24));
 			double particleX = this.getX() + radius * Math.sin(Math.toRadians(angle));
 			double particleZ = this.getZ() + radius * Math.cos(Math.toRadians(angle));
-			this.level().addParticle(CaerulaArborModParticleTypes.MARTUS_CHARS.get(), particleX, this.getY() + 1, particleZ, 0, 0.15, 0);
-			this.level().addParticle(CaerulaArborModParticleTypes.MARTUS_CHARS.get(), particleX, this.getY() + 0.8, particleZ, 0, -0.08, 0);
+			this.level().addParticle(CAParticleTypes.MARTUS_CHARS.get(), particleX, this.getY() + 1, particleZ, 0, 0.15, 0);
+			this.level().addParticle(CAParticleTypes.MARTUS_CHARS.get(), particleX, this.getY() + 0.8, particleZ, 0, -0.08, 0);
 		}
 	}
 
@@ -729,7 +717,7 @@ public class MartusEntity extends SeaMonster {
 	@Override
     public void setHealth(float pHealth){
     	if(this.releaseTime > 0) super.setHealth(pHealth);
-        if(this.hasEffect(CaerulaArborModMobEffects.INVULNERABLE.get()) && pHealth < this.getHealth()) return;
+        if(this.hasEffect(CAMobEffects.INVULNERABLE.get()) && pHealth < this.getHealth()) return;
         super.setHealth(pHealth);
     }
 

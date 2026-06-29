@@ -1,6 +1,7 @@
 package com.apocalypse.caerulaarbor.init;
 
 import com.apocalypse.caerulaarbor.entity.*;
+import com.apocalypse.caerulaarbor.entity.EndspeakerEntity;
 import com.apocalypse.caerulaarbor.entity.routeshaper.LineringPathshaperEntity;
 import com.apocalypse.caerulaarbor.entity.routeshaper.LingeringFractalEntity;
 import com.apocalypse.caerulaarbor.entity.routeshaper.RouteFractalEntity;
@@ -11,19 +12,6 @@ import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber
 public class EntityAnimationFactory {
-	//TODO:写入海嗣的tick
-
-	/**
-	 public void tick() {
-	 super.tick(); // 必须调用父类逻辑，否则实体会失去重力、AI和碰撞
-
-	 // 逻辑流：获取同步名 -> 判定非空 -> 重置状态 -> 触发本地播放逻辑
-	 String animation = this.getSyncedAnimation();
-	 if (!"undefined".equals(animation)) {
-	 this.setAnimation("undefined"); // 立即重置，防止下一 tick 重复触发
-	 this.animationprocedure = animation; // 传递给渲染器（如 GeckoLib）
-	 }
-	 */
 	@SubscribeEvent
 	public static void onEntityTick(LivingEvent.LivingTickEvent event) {
 		if (event != null && event.getEntity() != null) {
@@ -601,28 +589,7 @@ public class EntityAnimationFactory {
 					syncable.animationprocedure = animation;
 				}
 			}
-			if (event.getEntity() instanceof Endspeaker0Entity syncable) {
-				String animation = syncable.getSyncedAnimation();
-				if (!animation.equals("undefined")) {
-					syncable.setAnimation("undefined");
-					syncable.animationprocedure = animation;
-				}
-			}
-			if (event.getEntity() instanceof Endspeaker1Entity syncable) {
-				String animation = syncable.getSyncedAnimation();
-				if (!animation.equals("undefined")) {
-					syncable.setAnimation("undefined");
-					syncable.animationprocedure = animation;
-				}
-			}
-			if (event.getEntity() instanceof Endspeaker2Entity syncable) {
-				String animation = syncable.getSyncedAnimation();
-				if (!animation.equals("undefined")) {
-					syncable.setAnimation("undefined");
-					syncable.animationprocedure = animation;
-				}
-			}
-			if (event.getEntity() instanceof Endspeaker3Entity syncable) {
+			if (event.getEntity() instanceof EndspeakerEntity syncable) {
 				String animation = syncable.getSyncedAnimation();
 				if (!animation.equals("undefined")) {
 					syncable.setAnimation("undefined");

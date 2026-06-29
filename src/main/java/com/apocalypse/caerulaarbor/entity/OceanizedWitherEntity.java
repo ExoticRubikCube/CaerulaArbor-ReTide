@@ -2,10 +2,11 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
@@ -91,7 +92,7 @@ public class OceanizedWitherEntity extends SeaMonster implements RangedAttackMob
 	private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.WHITE, ServerBossEvent.BossBarOverlay.NOTCHED_10);
 
 	public OceanizedWitherEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.OCEANIZED_WITHER.get(), world);
+		this(CAEntities.OCEANIZED_WITHER.get(), world);
 	}
 
 	public OceanizedWitherEntity(EntityType<OceanizedWitherEntity> type, Level world) {
@@ -348,16 +349,16 @@ public class OceanizedWitherEntity extends SeaMonster implements RangedAttackMob
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
         if (this != null) {
-            if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get()))
-                this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(10);
-            if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()))
-                this.getAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()).setBaseValue(0.01);
-            if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-                this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(65);
-            if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()))
-                this.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).setBaseValue(5);
+            if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get()))
+                this.getAttribute(CAAttributes.SANITY_RATE.get()).setBaseValue(10);
+            if (this.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
+                this.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.01);
+            if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
+                this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(65);
+            if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
+                this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).setBaseValue(5);
             if (!this.level().isClientSide())
-                this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 100, 9, false, false));
+                this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 100, 9, false, false));
             if ((Entity) this instanceof LivingEntity _entity)
                 _entity.setHealth(1);
             setDeltaMovement(new Vec3(0, (-0.75), 0));
@@ -404,7 +405,7 @@ public class OceanizedWitherEntity extends SeaMonster implements RangedAttackMob
 		Level world = this.level();
         if (entity == null)
             return InteractionResult.PASS;
-        if (itemstack.getItem() == CaerulaArborModItems.OCEANIZED_WITHER_SPAWNEGG.get()) {
+        if (itemstack.getItem() == CAItems.OCEANIZED_WITHER_SPAWNEGG.get()) {
             if (entity instanceof OceanizedWitherEntity _datEntSetI)
                 _datEntSetI.getEntityData().set(DATA_duration, 0);
             if (entity instanceof OceanizedWitherEntity _datEntSetI)
@@ -414,7 +415,7 @@ public class OceanizedWitherEntity extends SeaMonster implements RangedAttackMob
             if (entity instanceof LivingEntity _entity)
                 _entity.setHealth(entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1);
             if (entity instanceof LivingEntity _entity)
-                _entity.removeEffect(CaerulaArborModMobEffects.INVULNERABLE.get());
+                _entity.removeEffect(CAMobEffects.INVULNERABLE.get());
             return InteractionResult.SUCCESS;
         }
         return InteractionResult.PASS;
@@ -428,11 +429,11 @@ public class OceanizedWitherEntity extends SeaMonster implements RangedAttackMob
         double y = this.getY();
         double z = this.getZ();
         if (this != null) {
-            double spawn = 0;
-            double skillp = 0;
-            double duration = 0;
-            Entity enemy = null;
-            boolean shelled = false;
+            double spawn;
+            double skillp;
+            double duration;
+            Entity enemy;
+            boolean shelled;
             if (this.isAlive()) {
                 spawn = (Entity) this instanceof OceanizedWitherEntity _datEntI ? _datEntI.getEntityData().get(DATA_spawn) : 0;
                 skillp = (Entity) this instanceof OceanizedWitherEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp) : 0;
@@ -491,7 +492,7 @@ public class OceanizedWitherEntity extends SeaMonster implements RangedAttackMob
                             _datEntSetI.getEntityData().set(DATA_skillp, 300);
                         LivingEntity _entity = this;
                         if (!this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 20, 0, false, false));
+                            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 20, 0, false, false));
                         if (this instanceof OceanizedWitherEntity) {
                             this.setAnimation("animation.oceanzied_wither.skill");
                         }
@@ -507,13 +508,13 @@ public class OceanizedWitherEntity extends SeaMonster implements RangedAttackMob
                     }
                 }
                 if (tickCount % 10 == 0) {
-                    boolean once = false;
-                    double dx = 0;
-                    double dy = 0;
-                    double dz = 0;
-                    double hardness = 0;
+                    boolean once;
+                    double dx;
+                    double dy;
+                    double dz;
+                    double hardness;
                     double lose = 0;
-                    BlockState block = Blocks.AIR.defaultBlockState();
+                    BlockState block;
                     if (WorldUtils.canGrief(world)) {
                         once = false;
                         dx = -1;
@@ -557,7 +558,7 @@ public class OceanizedWitherEntity extends SeaMonster implements RangedAttackMob
                     if ((Entity) this instanceof LivingEntity _entity)
                         _entity.removeEffect(MobEffects.WITHER);
                     if ((Entity) this instanceof LivingEntity _entity)
-                        _entity.removeEffect(CaerulaArborModMobEffects.DIZZY.get());
+                        _entity.removeEffect(CAMobEffects.DIZZY.get());
                     {
                         final Vec3 _center = new Vec3(x, y, z);
                         List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(64 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
@@ -591,10 +592,10 @@ public class OceanizedWitherEntity extends SeaMonster implements RangedAttackMob
                     if (this.getAttributes().hasAttribute(Attributes.ARMOR))
                         this.getAttribute(Attributes.ARMOR)
                                 .setBaseValue(((this.getAttributes().hasAttribute(Attributes.ARMOR) ? this.getAttribute(Attributes.ARMOR).getBaseValue() : 0) * 1.5));
-                    if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()))
-                        this.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get())
-                                .setBaseValue(((this.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get())
-                                        ? this.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).getBaseValue()
+                    if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
+                        this.getAttribute(CAAttributes.GENERAL_DEFENSE.get())
+                                .setBaseValue(((this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get())
+                                        ? this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getBaseValue()
                                         : 0) * 1.5));
                     if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
                         this.getAttribute(Attributes.ATTACK_DAMAGE)
@@ -769,7 +770,7 @@ public class OceanizedWitherEntity extends SeaMonster implements RangedAttackMob
     public void setHealth(float pHealth){
     	float hlth = this.getHealth();
     	float mhlth = this.getMaxHealth();
-        if(this.hasEffect(CaerulaArborModMobEffects.INVULNERABLE.get()) && pHealth < hlth) return;
+        if(this.hasEffect(CAMobEffects.INVULNERABLE.get()) && pHealth < hlth) return;
         float reduction = hlth - pHealth;
         super.setHealth(reduction >= mhlth * 0.35f ? hlth - mhlth * 0.35f : hlth - reduction);
     }
@@ -794,8 +795,8 @@ public class OceanizedWitherEntity extends SeaMonster implements RangedAttackMob
 		double vz = 0;
 		new Object() {
 			void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
-                double dist = 0;
-                double rng = 0;
+                double dist;
+                double rng;
                 dist = Mth.nextDouble(RandomSource.create(), 0, 16);
                 rng = Mth.nextDouble(RandomSource.create(), 0, 6.283);
                 WorldUtils.shootWitherSkull(world, OceanizedWitherEntity.this, 0.15, 0, -1, 0, 6, 0.35, x + dist * Math.cos(rng), y + Mth.nextDouble(RandomSource.create(), 4, 8), z + dist * Math.sin(rng));

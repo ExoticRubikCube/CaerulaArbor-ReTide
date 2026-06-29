@@ -1,7 +1,7 @@
 
 package com.apocalypse.caerulaarbor.menu;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMenus;
+import com.apocalypse.caerulaarbor.init.CAMenus;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.Entity;
@@ -34,11 +34,11 @@ public class InfoStrategyGrowMenu extends AbstractContainerMenu implements Suppl
 	private final BlockEntity boundBlockEntity = null;
 
 	public InfoStrategyGrowMenu(int id, Inventory inv, FriendlyByteBuf extraData) {
-		super(CaerulaArborModMenus.INFO_STRATEGY_GROW.get(), id);
+		super(CAMenus.INFO_STRATEGY_GROW.get(), id);
 		this.entity = inv.player;
 		this.world = inv.player.level();
 		this.internal = new ItemStackHandler(0);
-		BlockPos pos = null;
+		BlockPos pos;
 		if (extraData != null) {
 			pos = extraData.readBlockPos();
 			this.x = pos.getX();

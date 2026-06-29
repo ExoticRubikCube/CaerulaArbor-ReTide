@@ -1,7 +1,7 @@
 package com.apocalypse.caerulaarbor.entity.routeshaper;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -60,7 +60,7 @@ public class LingeringFractalEntity extends AbstractFractalEntity {
 	private long lastSwing;
 
 	public LingeringFractalEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.LINGERING_FRACTAL.get(), world);
+		this(CAEntities.LINGERING_FRACTAL.get(), world);
 	}
 
 	public LingeringFractalEntity(EntityType<LingeringFractalEntity> type, Level world) {
@@ -85,7 +85,7 @@ public class LingeringFractalEntity extends AbstractFractalEntity {
 
 	@Override
 	protected EntityType<?> getSummonedFractalType() {
-		return CaerulaArborModEntities.LINGERING_FRACTAL.get();
+		return CAEntities.LINGERING_FRACTAL.get();
 	}
 
 	@Override
@@ -198,7 +198,7 @@ public class LingeringFractalEntity extends AbstractFractalEntity {
                     }
                 }
                 if (world instanceof ServerLevel _level) {
-                    Entity entityToSpawn = CaerulaArborModEntities.LINGERING_PATHSHAPER.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+                    Entity entityToSpawn = CAEntities.LINGERING_PATHSHAPER.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                     if (entityToSpawn != null) {
                         entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                     }
@@ -249,8 +249,7 @@ public class LingeringFractalEntity extends AbstractFractalEntity {
 	private PlayState attackingPredicate(AnimationState event) {
 		double d1 = this.getX() - this.xOld;
 		double d0 = this.getZ() - this.zOld;
-		float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
-		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
+        if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
 		}

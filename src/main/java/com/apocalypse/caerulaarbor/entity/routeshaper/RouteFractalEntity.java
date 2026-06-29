@@ -1,7 +1,7 @@
 package com.apocalypse.caerulaarbor.entity.routeshaper;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.registries.Registries;
@@ -53,7 +53,7 @@ public class RouteFractalEntity extends AbstractFractalEntity {
 	private long lastSwing;
 
 	public RouteFractalEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.ROUTE_FRACTAL.get(), world);
+		this(CAEntities.ROUTE_FRACTAL.get(), world);
 	}
 
 	public RouteFractalEntity(EntityType<RouteFractalEntity> type, Level world) {
@@ -79,7 +79,7 @@ public class RouteFractalEntity extends AbstractFractalEntity {
 
 	@Override
 	protected EntityType<?> getSummonedFractalType() {
-		return CaerulaArborModEntities.ROUTE_FRACTAL.get();
+		return CAEntities.ROUTE_FRACTAL.get();
 	}
 
 	@Override
@@ -178,7 +178,7 @@ public class RouteFractalEntity extends AbstractFractalEntity {
 	@Override
 	public void baseTick() {
 		super.baseTick();
-        double timel = 0;
+        double timel;
         timel = (Entity) this instanceof RouteFractalEntity _datEntI ? _datEntI.getEntityData().get(DATA_time_left) : 0;
         if (timel <= 0) {
             ((Entity) this).hurt(new DamageSource((this.level()).registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.FELL_OUT_OF_WORLD)), 999999);
@@ -227,10 +227,7 @@ public class RouteFractalEntity extends AbstractFractalEntity {
 	}
 
 	private PlayState attackingPredicate(AnimationState event) {
-		double d1 = this.getX() - this.xOld;
-		double d0 = this.getZ() - this.zOld;
-		float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
-		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
+        if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
 		}

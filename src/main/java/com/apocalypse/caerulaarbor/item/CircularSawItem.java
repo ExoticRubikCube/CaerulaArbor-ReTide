@@ -153,7 +153,7 @@ public class CircularSawItem extends Item implements GeoItem {
         ItemStack itemstack = context.getItemInHand();
         if (entity == null)
             return InteractionResult.PASS;
-        BlockState tgt = Blocks.AIR.defaultBlockState();
+        BlockState tgt;
         if (blockstate.is(BlockTags.create(new ResourceLocation("minecraft:mineable/axe")))) {
             {
                 BlockPos _pos = BlockPos.containing(x, y, z);

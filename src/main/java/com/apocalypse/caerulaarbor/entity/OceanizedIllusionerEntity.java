@@ -3,10 +3,9 @@ package com.apocalypse.caerulaarbor.entity;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.RavagerMountRider;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModGameRules;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.*;
+import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
@@ -82,7 +81,7 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
 	private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.GREEN, ServerBossEvent.BossBarOverlay.PROGRESS);
 
 	public OceanizedIllusionerEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.OCEANIZED_ILLUSIONER.get(), world);
+		this(CAEntities.OCEANIZED_ILLUSIONER.get(), world);
 	}
 
 	public OceanizedIllusionerEntity(EntityType<OceanizedIllusionerEntity> type, Level world) {
@@ -91,7 +90,7 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
 		setNoAi(false);
 		setMaxUpStep(1f);
 		setPersistenceRequired();
-		this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(CaerulaArborModItems.CHITIN_BOW.get()));
+		this.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(CAItems.CHITIN_BOW.get()));
 	}
 
 	@Override
@@ -322,7 +321,7 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        Entity illusion = null;
+        Entity illusion;
         if (!isPassenger()) {
             if (Math.random() < 0.75) {
                 illusion = world.getEntitiesOfClass(OceanIllusionEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true).stream().sorted(new Object() {
@@ -365,7 +364,7 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
         if ((LevelAccessor) world instanceof ServerLevel _level) {
-            LivingEntity entityToSpawn = CaerulaArborModEntities.OCEANIZED_RAVAGER.get().spawn(_level, BlockPos.containing(this.getX(), this.getY(), this.getZ()), MobSpawnType.MOB_SUMMONED);
+            LivingEntity entityToSpawn = CAEntities.OCEANIZED_RAVAGER.get().spawn(_level, BlockPos.containing(this.getX(), this.getY(), this.getZ()), MobSpawnType.MOB_SUMMONED);
             if (entityToSpawn != null) {
                 entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                 AttributeInstance instance = entityToSpawn.getAttribute(Attributes.MAX_HEALTH);
@@ -408,10 +407,10 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        Entity enemy = null;
-        double sklp1 = 0;
-        double sklp2 = 0;
-        double dura = 0;
+        Entity enemy;
+        double sklp1;
+        double sklp2;
+        double dura;
         if (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5) {
             if ((Entity) this instanceof OceanizedIllusionerEntity animatable)
                 animatable.setTexture("oceanized_illusioner_broken");
@@ -447,7 +446,7 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
                         if (enemy instanceof LivingEntity _entity && !this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 400, 0));
                         if (enemy instanceof LivingEntity _entity && !this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.DEDUCT_ONE_SANITY.get(), 200, 1));
+                            this.addEffect(new MobEffectInstance(CAMobEffects.DEDUCT_ONE_SANITY.get(), 200, 1));
                         if ((Entity) this instanceof OceanizedIllusionerEntity _datEntSetI)
                             _datEntSetI.getEntityData().set(DATA_spellP, 180);
                         if ((Entity) this instanceof OceanizedIllusionerEntity _datEntSetI)
@@ -456,7 +455,7 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
                     }
                 }
             }
-            this.removeEffect(CaerulaArborModMobEffects.DEDUCT_ONE_SANITY.get());
+            this.removeEffect(CAMobEffects.DEDUCT_ONE_SANITY.get());
             this.removeEffect(MobEffects.BLINDNESS);
             if (sklp2 > 0) {
                 if ((Entity) this instanceof OceanizedIllusionerEntity _datEntSetI)
@@ -468,7 +467,7 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
                 }
             } else if (dura <= 0) {
                 if (!(enemy == null) && enemy.isAlive()) {
-                    if (EntityUtils.getIllusionNum(world, x, y, z) < 8 && EntityUtils.getSeabornAround(world, x, y, z, this) < (world.getLevelData().getGameRules().getInt(CaerulaArborModGameRules.CLONE_NUMBER_LIMIT))) {
+                    if (EntityUtils.getIllusionNum(world, x, y, z) < 8 && EntityUtils.getSeabornAround(world, x, y, z, this) < (world.getLevelData().getGameRules().getInt(CAGameRules.CLONE_NUMBER_LIMIT))) {
                         if (world instanceof Level _level) {
                                 _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.illusioner.cast_spell")), SoundSource.HOSTILE, 1, 1);
                         }
@@ -478,7 +477,7 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
                         for (int index0 = 0; index0 < 5; index0++) {
                             if (WorldUtils.isValidForMan(world, x + 4 - index0, y, z)) {
                                 if (world instanceof ServerLevel _level) {
-                                    Entity entityToSpawn = CaerulaArborModEntities.OCEAN_ILLUSION.get().spawn(_level, BlockPos.containing(x + 4 - index0, y, z), MobSpawnType.MOB_SUMMONED);
+                                    Entity entityToSpawn = CAEntities.OCEAN_ILLUSION.get().spawn(_level, BlockPos.containing(x + 4 - index0, y, z), MobSpawnType.MOB_SUMMONED);
                                     if (entityToSpawn != null) {
                                         entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                                     }
@@ -489,7 +488,7 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
                         for (int index1 = 0; index1 < 5; index1++) {
                             if (WorldUtils.isValidForMan(world, x - (4 - index1), y, z)) {
                                 if (world instanceof ServerLevel _level) {
-                                    Entity entityToSpawn = CaerulaArborModEntities.OCEAN_ILLUSION.get().spawn(_level, BlockPos.containing(x - (4 - index1), y, z), MobSpawnType.MOB_SUMMONED);
+                                    Entity entityToSpawn = CAEntities.OCEAN_ILLUSION.get().spawn(_level, BlockPos.containing(x - (4 - index1), y, z), MobSpawnType.MOB_SUMMONED);
                                     if (entityToSpawn != null) {
                                         entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                                     }
@@ -500,7 +499,7 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
                         for (int index2 = 0; index2 < 5; index2++) {
                             if (WorldUtils.isValidForMan(world, x, y, z + 4 - index2)) {
                                 if (world instanceof ServerLevel _level) {
-                                    Entity entityToSpawn = CaerulaArborModEntities.OCEAN_ILLUSION.get().spawn(_level, BlockPos.containing(x, y, z + 4 - index2), MobSpawnType.MOB_SUMMONED);
+                                    Entity entityToSpawn = CAEntities.OCEAN_ILLUSION.get().spawn(_level, BlockPos.containing(x, y, z + 4 - index2), MobSpawnType.MOB_SUMMONED);
                                     if (entityToSpawn != null) {
                                         entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                                     }
@@ -511,7 +510,7 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
                         for (int index3 = 0; index3 < 5; index3++) {
                             if (WorldUtils.isValidForMan(world, x, y, z - (4 - index3))) {
                                 if (world instanceof ServerLevel _level) {
-                                    Entity entityToSpawn = CaerulaArborModEntities.OCEAN_ILLUSION.get().spawn(_level, BlockPos.containing(x, y, z - (4 - index3)), MobSpawnType.MOB_SUMMONED);
+                                    Entity entityToSpawn = CAEntities.OCEAN_ILLUSION.get().spawn(_level, BlockPos.containing(x, y, z - (4 - index3)), MobSpawnType.MOB_SUMMONED);
                                     if (entityToSpawn != null) {
                                         entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                                     }
@@ -520,7 +519,7 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
                             }
                         }
                         if (!this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 20, 0));
+                            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 20, 0));
                         CaerulaArborMod.queueServerWork(18, () -> {
                             if (!isPassenger()) {
                                 if (!this.level().isClientSide())

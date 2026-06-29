@@ -1,6 +1,7 @@
 
 package com.apocalypse.caerulaarbor.potion;
 
+import com.apocalypse.caerulaarbor.init.CAAttributes;
 import net.minecraftforge.client.extensions.common.IClientMobEffectExtensions;
 
 import net.minecraft.world.item.ItemStack;
@@ -11,15 +12,13 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.client.gui.GuiGraphics;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-
 import java.util.List;
 import java.util.ArrayList;
 
 public class AddDefTinyMobEffect extends MobEffect {
 	public AddDefTinyMobEffect() {
 		super(MobEffectCategory.BENEFICIAL, -1);
-		this.addAttributeModifier(CaerulaArborModAttributes.GENERAL_DEFENSE.get(), "522ff87a-2bc1-3538-86d3-466c6e2ff9fe", 0.5, AttributeModifier.Operation.ADDITION);
+		this.addAttributeModifier(CAAttributes.GENERAL_DEFENSE.get(), "522ff87a-2bc1-3538-86d3-466c6e2ff9fe", 0.5, AttributeModifier.Operation.ADDITION);
 	}
 
 	@Override

@@ -1,7 +1,7 @@
 package com.apocalypse.caerulaarbor.block.entity;
 
 import com.apocalypse.caerulaarbor.block.TidewayCradleBlock;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlockEntities;
+import com.apocalypse.caerulaarbor.init.CABlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -42,7 +42,7 @@ public class TidewayCradleTileEntity extends RandomizableContainerBlockEntity im
 	private int blockstateOld = this.getBlockState().getValue(TidewayCradleBlock.BLOCKSTATE);
 
 	public TidewayCradleTileEntity(BlockPos pos, BlockState state) {
-		super(CaerulaArborModBlockEntities.TIDEWAY_CRADLE.get(), pos, state);
+		super(CABlockEntities.TIDEWAY_CRADLE.get(), pos, state);
 	}
 
 	private PlayState predicate(AnimationState event) {

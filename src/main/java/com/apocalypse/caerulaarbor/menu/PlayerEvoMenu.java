@@ -1,7 +1,7 @@
 package com.apocalypse.caerulaarbor.menu;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMenus;
+import com.apocalypse.caerulaarbor.init.CAMenus;
 import com.apocalypse.caerulaarbor.util.NodeUtils;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
@@ -39,11 +39,11 @@ public class PlayerEvoMenu extends AbstractContainerMenu implements Supplier<Map
 	private final BlockEntity boundBlockEntity = null;
 
 	public PlayerEvoMenu(int id, Inventory inv, FriendlyByteBuf extraData) {
-		super(CaerulaArborModMenus.PLAYER_EVO.get(), id);
+		super(CAMenus.PLAYER_EVO.get(), id);
 		this.entity = inv.player;
 		this.world = inv.player.level();
 		this.internal = new ItemStackHandler(0);
-		BlockPos pos = null;
+		BlockPos pos;
 		if (extraData != null) {
 			pos = extraData.readBlockPos();
 			this.x = pos.getX();

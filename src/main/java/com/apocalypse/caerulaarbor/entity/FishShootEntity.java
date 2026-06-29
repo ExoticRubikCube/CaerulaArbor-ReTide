@@ -1,8 +1,8 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAParticleTypes;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -30,7 +30,7 @@ public class FishShootEntity extends AbstractArrow implements ItemSupplier {
 	public static final ItemStack PROJECTILE_ITEM = new ItemStack(Items.IRON_NUGGET);
 
 	public FishShootEntity(PlayMessages.SpawnEntity packet, Level world) {
-		super(CaerulaArborModEntities.FISH_SHOOT.get(), world);
+		super(CAEntities.FISH_SHOOT.get(), world);
 	}
 
 	public FishShootEntity(EntityType<? extends FishShootEntity> type, Level world) {
@@ -77,7 +77,7 @@ public class FishShootEntity extends AbstractArrow implements ItemSupplier {
 	public void tick() {
 		super.tick();
 		LevelAccessor world = this.level();
-		world.addParticle(CaerulaArborModParticleTypes.SEA_SPLASH.get(), this.getX(), this.getY(), this.getZ(), 0, 0, 0);
+		world.addParticle(CAParticleTypes.SEA_SPLASH.get(), this.getX(), this.getY(), this.getZ(), 0, 0, 0);
 		if (this.inGround)
 			this.discard();
 	}
@@ -91,7 +91,7 @@ public class FishShootEntity extends AbstractArrow implements ItemSupplier {
 	}
 
 	public static FishShootEntity shoot(Level world, LivingEntity entity, RandomSource random, float power, double damage, int knockback) {
-		FishShootEntity entityarrow = new FishShootEntity(CaerulaArborModEntities.FISH_SHOOT.get(), entity, world);
+		FishShootEntity entityarrow = new FishShootEntity(CAEntities.FISH_SHOOT.get(), entity, world);
 		entityarrow.shoot(entity.getViewVector(1).x, entity.getViewVector(1).y, entity.getViewVector(1).z, power * 2, 0);
 		entityarrow.setSilent(true);
 		entityarrow.setCritArrow(false);
@@ -112,7 +112,7 @@ public class FishShootEntity extends AbstractArrow implements ItemSupplier {
 	}
 
 	public static FishShootEntity shoot(LivingEntity entity, LivingEntity target, double damage) {
-		FishShootEntity entityarrow = new FishShootEntity(CaerulaArborModEntities.FISH_SHOOT.get(), entity, entity.level());
+		FishShootEntity entityarrow = new FishShootEntity(CAEntities.FISH_SHOOT.get(), entity, entity.level());
 		double dx = target.getX() - entity.getX();
 		double dy = target.getY() + target.getEyeHeight() - 1.1;
 		double dz = target.getZ() - entity.getZ();

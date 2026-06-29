@@ -2,8 +2,8 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.client.renderer.entity.TrailriteArmorArmorRenderer;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.client.gui.screens.Screen;
@@ -65,7 +65,7 @@ public class TrailriteArmorItem extends ArmorItem implements GeoItem {
 
 			@Override
 			public Ingredient getRepairIngredient() {
-				return Ingredient.of(new ItemStack(CaerulaArborModItems.TRAILRITE.get()));
+				return Ingredient.of(new ItemStack(CAItems.TRAILRITE.get()));
 			}
 
 			@Override
@@ -140,13 +140,13 @@ public class TrailriteArmorItem extends ArmorItem implements GeoItem {
         UUID uuid = new UUID(slot.toString().hashCode(), 0);
         if (slot == this.getEquipmentSlot()){
             map = HashMultimap.create(map);
-            map.put(CaerulaArborModAttributes.SANITY_RESISTANCE.get(),
+            map.put(CAAttributes.SANITY_RESISTANCE.get(),
                     new AttributeModifier(uuid, name , 17.5f, AttributeModifier.Operation.ADDITION));
-            map.put(CaerulaArborModAttributes.SANITY_RATE.get(),
+            map.put(CAAttributes.SANITY_RATE.get(),
                     new AttributeModifier(uuid, name , 0.75f, AttributeModifier.Operation.ADDITION));
-            map.put(CaerulaArborModAttributes.GENERAL_DEFENSE.get(),
+            map.put(CAAttributes.GENERAL_DEFENSE.get(),
                     new AttributeModifier(uuid, name , 3.5f, AttributeModifier.Operation.ADDITION));
-            map.put(CaerulaArborModAttributes.MAGIC_RESISTANCE.get(),
+            map.put(CAAttributes.MAGIC_RESISTANCE.get(),
                     new AttributeModifier(uuid, name , 8f, AttributeModifier.Operation.ADDITION));
         }
         return map;

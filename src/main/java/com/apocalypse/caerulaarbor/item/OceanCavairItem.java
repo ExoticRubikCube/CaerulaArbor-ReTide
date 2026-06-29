@@ -1,8 +1,8 @@
 
 package com.apocalypse.caerulaarbor.item;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import com.apocalypse.caerulaarbor.api.event.SanityEvent;
 import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import net.minecraft.network.chat.Component;
@@ -31,7 +31,7 @@ public class OceanCavairItem extends Item {
 
 	@Override
 	public ItemStack getCraftingRemainingItem(ItemStack itemstack) {
-		return new ItemStack(CaerulaArborModItems.EMPTY_CAN.get());
+		return new ItemStack(CAItems.EMPTY_CAN.get());
 	}
 
 	@Override
@@ -42,10 +42,10 @@ public class OceanCavairItem extends Item {
 
 	@Override
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
-		ItemStack retval = new ItemStack(CaerulaArborModItems.EMPTY_CAN.get());
+		ItemStack retval = new ItemStack(CAItems.EMPTY_CAN.get());
 		super.finishUsingItem(itemstack, world, entity);
 		if (!entity.level().isClientSide()) {
-			entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ADD_ATTACK_PERCLY.get(), 600, 1));
+			entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_ATTACK_PERCLY.get(), 600, 1));
 			entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 0));
 		}
 		SIHelper.causeSanityInjury(entity, 325, SanityEvent.Hurt.Type.FOOD);

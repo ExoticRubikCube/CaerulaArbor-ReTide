@@ -2,9 +2,9 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CABlocks;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.procedures.TrailReplaceProcedure;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
@@ -59,7 +59,7 @@ public class TidutantExcrescenceEntity extends SeaMonster {
 	public String animationprocedure = "empty";
 
 	public TidutantExcrescenceEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.TIDUTANT_EXCRESCENCE.get(), world);
+		this(CAEntities.TIDUTANT_EXCRESCENCE.get(), world);
 	}
 
 	public TidutantExcrescenceEntity(EntityType<TidutantExcrescenceEntity> type, Level world) {
@@ -179,10 +179,10 @@ public class TidutantExcrescenceEntity extends SeaMonster {
 	public void baseTick() {
 		super.baseTick();
         if (this.isAlive()) {
-            if ((Entity) this instanceof LivingEntity _livEnt1 && _livEnt1.hasEffect(CaerulaArborModMobEffects.MUTE.get())) {
+            if ((Entity) this instanceof LivingEntity _livEnt1 && _livEnt1.hasEffect(CAMobEffects.MUTE.get())) {
                 if ((Entity) this instanceof TidutantExcrescenceEntity _datEntSetI)
                     _datEntSetI.getEntityData().set(DATA_mute_time,
-                            (Entity) this instanceof LivingEntity _livEnt && _livEnt.hasEffect(CaerulaArborModMobEffects.MUTE.get()) ? _livEnt.getEffect(CaerulaArborModMobEffects.MUTE.get()).getDuration() : 0);
+                            (Entity) this instanceof LivingEntity _livEnt && _livEnt.hasEffect(CAMobEffects.MUTE.get()) ? _livEnt.getEffect(CAMobEffects.MUTE.get()).getDuration() : 0);
             } else if (((Entity) this instanceof TidutantExcrescenceEntity _datEntI ? _datEntI.getEntityData().get(DATA_mute_time) : 0) == 1) {
                 if ((Entity) this instanceof TidutantExcrescenceEntity _datEntSetI)
                     _datEntSetI.getEntityData().set(DATA_mute_time, 0);
@@ -252,14 +252,14 @@ public class TidutantExcrescenceEntity extends SeaMonster {
             double z = this.getZ();
             if (WorldUtils.canGrief(world)) {
                 if (((Entity) this instanceof TidutantExcrescenceEntity _datEntI ? _datEntI.getEntityData().get(DATA_mute_time) : 0) <= 0) {
-                    if (CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing(x, y, z)) && !(world.getBlockFloorHeight(BlockPos.containing(x, y, z)) > 0)) {
-                        TrailReplaceProcedure.execute(world, CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState(), (world.getFluidState(BlockPos.containing(x, y, z)).createLegacyBlock()).getBlock() == Blocks.WATER, x, y, z);
+                    if (CABlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing(x, y, z)) && !(world.getBlockFloorHeight(BlockPos.containing(x, y, z)) > 0)) {
+                        TrailReplaceProcedure.execute(world, CABlocks.SEA_TRAIL_INIT.get().defaultBlockState(), (world.getFluidState(BlockPos.containing(x, y, z)).createLegacyBlock()).getBlock() == Blocks.WATER, x, y, z);
                     }
                     for (Direction directioniterator : Direction.Plane.HORIZONTAL) {
-                        if (CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing(x + directioniterator.getStepX(), y, z + directioniterator.getStepZ()))
+                        if (CABlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing(x + directioniterator.getStepX(), y, z + directioniterator.getStepZ()))
                                 && !(world.getBlockFloorHeight(BlockPos.containing(x + directioniterator.getStepX(), y, z + directioniterator.getStepZ())) > 0)) {
                             if (Math.random() < 0.25) {
-                                TrailReplaceProcedure.execute(world, CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState(),
+                                TrailReplaceProcedure.execute(world, CABlocks.SEA_TRAIL_INIT.get().defaultBlockState(),
                                         (world.getFluidState(BlockPos.containing(x + directioniterator.getStepX(), y, z + directioniterator.getStepZ())).createLegacyBlock()).getBlock() == Blocks.WATER, x + directioniterator.getStepX(), y,
                                         z + directioniterator.getStepZ());
                             }

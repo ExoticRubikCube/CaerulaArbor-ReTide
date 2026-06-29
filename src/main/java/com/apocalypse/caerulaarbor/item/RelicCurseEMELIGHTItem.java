@@ -3,7 +3,7 @@ package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
+import com.apocalypse.caerulaarbor.init.CABlocks;
 import com.apocalypse.caerulaarbor.util.ItemUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -63,11 +63,11 @@ public class RelicCurseEMELIGHTItem extends Item {
         ItemStack itemstack = context.getItemInHand();
         if (direction == null || entity == null)
             return InteractionResult.PASS;
-        double tX = 0;
-        double tY = 0;
-        double tZ = 0;
-        boolean wattered = false;
-        BlockState toPlace = Blocks.AIR.defaultBlockState();
+        double tX;
+        double tY;
+        double tZ;
+        boolean wattered;
+        BlockState toPlace;
         if (!itemstack.getOrCreateTag().getBoolean("used")) {
             return InteractionResult.PASS;
         }
@@ -75,10 +75,10 @@ public class RelicCurseEMELIGHTItem extends Item {
         tY = y + direction.getStepY();
         tZ = z + direction.getStepZ();
         wattered = (world.getFluidState(BlockPos.containing(tX, tY, tZ)).createLegacyBlock()).getBlock() == Blocks.WATER;
-        toPlace = (CaerulaArborModBlocks.EMERGENCY_LIGHT.get().getStateDefinition().getProperty("waterlogged") instanceof BooleanProperty _withbp8
-                ? CaerulaArborModBlocks.EMERGENCY_LIGHT.get().defaultBlockState().setValue(_withbp8, wattered)
-                : CaerulaArborModBlocks.EMERGENCY_LIGHT.get().defaultBlockState());
-        if (CaerulaArborModBlocks.EMERGENCY_LIGHT.get().defaultBlockState().canSurvive(world, BlockPos.containing(tX, tY, tZ)) && (world.getBlockState(BlockPos.containing(tX, tY, tZ))).canBeReplaced()) {
+        toPlace = (CABlocks.EMERGENCY_LIGHT.get().getStateDefinition().getProperty("waterlogged") instanceof BooleanProperty _withbp8
+                ? CABlocks.EMERGENCY_LIGHT.get().defaultBlockState().setValue(_withbp8, wattered)
+                : CABlocks.EMERGENCY_LIGHT.get().defaultBlockState());
+        if (CABlocks.EMERGENCY_LIGHT.get().defaultBlockState().canSurvive(world, BlockPos.containing(tX, tY, tZ)) && (world.getBlockState(BlockPos.containing(tX, tY, tZ))).canBeReplaced()) {
             if (direction == Direction.DOWN) {
                 world.setBlock(BlockPos.containing(tX, tY, tZ), (new Object() {
                     public BlockState with(BlockState _bs, String _property, int _newValue) {

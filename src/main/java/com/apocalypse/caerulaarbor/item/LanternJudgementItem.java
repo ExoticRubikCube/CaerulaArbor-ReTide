@@ -2,10 +2,9 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
+import com.apocalypse.caerulaarbor.init.*;
+import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
@@ -128,7 +127,7 @@ public class LanternJudgementItem extends Item {
                 void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                     for (int index0 = 0; index0 < 120; index0++) {
                         if ((LevelAccessor) world instanceof ServerLevel _level)
-                            _level.sendParticles(CaerulaArborModParticleTypes.PURPLE_FLAME.get(), (x + 2 * (timedloopiterator + 1) * Math.sin(Math.toRadians(index0 * 3))), y,
+                            _level.sendParticles(CAParticleTypes.PURPLE_FLAME.get(), (x + 2 * (timedloopiterator + 1) * Math.sin(Math.toRadians(index0 * 3))), y,
                                     (z + 2 * (timedloopiterator + 1) * Math.cos(Math.toRadians(index0 * 3))), 4, 0.15, 0.2, 0.15, 0.1);
                     }
                     final int tick2 = ticks;
@@ -146,9 +145,9 @@ public class LanternJudgementItem extends Item {
                     if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))
                             && !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanpet"))) && (entityiterator != null ? entity.distanceTo(entityiterator) : -1) <= 18) {
                         if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                            _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.DIZZY.get(), 200, 0, false, false));
+                            _entity.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 200, 0, false, false));
                         if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                            _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.MUTE.get(), 400, 0, false, false));
+                            _entity.addEffect(new MobEffectInstance(CAMobEffects.MUTE.get(), 400, 0, false, false));
                         entityiterator.hurt(new DamageSource(((LevelAccessor) world).registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceankiller_damage"))), entity),
                                 (float) Math.max(((Entity) entity instanceof LivingEntity _livingEntity10 && _livingEntity10.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity10.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.15,
                                         15));
@@ -177,7 +176,7 @@ public class LanternJudgementItem extends Item {
                     _player.getCooldowns().addCooldown(itemstack.getItem(), 400);
             }
             if ((Entity) entity instanceof LivingEntity _entity)
-                _entity.removeEffect(CaerulaArborModMobEffects.DIZZY.get());
+                _entity.removeEffect(CAMobEffects.DIZZY.get());
         }
         return retval;
 	}
@@ -194,17 +193,17 @@ public class LanternJudgementItem extends Item {
         ItemStack itemstack = context.getItemInHand();
         if (entity == null)
             return InteractionResult.PASS;
-        BlockState output = Blocks.AIR.defaultBlockState();
-        ItemStack toGive = ItemStack.EMPTY;
-        if (blockstate.getBlock() == CaerulaArborModBlocks.SEA_TRAIL_INIT.get() || blockstate.getBlock() == CaerulaArborModBlocks.SEA_TRAIL_GROWING.get() || blockstate.getBlock() == CaerulaArborModBlocks.SEA_TRAIL_GROWN.get()
-                || blockstate.getBlock() == CaerulaArborModBlocks.SEA_TRAIL_STOP.get() || blockstate.getBlock() == CaerulaArborModBlocks.SEA_TRAIL_SOLID.get() || blockstate.getBlock() == CaerulaArborModBlocks.TRAIL_PULSE.get()) {
+        BlockState output;
+        ItemStack toGive;
+        if (blockstate.getBlock() == CABlocks.SEA_TRAIL_INIT.get() || blockstate.getBlock() == CABlocks.SEA_TRAIL_GROWING.get() || blockstate.getBlock() == CABlocks.SEA_TRAIL_GROWN.get()
+                || blockstate.getBlock() == CABlocks.SEA_TRAIL_STOP.get() || blockstate.getBlock() == CABlocks.SEA_TRAIL_SOLID.get() || blockstate.getBlock() == CABlocks.TRAIL_PULSE.get()) {
             WorldUtils.burndownTrail(world, blockstate, x, y, z);
             if (world instanceof ServerLevel _level)
-                _level.sendParticles(CaerulaArborModParticleTypes.PURPLE_FLAME.get(), (x + 0.5), (y + 1), (z + 0.5), 48, 0.75, 0.75, 0.75, 0.15);
+                _level.sendParticles(CAParticleTypes.PURPLE_FLAME.get(), (x + 0.5), (y + 1), (z + 0.5), 48, 0.75, 0.75, 0.75, 0.15);
             for (Direction directioniterator : Direction.values()) {
                 output = (world.getBlockState(BlockPos.containing(x + directioniterator.getStepX(), y + directioniterator.getStepY(), z + directioniterator.getStepZ())));
-                if (output.getBlock() == CaerulaArborModBlocks.SEA_TRAIL_INIT.get() || output.getBlock() == CaerulaArborModBlocks.SEA_TRAIL_GROWING.get() || output.getBlock() == CaerulaArborModBlocks.SEA_TRAIL_GROWN.get()
-                        || output.getBlock() == CaerulaArborModBlocks.SEA_TRAIL_SOLID.get()) {
+                if (output.getBlock() == CABlocks.SEA_TRAIL_INIT.get() || output.getBlock() == CABlocks.SEA_TRAIL_GROWING.get() || output.getBlock() == CABlocks.SEA_TRAIL_GROWN.get()
+                        || output.getBlock() == CABlocks.SEA_TRAIL_SOLID.get()) {
                     WorldUtils.burndownTrail(world, output, x + directioniterator.getStepX(), y + directioniterator.getStepY(), z + directioniterator.getStepZ());
                 }
             }
@@ -229,17 +228,17 @@ public class LanternJudgementItem extends Item {
             }
             return InteractionResult.SUCCESS;
         }
-        if (blockstate.getBlock() == CaerulaArborModBlocks.TRAIL_LEAVE.get()) {
+        if (blockstate.getBlock() == CABlocks.TRAIL_LEAVE.get()) {
             {
                 BlockPos _pos = BlockPos.containing(x, y, z);
                 Block.dropResources(world.getBlockState(_pos), world, BlockPos.containing(x + 0.5, y + 0.5, z + 0.5), null);
                 world.destroyBlock(_pos, false);
             }
             if (world instanceof ServerLevel _level)
-                _level.sendParticles(CaerulaArborModParticleTypes.PURPLE_FLAME.get(), (x + 0.5), (y + 1), (z + 0.5), 48, 0.75, 0.75, 0.75, 0.15);
+                _level.sendParticles(CAParticleTypes.PURPLE_FLAME.get(), (x + 0.5), (y + 1), (z + 0.5), 48, 0.75, 0.75, 0.75, 0.15);
             for (Direction directioniterator : Direction.values()) {
                 output = (world.getBlockState(BlockPos.containing(x + directioniterator.getStepX(), y + directioniterator.getStepY(), z + directioniterator.getStepZ())));
-                if (output.getBlock() == CaerulaArborModBlocks.TRAIL_LEAVE.get()) {
+                if (output.getBlock() == CABlocks.TRAIL_LEAVE.get()) {
                     {
                         BlockPos _pos = BlockPos.containing(x + directioniterator.getStepX(), y + directioniterator.getStepY(), z + directioniterator.getStepZ());
                         Block.dropResources(world.getBlockState(_pos), world, BlockPos.containing(x + directioniterator.getStepX() + 0.5, y + directioniterator.getStepY() + 0.5, z + directioniterator.getStepZ() + 0.5), null);
@@ -258,12 +257,12 @@ public class LanternJudgementItem extends Item {
         }
         if (blockstate.is(BlockTags.create(new ResourceLocation("minecraft:logs")))) {
             toGive = new ItemStack(Items.CHARCOAL).copy();
-            if (blockstate.getBlock() == CaerulaArborModBlocks.TRAIL_LOG.get() || blockstate.getBlock() == CaerulaArborModBlocks.STRIPPED_TRAIL_LOG.get()) {
-                toGive = new ItemStack(CaerulaArborModItems.TRAIL_POWDER.get()).copy();
+            if (blockstate.getBlock() == CABlocks.TRAIL_LOG.get() || blockstate.getBlock() == CABlocks.STRIPPED_TRAIL_LOG.get()) {
+                toGive = new ItemStack(CAItems.TRAIL_POWDER.get()).copy();
             }
             world.destroyBlock(BlockPos.containing(x, y, z), false);
             if (world instanceof ServerLevel _level)
-                _level.sendParticles(CaerulaArborModParticleTypes.PURPLE_FLAME.get(), (x + 0.5), (y + 1), (z + 0.5), 48, 0.75, 0.75, 0.75, 0.15);
+                _level.sendParticles(CAParticleTypes.PURPLE_FLAME.get(), (x + 0.5), (y + 1), (z + 0.5), 48, 0.75, 0.75, 0.75, 0.15);
             if (world instanceof Level _level) {
                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.fire.extinguish")), SoundSource.BLOCKS, 1, 1);
             }
@@ -297,7 +296,7 @@ public class LanternJudgementItem extends Item {
             if (entity == null)
                 return;
             if (entity instanceof LivingEntity _entity)
-                _entity.removeEffect(CaerulaArborModMobEffects.FROZEN.get());
+                _entity.removeEffect(CAMobEffects.FROZEN.get());
             if (entity instanceof LivingEntity _entity)
                 _entity.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
             if (entity instanceof LivingEntity _entity)

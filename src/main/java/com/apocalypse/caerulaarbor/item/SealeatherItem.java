@@ -1,6 +1,7 @@
 
 package com.apocalypse.caerulaarbor.item;
 
+import com.apocalypse.caerulaarbor.init.CAAttributes;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import net.minecraft.world.level.Level;
@@ -16,11 +17,9 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import com.google.common.collect.HashMultimap;
@@ -57,7 +56,7 @@ public abstract class SealeatherItem extends ArmorItem {
 
 			@Override
 			public Ingredient getRepairIngredient() {
-				return Ingredient.of(new ItemStack(CaerulaArborModItems.OCEAN_PHLOEM.get()));
+				return Ingredient.of(new ItemStack(CAItems.OCEAN_PHLOEM.get()));
 			}
 
 			@Override
@@ -84,7 +83,7 @@ public abstract class SealeatherItem extends ArmorItem {
         String name = "caerula_arbor_attribute_modifier";
         if (slot == this.getEquipmentSlot()){
             map = HashMultimap.create(map);
-            map.put(CaerulaArborModAttributes.MISSRATE.get(),
+            map.put(CAAttributes.MISSRATE.get(),
                     new AttributeModifier(uuid, name , 5.0f, AttributeModifier.Operation.ADDITION));
         }
         return map;
@@ -128,10 +127,10 @@ public abstract class SealeatherItem extends ArmorItem {
     	public void inventoryTick(ItemStack itemstack, Level world, Entity entity, int slot, boolean selected) {
         super.inventoryTick(itemstack, world, entity, slot, selected);
         if (entity instanceof Player player && Iterables.contains(player.getArmorSlots(), itemstack)) {
-        	if (player.hasEffect(CaerulaArborModMobEffects.ESSENCE_RESISTANCE.get())) return;
+        	if (player.hasEffect(CAMobEffects.ESSENCE_RESISTANCE.get())) return;
             if (player.tickCount % 600 == 64){
                 player.addEffect(
-                	new MobEffectInstance(CaerulaArborModMobEffects.ESSENCE_RESISTANCE.get(), 
+                	new MobEffectInstance(CAMobEffects.ESSENCE_RESISTANCE.get(),
                 	400, 0, false, false)
                 	);
             }

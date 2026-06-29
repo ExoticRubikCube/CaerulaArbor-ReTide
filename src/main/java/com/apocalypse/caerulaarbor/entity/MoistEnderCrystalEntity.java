@@ -2,9 +2,9 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CAParticleTypes;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -66,7 +66,7 @@ public class MoistEnderCrystalEntity extends PathfinderMob implements GeoEntity 
 	public boolean IS_STATIC= false;
 
 	public MoistEnderCrystalEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.MOIST_ENDER_CRYSTAL.get(), world);
+		this(CAEntities.MOIST_ENDER_CRYSTAL.get(), world);
 	}
 
 	public MoistEnderCrystalEntity(EntityType<MoistEnderCrystalEntity> type, Level world) {
@@ -181,7 +181,7 @@ public class MoistEnderCrystalEntity extends PathfinderMob implements GeoEntity 
 		if (level instanceof ServerLevel sLevel){
 			if (player.getMainHandItem().isEmpty()) {
 				ItemEntity item = new ItemEntity(sLevel, this.getX(), this.getY(), this.getZ(),
-					new ItemStack(CaerulaArborModItems.MOIST_CRYSTAL_ITEM.get()));
+					new ItemStack(CAItems.MOIST_CRYSTAL_ITEM.get()));
 				item.setPickUpDelay(10);
 				item.setUnlimitedLifetime();
 				sLevel.addFreshEntity(item);
@@ -279,8 +279,8 @@ public class MoistEnderCrystalEntity extends PathfinderMob implements GeoEntity 
             double x = this.getX();
             double y = this.getY();
             double z = this.getZ();
-            double d = 0;
-            Entity enderina = null;
+            double d;
+            Entity enderina;
             if (world.isClientSide()) {
                 return;
             }
@@ -290,7 +290,7 @@ public class MoistEnderCrystalEntity extends PathfinderMob implements GeoEntity 
             if (world instanceof ServerLevel _level)
                 _level.sendParticles(ParticleTypes.EXPLOSION, x, (y + 0.5), z, 4, 0.5, 0.5, 0.5, 0.1);
             if (world instanceof ServerLevel _level)
-                _level.sendParticles(CaerulaArborModParticleTypes.EDERMAN_PTC.get(), x, (y + 0.5), z, 32, 1, 1, 1, 0.18);
+                _level.sendParticles(CAParticleTypes.EDERMAN_PTC.get(), x, (y + 0.5), z, 32, 1, 1, 1, 0.18);
             d = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
             if (d > 0) {
                 {

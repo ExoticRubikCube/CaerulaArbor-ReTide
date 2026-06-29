@@ -1,7 +1,7 @@
 package com.apocalypse.caerulaarbor.entity;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -65,7 +65,7 @@ public class XantisEntity extends TamableAnimal implements GeoEntity {
 	public String animationprocedure = "empty";
 
 	public XantisEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.XANTIS.get(), world);
+		this(CAEntities.XANTIS.get(), world);
 	}
 
 	public XantisEntity(EntityType<XantisEntity> type, Level world) {
@@ -163,7 +163,7 @@ public class XantisEntity extends TamableAnimal implements GeoEntity {
         boolean result = false;
         Entity sourceentity = source.getEntity();
         if (sourceentity != null) {
-            result = sourceentity instanceof LivingEntity _entity && _entity.isHolding(CaerulaArborModItems.APOCATA_SWORD.get());
+            result = sourceentity instanceof LivingEntity _entity && _entity.isHolding(CAItems.APOCATA_SWORD.get());
         }
         if (result){
             this.setNoNiubi();
@@ -210,26 +210,29 @@ public class XantisEntity extends TamableAnimal implements GeoEntity {
 	@Override
 	public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
 		ItemStack itemstack = sourceentity.getItemInHand(hand);
-		InteractionResult retval = InteractionResult.sidedSuccess(this.level().isClientSide());
+        this.level().isClientSide();
+        InteractionResult retval;
 		Item item = itemstack.getItem();
 		if (itemstack.getItem() instanceof SpawnEggItem) {
-			retval = super.mobInteract(sourceentity, hand);
-		} else if (this.level().isClientSide()) {
-			retval = (this.isTame() && this.isOwnedBy(sourceentity) || this.isFood(itemstack)) ? InteractionResult.sidedSuccess(this.level().isClientSide()) : InteractionResult.PASS;
-		} else {
+            super.mobInteract(sourceentity, hand);
+        } else if (this.level().isClientSide()) {
+            if ((this.isTame() && this.isOwnedBy(sourceentity) || this.isFood(itemstack))) {
+                this.level().isClientSide();
+            }
+        } else {
 			if (this.isTame()) {
 				if (this.isOwnedBy(sourceentity)) {
 					if (item.isEdible() && this.isFood(itemstack) && this.getHealth() < this.getMaxHealth()) {
 						this.usePlayerItem(sourceentity, hand, itemstack);
 						this.heal((float) item.getFoodProperties().getNutrition());
-						retval = InteractionResult.sidedSuccess(this.level().isClientSide());
-					} else if (this.isFood(itemstack) && this.getHealth() < this.getMaxHealth()) {
+                        this.level().isClientSide();
+                    } else if (this.isFood(itemstack) && this.getHealth() < this.getMaxHealth()) {
 						this.usePlayerItem(sourceentity, hand, itemstack);
 						this.heal(4);
-						retval = InteractionResult.sidedSuccess(this.level().isClientSide());
-					} else {
-						retval = super.mobInteract(sourceentity, hand);
-					}
+                        this.level().isClientSide();
+                    } else {
+                        super.mobInteract(sourceentity, hand);
+                    }
 				}
 			} else if (this.isFood(itemstack)) {
 				this.usePlayerItem(sourceentity, hand, itemstack);
@@ -240,8 +243,8 @@ public class XantisEntity extends TamableAnimal implements GeoEntity {
 					this.level().broadcastEntityEvent(this, (byte) 6);
 				}
 				this.setPersistenceRequired();
-				retval = InteractionResult.sidedSuccess(this.level().isClientSide());
-			} else {
+                this.level().isClientSide();
+            } else {
 				retval = super.mobInteract(sourceentity, hand);
 				if (retval == InteractionResult.SUCCESS || retval == InteractionResult.CONSUME)
 					this.setPersistenceRequired();
@@ -252,10 +255,10 @@ public class XantisEntity extends TamableAnimal implements GeoEntity {
 		double z = this.getZ();
 		Entity entity = this;
 		Level world = this.level();
-        double tapTick = 0;
-        boolean isNiubi = false;
+        double tapTick;
+        boolean isNiubi;
         tapTick = entity instanceof XantisEntity _datEntI ? _datEntI.getEntityData().get(DATA_TAP_TICK) : 0;
-        if ((Entity) sourceentity instanceof LivingEntity _entity && _entity.isHolding(CaerulaArborModItems.BANNED_ITEM.get())) {
+        if ((Entity) sourceentity instanceof LivingEntity _entity && _entity.isHolding(CAItems.BANNED_ITEM.get())) {
             isNiubi = entity instanceof XantisEntity _datEntL2 && _datEntL2.getEntityData().get(DATA_NIUBI);
             if (isNiubi) {
                 if (entity instanceof XantisEntity _datEntSetL)
@@ -280,7 +283,7 @@ public class XantisEntity extends TamableAnimal implements GeoEntity {
 	public void baseTick() {
 		super.baseTick();
         LevelAccessor world = this.level();
-        double tapTick = 0;
+        double tapTick;
         if (tickCount % 40 == 0) {
             {
                 final Vec3 _center = new Vec3(this.getX(), this.getY(), this.getZ());
@@ -334,14 +337,14 @@ public class XantisEntity extends TamableAnimal implements GeoEntity {
 
 	@Override
 	public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
-		XantisEntity retval = CaerulaArborModEntities.XANTIS.get().create(serverWorld);
+		XantisEntity retval = CAEntities.XANTIS.get().create(serverWorld);
 		retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null, null);
 		return retval;
 	}
 
 	@Override
 	public boolean isFood(ItemStack stack) {
-		return Objects.equals(CaerulaArborModItems.APOCALYPSE.get(), stack.getItem());
+		return Objects.equals(CAItems.APOCALYPSE.get(), stack.getItem());
 	}
 
 	@Override

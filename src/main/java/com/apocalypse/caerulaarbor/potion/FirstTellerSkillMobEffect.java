@@ -8,8 +8,9 @@ import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.entity.FirstTellerEntity;
 import com.apocalypse.caerulaarbor.entity.TellerShotEntity;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.MathUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
@@ -68,8 +69,8 @@ public class FirstTellerSkillMobEffect extends MobEffect {
         double z = entity.getZ();
         if (entity == null)
             return;
-        double ayk = 0;
-        Entity enemy = null;
+        double ayk;
+        Entity enemy;
         new Object() {
             void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                 if (world instanceof ServerLevel _level)
@@ -100,12 +101,12 @@ public class FirstTellerSkillMobEffect extends MobEffect {
             }.compareDistOf(x, y, z)).findFirst().orElse(null);
             if (enemy == null) {
                 if ((Entity) entity instanceof LivingEntity _entity)
-                    _entity.removeEffect(CaerulaArborModMobEffects.FIRST_TELLER_SKILL.get());
+                    _entity.removeEffect(CAMobEffects.FIRST_TELLER_SKILL.get());
                 return;
             }
             if (!enemy.isAlive()) {
                 if ((Entity) entity instanceof LivingEntity _entity)
-                    _entity.removeEffect(CaerulaArborModMobEffects.FIRST_TELLER_SKILL.get());
+                    _entity.removeEffect(CAMobEffects.FIRST_TELLER_SKILL.get());
                 return;
             }
             ayk = enemy instanceof LivingEntity _livingEntity13 && _livingEntity13.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity13.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
@@ -128,7 +129,7 @@ public class FirstTellerSkillMobEffect extends MobEffect {
             if (world instanceof ServerLevel projectileLevel) {
                 Projectile _entityToSpawn = new Object() {
                     public Projectile getArrow(Level level, float damage, int knockback, byte piercing) {
-                        AbstractArrow entityToSpawn = new TellerShotEntity(CaerulaArborModEntities.TELLER_SHOT.get(), level);
+                        AbstractArrow entityToSpawn = new TellerShotEntity(CAEntities.TELLER_SHOT.get(), level);
                         entityToSpawn.setBaseDamage(damage);
                         entityToSpawn.setKnockback(knockback);
                         entityToSpawn.setSilent(true);

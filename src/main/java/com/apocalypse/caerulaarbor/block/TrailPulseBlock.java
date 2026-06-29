@@ -1,7 +1,7 @@
 
 package com.apocalypse.caerulaarbor.block;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
+import com.apocalypse.caerulaarbor.init.CABlocks;
 import com.apocalypse.caerulaarbor.procedures.PokePlayerProcedure;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
@@ -109,24 +109,24 @@ public class TrailPulseBlock extends Block {
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();
-        BlockState toPlace = Blocks.AIR.defaultBlockState();
-        BlockState toReplace = Blocks.AIR.defaultBlockState();
+        BlockState toPlace;
+        BlockState toReplace;
         boolean put = false;
-        double dltx = 0;
-        double dltz = 0;
+        double dltx;
+        double dltz;
         for (Direction directioniterator : Direction.Plane.HORIZONTAL) {
             for (int dy = 0; dy <= 2; dy++) {
                 for (int dist = 1; dist <= 2; dist++) {
                     if (Math.random() < 0.25) {
                         toReplace = (((LevelAccessor) world).getBlockState(BlockPos.containing((double) x + directioniterator.getStepX() * dist, (double) y + dy, (double) z + directioniterator.getStepZ() * dist)));
                         if (toReplace.canBeReplaced()
-                                && CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing((double) x + directioniterator.getStepX() * dist, (double) y + dy, (double) z + directioniterator.getStepZ() * dist))) {
+                                && CABlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing((double) x + directioniterator.getStepX() * dist, (double) y + dy, (double) z + directioniterator.getStepZ() * dist))) {
                             if (toReplace.getBlock() == Blocks.WATER) {
-                                toPlace = (CaerulaArborModBlocks.SEA_TRAIL_INIT.get().getStateDefinition().getProperty("waterlogged") instanceof BooleanProperty _withbp12
-                                        ? CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState().setValue(_withbp12, true)
-                                        : CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState());
+                                toPlace = (CABlocks.SEA_TRAIL_INIT.get().getStateDefinition().getProperty("waterlogged") instanceof BooleanProperty _withbp12
+                                        ? CABlocks.SEA_TRAIL_INIT.get().defaultBlockState().setValue(_withbp12, true)
+                                        : CABlocks.SEA_TRAIL_INIT.get().defaultBlockState());
                             } else {
-                                toPlace = CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState();
+                                toPlace = CABlocks.SEA_TRAIL_INIT.get().defaultBlockState();
                             }
                             {
                                 BlockPos _bp = BlockPos.containing((double) x + directioniterator.getStepX() * dist, (double) y + dy, (double) z + directioniterator.getStepZ() * dist);
@@ -140,7 +140,7 @@ public class TrailPulseBlock extends Block {
                             } else if (_num == 3) {
                                 _dir = Direction.WEST;
                             }
-                            BlockState _bs = CaerulaArborModBlocks.SEA_TRAIL_INIT.get().withPropertiesOf(_bso);
+                            BlockState _bs = CABlocks.SEA_TRAIL_INIT.get().withPropertiesOf(_bso);
                             if (_bs.hasProperty(BlockStateProperties.WATERLOGGED) && toPlace.hasProperty(BlockStateProperties.WATERLOGGED))
                                 _bs = _bs.setValue(BlockStateProperties.WATERLOGGED, toPlace.getValue(BlockStateProperties.WATERLOGGED));
                             _bs = _bs.setValue(FACING, _dir);
@@ -162,7 +162,7 @@ public class TrailPulseBlock extends Block {
                 for (int dist = 1; dist <= 2; dist++) {
                     if (Math.random() < 0.25 && canDropTrail(world, (double) x + directioniterator.getStepX() * dist, (double) y - 1, (double) z + directioniterator.getStepZ() * dist)) {
                         if ((LevelAccessor) world instanceof ServerLevel _level)
-                            FallingBlockEntity.fall(_level, BlockPos.containing((double) x + directioniterator.getStepX() * dist, (double) y - 1, (double) z + directioniterator.getStepZ() * dist), CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState());
+                            FallingBlockEntity.fall(_level, BlockPos.containing((double) x + directioniterator.getStepX() * dist, (double) y - 1, (double) z + directioniterator.getStepZ() * dist), CABlocks.SEA_TRAIL_INIT.get().defaultBlockState());
                         put = true;
                         break;
                     }
@@ -175,13 +175,13 @@ public class TrailPulseBlock extends Block {
             for (int dy = 0; dy >= 2; dy--) {
                 if (Math.random() < 0.25) {
                     toReplace = (((LevelAccessor) world).getBlockState(BlockPos.containing((double) x + dltx, (double) y + dy, (double) z + dltz)));
-                    if (toReplace.canBeReplaced() && CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing((double) x + dltx, (double) y + dy, (double) z + dltz))) {
+                    if (toReplace.canBeReplaced() && CABlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing((double) x + dltx, (double) y + dy, (double) z + dltz))) {
                         if (toReplace.getBlock() == Blocks.WATER) {
-                            toPlace = (CaerulaArborModBlocks.SEA_TRAIL_INIT.get().getStateDefinition().getProperty("waterlogged") instanceof BooleanProperty _withbp37
-                                    ? CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState().setValue(_withbp37, true)
-                                    : CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState());
+                            toPlace = (CABlocks.SEA_TRAIL_INIT.get().getStateDefinition().getProperty("waterlogged") instanceof BooleanProperty _withbp37
+                                    ? CABlocks.SEA_TRAIL_INIT.get().defaultBlockState().setValue(_withbp37, true)
+                                    : CABlocks.SEA_TRAIL_INIT.get().defaultBlockState());
                         } else {
-                            toPlace = CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState();
+                            toPlace = CABlocks.SEA_TRAIL_INIT.get().defaultBlockState();
                         }
                         {
                             BlockPos _bp = BlockPos.containing((double) x + dltx, (double) y + dy, (double) z + dltz);
@@ -195,7 +195,7 @@ public class TrailPulseBlock extends Block {
                             } else if (_num == 3) {
                                 _dir = Direction.WEST;
                             }
-                            BlockState _bs = CaerulaArborModBlocks.SEA_TRAIL_INIT.get().withPropertiesOf(_bso);
+                            BlockState _bs = CABlocks.SEA_TRAIL_INIT.get().withPropertiesOf(_bso);
                             if (_bs.hasProperty(BlockStateProperties.WATERLOGGED) && toPlace.hasProperty(BlockStateProperties.WATERLOGGED))
                                 _bs = _bs.setValue(BlockStateProperties.WATERLOGGED, toPlace.getValue(BlockStateProperties.WATERLOGGED));
                             _bs = _bs.setValue(FACING, _dir);
@@ -208,7 +208,7 @@ public class TrailPulseBlock extends Block {
             }
             if (Math.random() < 0.25 && canDropTrail(world, (double) x + dltx, (double) y - 1, (double) z + dltz)) {
                 if ((LevelAccessor) world instanceof ServerLevel _level)
-                    FallingBlockEntity.fall(_level, BlockPos.containing((double) x + dltx, (double) y - 1, (double) z + dltz), CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState());
+                    FallingBlockEntity.fall(_level, BlockPos.containing((double) x + dltx, (double) y - 1, (double) z + dltz), CABlocks.SEA_TRAIL_INIT.get().defaultBlockState());
                 put = true;
             }
         }
@@ -218,13 +218,13 @@ public class TrailPulseBlock extends Block {
             for (int dy = 0; dy >= 2; dy--) {
                 if (Math.random() < 0.25) {
                     toReplace = (((LevelAccessor) world).getBlockState(BlockPos.containing((double) x + dltx, (double) y + dy, (double) z + dltz)));
-                    if (toReplace.canBeReplaced() && CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing((double) x + dltx, (double) y + dy, (double) z + dltz))) {
+                    if (toReplace.canBeReplaced() && CABlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing((double) x + dltx, (double) y + dy, (double) z + dltz))) {
                         if (toReplace.getBlock() == Blocks.WATER) {
-                            toPlace = (CaerulaArborModBlocks.SEA_TRAIL_INIT.get().getStateDefinition().getProperty("waterlogged") instanceof BooleanProperty _withbp48
-                                    ? CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState().setValue(_withbp48, true)
-                                    : CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState());
+                            toPlace = (CABlocks.SEA_TRAIL_INIT.get().getStateDefinition().getProperty("waterlogged") instanceof BooleanProperty _withbp48
+                                    ? CABlocks.SEA_TRAIL_INIT.get().defaultBlockState().setValue(_withbp48, true)
+                                    : CABlocks.SEA_TRAIL_INIT.get().defaultBlockState());
                         } else {
-                            toPlace = CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState();
+                            toPlace = CABlocks.SEA_TRAIL_INIT.get().defaultBlockState();
                         }
                         {
                             BlockPos _bp = BlockPos.containing((double) x + dltx, (double) y + dy, (double) z + dltz);
@@ -238,7 +238,7 @@ public class TrailPulseBlock extends Block {
                             } else if (_num == 3) {
                                 _dir = Direction.WEST;
                             }
-                            BlockState _bs = CaerulaArborModBlocks.SEA_TRAIL_INIT.get().withPropertiesOf(_bso);
+                            BlockState _bs = CABlocks.SEA_TRAIL_INIT.get().withPropertiesOf(_bso);
                             if (_bs.hasProperty(BlockStateProperties.WATERLOGGED) && toPlace.hasProperty(BlockStateProperties.WATERLOGGED))
                                 _bs = _bs.setValue(BlockStateProperties.WATERLOGGED, toPlace.getValue(BlockStateProperties.WATERLOGGED));
                             _bs = _bs.setValue(FACING, _dir);
@@ -251,7 +251,7 @@ public class TrailPulseBlock extends Block {
             }
             if (Math.random() < 0.25 && canDropTrail(world, (double) x + dltx, (double) y - 1, (double) z + dltz)) {
                 if ((LevelAccessor) world instanceof ServerLevel _level)
-                    FallingBlockEntity.fall(_level, BlockPos.containing((double) x + dltx, (double) y - 1, (double) z + dltz), CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState());
+                    FallingBlockEntity.fall(_level, BlockPos.containing((double) x + dltx, (double) y - 1, (double) z + dltz), CABlocks.SEA_TRAIL_INIT.get().defaultBlockState());
                 put = true;
             }
         }
@@ -261,13 +261,13 @@ public class TrailPulseBlock extends Block {
             for (int dy = 0; dy >= 2; dy--) {
                 if (Math.random() < 0.25) {
                     toReplace = (((LevelAccessor) world).getBlockState(BlockPos.containing((double) x + dltx, (double) y + dy, (double) z + dltz)));
-                    if (toReplace.canBeReplaced() && CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing((double) x + dltx, (double) y + dy, (double) z + dltz))) {
+                    if (toReplace.canBeReplaced() && CABlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing((double) x + dltx, (double) y + dy, (double) z + dltz))) {
                         if (toReplace.getBlock() == Blocks.WATER) {
-                            toPlace = (CaerulaArborModBlocks.SEA_TRAIL_INIT.get().getStateDefinition().getProperty("waterlogged") instanceof BooleanProperty _withbp59
-                                    ? CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState().setValue(_withbp59, true)
-                                    : CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState());
+                            toPlace = (CABlocks.SEA_TRAIL_INIT.get().getStateDefinition().getProperty("waterlogged") instanceof BooleanProperty _withbp59
+                                    ? CABlocks.SEA_TRAIL_INIT.get().defaultBlockState().setValue(_withbp59, true)
+                                    : CABlocks.SEA_TRAIL_INIT.get().defaultBlockState());
                         } else {
-                            toPlace = CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState();
+                            toPlace = CABlocks.SEA_TRAIL_INIT.get().defaultBlockState();
                         }
                         {
                             BlockPos _bp = BlockPos.containing((double) x + dltx, (double) y + dy, (double) z + dltz);
@@ -281,7 +281,7 @@ public class TrailPulseBlock extends Block {
                             } else if (_num == 3) {
                                 _dir = Direction.WEST;
                             }
-                            BlockState _bs = CaerulaArborModBlocks.SEA_TRAIL_INIT.get().withPropertiesOf(_bso);
+                            BlockState _bs = CABlocks.SEA_TRAIL_INIT.get().withPropertiesOf(_bso);
                             if (_bs.hasProperty(BlockStateProperties.WATERLOGGED) && toPlace.hasProperty(BlockStateProperties.WATERLOGGED))
                                 _bs = _bs.setValue(BlockStateProperties.WATERLOGGED, toPlace.getValue(BlockStateProperties.WATERLOGGED));
                             _bs = _bs.setValue(FACING, _dir);
@@ -294,7 +294,7 @@ public class TrailPulseBlock extends Block {
             }
             if (Math.random() < 0.25 && canDropTrail(world, (double) x + dltx, (double) y - 1, (double) z + dltz)) {
                 if ((LevelAccessor) world instanceof ServerLevel _level)
-                    FallingBlockEntity.fall(_level, BlockPos.containing((double) x + dltx, (double) y - 1, (double) z + dltz), CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState());
+                    FallingBlockEntity.fall(_level, BlockPos.containing((double) x + dltx, (double) y - 1, (double) z + dltz), CABlocks.SEA_TRAIL_INIT.get().defaultBlockState());
                 put = true;
             }
         }
@@ -304,13 +304,13 @@ public class TrailPulseBlock extends Block {
             for (int dy = 0; dy >= 2; dy--) {
                 if (Math.random() < 0.25) {
                     toReplace = (((LevelAccessor) world).getBlockState(BlockPos.containing((double) x + dltx, (double) y + dy, (double) z + dltz)));
-                    if (toReplace.canBeReplaced() && CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing((double) x + dltx, (double) y + dy, (double) z + dltz))) {
+                    if (toReplace.canBeReplaced() && CABlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing((double) x + dltx, (double) y + dy, (double) z + dltz))) {
                         if (toReplace.getBlock() == Blocks.WATER) {
-                            toPlace = (CaerulaArborModBlocks.SEA_TRAIL_INIT.get().getStateDefinition().getProperty("waterlogged") instanceof BooleanProperty _withbp70
-                                    ? CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState().setValue(_withbp70, true)
-                                    : CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState());
+                            toPlace = (CABlocks.SEA_TRAIL_INIT.get().getStateDefinition().getProperty("waterlogged") instanceof BooleanProperty _withbp70
+                                    ? CABlocks.SEA_TRAIL_INIT.get().defaultBlockState().setValue(_withbp70, true)
+                                    : CABlocks.SEA_TRAIL_INIT.get().defaultBlockState());
                         } else {
-                            toPlace = CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState();
+                            toPlace = CABlocks.SEA_TRAIL_INIT.get().defaultBlockState();
                         }
                         {
                             BlockPos _bp = BlockPos.containing((double) x + dltx, (double) y + dy, (double) z + dltz);
@@ -324,7 +324,7 @@ public class TrailPulseBlock extends Block {
                             } else if (_num == 3) {
                                 _dir = Direction.WEST;
                             }
-                            BlockState _bs = CaerulaArborModBlocks.SEA_TRAIL_INIT.get().withPropertiesOf(_bso);
+                            BlockState _bs = CABlocks.SEA_TRAIL_INIT.get().withPropertiesOf(_bso);
                             if (_bs.hasProperty(BlockStateProperties.WATERLOGGED) && toPlace.hasProperty(BlockStateProperties.WATERLOGGED))
                                 _bs = _bs.setValue(BlockStateProperties.WATERLOGGED, toPlace.getValue(BlockStateProperties.WATERLOGGED));
                             _bs = _bs.setValue(FACING, _dir);
@@ -337,7 +337,7 @@ public class TrailPulseBlock extends Block {
             }
             if (Math.random() < 0.25 && canDropTrail(world, (double) x + dltx, (double) y - 1, (double) z + dltz)) {
                 if ((LevelAccessor) world instanceof ServerLevel _level)
-                    FallingBlockEntity.fall(_level, BlockPos.containing((double) x + dltx, (double) y - 1, (double) z + dltz), CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState());
+                    FallingBlockEntity.fall(_level, BlockPos.containing((double) x + dltx, (double) y - 1, (double) z + dltz), CABlocks.SEA_TRAIL_INIT.get().defaultBlockState());
                 put = true;
             }
         }
@@ -348,7 +348,7 @@ public class TrailPulseBlock extends Block {
                         {
                             BlockPos _bp = BlockPos.containing((double) x + directioniterator.getStepX(), (double) y + directioniterator.getStepY(), (double) z + directioniterator.getStepZ());
                             BlockState _bso = ((LevelAccessor) world).getBlockState(_bp);
-                            BlockState _bs = CaerulaArborModBlocks.TRAIL_PULSE.get().withPropertiesOf(_bso);
+                            BlockState _bs = CABlocks.TRAIL_PULSE.get().withPropertiesOf(_bso);
                             ((LevelAccessor) world).setBlock(_bp, _bs, 3);
                         }
                         put = true;
@@ -364,9 +364,9 @@ public class TrailPulseBlock extends Block {
             }
             if (Math.random() < 0.025) {
                 if (Math.random() < 0.012) {
-                    ((LevelAccessor) world).setBlock(BlockPos.containing(x, y, z), CaerulaArborModBlocks.RED_OVARY.get().defaultBlockState(), 3);
+                    ((LevelAccessor) world).setBlock(BlockPos.containing(x, y, z), CABlocks.RED_OVARY.get().defaultBlockState(), 3);
                 } else {
-                    ((LevelAccessor) world).setBlock(BlockPos.containing(x, y, z), CaerulaArborModBlocks.OCEAN_OVARY.get().defaultBlockState(), 3);
+                    ((LevelAccessor) world).setBlock(BlockPos.containing(x, y, z), CABlocks.OCEAN_OVARY.get().defaultBlockState(), 3);
                 }
             }
         }
@@ -377,9 +377,9 @@ public class TrailPulseBlock extends Block {
             }
             if (Math.random() < 0.025) {
                 if (Math.random() < 0.012) {
-                    ((LevelAccessor) world).setBlock(BlockPos.containing(x, y, z), CaerulaArborModBlocks.RED_OVARY.get().defaultBlockState(), 3);
+                    ((LevelAccessor) world).setBlock(BlockPos.containing(x, y, z), CABlocks.RED_OVARY.get().defaultBlockState(), 3);
                 } else {
-                    ((LevelAccessor) world).setBlock(BlockPos.containing(x, y, z), CaerulaArborModBlocks.OCEAN_OVARY.get().defaultBlockState(), 3);
+                    ((LevelAccessor) world).setBlock(BlockPos.containing(x, y, z), CABlocks.OCEAN_OVARY.get().defaultBlockState(), 3);
                 }
             }
         }
@@ -406,16 +406,15 @@ public class TrailPulseBlock extends Block {
 	}
 
 	private boolean canDropTrail(LevelAccessor world, double xx, double yy, double zz) {
-		BlockState targetBlock = Blocks.AIR.defaultBlockState();
+		BlockState targetBlock;
 		boolean drop = false;
-		drop = true;
-		if (world.getBlockFloorHeight(BlockPos.containing(xx, yy, zz)) > 0) {
+        if (world.getBlockFloorHeight(BlockPos.containing(xx, yy, zz)) > 0) {
 			return false;
 		}
 		for (int index0 = 0; index0 < 64; index0++) {
 			targetBlock = (world.getBlockState(BlockPos.containing(xx, yy - index0 - 1, zz)));
 			if (world.isEmptyBlock(BlockPos.containing(xx, yy - index0 - 1, zz)) || targetBlock.canBeReplaced()) {
-				if (CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing(xx, yy - index0 - 1, zz))) {
+				if (CABlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing(xx, yy - index0 - 1, zz))) {
 					return true;
 				}
 			} else {

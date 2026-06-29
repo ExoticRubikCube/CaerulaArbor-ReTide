@@ -6,6 +6,7 @@ public class ValidationUtils {
 		throw new UnsupportedOperationException("Utility class");
 	}
 
+	//可疑，需要解释
 	public static boolean isValidString(String item, String name) {
 		if (item == null || name == null)
 			return false;

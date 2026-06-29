@@ -1,8 +1,8 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -57,7 +57,7 @@ public class ApocataEntity extends PathfinderMob implements GeoEntity {
 	public String animationprocedure = "empty";
 
 	public ApocataEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.APOCATA.get(), world);
+		this(CAEntities.APOCATA.get(), world);
 	}
 
 	public ApocataEntity(EntityType<ApocataEntity> type, Level world) {
@@ -144,7 +144,7 @@ public class ApocataEntity extends PathfinderMob implements GeoEntity {
         Entity sourceentity = source.getEntity();
         if (sourceentity == null)
             return;
-        String name = "";
+        String name;
         if (!world.isClientSide()) {
             if (world instanceof Level _level) {
                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "apocata_die")), SoundSource.NEUTRAL, 4, (float) 1.5);
@@ -155,7 +155,7 @@ public class ApocataEntity extends PathfinderMob implements GeoEntity {
             if (!level().isClientSide())
                 discard();
             if (world instanceof ServerLevel _level) {
-                Entity entityToSpawn = CaerulaArborModEntities.TIDE_CHIMERA.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+                Entity entityToSpawn = CAEntities.TIDE_CHIMERA.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn != null) {
                     entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                 }
@@ -210,7 +210,7 @@ public class ApocataEntity extends PathfinderMob implements GeoEntity {
 	@Override
 	public void baseTick() {
 		super.baseTick();
-        double dura = 0;
+        double dura;
         dura = (Entity) this instanceof ApocataEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
         if (dura > 0) {
             if ((Entity) this instanceof ApocataEntity _datEntSetI)
@@ -289,7 +289,7 @@ public class ApocataEntity extends PathfinderMob implements GeoEntity {
 			this.dropExperience();
             LevelAccessor world = this.level();
             if (world instanceof ServerLevel _level) {
-                ItemEntity entityToSpawn = new ItemEntity(_level, this.getX(), this.getY(), this.getZ(), new ItemStack(CaerulaArborModItems.APOCALYPSE.get()));
+                ItemEntity entityToSpawn = new ItemEntity(_level, this.getX(), this.getY(), this.getZ(), new ItemStack(CAItems.APOCALYPSE.get()));
                 entityToSpawn.setPickUpDelay(10);
                 entityToSpawn.setUnlimitedLifetime();
                 _level.addFreshEntity(entityToSpawn);

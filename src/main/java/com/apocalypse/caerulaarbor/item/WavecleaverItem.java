@@ -3,8 +3,8 @@ package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.client.renderer.item.WavecleaverItemRenderer;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
@@ -154,10 +154,10 @@ public class WavecleaverItem extends Item implements GeoItem {
             if (itemstack.getItem() instanceof WavecleaverItem)
                 itemstack.getOrCreateTag().putString("geckoAnim", "animation.wavelceaver.spin");
             CaerulaArborMod.queueServerWork(5, () -> {
-                if (entity.isHolding(CaerulaArborModItems.WAVECLEAVER.get())) {
+                if (entity.isHolding(CAItems.WAVECLEAVER.get())) {
                     new Object() {
                         void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
-                            if (entity.isHolding(CaerulaArborModItems.WAVECLEAVER.get())) {
+                            if (entity.isHolding(CAItems.WAVECLEAVER.get())) {
                                 double xx = entity.getX() + 2 * entity.getLookAngle().x;
                                 double yy = entity.getY() + 2 * entity.getLookAngle().y;
                                 double zz = entity.getZ() + 2 * entity.getLookAngle().z;
@@ -203,9 +203,9 @@ public class WavecleaverItem extends Item implements GeoItem {
 		if (selected) {
             if (entity == null)
                 return;
-            if (!(entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CaerulaArborModMobEffects.ADD_REACH.get()))) {
+            if (!(entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CAMobEffects.ADD_REACH.get()))) {
                 if (entity instanceof LivingEntity living && !living.level().isClientSide())
-                    living.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ADD_REACH.get(), 20, 2, false, false));
+                    living.addEffect(new MobEffectInstance(CAMobEffects.ADD_REACH.get(), 20, 2, false, false));
             }
         }
 	}

@@ -2,7 +2,7 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.entity.SkadiCorruptedEntity;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -17,7 +17,7 @@ import java.util.List;
 
 public class CorruptedHeartSpawnerItem extends ForgeSpawnEggItem {
 	public CorruptedHeartSpawnerItem() {
-		super(CaerulaArborModEntities.SKADI_CORRUPTED, -1, -1, new Item.Properties().stacksTo(1).rarity(Rarity.RARE));
+		super(CAEntities.SKADI_CORRUPTED, -1, -1, new Item.Properties().stacksTo(1).rarity(Rarity.RARE));
 	}
 
 	@Override

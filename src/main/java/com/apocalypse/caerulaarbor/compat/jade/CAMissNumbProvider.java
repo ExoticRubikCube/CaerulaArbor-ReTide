@@ -2,7 +2,7 @@ package com.apocalypse.caerulaarbor.compat.jade;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -35,13 +35,13 @@ public enum CAMissNumbProvider implements IEntityComponentProvider {
     }
 
     private double getMiss(LivingEntity living) {
-        AttributeInstance instance = living.getAttribute(CaerulaArborModAttributes.MISSRATE.get());
+        AttributeInstance instance = living.getAttribute(CAAttributes.MISSRATE.get());
         if (instance != null) return instance.getValue();
         return 0;
     }
 
     private double getNumb(LivingEntity living) {
-        AttributeInstance instance = living.getAttribute(CaerulaArborModAttributes.NUMB.get());
+        AttributeInstance instance = living.getAttribute(CAAttributes.NUMB.get());
         if (instance != null) return instance.getBaseValue();
         return 0;
     }

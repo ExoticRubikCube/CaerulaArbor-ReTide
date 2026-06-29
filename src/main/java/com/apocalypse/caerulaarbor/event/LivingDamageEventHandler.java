@@ -3,7 +3,7 @@ package com.apocalypse.caerulaarbor.event;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
@@ -62,11 +62,11 @@ public class LivingDamageEventHandler {
         if (!(entity instanceof LivingEntity target) || !(sourceentity instanceof LivingEntity attacker)) return;
         if (event.isCanceled()) return;
 
-        double sanityRate = attacker.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get())
-                ? attacker.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).getValue()
+        double sanityRate = attacker.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get())
+                ? attacker.getAttribute(CAAttributes.SANITY_RATE.get()).getValue()
                 : 0;
-        double sanityInjuryDamage = attacker.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_INJURY_DAMAGE.get())
-                ? attacker.getAttribute(CaerulaArborModAttributes.SANITY_INJURY_DAMAGE.get()).getValue()
+        double sanityInjuryDamage = attacker.getAttributes().hasAttribute(CAAttributes.SANITY_INJURY_DAMAGE.get())
+                ? attacker.getAttribute(CAAttributes.SANITY_INJURY_DAMAGE.get()).getValue()
                 : 0;
         double sanityDamage = sanityInjuryDamage + amount * sanityRate;
 
@@ -101,8 +101,8 @@ public class LivingDamageEventHandler {
 
         if (!(sourceentity instanceof Player attacker) || !EntityUtils.canPlayerEvo(attacker)) return;
 
-        double barrier = attacker.getAttributes().hasAttribute(CaerulaArborModAttributes.LIVING_BARRIER.get())
-                ? attacker.getAttribute(CaerulaArborModAttributes.LIVING_BARRIER.get()).getBaseValue()
+        double barrier = attacker.getAttributes().hasAttribute(CAAttributes.LIVING_BARRIER.get())
+                ? attacker.getAttribute(CAAttributes.LIVING_BARRIER.get()).getBaseValue()
                 : 0;
 
         double rate;
@@ -118,8 +118,8 @@ public class LivingDamageEventHandler {
         max = max * attacker.getMaxHealth();
 
         if (barrier < max && rate > 0) {
-            if (attacker.getAttributes().hasAttribute(CaerulaArborModAttributes.LIVING_BARRIER.get()))
-                attacker.getAttribute(CaerulaArborModAttributes.LIVING_BARRIER.get()).setBaseValue(Math.min(barrier + event.getAmount() * rate, max));
+            if (attacker.getAttributes().hasAttribute(CAAttributes.LIVING_BARRIER.get()))
+                attacker.getAttribute(CAAttributes.LIVING_BARRIER.get()).setBaseValue(Math.min(barrier + event.getAmount() * rate, max));
         }
 
         lvl = EntityUtils.getNodeRealDamage(attacker);

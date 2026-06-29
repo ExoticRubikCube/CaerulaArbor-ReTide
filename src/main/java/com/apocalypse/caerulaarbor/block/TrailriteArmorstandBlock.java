@@ -1,8 +1,8 @@
 
 package com.apocalypse.caerulaarbor.block;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlockEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CABlockEntities;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -54,7 +54,7 @@ public class TrailriteArmorstandBlock extends BaseEntityBlock implements SimpleW
 	@Nullable
 	@Override
 	public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
-		return CaerulaArborModBlockEntities.TRAILRITE_ARMORSTAND.get().create(blockPos, blockState);
+		return CABlockEntities.TRAILRITE_ARMORSTAND.get().create(blockPos, blockState);
 	}
 
 	@Override
@@ -134,7 +134,7 @@ public class TrailriteArmorstandBlock extends BaseEntityBlock implements SimpleW
             return;
         if (entity instanceof Player) {
             if ((LevelAccessor) world instanceof ServerLevel _level) {
-                Entity entityToSpawn = CaerulaArborModEntities.FLAMARINE_GOLEM.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+                Entity entityToSpawn = CAEntities.FLAMARINE_GOLEM.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn != null) {
                     entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
                 }
@@ -165,7 +165,7 @@ public class TrailriteArmorstandBlock extends BaseEntityBlock implements SimpleW
 
 	private void formArmorBoss(LevelAccessor world, double x, double y, double z) {
 		if (world instanceof ServerLevel _level) {
-			Entity entityToSpawn = CaerulaArborModEntities.FLAMARINE_GOLEM.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+			Entity entityToSpawn = CAEntities.FLAMARINE_GOLEM.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
 			if (entityToSpawn != null) {
 				entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
 			}

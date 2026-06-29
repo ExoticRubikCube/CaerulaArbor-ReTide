@@ -1,8 +1,9 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.advancements.Advancement;
@@ -24,6 +25,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -85,7 +88,7 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity {
 	private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.WHITE, ServerBossEvent.BossBarOverlay.NOTCHED_6);
 
 	public LastKnightAndHorseEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.LAST_KNIGHT_AND_HORSE.get(), world);
+		this(CAEntities.LAST_KNIGHT_AND_HORSE.get(), world);
 	}
 
 	public LastKnightAndHorseEntity(EntityType<LastKnightAndHorseEntity> type, Level world) {
@@ -209,7 +212,7 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity {
 
 	@Override
 	public boolean hurt(DamageSource source, float amount) {
-		EntityUtils.applyLastKnightFreeze(this.level(), this, source.getEntity());
+		this.applyLastKnightFreeze(source.getEntity());
 		if (source.is(DamageTypes.IN_FIRE))
 			return false;
 		if (source.getDirectEntity() instanceof ThrownPotion || source.getDirectEntity() instanceof AreaEffectCloud)
@@ -231,7 +234,7 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity {
             return;
         if (sourceentity instanceof ServerPlayer _player) {
             Advancement _adv = _player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "kill_knight_and_horse"));
-            AdvancementProgress _ap = null;
+            AdvancementProgress _ap;
             if (_adv != null) {
 				_ap = _player.getAdvancements().getOrStartProgress(_adv);
 				if (!_ap.isDone()) {
@@ -306,14 +309,14 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        Entity enemy = null;
-        double add = 0;
-        double duration = 0;
-        double skillp = 0;
+        Entity enemy;
+        double add;
+        double duration;
+        double skillp;
         if (this.isAlive()) {
             if (tickCount % 10 == 0) {
-                this.removeEffect(CaerulaArborModMobEffects.DIZZY.get());
-                this.removeEffect(CaerulaArborModMobEffects.FROZEN.get());
+                this.removeEffect(CAMobEffects.DIZZY.get());
+                this.removeEffect(CAMobEffects.FROZEN.get());
                 this.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
                 if (!this.level().isClientSide())
                     this.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 20, 0, false, false));
@@ -324,7 +327,7 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity {
 						if (entityiterator.getTicksFrozen() >= 125 && entityiterator.isAlive()) {
 							entityiterator.setTicksFrozen(200);
 							if (entityiterator instanceof LivingEntity _entity && !this.level().isClientSide())
-								this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.FROZEN.get(), 20, 0, false, false));
+								this.addEffect(new MobEffectInstance(CAMobEffects.FROZEN.get(), 20, 0, false, false));
 						}
 					}
                 }
@@ -341,9 +344,9 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity {
                 setDeltaMovement(new Vec3(0, 0, 0));
             }
             setTicksFrozen(0);
-            this.removeEffect(CaerulaArborModMobEffects.FROZEN.get());
+            this.removeEffect(CAMobEffects.FROZEN.get());
             this.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
-            this.removeEffect(CaerulaArborModMobEffects.DIZZY.get());
+            this.removeEffect(CAMobEffects.DIZZY.get());
             skillp = this.getEntityData().get(DATA_skillp);
             duration = this.getEntityData().get(DATA_duration);
             if (duration > 0) {
@@ -358,11 +361,11 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity {
                         this.getEntityData().set(DATA_duration, 40);
                         this.getEntityData().set(DATA_skillp, 240);
                         if (!this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 32, 0, false, false));
+                            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 32, 0, false, false));
                         this.setAnimation("animation.last_knight_horse.skill");
                         CaerulaArborMod.queueServerWork(13, () -> {
-                            Entity enemy1 = null;
-                            double damage = 0;
+                            Entity enemy1;
+                            double damage;
                             damage = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
                             enemy1 = this.getTarget();
                             {
@@ -395,7 +398,7 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity {
                                                     new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "last_knight_attack"))), this),
                                                     (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 2));
                                             if (entityiterator instanceof LivingEntity _entity && !this.level().isClientSide())
-                                                this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ROCK_BREAK.get(), 150, 0, false, false));
+                                                this.addEffect(new MobEffectInstance(CAMobEffects.ROCK_BREAK.get(), 150, 0, false, false));
                                             entityiterator.push(0, (-1), 0);
                                         });
                                     }
@@ -416,7 +419,7 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity {
 
 	@Override
 	public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
-		LastKnightAndHorseEntity retval = CaerulaArborModEntities.LAST_KNIGHT_AND_HORSE.get().create(serverWorld);
+		LastKnightAndHorseEntity retval = CAEntities.LAST_KNIGHT_AND_HORSE.get().create(serverWorld);
 		retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null, null);
 		return retval;
 	}
@@ -501,8 +504,7 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity {
 	private PlayState attackingPredicate(AnimationState event) {
 		double d1 = this.getX() - this.xOld;
 		double d0 = this.getZ() - this.zOld;
-		float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
-		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
+        if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
 		}
@@ -550,6 +552,26 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity {
 
 	public void setAnimation(String animation) {
 		this.entityData.set(ANIMATION, animation);
+	}
+
+	public void applyLastKnightFreeze(Entity sourceEntity) {
+		if (sourceEntity == null) {
+			return;
+		}
+		int frozenDuration = this.getHealth() < this.getMaxHealth() * 0.5F ? 80 : 40;
+		double frozenTicks = sourceEntity.getTicksFrozen();
+		if (frozenTicks < 140) {
+			sourceEntity.setTicksFrozen((int) Math.min(frozenTicks + frozenDuration, 200));
+			return;
+		}
+		if (!(sourceEntity instanceof LivingEntity living) || !living.hasEffect(CAMobEffects.FROZEN.get())) {
+			this.level().playSound(null, BlockPos.containing(sourceEntity.getX(), sourceEntity.getY(), sourceEntity.getZ()),
+					ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "last_jnight_freeze")), SoundSource.HOSTILE,
+					4, (float) Mth.nextDouble(RandomSource.create(), 1, 1.15));
+		}
+		if (sourceEntity instanceof LivingEntity living && !living.level().isClientSide()) {
+			living.addEffect(new MobEffectInstance(CAMobEffects.FROZEN.get(), frozenDuration, 0, false, false));
+		}
 	}
 
 	@Override

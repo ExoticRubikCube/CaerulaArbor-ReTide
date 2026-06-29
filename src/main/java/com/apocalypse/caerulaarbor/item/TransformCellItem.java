@@ -3,7 +3,8 @@ package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
@@ -31,9 +32,9 @@ public class TransformCellItem extends Item {
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
 		ItemStack retval = super.finishUsingItem(itemstack, world, entity);
 		if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization < 3
-				&& !entity.hasEffect(CaerulaArborModMobEffects.INFESTED.get())) {
+				&& !entity.hasEffect(CAMobEffects.INFESTED.get())) {
 			if (!entity.level().isClientSide())
-				entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INFESTED.get(), 5000,
+				entity.addEffect(new MobEffectInstance(CAMobEffects.INFESTED.get(), 5000,
 						(int) (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization));
 		}
 		return retval;

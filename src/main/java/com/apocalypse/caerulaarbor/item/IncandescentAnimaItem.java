@@ -64,16 +64,16 @@ public class IncandescentAnimaItem extends Item {
         boolean finished = false;
         if (entity != null) {
             boolean shouldBroadCast = false;
-            double maxium_lvl = 0;
-            double lvl1 = 0;
-            double lvl2 = 0;
-            double lvl3 = 0;
-            double lvl4 = 0;
-            double useTick = 0;
-            double gameTick = 0;
-            String stra = "";
-            String info = "";
-            String info_raw = "";
+            double maxium_lvl;
+            double lvl1;
+            double lvl2;
+            double lvl3;
+            double lvl4;
+            double useTick;
+            double gameTick;
+            String stra;
+            String info;
+            String info_raw;
             useTick = MapVariables.get(world).incandescentAnimaUseTick;
             gameTick = ((LevelAccessor) world).getLevelData().getGameTime();
             if (useTick > 0 && gameTick - useTick < 24000) {

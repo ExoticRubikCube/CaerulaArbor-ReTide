@@ -4,12 +4,12 @@ import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.api.event.SanityEvent;
 import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.*;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
+import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -73,9 +73,7 @@ public class BishopFishEntity extends SeaMonster {
 	private boolean isBishopStarted() {
 		return EntityPredicateUtils.isBishopStarted(this);
 	}
-	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(BishopFishEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(BishopFishEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(BishopFishEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<Integer> DATA_sklp = SynchedEntityData.defineId(BishopFishEntity.class, EntityDataSerializers.INT);
 	public static final EntityDataAccessor<Integer> DATA_endp = SynchedEntityData.defineId(BishopFishEntity.class, EntityDataSerializers.INT);
 	public static final EntityDataAccessor<Integer> DATA_locx = SynchedEntityData.defineId(BishopFishEntity.class, EntityDataSerializers.INT);
@@ -90,7 +88,7 @@ public class BishopFishEntity extends SeaMonster {
 	private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.NOTCHED_10);
 
 	public BishopFishEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.BISHOP_FISH.get(), world);
+		this(CAEntities.BISHOP_FISH.get(), world);
 	}
 
 	public BishopFishEntity(EntityType<BishopFishEntity> type, Level world) {
@@ -104,9 +102,7 @@ public class BishopFishEntity extends SeaMonster {
 	@Override
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(SHOOT, false);
 		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(TEXTURE, "bishop");
 		this.entityData.define(DATA_sklp, 200);
 		this.entityData.define(DATA_endp, 1200);
 		this.entityData.define(DATA_locx, 0);
@@ -114,14 +110,6 @@ public class BishopFishEntity extends SeaMonster {
 		this.entityData.define(DATA_locz, 0);
 		this.entityData.define(DATA_summonp, 280);
 		this.entityData.define(DATA_duration, 0);
-	}
-
-	public void setTexture(String texture) {
-		this.entityData.set(TEXTURE, texture);
-	}
-
-	public String getTexture() {
-		return this.entityData.get(TEXTURE);
 	}
 
 	@Override
@@ -211,9 +199,9 @@ public class BishopFishEntity extends SeaMonster {
         double z = this.getZ();
         double rate = 0;
         double sklp = 0;
-        double dx = 0;
-        double dz = 0;
-        double yfnl = 0;
+        double dx;
+        double dz;
+        double yfnl;
         if (this.isAlive()) {
             if (((Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_sklp) : 0) <= 0) {
                 if (this instanceof BishopFishEntity) {
@@ -285,18 +273,18 @@ public class BishopFishEntity extends SeaMonster {
                             SIHelper.causeSanityInjury(target,
                                     this,
                                     (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
-                                            * (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get())
-                                            ? this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).getValue()
+                                            * (this.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get())
+                                            ? this.getAttribute(CAAttributes.SANITY_RATE.get()).getValue()
                                             : 0)
                                             * 1.5,
                                     SanityEvent.Hurt.Type.ENTITY);
                         }
                         if (entityiterator instanceof LivingEntity _entity && !this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.DIZZY.get(), 60, 0, false, false));
+                            this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 60, 0, false, false));
                     }
                 }
-                if (this.hasEffect(CaerulaArborModMobEffects.ANGER_OF_BISHOP.get())) {
-                    if ((this.hasEffect(CaerulaArborModMobEffects.ANGER_OF_BISHOP.get()) ? this.getEffect(CaerulaArborModMobEffects.ANGER_OF_BISHOP.get()).getAmplifier() : 0) >= 1) {
+                if (this.hasEffect(CAMobEffects.ANGER_OF_BISHOP.get())) {
+                    if ((this.hasEffect(CAMobEffects.ANGER_OF_BISHOP.get()) ? this.getEffect(CAMobEffects.ANGER_OF_BISHOP.get()).getAmplifier() : 0) >= 1) {
                         if ((Entity) this instanceof BishopFishEntity _datEntSetI)
                             _datEntSetI.getEntityData().set(DATA_sklp, 100);
                     } else {
@@ -327,7 +315,7 @@ public class BishopFishEntity extends SeaMonster {
                             yfnl = y + 3;
                         }
                         if (world instanceof ServerLevel _level) {
-                            Entity entityToSpawn = CaerulaArborModEntities.SONS.get().spawn(_level, BlockPos.containing(x + dx, yfnl, z + dz), MobSpawnType.MOB_SUMMONED);
+                            Entity entityToSpawn = CAEntities.SONS.get().spawn(_level, BlockPos.containing(x + dx, yfnl, z + dz), MobSpawnType.MOB_SUMMONED);
                             if (entityToSpawn != null) {
                                 entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                             }
@@ -338,7 +326,7 @@ public class BishopFishEntity extends SeaMonster {
                                 _level.playSound(null, BlockPos.containing(x + dx, yfnl, z + dz), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.guardian.flop")), SoundSource.HOSTILE, 1, 1);
                         }
                     }
-                    if (this.hasEffect(CaerulaArborModMobEffects.ANGER_OF_BISHOP.get())) {
+                    if (this.hasEffect(CAMobEffects.ANGER_OF_BISHOP.get())) {
                         if ((Entity) this instanceof BishopFishEntity _datEntSetI)
                             _datEntSetI.getEntityData().set(DATA_summonp, 360);
                     } else {
@@ -371,54 +359,70 @@ public class BishopFishEntity extends SeaMonster {
             _datEntSetI.getEntityData().set(DATA_locy, (int) Math.round(y));
         if ((Entity) this instanceof BishopFishEntity _datEntSetI)
             _datEntSetI.getEntityData().set(DATA_locz, (int) Math.round(z));
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get()))
-            this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(10);
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-            this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(24);
+        if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get()))
+            this.getAttribute(CAAttributes.SANITY_RATE.get()).setBaseValue(10);
+        if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
+            this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(24);
         setNoGravity(true);
         if (!this.level().isClientSide())
-            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 80, 1, false, false));
+            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 80, 1, false, false));
         if ((LevelAccessor) world instanceof Level _level) {
                 _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.emerge")), SoundSource.HOSTILE, 3, 1);
         }
-        if (this instanceof BishopFishEntity) {
-            this.setAnimation("animation.bishop.start1");
-        }
-        return retval;
+		this.setAnimation("animation.bishop.start1");
+		return retval;
 	}
 
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
-		compound.putString("Texture", this.getTexture());
-		compound.putInt("Datasklp", this.entityData.get(DATA_sklp));
-		compound.putInt("Dataendp", this.entityData.get(DATA_endp));
-		compound.putInt("Datalocx", this.entityData.get(DATA_locx));
-		compound.putInt("Datalocy", this.entityData.get(DATA_locy));
-		compound.putInt("Datalocz", this.entityData.get(DATA_locz));
-		compound.putInt("Datasummonp", this.entityData.get(DATA_summonp));
-		compound.putInt("Dataduration", this.entityData.get(DATA_duration));
+		compound.putInt("SkillCooldown", this.entityData.get(DATA_sklp));
+		compound.putInt("BlastCooldown", this.entityData.get(DATA_endp));
+		compound.putInt("AnchorX", this.entityData.get(DATA_locx));
+		compound.putInt("AnchorY", this.entityData.get(DATA_locy));
+		compound.putInt("AnchorZ", this.entityData.get(DATA_locz));
+		compound.putInt("SummonCooldown", this.entityData.get(DATA_summonp));
+		compound.putInt("Duration", this.entityData.get(DATA_duration));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
-		if (compound.contains("Texture"))
-			this.setTexture(compound.getString("Texture"));
-		if (compound.contains("Datasklp"))
+		if (compound.contains("SkillCooldown")) {
+			this.entityData.set(DATA_sklp, compound.getInt("SkillCooldown"));
+		} else if (compound.contains("Datasklp")) {
 			this.entityData.set(DATA_sklp, compound.getInt("Datasklp"));
-		if (compound.contains("Dataendp"))
+		}
+		if (compound.contains("BlastCooldown")) {
+			this.entityData.set(DATA_endp, compound.getInt("BlastCooldown"));
+		} else if (compound.contains("Dataendp")) {
 			this.entityData.set(DATA_endp, compound.getInt("Dataendp"));
-		if (compound.contains("Datalocx"))
+		}
+		if (compound.contains("AnchorX")) {
+			this.entityData.set(DATA_locx, compound.getInt("AnchorX"));
+		} else if (compound.contains("Datalocx")) {
 			this.entityData.set(DATA_locx, compound.getInt("Datalocx"));
-		if (compound.contains("Datalocy"))
+		}
+		if (compound.contains("AnchorY")) {
+			this.entityData.set(DATA_locy, compound.getInt("AnchorY"));
+		} else if (compound.contains("Datalocy")) {
 			this.entityData.set(DATA_locy, compound.getInt("Datalocy"));
-		if (compound.contains("Datalocz"))
+		}
+		if (compound.contains("AnchorZ")) {
+			this.entityData.set(DATA_locz, compound.getInt("AnchorZ"));
+		} else if (compound.contains("Datalocz")) {
 			this.entityData.set(DATA_locz, compound.getInt("Datalocz"));
-		if (compound.contains("Datasummonp"))
+		}
+		if (compound.contains("SummonCooldown")) {
+			this.entityData.set(DATA_summonp, compound.getInt("SummonCooldown"));
+		} else if (compound.contains("Datasummonp")) {
 			this.entityData.set(DATA_summonp, compound.getInt("Datasummonp"));
-		if (compound.contains("Dataduration"))
+		}
+		if (compound.contains("Duration")) {
+			this.entityData.set(DATA_duration, compound.getInt("Duration"));
+		} else if (compound.contains("Dataduration")) {
 			this.entityData.set(DATA_duration, compound.getInt("Dataduration"));
+		}
 	}
 
 	@Override
@@ -428,16 +432,16 @@ public class BishopFishEntity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        double skl = 0;
-        double end = 0;
-        double smm = 0;
-        double d = 0;
+        double skl;
+        double end;
+        double smm;
+        double d;
         if (this.getHealth() <= this.getMaxHealth() * 0.67) {
-            if (!this.level().isClientSide() && !this.hasEffect(CaerulaArborModMobEffects.ANGER_OF_BISHOP.get())) {;
+            if (!this.level().isClientSide() && !this.hasEffect(CAMobEffects.ANGER_OF_BISHOP.get())) {;
                 if (this.getHealth() <= this.getMaxHealth() * 0.33) {
-                    this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ANGER_OF_BISHOP.get(), 20, 1));
+                    this.addEffect(new MobEffectInstance(CAMobEffects.ANGER_OF_BISHOP.get(), 20, 1));
                 } else {
-                    this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ANGER_OF_BISHOP.get(), 20, 0));
+                    this.addEffect(new MobEffectInstance(CAMobEffects.ANGER_OF_BISHOP.get(), 20, 0));
                 }
             }
         }
@@ -468,14 +472,14 @@ public class BishopFishEntity extends SeaMonster {
                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "bishopfish_blast")), SoundSource.HOSTILE, 4, 1);
                 }
                 if (!this.level().isClientSide())
-                    this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 40, 0));
+                    this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 40, 0));
                 if ((Entity) this instanceof BishopFishEntity _datEntSetI)
                     _datEntSetI.getEntityData().set(DATA_endp, 2400);
                 new Object() {
                     void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
-                        double dx1 = 0;
-                        double dz1 = 0;
-                        double yfnl = 0;
+                        double dx1;
+                        double dz1;
+                        double yfnl;
                         dx1 = Mth.nextInt(RandomSource.create(), -18, 18);
                         dz1 = Mth.nextInt(RandomSource.create(), -18, 18);
                         yfnl = world.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (int) (x + dx1), (int) (z + dz1));
@@ -485,9 +489,9 @@ public class BishopFishEntity extends SeaMonster {
                         if (yfnl > y + 3) {
                             yfnl = y + 3;
                         }
-                        com.apocalypse.caerulaarbor.util.WorldUtils.summonRandomSeaborn(world, 0.75, x + dx1, yfnl, z + dz1);
+                        WorldUtils.summonRandomSeaborn(world, 0.75, x + dx1, yfnl, z + dz1);
                         if (world instanceof ServerLevel _level)
-                            FallingBlockEntity.fall(_level, BlockPos.containing(x + dx1, yfnl + 6, z + dz1), CaerulaArborModBlocks.SEA_TRAIL_GROWN.get().defaultBlockState());
+                            FallingBlockEntity.fall(_level, BlockPos.containing(x + dx1, yfnl + 6, z + dz1), CABlocks.SEA_TRAIL_GROWN.get().defaultBlockState());
                         if (world instanceof ServerLevel _level)
                             _level.sendParticles(ParticleTypes.CLOUD, (x + dx1), (yfnl + 1), (z + dz1), 64, 1, 1, 1, 0.1);
                         if (world instanceof Level _level) {

@@ -2,7 +2,7 @@ package com.apocalypse.caerulaarbor.block;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
@@ -121,17 +121,17 @@ public class OperationTableBlock extends Block {
 		Direction direction = hit.getDirection();
         InteractionResult result = InteractionResult.PASS;
         if (entity != null) {
-            double stats = 0;
+            double stats;
             String res = "";
-            ItemStack item = ItemStack.EMPTY;
-            ItemStack output = ItemStack.EMPTY;
+            ItemStack item;
+            ItemStack output;
             stats = blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _getip1 ? blockstate.getValue(_getip1) : -1;
             item = ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).copy();
             if (!(Math.abs((double) x - hitX) > 1)) {
                 if (!(Math.abs((double) y - hitY) > 1)) {
                     if (!(Math.abs((double) z - hitZ) > 1)) {
                         if (stats == 0) {
-                            if (item.getItem() == CaerulaArborModItems.PERSONNEL_TRANSPORTER.get()) {
+                            if (item.getItem() == CAItems.PERSONNEL_TRANSPORTER.get()) {
                                 if ((item.getOrCreateTag().getString("name")).equals("caerula_arbor:the_abandoned")) {
                                     {
                                         int _value = 1;
@@ -151,13 +151,13 @@ public class OperationTableBlock extends Block {
                                     _player.displayClientMessage(Component.literal((Component.translatable("block.caerula_arbor.operation_table.misuse").getString())), true);
                             }
                         } else if (stats == 1) {
-                            if (item.getItem() == CaerulaArborModItems.OPERATION_KIT_SKADI.get()) {
+                            if (item.getItem() == CAItems.OPERATION_KIT_SKADI.get()) {
                                 res = "caerula_arbor:skadi";
-                            } else if (item.getItem() == CaerulaArborModItems.OPERATION_KIT_ULPIANS.get()) {
+                            } else if (item.getItem() == CAItems.OPERATION_KIT_ULPIANS.get()) {
                                 res = "caerula_arbor:ulpians";
-                            } else if (item.getItem() == CaerulaArborModItems.OPERATION_KIT_GLADIIA.get()) {
+                            } else if (item.getItem() == CAItems.OPERATION_KIT_GLADIIA.get()) {
                                 res = "caerula_arbor:gladiia";
-                            } else if (item.getItem() == CaerulaArborModItems.OPERATION_KIT_SPECTER.get()) {
+                            } else if (item.getItem() == CAItems.OPERATION_KIT_SPECTER.get()) {
                                 res = "caerula_arbor:specter";
                             }
                             if (!(res).isEmpty()) {
@@ -177,7 +177,7 @@ public class OperationTableBlock extends Block {
                                     }
                                 }
                                 ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
-                                output = new ItemStack(CaerulaArborModItems.PERSONNEL_TRANSPORTER.get()).copy();
+                                output = new ItemStack(CAItems.PERSONNEL_TRANSPORTER.get()).copy();
                                 output.getOrCreateTag().putString("name", res);
                                 output.getOrCreateTag().putDouble("perc", 0.5);
                                 {

@@ -1,11 +1,11 @@
 package com.apocalypse.caerulaarbor.block;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.entity.IsharmlaEntity;
 import com.apocalypse.caerulaarbor.entity.SkadiCorruptedEntity;
 import com.apocalypse.caerulaarbor.entity.SkadiEntity;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
-import com.apocalypse.caerulaarbor.util.WorldUtils;
+import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
@@ -167,13 +167,13 @@ public class IsharmlaRemainBlock extends Block {
 		Direction direction = hit.getDirection();
         InteractionResult result = InteractionResult.PASS;
         if (entity != null) {
-            double stat = 0;
-            Entity skadi = null;
+            double stat;
+            Entity skadi;
             if (world.getEntitiesOfClass(SkadiCorruptedEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).isEmpty()) {
                 stat = blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _getip3 ? blockstate.getValue(_getip3) : -1;
                 if (stat == 0) {
-                    if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CaerulaArborModItems.WHIRL_EYE.get()
-                            && ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == CaerulaArborModItems.CAERULA_HEART.get()) {
+                    if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.WHIRL_EYE.get()
+                            && ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == CAItems.CAERULA_HEART.get()) {
                         skadi = world.getEntitiesOfClass(SkadiEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).stream().sorted(new Object() {
                             Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
                                 return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
@@ -185,8 +185,8 @@ public class IsharmlaRemainBlock extends Block {
                             result = InteractionResult.FAIL;
                         } else {
                             if (skadi instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                                _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ISHARMLA_CURSE.get(), 99999, 0));
-                            WorldUtils.isharmlaLinkPtcToEntity(world, x, y, z, skadi);
+                                _entity.addEffect(new MobEffectInstance(CAMobEffects.ISHARMLA_CURSE.get(), 99999, 0));
+                            IsharmlaEntity.sendLinkParticlesToEntity(world, x, y, z, skadi);
                             if ((LevelAccessor) world instanceof Level _level) {
                                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "isharmla_tear_place")), SoundSource.BLOCKS, 3, 1);
                             }
@@ -220,7 +220,7 @@ public class IsharmlaRemainBlock extends Block {
                         if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
                             _player.displayClientMessage(Component.literal((Component.translatable("block.caerula_arbor.isharmla_remain.notice").getString())), true);
                     }
-                } else if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CaerulaArborModItems.TEAR_ISHARMLA.get()) {
+                } else if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.TEAR_ISHARMLA.get()) {
                     if ((LevelAccessor) world instanceof Level _level) {
                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.totem.use")), SoundSource.BLOCKS, 3, 1);
                     }

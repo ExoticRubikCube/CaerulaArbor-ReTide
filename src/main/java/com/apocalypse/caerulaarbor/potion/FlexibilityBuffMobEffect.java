@@ -1,6 +1,7 @@
 
 package com.apocalypse.caerulaarbor.potion;
 
+import com.apocalypse.caerulaarbor.init.CAAttributes;
 import net.minecraftforge.client.extensions.common.IClientMobEffectExtensions;
 
 import net.minecraft.world.item.ItemStack;
@@ -11,8 +12,6 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.client.gui.GuiGraphics;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-
 import java.util.List;
 import java.util.ArrayList;
 import java.util.function.Consumer;
@@ -20,7 +19,7 @@ import java.util.function.Consumer;
 public class FlexibilityBuffMobEffect extends MobEffect {
     public FlexibilityBuffMobEffect() {
         super(MobEffectCategory.BENEFICIAL, -6697729);
-        this.addAttributeModifier(CaerulaArborModAttributes.MISSRATE.get(), "ff06eaa4-e7d6-351a-a4c4-d69514dd9e44", 3, AttributeModifier.Operation.ADDITION);
+        this.addAttributeModifier(CAAttributes.MISSRATE.get(), "ff06eaa4-e7d6-351a-a4c4-d69514dd9e44", 3, AttributeModifier.Operation.ADDITION);
     }
 
     @Override

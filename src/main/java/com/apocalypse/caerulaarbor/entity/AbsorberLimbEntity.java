@@ -2,10 +2,9 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
-import net.minecraft.core.registries.Registries;
+import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -51,7 +50,7 @@ public class AbsorberLimbEntity extends SeaMonster {
 	public String animationprocedure = "empty";
 
 	public AbsorberLimbEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.ABSORBER_LIMB.get(), world);
+		this(CAEntities.ABSORBER_LIMB.get(), world);
 	}
 
 	public AbsorberLimbEntity(EntityType<AbsorberLimbEntity> type, Level world) {
@@ -96,7 +95,7 @@ public class AbsorberLimbEntity extends SeaMonster {
 
 	protected void dropCustomDeathLoot(DamageSource source, int looting, boolean recentlyHitIn) {
 		super.dropCustomDeathLoot(source, looting, recentlyHitIn);
-		this.spawnAtLocation(new ItemStack(CaerulaArborModItems.NERVOUS_REGENERATION.get()));
+		this.spawnAtLocation(new ItemStack(CAItems.NERVOUS_REGENERATION.get()));
 	}
 
 	@Override
@@ -123,22 +122,22 @@ public class AbsorberLimbEntity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        Entity thirster = null;
+        Entity thirster;
         thirster = world.getEntitiesOfClass(ThirsterEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true).stream().min(new Object() {
             Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
                 return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
             }
         }.compareDistOf(x, y, z)).orElse(null);
         if (!(thirster == null)) {
-            if (thirster instanceof LivingEntity _livingEntity3 && _livingEntity3.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()))
-                _livingEntity3.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get())
-                        .setBaseValue(Math.max((thirster instanceof LivingEntity _livingEntity2 && _livingEntity2.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get())
-                                ? _livingEntity2.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).getBaseValue()
+            if (thirster instanceof LivingEntity _livingEntity3 && _livingEntity3.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
+                _livingEntity3.getAttribute(CAAttributes.GENERAL_DEFENSE.get())
+                        .setBaseValue(Math.max((thirster instanceof LivingEntity _livingEntity2 && _livingEntity2.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get())
+                                ? _livingEntity2.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getBaseValue()
                                 : 0) - 1, 0));
-            if (thirster instanceof LivingEntity _livingEntity5 && _livingEntity5.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get())) {
-                _livingEntity5.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get())
-                        .setBaseValue(Math.max((_livingEntity5.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get())
-                                ? _livingEntity5.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).getBaseValue()
+            if (thirster instanceof LivingEntity _livingEntity5 && _livingEntity5.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())) {
+                _livingEntity5.getAttribute(CAAttributes.MAGIC_RESISTANCE.get())
+                        .setBaseValue(Math.max((_livingEntity5.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())
+                                ? _livingEntity5.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).getBaseValue()
                                 : 0) - 5, 0));
             }
         }
@@ -171,11 +170,10 @@ public class AbsorberLimbEntity extends SeaMonster {
 	@Override
 	public void baseTick() {
 		super.baseTick();
-        LevelAccessor world = this.level();
         setDeltaMovement(new Vec3(0, 0, 0));
-        if (tickCount >= 16 && ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) >= ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1)) {
-            ((Entity) this).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.GENERIC_KILL)), 999999);
-        }
+        if (tickCount >= 16 && this.getHealth() >= this.getMaxHealth()) {
+			this.kill();
+		}
         this.refreshDimensions();
 	}
 

@@ -1,8 +1,8 @@
 
 package com.apocalypse.caerulaarbor.block;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlockEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CABlockEntities;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -67,7 +67,7 @@ public class TidewayCradleBlock extends BaseEntityBlock implements SimpleWaterlo
 	@Nullable
 	@Override
 	public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
-		return CaerulaArborModBlockEntities.TIDEWAY_CRADLE.get().create(blockPos, blockState);
+		return CABlockEntities.TIDEWAY_CRADLE.get().create(blockPos, blockState);
 	}
 
 	@Override
@@ -134,9 +134,9 @@ public class TidewayCradleBlock extends BaseEntityBlock implements SimpleWaterlo
 		Direction direction = hit.getDirection();
         InteractionResult result = InteractionResult.PASS;
         if (entity != null) {
-            ItemStack axe = ItemStack.EMPTY;
+            ItemStack axe;
             axe = ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).copy();
-            if (axe.getItem() == CaerulaArborModItems.PATH_INAUGURATOR.get() && (blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _getip3 ? blockstate.getValue(_getip3) : -1) == 1) {
+            if (axe.getItem() == CAItems.PATH_INAUGURATOR.get() && (blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _getip3 ? blockstate.getValue(_getip3) : -1) == 1) {
                 {
                     int _value = 0;
                     BlockPos _pos = BlockPos.containing(x, y, z);

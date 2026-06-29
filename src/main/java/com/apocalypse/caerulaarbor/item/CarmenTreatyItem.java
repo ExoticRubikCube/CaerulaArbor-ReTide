@@ -1,9 +1,9 @@
 
 package com.apocalypse.caerulaarbor.item;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
+import com.apocalypse.caerulaarbor.init.CABlocks;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAParticleTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -48,17 +48,17 @@ public class CarmenTreatyItem extends Item {
         ItemStack itemstack = context.getItemInHand();
         if (entity == null)
             return InteractionResult.PASS;
-        double tx = 0;
-        double ty = 0;
-        double tz = 0;
-        if (blockstate.getBlock() == CaerulaArborModBlocks.FAX.get()) {
+        double tx;
+        double ty;
+        double tz;
+        if (blockstate.getBlock() == CABlocks.FAX.get()) {
             tx = x + 0.5 + direction.getStepX();
             ty = y + direction.getStepY();
             tz = z + 0.5 + direction.getStepZ();
             if (world instanceof ServerLevel _level)
-                _level.sendParticles(CaerulaArborModParticleTypes.PURPLE_FLAME.get(), tx, (ty + 0.64), tz, 48, 0.64, 0.64, 0.64, 0.1);
+                _level.sendParticles(CAParticleTypes.PURPLE_FLAME.get(), tx, (ty + 0.64), tz, 48, 0.64, 0.64, 0.64, 0.1);
             if (world instanceof ServerLevel _level) {
-                Entity entityToSpawn = CaerulaArborModEntities.SAINT_CARMEN.get().spawn(_level, BlockPos.containing(tx, ty, tz), MobSpawnType.MOB_SUMMONED);
+                Entity entityToSpawn = CAEntities.SAINT_CARMEN.get().spawn(_level, BlockPos.containing(tx, ty, tz), MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn != null) {
                     entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                 }

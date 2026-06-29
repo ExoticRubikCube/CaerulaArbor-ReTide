@@ -86,7 +86,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
 	private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.RED, ServerBossEvent.BossBarOverlay.NOTCHED_6);
 
 	public SkadiCorruptedEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.SKADI_CORRUPTED.get(), world);
+		this(CAEntities.SKADI_CORRUPTED.get(), world);
 	}
 
 	public SkadiCorruptedEntity(EntityType<SkadiCorruptedEntity> type, Level world) {
@@ -255,7 +255,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
 			else if(p<1.5) newAmount = amount * 0.5f;
 		}
 		boolean damaged = super.hurt(source, newAmount);
-		if (damaged && EntityUtils.isCorruptedSource(source)) {
+		if (damaged && this.isCorruptedSource(source)) {
 			if (this.getEntityData().get(DATA_phase) > 1.5) {
 				return damaged;
 			}
@@ -268,7 +268,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
 				}
 				this.setAnimation("animation.skadi_corrupted.convert_in_1");
 				if (!this.level().isClientSide())
-					this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 9999, 9, false, false));
+					this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 9999, 9, false, false));
 				this.getEntityData().set(DATA_duration, 10000);
 				this.getEntityData().set(DATA_convertTick, 30);
 				this.getEntityData().set(DATA_convertP, 10000);
@@ -318,13 +318,13 @@ public class SkadiCorruptedEntity extends SeaMonster {
         double y = this.getY();
         double z = this.getZ();
         Entity enemy = null;
-        double dura = 0;
-        double conv = 0;
-        double deal = 0;
+        double dura;
+        double conv;
+        double deal;
         double phase = 0;
-        double converT = 0;
-        double gap = 0;
-        double nn = 0;
+        double converT;
+        double gap;
+        double nn;
         converT = (Entity) this instanceof SkadiCorruptedEntity _datEntI ? _datEntI.getEntityData().get(DATA_convertTick) : 0;
         if (converT < 999) {
             if (converT > 0) {
@@ -341,13 +341,13 @@ public class SkadiCorruptedEntity extends SeaMonster {
                         }
                     }
                     if (world instanceof ServerLevel _level) {
-                        ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, new ItemStack(CaerulaArborModItems.INCANDESCENT_ANIMA.get()));
+                        ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, new ItemStack(CAItems.INCANDESCENT_ANIMA.get()));
                         entityToSpawn.setPickUpDelay(10);
                         entityToSpawn.setUnlimitedLifetime();
                         _level.addFreshEntity(entityToSpawn);
                     }
                     if (world instanceof ServerLevel _level) {
-                        ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, new ItemStack(CaerulaArborModItems.RECORD_UNDERTIDES.get()));
+                        ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, new ItemStack(CAItems.RECORD_UNDERTIDES.get()));
                         entityToSpawn.setPickUpDelay(10);
                         entityToSpawn.setUnlimitedLifetime();
                         _level.addFreshEntity(entityToSpawn);
@@ -359,7 +359,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
                         _datEntSetL.getEntityData().set(DATA_mayCorrupt, false);
                     if (!level().isClientSide())
                         discard();
-                    EntityUtils.summonHurtSkadi(world, x, y, z);
+                    this.spawnHurtSkadi(world, x, y, z);
                 }
             }
         }
@@ -370,7 +370,9 @@ public class SkadiCorruptedEntity extends SeaMonster {
             dura = (Entity) this instanceof SkadiCorruptedEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
             deal = (Entity) this instanceof SkadiCorruptedEntity _datEntI ? _datEntI.getEntityData().get(DATA_deal) : 0;
             phase = (Entity) this instanceof SkadiCorruptedEntity _datEntI ? _datEntI.getEntityData().get(DATA_phase) : 0;
-            enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+            if ((Entity) this instanceof Mob _mobEnt) {
+                _mobEnt.getTarget();
+            }
             if (dura > 0) {
                 if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetI)
                     _datEntSetI.getEntityData().set(DATA_duration, (int) (dura - 1));
@@ -403,7 +405,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
                     if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetL)
                         _datEntSetL.getEntityData().set(DATA_mayCorrupt, true);
                     if (!this.level().isClientSide())
-                        this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 60, 9, false, false));
+                        this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 60, 9, false, false));
                     if (!world.isClientSide()) {
                         if (world instanceof Level _level) {
                                 _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "silence3")), SoundSource.HOSTILE, 2, 1);
@@ -425,10 +427,10 @@ public class SkadiCorruptedEntity extends SeaMonster {
                         _datEntSetI.getEntityData().set(DATA_deal, 0);
                     if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetI)
                         _datEntSetI.getEntityData().set(DATA_duration, 80);
-                    if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-                        this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get())
-                                .setBaseValue(((this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get())
-                                        ? this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).getBaseValue()
+                    if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
+                        this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get())
+                                .setBaseValue(((this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())
+                                        ? this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).getBaseValue()
                                         : 0) + 50));
                     if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
                         this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
@@ -436,7 +438,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
                     if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetL)
                         _datEntSetL.getEntityData().set(DATA_mayCorrupt, true);
                     if (!this.level().isClientSide())
-                        this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 80, 9, false, false));
+                        this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 80, 9, false, false));
                     if (!world.isClientSide()) {
                         if (world instanceof Level _level) {
                                 _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "silence4")), SoundSource.HOSTILE, 2, 1);
@@ -454,9 +456,9 @@ public class SkadiCorruptedEntity extends SeaMonster {
                 gap = 300;
                 nn = 5;
                 if (tickCount % 20 == 5) {
-                    Entity enemy1 = null;
-                    double ddd = 0;
-                    double dama = 0;
+                    Entity enemy1;
+                    double ddd;
+                    double dama;
                     ddd = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
                     enemy1 = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                     {
@@ -515,23 +517,23 @@ public class SkadiCorruptedEntity extends SeaMonster {
                     }
                 }
                 double phase1 = 0;
-                double ang = 0;
-                double r = 0;
-                double t = 0;
+                double ang;
+                double r;
+                double t;
                 t = tickCount % 90;
                 for (int index0 = 0; index0 < 20; index0++) {
                     ang = Math.toRadians(index0 * 6 + t * 4);
                     r = 11.5 + Math.sin(index0 * 12);
                     if (world instanceof ServerLevel _level)
-                        _level.sendParticles(CaerulaArborModParticleTypes.CORRUPTED_FISH.get(), (x + r * Math.sin(ang)), (y + 0.15), (z + r * Math.cos(ang)), 1, 0, 0.25, 0, 0.2);
+                        _level.sendParticles(CAParticleTypes.CORRUPTED_FISH.get(), (x + r * Math.sin(ang)), (y + 0.15), (z + r * Math.cos(ang)), 1, 0, 0.25, 0, 0.2);
                 }
             }
             if (tickCount % 20 == 10) {
-                double ddd = 0;
-                double healPerc = 0;
-                boolean mayBonus = false;
-                boolean isSeaborn = false;
-                Entity enemy1 = null;
+                double ddd;
+                double healPerc;
+                boolean mayBonus;
+                boolean isSeaborn;
+                Entity enemy1;
                 ddd = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
                 healPerc = 0.1;
                 enemy1 = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
@@ -570,10 +572,10 @@ public class SkadiCorruptedEntity extends SeaMonster {
                                         _livingEntity10.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
                                                 ((entityiterator instanceof LivingEntity _livingEntity9 && _livingEntity9.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity9.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0)
                                                         + ddd * 0.4));
-                                    if (entityiterator instanceof LivingEntity _livingEntity12 && _livingEntity12.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()))
-                                        _livingEntity12.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get())
-                                                .setBaseValue(((entityiterator instanceof LivingEntity _livingEntity11 && _livingEntity11.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get())
-                                                        ? _livingEntity11.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).getBaseValue()
+                                    if (entityiterator instanceof LivingEntity _livingEntity12 && _livingEntity12.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
+                                        _livingEntity12.getAttribute(CAAttributes.GENERAL_DEFENSE.get())
+                                                .setBaseValue(((entityiterator instanceof LivingEntity _livingEntity11 && _livingEntity11.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get())
+                                                        ? _livingEntity11.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getBaseValue()
                                                         : 0) + ddd * 0.4));
                                     entityiterator.getPersistentData().putBoolean("corruptedBonus1", true);
                                 }
@@ -603,15 +605,15 @@ public class SkadiCorruptedEntity extends SeaMonster {
                 assert Boolean.TRUE; //#dbg:SkadiCorruptedSkills:corruptedSpawnCheck
                 WorldUtils.corruptedSpawnMobs(world, x, y, z, nn);
             }
-            double phase1 = 0;
-            double ang = 0;
-            double r = 0;
+            double phase1;
+            double ang;
+            double r;
             ang = Mth.nextDouble(RandomSource.create(), 0, 6.283);
             phase1 = (Entity) this instanceof SkadiCorruptedEntity _datEntI ? _datEntI.getEntityData().get(DATA_phase) : 0;
             for (int index0 = 0; index0 < (int) (phase1 + 1); index0++) {
                 r = Mth.nextDouble(RandomSource.create(), 2, 3.5);
                 if (world instanceof ServerLevel _level)
-                    _level.sendParticles(CaerulaArborModParticleTypes.CORRUPTED_FISH.get(), (x + r * Math.sin(ang)), (y + 0.25), (z + r * Math.cos(ang)), 1, 0, 0, 0, 0.2);
+                    _level.sendParticles(CAParticleTypes.CORRUPTED_FISH.get(), (x + r * Math.sin(ang)), (y + 0.25), (z + r * Math.cos(ang)), 1, 0, 0, 0, 0.2);
             }
             if (!(phase > 1.5)) {
                 LivingEntity _livEnt =  this;
@@ -631,7 +633,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
 
 	@Override
 	public InteractionResult mobInteract(Player player, InteractionHand hand){
-        if (player.getMainHandItem().getItem() == CaerulaArborModItems.CORRUPTED_HEART_SPAWNER.get()){
+        if (player.getMainHandItem().getItem() == CAItems.CORRUPTED_HEART_SPAWNER.get()){
             entityData.set(DATA_convertP, 1);
             return InteractionResult.SUCCESS;
         }
@@ -690,8 +692,8 @@ public class SkadiCorruptedEntity extends SeaMonster {
 		builder = builder.add(Attributes.ATTACK_DAMAGE, 15);
 		builder = builder.add(Attributes.FOLLOW_RANGE, 36);
 		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
-		builder = builder.add(CaerulaArborModAttributes.SANITY_MODIFIER.get(), 0.02);
-		builder = builder.add(CaerulaArborModAttributes.MAGIC_RESISTANCE.get(), 30);
+		builder = builder.add(CAAttributes.SANITY_MODIFIER.get(), 0.02);
+		builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 30);
 		return builder;
 	}
 
@@ -747,6 +749,27 @@ public class SkadiCorruptedEntity extends SeaMonster {
 		return PlayState.CONTINUE;
 	}
 
+	private void spawnHurtSkadi(LevelAccessor world, double x, double y, double z) {
+		if (world instanceof ServerLevel level) {
+			LivingEntity entityToSpawn = CAEntities.SKADI.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+			if (entityToSpawn != null) {
+				entityToSpawn.setHealth(entityToSpawn.getMaxHealth() * 0.4F);
+				entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+			}
+		}
+	}
+
+	private boolean isCorruptedSource(DamageSource source) {
+		Entity sourceEntity = source.getEntity();
+		if (sourceEntity == null) {
+			return true;
+		}
+		if (sourceEntity.getType().is(EntityUtils.HUMAN)) {
+			return true;
+		}
+		return sourceEntity instanceof Player;
+	}
+
 	@Override
 	protected void tickDeath() {
 		++this.deathTime;
@@ -770,7 +793,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
                     }
                 }
                 if (world instanceof ServerLevel _level) {
-                    Entity entityToSpawn = CaerulaArborModEntities.ISHARMLA.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+                    Entity entityToSpawn = CAEntities.ISHARMLA.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                     if (entityToSpawn != null) {
                         entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                     }
@@ -788,15 +811,15 @@ public class SkadiCorruptedEntity extends SeaMonster {
                     }
                 }
                 if (world instanceof ServerLevel _level) {
-                    ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, new ItemStack(CaerulaArborModItems.INCANDESCENT_ANIMA.get()));
+                    ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, new ItemStack(CAItems.INCANDESCENT_ANIMA.get()));
                     entityToSpawn.setPickUpDelay(10);
                     entityToSpawn.setUnlimitedLifetime();
                     _level.addFreshEntity(entityToSpawn);
                 }
-                EntityUtils.summonHurtSkadi(world, x, y, z);
+                this.spawnHurtSkadi(world, x, y, z);
             }
             if (world instanceof ServerLevel _level) {
-                ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, new ItemStack(CaerulaArborModItems.RECORD_UNDERTIDES.get()));
+                ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, new ItemStack(CAItems.RECORD_UNDERTIDES.get()));
                 entityToSpawn.setPickUpDelay(10);
                 entityToSpawn.setUnlimitedLifetime();
                 _level.addFreshEntity(entityToSpawn);

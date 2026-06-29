@@ -40,7 +40,7 @@ public class EvolutionCommand {
 				entity = FakePlayerFactory.getMinecraft(_servLevel);
 			Direction direction = Direction.DOWN;
 			if (entity != null)
-				direction = entity.getDirection();
+                entity.getDirection();
 
 			UpgradeGrowProcedure.execute(world);
 			return 0;
@@ -54,9 +54,9 @@ public class EvolutionCommand {
 				entity = FakePlayerFactory.getMinecraft(_servLevel);
 			Direction direction = Direction.DOWN;
 			if (entity != null)
-				direction = entity.getDirection();
+                entity.getDirection();
 
-            String info = "";
+            String info;
             MapVariablesHandler.setStrategyLevel(world, StrategyType.GROW, Math.round(DoubleArgumentType.getDouble(arguments, "lvl")));
             if (DoubleArgumentType.getDouble(arguments, "lvl") >= 3) {
                 if ((LevelAccessor) world instanceof Level _level) {
@@ -88,7 +88,7 @@ public class EvolutionCommand {
 				entity = FakePlayerFactory.getMinecraft(_servLevel);
 			Direction direction = Direction.DOWN;
 			if (entity != null)
-				direction = entity.getDirection();
+                entity.getDirection();
 
 			UpgradeBreedProcedure.execute(world);
 			return 0;
@@ -102,9 +102,9 @@ public class EvolutionCommand {
 				entity = FakePlayerFactory.getMinecraft(_servLevel);
 			Direction direction = Direction.DOWN;
 			if (entity != null)
-				direction = entity.getDirection();
+                entity.getDirection();
 
-            String info = "";
+            String info;
             MapVariablesHandler.setStrategyLevel(world, StrategyType.BREED, Math.round(DoubleArgumentType.getDouble(arguments, "lvl")));
             if (DoubleArgumentType.getDouble(arguments, "lvl") >= 3) {
                 if ((LevelAccessor) world instanceof Level _level) {
@@ -136,7 +136,7 @@ public class EvolutionCommand {
 				entity = FakePlayerFactory.getMinecraft(_servLevel);
 			Direction direction = Direction.DOWN;
 			if (entity != null)
-				direction = entity.getDirection();
+                entity.getDirection();
 
 			UpgradeMigraProcedure.execute(world);
 			return 0;
@@ -150,9 +150,9 @@ public class EvolutionCommand {
 				entity = FakePlayerFactory.getMinecraft(_servLevel);
 			Direction direction = Direction.DOWN;
 			if (entity != null)
-				direction = entity.getDirection();
+                entity.getDirection();
 
-            String info = "";
+            String info;
             MapVariablesHandler.setStrategyLevel(world, StrategyType.MIGRATION, Math.round(DoubleArgumentType.getDouble(arguments, "lvl")));
             if (DoubleArgumentType.getDouble(arguments, "lvl") >= 3) {
                 if ((LevelAccessor) world instanceof Level _level) {
@@ -184,7 +184,7 @@ public class EvolutionCommand {
 				entity = FakePlayerFactory.getMinecraft(_servLevel);
 			Direction direction = Direction.DOWN;
 			if (entity != null)
-				direction = entity.getDirection();
+                entity.getDirection();
 
 			UpgradeSubsisProcedure.execute(world);
 			return 0;
@@ -198,9 +198,9 @@ public class EvolutionCommand {
 				entity = FakePlayerFactory.getMinecraft(_servLevel);
 			Direction direction = Direction.DOWN;
 			if (entity != null)
-				direction = entity.getDirection();
+                entity.getDirection();
 
-            String info = "";
+            String info;
             MapVariablesHandler.setStrategyLevel(world, StrategyType.SUBSISTING, Math.round(DoubleArgumentType.getDouble(arguments, "lvl")));
             if (DoubleArgumentType.getDouble(arguments, "lvl") >= 3) {
                 if ((LevelAccessor) world instanceof Level _level) {
@@ -232,10 +232,10 @@ public class EvolutionCommand {
 				entity = FakePlayerFactory.getMinecraft(_servLevel);
 			Direction direction = Direction.DOWN;
 			if (entity != null)
-				direction = entity.getDirection();
+                entity.getDirection();
 
             if (entity != null) {
-                String info = "";
+                String info;
                 if (StrategyUtils.canEnableSilence(world)) {
                     MapVariablesHandler.setStrategyLevel(world, StrategyType.SILENCE, Math.round(DoubleArgumentType.getDouble(arguments, "lvl")));
                     if (DoubleArgumentType.getDouble(arguments, "lvl") == 1) {

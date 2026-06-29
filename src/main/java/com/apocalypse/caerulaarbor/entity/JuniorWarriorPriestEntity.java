@@ -1,7 +1,7 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
@@ -55,7 +55,7 @@ public class JuniorWarriorPriestEntity extends Animal implements GeoEntity {
 	public String animationprocedure = "empty";
 
 	public JuniorWarriorPriestEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.JUNIOR_WARRIOR_PRIEST.get(), world);
+		this(CAEntities.JUNIOR_WARRIOR_PRIEST.get(), world);
 	}
 
 	public JuniorWarriorPriestEntity(EntityType<JuniorWarriorPriestEntity> type, Level world) {
@@ -196,7 +196,7 @@ public class JuniorWarriorPriestEntity extends Animal implements GeoEntity {
 	@Override
 	public void baseTick() {
 		super.baseTick();
-        double sklp1 = 0;
+        double sklp1;
         if (this.isAlive()) {
             sklp1 = (Entity) this instanceof JuniorWarriorPriestEntity _datEntI ? _datEntI.getEntityData().get(DATA_skill_p) : 0;
             if (sklp1 > 0) {
@@ -214,7 +214,7 @@ public class JuniorWarriorPriestEntity extends Animal implements GeoEntity {
 
 	@Override
 	public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
-		JuniorWarriorPriestEntity retval = CaerulaArborModEntities.JUNIOR_WARRIOR_PRIEST.get().create(serverWorld);
+		JuniorWarriorPriestEntity retval = CAEntities.JUNIOR_WARRIOR_PRIEST.get().create(serverWorld);
 		retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null, null);
 		return retval;
 	}

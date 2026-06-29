@@ -51,8 +51,8 @@ public class FrozenMobEffect extends MobEffect {
         double z = entity.getZ();
         if (entity == null)
             return;
-        double dh = 0;
-        double dw = 0;
+        double dh;
+        double dw;
         if (entity instanceof Creeper) {
             CompoundTag dataIndex1 = new CompoundTag();
             entity.saveWithoutId(dataIndex1);

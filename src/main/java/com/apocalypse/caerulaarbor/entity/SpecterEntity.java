@@ -1,9 +1,10 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
@@ -75,7 +76,7 @@ public class SpecterEntity extends Animal implements GeoEntity {
 
 
 	public SpecterEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.SPECTER.get(), world);
+		this(CAEntities.SPECTER.get(), world);
 	}
 
 	public SpecterEntity(EntityType<SpecterEntity> type, Level world) {
@@ -254,8 +255,8 @@ public class SpecterEntity extends Animal implements GeoEntity {
         if (this.getAttributes().hasAttribute(ForgeMod.SWIM_SPEED.get()))
             this.getAttribute(ForgeMod.SWIM_SPEED.get())
                     .setBaseValue((this.getAttributes().hasAttribute(ForgeMod.SWIM_SPEED.get()) ? this.getAttribute(ForgeMod.SWIM_SPEED.get()).getBaseValue() : 0) * 8);
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()))
-            this.getAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()).setBaseValue(0.33);
+        if (this.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
+            this.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.33);
         return retval;
 	}
 
@@ -288,11 +289,11 @@ public class SpecterEntity extends Animal implements GeoEntity {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        Entity enemy = null;
+        Entity enemy;
         double gap = 0;
-        double sklp1 = 0;
-        double dura = 0;
-        double skillp2 = 0;
+        double sklp1;
+        double dura;
+        double skillp2;
             if (this.isAlive()) {
                 sklp1 = this.getEntityData().get(DATA_skillp1);
                 skillp2 = this.getEntityData().get(DATA_skillp2);
@@ -308,7 +309,7 @@ public class SpecterEntity extends Animal implements GeoEntity {
                             this.getEntityData().set(DATA_skillp1, 0);
                             this.getEntityData().set(DATA_duration, (int) (dura + 45));
                             if (!this.level().isClientSide())
-                                this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 35, 0, false, false));
+                                this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 35, 0, false, false));
                             CaerulaArborMod.queueServerWork(8, () -> {
                                 if (world instanceof Level _level) {
                                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "saw_heavy")), SoundSource.NEUTRAL, 3, 1);
@@ -349,14 +350,14 @@ public class SpecterEntity extends Animal implements GeoEntity {
                             }
                             this.getEntityData().set(DATA_skillp2, 1000);
                             if (!this.level().isClientSide())
-                                this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.IMMORTAL.get(), 400, 0, false, false));
+                                this.addEffect(new MobEffectInstance(CAMobEffects.IMMORTAL.get(), 400, 0, false, false));
                             if (!this.level().isClientSide())
-                                this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ADD_ATTACK_PERCLY.get(), 400, 5, false, false));
+                                this.addEffect(new MobEffectInstance(CAMobEffects.ADD_ATTACK_PERCLY.get(), 400, 5, false, false));
                         }
                     }
                 }
                 EntityUtils.healFromGladiia(world, x, y, z, this);
-                double perc = 0;
+                double perc;
                 if (tickCount % 10 == 0) {
 						{
 							final Vec3 _center = new Vec3(x, y, z);
@@ -366,10 +367,10 @@ public class SpecterEntity extends Animal implements GeoEntity {
 									continue;
 								}
 								if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunters")))) {
-									if (!(entityiterator instanceof LivingEntity _livEnt3 && _livEnt3.hasEffect(CaerulaArborModMobEffects.ADD_HEALTH_PERCLY.get()))) {
+									if (!(entityiterator instanceof LivingEntity _livEnt3 && _livEnt3.hasEffect(CAMobEffects.ADD_HEALTH_PERCLY.get()))) {
 										perc = EntityUtils.getHealthPerc(entityiterator);
 										if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
-											_entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ADD_HEALTH_PERCLY.get(), 32768, 0, false, false));
+											_entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_HEALTH_PERCLY.get(), 32768, 0, false, false));
 										if (entityiterator instanceof LivingEntity _entity)
 											_entity.setHealth((float) ((entityiterator instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * perc));
 									}
@@ -388,7 +389,7 @@ public class SpecterEntity extends Animal implements GeoEntity {
 
 	@Override
 	public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
-		SpecterEntity retval = CaerulaArborModEntities.SPECTER.get().create(serverWorld);
+		SpecterEntity retval = CAEntities.SPECTER.get().create(serverWorld);
 		retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null, null);
 		return retval;
 	}
@@ -480,7 +481,7 @@ public class SpecterEntity extends Animal implements GeoEntity {
 			this.dropExperience();
             LevelAccessor world = this.level();
             if (world instanceof ServerLevel _level) {
-                Entity entityToSpawn = CaerulaArborModEntities.SPECTER_DOLL.get().spawn(_level, BlockPos.containing(this.getX(), this.getY(), this.getZ()), MobSpawnType.MOB_SUMMONED);
+                Entity entityToSpawn = CAEntities.SPECTER_DOLL.get().spawn(_level, BlockPos.containing(this.getX(), this.getY(), this.getZ()), MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn != null) {
                     entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                 }

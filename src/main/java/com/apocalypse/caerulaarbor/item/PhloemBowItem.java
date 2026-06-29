@@ -2,8 +2,8 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEnchantments;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CAEnchantments;
 import com.apocalypse.caerulaarbor.client.renderer.item.PhloemBowItemRenderer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
@@ -157,19 +157,19 @@ public class PhloemBowItem extends Item implements GeoItem {
 		double z = entity.getZ();
 
         if (entity != null) {
-            boolean valid = false;
+            boolean valid;
             valid = true;
             if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == itemstack.getItem()) {
                 if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.POWER_ARROWS, ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY)) != 0
-                        && ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).getEnchantmentLevel(Enchantments.POWER_ARROWS) > itemstack.getEnchantmentLevel(CaerulaArborModEnchantments.REFLECTION.get())) {
+                        && ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).getEnchantmentLevel(Enchantments.POWER_ARROWS) > itemstack.getEnchantmentLevel(CAEnchantments.REFLECTION.get())) {
                     {
                         Map<Enchantment, Integer> _enchantments = EnchantmentHelper.getEnchantments(itemstack);
-                        if (_enchantments.containsKey(CaerulaArborModEnchantments.REFLECTION.get())) {
-                            _enchantments.remove(CaerulaArborModEnchantments.REFLECTION.get());
+                        if (_enchantments.containsKey(CAEnchantments.REFLECTION.get())) {
+                            _enchantments.remove(CAEnchantments.REFLECTION.get());
                             EnchantmentHelper.setEnchantments(_enchantments, itemstack);
                         }
                     }
-                    itemstack.enchant(CaerulaArborModEnchantments.REFLECTION.get(), ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).getEnchantmentLevel(Enchantments.POWER_ARROWS));
+                    itemstack.enchant(CAEnchantments.REFLECTION.get(), ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).getEnchantmentLevel(Enchantments.POWER_ARROWS));
                     {
                         Map<Enchantment, Integer> _enchantments = EnchantmentHelper.getEnchantments(((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY));
                         if (_enchantments.containsKey(Enchantments.POWER_ARROWS)) {
@@ -184,15 +184,15 @@ public class PhloemBowItem extends Item implements GeoItem {
                     }
                     valid = false;
                 } else if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY)) != 0
-                        && EnchantmentHelper.getItemEnchantmentLevel(CaerulaArborModEnchantments.METABOLISM.get(), itemstack) == 0) {
+                        && EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.METABOLISM.get(), itemstack) == 0) {
                     {
                         Map<Enchantment, Integer> _enchantments = EnchantmentHelper.getEnchantments(itemstack);
-                        if (_enchantments.containsKey(CaerulaArborModEnchantments.METABOLISM.get())) {
-                            _enchantments.remove(CaerulaArborModEnchantments.METABOLISM.get());
+                        if (_enchantments.containsKey(CAEnchantments.METABOLISM.get())) {
+                            _enchantments.remove(CAEnchantments.METABOLISM.get());
                             EnchantmentHelper.setEnchantments(_enchantments, itemstack);
                         }
                     }
-                    itemstack.enchant(CaerulaArborModEnchantments.METABOLISM.get(), 1);
+                    itemstack.enchant(CAEnchantments.METABOLISM.get(), 1);
                     {
                         Map<Enchantment, Integer> _enchantments = EnchantmentHelper.getEnchantments(((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY));
                         if (_enchantments.containsKey(Enchantments.INFINITY_ARROWS)) {
@@ -210,7 +210,7 @@ public class PhloemBowItem extends Item implements GeoItem {
             }
             if (valid) {
                 if (!((Entity) entity instanceof Player _plrCldCheck32 && _plrCldCheck32.getCooldowns().isOnCooldown(itemstack.getItem()))) {
-                    if (((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.OCEAN_ARROW.get()))) || new Object() {
+                    if (((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CAItems.OCEAN_ARROW.get()))) || new Object() {
                         public boolean checkGamemode(Entity _ent) {
                             if (_ent instanceof ServerPlayer _serverPlayer) {
                                 return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
@@ -223,7 +223,7 @@ public class PhloemBowItem extends Item implements GeoItem {
                     }.checkGamemode((Entity) entity)) {
 						if (entity != null) {
 							CaerulaArborMod.queueServerWork(24, () -> {
-								if ((((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CaerulaArborModItems.OCEAN_ARROW.get()))) || new Object() {
+								if ((((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CAItems.OCEAN_ARROW.get()))) || new Object() {
 									public boolean checkGamemode(Entity _ent) {
 										if (_ent instanceof ServerPlayer _serverPlayer) {
 											return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
@@ -233,7 +233,7 @@ public class PhloemBowItem extends Item implements GeoItem {
 										}
 										return false;
 									}
-								}.checkGamemode((Entity) entity) || EnchantmentHelper.getItemEnchantmentLevel(CaerulaArborModEnchantments.METABOLISM.get(), itemstack) != 0)
+								}.checkGamemode((Entity) entity) || EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.METABOLISM.get(), itemstack) != 0)
 										&& (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == itemstack.getItem()
 										|| ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == itemstack.getItem())) {
 									if ((LevelAccessor) world instanceof Level _level1) {
@@ -257,7 +257,7 @@ public class PhloemBowItem extends Item implements GeoItem {
 											}
 										}
 									}
-									if (EnchantmentHelper.getItemEnchantmentLevel(CaerulaArborModEnchantments.METABOLISM.get(), itemstack) != 0) {
+									if (EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.METABOLISM.get(), itemstack) != 0) {
 										{
 											Entity _shootFrom = entity;
 											Level projectileLevel = _shootFrom.level();
@@ -273,9 +273,9 @@ public class PhloemBowItem extends Item implements GeoItem {
 														entityToSpawn.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
 														return entityToSpawn;
 													}
-												}.getArrow(projectileLevel, (Entity) entity, (float) (7 + 1.5 * itemstack.getEnchantmentLevel(CaerulaArborModEnchantments.REFLECTION.get())), (int) 0.5, (byte) 1);
+												}.getArrow(projectileLevel, (Entity) entity, (float) (7 + 1.5 * itemstack.getEnchantmentLevel(CAEnchantments.REFLECTION.get())), (int) 0.5, (byte) 1);
 												_entityToSpawn.setPos(_shootFrom.getX(), _shootFrom.getEyeY() - 0.1, _shootFrom.getZ());
-												_entityToSpawn.shoot(_shootFrom.getLookAngle().x, _shootFrom.getLookAngle().y, _shootFrom.getLookAngle().z, (float) (3 + 0.2 * itemstack.getEnchantmentLevel(CaerulaArborModEnchantments.REFLECTION.get())), 0);
+												_entityToSpawn.shoot(_shootFrom.getLookAngle().x, _shootFrom.getLookAngle().y, _shootFrom.getLookAngle().z, (float) (3 + 0.2 * itemstack.getEnchantmentLevel(CAEnchantments.REFLECTION.get())), 0);
 												projectileLevel.addFreshEntity(_entityToSpawn);
 											}
 										}
@@ -292,7 +292,7 @@ public class PhloemBowItem extends Item implements GeoItem {
 											}
 										}.checkGamemode((Entity) entity))) {
 											if ((Entity) entity instanceof Player _player1) {
-												ItemStack _stktoremove = new ItemStack(CaerulaArborModItems.OCEAN_ARROW.get());
+												ItemStack _stktoremove = new ItemStack(CAItems.OCEAN_ARROW.get());
 												_player1.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player1.inventoryMenu.getCraftSlots());
 											}
 											{
@@ -310,9 +310,9 @@ public class PhloemBowItem extends Item implements GeoItem {
 															entityToSpawn.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
 															return entityToSpawn;
 														}
-													}.getArrow(projectileLevel, (Entity) entity, (float) (7 + 1.5 * itemstack.getEnchantmentLevel(CaerulaArborModEnchantments.REFLECTION.get())), (int) 0.5, (byte) 1);
+													}.getArrow(projectileLevel, (Entity) entity, (float) (7 + 1.5 * itemstack.getEnchantmentLevel(CAEnchantments.REFLECTION.get())), (int) 0.5, (byte) 1);
 													_entityToSpawn.setPos(_shootFrom.getX(), _shootFrom.getEyeY() - 0.1, _shootFrom.getZ());
-													_entityToSpawn.shoot(_shootFrom.getLookAngle().x, _shootFrom.getLookAngle().y, _shootFrom.getLookAngle().z, (float) (3 + 0.2 * itemstack.getEnchantmentLevel(CaerulaArborModEnchantments.REFLECTION.get())), 0);
+													_entityToSpawn.shoot(_shootFrom.getLookAngle().x, _shootFrom.getLookAngle().y, _shootFrom.getLookAngle().z, (float) (3 + 0.2 * itemstack.getEnchantmentLevel(CAEnchantments.REFLECTION.get())), 0);
 													projectileLevel.addFreshEntity(_entityToSpawn);
 												}
 											}
@@ -332,9 +332,9 @@ public class PhloemBowItem extends Item implements GeoItem {
 															entityToSpawn.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
 															return entityToSpawn;
 														}
-													}.getArrow(projectileLevel, (Entity) entity, (float) (7 + 1.5 * itemstack.getEnchantmentLevel(CaerulaArborModEnchantments.REFLECTION.get())), (int) 0.5, (byte) 1);
+													}.getArrow(projectileLevel, (Entity) entity, (float) (7 + 1.5 * itemstack.getEnchantmentLevel(CAEnchantments.REFLECTION.get())), (int) 0.5, (byte) 1);
 													_entityToSpawn.setPos(_shootFrom.getX(), _shootFrom.getEyeY() - 0.1, _shootFrom.getZ());
-													_entityToSpawn.shoot(_shootFrom.getLookAngle().x, _shootFrom.getLookAngle().y, _shootFrom.getLookAngle().z, (float) (3 + 0.2 * itemstack.getEnchantmentLevel(CaerulaArborModEnchantments.REFLECTION.get())), 0);
+													_entityToSpawn.shoot(_shootFrom.getLookAngle().x, _shootFrom.getLookAngle().y, _shootFrom.getLookAngle().z, (float) (3 + 0.2 * itemstack.getEnchantmentLevel(CAEnchantments.REFLECTION.get())), 0);
 													projectileLevel.addFreshEntity(_entityToSpawn);
 												}
 											}

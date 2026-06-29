@@ -126,20 +126,20 @@ public class LivingHurtEventHandler {
 
         if (damagesource.is(DamageTypeTags.BYPASSES_INVULNERABILITY) || damagesource.is(DamageTypeTags.BYPASSES_EFFECTS)) return;
 
-        double brr = entity instanceof LivingEntity _livingEntity1 && _livingEntity1.getAttributes().hasAttribute(CaerulaArborModAttributes.LIVING_BARRIER.get())
-                ? _livingEntity1.getAttribute(CaerulaArborModAttributes.LIVING_BARRIER.get()).getBaseValue()
+        double brr = entity instanceof LivingEntity _livingEntity1 && _livingEntity1.getAttributes().hasAttribute(CAAttributes.LIVING_BARRIER.get())
+                ? _livingEntity1.getAttribute(CAAttributes.LIVING_BARRIER.get()).getBaseValue()
                 : 0;
 
         if (brr > 0) {
             double disp;
             if (brr >= amount) {
-                if (entity instanceof LivingEntity _livingEntity2 && _livingEntity2.getAttributes().hasAttribute(CaerulaArborModAttributes.LIVING_BARRIER.get()))
-                    _livingEntity2.getAttribute(CaerulaArborModAttributes.LIVING_BARRIER.get()).setBaseValue((brr - amount));
+                if (entity instanceof LivingEntity _livingEntity2 && _livingEntity2.getAttributes().hasAttribute(CAAttributes.LIVING_BARRIER.get()))
+                    _livingEntity2.getAttribute(CAAttributes.LIVING_BARRIER.get()).setBaseValue((brr - amount));
                 disp = amount;
                 event.setAmount(0);
             } else {
-                if (entity instanceof LivingEntity _livingEntity4 && _livingEntity4.getAttributes().hasAttribute(CaerulaArborModAttributes.LIVING_BARRIER.get()))
-                    _livingEntity4.getAttribute(CaerulaArborModAttributes.LIVING_BARRIER.get()).setBaseValue(0);
+                if (entity instanceof LivingEntity _livingEntity4 && _livingEntity4.getAttributes().hasAttribute(CAAttributes.LIVING_BARRIER.get()))
+                    _livingEntity4.getAttribute(CAAttributes.LIVING_BARRIER.get()).setBaseValue(0);
                 disp = brr;
                 event.setAmount((float) (amount - brr));
             }
@@ -147,7 +147,7 @@ public class LivingHurtEventHandler {
                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "living_barrier")), SoundSource.HOSTILE, 2, (float) Mth.nextDouble(RandomSource.create(), 0.9, 1.1));
             }
             if (world instanceof ServerLevel _level)
-                _level.sendParticles(CaerulaArborModParticleTypes.LIVING_BARRIER_SHOW.get(), x, (y + 0.75), z, (int) Math.min(disp * 0.5, 24), 0.75, 0.75, 0.75, 0.1);
+                _level.sendParticles(CAParticleTypes.LIVING_BARRIER_SHOW.get(), x, (y + 0.75), z, (int) Math.min(disp * 0.5, 24), 0.75, 0.75, 0.75, 0.1);
         }
     }
 
@@ -163,15 +163,15 @@ public class LivingHurtEventHandler {
         if (damagesource.is(B_PROTECTION)) return;
 
         if (damagesource.is(IS_MAGIC) && !damagesource.is(DamageTypeTags.BYPASSES_ENCHANTMENTS)) {
-            double mgc_resis = entity instanceof LivingEntity _livingEntity5 && _livingEntity5.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get())
-                    ? _livingEntity5.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).getValue()
+            double mgc_resis = entity instanceof LivingEntity _livingEntity5 && _livingEntity5.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())
+                    ? _livingEntity5.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).getValue()
                     : 0;
             if (mgc_resis > 0) {
                 event.setAmount((float) Math.max(amount * 0.01 * (100 - mgc_resis), amount * 0.05));
             }
         } else {
-            double def = entity instanceof LivingEntity _livingEntity7 && _livingEntity7.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get())
-                    ? _livingEntity7.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).getValue()
+            double def = entity instanceof LivingEntity _livingEntity7 && _livingEntity7.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get())
+                    ? _livingEntity7.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getValue()
                     : 0;
             if (def > 0 && !damagesource.is(B_DEFENSE)) {
                 event.setAmount((float) Math.max(amount - def, amount * 0.05));
@@ -213,28 +213,28 @@ public class LivingHurtEventHandler {
             event.setAmount((float) Math.min(amount * ratie, (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.34));
 
             if (entity instanceof FlamarineStatueEntity) {
-                if (entity instanceof LivingEntity _livingEntity8 && _livingEntity8.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()))
-                    _livingEntity8.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get())
-                            .setBaseValue(Math.max((entity instanceof LivingEntity _livingEntity7 && _livingEntity7.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get())
-                                    ? _livingEntity7.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).getBaseValue()
+                if (entity instanceof LivingEntity _livingEntity8 && _livingEntity8.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
+                    _livingEntity8.getAttribute(CAAttributes.GENERAL_DEFENSE.get())
+                            .setBaseValue(Math.max((entity instanceof LivingEntity _livingEntity7 && _livingEntity7.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get())
+                                    ? _livingEntity7.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getBaseValue()
                                     : 0) - 0.5, 1));
-                if (entity instanceof LivingEntity _livingEntity10 && _livingEntity10.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-                    _livingEntity10.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get())
-                            .setBaseValue(Math.max((entity instanceof LivingEntity _livingEntity9 && _livingEntity9.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get())
-                                    ? _livingEntity9.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).getBaseValue()
+                if (entity instanceof LivingEntity _livingEntity10 && _livingEntity10.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
+                    _livingEntity10.getAttribute(CAAttributes.MAGIC_RESISTANCE.get())
+                            .setBaseValue(Math.max((entity instanceof LivingEntity _livingEntity9 && _livingEntity9.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())
+                                    ? _livingEntity9.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).getBaseValue()
                                     : 0) - 2, 15));
             } else {
                 double add = entity instanceof FlamarineGolemEntity _datEntI ? _datEntI.getEntityData().get(FlamarineGolemEntity.DATA_addition) : 0;
                 if (add > 0) {
-                    if (entity instanceof LivingEntity _livingEntity13 && _livingEntity13.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()))
-                        _livingEntity13.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get())
-                                .setBaseValue(((entity instanceof LivingEntity _livingEntity12 && _livingEntity12.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get())
-                                        ? _livingEntity12.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).getBaseValue()
+                    if (entity instanceof LivingEntity _livingEntity13 && _livingEntity13.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
+                        _livingEntity13.getAttribute(CAAttributes.GENERAL_DEFENSE.get())
+                                .setBaseValue(((entity instanceof LivingEntity _livingEntity12 && _livingEntity12.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get())
+                                        ? _livingEntity12.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getBaseValue()
                                         : 0) + 1));
-                    if (entity instanceof LivingEntity _livingEntity15 && _livingEntity15.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-                        _livingEntity15.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get())
-                                .setBaseValue(((entity instanceof LivingEntity _livingEntity14 && _livingEntity14.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get())
-                                        ? _livingEntity14.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).getBaseValue()
+                    if (entity instanceof LivingEntity _livingEntity15 && _livingEntity15.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
+                        _livingEntity15.getAttribute(CAAttributes.MAGIC_RESISTANCE.get())
+                                .setBaseValue(((entity instanceof LivingEntity _livingEntity14 && _livingEntity14.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())
+                                        ? _livingEntity14.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).getBaseValue()
                                         : 0) + 1.5));
                     if (entity instanceof FlamarineGolemEntity _datEntSetI)
                         _datEntSetI.getEntityData().set(FlamarineGolemEntity.DATA_addition, (int) (add - 1));
@@ -256,8 +256,8 @@ public class LivingHurtEventHandler {
         ItemStack legg = (sourceentity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.LEGS) : ItemStack.EMPTY).copy();
         ItemStack boot = (sourceentity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.FEET) : ItemStack.EMPTY).copy();
 
-        if (helm.getItem() == CaerulaArborModItems.TRAILRITE_ARMOR_HELMET.get() && chest.getItem() == CaerulaArborModItems.TRAILRITE_ARMOR_CHESTPLATE.get()
-                && legg.getItem() == CaerulaArborModItems.TRAILRITE_ARMOR_LEGGINGS.get() && boot.getItem() == CaerulaArborModItems.TRAILRITE_ARMOR_BOOTS.get()) {
+        if (helm.getItem() == CAItems.TRAILRITE_ARMOR_HELMET.get() && chest.getItem() == CAItems.TRAILRITE_ARMOR_CHESTPLATE.get()
+                && legg.getItem() == CAItems.TRAILRITE_ARMOR_LEGGINGS.get() && boot.getItem() == CAItems.TRAILRITE_ARMOR_BOOTS.get()) {
             EntityUtils.giveLessArmor(entity, 24);
         }
 
@@ -266,8 +266,8 @@ public class LivingHurtEventHandler {
         legg = (entity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.LEGS) : ItemStack.EMPTY).copy();
         boot = (entity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.FEET) : ItemStack.EMPTY).copy();
 
-        if (helm.getItem() == CaerulaArborModItems.TRAILRITE_ARMOR_HELMET.get() && chest.getItem() == CaerulaArborModItems.TRAILRITE_ARMOR_CHESTPLATE.get()
-                && legg.getItem() == CaerulaArborModItems.TRAILRITE_ARMOR_LEGGINGS.get() && boot.getItem() == CaerulaArborModItems.TRAILRITE_ARMOR_BOOTS.get()) {
+        if (helm.getItem() == CAItems.TRAILRITE_ARMOR_HELMET.get() && chest.getItem() == CAItems.TRAILRITE_ARMOR_CHESTPLATE.get()
+                && legg.getItem() == CAItems.TRAILRITE_ARMOR_LEGGINGS.get() && boot.getItem() == CAItems.TRAILRITE_ARMOR_BOOTS.get()) {
             if (!damagesource.is(TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation("minecraft:bypasses_invulnerability")))) {
                 double gap = entity.tickCount - (entity instanceof LivingEntity _livEnt ? _livEnt.getLastHurtByMobTimestamp() : 0);
                 double maxH = entity instanceof LivingEntity _livingEntity18 && _livingEntity18.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? _livingEntity18.getAttribute(Attributes.MAX_HEALTH).getValue() : 0;
@@ -286,16 +286,16 @@ public class LivingHurtEventHandler {
         if (entity == null || sourceentity == null) return;
 
         double rate = 0;
-        double freeze = 0;
+        double freeze;
         ItemStack helm = (entity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.HEAD) : ItemStack.EMPTY).copy();
         ItemStack chest = (entity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.CHEST) : ItemStack.EMPTY).copy();
         ItemStack legg = (entity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.LEGS) : ItemStack.EMPTY).copy();
         ItemStack boot = (entity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.FEET) : ItemStack.EMPTY).copy();
 
-        if (helm.getItem() == CaerulaArborModItems.KNIGHT_IRON_HELMET.get()) rate = rate + 0.25;
-        if (chest.getItem() == CaerulaArborModItems.KNIGHT_IRON_CHESTPLATE.get()) rate = rate + 0.25;
-        if (legg.getItem() == CaerulaArborModItems.KNIGHT_IRON_LEGGINGS.get()) rate = rate + 0.25;
-        if (boot.getItem() == CaerulaArborModItems.KNIGHT_IRON_BOOTS.get()) rate = rate + 0.25;
+        if (helm.getItem() == CAItems.KNIGHT_IRON_HELMET.get()) rate = rate + 0.25;
+        if (chest.getItem() == CAItems.KNIGHT_IRON_CHESTPLATE.get()) rate = rate + 0.25;
+        if (legg.getItem() == CAItems.KNIGHT_IRON_LEGGINGS.get()) rate = rate + 0.25;
+        if (boot.getItem() == CAItems.KNIGHT_IRON_BOOTS.get()) rate = rate + 0.25;
 
         if (rate > 0) {
             freeze = sourceentity.getTicksFrozen();
@@ -306,17 +306,17 @@ public class LivingHurtEventHandler {
                     sourceentity.setTicksFrozen((int) Math.min(freeze + 60 * rate, 200));
                 }
             } else {
-                if (!(sourceentity instanceof LivingEntity _livEnt13 && _livEnt13.hasEffect(CaerulaArborModMobEffects.FROZEN.get()))) {
+                if (!(sourceentity instanceof LivingEntity _livEnt13 && _livEnt13.hasEffect(CAMobEffects.FROZEN.get()))) {
                     if (world instanceof Level _level) {
                             _level.playSound(null, BlockPos.containing(sourceentity.getX(), sourceentity.getY(), sourceentity.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "last_jnight_freeze")), SoundSource.HOSTILE, 4, (float) Mth.nextDouble(RandomSource.create(), 1, 1.15));
                     }
                 }
                 if ((entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5) {
                     if (sourceentity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                        _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.FROZEN.get(), (int) (120 * rate), 0, false, false));
+                        _entity.addEffect(new MobEffectInstance(CAMobEffects.FROZEN.get(), (int) (120 * rate), 0, false, false));
                 } else {
                     if (sourceentity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                        _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.FROZEN.get(), (int) (60 * rate), 0, false, false));
+                        _entity.addEffect(new MobEffectInstance(CAMobEffects.FROZEN.get(), (int) (60 * rate), 0, false, false));
                 }
             }
         }
@@ -342,7 +342,7 @@ public class LivingHurtEventHandler {
                     if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
                         _entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 10, 4, false, true));
                     if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                        _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 10, 0, false, true));
+                        _entity.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 10, 0, false, true));
                 }
             }
         }
@@ -353,21 +353,21 @@ public class LivingHurtEventHandler {
         if (sourceentity == null) return;
 
         if (sourceentity instanceof TideChimeraEntity livEnt) {
-            double amplifi = livEnt.hasEffect(CaerulaArborModMobEffects.REEF_CRACKER.get()) ? livEnt.getEffect(CaerulaArborModMobEffects.REEF_CRACKER.get()).getAmplifier() : 0;
-            if (livEnt.hasEffect(CaerulaArborModMobEffects.REEF_CRACKER.get())) {
+            double amplifi = livEnt.hasEffect(CAMobEffects.REEF_CRACKER.get()) ? livEnt.getEffect(CAMobEffects.REEF_CRACKER.get()).getAmplifier() : 0;
+            if (livEnt.hasEffect(CAMobEffects.REEF_CRACKER.get())) {
                 if (amplifi < 31) {
                     LivingEntity _entity = (LivingEntity) sourceentity;
                     if (!_entity.level().isClientSide())
-                        _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.REEF_CRACKER.get(), 100, (int) (amplifi + 1), false, false));
+                        _entity.addEffect(new MobEffectInstance(CAMobEffects.REEF_CRACKER.get(), 100, (int) (amplifi + 1), false, false));
                 } else {
                     LivingEntity _entity = (LivingEntity) sourceentity;
                     if (!_entity.level().isClientSide())
-                        _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.REEF_CRACKER.get(), 100, 31, false, false));
+                        _entity.addEffect(new MobEffectInstance(CAMobEffects.REEF_CRACKER.get(), 100, 31, false, false));
                 }
             } else {
                 LivingEntity _entity = (LivingEntity) sourceentity;
                 if (!_entity.level().isClientSide())
-                    _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.REEF_CRACKER.get(), 100, 0, false, false));
+                    _entity.addEffect(new MobEffectInstance(CAMobEffects.REEF_CRACKER.get(), 100, 0, false, false));
             }
         }
     }
@@ -454,7 +454,7 @@ public class LivingHurtEventHandler {
         if (entity == null || sourceentity == null) return;
 
         boolean valid = false;
-        String regName = "";
+        String regName;
 
         if (entity instanceof Player && (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_TREATY) {
             if (sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation("forge:nether_mobs")))) {
@@ -492,11 +492,11 @@ public class LivingHurtEventHandler {
         if (entity == null || sourceentity == null) return;
 
         if (EntityUtils.inquirybility(world, 3)) {
-            if (EntityPredicateUtils.isEndspeaker(sourceentity) && entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CaerulaArborModMobEffects.TRAIL_BUFF.get())) {
+            if (EntityPredicateUtils.isEndspeaker(sourceentity) && entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CAMobEffects.TRAIL_BUFF.get())) {
                 event.setAmount((float) (amount * 1.5));
             }
             if (EntityPredicateUtils.isEndspeaker(entity)
-                    && (entity instanceof LivingEntity _livEnt2 && _livEnt2.hasEffect(CaerulaArborModMobEffects.TRAIL_BUFF.get()) || sourceentity instanceof LivingEntity _livEnt3 && _livEnt3.hasEffect(CaerulaArborModMobEffects.TRAIL_BUFF.get()))) {
+                    && (entity instanceof LivingEntity _livEnt2 && _livEnt2.hasEffect(CAMobEffects.TRAIL_BUFF.get()) || sourceentity instanceof LivingEntity _livEnt3 && _livEnt3.hasEffect(CAMobEffects.TRAIL_BUFF.get()))) {
                 event.setAmount((float) (amount * 0.65));
             }
         }
@@ -509,18 +509,18 @@ public class LivingHurtEventHandler {
 
         if (EntityPredicateUtils.isEndspeaker(sourceentity)) {
             if (EntityUtils.inquirybility(world, 5)) {
-                double amplifi = sourceentity instanceof LivingEntity _livEnt && _livEnt.hasEffect(CaerulaArborModMobEffects.REEF_CRACKER.get()) ? _livEnt.getEffect(CaerulaArborModMobEffects.REEF_CRACKER.get()).getAmplifier() : 0;
-                if (sourceentity instanceof LivingEntity _livEnt1 && _livEnt1.hasEffect(CaerulaArborModMobEffects.REEF_CRACKER.get())) {
+                double amplifi = sourceentity instanceof LivingEntity _livEnt && _livEnt.hasEffect(CAMobEffects.REEF_CRACKER.get()) ? _livEnt.getEffect(CAMobEffects.REEF_CRACKER.get()).getAmplifier() : 0;
+                if (sourceentity instanceof LivingEntity _livEnt1 && _livEnt1.hasEffect(CAMobEffects.REEF_CRACKER.get())) {
                     if (amplifi < 11) {
                         if (sourceentity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                            _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.REEF_CRACKER.get(), 120, (int) (amplifi + 1), false, false));
+                            _entity.addEffect(new MobEffectInstance(CAMobEffects.REEF_CRACKER.get(), 120, (int) (amplifi + 1), false, false));
                     } else {
                         if (sourceentity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                            _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.REEF_CRACKER.get(), 80, 11, false, false));
+                            _entity.addEffect(new MobEffectInstance(CAMobEffects.REEF_CRACKER.get(), 80, 11, false, false));
                     }
                 } else {
                     if (sourceentity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                        _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.REEF_CRACKER.get(), 80, 0, false, false));
+                        _entity.addEffect(new MobEffectInstance(CAMobEffects.REEF_CRACKER.get(), 80, 0, false, false));
                 }
             }
         }
@@ -595,12 +595,12 @@ public class LivingHurtEventHandler {
             }
             if (item_temp.getItem() instanceof SwordItem || item_temp.is(ItemTags.create(new ResourceLocation("minecraft:swords")))) {
                 if ((sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_SWORD) {
-                    if (!(entity instanceof LivingEntity _livEnt11 && _livEnt11.hasEffect(CaerulaArborModMobEffects.ROCK_BREAK.get()))) {
+                    if (!(entity instanceof LivingEntity _livEnt11 && _livEnt11.hasEffect(CAMobEffects.ROCK_BREAK.get()))) {
                         if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                            _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ROCK_BREAK.get(), 120, 1));
+                            _entity.addEffect(new MobEffectInstance(CAMobEffects.ROCK_BREAK.get(), 120, 1));
                     }
                     if (sourceentity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                        _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ADD_REACH.get(), 120, 3, false, false));
+                        _entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_REACH.get(), 120, 3, false, false));
                     EntityUtils.heal(sourceentity, (sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.1);
                 }
             }
@@ -697,20 +697,20 @@ public class LivingHurtEventHandler {
                 if (isSeaborn) {
                     factor = factor + 0.2;
                     if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                        _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ROCK_BREAK.get(), 80, 1));
+                        _entity.addEffect(new MobEffectInstance(CAMobEffects.ROCK_BREAK.get(), 80, 1));
                 } else {
                     if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                        _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ROCK_BREAK.get(), 60, 0));
+                        _entity.addEffect(new MobEffectInstance(CAMobEffects.ROCK_BREAK.get(), 60, 0));
                 }
             }
             event.setAmount((float) (amount * (1 + factor)));
         } else if (entity instanceof IreneEntity
-                && (sourceentity instanceof LivingEntity _livEnt7 && _livEnt7.hasEffect(MobEffects.SLOW_FALLING) || sourceentity instanceof LivingEntity _livEnt8 && _livEnt8.hasEffect(CaerulaArborModMobEffects.MUTE.get()))) {
+                && (sourceentity instanceof LivingEntity _livEnt7 && _livEnt7.hasEffect(MobEffects.SLOW_FALLING) || sourceentity instanceof LivingEntity _livEnt8 && _livEnt8.hasEffect(CAMobEffects.MUTE.get()))) {
             event.setAmount((float) (amount * 0.65));
         }
         if (sourceentity instanceof SaintCarmenEntity) {
             if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.MUTE.get(), 100, 0));
+                _entity.addEffect(new MobEffectInstance(CAMobEffects.MUTE.get(), 100, 0));
         }
     }
 
@@ -743,12 +743,12 @@ public class LivingHurtEventHandler {
 
         double rate = 1;
         if (damagesource.is(DamageTypes.PLAYER_ATTACK) && entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
-            if ((sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CaerulaArborModItems.IRON_SWORD_OF_KNIGHT_CORPUS.get()
-                    || (sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CaerulaArborModItems.LONG_SWORD_OF_KNIGHT_CORPUS.get()) {
+            if ((sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.IRON_SWORD_OF_KNIGHT_CORPUS.get()
+                    || (sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.LONG_SWORD_OF_KNIGHT_CORPUS.get()) {
                 rate = 1.5;
             }
         }
-        if ((sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CaerulaArborModItems.LONG_SWORD_OF_KNIGHT_CORPUS.get()
+        if ((sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.LONG_SWORD_OF_KNIGHT_CORPUS.get()
                 && (entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 33) {
             rate = rate * 1.5;
         }
@@ -803,7 +803,7 @@ public class LivingHurtEventHandler {
             double lll = arrow.getPersistentData().getDouble("TrailriteLink");
             if (lll > 0) {
                 if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                    _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.COOLDOWN_SINAL.get(), 20, 0, false, false));
+                    _entity.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL.get(), 20, 0, false, false));
                 double y1 = arrow.getY();
                 Entity entity1 = damagesource.getEntity();
                 if (entity1 != null) {
@@ -813,7 +813,7 @@ public class LivingHurtEventHandler {
                         for (Entity entityiterator : _entfound) {
                             if (!(entityiterator instanceof LivingEntity)) continue;
                             if (entityiterator == entity1) continue;
-                            if (entityiterator instanceof LivingEntity _livEnt2 && _livEnt2.hasEffect(CaerulaArborModMobEffects.COOLDOWN_SINAL.get())) continue;
+                            if (entityiterator instanceof LivingEntity _livEnt2 && _livEnt2.hasEffect(CAMobEffects.COOLDOWN_SINAL.get())) continue;
                             if (!(entityiterator instanceof Monster)) {
                                 Entity recentVictim = (entity1 instanceof LivingEntity _entity) ? _entity.getLastHurtMob() : null;
                                 Entity recentAttacker = (entity1 instanceof LivingEntity _entity) ? _entity.getLastHurtByMob() : null;
@@ -843,7 +843,7 @@ public class LivingHurtEventHandler {
                 }
                 if (lll > 4) {
                     if (world instanceof ServerLevel _level)
-                        _level.sendParticles(CaerulaArborModParticleTypes.MOIST_BOOM.get(), x, (y + 0.5), z, 2, 0.1, 0.1, 0.1, 0.1);
+                        _level.sendParticles(CAParticleTypes.MOIST_BOOM.get(), x, (y + 0.5), z, 2, 0.1, 0.1, 0.1, 0.1);
                     if (entity instanceof LivingEntity target) {
                         if (entity1 instanceof LivingEntity attacker) {
                             SIHelper.causeSanityInjury(target, attacker, amount * 5, SanityEvent.Hurt.Type.ENTITY);
@@ -869,8 +869,8 @@ public class LivingHurtEventHandler {
         if (entity == null || sourceentity == null) return;
 
         ItemStack mainHandItem = (sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).copy();
-        if (EnchantmentHelper.getItemEnchantmentLevel(CaerulaArborModEnchantments.SANITY_REAPER.get(), mainHandItem) != 0) {
-            double lvl = mainHandItem.getEnchantmentLevel(CaerulaArborModEnchantments.SANITY_REAPER.get());
+        if (EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.SANITY_REAPER.get(), mainHandItem) != 0) {
+            double lvl = mainHandItem.getEnchantmentLevel(CAEnchantments.SANITY_REAPER.get());
             if (entity instanceof LivingEntity target && sourceentity instanceof LivingEntity attacker) {
                 SIHelper.causeSanityInjury(target, attacker, amount * 2 * lvl, SanityEvent.Hurt.Type.ENTITY);
             }
@@ -891,8 +891,8 @@ public class LivingHurtEventHandler {
         if (entity == null || sourceentity == null) return;
 
         if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))
-                && EnchantmentHelper.getItemEnchantmentLevel(CaerulaArborModEnchantments.OCEANOSPR_KILLER.get(), (sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY)) != 0) {
-            double lvl = (sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getEnchantmentLevel(CaerulaArborModEnchantments.OCEANOSPR_KILLER.get());
+                && EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.OCEANOSPR_KILLER.get(), (sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY)) != 0) {
+            double lvl = (sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getEnchantmentLevel(CAEnchantments.OCEANOSPR_KILLER.get());
             double addition = Math.max(amount * lvl * 0.15, lvl * 5);
             if (world instanceof ServerLevel _level)
                 _level.sendParticles(ParticleTypes.ENCHANTED_HIT, x, (y + 0.6), z, 24, 0.6, 0.6, 0.6, 0.1);
@@ -928,10 +928,10 @@ public class LivingHurtEventHandler {
         if (bullet instanceof ShulkerBullet && bullet.getPersistentData().getBoolean("oceanized")) {
             EntityUtils.giveLessArmor(entity, 8);
             if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.MORE_FALL_DAMAGE.get(), 300, 0));
+                _entity.addEffect(new MobEffectInstance(CAMobEffects.MORE_FALL_DAMAGE.get(), 300, 0));
         }
-        if (damagesource.is(DamageTypes.FALL) && entity instanceof LivingEntity _livEnt5 && _livEnt5.hasEffect(CaerulaArborModMobEffects.MORE_FALL_DAMAGE.get())) {
-            double lvl = (entity instanceof LivingEntity _livEnt && _livEnt.hasEffect(CaerulaArborModMobEffects.MORE_FALL_DAMAGE.get()) ? _livEnt.getEffect(CaerulaArborModMobEffects.MORE_FALL_DAMAGE.get()).getAmplifier() : 0) + 1;
+        if (damagesource.is(DamageTypes.FALL) && entity instanceof LivingEntity _livEnt5 && _livEnt5.hasEffect(CAMobEffects.MORE_FALL_DAMAGE.get())) {
+            double lvl = (entity instanceof LivingEntity _livEnt && _livEnt.hasEffect(CAMobEffects.MORE_FALL_DAMAGE.get()) ? _livEnt.getEffect(CAMobEffects.MORE_FALL_DAMAGE.get()).getAmplifier() : 0) + 1;
             event.setAmount((float) (amount * (1 + 0.25 * lvl)));
         }
     }
@@ -951,7 +951,7 @@ public class LivingHurtEventHandler {
                 if (slime.getHealth() <= slime.getMaxHealth() * 0.5 || slime.getHealth() <= 1) {
                     int size = slime.getSize();
                     if (world instanceof ServerLevel _level) {
-                        NetherseaSlimeEntity entityToSpawn = CaerulaArborModEntities.NETHERSEA_SLIME.get().create(_level);
+                        NetherseaSlimeEntity entityToSpawn = CAEntities.NETHERSEA_SLIME.get().create(_level);
                         if (entityToSpawn != null) {
                             entityToSpawn.setPos(x, y, z);
                             entityToSpawn.getEntityData().set(NetherseaSlimeEntity.DATA_SIZE, size);
@@ -981,7 +981,7 @@ public class LivingHurtEventHandler {
 
         if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring"))) && sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "warriors")))) {
             if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ROCK_BREAK.get(), 100, 0, false, false));
+                _entity.addEffect(new MobEffectInstance(CAMobEffects.ROCK_BREAK.get(), 100, 0, false, false));
         }
 
         if (entity instanceof JuniorWarriorPriestEntity) {
@@ -1107,7 +1107,7 @@ public class LivingHurtEventHandler {
             finalValue = amount * rate;
         }
 
-        if (entity instanceof LivingEntity _livEnt && _livEnt.hasEffect(CaerulaArborModMobEffects.UNDER_BREAK.get())) {
+        if (entity instanceof LivingEntity _livEnt && _livEnt.hasEffect(CAMobEffects.UNDER_BREAK.get())) {
             e = EntityUtils.getNodeWorseBreak(attacker);
             if (e >= 4) rate = 2.4;
             else if (e >= 3) rate = 1.9;
@@ -1132,7 +1132,7 @@ public class LivingHurtEventHandler {
                 EntityUtils.giveLessArmor(entity, lll);
             }
 
-            if ((entity instanceof LivingEntity _livEnt && _livEnt.hasEffect(CaerulaArborModMobEffects.LESS_ARMOR.get()) ? _livEnt.getEffect(CaerulaArborModMobEffects.LESS_ARMOR.get()).getAmplifier() : 0) >= lll) {
+            if ((entity instanceof LivingEntity _livEnt && _livEnt.hasEffect(CAMobEffects.LESS_ARMOR.get()) ? _livEnt.getEffect(CAMobEffects.LESS_ARMOR.get()).getAmplifier() : 0) >= lll) {
                 if (rate > 1) {
                     finalValue = finalValue * rate;
                 }
@@ -1141,7 +1141,7 @@ public class LivingHurtEventHandler {
 
         if (PlayerStateUtils.isNexusPercDamageSelected(attacker)) {
             double hitTime = attacker.getPersistentData().getDouble("playerEvoHitTime");
-            double perc = 0;
+            double perc;
             double result = 0;
 
             if (entity == attacker.getLastHurtMob()) {

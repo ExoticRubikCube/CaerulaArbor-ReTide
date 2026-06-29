@@ -11,7 +11,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.client.gui.GuiGraphics;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ import java.util.function.Consumer;
 public class AddMissRateMobEffect extends MobEffect {
     public AddMissRateMobEffect() {
         super(MobEffectCategory.BENEFICIAL, -1);
-        this.addAttributeModifier(CaerulaArborModAttributes.MISSRATE.get(), "ae39a82e-2827-3751-b7be-e78803da3770", 0.5, AttributeModifier.Operation.ADDITION);
+        this.addAttributeModifier(CAAttributes.MISSRATE.get(), "ae39a82e-2827-3751-b7be-e78803da3770", 0.5, AttributeModifier.Operation.ADDITION);
     }
 
     @Override

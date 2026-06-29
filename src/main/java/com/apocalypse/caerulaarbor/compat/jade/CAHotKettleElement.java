@@ -2,7 +2,7 @@ package com.apocalypse.caerulaarbor.compat.jade;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
@@ -40,18 +40,18 @@ public class CAHotKettleElement extends Element {
     public int getRes() {
         int index = getIndex();
         if (index == 0) {
-            if (item.is(CaerulaArborModItems.CANNED_WATER.get()) || item.is(CaerulaArborModItems.A_CUP_OF_WATER.get())) return 0;
+            if (item.is(CAItems.CANNED_WATER.get()) || item.is(CAItems.A_CUP_OF_WATER.get())) return 0;
         } else if (index == 1) {
-            if (item.is(CaerulaArborModItems.EMPTY_CAN.get())) return 2;
-            if (item.is(CaerulaArborModItems.OCEANGLASS_CUP.get())) return 7;
-            if (item.is(CaerulaArborModItems.CANNED_LAVA.get())) return 5;
+            if (item.is(CAItems.EMPTY_CAN.get())) return 2;
+            if (item.is(CAItems.OCEANGLASS_CUP.get())) return 7;
+            if (item.is(CAItems.CANNED_LAVA.get())) return 5;
         } else if (index == 2) {
-            if (item.is(CaerulaArborModItems.CANNED_LAVA.get())) return 5;
-            if (item.is(CaerulaArborModItems.INSTANT_NOODLE.get())) return 1;
-            if (item.is(CaerulaArborModItems.REAL_EGG.get())) return 6;
-            if (item.is(CaerulaArborModItems.EMPTY_CAN.get())) return 3;
+            if (item.is(CAItems.CANNED_LAVA.get())) return 5;
+            if (item.is(CAItems.INSTANT_NOODLE.get())) return 1;
+            if (item.is(CAItems.REAL_EGG.get())) return 6;
+            if (item.is(CAItems.EMPTY_CAN.get())) return 3;
         } else if (index == 3) {
-            if (item.is(CaerulaArborModItems.EMPTY_CAN.get())) return 4;
+            if (item.is(CAItems.EMPTY_CAN.get())) return 4;
         }
         return -1;
     }

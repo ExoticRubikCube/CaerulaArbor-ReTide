@@ -1,7 +1,7 @@
 
 package com.apocalypse.caerulaarbor.block;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -167,7 +167,7 @@ public class CaramelCakeBlock extends Block implements SimpleWaterloggedBlock {
                 ((LevelAccessor) world).setBlock(BlockPos.containing(x, y, z), Blocks.AIR.defaultBlockState(), 3);
             }
             if ((Entity) entity instanceof Player _player) {
-                ItemStack _setstack = new ItemStack(CaerulaArborModItems.CARAMEL_CAKE_PIECE.get()).copy();
+                ItemStack _setstack = new ItemStack(CAItems.CARAMEL_CAKE_PIECE.get()).copy();
                 _setstack.setCount(1);
                 ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
             }
@@ -179,7 +179,7 @@ public class CaramelCakeBlock extends Block implements SimpleWaterloggedBlock {
                 || ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).is(ItemTags.create(new ResourceLocation("forge:tools/knives")))) {
             for (int index0 = 0; index0 < (4 - (blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _getip13 ? blockstate.getValue(_getip13) : -1)); index0++) {
                 if ((LevelAccessor) world instanceof ServerLevel _level) {
-                    ItemEntity entityToSpawn = new ItemEntity(_level, ((double) x + 0.5), ((double) y + 0.5), ((double) z + 0.5), new ItemStack(CaerulaArborModItems.CARAMEL_CAKE_PIECE.get()));
+                    ItemEntity entityToSpawn = new ItemEntity(_level, ((double) x + 0.5), ((double) y + 0.5), ((double) z + 0.5), new ItemStack(CAItems.CARAMEL_CAKE_PIECE.get()));
                     entityToSpawn.setPickUpDelay(10);
                     _level.addFreshEntity(entityToSpawn);
                 }

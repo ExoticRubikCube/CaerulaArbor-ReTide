@@ -2,7 +2,7 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -56,13 +56,13 @@ public class CannedBoiledWaterItem extends Item {
 		if (entity != null) {
 			if (!(entity instanceof Player)) {
 				resultStack.shrink(1);
-				ItemStack emptyCan = new ItemStack(CaerulaArborModItems.EMPTY_CAN.get());
+				ItemStack emptyCan = new ItemStack(CAItems.EMPTY_CAN.get());
 				if (resultStack.isEmpty()) {
 					return emptyCan;
 				}
 			} else if (entity instanceof Player player && !player.getAbilities().instabuild) {
 				resultStack.shrink(1);
-				ItemStack emptyCan = new ItemStack(CaerulaArborModItems.EMPTY_CAN.get());
+				ItemStack emptyCan = new ItemStack(CAItems.EMPTY_CAN.get());
 				if (resultStack.isEmpty()) {
 					return emptyCan;
 				}
@@ -93,11 +93,11 @@ public class CannedBoiledWaterItem extends Item {
         itemstack.setDamageValue(itemstack.getDamageValue() + 1);
         if (itemstack.getDamageValue() >= 1199) {
             if (entity instanceof Player _player) {
-                ItemStack _stktoremove = new ItemStack(CaerulaArborModItems.CANNED_BOILED_WATER.get());
+                ItemStack _stktoremove = new ItemStack(CAItems.CANNED_BOILED_WATER.get());
                 _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
             }
             if (entity instanceof Player _player) {
-                ItemStack _setstack = new ItemStack(CaerulaArborModItems.CANNED_WATER.get()).copy();
+                ItemStack _setstack = new ItemStack(CAItems.CANNED_WATER.get()).copy();
                 _setstack.setCount(1);
                 ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
             }

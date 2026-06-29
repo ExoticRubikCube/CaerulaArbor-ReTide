@@ -1,9 +1,9 @@
 
 package com.apocalypse.caerulaarbor.block;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CAParticleTypes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -72,8 +72,8 @@ public class FaxBlock extends Block {
 		Direction direction = hit.getDirection();
         InteractionResult result = InteractionResult.PASS;
         if (direction != null && entity != null) {
-            ItemStack treaty = ItemStack.EMPTY;
-            boolean isCreative = false;
+            ItemStack treaty;
+            boolean isCreative;
             treaty = ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).copy();
             isCreative = new Object() {
                 public boolean checkGamemode(Entity _ent) {
@@ -85,7 +85,7 @@ public class FaxBlock extends Block {
                     return false;
                 }
             }.checkGamemode((Entity) entity);
-            if (treaty.getItem() == CaerulaArborModItems.TREATY_COPPER.get()) {
+            if (treaty.getItem() == CAItems.TREATY_COPPER.get()) {
                 if (((Entity) entity instanceof Player _plr ? _plr.experienceLevel : 0) >= 5 || isCreative) {
                     if (!isCreative) {
                         if ((Entity) entity instanceof Player _player)
@@ -93,14 +93,14 @@ public class FaxBlock extends Block {
                     }
                     ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                     if ((LevelAccessor) world instanceof ServerLevel _level) {
-                        Entity entityToSpawn = CaerulaArborModEntities.JUNIOR_WARRIOR_PRIEST.get().spawn(_level, BlockPos.containing((double) x + direction.getStepX() + 0.5, (double) y + direction.getStepY(), (double) z + direction.getStepZ() + 0.5), MobSpawnType.MOB_SUMMONED);
+                        Entity entityToSpawn = CAEntities.JUNIOR_WARRIOR_PRIEST.get().spawn(_level, BlockPos.containing((double) x + direction.getStepX() + 0.5, (double) y + direction.getStepY(), (double) z + direction.getStepZ() + 0.5), MobSpawnType.MOB_SUMMONED);
                         if (entityToSpawn != null) {
                             entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
                         }
                     }
                     result = InteractionResult.SUCCESS;
                 }
-            } else if (treaty.getItem() == CaerulaArborModItems.TREATY_IRON.get()) {
+            } else if (treaty.getItem() == CAItems.TREATY_IRON.get()) {
                 if (((Entity) entity instanceof Player _plr ? _plr.experienceLevel : 0) >= 7 || isCreative) {
                     if (!isCreative) {
                         if ((Entity) entity instanceof Player _player)
@@ -108,14 +108,14 @@ public class FaxBlock extends Block {
                     }
                     ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                     if ((LevelAccessor) world instanceof ServerLevel _level) {
-                        Entity entityToSpawn = CaerulaArborModEntities.WARRIOR_PRIEST.get().spawn(_level, BlockPos.containing((double) x + direction.getStepX() + 0.5, (double) y + direction.getStepY(), (double) z + direction.getStepZ() + 0.5), MobSpawnType.MOB_SUMMONED);
+                        Entity entityToSpawn = CAEntities.WARRIOR_PRIEST.get().spawn(_level, BlockPos.containing((double) x + direction.getStepX() + 0.5, (double) y + direction.getStepY(), (double) z + direction.getStepZ() + 0.5), MobSpawnType.MOB_SUMMONED);
                         if (entityToSpawn != null) {
                             entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
                         }
                     }
                     result = InteractionResult.SUCCESS;
                 }
-            } else if (treaty.getItem() == CaerulaArborModItems.TREATY_GOLD.get()) {
+            } else if (treaty.getItem() == CAItems.TREATY_GOLD.get()) {
                 if (((Entity) entity instanceof Player _plr ? _plr.experienceLevel : 0) >= 9 || isCreative) {
                     if (!isCreative) {
                         if ((Entity) entity instanceof Player _player)
@@ -124,7 +124,7 @@ public class FaxBlock extends Block {
                     ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                     if (Math.random() < 0.5) {
                         if ((LevelAccessor) world instanceof ServerLevel _level) {
-                            Entity entityToSpawn = CaerulaArborModEntities.CORRECTIONAL_PHALAX_VANGUARD.get().spawn(_level, BlockPos.containing((double) x + direction.getStepX() + 0.5, (double) y + direction.getStepY(), (double) z + direction.getStepZ() + 0.5),
+                            Entity entityToSpawn = CAEntities.CORRECTIONAL_PHALAX_VANGUARD.get().spawn(_level, BlockPos.containing((double) x + direction.getStepX() + 0.5, (double) y + direction.getStepY(), (double) z + direction.getStepZ() + 0.5),
                                     MobSpawnType.MOB_SUMMONED);
                             if (entityToSpawn != null) {
                                 entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
@@ -132,7 +132,7 @@ public class FaxBlock extends Block {
                         }
                     } else {
                         if ((LevelAccessor) world instanceof ServerLevel _level) {
-                            Entity entityToSpawn = CaerulaArborModEntities.CORRECTIONAL_PHALANXY_INFANTRY.get().spawn(_level, BlockPos.containing((double) x + direction.getStepX() + 0.5, (double) y + direction.getStepY(), (double) z + direction.getStepZ() + 0.5),
+                            Entity entityToSpawn = CAEntities.CORRECTIONAL_PHALANXY_INFANTRY.get().spawn(_level, BlockPos.containing((double) x + direction.getStepX() + 0.5, (double) y + direction.getStepY(), (double) z + direction.getStepZ() + 0.5),
                                     MobSpawnType.MOB_SUMMONED);
                             if (entityToSpawn != null) {
                                 entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
@@ -141,7 +141,7 @@ public class FaxBlock extends Block {
                     }
                     result = InteractionResult.SUCCESS;
                 }
-            } else if (treaty.getItem() == CaerulaArborModItems.EMERALD_TREATY.get()) {
+            } else if (treaty.getItem() == CAItems.EMERALD_TREATY.get()) {
                 if (((Entity) entity instanceof Player _plr ? _plr.experienceLevel : 0) >= 9 || isCreative) {
                     if (!isCreative) {
                         if ((Entity) entity instanceof Player _player)
@@ -150,14 +150,14 @@ public class FaxBlock extends Block {
                     ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                     if (Math.random() < 0.5) {
                         if ((LevelAccessor) world instanceof ServerLevel _level) {
-                            Entity entityToSpawn = CaerulaArborModEntities.TRIBUNAL_HEALER.get().spawn(_level, BlockPos.containing((double) x + direction.getStepX() + 0.5, (double) y + direction.getStepY(), (double) z + direction.getStepZ() + 0.5), MobSpawnType.MOB_SUMMONED);
+                            Entity entityToSpawn = CAEntities.TRIBUNAL_HEALER.get().spawn(_level, BlockPos.containing((double) x + direction.getStepX() + 0.5, (double) y + direction.getStepY(), (double) z + direction.getStepZ() + 0.5), MobSpawnType.MOB_SUMMONED);
                             if (entityToSpawn != null) {
                                 entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
                             }
                         }
                     } else {
                         if ((LevelAccessor) world instanceof ServerLevel _level) {
-                            Entity entityToSpawn = CaerulaArborModEntities.TRIBUNAL_HEALER.get().spawn(_level, BlockPos.containing((double) x + direction.getStepX() + 0.5, (double) y + direction.getStepY(), (double) z + direction.getStepZ() + 0.5), MobSpawnType.MOB_SUMMONED);
+                            Entity entityToSpawn = CAEntities.TRIBUNAL_HEALER.get().spawn(_level, BlockPos.containing((double) x + direction.getStepX() + 0.5, (double) y + direction.getStepY(), (double) z + direction.getStepZ() + 0.5), MobSpawnType.MOB_SUMMONED);
                             if (entityToSpawn != null) {
                                 entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
                             }
@@ -165,7 +165,7 @@ public class FaxBlock extends Block {
                     }
                     result = InteractionResult.SUCCESS;
                 }
-            } else if (treaty.getItem() == CaerulaArborModItems.TREATY_DIAMOND.get()) {
+            } else if (treaty.getItem() == CAItems.TREATY_DIAMOND.get()) {
                 if (((Entity) entity instanceof Player _plr ? _plr.experienceLevel : 0) >= 11 || isCreative) {
                     if (!isCreative) {
                         if ((Entity) entity instanceof Player _player)
@@ -173,9 +173,9 @@ public class FaxBlock extends Block {
                     }
                     ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                     if ((LevelAccessor) world instanceof ServerLevel _level)
-                        _level.sendParticles(CaerulaArborModParticleTypes.PURPLE_FLAME.get(), ((double) x + 0.5), ((double) y + 1.5), ((double) z + 0.5), 32, 0.75, 0.75, 0.75, 0.1);
+                        _level.sendParticles(CAParticleTypes.PURPLE_FLAME.get(), ((double) x + 0.5), ((double) y + 1.5), ((double) z + 0.5), 32, 0.75, 0.75, 0.75, 0.1);
                     if ((LevelAccessor) world instanceof ServerLevel _level) {
-                        Entity entityToSpawn = CaerulaArborModEntities.IRENE.get().spawn(_level, BlockPos.containing((double) x + direction.getStepX() + 0.5, (double) y + direction.getStepY(), (double) z + direction.getStepZ() + 0.5), MobSpawnType.MOB_SUMMONED);
+                        Entity entityToSpawn = CAEntities.IRENE.get().spawn(_level, BlockPos.containing((double) x + direction.getStepX() + 0.5, (double) y + direction.getStepY(), (double) z + direction.getStepZ() + 0.5), MobSpawnType.MOB_SUMMONED);
                         if (entityToSpawn != null) {
                             entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
                         }

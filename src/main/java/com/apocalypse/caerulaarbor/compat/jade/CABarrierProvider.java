@@ -2,7 +2,7 @@ package com.apocalypse.caerulaarbor.compat.jade;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -34,7 +34,7 @@ public enum CABarrierProvider implements IEntityComponentProvider {
     }
 
     private double getBarrier(LivingEntity living) {
-        AttributeInstance instance = living.getAttribute(CaerulaArborModAttributes.LIVING_BARRIER.get());
+        AttributeInstance instance = living.getAttribute(CAAttributes.LIVING_BARRIER.get());
         if (instance != null) return instance.getValue();
         return 0;
     }

@@ -2,7 +2,7 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.entity.OceanizedChickenEntity;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -37,8 +37,8 @@ public class NetherseaChickenEggItem extends Item {
 	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
 		super.appendHoverText(itemstack, level, list, flag);
 		Entity entity = itemstack.getEntityRepresentation();
-        double rrr = 0;
-        double ooo = 0;
+        double rrr;
+        double ooo;
         String info = "";
         rrr = Math.max(itemstack.getOrCreateTag().getDouble("rate") * 0.1, 100);
         ooo = Math.max(itemstack.getOrCreateTag().getDouble("offset"), 4);
@@ -79,7 +79,7 @@ public class NetherseaChickenEggItem extends Item {
         for (int index0 = 0; index0 < count; index0++) {
             double fr = rrr + Mth.nextDouble(RandomSource.create(), -1 / ooo, ooo * 0.05);
             if (world instanceof ServerLevel _level) {
-                Entity entityToSpawn = CaerulaArborModEntities.OCEANIZED_CHICKEN.get().spawn(_level, pos, MobSpawnType.MOB_SUMMONED);
+                Entity entityToSpawn = CAEntities.OCEANIZED_CHICKEN.get().spawn(_level, pos, MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn instanceof OceanizedChickenEntity chicken) {
                     chicken.setYRot(world.getRandom().nextFloat() * 360F);
                     AttributeInstance max_h = chicken.getAttribute(Attributes.MAX_HEALTH);

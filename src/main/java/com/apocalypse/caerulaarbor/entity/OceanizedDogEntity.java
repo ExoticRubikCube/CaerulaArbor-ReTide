@@ -1,6 +1,6 @@
 package com.apocalypse.caerulaarbor.entity;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -46,7 +46,6 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-import java.util.List;
 import java.util.Objects;
 
 public class OceanizedDogEntity extends TamableAnimal implements GeoEntity {
@@ -61,7 +60,7 @@ public class OceanizedDogEntity extends TamableAnimal implements GeoEntity {
 	public String animationprocedure = "empty";
 
 	public OceanizedDogEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.OCEANIZED_DOG.get(), world);
+		this(CAEntities.OCEANIZED_DOG.get(), world);
 	}
 
 	public OceanizedDogEntity(EntityType<OceanizedDogEntity> type, Level world) {
@@ -203,26 +202,29 @@ public class OceanizedDogEntity extends TamableAnimal implements GeoEntity {
 	@Override
 	public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
 		ItemStack itemstack = sourceentity.getItemInHand(hand);
-		InteractionResult retval = InteractionResult.sidedSuccess(this.level().isClientSide());
+        this.level().isClientSide();
+        InteractionResult retval;
 		Item item = itemstack.getItem();
 		if (itemstack.getItem() instanceof SpawnEggItem) {
-			retval = super.mobInteract(sourceentity, hand);
-		} else if (this.level().isClientSide()) {
-			retval = (this.isTame() && this.isOwnedBy(sourceentity) || this.isFood(itemstack)) ? InteractionResult.sidedSuccess(this.level().isClientSide()) : InteractionResult.PASS;
-		} else {
+            super.mobInteract(sourceentity, hand);
+        } else if (this.level().isClientSide()) {
+            if ((this.isTame() && this.isOwnedBy(sourceentity) || this.isFood(itemstack))) {
+                this.level().isClientSide();
+            }
+        } else {
 			if (this.isTame()) {
 				if (this.isOwnedBy(sourceentity)) {
 					if (item.isEdible() && this.isFood(itemstack) && this.getHealth() < this.getMaxHealth()) {
 						this.usePlayerItem(sourceentity, hand, itemstack);
 						this.heal((float) item.getFoodProperties().getNutrition());
-						retval = InteractionResult.sidedSuccess(this.level().isClientSide());
-					} else if (this.isFood(itemstack) && this.getHealth() < this.getMaxHealth()) {
+                        this.level().isClientSide();
+                    } else if (this.isFood(itemstack) && this.getHealth() < this.getMaxHealth()) {
 						this.usePlayerItem(sourceentity, hand, itemstack);
 						this.heal(4);
-						retval = InteractionResult.sidedSuccess(this.level().isClientSide());
-					} else {
-						retval = super.mobInteract(sourceentity, hand);
-					}
+                        this.level().isClientSide();
+                    } else {
+                        super.mobInteract(sourceentity, hand);
+                    }
 				}
 			} else if (this.isFood(itemstack)) {
 				this.usePlayerItem(sourceentity, hand, itemstack);
@@ -233,8 +235,8 @@ public class OceanizedDogEntity extends TamableAnimal implements GeoEntity {
 					this.level().broadcastEntityEvent(this, (byte) 6);
 				}
 				this.setPersistenceRequired();
-				retval = InteractionResult.sidedSuccess(this.level().isClientSide());
-			} else {
+                this.level().isClientSide();
+            } else {
 				retval = super.mobInteract(sourceentity, hand);
 				if (retval == InteractionResult.SUCCESS || retval == InteractionResult.CONSUME)
 					this.setPersistenceRequired();
@@ -271,8 +273,8 @@ public class OceanizedDogEntity extends TamableAnimal implements GeoEntity {
 	@Override
 	public void baseTick() {
 		super.baseTick();
-        Entity owner = null;
-        Entity enemy = null;
+        Entity owner;
+        Entity enemy;
         owner = (Entity) this instanceof TamableAnimal _tamEnt ? _tamEnt.getOwner() : null;
         enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
         if ((Entity) this instanceof OceanizedDogEntity _datEntL2 && _datEntL2.getEntityData().get(DATA_sitting)) {
@@ -300,7 +302,7 @@ public class OceanizedDogEntity extends TamableAnimal implements GeoEntity {
 
 	@Override
 	public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
-		OceanizedDogEntity retval = CaerulaArborModEntities.OCEANIZED_DOG.get().create(serverWorld);
+		OceanizedDogEntity retval = CAEntities.OCEANIZED_DOG.get().create(serverWorld);
 		retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null, null);
 		return retval;
 	}

@@ -3,8 +3,8 @@ package com.apocalypse.caerulaarbor.entity;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -72,7 +72,7 @@ public class OceanizedChickenEntity extends SeaMonster {
 	public String animationprocedure = "empty";
 
 	public OceanizedChickenEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.OCEANIZED_CHICKEN.get(), world);
+		this(CAEntities.OCEANIZED_CHICKEN.get(), world);
 	}
 
 	public OceanizedChickenEntity(EntityType<OceanizedChickenEntity> type, Level world) {
@@ -277,7 +277,7 @@ public class OceanizedChickenEntity extends SeaMonster {
                 return false;
             }
         }.checkGamemode((Entity) sourceentity)) {
-            if (sourceentity.isHolding(CaerulaArborModItems.NETHERSEA_CHICKEN_EGG.get())) {
+            if (sourceentity.isHolding(CAItems.NETHERSEA_CHICKEN_EGG.get())) {
                 if (entity instanceof OceanizedChickenEntity _datEntL2 && _datEntL2.getEntityData().get(DATA_IS_CHILD)) {
                     if (entity instanceof OceanizedChickenEntity _datEntSetI)
                         _datEntSetI.getEntityData().set(DATA_GROW_TIME, 1);
@@ -295,9 +295,9 @@ public class OceanizedChickenEntity extends SeaMonster {
 	public void baseTick() {
 		super.baseTick();
         LevelAccessor world = this.level();
-        double lay = 0;
-        double grow = 0;
-        boolean is_child = false;
+        double lay;
+        double grow;
+        boolean is_child;
         is_child = (Entity) this instanceof OceanizedChickenEntity _datEntL0 && _datEntL0.getEntityData().get(DATA_IS_CHILD);
         if (is_child) {
             if ((Entity) this instanceof OceanizedChickenEntity animatable)
@@ -329,11 +329,11 @@ public class OceanizedChickenEntity extends SeaMonster {
                     }
                     if (world instanceof ServerLevel _level) {
                         ItemStack result;
-                        ItemStack egg = ItemStack.EMPTY;
-                        double rrr = 0;
-                        double ooo = 0;
-                        double c = 0;
-                        egg = new ItemStack(CaerulaArborModItems.NETHERSEA_CHICKEN_EGG.get()).copy();
+                        ItemStack egg;
+                        double rrr;
+                        double ooo;
+                        double c;
+                        egg = new ItemStack(CAItems.NETHERSEA_CHICKEN_EGG.get()).copy();
                         rrr = (Entity) this instanceof OceanizedChickenEntity _datEntI ? _datEntI.getEntityData().get(DATA_EGG_RATE) : 0;
                         ooo = (Entity) this instanceof OceanizedChickenEntity _datEntI ? _datEntI.getEntityData().get(DATA_EGG_OFFSET) : 0;
                         c = Mth.nextInt(RandomSource.create(), 1, 16);

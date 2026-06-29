@@ -103,7 +103,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 		this.renderTooltip(guiGraphics, mouseX, mouseY);
         boolean result = false;
         if (entity != null) {
-            String title1 = "";
+            String title1;
             title1 = entity.getPersistentData().getString("showcasingEvoNode");
             result = !(title1).isEmpty();
         }
@@ -376,7 +376,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
 	protected void renderLabels(GuiGraphics guiGraphics, int mouseX, int mouseY) {
         String result3 = "";
         if (entity != null) {
-            String title2 = "";
+            String title2;
             title2 = entity.getPersistentData().getString("showcasingEvoNode");
             if ((title2).isEmpty()) {
                 title2 = "empty";
@@ -388,7 +388,7 @@ public class PlayerEvoScreen extends AbstractContainerScreen<PlayerEvoMenu> {
                 result3, 8, 178, -52, false);
         String result1 = "";
         if (entity != null) {
-            String title1 = "";
+            String title1;
             title1 = entity.getPersistentData().getString("showcasingEvoNode");
             if ((title1).isEmpty()) {
                 title1 = "empty";

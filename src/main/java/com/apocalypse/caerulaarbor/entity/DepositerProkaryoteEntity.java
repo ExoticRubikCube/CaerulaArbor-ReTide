@@ -1,8 +1,8 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CABlocks;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -63,7 +63,7 @@ public class DepositerProkaryoteEntity extends SeaMonster {
 	public String animationprocedure = "empty";
 
 	public DepositerProkaryoteEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.DEPOSITER_PROKARYOTE.get(), world);
+		this(CAEntities.DEPOSITER_PROKARYOTE.get(), world);
 	}
 
 	public DepositerProkaryoteEntity(EntityType<DepositerProkaryoteEntity> type, Level world) {
@@ -277,7 +277,7 @@ public class DepositerProkaryoteEntity extends SeaMonster {
 	}
 
 	public static void init() {
-		SpawnPlacements.register(CaerulaArborModEntities.DEPOSITER_PROKARYOTE.get(), SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
+		SpawnPlacements.register(CAEntities.DEPOSITER_PROKARYOTE.get(), SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();
@@ -315,9 +315,7 @@ public class DepositerProkaryoteEntity extends SeaMonster {
 	}
 
 	private PlayState attackingPredicate(AnimationState event) {
-		double d1 = this.getX() - this.xOld;
-		double d0 = this.getZ() - this.zOld;
-		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
+        if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
 		}
@@ -362,24 +360,24 @@ public class DepositerProkaryoteEntity extends SeaMonster {
             double z = this.getZ();
             if ((world.getBlockState(BlockPos.containing(x, y, z))).canBeReplaced()) {
 				BlockPos _bp = BlockPos.containing(x, y, z);
-				BlockState _bs = CaerulaArborModBlocks.WHITE_CHITIN_BLOCK.get().withPropertiesOf(world.getBlockState(_bp));
+				BlockState _bs = CABlocks.WHITE_CHITIN_BLOCK.get().withPropertiesOf(world.getBlockState(_bp));
 				if (_bs.getBlock().getStateDefinition().getProperty("waterlogged") instanceof BooleanProperty _waterlogged)
 					_bs = _bs.setValue(_waterlogged, (world.getFluidState(BlockPos.containing(x, y, z)).createLegacyBlock()).getBlock() == Blocks.WATER);
 				world.setBlock(_bp, _bs, 3);
-                world.levelEvent(2001, BlockPos.containing(x, y, z), Block.getId(CaerulaArborModBlocks.WHITE_CHITIN_BLOCK.get().defaultBlockState()));
+                world.levelEvent(2001, BlockPos.containing(x, y, z), Block.getId(CABlocks.WHITE_CHITIN_BLOCK.get().defaultBlockState()));
             }
             for (Direction directioniterator : Direction.values()) {
                 if (Math.random() < 0.5) {
                     if ((world.getBlockState(BlockPos.containing(x + directioniterator.getStepX(), y + directioniterator.getStepY(), z + directioniterator.getStepZ()))).canBeReplaced()) {
                         {
                             BlockPos _bp = BlockPos.containing(x + directioniterator.getStepX(), y + directioniterator.getStepY(), z + directioniterator.getStepZ());
-                            BlockState _bs = CaerulaArborModBlocks.WHITE_CHITIN_BLOCK.get().withPropertiesOf(world.getBlockState(_bp));
+                            BlockState _bs = CABlocks.WHITE_CHITIN_BLOCK.get().withPropertiesOf(world.getBlockState(_bp));
                             if (_bs.getBlock().getStateDefinition().getProperty("waterlogged") instanceof BooleanProperty _waterlogged)
                                 _bs = _bs.setValue(_waterlogged,
                                         (world.getFluidState(BlockPos.containing(x + directioniterator.getStepX(), y + directioniterator.getStepY(), z + directioniterator.getStepZ())).createLegacyBlock()).getBlock() == Blocks.WATER);
                             world.setBlock(_bp, _bs, 3);
                         }
-                        world.levelEvent(2001, BlockPos.containing(x + directioniterator.getStepX(), y + directioniterator.getStepY(), z + directioniterator.getStepZ()), Block.getId(CaerulaArborModBlocks.WHITE_CHITIN_BLOCK.get().defaultBlockState()));
+                        world.levelEvent(2001, BlockPos.containing(x + directioniterator.getStepX(), y + directioniterator.getStepY(), z + directioniterator.getStepZ()), Block.getId(CABlocks.WHITE_CHITIN_BLOCK.get().defaultBlockState()));
                     }
                 }
             }

@@ -3,7 +3,7 @@ package com.apocalypse.caerulaarbor.block;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -156,16 +156,16 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
             result = InteractionResult.PASS;
         } else {
             InteractionResult res = InteractionResult.PASS;
-            String output = "";
-            double balance = 0;
-            double amount = 0;
+            String output;
+            double balance;
+            double amount;
             balance = (((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).plauyer_balance;
             if (balance >= 131072) {
                 if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
                     _player.displayClientMessage(Component.literal((Component.translatable("block.golden_chalise.inquiry").getString())), true);
                 res = InteractionResult.PASS;
             } else {
-                if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CaerulaArborModItems.REDSTONE_INGOT.get()) {
+                if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.REDSTONE_INGOT.get()) {
                     if (direction == Direction.UP) {
                         amount = ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getCount();
                         balance = Math.min(balance + amount, 131072);
@@ -191,7 +191,7 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
                             });
                         }
                         if ((Entity) entity instanceof Player _player) {
-                            ItemStack _stktoremove = new ItemStack(CaerulaArborModItems.REDSTONE_INGOT.get());
+                            ItemStack _stktoremove = new ItemStack(CAItems.REDSTONE_INGOT.get());
                             _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
                         }
                         if ((LevelAccessor) world instanceof Level _level) {
@@ -199,7 +199,7 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
                         }
                         res = InteractionResult.SUCCESS;
                     }
-                } else if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CaerulaArborModItems.REDSTONIUM.get()) {
+                } else if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.REDSTONIUM.get()) {
                     if (direction == Direction.UP) {
                         amount = ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getCount();
                         balance = Math.min(balance + amount * 9, 131072);
@@ -225,7 +225,7 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
                             });
                         }
                         if ((Entity) entity instanceof Player _player) {
-                            ItemStack _stktoremove = new ItemStack(CaerulaArborModItems.REDSTONIUM.get());
+                            ItemStack _stktoremove = new ItemStack(CAItems.REDSTONIUM.get());
                             _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
                         }
                         if ((LevelAccessor) world instanceof Level _level) {
@@ -250,7 +250,7 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
                                     });
                                 }
                                 if ((LevelAccessor) world instanceof ServerLevel _level) {
-                                    ItemEntity entityToSpawn = new ItemEntity(_level, ((double) x + 0.5), ((double) y + 0.75), ((double) z + 0.5), new ItemStack(CaerulaArborModItems.REDSTONIUM.get()));
+                                    ItemEntity entityToSpawn = new ItemEntity(_level, ((double) x + 0.5), ((double) y + 0.75), ((double) z + 0.5), new ItemStack(CAItems.REDSTONIUM.get()));
                                     entityToSpawn.setPickUpDelay(10);
                                     _level.addFreshEntity(entityToSpawn);
                                 }
@@ -261,7 +261,7 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
                             } else if (balance >= 1) {
                                 for (int index0 = 0; index0 < (int) balance; index0++) {
                                     if ((LevelAccessor) world instanceof ServerLevel _level) {
-                                        ItemEntity entityToSpawn = new ItemEntity(_level, ((double) x + 0.5), ((double) y + 0.75), ((double) z + 0.5), new ItemStack(CaerulaArborModItems.REDSTONE_INGOT.get()));
+                                        ItemEntity entityToSpawn = new ItemEntity(_level, ((double) x + 0.5), ((double) y + 0.75), ((double) z + 0.5), new ItemStack(CAItems.REDSTONE_INGOT.get()));
                                         entityToSpawn.setPickUpDelay(10);
                                         _level.addFreshEntity(entityToSpawn);
                                     }
@@ -289,7 +289,7 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
                                 });
                             }
                             if ((LevelAccessor) world instanceof ServerLevel _level) {
-                                ItemEntity entityToSpawn = new ItemEntity(_level, ((double) x + 0.5), ((double) y + 0.75), ((double) z + 0.5), new ItemStack(CaerulaArborModItems.REDSTONE_INGOT.get()));
+                                ItemEntity entityToSpawn = new ItemEntity(_level, ((double) x + 0.5), ((double) y + 0.75), ((double) z + 0.5), new ItemStack(CAItems.REDSTONE_INGOT.get()));
                                 entityToSpawn.setPickUpDelay(10);
                                 _level.addFreshEntity(entityToSpawn);
                             }

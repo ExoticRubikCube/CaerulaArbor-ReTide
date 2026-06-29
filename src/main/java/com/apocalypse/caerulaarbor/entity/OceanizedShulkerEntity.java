@@ -2,10 +2,10 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
@@ -76,7 +76,7 @@ public class OceanizedShulkerEntity extends SeaMonster {
 	public String animationprocedure = "empty";
 
 	public OceanizedShulkerEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.OCEANIZED_SHULKER.get(), world);
+		this(CAEntities.OCEANIZED_SHULKER.get(), world);
 	}
 
 	public OceanizedShulkerEntity(EntityType<OceanizedShulkerEntity> type, Level world) {
@@ -135,14 +135,12 @@ public class OceanizedShulkerEntity extends SeaMonster {
 
 			@Override
 			public boolean canUse() {
-				Entity entity = OceanizedShulkerEntity.this;
-				return super.canUse() && EntityUtils.isShulkerWalking(entity);
+				return super.canUse() && OceanizedShulkerEntity.this.isAlive() && OceanizedShulkerEntity.this.isWalking();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				Entity entity = OceanizedShulkerEntity.this;
-				return super.canContinueToUse() && EntityUtils.isShulkerWalking(entity);
+				return super.canContinueToUse() && OceanizedShulkerEntity.this.isAlive() && OceanizedShulkerEntity.this.isWalking();
 			}
 
 		});
@@ -150,27 +148,23 @@ public class OceanizedShulkerEntity extends SeaMonster {
 		this.goalSelector.addGoal(3, new RandomStrollGoal(this, 1) {
 			@Override
 			public boolean canUse() {
-				Entity entity = OceanizedShulkerEntity.this;
-				return super.canUse() && EntityUtils.isShulkerWalking(entity);
+				return super.canUse() && OceanizedShulkerEntity.this.isAlive() && OceanizedShulkerEntity.this.isWalking();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				Entity entity = OceanizedShulkerEntity.this;
-				return super.canContinueToUse() && EntityUtils.isShulkerWalking(entity);
+				return super.canContinueToUse() && OceanizedShulkerEntity.this.isAlive() && OceanizedShulkerEntity.this.isWalking();
 			}
 		});
 		this.goalSelector.addGoal(4, new RandomLookAroundGoal(this) {
 			@Override
 			public boolean canUse() {
-				Entity entity = OceanizedShulkerEntity.this;
-				return super.canUse() && EntityUtils.isShulkerWalking(entity);
+				return super.canUse() && OceanizedShulkerEntity.this.isAlive() && OceanizedShulkerEntity.this.isWalking();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				Entity entity = OceanizedShulkerEntity.this;
-				return super.canContinueToUse() && EntityUtils.isShulkerWalking(entity);
+				return super.canContinueToUse() && OceanizedShulkerEntity.this.isAlive() && OceanizedShulkerEntity.this.isWalking();
 			}
 		});
 	}
@@ -242,7 +236,7 @@ public class OceanizedShulkerEntity extends SeaMonster {
         double y = this.getY();
         double z = this.getZ();
         if (((Entity) this instanceof OceanizedShulkerEntity _datEntI ? _datEntI.getEntityData().get(DATA_VARIANT) : 0) < 2) {
-            if (player.getMainHandItem().getItem() == CaerulaArborModItems.COMPLEX_CHITIN.get()) {
+            if (player.getMainHandItem().getItem() == CAItems.COMPLEX_CHITIN.get()) {
                 if ((Entity) this instanceof OceanizedShulkerEntity _datEntSetI)
                     _datEntSetI.getEntityData().set(DATA_VARIANT, 2);
                 if (this.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
@@ -251,20 +245,20 @@ public class OceanizedShulkerEntity extends SeaMonster {
                 if (this.getAttributes().hasAttribute(Attributes.ARMOR))
                     this.getAttribute(Attributes.ARMOR)
                             .setBaseValue(((this.getAttributes().hasAttribute(Attributes.ARMOR) ? this.getAttribute(Attributes.ARMOR).getBaseValue() : 0) * 1.5));
-                if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()))
-                    this.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get())
-                            .setBaseValue(((this.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get())
-                                    ? this.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).getBaseValue()
+                if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
+                    this.getAttribute(CAAttributes.GENERAL_DEFENSE.get())
+                            .setBaseValue(((this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get())
+                                    ? this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getBaseValue()
                                     : 0) + 5));
-                if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-                    this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get())
-                            .setBaseValue(((this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get())
-                                    ? this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).getBaseValue()
+                if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
+                    this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get())
+                            .setBaseValue(((this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())
+                                    ? this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).getBaseValue()
                                     : 0) + 35));
-                if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RESISTANCE.get()))
-                    this.getAttribute(CaerulaArborModAttributes.SANITY_RESISTANCE.get())
-                            .setBaseValue(((this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RESISTANCE.get())
-                                    ? this.getAttribute(CaerulaArborModAttributes.SANITY_RESISTANCE.get()).getBaseValue()
+                if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RESISTANCE.get()))
+                    this.getAttribute(CAAttributes.SANITY_RESISTANCE.get())
+                            .setBaseValue(((this.getAttributes().hasAttribute(CAAttributes.SANITY_RESISTANCE.get())
+                                    ? this.getAttribute(CAAttributes.SANITY_RESISTANCE.get()).getBaseValue()
                                     : 0) + 35));
                 player.getMainHandItem().shrink(1);
                 if (world instanceof Level _level) {
@@ -293,20 +287,20 @@ public class OceanizedShulkerEntity extends SeaMonster {
                 if (this.getAttributes().hasAttribute(Attributes.ARMOR))
                     this.getAttribute(Attributes.ARMOR)
                             .setBaseValue(((this.getAttributes().hasAttribute(Attributes.ARMOR) ? this.getAttribute(Attributes.ARMOR).getBaseValue() : 0) * 10));
-                if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()))
-                    this.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get())
-                            .setBaseValue(((this.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get())
-                                    ? this.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).getBaseValue()
+                if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
+                    this.getAttribute(CAAttributes.GENERAL_DEFENSE.get())
+                            .setBaseValue(((this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get())
+                                    ? this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getBaseValue()
                                     : 0) + 32767));
-                if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-                    this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get())
-                            .setBaseValue(((this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get())
-                                    ? this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).getBaseValue()
+                if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
+                    this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get())
+                            .setBaseValue(((this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())
+                                    ? this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).getBaseValue()
                                     : 0) + 100));
-                if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RESISTANCE.get()))
-                    this.getAttribute(CaerulaArborModAttributes.SANITY_RESISTANCE.get())
-                            .setBaseValue(((this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RESISTANCE.get())
-                                    ? this.getAttribute(CaerulaArborModAttributes.SANITY_RESISTANCE.get()).getBaseValue()
+                if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RESISTANCE.get()))
+                    this.getAttribute(CAAttributes.SANITY_RESISTANCE.get())
+                            .setBaseValue(((this.getAttributes().hasAttribute(CAAttributes.SANITY_RESISTANCE.get())
+                                    ? this.getAttribute(CAAttributes.SANITY_RESISTANCE.get()).getBaseValue()
                                     : 0) + 100));
                 player.getMainHandItem().shrink(1);
                 this.setHealth(this.getMaxHealth());
@@ -359,14 +353,14 @@ public class OceanizedShulkerEntity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        Direction dire = Direction.NORTH;
+        Direction dire;
         Direction curDire = Direction.NORTH;
-        String curDIreName = "";
-        boolean isAttached = false;
-        Entity enemy = null;
-        double peekTime = 0;
-        double shootDelay = 0;
-        double variant = 0;
+        String curDIreName;
+        boolean isAttached;
+        Entity enemy;
+        double peekTime;
+        double shootDelay;
+        double variant;
         if (this.isAlive()) {
             if (tickCount <= 3) {
                 {
@@ -397,7 +391,7 @@ public class OceanizedShulkerEntity extends SeaMonster {
                     animatable.setTexture("oceanized_shulker");
             }
             curDIreName = (Entity) this instanceof OceanizedShulkerEntity _datEntS ? _datEntS.getEntityData().get(DATA_DIRECTION) : "";
-            dire = Direction.byName(curDIreName);
+            Direction.byName(curDIreName);
             peekTime = (Entity) this instanceof OceanizedShulkerEntity _datEntI ? _datEntI.getEntityData().get(DATA_PEEK_TIME) : 0;
             shootDelay = (Entity) this instanceof OceanizedShulkerEntity _datEntI ? _datEntI.getEntityData().get(DATA_SHOOT_DELAY) : 0;
             isAttached = !((Entity) this instanceof OceanizedShulkerEntity _datEntL11 && _datEntL11.getEntityData().get(DATA_WALKING));
@@ -408,10 +402,10 @@ public class OceanizedShulkerEntity extends SeaMonster {
                         if ((Entity) this instanceof OceanizedShulkerEntity _datEntSetS)
                             _datEntSetS.getEntityData().set(DATA_DIRECTION, dire.toString());
                     } else {
-                        double dx = 0;
-                        double dy = 0;
-                        double dz = 0;
-                        Direction tDIre = Direction.NORTH;
+                        double dx;
+                        double dy;
+                        double dz;
+                        Direction tDIre;
                         for (int index0 = 0; index0 < 5; index0++) {
                             dx = Mth.nextInt(RandomSource.create(), -9, 9);
                             dy = Mth.nextInt(RandomSource.create(), -9, 9);
@@ -480,18 +474,18 @@ public class OceanizedShulkerEntity extends SeaMonster {
             if (peekTime <= 0) {
                 if (variant == 2) {
                     if (!this.level().isClientSide())
-                        this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.SHULKER_BUFF.get(), 5, 2, false, false));
+                        this.addEffect(new MobEffectInstance(CAMobEffects.SHULKER_BUFF.get(), 5, 2, false, false));
                 } else if (variant == 3) {
                     if (!this.level().isClientSide())
-                        this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.SHULKER_BUFF.get(), 5, 9, false, false));
+                        this.addEffect(new MobEffectInstance(CAMobEffects.SHULKER_BUFF.get(), 5, 9, false, false));
                 } else {
                     if (!this.level().isClientSide())
-                        this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.SHULKER_BUFF.get(), 5, 0, false, false));
+                        this.addEffect(new MobEffectInstance(CAMobEffects.SHULKER_BUFF.get(), 5, 0, false, false));
                 }
             } else {
                 if ((Entity) this instanceof OceanizedShulkerEntity _datEntSetI)
                     _datEntSetI.getEntityData().set(DATA_PEEK_TIME, (int) (peekTime - 1));
-                this.removeEffect(CaerulaArborModMobEffects.SHULKER_BUFF.get());
+                this.removeEffect(CAMobEffects.SHULKER_BUFF.get());
             }
             enemy = this.getTarget();
             if (shootDelay <= 0) {
@@ -546,7 +540,7 @@ public class OceanizedShulkerEntity extends SeaMonster {
 			this.getAttribute(Attributes.ARMOR).setBaseValue(this.getArmorValue() * 0.4);
 		this.setHealth(this.getMaxHealth());
 		if (!this.level().isClientSide())
-			this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 20, 9, false, false));
+			this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 20, 9, false, false));
 		if (!this.level().isClientSide())
 			this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, 9, false, false));
 		setAnimation("animation.oceanized_shulker.rise");
@@ -633,12 +627,12 @@ public class OceanizedShulkerEntity extends SeaMonster {
             double x = this.getX();
             double y = this.getY();
             double z = this.getZ();
-            double v = 0;
+            double v;
             if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
                 v = (Entity) this instanceof OceanizedShulkerEntity _datEntI ? _datEntI.getEntityData().get(DATA_VARIANT) : 0;
                 if (v == 2) {
                     if (world instanceof ServerLevel _level) {
-                        ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, new ItemStack(CaerulaArborModItems.COMPLEX_CHITIN.get()));
+                        ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, new ItemStack(CAItems.COMPLEX_CHITIN.get()));
                         entityToSpawn.setPickUpDelay(10);
                         entityToSpawn.setUnlimitedLifetime();
                         _level.addFreshEntity(entityToSpawn);

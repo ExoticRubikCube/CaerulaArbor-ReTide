@@ -1,10 +1,9 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
+import com.apocalypse.caerulaarbor.init.*;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -70,7 +69,7 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
 	public String animationprocedure = "empty";
 
 	public TribunalHealerEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.TRIBUNAL_HEALER.get(), world);
+		this(CAEntities.TRIBUNAL_HEALER.get(), world);
 	}
 
 	public TribunalHealerEntity(EntityType<TribunalHealerEntity> type, Level world) {
@@ -242,8 +241,8 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-            this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(50);
+        if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
+            this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(50);
         return retval;
 	}
 
@@ -274,8 +273,8 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
         double y = this.getY();
         double z = this.getZ();
         Entity enemy = null;
-        double sklp1 = 0;
-        double sklp2 = 0;
+        double sklp1;
+        double sklp2;
         double count = 0;
         double atk = 0;
         if (this.isAlive()) {
@@ -286,7 +285,9 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
                     _datEntSetI.getEntityData().set(DATA_skillp1, (int) (sklp1 - 1));
             } else {
                 if (tickCount % 5 == 0) {
-                    atk = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
+                    if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)) {
+                        this.getAttribute(Attributes.ATTACK_DAMAGE).getValue();
+                    }
                     {
                         final Vec3 _center = new Vec3(x, y, z);
                         List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(16 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
@@ -302,7 +303,7 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
                                         if (this.isAlive()) {
                                             if (this == null)
                                                 return;
-                                            double atk1 = 0;
+                                            double atk1;
                                             double count1 = 0;
                                             atk1 = (Entity) this instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity0.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
                                             if (world instanceof Level _level) {
@@ -354,9 +355,9 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
                     }
                     CaerulaArborMod.queueServerWork(40, () -> {
                         if (this.isAlive()) {
-                            double vx = 0;
-                            double vz = 0;
-                            double dist = 0;
+                            double vx;
+                            double vz;
+                            double dist;
                             if (world instanceof Level _level) {
                                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "medic_blast")), SoundSource.PLAYERS, 2, 1);
                             }
@@ -385,7 +386,7 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
                                         dist = Math.sqrt(vx * vx + vz * vz);
                                         entityiterator.push((0.85 / Math.max(vx, vx / dist)), 0.25, (0.85 / Math.max(vz, vz / dist)));
                                         if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                                            _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.MUTE.get(), 60, 0, false, false));
+                                            _entity.addEffect(new MobEffectInstance(CAMobEffects.MUTE.get(), 60, 0, false, false));
                                         CaerulaArborMod.queueServerWork(8, () -> {
                                             if (this.isAlive()) {
                                                 entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.INDIRECT_MAGIC), this),
@@ -404,7 +405,7 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
                                         void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                                             for (int index0 = 0; index0 < 60; index0++) {
                                                 if (world instanceof ServerLevel _level)
-                                                    _level.sendParticles(CaerulaArborModParticleTypes.PURPLE_FLAME.get(), (getX() + 1 * (timedloopiterator + 1) * Math.sin(Math.toRadians(index0 * 6))), (getY()),
+                                                    _level.sendParticles(CAParticleTypes.PURPLE_FLAME.get(), (getX() + 1 * (timedloopiterator + 1) * Math.sin(Math.toRadians(index0 * 6))), (getY()),
                                                             (getZ() + 1 * (timedloopiterator + 1) * Math.cos(Math.toRadians(index0 * 6))), 2, 0.1, 0.15, 0.1, 0.1);
                                             }
                                             final int tick2 = ticks;
@@ -451,7 +452,7 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
 
 	@Override
 	public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
-		TribunalHealerEntity retval = CaerulaArborModEntities.TRIBUNAL_HEALER.get().create(serverWorld);
+		TribunalHealerEntity retval = CAEntities.TRIBUNAL_HEALER.get().create(serverWorld);
 		retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null, null);
 		return retval;
 	}

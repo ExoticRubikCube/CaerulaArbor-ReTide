@@ -1,8 +1,8 @@
 
 package com.apocalypse.caerulaarbor.item;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -22,7 +22,7 @@ public class TidelinkedShieldItem extends ShieldItem {
 
 	@Override
 	public boolean isValidRepairItem(ItemStack itemstack, ItemStack repairitem) {
-		return Ingredient.of(new ItemStack(CaerulaArborModItems.REPELLER_SHELL.get())).test(repairitem);
+		return Ingredient.of(new ItemStack(CAItems.REPELLER_SHELL.get())).test(repairitem);
 	}
 
 	@Override
@@ -58,7 +58,7 @@ public class TidelinkedShieldItem extends ShieldItem {
 		super.inventoryTick(itemstack, world, entity, slot, selected);
 		if (selected) {
             if (entity instanceof LivingEntity _entity)
-                _entity.removeEffect(CaerulaArborModMobEffects.LESS_ARMOR.get());
+                _entity.removeEffect(CAMobEffects.LESS_ARMOR.get());
         }
 	}
 }

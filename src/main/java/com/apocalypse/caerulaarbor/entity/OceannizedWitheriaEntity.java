@@ -2,9 +2,9 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
@@ -80,7 +80,7 @@ public class OceannizedWitheriaEntity extends SeaMonster {
 	private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.WHITE, ServerBossEvent.BossBarOverlay.NOTCHED_10);
 
 	public OceannizedWitheriaEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.OCEANIZED_WITHERIA.get(), world);
+		this(CAEntities.OCEANIZED_WITHERIA.get(), world);
 	}
 
 	public OceannizedWitheriaEntity(EntityType<OceannizedWitheriaEntity> type, Level world) {
@@ -253,16 +253,16 @@ public class OceannizedWitheriaEntity extends SeaMonster {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get()))
-            this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(10);
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()))
-            this.getAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()).setBaseValue(0.01);
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-            this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(65);
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()))
-            this.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).setBaseValue(5);
+        if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get()))
+            this.getAttribute(CAAttributes.SANITY_RATE.get()).setBaseValue(10);
+        if (this.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
+            this.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.01);
+        if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
+            this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(65);
+        if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
+            this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).setBaseValue(5);
         if (!this.level().isClientSide())
-            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 95, 9, false, false));
+            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 95, 9, false, false));
         if (this instanceof OceannizedWitheriaEntity) {
             this.setAnimation("animation.oceanzied_witheria.start");
         }
@@ -302,10 +302,10 @@ public class OceannizedWitheriaEntity extends SeaMonster {
         double y = this.getY();
         double z = this.getZ();
         Entity enemy = null;
-        boolean shelled = false;
+        boolean shelled;
         double spawn = 0;
-        double skillp = 0;
-        double duration = 0;
+        double skillp;
+        double duration;
         double idle = 0;
         if (this.isAlive()) {
             skillp = (Entity) this instanceof OceannizedWitheriaEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp) : 0;
@@ -335,7 +335,7 @@ public class OceannizedWitheriaEntity extends SeaMonster {
                     if ((Entity) this instanceof OceannizedWitheriaEntity _datEntSetI)
                         _datEntSetI.getEntityData().set(DATA_skillp, 400);
                     if (!this.level().isClientSide())
-                        this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 65, 0, false, false));
+                        this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 65, 0, false, false));
                     if (this instanceof OceannizedWitheriaEntity) {
                         this.setAnimation("animation.oceanzied_witheria.skill");
                     }
@@ -353,9 +353,9 @@ public class OceannizedWitheriaEntity extends SeaMonster {
                     CaerulaArborMod.queueServerWork(30, () -> {
                         if (this.isAlive()) {
                             purchaseEnemy();
-                            Entity enemy1 = null;
-                            Entity otherOne = null;
-                            Entity otherTwo = null;
+                            Entity enemy1;
+                            Entity otherOne;
+                            Entity otherTwo;
                             if (((Entity) this instanceof OceannizedWitheriaEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0) <= 0) {
                                 enemy1 = this.getTarget();
                                 if (enemy1 != null && enemy1.isAlive()) {
@@ -388,7 +388,7 @@ public class OceannizedWitheriaEntity extends SeaMonster {
             }
             if (tickCount % 20 == 0) {
                 this.removeEffect(MobEffects.WITHER);
-                this.removeEffect(CaerulaArborModMobEffects.DIZZY.get());
+                this.removeEffect(CAMobEffects.DIZZY.get());
 
 				final Vec3 _center = new Vec3(x, y, z);
 				List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(64 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
@@ -424,10 +424,10 @@ public class OceannizedWitheriaEntity extends SeaMonster {
                 if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
                     this.getAttribute(Attributes.ATTACK_DAMAGE)
                             .setBaseValue(((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) * 1.5));
-                if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()))
-                    this.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get())
-                            .setBaseValue(((this.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get())
-                                    ? this.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).getBaseValue()
+                if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
+                    this.getAttribute(CAAttributes.GENERAL_DEFENSE.get())
+                            .setBaseValue(((this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get())
+                                    ? this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getBaseValue()
                                     : 0) * 1.5));
                 if ((Entity) this instanceof OceannizedWitheriaEntity animatable)
                     animatable.setTexture("oceanized_witheria_anger");
@@ -440,7 +440,7 @@ public class OceannizedWitheriaEntity extends SeaMonster {
                 if ((Entity) this instanceof OceannizedWitheriaEntity _datEntSetI)
                     _datEntSetI.getEntityData().set(DATA_duration, 1800);
                 if (!this.level().isClientSide())
-                    this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 999, 9, false, false));
+                    this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 999, 9, false, false));
                 if (this instanceof OceannizedWitheriaEntity) {
                     this.setAnimation("animation.oceanzied_witheria.byebye");
                 }
@@ -613,7 +613,7 @@ public class OceannizedWitheriaEntity extends SeaMonster {
     public void setHealth(float pHealth){
     	float hlth = this.getHealth();
     	float mhlth = this.getMaxHealth();
-        if(this.hasEffect(CaerulaArborModMobEffects.INVULNERABLE.get()) && pHealth < hlth) return;
+        if(this.hasEffect(CAMobEffects.INVULNERABLE.get()) && pHealth < hlth) return;
         float reduction = hlth - pHealth;
         super.setHealth(reduction >= mhlth * 0.35f ? hlth - mhlth * 0.35f : hlth - reduction);
     }

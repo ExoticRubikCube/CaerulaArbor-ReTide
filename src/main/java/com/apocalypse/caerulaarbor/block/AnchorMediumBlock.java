@@ -1,8 +1,8 @@
 package com.apocalypse.caerulaarbor.block;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CABlocks;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -108,7 +108,7 @@ public class AnchorMediumBlock extends Block {
             double y = pos.getY();
             double z = pos.getZ();
             if (!(blockstate.getBlock().getStateDefinition().getProperty("activated") instanceof BooleanProperty _getbp1 && blockstate.getValue(_getbp1))) {
-                if ((((LevelAccessor) world).getBlockState(BlockPos.containing(x, y + 1, z))).getBlock() == CaerulaArborModBlocks.ANCHOR_UPPER.get() && (new Object() {
+                if ((((LevelAccessor) world).getBlockState(BlockPos.containing(x, y + 1, z))).getBlock() == CABlocks.ANCHOR_UPPER.get() && (new Object() {
                     public Direction getDirection(BlockPos pos1) {
                         BlockState _bs = ((LevelAccessor) world).getBlockState(pos1);
                         Property<?> property = _bs.getBlock().getStateDefinition().getProperty("facing");
@@ -128,7 +128,7 @@ public class AnchorMediumBlock extends Block {
                         _prop = _bs.getBlock().getStateDefinition().getProperty("axis");
                         return _prop instanceof EnumProperty _ep && _ep.getPossibleValues().toArray()[0] instanceof Direction.Axis ? Direction.fromAxisAndDirection((Direction.Axis) _bs.getValue(_ep), Direction.AxisDirection.POSITIVE) : Direction.NORTH;
                     }
-                }.getDirection(blockstate)) && (((LevelAccessor) world).getBlockState(BlockPos.containing(x, y - 1, z))).getBlock() == CaerulaArborModBlocks.ANCHOR_LOWER.get() && (new Object() {
+                }.getDirection(blockstate)) && (((LevelAccessor) world).getBlockState(BlockPos.containing(x, y - 1, z))).getBlock() == CABlocks.ANCHOR_LOWER.get() && (new Object() {
                     public Direction getDirection(BlockPos pos1) {
                         BlockState _bs = ((LevelAccessor) world).getBlockState(pos1);
                         Property<?> property = _bs.getBlock().getStateDefinition().getProperty("facing");
@@ -176,11 +176,11 @@ public class AnchorMediumBlock extends Block {
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();
-        double dx = 0;
-        double dy = 0;
-        double dz = 0;
-        double attr = 0;
-        BlockState target = Blocks.AIR.defaultBlockState();
+        double dx;
+        double dy;
+        double dz;
+        double attr;
+        BlockState target;
         if (blockstate.getBlock().getStateDefinition().getProperty("activated") instanceof BooleanProperty _getbp1 && blockstate.getValue(_getbp1)) {
             {
                 int _value = 1;
@@ -189,7 +189,7 @@ public class AnchorMediumBlock extends Block {
                 if (_bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))
                     ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
             }
-            if (!((((LevelAccessor) world).getBlockState(BlockPos.containing(x, (double) y + 1, z))).getBlock() == CaerulaArborModBlocks.ANCHOR_UPPER.get() && (new Object() {
+            if (!((((LevelAccessor) world).getBlockState(BlockPos.containing(x, (double) y + 1, z))).getBlock() == CABlocks.ANCHOR_UPPER.get() && (new Object() {
                 public Direction getDirection(BlockPos pos1) {
                     BlockState _bs = ((LevelAccessor) world).getBlockState(pos1);
                     Property<?> property = _bs.getBlock().getStateDefinition().getProperty("facing");
@@ -209,7 +209,7 @@ public class AnchorMediumBlock extends Block {
                     _prop = _bs.getBlock().getStateDefinition().getProperty("axis");
                     return _prop instanceof EnumProperty _ep && _ep.getPossibleValues().toArray()[0] instanceof Direction.Axis ? Direction.fromAxisAndDirection((Direction.Axis) _bs.getValue(_ep), Direction.AxisDirection.POSITIVE) : Direction.NORTH;
                 }
-            }.getDirection(blockstate)) && (((LevelAccessor) world).getBlockState(BlockPos.containing(x, (double) y - 1, z))).getBlock() == CaerulaArborModBlocks.ANCHOR_LOWER.get() && (new Object() {
+            }.getDirection(blockstate)) && (((LevelAccessor) world).getBlockState(BlockPos.containing(x, (double) y - 1, z))).getBlock() == CABlocks.ANCHOR_LOWER.get() && (new Object() {
                 public Direction getDirection(BlockPos pos1) {
                     BlockState _bs = ((LevelAccessor) world).getBlockState(pos1);
                     Property<?> property = _bs.getBlock().getStateDefinition().getProperty("facing");
@@ -293,9 +293,9 @@ public class AnchorMediumBlock extends Block {
                     ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
             }
             for (Entity entityiterator : world.getEntities(null, new AABB(((double) x + 37), ((double) y + 22), ((double) z + 37), ((double) x - 36), ((double) y - 21), ((double) z - 36)))) {
-                if (!(entityiterator instanceof LivingEntity _livEnt33 && _livEnt33.hasEffect(CaerulaArborModMobEffects.POWER_OF_ANCHOR.get()))) {
+                if (!(entityiterator instanceof LivingEntity _livEnt33 && _livEnt33.hasEffect(CAMobEffects.POWER_OF_ANCHOR.get()))) {
                     if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                        _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.POWER_OF_ANCHOR.get(), 20, 0, false, false));
+                        _entity.addEffect(new MobEffectInstance(CAMobEffects.POWER_OF_ANCHOR.get(), 20, 0, false, false));
                 }
             }
         } else {
@@ -355,7 +355,7 @@ public class AnchorMediumBlock extends Block {
                             ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_booleanProp, false), 3);
                     }
                     finished = true;
-                } else if ((((LevelAccessor) world).getBlockState(BlockPos.containing(x, (double) y + 1, z))).getBlock() == CaerulaArborModBlocks.ANCHOR_UPPER.get() && (new Object() {
+                } else if ((((LevelAccessor) world).getBlockState(BlockPos.containing(x, (double) y + 1, z))).getBlock() == CABlocks.ANCHOR_UPPER.get() && (new Object() {
                     public Direction getDirection(BlockPos pos1) {
                         BlockState _bs = ((LevelAccessor) world).getBlockState(pos1);
                         Property<?> property = _bs.getBlock().getStateDefinition().getProperty("facing");
@@ -377,7 +377,7 @@ public class AnchorMediumBlock extends Block {
                                 ? Direction.fromAxisAndDirection((Direction.Axis) _bs.getValue(_ep), Direction.AxisDirection.POSITIVE)
                                 : Direction.NORTH;
                     }
-                }.getDirection(blockstate)) && (((LevelAccessor) world).getBlockState(BlockPos.containing(x, (double) y - 1, z))).getBlock() == CaerulaArborModBlocks.ANCHOR_LOWER.get() && (new Object() {
+                }.getDirection(blockstate)) && (((LevelAccessor) world).getBlockState(BlockPos.containing(x, (double) y - 1, z))).getBlock() == CABlocks.ANCHOR_LOWER.get() && (new Object() {
                     public Direction getDirection(BlockPos pos1) {
                         BlockState _bs = ((LevelAccessor) world).getBlockState(pos1);
                         Property<?> property = _bs.getBlock().getStateDefinition().getProperty("facing");

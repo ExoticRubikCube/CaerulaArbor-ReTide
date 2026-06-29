@@ -32,10 +32,10 @@ public class SetPlayerLifeCommand {
 						entity = FakePlayerFactory.getMinecraft(_servLevel);
 					Direction direction = Direction.DOWN;
 					if (entity != null)
-						direction = entity.getDirection();
+                        entity.getDirection();
 
-                    String info = "";
-                    double lfs = 0;
+                    String info;
+                    double lfs;
                     try {
                         for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
                             lfs = Math.min(DoubleArgumentType.getDouble(arguments, "life"), (entityiterator.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_maxlive);
@@ -69,9 +69,9 @@ public class SetPlayerLifeCommand {
 						entity = FakePlayerFactory.getMinecraft(_servLevel);
 					Direction direction = Direction.DOWN;
 					if (entity != null)
-						direction = entity.getDirection();
+                        entity.getDirection();
 
-                    String info = "";
+                    String info;
                     try {
                         for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
                             {
@@ -104,9 +104,9 @@ public class SetPlayerLifeCommand {
 						entity = FakePlayerFactory.getMinecraft(_servLevel);
 					Direction direction = Direction.DOWN;
 					if (entity != null)
-						direction = entity.getDirection();
+                        entity.getDirection();
 
-                    String info = "";
+                    String info;
                     try {
                         for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
                             {
@@ -139,9 +139,9 @@ public class SetPlayerLifeCommand {
 						entity = FakePlayerFactory.getMinecraft(_servLevel);
 					Direction direction = Direction.DOWN;
 					if (entity != null)
-						direction = entity.getDirection();
+                        entity.getDirection();
 
-                    String info = "";
+                    String info;
                     try {
                         for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
                             {
@@ -174,9 +174,9 @@ public class SetPlayerLifeCommand {
 						entity = FakePlayerFactory.getMinecraft(_servLevel);
 					Direction direction = Direction.DOWN;
 					if (entity != null)
-						direction = entity.getDirection();
+                        entity.getDirection();
 
-                    String info = "";
+                    String info;
                     try {
                         for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
                             {
@@ -209,9 +209,9 @@ public class SetPlayerLifeCommand {
 						entity = FakePlayerFactory.getMinecraft(_servLevel);
 					Direction direction = Direction.DOWN;
 					if (entity != null)
-						direction = entity.getDirection();
+                        entity.getDirection();
 
-                    String info = "";
+                    String info;
                     try {
                         for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
                             {
@@ -244,9 +244,9 @@ public class SetPlayerLifeCommand {
 						entity = FakePlayerFactory.getMinecraft(_servLevel);
 					Direction direction = Direction.DOWN;
 					if (entity != null)
-						direction = entity.getDirection();
+                        entity.getDirection();
 
-                    String info = "";
+                    String info;
                     try {
                         for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
                             {
@@ -279,9 +279,9 @@ public class SetPlayerLifeCommand {
 						entity = FakePlayerFactory.getMinecraft(_servLevel);
 					Direction direction = Direction.DOWN;
 					if (entity != null)
-						direction = entity.getDirection();
+                        entity.getDirection();
 
-                    String info = "";
+                    String info;
                     try {
                         for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
                             {
@@ -314,9 +314,9 @@ public class SetPlayerLifeCommand {
 						entity = FakePlayerFactory.getMinecraft(_servLevel);
 					Direction direction = Direction.DOWN;
 					if (entity != null)
-						direction = entity.getDirection();
+                        entity.getDirection();
 
-                    String info = "";
+                    String info;
                     try {
                         for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
                             {
@@ -349,9 +349,9 @@ public class SetPlayerLifeCommand {
 						entity = FakePlayerFactory.getMinecraft(_servLevel);
 					Direction direction = Direction.DOWN;
 					if (entity != null)
-						direction = entity.getDirection();
+                        entity.getDirection();
 
-                    String info = "";
+                    String info;
                     try {
                         for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
                             {
@@ -383,9 +383,9 @@ public class SetPlayerLifeCommand {
 						entity = FakePlayerFactory.getMinecraft(_servLevel);
 					Direction direction = Direction.DOWN;
 					if (entity != null)
-						direction = entity.getDirection();
+                        entity.getDirection();
 
-                    String info = "";
+                    String info;
                     try {
                         for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
                             {
@@ -417,9 +417,9 @@ public class SetPlayerLifeCommand {
 						entity = FakePlayerFactory.getMinecraft(_servLevel);
 					Direction direction = Direction.DOWN;
 					if (entity != null)
-						direction = entity.getDirection();
+                        entity.getDirection();
 
-                    String info = "";
+                    String info;
                     try {
                         for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
                             {
@@ -451,9 +451,9 @@ public class SetPlayerLifeCommand {
 						entity = FakePlayerFactory.getMinecraft(_servLevel);
 					Direction direction = Direction.DOWN;
 					if (entity != null)
-						direction = entity.getDirection();
+                        entity.getDirection();
 
-                    String info = "";
+                    String info;
                     try {
                         for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
                             {
@@ -485,9 +485,9 @@ public class SetPlayerLifeCommand {
 						entity = FakePlayerFactory.getMinecraft(_servLevel);
 					Direction direction = Direction.DOWN;
 					if (entity != null)
-						direction = entity.getDirection();
+                        entity.getDirection();
 
-                    String info = "";
+                    String info;
                     try {
                         for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
                             {

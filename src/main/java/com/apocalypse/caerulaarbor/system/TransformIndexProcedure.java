@@ -3,8 +3,8 @@ package com.apocalypse.caerulaarbor.system;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
 import com.apocalypse.caerulaarbor.entity.TribunalHealerEntity;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModGameRules;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAGameRules;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -35,35 +35,35 @@ public class TransformIndexProcedure {
 
 	private static final List<TransformRule> STANDARD_TRANSFORM_RULES = List.of(
 			new TransformRule(entity -> entity instanceof Villager && !(entity instanceof LivingEntity livingEntity && livingEntity.isBaby()) || matchesEntityType(entity, "guardvillagers:guard"), 0.375,
-					CaerulaArborModEntities.OCEANIZED_VILLAGER.get()),
-			new TransformRule(entity -> entity instanceof Shulker, 0.25, CaerulaArborModEntities.OCEANIZED_SHULKER.get()),
-			new TransformRule(entity -> entity instanceof Chicken, 0.45, CaerulaArborModEntities.OCEANIZED_CHICKEN.get()),
-			new TransformRule(entity -> entity instanceof TribunalHealerEntity, 0.15, CaerulaArborModEntities.COMPASSION_PRAYER.get()),
-			new TransformRule(entity -> entity instanceof Rabbit, 0.45, CaerulaArborModEntities.OCEANIZE_RABBIT.get()),
-			new TransformRule(entity -> entity instanceof PolarBear, 0.35, CaerulaArborModEntities.OCEANIZED_POLAR_BEAR.get()),
-			new TransformRule(entity -> matchesEntityType(entity, "bobsoriginiumdream:mutant_giant_rock_spider"), 0.32, CaerulaArborModEntities.TIDUTANT_ROCK_SPIDER.get()),
-			new TransformRule(entity -> matchesEntityType(entity, "bobsoriginiumdream:originiutant_excrescence"), 0.5, CaerulaArborModEntities.TIDUTANT_EXCRESCENCE.get()),
-			new TransformRule(entity -> entity instanceof Fox, 0.5, CaerulaArborModEntities.OCEANIZED_FOX.get()),
-			new TransformRule(entity -> entity.getType().is(HOMO_SAPIENS), 0.25, CaerulaArborModEntities.THE_ABANDONED.get()),
-			new TransformRule(entity -> entity instanceof Evoker, 0.25, CaerulaArborModEntities.OCEANIZED_EVOKER.get()),
-			new TransformRule(entity -> entity instanceof Vindicator, 0.3, CaerulaArborModEntities.OCEANIZED_VINDICATOR.get()),
-			new TransformRule(entity -> entity instanceof Pillager, 0.3, CaerulaArborModEntities.OCEANIZED_PILLAGER.get()),
-			new TransformRule(entity -> entity instanceof Pig, 0.5, CaerulaArborModEntities.OCEANIZED_PIG.get()),
-			new TransformRule(entity -> entity instanceof Cow || entity instanceof MushroomCow, 0.45, CaerulaArborModEntities.OCEANIZED_COW.get()),
-			new TransformRule(entity -> entity instanceof Sheep, 0.45, CaerulaArborModEntities.OCEANIZED_SHEEP.get()),
-			new TransformRule(entity -> entity instanceof Horse, 0.35, CaerulaArborModEntities.OCEANIZED_HORSE.get()),
-			new TransformRule(entity -> entity instanceof Piglin, 0.4, CaerulaArborModEntities.OCEANIZED_PIGLIN.get()),
-			new TransformRule(entity -> entity instanceof PiglinBrute, 0.2, CaerulaArborModEntities.OCEANIZED_BRUTE.get()),
+					CAEntities.OCEANIZED_VILLAGER.get()),
+			new TransformRule(entity -> entity instanceof Shulker, 0.25, CAEntities.OCEANIZED_SHULKER.get()),
+			new TransformRule(entity -> entity instanceof Chicken, 0.45, CAEntities.OCEANIZED_CHICKEN.get()),
+			new TransformRule(entity -> entity instanceof TribunalHealerEntity, 0.15, CAEntities.COMPASSION_PRAYER.get()),
+			new TransformRule(entity -> entity instanceof Rabbit, 0.45, CAEntities.OCEANIZE_RABBIT.get()),
+			new TransformRule(entity -> entity instanceof PolarBear, 0.35, CAEntities.OCEANIZED_POLAR_BEAR.get()),
+			new TransformRule(entity -> matchesEntityType(entity, "bobsoriginiumdream:mutant_giant_rock_spider"), 0.32, CAEntities.TIDUTANT_ROCK_SPIDER.get()),
+			new TransformRule(entity -> matchesEntityType(entity, "bobsoriginiumdream:originiutant_excrescence"), 0.5, CAEntities.TIDUTANT_EXCRESCENCE.get()),
+			new TransformRule(entity -> entity instanceof Fox, 0.5, CAEntities.OCEANIZED_FOX.get()),
+			new TransformRule(entity -> entity.getType().is(HOMO_SAPIENS), 0.25, CAEntities.THE_ABANDONED.get()),
+			new TransformRule(entity -> entity instanceof Evoker, 0.25, CAEntities.OCEANIZED_EVOKER.get()),
+			new TransformRule(entity -> entity instanceof Vindicator, 0.3, CAEntities.OCEANIZED_VINDICATOR.get()),
+			new TransformRule(entity -> entity instanceof Pillager, 0.3, CAEntities.OCEANIZED_PILLAGER.get()),
+			new TransformRule(entity -> entity instanceof Pig, 0.5, CAEntities.OCEANIZED_PIG.get()),
+			new TransformRule(entity -> entity instanceof Cow || entity instanceof MushroomCow, 0.45, CAEntities.OCEANIZED_COW.get()),
+			new TransformRule(entity -> entity instanceof Sheep, 0.45, CAEntities.OCEANIZED_SHEEP.get()),
+			new TransformRule(entity -> entity instanceof Horse, 0.35, CAEntities.OCEANIZED_HORSE.get()),
+			new TransformRule(entity -> entity instanceof Piglin, 0.4, CAEntities.OCEANIZED_PIGLIN.get()),
+			new TransformRule(entity -> entity instanceof PiglinBrute, 0.2, CAEntities.OCEANIZED_BRUTE.get()),
 			new TransformRule(entity -> entity instanceof Spider || entity instanceof CaveSpider || matchesEntityType(entity, "twilightforest:hedge_spider") || matchesEntityType(entity, "twilightforest:king_spider"), 0.65,
-					CaerulaArborModEntities.OCEANIZED_SPIDER.get()),
-			new TransformRule(entity -> entity instanceof EnderMan, 0.2, CaerulaArborModEntities.OCEANIZED_ENDERMAN.get()),
-			new TransformRule(entity -> entity instanceof TamableAnimal tamableAnimal && entity instanceof Wolf && !tamableAnimal.isTame(), 0.2, CaerulaArborModEntities.OCEANIZED_WOLF.get()),
-			new TransformRule(entity -> entity instanceof TamableAnimal tamableAnimal && entity instanceof Wolf && tamableAnimal.isTame(), 1.0, CaerulaArborModEntities.OCEANIZED_DOG.get()),
-			new TransformRule(entity -> entity instanceof Witch, 0.33, CaerulaArborModEntities.OCEANIZED_WITCH.get()),
-			new TransformRule(entity -> entity instanceof Ravager, 0.25, CaerulaArborModEntities.OCEANIZED_RAVAGER.get()),
+					CAEntities.OCEANIZED_SPIDER.get()),
+			new TransformRule(entity -> entity instanceof EnderMan, 0.2, CAEntities.OCEANIZED_ENDERMAN.get()),
+			new TransformRule(entity -> entity instanceof TamableAnimal tamableAnimal && entity instanceof Wolf && !tamableAnimal.isTame(), 0.2, CAEntities.OCEANIZED_WOLF.get()),
+			new TransformRule(entity -> entity instanceof TamableAnimal tamableAnimal && entity instanceof Wolf && tamableAnimal.isTame(), 1.0, CAEntities.OCEANIZED_DOG.get()),
+			new TransformRule(entity -> entity instanceof Witch, 0.33, CAEntities.OCEANIZED_WITCH.get()),
+			new TransformRule(entity -> entity instanceof Ravager, 0.25, CAEntities.OCEANIZED_RAVAGER.get()),
 			new TransformRule(entity -> entity instanceof Warden, 0.1, (world, x, y, z, entity) -> spawnReplacement(world, x, y, z, entity, current -> current instanceof Warden,
-					Math.random() < 0.02 ? CaerulaArborModEntities.OCEANIZED_WARDENIS.get() : CaerulaArborModEntities.OCEANIZED_WARDEN.get())),
-			new TransformRule(entity -> entity instanceof Cat || entity instanceof Ocelot, 0.5, CaerulaArborModEntities.OCEANIZED_CAT.get()));
+					Math.random() < 0.02 ? CAEntities.OCEANIZED_WARDENIS.get() : CAEntities.OCEANIZED_WARDEN.get())),
+			new TransformRule(entity -> entity instanceof Cat || entity instanceof Ocelot, 0.5, CAEntities.OCEANIZED_CAT.get()));
 
 	public static boolean transformToSeaborn(LevelAccessor world, double x, double y, double z, Entity entity) {
 		if (entity == null)
@@ -78,8 +78,8 @@ public class TransformIndexProcedure {
 			return false;
 		}
 		if (!(entity instanceof LivingEntity _livEnt2 && _livEnt2.getMobType() == MobType.UNDEAD || entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "cannot_transform"))))
-				&& world.getLevelData().getGameRules().getBoolean(CaerulaArborModGameRules.OCEANIZATION_MODE) && !(entity instanceof LivingEntity _livEnt5 && _livEnt5.isBaby())) {
-			if (EntityUtils.getSeabornAround(world, x, y, z, entity) > Math.min((world.getLevelData().getGameRules().getInt(CaerulaArborModGameRules.CLONE_NUMBER_LIMIT)), CaerulaConfigsConfiguration.CLONE_NUM.get()) * 2) {
+				&& world.getLevelData().getGameRules().getBoolean(CAGameRules.OCEANIZATION_MODE) && !(entity instanceof LivingEntity _livEnt5 && _livEnt5.isBaby())) {
+			if (EntityUtils.getSeabornAround(world, x, y, z, entity) > Math.min((world.getLevelData().getGameRules().getInt(CAGameRules.CLONE_NUMBER_LIMIT)), CaerulaConfigsConfiguration.CLONE_NUM.get()) * 2) {
 				return false;
 			}
 			TransformAttemptResult standardTransformResult = tryStandardTransformRules(world, x, y, z, entity);

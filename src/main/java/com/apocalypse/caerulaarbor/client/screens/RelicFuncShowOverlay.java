@@ -3,7 +3,7 @@ package com.apocalypse.caerulaarbor.client.screens;
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import net.minecraft.world.entity.Entity;
 
@@ -32,11 +32,8 @@ public class RelicFuncShowOverlay {
 		double z = 0;
 		Player entity = Minecraft.getInstance().player;
 		if (entity != null) {
-			world = entity.level();
-			x = entity.getX();
-			y = entity.getY();
-			z = entity.getZ();
-		}
+            entity.level();
+        }
         boolean result2 = false;
         if (entity != null) {
             result2 = !(((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).kingShowPtc;
@@ -57,7 +54,7 @@ public class RelicFuncShowOverlay {
 
             boolean result1 = false;
             if (entity != null) {
-                if ((Entity) entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CaerulaArborModMobEffects.TIDE_OF_CHITIN.get())) {
+                if ((Entity) entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CAMobEffects.TIDE_OF_CHITIN.get())) {
                     result1 = true;
                 }
             }

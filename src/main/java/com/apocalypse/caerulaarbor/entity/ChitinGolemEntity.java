@@ -75,7 +75,7 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity {
 	public String animationprocedure = "empty";
 
 	public ChitinGolemEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.CHITIN_GOLEM.get(), world);
+		this(CAEntities.CHITIN_GOLEM.get(), world);
 	}
 
 	public ChitinGolemEntity(EntityType<ChitinGolemEntity> type, Level world) {
@@ -158,9 +158,9 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity {
         double z = this.getZ();
         Entity sourceentity = source.getEntity();
         if (sourceentity != null) {
-            double num = 0;
+            double num;
             if (this.isAlive()) {
-                if (!this.hasEffect(CaerulaArborModMobEffects.COOLDOWN_SINAL.get())) {
+                if (!this.hasEffect(CAMobEffects.COOLDOWN_SINAL.get())) {
                     num = 0;
                     {
                         final Vec3 _center = new Vec3(x, y, z);
@@ -177,7 +177,7 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity {
                                 this.setAnimation("animation.chitgolem.smash");
                             }
                             if (!this.level().isClientSide())
-                                this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.COOLDOWN_SINAL.get(), 60, 0, false, false));
+                                this.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL.get(), 60, 0, false, false));
                             ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((sourceentity.getX()), (sourceentity.getY()), (sourceentity.getZ())));
                             CaerulaArborMod.queueServerWork(13, () -> {
                                 if (world instanceof Level _level) {
@@ -214,12 +214,12 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()))
-            this.getAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()).setBaseValue(0.05);
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get()))
-            this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(10);
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MISSRATE.get()))
-            this.getAttribute(CaerulaArborModAttributes.MISSRATE.get()).setBaseValue(33);
+        if (this.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
+            this.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.05);
+        if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get()))
+            this.getAttribute(CAAttributes.SANITY_RATE.get()).setBaseValue(10);
+        if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE.get()))
+            this.getAttribute(CAAttributes.MISSRATE.get()).setBaseValue(33);
         return retval;
 	}
 
@@ -253,9 +253,9 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity {
 		double z = this.getZ();
 		Entity entity = this;
 		Level world = this.level();
-        ItemStack mainHand = ItemStack.EMPTY;
-        boolean isLowHealth = false;
-        boolean isCreative = false;
+        ItemStack mainHand;
+        boolean isLowHealth;
+        boolean isCreative;
         mainHand = sourceentity.getMainHandItem().copy();
         isLowHealth = (entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1);
         isCreative = new Object() {
@@ -268,7 +268,7 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity {
                 return false;
             }
         }.checkGamemode((Entity) sourceentity);
-        if (mainHand.getItem() == CaerulaArborModItems.OCEAN_CHITIN.get() && isLowHealth) {
+        if (mainHand.getItem() == CAItems.OCEAN_CHITIN.get() && isLowHealth) {
             LivingEntity _entity = (LivingEntity) entity;
             _entity.setHealth((float) ((entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) + (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.25));
             if ((LevelAccessor) world instanceof Level _level) {
@@ -278,7 +278,7 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity {
 				sourceentity.getMainHandItem().shrink(1);
             }
             return InteractionResult.SUCCESS;
-        } else if (mainHand.getItem() == CaerulaArborModItems.CHITIN_INGOT.get() && isLowHealth) {
+        } else if (mainHand.getItem() == CAItems.CHITIN_INGOT.get() && isLowHealth) {
             if (entity instanceof LivingEntity _entity)
                 _entity.setHealth((float) ((entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) + (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5));
             if ((LevelAccessor) world instanceof Level _level) {
@@ -288,7 +288,7 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity {
                 ((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
             }
             return InteractionResult.SUCCESS;
-        } else if (mainHand.getItem() == CaerulaArborModBlocks.COMPLEX_CHITIN_BLOCK.get().asItem() && mainHand.getCount() >= 3) {
+        } else if (mainHand.getItem() == CABlocks.COMPLEX_CHITIN_BLOCK.get().asItem() && mainHand.getCount() >= 3) {
             if ((LevelAccessor) world instanceof Level _level) {
                 if (!_level.isClientSide()) {
                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.smithing_table.use")), SoundSource.PLAYERS, (float) 1.5, 1);
@@ -299,7 +299,7 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity {
             if (!entity.level().isClientSide())
                 entity.discard();
             if ((LevelAccessor) world instanceof ServerLevel _level) {
-                Entity entityToSpawn = CaerulaArborModEntities.COMPLEX_CHITIN_GOLEM.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+                Entity entityToSpawn = CAEntities.COMPLEX_CHITIN_GOLEM.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn != null) {
                     entityToSpawn.setYRot(entity.getYRot());
                     entityToSpawn.setYBodyRot(entity.getYRot());
@@ -320,12 +320,12 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity {
 		super.baseTick();
         double x = this.getX();
         double z = this.getZ();
-        boolean root = false;
-        double rx = 0;
-        double rz = 0;
-        double dist = 0;
-        double dist1 = 0;
-        double perc = 0;
+        boolean root;
+        double rx;
+        double rz;
+        double dist;
+        double dist1;
+        double perc;
         perc = this.getHealth() / this.getMaxHealth();
         if (perc < 0.25) {
             if ((Entity) this instanceof ChitinGolemEntity animatable)

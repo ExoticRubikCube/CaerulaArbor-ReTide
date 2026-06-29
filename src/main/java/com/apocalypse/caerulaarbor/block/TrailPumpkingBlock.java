@@ -1,8 +1,8 @@
 
 package com.apocalypse.caerulaarbor.block;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CABlocks;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -58,9 +58,9 @@ public class TrailPumpkingBlock extends Block {
         double z = pos.getZ();
         boolean hor = false;
         boolean vec = false;
-        BlockState taregt = Blocks.AIR.defaultBlockState();
+        BlockState taregt;
         double direc = 0;
-        taregt = CaerulaArborModBlocks.CHITIN_BLOCK.get().defaultBlockState();
+        taregt = CABlocks.CHITIN_BLOCK.get().defaultBlockState();
         if ((((LevelAccessor) world).getBlockState(BlockPos.containing(x, y - 1, z))).getBlock() == taregt.getBlock() && (((LevelAccessor) world).getBlockState(BlockPos.containing(x, y - 2, z))).getBlock() == taregt.getBlock()) {
             vec = true;
         }
@@ -83,14 +83,14 @@ public class TrailPumpkingBlock extends Block {
                 world.destroyBlock(BlockPos.containing(x, y - 1, z + 1), false);
             }
             if ((LevelAccessor) world instanceof ServerLevel _level) {
-                Entity entityToSpawn = CaerulaArborModEntities.CHITIN_GOLEM.get().spawn(_level, BlockPos.containing(x + 0.5, y - 2, z + 0.5), MobSpawnType.MOB_SUMMONED);
+                Entity entityToSpawn = CAEntities.CHITIN_GOLEM.get().spawn(_level, BlockPos.containing(x + 0.5, y - 2, z + 0.5), MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn != null) {
                     entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
                 }
             }
             return;
         }
-        taregt = CaerulaArborModBlocks.COMPLEX_CHITIN_BLOCK.get().defaultBlockState();
+        taregt = CABlocks.COMPLEX_CHITIN_BLOCK.get().defaultBlockState();
         if ((((LevelAccessor) world).getBlockState(BlockPos.containing(x, y - 1, z))).getBlock() == taregt.getBlock() && (((LevelAccessor) world).getBlockState(BlockPos.containing(x, y - 2, z))).getBlock() == taregt.getBlock()) {
             vec = true;
         }
@@ -113,7 +113,7 @@ public class TrailPumpkingBlock extends Block {
                 world.destroyBlock(BlockPos.containing(x, y - 1, z + 1), false);
             }
             if ((LevelAccessor) world instanceof ServerLevel _level) {
-                Entity entityToSpawn = CaerulaArborModEntities.COMPLEX_CHITIN_GOLEM.get().spawn(_level, BlockPos.containing(x + 0.5, y - 2, z + 0.5), MobSpawnType.MOB_SUMMONED);
+                Entity entityToSpawn = CAEntities.COMPLEX_CHITIN_GOLEM.get().spawn(_level, BlockPos.containing(x + 0.5, y - 2, z + 0.5), MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn != null) {
                     entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
                 }

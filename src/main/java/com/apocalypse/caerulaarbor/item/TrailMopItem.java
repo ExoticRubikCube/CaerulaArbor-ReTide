@@ -4,7 +4,7 @@ package com.apocalypse.caerulaarbor.item;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.api.event.SanityEvent;
 import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
+import com.apocalypse.caerulaarbor.init.CABlocks;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.client.Minecraft;
@@ -44,7 +44,7 @@ public class TrailMopItem extends Item {
 
 	@Override
 	public float getDestroySpeed(ItemStack itemstack, BlockState blockstate) {
-		return List.of(CaerulaArborModBlocks.SEA_TRAIL_INIT.get(), CaerulaArborModBlocks.SEA_TRAIL_GROWING.get(), CaerulaArborModBlocks.SEA_TRAIL_GROWN.get()).contains(blockstate.getBlock()) ? 1.5f : 1;
+		return List.of(CABlocks.SEA_TRAIL_INIT.get(), CABlocks.SEA_TRAIL_GROWING.get(), CABlocks.SEA_TRAIL_GROWN.get()).contains(blockstate.getBlock()) ? 1.5f : 1;
 	}
 
 	@Override
@@ -129,13 +129,13 @@ public class TrailMopItem extends Item {
         if (entity == null)
             return InteractionResult.PASS;
         double rate = 0;
-        if (blockstate.getBlock() == CaerulaArborModBlocks.SEA_TRAIL_INIT.get()) {
+        if (blockstate.getBlock() == CABlocks.SEA_TRAIL_INIT.get()) {
             rate = 0.9;
-        } else if (blockstate.getBlock() == CaerulaArborModBlocks.SEA_TRAIL_GROWING.get()) {
+        } else if (blockstate.getBlock() == CABlocks.SEA_TRAIL_GROWING.get()) {
             rate = 0.65;
-        } else if (blockstate.getBlock() == CaerulaArborModBlocks.SEA_TRAIL_GROWN.get() || blockstate.getBlock() == CaerulaArborModBlocks.SEA_TRAIL_STOP.get()) {
+        } else if (blockstate.getBlock() == CABlocks.SEA_TRAIL_GROWN.get() || blockstate.getBlock() == CABlocks.SEA_TRAIL_STOP.get()) {
             rate = 0.5;
-        } else if (blockstate.getBlock() == CaerulaArborModBlocks.SEA_TRAIL_SOLID.get() || blockstate.getBlock() == CaerulaArborModBlocks.TRAIL_PULSE.get()) {
+        } else if (blockstate.getBlock() == CABlocks.SEA_TRAIL_SOLID.get() || blockstate.getBlock() == CABlocks.TRAIL_PULSE.get()) {
             rate = 0.33;
         }
         if (rate > 0) {

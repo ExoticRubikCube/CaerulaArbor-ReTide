@@ -1,9 +1,9 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
@@ -72,7 +72,7 @@ public class ReaperPetEntity extends TamableAnimal implements GeoEntity {
 	public String animationprocedure = "empty";
 
 	public ReaperPetEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.REAPER_PET.get(), world);
+		this(CAEntities.REAPER_PET.get(), world);
 	}
 
 	public ReaperPetEntity(EntityType<ReaperPetEntity> type, Level world) {
@@ -148,7 +148,7 @@ public class ReaperPetEntity extends TamableAnimal implements GeoEntity {
 		});
 		this.goalSelector.addGoal(5, new OpenDoorGoal(this, false));
 		this.goalSelector.addGoal(6, new OpenDoorGoal(this, true));
-		this.goalSelector.addGoal(7, new TemptGoal(this, 0.4, Ingredient.of(CaerulaArborModItems.OCEAN_EYE.get()), false) {
+		this.goalSelector.addGoal(7, new TemptGoal(this, 0.4, Ingredient.of(CAItems.OCEAN_EYE.get()), false) {
 			@Override
 			public boolean canUse() {
 				return super.canUse() && ReaperPetEntity.this.isMovable();
@@ -182,7 +182,7 @@ public class ReaperPetEntity extends TamableAnimal implements GeoEntity {
 
 	protected void dropCustomDeathLoot(DamageSource source, int looting, boolean recentlyHitIn) {
 		super.dropCustomDeathLoot(source, looting, recentlyHitIn);
-		this.spawnAtLocation(new ItemStack(CaerulaArborModItems.BASE_EGG.get()));
+		this.spawnAtLocation(new ItemStack(CAItems.BASE_EGG.get()));
 	}
 
 	@Override
@@ -234,26 +234,29 @@ public class ReaperPetEntity extends TamableAnimal implements GeoEntity {
 	@Override
 	public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
 		ItemStack itemstack = sourceentity.getItemInHand(hand);
-		InteractionResult retval = InteractionResult.sidedSuccess(this.level().isClientSide());
+        this.level().isClientSide();
+        InteractionResult retval;
 		Item item = itemstack.getItem();
 		if (itemstack.getItem() instanceof SpawnEggItem) {
-			retval = super.mobInteract(sourceentity, hand);
-		} else if (this.level().isClientSide()) {
-			retval = (this.isTame() && this.isOwnedBy(sourceentity) || this.isFood(itemstack)) ? InteractionResult.sidedSuccess(this.level().isClientSide()) : InteractionResult.PASS;
-		} else {
+            super.mobInteract(sourceentity, hand);
+        } else if (this.level().isClientSide()) {
+            if ((this.isTame() && this.isOwnedBy(sourceentity) || this.isFood(itemstack))) {
+                this.level().isClientSide();
+            }
+        } else {
 			if (this.isTame()) {
 				if (this.isOwnedBy(sourceentity)) {
 					if (item.isEdible() && this.isFood(itemstack) && this.getHealth() < this.getMaxHealth()) {
 						this.usePlayerItem(sourceentity, hand, itemstack);
 						this.heal((float) item.getFoodProperties().getNutrition());
-						retval = InteractionResult.sidedSuccess(this.level().isClientSide());
-					} else if (this.isFood(itemstack) && this.getHealth() < this.getMaxHealth()) {
+                        this.level().isClientSide();
+                    } else if (this.isFood(itemstack) && this.getHealth() < this.getMaxHealth()) {
 						this.usePlayerItem(sourceentity, hand, itemstack);
 						this.heal(4);
-						retval = InteractionResult.sidedSuccess(this.level().isClientSide());
-					} else {
-						retval = super.mobInteract(sourceentity, hand);
-					}
+                        this.level().isClientSide();
+                    } else {
+                        super.mobInteract(sourceentity, hand);
+                    }
 				}
 			} else if (this.isFood(itemstack)) {
 				this.usePlayerItem(sourceentity, hand, itemstack);
@@ -264,8 +267,8 @@ public class ReaperPetEntity extends TamableAnimal implements GeoEntity {
 					this.level().broadcastEntityEvent(this, (byte) 6);
 				}
 				this.setPersistenceRequired();
-				retval = InteractionResult.sidedSuccess(this.level().isClientSide());
-			} else {
+                this.level().isClientSide();
+            } else {
 				retval = super.mobInteract(sourceentity, hand);
 				if (retval == InteractionResult.SUCCESS || retval == InteractionResult.CONSUME)
 					this.setPersistenceRequired();
@@ -332,11 +335,11 @@ public class ReaperPetEntity extends TamableAnimal implements GeoEntity {
 	@Override
 	public void baseTick() {
 		super.baseTick();
-        Entity owner = null;
-        Entity enemy = null;
-        if ((Entity) this instanceof Mob _mobEnt0 && _mobEnt0.isAggressive() && !((Entity) this instanceof LivingEntity _livEnt1 && _livEnt1.hasEffect(CaerulaArborModMobEffects.PET_REAP.get()))) {
+        Entity owner;
+        Entity enemy;
+        if ((Entity) this instanceof Mob _mobEnt0 && _mobEnt0.isAggressive() && !((Entity) this instanceof LivingEntity _livEnt1 && _livEnt1.hasEffect(CAMobEffects.PET_REAP.get()))) {
             if (!this.level().isClientSide())
-                this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.PET_REAP.get(), 100, 0, false, false));
+                this.addEffect(new MobEffectInstance(CAMobEffects.PET_REAP.get(), 100, 0, false, false));
         }
         if (((Entity) this instanceof ReaperPetEntity _datEntI ? _datEntI.getEntityData().get(DATA_state) : 0) == 2) {
             if ((Entity) this instanceof Mob _entity)
@@ -358,7 +361,7 @@ public class ReaperPetEntity extends TamableAnimal implements GeoEntity {
 
 	@Override
 	public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
-		ReaperPetEntity retval = CaerulaArborModEntities.REAPER_PET.get().create(serverWorld);
+		ReaperPetEntity retval = CAEntities.REAPER_PET.get().create(serverWorld);
 		retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null, null);
 		return retval;
 	}

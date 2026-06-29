@@ -1,7 +1,7 @@
 package com.apocalypse.caerulaarbor.block.entity;
 
 import com.apocalypse.caerulaarbor.block.LivingArmorstandBlock;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlockEntities;
+import com.apocalypse.caerulaarbor.init.CABlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -40,7 +40,7 @@ public class LivingArmorstandTileEntity extends RandomizableContainerBlockEntity
 	private final LazyOptional<? extends IItemHandler>[] handlers = SidedInvWrapper.create(this, Direction.values());
 
 	public LivingArmorstandTileEntity(BlockPos pos, BlockState state) {
-		super(CaerulaArborModBlockEntities.LIVING_ARMORSTAND.get(), pos, state);
+		super(CABlockEntities.LIVING_ARMORSTAND.get(), pos, state);
 	}
 
 	private PlayState predicate(AnimationState event) {

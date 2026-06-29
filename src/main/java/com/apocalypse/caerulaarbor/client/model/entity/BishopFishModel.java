@@ -18,7 +18,7 @@ public class BishopFishModel extends GeoModel<BishopFishEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(BishopFishEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/bishop.png");
 	}
 
 }

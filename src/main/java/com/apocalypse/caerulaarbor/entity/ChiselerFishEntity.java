@@ -2,8 +2,8 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -64,7 +64,7 @@ public class ChiselerFishEntity extends SeaMonster implements RangedAttackMob {
 	public String animationprocedure = "empty";
 
 	public ChiselerFishEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.CHISELER_FISH.get(), world);
+		this(CAEntities.CHISELER_FISH.get(), world);
 	}
 
 	public ChiselerFishEntity(EntityType<ChiselerFishEntity> type, Level world) {
@@ -98,10 +98,10 @@ public class ChiselerFishEntity extends SeaMonster implements RangedAttackMob {
 	@Override
 	public void setTarget(@Nullable LivingEntity target) {
 		super.setTarget(target);
-		if (target != null && !this.level().isClientSide() && !this.hasEffect(CaerulaArborModMobEffects.COOLDOWN_SINAL.get())) {
+		if (target != null && !this.level().isClientSide() && !this.hasEffect(CAMobEffects.COOLDOWN_SINAL.get())) {
 			this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 3, false, false));
 			this.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 400, 1));
-			this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.COOLDOWN_SINAL.get(), 800, 0, false, false));
+			this.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL.get(), 800, 0, false, false));
 		}
 	}
 
@@ -298,11 +298,11 @@ public class ChiselerFishEntity extends SeaMonster implements RangedAttackMob {
 	@Override
 	public void baseTick() {
 		super.baseTick();
-        if (this.isAggressive() && !this.hasEffect(CaerulaArborModMobEffects.COOLDOWN_SINAL.get())) {
+        if (this.isAggressive() && !this.hasEffect(CAMobEffects.COOLDOWN_SINAL.get())) {
 			if (!this.level().isClientSide()) {
 				this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 2, false, false));
 				this.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 400, 1));
-				this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.COOLDOWN_SINAL.get(), 800, 0, false, false));
+				this.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL.get(), 800, 0, false, false));
 			}
 		}
         this.refreshDimensions();
@@ -319,7 +319,7 @@ public class ChiselerFishEntity extends SeaMonster implements RangedAttackMob {
 	}
 
 	public static void init() {
-		SpawnPlacements.register(CaerulaArborModEntities.CHISELER_FISH.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
+		SpawnPlacements.register(CAEntities.CHISELER_FISH.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();

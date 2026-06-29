@@ -1,7 +1,7 @@
 
 package com.apocalypse.caerulaarbor.item;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -55,13 +55,13 @@ public class CaramelSeagrassJuiceItem extends Item {
         }
         if (!(entity instanceof Player)) {
             resultStack.shrink(1);
-            ItemStack emptyCup = new ItemStack(CaerulaArborModItems.OCEANGLASS_CUP.get());
+            ItemStack emptyCup = new ItemStack(CAItems.OCEANGLASS_CUP.get());
             if (resultStack.isEmpty()) {
                 return emptyCup;
             }
         } else if (entity instanceof Player player && !player.getAbilities().instabuild) {
             resultStack.shrink(1);
-            ItemStack emptyCup = new ItemStack(CaerulaArborModItems.OCEANGLASS_CUP.get());
+            ItemStack emptyCup = new ItemStack(CAItems.OCEANGLASS_CUP.get());
             if (resultStack.isEmpty()) {
                 return emptyCup;
             }

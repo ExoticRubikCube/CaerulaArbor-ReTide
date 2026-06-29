@@ -1,9 +1,9 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAParticleTypes;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
@@ -64,7 +64,7 @@ public class SpecterDollEntity extends Animal implements GeoEntity {
 	public String animationprocedure = "empty";
 
 	public SpecterDollEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.SPECTER_DOLL.get(), world);
+		this(CAEntities.SPECTER_DOLL.get(), world);
 	}
 
 	public SpecterDollEntity(EntityType<SpecterDollEntity> type, Level world) {
@@ -141,13 +141,13 @@ public class SpecterDollEntity extends Animal implements GeoEntity {
             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "specter_doll_ambient")), SoundSource.NEUTRAL, 3, 1);
         }
         if ((LevelAccessor) world instanceof ServerLevel _level)
-            _level.sendParticles(CaerulaArborModParticleTypes.SPECTER_GLITTER.get(), x, (y + 0.75), z, 64, 0.75, 0.75, 0.75, 0.1);
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-            this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(50);
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()))
-            this.getAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()).setBaseValue(0.33);
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MISSRATE.get()))
-            this.getAttribute(CaerulaArborModAttributes.MISSRATE.get()).setBaseValue(18);
+            _level.sendParticles(CAParticleTypes.SPECTER_GLITTER.get(), x, (y + 0.75), z, 64, 0.75, 0.75, 0.75, 0.1);
+        if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
+            this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(50);
+        if (this.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
+            this.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.33);
+        if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE.get()))
+            this.getAttribute(CAAttributes.MISSRATE.get()).setBaseValue(18);
         return retval;
 	}
 
@@ -171,7 +171,7 @@ public class SpecterDollEntity extends Animal implements GeoEntity {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        double tickCount1 = 0;
+        double tickCount1;
         if (this.isAlive()) {
             EntityUtils.healFromGladiia(world, x, y, z, this);
             setDeltaMovement(new Vec3(0, (getDeltaMovement().y()), 0));
@@ -179,9 +179,9 @@ public class SpecterDollEntity extends Animal implements GeoEntity {
             this.setHealth((float) (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) + ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.0005));
             if (tickCount1 > 20 && tickCount1 < 200) {
                 if (tickCount1 % 20 == 0) {
-                    Entity enemy = null;
-                    double damage = 0;
-                    double r = 0;
+                    Entity enemy;
+                    double damage;
+                    double r;
                     enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                     r = 6;
                     damage = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.8;
@@ -208,7 +208,7 @@ public class SpecterDollEntity extends Animal implements GeoEntity {
                             if (entityiterator == this) {
                                 continue;
                             }
-                            double result = 0;
+                            double result;
                             result = Math.abs(getX() - entityiterator.getX()) + Math.abs(getZ() - entityiterator.getZ());
                             if (result <= r) {
                                 invulnerableTime = 0;
@@ -225,9 +225,9 @@ public class SpecterDollEntity extends Animal implements GeoEntity {
                 if (!level().isClientSide())
                     discard();
                 if (world instanceof ServerLevel _level)
-                    _level.sendParticles(CaerulaArborModParticleTypes.SPECTER_GLITTER.get(), x, (y + 0.75), z, 64, 0.75, 0.75, 0.75, 0.1);
+                    _level.sendParticles(CAParticleTypes.SPECTER_GLITTER.get(), x, (y + 0.75), z, 64, 0.75, 0.75, 0.75, 0.1);
                 if (world instanceof ServerLevel _level) {
-                    Entity entityToSpawn = CaerulaArborModEntities.SPECTER.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+                    Entity entityToSpawn = CAEntities.SPECTER.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                     if (entityToSpawn != null) {
                         entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                     }
@@ -244,7 +244,7 @@ public class SpecterDollEntity extends Animal implements GeoEntity {
 
 	@Override
 	public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
-		SpecterDollEntity retval = CaerulaArborModEntities.SPECTER_DOLL.get().create(serverWorld);
+		SpecterDollEntity retval = CAEntities.SPECTER_DOLL.get().create(serverWorld);
 		retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null, null);
 		return retval;
 	}
@@ -273,15 +273,15 @@ public class SpecterDollEntity extends Animal implements GeoEntity {
 		for (int index0 = 0; index0 < (int) (R + 1); index0++) {
 			double dx = index0 * 0.5;
 			double dz = (R - index0) * 0.5;
-			world.addParticle(CaerulaArborModParticleTypes.SPECTER_GLITTER.get(), (x + dx), (y + 0.1), (z + dz), 0, 0.1, 0);
-			world.addParticle(CaerulaArborModParticleTypes.SPECTER_GLITTER.get(), (x - dx), (y + 0.1), (z + dz), 0, 0.1, 0);
-			world.addParticle(CaerulaArborModParticleTypes.SPECTER_GLITTER.get(), (x + dx), (y + 0.1), (z - dz), 0, 0.1, 0);
-			world.addParticle(CaerulaArborModParticleTypes.SPECTER_GLITTER.get(), (x - dx), (y + 0.1), (z - dz), 0, 0.1, 0);
+			world.addParticle(CAParticleTypes.SPECTER_GLITTER.get(), (x + dx), (y + 0.1), (z + dz), 0, 0.1, 0);
+			world.addParticle(CAParticleTypes.SPECTER_GLITTER.get(), (x - dx), (y + 0.1), (z + dz), 0, 0.1, 0);
+			world.addParticle(CAParticleTypes.SPECTER_GLITTER.get(), (x + dx), (y + 0.1), (z - dz), 0, 0.1, 0);
+			world.addParticle(CAParticleTypes.SPECTER_GLITTER.get(), (x - dx), (y + 0.1), (z - dz), 0, 0.1, 0);
 		}
 		if (Math.random() < 0.15) {
 			R = Mth.nextDouble(RandomSource.create(), 1, 8);
 			double tt = Mth.nextDouble(RandomSource.create(), 0, 6.283);
-			world.addParticle(CaerulaArborModParticleTypes.SPECTER_CHARS.get(), (x + R * Math.cos(tt)), (y + 0.2), (z + R * Math.sin(tt)), 0, 0.25, 0);
+			world.addParticle(CAParticleTypes.SPECTER_CHARS.get(), (x + R * Math.cos(tt)), (y + 0.2), (z + R * Math.sin(tt)), 0, 0.25, 0);
 		}
 	}
 

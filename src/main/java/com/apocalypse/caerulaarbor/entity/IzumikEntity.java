@@ -3,9 +3,9 @@ package com.apocalypse.caerulaarbor.entity;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
@@ -92,7 +92,7 @@ public class IzumikEntity extends SeaMonster {
 	private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.PINK, ServerBossEvent.BossBarOverlay.NOTCHED_12);
 	
 	public IzumikEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.IZUMIK.get(), world);
+		this(CAEntities.IZUMIK.get(), world);
 	}
 
 	public IzumikEntity(EntityType<IzumikEntity> type, Level world) {
@@ -247,9 +247,9 @@ public class IzumikEntity extends SeaMonster {
 										this),
 								oceanMagicDamage);
 						if (this.getEntityData().get(DATA_phase) >= 2 && Math.random() < 0.15 && target instanceof LivingEntity livingTarget
-								&& livingTarget.getAttributes().hasAttribute(CaerulaArborModAttributes.NUMB.get())) {
-							livingTarget.getAttribute(CaerulaArborModAttributes.NUMB.get())
-									.setBaseValue(livingTarget.getAttribute(CaerulaArborModAttributes.NUMB.get()).getBaseValue() + 1);
+								&& livingTarget.getAttributes().hasAttribute(CAAttributes.NUMB.get())) {
+							livingTarget.getAttribute(CAAttributes.NUMB.get())
+									.setBaseValue(livingTarget.getAttribute(CAAttributes.NUMB.get()).getBaseValue() + 1);
 							if (this.level() instanceof ServerLevel serverLevel) {
 								serverLevel.sendParticles(ParticleTypes.FIREWORK, targetX, targetY + 0.75, targetZ, 16, 0.75, 0.75, 0.75, 0.1);
 							}
@@ -310,13 +310,13 @@ public class IzumikEntity extends SeaMonster {
             this.setAnimation("animation.izumik.start");
         }
         if (!this.level().isClientSide())
-            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 30, 1, false, false));
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()))
-            this.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).setBaseValue(10);
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-            this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(50);
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()))
-            this.getAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()).setBaseValue(0.01);
+            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 30, 1, false, false));
+        if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
+            this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).setBaseValue(10);
+        if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
+            this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(50);
+        if (this.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
+            this.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.01);
         return retval;
 	}
 
@@ -386,22 +386,22 @@ public class IzumikEntity extends SeaMonster {
         double y = this.getY();
         double z = this.getZ();
         Entity enemy = null;
-        double sklp = 0;
-        double grow = 0;
-        double phase = 0;
-        double sklp1 = 0;
-        double waves = 0;
-        double amplifi = 0;
+        double sklp;
+        double grow;
+        double phase;
+        double sklp1;
+        double waves;
+        double amplifi;
         if (this.isAlive()) {
-            this.removeEffect(CaerulaArborModMobEffects.DIZZY.get());
-            this.removeEffect(CaerulaArborModMobEffects.FROZEN.get());
-            enemy = this.getTarget();
+            this.removeEffect(CAMobEffects.DIZZY.get());
+            this.removeEffect(CAMobEffects.FROZEN.get());
+            this.getTarget();
             sklp = this.getEntityData().get(DATA_skillp);
             sklp1 = this.getEntityData().get(DATA_skillp_1);
             grow = this.getEntityData().get(DATA_growth_p);
             phase = this.getEntityData().get(DATA_phase);
             waves = this.getEntityData().get(DATA_wave);
-            if (!this.hasEffect(CaerulaArborModMobEffects.IZUMIK_LEARN.get())) {
+            if (!this.hasEffect(CAMobEffects.IZUMIK_LEARN.get())) {
                 amplifi = Math.floor(grow / 5);
                 if (MapVariables.get(world).strategy_silence > 3) {
                     amplifi = amplifi * 4;
@@ -412,14 +412,14 @@ public class IzumikEntity extends SeaMonster {
                 }
                 if (amplifi > 0) {
                     if (!this.level().isClientSide())
-                        this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.IZUMIK_LEARN.get(), 20, (int) (amplifi - 1), false, false));
+                        this.addEffect(new MobEffectInstance(CAMobEffects.IZUMIK_LEARN.get(), 20, (int) (amplifi - 1), false, false));
                 }
             }
             if (phase == 0) {
                 this.removeEffect(MobEffects.REGENERATION);
-                if (!this.hasEffect(CaerulaArborModMobEffects.INVULNERABLE.get())) {
+                if (!this.hasEffect(CAMobEffects.INVULNERABLE.get())) {
                     if (!this.level().isClientSide())
-                        this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 35, 2, false, false));
+                        this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 35, 2, false, false));
                 }
                 if (grow < 20) {
                     {
@@ -443,9 +443,9 @@ public class IzumikEntity extends SeaMonster {
                         this.setAnimation("animation.izumik.revive");
                     }
                     this.getEntityData().set(DATA_phase, 1);
-                    this.removeEffect(CaerulaArborModMobEffects.INVULNERABLE.get());
+                    this.removeEffect(CAMobEffects.INVULNERABLE.get());
                     if (!this.level().isClientSide())
-                        this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 300, 1, false, false));
+                        this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 300, 1, false, false));
                     this.getEntityData().set(DATA_skillp, 300);
                     {
                         final Vec3 _center = new Vec3(x, y, z);
@@ -464,8 +464,8 @@ public class IzumikEntity extends SeaMonster {
                         }
                     }
                     CaerulaArborMod.queueServerWork(25, () -> {
-                        double rate = 0;
-                        double range = 0;
+                        double rate;
+                        double range;
                         if (world instanceof Level _level) {
                                 _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "izumik_learn")), SoundSource.HOSTILE, (float) 2.5, 1);
                         }
@@ -504,9 +504,9 @@ public class IzumikEntity extends SeaMonster {
                         this.setAnimation("animation.izumik.revive");
                     }
                     this.getEntityData().set(DATA_phase, 1);
-                    this.removeEffect(CaerulaArborModMobEffects.INVULNERABLE.get());
+                    this.removeEffect(CAMobEffects.INVULNERABLE.get());
                     if (!this.level().isClientSide())
-                        this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 300, 1, false, false));
+                        this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 300, 1, false, false));
                     this.getEntityData().set(DATA_skillp, 300);
                     {
                         final Vec3 _center = new Vec3(x, y, z);
@@ -519,11 +519,11 @@ public class IzumikEntity extends SeaMonster {
                 }
                 if (sklp1 <= 0 && waves > 0) {
                     for (int index0 = 0; index0 < 12; index0++) {
-                        double range = 0;
-                        double t = 0;
+                        double range;
+                        double t;
                         double tgtX = 0;
                         double tgtZ = 0;
-                        double validY = 0;
+                        double validY;
                         validY = 114514;
                         for (int index1 = 0; index1 < 24; index1++) {
                             range = Mth.nextInt(RandomSource.create(), 28, 42);
@@ -537,7 +537,7 @@ public class IzumikEntity extends SeaMonster {
                         }
                         if (validY < 114513) {
                             if (world instanceof ServerLevel _level) {
-                                Entity entityToSpawn = CaerulaArborModEntities.IZUMIK_OFFSPRING.get().spawn(_level, BlockPos.containing(tgtX, validY, tgtZ), MobSpawnType.MOB_SUMMONED);
+                                Entity entityToSpawn = CAEntities.IZUMIK_OFFSPRING.get().spawn(_level, BlockPos.containing(tgtX, validY, tgtZ), MobSpawnType.MOB_SUMMONED);
                                 if (entityToSpawn != null) {
                                     entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                                 }
@@ -561,18 +561,18 @@ public class IzumikEntity extends SeaMonster {
                                 this.getEntityData().set(DATA_skillp, 600);
                             }
                             if (!this.level().isClientSide())
-                                this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 50, 0, false, false));
+                                this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 50, 0, false, false));
                             if (this instanceof IzumikEntity) {
                                 this.setAnimation("animation.izumik.skill");
                             }
                             CaerulaArborMod.queueServerWork(35, () -> {
                                 this.setHealth((float) ((this.getHealth()) + (this.getMaxHealth()) * 0.03));
-                                if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()))
-                                    this.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get())
-                                            .setBaseValue(Math.min((this.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get())
-                                                    ? this.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).getBaseValue()
+                                if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
+                                    this.getAttribute(CAAttributes.GENERAL_DEFENSE.get())
+                                            .setBaseValue(Math.min((this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get())
+                                                    ? this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getBaseValue()
                                                     : 0) + 1, (this.getMaxHealth()) * 0.05));
-                                double range = 0;
+                                double range;
                                 if (world instanceof Level _level) {
                                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "izumik_shock")), SoundSource.HOSTILE, (float) 3.5, 1);
                                 }
@@ -728,33 +728,33 @@ public class IzumikEntity extends SeaMonster {
 				entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "izumik_skill"))), this),
 						(float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * rate));
 
-				if (!(entityiterator instanceof LivingEntity _livEnt11 && _livEnt11.hasEffect(CaerulaArborModMobEffects.IZUMIK_SHOCK.get()))) {
+				if (!(entityiterator instanceof LivingEntity _livEnt11 && _livEnt11.hasEffect(CAMobEffects.IZUMIK_SHOCK.get()))) {
 					if (entityiterator instanceof LivingEntity _entity && !this.level().isClientSide())
-						this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.IZUMIK_SHOCK.get(), 160, 0, false, false));
+						this.addEffect(new MobEffectInstance(CAMobEffects.IZUMIK_SHOCK.get(), 160, 0, false, false));
 				}
-				if (!(entityiterator instanceof LivingEntity _livEnt13 && _livEnt13.hasEffect(CaerulaArborModMobEffects.DIZZY.get()))) {
+				if (!(entityiterator instanceof LivingEntity _livEnt13 && _livEnt13.hasEffect(CAMobEffects.DIZZY.get()))) {
 					if (entityiterator instanceof LivingEntity _entity && !this.level().isClientSide())
-						this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.DIZZY.get(), 160, 0, false, false));
+						this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 160, 0, false, false));
 				}
-				if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()))
-					this.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get())
-							.setBaseValue(Math.min((this.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get())
-									? this.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).getBaseValue()
+				if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
+					this.getAttribute(CAAttributes.GENERAL_DEFENSE.get())
+							.setBaseValue(Math.min((this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get())
+									? this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getBaseValue()
 									: 0) + 0.25, this.getMaxHealth() * 0.05));
 
 				if ((this.getEntityData().get(DATA_phase) >= 2)) {
 					if (Math.random() < 0.33) {
 						if (MapVariables.get(world).strategy_grow >= 4) {
-							if (entityiterator instanceof LivingEntity _livingEntity20 && _livingEntity20.getAttributes().hasAttribute(CaerulaArborModAttributes.NUMB.get()))
-								_livingEntity20.getAttribute(CaerulaArborModAttributes.NUMB.get())
-										.setBaseValue(((entityiterator instanceof LivingEntity _livingEntity19 && _livingEntity19.getAttributes().hasAttribute(CaerulaArborModAttributes.NUMB.get())
-												? _livingEntity19.getAttribute(CaerulaArborModAttributes.NUMB.get()).getBaseValue()
+							if (entityiterator instanceof LivingEntity _livingEntity20 && _livingEntity20.getAttributes().hasAttribute(CAAttributes.NUMB.get()))
+								_livingEntity20.getAttribute(CAAttributes.NUMB.get())
+										.setBaseValue(((entityiterator instanceof LivingEntity _livingEntity19 && _livingEntity19.getAttributes().hasAttribute(CAAttributes.NUMB.get())
+												? _livingEntity19.getAttribute(CAAttributes.NUMB.get()).getBaseValue()
 												: 0) + 2));
 						} else {
-							if (entityiterator instanceof LivingEntity _livingEntity22 && _livingEntity22.getAttributes().hasAttribute(CaerulaArborModAttributes.NUMB.get()))
-								_livingEntity22.getAttribute(CaerulaArborModAttributes.NUMB.get())
-										.setBaseValue(((entityiterator instanceof LivingEntity _livingEntity21 && _livingEntity21.getAttributes().hasAttribute(CaerulaArborModAttributes.NUMB.get())
-												? _livingEntity21.getAttribute(CaerulaArborModAttributes.NUMB.get()).getBaseValue()
+							if (entityiterator instanceof LivingEntity _livingEntity22 && _livingEntity22.getAttributes().hasAttribute(CAAttributes.NUMB.get()))
+								_livingEntity22.getAttribute(CAAttributes.NUMB.get())
+										.setBaseValue(((entityiterator instanceof LivingEntity _livingEntity21 && _livingEntity21.getAttributes().hasAttribute(CAAttributes.NUMB.get())
+												? _livingEntity21.getAttribute(CAAttributes.NUMB.get()).getBaseValue()
 												: 0) + 1));
 						}
 					}
@@ -777,12 +777,11 @@ public class IzumikEntity extends SeaMonster {
 	}
 
 	private double findValidYOffspr(LevelAccessor world, double x, double y, double z, double xx, double yy, double zz) {
-		double y_found = 0;
+		double y_found;
 		if (world instanceof Level _level) {
 				_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.azalea.hit")), SoundSource.NEUTRAL, 0, 1);
 		}
-		y_found = yy;
-		for (int index0 = 0; index0 < 12; index0++) {
+        for (int index0 = 0; index0 < 12; index0++) {
 			y_found = yy + index0;
 			if (!(world.getBlockFloorHeight(BlockPos.containing(xx, y_found, zz)) > 0)) {
 				return y_found;
@@ -910,7 +909,7 @@ public class IzumikEntity extends SeaMonster {
     public void setHealth(float pHealth){
     	float hlth = this.getHealth();
     	float mhlth = this.getMaxHealth();
-        if(this.hasEffect(CaerulaArborModMobEffects.INVULNERABLE.get()) && pHealth < this.getHealth()) return;
+        if(this.hasEffect(CAMobEffects.INVULNERABLE.get()) && pHealth < this.getHealth()) return;
         float reduction = hlth - pHealth;
         float finalV = reduction >= mhlth * 0.33f ? hlth - mhlth * 0.33f : hlth - reduction;
         super.setHealth(finalV);

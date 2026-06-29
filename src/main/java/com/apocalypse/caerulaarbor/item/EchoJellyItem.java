@@ -3,7 +3,8 @@ package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
@@ -38,10 +39,10 @@ public class EchoJellyItem extends Item {
 		ItemStack retval = super.finishUsingItem(itemstack, world, entity);
 		entity.clearFire();
 		if (!entity.level().isClientSide()) {
-			entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 80, 0));
-			entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ADD_ATTACK_PERCLY.get(), 700, 2));
-			entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ESSENCE_RESISTANCE.get(), 3600, 1));
-			entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.SANITY_HEAL.get(), 1, 2, false, false));
+			entity.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 80, 0));
+			entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_ATTACK_PERCLY.get(), 700, 2));
+			entity.addEffect(new MobEffectInstance(CAMobEffects.ESSENCE_RESISTANCE.get(), 3600, 1));
+			entity.addEffect(new MobEffectInstance(CAMobEffects.SANITY_HEAL.get(), 1, 2, false, false));
 		}
 		double _setval = Math.min((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_light + 19, 100);
 		entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {

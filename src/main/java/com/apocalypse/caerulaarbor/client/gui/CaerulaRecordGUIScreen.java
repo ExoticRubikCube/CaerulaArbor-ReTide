@@ -3,7 +3,7 @@ package com.apocalypse.caerulaarbor.client.gui;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModGameRules;
+import com.apocalypse.caerulaarbor.init.CAGameRules;
 import com.apocalypse.caerulaarbor.menu.CaerulaRecordGUIMenu;
 import com.apocalypse.caerulaarbor.network.CaerulaArborModNetwork;
 import com.apocalypse.caerulaarbor.network.message.send.CaerulaRecordGUIButtonMessage;
@@ -223,10 +223,10 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 			guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.caerula_record_gui.label_neurodegression"), 101, 147, -3368449, false);
 		if (RelicUtils.hasDisoFlesh(entity))
 			guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.caerula_record_gui.label_deformity"), 101, 147, -3368449, false);
-        if ((((LevelAccessor) world).getLevelData().getGameRules().getInt(CaerulaArborModGameRules.SURGING_WAVES)) > 0)
+        if ((((LevelAccessor) world).getLevelData().getGameRules().getInt(CAGameRules.SURGING_WAVES)) > 0)
             guiGraphics.drawString(this.font,
 
-                    Component.translatable("key.surging_waves").getString() + "\u00B7" + Math.round((((LevelAccessor) world).getLevelData().getGameRules().getInt(CaerulaArborModGameRules.SURGING_WAVES))), -4, -13, -10040065, false);
+                    Component.translatable("key.surging_waves").getString() + "\u00B7" + Math.round((((LevelAccessor) world).getLevelData().getGameRules().getInt(CAGameRules.SURGING_WAVES))), -4, -13, -10040065, false);
 	}
 
 	@Override

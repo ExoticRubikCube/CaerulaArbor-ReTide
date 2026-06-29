@@ -11,7 +11,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.client.gui.GuiGraphics;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ import java.util.function.Consumer;
 public class MagicResisBuffMobEffect extends MobEffect {
     public MagicResisBuffMobEffect() {
         super(MobEffectCategory.BENEFICIAL, -3394561);
-        this.addAttributeModifier(CaerulaArborModAttributes.MAGIC_RESISTANCE.get(), "26fea5e8-5251-3bfc-bd92-46a0eb216a22", 4, AttributeModifier.Operation.ADDITION);
+        this.addAttributeModifier(CAAttributes.MAGIC_RESISTANCE.get(), "26fea5e8-5251-3bfc-bd92-46a0eb216a22", 4, AttributeModifier.Operation.ADDITION);
     }
 
     @Override

@@ -3,7 +3,7 @@ package com.apocalypse.caerulaarbor.block;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.MoistEnderCrystalEntity;
 import com.apocalypse.caerulaarbor.entity.OceanizedEnderinaEntity;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -129,7 +129,7 @@ public class EnderinaCoreBlock extends Block {
                     _level.addFreshEntity(entityToSpawn);
                 }
                 if ((LevelAccessor) world instanceof ServerLevel _level) {
-                    Entity entityToSpawn = CaerulaArborModEntities.OCEANIZED_ENDERINA.get().spawn(_level, BlockPos.containing(x, (double) y + 1, z), MobSpawnType.MOB_SUMMONED);
+                    Entity entityToSpawn = CAEntities.OCEANIZED_ENDERINA.get().spawn(_level, BlockPos.containing(x, (double) y + 1, z), MobSpawnType.MOB_SUMMONED);
                     if (entityToSpawn != null) {
                         entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
                     }

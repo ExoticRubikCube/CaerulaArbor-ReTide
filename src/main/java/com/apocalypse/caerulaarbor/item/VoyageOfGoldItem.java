@@ -2,7 +2,7 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -36,8 +36,8 @@ public class VoyageOfGoldItem extends Item {
 		super.appendHoverText(itemstack, level, list, flag);
 		Entity entity = itemstack.getEntityRepresentation();
         String hoverText;
-        String first_two = "";
-        String locId = "";
+        String first_two;
+        String locId;
         locId = itemstack.getDescriptionId();
         first_two = Component.translatable((locId + ".description_0")).getString() + "\n" + Component.translatable((locId + ".description_1")).getString() + "\n" + Component.translatable((locId + ".description_2")).getString() + "\n"
                 + Component.translatable((locId + ".description_3")).getString();
@@ -64,7 +64,7 @@ public class VoyageOfGoldItem extends Item {
                     _level.addFreshEntity(new ExperienceOrb(_level, (x + Mth.nextDouble(RandomSource.create(), -1, 1)), (y + Mth.nextDouble(RandomSource.create(), 0.6, 0.75)), (z + Mth.nextDouble(RandomSource.create(), -1, 1)), 4));
             }
             if (!entity.level().isClientSide())
-                entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ADD_REACH.get(), 400, 1, false, false));
+                entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_REACH.get(), 400, 1, false, false));
             {
                 boolean _setval = true;
                 ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {

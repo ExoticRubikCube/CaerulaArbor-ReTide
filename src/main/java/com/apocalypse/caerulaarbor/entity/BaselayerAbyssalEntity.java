@@ -2,10 +2,9 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.*;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.procedures.TrailReplaceProcedure;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
@@ -65,7 +64,7 @@ public class BaselayerAbyssalEntity extends SeaMonster {
 	public String animationprocedure = "empty";
 
 	public BaselayerAbyssalEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.BASELAYER_ABYSSAL.get(), world);
+		this(CAEntities.BASELAYER_ABYSSAL.get(), world);
 	}
 
 	public BaselayerAbyssalEntity(EntityType<BaselayerAbyssalEntity> type, Level world) {
@@ -178,10 +177,10 @@ public class BaselayerAbyssalEntity extends SeaMonster {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get()))
-            this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(9);
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-            this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(20);
+        if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get()))
+            this.getAttribute(CAAttributes.SANITY_RATE.get()).setBaseValue(9);
+        if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
+            this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(20);
         return retval;
 	}
 
@@ -205,10 +204,10 @@ public class BaselayerAbyssalEntity extends SeaMonster {
 	public void baseTick() {
 		super.baseTick();
         if (this.isAlive()) {
-            if (this.hasEffect(CaerulaArborModMobEffects.MUTE.get())) {
+            if (this.hasEffect(CAMobEffects.MUTE.get())) {
                 if ((Entity) this instanceof BaselayerAbyssalEntity _datEntSetI) {
                     _datEntSetI.getEntityData().set(DATA_mute_time,
-                    _datEntSetI.hasEffect(CaerulaArborModMobEffects.MUTE.get()) ? _datEntSetI.getEffect(CaerulaArborModMobEffects.MUTE.get()).getDuration() : 0);
+                    _datEntSetI.hasEffect(CAMobEffects.MUTE.get()) ? _datEntSetI.getEffect(CAMobEffects.MUTE.get()).getDuration() : 0);
                 }
             } else if (((Entity) this instanceof BaselayerAbyssalEntity _datEntI ? _datEntI.getEntityData().get(DATA_mute_time) : 0) == 1) {
                 if ((Entity) this instanceof BaselayerAbyssalEntity _datEntSetI)
@@ -224,13 +223,13 @@ public class BaselayerAbyssalEntity extends SeaMonster {
 	}
 
 	public static void init() {
-		SpawnPlacements.register(CaerulaArborModEntities.BASELAYER_ABYSSAL.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
+		SpawnPlacements.register(CAEntities.BASELAYER_ABYSSAL.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();
 			return WorldUtils.canRareSeabornSpawn(world, x, y, z);
 		});
-		DungeonHooks.addDungeonMob(CaerulaArborModEntities.BASELAYER_ABYSSAL.get(), 180);
+		DungeonHooks.addDungeonMob(CAEntities.BASELAYER_ABYSSAL.get(), 180);
 	}
 
 	public static AttributeSupplier.Builder createAttributes() {
@@ -305,10 +304,10 @@ public class BaselayerAbyssalEntity extends SeaMonster {
             double x = this.getX();
             double y = this.getY();
             double z = this.getZ();
-            if (CaerulaArborModBlocks.SEA_TRAIL_GROWN.get().defaultBlockState().canSurvive(world, BlockPos.containing(x, y, z)) && !(world.getBlockFloorHeight(BlockPos.containing(x, y, z)) > 0)) {
+            if (CABlocks.SEA_TRAIL_GROWN.get().defaultBlockState().canSurvive(world, BlockPos.containing(x, y, z)) && !(world.getBlockFloorHeight(BlockPos.containing(x, y, z)) > 0)) {
                 if (WorldUtils.canGrief(world)) {
                     if (((Entity) this instanceof BaselayerAbyssalEntity _datEntI ? _datEntI.getEntityData().get(DATA_mute_time) : 0) <= 0) {
-                        TrailReplaceProcedure.execute(world, CaerulaArborModBlocks.SEA_TRAIL_GROWN.get().defaultBlockState(), (world.getFluidState(BlockPos.containing(x, y, z)).createLegacyBlock()).getBlock() == Blocks.WATER, x, y, z);
+                        TrailReplaceProcedure.execute(world, CABlocks.SEA_TRAIL_GROWN.get().defaultBlockState(), (world.getFluidState(BlockPos.containing(x, y, z)).createLegacyBlock()).getBlock() == Blocks.WATER, x, y, z);
                     }
                 }
             }

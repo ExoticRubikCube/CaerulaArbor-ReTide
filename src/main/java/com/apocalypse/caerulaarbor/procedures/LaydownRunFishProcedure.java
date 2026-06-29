@@ -1,7 +1,7 @@
 package com.apocalypse.caerulaarbor.procedures;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -25,44 +25,44 @@ public class LaydownRunFishProcedure {
 		if (world instanceof Level _level) {
 				_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.bucket.empty_fish")), SoundSource.NEUTRAL, 1, 1);
 		}
-		if (itemstack.getItem() == CaerulaArborModItems.BUCKET_RUNFISH.get()) {
+		if (itemstack.getItem() == CAItems.BUCKET_RUNFISH.get()) {
 			if (world instanceof ServerLevel _level) {
-				Entity entityToSpawn = CaerulaArborModEntities.RUN_FISH.get().spawn(_level, BlockPos.containing(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ()), MobSpawnType.MOB_SUMMONED);
+				Entity entityToSpawn = CAEntities.RUN_FISH.get().spawn(_level, BlockPos.containing(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ()), MobSpawnType.MOB_SUMMONED);
 				if (entityToSpawn != null) {
 					entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
 				}
 			}
-		} else if (itemstack.getItem() == CaerulaArborModItems.BUCKET_CHISELER.get()) {
+		} else if (itemstack.getItem() == CAItems.BUCKET_CHISELER.get()) {
 			if (world instanceof ServerLevel _level) {
-				Entity entityToSpawn = CaerulaArborModEntities.CHISELER_FISH.get().spawn(_level, BlockPos.containing(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ()), MobSpawnType.MOB_SUMMONED);
+				Entity entityToSpawn = CAEntities.CHISELER_FISH.get().spawn(_level, BlockPos.containing(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ()), MobSpawnType.MOB_SUMMONED);
 				if (entityToSpawn != null) {
 					entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
 				}
 			}
-		} else if (itemstack.getItem() == CaerulaArborModItems.BUCKET_FLOATER.get()) {
+		} else if (itemstack.getItem() == CAItems.BUCKET_FLOATER.get()) {
 			if (world instanceof ServerLevel _level) {
-				Entity entityToSpawn = CaerulaArborModEntities.FLOATER_PROKARYOTE.get().spawn(_level, BlockPos.containing(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ()), MobSpawnType.MOB_SUMMONED);
+				Entity entityToSpawn = CAEntities.FLOATER_PROKARYOTE.get().spawn(_level, BlockPos.containing(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ()), MobSpawnType.MOB_SUMMONED);
 				if (entityToSpawn != null) {
 					entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
 				}
 			}
-		} else if (itemstack.getItem() == CaerulaArborModItems.BUCKET_BONEFISH.get()) {
+		} else if (itemstack.getItem() == CAItems.BUCKET_BONEFISH.get()) {
 			if (world instanceof ServerLevel _level) {
-				Entity entityToSpawn = CaerulaArborModEntities.BONE_FISH.get().spawn(_level, BlockPos.containing(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ()), MobSpawnType.MOB_SUMMONED);
+				Entity entityToSpawn = CAEntities.BONE_FISH.get().spawn(_level, BlockPos.containing(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ()), MobSpawnType.MOB_SUMMONED);
 				if (entityToSpawn != null) {
 					entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
 				}
 			}
-		} else if (itemstack.getItem() == CaerulaArborModItems.BUCKET_COLLECTOR.get()) {
+		} else if (itemstack.getItem() == CAItems.BUCKET_COLLECTOR.get()) {
 			if (world instanceof ServerLevel _level) {
-				Entity entityToSpawn = CaerulaArborModEntities.COLLECTOR_PROKARYOTE.get().spawn(_level, BlockPos.containing(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ()), MobSpawnType.MOB_SUMMONED);
+				Entity entityToSpawn = CAEntities.COLLECTOR_PROKARYOTE.get().spawn(_level, BlockPos.containing(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ()), MobSpawnType.MOB_SUMMONED);
 				if (entityToSpawn != null) {
 					entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
 				}
 			}
-		} else if (itemstack.getItem() == CaerulaArborModItems.BUCKET_SLIDER.get()) {
+		} else if (itemstack.getItem() == CAItems.BUCKET_SLIDER.get()) {
 			if (world instanceof ServerLevel _level) {
-				Entity entityToSpawn = CaerulaArborModEntities.SLIDER_FISH.get().spawn(_level, BlockPos.containing(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ()), MobSpawnType.MOB_SUMMONED);
+				Entity entityToSpawn = CAEntities.SLIDER_FISH.get().spawn(_level, BlockPos.containing(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ()), MobSpawnType.MOB_SUMMONED);
 				if (entityToSpawn != null) {
 					entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
 				}

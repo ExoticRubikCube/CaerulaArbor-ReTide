@@ -1,7 +1,7 @@
 package com.apocalypse.caerulaarbor.entity;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -30,10 +30,10 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 @OnlyIn(value = Dist.CLIENT, _interface = ItemSupplier.class)
 public class FakerggShootEntity extends AbstractArrow implements ItemSupplier {
-	public static final ItemStack PROJECTILE_ITEM = new ItemStack(CaerulaArborModItems.FAKE_EGG.get());
+	public static final ItemStack PROJECTILE_ITEM = new ItemStack(CAItems.FAKE_EGG.get());
 
 	public FakerggShootEntity(PlayMessages.SpawnEntity packet, Level world) {
-		super(CaerulaArborModEntities.FAKERGG_SHOOT.get(), world);
+		super(CAEntities.FAKERGG_SHOOT.get(), world);
 	}
 
 	public FakerggShootEntity(EntityType<? extends FakerggShootEntity> type, Level world) {
@@ -80,7 +80,7 @@ public class FakerggShootEntity extends AbstractArrow implements ItemSupplier {
             return;
         if (!(entity == sourceentity)) {
             if (world instanceof ServerLevel _level) {
-                Entity entityToSpawn = CaerulaArborModEntities.FAKE_OFFSPRING.get().spawn(_level, BlockPos.containing(this.getX() + Mth.nextDouble(RandomSource.create(), -0.5, 0.5), this.getY(), this.getZ() + Mth.nextDouble(RandomSource.create(), -0.5, 0.5)),
+                Entity entityToSpawn = CAEntities.FAKE_OFFSPRING.get().spawn(_level, BlockPos.containing(this.getX() + Mth.nextDouble(RandomSource.create(), -0.5, 0.5), this.getY(), this.getZ() + Mth.nextDouble(RandomSource.create(), -0.5, 0.5)),
                         MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn != null) {
                     entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
@@ -99,7 +99,7 @@ public class FakerggShootEntity extends AbstractArrow implements ItemSupplier {
         double y = blockHitResult.getBlockPos().getY();
         double z = blockHitResult.getBlockPos().getZ();
         if (world instanceof ServerLevel _level) {
-            Entity entityToSpawn = CaerulaArborModEntities.FAKE_OFFSPRING.get().spawn(_level, BlockPos.containing(x + Mth.nextDouble(RandomSource.create(), 0, 1), y + 1, z + Mth.nextDouble(RandomSource.create(), 0, 1)), MobSpawnType.MOB_SUMMONED);
+            Entity entityToSpawn = CAEntities.FAKE_OFFSPRING.get().spawn(_level, BlockPos.containing(x + Mth.nextDouble(RandomSource.create(), 0, 1), y + 1, z + Mth.nextDouble(RandomSource.create(), 0, 1)), MobSpawnType.MOB_SUMMONED);
             if (entityToSpawn != null) {
                 entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
             }
@@ -124,7 +124,7 @@ public class FakerggShootEntity extends AbstractArrow implements ItemSupplier {
 	}
 
 	public static FakerggShootEntity shoot(Level world, LivingEntity entity, RandomSource random, float power, double damage, int knockback) {
-		FakerggShootEntity entityarrow = new FakerggShootEntity(CaerulaArborModEntities.FAKERGG_SHOOT.get(), entity, world);
+		FakerggShootEntity entityarrow = new FakerggShootEntity(CAEntities.FAKERGG_SHOOT.get(), entity, world);
 		entityarrow.shoot(entity.getViewVector(1).x, entity.getViewVector(1).y, entity.getViewVector(1).z, power * 2, 0);
 		entityarrow.setSilent(true);
 		entityarrow.setCritArrow(false);
@@ -145,7 +145,7 @@ public class FakerggShootEntity extends AbstractArrow implements ItemSupplier {
 	}
 
 	public static FakerggShootEntity shoot(LivingEntity entity, LivingEntity target, double damage) {
-		FakerggShootEntity entityarrow = new FakerggShootEntity(CaerulaArborModEntities.FAKERGG_SHOOT.get(), entity, entity.level());
+		FakerggShootEntity entityarrow = new FakerggShootEntity(CAEntities.FAKERGG_SHOOT.get(), entity, entity.level());
 		double dx = target.getX() - entity.getX();
 		double dy = target.getY() + target.getEyeHeight() - 1.1;
 		double dz = target.getZ() - entity.getZ();

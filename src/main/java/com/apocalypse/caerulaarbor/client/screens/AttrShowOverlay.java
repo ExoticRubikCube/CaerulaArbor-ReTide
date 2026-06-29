@@ -2,7 +2,7 @@ package com.apocalypse.caerulaarbor.client.screens;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
@@ -33,18 +33,8 @@ public class AttrShowOverlay {
 	public static void eventHandler(RenderGuiEvent.Pre event) {
 		int w = event.getWindow().getGuiScaledWidth();
 		int h = event.getWindow().getGuiScaledHeight();
-		Level world = null;
-		double x = 0;
-		double y = 0;
-		double z = 0;
 		Player entity = Minecraft.getInstance().player;
 		if (entity.isSpectator()) return;
-		if (entity != null) {
-			world = entity.level();
-			x = entity.getX();
-			y = entity.getY();
-			z = entity.getZ();
-		}
 		RenderSystem.disableDepthTest();
 		RenderSystem.depthMask(false);
 		RenderSystem.enableBlend();
@@ -57,33 +47,33 @@ public class AttrShowOverlay {
 		int dy = CaerulaConfigsConfiguration.Y_OFFSET_ATTR.get().intValue();
 		if (entity.isAlive()) {
             String defense = "";
-            if (entity != null) {
-                double d = 0;
-                d = (Entity) entity instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()) ? _livingEntity0.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).getValue() : 0;
+            {
+                double d;
+                d = (Entity) entity instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()) ? _livingEntity0.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getValue() : 0;
                 if (d > 0) {
                     defense = new java.text.DecimalFormat("##.#").format(d);
                 }
             }
             String resis = "";
             if (entity != null) {
-                double d1 = 0;
-                d1 = (Entity) entity instanceof LivingEntity _livingEntity1 && _livingEntity1.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()) ? _livingEntity1.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).getValue() : 0;
+                double d1;
+                d1 = (Entity) entity instanceof LivingEntity _livingEntity1 && _livingEntity1.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()) ? _livingEntity1.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).getValue() : 0;
                 if (d1 > 0) {
                     resis = new java.text.DecimalFormat("##.#").format(d1);
                 }
             }
             String miss = "";
             if (entity != null) {
-                double d = 0;
-                d = (Entity) entity instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(CaerulaArborModAttributes.MISSRATE.get()) ? _livingEntity0.getAttribute(CaerulaArborModAttributes.MISSRATE.get()).getValue() : 0;
+                double d;
+                d = (Entity) entity instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(CAAttributes.MISSRATE.get()) ? _livingEntity0.getAttribute(CAAttributes.MISSRATE.get()).getValue() : 0;
                 if (d > 0) {
                     miss = new java.text.DecimalFormat("##.#").format(d);
                 }
             }
             String barrier = "";
             if (entity != null) {
-                double d = 0;
-                d = (Entity) entity instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(CaerulaArborModAttributes.LIVING_BARRIER.get()) ? _livingEntity0.getAttribute(CaerulaArborModAttributes.LIVING_BARRIER.get()).getBaseValue() : 0;
+                double d;
+                d = (Entity) entity instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(CAAttributes.LIVING_BARRIER.get()) ? _livingEntity0.getAttribute(CAAttributes.LIVING_BARRIER.get()).getBaseValue() : 0;
                 if (d > 0) {
                     barrier = new java.text.DecimalFormat("##.#").format(d);
                 }
@@ -97,8 +87,8 @@ public class AttrShowOverlay {
 				event.getGuiGraphics().blit(RESIS, 4+dx, h - 13+dy, 0, 0, 9, 9, 9, 9);
                 double result = 0;
                 if (entity != null) {
-                    double d = 0;
-                    d = (Entity) entity instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()) ? _livingEntity0.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).getValue() : 0;
+                    double d;
+                    d = (Entity) entity instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()) ? _livingEntity0.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).getValue() : 0;
                     result = d * 0.25;
                 }
                 int len = (int) result;
@@ -118,9 +108,9 @@ public class AttrShowOverlay {
                 if (entity == null) {
                     result = 0;
                 } else {
-                    double d = 0;
-                    double h1 = 0;
-                    d = (Entity) entity instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(CaerulaArborModAttributes.LIVING_BARRIER.get()) ? _livingEntity0.getAttribute(CaerulaArborModAttributes.LIVING_BARRIER.get()).getBaseValue() : 0;
+                    double d;
+                    double h1;
+                    d = (Entity) entity instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(CAAttributes.LIVING_BARRIER.get()) ? _livingEntity0.getAttribute(CAAttributes.LIVING_BARRIER.get()).getBaseValue() : 0;
                     h1 = (Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1;
                     if (h1 <= 0) {
                         result = 25;

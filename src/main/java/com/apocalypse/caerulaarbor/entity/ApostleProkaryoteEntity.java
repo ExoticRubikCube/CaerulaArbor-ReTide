@@ -3,8 +3,8 @@ package com.apocalypse.caerulaarbor.entity;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CABlocks;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
@@ -69,7 +69,7 @@ public class ApostleProkaryoteEntity extends SeaMonster {
 	public String animationprocedure = "empty";
 
 	public ApostleProkaryoteEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.APOSTLE_PROKARYOTE.get(), world);
+		this(CAEntities.APOSTLE_PROKARYOTE.get(), world);
 	}
 
 	public ApostleProkaryoteEntity(EntityType<ApostleProkaryoteEntity> type, Level world) {
@@ -157,11 +157,6 @@ public class ApostleProkaryoteEntity extends SeaMonster {
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = ApostleProkaryoteEntity.this.getX();
-				double y = ApostleProkaryoteEntity.this.getY();
-				double z = ApostleProkaryoteEntity.this.getZ();
-				Entity entity = ApostleProkaryoteEntity.this;
-				Level world = ApostleProkaryoteEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
@@ -328,13 +323,13 @@ public class ApostleProkaryoteEntity extends SeaMonster {
         double z = this.getZ();
         if (this != null) {
             boolean found = false;
-            double perc = 0;
+            double perc;
             if (this.isAlive()) {
                 if (!((Entity) this instanceof ApostleProkaryoteEntity _datEntL1 && _datEntL1.getEntityData().get(DATA_shelled))) {
                     for (int dx = -2; dx <= 2; dx++) {
                         for (int dy = -2; dy <= 3; dy++) {
                             for (int dz = -2; dz <= 2; dz++) {
-                                if ((world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz))).getBlock() == CaerulaArborModBlocks.WHITE_CHITIN_BLOCK.get()) {
+                                if ((world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz))).getBlock() == CABlocks.WHITE_CHITIN_BLOCK.get()) {
                                     ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((x + dx), (y + dy), (z + dz)));
                                     world.destroyBlock(BlockPos.containing(x + dx, y + dy, z + dz), false);
                                     found = true;
@@ -409,7 +404,7 @@ public class ApostleProkaryoteEntity extends SeaMonster {
 	}
 
 	public static void init() {
-		SpawnPlacements.register(CaerulaArborModEntities.APOSTLE_PROKARYOTE.get(), SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
+		SpawnPlacements.register(CAEntities.APOSTLE_PROKARYOTE.get(), SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();

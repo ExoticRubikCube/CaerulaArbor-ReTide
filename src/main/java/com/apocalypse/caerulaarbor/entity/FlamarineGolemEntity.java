@@ -2,10 +2,10 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
@@ -83,7 +83,7 @@ public class FlamarineGolemEntity extends SeaMonster {
 	private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.PROGRESS);
 
 	public FlamarineGolemEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.FLAMARINE_GOLEM.get(), world);
+		this(CAEntities.FLAMARINE_GOLEM.get(), world);
 	}
 
 	public FlamarineGolemEntity(EntityType<FlamarineGolemEntity> type, Level world) {
@@ -217,7 +217,7 @@ public class FlamarineGolemEntity extends SeaMonster {
         LevelAccessor world = this.level();
         Entity sourceentity = source.getEntity();
         if (sourceentity != null) {
-            double sklp = 0;
+            double sklp;
             if (this.isAlive()) {
                 sklp = (Entity) this instanceof FlamarineGolemEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillP1) : 0;
                 if (sklp > 0) {
@@ -262,12 +262,12 @@ public class FlamarineGolemEntity extends SeaMonster {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()))
-            this.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).setBaseValue(5);
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-            this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(15);
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RESISTANCE.get()))
-            this.getAttribute(CaerulaArborModAttributes.SANITY_RESISTANCE.get()).setBaseValue(60);
+        if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
+            this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).setBaseValue(5);
+        if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
+            this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(15);
+        if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RESISTANCE.get()))
+            this.getAttribute(CAAttributes.SANITY_RESISTANCE.get()).setBaseValue(60);
         if (this instanceof FlamarineGolemEntity) {
             this.setAnimation("animation.flamarine_golem.start");
         }
@@ -308,10 +308,10 @@ public class FlamarineGolemEntity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        Entity enemy = null;
-        double sklp1 = 0;
-        double sklp2 = 0;
-        double dura = 0;
+        Entity enemy;
+        double sklp1;
+        double sklp2;
+        double dura;
         if (this.deathTime == 46) {
             if (!world.isClientSide()) {
                 if (world instanceof Level _level) {
@@ -341,11 +341,11 @@ public class FlamarineGolemEntity extends SeaMonster {
                         dura = 40;
                         CaerulaArborMod.queueServerWork(20, () -> {
                             if (this.isAlive()) {
-                                Entity enemy1 = null;
-                                double damage = 0;
-                                double r = 0;
-                                double h = 0;
-                                double d = 0;
+                                Entity enemy1;
+                                double damage;
+                                double r;
+                                double h;
+                                double d;
                                 enemy1 = this.getTarget();
                                 r = 6;
                                 damage = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
@@ -405,8 +405,7 @@ public class FlamarineGolemEntity extends SeaMonster {
                         if ((Entity) this instanceof FlamarineGolemEntity _datEntSetI)
                             _datEntSetI.getEntityData().set(DATA_duration, 60);
                         if (!this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 30, 9, false, false));
-                        dura = 40;
+                            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 30, 9, false, false));
                         CaerulaArborMod.queueServerWork(22, () -> {
                             if (this.isAlive()) {
                                 this.combo(world, x, y, z, 5.75, 2);
@@ -423,10 +422,10 @@ public class FlamarineGolemEntity extends SeaMonster {
             if (tickCount % 20 == 10) {
                 if (!(enemy == null) && enemy.isAlive()) {
                     boolean once = false;
-                    double dx = 0;
-                    double dy = 0;
-                    double dz = 0;
-                    double hardness = 0;
+                    double dx;
+                    double dy;
+                    double dz;
+                    double hardness;
                     double lose = 0;
                     BlockState block;
                     if (WorldUtils.canGrief(world)) {
@@ -581,7 +580,7 @@ public class FlamarineGolemEntity extends SeaMonster {
             LevelAccessor world = this.level();
             if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
                 if (world instanceof ServerLevel _level) {
-                    ItemEntity entityToSpawn = new ItemEntity(_level, this.getX(), (this.getY() + 1), this.getZ(), new ItemStack(CaerulaArborModItems.FLAMARINE_UPGRADE_TEMPLATE.get()));
+                    ItemEntity entityToSpawn = new ItemEntity(_level, this.getX(), (this.getY() + 1), this.getZ(), new ItemStack(CAItems.FLAMARINE_UPGRADE_TEMPLATE.get()));
                     entityToSpawn.setPickUpDelay(5);
                     _level.addFreshEntity(entityToSpawn);
                 }
@@ -605,8 +604,8 @@ public class FlamarineGolemEntity extends SeaMonster {
 	}
 
 	private void combo(LevelAccessor world, double x, double y, double z, double dist, double rate) {
-		Entity enemy = null;
-		double damage = 0;
+		Entity enemy;
+		double damage;
 		enemy = this.getTarget();
 		damage = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * rate;
 		if (world instanceof Level _level) {

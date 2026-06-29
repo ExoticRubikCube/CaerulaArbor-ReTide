@@ -1,8 +1,8 @@
 
 package com.apocalypse.caerulaarbor.item;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.resources.ResourceLocation;
@@ -45,7 +45,7 @@ public abstract class ChitinArmorItem extends ArmorItem {
 
 			@Override
 			public Ingredient getRepairIngredient() {
-				return Ingredient.of(new ItemStack(CaerulaArborModItems.OCEAN_CHITIN.get()));
+				return Ingredient.of(new ItemStack(CAItems.OCEAN_CHITIN.get()));
 			}
 
 			@Override
@@ -72,7 +72,7 @@ public abstract class ChitinArmorItem extends ArmorItem {
         String name = "caerula_arbor_attribute_modifier";
         if (slot == this.getEquipmentSlot()){
             map = HashMultimap.create(map);
-            map.put(CaerulaArborModAttributes.SANITY_RESISTANCE.get(),
+            map.put(CAAttributes.SANITY_RESISTANCE.get(),
                     new AttributeModifier(uuid, name , 7.5f, AttributeModifier.Operation.ADDITION));
         }
         return map;

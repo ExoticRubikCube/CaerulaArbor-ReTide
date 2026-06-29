@@ -1,7 +1,7 @@
 
 package com.apocalypse.caerulaarbor.block;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -139,7 +139,7 @@ public class BlockChestfishBlock extends Block implements SimpleWaterloggedBlock
 		}
 		if (Math.random() < 0.7) {
 			if (world instanceof ServerLevel _level) {
-				Entity entityToSpawn = CaerulaArborModEntities.CHEST_FISH.get().spawn(_level, BlockPos.containing(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5), MobSpawnType.MOB_SUMMONED);
+				Entity entityToSpawn = CAEntities.CHEST_FISH.get().spawn(_level, BlockPos.containing(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5), MobSpawnType.MOB_SUMMONED);
 				if (entityToSpawn != null) {
 					entityToSpawn.setYRot(angl);
 					entityToSpawn.setYBodyRot(angl);
@@ -148,7 +148,7 @@ public class BlockChestfishBlock extends Block implements SimpleWaterloggedBlock
 			}
 		} else if (Math.random() < 0.85) {
 			if (world instanceof ServerLevel _level) {
-				Entity entityToSpawn = CaerulaArborModEntities.SCREAM_CHEST_FISH.get().spawn(_level, BlockPos.containing(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5), MobSpawnType.MOB_SUMMONED);
+				Entity entityToSpawn = CAEntities.SCREAM_CHEST_FISH.get().spawn(_level, BlockPos.containing(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5), MobSpawnType.MOB_SUMMONED);
 				if (entityToSpawn != null) {
 					entityToSpawn.setYRot(angl);
 					entityToSpawn.setYBodyRot(angl);
@@ -157,7 +157,7 @@ public class BlockChestfishBlock extends Block implements SimpleWaterloggedBlock
 			}
 		} else {
 			if (world instanceof ServerLevel _level) {
-				Entity entityToSpawn = CaerulaArborModEntities.SPIKE_CHEST.get().spawn(_level, BlockPos.containing(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5), MobSpawnType.MOB_SUMMONED);
+				Entity entityToSpawn = CAEntities.SPIKE_CHEST.get().spawn(_level, BlockPos.containing(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5), MobSpawnType.MOB_SUMMONED);
 				if (entityToSpawn != null) {
 					entityToSpawn.setYRot(angl);
 					entityToSpawn.setYBodyRot(angl);

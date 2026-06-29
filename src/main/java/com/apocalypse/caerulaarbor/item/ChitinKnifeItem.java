@@ -3,7 +3,7 @@ package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -61,7 +61,7 @@ public class ChitinKnifeItem extends Item {
             if (((LevelAccessor) world).isClientSide())
                 Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);
             if ((LevelAccessor) world instanceof ServerLevel _level) {
-                ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, new ItemStack(CaerulaArborModItems.OCEAN_TRIM_TEMPLATE.get()));
+                ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, new ItemStack(CAItems.OCEAN_TRIM_TEMPLATE.get()));
                 entityToSpawn.setPickUpDelay(5);
                 entityToSpawn.setUnlimitedLifetime();
                 _level.addFreshEntity(entityToSpawn);

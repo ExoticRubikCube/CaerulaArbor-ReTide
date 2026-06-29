@@ -3,8 +3,8 @@ package com.apocalypse.caerulaarbor.entity;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.RangedSanityAttacker;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -56,7 +56,7 @@ public class CreeperFishEntity extends SeaMonster implements RangedSanityAttacke
 	public String animationprocedure = "empty";
 
 	public CreeperFishEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.CREEPER_FISH.get(), world);
+		this(CAEntities.CREEPER_FISH.get(), world);
 	}
 
 	public CreeperFishEntity(EntityType<CreeperFishEntity> type, Level world) {
@@ -106,7 +106,7 @@ public class CreeperFishEntity extends SeaMonster implements RangedSanityAttacke
 
     protected void dropCustomDeathLoot(DamageSource source, int looting, boolean recentlyHitIn) {
 		super.dropCustomDeathLoot(source, looting, recentlyHitIn);
-		this.spawnAtLocation(new ItemStack(CaerulaArborModItems.OCEAN_CRYSTAL.get()));
+		this.spawnAtLocation(new ItemStack(CAItems.OCEAN_CRYSTAL.get()));
 	}
 
 	@Override
@@ -201,7 +201,7 @@ public class CreeperFishEntity extends SeaMonster implements RangedSanityAttacke
 	}
 
 	public static void init() {
-		SpawnPlacements.register(CaerulaArborModEntities.CREEPER_FISH.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
+		SpawnPlacements.register(CAEntities.CREEPER_FISH.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();

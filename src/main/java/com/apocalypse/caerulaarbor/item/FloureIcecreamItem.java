@@ -1,8 +1,8 @@
 
 package com.apocalypse.caerulaarbor.item;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -36,13 +36,13 @@ public class FloureIcecreamItem extends Item {
 
 	@Override
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
-		ItemStack retval = new ItemStack(CaerulaArborModItems.SHELL_OF_STONECUTTER.get());
+		ItemStack retval = new ItemStack(CAItems.SHELL_OF_STONECUTTER.get());
 		super.finishUsingItem(itemstack, world, entity);
 		if (!entity.level().isClientSide()) {
 			entity.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 300, 0));
-			entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ESSENCE_RESISTANCE.get(), 1200, 0));
+			entity.addEffect(new MobEffectInstance(CAMobEffects.ESSENCE_RESISTANCE.get(), 1200, 0));
 		}
-		entity.removeEffect(CaerulaArborModMobEffects.FROZEN.get());
+		entity.removeEffect(CAMobEffects.FROZEN.get());
 		entity.setTicksFrozen(0);
 		EntityUtils.restorePlayerLights(entity, 12);
 		if (itemstack.isEmpty()) {

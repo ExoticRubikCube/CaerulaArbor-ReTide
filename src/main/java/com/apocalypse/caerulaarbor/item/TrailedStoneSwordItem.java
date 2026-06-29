@@ -51,7 +51,7 @@ public class TrailedStoneSwordItem extends SwordItem {
 	public boolean hurtEnemy(ItemStack itemstack, LivingEntity entity, LivingEntity sourceentity) {
 		boolean retval = super.hurtEnemy(itemstack, entity, sourceentity);
         LevelAccessor world = entity.level();
-        double dam = 0;
+        double dam;
         dam = 50 + 10 * itemstack.getEnchantmentLevel(Enchantments.SHARPNESS);
         SIHelper.causeSanityInjury(entity, sourceentity, dam, SanityEvent.Hurt.Type.ENTITY);
         new Object() {

@@ -3,7 +3,7 @@ package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.client.renderer.item.LegendarySpearItemRenderer;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEnchantments;
+import com.apocalypse.caerulaarbor.init.CAEnchantments;
 import com.apocalypse.caerulaarbor.procedures.TridentEnchantProcedure;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.google.common.collect.ImmutableMultimap;
@@ -193,7 +193,7 @@ public class LegendarySpearItem extends Item implements GeoItem {
                                     entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.TRIDENT), sourceentity),
                                             (float) (((Entity) sourceentity instanceof LivingEntity _livingEntity17 && _livingEntity17.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)
                                                     ? _livingEntity17.getAttribute(Attributes.ATTACK_DAMAGE).getValue()
-                                                    : 0) * (1 + 0.2 * itemstack.getEnchantmentLevel(CaerulaArborModEnchantments.SYNESTHESIA.get()))));
+                                                    : 0) * (1 + 0.2 * itemstack.getEnchantmentLevel(CAEnchantments.SYNESTHESIA.get()))));
                                 }
                             }
                         }
@@ -212,7 +212,7 @@ public class LegendarySpearItem extends Item implements GeoItem {
                         if ((sourceentity != null ? entity.distanceTo(sourceentity) : -1) <= 4) {
                             ((Entity) entity).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.TRIDENT), sourceentity),
                                     (float) (((Entity) sourceentity instanceof LivingEntity _livingEntity32 && _livingEntity32.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity32.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
-                                            * (1 + 0.2 * itemstack.getEnchantmentLevel(CaerulaArborModEnchantments.SYNESTHESIA.get()))));
+                                            * (1 + 0.2 * itemstack.getEnchantmentLevel(CAEnchantments.SYNESTHESIA.get()))));
                         }
                     }
                 });
@@ -229,7 +229,7 @@ public class LegendarySpearItem extends Item implements GeoItem {
                         if ((sourceentity != null ? entity.distanceTo(sourceentity) : -1) <= 4) {
                             ((Entity) entity).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.TRIDENT), sourceentity),
                                     (float) (((Entity) sourceentity instanceof LivingEntity _livingEntity46 && _livingEntity46.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity46.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
-                                            * (1 + 0.2 * itemstack.getEnchantmentLevel(CaerulaArborModEnchantments.SYNESTHESIA.get()))));
+                                            * (1 + 0.2 * itemstack.getEnchantmentLevel(CAEnchantments.SYNESTHESIA.get()))));
                             entity.push(0, 0.5, 0);
                         }
                     }
@@ -247,7 +247,7 @@ public class LegendarySpearItem extends Item implements GeoItem {
                         if ((sourceentity != null ? entity.distanceTo(sourceentity) : -1) <= 4) {
                             ((Entity) entity).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.TRIDENT), sourceentity),
                                     (float) (((Entity) sourceentity instanceof LivingEntity _livingEntity60 && _livingEntity60.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity60.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
-                                            * (1 + 0.2 * itemstack.getEnchantmentLevel(CaerulaArborModEnchantments.SYNESTHESIA.get()))));
+                                            * (1 + 0.2 * itemstack.getEnchantmentLevel(CAEnchantments.SYNESTHESIA.get()))));
                             entity.push((sourceentity.getLookAngle().x), 0, (sourceentity.getLookAngle().z));
                         }
                     }

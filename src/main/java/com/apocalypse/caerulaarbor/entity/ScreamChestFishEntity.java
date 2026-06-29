@@ -4,8 +4,8 @@ import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.api.event.SanityEvent;
 import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
@@ -68,7 +68,7 @@ public class ScreamChestFishEntity extends SeaMonster {
 	public String animationprocedure = "empty";
 
 	public ScreamChestFishEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.SCREAM_CHEST_FISH.get(), world);
+		this(CAEntities.SCREAM_CHEST_FISH.get(), world);
 	}
 
 	public ScreamChestFishEntity(EntityType<ScreamChestFishEntity> type, Level world) {
@@ -245,8 +245,8 @@ public class ScreamChestFishEntity extends SeaMonster {
                 _entity.yHeadRotO = _entity.getYRot();
             }
         }
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-            this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(25);
+        if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
+            this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(25);
         return retval;
 	}
 
@@ -282,10 +282,10 @@ public class ScreamChestFishEntity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        double scream = 0;
-        double d = 0;
-        double angle = 0;
-        double t = 0;
+        double scream;
+        double d;
+        double angle;
+        double t;
         if (!((Entity) this instanceof ScreamChestFishEntity _datEntL0 && _datEntL0.getEntityData().get(DATA_release))) {
             setShiftKeyDown(true);
             if (!this.level().isClientSide())

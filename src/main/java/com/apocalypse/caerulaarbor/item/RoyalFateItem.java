@@ -2,7 +2,7 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
+import com.apocalypse.caerulaarbor.init.CABlocks;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -60,7 +60,7 @@ public class RoyalFateItem extends Item {
         double y = entity.getY();
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
-        double lives_left = 0;
+        double lives_left;
         if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_maxlive > 1) {
             if ((LevelAccessor) world instanceof Level _level) {
                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.death")), SoundSource.NEUTRAL, 2, 1);
@@ -123,7 +123,7 @@ public class RoyalFateItem extends Item {
         if (entity == null)
             return InteractionResult.PASS;
         if (blockstate.getBlock() == Blocks.DEEPSLATE_BRICK_SLAB) {
-            world.setBlock(BlockPos.containing(x, y, z), CaerulaArborModBlocks.BLOCK_FATE.get().defaultBlockState(), 3);
+            world.setBlock(BlockPos.containing(x, y, z), CABlocks.BLOCK_FATE.get().defaultBlockState(), 3);
             {
                 Direction _dir = ((entity.getDirection()).getOpposite());
                 BlockPos _pos = BlockPos.containing(x, y, z);

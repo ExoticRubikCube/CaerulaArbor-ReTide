@@ -1,7 +1,7 @@
 package com.apocalypse.caerulaarbor.block.entity;
 
 import com.apocalypse.caerulaarbor.block.ChestmegaSpawnerBlock;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlockEntities;
+import com.apocalypse.caerulaarbor.init.CABlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -42,7 +42,7 @@ public class ChestmegaSpawnerTileEntity extends RandomizableContainerBlockEntity
 	private int blockstateOld = this.getBlockState().getValue(ChestmegaSpawnerBlock.BLOCKSTATE);
 
 	public ChestmegaSpawnerTileEntity(BlockPos pos, BlockState state) {
-		super(CaerulaArborModBlockEntities.CHESTMEGA_SPAWNER.get(), pos, state);
+		super(CABlockEntities.CHESTMEGA_SPAWNER.get(), pos, state);
 	}
 
 	private PlayState predicate(AnimationState event) {

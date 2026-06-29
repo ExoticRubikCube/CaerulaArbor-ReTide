@@ -1,9 +1,9 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.nbt.CompoundTag;
@@ -61,7 +61,7 @@ public class SonsEntity extends SeaMonster {
 	public String animationprocedure = "empty";
 
 	public SonsEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.SONS.get(), world);
+		this(CAEntities.SONS.get(), world);
 	}
 
 	public SonsEntity(EntityType<SonsEntity> type, Level world) {
@@ -158,7 +158,7 @@ public class SonsEntity extends SeaMonster {
 	public boolean hurt(DamageSource source, float amount) {
         if (Math.random() == 0.15) {
             if (!this.level().isClientSide())
-                this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.COOLDOWN_SINAL.get(), 40, 0, false, false));
+                this.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL.get(), 40, 0, false, false));
         }
         if (source.is(DamageTypes.FALL))
 			return false;
@@ -170,8 +170,8 @@ public class SonsEntity extends SeaMonster {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get()))
-            this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(50);
+        if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get()))
+            this.getAttribute(CAAttributes.SANITY_RATE.get()).setBaseValue(50);
         return retval;
 	}
 
@@ -203,8 +203,8 @@ public class SonsEntity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        Entity owner = null;
-        Entity tgt = null;
+        Entity owner;
+        Entity tgt;
         owner = world.getEntitiesOfClass(BishopFishEntity.class, AABB.ofSize(new Vec3(x, y, z), 96, 96, 96), e -> true).stream().sorted(new Object() {
             Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
                 return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
@@ -215,7 +215,7 @@ public class SonsEntity extends SeaMonster {
         } else {
             this.getNavigation().stop();
         }
-        if (!((Entity) this instanceof LivingEntity _livEnt7 && _livEnt7.hasEffect(CaerulaArborModMobEffects.COOLDOWN_SINAL.get()))) {
+        if (!((Entity) this instanceof LivingEntity _livEnt7 && _livEnt7.hasEffect(CAMobEffects.COOLDOWN_SINAL.get()))) {
             tgt = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
             if (!(null == tgt)) {
                 if ((tgt != null ? distanceTo(tgt) : -1) <= 3.5) {

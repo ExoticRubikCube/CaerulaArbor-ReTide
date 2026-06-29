@@ -2,8 +2,7 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.api.event.SanityEvent;
 import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.util.EntityUtils;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
@@ -69,7 +68,7 @@ public class NautilusHeadhunterEntity extends Animal implements GeoEntity {
 	public String animationprocedure = "empty";
 
 	public NautilusHeadhunterEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.NAUTILUS_HEADHUNTER.get(), world);
+		this(CAEntities.NAUTILUS_HEADHUNTER.get(), world);
 	}
 
 	public NautilusHeadhunterEntity(EntityType<NautilusHeadhunterEntity> type, Level world) {
@@ -227,7 +226,7 @@ public class NautilusHeadhunterEntity extends Animal implements GeoEntity {
 	@Override
 	public void awardKillScore(Entity entity, int score, DamageSource damageSource) {
 		super.awardKillScore(entity, score, damageSource);
-        double bonus = 0;
+        double bonus;
         bonus = (Entity) this instanceof NautilusHeadhunterEntity _datEntI ? _datEntI.getEntityData().get(DATA_BONUS) : 0;
         if (bonus < 10) {
             if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
@@ -245,10 +244,10 @@ public class NautilusHeadhunterEntity extends Animal implements GeoEntity {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        double dryTick = 0;
-        boolean isMounting = false;
-        Entity enemy = null;
-        Entity vehicle = null;
+        double dryTick;
+        boolean isMounting;
+        Entity enemy;
+        Entity vehicle;
         if (this.isAlive()) {
             dryTick = (Entity) this instanceof NautilusHeadhunterEntity _datEntI ? _datEntI.getEntityData().get(DATA_DRY_TICK) : 0;
             enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
@@ -302,7 +301,7 @@ public class NautilusHeadhunterEntity extends Animal implements GeoEntity {
 
 	@Override
 	public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
-		NautilusHeadhunterEntity retval = CaerulaArborModEntities.NAUTILUS_HEADHUNTER.get().create(serverWorld);
+		NautilusHeadhunterEntity retval = CAEntities.NAUTILUS_HEADHUNTER.get().create(serverWorld);
 		retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null, null);
 		return retval;
 	}
@@ -334,7 +333,7 @@ public class NautilusHeadhunterEntity extends Animal implements GeoEntity {
 	}
 
 	public static void init() {
-		SpawnPlacements.register(CaerulaArborModEntities.NAUTILUS_HEADHUNTER.get(), SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
+		SpawnPlacements.register(CAEntities.NAUTILUS_HEADHUNTER.get(), SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();

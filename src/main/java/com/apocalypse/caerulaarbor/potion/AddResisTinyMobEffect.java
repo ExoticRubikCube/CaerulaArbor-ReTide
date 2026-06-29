@@ -11,7 +11,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.client.gui.GuiGraphics;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class AddResisTinyMobEffect extends MobEffect {
 	public AddResisTinyMobEffect() {
 		super(MobEffectCategory.BENEFICIAL, -1);
-		this.addAttributeModifier(CaerulaArborModAttributes.MAGIC_RESISTANCE.get(), "e95139e4-f64a-36b7-b1a2-8602faf4fc57", 3, AttributeModifier.Operation.ADDITION);
+		this.addAttributeModifier(CAAttributes.MAGIC_RESISTANCE.get(), "e95139e4-f64a-36b7-b1a2-8602faf4fc57", 3, AttributeModifier.Operation.ADDITION);
 	}
 
 	@Override

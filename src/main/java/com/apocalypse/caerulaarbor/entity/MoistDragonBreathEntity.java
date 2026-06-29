@@ -3,9 +3,8 @@ package com.apocalypse.caerulaarbor.entity;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.api.event.SanityEvent;
 import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
-import com.apocalypse.caerulaarbor.util.EntityUtils;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAParticleTypes;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -67,7 +66,7 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity 
 	public String animationprocedure = "empty";
 
 	public MoistDragonBreathEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.MOIST_DRAGON_BREATH.get(), world);
+		this(CAEntities.MOIST_DRAGON_BREATH.get(), world);
 	}
 
 	public MoistDragonBreathEntity(EntityType<MoistDragonBreathEntity> type, Level world) {
@@ -158,9 +157,9 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity 
         double z = this.getZ();
         if (this != null) {
             double sklp1 = 0;
-            String uuid2 = "";
-            String uuid1 = "";
-            Entity enemy = null;
+            String uuid2;
+            String uuid1;
+            Entity enemy;
             Entity owner = null;
             if (tickCount >= 1200) {
                 if (!level().isClientSide())
@@ -183,7 +182,7 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity 
                         return _uuidentity;
                     }
                 }.entityFromStringUUID(uuid2, (Level) world);
-                owner = new Object() {
+                new Object() {
                     Entity entityFromStringUUID(String uuid3, Level world) {
                         Entity _uuidentity = null;
                         if (world instanceof ServerLevel _server) {
@@ -196,7 +195,7 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity 
                     }
                 }.entityFromStringUUID(uuid1, (Level) world);
                 if (world instanceof ServerLevel _level)
-                    _level.sendParticles(CaerulaArborModParticleTypes.EDERMAN_PTC.get(), x, (y + 0.25), z, 3, 0.1, 0.1, 0.1, 0.1);
+                    _level.sendParticles(CAParticleTypes.EDERMAN_PTC.get(), x, (y + 0.25), z, 3, 0.1, 0.1, 0.1, 0.1);
                 if (!(enemy == null) && enemy.isAlive()) {
                     ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY() + 0.5), (enemy.getZ())));
                     if (tickCount > 20) {
@@ -364,10 +363,10 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity 
 	public static void dragonBreathRain(LevelAccessor world, double x, double y, double z, Entity entity) {
 		if (entity == null)
 			return;
-		double r = 0;
-		double d = 0;
-		double tx = 0;
-		double tz = 0;
+		double r;
+		double d;
+		double tx;
+		double tz;
 		r = Mth.nextDouble(RandomSource.create(), 0, 6.283);
 		d = Mth.nextDouble(RandomSource.create(), 3, 8);
 		tx = x + d * Math.cos(r);
@@ -392,18 +391,20 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity 
 	private void dragonBreathExplode(LevelAccessor world, double x, double y, double z, Entity entity) {
 		if (entity == null)
 			return;
-		Entity owner = null;
-		Entity enemy = null;
-		String uuid = "";
-		String uuid1 = "";
-		double d = 0;
-		double T = 0;
+		Entity owner;
+		Entity enemy;
+		String uuid;
+		String uuid1;
+		double d;
+		double T;
 		double thita = 0;
 		if (world.isClientSide()) {
 			return;
 		}
-		d = entity instanceof LivingEntity _livingEntity1 && _livingEntity1.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity1.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
-		uuid = entity instanceof MoistDragonBreathEntity _datEntS ? _datEntS.getEntityData().get(MoistDragonBreathEntity.DATA_TARGET) : "";
+        if (entity instanceof LivingEntity _livingEntity1 && _livingEntity1.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)) {
+            _livingEntity1.getAttribute(Attributes.ATTACK_DAMAGE).getValue();
+        }
+        uuid = entity instanceof MoistDragonBreathEntity _datEntS ? _datEntS.getEntityData().get(MoistDragonBreathEntity.DATA_TARGET) : "";
 		uuid1 = entity instanceof MoistDragonBreathEntity _datEntS ? _datEntS.getEntityData().get(MoistDragonBreathEntity.DATA_OWNER) : "";
 		enemy = new Object() {
 			Entity entityFromStringUUID(String uuid, Level world) {
@@ -453,8 +454,8 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity 
                     if (enemy == null || owner == null) {
                         result = false;
                     } else {
-                        Entity recentVictim = null;
-                        Entity recentAttacker = null;
+                        Entity recentVictim;
+                        Entity recentAttacker;
                         if (owner instanceof OceanizedEnderinaEntity) {
                             if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
                                 if (!(entityiterator == enemy)) {

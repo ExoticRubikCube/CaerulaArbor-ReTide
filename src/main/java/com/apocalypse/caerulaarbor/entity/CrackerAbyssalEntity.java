@@ -3,9 +3,9 @@ package com.apocalypse.caerulaarbor.entity;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.PolarMountRider;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CABlocks;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -74,7 +74,7 @@ public class CrackerAbyssalEntity extends SeaMonster implements PolarMountRider 
 	public String animationprocedure = "empty";
 
 	public CrackerAbyssalEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.CRACKER_ABYSSAL.get(), world);
+		this(CAEntities.CRACKER_ABYSSAL.get(), world);
 	}
 
 	public CrackerAbyssalEntity(EntityType<CrackerAbyssalEntity> type, Level world) {
@@ -203,9 +203,9 @@ public class CrackerAbyssalEntity extends SeaMonster implements PolarMountRider 
 			this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
 					ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "reefbreaker_attack")), SoundSource.HOSTILE, 10,
 					(float) Mth.nextDouble(RandomSource.create(), 0.85, 1.15));
-			double amplifier = this.hasEffect(CaerulaArborModMobEffects.REEF_CRACKER.get()) ? this.getEffect(CaerulaArborModMobEffects.REEF_CRACKER.get()).getAmplifier() : -1;
+			double amplifier = this.hasEffect(CAMobEffects.REEF_CRACKER.get()) ? this.getEffect(CAMobEffects.REEF_CRACKER.get()).getAmplifier() : -1;
 			int nextAmplifier = amplifier < 0 ? 0 : Math.min((int)amplifier + 1, 14);
-			this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.REEF_CRACKER.get(), 120, nextAmplifier, false, false));
+			this.addEffect(new MobEffectInstance(CAMobEffects.REEF_CRACKER.get(), 120, nextAmplifier, false, false));
 			CaerulaArborMod.queueServerWork(12, () -> {
 				if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 3) {
 					target.hurt(
@@ -228,8 +228,8 @@ public class CrackerAbyssalEntity extends SeaMonster implements PolarMountRider 
         double z = this.getZ();
         Entity sourceentity = source.getEntity();
         if (sourceentity != null) {
-            double num = 0;
-            if (this.isAlive() && !this.hasEffect(CaerulaArborModMobEffects.COOLDOWN_SINAL.get())) {
+            double num;
+            if (this.isAlive() && !this.hasEffect(CAMobEffects.COOLDOWN_SINAL.get())) {
 				num = 0;
 				{
 					final Vec3 _center = new Vec3(x, y, z);
@@ -245,7 +245,7 @@ public class CrackerAbyssalEntity extends SeaMonster implements PolarMountRider 
 						this.setAnimation("animation.nethersea_reefbreaker.spin");
 					}
 					if (!this.level().isClientSide())
-						this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.COOLDOWN_SINAL.get(), 40, 0, false, false));
+						this.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL.get(), 40, 0, false, false));
 					CaerulaArborMod.queueServerWork(10, () -> {
 						if (world instanceof Level _level) {
 							_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.player.attack.sweep")), SoundSource.HOSTILE, 2, 1);
@@ -300,7 +300,7 @@ public class CrackerAbyssalEntity extends SeaMonster implements PolarMountRider 
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if ((world.getBlockState(BlockPos.containing(x, y, z))).getBlock() == CaerulaArborModBlocks.SEA_TRAIL_STOP.get() || (world.getBlockState(BlockPos.containing(x, y, z))).getBlock() == CaerulaArborModBlocks.SEA_TRAIL_GROWN.get()) {
+        if ((world.getBlockState(BlockPos.containing(x, y, z))).getBlock() == CABlocks.SEA_TRAIL_STOP.get() || (world.getBlockState(BlockPos.containing(x, y, z))).getBlock() == CABlocks.SEA_TRAIL_GROWN.get()) {
             if ((this.hasEffect(MobEffects.INVISIBILITY) ? this.getEffect(MobEffects.INVISIBILITY).getDuration() : 0) <= 5) {
                 if (!this.level().isClientSide())
                     this.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 20, 0));
@@ -317,7 +317,7 @@ public class CrackerAbyssalEntity extends SeaMonster implements PolarMountRider 
 	}
 
 	public static void init() {
-		SpawnPlacements.register(CaerulaArborModEntities.CRACKER_ABYSSAL.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
+		SpawnPlacements.register(CAEntities.CRACKER_ABYSSAL.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();

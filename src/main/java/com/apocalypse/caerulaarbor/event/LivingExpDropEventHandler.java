@@ -27,7 +27,7 @@ public class LivingExpDropEventHandler {
 		double originalexperience = event.getOriginalExperience();
 		if (sourceentity == null)
 			return;
-		double exp_left = 0;
+		double exp_left;
 		if (sourceentity instanceof Player && (sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_king_EXTENSION) {
 			if ((sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_lives <= 1) {
 				exp_left = originalexperience;

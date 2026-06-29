@@ -1,7 +1,7 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.Packet;
@@ -30,7 +30,7 @@ public class FishSplashEntity extends AbstractArrow implements ItemSupplier {
 	public static final ItemStack PROJECTILE_ITEM = new ItemStack(Items.GHAST_TEAR);
 
 	public FishSplashEntity(PlayMessages.SpawnEntity packet, Level world) {
-		super(CaerulaArborModEntities.FISH_SPLASH.get(), world);
+		super(CAEntities.FISH_SPLASH.get(), world);
 	}
 
 	public FishSplashEntity(EntityType<? extends FishSplashEntity> type, Level world) {
@@ -95,7 +95,7 @@ public class FishSplashEntity extends AbstractArrow implements ItemSupplier {
 	}
 
 	public static FishSplashEntity shoot(Level world, LivingEntity entity, RandomSource random, float power, double damage, int knockback) {
-		FishSplashEntity entityarrow = new FishSplashEntity(CaerulaArborModEntities.FISH_SPLASH.get(), entity, world);
+		FishSplashEntity entityarrow = new FishSplashEntity(CAEntities.FISH_SPLASH.get(), entity, world);
 		entityarrow.shoot(entity.getViewVector(1).x, entity.getViewVector(1).y, entity.getViewVector(1).z, power * 2, 0);
 		entityarrow.setSilent(true);
 		entityarrow.setCritArrow(false);
@@ -116,7 +116,7 @@ public class FishSplashEntity extends AbstractArrow implements ItemSupplier {
 	}
 
 	public static FishSplashEntity shoot(LivingEntity entity, LivingEntity target, double damage) {
-		FishSplashEntity entityarrow = new FishSplashEntity(CaerulaArborModEntities.FISH_SPLASH.get(), entity, entity.level());
+		FishSplashEntity entityarrow = new FishSplashEntity(CAEntities.FISH_SPLASH.get(), entity, entity.level());
 		double dx = target.getX() - entity.getX();
 		double dy = target.getY() + target.getEyeHeight() - 1.1;
 		double dz = target.getZ() - entity.getZ();

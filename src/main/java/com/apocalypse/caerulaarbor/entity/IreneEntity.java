@@ -1,9 +1,9 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
@@ -76,7 +76,7 @@ public class IreneEntity extends Animal implements GeoEntity {
 	public String animationprocedure = "empty";
 
 	public IreneEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.IRENE.get(), world);
+		this(CAEntities.IRENE.get(), world);
 	}
 
 	public IreneEntity(EntityType<IreneEntity> type, Level world) {
@@ -184,7 +184,7 @@ public class IreneEntity extends Animal implements GeoEntity {
 
 	protected void dropCustomDeathLoot(DamageSource source, int looting, boolean recentlyHitIn) {
 		super.dropCustomDeathLoot(source, looting, recentlyHitIn);
-		this.spawnAtLocation(new ItemStack(CaerulaArborModItems.TRAIL_POWDER.get()));
+		this.spawnAtLocation(new ItemStack(CAItems.TRAIL_POWDER.get()));
 	}
 
 	@Override
@@ -211,7 +211,7 @@ public class IreneEntity extends Animal implements GeoEntity {
 							ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_attack")), SoundSource.NEUTRAL, 2.5F,
 							(float) Mth.nextDouble(RandomSource.create(), 0.9, 1.1));
 					if (target instanceof LivingEntity livingTarget) {
-						livingTarget.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.MUTE.get(), 60, 0, false, false));
+						livingTarget.addEffect(new MobEffectInstance(CAMobEffects.MUTE.get(), 60, 0, false, false));
 					}
 					target.hurt(
 							new DamageSource(
@@ -246,19 +246,18 @@ public class IreneEntity extends Animal implements GeoEntity {
         double z = this.getZ();
         Entity sourceentity = source.getEntity();
         if (sourceentity != null) {
-            Entity specter = null;
+            Entity specter;
             if (!(sourceentity instanceof Player) && !(sourceentity instanceof SpecterEntity)) {
                 specter = world.getEntitiesOfClass(SpecterEntity.class, AABB.ofSize(new Vec3(x, y, z), 32, 32, 32), e -> true).stream().sorted(new Object() {
                     Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
                         return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
                     }
                 }.compareDistOf(x, y, z)).findFirst().orElse(null);
-                if (!(specter == null)) {
-                    if (specter instanceof Mob _entity)
-                        _entity.getNavigation().moveTo(x, y, z, 1);
-                    if (specter instanceof Mob _entity && sourceentity instanceof LivingEntity _ent)
-                        _entity.setTarget(_ent);
-                }
+                if (specter instanceof Mob _entity) {
+						_entity.getNavigation().moveTo(x, y, z, 1);
+						if (sourceentity instanceof LivingEntity _ent)
+							_entity.setTarget(_ent);
+					}
             }
         }
         return super.hurt(source, amount);
@@ -297,12 +296,12 @@ public class IreneEntity extends Animal implements GeoEntity {
 		double z = this.getZ();
 		Entity entity = this;
 		Level world = this.level();
-        double tap = 0;
-        Entity enemy = null;
+        double tap;
+        Entity enemy;
         if (!entity.isAlive()) {
             return InteractionResult.PASS;
         }
-        if ((Entity) sourceentity instanceof LivingEntity _entity && _entity.isHolding(CaerulaArborModItems.PERSONNEL_TRANSPORTER.get())) {
+        if ((Entity) sourceentity instanceof LivingEntity _entity && _entity.isHolding(CAItems.PERSONNEL_TRANSPORTER.get())) {
             return InteractionResult.PASS;
         }
         tap = entity instanceof IreneEntity _datEntI ? _datEntI.getEntityData().get(DATA_tapTick) : 0;
@@ -335,11 +334,11 @@ public class IreneEntity extends Animal implements GeoEntity {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        Entity enemy = null;
-        double sklp1 = 0;
-        double dura = 0;
-        double skillp2 = 0;
-        double tap = 0;
+        Entity enemy;
+        double sklp1;
+        double dura;
+        double skillp2;
+        double tap;
         double less = 0;
         if (this.isAlive()) {
             if (tickCount % 40 == 15) {
@@ -374,7 +373,7 @@ public class IreneEntity extends Animal implements GeoEntity {
                                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_fly")), SoundSource.NEUTRAL, 3, 1);
                                 }
                                 Entity enemy1 = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
-                                if (enemy1 == null || this == null)
+                                if (enemy1 == null)
                                     return;
                                 enemy1.push(0, 0.4, 0);
                                 if (world instanceof ServerLevel _level)
@@ -403,7 +402,7 @@ public class IreneEntity extends Animal implements GeoEntity {
                             this.setAnimation("animation.irene.skill_2");
                         }
                         if (!this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 60, 9, false, false));
+                            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 60, 9, false, false));
                         if (world instanceof Level _level) {
                                 _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_skill")), SoundSource.NEUTRAL, 3, 1);
                         }
@@ -413,7 +412,7 @@ public class IreneEntity extends Animal implements GeoEntity {
                             _datEntSetI.getEntityData().set(DATA_duration, 70);
                         CaerulaArborMod.queueServerWork(9, () -> {
                             if (this.isAlive()) {
-                                double damage = 0;
+                                double damage;
                                 damage = (Entity) this instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity0.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
                                 if (world instanceof Level _level) {
                                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_skill_fly")), SoundSource.NEUTRAL, 3, 1);
@@ -445,11 +444,11 @@ public class IreneEntity extends Animal implements GeoEntity {
                         for (int index0 = 0; index0 < 10; index0++) {
                             CaerulaArborMod.queueServerWork(Math.toIntExact(Math.round(20 + index0 * 3.778)), () -> {
                                 if (this.isAlive()) {
-                                    Entity selected = null;
-                                    double damage = 0;
-                                    double tx = 0;
-                                    double ty = 0;
-                                    double tz = 0;
+                                    Entity selected;
+                                    double damage;
+                                    double tx;
+                                    double ty;
+                                    double tz;
                                     damage = (Entity) this instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity0.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
                                     Entity result = null;
                                     Vec3 pos = position();
@@ -509,7 +508,7 @@ public class IreneEntity extends Animal implements GeoEntity {
 
 	@Override
 	public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
-		IreneEntity retval = CaerulaArborModEntities.IRENE.get().create(serverWorld);
+		IreneEntity retval = CAEntities.IRENE.get().create(serverWorld);
 		retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null, null);
 		return retval;
 	}

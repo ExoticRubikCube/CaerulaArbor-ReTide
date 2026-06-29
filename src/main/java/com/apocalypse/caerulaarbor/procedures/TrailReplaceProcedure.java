@@ -1,7 +1,7 @@
 package com.apocalypse.caerulaarbor.procedures;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
+import com.apocalypse.caerulaarbor.init.CABlocks;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
@@ -38,7 +38,7 @@ public class TrailReplaceProcedure {
 					world.destroyBlock(_pos, false);
 				}
 				world.setBlock(BlockPos.containing(xx, yy, zz), (toPlace.getBlock().getStateDefinition().getProperty("waterlogged") instanceof BooleanProperty _withbp6 ? toPlace.setValue(_withbp6, water) : toPlace), 3);
-				world.levelEvent(2001, BlockPos.containing(xx, yy, zz), Block.getId(CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState()));
+				world.levelEvent(2001, BlockPos.containing(xx, yy, zz), Block.getId(CABlocks.SEA_TRAIL_INIT.get().defaultBlockState()));
 				if (world instanceof Level _level) {
 						_level.playSound(null, BlockPos.containing(xx, yy, zz), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.place")), SoundSource.NEUTRAL, 1, 1);
 				}

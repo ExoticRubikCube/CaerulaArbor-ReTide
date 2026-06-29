@@ -72,7 +72,7 @@ public class NucleicMaleficentEntity extends SeaMonster {
 	public String animationprocedure = "empty";
 
 	public NucleicMaleficentEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.NUCLEIC_MALEFICENT.get(), world);
+		this(CAEntities.NUCLEIC_MALEFICENT.get(), world);
 	}
 
 	public NucleicMaleficentEntity(EntityType<NucleicMaleficentEntity> type, Level world) {
@@ -197,10 +197,10 @@ public class NucleicMaleficentEntity extends SeaMonster {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-            this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(45);
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get()))
-            this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(6);
+        if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
+            this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(45);
+        if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get()))
+            this.getAttribute(CAAttributes.SANITY_RATE.get()).setBaseValue(6);
         return retval;
 	}
 
@@ -224,7 +224,7 @@ public class NucleicMaleficentEntity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        double angle = 0;
+        double angle;
         if (this.getTarget() != null && ((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null).isAlive()) {
             if ((Entity) this instanceof Mob _mobEnt4 && _mobEnt4.isAggressive() && this.isAlive() && tickCount % 20 == 0) {
                 for (int index0 = 0; index0 < 120; index0++) {
@@ -251,11 +251,11 @@ public class NucleicMaleficentEntity extends SeaMonster {
                         }
                     }
                 }
-                boolean once = false;
-                double dx = 0;
-                double dy = 0;
-                double dz = 0;
-                double hardness = 0;
+                boolean once;
+                double dx;
+                double dy;
+                double dz;
+                double hardness;
                 double lose = 0;
                 BlockState block;
                 if (WorldUtils.canGrief(world)) {
@@ -268,7 +268,7 @@ public class NucleicMaleficentEntity extends SeaMonster {
                             for (int index2 = 0; index2 < 2; index2++) {
                                 block = (world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz)));
                                 hardness = block.getDestroySpeed(world, BlockPos.containing(0, 0, 0));
-                                if (hardness <= 5 && hardness >= 0 && world.getBlockFloorHeight(BlockPos.containing(x + dx, y + dy, z + dz)) > 0 || block.getBlock() == CaerulaArborModBlocks.WHITE_CHITIN_BLOCK.get()) {
+                                if (hardness <= 5 && hardness >= 0 && world.getBlockFloorHeight(BlockPos.containing(x + dx, y + dy, z + dz)) > 0 || block.getBlock() == CABlocks.WHITE_CHITIN_BLOCK.get()) {
                                     {
                                         BlockPos _pos = BlockPos.containing(x + dx, y + dy, z + dz);
                                         Block.dropResources(world.getBlockState(_pos), world, BlockPos.containing(x, y, z), null);
@@ -277,7 +277,7 @@ public class NucleicMaleficentEntity extends SeaMonster {
                                     if (world instanceof Level _level)
                                         _level.updateNeighborsAt(BlockPos.containing(x + dx, y + dy, z + dz), _level.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz)).getBlock());
                                     once = true;
-                                    if (block.getBlock() == CaerulaArborModBlocks.WHITE_CHITIN_BLOCK.get()) {
+                                    if (block.getBlock() == CABlocks.WHITE_CHITIN_BLOCK.get()) {
                                         lose = lose + 0.1;
                                     } else {
                                         if (hardness < 1) {
@@ -307,9 +307,9 @@ public class NucleicMaleficentEntity extends SeaMonster {
                                 (float) (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * lose));
                     }
                 }
-                if (!_mobEnt4.hasEffect(CaerulaArborModMobEffects.FAST_SWIM.get())) {
+                if (!_mobEnt4.hasEffect(CAMobEffects.FAST_SWIM.get())) {
                     if (!this.level().isClientSide())
-                        this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.FAST_SWIM.get(), 20, 2, false, false));
+                        this.addEffect(new MobEffectInstance(CAMobEffects.FAST_SWIM.get(), 20, 2, false, false));
                 }
             }
         }
@@ -337,14 +337,14 @@ public class NucleicMaleficentEntity extends SeaMonster {
 	}
 
 	public static void init() {
-		SpawnPlacements.register(CaerulaArborModEntities.NUCLEIC_MALEFICENT.get(), SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
+		SpawnPlacements.register(CAEntities.NUCLEIC_MALEFICENT.get(), SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();
             if (!world.getBiome(BlockPos.containing(x, y, z)).is(TagKey.create(Registries.BIOME, new ResourceLocation(CaerulaArborMod.MODID, "deepmarine_spawn_biome")))) {
                 return false;
             }
-            if (Math.random() * 100 < (world.getLevelData().getGameRules().getInt(CaerulaArborModGameRules.SEABORN_SPAWN_RATE))) {
+            if (Math.random() * 100 < (world.getLevelData().getGameRules().getInt(CAGameRules.SEABORN_SPAWN_RATE))) {
                 return world.getDifficulty() != Difficulty.PEACEFUL;
             }
             return false;

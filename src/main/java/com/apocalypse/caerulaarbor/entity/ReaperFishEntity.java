@@ -5,8 +5,8 @@ import com.apocalypse.caerulaarbor.api.event.SanityEvent;
 import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -71,7 +71,7 @@ public class ReaperFishEntity extends SeaMonster {
 	public String animationprocedure = "empty";
 
 	public ReaperFishEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.REAPER_FISH.get(), world);
+		this(CAEntities.REAPER_FISH.get(), world);
 	}
 
 	public ReaperFishEntity(EntityType<ReaperFishEntity> type, Level world) {
@@ -147,12 +147,12 @@ public class ReaperFishEntity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        double dx = 0;
-        double dy = 0;
-        double dz = 0;
-        double limithard = 0;
-        double hardness = 0;
-        boolean once = false;
+        double dx;
+        double dy;
+        double dz;
+        double limithard;
+        double hardness;
+        boolean once;
         limithard = -1;
         if (MapVariables.get(world).strategy_migration >= 4) {
             limithard = 5;
@@ -209,10 +209,10 @@ public class ReaperFishEntity extends SeaMonster {
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
         if (this != null) {
-            if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get()))
-                this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(6);
-            if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-                this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(40);
+            if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get()))
+                this.getAttribute(CAAttributes.SANITY_RATE.get()).setBaseValue(6);
+            if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
+                this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(40);
         }
         return retval;
 	}
@@ -244,9 +244,9 @@ public class ReaperFishEntity extends SeaMonster {
         double y = this.getY();
         double z = this.getZ();
         if (this != null) {
-            double angle = 0;
-            double cTick = 0;
-            boolean isCharging = false;
+            double angle;
+            double cTick;
+            boolean isCharging;
             if (!(((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == null) && tickCount % 20 == 0) {
                 if ((Entity) this instanceof Mob _mobEnt3 && _mobEnt3.isAggressive() && this.isAlive()) {
                     for (int index0 = 0; index0 < 120; index0++) {
@@ -258,10 +258,12 @@ public class ReaperFishEntity extends SeaMonster {
                         final Vec3 _center = new Vec3(x, y, z);
                         List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(10 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
                         for (Entity entityiterator : _entfound) {
-                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring"))) && !(entityiterator == ((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null))) {
-                                continue;
+                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                                if (!(entityiterator == this.getTarget())) {
+                                    continue;
+                                }
                             }
-                            if ((entityiterator != null ? distanceTo(entityiterator) : -1) < 5) {
+                            if (distanceTo(entityiterator) < 5) {
                                 if (!(entityiterator == this)) {
                                     if (entityiterator instanceof LivingEntity target) {
                                         SIHelper.causeSanityInjury(target,
@@ -309,7 +311,7 @@ public class ReaperFishEntity extends SeaMonster {
 	}
 
 	public static void init() {
-		SpawnPlacements.register(CaerulaArborModEntities.REAPER_FISH.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
+		SpawnPlacements.register(CAEntities.REAPER_FISH.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();
@@ -352,7 +354,6 @@ public class ReaperFishEntity extends SeaMonster {
 	private PlayState attackingPredicate(AnimationState event) {
 		double d1 = this.getX() - this.xOld;
 		double d0 = this.getZ() - this.zOld;
-		float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
 		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();

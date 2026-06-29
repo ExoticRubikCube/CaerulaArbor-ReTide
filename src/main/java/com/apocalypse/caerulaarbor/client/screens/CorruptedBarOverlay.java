@@ -36,7 +36,7 @@ public class CorruptedBarOverlay {
 			z = entity.getZ();
 		}
         boolean result1 = false;
-        Entity corrupted1 = null;
+        Entity corrupted1;
         corrupted1 = world.getEntitiesOfClass(SkadiCorruptedEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e1 -> true).stream().sorted(new Object() {
             Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
                 return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
@@ -48,9 +48,9 @@ public class CorruptedBarOverlay {
         if (result1) {
 
             double result2 = 0;
-            Entity corrupted2 = null;
-            double convertP = 0;
-            double phase = 0;
+            Entity corrupted2;
+            double convertP;
+            double phase;
             double progress = 0;
             corrupted2 = world.getEntitiesOfClass(SkadiCorruptedEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e1 -> true).stream().sorted(new Object() {
                 Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
@@ -70,8 +70,8 @@ public class CorruptedBarOverlay {
             event.getGuiGraphics().blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/corrupted_bar_inner.png"), 28, h / 2 + -42, Mth.clamp((int) result2 * 2, 0, 100), 0, 2, 88, 102, 88);
 
             double result = 0;
-            Entity corrupted = null;
-            double P = 0;
+            Entity corrupted;
+            double P;
             corrupted = world.getEntitiesOfClass(SkadiCorruptedEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true).stream().sorted(new Object() {
                 Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
                     return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));

@@ -1,6 +1,7 @@
 package com.apocalypse.caerulaarbor.util;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler;
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
@@ -52,6 +53,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 public class EntityUtils {
 
@@ -93,8 +95,8 @@ public class EntityUtils {
 		if (obj == null)
 			return null;
 		Entity enemy = null;
-		double minDist = 0;
-		double d = 0;
+		double minDist;
+		double d;
 		minDist = 999;
 		for (Entity entityiterator : world.getEntities(obj, new AABB((x + 4), (y + 4), (z + 4), (x - 4), (y - 4), (z - 4)))) {
 			if (!(entityiterator instanceof LivingEntity)) {
@@ -170,7 +172,7 @@ public class EntityUtils {
 				living.setHealth((float) (living.getHealth() + living.getMaxHealth() * 0.001));
 			}
 			if (!living.level().isClientSide()) {
-				living.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.RUNNING_ON_TRAIL.get(), 5, 0, false, false));
+				living.addEffect(new MobEffectInstance(CAMobEffects.RUNNING_ON_TRAIL.get(), 5, 0, false, false));
 			}
 		} else if (entity instanceof Player) {
 			if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null)
@@ -181,7 +183,7 @@ public class EntityUtils {
 					living.heal((float) (living.getMaxHealth() * 0.001));
 				}
 				if (!living.level().isClientSide()) {
-					living.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.RUNNING_ON_TRAIL.get(), 5, 0, false, false));
+					living.addEffect(new MobEffectInstance(CAMobEffects.RUNNING_ON_TRAIL.get(), 5, 0, false, false));
 					living.addEffect(new MobEffectInstance(MobEffects.JUMP, 5, 0, false, false));
 				}
 			}
@@ -192,73 +194,73 @@ public class EntityUtils {
 	public static void initAplusMagic(Entity entity) {
 		if (entity == null)
 			return;
-		if (entity instanceof LivingEntity living && living.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-			living.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(30);
+		if (entity instanceof LivingEntity living && living.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
+			living.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(30);
 	}
 
 	public static void initBplusMagic(Entity entity) {
 		if (entity == null)
 			return;
-		if (entity instanceof LivingEntity living && living.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-			living.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(18);
+		if (entity instanceof LivingEntity living && living.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
+			living.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(18);
 	}
 
 	public static void initSmagic(Entity entity) {
 		if (entity == null)
 			return;
-		if (entity instanceof LivingEntity living && living.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-			living.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(40);
+		if (entity instanceof LivingEntity living && living.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
+			living.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(40);
 	}
 
 	public static void initBmagic(Entity entity) {
 		if (entity == null)
 			return;
-		if (entity instanceof LivingEntity living && living.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-			living.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(15);
+		if (entity instanceof LivingEntity living && living.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
+			living.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(15);
 	}
 
 	public static void initWardenAttributes(Entity entity) {
 		if (entity == null)
 			return;
-		if (entity instanceof LivingEntity living && living.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-			living.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(75);
-		if (entity instanceof LivingEntity living && living.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()))
-			living.getAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()).setBaseValue(0.01);
+		if (entity instanceof LivingEntity living && living.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
+			living.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(75);
+		if (entity instanceof LivingEntity living && living.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
+			living.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.01);
 	}
 
 	public static void initLastKnightAttributes(Entity entity) {
 		if (entity == null)
 			return;
-		if (entity instanceof LivingEntity living && living.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()))
-			living.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).setBaseValue(20);
-		if (entity instanceof LivingEntity living && living.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-			living.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(60);
+		if (entity instanceof LivingEntity living && living.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
+			living.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).setBaseValue(20);
+		if (entity instanceof LivingEntity living && living.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
+			living.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(60);
 	}
 
 	public static void initEndspeakerAbilities(LevelAccessor world, Entity entity) {
 		if (entity == null)
 			return;
 		if (inquirybility(world, 0)) {
-			if (entity instanceof LivingEntity living && living.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-				living.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get())
-						.setBaseValue((living.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get())
-								? living.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).getBaseValue()
+			if (entity instanceof LivingEntity living && living.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
+				living.getAttribute(CAAttributes.MAGIC_RESISTANCE.get())
+						.setBaseValue((living.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())
+								? living.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).getBaseValue()
 								: 0) + 40);
 		}
 		if (inquirybility(world, 1)) {
-			if (entity instanceof LivingEntity living && living.getAttributes().hasAttribute(CaerulaArborModAttributes.MISSRATE.get()))
-				living.getAttribute(CaerulaArborModAttributes.MISSRATE.get())
-						.setBaseValue((living.getAttributes().hasAttribute(CaerulaArborModAttributes.MISSRATE.get())
-								? living.getAttribute(CaerulaArborModAttributes.MISSRATE.get()).getBaseValue()
+			if (entity instanceof LivingEntity living && living.getAttributes().hasAttribute(CAAttributes.MISSRATE.get()))
+				living.getAttribute(CAAttributes.MISSRATE.get())
+						.setBaseValue((living.getAttributes().hasAttribute(CAAttributes.MISSRATE.get())
+								? living.getAttribute(CAAttributes.MISSRATE.get()).getBaseValue()
 								: 0) + 50);
 		}
 	}
 
-	//TODO可能需要下放回实体
+	//TODO可能需要下放回实体作为辅助方法
 	public static void castDragonBreath(LevelAccessor world, double x, double y, double z, Entity owner, Entity target, double type) {
 		if (owner == null) return;
 		if (world instanceof ServerLevel _level) {
-			Entity entityToSpawn = CaerulaArborModEntities.MOIST_DRAGON_BREATH.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+			Entity entityToSpawn = CAEntities.MOIST_DRAGON_BREATH.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
 			if (entityToSpawn instanceof MoistDragonBreathEntity _datEntSetS){
 				RandomSource random = world.getRandom();
 				entityToSpawn.setDeltaMovement(owner.getLookAngle().scale(0.25).add(
@@ -290,42 +292,42 @@ public class EntityUtils {
 		if (sourceentity instanceof LivingEntity _entity && _entity.isHolding(Items.BUCKET)) {
 			if (entity instanceof RunFishEntity) {
 				if (sourceentity instanceof Player _player) {
-					ItemStack _setstack = new ItemStack(CaerulaArborModItems.BUCKET_RUNFISH.get()).copy();
+					ItemStack _setstack = new ItemStack(CAItems.BUCKET_RUNFISH.get()).copy();
 					_setstack.setCount(1);
 					ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
 				}
 				given = true;
 			} else if (entity instanceof SliderFishEntity) {
 				if (sourceentity instanceof Player _player) {
-					ItemStack _setstack = new ItemStack(CaerulaArborModItems.BUCKET_SLIDER.get()).copy();
+					ItemStack _setstack = new ItemStack(CAItems.BUCKET_SLIDER.get()).copy();
 					_setstack.setCount(1);
 					ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
 				}
 				given = true;
 			} else if (entity instanceof ChiselerFishEntity) {
 				if (sourceentity instanceof Player _player) {
-					ItemStack _setstack = new ItemStack(CaerulaArborModItems.BUCKET_CHISELER.get()).copy();
+					ItemStack _setstack = new ItemStack(CAItems.BUCKET_CHISELER.get()).copy();
 					_setstack.setCount(1);
 					ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
 				}
 				given = true;
 			} else if (entity instanceof FloaterProkaryoteEntity) {
 				if (sourceentity instanceof Player _player) {
-					ItemStack _setstack = new ItemStack(CaerulaArborModItems.BUCKET_FLOATER.get()).copy();
+					ItemStack _setstack = new ItemStack(CAItems.BUCKET_FLOATER.get()).copy();
 					_setstack.setCount(1);
 					ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
 				}
 				given = true;
 			} else if (entity instanceof BoneFishEntity) {
 				if (sourceentity instanceof Player _player) {
-					ItemStack _setstack = new ItemStack(CaerulaArborModItems.BUCKET_BONEFISH.get()).copy();
+					ItemStack _setstack = new ItemStack(CAItems.BUCKET_BONEFISH.get()).copy();
 					_setstack.setCount(1);
 					ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
 				}
 				given = true;
 			} else if (entity instanceof CollectorProkaryoteEntity) {
 				if (sourceentity instanceof Player _player) {
-					ItemStack _setstack = new ItemStack(CaerulaArborModItems.BUCKET_COLLECTOR.get()).copy();
+					ItemStack _setstack = new ItemStack(CAItems.BUCKET_COLLECTOR.get()).copy();
 					_setstack.setCount(1);
 					ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
 				}
@@ -349,20 +351,19 @@ public class EntityUtils {
 		if (entity == null)
 			return;
 		{
-			Entity _ent = entity;
-			_ent.setYRot((float) (90 * Mth.nextInt(RandomSource.create(), 0, 3)));
-			_ent.setXRot(0);
-			_ent.setYBodyRot(_ent.getYRot());
-			_ent.setYHeadRot(_ent.getYRot());
-			_ent.yRotO = _ent.getYRot();
-			_ent.xRotO = _ent.getXRot();
-			if (_ent instanceof LivingEntity _entity) {
+            entity.setYRot((float) (90 * Mth.nextInt(RandomSource.create(), 0, 3)));
+			entity.setXRot(0);
+			entity.setYBodyRot(entity.getYRot());
+			entity.setYHeadRot(entity.getYRot());
+			entity.yRotO = entity.getYRot();
+			entity.xRotO = entity.getXRot();
+			if (entity instanceof LivingEntity _entity) {
 				_entity.yBodyRotO = _entity.getYRot();
 				_entity.yHeadRotO = _entity.getYRot();
 			}
 		}
-		if (entity instanceof LivingEntity _livingEntity2 && _livingEntity2.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-			_livingEntity2.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(18);
+		if (entity instanceof LivingEntity _livingEntity2 && _livingEntity2.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
+			_livingEntity2.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(18);
 	}
 
 	//可能需要评估放到哪个util合适
@@ -370,54 +371,54 @@ public class EntityUtils {
 		if (entity == null)
 			return;
 		double lvl = 0;
-		double gap = 0;
+		double gap;
 		double lvl1 = 0;
-		ItemStack a0 = ItemStack.EMPTY;
-		ItemStack a1 = ItemStack.EMPTY;
-		ItemStack a2 = ItemStack.EMPTY;
-		ItemStack a3 = ItemStack.EMPTY;
+		ItemStack a0;
+		ItemStack a1;
+		ItemStack a2;
+		ItemStack a3;
 		if (entity instanceof LivingEntity) {
-			if (!(entity instanceof LivingEntity _livEnt1 && _livEnt1.hasEffect(CaerulaArborModMobEffects.TRAIL_BUFF.get()))) {
+			if (!(entity instanceof LivingEntity _livEnt1 && _livEnt1.hasEffect(CAMobEffects.TRAIL_BUFF.get()))) {
 				if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-					_entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.TRAIL_BUFF.get(), 10, 0, false, false));
+					_entity.addEffect(new MobEffectInstance(CAMobEffects.TRAIL_BUFF.get(), 10, 0, false, false));
 			}
 			gap = 20;
 			a0 = (entity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.FEET) : ItemStack.EMPTY).copy();
 			a1 = (entity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.LEGS) : ItemStack.EMPTY).copy();
 			a2 = (entity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.CHEST) : ItemStack.EMPTY).copy();
 			a3 = (entity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.HEAD) : ItemStack.EMPTY).copy();
-			if (a0.getItem() == CaerulaArborModItems.SEALEATHER_BOOTS.get()) {
+			if (a0.getItem() == CAItems.SEALEATHER_BOOTS.get()) {
 				gap = gap + 8;
-			} else if (a0.getItem() == CaerulaArborModItems.SEALEATHER_CHITIN_BOOTS.get()) {
+			} else if (a0.getItem() == CAItems.SEALEATHER_CHITIN_BOOTS.get()) {
 				gap = gap + 6;
-			} else if (a0.getItem() == CaerulaArborModItems.TRAILRITE_ARMOR_BOOTS.get()) {
+			} else if (a0.getItem() == CAItems.TRAILRITE_ARMOR_BOOTS.get()) {
 				gap = gap + 8;
 			}
-			if (a1.getItem() == CaerulaArborModItems.SEALEATHER_LEGGINGS.get()) {
+			if (a1.getItem() == CAItems.SEALEATHER_LEGGINGS.get()) {
 				gap = gap + 6;
-			} else if (a1.getItem() == CaerulaArborModItems.SEALEATHER_CHITIN_LEGGINGS.get()) {
+			} else if (a1.getItem() == CAItems.SEALEATHER_CHITIN_LEGGINGS.get()) {
 				gap = gap + 5;
-			} else if (a1.getItem() == CaerulaArborModItems.TRAILRITE_ARMOR_LEGGINGS.get()) {
+			} else if (a1.getItem() == CAItems.TRAILRITE_ARMOR_LEGGINGS.get()) {
 				gap = gap + 6;
 			}
-			if (a2.getItem() == CaerulaArborModItems.SEALEATHER_CHESTPLATE.get()) {
+			if (a2.getItem() == CAItems.SEALEATHER_CHESTPLATE.get()) {
 				gap = gap + 4;
-			} else if (a2.getItem() == CaerulaArborModItems.SEALEATHER_CHITIN_CHESTPLATE.get()) {
+			} else if (a2.getItem() == CAItems.SEALEATHER_CHITIN_CHESTPLATE.get()) {
 				gap = gap + 4;
-			} else if (a2.getItem() == CaerulaArborModItems.TRAILRITE_ARMOR_CHESTPLATE.get()) {
+			} else if (a2.getItem() == CAItems.TRAILRITE_ARMOR_CHESTPLATE.get()) {
 				gap = gap + 4;
 			}
-			if (a3.getItem() == CaerulaArborModItems.SEALEATHER_HELMET.get()) {
+			if (a3.getItem() == CAItems.SEALEATHER_HELMET.get()) {
 				gap = gap + 2;
-			} else if (a3.getItem() == CaerulaArborModItems.SEALEATHER_CHITIN_HELMET.get()) {
+			} else if (a3.getItem() == CAItems.SEALEATHER_CHITIN_HELMET.get()) {
 				gap = gap + 3;
-			} else if (a3.getItem() == CaerulaArborModItems.TRAILRITE_ARMOR_HELMET.get()) {
+			} else if (a3.getItem() == CAItems.TRAILRITE_ARMOR_HELMET.get()) {
 				gap = gap + 2;
 			}
-			if (EnchantmentHelper.getItemEnchantmentLevel(CaerulaArborModEnchantments.NETHERSEA_WALKER.get(), a0) != 0) {
-				lvl = a0.getEnchantmentLevel(CaerulaArborModEnchantments.NETHERSEA_WALKER.get());
+			if (EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.NETHERSEA_WALKER.get(), a0) != 0) {
+				lvl = a0.getEnchantmentLevel(CAEnchantments.NETHERSEA_WALKER.get());
 				if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-					_entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.RUNNING_ON_TRAIL.get(), 30, (int) lvl, false, false));
+					_entity.addEffect(new MobEffectInstance(CAMobEffects.RUNNING_ON_TRAIL.get(), 30, (int) lvl, false, false));
 				if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
 					_entity.addEffect(new MobEffectInstance(MobEffects.JUMP, 5, 0, false, false));
 			}
@@ -443,186 +444,12 @@ public class EntityUtils {
 		}
 	}
 
-	//TODO:需要下放回实体
-	public static void endspeakerRevive(Entity entity) {
-		if (entity == null)
-			return;
-		if (entity instanceof Endspeaker0Entity endspeaker0) {
-			endspeaker0.setAnimation("animation.endspeaker_0.die");
-			if (entity instanceof Endspeaker0Entity _datEntSetI)
-				_datEntSetI.getEntityData().set(Endspeaker0Entity.DATA_EvolveTime, 300);
-		} else if (entity instanceof Endspeaker1Entity endspeaker1) {
-			endspeaker1.setAnimation("animation.endspeaker_1.die");
-			if (entity instanceof Endspeaker1Entity _datEntSetI)
-				_datEntSetI.getEntityData().set(Endspeaker1Entity.DATA_EvolveTime, 300);
-		} else if (entity instanceof Endspeaker2Entity endspeaker2) {
-			endspeaker2.setAnimation("animation.endspeaker_2.die");
-			endspeaker2.getEntityData().set(Endspeaker2Entity.DATA_EvolveTime, 300);
-			endspeaker2.getEntityData().set(Endspeaker2Entity.DATA_duration, 999);
-		}
-	}
-
-	//TODO下放
-	public static void endspeakerToPhase2(LevelAccessor world, double x, double y, double z, Entity entity, double phase) {
-		if (entity == null)
-			return;
-		Entity sacrifice = null;
-		double tx = 0;
-		double ty = 0;
-		double tz = 0;
-		double r = 0;
-        Entity result;
-        Entity sacrifice1 = null;
-        Entity player = null;
-        double minDIst = 0;
-        double curDist = 0;
-        double curPlayerDist = 0;
-        double minPlayerDist = 0;
-        double bestowed = 0;
-        minDIst = 999;
-        minPlayerDist = 999;
-        {
-            final Vec3 _center1 = new Vec3(x, (y + 24), z);
-            List<Entity> _entfound1 = world.getEntitiesOfClass(Entity.class, new AABB(_center1, _center1).inflate(64 / 2d), e1 -> true).stream().sorted(Comparator.comparingDouble(_entcnd1 -> _entcnd1.distanceToSqr(_center1))).toList();
-            for (Entity entityiterator1 : _entfound1) {
-                if (!(entityiterator1 instanceof Monster || entityiterator1 instanceof Player)) {
-                    continue;
-                }
-                if (entityiterator1.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "endspeaker_edible")))) {
-                    if (entityiterator1 instanceof BaselayerAbyssalEntity && inquirybility(world, 0)) {
-                        continue;
-                    } else if (entityiterator1 instanceof PredatorAbyssalEntity && inquirybility(world, 1)) {
-                        continue;
-                    } else if (entityiterator1 instanceof GuideAbyssalEntity && inquirybility(world, 2)) {
-                        continue;
-                    } else if (entityiterator1 instanceof SplasherAbyssalEntity && inquirybility(world, 3)) {
-                        continue;
-                    } else if (entityiterator1 instanceof UmbrellaAbyssalEntity && inquirybility(world, 4)) {
-                        continue;
-                    } else if (entityiterator1 instanceof CrackerAbyssalEntity && inquirybility(world, 5)) {
-                        continue;
-                    }
-                    curDist = entityiterator1 != null ? entity.distanceTo(entityiterator1) : -1;
-                    if (curDist < minDIst) {
-                        minDIst = curDist;
-                        sacrifice1 = entityiterator1;
-                    }
-                } else if (entityiterator1 instanceof Player && !(new Object() {
-                    public boolean checkGamemode(Entity _ent) {
-                        if (_ent instanceof ServerPlayer _serverPlayer) {
-                            return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                        } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                            return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                    && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
-                        }
-                        return false;
-                    }
-                }.checkGamemode(entityiterator1))) {
-                    curPlayerDist = entityiterator1 != null ? entity.distanceTo(entityiterator1) : -1;
-                    if (curPlayerDist < minPlayerDist) {
-                        minPlayerDist = curPlayerDist;
-                        player = entityiterator1;
-                    }
-                }
-            }
-        }
-        if (sacrifice1 == null) {
-            if (player == null) {
-                result = entity;
-            } else {
-                result = player;
-            }
-        } else {
-            if (sacrifice1 instanceof BaselayerAbyssalEntity) {
-                bestowed = 0;
-            } else if (sacrifice1 instanceof PredatorAbyssalEntity) {
-                bestowed = 1;
-            } else if (sacrifice1 instanceof GuideAbyssalEntity) {
-                bestowed = 2;
-            } else if (sacrifice1 instanceof SplasherAbyssalEntity) {
-                bestowed = 3;
-            } else if (sacrifice1 instanceof UmbrellaAbyssalEntity) {
-                bestowed = 4;
-            } else if (sacrifice1 instanceof CrackerAbyssalEntity) {
-                bestowed = 5;
-            }
-            WorldUtils.bestowAbility(world, bestowed);
-            result = sacrifice1;
-        }
-        sacrifice = result;
-		if (!(sacrifice == null)) {
-			tx = sacrifice.getX();
-			ty = sacrifice.getY();
-			tz = sacrifice.getZ();
-			r = 1 + phase;
-			if (world instanceof Level _level) {
-					_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "endspeaker_eat")), SoundSource.HOSTILE, 4, 1);
-			}
-			{
-				final Vec3 _center = new Vec3(tx, ty, tz);
-				List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate((2 * r) / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-				for (Entity entityiterator : _entfound) {
-					if (!(entityiterator instanceof LivingEntity)) {
-						continue;
-					}
-					if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffpsring"))) && entityiterator instanceof Player) {
-						continue;
-					}
-					if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization > 2) {
-						continue;
-					}
-					if ((entityiterator != null ? sacrifice.distanceTo(entityiterator) : -1) < r) {
-						entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceankiller_damage")))),
-								(float) (CaerulaConfigsConfiguration.SANITY_BREAK.get() * 6));
-					}
-				}
-			}
-			if (!(sacrifice instanceof Player)) {
-				if (sacrifice.isAlive()) {
-					sacrifice.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceankiller_damage")))), 114514);
-				}
-				if (sacrifice.isAlive()) {
-					if (!sacrifice.level().isClientSide())
-						sacrifice.discard();
-				}
-			}
-		} else {
-			tx = x;
-			ty = y;
-			tz = z;
-		}
-		if (world instanceof ServerLevel _level)
-			_level.sendParticles((CaerulaArborModParticleTypes.ENDSPEAKER_PARTICLE.get()), tx, (ty + 1), tz, 128, 1, 1, 1, 0.075);
-		if (phase == 1) {
-			if (world instanceof ServerLevel _level) {
-				Entity entityToSpawn = CaerulaArborModEntities.ENDSPEAKER_1.get().spawn(_level, BlockPos.containing(tx, ty, tz), MobSpawnType.MOB_SUMMONED);
-				if (entityToSpawn != null) {
-					entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-				}
-			}
-		} else if (phase == 2) {
-			if (world instanceof ServerLevel _level) {
-				Entity entityToSpawn = CaerulaArborModEntities.ENDSPEAKER_2.get().spawn(_level, BlockPos.containing(tx, ty, tz), MobSpawnType.MOB_SUMMONED);
-				if (entityToSpawn != null) {
-					entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-				}
-			}
-		} else {
-			if (world instanceof ServerLevel _level) {
-				Entity entityToSpawn = CaerulaArborModEntities.ENDSPEAKER_3.get().spawn(_level, BlockPos.containing(tx, ty, tz), MobSpawnType.MOB_SUMMONED);
-				if (entityToSpawn != null) {
-					entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-				}
-			}
-		}
-	}
-
 	//需要解释，大概率需要下放
 	public static void endspeakerLinkPtcTo(LevelAccessor world, double fromX, double fromY, double fromZ, double toX, double toY, double toZ) {
-		double vx = 0;
-		double vy = 0;
-		double vz = 0;
-		double size = 0;
+		double vx;
+		double vy;
+		double vz;
+		double size;
 		vx = toX - fromX;
 		vy = toY - fromY;
 		vz = toZ - fromZ;
@@ -632,23 +459,23 @@ public class EntityUtils {
 		}
 		for (int index0 = 0; index0 < (int) size; index0++) {
 			if (world instanceof ServerLevel _level)
-				_level.sendParticles(CaerulaArborModParticleTypes.ENDSPEAKER_INV.get(), (fromX + (vx / size) * index0), (fromY + (vy / size) * index0 + 0.5), (fromZ + (vz / size) * index0), 8, 0.32, 0.5, 0.32, 0.05);
+				_level.sendParticles(CAParticleTypes.ENDSPEAKER_INV.get(), (fromX + (vx / size) * index0), (fromY + (vy / size) * index0 + 0.5), (fromZ + (vz / size) * index0), 8, 0.32, 0.5, 0.32, 0.05);
 		}
 	}
 
 	//同上
 	public static void enderinaLinkPtcTo(LevelAccessor world, double fromX, double fromY, double fromZ, double toX, double toY, double toZ) {
-		double vx = 0;
-		double vy = 0;
-		double vz = 0;
-		double size = 0;
+		double vx;
+		double vy;
+		double vz;
+		double size;
 		vx = toX - fromX;
 		vy = toY - fromY;
 		vz = toZ - fromZ;
 		size = Math.max(Math.min(Math.round(Math.sqrt(Math.pow(vx, 2) + Math.pow(vy, 2) + Math.pow(vz, 2))), 32), 1);
 		for (int index0 = 0; index0 < (int) size; index0++) {
 			if (world instanceof ServerLevel serverLevel)
-				serverLevel.sendParticles(CaerulaArborModParticleTypes.EDERMAN_PTC.get(), (fromX + (vx / size) * index0), (fromY + (vy / size) * index0 + 1), (fromZ + (vz / size) * index0), 1, 0, 0, 0, 0.01);
+				serverLevel.sendParticles(CAParticleTypes.EDERMAN_PTC.get(), (fromX + (vx / size) * index0), (fromY + (vy / size) * index0 + 1), (fromZ + (vz / size) * index0), 1, 0, 0, 0, 0.01);
 		}
 	}
 
@@ -689,7 +516,7 @@ public class EntityUtils {
 		return Component.translatable(("item.caerula_arbor.sample_subsisting.description_" + Math.round(MapVariables.get(world).strategy_silence + 5))).getString();
 	}
 
-	//TODO评估是否需要需要下放，然后处理或跳过
+	//TODO评估是否需要需要下放或内联，然后处理或跳过
 	public static double getComplexPulling(Entity entity, ItemStack itemstack) {
 		if (entity == null)
 			return 0;
@@ -755,11 +582,11 @@ public class EntityUtils {
 
 	//需要解释
 	public static Entity getGladiiaAround(LevelAccessor world, double x, double y, double z) {
-		Entity g = world.getEntitiesOfClass(GladiiaEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).stream().sorted(new Object() {
-			Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
-				return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
-			}
-		}.compareDistOf(x, y, z)).findFirst().orElse(null);
+		Entity g = world.getEntitiesOfClass(GladiiaEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).stream().min(new Object() {
+            Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
+                return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
+            }
+        }.compareDistOf(x, y, z)).orElse(null);
 		if (!(g == null) && g.isAlive()) {
 			return g;
 		}
@@ -773,7 +600,7 @@ public class EntityUtils {
 		double r = 0;
 		double exp = 0;
 		double r_a = 0;
-		boolean creative = false;
+		boolean creative;
 		creative = new Object() {
 			public boolean checkGamemode(Entity _ent) {
 				if (_ent instanceof ServerPlayer _serverPlayer) {
@@ -784,13 +611,13 @@ public class EntityUtils {
 				return false;
 			}
 		}.checkGamemode(entity);
-		if (itemstack.getItem() == CaerulaArborModItems.GENE_SAMPLE_NORMAL.get()) {
+		if (itemstack.getItem() == CAItems.GENE_SAMPLE_NORMAL.get()) {
 			r = 1;
 			exp = 1;
-		} else if (itemstack.getItem() == CaerulaArborModItems.GENE_SAMPLE_UPGRADED.get()) {
+		} else if (itemstack.getItem() == CAItems.GENE_SAMPLE_UPGRADED.get()) {
 			r = 4;
 			exp = 2;
-		} else if (itemstack.getItem() == CaerulaArborModItems.GENE_SAMPLE_SUPERB.get()) {
+		} else if (itemstack.getItem() == CAItems.GENE_SAMPLE_SUPERB.get()) {
 			r_a = 1;
 			exp = 3;
 		}
@@ -854,8 +681,8 @@ public class EntityUtils {
 		if (exception0 == null || exception1 == null || obj == null)
 			return null;
 		Entity enemy = null;
-		double minDist = 0;
-		double d = 0;
+		double minDist;
+		double d;
 		minDist = 999;
 		for (Entity entityiterator : world.getEntities(obj, new AABB((x + 42), (y + 40), (z + 42), (x - 42), (y - 40), (z - 42)))) {
 			if (!(entityiterator instanceof LivingEntity)) {
@@ -864,7 +691,7 @@ public class EntityUtils {
 			if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
 				continue;
 			}
-			d = entityiterator != null ? obj.distanceTo(entityiterator) : -1;
+			d = obj.distanceTo(entityiterator);
 			if (d <= 42) {
 				if (entityiterator == exception0) {
 					continue;
@@ -993,9 +820,9 @@ public class EntityUtils {
 	}
 
 	public static void giveSpearFight(Entity entity) {
-		if (!(entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CaerulaArborModMobEffects.SPEAR_FIGHT.get()))) {
+		if (!(entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CAMobEffects.SPEAR_FIGHT.get()))) {
 			if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-				_entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.SPEAR_FIGHT.get(), 60, 0, false, false));
+				_entity.addEffect(new MobEffectInstance(CAMobEffects.SPEAR_FIGHT.get(), 60, 0, false, false));
 		}
 	}
 
@@ -1013,18 +840,19 @@ public class EntityUtils {
 		return (entity instanceof NetherseaSlimeEntity _datEntI ? _datEntI.getEntityData().get(NetherseaSlimeEntity.DATA_SIZE) : 0) * 0.5;
 	}
 
+	//TODO:可能需要下放到药水类
 	public static void giveLessArmor(Entity obj, double limit) {
 		if (obj == null)
 			return;
-		if (obj instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CaerulaArborModMobEffects.LESS_ARMOR.get())) {
-			if ((obj instanceof LivingEntity _livEnt && _livEnt.hasEffect(CaerulaArborModMobEffects.LESS_ARMOR.get()) ? _livEnt.getEffect(CaerulaArborModMobEffects.LESS_ARMOR.get()).getAmplifier() : 0) < limit) {
+		if (obj instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CAMobEffects.LESS_ARMOR.get())) {
+			if ((obj instanceof LivingEntity _livEnt && _livEnt.hasEffect(CAMobEffects.LESS_ARMOR.get()) ? _livEnt.getEffect(CAMobEffects.LESS_ARMOR.get()).getAmplifier() : 0) < limit) {
 				if (obj instanceof LivingEntity _entity && !_entity.level().isClientSide())
-					_entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.LESS_ARMOR.get(), 300,
-                            (obj instanceof LivingEntity _livEnt && _livEnt.hasEffect(CaerulaArborModMobEffects.LESS_ARMOR.get()) ? _livEnt.getEffect(CaerulaArborModMobEffects.LESS_ARMOR.get()).getAmplifier() : 0) + 1, false, true));
+					_entity.addEffect(new MobEffectInstance(CAMobEffects.LESS_ARMOR.get(), 300,
+                            (obj instanceof LivingEntity _livEnt && _livEnt.hasEffect(CAMobEffects.LESS_ARMOR.get()) ? _livEnt.getEffect(CAMobEffects.LESS_ARMOR.get()).getAmplifier() : 0) + 1, false, true));
 			}
 		} else {
 			if (obj instanceof LivingEntity _entity && !_entity.level().isClientSide())
-				_entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.LESS_ARMOR.get(), 300, 0, false, true));
+				_entity.addEffect(new MobEffectInstance(CAMobEffects.LESS_ARMOR.get(), 300, 0, false, true));
 		}
 	}
 
@@ -1064,9 +892,9 @@ public class EntityUtils {
 	public static void gainLessSpeed(Entity entity) {
 		if (entity == null)
 			return;
-		if (!(entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CaerulaArborModMobEffects.ADD_REACH.get()))) {
+		if (!(entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CAMobEffects.ADD_REACH.get()))) {
 			if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-				_entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ADD_REACH.get(), 20, 3, false, false));
+				_entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_REACH.get(), 20, 3, false, false));
 		}
 	}
 
@@ -1074,10 +902,10 @@ public class EntityUtils {
 		if (entity == null)
 			return;
 		if ((entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5) {
-			if (!(entity instanceof LivingEntity _livEnt2 && _livEnt2.hasEffect(CaerulaArborModMobEffects.MUTE.get()))) {
-				if (!(entity instanceof LivingEntity _livEnt3 && _livEnt3.hasEffect(CaerulaArborModMobEffects.GUIDE_PATH_AHEAD.get()))) {
+			if (!(entity instanceof LivingEntity _livEnt2 && _livEnt2.hasEffect(CAMobEffects.MUTE.get()))) {
+				if (!(entity instanceof LivingEntity _livEnt3 && _livEnt3.hasEffect(CAMobEffects.GUIDE_PATH_AHEAD.get()))) {
 					if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-						_entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.GUIDE_PATH_AHEAD.get(), 20, 0));
+						_entity.addEffect(new MobEffectInstance(CAMobEffects.GUIDE_PATH_AHEAD.get(), 20, 0));
 				}
 			}
 		}
@@ -1098,7 +926,7 @@ public class EntityUtils {
 	public static String getPalsy(Entity entity) {
 		if (entity == null)
 			return "";
-		return "" + Math.round(entity instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(CaerulaArborModAttributes.NUMB.get()) ? _livingEntity0.getAttribute(CaerulaArborModAttributes.NUMB.get()).getBaseValue() : 0);
+		return "" + Math.round(entity instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(CAAttributes.NUMB.get()) ? _livingEntity0.getAttribute(CAAttributes.NUMB.get()).getBaseValue() : 0);
 	}
 
 	public static String getHealth(Entity entity) {
@@ -1124,17 +952,17 @@ public class EntityUtils {
 		return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
 	}
 
-	//TODO 需要下放 解释
+	//TODO 需要下放 评估是否应该分别为方块和实体添加辅助类
 	public static void gladiiaLinkPtcToEntity(LevelAccessor world, Entity entity, Entity tgt) {
 		if (entity == null || tgt == null)
 			return;
         double fromX = entity.getX();
         double fromY = entity.getY();
         double fromZ = entity.getZ();
-        double vx = 0;
-        double vy = 0;
-        double vz = 0;
-        double size = 0;
+        double vx;
+        double vy;
+        double vz;
+        double size;
         vx = tgt.getX() - fromX;
         vy = tgt.getY() - fromY;
         vz = tgt.getZ() - fromZ;
@@ -1164,36 +992,6 @@ public class EntityUtils {
 		return inq == comparator;
 	}
 
-	//TODO下放回实体
-	public static void getEndspeakerPrefixes(LevelAccessor world, Entity entity) {
-		if (entity == null)
-			return;
-		StringBuilder prefixes = new StringBuilder();
-		double index = 0;
-		double count = 0;
-		{
-			String[] _array = (Component.translatable("entity.caerula_arbor.endspeaker.prefix").getString()).split((","));
-            for (String stringiterator : _array) {
-                if (inquirybility(world, index)) {
-                    prefixes.append(stringiterator);
-                    count = count + 1;
-                }
-                index = index + 1;
-            }
-        }
-		if (count > 5) {
-			prefixes = new StringBuilder(Component.translatable("entity.caerula_arbor.endspeaker.prefix.all").getString());
-		}
-		if (count >= 4) {
-			prefixes.insert(0, "§b");
-		} else if (count >= 2) {
-			prefixes.insert(0, "§e");
-		}
-		if (!prefixes.isEmpty()) {
-			entity.setCustomName(Component.literal((prefixes + entity.getDisplayName().getString())));
-		}
-	}
-
 	//需要解释
 	public static void healFromGladiia(LevelAccessor world, double x, double y, double z, Entity entity) {
 		if (entity == null)
@@ -1213,48 +1011,46 @@ public class EntityUtils {
 		if (entity instanceof LivingEntity _livingEntity1 && _livingEntity1.getAttributes().hasAttribute(ForgeMod.SWIM_SPEED.get()))
 			_livingEntity1.getAttribute(ForgeMod.SWIM_SPEED.get())
 					.setBaseValue(((entity instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(ForgeMod.SWIM_SPEED.get()) ? _livingEntity0.getAttribute(ForgeMod.SWIM_SPEED.get()).getBaseValue() : 0) * 8));
-		if (entity instanceof LivingEntity _livingEntity2 && _livingEntity2.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()))
-			_livingEntity2.getAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()).setBaseValue(0.33);
+		if (entity instanceof LivingEntity _livingEntity2 && _livingEntity2.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
+			_livingEntity2.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.33);
 	}
 
 	public static void wardenRangedAttack(LevelAccessor world, Entity obj, boolean isSonic, double rate, double xx, double yy, double zz) {
 		if (obj == null)
 			return;
-		Entity enemy = null;
-		double damage = 0;
-		double r = 0;
+		Entity enemy;
+		double damage;
+		double r;
 		enemy = obj instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
 		r = 3;
 		if (isSonic) {
 			r = 4.5;
 		}
-		{
-			final Vec3 _center = new Vec3(xx, yy, zz);
-			List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate((2 * r) / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-			for (Entity entityiterator : _entfound) {
-				if (!(entityiterator instanceof Mob) && !(entityiterator instanceof Player)) {
+		final Vec3 _center = new Vec3(xx, yy, zz);
+		List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate((2 * r) / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+		for (Entity entityiterator : _entfound) {
+			if (!(entityiterator instanceof Mob) && !(entityiterator instanceof Player)) {
+				continue;
+			}
+			if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+				if (!(entityiterator == enemy)) {
 					continue;
 				}
-				if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
-					if (!(entityiterator == enemy)) {
-						continue;
+			}
+			if (entityiterator == obj) {
+				continue;
+			}
+			if (new Vec3(xx, yy, zz).distanceTo(new Vec3((entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()))) <= r) {
+				damage = (obj instanceof LivingEntity _livingEntity10 && _livingEntity10.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity10.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * rate;
+				if (isSonic) {
+					entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "warden_sonic"))), obj),
+							(float) damage);
+					if (entityiterator instanceof LivingEntity livingEntity) {
+						SIHelper.causeSanityInjury(livingEntity, damage * 1.5);
 					}
-				}
-				if (entityiterator == obj) {
-					continue;
-				}
-				if (new Vec3(xx, yy, zz).distanceTo(new Vec3((entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()))) <= r) {
-					damage = (obj instanceof LivingEntity _livingEntity10 && _livingEntity10.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity10.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * rate;
-					if (isSonic) {
-						entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "warden_sonic"))), obj),
-								(float) damage);
-						if (entityiterator instanceof LivingEntity livingEntity) {
-							SIHelper.causeSanityInjury(livingEntity, damage * 1.5);
-						}
-					} else {
-						entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "warden_attack"))), obj),
-								(float) damage);
-					}
+				} else {
+					entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "warden_attack"))), obj),
+							(float) damage);
 				}
 			}
 		}
@@ -1264,13 +1060,13 @@ public class EntityUtils {
 	public static void wardenSonicBoom(LevelAccessor world, Entity obj, Entity target) {
 		if (obj == null || target == null)
 			return;
-		double vx = 0;
-		double vy = 0;
-		double vz = 0;
-		double len = 0;
-		double tx = 0;
-		double ty = 0;
-		double tz = 0;
+		double vx;
+		double vy;
+		double vz;
+		double len;
+		double tx;
+		double ty;
+		double tz;
 		vx = target.getX() - obj.getX();
 		vy = target.getY() - obj.getY();
 		vz = target.getZ() - obj.getZ();
@@ -1298,13 +1094,13 @@ public class EntityUtils {
 	public static void wardenLightBoom(LevelAccessor world, Entity obj, Entity target) {
 		if (obj == null || target == null)
 			return;
-		double vx = 0;
-		double vy = 0;
-		double vz = 0;
-		double len = 0;
-		double tx = 0;
-		double ty = 0;
-		double tz = 0;
+		double vx;
+		double vy;
+		double vz;
+		double len;
+		double tx;
+		double ty;
+		double tz;
 		vx = target.getX() - obj.getX();
 		vy = target.getY() - obj.getY();
 		vz = target.getZ() - obj.getZ();
@@ -1342,30 +1138,30 @@ public class EntityUtils {
 	public static void endspeakerTick(LevelAccessor world, Entity entity) {
 		if (entity == null)
 			return;
-		double missR = 0;
+		double missR;
 		if (entity.tickCount % 5 == 0) {
 			if (inquirybility(world, 2) && (entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.4) {
 				if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
 					_entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 25, 0, false, false));
 				if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-					_entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ENDSPEAER_BRANDGUIDE_BUFF.get(), 25, 0));
+					_entity.addEffect(new MobEffectInstance(CAMobEffects.ENDSPEAER_BRANDGUIDE_BUFF.get(), 25, 0));
 			}
 			if (inquirybility(world, 4)) {
 				entity.clearFire();
 				if (entity instanceof LivingEntity _entity)
-					_entity.removeEffect(CaerulaArborModMobEffects.DIZZY.get());
+					_entity.removeEffect(CAMobEffects.DIZZY.get());
 				if (entity instanceof LivingEntity _entity)
-					_entity.removeEffect(CaerulaArborModMobEffects.MUTE.get());
+					_entity.removeEffect(CAMobEffects.MUTE.get());
 				if (entity instanceof LivingEntity _entity)
 					_entity.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
 				if (entity instanceof LivingEntity _entity)
 					_entity.removeEffect(MobEffects.WEAKNESS);
 				if (entity instanceof LivingEntity _entity)
-					_entity.removeEffect(CaerulaArborModMobEffects.FROZEN.get());
+					_entity.removeEffect(CAMobEffects.FROZEN.get());
 				entity.setTicksFrozen(0);
-				if (entity.tickCount % 200 == 0 && !(entity instanceof LivingEntity _livEnt13 && _livEnt13.hasEffect(CaerulaArborModMobEffects.ESSENCE_RESISTANCE.get()))) {
+				if (entity.tickCount % 200 == 0 && !(entity instanceof LivingEntity _livEnt13 && _livEnt13.hasEffect(CAMobEffects.ESSENCE_RESISTANCE.get()))) {
 					if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-						_entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ESSENCE_RESISTANCE.get(), 180, 2, false, false));
+						_entity.addEffect(new MobEffectInstance(CAMobEffects.ESSENCE_RESISTANCE.get(), 180, 2, false, false));
 				}
 				if (getSpeed(entity) > (entity instanceof LivingEntity _livingEntity15 && _livingEntity15.getAttributes().hasAttribute(Attributes.MOVEMENT_SPEED) ? _livingEntity15.getAttribute(Attributes.MOVEMENT_SPEED).getValue() : 0) * 1.25) {
 					entity.setDeltaMovement(new Vec3(0, 0, 0));
@@ -1376,94 +1172,13 @@ public class EntityUtils {
 				if (entity.isOnFire() && !entity.fireImmune()) {
 					missR = 0;
 				}
-				if (entity instanceof LivingEntity _livEnt19 && _livEnt19.hasEffect(CaerulaArborModMobEffects.DIZZY.get()) || entity instanceof LivingEntity _livEnt20 && _livEnt20.hasEffect(CaerulaArborModMobEffects.FROZEN.get())
+				if (entity instanceof LivingEntity _livEnt19 && _livEnt19.hasEffect(CAMobEffects.DIZZY.get()) || entity instanceof LivingEntity _livEnt20 && _livEnt20.hasEffect(CAMobEffects.FROZEN.get())
 						|| entity instanceof LivingEntity _livEnt21 && _livEnt21.hasEffect(MobEffects.LEVITATION) || entity instanceof LivingEntity _livEnt22 && _livEnt22.hasEffect(MobEffects.MOVEMENT_SLOWDOWN)
 						|| entity instanceof LivingEntity _livEnt23 && _livEnt23.hasEffect(MobEffects.SLOW_FALLING)) {
 					missR = 0;
 				}
-				if (entity instanceof LivingEntity _livingEntity24 && _livingEntity24.getAttributes().hasAttribute(CaerulaArborModAttributes.MISSRATE.get()))
-					_livingEntity24.getAttribute(CaerulaArborModAttributes.MISSRATE.get()).setBaseValue(missR);
-			}
-		}
-	}
-
-	//TODO同下放处理，理念同上
-	public static void spawnEndspeakerMobs(LevelAccessor world, double x, double y, double z, double elite_chan, double n) {
-		double tx = 0;
-		double ty = 0;
-		double tz = 0;
-		if (!MapVariables.get(world).endspeakerSummon) {
-			return;
-		}
-		if (getSeabornNum(world, x, y, z) >= (world.getLevelData().getGameRules().getInt(CaerulaArborModGameRules.CLONE_NUMBER_LIMIT))) {
-			return;
-		}
-		for (int index0 = 0; index0 < 8; index0++) {
-			tx = x + Mth.nextInt(RandomSource.create(), -8, 8);
-			tz = z + Mth.nextInt(RandomSource.create(), -8, 8);
-			ty = WorldUtils.findValidYForCat(world, x, y, z, tx, y, tz);
-			if (ty < 999) {
-                double rand = 0;
-                rand = Mth.nextInt(RandomSource.create(), 0, 5);
-                if (rand == 0) {
-                    if (world instanceof ServerLevel _level) {
-                        Entity entityToSpawn = CaerulaArborModEntities.BASELAYER_ABYSSAL.get().spawn(_level, BlockPos.containing(tx, ty, tz), MobSpawnType.MOB_SUMMONED);
-                        if (entityToSpawn != null) {
-                            entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-                        }
-                    }
-                } else if (rand == 1) {
-                    if (world instanceof ServerLevel _level) {
-                        Entity entityToSpawn = CaerulaArborModEntities.PREDATOR_ABYSSAL.get().spawn(_level, BlockPos.containing(tx, ty, tz), MobSpawnType.MOB_SUMMONED);
-                        if (entityToSpawn != null) {
-                            entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-                        }
-                    }
-                } else if (rand == 2) {
-                    if (world instanceof ServerLevel _level) {
-                        Entity entityToSpawn = CaerulaArborModEntities.GUIDE_ABYSSAL.get().spawn(_level, BlockPos.containing(tx, ty, tz), MobSpawnType.MOB_SUMMONED);
-                        if (entityToSpawn != null) {
-                            entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-                        }
-                    }
-                } else if (rand == 3) {
-                    if (world instanceof ServerLevel _level) {
-                        Entity entityToSpawn = CaerulaArborModEntities.SPLASHER_ABYSSAL.get().spawn(_level, BlockPos.containing(tx, ty, tz), MobSpawnType.MOB_SUMMONED);
-                        if (entityToSpawn != null) {
-                            entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-                        }
-                    }
-                } else if (rand == 4) {
-                    if (world instanceof ServerLevel _level) {
-                        Entity entityToSpawn = CaerulaArborModEntities.UMBRELLA_ABYSSAL.get().spawn(_level, BlockPos.containing(tx, ty, tz), MobSpawnType.MOB_SUMMONED);
-                        if (entityToSpawn != null) {
-                            entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-                        }
-                    }
-                } else if (rand == 5) {
-                    if (world instanceof ServerLevel _level) {
-                        Entity entityToSpawn = CaerulaArborModEntities.CRACKER_ABYSSAL.get().spawn(_level, BlockPos.containing(tx, ty, tz), MobSpawnType.MOB_SUMMONED);
-                        if (entityToSpawn != null) {
-                            entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-                        }
-                    }
-                }
-                if (world instanceof ServerLevel _level)
-                    _level.sendParticles(ParticleTypes.CLOUD, tx, (ty + 0.75), tz, 64, 0.75, 0.75, 0.75, 0.1);
-                break;
-			}
-		}
-		for (int index1 = 0; index1 < (int) (n - 1); index1++) {
-			for (int index2 = 0; index2 < 8; index2++) {
-				tx = x + Mth.nextInt(RandomSource.create(), -8, 8);
-				tz = z + Mth.nextInt(RandomSource.create(), -8, 8);
-				ty = WorldUtils.findValidYForCat(world, x, y, z, tx, y, tz);
-				if (ty < 999) {
-					WorldUtils.summonRandomSeaborn(world, elite_chan, tx, ty, tz);
-					if (world instanceof ServerLevel _level)
-						_level.sendParticles(ParticleTypes.CLOUD, tx, (ty + 0.75), tz, 64, 0.75, 0.75, 0.75, 0.1);
-					break;
-				}
+				if (entity instanceof LivingEntity _livingEntity24 && _livingEntity24.getAttributes().hasAttribute(CAAttributes.MISSRATE.get()))
+					_livingEntity24.getAttribute(CAAttributes.MISSRATE.get()).setBaseValue(missR);
 			}
 		}
 	}
@@ -1472,7 +1187,7 @@ public class EntityUtils {
 	public static void hurtMartus(LevelAccessor world, Entity obj, Entity source, double num, double perc) {
 		if (obj == null)
 			return;
-		double amount = 0;
+		double amount;
 		amount = (obj instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * perc + num;
 		if (amount > 0) {
 			obj.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "inv_killer"))), source), (float) amount);
@@ -1482,8 +1197,8 @@ public class EntityUtils {
 	public static void igniteRouteshaper(LevelAccessor world, double x, double y, double z, Entity entity) {
 		if (entity == null)
 			return;
-		if (entity instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-			_livingEntity0.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(24);
+		if (entity instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
+			_livingEntity0.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(24);
 		if (world.getEntitiesOfClass(Player.class, AABB.ofSize(new Vec3(x, y, z), 16, 16, 16), e -> true).isEmpty()) {
 			if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
 				_entity.addEffect(new MobEffectInstance(MobEffects.GLOWING, 1800, 0, false, false));
@@ -1510,14 +1225,6 @@ public class EntityUtils {
 			new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")
 		);
 
-	//TODO:下放回实体
-	public static boolean isCorruptedSource(DamageSource source) {
-		Entity entity = source.getEntity();
-		if(entity == null) return true;
-		if(entity.getType().is(HUMAN)) return true;
-		return entity instanceof Player;
-	}
-
 	//可能需要评估，低优先级
 	public static void killSelf(LevelAccessor world, Entity entity, Entity immediatesourceentity) {
 		if (entity == null || immediatesourceentity == null)
@@ -1529,51 +1236,13 @@ public class EntityUtils {
 		});
 	}
 
-	//TODO下放到实体并作为辅助方法
-	public static void swallowCrystals(LevelAccessor world, double x, double y, double z, Entity entity) {
-		if (entity == null)
-			return;
-		final Vec3 _center = new Vec3(x, y, z);
-		List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(5 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-		for (Entity entityiterator : _entfound) {
-			if (entityiterator instanceof MoistEnderCrystalEntity && entity.distanceTo(entityiterator) < 2.5) {
-				if (!entityiterator.level().isClientSide())
-					entityiterator.discard();
-				heal(entity, (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.05);
-				if (world instanceof ServerLevel _level)
-					_level.sendParticles(ParticleTypes.DRAGON_BREATH, (entityiterator.getX()), (entityiterator.getY() + 0.5), (entityiterator.getZ()), 16, 0.5, 0.5, 0.5, 0.1);
-			}
-		}
-	}
-
-	//TODO需要下放回实体
-	public static boolean isShulkerWalking(Entity entity) {
-		if (entity == null)
-			return false;
-		if (entity.isAlive()) {
-			return entity instanceof OceanizedShulkerEntity _datEntL1 && _datEntL1.getEntityData().get(OceanizedShulkerEntity.DATA_WALKING);
-		}
-		return false;
-	}
-
-	//TODO下放回实体
-	public static void summonHurtSkadi(LevelAccessor world, double x, double y, double z) {
-		if (world instanceof ServerLevel _level) {
-			LivingEntity entityToSpawn = CaerulaArborModEntities.SKADI.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
-			if (entityToSpawn != null) {
-				entityToSpawn.setHealth(entityToSpawn.getMaxHealth() * 0.4f);
-				entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-			}
-		}
-	}
-
 	//需要解释，特别可疑
 	public static void vanguardBuff(LevelAccessor world, double x, double y, double z, Entity entity) {
 		if (entity == null)
 			return;
 		double less = 0;
 		if (entity.tickCount % 20 == 10) {
-			if (!(entity instanceof LivingEntity _livEnt1 && _livEnt1.hasEffect(CaerulaArborModMobEffects.INFANTRY.get()))) {
+			if (!(entity instanceof LivingEntity _livEnt1 && _livEnt1.hasEffect(CAMobEffects.INFANTRY.get()))) {
 				{
 					final Vec3 _center = new Vec3(x, y, z);
 					List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(16 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
@@ -1591,7 +1260,7 @@ public class EntityUtils {
 				}
 				if (less > 0) {
 					if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-						_entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INFANTRY.get(), 40, (int) (less - 1)));
+						_entity.addEffect(new MobEffectInstance(CAMobEffects.INFANTRY.get(), 40, (int) (less - 1)));
 				}
 			}
 		}
@@ -1611,34 +1280,6 @@ public class EntityUtils {
 			}
 		}
 		return true;
-	}
-
-	//TODO下放回骑士实体，马调用骑士的就行
-	public static void applyLastKnightFreeze(LevelAccessor world, Entity entity, Entity sourceentity) {
-		if (entity == null || sourceentity == null)
-			return;
-		double freeze = sourceentity.getTicksFrozen();
-		if (freeze < 140) {
-			if ((entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5) {
-				sourceentity.setTicksFrozen((int) Math.min(freeze + 80, 200));
-			} else {
-				sourceentity.setTicksFrozen((int) Math.min(freeze + 40, 200));
-			}
-		} else {
-			if (!(sourceentity instanceof LivingEntity _livEnt5 && _livEnt5.hasEffect(CaerulaArborModMobEffects.FROZEN.get()))) {
-				if (world instanceof Level _level) {
-						_level.playSound(null, BlockPos.containing(sourceentity.getX(), sourceentity.getY(), sourceentity.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "last_jnight_freeze")), SoundSource.HOSTILE,
-								4, (float) Mth.nextDouble(RandomSource.create(), 1, 1.15));
-				}
-			}
-			if ((entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5) {
-				if (sourceentity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-					_entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.FROZEN.get(), 80, 0, false, false));
-			} else {
-				if (sourceentity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-					_entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.FROZEN.get(), 40, 0, false, false));
-			}
-		}
 	}
 
 	//需要解释
@@ -1723,7 +1364,7 @@ public class EntityUtils {
 		}
 		for (int index0 = 0; index0 < (int) size; index0++) {
 			if (world instanceof ServerLevel _level)
-				_level.sendParticles(CaerulaArborModParticleTypes.EDERMAN_PTC.get(), (fromX + (vx / size) * index0), (fromY + (vy / size) * index0 + 0.65), (fromZ + (vz / size) * index0), 32, 0.65, 0.65, 0.65, 0.05);
+				_level.sendParticles(CAParticleTypes.EDERMAN_PTC.get(), (fromX + (vx / size) * index0), (fromY + (vy / size) * index0 + 0.65), (fromZ + (vz / size) * index0), 32, 0.65, 0.65, 0.65, 0.05);
 		}
 		entity.teleportTo(toX, toY, toZ);
 		if (entity instanceof ServerPlayer _serverPlayer)

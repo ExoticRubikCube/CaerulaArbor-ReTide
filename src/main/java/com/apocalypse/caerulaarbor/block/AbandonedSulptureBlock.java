@@ -1,8 +1,8 @@
 package com.apocalypse.caerulaarbor.block;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlockEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CABlockEntities;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
@@ -62,7 +62,7 @@ public class AbandonedSulptureBlock extends BaseEntityBlock implements SimpleWat
 	@Nullable
 	@Override
 	public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
-		return CaerulaArborModBlockEntities.ABANDONED_SULPTURE.get().create(blockPos, blockState);
+		return CABlockEntities.ABANDONED_SULPTURE.get().create(blockPos, blockState);
 	}
 
 	@Override
@@ -153,7 +153,7 @@ public class AbandonedSulptureBlock extends BaseEntityBlock implements SimpleWat
                     if (new Vec3(((double) x + 0.5), ((double) y + 1), ((double) z + 0.5)).distanceTo(new Vec3((entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()))) < 24) {
                         world.destroyBlock(BlockPos.containing(x, y, z), false);
                         if ((LevelAccessor) world instanceof ServerLevel _level) {
-                            Entity entityToSpawn = CaerulaArborModEntities.THE_ABANDONED.get().spawn(_level, BlockPos.containing((double) x + 0.5, y, (double) z + 0.5), MobSpawnType.MOB_SUMMONED);
+                            Entity entityToSpawn = CAEntities.THE_ABANDONED.get().spawn(_level, BlockPos.containing((double) x + 0.5, y, (double) z + 0.5), MobSpawnType.MOB_SUMMONED);
                             if (entityToSpawn != null) {
                                 entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
                             }
@@ -173,7 +173,7 @@ public class AbandonedSulptureBlock extends BaseEntityBlock implements SimpleWat
         double y = pos.getY();
         double z = pos.getZ();
         if ((LevelAccessor) world instanceof ServerLevel _level) {
-            Entity entityToSpawn = CaerulaArborModEntities.THE_ABANDONED.get().spawn(_level, BlockPos.containing(x + 0.5, y, z + 0.5), MobSpawnType.MOB_SUMMONED);
+            Entity entityToSpawn = CAEntities.THE_ABANDONED.get().spawn(_level, BlockPos.containing(x + 0.5, y, z + 0.5), MobSpawnType.MOB_SUMMONED);
             if (entityToSpawn != null) {
                 entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
             }

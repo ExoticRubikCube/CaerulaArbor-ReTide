@@ -3,9 +3,9 @@ package com.apocalypse.caerulaarbor.event;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModGameRules;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAGameRules;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
@@ -45,40 +45,40 @@ public class EntityJoinLevelEventHandler {
 
         if (entity == null) return;
 
-        if ((entity instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get())
-                ? _livingEntity0.getAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()).getBaseValue()
+        if ((entity instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get())
+                ? _livingEntity0.getAttribute(CAAttributes.SANITY_MODIFIER.get()).getBaseValue()
                 : 0) == 1) {
             if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "bossoffspring")))) {
-                if (entity instanceof LivingEntity _livingEntity2 && _livingEntity2.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()))
-                    _livingEntity2.getAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()).setBaseValue(0.16);
+                if (entity instanceof LivingEntity _livingEntity2 && _livingEntity2.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
+                    _livingEntity2.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.16);
             }
             if (entity instanceof LivingEntity _livEnt3 && _livEnt3.getMobType() == MobType.UNDEAD) {
-                if (entity instanceof LivingEntity _livingEntity4 && _livingEntity4.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()))
-                    _livingEntity4.getAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()).setBaseValue(0.5);
+                if (entity instanceof LivingEntity _livingEntity4 && _livingEntity4.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
+                    _livingEntity4.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.5);
             }
             if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "with_low_sanity_modifier")))) {
-                if (entity instanceof LivingEntity _livingEntity6 && _livingEntity6.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()))
-                    _livingEntity6.getAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()).setBaseValue(0.5);
+                if (entity instanceof LivingEntity _livingEntity6 && _livingEntity6.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
+                    _livingEntity6.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.5);
             }
             if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "with_lower_sanity_modifier")))) {
-                if (entity instanceof LivingEntity _livingEntity8 && _livingEntity8.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()))
-                    _livingEntity8.getAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()).setBaseValue(0.33);
+                if (entity instanceof LivingEntity _livingEntity8 && _livingEntity8.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
+                    _livingEntity8.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.33);
             }
             if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "with_lowest_sanity_modifier")))) {
-                if (entity instanceof LivingEntity _livingEntity10 && _livingEntity10.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()))
-                    _livingEntity10.getAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()).setBaseValue(0.25);
+                if (entity instanceof LivingEntity _livingEntity10 && _livingEntity10.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
+                    _livingEntity10.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.25);
             }
             if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "with_lowest_smaller_sanity_modifier")))) {
-                if (entity instanceof LivingEntity _livingEntity12 && _livingEntity12.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()))
-                    _livingEntity12.getAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()).setBaseValue(0.2);
+                if (entity instanceof LivingEntity _livingEntity12 && _livingEntity12.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
+                    _livingEntity12.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.2);
             }
             if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "with_lowest_smallest_sanity_modifier")))) {
-                if (entity instanceof LivingEntity _livingEntity14 && _livingEntity14.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()))
-                    _livingEntity14.getAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()).setBaseValue(0.1);
+                if (entity instanceof LivingEntity _livingEntity14 && _livingEntity14.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
+                    _livingEntity14.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.1);
             }
             if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "with_zero_sanity_modifier")))) {
-                if (entity instanceof LivingEntity _livingEntity16 && _livingEntity16.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()))
-                    _livingEntity16.getAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()).setBaseValue(0);
+                if (entity instanceof LivingEntity _livingEntity16 && _livingEntity16.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
+                    _livingEntity16.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0);
             }
         }
     }
@@ -91,7 +91,7 @@ public class EntityJoinLevelEventHandler {
         Entity entity = event.getEntity();
 
         if (entity == null) return;
-        if (!(entity instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(CaerulaArborModAttributes.EVOLVED.get()))) return;
+        if (!(entity instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(CAAttributes.EVOLVED.get()))) return;
 
         double health_index;
         double attack_index;
@@ -107,11 +107,11 @@ public class EntityJoinLevelEventHandler {
                     _livingEntity4.getAttribute(ForgeMod.SWIM_SPEED.get())
                             .setBaseValue(((entity instanceof LivingEntity _livingEntity3 && _livingEntity3.getAttributes().hasAttribute(Attributes.MOVEMENT_SPEED) ? _livingEntity3.getAttribute(Attributes.MOVEMENT_SPEED).getBaseValue() : 0) * 10));
             }
-            if ((entity instanceof LivingEntity _livingEntity5 && _livingEntity5.getAttributes().hasAttribute(CaerulaArborModAttributes.EVOLVED.get()) ? _livingEntity5.getAttribute(CaerulaArborModAttributes.EVOLVED.get()).getBaseValue() : 0) == 0) {
+            if ((entity instanceof LivingEntity _livingEntity5 && _livingEntity5.getAttributes().hasAttribute(CAAttributes.EVOLVED.get()) ? _livingEntity5.getAttribute(CAAttributes.EVOLVED.get()).getBaseValue() : 0) == 0) {
                 health_index = 1 + 0.3 * MapVariables.get(world).strategy_subsisting;
                 attack_index = 1 + 0.25 * MapVariables.get(world).strategy_grow;
                 armor_index = 1;
-                n = Math.min((world.getLevelData().getGameRules().getInt(CaerulaArborModGameRules.SURGING_WAVES)), 18);
+                n = Math.min((world.getLevelData().getGameRules().getInt(CAGameRules.SURGING_WAVES)), 18);
                 if (n > 0) {
                     n = 1 + 0.01 * n * 2;
                     coef = 1;
@@ -155,10 +155,10 @@ public class EntityJoinLevelEventHandler {
                     _livingEntity22.getAttribute(Attributes.ARMOR)
                             .setBaseValue((((entity instanceof LivingEntity _livingEntity21 && _livingEntity21.getAttributes().hasAttribute(Attributes.ARMOR) ? _livingEntity21.getAttribute(Attributes.ARMOR).getBaseValue() : 0)
                                     + 2 * MapVariables.get(world).strategy_subsisting) * armor_index));
-                if (entity instanceof LivingEntity _livingEntity24 && _livingEntity24.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()))
-                    _livingEntity24.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get())
-                            .setBaseValue((((entity instanceof LivingEntity _livingEntity23 && _livingEntity23.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get())
-                                    ? _livingEntity23.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).getBaseValue()
+                if (entity instanceof LivingEntity _livingEntity24 && _livingEntity24.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
+                    _livingEntity24.getAttribute(CAAttributes.GENERAL_DEFENSE.get())
+                            .setBaseValue((((entity instanceof LivingEntity _livingEntity23 && _livingEntity23.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get())
+                                    ? _livingEntity23.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getBaseValue()
                                     : 0) + 1 * MapVariables.get(world).strategy_subsisting) * armor_index));
                 if (entity instanceof LivingEntity _livingEntity26 && _livingEntity26.getAttributes().hasAttribute(Attributes.ARMOR_TOUGHNESS))
                     _livingEntity26.getAttribute(Attributes.ARMOR_TOUGHNESS)
@@ -173,7 +173,7 @@ public class EntityJoinLevelEventHandler {
                 final Entity finalEntity = entity;
                 final LevelAccessor finalWorld = world;
                 CaerulaArborMod.queueServerWork(10, () -> {
-                    if (!(finalEntity instanceof LivingEntity _livEnt29 && _livEnt29.hasEffect(CaerulaArborModMobEffects.POWER_OF_ANCHOR.get()))) {
+                    if (!(finalEntity instanceof LivingEntity _livEnt29 && _livEnt29.hasEffect(CAMobEffects.POWER_OF_ANCHOR.get()))) {
                         if (MapVariables.get(finalWorld).strategy_breed > 0) {
                             if (!finalEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "bossoffspring")))
                                     && !finalEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanspawn")))
@@ -205,15 +205,15 @@ public class EntityJoinLevelEventHandler {
                                 }
                             }
                         }
-                        if (finalEntity instanceof LivingEntity _livingEntity41 && _livingEntity41.getAttributes().hasAttribute(CaerulaArborModAttributes.EVOLVED.get()))
-                            _livingEntity41.getAttribute(CaerulaArborModAttributes.EVOLVED.get()).setBaseValue(1);
+                        if (finalEntity instanceof LivingEntity _livingEntity41 && _livingEntity41.getAttributes().hasAttribute(CAAttributes.EVOLVED.get()))
+                            _livingEntity41.getAttribute(CAAttributes.EVOLVED.get()).setBaseValue(1);
                     }
                 });
             }
         }
         if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "golems")))) {
-            if ((entity instanceof LivingEntity _livingEntity44 && _livingEntity44.getAttributes().hasAttribute(CaerulaArborModAttributes.EVOLVED.get())
-                    ? _livingEntity44.getAttribute(CaerulaArborModAttributes.EVOLVED.get()).getBaseValue()
+            if ((entity instanceof LivingEntity _livingEntity44 && _livingEntity44.getAttributes().hasAttribute(CAAttributes.EVOLVED.get())
+                    ? _livingEntity44.getAttribute(CAAttributes.EVOLVED.get()).getBaseValue()
                     : 0) == 0) {
                 percentage = (entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) / (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1);
                 if (entity instanceof LivingEntity _livingEntity48 && _livingEntity48.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
@@ -227,10 +227,10 @@ public class EntityJoinLevelEventHandler {
                     _livingEntity52.getAttribute(Attributes.ARMOR)
                             .setBaseValue(((entity instanceof LivingEntity _livingEntity51 && _livingEntity51.getAttributes().hasAttribute(Attributes.ARMOR) ? _livingEntity51.getAttribute(Attributes.ARMOR).getBaseValue() : 0)
                                     + 2 * MapVariables.get(world).strategy_subsisting));
-                if (entity instanceof LivingEntity _livingEntity54 && _livingEntity54.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()))
-                    _livingEntity54.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get())
-                            .setBaseValue(((entity instanceof LivingEntity _livingEntity53 && _livingEntity53.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get())
-                                    ? _livingEntity53.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).getBaseValue()
+                if (entity instanceof LivingEntity _livingEntity54 && _livingEntity54.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
+                    _livingEntity54.getAttribute(CAAttributes.GENERAL_DEFENSE.get())
+                            .setBaseValue(((entity instanceof LivingEntity _livingEntity53 && _livingEntity53.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get())
+                                    ? _livingEntity53.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getBaseValue()
                                     : 0) + 2 * MapVariables.get(world).strategy_subsisting));
                 if (entity instanceof LivingEntity _livingEntity56 && _livingEntity56.getAttributes().hasAttribute(Attributes.ARMOR_TOUGHNESS))
                     _livingEntity56.getAttribute(Attributes.ARMOR_TOUGHNESS)
@@ -240,8 +240,8 @@ public class EntityJoinLevelEventHandler {
                     _livingEntity58.getAttribute(Attributes.ATTACK_DAMAGE)
                             .setBaseValue(((entity instanceof LivingEntity _livingEntity57 && _livingEntity57.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity57.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0)
                                     * (1 + 0.25 * MapVariables.get(world).strategy_grow)));
-                if (entity instanceof LivingEntity _livingEntity59 && _livingEntity59.getAttributes().hasAttribute(CaerulaArborModAttributes.EVOLVED.get()))
-                    _livingEntity59.getAttribute(CaerulaArborModAttributes.EVOLVED.get()).setBaseValue(1);
+                if (entity instanceof LivingEntity _livingEntity59 && _livingEntity59.getAttributes().hasAttribute(CAAttributes.EVOLVED.get()))
+                    _livingEntity59.getAttribute(CAAttributes.EVOLVED.get()).setBaseValue(1);
             }
         }
     }

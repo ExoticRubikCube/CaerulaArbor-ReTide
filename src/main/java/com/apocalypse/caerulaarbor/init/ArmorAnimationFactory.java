@@ -16,7 +16,7 @@ public class ArmorAnimationFactory {
 	//TODO:和EntityAnimationFactory是一样的情况
 	@SubscribeEvent
 	public static void animatedArmors(TickEvent.PlayerTickEvent event) {
-		String animation = "";
+		String animation;
 		if (event.phase == TickEvent.Phase.END) {
 			if (event.player.getItemBySlot(EquipmentSlot.HEAD).getItem() != (ItemStack.EMPTY).getItem() && event.player.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof GeoItem) {
 				if (!event.player.getItemBySlot(EquipmentSlot.HEAD).getOrCreateTag().getString("geckoAnim").equals("")) {

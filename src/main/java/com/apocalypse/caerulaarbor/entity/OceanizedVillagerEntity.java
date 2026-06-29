@@ -2,9 +2,9 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.entity.base.PolarMountRider;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -58,7 +58,7 @@ public class OceanizedVillagerEntity extends SeaMonster implements PolarMountRid
 	public String animationprocedure = "empty";
 
 	public OceanizedVillagerEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.OCEANIZED_VILLAGER.get(), world);
+		this(CAEntities.OCEANIZED_VILLAGER.get(), world);
 	}
 
 	public OceanizedVillagerEntity(EntityType<OceanizedVillagerEntity> type, Level world) {
@@ -149,7 +149,7 @@ public class OceanizedVillagerEntity extends SeaMonster implements PolarMountRid
 
     protected void dropCustomDeathLoot(DamageSource source, int looting, boolean recentlyHitIn) {
 		super.dropCustomDeathLoot(source, looting, recentlyHitIn);
-		this.spawnAtLocation(new ItemStack(CaerulaArborModItems.OCEAN_PEDUNCLE.get()));
+		this.spawnAtLocation(new ItemStack(CAItems.OCEAN_PEDUNCLE.get()));
 	}
 
 	@Override
@@ -172,7 +172,7 @@ public class OceanizedVillagerEntity extends SeaMonster implements PolarMountRid
 		super.thunderHit(serverWorld, lightningBolt);
         LevelAccessor world = this.level();
         if (world instanceof ServerLevel _level) {
-            Entity entityToSpawn = CaerulaArborModEntities.OCEANIZED_WITCH.get().spawn(_level, BlockPos.containing(this.getX(), this.getY(), this.getZ()), MobSpawnType.MOB_SUMMONED);
+            Entity entityToSpawn = CAEntities.OCEANIZED_WITCH.get().spawn(_level, BlockPos.containing(this.getX(), this.getY(), this.getZ()), MobSpawnType.MOB_SUMMONED);
             if (entityToSpawn != null) {
                 entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
             }
@@ -191,8 +191,8 @@ public class OceanizedVillagerEntity extends SeaMonster implements PolarMountRid
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get()))
-            this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(6);
+        if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get()))
+            this.getAttribute(CAAttributes.SANITY_RATE.get()).setBaseValue(6);
         return retval;
 	}
 

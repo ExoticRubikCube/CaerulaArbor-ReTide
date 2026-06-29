@@ -2,9 +2,9 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
@@ -50,7 +50,7 @@ public class GunmuEntity extends Monster {
 	private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.WHITE, ServerBossEvent.BossBarOverlay.PROGRESS);
 
 	public GunmuEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.GUNMU.get(), world);
+		this(CAEntities.GUNMU.get(), world);
 	}
 
 	public GunmuEntity(EntityType<GunmuEntity> type, Level world) {
@@ -96,7 +96,7 @@ public class GunmuEntity extends Monster {
 
 	protected void dropCustomDeathLoot(DamageSource source, int looting, boolean recentlyHitIn) {
 		super.dropCustomDeathLoot(source, looting, recentlyHitIn);
-		this.spawnAtLocation(new ItemStack(CaerulaArborModItems.BANNED_ITEM.get()));
+		this.spawnAtLocation(new ItemStack(CAItems.BANNED_ITEM.get()));
 	}
 
 	@Override
@@ -161,16 +161,16 @@ public class GunmuEntity extends Monster {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-            this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(100);
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()))
-            this.getAttribute(CaerulaArborModAttributes.SANITY_MODIFIER.get()).setBaseValue(0);
+        if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
+            this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(100);
+        if (this.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
+            this.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0);
         return retval;
 	}
 
 	@Override
 	public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
-		if (sourceentity.isHolding(CaerulaArborModItems.BANNED_ITEM.get())){
+		if (sourceentity.isHolding(CAItems.BANNED_ITEM.get())){
 			this.setRemoved(RemovalReason.CHANGED_DIMENSION);
 			return InteractionResult.SUCCESS;
 		}
@@ -199,8 +199,8 @@ public class GunmuEntity extends Monster {
         if (tickCount % 10 == 0) {
             clearFire();
             this.removeAllEffects();
-            if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.NUMB.get()))
-                this.getAttribute(CaerulaArborModAttributes.NUMB.get()).setBaseValue(0);
+            if (this.getAttributes().hasAttribute(CAAttributes.NUMB.get()))
+                this.getAttribute(CAAttributes.NUMB.get()).setBaseValue(0);
             ModCapabilities.getSanityInjury(this).heal(1000);
         }
     }

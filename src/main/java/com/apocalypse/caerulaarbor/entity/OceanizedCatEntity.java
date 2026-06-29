@@ -2,8 +2,8 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
@@ -62,7 +62,7 @@ public class OceanizedCatEntity extends SeaMonster {
 	public String animationprocedure = "empty";
 
 	public OceanizedCatEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.OCEANIZED_CAT.get(), world);
+		this(CAEntities.OCEANIZED_CAT.get(), world);
 	}
 
 	public OceanizedCatEntity(EntityType<OceanizedCatEntity> type, Level world) {
@@ -216,11 +216,11 @@ public class OceanizedCatEntity extends SeaMonster {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-		if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get())) {
-			this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(4);
+		if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get())) {
+			this.getAttribute(CAAttributes.SANITY_RATE.get()).setBaseValue(4);
 		}
-		if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get())) {
-			this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(35);
+		if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())) {
+			this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(35);
 		}
 		return retval;
 	}
@@ -247,8 +247,8 @@ public class OceanizedCatEntity extends SeaMonster {
 	@Override
 	public void baseTick() {
 		super.baseTick();
-        double time_stamp = 0;
-        boolean sneak = false;
+        double time_stamp;
+        boolean sneak;
         if (this.isAlive() && tickCount % 10 == 0) {
             time_stamp = (Entity) this instanceof OceanizedCatEntity _datEntI ? _datEntI.getEntityData().get(DATA_action_time) : 0;
             sneak = (Entity) this instanceof OceanizedCatEntity _datEntL3 && _datEntL3.getEntityData().get(DATA_stateSneaking);

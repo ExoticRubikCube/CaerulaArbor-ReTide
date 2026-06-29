@@ -3,8 +3,8 @@ package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.api.event.SanityEvent;
 import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
@@ -48,7 +48,7 @@ public class TrailriteSwordItem extends SwordItem {
 			}
 
 			public Ingredient getRepairIngredient() {
-				return Ingredient.of(new ItemStack(CaerulaArborModItems.TRAILRITE.get()));
+				return Ingredient.of(new ItemStack(CAItems.TRAILRITE.get()));
 			}
 		}, 3, -2.4f, new Item.Properties().fireResistant());
 	}
@@ -60,8 +60,8 @@ public class TrailriteSwordItem extends SwordItem {
         double x = entity.getX();
         double y = entity.getY();
         double z = entity.getZ();
-        double absorp = 0;
-        double rate = 0;
+        double absorp;
+        double rate;
         SIHelper.causeSanityInjury(entity, sourceentity, 330, SanityEvent.Hurt.Type.ENTITY);
         if (!(entity instanceof Player)) {
             if (Math.random() < 0.2 + itemstack.getEnchantmentLevel(Enchantments.MOB_LOOTING) * 0.02) {
@@ -101,9 +101,9 @@ public class TrailriteSwordItem extends SwordItem {
 		if (selected) {
             if (entity == null)
                 return;
-            if (!(entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CaerulaArborModMobEffects.ADD_REACH.get()))) {
+            if (!(entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CAMobEffects.ADD_REACH.get()))) {
                 if (entity instanceof LivingEntity living && !living.level().isClientSide())
-                    living.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ADD_REACH.get(), 20, 2, false, false));
+                    living.addEffect(new MobEffectInstance(CAMobEffects.ADD_REACH.get(), 20, 2, false, false));
             }
         }
 	}

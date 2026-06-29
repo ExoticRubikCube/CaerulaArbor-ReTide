@@ -2,7 +2,8 @@ package com.apocalypse.caerulaarbor.util;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.*;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.entity.EndspeakerEntity;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -174,8 +175,7 @@ public class EntityPredicateUtils {
 	public static boolean isEndspeaker(Entity entity) {
 		if (entity == null)
 			return false;
-		return entity instanceof Endspeaker0Entity || entity instanceof Endspeaker1Entity
-			|| entity instanceof Endspeaker2Entity || entity instanceof Endspeaker3Entity;
+		return entity instanceof EndspeakerEntity;
 	}
 
 	public static boolean isSpecterAround(LevelAccessor world, double x, double y, double z) {
@@ -220,6 +220,6 @@ public class EntityPredicateUtils {
 	public static boolean isNotFakeDying(Entity entity) {
 		if (entity == null)
 			return false;
-		return !(entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CaerulaArborModMobEffects.FAKE_DEATH.get()));
+		return !(entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CAMobEffects.FAKE_DEATH.get()));
 	}
 }

@@ -1,8 +1,9 @@
 package com.apocalypse.caerulaarbor.entity;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
+import net.minecraft.util.Mth;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.util.RandomSource;
@@ -27,7 +28,7 @@ public class WitherShootPreEntity extends AbstractArrow implements ItemSupplier 
 	public static final ItemStack PROJECTILE_ITEM = new ItemStack(Blocks.WITHER_SKELETON_SKULL);
 
 	public WitherShootPreEntity(PlayMessages.SpawnEntity packet, Level world) {
-		super(CaerulaArborModEntities.WITHER_SHOOT_PRE.get(), world);
+		super(CAEntities.WITHER_SHOOT_PRE.get(), world);
 	}
 
 	public WitherShootPreEntity(EntityType<? extends WitherShootPreEntity> type, Level world) {
@@ -75,9 +76,9 @@ public class WitherShootPreEntity extends AbstractArrow implements ItemSupplier 
         Entity sourceentity = this.getOwner();
         if (sourceentity == null)
             return;
-        Entity enemy = null;
-        Entity otherOne = null;
-        Entity otherTwo = null;
+        Entity enemy;
+        Entity otherOne;
+        Entity otherTwo;
         if (entity instanceof OceanizedWitherEntity) {
             return;
         }
@@ -92,17 +93,17 @@ public class WitherShootPreEntity extends AbstractArrow implements ItemSupplier 
                 discard();
             return;
         }
-        WorldUtils.shootWitherTo(world, sourceentity, enemy);
+        this.shootWitherToTarget(world, sourceentity, enemy);
         otherOne = EntityUtils.getNearestEnemy(world, x, y, z, enemy, null, sourceentity);
         if (otherOne == null || !otherOne.isAlive()) {
             otherOne = enemy;
         }
-        WorldUtils.shootWitherTo(world, sourceentity, otherOne);
+        this.shootWitherToTarget(world, sourceentity, otherOne);
         otherTwo = EntityUtils.getNearestEnemy(world, x, y, z, enemy, otherOne, sourceentity);
         if (otherTwo == null || !otherTwo.isAlive()) {
             otherTwo = enemy;
         }
-        WorldUtils.shootWitherTo(world, sourceentity, otherTwo);
+        this.shootWitherToTarget(world, sourceentity, otherTwo);
         if (!level().isClientSide())
             discard();
     }
@@ -116,9 +117,9 @@ public class WitherShootPreEntity extends AbstractArrow implements ItemSupplier 
         double z = this.getZ();
         Entity entity = this.getOwner();
         if (entity != null && this != null) {
-            Entity enemy = null;
-            Entity otherOne = null;
-            Entity otherTwo = null;
+            Entity enemy;
+            Entity otherOne;
+            Entity otherTwo;
             if ((entity instanceof OceanizedWitherEntity _datEntI ? _datEntI.getEntityData().get(OceanizedWitherEntity.DATA_duration) : 0) > 0) {
                 if (!level().isClientSide())
                     discard();
@@ -128,17 +129,17 @@ public class WitherShootPreEntity extends AbstractArrow implements ItemSupplier 
                     if (!level().isClientSide())
                         discard();
                 } else {
-                    WorldUtils.shootWitherTo(world, entity, enemy);
+                    this.shootWitherToTarget(world, entity, enemy);
                     otherOne = EntityUtils.getNearestEnemy(world, x, y, z, enemy, enemy, entity);
                     if (otherOne == null || !otherOne.isAlive()) {
                         otherOne = enemy;
                     }
-                    WorldUtils.shootWitherTo(world, entity, otherOne);
+                    this.shootWitherToTarget(world, entity, otherOne);
                     otherTwo = EntityUtils.getNearestEnemy(world, x, y, z, enemy, otherOne, entity);
                     if (otherTwo == null || !otherTwo.isAlive()) {
                         otherTwo = enemy;
                     }
-                    WorldUtils.shootWitherTo(world, entity, otherTwo);
+                    this.shootWitherToTarget(world, entity, otherTwo);
                     if (!level().isClientSide())
                         discard();
                 }
@@ -146,6 +147,16 @@ public class WitherShootPreEntity extends AbstractArrow implements ItemSupplier 
         }
         if (this.inGround)
 			this.discard();
+	}
+
+	private void shootWitherToTarget(LevelAccessor world, Entity from, Entity target) {
+		if (from == null || target == null) {
+			return;
+		}
+		double vx = target.getX() - from.getX();
+		double vy = target.getY() + target.getBbHeight() * 0.5 - (from.getY() + 2.7);
+		double vz = target.getZ() - from.getZ();
+		WorldUtils.shootWitherSkull(world, from, 0.1, vx, vy, vz, 1, Mth.nextDouble(RandomSource.create(), 0.42, 0.56), from.getX(), from.getY() + 2.7, from.getZ());
 	}
 
 	public static WitherShootPreEntity shoot(Level world, LivingEntity entity, RandomSource source) {
@@ -157,7 +168,7 @@ public class WitherShootPreEntity extends AbstractArrow implements ItemSupplier 
 	}
 
 	public static WitherShootPreEntity shoot(Level world, LivingEntity entity, RandomSource random, float power, double damage, int knockback) {
-		WitherShootPreEntity entityarrow = new WitherShootPreEntity(CaerulaArborModEntities.WITHER_SHOOT_PRE.get(), entity, world);
+		WitherShootPreEntity entityarrow = new WitherShootPreEntity(CAEntities.WITHER_SHOOT_PRE.get(), entity, world);
 		entityarrow.shoot(entity.getViewVector(1).x, entity.getViewVector(1).y, entity.getViewVector(1).z, power * 2, 0);
 		entityarrow.setSilent(true);
 		entityarrow.setCritArrow(false);
@@ -169,7 +180,7 @@ public class WitherShootPreEntity extends AbstractArrow implements ItemSupplier 
 
 	// TODO: Revisit this legacy two-arg system when the pre-shot wither projectile API is refactored.
 	public static WitherShootPreEntity shoot(LivingEntity entity, LivingEntity target) {
-		WitherShootPreEntity entityarrow = new WitherShootPreEntity(CaerulaArborModEntities.WITHER_SHOOT_PRE.get(), entity, entity.level());
+		WitherShootPreEntity entityarrow = new WitherShootPreEntity(CAEntities.WITHER_SHOOT_PRE.get(), entity, entity.level());
 		double dx = target.getX() - entity.getX();
 		double dy = target.getY() + target.getEyeHeight() - 1.1;
 		double dz = target.getZ() - entity.getZ();

@@ -4,8 +4,8 @@ import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.api.event.SanityEvent;
 import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.particles.ParticleTypes;
@@ -72,7 +72,7 @@ public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMo
 	public String animationprocedure = "empty";
 
 	public CompassionPrayerEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.COMPASSION_PRAYER.get(), world);
+		this(CAEntities.COMPASSION_PRAYER.get(), world);
 	}
 
 	public CompassionPrayerEntity(EntityType<CompassionPrayerEntity> type, Level world) {
@@ -339,11 +339,11 @@ public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMo
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        Entity enemy = null;
-        double dura = 0;
-        double P = 0;
-        double perc = 0;
-        double d = 0;
+        Entity enemy;
+        double dura;
+        double P;
+        double perc;
+        double d;
         if (this.isAlive()) {
             dura = (Entity) this instanceof CompassionPrayerEntity _datEntI ? _datEntI.getEntityData().get(DATA_REVIVE_TICK) : 0;
             if (dura > 0) {
@@ -373,10 +373,10 @@ public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMo
                                 continue;
                             }
                             if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
-                                if (!(entityiterator instanceof LivingEntity _livEnt12 && _livEnt12.hasEffect(CaerulaArborModMobEffects.ADD_HEALTH_PERCLY.get()))) {
+                                if (!(entityiterator instanceof LivingEntity _livEnt12 && _livEnt12.hasEffect(CAMobEffects.ADD_HEALTH_PERCLY.get()))) {
                                     perc = EntityUtils.getHealthPerc(entityiterator);
                                     if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                                        _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ADD_HEALTH_PERCLY.get(), 32768, 1, false, false));
+                                        _entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_HEALTH_PERCLY.get(), 32768, 1, false, false));
                                     if (entityiterator instanceof LivingEntity _entity)
                                         _entity.setHealth((float) ((entityiterator instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * perc));
                                 }

@@ -3,7 +3,7 @@ package com.apocalypse.caerulaarbor.entity;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.PolarMountRider;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
@@ -58,7 +58,7 @@ public class TheAbandonedEntity extends SeaMonster implements PolarMountRider {
 	public String animationprocedure = "empty";
 
 	public TheAbandonedEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.THE_ABANDONED.get(), world);
+		this(CAEntities.THE_ABANDONED.get(), world);
 	}
 
 	public TheAbandonedEntity(EntityType<TheAbandonedEntity> type, Level world) {
@@ -203,8 +203,8 @@ public class TheAbandonedEntity extends SeaMonster implements PolarMountRider {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        double sklp = 0;
-        Entity enemy = null;
+        double sklp;
+        Entity enemy;
         sklp = (Entity) this instanceof TheAbandonedEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp) : 0;
         if (sklp > 0) {
             if ((Entity) this instanceof TheAbandonedEntity _datEntSetI)
@@ -231,7 +231,7 @@ public class TheAbandonedEntity extends SeaMonster implements PolarMountRider {
                                     if (!projectileLevel.isClientSide()) {
                                         Projectile _entityToSpawn = new Object() {
                                             public Projectile getArrow(Level level, Entity shooter, float damage, int knockback) {
-                                                AbstractArrow entityToSpawn = new AbandonedShootEntity(CaerulaArborModEntities.ABANDONED_SHOOT.get(), level);
+                                                AbstractArrow entityToSpawn = new AbandonedShootEntity(CAEntities.ABANDONED_SHOOT.get(), level);
                                                 entityToSpawn.setOwner(shooter);
                                                 entityToSpawn.setBaseDamage(damage);
                                                 entityToSpawn.setKnockback(knockback);

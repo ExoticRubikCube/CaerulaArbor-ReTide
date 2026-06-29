@@ -1,6 +1,6 @@
 package com.apocalypse.caerulaarbor.entity;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -58,7 +58,7 @@ public class RocinanteEntity extends Animal implements GeoEntity {
 	public String animationprocedure = "empty";
 
 	public RocinanteEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.ROCINANTE.get(), world);
+		this(CAEntities.ROCINANTE.get(), world);
 	}
 
 	public RocinanteEntity(EntityType<RocinanteEntity> type, Level world) {
@@ -195,8 +195,8 @@ public class RocinanteEntity extends Animal implements GeoEntity {
 	@Override
 	public void baseTick() {
 		super.baseTick();
-        Entity passanger = null;
-        double yRot = 0;
+        Entity passanger;
+        double yRot;
         if (tickCount % 5 == 0) {
             passanger = getFirstPassenger();
             if (passanger != null) {
@@ -223,7 +223,7 @@ public class RocinanteEntity extends Animal implements GeoEntity {
 
 	@Override
 	public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
-		RocinanteEntity retval = CaerulaArborModEntities.ROCINANTE.get().create(serverWorld);
+		RocinanteEntity retval = CAEntities.ROCINANTE.get().create(serverWorld);
 		retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null, null);
 		return retval;
 	}

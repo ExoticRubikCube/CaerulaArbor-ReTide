@@ -1,8 +1,8 @@
 
 package com.apocalypse.caerulaarbor.block;
 
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CABlocks;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -109,11 +109,11 @@ public class BlockCrownBlock extends Block implements SimpleWaterloggedBlock {
 		double hitZ = hit.getLocation().z;
 		Direction direction = hit.getDirection();
         if ((LevelAccessor) world instanceof ServerLevel _level) {
-            ItemEntity entityToSpawn = new ItemEntity(_level, ((double) x + 0.5), ((double) y + 0.75), ((double) z + 0.5), new ItemStack(CaerulaArborModItems.RELIC_CROWN.get()));
+            ItemEntity entityToSpawn = new ItemEntity(_level, ((double) x + 0.5), ((double) y + 0.75), ((double) z + 0.5), new ItemStack(CAItems.RELIC_CROWN.get()));
             entityToSpawn.setPickUpDelay(10);
             _level.addFreshEntity(entityToSpawn);
         }
-        world.levelEvent(2001, BlockPos.containing(x, y, z), getId(CaerulaArborModBlocks.BLOCK_CROWN.get().defaultBlockState()));
+        world.levelEvent(2001, BlockPos.containing(x, y, z), getId(CABlocks.BLOCK_CROWN.get().defaultBlockState()));
         ((LevelAccessor) world).setBlock(BlockPos.containing(x, y, z), Blocks.DEEPSLATE_BRICK_SLAB.defaultBlockState(), 3);
         InteractionResult result = InteractionResult.SUCCESS;
 		return result;

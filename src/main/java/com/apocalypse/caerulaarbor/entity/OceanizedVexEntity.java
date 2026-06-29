@@ -4,7 +4,7 @@ import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.api.event.SanityEvent;
 import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
@@ -78,7 +78,7 @@ public class OceanizedVexEntity extends SeaMonster {
 	public String animationprocedure = "empty";
 
 	public OceanizedVexEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.OCEANIZED_VEX.get(), world);
+		this(CAEntities.OCEANIZED_VEX.get(), world);
 	}
 
 	public OceanizedVexEntity(EntityType<OceanizedVexEntity> type, Level world) {
@@ -243,11 +243,13 @@ public class OceanizedVexEntity extends SeaMonster {
 	public void baseTick() {
 		super.baseTick();
         Level world = this.level();
-        Entity enemy = null;
-        double sklp1 = 0;
-        String uuid1 = "";
+        Entity enemy;
+        double sklp1;
+        String uuid1;
         if (this.isAlive()) {
-            enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+            if ((Entity) this instanceof Mob _mobEnt) {
+                _mobEnt.getTarget();
+            }
             sklp1 = (Entity) this instanceof OceanizedVexEntity _datEntI ? _datEntI.getEntityData().get(DATA_leftSurvivalTick) : 0;
             if (sklp1 <= 0) {
                 ((Entity) this).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.STARVE)), (float) Math.max(0.075 * ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1), 1));
@@ -421,7 +423,7 @@ public class OceanizedVexEntity extends SeaMonster {
             double x = this.getX();
             double y = this.getY();
             double z = this.getZ();
-            double sanity = 0;
+            double sanity;
             if (world instanceof ServerLevel _level)
                 _level.sendParticles(ParticleTypes.EXPLOSION, x, (y + 0.4), z, 4, 1, 1, 1, 0.1);
             if (world instanceof Level _level) {

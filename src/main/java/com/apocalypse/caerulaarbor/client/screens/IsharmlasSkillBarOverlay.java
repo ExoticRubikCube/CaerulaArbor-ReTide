@@ -39,7 +39,7 @@ public class IsharmlasSkillBarOverlay {
 			z = entity.getZ();
 		}
         boolean result = false;
-        Entity corrupted = null;
+        Entity corrupted;
         corrupted = world.getEntitiesOfClass(IsharmlaEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e1 -> true).stream().sorted(new Object() {
             Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
                 return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
@@ -50,7 +50,7 @@ public class IsharmlasSkillBarOverlay {
         }
         if (result) {
 
-            Entity ent = null;
+            Entity ent;
             double ind = 0;
             ent = world.getEntitiesOfClass(IsharmlaEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true)
             .stream()

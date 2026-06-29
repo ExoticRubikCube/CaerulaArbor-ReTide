@@ -13,6 +13,7 @@ public class StrategyUtils {
 		return MapVariables.get(world).strategy_silence > 0;
 	}
 
+	//可疑，需要解释
 	public static boolean canEnableSilence(LevelAccessor world) {
 		return MapVariables.get(world).strategy_grow >= 4 && MapVariables.get(world).strategy_subsisting >= 4 && MapVariables.get(world).strategy_breed >= 4
 				&& MapVariables.get(world).strategy_migration >= 4 && MapVariables.get(world).silence_enabled;

@@ -3,9 +3,9 @@ package com.apocalypse.caerulaarbor.entity;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -62,7 +62,7 @@ public class FirstTellerEntity extends SeaMonster implements RangedAttackMob {
 	public String animationprocedure = "empty";
 
 	public FirstTellerEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.FIRST_TO_TALK.get(), world);
+		this(CAEntities.FIRST_TO_TALK.get(), world);
 	}
 
 	public FirstTellerEntity(EntityType<FirstTellerEntity> type, Level world) {
@@ -235,12 +235,12 @@ public class FirstTellerEntity extends SeaMonster implements RangedAttackMob {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get()))
-            this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(16);
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-            this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(15);
+        if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get()))
+            this.getAttribute(CAAttributes.SANITY_RATE.get()).setBaseValue(16);
+        if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
+            this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(15);
         if (!this.level().isClientSide())
-            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.COOLDOWN_SINAL.get(), 200, 0, false, false));
+            this.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL.get(), 200, 0, false, false));
         return retval;
 	}
 
@@ -282,7 +282,7 @@ public class FirstTellerEntity extends SeaMonster implements RangedAttackMob {
                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "firstteller_skill")), SoundSource.HOSTILE, 3, 1);
                     }
                     if (!this.level().isClientSide())
-                        this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 65, 0, false, false));
+                        this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 65, 0, false, false));
                     if (this instanceof FirstTellerEntity) {
                         this.setAnimation("animation.firstspeak.skill");
                     }
@@ -290,7 +290,7 @@ public class FirstTellerEntity extends SeaMonster implements RangedAttackMob {
                         Mob _mobEnt = this;
                         if (!(_mobEnt.getTarget() == null)) {
                             if ((Entity) _mobEnt.getTarget() instanceof LivingEntity _entity && !this.level().isClientSide())
-                                this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.FIRST_TELLER_SKILL.get(), 50, 0, false, false));
+                                this.addEffect(new MobEffectInstance(CAMobEffects.FIRST_TELLER_SKILL.get(), 50, 0, false, false));
                         }
                     });
                     if ((Entity) this instanceof FirstTellerEntity _datEntSetI)
@@ -315,7 +315,7 @@ public class FirstTellerEntity extends SeaMonster implements RangedAttackMob {
 	}
 
 	public static void init() {
-		SpawnPlacements.register(CaerulaArborModEntities.FIRST_TO_TALK.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
+		SpawnPlacements.register(CAEntities.FIRST_TO_TALK.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();
@@ -352,8 +352,7 @@ public class FirstTellerEntity extends SeaMonster implements RangedAttackMob {
 	private PlayState attackingPredicate(AnimationState event) {
 		double d1 = this.getX() - this.xOld;
 		double d0 = this.getZ() - this.zOld;
-		float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
-		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
+        if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
 		}

@@ -2,10 +2,10 @@
 package com.apocalypse.caerulaarbor.block;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlockEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CABlockEntities;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CABlocks;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -71,7 +71,7 @@ public class HighmoreSpawningBlockBlock extends BaseEntityBlock implements Simpl
 	@Nullable
 	@Override
 	public BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
-		return CaerulaArborModBlockEntities.HIGHMORE_SPAWNING_BLOCK.get().create(blockPos, blockState);
+		return CABlockEntities.HIGHMORE_SPAWNING_BLOCK.get().create(blockPos, blockState);
 	}
 
 	@Override
@@ -141,7 +141,7 @@ public class HighmoreSpawningBlockBlock extends BaseEntityBlock implements Simpl
                     ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
             }
             CaerulaArborMod.queueServerWork(40, () -> {
-                if ((((LevelAccessor) world).getBlockState(BlockPos.containing(x, y, z))).getBlock() == CaerulaArborModBlocks.HIGHMORE_SPAWNING_BLOCK.get()
+                if ((((LevelAccessor) world).getBlockState(BlockPos.containing(x, y, z))).getBlock() == CABlocks.HIGHMORE_SPAWNING_BLOCK.get()
                         && ((((LevelAccessor) world).getBlockState(BlockPos.containing(x, y, z))).getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _getip6
                                 ? (((LevelAccessor) world).getBlockState(BlockPos.containing(x, y, z))).getValue(_getip6)
                                 : -1) == 0) {
@@ -160,7 +160,7 @@ public class HighmoreSpawningBlockBlock extends BaseEntityBlock implements Simpl
                             ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
                     }
                     if ((LevelAccessor) world instanceof ServerLevel _level) {
-                        Entity entityToSpawn = CaerulaArborModEntities.HIGHMORE.get().spawn(_level, BlockPos.containing(x + 0.5, y + 1, z + 0.5), MobSpawnType.MOB_SUMMONED);
+                        Entity entityToSpawn = CAEntities.HIGHMORE.get().spawn(_level, BlockPos.containing(x + 0.5, y + 1, z + 0.5), MobSpawnType.MOB_SUMMONED);
                         if (entityToSpawn != null) {
                             entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
                         }
@@ -183,8 +183,8 @@ public class HighmoreSpawningBlockBlock extends BaseEntityBlock implements Simpl
         InteractionResult result = InteractionResult.PASS;
         if (entity != null) {
             if ((blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _getip1 ? blockstate.getValue(_getip1) : -1) == 1) {
-                if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CaerulaArborModItems.HIGHMORE_SCYTHE.get()) {
-                    ((LevelAccessor) world).setBlock(BlockPos.containing(x, y, z), CaerulaArborModBlocks.HIGHMORE_SPAWNBLOCK.get().defaultBlockState(), 3);
+                if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.HIGHMORE_SCYTHE.get()) {
+                    ((LevelAccessor) world).setBlock(BlockPos.containing(x, y, z), CABlocks.HIGHMORE_SPAWNBLOCK.get().defaultBlockState(), 3);
                     if ((LevelAccessor) world instanceof Level _level) {
                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.end_portal_frame.fill")), SoundSource.BLOCKS, (float) 1.5, 1);
                     }

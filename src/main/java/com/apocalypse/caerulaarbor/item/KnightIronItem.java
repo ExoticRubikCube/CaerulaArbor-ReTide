@@ -2,8 +2,8 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.client.renderer.entity.KnightIronArmorRenderer;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.client.model.HumanoidModel;
@@ -64,7 +64,7 @@ public class KnightIronItem extends ArmorItem implements GeoItem {
 
 			@Override
 			public Ingredient getRepairIngredient() {
-				return Ingredient.of(new ItemStack(CaerulaArborModItems.KNIGHT_CORPSE.get()));
+				return Ingredient.of(new ItemStack(CAItems.KNIGHT_CORPSE.get()));
 			}
 
 			@Override
@@ -91,7 +91,7 @@ public class KnightIronItem extends ArmorItem implements GeoItem {
         UUID uuid = new UUID(slot.toString().hashCode(), 0);
         if (slot == this.getEquipmentSlot()){
             map = HashMultimap.create(map);
-            map.put(CaerulaArborModAttributes.GENERAL_DEFENSE.get(),
+            map.put(CAAttributes.GENERAL_DEFENSE.get(),
                     new AttributeModifier(uuid, name , 1f, AttributeModifier.Operation.ADDITION));
         }
         return map;

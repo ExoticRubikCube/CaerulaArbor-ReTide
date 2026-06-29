@@ -5,10 +5,10 @@ import com.apocalypse.caerulaarbor.api.event.SanityEvent;
 import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.entity.base.RangedSanityAttacker;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
@@ -88,7 +88,7 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
 	private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.NOTCHED_12);
 
 	public TideChimeraEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.TIDE_CHIMERA.get(), world);
+		this(CAEntities.TIDE_CHIMERA.get(), world);
 	}
 
 	public TideChimeraEntity(EntityType<TideChimeraEntity> type, Level world) {
@@ -258,13 +258,13 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
         double y = this.getY();
         double z = this.getZ();
         if (!this.level().isClientSide())
-            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 100, 9, false, false));
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get()))
-            this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(4);
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MISSRATE.get()))
-            this.getAttribute(CaerulaArborModAttributes.MISSRATE.get()).setBaseValue(50);
-        if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-            this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(45);
+            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 100, 9, false, false));
+        if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get()))
+            this.getAttribute(CAAttributes.SANITY_RATE.get()).setBaseValue(4);
+        if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE.get()))
+            this.getAttribute(CAAttributes.MISSRATE.get()).setBaseValue(50);
+        if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
+            this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(45);
         if (this instanceof TideChimeraEntity) {
             this.setAnimation("animation.super_apocata.start");
         }
@@ -335,65 +335,65 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        Entity enemy = null;
-        double sklp1 = 0;
-        double dura = 0;
-        double tap = 0;
-        double perc = 0;
+        Entity enemy;
+        double sklp1;
+        double dura;
+        double tap;
+        double perc;
         boolean maySummon = false;
         LivingEntity _livEnt = this;
         if (_livEnt.deathTime == 10) {
             if (world instanceof Level _level) {
                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.dragon_fireball.explode")), SoundSource.HOSTILE, 2, 1);
             }
-            Entity entityToSpawn = null;
+            Entity entityToSpawn;
             BlockPos pos = BlockPos.containing(x, y, z);
             if (world instanceof ServerLevel _level) {
-                entityToSpawn = CaerulaArborModEntities.CRACKER_ABYSSAL.get().spawn(_level, pos, MobSpawnType.MOB_SUMMONED);
+                entityToSpawn = CAEntities.CRACKER_ABYSSAL.get().spawn(_level, pos, MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn != null) {
                     entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                 }
-                entityToSpawn = CaerulaArborModEntities.GUIDE_ABYSSAL.get().spawn(_level, pos, MobSpawnType.MOB_SUMMONED);
+                entityToSpawn = CAEntities.GUIDE_ABYSSAL.get().spawn(_level, pos, MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn != null) {
                     entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                 }
-                entityToSpawn = CaerulaArborModEntities.UMBRELLA_ABYSSAL.get().spawn(_level, pos, MobSpawnType.MOB_SUMMONED);
+                entityToSpawn = CAEntities.UMBRELLA_ABYSSAL.get().spawn(_level, pos, MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn != null) {
                     entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                 }
-                entityToSpawn = CaerulaArborModEntities.CREEPER_FISH.get().spawn(_level, pos, MobSpawnType.MOB_SUMMONED);
+                entityToSpawn = CAEntities.CREEPER_FISH.get().spawn(_level, pos, MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn != null) {
                     entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                 }
-                entityToSpawn = CaerulaArborModEntities.PREGNANT_FISH.get().spawn(_level, pos, MobSpawnType.MOB_SUMMONED);
+                entityToSpawn = CAEntities.PREGNANT_FISH.get().spawn(_level, pos, MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn != null) {
                     entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                 }
-                entityToSpawn = CaerulaArborModEntities.BASELAYER_ABYSSAL.get().spawn(_level, pos, MobSpawnType.MOB_SUMMONED);
+                entityToSpawn = CAEntities.BASELAYER_ABYSSAL.get().spawn(_level, pos, MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn != null) {
                     entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                 }
-                entityToSpawn = CaerulaArborModEntities.PREDATOR_ABYSSAL.get().spawn(_level, pos, MobSpawnType.MOB_SUMMONED);
+                entityToSpawn = CAEntities.PREDATOR_ABYSSAL.get().spawn(_level, pos, MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn != null) {
                     entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                 }
-                entityToSpawn = CaerulaArborModEntities.SPLASHER_ABYSSAL.get().spawn(_level, pos, MobSpawnType.MOB_SUMMONED);
+                entityToSpawn = CAEntities.SPLASHER_ABYSSAL.get().spawn(_level, pos, MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn != null) {
                     entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                 }
-                entityToSpawn = CaerulaArborModEntities.APOSTLE_PROKARYOTE.get().spawn(_level, pos, MobSpawnType.MOB_SUMMONED);
+                entityToSpawn = CAEntities.APOSTLE_PROKARYOTE.get().spawn(_level, pos, MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn != null) {
                     entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                 }
-                entityToSpawn = CaerulaArborModEntities.DIVICELLULAR_GO.get().spawn(_level, pos, MobSpawnType.MOB_SUMMONED);
+                entityToSpawn = CAEntities.DIVICELLULAR_GO.get().spawn(_level, pos, MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn != null) {
                     entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                 }
-                entityToSpawn = CaerulaArborModEntities.PUNCTURE_FISH.get().spawn(_level, pos, MobSpawnType.MOB_SUMMONED);
+                entityToSpawn = CAEntities.PUNCTURE_FISH.get().spawn(_level, pos, MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn != null) {
                     entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                 }
-                entityToSpawn = CaerulaArborModEntities.NUCLEIC_MALEFICENT.get().spawn(_level, pos, MobSpawnType.MOB_SUMMONED);
+                entityToSpawn = CAEntities.NUCLEIC_MALEFICENT.get().spawn(_level, pos, MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn != null) {
                     entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                 }
@@ -413,7 +413,7 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
                 if (perc <= 0.25 && tap >= 1) {
                     maySummon = true;
                     if (!this.level().isClientSide())
-                        this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.IMMORTAL.get(), 600, 0, false, false));
+                        this.addEffect(new MobEffectInstance(CAMobEffects.IMMORTAL.get(), 600, 0, false, false));
                     CaerulaArborMod.queueServerWork(10, () -> {
                         summonRandomChimera(world, x, y, z);
                     });
@@ -430,7 +430,7 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
                 }
                 if (maySummon) {
                     if (!this.level().isClientSide())
-                        this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 20, 0, false, false));
+                        this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 20, 0, false, false));
                     if ((Entity) this instanceof TideChimeraEntity _datEntSetI)
                         _datEntSetI.getEntityData().set(DATA_summonP, (int) (tap - 1));
                     if ((Entity) this instanceof TideChimeraEntity _datEntSetI)
@@ -489,8 +489,8 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
             }
             EntityUtils.giveGuideLay(this);
             if (this != null) {
-                double angle = 0;
-                double d = 0;
+                double angle;
+                double d;
                 double daam = 0;
                 if ((Entity) this instanceof LivingEntity _entity)
                     _entity.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
@@ -505,7 +505,9 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
                         _level.sendParticles(ParticleTypes.ELECTRIC_SPARK, (x + d * Math.sin(angle)), (y + 0.4), (z + d * Math.cos(angle)), 2, 0.1, 0.1, 0.1, 0.1);
                 }
                 if (tickCount % 20 == 0) {
-                    angle = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
+                    if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)) {
+                        this.getAttribute(Attributes.ATTACK_DAMAGE).getValue();
+                    }
                     for (Entity entityiterator : world.getEntities(this, new AABB((x - 6.5), (y - 2), (z - 6.5), (x + 6.5), (y + 5), (z + 6.5)))) {
                         if ((entityiterator != null ? distanceTo(entityiterator) : -1) <= 6.5) {
                             if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
@@ -536,22 +538,22 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
 		BlockPos pos = BlockPos.containing(x, y + 3, z);
 		if (world instanceof ServerLevel serverLevel) {
 			if (randomValue < 0.01) {
-				entityToSpawn = CaerulaArborModEntities.IZUMIK.get().spawn(serverLevel, pos, MobSpawnType.MOB_SUMMONED);
+				entityToSpawn = CAEntities.IZUMIK.get().spawn(serverLevel, pos, MobSpawnType.MOB_SUMMONED);
 				if (entityToSpawn instanceof IzumikEntity izumik) {
 					izumik.getEntityData().set(IzumikEntity.DATA_growth_p, 20);
 				}
 			} else if (randomValue < 0.02) {
-				entityToSpawn = CaerulaArborModEntities.TIDE_CHIMERA.get().spawn(serverLevel, pos, MobSpawnType.MOB_SUMMONED);
+				entityToSpawn = CAEntities.TIDE_CHIMERA.get().spawn(serverLevel, pos, MobSpawnType.MOB_SUMMONED);
 			} else if (randomValue < 0.21) {
-				entityToSpawn = CaerulaArborModEntities.TIDE_DEATHREPELLER.get().spawn(serverLevel, pos, MobSpawnType.MOB_SUMMONED);
+				entityToSpawn = CAEntities.TIDE_DEATHREPELLER.get().spawn(serverLevel, pos, MobSpawnType.MOB_SUMMONED);
 			} else if (randomValue < 0.4) {
-				entityToSpawn = CaerulaArborModEntities.LINGERING_PATHSHAPER.get().spawn(serverLevel, pos, MobSpawnType.MOB_SUMMONED);
+				entityToSpawn = CAEntities.LINGERING_PATHSHAPER.get().spawn(serverLevel, pos, MobSpawnType.MOB_SUMMONED);
 			} else if (randomValue < 0.6) {
-				entityToSpawn = CaerulaArborModEntities.ENDSPEAKER_3.get().spawn(serverLevel, pos, MobSpawnType.MOB_SUMMONED);
+				entityToSpawn = EndspeakerEntity.spawnForPhase(serverLevel, pos, MobSpawnType.MOB_SUMMONED, 3);
 			} else if (randomValue < 0.8) {
-				entityToSpawn = CaerulaArborModEntities.FIRST_TO_TALK.get().spawn(serverLevel, pos, MobSpawnType.MOB_SUMMONED);
+				entityToSpawn = CAEntities.FIRST_TO_TALK.get().spawn(serverLevel, pos, MobSpawnType.MOB_SUMMONED);
 			} else {
-				entityToSpawn = CaerulaArborModEntities.MEGA_CHEST.get().spawn(serverLevel, pos, MobSpawnType.MOB_SUMMONED);
+				entityToSpawn = CAEntities.MEGA_CHEST.get().spawn(serverLevel, pos, MobSpawnType.MOB_SUMMONED);
 				if (entityToSpawn instanceof MegaChestEntity megaChest) {
 					megaChest.getEntityData().set(MegaChestEntity.DATA_released, true);
 				}
@@ -678,7 +680,7 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
 			this.dropExperience();
             LevelAccessor world = this.level();
             if (world instanceof ServerLevel _level) {
-                ItemEntity entityToSpawn = new ItemEntity(_level, this.getX(), this.getY(), this.getZ(), new ItemStack(CaerulaArborModItems.APOCALYPSE.get()));
+                ItemEntity entityToSpawn = new ItemEntity(_level, this.getX(), this.getY(), this.getZ(), new ItemStack(CAItems.APOCALYPSE.get()));
                 entityToSpawn.setPickUpDelay(10);
                 entityToSpawn.setUnlimitedLifetime();
                 _level.addFreshEntity(entityToSpawn);
@@ -690,7 +692,7 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
     public void setHealth(float pHealth){
     	float hlth = this.getHealth();
     	float mhlth = this.getMaxHealth();
-        if(this.hasEffect(CaerulaArborModMobEffects.INVULNERABLE.get()) && pHealth < this.getHealth()) return;
+        if(this.hasEffect(CAMobEffects.INVULNERABLE.get()) && pHealth < this.getHealth()) return;
         float reduction = hlth - pHealth;
         float finalV = reduction >= mhlth * 0.26f ? hlth - mhlth * 0.26f : hlth - reduction;
         super.setHealth(finalV);
@@ -712,12 +714,12 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
 	}
 
 	public void distributeBullets(LevelAccessor world, double x, double y, double z) {
-		double r = 0;
-		double d = 0;
-		double tx = 0;
-		double tz = 0;
-		double ty = 0;
-		double dama = 0;
+		double r;
+		double d;
+		double tx;
+		double tz;
+		double ty;
+		double dama;
 		dama = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
 		for (int index0 = 0; index0 < 3; index0++) {
 			r = Mth.nextDouble(RandomSource.create(), 0, 6.283);
@@ -728,7 +730,7 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
 			if (world instanceof ServerLevel projectileLevel) {
 				Projectile _entityToSpawn = new Object() {
 					public Projectile getArrow(Level level, Entity shooter, float damage, int knockback) {
-						AbstractArrow entityToSpawn = new FishShootEntity(CaerulaArborModEntities.FISH_SHOOT.get(), level);
+						AbstractArrow entityToSpawn = new FishShootEntity(CAEntities.FISH_SHOOT.get(), level);
 						entityToSpawn.setOwner(shooter);
 						entityToSpawn.setBaseDamage(damage);
 						entityToSpawn.setKnockback(knockback);
@@ -751,7 +753,7 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
 			if (world instanceof ServerLevel projectileLevel) {
 				Projectile _entityToSpawn = new Object() {
 					public Projectile getArrow(Level level, Entity shooter, float damage, int knockback) {
-						AbstractArrow entityToSpawn = new FishSplashEntity(CaerulaArborModEntities.FISH_SPLASH.get(), level);
+						AbstractArrow entityToSpawn = new FishSplashEntity(CAEntities.FISH_SPLASH.get(), level);
 						entityToSpawn.setOwner(shooter);
 						entityToSpawn.setBaseDamage(damage);
 						entityToSpawn.setKnockback(knockback);
@@ -774,7 +776,7 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
 			if (world instanceof ServerLevel projectileLevel) {
 				Projectile _entityToSpawn = new Object() {
 					public Projectile getArrow(Level level, Entity shooter, float damage, int knockback) {
-						AbstractArrow entityToSpawn = new FleefishBulletEntity(CaerulaArborModEntities.FLEEFISH_BULLET.get(), level);
+						AbstractArrow entityToSpawn = new FleefishBulletEntity(CAEntities.FLEEFISH_BULLET.get(), level);
 						entityToSpawn.setOwner(shooter);
 						entityToSpawn.setBaseDamage(damage);
 						entityToSpawn.setKnockback(knockback);
@@ -797,7 +799,7 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
 			if (world instanceof ServerLevel projectileLevel) {
 				Projectile _entityToSpawn = new Object() {
 					public Projectile getArrow(Level level, Entity shooter, float damage, int knockback) {
-						AbstractArrow entityToSpawn = new TellerShotEntity(CaerulaArborModEntities.TELLER_SHOT.get(), level);
+						AbstractArrow entityToSpawn = new TellerShotEntity(CAEntities.TELLER_SHOT.get(), level);
 						entityToSpawn.setOwner(shooter);
 						entityToSpawn.setBaseDamage(damage);
 						entityToSpawn.setKnockback(knockback);
@@ -820,7 +822,7 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
 			if (world instanceof ServerLevel projectileLevel) {
 				Projectile _entityToSpawn = new Object() {
 					public Projectile getArrow(Level level, Entity shooter, float damage, int knockback) {
-						AbstractArrow entityToSpawn = new AbandonedShootEntity(CaerulaArborModEntities.ABANDONED_SHOOT.get(), level);
+						AbstractArrow entityToSpawn = new AbandonedShootEntity(CAEntities.ABANDONED_SHOOT.get(), level);
 						entityToSpawn.setOwner(shooter);
 						entityToSpawn.setBaseDamage(damage);
 						entityToSpawn.setKnockback(knockback);
@@ -843,7 +845,7 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
 			if (world instanceof ServerLevel projectileLevel) {
 				Projectile _entityToSpawn = new Object() {
 					public Projectile getArrow(Level level, Entity shooter, float damage, int knockback) {
-						AbstractArrow entityToSpawn = new FakerggShootEntity(CaerulaArborModEntities.FAKERGG_SHOOT.get(), level);
+						AbstractArrow entityToSpawn = new FakerggShootEntity(CAEntities.FAKERGG_SHOOT.get(), level);
 						entityToSpawn.setOwner(shooter);
 						entityToSpawn.setBaseDamage(damage);
 						entityToSpawn.setKnockback(knockback);

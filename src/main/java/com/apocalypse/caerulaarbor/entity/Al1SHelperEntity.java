@@ -1,8 +1,8 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
@@ -20,7 +20,7 @@ import javax.annotation.Nullable;
 
 public class Al1SHelperEntity extends LittleHelperEntity {
 	public Al1SHelperEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.AL_1_S_HELPER.get(), world);
+		this(CAEntities.AL_1_S_HELPER.get(), world);
 	}
 
 	public Al1SHelperEntity(EntityType<? extends LittleHelperEntity> type, Level world) {
@@ -34,7 +34,7 @@ public class Al1SHelperEntity extends LittleHelperEntity {
 
 	@Override
 	protected InteractionResult handleApocalypseInteract(Player sourceentity) {
-		if (this.level() instanceof ServerLevel serverLevel && sourceentity.isHolding(CaerulaArborModItems.APOCALYPSE.get())) {
+		if (this.level() instanceof ServerLevel serverLevel && sourceentity.isHolding(CAItems.APOCALYPSE.get())) {
 			serverLevel.sendParticles(ParticleTypes.FLAME, this.getX(), this.getY(), this.getZ(), 32, 0.75, 0.75, 0.75, 0.15);
 			this.level().playSound(null, BlockPos.containing(this.getX(), this.getY(), this.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "al1s_spec")), SoundSource.BLOCKS, 3, 1);
 			return InteractionResult.SUCCESS;
@@ -44,7 +44,7 @@ public class Al1SHelperEntity extends LittleHelperEntity {
 
 	@Override
 	protected ItemStack getRecycleItemStack() {
-		return new ItemStack(CaerulaArborModItems.ITEM_HELPER_AL_1S.get());
+		return new ItemStack(CAItems.ITEM_HELPER_AL_1S.get());
 	}
 
 	@Override

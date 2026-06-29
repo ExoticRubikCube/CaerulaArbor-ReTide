@@ -2,7 +2,7 @@ package com.apocalypse.caerulaarbor.event;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModGameRules;
+import com.apocalypse.caerulaarbor.init.CAGameRules;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.network.chat.Component;
@@ -47,7 +47,7 @@ public class PlayerLogInEventHandler {
 				}
 
 				if (serverPlayer.server.getDefaultGameType() == GameType.SURVIVAL) {
-					int surgingWavesLevel = serverPlayer.serverLevel().getGameRules().getInt(CaerulaArborModGameRules.SURGING_WAVES);
+					int surgingWavesLevel = serverPlayer.serverLevel().getGameRules().getInt(CAGameRules.SURGING_WAVES);
 					if (surgingWavesLevel >= 12) {
 						serverPlayer.displayClientMessage(Component.translatable("gameplay.caerula_arbor.n_warn_12"), false);
 					} else if (surgingWavesLevel >= 6) {

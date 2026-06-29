@@ -2,8 +2,8 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CABlocks;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -70,7 +70,7 @@ public class OceanizedSpiderEntity extends SeaMonster {
 	public String animationprocedure = "empty";
 
 	public OceanizedSpiderEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.OCEANIZED_SPIDER.get(), world);
+		this(CAEntities.OCEANIZED_SPIDER.get(), world);
 	}
 
 	public OceanizedSpiderEntity(EntityType<OceanizedSpiderEntity> type, Level world) {
@@ -152,7 +152,7 @@ public class OceanizedSpiderEntity extends SeaMonster {
 			@Override
 			public void start() {
 				LivingEntity livingentity = OceanizedSpiderEntity.this.getTarget();
-				Vec3 vec3d = null;
+				Vec3 vec3d;
 				if (livingentity != null) {
 					vec3d = livingentity.getEyePosition(1);
 					OceanizedSpiderEntity.this.moveControl.setWantedPosition(vec3d.x, vec3d.y, vec3d.z, 1.25);
@@ -381,19 +381,19 @@ public class OceanizedSpiderEntity extends SeaMonster {
                 if ((world.getBlockState(BlockPos.containing(x, y, z))).canBeReplaced()) {
                     if (((Entity) this instanceof OceanizedSpiderEntity _datEntI ? _datEntI.getEntityData().get(DATA_mute_time) : 0) <= 0) {
                         if (Math.random() < 0.25) {
-                            world.levelEvent(2001, BlockPos.containing(x, y, z), Block.getId(CaerulaArborModBlocks.RED_OVARY.get().defaultBlockState()));
+                            world.levelEvent(2001, BlockPos.containing(x, y, z), Block.getId(CABlocks.RED_OVARY.get().defaultBlockState()));
                             if (world instanceof Level _level) {
                                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.place")), SoundSource.HOSTILE, 1, (float) 0.8);
                             }
                             if (world instanceof ServerLevel _level)
-                                FallingBlockEntity.fall(_level, BlockPos.containing(x, y, z), CaerulaArborModBlocks.RED_OVARY.get().defaultBlockState());
+                                FallingBlockEntity.fall(_level, BlockPos.containing(x, y, z), CABlocks.RED_OVARY.get().defaultBlockState());
                         } else {
-                            world.levelEvent(2001, BlockPos.containing(x, y, z), Block.getId(CaerulaArborModBlocks.OCEAN_OVARY.get().defaultBlockState()));
+                            world.levelEvent(2001, BlockPos.containing(x, y, z), Block.getId(CABlocks.OCEAN_OVARY.get().defaultBlockState()));
                             if (world instanceof Level _level) {
                                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.place")), SoundSource.HOSTILE, 1, 1);
                             }
                             if (world instanceof ServerLevel _level)
-                                FallingBlockEntity.fall(_level, BlockPos.containing(x, y, z), CaerulaArborModBlocks.OCEAN_OVARY.get().defaultBlockState());
+                                FallingBlockEntity.fall(_level, BlockPos.containing(x, y, z), CABlocks.OCEAN_OVARY.get().defaultBlockState());
                         }
                     }
                 }

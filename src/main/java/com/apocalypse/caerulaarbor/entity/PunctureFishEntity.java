@@ -3,7 +3,7 @@ package com.apocalypse.caerulaarbor.entity;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.PolarMountRider;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -61,7 +61,7 @@ public class PunctureFishEntity extends SeaMonster implements PolarMountRider {
 	public String animationprocedure = "empty";
 
 	public PunctureFishEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.PUNCTURE_FISH.get(), world);
+		this(CAEntities.PUNCTURE_FISH.get(), world);
 	}
 
 	public PunctureFishEntity(EntityType<PunctureFishEntity> type, Level world) {
@@ -119,8 +119,7 @@ public class PunctureFishEntity extends SeaMonster implements PolarMountRider {
 				double x = PunctureFishEntity.this.getX();
 				double y = PunctureFishEntity.this.getY();
 				double z = PunctureFishEntity.this.getZ();
-				Entity entity = PunctureFishEntity.this;
-				Level world = PunctureFishEntity.this.level();
+                Level world = PunctureFishEntity.this.level();
 				return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
 
@@ -211,7 +210,7 @@ public class PunctureFishEntity extends SeaMonster implements PolarMountRider {
 	}
 
 	public static void init() {
-		SpawnPlacements.register(CaerulaArborModEntities.PUNCTURE_FISH.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
+		SpawnPlacements.register(CAEntities.PUNCTURE_FISH.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();
@@ -248,8 +247,7 @@ public class PunctureFishEntity extends SeaMonster implements PolarMountRider {
 	private PlayState attackingPredicate(AnimationState event) {
 		double d1 = this.getX() - this.xOld;
 		double d0 = this.getZ() - this.zOld;
-		float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
-		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
+        if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
 		}

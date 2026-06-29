@@ -1,7 +1,7 @@
 package com.apocalypse.caerulaarbor.block;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -132,12 +132,12 @@ public class InjectorBlock extends Block implements SimpleWaterloggedBlock {
         InteractionResult result = InteractionResult.PASS;
         if (entity != null) {
             ItemStack res = ItemStack.EMPTY;
-            ItemStack input = ItemStack.EMPTY;
-            double stats = 0;
+            ItemStack input;
+            double stats;
             input = ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).copy();
             stats = blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _getip2 ? blockstate.getValue(_getip2) : -1;
             if (stats == 0) {
-                if (input.getItem() == CaerulaArborModItems.TARGETED_BASE.get()) {
+                if (input.getItem() == CAItems.TARGETED_BASE.get()) {
                     ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                     if ((LevelAccessor) world instanceof Level _level) {
                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.glow_item_frame.add_item")), SoundSource.BLOCKS, 1, 1);
@@ -155,17 +155,17 @@ public class InjectorBlock extends Block implements SimpleWaterloggedBlock {
                         _player.displayClientMessage(Component.literal((Component.translatable("block.caerula_arbor.injector.note").getString())), true);
                 }
             } else if (stats == 1) {
-                if (input.getItem() == CaerulaArborModItems.HUNTER_GENE_SKADI.get()) {
-                    res = new ItemStack(CaerulaArborModItems.TARGETED_TRANSMITTER_SKADI.get()).copy();
-                } else if (input.getItem() == CaerulaArborModItems.HUNTER_GENE_ULPIANS.get()) {
-                    res = new ItemStack(CaerulaArborModItems.TARGETED_TRANSMITTER_ULPIANS.get()).copy();
-                } else if (input.getItem() == CaerulaArborModItems.HUNTER_GENE_GLADIIA.get()) {
-                    res = new ItemStack(CaerulaArborModItems.TARGETED_TRANSMITTER_GLADIIA.get()).copy();
-                } else if (input.getItem() == CaerulaArborModItems.TARGETED_BASE.get()) {
+                if (input.getItem() == CAItems.HUNTER_GENE_SKADI.get()) {
+                    res = new ItemStack(CAItems.TARGETED_TRANSMITTER_SKADI.get()).copy();
+                } else if (input.getItem() == CAItems.HUNTER_GENE_ULPIANS.get()) {
+                    res = new ItemStack(CAItems.TARGETED_TRANSMITTER_ULPIANS.get()).copy();
+                } else if (input.getItem() == CAItems.HUNTER_GENE_GLADIIA.get()) {
+                    res = new ItemStack(CAItems.TARGETED_TRANSMITTER_GLADIIA.get()).copy();
+                } else if (input.getItem() == CAItems.TARGETED_BASE.get()) {
                     if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
                         _player.displayClientMessage(Component.literal((Component.translatable("block.caerula_arbor.injector.have").getString())), true);
-                } else if (input.getItem() == CaerulaArborModItems.HUNTER_GENE_SPECTER.get()) {
-                    res = new ItemStack(CaerulaArborModItems.TARGETED_TRANSMITTER_SPECTER.get()).copy();
+                } else if (input.getItem() == CAItems.HUNTER_GENE_SPECTER.get()) {
+                    res = new ItemStack(CAItems.TARGETED_TRANSMITTER_SPECTER.get()).copy();
                 }
                 if (!(res.getItem() == ItemStack.EMPTY.getItem())) {
                     ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);

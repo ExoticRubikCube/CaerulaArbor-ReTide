@@ -24,7 +24,7 @@ public class UlpiansModel extends GeoModel<UlpiansEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(UlpiansEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/hunter_ulpians.png");
 	}
 
 	@Override

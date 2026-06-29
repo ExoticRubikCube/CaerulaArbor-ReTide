@@ -1,8 +1,8 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -28,10 +28,10 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 @OnlyIn(value = Dist.CLIENT, _interface = ItemSupplier.class)
 public class ShotOceanArrowEntity extends AbstractArrow implements ItemSupplier {
-	public static final ItemStack PROJECTILE_ITEM = new ItemStack(CaerulaArborModItems.OCEAN_ARROW.get());
+	public static final ItemStack PROJECTILE_ITEM = new ItemStack(CAItems.OCEAN_ARROW.get());
 
 	public ShotOceanArrowEntity(PlayMessages.SpawnEntity packet, Level world) {
-		super(CaerulaArborModEntities.SHOT_OCEAN_ARROW.get(), world);
+		super(CAEntities.SHOT_OCEAN_ARROW.get(), world);
 	}
 
 	public ShotOceanArrowEntity(EntityType<? extends ShotOceanArrowEntity> type, Level world) {
@@ -89,7 +89,7 @@ public class ShotOceanArrowEntity extends AbstractArrow implements ItemSupplier 
 		super.tick();
         Entity entity = this.getOwner();
         if (entity != null) {
-            Entity enemy = null;
+            Entity enemy;
             enemy = entity instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
             if (!(enemy == null)) {
                 lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY() + enemy.getBbHeight() * 0.75), (enemy.getZ())));
@@ -108,7 +108,7 @@ public class ShotOceanArrowEntity extends AbstractArrow implements ItemSupplier 
 	}
 
 	public static ShotOceanArrowEntity shoot(Level world, LivingEntity entity, RandomSource random, float power, double damage, int knockback) {
-		ShotOceanArrowEntity entityarrow = new ShotOceanArrowEntity(CaerulaArborModEntities.SHOT_OCEAN_ARROW.get(), entity, world);
+		ShotOceanArrowEntity entityarrow = new ShotOceanArrowEntity(CAEntities.SHOT_OCEAN_ARROW.get(), entity, world);
 		entityarrow.shoot(entity.getViewVector(1).x, entity.getViewVector(1).y, entity.getViewVector(1).z, power * 2, 0);
 		entityarrow.setSilent(true);
 		entityarrow.setCritArrow(true);
@@ -129,7 +129,7 @@ public class ShotOceanArrowEntity extends AbstractArrow implements ItemSupplier 
 	}
 
 	public static ShotOceanArrowEntity shoot(LivingEntity entity, LivingEntity target, double damage) {
-		ShotOceanArrowEntity entityarrow = new ShotOceanArrowEntity(CaerulaArborModEntities.SHOT_OCEAN_ARROW.get(), entity, entity.level());
+		ShotOceanArrowEntity entityarrow = new ShotOceanArrowEntity(CAEntities.SHOT_OCEAN_ARROW.get(), entity, entity.level());
 		double dx = target.getX() - entity.getX();
 		double dy = target.getY() + target.getEyeHeight() - 1.1;
 		double dz = target.getZ() - entity.getZ();

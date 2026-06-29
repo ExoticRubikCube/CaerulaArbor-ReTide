@@ -1,8 +1,8 @@
 package com.apocalypse.caerulaarbor.block;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModGameRules;
+import com.apocalypse.caerulaarbor.init.CABlocks;
+import com.apocalypse.caerulaarbor.init.CAGameRules;
 import com.apocalypse.caerulaarbor.procedures.PokePlayerProcedure;
 import com.apocalypse.caerulaarbor.procedures.TrailReplaceProcedure;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
@@ -132,7 +132,6 @@ public class SeaTrailGrownBlock extends Block implements SimpleWaterloggedBlock,
 	public void onPlace(BlockState blockstate, Level world, BlockPos pos, BlockState oldState, boolean moving) {
 		super.onPlace(blockstate, world, pos, oldState, moving);
 		world.scheduleTick(pos, this, 25);
-		WorldUtils.saveWaterloggedState(world, pos.getX(), pos.getY(), pos.getZ(), oldState);
 	}
 
 	@Override
@@ -141,18 +140,18 @@ public class SeaTrailGrownBlock extends Block implements SimpleWaterloggedBlock,
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();
-        boolean valid = false;
+        boolean valid;
         boolean change = false;
         boolean watered = false;
-        double direc = 0;
-        double dx = 0;
-        double dz = 0;
-        double longev = 0;
-        double expand = 0;
-        double rand = 0;
-        BlockState blocktoplace = Blocks.AIR.defaultBlockState();
-        BlockState targetB = Blocks.AIR.defaultBlockState();
-        Direction dire = Direction.NORTH;
+        double direc;
+        double dx;
+        double dz;
+        double longev;
+        double expand;
+        double rand;
+        BlockState blocktoplace;
+        BlockState targetB;
+        Direction dire;
         if ((blockstate.getBlock().getStateDefinition().getProperty("grow_age") instanceof IntegerProperty _getip1 ? blockstate.getValue(_getip1) : -1) < 62) {
             expand = 1;
             if (((LevelAccessor) world).getLevelData().isThundering()) {
@@ -177,13 +176,11 @@ public class SeaTrailGrownBlock extends Block implements SimpleWaterloggedBlock,
             }
             if (valid && (blockstate.getBlock().getStateDefinition().getProperty("grow_age") instanceof IntegerProperty _getip7 ? blockstate.getValue(_getip7) : -1) > 29
                     && (blockstate.getBlock().getStateDefinition().getProperty("longevity") instanceof IntegerProperty _getip9 ? blockstate.getValue(_getip9) : -1) > 0) {
-                if (Math.random() * 100 < (((LevelAccessor) world).getLevelData().getGameRules().getInt(CaerulaArborModGameRules.SPREAD_RATE))) {
+                if (Math.random() * 100 < (((LevelAccessor) world).getLevelData().getGameRules().getInt(CAGameRules.SPREAD_RATE))) {
                     if (StrategyUtils.isSilence(world)) {
                         expand = 1;
                     }
                     if (Math.random() < 0.2) {
-                        dx = 0;
-                        dx = 1;
                         direc = Mth.nextInt(RandomSource.create(), 0, 3);
                         if (direc == 0) {
                             dx = 0;
@@ -203,28 +200,28 @@ public class SeaTrailGrownBlock extends Block implements SimpleWaterloggedBlock,
                             longev = longev - 1;
                         }
                         if ((((LevelAccessor) world).getBlockState(BlockPos.containing((double) x + dx, y, (double) z + dz))).is(BlockTags.create(new ResourceLocation("minecraft:logs")))
-                                && !((((LevelAccessor) world).getBlockState(BlockPos.containing(x, (double) y - 1, z))).getBlock() == CaerulaArborModBlocks.TRAIL_LOG.get()
-                                        || (((LevelAccessor) world).getBlockState(BlockPos.containing(x, (double) y - 1, z))).getBlock() == CaerulaArborModBlocks.STRIPPED_TRAIL_LOG.get())) {
+                                && !((((LevelAccessor) world).getBlockState(BlockPos.containing(x, (double) y - 1, z))).getBlock() == CABlocks.TRAIL_LOG.get()
+                                        || (((LevelAccessor) world).getBlockState(BlockPos.containing(x, (double) y - 1, z))).getBlock() == CABlocks.STRIPPED_TRAIL_LOG.get())) {
                             {
                                 BlockPos _bp = BlockPos.containing((double) x + dx, y, (double) z + dz);
                                 BlockState _bso = ((LevelAccessor) world).getBlockState(_bp);
-                                BlockState _bs = CaerulaArborModBlocks.TRAIL_LOG.get().withPropertiesOf(_bso);
+                                BlockState _bs = CABlocks.TRAIL_LOG.get().withPropertiesOf(_bso);
                                 ((LevelAccessor) world).setBlock(_bp, _bs, 3);
                             }
                         } else if ((((LevelAccessor) world).getBlockState(BlockPos.containing((double) x + dx, y, (double) z + dz))).is(BlockTags.create(new ResourceLocation("minecraft:leaves")))
-                                && !((((LevelAccessor) world).getBlockState(BlockPos.containing((double) x + dx, y, (double) z + dz))).getBlock() == CaerulaArborModBlocks.TRAIL_LEAVE.get())) {
+                                && !((((LevelAccessor) world).getBlockState(BlockPos.containing((double) x + dx, y, (double) z + dz))).getBlock() == CABlocks.TRAIL_LEAVE.get())) {
                             ((LevelAccessor) world).setBlock(BlockPos.containing((double) x + dx, y, (double) z + dz),
-                                    (CaerulaArborModBlocks.TRAIL_LEAVE.get().getStateDefinition().getProperty("waterlogged") instanceof BooleanProperty _withbp28
-                                            ? CaerulaArborModBlocks.TRAIL_LEAVE.get().defaultBlockState().setValue(_withbp28, false)
-                                            : CaerulaArborModBlocks.TRAIL_LEAVE.get().defaultBlockState()),
+                                    (CABlocks.TRAIL_LEAVE.get().getStateDefinition().getProperty("waterlogged") instanceof BooleanProperty _withbp28
+                                            ? CABlocks.TRAIL_LEAVE.get().defaultBlockState().setValue(_withbp28, false)
+                                            : CABlocks.TRAIL_LEAVE.get().defaultBlockState()),
                                     3);
-                            world.levelEvent(2001, BlockPos.containing((double) x + dx, y, (double) z + dz), getId(CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState()));
+                            world.levelEvent(2001, BlockPos.containing((double) x + dx, y, (double) z + dz), getId(CABlocks.SEA_TRAIL_INIT.get().defaultBlockState()));
                             if ((LevelAccessor) world instanceof Level _level) {
                                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.place")), SoundSource.NEUTRAL, 1, 1);
                             }
-                        } else if (WorldUtils.isOrganic(((LevelAccessor) world).getBlockState(BlockPos.containing((double) x + dx, y, (double) z + dz))) && !((((LevelAccessor) world).getBlockState(BlockPos.containing((double) x + dx, y, (double) z + dz))).getBlock() == CaerulaArborModBlocks.TRAIL_PULSE.get())) {
-                            ((LevelAccessor) world).setBlock(BlockPos.containing((double) x + dx, y, (double) z + dz), CaerulaArborModBlocks.TRAIL_PULSE.get().defaultBlockState(), 3);
-                            world.levelEvent(2001, BlockPos.containing((double) x + dx, y, (double) z + dz), getId(CaerulaArborModBlocks.TRAIL_PULSE.get().defaultBlockState()));
+                        } else if (WorldUtils.isOrganic(((LevelAccessor) world).getBlockState(BlockPos.containing((double) x + dx, y, (double) z + dz))) && !((((LevelAccessor) world).getBlockState(BlockPos.containing((double) x + dx, y, (double) z + dz))).getBlock() == CABlocks.TRAIL_PULSE.get())) {
+                            ((LevelAccessor) world).setBlock(BlockPos.containing((double) x + dx, y, (double) z + dz), CABlocks.TRAIL_PULSE.get().defaultBlockState(), 3);
+                            world.levelEvent(2001, BlockPos.containing((double) x + dx, y, (double) z + dz), getId(CABlocks.TRAIL_PULSE.get().defaultBlockState()));
                             if ((LevelAccessor) world instanceof Level _level) {
                                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.place")), SoundSource.NEUTRAL, 1, 1);
                             }
@@ -242,7 +239,7 @@ public class SeaTrailGrownBlock extends Block implements SimpleWaterloggedBlock,
                                     _prop = _bs.getBlock().getStateDefinition().getProperty("axis");
                                     return _prop instanceof EnumProperty _ep && _ep.getPossibleValues().contains(newValue.getAxis()) ? _bs.setValue(_ep, newValue.getAxis()) : _bs;
                                 }
-                            }.with(CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState(), new Object() {
+                            }.with(CABlocks.SEA_TRAIL_INIT.get().defaultBlockState(), new Object() {
                                 public Direction getValue() {
                                     Direction _dir = Direction.NORTH;
                                     int _num = Mth.nextInt(RandomSource.create(), 1, 4);
@@ -259,7 +256,7 @@ public class SeaTrailGrownBlock extends Block implements SimpleWaterloggedBlock,
                             for (int index0 = 0; index0 < 3; index0++) {
                                 if (!(world.getBlockFloorHeight(BlockPos.containing((double) x + dx, (double) y - 1 + index0, (double) z + dz)) > 0)
                                         && !(((LevelAccessor) world).getBlockState(BlockPos.containing((double) x + dx, (double) y - 1 + index0, (double) z + dz))).is(BlockTags.create(new ResourceLocation(CaerulaArborMod.MODID, "cannot_cover")))
-                                        && CaerulaArborModBlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing((double) x + dx, (double) y - 1 + index0, (double) z + dz))) {
+                                        && CABlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing((double) x + dx, (double) y - 1 + index0, (double) z + dz))) {
                                     if ((((LevelAccessor) world).getFluidState(BlockPos.containing((double) x + dx, (double) y - 1 + index0, (double) z + dz)).createLegacyBlock()).getBlock() == Blocks.WATER
                                             || (((LevelAccessor) world).getFluidState(BlockPos.containing((double) x + dx, (double) y - 1 + index0, (double) z + dz)).createLegacyBlock()).getBlock() == Blocks.BUBBLE_COLUMN) {
                                         watered = true;
@@ -304,15 +301,15 @@ public class SeaTrailGrownBlock extends Block implements SimpleWaterloggedBlock,
                             _prop = _bs.getBlock().getStateDefinition().getProperty("axis");
                             return _prop instanceof EnumProperty _ep && _ep.getPossibleValues().contains(newValue.getAxis()) ? _bs.setValue(_ep, newValue.getAxis()) : _bs;
                         }
-                    }.with(CaerulaArborModBlocks.TRAIL_LOG.get().defaultBlockState(), dire)), 3);
+                    }.with(CABlocks.TRAIL_LOG.get().defaultBlockState(), dire)), 3);
                     change = true;
                 } else if (targetB.getBlock() == Blocks.SOUL_SAND || targetB.getBlock() == Blocks.SOUL_SOIL) {
                     world.destroyBlock(BlockPos.containing(x, y, z), false);
-                    ((LevelAccessor) world).setBlock(BlockPos.containing(x, (double) y - 1, z), CaerulaArborModBlocks.NETHERSEA_SOUL_SAND.get().defaultBlockState(), 3);
+                    ((LevelAccessor) world).setBlock(BlockPos.containing(x, (double) y - 1, z), CABlocks.NETHERSEA_SOUL_SAND.get().defaultBlockState(), 3);
                     change = true;
                 } else if (targetB.is(BlockTags.create(new ResourceLocation("minecraft:base_stone_overworld"))) || targetB.is(BlockTags.create(new ResourceLocation("forge:stone")))) {
                     world.destroyBlock(BlockPos.containing(x, y, z), false);
-                    ((LevelAccessor) world).setBlock(BlockPos.containing(x, (double) y - 1, z), CaerulaArborModBlocks.TRAIL_STONE.get().defaultBlockState(), 3);
+                    ((LevelAccessor) world).setBlock(BlockPos.containing(x, (double) y - 1, z), CABlocks.TRAIL_STONE.get().defaultBlockState(), 3);
                     change = true;
                 } else if (targetB.is(BlockTags.create(new ResourceLocation("minecraft:planks")))) {
                     world.destroyBlock(BlockPos.containing(x, y, z), false);
@@ -324,7 +321,7 @@ public class SeaTrailGrownBlock extends Block implements SimpleWaterloggedBlock,
                             _prop = _bs.getBlock().getStateDefinition().getProperty("axis");
                             return _prop instanceof EnumProperty _ep && _ep.getPossibleValues().contains(newValue.getAxis()) ? _bs.setValue(_ep, newValue.getAxis()) : _bs;
                         }
-                    }.with(CaerulaArborModBlocks.TRAIL_PLANK.get().defaultBlockState(), dire)), 3);
+                    }.with(CABlocks.TRAIL_PLANK.get().defaultBlockState(), dire)), 3);
                     change = true;
                 } else if (targetB.getBlock() == Blocks.CARVED_PUMPKIN || targetB.getBlock() == Blocks.JACK_O_LANTERN) {
                     world.destroyBlock(BlockPos.containing(x, y, z), false);
@@ -336,7 +333,7 @@ public class SeaTrailGrownBlock extends Block implements SimpleWaterloggedBlock,
                             _prop = _bs.getBlock().getStateDefinition().getProperty("axis");
                             return _prop instanceof EnumProperty _ep && _ep.getPossibleValues().contains(newValue.getAxis()) ? _bs.setValue(_ep, newValue.getAxis()) : _bs;
                         }
-                    }.with(CaerulaArborModBlocks.TRAIL_PUMPKING.get().defaultBlockState(), dire)), 3);
+                    }.with(CABlocks.TRAIL_PUMPKING.get().defaultBlockState(), dire)), 3);
                     change = true;
                 } else if (targetB.is(BlockTags.create(new ResourceLocation("minecraft:leaves")))) {
                     world.destroyBlock(BlockPos.containing(x, y, z), false);
@@ -348,7 +345,7 @@ public class SeaTrailGrownBlock extends Block implements SimpleWaterloggedBlock,
                             _prop = _bs.getBlock().getStateDefinition().getProperty("axis");
                             return _prop instanceof EnumProperty _ep && _ep.getPossibleValues().contains(newValue.getAxis()) ? _bs.setValue(_ep, newValue.getAxis()) : _bs;
                         }
-                    }.with(CaerulaArborModBlocks.TRAIL_LEAVE.get().defaultBlockState(), dire)), 3);
+                    }.with(CABlocks.TRAIL_LEAVE.get().defaultBlockState(), dire)), 3);
                     change = true;
                 } else if (targetB.getBlock() == Blocks.ANCIENT_DEBRIS) {
                     world.destroyBlock(BlockPos.containing(x, y, z), false);
@@ -360,7 +357,7 @@ public class SeaTrailGrownBlock extends Block implements SimpleWaterloggedBlock,
                             _prop = _bs.getBlock().getStateDefinition().getProperty("axis");
                             return _prop instanceof EnumProperty _ep && _ep.getPossibleValues().contains(newValue.getAxis()) ? _bs.setValue(_ep, newValue.getAxis()) : _bs;
                         }
-                    }.with(CaerulaArborModBlocks.TRAIL_DEBRIS.get().defaultBlockState(), dire)), 3);
+                    }.with(CABlocks.TRAIL_DEBRIS.get().defaultBlockState(), dire)), 3);
                     change = true;
                 } else if (WorldUtils.isOrganic(targetB)) {
                     world.destroyBlock(BlockPos.containing(x, y, z), false);
@@ -372,7 +369,7 @@ public class SeaTrailGrownBlock extends Block implements SimpleWaterloggedBlock,
                             _prop = _bs.getBlock().getStateDefinition().getProperty("axis");
                             return _prop instanceof EnumProperty _ep && _ep.getPossibleValues().contains(newValue.getAxis()) ? _bs.setValue(_ep, newValue.getAxis()) : _bs;
                         }
-                    }.with(CaerulaArborModBlocks.TRAIL_PULSE.get().defaultBlockState(), new Object() {
+                    }.with(CABlocks.TRAIL_PULSE.get().defaultBlockState(), new Object() {
                         public Direction getValue() {
                             Direction _dir = Direction.NORTH;
                             int _num = Mth.nextInt(RandomSource.create(), 1, 4);
@@ -397,7 +394,7 @@ public class SeaTrailGrownBlock extends Block implements SimpleWaterloggedBlock,
                             _prop = _bs.getBlock().getStateDefinition().getProperty("axis");
                             return _prop instanceof EnumProperty _ep && _ep.getPossibleValues().contains(newValue.getAxis()) ? _bs.setValue(_ep, newValue.getAxis()) : _bs;
                         }
-                    }.with(CaerulaArborModBlocks.SEA_TRAIL_SOLID.get().defaultBlockState(), new Object() {
+                    }.with(CABlocks.SEA_TRAIL_SOLID.get().defaultBlockState(), new Object() {
                         public Direction getValue() {
                             Direction _dir = Direction.NORTH;
                             int _num = Mth.nextInt(RandomSource.create(), 1, 4);
@@ -418,35 +415,37 @@ public class SeaTrailGrownBlock extends Block implements SimpleWaterloggedBlock,
                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.break")), SoundSource.BLOCKS, 1, 1);
                     }
                 }
-                blocktoplace = Blocks.AIR.defaultBlockState();
                 rand = Math.random();
                 if (rand < 0.02) {
                     if (Math.random() < 0.12) {
-                        blocktoplace = CaerulaArborModBlocks.RED_OVARY.get().defaultBlockState();
+                        blocktoplace = CABlocks.RED_OVARY.get().defaultBlockState();
                     } else {
-                        blocktoplace = CaerulaArborModBlocks.OCEAN_OVARY.get().defaultBlockState();
+                        blocktoplace = CABlocks.OCEAN_OVARY.get().defaultBlockState();
                     }
                 } else if (rand < 0.1) {
                     if (blockstate.getBlock().getStateDefinition().getProperty("waterlogged") instanceof BooleanProperty _getbp95 && blockstate.getValue(_getbp95)) {
-                        blocktoplace = (CaerulaArborModBlocks.DEEP_SEAGRASS.get().getStateDefinition().getProperty("waterlogged") instanceof BooleanProperty _withbp96
-                                ? CaerulaArborModBlocks.DEEP_SEAGRASS.get().defaultBlockState().setValue(_withbp96, true)
-                                : CaerulaArborModBlocks.DEEP_SEAGRASS.get().defaultBlockState());
+                        blocktoplace = (CABlocks.DEEP_SEAGRASS.get().getStateDefinition().getProperty("waterlogged") instanceof BooleanProperty _withbp96
+                                ? CABlocks.DEEP_SEAGRASS.get().defaultBlockState().setValue(_withbp96, true)
+                                : CABlocks.DEEP_SEAGRASS.get().defaultBlockState());
                     } else {
-                        blocktoplace = CaerulaArborModBlocks.TRAIL_MUSHROOM.get().defaultBlockState();
+                        blocktoplace = CABlocks.TRAIL_MUSHROOM.get().defaultBlockState();
                     }
                 } else if (rand < 0.013) {
-                    blocktoplace = CaerulaArborModBlocks.VIVIPAROUS_LILY.get().defaultBlockState();
-                } else {
-                    blocktoplace = CaerulaArborModBlocks.SEA_TRAIL_STOP.get().defaultBlockState();
+                    blocktoplace = CABlocks.VIVIPAROUS_LILY.get().defaultBlockState();
+				} else {
+					blocktoplace = CABlocks.SEA_TRAIL_STOP.get().defaultBlockState();
+					if (blocktoplace.hasProperty(WATERLOGGED)) {
+						blocktoplace = blocktoplace.setValue(WATERLOGGED, blockstate.getValue(WATERLOGGED));
+					}
                 }
                 if (!(blocktoplace.getBlock() == Blocks.AIR) && blocktoplace.canSurvive(world, BlockPos.containing(x, y, z))) {
                     ((LevelAccessor) world).setBlock(BlockPos.containing(x, y, z), blocktoplace, 3);
-                    if (blocktoplace.getBlock() == CaerulaArborModBlocks.DEEP_SEAGRASS.get()) {
+                    if (blocktoplace.getBlock() == CABlocks.DEEP_SEAGRASS.get()) {
                         if (Math.random() < 0.5 && (((LevelAccessor) world).getFluidState(BlockPos.containing(x, (double) y + 1, z)).createLegacyBlock()).getBlock() == Blocks.WATER) {
                             ((LevelAccessor) world).setBlock(BlockPos.containing(x, (double) y + 1, z),
-                                    (CaerulaArborModBlocks.DEEP_SEAGRASS.get().getStateDefinition().getProperty("waterlogged") instanceof BooleanProperty _withbp103
-                                            ? CaerulaArborModBlocks.DEEP_SEAGRASS.get().defaultBlockState().setValue(_withbp103, true)
-                                            : CaerulaArborModBlocks.DEEP_SEAGRASS.get().defaultBlockState()),
+                                    (CABlocks.DEEP_SEAGRASS.get().getStateDefinition().getProperty("waterlogged") instanceof BooleanProperty _withbp103
+                                            ? CABlocks.DEEP_SEAGRASS.get().defaultBlockState().setValue(_withbp103, true)
+                                            : CABlocks.DEEP_SEAGRASS.get().defaultBlockState()),
                                     3);
                         }
                     }

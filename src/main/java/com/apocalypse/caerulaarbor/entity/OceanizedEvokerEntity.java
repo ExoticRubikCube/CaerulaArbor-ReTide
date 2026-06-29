@@ -4,11 +4,10 @@ import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.entity.base.RavagerMountRider;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModGameRules;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAGameRules;
+import com.apocalypse.caerulaarbor.init.CAParticleTypes;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
-import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -47,6 +46,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -71,7 +71,7 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
 	public String animationprocedure = "empty";
 
 	public OceanizedEvokerEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.OCEANIZED_EVOKER.get(), world);
+		this(CAEntities.OCEANIZED_EVOKER.get(), world);
 	}
 
 	public OceanizedEvokerEntity(EntityType<OceanizedEvokerEntity> type, Level world) {
@@ -127,8 +127,7 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
 				double x = OceanizedEvokerEntity.this.getX();
 				double y = OceanizedEvokerEntity.this.getY();
 				double z = OceanizedEvokerEntity.this.getZ();
-				Entity entity = OceanizedEvokerEntity.this;
-				Level world = OceanizedEvokerEntity.this.level();
+                Level world = OceanizedEvokerEntity.this.level();
 				return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
 
@@ -137,29 +136,18 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
 				double x = OceanizedEvokerEntity.this.getX();
 				double y = OceanizedEvokerEntity.this.getY();
 				double z = OceanizedEvokerEntity.this.getZ();
-				Entity entity = OceanizedEvokerEntity.this;
-				Level world = OceanizedEvokerEntity.this.level();
+                Level world = OceanizedEvokerEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
 		});
 		this.targetSelector.addGoal(14, new NearestAttackableTargetGoal(this, Animal.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = OceanizedEvokerEntity.this.getX();
-				double y = OceanizedEvokerEntity.this.getY();
-				double z = OceanizedEvokerEntity.this.getZ();
-				Entity entity = OceanizedEvokerEntity.this;
-				Level world = OceanizedEvokerEntity.this.level();
 				return super.canUse() && EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = OceanizedEvokerEntity.this.getX();
-				double y = OceanizedEvokerEntity.this.getY();
-				double z = OceanizedEvokerEntity.this.getZ();
-				Entity entity = OceanizedEvokerEntity.this;
-				Level world = OceanizedEvokerEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
 			}
 		});
@@ -315,163 +303,31 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if (this != null) {
-            Entity enemy = null;
-            double sklp1 = 0;
-            double sklp2 = 0;
-            double dist = 0;
-            if (this.isAlive()) {
-                enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
-                sklp1 = (Entity) this instanceof OceanizedEvokerEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp1) : 0;
-                sklp2 = (Entity) this instanceof OceanizedEvokerEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp2) : 0;
-                if (sklp1 <= 0) {
-                    if (!(enemy == null) && enemy.isAlive()) {
-                        dist = Math.round(enemy != null ? distanceTo(enemy) : -1);
-                        if (dist <= 35) {
-                            if (this instanceof OceanizedEvokerEntity) {
-                                this.setAnimation("animation.oceanized_evoker.spell");
-                            }
-                            if ((Entity) this instanceof OceanizedEvokerEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_skillp1, 100);
-                            if (!this.level().isClientSide())
-                                this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 40, 9, false, false));
-                            if (dist > 6) {
-                                new Object() {
-                                    void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
-                                        if (((Entity) OceanizedEvokerEntity.this).isAlive()) {
-                                            spawnLinearFangs(world, timedloopiterator + 1);
-                                        }
-                                        final int tick2 = ticks;
-                                        CaerulaArborMod.queueServerWork(tick2, () -> {
-                                            if (timedlooptotal > timedloopiterator + 1) {
-                                                timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
-                                            }
-                                        });
-                                    }
-                                }.timedLoop(0, (int) dist, 1);
-                            } else {
-                                new Object() {
-                                    void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
-                                        if (((Entity) OceanizedEvokerEntity.this).isAlive()) {
-                                            double dt = 0;
-                                            double r = 0;
-                                            double fy = 0;
-                                            double tx = 0;
-                                            double tz = 0;
-                                            dt = 360 / ((double) ((timedloopiterator + 1) * 3));
-                                            r = 0.5 * (double) ((timedloopiterator + 1) * 3);
-                                            for (int index0 = 0; index0 < (int) ((double) ((timedloopiterator + 1) * 3)); index0++) {
-                                                tx = x + r * Math.sin(Math.toRadians(dt * index0));
-                                                tz = z + r * Math.cos(Math.toRadians(dt * index0));
-                                                fy = WorldUtils.findGround(world, tx, y, tz);
-                                                if (fy <= 114513) {
-                                                    if (world instanceof ServerLevel _level) {
-                                                        Entity entityToSpawn = EntityType.EVOKER_FANGS.spawn(_level, BlockPos.containing(tx, fy, tz), MobSpawnType.MOB_SUMMONED);
-                                                        if (entityToSpawn != null) {
-                                                            entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        final int tick2 = ticks;
-                                        CaerulaArborMod.queueServerWork(tick2, () -> {
-                                            if (timedlooptotal > timedloopiterator + 1) {
-                                                timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
-                                            }
-                                        });
-                                    }
-                                }.timedLoop(0, 5, 2);
-                            }
-                        }
-                    }
-                } else {
-                    if ((Entity) this instanceof OceanizedEvokerEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_skillp1, (int) (sklp1 - 1));
-                    if (sklp1 == 20) {
-                        if (world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.evoker.prepare_attack")), SoundSource.NEUTRAL, 1, 1);
-                        }
-                    }
-                }
-                if (sklp2 <= 0) {
-                    if (!(enemy == null) && enemy.isAlive()) {
+        Entity enemy;
+        double sklp1;
+        double sklp2;
+        double dist;
+        if (this.isAlive()) {
+            enemy = this.getTarget();
+            sklp1 = (Entity) this instanceof OceanizedEvokerEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp1) : 0;
+            sklp2 = (Entity) this instanceof OceanizedEvokerEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp2) : 0;
+            if (sklp1 <= 0) {
+                if (!(enemy == null) && enemy.isAlive()) {
+                    dist = Math.round(distanceTo(enemy));
+                    if (dist <= 35) {
                         if (this instanceof OceanizedEvokerEntity) {
                             this.setAnimation("animation.oceanized_evoker.spell");
                         }
-                        if (world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.evoker.cast_spell")), SoundSource.NEUTRAL, 1, 1);
-                        }
                         if ((Entity) this instanceof OceanizedEvokerEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_skillp2, 300);
+                            _datEntSetI.getEntityData().set(DATA_skillp1, 100);
                         if (!this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 40, 9, false, false));
-                        assert Boolean.TRUE; //#dbg:EvokerSkill:evo_skl_2
-                        CaerulaArborMod.queueServerWork(10, () -> {
+                        if (dist > 6) {
                             new Object() {
                                 void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                                     if (((Entity) OceanizedEvokerEntity.this).isAlive()) {
-										double angl = 0;
-										double d = 0;
-										double tx = 0;
-										double tz = 0;
-										double rd = 0;
-										if (!(EntityUtils.getSeabornNum(world, x, y, z) >= (world.getLevelData().getGameRules().getInt(CaerulaArborModGameRules.CLONE_NUMBER_LIMIT)))) {
-											angl = Mth.nextDouble(RandomSource.create(), 0, 6.283);
-											d = Mth.nextDouble(RandomSource.create(), 1, 2);
-											tx = x + d * Math.sin(angl);
-											tz = z + d * Math.cos(angl);
-											rd = Mth.nextDouble(RandomSource.create(), 0, 1);
-											if (MapVariables.get(world).strategy_grow >= 4) {
-												rd = Mth.nextDouble(RandomSource.create(), 0, 1.025);
-											}
-											if (rd < 0.5) {
-												if (world instanceof ServerLevel _level) {
-													Entity entityToSpawn = CaerulaArborModEntities.OCEANIZED_VEX.get().spawn(_level, BlockPos.containing(tx, y + 1.5, tz), MobSpawnType.MOB_SUMMONED);
-													if (entityToSpawn != null) {
-														entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-													}
-												}
-											} else if (rd < 0.65) {
-												if (world instanceof ServerLevel _level) {
-													Entity entityToSpawn = CaerulaArborModEntities.FLY_FISH.get().spawn(_level, BlockPos.containing(tx, y + 1.5, tz), MobSpawnType.MOB_SUMMONED);
-													if (entityToSpawn != null) {
-														entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-													}
-												}
-											} else if (rd < 0.8) {
-												if (world instanceof ServerLevel _level) {
-													Entity entityToSpawn = CaerulaArborModEntities.OCEANIZED_SPIDER.get().spawn(_level, BlockPos.containing(tx, y + 1.5, tz), MobSpawnType.MOB_SUMMONED);
-													if (entityToSpawn != null) {
-														entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-													}
-												}
-											} else if (rd < 0.95) {
-												if (world instanceof ServerLevel _level) {
-													Entity entityToSpawn = CaerulaArborModEntities.FLOATER_PROKARYOTE.get().spawn(_level, BlockPos.containing(tx, y + 1.5, tz), MobSpawnType.MOB_SUMMONED);
-													if (entityToSpawn != null) {
-														entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-													}
-												}
-											} else if (rd < 1) {
-												if (world instanceof ServerLevel _level) {
-													Entity entityToSpawn = CaerulaArborModEntities.FLEE_FISH.get().spawn(_level, BlockPos.containing(tx, y + 1.5, tz), MobSpawnType.MOB_SUMMONED);
-													if (entityToSpawn != null) {
-														entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-													}
-												}
-											} else {
-												if (world instanceof ServerLevel _level) {
-													Entity entityToSpawn = CaerulaArborModEntities.IZUMIK_OFFSPRING.get().spawn(_level, BlockPos.containing(tx, y + 1.5, tz), MobSpawnType.MOB_SUMMONED);
-													if (entityToSpawn != null) {
-														entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-													}
-												}
-											}
-											if (world instanceof ServerLevel _level)
-												_level.sendParticles(CaerulaArborModParticleTypes.EDERMAN_PTC.get(), tx, (y + 2), tz, 16, 0.5, 0.5, 0.5, 0.15);
-										}
-									}
+                                        spawnLinearFangs(world, timedloopiterator + 1);
+                                    }
                                     final int tick2 = ticks;
                                     CaerulaArborMod.queueServerWork(tick2, () -> {
                                         if (timedlooptotal > timedloopiterator + 1) {
@@ -479,16 +335,158 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
                                         }
                                     });
                                 }
-                            }.timedLoop(0, 4, 5);
-                        });
-                    }
-                } else {
-                    if ((Entity) this instanceof OceanizedEvokerEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_skillp2, (int) (sklp2 - 1));
-                    if (sklp2 == 20) {
-                        if (world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.evoker.prepare_summon")), SoundSource.NEUTRAL, 1, 1);
+                            }.timedLoop(0, (int) dist, 1);
+                        } else {
+                            new Object() {
+                                void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
+                                    if (((Entity) OceanizedEvokerEntity.this).isAlive()) {
+                                        double dt;
+                                        double r;
+                                        double fy;
+                                        double tx;
+                                        double tz;
+                                        dt = 360 / ((double) ((timedloopiterator + 1) * 3));
+                                        r = 0.5 * (double) ((timedloopiterator + 1) * 3);
+                                        for (int index0 = 0; index0 < (int) ((double) ((timedloopiterator + 1) * 3)); index0++) {
+                                            tx = x + r * Math.sin(Math.toRadians(dt * index0));
+                                            tz = z + r * Math.cos(Math.toRadians(dt * index0));
+                                            fy = 114514;
+                                            for (int dy = 0; dy <= 3; dy++) {
+                                                BlockState target = world.getBlockState(BlockPos.containing(tx, y + dy, tz));
+                                                if (target.canBeReplaced() && world.getBlockFloorHeight(BlockPos.containing(tx, y + dy - 1, tz)) > 0) {
+                                                    fy = y + dy;
+                                                    break;
+                                                }
+                                                target = world.getBlockState(BlockPos.containing(tx, y - dy, tz));
+                                                if (target.canBeReplaced() && world.getBlockFloorHeight(BlockPos.containing(tx, y - dy - 1, tz)) > 0) {
+                                                    fy = y - dy;
+                                                    break;
+                                                }
+                                            }
+                                            if (fy <= 114513) {
+                                                if (world instanceof ServerLevel _level) {
+                                                    Entity entityToSpawn = EntityType.EVOKER_FANGS.spawn(_level, BlockPos.containing(tx, fy, tz), MobSpawnType.MOB_SUMMONED);
+                                                    if (entityToSpawn != null) {
+                                                        entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    final int tick2 = ticks;
+                                    CaerulaArborMod.queueServerWork(tick2, () -> {
+                                        if (timedlooptotal > timedloopiterator + 1) {
+                                            timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
+                                        }
+                                    });
+                                }
+                            }.timedLoop(0, 5, 2);
                         }
+                    }
+                }
+            } else {
+                if ((Entity) this instanceof OceanizedEvokerEntity _datEntSetI)
+                    _datEntSetI.getEntityData().set(DATA_skillp1, (int) (sklp1 - 1));
+                if (sklp1 == 20) {
+                    if (world instanceof Level _level) {
+                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.evoker.prepare_attack")), SoundSource.NEUTRAL, 1, 1);
+                    }
+                }
+            }
+            if (sklp2 <= 0) {
+                if (!(enemy == null) && enemy.isAlive()) {
+                    if (this instanceof OceanizedEvokerEntity) {
+                        this.setAnimation("animation.oceanized_evoker.spell");
+                    }
+                    if (world instanceof Level _level) {
+                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.evoker.cast_spell")), SoundSource.NEUTRAL, 1, 1);
+                    }
+                    if ((Entity) this instanceof OceanizedEvokerEntity _datEntSetI)
+                        _datEntSetI.getEntityData().set(DATA_skillp2, 300);
+                    if (!this.level().isClientSide())
+                        this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 40, 9, false, false));
+                    assert Boolean.TRUE; //#dbg:EvokerSkill:evo_skl_2
+                    CaerulaArborMod.queueServerWork(10, () -> {
+                        new Object() {
+                            void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
+                                if (((Entity) OceanizedEvokerEntity.this).isAlive()) {
+                                    double angl;
+                                    double d;
+                                    double tx;
+                                    double tz;
+                                    double rd;
+                                    if (!(EntityUtils.getSeabornNum(world, x, y, z) >= (world.getLevelData().getGameRules().getInt(CAGameRules.CLONE_NUMBER_LIMIT)))) {
+                                        angl = Mth.nextDouble(RandomSource.create(), 0, 6.283);
+                                        d = Mth.nextDouble(RandomSource.create(), 1, 2);
+                                        tx = x + d * Math.sin(angl);
+                                        tz = z + d * Math.cos(angl);
+                                        rd = Mth.nextDouble(RandomSource.create(), 0, 1);
+                                        if (MapVariables.get(world).strategy_grow >= 4) {
+                                            rd = Mth.nextDouble(RandomSource.create(), 0, 1.025);
+                                        }
+                                        if (rd < 0.5) {
+                                            if (world instanceof ServerLevel _level) {
+                                                Entity entityToSpawn = CAEntities.OCEANIZED_VEX.get().spawn(_level, BlockPos.containing(tx, y + 1.5, tz), MobSpawnType.MOB_SUMMONED);
+                                                if (entityToSpawn != null) {
+                                                    entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+                                                }
+                                            }
+                                        } else if (rd < 0.65) {
+                                            if (world instanceof ServerLevel _level) {
+                                                Entity entityToSpawn = CAEntities.FLY_FISH.get().spawn(_level, BlockPos.containing(tx, y + 1.5, tz), MobSpawnType.MOB_SUMMONED);
+                                                if (entityToSpawn != null) {
+                                                    entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+                                                }
+                                            }
+                                        } else if (rd < 0.8) {
+                                            if (world instanceof ServerLevel _level) {
+                                                Entity entityToSpawn = CAEntities.OCEANIZED_SPIDER.get().spawn(_level, BlockPos.containing(tx, y + 1.5, tz), MobSpawnType.MOB_SUMMONED);
+                                                if (entityToSpawn != null) {
+                                                    entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+                                                }
+                                            }
+                                        } else if (rd < 0.95) {
+                                            if (world instanceof ServerLevel _level) {
+                                                Entity entityToSpawn = CAEntities.FLOATER_PROKARYOTE.get().spawn(_level, BlockPos.containing(tx, y + 1.5, tz), MobSpawnType.MOB_SUMMONED);
+                                                if (entityToSpawn != null) {
+                                                    entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+                                                }
+                                            }
+                                        } else if (rd < 1) {
+                                            if (world instanceof ServerLevel _level) {
+                                                Entity entityToSpawn = CAEntities.FLEE_FISH.get().spawn(_level, BlockPos.containing(tx, y + 1.5, tz), MobSpawnType.MOB_SUMMONED);
+                                                if (entityToSpawn != null) {
+                                                    entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+                                                }
+                                            }
+                                        } else {
+                                            if (world instanceof ServerLevel _level) {
+                                                Entity entityToSpawn = CAEntities.IZUMIK_OFFSPRING.get().spawn(_level, BlockPos.containing(tx, y + 1.5, tz), MobSpawnType.MOB_SUMMONED);
+                                                if (entityToSpawn != null) {
+                                                    entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+                                                }
+                                            }
+                                        }
+                                        if (world instanceof ServerLevel _level)
+                                            _level.sendParticles(CAParticleTypes.EDERMAN_PTC.get(), tx, (y + 2), tz, 16, 0.5, 0.5, 0.5, 0.15);
+                                    }
+                                }
+                                final int tick2 = ticks;
+                                CaerulaArborMod.queueServerWork(tick2, () -> {
+                                    if (timedlooptotal > timedloopiterator + 1) {
+                                        timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
+                                    }
+                                });
+                            }
+                        }.timedLoop(0, 4, 5);
+                    });
+                }
+            } else {
+                if ((Entity) this instanceof OceanizedEvokerEntity _datEntSetI)
+                    _datEntSetI.getEntityData().set(DATA_skillp2, (int) (sklp2 - 1));
+                if (sklp2 == 20) {
+                    if (world instanceof Level _level) {
+                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.evoker.prepare_summon")), SoundSource.NEUTRAL, 1, 1);
                     }
                 }
             }
@@ -502,11 +500,11 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
 	}
 
 	private void spawnLinearFangs(LevelAccessor world, double index) {
-		double dist = 0;
-		double vx = 0;
-		double vy = 0;
-		double vz = 0;
-		double fy = 0;
+		double dist;
+		double vx;
+		double vy;
+		double vz;
+		double fy;
 		Entity enemy = this.getTarget();
 		if (enemy != null) {
 			dist = Math.round(this.distanceTo(enemy));
@@ -516,7 +514,19 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
 			vx = this.getX() + vx * (index / dist);
 			vy = this.getY() + vy * (index / dist);
 			vz = this.getZ() + vz * (index / dist);
-			fy = WorldUtils.findGround(world, vx, vy, vz);
+			fy = 114514;
+			for (int dy = 0; dy <= 3; dy++) {
+				BlockState target = world.getBlockState(BlockPos.containing(vx, vy + dy, vz));
+				if (target.canBeReplaced() && world.getBlockFloorHeight(BlockPos.containing(vx, vy + dy - 1, vz)) > 0) {
+					fy = vy + dy;
+					break;
+				}
+				target = world.getBlockState(BlockPos.containing(vx, vy - dy, vz));
+				if (target.canBeReplaced() && world.getBlockFloorHeight(BlockPos.containing(vx, vy - dy - 1, vz)) > 0) {
+					fy = vy - dy;
+					break;
+				}
+			}
 			if (fy <= 114513) {
 				if (world instanceof ServerLevel _level) {
 					Entity entityToSpawn = EntityType.EVOKER_FANGS.spawn(_level, BlockPos.containing(vx, fy, vz), MobSpawnType.MOB_SUMMONED);

@@ -5,7 +5,8 @@ import com.apocalypse.caerulaarbor.api.event.SanityEvent;
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.MathUtils;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
@@ -49,14 +50,14 @@ public class InfestedMobEffect extends MobEffect {
         LevelAccessor world = entity.level();
         if (entity == null)
             return;
-        double dam = 0;
+        double dam;
         if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization < 3) {
             dam = ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * Mth.nextDouble(RandomSource.create(), 0.1, 0.25) * ((double) amplifier + 1);
-            if ((Entity) entity instanceof LivingEntity _livEnt2 && _livEnt2.hasEffect(CaerulaArborModMobEffects.POWER_OF_ANCHOR.get())) {
+            if ((Entity) entity instanceof LivingEntity _livEnt2 && _livEnt2.hasEffect(CAMobEffects.POWER_OF_ANCHOR.get())) {
                 dam = dam * 0.1;
             }
             ((Entity) entity).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanize_damage")))), (float) dam);
-            if (!((Entity) entity instanceof LivingEntity _livEnt5 && _livEnt5.hasEffect(CaerulaArborModMobEffects.POWER_OF_ANCHOR.get()))) {
+            if (!((Entity) entity instanceof LivingEntity _livEnt5 && _livEnt5.hasEffect(CAMobEffects.POWER_OF_ANCHOR.get()))) {
                 if (Math.random() < 0.33) {
                     dam = Mth.nextInt(RandomSource.create(), 0, 7);
                     if (dam == 0) {
@@ -79,10 +80,10 @@ public class InfestedMobEffect extends MobEffect {
                             _entity.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 160, 0));
                     } else if (dam == 6) {
                         if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                            _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.FROZEN.get(), 160, 0));
+                            _entity.addEffect(new MobEffectInstance(CAMobEffects.FROZEN.get(), 160, 0));
                     } else if (dam == 7) {
                         if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                            _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.DIZZY.get(), 160, 0));
+                            _entity.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 160, 0));
                     }
                 }
             }
@@ -98,7 +99,7 @@ public class InfestedMobEffect extends MobEffect {
         double z = entity.getZ();
         if (entity == null)
             return;
-        double ampli = 0;
+        double ampli;
         if (entity instanceof Player) {
             ampli = amplifier;
             if ((double) amplifier > 2) {

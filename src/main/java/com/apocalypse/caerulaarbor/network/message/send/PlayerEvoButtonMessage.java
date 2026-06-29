@@ -77,12 +77,12 @@ public class PlayerEvoButtonMessage {
         }
 		if (buttonID == 1) {
 
-            String title = "";
-            double quantity = 0;
-            double quality = 0;
+            String title;
+            double quantity;
+            double quality;
             double quantity_cost = 0;
             double quality_cost = 0;
-            double add_def = 0;
+            double add_def;
             quantity = (((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).reserve_quantity;
             quality = (((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).reserve_quality;
             title = entity.getPersistentData().getString("showcasingEvoNode");
@@ -352,7 +352,7 @@ public class PlayerEvoButtonMessage {
                     }
                 }
             } else if (title.contains("node.less_armor")) {
-                double result = 0;
+                double result;
                 result = (((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).PEVO_NODE_less_armor;
                 add_def = result;
                 for (int index12 = 0; index12 < 4; index12++) {

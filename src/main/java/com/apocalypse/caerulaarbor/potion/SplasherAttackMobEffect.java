@@ -5,9 +5,9 @@ import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import com.apocalypse.caerulaarbor.entity.FishSplashEntity;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModParticleTypes;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CAParticleTypes;
 import com.apocalypse.caerulaarbor.util.MathUtils;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -49,11 +49,11 @@ public class SplasherAttackMobEffect extends MobEffect {
         double z = entity.getZ();
         if (entity == null)
             return;
-        double num = 0;
-        double rand = 0;
-        double dama = 0;
+        double num;
+        double rand;
+        double dama;
         num = 0;
-        if ((Entity) entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CaerulaArborModMobEffects.TRAIL_BUFF.get())) {
+        if ((Entity) entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CAMobEffects.TRAIL_BUFF.get())) {
             dama = ((Entity) entity instanceof LivingEntity _livingEntity1 && _livingEntity1.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity1.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.5;
             for (Entity entityiterator : world.getEntities(entity, new AABB((x + 48), (y + 6), (z + 48), (x - 48), (y - 6), (z - 48)))) {
                 if ((entityiterator instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) < 5) {
@@ -66,11 +66,11 @@ public class SplasherAttackMobEffect extends MobEffect {
                     continue;
                 }
                 rand = Mth.nextDouble(RandomSource.create(), 7, 11);
-                if (entityiterator instanceof LivingEntity _livEnt6 && _livEnt6.hasEffect(CaerulaArborModMobEffects.TRAIL_BUFF.get())) {
+                if (entityiterator instanceof LivingEntity _livEnt6 && _livEnt6.hasEffect(CAMobEffects.TRAIL_BUFF.get())) {
                     if (world instanceof ServerLevel projectileLevel) {
                         Projectile _entityToSpawn = new Object() {
                             public Projectile getArrow(Level level, Entity shooter, float damage, int knockback) {
-                                AbstractArrow entityToSpawn = new FishSplashEntity(CaerulaArborModEntities.FISH_SPLASH.get(), level);
+                                AbstractArrow entityToSpawn = new FishSplashEntity(CAEntities.FISH_SPLASH.get(), level);
                                 entityToSpawn.setOwner(shooter);
                                 entityToSpawn.setBaseDamage(damage);
                                 entityToSpawn.setKnockback(knockback);
@@ -87,7 +87,7 @@ public class SplasherAttackMobEffect extends MobEffect {
                     new Object() {
                         void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                             if (world instanceof ServerLevel _level)
-                                _level.sendParticles(CaerulaArborModParticleTypes.SEA_SPLASH.get(), (entityiterator.getX() + ((x - entityiterator.getX()) / 40) * timedloopiterator),
+                                _level.sendParticles(CAParticleTypes.SEA_SPLASH.get(), (entityiterator.getX() + ((x - entityiterator.getX()) / 40) * timedloopiterator),
                                         (entityiterator.getY() + 9 + ((y - (entityiterator.getY() + 9)) / 40) * timedloopiterator), (entityiterator.getZ() + ((z - entityiterator.getZ()) / 40) * timedloopiterator), 1, 0.1, 0.1, 0.1, 0.01);
                             final int tick2 = ticks;
                             CaerulaArborMod.queueServerWork(tick2, () -> {

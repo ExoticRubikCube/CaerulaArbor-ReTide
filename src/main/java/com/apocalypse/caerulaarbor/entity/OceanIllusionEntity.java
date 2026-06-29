@@ -1,9 +1,9 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.procedures.RavagerSummonFellowsProcedure;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.particles.ParticleTypes;
@@ -63,7 +63,7 @@ public class OceanIllusionEntity extends SeaMonster implements RangedAttackMob {
 	public String animationprocedure = "empty";
 
 	public OceanIllusionEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.OCEAN_ILLUSION.get(), world);
+		this(CAEntities.OCEAN_ILLUSION.get(), world);
 	}
 
 	public OceanIllusionEntity(EntityType<OceanIllusionEntity> type, Level world) {
@@ -304,8 +304,8 @@ public class OceanIllusionEntity extends SeaMonster implements RangedAttackMob {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        Entity illusioner = null;
-        Entity enemy = null;
+        Entity illusioner;
+        Entity enemy;
         if (this.isAlive()) {
             if (tickCount % 40 == 20) {
                 enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
@@ -341,11 +341,11 @@ public class OceanIllusionEntity extends SeaMonster implements RangedAttackMob {
                 }
             }
             if (!finished) {
-                if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()))
-                    this.getAttribute(CaerulaArborModAttributes.GENERAL_DEFENSE.get()).setBaseValue(0);
+                if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
+                    this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).setBaseValue(0);
             }
         }
-        if (!this.level().isClientSide() && this.hasEffect(CaerulaArborModMobEffects.MUTE.get())) this.discard();
+        if (!this.level().isClientSide() && this.hasEffect(CAMobEffects.MUTE.get())) this.discard();
 		this.refreshDimensions();
 	}
 

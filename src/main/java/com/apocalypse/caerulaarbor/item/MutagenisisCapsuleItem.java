@@ -46,7 +46,7 @@ public class MutagenisisCapsuleItem extends Item {
 		double y = entity.getY();
 		double z = entity.getZ();
         if (entity != null) {
-            double ocean = 0;
+            double ocean;
             ocean = (((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization;
             if (ocean < 2.9) {
                 SIHelper.causeSanityInjury(entity, (ocean + 1) * 40, SanityEvent.Hurt.Type.FOOD);

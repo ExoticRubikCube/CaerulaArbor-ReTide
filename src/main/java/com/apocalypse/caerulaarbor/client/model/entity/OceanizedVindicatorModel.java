@@ -24,7 +24,7 @@ public class OceanizedVindicatorModel extends GeoModel<OceanizedVindicatorEntity
 
 	@Override
 	public ResourceLocation getTextureResource(OceanizedVindicatorEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/oceanvindic_lit.png");
 	}
 
 	@Override

@@ -3,9 +3,9 @@ package com.apocalypse.caerulaarbor.entity;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.PolarMountRider;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -65,7 +65,7 @@ public class SplasherAbyssalEntity extends SeaMonster implements RangedAttackMob
 	public String animationprocedure = "empty";
 
 	public SplasherAbyssalEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.SPLASHER_ABYSSAL.get(), world);
+		this(CAEntities.SPLASHER_ABYSSAL.get(), world);
 	}
 
 	public SplasherAbyssalEntity(EntityType<SplasherAbyssalEntity> type, Level world) {
@@ -269,10 +269,10 @@ public class SplasherAbyssalEntity extends SeaMonster implements RangedAttackMob
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
         if (this != null) {
-            if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get()))
-                this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(2);
-            if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()))
-                this.getAttribute(CaerulaArborModAttributes.MAGIC_RESISTANCE.get()).setBaseValue(27);
+            if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get()))
+                this.getAttribute(CAAttributes.SANITY_RATE.get()).setBaseValue(2);
+            if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
+                this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(27);
         }
         return retval;
 	}
@@ -293,9 +293,9 @@ public class SplasherAbyssalEntity extends SeaMonster implements RangedAttackMob
 	@Override
 	public void baseTick() {
 		super.baseTick();
-        if (!this.hasEffect(CaerulaArborModMobEffects.SPLASHER_ATTACK.get())) {
+        if (!this.hasEffect(CAMobEffects.SPLASHER_ATTACK.get())) {
             if (!this.level().isClientSide())
-                this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.SPLASHER_ATTACK.get(), 10000, 0, false, false));
+                this.addEffect(new MobEffectInstance(CAMobEffects.SPLASHER_ATTACK.get(), 10000, 0, false, false));
         }
         this.refreshDimensions();
 	}
@@ -311,13 +311,13 @@ public class SplasherAbyssalEntity extends SeaMonster implements RangedAttackMob
 	}
 
 	public static void init() {
-		SpawnPlacements.register(CaerulaArborModEntities.SPLASHER_ABYSSAL.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
+		SpawnPlacements.register(CAEntities.SPLASHER_ABYSSAL.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();
 			return WorldUtils.canCommonSeabornSpawn(world, x, y, z);
 		});
-		DungeonHooks.addDungeonMob(CaerulaArborModEntities.SPLASHER_ABYSSAL.get(), 180);
+		DungeonHooks.addDungeonMob(CAEntities.SPLASHER_ABYSSAL.get(), 180);
 	}
 
 	public static AttributeSupplier.Builder createAttributes() {

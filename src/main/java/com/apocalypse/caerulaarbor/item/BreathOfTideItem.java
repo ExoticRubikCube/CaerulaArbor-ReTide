@@ -2,7 +2,7 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
@@ -72,7 +72,7 @@ public class BreathOfTideItem extends Item {
             if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
                 _player.displayClientMessage(Component.literal((Component.translatable("spawn.last_knight").getString())), false);
             if ((LevelAccessor) world instanceof ServerLevel _level) {
-                CaerulaArborModEntities.THE_LAST_KNIGHT.get().spawn(_level, BlockPos.containing(x + Mth.nextInt(RandomSource.create(), -5, 5), y + 3, z + Mth.nextInt(RandomSource.create(), -5, 5)), MobSpawnType.MOB_SUMMONED);
+                CAEntities.THE_LAST_KNIGHT.get().spawn(_level, BlockPos.containing(x + Mth.nextInt(RandomSource.create(), -5, 5), y + 3, z + Mth.nextInt(RandomSource.create(), -5, 5)), MobSpawnType.MOB_SUMMONED);
             }
             itemstack.shrink(1);
         }

@@ -1,10 +1,9 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.*;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -70,7 +69,7 @@ public class OceanizedCowEntity extends SeaMonster {
 	public String animationprocedure = "empty";
 
 	public OceanizedCowEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.OCEANIZED_COW.get(), world);
+		this(CAEntities.OCEANIZED_COW.get(), world);
 	}
 
 	public OceanizedCowEntity(EntityType<OceanizedCowEntity> type, Level world) {
@@ -180,8 +179,8 @@ public class OceanizedCowEntity extends SeaMonster {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-		if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY_RATE.get())) {
-			this.getAttribute(CaerulaArborModAttributes.SANITY_RATE.get()).setBaseValue(6);
+		if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get())) {
+			this.getAttribute(CAAttributes.SANITY_RATE.get()).setBaseValue(6);
 		}
 		return retval;
 	}
@@ -220,7 +219,7 @@ public class OceanizedCowEntity extends SeaMonster {
             }
             for (int index0 = 0; index0 < Mth.nextInt(RandomSource.create(), 3, 5); index0++) {
                 if ((LevelAccessor) world instanceof ServerLevel _level) {
-                    ItemEntity entityToSpawn = new ItemEntity(_level, x, (y + 0.65), z, new ItemStack(CaerulaArborModBlocks.TRAIL_MUSHROOM.get()));
+                    ItemEntity entityToSpawn = new ItemEntity(_level, x, (y + 0.65), z, new ItemStack(CABlocks.TRAIL_MUSHROOM.get()));
                     entityToSpawn.setPickUpDelay(10);
                     _level.addFreshEntity(entityToSpawn);
                 }
@@ -234,9 +233,9 @@ public class OceanizedCowEntity extends SeaMonster {
 	public void baseTick() {
 		super.baseTick();
         LevelAccessor world = this.level();
-        if (!this.hasEffect(CaerulaArborModMobEffects.MUTE.get()) && (Entity) this instanceof OceanizedCowEntity _datEntL1 && _datEntL1.getEntityData().get(DATA_skill) && WorldUtils.canGrief(world)) {
-            if (!this.level().isClientSide() && !_datEntL1.hasEffect(CaerulaArborModMobEffects.COW_BUFF.get())) {
-                this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.COW_BUFF.get(), 20, 0, false, false));
+        if (!this.hasEffect(CAMobEffects.MUTE.get()) && (Entity) this instanceof OceanizedCowEntity _datEntL1 && _datEntL1.getEntityData().get(DATA_skill) && WorldUtils.canGrief(world)) {
+            if (!this.level().isClientSide() && !_datEntL1.hasEffect(CAMobEffects.COW_BUFF.get())) {
+                this.addEffect(new MobEffectInstance(CAMobEffects.COW_BUFF.get(), 20, 0, false, false));
             }
         }
         this.refreshDimensions();

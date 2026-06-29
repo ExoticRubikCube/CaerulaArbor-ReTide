@@ -2,8 +2,9 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
@@ -44,6 +45,7 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -65,9 +67,7 @@ public class UlpiansEntity extends Animal implements GeoEntity {
 	private boolean isUlpuansDurative() {
 		return EntityPredicateUtils.isUlpuansDurative(this);
 	}
-	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(UlpiansEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(UlpiansEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(UlpiansEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(UlpiansEntity.class, EntityDataSerializers.INT);
 	public static final EntityDataAccessor<Integer> DATA_skillp1 = SynchedEntityData.defineId(UlpiansEntity.class, EntityDataSerializers.INT);
 	public static final EntityDataAccessor<Integer> DATA_skillp2 = SynchedEntityData.defineId(UlpiansEntity.class, EntityDataSerializers.INT);
@@ -79,7 +79,7 @@ public class UlpiansEntity extends Animal implements GeoEntity {
 	public String animationprocedure = "empty";
 
 	public UlpiansEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.ULPIANS.get(), world);
+		this(CAEntities.ULPIANS.get(), world);
 	}
 
 	public UlpiansEntity(EntityType<UlpiansEntity> type, Level world) {
@@ -93,21 +93,11 @@ public class UlpiansEntity extends Animal implements GeoEntity {
 	@Override
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(SHOOT, false);
 		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(TEXTURE, "hunter_ulpians");
 		this.entityData.define(DATA_duration, 0);
 		this.entityData.define(DATA_skillp1, 80);
 		this.entityData.define(DATA_skillp2, 160);
 		this.entityData.define(DATA_bonus, 0);
-	}
-
-	public void setTexture(String texture) {
-		this.entityData.set(TEXTURE, texture);
-	}
-
-	public String getTexture() {
-		return this.entityData.get(TEXTURE);
 	}
 
 	@Override
@@ -245,7 +235,7 @@ public class UlpiansEntity extends Animal implements GeoEntity {
 
 	@Override
 	public boolean hurt(DamageSource source, float amount) {
-        double healAmoun = 0;
+        double healAmoun;
         if (this.isAlive()) {
             if (invulnerableTime <= 15) {
                 healAmoun = 8;
@@ -266,41 +256,56 @@ public class UlpiansEntity extends Animal implements GeoEntity {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-		EntityUtils.initHunter(this);
-		return retval;
+        if (this != null) {
+            if ((Entity) this instanceof LivingEntity _livingEntity1 && _livingEntity1.getAttributes().hasAttribute(ForgeMod.SWIM_SPEED.get()))
+                _livingEntity1.getAttribute(ForgeMod.SWIM_SPEED.get())
+                        .setBaseValue((((Entity) this instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(ForgeMod.SWIM_SPEED.get()) ? _livingEntity0.getAttribute(ForgeMod.SWIM_SPEED.get()).getBaseValue() : 0) * 8));
+            if ((Entity) this instanceof LivingEntity _livingEntity2 && _livingEntity2.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
+                _livingEntity2.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.33);
+        }
+        return retval;
 	}
 
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
-		compound.putString("Texture", this.getTexture());
-		compound.putInt("Dataduration", this.entityData.get(DATA_duration));
-		compound.putInt("Dataskillp1", this.entityData.get(DATA_skillp1));
-		compound.putInt("Dataskillp2", this.entityData.get(DATA_skillp2));
-		compound.putInt("Databonus", this.entityData.get(DATA_bonus));
+		compound.putInt("Duration", this.entityData.get(DATA_duration));
+		compound.putInt("PrimarySkillCooldown", this.entityData.get(DATA_skillp1));
+		compound.putInt("SecondarySkillCooldown", this.entityData.get(DATA_skillp2));
+		compound.putInt("BonusStacks", this.entityData.get(DATA_bonus));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
-		if (compound.contains("Texture"))
-			this.setTexture(compound.getString("Texture"));
-		if (compound.contains("Dataduration"))
+		if (compound.contains("Duration")) {
+			this.entityData.set(DATA_duration, compound.getInt("Duration"));
+		} else if (compound.contains("Dataduration")) {
 			this.entityData.set(DATA_duration, compound.getInt("Dataduration"));
-		if (compound.contains("Dataskillp1"))
+		}
+		if (compound.contains("PrimarySkillCooldown")) {
+			this.entityData.set(DATA_skillp1, compound.getInt("PrimarySkillCooldown"));
+		} else if (compound.contains("Dataskillp1")) {
 			this.entityData.set(DATA_skillp1, compound.getInt("Dataskillp1"));
-		if (compound.contains("Dataskillp2"))
+		}
+		if (compound.contains("SecondarySkillCooldown")) {
+			this.entityData.set(DATA_skillp2, compound.getInt("SecondarySkillCooldown"));
+		} else if (compound.contains("Dataskillp2")) {
 			this.entityData.set(DATA_skillp2, compound.getInt("Dataskillp2"));
-		if (compound.contains("Databonus"))
+		}
+		if (compound.contains("BonusStacks")) {
+			this.entityData.set(DATA_bonus, compound.getInt("BonusStacks"));
+		} else if (compound.contains("Databonus")) {
 			this.entityData.set(DATA_bonus, compound.getInt("Databonus"));
+		}
 	}
 
 	@Override
 	public void awardKillScore(Entity entity, int score, DamageSource damageSource) {
 		super.awardKillScore(entity, score, damageSource);
         LevelAccessor world = this.level();
-        double bns = 0;
-        double perc = 0;
+        double bns;
+        double perc;
         bns = (Entity) this instanceof UlpiansEntity _datEntI ? _datEntI.getEntityData().get(DATA_bonus) : 0;
         if (bns < 10) {
             if ((Entity) this instanceof UlpiansEntity _datEntSetI)
@@ -338,11 +343,11 @@ public class UlpiansEntity extends Animal implements GeoEntity {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        Entity enemy = null;
+        Entity enemy;
         double gap = 0;
-        double sklp1 = 0;
-        double dura = 0;
-        double skillp2 = 0;
+        double sklp1;
+        double dura;
+        double skillp2;
         if (this.isAlive()) {
             sklp1 = (Entity) this instanceof UlpiansEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp1) : 0;
             skillp2 = (Entity) this instanceof UlpiansEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp2) : 0;
@@ -378,10 +383,10 @@ public class UlpiansEntity extends Animal implements GeoEntity {
                         });
                         CaerulaArborMod.queueServerWork(20, () -> {
                             if (this.isAlive()) {
-                                Entity enemy1 = null;
-                                double damage = 0;
-                                double r = 0;
-                                double d = 0;
+                                Entity enemy1;
+                                double damage;
+                                double r;
+                                double d;
                                 enemy1 = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                                 r = 6;
                                 damage = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 2.7;
@@ -411,7 +416,7 @@ public class UlpiansEntity extends Animal implements GeoEntity {
                                         d = entityiterator != null ? distanceTo(entityiterator) : -1;
                                         if (d <= r && (EntityUtils.getEntityCosine(this, entityiterator) > 0.5 || d <= 3)) {
                                             if (entityiterator instanceof LivingEntity _entity && !this.level().isClientSide())
-                                                this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.DIZZY.get(), 40, 0, false, false));
+                                                this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 40, 0, false, false));
                                             entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "anchor_smash"))), this),
                                                     (float) damage);
                                         }
@@ -421,9 +426,9 @@ public class UlpiansEntity extends Animal implements GeoEntity {
                         });
                         CaerulaArborMod.queueServerWork(24, () -> {
                             if (this.isAlive()) {
-                                Entity enemy1 = null;
+                                Entity enemy1;
                                 double damage = 0;
-                                double r = 0;
+                                double r;
                                 enemy1 = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                                 r = 4.5;
                                 {
@@ -494,7 +499,7 @@ public class UlpiansEntity extends Animal implements GeoEntity {
                         }
                         ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY() + 1.6), (enemy.getZ())));
                         if (!this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 25, 9, false, false));
+                            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 25, 9, false, false));
                         if (world instanceof Level _level) {
                                 _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "ulpians_skill")), SoundSource.NEUTRAL, (float) 2.5, 1);
                         }
@@ -505,15 +510,15 @@ public class UlpiansEntity extends Animal implements GeoEntity {
                         });
                         CaerulaArborMod.queueServerWork(22, () -> {
                             if (this.isAlive()) {
-                                Entity enemy1 = null;
-                                double perc = 0;
-                                double damage = 0;
-                                double noeX = 0;
-                                double nowY = 0;
-                                double nowZ = 0;
+                                Entity enemy1;
+                                double perc;
+                                double damage;
+                                double noeX;
+                                double nowY;
+                                double nowZ;
                                 perc = ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) / ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1);
                                 if (!this.level().isClientSide())
-                                    this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.PATH_TO_UNCOVER.get(), 500, 0, false, true));
+                                    this.addEffect(new MobEffectInstance(CAMobEffects.PATH_TO_UNCOVER.get(), 500, 0, false, true));
                                 if ((Entity) this instanceof LivingEntity _entity)
                                     _entity.setHealth((float) (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * perc));
                                 enemy1 = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
@@ -526,7 +531,7 @@ public class UlpiansEntity extends Animal implements GeoEntity {
                                             _serverPlayer.connection.teleport((enemy1.getX()), (enemy1.getY()), (enemy1.getZ()), _ent.getYRot(), _ent.getXRot());
                                     }
                                     if (enemy1 instanceof LivingEntity _entity && !this.level().isClientSide())
-                                        this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.DIZZY.get(), 120, 0, false, false));
+                                        this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 120, 0, false, false));
                                     enemy1.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "anchor_smash"))), this), (float) damage);
                                 }
                                 noeX = getX();
@@ -552,15 +557,15 @@ public class UlpiansEntity extends Animal implements GeoEntity {
                                             continue;
                                         }
                                         if ((entityiterator != null ? distanceTo(entityiterator) : -1) <= 6) {
-                                            if (entityiterator instanceof LivingEntity _entity && !this.level().isClientSide())
-                                                this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.DIZZY.get(), 120, 0, false, false));
+                                            if (entityiterator instanceof LivingEntity && !this.level().isClientSide())
+                                                this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 120, 0, false, false));
                                             entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "anchor_smash"))), this),
                                                     (float) damage);
                                         }
                                     }
                                 }
                                 if ((Entity) this instanceof LivingEntity _entity)
-                                    _entity.removeEffect(CaerulaArborModMobEffects.DIZZY.get());
+                                    _entity.removeEffect(CAMobEffects.DIZZY.get());
                                 if ((Entity) this instanceof LivingEntity _entity)
                                     _entity.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
                                 if ((Entity) this instanceof LivingEntity _entity)
@@ -588,7 +593,7 @@ public class UlpiansEntity extends Animal implements GeoEntity {
 
 	@Override
 	public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
-		UlpiansEntity retval = CaerulaArborModEntities.ULPIANS.get().create(serverWorld);
+		UlpiansEntity retval = CAEntities.ULPIANS.get().create(serverWorld);
 		retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null, null);
 		return retval;
 	}
@@ -634,8 +639,6 @@ public class UlpiansEntity extends Animal implements GeoEntity {
 	}
 
 	private PlayState attackingPredicate(AnimationState event) {
-		double d1 = this.getX() - this.xOld;
-		double d0 = this.getZ() - this.zOld;
 		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();

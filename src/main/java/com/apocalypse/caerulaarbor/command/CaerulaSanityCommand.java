@@ -32,10 +32,10 @@ public class CaerulaSanityCommand {
 				entity = FakePlayerFactory.getMinecraft(_servLevel);
 			Direction direction = Direction.DOWN;
 			if (entity != null)
-				direction = entity.getDirection();
+                entity.getDirection();
 
-            Entity ent = null;
-            String info = "";
+            Entity ent;
+            String info;
             ent = new Object() {
                 public Entity getEntity() {
                     try {
@@ -69,9 +69,9 @@ public class CaerulaSanityCommand {
 				entity = FakePlayerFactory.getMinecraft(_servLevel);
 			Direction direction = Direction.DOWN;
 			if (entity != null)
-				direction = entity.getDirection();
+                entity.getDirection();
 
-            Entity ent = null;
+            Entity ent;
             String info = "";
             double num = 0;
             try {
@@ -113,9 +113,9 @@ public class CaerulaSanityCommand {
 				entity = FakePlayerFactory.getMinecraft(_servLevel);
 			Direction direction = Direction.DOWN;
 			if (entity != null)
-				direction = entity.getDirection();
+                entity.getDirection();
 
-            Entity ent = null;
+            Entity ent;
             String info = "";
             double num = 0;
             try {
@@ -153,9 +153,9 @@ public class CaerulaSanityCommand {
 				entity = FakePlayerFactory.getMinecraft(_servLevel);
 			Direction direction = Direction.DOWN;
 			if (entity != null)
-				direction = entity.getDirection();
+                entity.getDirection();
 
-            Entity ent = null;
+            Entity ent;
             String info = "";
             double num = 0;
             try {
