@@ -52,13 +52,11 @@ public class SoloMusicBoxItem extends Item {
                 if ((LevelAccessor) world instanceof ServerLevel _level)
                     _level.addFreshEntity(new ExperienceOrb(_level, (x + Mth.nextDouble(RandomSource.create(), -1, 1)), (y + Mth.nextDouble(RandomSource.create(), 0.6, 0.75)), (z + Mth.nextDouble(RandomSource.create(), -1, 1)), 4));
             }
-            {
-                boolean _setval = true;
-                ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                    capability.relic_util_MUSICBOX = _setval;
-                    capability.syncPlayerVariables(entity);
-                });
-            }
+            boolean _setval = true;
+            ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                capability.relic_util_MUSICBOX = _setval;
+                capability.syncPlayerVariables(entity);
+            });
             itemstack.getOrCreateTag().putBoolean("used", true);
             if ((LevelAccessor) world instanceof Level _level) {
                 _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.player.levelup")), SoundSource.NEUTRAL, 2, 1);

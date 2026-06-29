@@ -151,8 +151,7 @@ public class LivingDeathEventHandler {
                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.totem.use")), SoundSource.PLAYERS, (float) 0.33, 1);
                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "target_damaged")), SoundSource.PLAYERS, (float) 0.33, 1);
                 }
-                if (entity.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY.get()))
-                    entity.getAttribute(CaerulaArborModAttributes.SANITY.get()).setBaseValue(1000);
+                ModCapabilities.getSanityInjury(entity).heal(1000);
                 if (is_shield) {
                     if (world instanceof ServerLevel _level)
                         _level.sendParticles(CaerulaArborModParticleTypes.SHIELDLOSS.get(), x, (y + 0.95), z, 72, 0.75, 0.55, 0.75, 0.2);

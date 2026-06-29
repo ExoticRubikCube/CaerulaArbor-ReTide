@@ -1,7 +1,7 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
+import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
@@ -565,8 +565,7 @@ public class UlpiansEntity extends Animal implements GeoEntity {
                                     _entity.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
                                 if ((Entity) this instanceof LivingEntity _entity)
                                     _entity.removeEffect(MobEffects.DIG_SLOWDOWN);
-                                if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY.get()))
-                                    this.getAttribute(CaerulaArborModAttributes.SANITY.get()).setBaseValue(1000);
+                                ModCapabilities.getSanityInjury(this).heal(1000);
                                 if (world instanceof ServerLevel _level)
                                     _level.sendParticles(ParticleTypes.EXPLOSION_EMITTER, noeX, nowY, nowZ, 72, 3, 3, 3, 0.5);
                                 if (world instanceof Level _level) {

@@ -24,7 +24,6 @@ import java.util.stream.Collectors;
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class CaerulaArborModAttributes {
 	public static final DeferredRegister<Attribute> REGISTRY = DeferredRegister.create(ForgeRegistries.ATTRIBUTES, CaerulaArborMod.MODID);
-	public static final RegistryObject<Attribute> SANITY = REGISTRY.register("sanity", () -> new RangedAttribute("attribute.caerula_arbor.sanity", 1000, -1, 1000).setSyncable(true));
 	public static final RegistryObject<Attribute> SANITY_MODIFIER = REGISTRY.register("sanity_modifier", () -> new RangedAttribute("attribute.caerula_arbor.sanity_modifier", 1, 0, 999).setSyncable(true));
 	public static final RegistryObject<Attribute> SANITY_RATE = REGISTRY.register("sanity_rate", () -> new RangedAttribute("attribute.caerula_arbor.sanity_rate", 0, 0, 999).setSyncable(true));
 	public static final RegistryObject<Attribute> SANITY_INJURY_DAMAGE = REGISTRY.register("sanity_injury_damage",
@@ -40,7 +39,6 @@ public class CaerulaArborModAttributes {
 
 	@SubscribeEvent
 	public static void addAttributes(EntityAttributeModificationEvent event) {
-		event.getTypes().forEach(entity -> event.add(entity, SANITY.get()));
 		event.getTypes().forEach(entity -> event.add(entity, SANITY_MODIFIER.get()));
 		event.getTypes().forEach(entity -> event.add(entity, SANITY_RATE.get()));
 		event.getTypes().forEach(entity -> event.add(entity, SANITY_INJURY_DAMAGE.get()));
@@ -109,7 +107,6 @@ public class CaerulaArborModAttributes {
 		public static void playerClone(PlayerEvent.Clone event) {
 			Player oldPlayer = event.getOriginal();
 			Player newPlayer = event.getEntity();
-			newPlayer.getAttribute(SANITY.get()).setBaseValue(oldPlayer.getAttribute(SANITY.get()).getBaseValue());
 			newPlayer.getAttribute(SANITY_MODIFIER.get()).setBaseValue(oldPlayer.getAttribute(SANITY_MODIFIER.get()).getBaseValue());
 			newPlayer.getAttribute(SANITY_RATE.get()).setBaseValue(oldPlayer.getAttribute(SANITY_RATE.get()).getBaseValue());
 			newPlayer.getAttribute(SANITY_INJURY_DAMAGE.get()).setBaseValue(oldPlayer.getAttribute(SANITY_INJURY_DAMAGE.get()).getBaseValue());

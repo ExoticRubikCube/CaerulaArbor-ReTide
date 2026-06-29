@@ -1,6 +1,7 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModAttributes;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
@@ -200,8 +201,7 @@ public class GunmuEntity extends Monster {
             this.removeAllEffects();
             if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.NUMB.get()))
                 this.getAttribute(CaerulaArborModAttributes.NUMB.get()).setBaseValue(0);
-            if (this.getAttributes().hasAttribute(CaerulaArborModAttributes.SANITY.get()))
-                this.getAttribute(CaerulaArborModAttributes.SANITY.get()).setBaseValue(1000);
+            ModCapabilities.getSanityInjury(this).heal(1000);
         }
     }
 

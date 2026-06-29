@@ -2,8 +2,8 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
+import com.apocalypse.caerulaarbor.init.CaerulaArborModBlocks;
 import com.apocalypse.caerulaarbor.util.ItemUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -121,8 +121,6 @@ public class RelicCurseEMELIGHTItem extends Item {
         double x = entity.getX();
         double y = entity.getY();
         double z = entity.getZ();
-        if (entity == null)
-            return;
         if (!itemstack.getOrCreateTag().getBoolean("used")) {
             if (!(entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_cursed_EMELIGHT) {
                 {

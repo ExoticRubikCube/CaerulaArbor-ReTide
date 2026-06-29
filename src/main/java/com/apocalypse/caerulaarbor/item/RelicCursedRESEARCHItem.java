@@ -44,13 +44,11 @@ public class RelicCursedRESEARCHItem extends Item {
         double z = entity.getZ();
         if (!itemstack.getOrCreateTag().getBoolean("used")) {
             if (!(entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_cursed_RESEARCH) {
-                {
-                    boolean _setval = true;
-                    entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                        capability.relic_cursed_RESEARCH = _setval;
-                        capability.syncPlayerVariables(entity);
-                    });
-                }
+                boolean _setval = true;
+                entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                    capability.relic_cursed_RESEARCH = _setval;
+                    capability.syncPlayerVariables(entity);
+                });
                 if ((LevelAccessor) world instanceof Level _level) {
                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("ambient.soul_sand_valley.mood")), SoundSource.NEUTRAL, 2, 1);
                 }

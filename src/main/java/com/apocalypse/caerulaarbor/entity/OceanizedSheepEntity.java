@@ -218,9 +218,7 @@ public class OceanizedSheepEntity extends SeaMonster {
                     _level.addFreshEntity(entityToSpawn);
                 }
             }
-            if (sourceentity instanceof LivingEntity target) {
-                SIHelper.causeSanityInjury(target, this, 64, SanityEvent.Hurt.Type.ENTITY);
-            }
+            SIHelper.causeSanityInjury(sourceentity, this, 64, SanityEvent.Hurt.Type.ENTITY);
             return InteractionResult.SUCCESS;
         }
         return InteractionResult.PASS;
