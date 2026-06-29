@@ -8,7 +8,6 @@ import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
 import com.apocalypse.caerulaarbor.entity.*;
 import com.apocalypse.caerulaarbor.init.*;
-import com.apocalypse.caerulaarbor.procedures.SummonFractalProcedure;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -75,64 +74,6 @@ public class EntityUtils {
 					b.getY() + dy * t + 1,
 					b.getZ() + dz * t,
 					3, 0.1, 0.1, 0.1, 0.01);
-			}
-		}
-	}
-
-	public static void assembleFractals(LevelAccessor world, double x, double y, double z, Entity entity, Entity sourceentity) {
-		if (entity == null || sourceentity == null)
-			return;
-		double sklp = 0;
-		boolean isLingering = entity instanceof LineringPathshaperEntity;
-        if (isLingering) {
-			sklp = entity instanceof LineringPathshaperEntity _datEntI ? _datEntI.getEntityData().get(LineringPathshaperEntity.DATA_skillp) : 0;
-		} else {
-			sklp = entity instanceof RouteShaperEntity _datEntI ? _datEntI.getEntityData().get(RouteShaperEntity.DATA_skillp) : 0;
-		}
-		if (sklp >= 8) {
-			SummonFractalProcedure.execute(world, x, y, z, entity);
-			if (Math.random() < 0.33) {
-				SummonFractalProcedure.execute(world, x, y, z, entity);
-			}
-			if (entity instanceof RouteShaperEntity _datEntSetI)
-				_datEntSetI.getEntityData().set(RouteShaperEntity.DATA_skillp, 0);
-			if (entity instanceof LineringPathshaperEntity _datEntSetI)
-				_datEntSetI.getEntityData().set(LineringPathshaperEntity.DATA_skillp, 0);
-		} else {
-			if (entity instanceof RouteShaperEntity _datEntSetI)
-				_datEntSetI.getEntityData().set(RouteShaperEntity.DATA_skillp, (int) (sklp + 2));
-			if (entity instanceof LineringPathshaperEntity _datEntSetI)
-				_datEntSetI.getEntityData().set(LineringPathshaperEntity.DATA_skillp, (int) (sklp + 2));
-		}
-		{
-			final Vec3 _center = new Vec3(x, y, z);
-			List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(64 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-			for (Entity entityiterator : _entfound) {
-				if (entityiterator instanceof RouteFractalEntity || entityiterator instanceof LingeringFractalEntity) {
-					if (entityiterator instanceof Mob _entity && sourceentity instanceof LivingEntity _ent)
-						_entity.setTarget(_ent);
-				}
-			}
-		}
-	}
-
-	public static void boostFractals(LevelAccessor world, double x, double y, double z, Entity entity) {
-		if (entity == null)
-			return;
-		if (entity.tickCount % 20 == 7) {
-			if ((entity instanceof RouteShaperEntity _datEntI ? _datEntI.getEntityData().get(RouteShaperEntity.DATA_phase) : 0) == 1 || entity instanceof LineringPathshaperEntity) {
-				{
-					final Vec3 _center = new Vec3(x, y, z);
-					List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(64 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-					for (Entity entityiterator : _entfound) {
-						if (entityiterator instanceof RouteFractalEntity livEnt4) {
-							if (!livEnt4.hasEffect(CaerulaArborModMobEffects.SEEK_OF_FRACTAL.get())) {
-								if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
-									_entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.SEEK_OF_FRACTAL.get(), 999, 0));
-							}
-						}
-					}
-				}
 			}
 		}
 	}

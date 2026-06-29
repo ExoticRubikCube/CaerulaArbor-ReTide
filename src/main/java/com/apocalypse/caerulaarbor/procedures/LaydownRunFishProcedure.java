@@ -77,5 +77,3 @@ public class LaydownRunFishProcedure {
 		return InteractionResult.SUCCESS;
 	}
 }
-
-// TODO: 调用次数 = 6，副作用密集（生成实体、播放声音、修改物品栏），保持原样不重构

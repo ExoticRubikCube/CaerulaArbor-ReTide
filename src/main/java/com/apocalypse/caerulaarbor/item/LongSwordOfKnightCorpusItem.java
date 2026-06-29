@@ -2,9 +2,11 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
-import com.apocalypse.caerulaarbor.util.EffectUtils;
+import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
@@ -71,7 +73,13 @@ public class LongSwordOfKnightCorpusItem extends SwordItem {
 	@Override
 	public void inventoryTick(ItemStack itemstack, Level world, Entity entity, int slot, boolean selected) {
 		super.inventoryTick(itemstack, world, entity, slot, selected);
-		if (selected)
-			EffectUtils.addReachEffect(entity, 20, 2);
+		if (selected) {
+            if (entity == null)
+                return;
+            if (!(entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CaerulaArborModMobEffects.ADD_REACH.get()))) {
+                if (entity instanceof LivingEntity living && !living.level().isClientSide())
+                    living.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ADD_REACH.get(), 20, 2, false, false));
+            }
+        }
 	}
 }

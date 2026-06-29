@@ -86,5 +86,3 @@ public class UpgradeMigraProcedure {
 		}
 	}
 }
-
-// TODO: 调用次数 = 6，但 procedure 非常长（98行），副作用密集（修改全局变量、同步数据、播放声音、给予玩家成就、显示消息），保持原样不重构

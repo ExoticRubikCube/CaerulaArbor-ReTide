@@ -5,6 +5,10 @@ package com.apocalypse.caerulaarbor.init;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.*;
+import com.apocalypse.caerulaarbor.entity.routeshaper.LineringPathshaperEntity;
+import com.apocalypse.caerulaarbor.entity.routeshaper.LingeringFractalEntity;
+import com.apocalypse.caerulaarbor.entity.routeshaper.RouteFractalEntity;
+import com.apocalypse.caerulaarbor.entity.routeshaper.RouteShaperEntity;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -515,7 +519,7 @@ public class CaerulaArborModEntities {
 		return REGISTRY.register(registryname, () -> entityTypeBuilder.build(registryname));
 	}
 
-	//TODO:之后会清理
+	//TODO:需要清理和下放，高优先级
 	@SubscribeEvent
 	public static void init(FMLCommonSetupEvent event) {
 		event.enqueueWork(() -> {

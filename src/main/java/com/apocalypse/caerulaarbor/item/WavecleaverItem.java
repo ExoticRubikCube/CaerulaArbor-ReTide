@@ -2,9 +2,9 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
 import com.apocalypse.caerulaarbor.client.renderer.item.WavecleaverItemRenderer;
-import com.apocalypse.caerulaarbor.util.EffectUtils;
+import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
+import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
@@ -15,6 +15,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -199,7 +200,13 @@ public class WavecleaverItem extends Item implements GeoItem {
 	@Override
 	public void inventoryTick(ItemStack itemstack, Level world, Entity entity, int slot, boolean selected) {
 		super.inventoryTick(itemstack, world, entity, slot, selected);
-		if (selected)
-			EffectUtils.addReachEffect(entity, 20, 2);
+		if (selected) {
+            if (entity == null)
+                return;
+            if (!(entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CaerulaArborModMobEffects.ADD_REACH.get()))) {
+                if (entity instanceof LivingEntity living && !living.level().isClientSide())
+                    living.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ADD_REACH.get(), 20, 2, false, false));
+            }
+        }
 	}
 }

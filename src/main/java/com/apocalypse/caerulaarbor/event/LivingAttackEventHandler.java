@@ -12,7 +12,6 @@ import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
 import com.apocalypse.caerulaarbor.entity.*;
 import com.apocalypse.caerulaarbor.init.*;
 import com.apocalypse.caerulaarbor.item.HighmoreScytheItem;
-import com.apocalypse.caerulaarbor.procedures.SummonFractalProcedure;
 import com.apocalypse.caerulaarbor.system.UpgradeGrowProcedure;
 import com.apocalypse.caerulaarbor.system.UpgradeSilenceProcedure;
 import com.apocalypse.caerulaarbor.system.UpgradeSubsisProcedure;
@@ -85,7 +84,6 @@ public class LivingAttackEventHandler {
         handleHighmoreCounter(event);
         handleHighmoreScytheEntityAttack(event);
         handleOceanWitherExtraAttack(event);
-        handlePathshaperHit(event);
         handleTidutantArmorBreak(event);
         handleMobHit(event);
         handlePlayerHit(event);
@@ -537,58 +535,6 @@ public class LivingAttackEventHandler {
                         (float) (sourceentity instanceof LivingEntity _livingEntity6 && _livingEntity6.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)
                                 ? _livingEntity6.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
                 entity.invulnerableTime = 0;
-            }
-        }
-    }
-
-    private static void handlePathshaperHit(LivingAttackEvent event) {
-        LevelAccessor world = event.getEntity().level();
-        double x = event.getEntity().getX();
-        double y = event.getEntity().getY();
-        double z = event.getEntity().getZ();
-        Entity sourceentity = event.getSource().getEntity();
-
-        if (sourceentity == null) return;
-        if (event.isCanceled()) return;
-
-        if (sourceentity instanceof RouteShaperEntity) {
-            double sklp = sourceentity instanceof RouteShaperEntity _datEntI ? _datEntI.getEntityData().get(RouteShaperEntity.DATA_skillp) : 0;
-            if (sourceentity instanceof RouteShaperEntity _datEntSetI)
-                _datEntSetI.getEntityData().set(RouteShaperEntity.DATA_skillp, (int) (sklp + 1));
-            if (sklp + 1 >= 8) {
-                SummonFractalProcedure.execute(world, x, y, z, sourceentity);
-                if (sourceentity instanceof RouteShaperEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(RouteShaperEntity.DATA_skillp, 0);
-            }
-        }
-        if (sourceentity instanceof RouteFractalEntity) {
-            double sklp = sourceentity instanceof RouteFractalEntity _datEntI ? _datEntI.getEntityData().get(RouteFractalEntity.DATA_skillp) : 0;
-            if (sourceentity instanceof RouteFractalEntity _datEntSetI)
-                _datEntSetI.getEntityData().set(RouteFractalEntity.DATA_skillp, (int) (sklp + 1));
-            if (sklp + 1 >= 6) {
-                SummonFractalProcedure.execute(world, x, y, z, sourceentity);
-                if (sourceentity instanceof RouteFractalEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(RouteFractalEntity.DATA_skillp, 0);
-            }
-        }
-        if (sourceentity instanceof LineringPathshaperEntity) {
-            double sklp = sourceentity instanceof LineringPathshaperEntity _datEntI ? _datEntI.getEntityData().get(LineringPathshaperEntity.DATA_skillp) : 0;
-            if (sourceentity instanceof LineringPathshaperEntity _datEntSetI)
-                _datEntSetI.getEntityData().set(LineringPathshaperEntity.DATA_skillp, (int) (sklp + 1));
-            if (sklp + 1 >= 8) {
-                SummonFractalProcedure.execute(world, x, y, z, sourceentity);
-                if (sourceentity instanceof LineringPathshaperEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(LineringPathshaperEntity.DATA_skillp, 0);
-            }
-        }
-        if (sourceentity instanceof LingeringFractalEntity) {
-            double sklp = sourceentity instanceof LingeringFractalEntity _datEntI ? _datEntI.getEntityData().get(LingeringFractalEntity.DATA_skillp) : 0;
-            if (sourceentity instanceof LingeringFractalEntity _datEntSetI)
-                _datEntSetI.getEntityData().set(LingeringFractalEntity.DATA_skillp, (int) (sklp + 1));
-            if (sklp + 1 >= 6) {
-                SummonFractalProcedure.execute(world, x, y, z, sourceentity);
-                if (sourceentity instanceof LingeringFractalEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(LingeringFractalEntity.DATA_skillp, 0);
             }
         }
     }

@@ -1,8 +1,7 @@
-
 package com.apocalypse.caerulaarbor.client.renderer.entity;
 
 import com.apocalypse.caerulaarbor.client.model.entity.LineringPathshaperModel;
-import com.apocalypse.caerulaarbor.entity.LineringPathshaperEntity;
+import com.apocalypse.caerulaarbor.entity.routeshaper.LineringPathshaperEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -37,3 +36,4 @@ public class LineringPathshaperRenderer extends GeoEntityRenderer<LineringPathsh
 		return 0.0F;
 	}
 }
+

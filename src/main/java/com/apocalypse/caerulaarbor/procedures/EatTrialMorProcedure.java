@@ -19,5 +19,3 @@ public class EatTrialMorProcedure {
 			serverLevel.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, (y + 0.8), z, 48, 0.5, 1, 0.5, 0.1);
 	}
 }
-
-// TODO: 是公共方法

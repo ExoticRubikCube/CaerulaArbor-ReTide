@@ -1,10 +1,17 @@
 
 package com.apocalypse.caerulaarbor.menu;
 
+import com.apocalypse.caerulaarbor.init.CaerulaArborModItems;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMenus;
+import io.netty.buffer.Unpooled;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -15,6 +22,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.network.NetworkHooks;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -68,5 +76,30 @@ public class InfoStrategyAllMenu extends AbstractContainerMenu implements Suppli
 
 	public Map<Integer, Slot> get() {
 		return customSlots;
+	}
+
+	public static InteractionResult open(Entity entity, BlockPos blockPos) {
+		if (entity == null)
+			return InteractionResult.PASS;
+		if (entity instanceof LivingEntity livingEntity && livingEntity.isHolding(CaerulaArborModItems.DICTATIONLESS_CHAPTER.get())) {
+			return InteractionResult.PASS;
+		}
+		if (entity instanceof LivingEntity livingEntity && livingEntity.isHolding(CaerulaArborModItems.DICTATION_CHAPTER.get())) {
+			return InteractionResult.PASS;
+		}
+		if (entity instanceof ServerPlayer serverPlayer) {
+			NetworkHooks.openScreen(serverPlayer, new MenuProvider() {
+				@Override
+				public Component getDisplayName() {
+					return Component.literal("InfoStrategyAll");
+				}
+
+				@Override
+				public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
+					return new InfoStrategyAllMenu(id, inventory, new FriendlyByteBuf(Unpooled.buffer()).writeBlockPos(blockPos));
+				}
+			}, blockPos);
+		}
+		return InteractionResult.SUCCESS;
 	}
 }

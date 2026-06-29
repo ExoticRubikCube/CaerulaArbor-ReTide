@@ -1,6 +1,6 @@
 package com.apocalypse.caerulaarbor.network.message.send;
 
-import com.apocalypse.caerulaarbor.procedures.OpenStraGUIProcedure;
+import com.apocalypse.caerulaarbor.menu.InfoStrategyAllMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
@@ -54,8 +54,7 @@ public class InfoStrategyReturnButtonMessage {
 		if (!world.hasChunkAt(new BlockPos(x, y, z)))
 			return;
 		if (buttonID == 0) {
-			OpenStraGUIProcedure.execute(world, x, y, z, entity);
+			InfoStrategyAllMenu.open(entity, BlockPos.containing(x, y, z));
 		}
 	}
 }
-

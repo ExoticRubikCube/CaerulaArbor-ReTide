@@ -73,12 +73,12 @@ public class TideBiDeathProcedure {
 				entity.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.FELL_OUT_OF_WORLD)), 114514);
 			}
 		} else {
-			if (entity instanceof TideDeathrepellerEntity) {
+			if (entity instanceof TideDeathrepellerEntity livEnt0) {
                 Entity enemy = null;
                 double num = 0;
                 double sklp = 0;
                 double dura = 0;
-                if (!(entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CaerulaArborModMobEffects.FAKE_DEATH.get()))) {
+                if (!livEnt0.hasEffect(CaerulaArborModMobEffects.FAKE_DEATH.get())) {
                     sklp = entity instanceof TideDeathrepellerEntity _datEntI ? _datEntI.getEntityData().get(TideDeathrepellerEntity.DATA_skillp) : 0;
                     dura = entity instanceof TideDeathrepellerEntity _datEntI ? _datEntI.getEntityData().get(TideDeathrepellerEntity.DATA_duration) : 0;
                     if (dura > 0) {
@@ -160,9 +160,9 @@ public class TideBiDeathProcedure {
 					}
 				}
 			}
-			if (entity instanceof TideBishopEntity) {
+			if (entity instanceof TideBishopEntity livEnt0) {
                 double sklp = 0;
-                if (!(entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CaerulaArborModMobEffects.FAKE_DEATH.get()))) {
+                if (!livEnt0.hasEffect(CaerulaArborModMobEffects.FAKE_DEATH.get())) {
                     sklp = entity instanceof TideBishopEntity _datEntI ? _datEntI.getEntityData().get(TideBishopEntity.DATA_skillp) : 0;
                     if (sklp <= 0) {
                         if (!((entity instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == null)) {

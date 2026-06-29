@@ -1,6 +1,10 @@
 package com.apocalypse.caerulaarbor.init;
 
 import com.apocalypse.caerulaarbor.entity.*;
+import com.apocalypse.caerulaarbor.entity.routeshaper.LineringPathshaperEntity;
+import com.apocalypse.caerulaarbor.entity.routeshaper.LingeringFractalEntity;
+import com.apocalypse.caerulaarbor.entity.routeshaper.RouteFractalEntity;
+import com.apocalypse.caerulaarbor.entity.routeshaper.RouteShaperEntity;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;

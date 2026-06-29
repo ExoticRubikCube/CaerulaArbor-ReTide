@@ -1,8 +1,7 @@
 package com.apocalypse.caerulaarbor.client.model.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
-import com.apocalypse.caerulaarbor.entity.RouteFractalEntity;
+import com.apocalypse.caerulaarbor.entity.routeshaper.RouteFractalEntity;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.GeoModel;
 
@@ -19,7 +18,8 @@ public class RouteFractalModel extends GeoModel<RouteFractalEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(RouteFractalEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/blackroute.png");
 	}
 
 }
+

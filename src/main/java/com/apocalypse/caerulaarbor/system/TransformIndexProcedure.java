@@ -172,5 +172,4 @@ public class TransformIndexProcedure {
 	private interface TransformExecutor {
 		boolean apply(LevelAccessor world, double x, double y, double z, Entity entity);
 	}
-
 }

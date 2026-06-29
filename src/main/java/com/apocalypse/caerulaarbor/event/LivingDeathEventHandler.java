@@ -8,6 +8,7 @@ import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler.StrategyTy
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
 import com.apocalypse.caerulaarbor.entity.*;
+import com.apocalypse.caerulaarbor.entity.routeshaper.RouteShaperEntity;
 import com.apocalypse.caerulaarbor.init.*;
 import com.apocalypse.caerulaarbor.system.TransformIndexProcedure;
 import com.apocalypse.caerulaarbor.system.UpgradeBreedProcedure;
@@ -237,7 +238,7 @@ public class LivingDeathEventHandler {
             handleIzumikDeath(event, world, entity);
         }
         if (entity instanceof RouteShaperEntity) {
-            handleRouteShaperDeath(event, world, entity);
+            handleRouteShaperDeath(event, entity);
         }
         if (entity instanceof HighmoreEntity) {
             handleHighmoreDeath(event, world, entity);
@@ -371,18 +372,10 @@ public class LivingDeathEventHandler {
         }
     }
 
-    private static void handleRouteShaperDeath(LivingDeathEvent event, LevelAccessor world, Entity entity) {
-        if (MapVariables.get(world).strategy_subsisting >= 4) {
-            if ((entity instanceof RouteShaperEntity _datEntI ? _datEntI.getEntityData().get(RouteShaperEntity.DATA_phase) : 0) == 0) {
-                if (event.isCancelable()) {
-                    event.setCanceled(true);
-                }
-                if (entity instanceof RouteShaperEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(RouteShaperEntity.DATA_phase, 1);
-                if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                    _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 200, 1, false, false));
-                if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                    _entity.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.FAKE_DEATH.get(), 200, 1, false, false));
+    private static void handleRouteShaperDeath(LivingDeathEvent event, Entity entity) {
+        if (entity instanceof RouteShaperEntity routeShaper && routeShaper.tryEnterSubsistingFakeDeath()) {
+            if (event.isCancelable()) {
+                event.setCanceled(true);
             }
         }
     }

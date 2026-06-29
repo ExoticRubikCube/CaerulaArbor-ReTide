@@ -2,7 +2,6 @@ package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
-import com.apocalypse.caerulaarbor.util.EffectUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -97,7 +96,13 @@ public class AegirLancetItem extends SwordItem {
 	@Override
 	public void inventoryTick(ItemStack itemstack, Level world, Entity entity, int slot, boolean selected) {
 		super.inventoryTick(itemstack, world, entity, slot, selected);
-		if (selected)
-			EffectUtils.addReachEffect(entity, 80, 0);
+		if (selected) {
+            if (entity == null)
+                return;
+            if (!(entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CaerulaArborModMobEffects.ADD_REACH.get()))) {
+                if (entity instanceof LivingEntity living && !living.level().isClientSide())
+                    living.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.ADD_REACH.get(), 80, 0, false, false));
+            }
+        }
 	}
 }

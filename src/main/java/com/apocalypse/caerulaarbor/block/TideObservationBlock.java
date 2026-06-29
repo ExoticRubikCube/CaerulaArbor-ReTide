@@ -1,7 +1,7 @@
 
 package com.apocalypse.caerulaarbor.block;
 
-import com.apocalypse.caerulaarbor.procedures.OpenStraGUIProcedure;
+import com.apocalypse.caerulaarbor.menu.InfoStrategyAllMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -87,14 +87,6 @@ public class TideObservationBlock extends Block {
 	@Override
 	public InteractionResult use(BlockState blockstate, Level world, BlockPos pos, Player entity, InteractionHand hand, BlockHitResult hit) {
 		super.use(blockstate, world, pos, entity, hand, hit);
-		int x = pos.getX();
-		int y = pos.getY();
-		int z = pos.getZ();
-		double hitX = hit.getLocation().x;
-		double hitY = hit.getLocation().y;
-		double hitZ = hit.getLocation().z;
-		Direction direction = hit.getDirection();
-		InteractionResult result = OpenStraGUIProcedure.execute(world, x, y, z, entity);
-		return result;
+		return InfoStrategyAllMenu.open(entity, pos);
 	}
 }

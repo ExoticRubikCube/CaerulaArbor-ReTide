@@ -1,8 +1,7 @@
-
 package com.apocalypse.caerulaarbor.client.renderer.entity;
 
-import com.apocalypse.caerulaarbor.entity.RouteShaperEntity;
 import com.apocalypse.caerulaarbor.client.model.entity.RouteShaperModel;
+import com.apocalypse.caerulaarbor.entity.routeshaper.RouteShaperEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -37,3 +36,4 @@ public class RouteShaperRenderer extends GeoEntityRenderer<RouteShaperEntity> {
 		return 0.0F;
 	}
 }
+

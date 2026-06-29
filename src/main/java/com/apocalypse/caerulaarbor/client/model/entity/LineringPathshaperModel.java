@@ -1,7 +1,7 @@
 package com.apocalypse.caerulaarbor.client.model.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.entity.LineringPathshaperEntity;
+import com.apocalypse.caerulaarbor.entity.routeshaper.LineringPathshaperEntity;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.GeoModel;
 
@@ -18,7 +18,8 @@ public class LineringPathshaperModel extends GeoModel<LineringPathshaperEntity> 
 
 	@Override
 	public ResourceLocation getTextureResource(LineringPathshaperEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/lingering_pathshaper.png");
 	}
 
 }
+

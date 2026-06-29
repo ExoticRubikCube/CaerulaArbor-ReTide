@@ -1,8 +1,7 @@
-
 package com.apocalypse.caerulaarbor.client.renderer.entity;
 
 import com.apocalypse.caerulaarbor.client.model.entity.LingeringFractalModel;
-import com.apocalypse.caerulaarbor.entity.LingeringFractalEntity;
+import com.apocalypse.caerulaarbor.entity.routeshaper.LingeringFractalEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -32,3 +31,4 @@ public class LingeringFractalRenderer extends GeoEntityRenderer<LingeringFractal
 		super.preRender(poseStack, entity, model, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, red, green, blue, alpha);
 	}
 }
+

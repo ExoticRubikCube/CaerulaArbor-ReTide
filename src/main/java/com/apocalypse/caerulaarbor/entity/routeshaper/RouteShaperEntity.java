@@ -1,10 +1,12 @@
-package com.apocalypse.caerulaarbor.entity;
+package com.apocalypse.caerulaarbor.entity.routeshaper;
 
-import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
+import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
+import com.apocalypse.caerulaarbor.init.CaerulaArborModMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -18,6 +20,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -36,7 +39,10 @@ import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -47,24 +53,23 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 
 import javax.annotation.Nullable;
+import java.util.Comparator;
+import java.util.List;
 
-public class LineringPathshaperEntity extends SeaMonster {
-	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(LineringPathshaperEntity.class, EntityDataSerializers.BOOLEAN);
-	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(LineringPathshaperEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(LineringPathshaperEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<Integer> DATA_skillp = SynchedEntityData.defineId(LineringPathshaperEntity.class, EntityDataSerializers.INT);
-	public static final EntityDataAccessor<Integer> DATA_phase = SynchedEntityData.defineId(LineringPathshaperEntity.class, EntityDataSerializers.INT);
+public class RouteShaperEntity extends AbstractPathshaperEntity {
+	public static final EntityDataAccessor<Integer> DATA_ATTACK_SKILLP = SynchedEntityData.defineId(RouteShaperEntity.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<Integer> DATA_HURT_SKILLP = SynchedEntityData.defineId(RouteShaperEntity.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<Integer> DATA_phase = SynchedEntityData.defineId(RouteShaperEntity.class, EntityDataSerializers.INT);
 	private boolean swinging;
 	private boolean lastloop;
 	private long lastSwing;
-	public String animationprocedure = "empty";
-	private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.GREEN, ServerBossEvent.BossBarOverlay.NOTCHED_6);
+	private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.NOTCHED_6);
 
-	public LineringPathshaperEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.LINGERING_PATHSHAPER.get(), world);
+	public RouteShaperEntity(PlayMessages.SpawnEntity packet, Level world) {
+		this(CaerulaArborModEntities.ROUTE_SHAPER.get(), world);
 	}
 
-	public LineringPathshaperEntity(EntityType<LineringPathshaperEntity> type, Level world) {
+	public RouteShaperEntity(EntityType<RouteShaperEntity> type, Level world) {
 		super(type, world);
 		xpReward = 32;
 		setNoAi(false);
@@ -75,19 +80,41 @@ public class LineringPathshaperEntity extends SeaMonster {
 	@Override
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(SHOOT, false);
-		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(TEXTURE, "lingering_pathshaper");
-		this.entityData.define(DATA_skillp, 0);
+		this.entityData.define(DATA_ATTACK_SKILLP, 0);
+		this.entityData.define(DATA_HURT_SKILLP, 0);
 		this.entityData.define(DATA_phase, 0);
 	}
 
-	public void setTexture(String texture) {
-		this.entityData.set(TEXTURE, texture);
+	@Override
+	protected EntityDataAccessor<Integer> getHurtSkillpAccessor() {
+		return DATA_HURT_SKILLP;
 	}
 
-	public String getTexture() {
-		return this.entityData.get(TEXTURE);
+	@Override
+	protected EntityDataAccessor<Integer> getAttackSkillpAccessor() {
+		return DATA_ATTACK_SKILLP;
+	}
+
+	@Override
+	protected EntityType<?> getSummonedFractalType() {
+		return CaerulaArborModEntities.ROUTE_FRACTAL.get();
+	}
+
+	@Override
+	protected int getHurtSummonThreshold() {
+		return 10;
+	}
+
+	public boolean tryEnterSubsistingFakeDeath() {
+		if (MapVariables.get(this.level()).strategy_subsisting >= 4 && this.entityData.get(DATA_phase) == 0) {
+			this.entityData.set(DATA_phase, 1);
+			if (!this.level().isClientSide()) {
+				this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.INVULNERABLE.get(), 200, 1, false, false));
+				this.addEffect(new MobEffectInstance(CaerulaArborModMobEffects.FAKE_DEATH.get(), 200, 1, false, false));
+			}
+			return true;
+		}
+		return false;
 	}
 
 	@Override
@@ -107,14 +134,14 @@ public class LineringPathshaperEntity extends SeaMonster {
 
 			@Override
 			public boolean canUse() {
-				Entity entity = LineringPathshaperEntity.this;
+				Entity entity = RouteShaperEntity.this;
                 if (!super.canUse()) return false;
                 return EntityPredicateUtils.isNotFakeDying(entity);
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				Entity entity = LineringPathshaperEntity.this;
+				Entity entity = RouteShaperEntity.this;
                 if (!super.canContinueToUse()) return false;
                 return EntityPredicateUtils.isNotFakeDying(entity);
 			}
@@ -133,23 +160,24 @@ public class LineringPathshaperEntity extends SeaMonster {
 		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Player.class, true, false) {
 			@Override
 			public boolean canUse() {
-				double x = LineringPathshaperEntity.this.getX();
-				double y = LineringPathshaperEntity.this.getY();
-				double z = LineringPathshaperEntity.this.getZ();
-				Level world = LineringPathshaperEntity.this.level();
+				double x = RouteShaperEntity.this.getX();
+				double y = RouteShaperEntity.this.getY();
+				double z = RouteShaperEntity.this.getZ();
+				Entity entity = RouteShaperEntity.this;
+				Level world = RouteShaperEntity.this.level();
 				return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = LineringPathshaperEntity.this.getX();
-				double y = LineringPathshaperEntity.this.getY();
-				double z = LineringPathshaperEntity.this.getZ();
-				Level world = LineringPathshaperEntity.this.level();
+				double x = RouteShaperEntity.this.getX();
+				double y = RouteShaperEntity.this.getY();
+				double z = RouteShaperEntity.this.getZ();
+				Level world = RouteShaperEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
 		});
-		this.targetSelector.addGoal(14, new NearestAttackableTargetGoal<>(this, Animal.class, true, false) {
+		this.targetSelector.addGoal(14, new NearestAttackableTargetGoal(this, Animal.class, true, false) {
 			@Override
 			public boolean canUse() {
 				return super.canUse() && EntityUtils.canAttackAnimals();
@@ -191,14 +219,17 @@ public class LineringPathshaperEntity extends SeaMonster {
 	}
 
 	@Override
-	public boolean hurt(DamageSource source, float amount) {
-		EntityUtils.assembleFractals(this.level(), this.getX(), this.getY(), this.getZ(), this, source.getEntity());
-		if (source.is(DamageTypes.FALL))
-			return false;
-		if (source.is(DamageTypes.DROWN))
-			return false;
-		return super.hurt(source, amount);
-	}
+	public void die(DamageSource source) {
+		super.die(source);
+        LevelAccessor world = this.level();
+		final Vec3 _center = new Vec3(this.getX(), this.getY(), this.getZ());
+		List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(64 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+		for (Entity entityiterator : _entfound) {
+			if (entityiterator instanceof RouteFractalEntity) {
+				entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.FELL_OUT_OF_WORLD)), 999999);
+			}
+		}
+    }
 
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
@@ -210,27 +241,14 @@ public class LineringPathshaperEntity extends SeaMonster {
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
-		compound.putString("Texture", this.getTexture());
-		compound.putInt("Dataskillp", this.entityData.get(DATA_skillp));
 		compound.putInt("Dataphase", this.entityData.get(DATA_phase));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
-		if (compound.contains("Texture"))
-			this.setTexture(compound.getString("Texture"));
-		if (compound.contains("Dataskillp"))
-			this.entityData.set(DATA_skillp, compound.getInt("Dataskillp"));
 		if (compound.contains("Dataphase"))
 			this.entityData.set(DATA_phase, compound.getInt("Dataphase"));
-	}
-
-	@Override
-	public void baseTick() {
-		super.baseTick();
-		EntityUtils.boostFractals(this.level(), this.getX(), this.getY(), this.getZ(), this);
-		this.refreshDimensions();
 	}
 
 	@Override
@@ -267,9 +285,9 @@ public class LineringPathshaperEntity extends SeaMonster {
 	public static AttributeSupplier.Builder createAttributes() {
 		AttributeSupplier.Builder builder = Mob.createMobAttributes();
 		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.2);
-		builder = builder.add(Attributes.MAX_HEALTH, 270);
-		builder = builder.add(Attributes.ARMOR, 9);
-		builder = builder.add(Attributes.ATTACK_DAMAGE, 10);
+		builder = builder.add(Attributes.MAX_HEALTH, 140);
+		builder = builder.add(Attributes.ARMOR, 8);
+		builder = builder.add(Attributes.ATTACK_DAMAGE, 9);
 		builder = builder.add(Attributes.FOLLOW_RANGE, 48);
 		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 1);
 		return builder;
@@ -315,41 +333,14 @@ public class LineringPathshaperEntity extends SeaMonster {
 		return PlayState.CONTINUE;
 	}
 
-	String prevAnim = "empty";
-
-	private PlayState procedurePredicate(AnimationState event) {
-		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
-			if (!this.animationprocedure.equals(prevAnim))
-				event.getController().forceAnimationReset();
-			event.getController().setAnimation(RawAnimation.begin().thenPlay(this.animationprocedure));
-			if (event.getController().getAnimationState() == AnimationController.State.STOPPED) {
-				this.animationprocedure = "empty";
-				event.getController().forceAnimationReset();
-			}
-		} else if (animationprocedure.equals("empty")) {
-			prevAnim = "empty";
-			return PlayState.STOP;
-		}
-		prevAnim = this.animationprocedure;
-		return PlayState.CONTINUE;
-	}
-
 	@Override
 	protected void tickDeath() {
 		++this.deathTime;
 		if (this.deathTime == 20) {
-			this.remove(LineringPathshaperEntity.RemovalReason.KILLED);
+			this.remove(RouteShaperEntity.RemovalReason.KILLED);
 			this.dropExperience();
 			WorldUtils.dropRelicRoute(this.level(), this.getX(), this.getY(), this.getZ());
 		}
-	}
-
-	public String getSyncedAnimation() {
-		return this.entityData.get(ANIMATION);
-	}
-
-	public void setAnimation(String animation) {
-		this.entityData.set(ANIMATION, animation);
 	}
 
 	@Override
@@ -359,3 +350,4 @@ public class LineringPathshaperEntity extends SeaMonster {
 		data.add(new AnimationController<>(this, "procedure", 0, this::procedurePredicate));
 	}
 }
+

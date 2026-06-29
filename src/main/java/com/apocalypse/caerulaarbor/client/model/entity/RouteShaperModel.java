@@ -1,12 +1,9 @@
 package com.apocalypse.caerulaarbor.client.model.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
-import software.bernie.geckolib.model.GeoModel;
-
+import com.apocalypse.caerulaarbor.entity.routeshaper.RouteShaperEntity;
 import net.minecraft.resources.ResourceLocation;
-
-import com.apocalypse.caerulaarbor.entity.RouteShaperEntity;
+import software.bernie.geckolib.model.GeoModel;
 
 public class RouteShaperModel extends GeoModel<RouteShaperEntity> {
 	@Override
@@ -21,7 +18,8 @@ public class RouteShaperModel extends GeoModel<RouteShaperEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(RouteShaperEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/routeshaper.png");
 	}
 
 }
+

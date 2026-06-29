@@ -1,8 +1,7 @@
 package com.apocalypse.caerulaarbor.procedures;
 
-import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
+import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import net.minecraft.core.particles.ParticleTypes;
@@ -32,5 +31,3 @@ public class PokeSlightlyProcedure {
 			_level.sendParticles(ParticleTypes.ELECTRIC_SPARK, (x + 0.5), (y + 0.5), (z + 0.5), 12, 0.75, 0.75, 0.75, 0.1);
 	}
 }
-
-// TODO: 调用次数 = 20，副作用密集（粒子效果、扣除理智），保持原样不重构

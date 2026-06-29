@@ -1,10 +1,10 @@
-package com.apocalypse.caerulaarbor.entity;
+package com.apocalypse.caerulaarbor.entity.routeshaper;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.CaerulaArborModEntities;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -12,7 +12,9 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
@@ -35,6 +37,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -45,26 +49,23 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 
 import javax.annotation.Nullable;
+import java.util.Comparator;
+import java.util.List;
 
-public class RouteFractalEntity extends SeaMonster {
-	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(RouteFractalEntity.class, EntityDataSerializers.BOOLEAN);
-	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(RouteFractalEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(RouteFractalEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<Integer> DATA_skillp = SynchedEntityData.defineId(RouteFractalEntity.class, EntityDataSerializers.INT);
-	public static final EntityDataAccessor<Integer> DATA_time_left = SynchedEntityData.defineId(RouteFractalEntity.class, EntityDataSerializers.INT);
-	public static final EntityDataAccessor<String> DATA_owner = SynchedEntityData.defineId(RouteFractalEntity.class, EntityDataSerializers.STRING);
+public class LingeringFractalEntity extends AbstractFractalEntity {
+	public static final EntityDataAccessor<Integer> DATA_ATTACK_SKILLP = SynchedEntityData.defineId(LingeringFractalEntity.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<String> DATA_owner = SynchedEntityData.defineId(LingeringFractalEntity.class, EntityDataSerializers.STRING);
 	private boolean swinging;
 	private boolean lastloop;
 	private long lastSwing;
-	public String animationprocedure = "empty";
 
-	public RouteFractalEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CaerulaArborModEntities.ROUTE_FRACTAL.get(), world);
+	public LingeringFractalEntity(PlayMessages.SpawnEntity packet, Level world) {
+		this(CaerulaArborModEntities.LINGERING_FRACTAL.get(), world);
 	}
 
-	public RouteFractalEntity(EntityType<RouteFractalEntity> type, Level world) {
+	public LingeringFractalEntity(EntityType<LingeringFractalEntity> type, Level world) {
 		super(type, world);
-		xpReward = 8;
+		xpReward = 9;
 		setNoAi(false);
 		setMaxUpStep(1f);
 		setPersistenceRequired();
@@ -73,20 +74,18 @@ public class RouteFractalEntity extends SeaMonster {
 	@Override
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(SHOOT, false);
-		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(TEXTURE, "blackroute");
-		this.entityData.define(DATA_skillp, 0);
-		this.entityData.define(DATA_time_left, 1800);
+		this.entityData.define(DATA_ATTACK_SKILLP, 0);
 		this.entityData.define(DATA_owner, "null");
 	}
 
-	public void setTexture(String texture) {
-		this.entityData.set(TEXTURE, texture);
+	@Override
+	protected EntityDataAccessor<Integer> getAttackSkillpAccessor() {
+		return DATA_ATTACK_SKILLP;
 	}
 
-	public String getTexture() {
-		return this.entityData.get(TEXTURE);
+	@Override
+	protected EntityType<?> getSummonedFractalType() {
+		return CaerulaArborModEntities.LINGERING_FRACTAL.get();
 	}
 
 	@Override
@@ -117,21 +116,19 @@ public class RouteFractalEntity extends SeaMonster {
 		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Player.class, false, false) {
 			@Override
 			public boolean canUse() {
-				double x = RouteFractalEntity.this.getX();
-				double y = RouteFractalEntity.this.getY();
-				double z = RouteFractalEntity.this.getZ();
-				Entity entity = RouteFractalEntity.this;
-				Level world = RouteFractalEntity.this.level();
+				double x = LingeringFractalEntity.this.getX();
+				double y = LingeringFractalEntity.this.getY();
+				double z = LingeringFractalEntity.this.getZ();
+				Level world = LingeringFractalEntity.this.level();
 				return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				double x = RouteFractalEntity.this.getX();
-				double y = RouteFractalEntity.this.getY();
-				double z = RouteFractalEntity.this.getZ();
-				Entity entity = RouteFractalEntity.this;
-				Level world = RouteFractalEntity.this.level();
+				double x = LingeringFractalEntity.this.getX();
+				double y = LingeringFractalEntity.this.getY();
+				double z = LingeringFractalEntity.this.getZ();
+				Level world = LingeringFractalEntity.this.level();
 				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
 		});
@@ -176,21 +173,12 @@ public class RouteFractalEntity extends SeaMonster {
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
-		compound.putString("Texture", this.getTexture());
-		compound.putInt("Dataskillp", this.entityData.get(DATA_skillp));
-		compound.putInt("Datatime_left", this.entityData.get(DATA_time_left));
 		compound.putString("Dataowner", this.entityData.get(DATA_owner));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
-		if (compound.contains("Texture"))
-			this.setTexture(compound.getString("Texture"));
-		if (compound.contains("Dataskillp"))
-			this.entityData.set(DATA_skillp, compound.getInt("Dataskillp"));
-		if (compound.contains("Datatime_left"))
-			this.entityData.set(DATA_time_left, compound.getInt("Datatime_left"));
 		if (compound.contains("Dataowner"))
 			this.entityData.set(DATA_owner, compound.getString("Dataowner"));
 	}
@@ -198,13 +186,30 @@ public class RouteFractalEntity extends SeaMonster {
 	@Override
 	public void baseTick() {
 		super.baseTick();
-        double timel = 0;
-        timel = (Entity) this instanceof RouteFractalEntity _datEntI ? _datEntI.getEntityData().get(DATA_time_left) : 0;
-        if (timel <= 0) {
-            ((Entity) this).hurt(new DamageSource((this.level()).registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.FELL_OUT_OF_WORLD)), 999999);
+        LevelAccessor world = this.level();
+        double x = this.getX();
+        double y = this.getY();
+        double z = this.getZ();
+        if (tickCount > 1200 && tickCount % 20 == 7) {
+            if (world.getEntitiesOfClass(LineringPathshaperEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).isEmpty()) {
+                {
+                    final Vec3 _center = new Vec3(x, y, z);
+                    List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(64 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+                    for (Entity entityiterator : _entfound) {
+                        if (entityiterator instanceof LingeringFractalEntity) {
+                            entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceankiller_damage")))),
+                                    1145141919);
+                        }
+                    }
+                }
+                if (world instanceof ServerLevel _level) {
+                    Entity entityToSpawn = CaerulaArborModEntities.LINGERING_PATHSHAPER.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+                    if (entityToSpawn != null) {
+                        entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+                    }
+                }
+            }
         }
-        if ((Entity) this instanceof RouteFractalEntity _datEntSetI)
-            _datEntSetI.getEntityData().set(DATA_time_left, (int) (timel - 1));
         this.refreshDimensions();
 	}
 
@@ -219,9 +224,9 @@ public class RouteFractalEntity extends SeaMonster {
 	public static AttributeSupplier.Builder createAttributes() {
 		AttributeSupplier.Builder builder = Mob.createMobAttributes();
 		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.5);
-		builder = builder.add(Attributes.MAX_HEALTH, 80);
-		builder = builder.add(Attributes.ARMOR, 0);
-		builder = builder.add(Attributes.ATTACK_DAMAGE, 6);
+		builder = builder.add(Attributes.MAX_HEALTH, 95);
+		builder = builder.add(Attributes.ARMOR, 3);
+		builder = builder.add(Attributes.ATTACK_DAMAGE, 7);
 		builder = builder.add(Attributes.FOLLOW_RANGE, 32);
 		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 1);
 		return builder;
@@ -264,40 +269,13 @@ public class RouteFractalEntity extends SeaMonster {
 		return PlayState.CONTINUE;
 	}
 
-	String prevAnim = "empty";
-
-	private PlayState procedurePredicate(AnimationState event) {
-		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
-			if (!this.animationprocedure.equals(prevAnim))
-				event.getController().forceAnimationReset();
-			event.getController().setAnimation(RawAnimation.begin().thenPlay(this.animationprocedure));
-			if (event.getController().getAnimationState() == AnimationController.State.STOPPED) {
-				this.animationprocedure = "empty";
-				event.getController().forceAnimationReset();
-			}
-		} else if (animationprocedure.equals("empty")) {
-			prevAnim = "empty";
-			return PlayState.STOP;
-		}
-		prevAnim = this.animationprocedure;
-		return PlayState.CONTINUE;
-	}
-
 	@Override
 	protected void tickDeath() {
 		++this.deathTime;
 		if (this.deathTime == 20) {
-			this.remove(RouteFractalEntity.RemovalReason.KILLED);
+			this.remove(LingeringFractalEntity.RemovalReason.KILLED);
 			this.dropExperience();
 		}
-	}
-
-	public String getSyncedAnimation() {
-		return this.entityData.get(ANIMATION);
-	}
-
-	public void setAnimation(String animation) {
-		this.entityData.set(ANIMATION, animation);
 	}
 
 	@Override
@@ -307,3 +285,4 @@ public class RouteFractalEntity extends SeaMonster {
 		data.add(new AnimationController<>(this, "procedure", 0, this::procedurePredicate));
 	}
 }
+
