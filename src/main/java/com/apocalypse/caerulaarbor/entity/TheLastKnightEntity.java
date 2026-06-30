@@ -5,7 +5,6 @@ import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAItems;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
-import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
@@ -64,7 +63,7 @@ import java.util.List;
 public class TheLastKnightEntity extends Animal implements GeoEntity, SyncedAnimationEntity {
 
     private boolean isLastKnightDurative() {
-        return EntityPredicateUtils.isLastKnightDurative(this);
+        return this.isAlive() && this.getEntityData().get(DATA_duration) <= 0;
     }
 
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(TheLastKnightEntity.class, EntityDataSerializers.BOOLEAN);

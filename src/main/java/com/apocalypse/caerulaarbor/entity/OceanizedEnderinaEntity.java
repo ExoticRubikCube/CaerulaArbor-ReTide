@@ -3,7 +3,6 @@ package com.apocalypse.caerulaarbor.entity;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.*;
-import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -149,28 +148,24 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 
 			@Override
 			public boolean canUse() {
-				Entity entity = OceanizedEnderinaEntity.this;
-				return super.canUse() && EntityPredicateUtils.isEnderinaDurative(entity);
+				return super.canUse() && isEnderinaDurative();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				Entity entity = OceanizedEnderinaEntity.this;
-				return super.canContinueToUse() && EntityPredicateUtils.isEnderinaDurative(entity);
+				return super.canContinueToUse() && isEnderinaDurative();
 			}
 
 		});
 		this.goalSelector.addGoal(3, new RandomLookAroundGoal(this) {
 			@Override
 			public boolean canUse() {
-				Entity entity = OceanizedEnderinaEntity.this;
-				return super.canUse() && EntityPredicateUtils.isEnderinaDurative(entity);
+				return super.canUse() && isEnderinaDurative();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				Entity entity = OceanizedEnderinaEntity.this;
-				return super.canContinueToUse() && EntityPredicateUtils.isEnderinaDurative(entity);
+				return super.canContinueToUse() && isEnderinaDurative();
 			}
 		});
 		this.goalSelector.addGoal(1, new RangedAttackGoal(this, 1.25, 60, 5f) {
@@ -217,8 +212,7 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 			LivingEntity livingentity = this.mob.getTarget();
 			if (livingentity != null && livingentity.isAlive()) {
 				this.target = livingentity;
-				Entity entity = OceanizedEnderinaEntity.this;
-				return EntityPredicateUtils.isEnderinaDurative(entity);
+				return isEnderinaDurative();
 			} else {
 				return false;
 			}
@@ -715,6 +709,10 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 
 	private boolean isReviving() {
 		return this.entityData.get(DATA_REVIVE_TICK) > 0;
+	}
+
+	public boolean isEnderinaDurative() {
+		return this.isAlive() && this.getEntityData().get(DATA_DURATION) <= 0 && this.getEntityData().get(DATA_REVIVE_TICK) <= 0;
 	}
 
 	private void normalAttack(LivingEntity target) {

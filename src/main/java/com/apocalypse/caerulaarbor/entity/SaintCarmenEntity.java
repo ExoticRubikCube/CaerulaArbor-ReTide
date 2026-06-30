@@ -4,7 +4,6 @@ import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.init.CAParticles;
-import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
@@ -59,7 +58,7 @@ import java.util.List;
 public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimationEntity {
 
     private boolean isCarmenDurative() {
-        return EntityPredicateUtils.isCarmenDurative(this);
+        return this.isAlive() && this.getEntityData().get(DATA_duration) <= 0;
     }
 
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(SaintCarmenEntity.class, EntityDataSerializers.BOOLEAN);

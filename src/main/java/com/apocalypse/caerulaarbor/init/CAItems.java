@@ -10,6 +10,7 @@ import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -251,17 +252,23 @@ public class CAItems {
 	public static final RegistryObject<Item> MEGA_CHEST_SPAWN_EGG = REGISTRY.register("mega_chest_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.MEGA_CHEST, -1, -1, new Item.Properties()));
 	public static final RegistryObject<Item> TRAILRITE = registerTooltipItem("trailrite", new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.RARE), "item.caerula_arbor.trailrite.description_0");
 	public static final RegistryObject<Item> TRAILRITE_AXE = REGISTRY.register("trailrite_axe", () -> new TrailriteAxeItem());
-	public static final RegistryObject<Item> BUCKET_RUNFISH = REGISTRY.register("bucket_runfish", () -> new BucketRunfishItem());
+	public static final RegistryObject<Item> BUCKET_RUNFISH = REGISTRY.register("bucket_runfish",
+			() -> new SeaMonsterBucketItem(CAEntities.RUN_FISH.get(), SoundEvents.BUCKET_EMPTY_FISH, new Item.Properties().stacksTo(1).rarity(Rarity.COMMON)));
 	public static final RegistryObject<Item> TRAILRITE_SWORD = REGISTRY.register("trailrite_sword", () -> new TrailriteSwordItem());
-	public static final RegistryObject<Item> BUCKET_SLIDER = REGISTRY.register("bucket_slider", () -> new BucketSliderItem());
+	public static final RegistryObject<Item> BUCKET_SLIDER = REGISTRY.register("bucket_slider",
+			() -> new SeaMonsterBucketItem(CAEntities.SLIDER_FISH.get(), SoundEvents.BUCKET_EMPTY_FISH, new Item.Properties().stacksTo(1).rarity(Rarity.COMMON)));
 	public static final RegistryObject<Item> TRAIL_DEBRIS = block(CABlocks.TRAIL_DEBRIS);
 	public static final RegistryObject<Item> TRAIL_SHARD = registerTooltipItem("trail_shard", new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.UNCOMMON), "item.caerula_arbor.trail_shard.description_0");
 	public static final RegistryObject<Item> TRAILRITE_BLOCK = block(CABlocks.TRAILRITE_BLOCK);
 	public static final RegistryObject<Item> APOSTLE_PROKARYOTE_SPAWN_EGG = REGISTRY.register("apostle_prokaryote_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.APOSTLE_PROKARYOTE, -15191057, -3933705, new Item.Properties()));
-	public static final RegistryObject<Item> BUCKET_CHISELER = REGISTRY.register("bucket_chiseler", () -> new BucketChiselerItem());
-	public static final RegistryObject<Item> BUCKET_FLOATER = REGISTRY.register("bucket_floater", () -> new BucketFloaterItem());
-	public static final RegistryObject<Item> BUCKET_BONEFISH = REGISTRY.register("bucket_bonefish", () -> new BucketBonefishItem());
-	public static final RegistryObject<Item> BUCKET_COLLECTOR = REGISTRY.register("bucket_collector", () -> new BucketCollectorItem());
+	public static final RegistryObject<Item> BUCKET_CHISELER = REGISTRY.register("bucket_chiseler",
+			() -> new SeaMonsterBucketItem(CAEntities.CHISELER_FISH.get(), SoundEvents.BUCKET_EMPTY_FISH, new Item.Properties().stacksTo(1).rarity(Rarity.COMMON)));
+	public static final RegistryObject<Item> BUCKET_FLOATER = REGISTRY.register("bucket_floater",
+			() -> new SeaMonsterBucketItem(CAEntities.FLOATER_PROKARYOTE.get(), SoundEvents.BUCKET_EMPTY_FISH, new Item.Properties().stacksTo(1).rarity(Rarity.COMMON)));
+	public static final RegistryObject<Item> BUCKET_BONEFISH = REGISTRY.register("bucket_bonefish",
+			() -> new SeaMonsterBucketItem(CAEntities.BONE_FISH.get(), SoundEvents.BUCKET_EMPTY_FISH, new Item.Properties().stacksTo(1).rarity(Rarity.COMMON)));
+	public static final RegistryObject<Item> BUCKET_COLLECTOR = REGISTRY.register("bucket_collector",
+			() -> new SeaMonsterBucketItem(CAEntities.COLLECTOR_PROKARYOTE.get(), SoundEvents.BUCKET_EMPTY_FISH, new Item.Properties().stacksTo(1).rarity(Rarity.COMMON)));
 	public static final RegistryObject<Item> WAVECLEAVER = REGISTRY.register("wavecleaver", () -> new WavecleaverItem());
 	public static final RegistryObject<Item> TRAIL_WALL = block(CABlocks.TRAIL_WALL);
 	public static final RegistryObject<Item> RED_OVARY = block(CABlocks.RED_OVARY);

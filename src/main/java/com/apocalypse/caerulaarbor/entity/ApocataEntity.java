@@ -3,7 +3,6 @@ package com.apocalypse.caerulaarbor.entity;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAItems;
-import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -44,7 +43,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 public class ApocataEntity extends PathfinderMob implements GeoEntity, SyncedAnimationEntity {
 
 	private boolean isApocataDurative() {
-		return EntityPredicateUtils.isApocataDurative(this);
+		return this.isAlive() && this.getEntityData().get(DATA_duration) <= 0;
 	}
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(ApocataEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(ApocataEntity.class, EntityDataSerializers.STRING);

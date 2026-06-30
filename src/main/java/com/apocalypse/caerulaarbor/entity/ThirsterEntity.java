@@ -8,7 +8,6 @@ import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.init.CAParticles;
-import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -65,7 +64,7 @@ import java.util.List;
 public class ThirsterEntity extends SeaMonster {
 
     private boolean isThirsterDurative() {
-        return EntityPredicateUtils.isThirsterDurative(this);
+        return this.isAlive() && this.getEntityData().get(DATA_DURATION) <= 0;
     }
 
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(ThirsterEntity.class, EntityDataSerializers.BOOLEAN);

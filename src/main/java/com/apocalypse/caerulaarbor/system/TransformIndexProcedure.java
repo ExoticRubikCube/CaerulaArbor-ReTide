@@ -34,7 +34,7 @@ public class TransformIndexProcedure {
 	private static final TagKey<EntityType<?>> HOMO_SAPIENS = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "homo_sapiens"));
 
 	private static final List<TransformRule> STANDARD_TRANSFORM_RULES = List.of(
-			new TransformRule(entity -> entity instanceof Villager && !(entity instanceof LivingEntity livingEntity && livingEntity.isBaby()) || matchesEntityType(entity, "guardvillagers:guard"), 0.375,
+			new TransformRule(entity -> entity instanceof Villager livingEntity && !livingEntity.isBaby() || matchesEntityType(entity, "guardvillagers:guard"), 0.375,
 					CAEntities.OCEANIZED_VILLAGER.get()),
 			new TransformRule(entity -> entity instanceof Shulker, 0.25, CAEntities.OCEANIZED_SHULKER.get()),
 			new TransformRule(entity -> entity instanceof Chicken, 0.45, CAEntities.OCEANIZED_CHICKEN.get()),
@@ -71,10 +71,7 @@ public class TransformIndexProcedure {
 		boolean trans = false;
 		double rate;
 		double h;
-		if (entity instanceof Player) {
-			return false;
-		}
-		if (getEntityTypeId(entity).contains("touhou_little_maid:maid")) {
+		if (entity instanceof Player ||getEntityTypeId(entity).contains("touhou_little_maid:maid")) {
 			return false;
 		}
 		if (!(entity instanceof LivingEntity _livEnt2 && _livEnt2.getMobType() == MobType.UNDEAD || entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "cannot_transform"))))
@@ -85,22 +82,20 @@ public class TransformIndexProcedure {
 			TransformAttemptResult standardTransformResult = tryStandardTransformRules(world, x, y, z, entity);
 			if (standardTransformResult != TransformAttemptResult.NO_MATCH) {
 				trans = standardTransformResult == TransformAttemptResult.SUCCESS;
-			} else {
-				if (!(entity instanceof Player) && Math.random() < 0.25) {
-					rate = 0.15;
-					h = CaerulaConfigsConfiguration.OCEANIZE_HEALTH.get();
-					if ((entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) < h) {
-						rate = 0;
-					}
-					if ((entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) > h * 4) {
-						rate = 0.75;
-					}
-					if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation("forge:bosses")))) {
-						rate = 1;
-					}
-					WorldUtils.summonRandomSeaborn(world, rate, x, y, z);
-					trans = true;
+			} else if (Math.random() < 0.25) {
+				rate = 0.15;
+				h = CaerulaConfigsConfiguration.OCEANIZE_HEALTH.get();
+				if ((entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) < h) {
+					rate = 0;
 				}
+				if ((entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) > h * 4) {
+					rate = 0.75;
+				}
+				if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation("forge:bosses")))) {
+					rate = 1;
+				}
+				WorldUtils.summonRandomSeaborn(world, rate, x, y, z);
+				trans = true;
 			}
 			if (trans) {
 				if (world instanceof Level level) {

@@ -1,4 +1,4 @@
-package com.apocalypse.caerulaarbor.procedures;
+package com.apocalypse.caerulaarbor.system;
 
 import com.apocalypse.caerulaarbor.init.CAEnchantments;
 import net.minecraft.core.BlockPos;

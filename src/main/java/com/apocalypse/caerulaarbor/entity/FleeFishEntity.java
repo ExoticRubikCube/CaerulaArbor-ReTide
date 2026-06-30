@@ -1,4 +1,4 @@
-﻿package com.apocalypse.caerulaarbor.entity;
+package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;

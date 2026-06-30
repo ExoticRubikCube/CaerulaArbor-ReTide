@@ -2,7 +2,7 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.client.renderer.item.HighmoreScytheItemRenderer;
-import com.apocalypse.caerulaarbor.procedures.TridentEnchantProcedure;
+import com.apocalypse.caerulaarbor.system.TridentEnchantProcedure;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;

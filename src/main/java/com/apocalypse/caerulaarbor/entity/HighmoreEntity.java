@@ -139,14 +139,14 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this) {
             @Override
             public boolean canUse() {
-                Entity entity = HighmoreEntity.this;
+                LivingEntity entity = HighmoreEntity.this;
                 if (!super.canUse()) return false;
                 return EntityPredicateUtils.isNotFakeDying(entity);
             }
 
             @Override
             public boolean canContinueToUse() {
-                Entity entity = HighmoreEntity.this;
+                LivingEntity entity = HighmoreEntity.this;
                 if (!super.canContinueToUse()) return false;
                 return EntityPredicateUtils.isNotFakeDying(entity);
             }

@@ -4,7 +4,6 @@ import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
-import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
@@ -59,7 +58,7 @@ import java.util.List;
 public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationEntity {
 
     private boolean isSpecterDurative() {
-        return EntityPredicateUtils.isSpecterDurative(this);
+        return this.isAlive() && this.tickCount > 15 && this.getEntityData().get(DATA_duration) <= 0;
     }
 
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(SpecterEntity.class, EntityDataSerializers.BOOLEAN);

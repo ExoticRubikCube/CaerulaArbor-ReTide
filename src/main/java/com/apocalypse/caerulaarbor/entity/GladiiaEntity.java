@@ -60,7 +60,7 @@ import java.util.List;
 public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationEntity {
 
 	private boolean isGladiiaDurative() {
-		return EntityPredicateUtils.isGladiiaDurative(this);
+		return this.isAlive() && this.getEntityData().get(DATA_duration) <= 0;
 	}
 
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(GladiiaEntity.class, EntityDataSerializers.STRING);

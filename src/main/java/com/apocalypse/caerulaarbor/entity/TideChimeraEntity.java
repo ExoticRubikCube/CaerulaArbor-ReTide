@@ -9,7 +9,6 @@ import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAItems;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
-import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -72,7 +71,7 @@ import java.util.List;
 public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacker {
 
     private boolean isChimeraDurative() {
-        return EntityPredicateUtils.isChimeraDurative(this);
+        return this.isAlive() && this.tickCount > 100 && this.getEntityData().get(DATA_duration) <= 0;
     }
 
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(TideChimeraEntity.class, EntityDataSerializers.BOOLEAN);

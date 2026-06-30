@@ -77,8 +77,6 @@ public class EndspeakerSpawneggItem extends ForgeSpawnEggItem {
         double z = context.getClickedPos().getZ();
         Direction direction = context.getClickedFace();
         ItemStack itemstack = context.getItemInHand();
-        if (direction == null)
-            return InteractionResult.PASS;
         double tgtX;
         double tgtY;
         double tgtZ;

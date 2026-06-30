@@ -73,7 +73,7 @@ public class EntityUtils {
 		}
 	}
 
-	//需要查看C:\Users\Administrator\Desktop\VANIILLLA\MODIFIY\CaerulaArbor\待移植文件对应的mcr辅助方法
+	//TODO 需要查看C:\Users\Administrator\Desktop\VANIILLLA\MODIFIY\CaerulaArbor\待移植文件对应的mcr辅助方法
 	public static boolean canAttackAnimals() {
 		return false;
 	}
@@ -348,16 +348,6 @@ public class EntityUtils {
 		return (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).PEVO_NODE_worse_break;
 	}
 
-	//TODO评估是否需要需要下放或内联，然后处理或跳过
-	public static double getComplexPulling(Entity entity, ItemStack itemstack) {
-		if (entity == null)
-			return 0;
-		if ((entity instanceof LivingEntity _entUseItem0 ? _entUseItem0.getUseItem() : ItemStack.EMPTY).getItem() == itemstack.getItem()) {
-			return entity instanceof LivingEntity _entUseTicks3 ? _entUseTicks3.getTicksUsingItem() : 0;
-		}
-		return 0;
-	}
-
 	//同上，需要评估
 	public static double getNodeAddDamage(Entity entity) {
 		if (entity == null)
@@ -394,7 +384,7 @@ public class EntityUtils {
 		return count;
 	}
 
-	//查看参考文件是怎么做的，很可能需要下放
+	//查看参考文件是怎么做的，很可能需要下放到海嗣的基类
 	public static double getSeabornNum(LevelAccessor world, double x, double y, double z) {
 		double count = 0;
 		{
@@ -804,16 +794,14 @@ public class EntityUtils {
 		}
 	}
 
-	//TODO可以放入海嗣的基类,参考参考文件
+	//TODO 或许可以放入海嗣的基类,参考参考文件，重命名为合适的名字
 	public static boolean isOceanizedPlayerNearby(LevelAccessor world, double x, double y, double z) {
 		{
 			final Vec3 _center = new Vec3(x, y, z);
-			List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(72 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-			for (Entity entityiterator : _entfound) {
-				if (entityiterator instanceof Player) {
-					if ((entityiterator.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization >= 2.9) {
+			List<Player> _entfound = world.getEntitiesOfClass(Player.class, new AABB(_center, _center).inflate(72 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+			for (Player entityiterator : _entfound) {
+				if ((entityiterator.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization >= 2.9) {
 						return false;
-					}
 				}
 			}
 		}

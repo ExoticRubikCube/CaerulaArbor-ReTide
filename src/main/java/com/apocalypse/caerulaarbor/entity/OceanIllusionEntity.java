@@ -4,7 +4,6 @@ import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
-import com.apocalypse.caerulaarbor.procedures.RavagerSummonFellowsProcedure;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -414,7 +413,7 @@ public class OceanIllusionEntity extends SeaMonster implements RangedAttackMob {
 			this.dropExperience();
 			LevelAccessor world = this.level();
 			if (Math.random() < 0.6) {
-				RavagerSummonFellowsProcedure.execute(world, this.getX(), this.getY(), this.getZ(), 1);
+				OceanizedRavagerEntity.summonFellows(world, this.getX(), this.getY(), this.getZ(), 1);
 			}
 		}
 	}

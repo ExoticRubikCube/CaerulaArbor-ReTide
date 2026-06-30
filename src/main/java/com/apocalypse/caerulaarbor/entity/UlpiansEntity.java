@@ -65,7 +65,7 @@ import java.util.List;
 public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationEntity {
 
     private boolean isUlpuansDurative() {
-        return EntityPredicateUtils.isUlpuansDurative(this);
+        return this.isAlive() && this.getEntityData().get(DATA_duration) <= 0;
     }
 
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(UlpiansEntity.class, EntityDataSerializers.STRING);

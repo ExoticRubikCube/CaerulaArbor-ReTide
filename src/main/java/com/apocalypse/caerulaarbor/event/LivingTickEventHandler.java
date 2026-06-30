@@ -9,7 +9,6 @@ import com.apocalypse.caerulaarbor.init.CAGameRules;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.system.UpgradeMigraProcedure;
 import com.apocalypse.caerulaarbor.system.UpgradeSilenceProcedure;
-import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -105,7 +104,7 @@ public class LivingTickEventHandler {
         } else if (enemy instanceof OceanizedIllusionerEntity) {
             other = world.getEntitiesOfClass(OceanIllusionEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true).stream()
                     .sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(x, y, z))).findFirst().orElse(null);
-        } else if (enemy instanceof OceanizedEnderinaEntity && !EntityPredicateUtils.isEnderinaDurative(entity)) {
+        } else if (enemy instanceof OceanizedEnderinaEntity enderina && !enderina.isEnderinaDurative()) {
             other = world.getEntitiesOfClass(MoistEnderCrystalEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true).stream()
                     .sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(x, y, z))).findFirst().orElse(null);
         }

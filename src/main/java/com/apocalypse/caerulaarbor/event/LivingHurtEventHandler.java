@@ -488,10 +488,10 @@ public class LivingHurtEventHandler {
         if (entity == null || sourceentity == null) return;
 
         if (EndspeakerEntity.hasAbility(world, 3)) {
-            if (EntityPredicateUtils.isEndspeaker(sourceentity) && entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CAMobEffects.TRAIL_BUFF.get())) {
+            if (sourceentity instanceof EndspeakerEntity && entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CAMobEffects.TRAIL_BUFF.get())) {
                 event.setAmount((float) (amount * 1.5));
             }
-            if (EntityPredicateUtils.isEndspeaker(entity)
+            if (entity instanceof EndspeakerEntity
                     && (entity instanceof LivingEntity _livEnt2 && _livEnt2.hasEffect(CAMobEffects.TRAIL_BUFF.get()) || sourceentity instanceof LivingEntity _livEnt3 && _livEnt3.hasEffect(CAMobEffects.TRAIL_BUFF.get()))) {
                 event.setAmount((float) (amount * 0.65));
             }
@@ -503,7 +503,7 @@ public class LivingHurtEventHandler {
         Entity sourceentity = event.getSource().getEntity();
         if (sourceentity == null) return;
 
-        if (EntityPredicateUtils.isEndspeaker(sourceentity)) {
+        if (sourceentity instanceof EndspeakerEntity) {
             if (EndspeakerEntity.hasAbility(world, 5)) {
                 double amplifi = sourceentity instanceof LivingEntity _livEnt && _livEnt.hasEffect(CAMobEffects.REEF_CRACKER.get()) ? _livEnt.getEffect(CAMobEffects.REEF_CRACKER.get()).getAmplifier() : 0;
                 if (sourceentity instanceof LivingEntity _livEnt1 && _livEnt1.hasEffect(CAMobEffects.REEF_CRACKER.get())) {

@@ -3,7 +3,6 @@ package com.apocalypse.caerulaarbor.entity;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.*;
-import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.client.Minecraft;
@@ -136,14 +135,12 @@ public class SkadiCorruptedEntity extends SeaMonster {
 
 			@Override
 			public boolean canUse() {
-				Entity entity = SkadiCorruptedEntity.this;
-				return super.canUse() && EntityPredicateUtils.isCorruptedDurative(entity);
+				return super.canUse() && isCorruptedDurative();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				Entity entity = SkadiCorruptedEntity.this;
-				return super.canContinueToUse() && EntityPredicateUtils.isCorruptedDurative(entity);
+				return super.canContinueToUse() && isCorruptedDurative();
 			}
 
 		});
@@ -152,14 +149,12 @@ public class SkadiCorruptedEntity extends SeaMonster {
 		this.goalSelector.addGoal(5, new RandomStrollGoal(this, 1) {
 			@Override
 			public boolean canUse() {
-				Entity entity = SkadiCorruptedEntity.this;
-				return super.canUse() && EntityPredicateUtils.isCorruptedDurative(entity);
+				return super.canUse() && isCorruptedDurative();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				Entity entity = SkadiCorruptedEntity.this;
-				return super.canContinueToUse() && EntityPredicateUtils.isCorruptedDurative(entity);
+				return super.canContinueToUse() && isCorruptedDurative();
 			}
 		});
 		this.goalSelector.addGoal(6, new OpenDoorGoal(this, true));
@@ -167,14 +162,12 @@ public class SkadiCorruptedEntity extends SeaMonster {
 		this.goalSelector.addGoal(8, new RandomLookAroundGoal(this) {
 			@Override
 			public boolean canUse() {
-				Entity entity = SkadiCorruptedEntity.this;
-				return super.canUse() && EntityPredicateUtils.isCorruptedDurative(entity);
+				return super.canUse() && isCorruptedDurative();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				Entity entity = SkadiCorruptedEntity.this;
-				return super.canContinueToUse() && EntityPredicateUtils.isCorruptedDurative(entity);
+				return super.canContinueToUse() && isCorruptedDurative();
 			}
 		});
 	}
@@ -203,7 +196,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
 	public boolean doHurtTarget(Entity target) {
 		if (!this.level().isClientSide()) {
 			CaerulaArborMod.queueServerWork(24, () -> {
-				if (this.isAlive() && EntityPredicateUtils.isCorruptedDurative(this) && target.isAlive() && this.distanceTo(target) <= 2.25) {
+				if (this.isAlive() && isCorruptedDurative() && target.isAlive() && this.distanceTo(target) <= 2.25) {
 					double damage = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
 					final Vec3 center = new Vec3(this.getX(), this.getY(), this.getZ());
 					List<Entity> foundEntities = this.level().getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(6 / 2d), entity -> true).stream()
@@ -746,6 +739,10 @@ public class SkadiCorruptedEntity extends SeaMonster {
 		}
 		prevAnim = this.animationprocedure;
 		return PlayState.CONTINUE;
+	}
+
+	public boolean isCorruptedDurative() {
+		return this.isAlive() && this.getEntityData().get(DATA_duration) <= 0;
 	}
 
 	private void spawnHurtSkadi(LevelAccessor world, double x, double y, double z) {

@@ -8,7 +8,6 @@ import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CABlocks;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
-import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.client.Minecraft;
@@ -72,7 +71,7 @@ import javax.annotation.Nullable;
 public class BishopFishEntity extends SeaMonster {
 
     private boolean isBishopStarted() {
-        return EntityPredicateUtils.isBishopStarted(this);
+        return this.isAlive() && this.tickCount >= 80 && this.getEntityData().get(DATA_duration) <= 0;
     }
 
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(BishopFishEntity.class, EntityDataSerializers.STRING);

@@ -1,14 +1,16 @@
-﻿package com.apocalypse.caerulaarbor.entity;
+package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAItems;
-import com.apocalypse.caerulaarbor.util.EntitySpawnUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -59,11 +61,13 @@ import software.bernie.geckolib.core.object.PlayState;
 import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 public class IzumikOffspringEntity extends SeaMonster {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(IzumikOffspringEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(IzumikOffspringEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(IzumikOffspringEntity.class, EntityDataSerializers.STRING);
+	private static final TagKey<EntityType<?>> ENTITY_TAG = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "izumik_discovers"));
 	public String animationprocedure = "empty";
 
 	public IzumikOffspringEntity(PlayMessages.SpawnEntity packet, Level world) {
@@ -92,6 +96,41 @@ public class IzumikOffspringEntity extends SeaMonster {
 
 	public String getTexture() {
 		return this.entityData.get(TEXTURE);
+	}
+
+	public static boolean spawnRandomEntityFromTag(ServerLevel serverLevel, double x, double y, double z) {
+		if (serverLevel == null) {
+			return false;
+		}
+		return spawnEntity(serverLevel, x, y, z);
+	}
+
+	public static Optional<EntityType<?>> randomEntityTypeInTag(Level level, TagKey<EntityType<?>> tag) {
+		Registry<EntityType<?>> registry = level.registryAccess().registryOrThrow(Registries.ENTITY_TYPE);
+		Optional<HolderSet.Named<EntityType<?>>> optional = registry.getTag(tag);
+		if (optional.isEmpty()) {
+			return Optional.empty();
+		}
+		List<Holder<EntityType<?>>> entitiesInTag = optional.get().stream().toList();
+		if (entitiesInTag.isEmpty()) {
+			return Optional.empty();
+		}
+		RandomSource random = level.getRandom();
+		EntityType<?> selected = entitiesInTag.get(random.nextInt(entitiesInTag.size())).value();
+		return Optional.of(selected);
+	}
+
+	private static boolean spawnEntity(ServerLevel level, double x, double y, double z) {
+		Optional<EntityType<?>> optionalEntityType = randomEntityTypeInTag(level, ENTITY_TAG);
+		if (optionalEntityType.isEmpty()) {
+			return false;
+		}
+		Entity entity = optionalEntityType.get().create(level);
+		if (entity != null) {
+			entity.moveTo(x, y, z, level.getRandom().nextFloat() * 360.0F, 0.0F);
+			level.addFreshEntity(entity);
+		}
+		return true;
 	}
 
 	@Override
@@ -167,7 +206,7 @@ public class IzumikOffspringEntity extends SeaMonster {
                     if (distanceTo(sourceentity) <= 3.5) {
                         if (!world.isClientSide()) {
                         if (world instanceof ServerLevel serverLevel) {
-                            success = EntitySpawnUtils.spawnRandomEntityFromTag(serverLevel, x, y, z);
+                            success = spawnRandomEntityFromTag(serverLevel, x, y, z);
                         }
                     }
                         if (success) {
@@ -260,7 +299,7 @@ public class IzumikOffspringEntity extends SeaMonster {
 				if (distanceTo(entityiterator) <= 2) {
 					if (!world.isClientSide()) {
 						if (world instanceof ServerLevel serverLevel) {
-							success = EntitySpawnUtils.spawnRandomEntityFromTag(serverLevel, x, y, z);
+							success = spawnRandomEntityFromTag(serverLevel, x, y, z);
 						}
 					}
 					if (success) {

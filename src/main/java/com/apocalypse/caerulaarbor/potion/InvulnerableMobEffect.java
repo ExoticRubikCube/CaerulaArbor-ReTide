@@ -1,10 +1,10 @@
 
 package com.apocalypse.caerulaarbor.potion;
 
+import com.apocalypse.caerulaarbor.entity.EndspeakerEntity;
 import com.apocalypse.caerulaarbor.entity.IzumikEntity;
 import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CAParticles;
-import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -40,7 +40,7 @@ public class InvulnerableMobEffect extends MobEffect {
             if (world instanceof ServerLevel _level)
                 _level.sendParticles(CAParticles.INV_PTC_BLUE.get(), (x + 2 * Math.sin(ang)), (y + 1.25), (z + 2 * Math.cos(ang)), 1, 0.1, 2, 0.1, 0.2);
         } else if ((double) amplifier == 1) {
-            if (EntityPredicateUtils.isEndspeaker(entity)) {
+            if (entity instanceof EndspeakerEntity) {
                 if (world instanceof ServerLevel _level)
                     _level.sendParticles(CAParticles.ENDSPEAKER_INV.get(), (x + 2 * Math.sin(ang)), (y + 1.25), (z + 2 * Math.cos(ang)), 4, 0.1, 2, 0.1, 0.2);
             } else {

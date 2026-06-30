@@ -5,7 +5,6 @@ import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
-import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -129,14 +128,12 @@ public class OceannizedWitheriaEntity extends SeaMonster {
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this) {
             @Override
             public boolean canUse() {
-                Entity entity = OceannizedWitheriaEntity.this;
-                return super.canUse() && EntityPredicateUtils.isWitherDurative(entity);
+                return super.canUse() && isWitherDurative();
             }
 
             @Override
             public boolean canContinueToUse() {
-                Entity entity = OceannizedWitheriaEntity.this;
-                return super.canContinueToUse() && EntityPredicateUtils.isWitherDurative(entity);
+                return super.canContinueToUse() && isWitherDurative();
             }
         });
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.25, false) {
@@ -147,14 +144,12 @@ public class OceannizedWitheriaEntity extends SeaMonster {
 
             @Override
             public boolean canUse() {
-                Entity entity = OceannizedWitheriaEntity.this;
-                return super.canUse() && EntityPredicateUtils.isWitherDurative(entity);
+                return super.canUse() && isWitherDurative();
             }
 
             @Override
             public boolean canContinueToUse() {
-                Entity entity = OceannizedWitheriaEntity.this;
-                return super.canContinueToUse() && EntityPredicateUtils.isWitherDurative(entity);
+                return super.canContinueToUse() && isWitherDurative();
             }
 
         });
@@ -172,28 +167,24 @@ public class OceannizedWitheriaEntity extends SeaMonster {
 
             @Override
             public boolean canUse() {
-                Entity entity = OceannizedWitheriaEntity.this;
-                return super.canUse() && EntityPredicateUtils.isWitherDurative(entity);
+                return super.canUse() && isWitherDurative();
             }
 
             @Override
             public boolean canContinueToUse() {
-                Entity entity = OceannizedWitheriaEntity.this;
-                return super.canContinueToUse() && EntityPredicateUtils.isWitherDurative(entity);
+                return super.canContinueToUse() && isWitherDurative();
             }
 
         });
         this.goalSelector.addGoal(6, new RandomLookAroundGoal(this) {
             @Override
             public boolean canUse() {
-                Entity entity = OceannizedWitheriaEntity.this;
-                return super.canUse() && EntityPredicateUtils.isWitherDurative(entity);
+                return super.canUse() && isWitherDurative();
             }
 
             @Override
             public boolean canContinueToUse() {
-                Entity entity = OceannizedWitheriaEntity.this;
-                return super.canContinueToUse() && EntityPredicateUtils.isWitherDurative(entity);
+                return super.canContinueToUse() && isWitherDurative();
             }
         });
     }
@@ -625,6 +616,10 @@ public class OceannizedWitheriaEntity extends SeaMonster {
 
     public void setAnimation(String animation) {
         this.entityData.set(ANIMATION, animation);
+    }
+
+    public boolean isWitherDurative() {
+        return this.isAlive() && this.getEntityData().get(DATA_duration) <= 0;
     }
 
     @Override

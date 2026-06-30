@@ -4,7 +4,6 @@ import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
-import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
@@ -72,7 +71,7 @@ import java.util.List;
 public class LastKnightAndHorseEntity extends Animal implements GeoEntity, SyncedAnimationEntity {
 
     private boolean isLastKnightStarting() {
-        return EntityPredicateUtils.isLastKnightStarting(this);
+        return this.tickCount >= 40 && this.getEntityData().get(DATA_SKILL_DURATION) <= 0;
     }
 
     public static final EntityDataAccessor<Boolean> DATA_IS_SHOOTING = SynchedEntityData.defineId(LastKnightAndHorseEntity.class, EntityDataSerializers.BOOLEAN);

@@ -251,9 +251,7 @@ public class RelicUtils {
 	}
 
 	public static void gainSpear(LevelAccessor world, double x, double y, double z, Entity entity, ItemStack itemstack) {
-		if (entity == null)
-			return;
-		if (!hasSpear(entity)) {
+		if (entity != null && !hasSpear(entity)) {
 			if (world instanceof Level _level) {
 					_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.totem.use")), SoundSource.NEUTRAL, 2, 1);
 			}

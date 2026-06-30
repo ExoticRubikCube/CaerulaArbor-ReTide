@@ -2,7 +2,6 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAItems;
-import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -52,7 +51,7 @@ import java.util.Objects;
 public class XantisEntity extends TamableAnimal implements GeoEntity, SyncedAnimationEntity {
 
     private boolean isXantisTapative() {
-        return EntityPredicateUtils.isXantisTapative(this);
+        return this.isAlive() && this.getEntityData().get(DATA_TAP_TICK) <= 0;
     }
 
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(XantisEntity.class, EntityDataSerializers.BOOLEAN);

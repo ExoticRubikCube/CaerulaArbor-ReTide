@@ -235,13 +235,16 @@ public class EndspeakerEntity extends SeaMonster {
 			case 3 -> 1.5F;
 			default -> 0.6F;
 		});
-		this.bossInfo.setColor(this.getPhase() >= 2 ? ServerBossEvent.BossBarColor.WHITE : ServerBossEvent.BossBarColor.BLUE);
-		this.bossInfo.setOverlay(this.getPhaseBossBarOverlay());
-		this.bossInfo.setName(this.getBossBarName());
+		if (this.bossInfo != null) {
+			this.bossInfo.setColor(this.getPhase() >= 2 ? ServerBossEvent.BossBarColor.WHITE : ServerBossEvent.BossBarColor.BLUE);
+			this.bossInfo.setOverlay(this.getPhaseBossBarOverlay());
+			this.bossInfo.setName(this.getBossBarName());
+			this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
+		}
 		this.updatePhaseAttributes();
 	}
 
-	protected void setAttributeBaseValue(Attribute attribute, double value) {
+	private void setAttributeBaseValue(Attribute attribute, double value) {
 		AttributeInstance instance = this.getAttribute(attribute);
 		if (instance != null) {
 			instance.setBaseValue(value);
@@ -578,12 +581,6 @@ public class EndspeakerEntity extends SeaMonster {
 	public void stopSeenByPlayer(ServerPlayer player) {
 		super.stopSeenByPlayer(player);
 		this.bossInfo.removePlayer(player);
-	}
-
-	@Override
-	public void customServerAiStep() {
-		super.customServerAiStep();
-		this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
 	}
 
 	@Override

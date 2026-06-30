@@ -3,7 +3,6 @@ package com.apocalypse.caerulaarbor.entity;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.CAEntities;
-import com.apocalypse.caerulaarbor.procedures.RavagerSummonFellowsProcedure;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -16,8 +15,10 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
@@ -65,6 +66,26 @@ public class OceanizedRavagerEntity extends SeaMonster {
         setNoAi(false);
         setMaxUpStep(1.5f);
         setPersistenceRequired();
+    }
+
+    public static void summonFellows(LevelAccessor world, double x, double y, double z, int count) {
+        if (!(world instanceof ServerLevel level)) {
+            return;
+        }
+        BlockPos spawnPos = BlockPos.containing(x, y, z);
+        RandomSource random = world.getRandom();
+        for (int index = 0; index < count; index++) {
+            Entity entityToSpawn = switch (random.nextInt(5)) {
+                case 0 -> CAEntities.OCEANIZED_PILLAGER.get().spawn(level, spawnPos, MobSpawnType.MOB_SUMMONED);
+                case 1 -> CAEntities.OCEANIZED_VINDICATOR.get().spawn(level, spawnPos, MobSpawnType.MOB_SUMMONED);
+                case 2 -> CAEntities.OCEANIZED_VILLAGER.get().spawn(level, spawnPos, MobSpawnType.MOB_SUMMONED);
+                case 3 -> CAEntities.OCEANIZED_WITCH.get().spawn(level, spawnPos, MobSpawnType.MOB_SUMMONED);
+                default -> CAEntities.OCEANIZED_EVOKER.get().spawn(level, spawnPos, MobSpawnType.MOB_SUMMONED);
+            };
+            if (entityToSpawn != null) {
+                entityToSpawn.setDeltaMovement(0, 0.15, 0);
+            }
+        }
     }
 
     @Override
@@ -206,7 +227,7 @@ public class OceanizedRavagerEntity extends SeaMonster {
         BlockState target;
         boolean breaked = false;
         if (this.deathTime == 22) {
-            RavagerSummonFellowsProcedure.execute(world, x, y, z, 3);
+            summonFellows(world, x, y, z, 3);
         }
         Mob _mobEnt1 = this;
         if (_mobEnt1.isAggressive()) {

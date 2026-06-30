@@ -6,7 +6,6 @@ import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAItems;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
-import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -139,16 +138,12 @@ public class OceanizedWitherEntity extends SeaMonster implements RangedAttackMob
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this) {
             @Override
             public boolean canUse() {
-                Entity entity = OceanizedWitherEntity.this;
-                Level world = OceanizedWitherEntity.this.level();
-                return super.canUse() && EntityPredicateUtils.isWitherDurative(entity);
+                return super.canUse() && isWitherDurative();
             }
 
             @Override
             public boolean canContinueToUse() {
-                Entity entity = OceanizedWitherEntity.this;
-                Level world = OceanizedWitherEntity.this.level();
-                return super.canContinueToUse() && EntityPredicateUtils.isWitherDurative(entity);
+                return super.canContinueToUse() && isWitherDurative();
             }
         });
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, IronGolem.class, false, false));
@@ -166,33 +161,25 @@ public class OceanizedWitherEntity extends SeaMonster implements RangedAttackMob
 
             @Override
             public boolean canUse() {
-                Entity entity = OceanizedWitherEntity.this;
-                Level world = OceanizedWitherEntity.this.level();
-                return super.canUse() && EntityPredicateUtils.isWitherDurative(entity);
+                return super.canUse() && isWitherDurative();
             }
 
             @Override
             public boolean canContinueToUse() {
                 double z = OceanizedWitherEntity.this.getZ();
-                Entity entity = OceanizedWitherEntity.this;
-                Level world = OceanizedWitherEntity.this.level();
-                return super.canContinueToUse() && EntityPredicateUtils.isWitherDurative(entity);
+                return super.canContinueToUse() && isWitherDurative();
             }
 
         });
         this.goalSelector.addGoal(6, new RandomLookAroundGoal(this) {
             @Override
             public boolean canUse() {
-                Entity entity = OceanizedWitherEntity.this;
-                Level world = OceanizedWitherEntity.this.level();
-                return super.canUse() && EntityPredicateUtils.isWitherDurative(entity);
+                return super.canUse() && isWitherDurative();
             }
 
             @Override
             public boolean canContinueToUse() {
-                Entity entity = OceanizedWitherEntity.this;
-                Level world = OceanizedWitherEntity.this.level();
-                return super.canContinueToUse() && EntityPredicateUtils.isWitherDurative(entity);
+                return super.canContinueToUse() && isWitherDurative();
             }
         });
         this.goalSelector.addGoal(1, new RangedAttackGoal(this, 1.25, 30, 12f) {
@@ -687,6 +674,10 @@ public class OceanizedWitherEntity extends SeaMonster implements RangedAttackMob
     public void aiStep() {
         super.aiStep();
         this.setNoGravity(true);
+    }
+
+    public boolean isWitherDurative() {
+        return this.isAlive() && this.getEntityData().get(DATA_duration) <= 0;
     }
 
 
