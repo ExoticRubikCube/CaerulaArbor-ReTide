@@ -1,28 +1,25 @@
 package com.apocalypse.caerulaarbor.event;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
-import com.apocalypse.caerulaarbor.init.CAEntities;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.event.level.BlockEvent;
-
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.Difficulty;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.core.Direction;
-import net.minecraft.core.BlockPos;
-import net.minecraft.advancements.AdvancementProgress;
-import net.minecraft.advancements.Advancement;
-
 import com.apocalypse.caerulaarbor.init.CABlocks;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
+import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementProgress;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Difficulty;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.event.level.BlockEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber
 public class SummonOceanWitherEventHandler {
@@ -38,43 +35,42 @@ public class SummonOceanWitherEventHandler {
 		if (entity == null)
 			return;
 		boolean summonedOceanWither = false;
-		if (world.getDifficulty() == Difficulty.PEACEFUL) {
-			return;
-		}
-		if (placedBlockState.getBlock() == Blocks.WITHER_SKELETON_SKULL && placedAgainstState.getBlock() == CABlocks.NETHERSEA_SOUL_SAND.get()) {
-			if (WorldUtils.checkTShape(world, x, y, z, CABlocks.NETHERSEA_SOUL_SAND.get().defaultBlockState())) {
-				if (world instanceof ServerLevel _level) {
-					Entity entityToSpawn = CAEntities.OCEANIZED_WITHER.get().spawn(_level, BlockPos.containing(x + 0.5, y - 2, z + 0.5), MobSpawnType.MOB_SUMMONED);
-					if (entityToSpawn != null) {
-						entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+		if (world.getDifficulty() != Difficulty.PEACEFUL) {
+			if (placedBlockState.getBlock() == Blocks.WITHER_SKELETON_SKULL && placedAgainstState.getBlock() == CABlocks.NETHERSEA_SOUL_SAND.get()) {
+				if (WorldUtils.checkTShape(world, x, y, z, CABlocks.NETHERSEA_SOUL_SAND.get().defaultBlockState())) {
+					if (world instanceof ServerLevel _level) {
+						Entity entityToSpawn = CAEntities.OCEANIZED_WITHER.get().spawn(_level, BlockPos.containing(x + 0.5, y - 2, z + 0.5), MobSpawnType.MOB_SUMMONED);
+						if (entityToSpawn != null) {
+							entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+						}
 					}
-				}
-				summonedOceanWither = true;
-			} else {
-				for (Direction direction : Direction.Plane.HORIZONTAL) {
-					double adjacentSkullX = x + direction.getStepX();
-					double adjacentSkullZ = z + direction.getStepZ();
-					if ((world.getBlockState(BlockPos.containing(adjacentSkullX, y, adjacentSkullZ))).getBlock() == Blocks.WITHER_SKELETON_SKULL) {
-						if (WorldUtils.checkTShape(world, adjacentSkullX, y, adjacentSkullZ, CABlocks.NETHERSEA_SOUL_SAND.get().defaultBlockState())) {
-							if (world instanceof ServerLevel _level) {
-								Entity entityToSpawn = CAEntities.OCEANIZED_WITHER.get().spawn(_level, BlockPos.containing(adjacentSkullX + 0.5, y - 2, adjacentSkullZ + 0.5),
-										MobSpawnType.MOB_SUMMONED);
-								if (entityToSpawn != null) {
-									entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+					summonedOceanWither = true;
+				} else {
+					for (Direction direction : Direction.Plane.HORIZONTAL) {
+						double adjacentSkullX = x + direction.getStepX();
+						double adjacentSkullZ = z + direction.getStepZ();
+						if ((world.getBlockState(BlockPos.containing(adjacentSkullX, y, adjacentSkullZ))).getBlock() == Blocks.WITHER_SKELETON_SKULL) {
+							if (WorldUtils.checkTShape(world, adjacentSkullX, y, adjacentSkullZ, CABlocks.NETHERSEA_SOUL_SAND.get().defaultBlockState())) {
+								if (world instanceof ServerLevel _level) {
+									Entity entityToSpawn = CAEntities.OCEANIZED_WITHER.get().spawn(_level, BlockPos.containing(adjacentSkullX + 0.5, y - 2, adjacentSkullZ + 0.5),
+											MobSpawnType.MOB_SUMMONED);
+									if (entityToSpawn != null) {
+										entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+									}
 								}
+								summonedOceanWither = true;
+								break;
 							}
-							summonedOceanWither = true;
-							break;
 						}
 					}
 				}
-			}
-			if (summonedOceanWither && entity instanceof ServerPlayer player) {
-				Advancement advancement = player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "tranquil_heights"));
-				AdvancementProgress advancementProgress = player.getAdvancements().getOrStartProgress(advancement);
-				if (!advancementProgress.isDone()) {
-					for (String criteria : advancementProgress.getRemainingCriteria())
-						player.getAdvancements().award(advancement, criteria);
+				if (summonedOceanWither && entity instanceof ServerPlayer player) {
+					Advancement advancement = player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "tranquil_heights"));
+					AdvancementProgress advancementProgress = player.getAdvancements().getOrStartProgress(advancement);
+					if (!advancementProgress.isDone()) {
+						for (String criteria : advancementProgress.getRemainingCriteria())
+							player.getAdvancements().award(advancement, criteria);
+					}
 				}
 			}
 		}

@@ -85,15 +85,11 @@ public class LivingHurtEventHandler {
         handleHandHoeSword(event);
         handleHandThorns(event);
         handleHuntersHit(event);
-        handleIllusionSetVulnerable(event);
-        handleIreneAttackBonus(event);
-        handleKnightAddedAttack(event);
-        handleLastKnightSword(event);
         handleOnArrowHit(event);
         handleSanityReaper(event);
         handleSeabornKiller(event);
         handleSeabornsGetOffShip(event);
-        handleShulkerBulletHit(event);
+        handleMoreFallDamageEffect(event);
         handleSlimeFunc(event);
         handleWarriorTactic(event);
         handlePlayerEvolutionDamageReduction(event);
@@ -668,95 +664,6 @@ public class LivingHurtEventHandler {
         }
     }
 
-    private static void handleIllusionSetVulnerable(LivingHurtEvent event) {
-        Entity entity = event.getEntity();
-        Entity sourceentity = event.getSource().getEntity();
-
-        if (entity == null || sourceentity == null) return;
-
-        if (sourceentity instanceof OceanIllusionEntity) {
-            entity.invulnerableTime = 0;
-        }
-    }
-
-    private static void handleIreneAttackBonus(LivingHurtEvent event) {
-        Entity entity = event.getEntity();
-        Entity sourceentity = event.getSource().getEntity();
-        double amount = event.getAmount();
-
-        if (entity == null || sourceentity == null) return;
-
-        double factor;
-        boolean isSeaborn;
-
-        if (sourceentity instanceof IreneEntity) {
-            isSeaborn = entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")));
-            factor = 0;
-            if (entity instanceof LivingEntity _livEnt2 && _livEnt2.hasEffect(MobEffects.SLOW_FALLING)) {
-                factor = factor + 0.2;
-                if (isSeaborn) {
-                    factor = factor + 0.2;
-                    if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                        _entity.addEffect(new MobEffectInstance(CAMobEffects.ROCK_BREAK.get(), 80, 1));
-                } else {
-                    if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                        _entity.addEffect(new MobEffectInstance(CAMobEffects.ROCK_BREAK.get(), 60, 0));
-                }
-            }
-            event.setAmount((float) (amount * (1 + factor)));
-        } else if (entity instanceof IreneEntity
-                && (sourceentity instanceof LivingEntity _livEnt7 && _livEnt7.hasEffect(MobEffects.SLOW_FALLING) || sourceentity instanceof LivingEntity _livEnt8 && _livEnt8.hasEffect(CAMobEffects.MUTE.get()))) {
-            event.setAmount((float) (amount * 0.65));
-        }
-        if (sourceentity instanceof SaintCarmenEntity) {
-            if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                _entity.addEffect(new MobEffectInstance(CAMobEffects.MUTE.get(), 100, 0));
-        }
-    }
-
-    private static void handleKnightAddedAttack(LivingHurtEvent event) {
-        Entity entity = event.getEntity();
-        Entity sourceentity = event.getSource().getEntity();
-        double amount = event.getAmount();
-
-        if (entity == null || sourceentity == null) return;
-
-        if (sourceentity instanceof TheLastKnightEntity) {
-            double rate = 1;
-            if (entity.getTicksFrozen() >= 200) {
-                rate = 1.75;
-            }
-            if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
-                rate = rate * 1.5;
-            }
-            event.setAmount((float) (amount * rate));
-        }
-    }
-
-    private static void handleLastKnightSword(LivingHurtEvent event) {
-        DamageSource damagesource = event.getSource();
-        Entity entity = event.getEntity();
-        Entity sourceentity = event.getSource().getEntity();
-        double amount = event.getAmount();
-
-        if (damagesource == null || entity == null || sourceentity == null) return;
-
-        double rate = 1;
-        if (damagesource.is(DamageTypes.PLAYER_ATTACK) && entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
-            if ((sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.IRON_SWORD_OF_KNIGHT_CORPUS.get()
-                    || (sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.LONG_SWORD_OF_KNIGHT_CORPUS.get()) {
-                rate = 1.5;
-            }
-        }
-        if ((sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.LONG_SWORD_OF_KNIGHT_CORPUS.get()
-                && (entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 33) {
-            rate = rate * 1.5;
-        }
-        if (rate > 1) {
-            event.setAmount((float) (amount * rate));
-        }
-    }
-
     private static void handleOnArrowHit(LivingHurtEvent event) {
         LevelAccessor world = event.getEntity().level();
         double x = event.getEntity().getX();
@@ -917,7 +824,7 @@ public class LivingHurtEventHandler {
         }
     }
 
-    private static void handleShulkerBulletHit(LivingHurtEvent event) {
+    private static void handleMoreFallDamageEffect(LivingHurtEvent event) {
         DamageSource damagesource = event.getSource();
         Entity entity = event.getEntity();
         double amount = event.getAmount();
@@ -930,9 +837,9 @@ public class LivingHurtEventHandler {
             if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
                 _entity.addEffect(new MobEffectInstance(CAMobEffects.MORE_FALL_DAMAGE.get(), 300, 0));
         }
-        if (damagesource.is(DamageTypes.FALL) && entity instanceof LivingEntity _livEnt5 && _livEnt5.hasEffect(CAMobEffects.MORE_FALL_DAMAGE.get())) {
-            double lvl = (entity instanceof LivingEntity _livEnt && _livEnt.hasEffect(CAMobEffects.MORE_FALL_DAMAGE.get()) ? _livEnt.getEffect(CAMobEffects.MORE_FALL_DAMAGE.get()).getAmplifier() : 0) + 1;
-            event.setAmount((float) (amount * (1 + 0.25 * lvl)));
+        if (damagesource.is(DamageTypes.FALL) && entity instanceof LivingEntity livingEntity && livingEntity.hasEffect(CAMobEffects.MORE_FALL_DAMAGE.get())) {
+            double level = livingEntity.getEffect(CAMobEffects.MORE_FALL_DAMAGE.get()).getAmplifier() + 1;
+            event.setAmount((float) (amount * (1 + 0.25 * level)));
         }
     }
 

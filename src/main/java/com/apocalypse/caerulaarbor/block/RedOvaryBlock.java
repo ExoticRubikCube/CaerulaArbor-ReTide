@@ -10,13 +10,11 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.PushReaction;
 
 public class RedOvaryBlock extends AbstractOvaryBlock {
@@ -51,41 +49,24 @@ public class RedOvaryBlock extends AbstractOvaryBlock {
 	@Override
 	public void tick(BlockState blockstate, ServerLevel world, BlockPos pos, RandomSource random) {
 		super.tick(blockstate, world, pos, random);
-		int x = pos.getX();
-		int y = pos.getY();
-		int z = pos.getZ();
-		double chance;
-		double rate;
-		if (!(world.getDifficulty() == Difficulty.PEACEFUL)) {
-			if (!(world.getBlockFloorHeight(BlockPos.containing(x, (double) y + 1, z)) > 0) && !(world.getBlockFloorHeight(BlockPos.containing(x, (double) y + 2, z)) > 0)) {
-				rate = 0.5;
-				if (MapVariables.get(world).strategy_breed >= 2) {
-					rate = 0.65;
+		if (world.getDifficulty() != Difficulty.PEACEFUL && !(world.getBlockFloorHeight(pos.above()) > 0) && !(world.getBlockFloorHeight(pos.above(2)) > 0)) {
+			double rate = 0.5D;
+			int strategyBreed = MapVariables.get(world).strategy_breed;
+			if (strategyBreed >= 2) {
+				rate = 0.65D;
+			}
+			if (strategyBreed >= 4) {
+				rate = 0.7D;
+			}
+			int output = blockstate.getValue(OUTPUT);
+			if (random.nextFloat() < output * 0.005F) {
+				int cloneLimit = Math.min(world.getGameRules().getInt(CAGameRules.CLONE_NUMBER_LIMIT), CaerulaConfigsConfiguration.CLONE_NUM.get());
+				if (EntityUtils.getSeabornNum(world, pos.getX(), pos.getY(), pos.getZ()) < cloneLimit) {
+					WorldUtils.summonRandomSeaborn(world, rate, pos.getX() + 0.5D, pos.getY() + 1.5D, pos.getZ() + 0.5D);
+					world.setBlock(pos, blockstate.setValue(OUTPUT, 0), 3);
 				}
-				if (MapVariables.get(world).strategy_breed >= 4) {
-					rate = 0.7;
-				}
-				chance = blockstate.getValue(OUTPUT);
-				if (Math.random() < chance * 0.005) {
-					if (EntityUtils.getSeabornNum(world, x, y, z) < Math.min((((LevelAccessor) world).getLevelData().getGameRules().getInt(CAGameRules.CLONE_NUMBER_LIMIT)), CaerulaConfigsConfiguration.CLONE_NUM.get())) {
-						WorldUtils.summonRandomSeaborn(world, rate, (double) x + 0.5, (double) y + 1.5, (double) z + 0.5);
-						{
-							int _value = 0;
-							BlockPos _pos = BlockPos.containing(x, y, z);
-							BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-							if (_bs.getBlock().getStateDefinition().getProperty("output") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))
-								((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
-						}
-					}
-				} else {
-					{
-						int _value = (int) (chance + 1);
-						BlockPos _pos = BlockPos.containing(x, y, z);
-						BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-						if (_bs.getBlock().getStateDefinition().getProperty("output") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))
-							((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
-					}
-				}
+			} else if (output < 200) {
+				world.setBlock(pos, blockstate.setValue(OUTPUT, output + 1), 3);
 			}
 		}
 		world.scheduleTick(pos, this, 60);

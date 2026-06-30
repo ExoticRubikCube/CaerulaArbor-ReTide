@@ -16,7 +16,6 @@ import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
@@ -44,6 +43,7 @@ public class HugeLilyBlock extends BaseEntityBlock implements SimpleWaterloggedB
 	public static final IntegerProperty ANIMATION = IntegerProperty.create("animation", 0, 1);
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
+	private static final net.minecraft.tags.TagKey<Block> TRAIL_TAG = BlockTags.create(new ResourceLocation(CaerulaArborMod.MODID, "trail"));
 
 	public HugeLilyBlock() {
 		super(BlockBehaviour.Properties.of()
@@ -138,23 +138,13 @@ public class HugeLilyBlock extends BaseEntityBlock implements SimpleWaterloggedB
 	@Override
 	public void tick(BlockState blockstate, ServerLevel world, BlockPos pos, RandomSource random) {
 		super.tick(blockstate, world, pos, random);
-		int x = pos.getX();
-		int y = pos.getY();
-		int z = pos.getZ();
-
-        if ((((LevelAccessor) world).getBlockState(BlockPos.containing(x, (double) y - 1, z))).is(BlockTags.create(new ResourceLocation(CaerulaArborMod.MODID, "trail")))) {
-            if (Math.random() < 0.1) {
-                if ((LevelAccessor) world instanceof ServerLevel _level) {
-                    Entity entityToSpawn = CAEntities.SUPER_SLIDER.get().spawn(_level, BlockPos.containing((double) x + 0.5, y, (double) z + 0.5), MobSpawnType.MOB_SUMMONED);
-                    if (entityToSpawn != null) {
-                        entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
-                    }
-                }
-                if ((LevelAccessor) world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.puffer_fish.blow_out")), SoundSource.BLOCKS, 2, 1);
-                }
-                ((LevelAccessor) world).setBlock(BlockPos.containing(x, y, z), Blocks.AIR.defaultBlockState(), 3);
-            }
-        }
-    }
+		if (world.getBlockState(pos.below()).is(TRAIL_TAG) && random.nextFloat() < 0.1F) {
+			Entity entityToSpawn = CAEntities.SUPER_SLIDER.get().spawn(world, pos.above(), MobSpawnType.MOB_SUMMONED);
+			if (entityToSpawn != null) {
+				entityToSpawn.setYRot(world.getRandom().nextFloat() * 360.0F);
+			}
+			world.playSound(null, pos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.puffer_fish.blow_out")), SoundSource.BLOCKS, 2.0F, 1.0F);
+			world.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
+		}
+	}
 }

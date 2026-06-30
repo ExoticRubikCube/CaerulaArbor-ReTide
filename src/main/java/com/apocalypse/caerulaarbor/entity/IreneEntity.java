@@ -21,6 +21,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -202,6 +203,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 		double targetX = target.getX();
 		double targetY = target.getY();
 		double targetZ = target.getZ();
+		float attackDamage = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
 		if (!this.level().isClientSide()) {
 			this.getEntityData().set(DATA_skillp1, this.getEntityData().get(DATA_skillp1) + 1);
 			this.getEntityData().set(DATA_skillp2, this.getEntityData().get(DATA_skillp2) + 1);
@@ -218,7 +220,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 									this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
 											.getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "generic_warrior_attack"))),
 									this),
-							(float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
+							this.applyLaunchPunishBonus(target, attackDamage));
 				}
 			});
 			CaerulaArborMod.queueServerWork(11, () -> {
@@ -231,7 +233,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 									this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
 											.getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "generic_warrior_attack"))),
 									this),
-							(float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
+							this.applyLaunchPunishBonus(target, attackDamage));
 				}
 			});
 		}
@@ -245,6 +247,9 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
         double y = this.getY();
         double z = this.getZ();
         Entity sourceentity = source.getEntity();
+        if (sourceentity instanceof LivingEntity livingSource && (livingSource.hasEffect(MobEffects.SLOW_FALLING) || livingSource.hasEffect(CAMobEffects.MUTE.get()))) {
+			amount *= 0.65F;
+		}
         if (sourceentity != null) {
             Entity specter;
             if (!(sourceentity instanceof Player) && !(sourceentity instanceof SpecterEntity)) {
@@ -261,6 +266,22 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
             }
         }
         return super.hurt(source, amount);
+	}
+
+	private float applyLaunchPunishBonus(Entity target, float baseDamage) {
+		float damage = baseDamage;
+		if (target instanceof LivingEntity livingTarget && livingTarget.hasEffect(MobEffects.SLOW_FALLING)) {
+			damage *= 1.2F;
+			if (target.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+				damage *= 1.2F;
+				if (!livingTarget.level().isClientSide()) {
+					livingTarget.addEffect(new MobEffectInstance(CAMobEffects.ROCK_BREAK.get(), 80, 1));
+				}
+			} else if (!livingTarget.level().isClientSide()) {
+				livingTarget.addEffect(new MobEffectInstance(CAMobEffects.ROCK_BREAK.get(), 60, 0));
+			}
+		}
+		return damage;
 	}
 
 	@Override
@@ -381,7 +402,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
                                 if (enemy1 instanceof LivingEntity _entity && !_entity.level().isClientSide())
                                     _entity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, (int) (double) 30, 0));
                                 enemy1.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))), this),
-                                        (float) (((Entity) this instanceof LivingEntity _livingEntity6 && _livingEntity6.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity6.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * (double) 3));
+                                        this.applyLaunchPunishBonus(enemy1, (float) (((Entity) this instanceof LivingEntity _livingEntity6 && _livingEntity6.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity6.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * (double) 3)));
                                 CaerulaArborMod.queueServerWork(6, () -> {
                                     if (world instanceof Level _level) {
                                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_gun")), SoundSource.NEUTRAL, 3, 1);
@@ -389,7 +410,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
                                     if (world instanceof ServerLevel _level)
                                         _level.sendParticles(ParticleTypes.END_ROD, (enemy1.getX()), (enemy1.getY() + 0.75), (enemy1.getZ()), 32, 0.75, 0.75, 0.75, 0.15);
                                     enemy1.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))), this),
-                                            (float) (((Entity) this instanceof LivingEntity _livingEntity14 && _livingEntity14.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity14.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 2));
+                                            this.applyLaunchPunishBonus(enemy1, (float) (((Entity) this instanceof LivingEntity _livingEntity14 && _livingEntity14.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity14.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 2)));
                                 });
                             }
                         });
@@ -428,7 +449,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
                                             if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
                                                 _entity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 80, 0));
                                             entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))), this),
-                                                    (float) (damage * 3));
+                                                    this.applyLaunchPunishBonus(entityiterator, (float) (damage * 3)));
                                         }
                                     }
                                 }
@@ -474,7 +495,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
                                         for (Entity entityiterator : _entfound) {
                                             if (EntityPredicateUtils.isValidEnemyForIrene(entityiterator, this) && (entityiterator != null ? selected.distanceTo(entityiterator) : -1) <= 3) {
                                                 entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))), this),
-                                                        (float) (damage * 2.5));
+                                                        this.applyLaunchPunishBonus(entityiterator, (float) (damage * 2.5)));
                                                 if (world instanceof Level _level) {
                                                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_skill_gun")), SoundSource.NEUTRAL, 3, 1);
                                                 }

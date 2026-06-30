@@ -1,12 +1,16 @@
 package com.apocalypse.caerulaarbor.entity;
 
+import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
-import com.apocalypse.caerulaarbor.procedures.TideBiDeathProcedure;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -23,6 +27,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -40,6 +45,8 @@ import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -335,8 +342,92 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
 	@Override
 	public void baseTick() {
 		super.baseTick();
-		TideBiDeathProcedure.execute(this.level(), this.getX(), this.getY(), this.getZ(), this);
+		this.tickLinkedBehavior();
 		this.refreshDimensions();
+	}
+
+	private void tickLinkedBehavior() {
+		double x = this.getX();
+		double y = this.getY();
+		double z = this.getZ();
+		Entity nearest = null;
+		if (this.hasEffect(CAMobEffects.FAKE_DEATH.get())) {
+			nearest = this.level().getEntitiesOfClass(TideDeathrepellerEntity.class, AABB.ofSize(new Vec3(x, y, z), 128, 128, 128), candidate -> true).stream()
+					.min(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(x, y, z))).orElse(null);
+			boolean keepup = nearest != null;
+			if (nearest instanceof LivingEntity nearestLiving && nearestLiving.hasEffect(CAMobEffects.FAKE_DEATH.get())) {
+				keepup = false;
+			}
+			if (!keepup) {
+				this.setAnimation("animation.tidebishop.die");
+				this.removeAllEffects();
+				this.hurt(new DamageSource(this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.FELL_OUT_OF_WORLD)), 114514);
+			}
+			return;
+		}
+		double skillCooldown = this.getEntityData().get(DATA_SKILL_COOLDOWN);
+		if (skillCooldown <= 0) {
+			if (this.getTarget() != null) {
+				this.setAnimation("animation.tidebishop.cast");
+				if (!this.level().isClientSide()) {
+					this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 50, 0, false, false));
+				}
+				CaerulaArborMod.queueServerWork(33, () -> {
+					Entity repeller = null;
+					if (this.isAlive() && this.getHealth() < this.getMaxHealth()) {
+						Level projectileLevel = this.level();
+						if (!projectileLevel.isClientSide()) {
+							Projectile projectile = new Object() {
+								public Projectile getArrow(Level level, Entity shooter, float damage, int knockback, byte piercing) {
+									AbstractArrow entityToSpawn = new TellerShotEntity(CAEntities.TELLER_SHOT.get(), level);
+									entityToSpawn.setOwner(shooter);
+									entityToSpawn.setBaseDamage(damage);
+									entityToSpawn.setKnockback(knockback);
+									entityToSpawn.setSilent(true);
+									entityToSpawn.setPierceLevel(piercing);
+									entityToSpawn.setCritArrow(true);
+									return entityToSpawn;
+								}
+							}.getArrow(projectileLevel, this, (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0), 0, (byte) 1);
+							projectile.setPos(this.getX(), this.getEyeY() - 0.1, this.getZ());
+							projectile.shoot(this.getLookAngle().x, this.getLookAngle().y, this.getLookAngle().z, 1.5F, 0);
+							projectileLevel.addFreshEntity(projectile);
+						}
+						this.setHealth((float) (this.getHealth() + this.getMaxHealth() * 0.1));
+						if (this.level() instanceof ServerLevel level) {
+							level.sendParticles(ParticleTypes.HAPPY_VILLAGER, x, y + 1.5, z, 64, 1.5, 1.5, 1.5, 0.2);
+						}
+					}
+					repeller = this.level().getEntitiesOfClass(TideDeathrepellerEntity.class, AABB.ofSize(new Vec3(x, y, z), 96, 96, 96), candidate -> true).stream()
+							.min(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(x, y, z))).orElse(null);
+					if (repeller instanceof LivingEntity repellerLiving && repellerLiving.isAlive() && repellerLiving.getHealth() < repellerLiving.getMaxHealth()) {
+						repellerLiving.setHealth((float) (repellerLiving.getHealth() + repellerLiving.getMaxHealth() * 0.1));
+						if (this.level() instanceof ServerLevel level) {
+							level.sendParticles(ParticleTypes.HAPPY_VILLAGER, repellerLiving.getX(), repellerLiving.getY() + 1.5, repellerLiving.getZ(), 64, 1.5, 1.5, 1.5, 0.2);
+						}
+					}
+				});
+				this.getEntityData().set(DATA_SKILL_COOLDOWN, 200);
+			}
+		} else {
+			this.getEntityData().set(DATA_SKILL_COOLDOWN, (int) (skillCooldown - 1));
+		}
+		nearest = this.level().getEntitiesOfClass(TideDeathrepellerEntity.class, AABB.ofSize(new Vec3(x, y, z), 128, 128, 128), candidate -> true).stream()
+				.min(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(x, y, z))).orElse(null);
+		if (nearest instanceof LivingEntity nearestLiving && nearestLiving.hasEffect(CAMobEffects.FAKE_DEATH.get())) {
+			EntityUtils.spawnLinkParticles(this.level(), this, nearest);
+			if (MapVariables.get(this.level()).strategy_silence >= 3) {
+				if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE.get())) {
+					this.getAttribute(CAAttributes.MISSRATE.get()).setBaseValue(30);
+				}
+			} else if (MapVariables.get(this.level()).strategy_subsisting >= 4) {
+				if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE.get())) {
+					this.getAttribute(CAAttributes.MISSRATE.get()).setBaseValue(15);
+				}
+			}
+		} else if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE.get())) {
+			this.getAttribute(CAAttributes.MISSRATE.get()).setBaseValue(0);
+		}
 	}
 
 	@Override

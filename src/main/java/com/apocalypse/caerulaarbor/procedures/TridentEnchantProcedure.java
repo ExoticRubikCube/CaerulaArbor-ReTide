@@ -49,5 +49,3 @@ public class TridentEnchantProcedure {
 		}
 	}
 }
-
-// TODO: 调用次数 = 2，副作用密集（修改附魔、播放声音、发送粒子），保持原样不重构

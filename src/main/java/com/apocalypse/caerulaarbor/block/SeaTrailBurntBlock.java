@@ -9,7 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.Mth;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -20,7 +20,10 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.*;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.PushReaction;
@@ -34,6 +37,7 @@ public class SeaTrailBurntBlock extends Block implements SimpleWaterloggedBlock,
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 	public static final IntegerProperty GROW_AGE = IntegerProperty.create("grow_age", 0, 64);
 	public static final IntegerProperty LONGEVITY = IntegerProperty.create("longevity", 0, 16);
+	private static final TagKey<Block> TRAIL_TAG = BlockTags.create(new ResourceLocation(CaerulaArborMod.MODID, "trail"));
 
 	public SeaTrailBurntBlock() {
 		super(BlockBehaviour.Properties.of().sound(SoundType.SNOW).strength(1f).speedFactor(0.9f).jumpFactor(0.9f).noOcclusion().pushReaction(PushReaction.DESTROY).isRedstoneConductor((bs, br, bp) -> false));
@@ -123,110 +127,35 @@ public class SeaTrailBurntBlock extends Block implements SimpleWaterloggedBlock,
 	@Override
 	public void tick(BlockState blockstate, ServerLevel world, BlockPos pos, RandomSource random) {
 		super.tick(blockstate, world, pos, random);
-		int x = pos.getX();
-		int y = pos.getY();
-		int z = pos.getZ();
-        double expand = 0;
-        for (Direction directioniterator : Direction.Plane.HORIZONTAL) {
-            if ((((LevelAccessor) world).getBlockState(BlockPos.containing((double) x + directioniterator.getStepX(), y, (double) z + directioniterator.getStepZ()))).is(BlockTags.create(new ResourceLocation(CaerulaArborMod.MODID, "trail")))) {
-                expand = 1;
-            }
-        }
-        {
-            int _value = (int) ((blockstate.getBlock().getStateDefinition().getProperty("grow_age") instanceof IntegerProperty _getip8 ? blockstate.getValue(_getip8) : -1) + expand);
-            BlockPos _pos = BlockPos.containing(x, y, z);
-            BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-            if (_bs.getBlock().getStateDefinition().getProperty("grow_age") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))
-                ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
-        }
-        if ((blockstate.getBlock().getStateDefinition().getProperty("grow_age") instanceof IntegerProperty _getip11 ? blockstate.getValue(_getip11) : -1) > 29) {
-            ((LevelAccessor) world).setBlock(BlockPos.containing(x, y, z), ((new Object() {
-                public BlockState with(BlockState _bs, String _property, int _newValue) {
-                    Property<?> _prop = _bs.getBlock().getStateDefinition().getProperty(_property);
-                    return _prop instanceof IntegerProperty _ip && _prop.getPossibleValues().contains(_newValue) ? _bs.setValue(_ip, _newValue) : _bs;
-                }
-            }.with((new Object() {
-                public BlockState with(BlockState _bs, Direction newValue) {
-                    Property<?> _prop = _bs.getBlock().getStateDefinition().getProperty("facing");
-                    if (_prop instanceof DirectionProperty _dp && _dp.getPossibleValues().contains(newValue))
-                        return _bs.setValue(_dp, newValue);
-                    _prop = _bs.getBlock().getStateDefinition().getProperty("axis");
-                    return _prop instanceof EnumProperty _ep && _ep.getPossibleValues().contains(newValue.getAxis()) ? _bs.setValue(_ep, newValue.getAxis()) : _bs;
-                }
-            }.with(CABlocks.SEA_TRAIL_GROWN.get().defaultBlockState(), new Object() {
-                public Direction getValue() {
-                    Direction _dir = Direction.NORTH;
-                    int _num = Mth.nextInt(RandomSource.create(), 1, 4);
-                    if (_num == 1) {
-                        _dir = Direction.EAST;
-                    } else if (_num == 2) {
-                        _dir = Direction.SOUTH;
-                    } else if (_num == 3) {
-                        _dir = Direction.WEST;
-                    }
-                    return _dir;
-                }
-            }.getValue())), "longevity", (int) ((blockstate.getBlock().getStateDefinition().getProperty("longevity") instanceof IntegerProperty _getip15 ? blockstate.getValue(_getip15) : -1) - 1))).getBlock().getStateDefinition()
-                    .getProperty("waterlogged") instanceof BooleanProperty _withbp19 ? (new Object() {
-                        public BlockState with(BlockState _bs, String _property, int _newValue) {
-                            Property<?> _prop = _bs.getBlock().getStateDefinition().getProperty(_property);
-                            return _prop instanceof IntegerProperty _ip && _prop.getPossibleValues().contains(_newValue) ? _bs.setValue(_ip, _newValue) : _bs;
-                        }
-                    }.with((new Object() {
-                        public BlockState with(BlockState _bs, Direction newValue) {
-                            Property<?> _prop = _bs.getBlock().getStateDefinition().getProperty("facing");
-                            if (_prop instanceof DirectionProperty _dp && _dp.getPossibleValues().contains(newValue))
-                                return _bs.setValue(_dp, newValue);
-                            _prop = _bs.getBlock().getStateDefinition().getProperty("axis");
-                            return _prop instanceof EnumProperty _ep && _ep.getPossibleValues().contains(newValue.getAxis()) ? _bs.setValue(_ep, newValue.getAxis()) : _bs;
-                        }
-                    }.with(CABlocks.SEA_TRAIL_GROWN.get().defaultBlockState(), new Object() {
-                        public Direction getValue() {
-                            Direction _dir = Direction.NORTH;
-                            int _num = Mth.nextInt(RandomSource.create(), 1, 4);
-                            if (_num == 1) {
-                                _dir = Direction.EAST;
-                            } else if (_num == 2) {
-                                _dir = Direction.SOUTH;
-                            } else if (_num == 3) {
-                                _dir = Direction.WEST;
-                            }
-                            return _dir;
-                        }
-                    }.getValue())), "longevity", (int) ((blockstate.getBlock().getStateDefinition().getProperty("longevity") instanceof IntegerProperty _getip15 ? blockstate.getValue(_getip15) : -1) - 1))).setValue(_withbp19,
-                            (blockstate.getBlock().getStateDefinition().getProperty("waterlogged") instanceof BooleanProperty _getbp18 && blockstate.getValue(_getbp18))) : (new Object() {
-                                public BlockState with(BlockState _bs, String _property, int _newValue) {
-                                    Property<?> _prop = _bs.getBlock().getStateDefinition().getProperty(_property);
-                                    return _prop instanceof IntegerProperty _ip && _prop.getPossibleValues().contains(_newValue) ? _bs.setValue(_ip, _newValue) : _bs;
-                                }
-                            }.with((new Object() {
-                                public BlockState with(BlockState _bs, Direction newValue) {
-                                    Property<?> _prop = _bs.getBlock().getStateDefinition().getProperty("facing");
-                                    if (_prop instanceof DirectionProperty _dp && _dp.getPossibleValues().contains(newValue))
-                                        return _bs.setValue(_dp, newValue);
-                                    _prop = _bs.getBlock().getStateDefinition().getProperty("axis");
-                                    return _prop instanceof EnumProperty _ep && _ep.getPossibleValues().contains(newValue.getAxis()) ? _bs.setValue(_ep, newValue.getAxis()) : _bs;
-                                }
-                            }.with(CABlocks.SEA_TRAIL_GROWN.get().defaultBlockState(), new Object() {
-                                public Direction getValue() {
-                                    Direction _dir = Direction.NORTH;
-                                    int _num = Mth.nextInt(RandomSource.create(), 1, 4);
-                                    if (_num == 1) {
-                                        _dir = Direction.EAST;
-                                    } else if (_num == 2) {
-                                        _dir = Direction.SOUTH;
-                                    } else if (_num == 3) {
-                                        _dir = Direction.WEST;
-                                    }
-                                    return _dir;
-                                }
-                            }.getValue())), "longevity", (int) ((blockstate.getBlock().getStateDefinition().getProperty("longevity") instanceof IntegerProperty _getip15 ? blockstate.getValue(_getip15) : -1) - 1)))),
-                    3);
-            if ((LevelAccessor) world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.step")), SoundSource.NEUTRAL, 1, 1);
-            }
-        }
-        world.scheduleTick(pos, this, 20);
+		int expand = 0;
+		for (Direction direction : Direction.Plane.HORIZONTAL) {
+			if (world.getBlockState(pos.relative(direction)).is(TRAIL_TAG)) {
+				expand = 1;
+				break;
+			}
+		}
+		int growAge = blockstate.getValue(GROW_AGE);
+		int nextGrowAge = growAge + expand;
+		if (nextGrowAge <= 64) {
+			world.setBlock(pos, blockstate.setValue(GROW_AGE, nextGrowAge), 3);
+		}
+		if (growAge > 29) {
+			Direction facing = switch (random.nextInt(4)) {
+				case 0 -> Direction.EAST;
+				case 1 -> Direction.SOUTH;
+				case 2 -> Direction.WEST;
+				default -> Direction.NORTH;
+			};
+			BlockState nextState = CABlocks.SEA_TRAIL_GROWN.get().defaultBlockState()
+				.setValue(SeaTrailGrownBlock.FACING, facing)
+				.setValue(SeaTrailGrownBlock.LONGEVITY, blockstate.getValue(LONGEVITY) - 1);
+			if (nextState.hasProperty(SeaTrailGrownBlock.WATERLOGGED)) {
+				nextState = nextState.setValue(SeaTrailGrownBlock.WATERLOGGED, blockstate.getValue(WATERLOGGED));
+			}
+			world.setBlock(pos, nextState, 3);
+			world.playSound(null, pos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.step")), SoundSource.NEUTRAL, 1.0F, 1.0F);
+		}
+		world.scheduleTick(pos, this, 20);
 	}
 
 	@Override

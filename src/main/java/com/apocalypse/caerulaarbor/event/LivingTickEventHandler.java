@@ -5,7 +5,6 @@ import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler;
 import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler.StrategyType;
 import com.apocalypse.caerulaarbor.entity.*;
-import com.apocalypse.caerulaarbor.entity.EndspeakerEntity;
 import com.apocalypse.caerulaarbor.init.CAGameRules;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.system.UpgradeMigraProcedure;
@@ -53,8 +52,7 @@ public class LivingTickEventHandler {
         double z = event.getEntity().getZ();
         Entity entity = event.getEntity();
 
-        if (entity == null) return;
-        if (entity.tickCount % 30 != 1 || !(entity instanceof LivingEntity)) return;
+        if (entity == null || entity.tickCount % 30 != 1) return;
 
         Entity enemy = entity instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
         if (enemy == null) return;
@@ -173,6 +171,7 @@ public class LivingTickEventHandler {
         }
     }
 
+    //TODO有性能问题
     private static void handleMobTick(LivingEvent.LivingTickEvent event) {
         LevelAccessor world = event.getEntity().level();
         double x = event.getEntity().getX();

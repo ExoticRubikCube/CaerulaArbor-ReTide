@@ -1,8 +1,8 @@
 
 package com.apocalypse.caerulaarbor.potion;
 
-import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
 
 public class MoreFallDamageMobEffect extends MobEffect {
 	public MoreFallDamageMobEffect() {

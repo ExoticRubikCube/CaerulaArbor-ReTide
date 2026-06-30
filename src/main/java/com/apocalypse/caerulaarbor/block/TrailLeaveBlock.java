@@ -4,7 +4,6 @@ package com.apocalypse.caerulaarbor.block;
 import com.apocalypse.caerulaarbor.init.CABlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
@@ -12,7 +11,6 @@ import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LeavesBlock;
@@ -60,79 +58,53 @@ public class TrailLeaveBlock extends LeavesBlock {
 	@Override
 	public void tick(BlockState blockstate, ServerLevel world, BlockPos pos, RandomSource random) {
 		super.tick(blockstate, world, pos, random);
-		int x = pos.getX();
-		int y = pos.getY();
-		int z = pos.getZ();
-        BlockState targetBlock;
-        Direction dire;
-        double expand = 0;
-        double longev;
-        boolean drop;
-        if ((blockstate.getBlock().getStateDefinition().getProperty("grow_age") instanceof IntegerProperty _getip1 ? blockstate.getValue(_getip1) : -1) < 64) {
-            {
-                int _value = (blockstate.getBlock().getStateDefinition().getProperty("grow_age") instanceof IntegerProperty _getip3 ? blockstate.getValue(_getip3) : -1) + 1;
-                BlockPos _pos = BlockPos.containing(x, y, z);
-                BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-                if (_bs.getBlock().getStateDefinition().getProperty("grow_age") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))
-                    ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
-            }
-        }
-        if ((blockstate.getBlock().getStateDefinition().getProperty("grow_age") instanceof IntegerProperty _getip6 ? blockstate.getValue(_getip6) : -1) > 16
-                && (blockstate.getBlock().getStateDefinition().getProperty("grow_age") instanceof IntegerProperty _getip8 ? blockstate.getValue(_getip8) : -1) < 62) {
-            for (Direction directioniterator : Direction.values()) {
-                if (Math.random() < 0.2) {
-                    longev = blockstate.getBlock().getStateDefinition().getProperty("longevity") instanceof IntegerProperty _getip10 ? blockstate.getValue(_getip10) : -1;
-                    if (longev > 0) {
-                        if (Math.random() < 0.25) {
-                            longev = longev - 1;
-                        }
-                        dire = directioniterator;
-                        targetBlock = (((LevelAccessor) world).getBlockState(BlockPos.containing((double) x + dire.getStepX(), (double) y + dire.getStepY(), (double) z + dire.getStepZ())));
-                        if (targetBlock.is(BlockTags.create(new ResourceLocation("minecraft:leaves"))) && !(targetBlock.getBlock() == CABlocks.TRAIL_LEAVE.get())) {
-                            {
-                                BlockPos _bp = BlockPos.containing((double) x + dire.getStepX(), (double) y + dire.getStepY(), (double) z + dire.getStepZ());
-                                BlockState _bso = ((LevelAccessor) world).getBlockState(_bp);
-                                BlockState _bs = CABlocks.TRAIL_LEAVE.get().withPropertiesOf(_bso).setValue(LONGEVITY, (int) longev);
-                                ((LevelAccessor) world).setBlock(_bp, _bs, 3);
-                            }
-                        }
-                    }
-                }
-            }
-        } else if ((blockstate.getBlock().getStateDefinition().getProperty("grow_age") instanceof IntegerProperty _getip25 ? blockstate.getValue(_getip25) : -1) > 62) {
-            if (Math.random() < 0.0125) {
-                drop = true;
-                for (int index0 = 0; index0 < 64; index0++) {
-                    targetBlock = (((LevelAccessor) world).getBlockState(BlockPos.containing(x, (double) y - index0 - 1, z)));
-                    if (world.isEmptyBlock(BlockPos.containing(x, (double) y - index0 - 1, z)) || targetBlock.canBeReplaced()) {
-                        if (CABlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing(x, (double) y - index0 - 1, z))) {
-                            drop = true;
-                            break;
-                        }
-                        continue;
-                    } else {
-                        if (targetBlock.getBlock() == CABlocks.TRAIL_LOG.get() || targetBlock.getBlock() == CABlocks.STRIPPED_TRAIL_LOG.get()) {
-                            drop = false;
-                        }
-                        if (targetBlock.getBlock() == CABlocks.NETHERSEA_WOOD.get() || targetBlock.getBlock() == CABlocks.STRIPPED_NETHERSEA_WOOD.get()) {
-                            drop = false;
-                        }
-                        if (targetBlock.getBlock() == CABlocks.TRAIL_LEAVE.get()) {
-                            drop = false;
-                        }
-                        if (index0 > 0) {
-                            drop = false;
-                        }
-                        break;
-                    }
-                }
-                if (drop) {
-                    ((LevelAccessor) world).setBlock(BlockPos.containing(x, y, z), Blocks.AIR.defaultBlockState(), 3);
-                    if ((LevelAccessor) world instanceof ServerLevel _level)
-                        FallingBlockEntity.fall(_level, BlockPos.containing(x, y, z), CABlocks.SEA_TRAIL_INIT.get().defaultBlockState());
-                }
-            }
-        }
-        world.scheduleTick(pos, this, 40);
+		int growAge = blockstate.getValue(GROW_AGE);
+		int longevity = blockstate.getValue(LONGEVITY);
+		if (growAge < 64) {
+			world.setBlock(pos, blockstate.setValue(GROW_AGE, growAge + 1), 3);
+		}
+		if (growAge > 16 && growAge < 62) {
+			if (longevity > 0) {
+				for (Direction direction : Direction.values()) {
+					if (random.nextFloat() < 0.2F) {
+						int spreadLongevity = random.nextFloat() < 0.25F ? longevity - 1 : longevity;
+						BlockPos targetPos = pos.relative(direction);
+						BlockState targetBlock = world.getBlockState(targetPos);
+						if (targetBlock.is(BlockTags.LEAVES) && targetBlock.getBlock() != CABlocks.TRAIL_LEAVE.get()) {
+							world.setBlock(targetPos, CABlocks.TRAIL_LEAVE.get().withPropertiesOf(targetBlock).setValue(LONGEVITY, spreadLongevity), 3);
+						}
+					}
+				}
+			}
+		} else if (growAge > 62 && random.nextFloat() < 0.0125F) {
+			boolean drop = true;
+			BlockPos.MutableBlockPos mutablePos = pos.mutable();
+			BlockState seaTrailInitState = CABlocks.SEA_TRAIL_INIT.get().defaultBlockState();
+			for (int index = 0; index < 64; index++) {
+				mutablePos.set(pos.getX(), pos.getY() - index - 1, pos.getZ());
+				BlockState targetBlock = world.getBlockState(mutablePos);
+				if (targetBlock.isAir() || targetBlock.canBeReplaced()) {
+					if (seaTrailInitState.canSurvive(world, mutablePos)) {
+						break;
+					}
+					continue;
+				}
+				if (targetBlock.getBlock() == CABlocks.TRAIL_LOG.get() || targetBlock.getBlock() == CABlocks.STRIPPED_TRAIL_LOG.get()) {
+					drop = false;
+				}
+				if (targetBlock.getBlock() == CABlocks.NETHERSEA_WOOD.get() || targetBlock.getBlock() == CABlocks.STRIPPED_NETHERSEA_WOOD.get()) {
+					drop = false;
+				}
+				if (targetBlock.getBlock() == CABlocks.TRAIL_LEAVE.get() || index > 0) {
+					drop = false;
+				}
+				break;
+			}
+			if (drop) {
+				world.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
+				FallingBlockEntity.fall(world, pos, seaTrailInitState);
+			}
+		}
+		world.scheduleTick(pos, this, 40);
 	}
 }

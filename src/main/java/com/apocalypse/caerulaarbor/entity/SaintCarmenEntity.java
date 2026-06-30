@@ -2,6 +2,7 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.init.CAParticleTypes;
 import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
@@ -23,6 +24,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -196,6 +198,7 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
 					this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
 							ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "carmen_melee")), SoundSource.NEUTRAL, 2.33F,
 							(float) Mth.nextDouble(RandomSource.create(), 0.9, 1.1));
+					this.applyMuteOnHit(target);
 					target.hurt(
 							new DamageSource(
 									this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
@@ -206,6 +209,12 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
 			});
 		}
 		return true;
+	}
+
+	private void applyMuteOnHit(Entity target) {
+		if (target instanceof LivingEntity livingTarget && !livingTarget.level().isClientSide()) {
+			livingTarget.addEffect(new MobEffectInstance(CAMobEffects.MUTE.get(), 100, 0));
+		}
 	}
 
 	@Override
@@ -570,6 +579,7 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
 		zz = enemy.getZ();
 		this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3(xx, (yy + 1.8), zz));
 		dama = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
+		this.applyMuteOnHit(enemy);
 		enemy.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "generic_warrior_attack"))), this),
 				(float) (dama * rate));
 		if (world instanceof Level _level) {
@@ -611,6 +621,7 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
 		if (world instanceof Level _level) {
 				_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "carmen_melee")), SoundSource.NEUTRAL, 3, 1);
 		}
+		this.applyMuteOnHit(enemy);
 		enemy.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "generic_warrior_attack"))), this),
 				(float) (dama * 2));
 	}

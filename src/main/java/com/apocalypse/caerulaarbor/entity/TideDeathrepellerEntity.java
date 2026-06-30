@@ -1,10 +1,11 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
-import com.apocalypse.caerulaarbor.procedures.TideBiDeathProcedure;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
@@ -290,8 +291,97 @@ public class TideDeathrepellerEntity extends SeaMonster {
 	@Override
 	public void baseTick() {
 		super.baseTick();
-		TideBiDeathProcedure.execute(this.level(), this.getX(), this.getY(), this.getZ(), this);
+		this.tickLinkedBehavior();
 		this.refreshDimensions();
+	}
+
+	private void tickLinkedBehavior() {
+		double x = this.getX();
+		double y = this.getY();
+		double z = this.getZ();
+		Entity nearest = null;
+		if (this.hasEffect(CAMobEffects.FAKE_DEATH.get())) {
+			nearest = this.level().getEntitiesOfClass(TideBishopEntity.class, AABB.ofSize(new Vec3(x, y, z), 128, 128, 128), candidate -> true).stream()
+					.min(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(x, y, z))).orElse(null);
+			boolean keepup = nearest != null;
+			if (nearest instanceof LivingEntity nearestLiving && nearestLiving.hasEffect(CAMobEffects.FAKE_DEATH.get())) {
+				keepup = false;
+			}
+			if (!keepup) {
+				this.setAnimation("animation.deathrepeller.die");
+				this.removeAllEffects();
+				this.hurt(new DamageSource(this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.FELL_OUT_OF_WORLD)), 114514);
+			}
+			return;
+		}
+		double skillCooldown = this.getEntityData().get(DATA_skillp);
+		double skillDuration = this.getEntityData().get(DATA_duration);
+		if (skillDuration > 0) {
+			this.getEntityData().set(DATA_duration, (int) (skillDuration - 1));
+		}
+		if (skillCooldown <= 0) {
+			double nearbyCount = 0;
+			Vec3 center = new Vec3(x, y, z);
+			List<Entity> nearbyEntities = this.level().getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(8 / 2d), candidate -> true).stream()
+					.sorted(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(center))).toList();
+			for (Entity nearbyEntity : nearbyEntities) {
+				if (nearbyEntity != this && (nearbyEntity instanceof LivingEntity livingEntity ? livingEntity.getMaxHealth() : -1) >= 10) {
+					nearbyCount++;
+				}
+			}
+			if (nearbyCount >= 2 || this.getHealth() < this.getMaxHealth() * 0.5) {
+				Entity enemy = this.getTarget();
+				if (enemy != null && this.distanceTo(enemy) <= 4) {
+					this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3(enemy.getX(), enemy.getY(), enemy.getZ()));
+					this.setAnimation("empty");
+					if (!this.level().isClientSide()) {
+						this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 50, 0, false, false));
+					}
+					this.setAnimation("animation.deathrepeller.combo");
+					CaerulaArborMod.queueServerWork(17, () -> {
+						if (this.isAlive()) {
+							EntityUtils.repellerChop(this.level(), x, y, z, this, 2);
+						}
+					});
+					CaerulaArborMod.queueServerWork(23, () -> {
+						if (this.isAlive()) {
+							EntityUtils.repellerChop(this.level(), x, y, z, this, 2);
+						}
+					});
+					CaerulaArborMod.queueServerWork(35, () -> {
+						if (this.isAlive()) {
+							EntityUtils.repellerChop(this.level(), x, y, z, this, 2);
+						}
+					});
+					CaerulaArborMod.queueServerWork(42, () -> {
+						if (this.isAlive()) {
+							EntityUtils.repellerChop(this.level(), x, y, z, this, 3.5);
+						}
+					});
+					this.getEntityData().set(DATA_duration, 53);
+					this.getEntityData().set(DATA_skillp, 300);
+				}
+			}
+		} else {
+			this.getEntityData().set(DATA_skillp, (int) (skillCooldown - 1));
+			if (MapVariables.get(this.level()).strategy_grow >= 3) {
+				this.getEntityData().set(DATA_skillp, (int) (skillCooldown - 2));
+			}
+		}
+		nearest = this.level().getEntitiesOfClass(TideBishopEntity.class, AABB.ofSize(new Vec3(x, y, z), 128, 128, 128), candidate -> true).stream()
+				.min(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(x, y, z))).orElse(null);
+		if (nearest instanceof LivingEntity nearestLiving && nearestLiving.hasEffect(CAMobEffects.FAKE_DEATH.get())) {
+			EntityUtils.spawnLinkParticles(this.level(), this, nearest);
+			if (MapVariables.get(this.level()).strategy_silence >= 3) {
+				if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE.get())) {
+					this.getAttribute(CAAttributes.MISSRATE.get()).setBaseValue(40);
+				}
+			} else if (MapVariables.get(this.level()).strategy_subsisting >= 4) {
+				if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE.get())) {
+					this.getAttribute(CAAttributes.MISSRATE.get()).setBaseValue(20);
+				}
+			}
+		}
 	}
 
 	@Override

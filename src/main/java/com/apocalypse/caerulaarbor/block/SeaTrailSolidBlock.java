@@ -15,7 +15,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -77,37 +76,24 @@ public class SeaTrailSolidBlock extends Block {
 	@Override
 	public void tick(BlockState blockstate, ServerLevel world, BlockPos pos, RandomSource random) {
 		super.tick(blockstate, world, pos, random);
-		int x = pos.getX();
-		int y = pos.getY();
-		int z = pos.getZ();
-        BlockState target;
-        boolean shouldConvert = false;
-        if (Math.random() < 0.5) {
-            target = (((LevelAccessor) world).getBlockState(BlockPos.containing(x, (double) y + 1, z)));
-            if (target.getBlock() == Blocks.DRAGON_EGG) {
-                shouldConvert = true;
-            } else {
-                for (Direction directioniterator : Direction.Plane.HORIZONTAL) {
-                    target = (((LevelAccessor) world).getBlockState(BlockPos.containing((double) x + directioniterator.getStepX(), y, (double) z + directioniterator.getStepZ())));
-                    if (target.getBlock() == Blocks.DRAGON_EGG) {
-                        shouldConvert = true;
-                        break;
-                    }
-                    target = (((LevelAccessor) world).getBlockState(BlockPos.containing((double) x + directioniterator.getStepX(), (double) y + 1, (double) z + directioniterator.getStepZ())));
-                    if (target.getBlock() == Blocks.DRAGON_EGG) {
-                        shouldConvert = true;
-                        break;
-                    }
-                }
-            }
-            if (shouldConvert) {
-                if ((LevelAccessor) world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.end_portal_frame.fill")), SoundSource.BLOCKS, 1, 1);
-                }
-                ((LevelAccessor) world).setBlock(BlockPos.containing(x, y, z), CABlocks.DRAGON_BRAND.get().defaultBlockState(), 3);
-            }
-        }
-    }
+		boolean shouldConvert = false;
+		if (random.nextFloat() < 0.5F) {
+			if (world.getBlockState(pos.above()).getBlock() == Blocks.DRAGON_EGG) {
+				shouldConvert = true;
+			} else {
+				for (Direction direction : Direction.Plane.HORIZONTAL) {
+					if (world.getBlockState(pos.relative(direction)).getBlock() == Blocks.DRAGON_EGG || world.getBlockState(pos.relative(direction).above()).getBlock() == Blocks.DRAGON_EGG) {
+						shouldConvert = true;
+						break;
+					}
+				}
+			}
+			if (shouldConvert) {
+				world.playSound(null, pos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.end_portal_frame.fill")), SoundSource.BLOCKS, 1.0F, 1.0F);
+				world.setBlock(pos, CABlocks.DRAGON_BRAND.get().defaultBlockState(), 3);
+			}
+		}
+	}
 
 	@Override
 	public boolean onDestroyedByPlayer(BlockState blockstate, Level world, BlockPos pos, Player entity, boolean willHarvest, FluidState fluid) {

@@ -1,8 +1,7 @@
 package com.apocalypse.caerulaarbor.block;
 
-import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
+import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
 import com.apocalypse.caerulaarbor.init.CAGameRules;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
@@ -24,7 +23,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -93,105 +91,45 @@ public class OceanOvaryBlock extends AbstractOvaryBlock {
 	public void neighborChanged(BlockState blockstate, Level world, BlockPos pos, Block neighborBlock, BlockPos fromPos, boolean moving) {
 		super.neighborChanged(blockstate, world, pos, neighborBlock, fromPos, moving);
 		if (world.getBestNeighborSignal(pos) > 0) {
-			double x = pos.getX();
-			double y = pos.getY();
-			double z = pos.getZ();
-			{
-				BlockPos _pos = BlockPos.containing(x, y, z);
-				BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-				if (_bs.getBlock().getStateDefinition().getProperty("powered") instanceof BooleanProperty _booleanProp)
-					((LevelAccessor) world).setBlock(_pos, _bs.setValue(_booleanProp, true), 3);
-			}
-			{
-				int _value = 0;
-				BlockPos _pos = BlockPos.containing(x, y, z);
-				BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-				if (_bs.getBlock().getStateDefinition().getProperty("output") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))
-					((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
-			}
-			{
-				int _value = 0;
-				BlockPos _pos = BlockPos.containing(x, y, z);
-				BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-				if (_bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))
-					((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
-			}
+			world.setBlock(pos, world.getBlockState(pos).setValue(POWERED, true).setValue(OUTPUT, 0).setValue(BLOCKSTATE, 0), 3);
 		} else {
-			double x = pos.getX();
-			double y = pos.getY();
-			double z = pos.getZ();
-			{
-				BlockPos _pos = BlockPos.containing(x, y, z);
-				BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-				if (_bs.getBlock().getStateDefinition().getProperty("powered") instanceof BooleanProperty _booleanProp)
-					((LevelAccessor) world).setBlock(_pos, _bs.setValue(_booleanProp, false), 3);
-			}
+			world.setBlock(pos, world.getBlockState(pos).setValue(POWERED, false), 3);
 		}
 	}
 
 	@Override
 	public void tick(BlockState blockstate, ServerLevel world, BlockPos pos, RandomSource random) {
 		super.tick(blockstate, world, pos, random);
-		int x = pos.getX();
-		int y = pos.getY();
-		int z = pos.getZ();
-		boolean finished = false;
-		double chance;
-		double rate;
-		if (!(world.getDifficulty() == Difficulty.PEACEFUL)) {
-			if (!(world.getBlockFloorHeight(BlockPos.containing(x, (double) y + 1, z)) > 0) && !(world.getBlockFloorHeight(BlockPos.containing(x, (double) y + 2, z)) > 0)) {
-				if (blockstate.getValue(BLOCKSTATE) == 0) {
-					rate = 0.05;
-					if (MapVariables.get(world).strategy_breed >= 2) {
-						rate = 0.08;
-					}
-					if (MapVariables.get(world).strategy_breed >= 4) {
-						rate = 0.1;
-					}
-					chance = blockstate.getValue(OUTPUT);
-					if (Math.random() < chance * 0.005) {
-						if (EntityUtils.getSeabornNum(world, x, y, z) >= Math.min(CaerulaConfigsConfiguration.CLONE_NUM.get(), (((LevelAccessor) world).getLevelData().getGameRules().getInt(CAGameRules.CLONE_NUMBER_LIMIT)))) {
-							finished = true;
-						} else {
-							WorldUtils.summonRandomSeaborn(world, rate, (double) x + 0.5, (double) y + 1.5, (double) z + 0.5);
-							if (!blockstate.getValue(POWERED)) {
-								{
-									int _value = 1;
-									BlockPos _pos = BlockPos.containing(x, y, z);
-									BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-									if (_bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))
-										((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
-								}
-							}
-							{
-								int _value = 0;
-								BlockPos _pos = BlockPos.containing(x, y, z);
-								BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-								if (_bs.getBlock().getStateDefinition().getProperty("output") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))
-									((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
-							}
-						}
+		if (world.getDifficulty() != Difficulty.PEACEFUL && !(world.getBlockFloorHeight(pos.above()) > 0) && !(world.getBlockFloorHeight(pos.above(2)) > 0)) {
+			boolean finished = false;
+			if (blockstate.getValue(BLOCKSTATE) == 0) {
+				double rate = 0.05D;
+				int strategyBreed = MapVariables.get(world).strategy_breed;
+				if (strategyBreed >= 2) {
+					rate = 0.08D;
+				}
+				if (strategyBreed >= 4) {
+					rate = 0.1D;
+				}
+				int output = blockstate.getValue(OUTPUT);
+				if (random.nextFloat() < output * 0.005F) {
+					int cloneLimit = Math.min(CaerulaConfigsConfiguration.CLONE_NUM.get(), world.getGameRules().getInt(CAGameRules.CLONE_NUMBER_LIMIT));
+					if (EntityUtils.getSeabornNum(world, pos.getX(), pos.getY(), pos.getZ()) >= cloneLimit) {
+						finished = true;
 					} else {
-						{
-							int _value = (int) (chance + 1);
-							BlockPos _pos = BlockPos.containing(x, y, z);
-							BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-							if (_bs.getBlock().getStateDefinition().getProperty("output") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))
-								((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
+						WorldUtils.summonRandomSeaborn(world, rate, pos.getX() + 0.5D, pos.getY() + 1.5D, pos.getZ() + 0.5D);
+						BlockState nextState = blockstate.setValue(OUTPUT, 0);
+						if (!blockstate.getValue(POWERED)) {
+							nextState = nextState.setValue(BLOCKSTATE, 1);
 						}
+						world.setBlock(pos, nextState, 3);
 					}
+				} else if (output < 200) {
+					world.setBlock(pos, blockstate.setValue(OUTPUT, output + 1), 3);
 				}
-				if (!finished) {
-					if (blockstate.getValue(POWERED)) {
-						{
-							int _value = 0;
-							BlockPos _pos = BlockPos.containing(x, y, z);
-							BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-							if (_bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))
-								((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
-						}
-					}
-				}
+			}
+			if (!finished && blockstate.getValue(POWERED)) {
+				world.setBlock(pos, world.getBlockState(pos).setValue(BLOCKSTATE, 0), 3);
 			}
 		}
 		world.scheduleTick(pos, this, 40);
@@ -200,13 +138,6 @@ public class OceanOvaryBlock extends AbstractOvaryBlock {
 	@Override
 	public InteractionResult use(BlockState blockstate, Level world, BlockPos pos, Player entity, InteractionHand hand, BlockHitResult hit) {
 		super.use(blockstate, world, pos, entity, hand, hit);
-		int x = pos.getX();
-		int y = pos.getY();
-		int z = pos.getZ();
-		double hitX = hit.getLocation().x;
-		double hitY = hit.getLocation().y;
-		double hitZ = hit.getLocation().z;
-		Direction direction = hit.getDirection();
 		InteractionResult result = InteractionResult.PASS;
 		if (entity != null) {
 			ItemStack fed = ItemStack.EMPTY;
@@ -217,23 +148,8 @@ public class OceanOvaryBlock extends AbstractOvaryBlock {
 			}
 			if (fed.is(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "fish_food")))) {
 				if (blockstate.getValue(BLOCKSTATE) == 1) {
-					{
-						int _value = 0;
-						BlockPos _pos = BlockPos.containing(x, y, z);
-						BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-						if (_bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))
-							((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
-					}
-					{
-						int _value = 0;
-						BlockPos _pos = BlockPos.containing(x, y, z);
-						BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-						if (_bs.getBlock().getStateDefinition().getProperty("output") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))
-							((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
-					}
-					if ((LevelAccessor) world instanceof Level _level) {
-							_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.panda.eat")), SoundSource.BLOCKS, (float) 0.95, 1);
-					}
+					world.setBlock(pos, world.getBlockState(pos).setValue(BLOCKSTATE, 0).setValue(OUTPUT, 0), 3);
+					world.playSound(null, pos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.panda.eat")), SoundSource.BLOCKS, 0.95F, 1.0F);
 					fed.shrink(1);
 					result = InteractionResult.SUCCESS;
 				}

@@ -1,8 +1,12 @@
 
 package com.apocalypse.caerulaarbor.item;
 
-import com.apocalypse.caerulaarbor.procedures.EatTrialMorProcedure;
+import com.apocalypse.caerulaarbor.api.event.SanityEvent;
+import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
@@ -10,6 +14,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 
 import java.util.List;
 
@@ -35,7 +40,13 @@ public class SeaTrailMorItem extends Item {
 		double x = entity.getX();
 		double y = entity.getY();
 		double z = entity.getZ();
-		EatTrialMorProcedure.execute(world, x, y, z, entity);
-		return retval;
+        if (entity != null) {
+            if ((Entity) entity instanceof LivingEntity livingEntity) {
+                SIHelper.causeSanityInjury(livingEntity, 160, SanityEvent.Hurt.Type.FOOD);
+            }
+            if ((LevelAccessor) world instanceof ServerLevel serverLevel)
+                serverLevel.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, (y + 0.8), z, 48, 0.5, 1, 0.5, 0.1);
+        }
+        return retval;
 	}
 }

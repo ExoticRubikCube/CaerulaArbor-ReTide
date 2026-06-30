@@ -340,11 +340,11 @@ public class LivingAttackEventHandler {
     private static void preventInquisitionDamage(LivingAttackEvent event, Entity entity, Entity sourceentity) {
         if (entity == null || sourceentity == null) return;
 
-        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "inquisition"))) && sourceentity instanceof Player) {
+        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "inquisition"))) && sourceentity instanceof Player entity1) {
             if ((entity.getPersistentData().getString("recentCommander")).equals(sourceentity.getDisplayName().getString())) {
                 event.setCanceled(true);
             }
-            if (sourceentity instanceof LivingEntity _entity && _entity.isHolding(CAItems.INTERPHONE.get())) {
+            if (entity1.isHolding(CAItems.INTERPHONE.get())) {
                 entity.getPersistentData().putString("recentCommander", "");
             }
         }
@@ -361,6 +361,7 @@ public class LivingAttackEventHandler {
         }
     }
 
+    //TODO下放回实体
     private static void handleEndermanTeleport(LivingAttackEvent event) {
         LevelAccessor world = event.getEntity().level();
         double x = event.getEntity().getX();

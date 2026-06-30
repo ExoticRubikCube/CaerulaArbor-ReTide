@@ -10,7 +10,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.FallingBlockEntity;
@@ -25,7 +24,6 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.FluidState;
@@ -106,319 +104,131 @@ public class TrailPulseBlock extends Block {
 	@Override
 	public void tick(BlockState blockstate, ServerLevel world, BlockPos pos, RandomSource random) {
 		super.tick(blockstate, world, pos, random);
-		int x = pos.getX();
-		int y = pos.getY();
-		int z = pos.getZ();
-        BlockState toPlace;
-        BlockState toReplace;
-        boolean put = false;
-        double dltx;
-        double dltz;
-        for (Direction directioniterator : Direction.Plane.HORIZONTAL) {
-            for (int dy = 0; dy <= 2; dy++) {
-                for (int dist = 1; dist <= 2; dist++) {
-                    if (Math.random() < 0.25) {
-                        toReplace = (((LevelAccessor) world).getBlockState(BlockPos.containing((double) x + directioniterator.getStepX() * dist, (double) y + dy, (double) z + directioniterator.getStepZ() * dist)));
-                        if (toReplace.canBeReplaced()
-                                && CABlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing((double) x + directioniterator.getStepX() * dist, (double) y + dy, (double) z + directioniterator.getStepZ() * dist))) {
-                            if (toReplace.getBlock() == Blocks.WATER) {
-                                toPlace = (CABlocks.SEA_TRAIL_INIT.get().getStateDefinition().getProperty("waterlogged") instanceof BooleanProperty _withbp12
-                                        ? CABlocks.SEA_TRAIL_INIT.get().defaultBlockState().setValue(_withbp12, true)
-                                        : CABlocks.SEA_TRAIL_INIT.get().defaultBlockState());
-                            } else {
-                                toPlace = CABlocks.SEA_TRAIL_INIT.get().defaultBlockState();
-                            }
-                            {
-                                BlockPos _bp = BlockPos.containing((double) x + directioniterator.getStepX() * dist, (double) y + dy, (double) z + directioniterator.getStepZ() * dist);
-                                BlockState _bso = ((LevelAccessor) world).getBlockState(_bp);
-                            Direction _dir = Direction.NORTH;
-                            int _num = Mth.nextInt(RandomSource.create(), 1, 4);
-                            if (_num == 1) {
-                                _dir = Direction.EAST;
-                            } else if (_num == 2) {
-                                _dir = Direction.SOUTH;
-                            } else if (_num == 3) {
-                                _dir = Direction.WEST;
-                            }
-                            BlockState _bs = CABlocks.SEA_TRAIL_INIT.get().withPropertiesOf(_bso);
-                            if (_bs.hasProperty(BlockStateProperties.WATERLOGGED) && toPlace.hasProperty(BlockStateProperties.WATERLOGGED))
-                                _bs = _bs.setValue(BlockStateProperties.WATERLOGGED, toPlace.getValue(BlockStateProperties.WATERLOGGED));
-                            _bs = _bs.setValue(FACING, _dir);
-                                ((LevelAccessor) world).setBlock(_bp, _bs, 3);
-                            }
-                            put = true;
-                            break;
-                        }
-                    }
-                }
-                if (put) {
-                    break;
-                }
-            }
-            if (put) {
-                break;
-            }
-            if (!put) {
-                for (int dist = 1; dist <= 2; dist++) {
-                    if (Math.random() < 0.25 && canDropTrail(world, (double) x + directioniterator.getStepX() * dist, (double) y - 1, (double) z + directioniterator.getStepZ() * dist)) {
-                        if ((LevelAccessor) world instanceof ServerLevel _level)
-                            FallingBlockEntity.fall(_level, BlockPos.containing((double) x + directioniterator.getStepX() * dist, (double) y - 1, (double) z + directioniterator.getStepZ() * dist), CABlocks.SEA_TRAIL_INIT.get().defaultBlockState());
-                        put = true;
-                        break;
-                    }
-                }
-            }
-        }
-        if (!put) {
-            dltx = 1;
-            dltz = 1;
-            for (int dy = 0; dy >= 2; dy--) {
-                if (Math.random() < 0.25) {
-                    toReplace = (((LevelAccessor) world).getBlockState(BlockPos.containing((double) x + dltx, (double) y + dy, (double) z + dltz)));
-                    if (toReplace.canBeReplaced() && CABlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing((double) x + dltx, (double) y + dy, (double) z + dltz))) {
-                        if (toReplace.getBlock() == Blocks.WATER) {
-                            toPlace = (CABlocks.SEA_TRAIL_INIT.get().getStateDefinition().getProperty("waterlogged") instanceof BooleanProperty _withbp37
-                                    ? CABlocks.SEA_TRAIL_INIT.get().defaultBlockState().setValue(_withbp37, true)
-                                    : CABlocks.SEA_TRAIL_INIT.get().defaultBlockState());
-                        } else {
-                            toPlace = CABlocks.SEA_TRAIL_INIT.get().defaultBlockState();
-                        }
-                        {
-                            BlockPos _bp = BlockPos.containing((double) x + dltx, (double) y + dy, (double) z + dltz);
-                            BlockState _bso = ((LevelAccessor) world).getBlockState(_bp);
-                            Direction _dir = Direction.NORTH;
-                            int _num = Mth.nextInt(RandomSource.create(), 1, 4);
-                            if (_num == 1) {
-                                _dir = Direction.EAST;
-                            } else if (_num == 2) {
-                                _dir = Direction.SOUTH;
-                            } else if (_num == 3) {
-                                _dir = Direction.WEST;
-                            }
-                            BlockState _bs = CABlocks.SEA_TRAIL_INIT.get().withPropertiesOf(_bso);
-                            if (_bs.hasProperty(BlockStateProperties.WATERLOGGED) && toPlace.hasProperty(BlockStateProperties.WATERLOGGED))
-                                _bs = _bs.setValue(BlockStateProperties.WATERLOGGED, toPlace.getValue(BlockStateProperties.WATERLOGGED));
-                            _bs = _bs.setValue(FACING, _dir);
-                            ((LevelAccessor) world).setBlock(_bp, _bs, 3);
-                        }
-                        put = true;
-                        break;
-                    }
-                }
-            }
-            if (Math.random() < 0.25 && canDropTrail(world, (double) x + dltx, (double) y - 1, (double) z + dltz)) {
-                if ((LevelAccessor) world instanceof ServerLevel _level)
-                    FallingBlockEntity.fall(_level, BlockPos.containing((double) x + dltx, (double) y - 1, (double) z + dltz), CABlocks.SEA_TRAIL_INIT.get().defaultBlockState());
-                put = true;
-            }
-        }
-        if (!put) {
-            dltx = 1;
-            dltz = -1;
-            for (int dy = 0; dy >= 2; dy--) {
-                if (Math.random() < 0.25) {
-                    toReplace = (((LevelAccessor) world).getBlockState(BlockPos.containing((double) x + dltx, (double) y + dy, (double) z + dltz)));
-                    if (toReplace.canBeReplaced() && CABlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing((double) x + dltx, (double) y + dy, (double) z + dltz))) {
-                        if (toReplace.getBlock() == Blocks.WATER) {
-                            toPlace = (CABlocks.SEA_TRAIL_INIT.get().getStateDefinition().getProperty("waterlogged") instanceof BooleanProperty _withbp48
-                                    ? CABlocks.SEA_TRAIL_INIT.get().defaultBlockState().setValue(_withbp48, true)
-                                    : CABlocks.SEA_TRAIL_INIT.get().defaultBlockState());
-                        } else {
-                            toPlace = CABlocks.SEA_TRAIL_INIT.get().defaultBlockState();
-                        }
-                        {
-                            BlockPos _bp = BlockPos.containing((double) x + dltx, (double) y + dy, (double) z + dltz);
-                            BlockState _bso = ((LevelAccessor) world).getBlockState(_bp);
-                            Direction _dir = Direction.NORTH;
-                            int _num = Mth.nextInt(RandomSource.create(), 1, 4);
-                            if (_num == 1) {
-                                _dir = Direction.EAST;
-                            } else if (_num == 2) {
-                                _dir = Direction.SOUTH;
-                            } else if (_num == 3) {
-                                _dir = Direction.WEST;
-                            }
-                            BlockState _bs = CABlocks.SEA_TRAIL_INIT.get().withPropertiesOf(_bso);
-                            if (_bs.hasProperty(BlockStateProperties.WATERLOGGED) && toPlace.hasProperty(BlockStateProperties.WATERLOGGED))
-                                _bs = _bs.setValue(BlockStateProperties.WATERLOGGED, toPlace.getValue(BlockStateProperties.WATERLOGGED));
-                            _bs = _bs.setValue(FACING, _dir);
-                            ((LevelAccessor) world).setBlock(_bp, _bs, 3);
-                        }
-                        put = true;
-                        break;
-                    }
-                }
-            }
-            if (Math.random() < 0.25 && canDropTrail(world, (double) x + dltx, (double) y - 1, (double) z + dltz)) {
-                if ((LevelAccessor) world instanceof ServerLevel _level)
-                    FallingBlockEntity.fall(_level, BlockPos.containing((double) x + dltx, (double) y - 1, (double) z + dltz), CABlocks.SEA_TRAIL_INIT.get().defaultBlockState());
-                put = true;
-            }
-        }
-        if (!put) {
-            dltx = -1;
-            dltz = 1;
-            for (int dy = 0; dy >= 2; dy--) {
-                if (Math.random() < 0.25) {
-                    toReplace = (((LevelAccessor) world).getBlockState(BlockPos.containing((double) x + dltx, (double) y + dy, (double) z + dltz)));
-                    if (toReplace.canBeReplaced() && CABlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing((double) x + dltx, (double) y + dy, (double) z + dltz))) {
-                        if (toReplace.getBlock() == Blocks.WATER) {
-                            toPlace = (CABlocks.SEA_TRAIL_INIT.get().getStateDefinition().getProperty("waterlogged") instanceof BooleanProperty _withbp59
-                                    ? CABlocks.SEA_TRAIL_INIT.get().defaultBlockState().setValue(_withbp59, true)
-                                    : CABlocks.SEA_TRAIL_INIT.get().defaultBlockState());
-                        } else {
-                            toPlace = CABlocks.SEA_TRAIL_INIT.get().defaultBlockState();
-                        }
-                        {
-                            BlockPos _bp = BlockPos.containing((double) x + dltx, (double) y + dy, (double) z + dltz);
-                            BlockState _bso = ((LevelAccessor) world).getBlockState(_bp);
-                            Direction _dir = Direction.NORTH;
-                            int _num = Mth.nextInt(RandomSource.create(), 1, 4);
-                            if (_num == 1) {
-                                _dir = Direction.EAST;
-                            } else if (_num == 2) {
-                                _dir = Direction.SOUTH;
-                            } else if (_num == 3) {
-                                _dir = Direction.WEST;
-                            }
-                            BlockState _bs = CABlocks.SEA_TRAIL_INIT.get().withPropertiesOf(_bso);
-                            if (_bs.hasProperty(BlockStateProperties.WATERLOGGED) && toPlace.hasProperty(BlockStateProperties.WATERLOGGED))
-                                _bs = _bs.setValue(BlockStateProperties.WATERLOGGED, toPlace.getValue(BlockStateProperties.WATERLOGGED));
-                            _bs = _bs.setValue(FACING, _dir);
-                            ((LevelAccessor) world).setBlock(_bp, _bs, 3);
-                        }
-                        put = true;
-                        break;
-                    }
-                }
-            }
-            if (Math.random() < 0.25 && canDropTrail(world, (double) x + dltx, (double) y - 1, (double) z + dltz)) {
-                if ((LevelAccessor) world instanceof ServerLevel _level)
-                    FallingBlockEntity.fall(_level, BlockPos.containing((double) x + dltx, (double) y - 1, (double) z + dltz), CABlocks.SEA_TRAIL_INIT.get().defaultBlockState());
-                put = true;
-            }
-        }
-        if (!put) {
-            dltx = -1;
-            dltz = -1;
-            for (int dy = 0; dy >= 2; dy--) {
-                if (Math.random() < 0.25) {
-                    toReplace = (((LevelAccessor) world).getBlockState(BlockPos.containing((double) x + dltx, (double) y + dy, (double) z + dltz)));
-                    if (toReplace.canBeReplaced() && CABlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing((double) x + dltx, (double) y + dy, (double) z + dltz))) {
-                        if (toReplace.getBlock() == Blocks.WATER) {
-                            toPlace = (CABlocks.SEA_TRAIL_INIT.get().getStateDefinition().getProperty("waterlogged") instanceof BooleanProperty _withbp70
-                                    ? CABlocks.SEA_TRAIL_INIT.get().defaultBlockState().setValue(_withbp70, true)
-                                    : CABlocks.SEA_TRAIL_INIT.get().defaultBlockState());
-                        } else {
-                            toPlace = CABlocks.SEA_TRAIL_INIT.get().defaultBlockState();
-                        }
-                        {
-                            BlockPos _bp = BlockPos.containing((double) x + dltx, (double) y + dy, (double) z + dltz);
-                            BlockState _bso = ((LevelAccessor) world).getBlockState(_bp);
-                            Direction _dir = Direction.NORTH;
-                            int _num = Mth.nextInt(RandomSource.create(), 1, 4);
-                            if (_num == 1) {
-                                _dir = Direction.EAST;
-                            } else if (_num == 2) {
-                                _dir = Direction.SOUTH;
-                            } else if (_num == 3) {
-                                _dir = Direction.WEST;
-                            }
-                            BlockState _bs = CABlocks.SEA_TRAIL_INIT.get().withPropertiesOf(_bso);
-                            if (_bs.hasProperty(BlockStateProperties.WATERLOGGED) && toPlace.hasProperty(BlockStateProperties.WATERLOGGED))
-                                _bs = _bs.setValue(BlockStateProperties.WATERLOGGED, toPlace.getValue(BlockStateProperties.WATERLOGGED));
-                            _bs = _bs.setValue(FACING, _dir);
-                            ((LevelAccessor) world).setBlock(_bp, _bs, 3);
-                        }
-                        put = true;
-                        break;
-                    }
-                }
-            }
-            if (Math.random() < 0.25 && canDropTrail(world, (double) x + dltx, (double) y - 1, (double) z + dltz)) {
-                if ((LevelAccessor) world instanceof ServerLevel _level)
-                    FallingBlockEntity.fall(_level, BlockPos.containing((double) x + dltx, (double) y - 1, (double) z + dltz), CABlocks.SEA_TRAIL_INIT.get().defaultBlockState());
-                put = true;
-            }
-        }
-        if (!put) {
-            for (Direction directioniterator : Direction.values()) {
-                if (Math.random() < 0.25) {
-                    if (WorldUtils.isOrganic(((LevelAccessor) world).getBlockState(BlockPos.containing((double) x + directioniterator.getStepX(), (double) y + directioniterator.getStepY(), (double) z + directioniterator.getStepZ())))) {
-                        {
-                            BlockPos _bp = BlockPos.containing((double) x + directioniterator.getStepX(), (double) y + directioniterator.getStepY(), (double) z + directioniterator.getStepZ());
-                            BlockState _bso = ((LevelAccessor) world).getBlockState(_bp);
-                            BlockState _bs = CABlocks.TRAIL_PULSE.get().withPropertiesOf(_bso);
-                            ((LevelAccessor) world).setBlock(_bp, _bs, 3);
-                        }
-                        put = true;
-                        break;
-                    }
-                }
-            }
-        }
-        if ((blockstate.getBlock().getStateDefinition().getProperty("nurtr") instanceof IntegerProperty _getip93 ? blockstate.getValue(_getip93) : -1) <= 0) {
-            world.destroyBlock(BlockPos.containing(x, y, z), false);
-            if ((LevelAccessor) world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.break")), SoundSource.BLOCKS, (float) 0.33, 1);
-            }
-            if (Math.random() < 0.025) {
-                if (Math.random() < 0.012) {
-                    ((LevelAccessor) world).setBlock(BlockPos.containing(x, y, z), CABlocks.RED_OVARY.get().defaultBlockState(), 3);
-                } else {
-                    ((LevelAccessor) world).setBlock(BlockPos.containing(x, y, z), CABlocks.OCEAN_OVARY.get().defaultBlockState(), 3);
-                }
-            }
-        }
-        if ((blockstate.getBlock().getStateDefinition().getProperty("grow_age") instanceof IntegerProperty _getip99 ? blockstate.getValue(_getip99) : -1) <= 0 && Math.random() < 0.33) {
-            world.destroyBlock(BlockPos.containing(x, y, z), false);
-            if ((LevelAccessor) world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.break")), SoundSource.BLOCKS, (float) 0.33, 1);
-            }
-            if (Math.random() < 0.025) {
-                if (Math.random() < 0.012) {
-                    ((LevelAccessor) world).setBlock(BlockPos.containing(x, y, z), CABlocks.RED_OVARY.get().defaultBlockState(), 3);
-                } else {
-                    ((LevelAccessor) world).setBlock(BlockPos.containing(x, y, z), CABlocks.OCEAN_OVARY.get().defaultBlockState(), 3);
-                }
-            }
-        }
-        if (put) {
-            if ((LevelAccessor) world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.place")), SoundSource.BLOCKS, (float) 0.33, 1);
-            }
-            {
-                int _value = (blockstate.getBlock().getStateDefinition().getProperty("nurtr") instanceof IntegerProperty _getip106 ? blockstate.getValue(_getip106) : -1) - 1;
-                BlockPos _pos = BlockPos.containing(x, y, z);
-                BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-                if (_bs.getBlock().getStateDefinition().getProperty("nurtr") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))
-                    ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
-            }
-        }
-        {
-            int _value = (blockstate.getBlock().getStateDefinition().getProperty("grow_age") instanceof IntegerProperty _getip109 ? blockstate.getValue(_getip109) : -1) - 1;
-            BlockPos _pos = BlockPos.containing(x, y, z);
-            BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-            if (_bs.getBlock().getStateDefinition().getProperty("grow_age") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))
-                ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
-        }
-        world.scheduleTick(pos, this, 80);
+		BlockState seaTrailInitState = CABlocks.SEA_TRAIL_INIT.get().defaultBlockState();
+		boolean put = false;
+		for (Direction direction : Direction.Plane.HORIZONTAL) {
+			for (int dy = 0; dy <= 2; dy++) {
+				for (int dist = 1; dist <= 2; dist++) {
+					if (random.nextFloat() < 0.25F) {
+						BlockPos targetPos = pos.offset(direction.getStepX() * dist, dy, direction.getStepZ() * dist);
+						if (this.tryPlaceSeaTrailInit(world, targetPos, seaTrailInitState)) {
+							put = true;
+							break;
+						}
+					}
+				}
+				if (put) {
+					break;
+				}
+			}
+			if (put) {
+				break;
+			}
+			for (int dist = 1; dist <= 2 && !put; dist++) {
+				BlockPos dropPos = pos.offset(direction.getStepX() * dist, -1, direction.getStepZ() * dist);
+				if (random.nextFloat() < 0.25F && this.canDropTrail(world, dropPos, seaTrailInitState)) {
+					FallingBlockEntity.fall(world, dropPos, seaTrailInitState);
+					put = true;
+				}
+			}
+			if (put) {
+				break;
+			}
+		}
+		if (!put) {
+			put = this.tryDropDiagonalTrail(world, pos.offset(1, -1, 1), random, seaTrailInitState);
+		}
+		if (!put) {
+			put = this.tryDropDiagonalTrail(world, pos.offset(1, -1, -1), random, seaTrailInitState);
+		}
+		if (!put) {
+			put = this.tryDropDiagonalTrail(world, pos.offset(-1, -1, 1), random, seaTrailInitState);
+		}
+		if (!put) {
+			put = this.tryDropDiagonalTrail(world, pos.offset(-1, -1, -1), random, seaTrailInitState);
+		}
+		if (!put) {
+			for (Direction direction : Direction.values()) {
+				if (random.nextFloat() < 0.25F) {
+					BlockPos targetPos = pos.relative(direction);
+					BlockState targetState = world.getBlockState(targetPos);
+					if (WorldUtils.isOrganic(targetState)) {
+						world.setBlock(targetPos, CABlocks.TRAIL_PULSE.get().withPropertiesOf(targetState), 3);
+						put = true;
+						break;
+					}
+				}
+			}
+		}
+		int nurture = blockstate.getValue(NURTR);
+		if (nurture <= 0) {
+			world.destroyBlock(pos, false);
+			world.playSound(null, pos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.break")), SoundSource.BLOCKS, 0.33F, 1.0F);
+			if (random.nextFloat() < 0.025F) {
+				world.setBlock(pos, random.nextFloat() < 0.012F ? CABlocks.RED_OVARY.get().defaultBlockState() : CABlocks.OCEAN_OVARY.get().defaultBlockState(), 3);
+			}
+		}
+		int growAge = blockstate.getValue(GROW_AGE);
+		if (growAge <= 0 && random.nextFloat() < 0.33F) {
+			world.destroyBlock(pos, false);
+			world.playSound(null, pos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.break")), SoundSource.BLOCKS, 0.33F, 1.0F);
+			if (random.nextFloat() < 0.025F) {
+				world.setBlock(pos, random.nextFloat() < 0.012F ? CABlocks.RED_OVARY.get().defaultBlockState() : CABlocks.OCEAN_OVARY.get().defaultBlockState(), 3);
+			}
+		}
+		if (put) {
+			world.playSound(null, pos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.place")), SoundSource.BLOCKS, 0.33F, 1.0F);
+			if (nurture > 0) {
+				BlockState currentState = world.getBlockState(pos);
+				if (currentState.hasProperty(NURTR)) {
+					world.setBlock(pos, currentState.setValue(NURTR, nurture - 1), 3);
+				}
+			}
+		}
+		if (growAge > 0) {
+			BlockState currentState = world.getBlockState(pos);
+			if (currentState.hasProperty(GROW_AGE)) {
+				world.setBlock(pos, currentState.setValue(GROW_AGE, growAge - 1), 3);
+			}
+		}
+		world.scheduleTick(pos, this, 80);
 	}
 
-	private boolean canDropTrail(LevelAccessor world, double xx, double yy, double zz) {
-		BlockState targetBlock;
-		boolean drop = false;
-        if (world.getBlockFloorHeight(BlockPos.containing(xx, yy, zz)) > 0) {
+	private boolean tryPlaceSeaTrailInit(ServerLevel world, BlockPos pos, BlockState seaTrailInitState) {
+		BlockState replaceState = world.getBlockState(pos);
+		if (!replaceState.canBeReplaced() || !seaTrailInitState.canSurvive(world, pos)) {
 			return false;
 		}
-		for (int index0 = 0; index0 < 64; index0++) {
-			targetBlock = (world.getBlockState(BlockPos.containing(xx, yy - index0 - 1, zz)));
-			if (world.isEmptyBlock(BlockPos.containing(xx, yy - index0 - 1, zz)) || targetBlock.canBeReplaced()) {
-				if (CABlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing(xx, yy - index0 - 1, zz))) {
+		BlockState placedState = CABlocks.SEA_TRAIL_INIT.get().withPropertiesOf(replaceState);
+		if (placedState.hasProperty(BlockStateProperties.WATERLOGGED)) {
+			placedState = placedState.setValue(BlockStateProperties.WATERLOGGED, replaceState.getBlock() == Blocks.WATER);
+		}
+		world.setBlock(pos, placedState, 3);
+		return true;
+	}
+
+	private boolean tryDropDiagonalTrail(ServerLevel world, BlockPos pos, RandomSource random, BlockState seaTrailInitState) {
+		if (random.nextFloat() < 0.25F && this.canDropTrail(world, pos, seaTrailInitState)) {
+			FallingBlockEntity.fall(world, pos, seaTrailInitState);
+			return true;
+		}
+		return false;
+	}
+
+	private boolean canDropTrail(LevelAccessor world, BlockPos pos, BlockState seaTrailInitState) {
+		if (world.getBlockFloorHeight(pos) > 0) {
+			return false;
+		}
+		BlockPos.MutableBlockPos mutablePos = pos.mutable();
+		for (int index = 0; index < 64; index++) {
+			mutablePos.set(pos.getX(), pos.getY() - index - 1, pos.getZ());
+			BlockState targetBlock = world.getBlockState(mutablePos);
+			if (world.isEmptyBlock(mutablePos) || targetBlock.canBeReplaced()) {
+				if (seaTrailInitState.canSurvive(world, mutablePos)) {
 					return true;
 				}
 			} else {
-				if (index0 > 0) {
+				if (index > 0) {
 					return false;
 				}
 				break;

@@ -70,6 +70,9 @@ public class FishSplashEntity extends AbstractArrow implements ItemSupplier {
 	@Override
 	public void onHitEntity(EntityHitResult entityHitResult) {
 		super.onHitEntity(entityHitResult);
+		if (this.getOwner() instanceof OceanIllusionEntity) {
+			entityHitResult.getEntity().invulnerableTime = 0;
+		}
 		EntityUtils.killSelf(this.level(), entityHitResult.getEntity(), this);
 	}
 

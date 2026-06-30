@@ -3,8 +3,8 @@ package com.apocalypse.caerulaarbor.block;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.init.CABlockEntities;
-import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CABlocks;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -13,7 +13,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.MobSpawnType;
@@ -28,7 +27,10 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.*;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.PushReaction;
@@ -45,6 +47,7 @@ public class ViviparousLilyBlock extends BaseEntityBlock implements SimpleWaterl
 	public static final IntegerProperty ANIMATION = IntegerProperty.create("animation", 0, 1);
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
+	private static final net.minecraft.tags.TagKey<Block> TRAIL_TAG = BlockTags.create(new ResourceLocation(CaerulaArborMod.MODID, "trail"));
 
 	public ViviparousLilyBlock() {
 		super(BlockBehaviour.Properties.of()
@@ -139,101 +142,50 @@ public class ViviparousLilyBlock extends BaseEntityBlock implements SimpleWaterl
 	@Override
 	public void onPlace(BlockState blockstate, Level world, BlockPos pos, BlockState oldState, boolean moving) {
 		super.onPlace(blockstate, world, pos, oldState, moving);
-        double x = pos.getX();
-        double y = pos.getY();
-        double z = pos.getZ();
-        {
-            Direction _dir = new Object() {
-                public Direction getValue() {
-                    Direction _dir = Direction.NORTH;
-                    int _num = Mth.nextInt(RandomSource.create(), 1, 4);
-                    if (_num == 1) {
-                        _dir = Direction.EAST;
-                    } else if (_num == 2) {
-                        _dir = Direction.SOUTH;
-                    } else if (_num == 3) {
-                        _dir = Direction.WEST;
-                    }
-                    return _dir;
-                }
-            }.getValue();
-            BlockPos _pos = BlockPos.containing(x, y, z);
-            BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-            Property<?> _property = _bs.getBlock().getStateDefinition().getProperty("facing");
-            if (_property instanceof DirectionProperty _dp && _dp.getPossibleValues().contains(_dir)) {
-                ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_dp, _dir), 3);
-            } else {
-                _property = _bs.getBlock().getStateDefinition().getProperty("axis");
-                if (_property instanceof EnumProperty _ap && _ap.getPossibleValues().contains(_dir.getAxis()))
-                    ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_ap, _dir.getAxis()), 3);
-            }
-        }
-    }
+		Direction direction = switch (world.getRandom().nextInt(4)) {
+			case 0 -> Direction.EAST;
+			case 1 -> Direction.SOUTH;
+			case 2 -> Direction.WEST;
+			default -> Direction.NORTH;
+		};
+		world.setBlock(pos, blockstate.setValue(FACING, direction), 3);
+	}
 
 	@Override
 	public void tick(BlockState blockstate, ServerLevel world, BlockPos pos, RandomSource random) {
 		super.tick(blockstate, world, pos, random);
-		int x = pos.getX();
-		int y = pos.getY();
-		int z = pos.getZ();
-
-        boolean huge;
-        huge = true;
-        for (int dx = -1; dx <= 1; dx++) {
-            for (int dz = -1; dz <= 1; dz++) {
-                if (!((((LevelAccessor) world).getBlockState(BlockPos.containing((double) x + dx, y, (double) z + dz))).getBlock() == CABlocks.VIVIPAROUS_LILY.get())) {
-                    huge = false;
-                    break;
-                }
-            }
-            if (!huge) {
-                break;
-            }
-        }
-        if (huge) {
-            for (int dx = -1; dx <= 1; dx++) {
-                for (int dz = -1; dz <= 1; dz++) {
-                    if (!(dx == 0 && dz == 0)) {
-                        ((LevelAccessor) world).setBlock(BlockPos.containing((double) x + dx, y, (double) z + dz), Blocks.AIR.defaultBlockState(), 3);
-                        if ((LevelAccessor) world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.fungus.break")), SoundSource.BLOCKS, 1, 1);
-                        }
-                    }
-                }
-            }
-            if ((LevelAccessor) world instanceof ServerLevel _level)
-                _level.sendParticles(ParticleTypes.EXPLOSION_EMITTER, ((double) x + 0.5), y, ((double) z + 0.5), 2, 0.1, 0.1, 0.1, 0.1);
-            {
-                int _value = 1;
-                BlockPos _pos = BlockPos.containing(x, y, z);
-                BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-                if (_bs.getBlock().getStateDefinition().getProperty("animation") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))
-                    ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
-            }
-            CaerulaArborMod.queueServerWork(20, () -> {
-                if ((((LevelAccessor) world).getBlockState(BlockPos.containing(x, y, z))).getBlock() == CABlocks.VIVIPAROUS_LILY.get()) {
-                    {
-                        BlockPos _bp = BlockPos.containing(x, y, z);
-                        BlockState _bs = CABlocks.HUGE_LILY.get().withPropertiesOf(blockstate);
-                        ((LevelAccessor) world).setBlock(_bp, _bs, 3);
-                    }
-                }
-            });
-        } else {
-            if ((((LevelAccessor) world).getBlockState(BlockPos.containing(x, (double) y - 1, z))).is(BlockTags.create(new ResourceLocation(CaerulaArborMod.MODID, "trail")))) {
-                if (Math.random() < 0.33) {
-                    if ((LevelAccessor) world instanceof ServerLevel _level) {
-                        Entity entityToSpawn = CAEntities.SLIDER_FISH.get().spawn(_level, BlockPos.containing((double) x + 0.5, y, (double) z + 0.5), MobSpawnType.MOB_SUMMONED);
-                        if (entityToSpawn != null) {
-                            entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
-                        }
-                    }
-                    if ((LevelAccessor) world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.puffer_fish.blow_out")), SoundSource.BLOCKS, 1, 1);
-                    }
-                    ((LevelAccessor) world).setBlock(BlockPos.containing(x, y, z), Blocks.AIR.defaultBlockState(), 3);
-                }
-            }
-        }
-    }
+		boolean huge = true;
+		for (int dx = -1; dx <= 1 && huge; dx++) {
+			for (int dz = -1; dz <= 1; dz++) {
+				if (world.getBlockState(pos.offset(dx, 0, dz)).getBlock() != CABlocks.VIVIPAROUS_LILY.get()) {
+					huge = false;
+					break;
+				}
+			}
+		}
+		if (huge) {
+			for (int dx = -1; dx <= 1; dx++) {
+				for (int dz = -1; dz <= 1; dz++) {
+					if (dx != 0 || dz != 0) {
+						world.setBlock(pos.offset(dx, 0, dz), Blocks.AIR.defaultBlockState(), 3);
+						world.playSound(null, pos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.fungus.break")), SoundSource.BLOCKS, 1.0F, 1.0F);
+					}
+				}
+			}
+			world.sendParticles(ParticleTypes.EXPLOSION_EMITTER, pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, 2, 0.1D, 0.1D, 0.1D, 0.1D);
+			world.setBlock(pos, blockstate.setValue(ANIMATION, 1), 3);
+			CaerulaArborMod.queueServerWork(20, () -> {
+				if (world.getBlockState(pos).getBlock() == CABlocks.VIVIPAROUS_LILY.get()) {
+					world.setBlock(pos, CABlocks.HUGE_LILY.get().withPropertiesOf(blockstate), 3);
+				}
+			});
+		} else if (world.getBlockState(pos.below()).is(TRAIL_TAG) && random.nextFloat() < 0.33F) {
+			Entity entityToSpawn = CAEntities.SLIDER_FISH.get().spawn(world, pos.above(), MobSpawnType.MOB_SUMMONED);
+			if (entityToSpawn != null) {
+				entityToSpawn.setYRot(world.getRandom().nextFloat() * 360.0F);
+			}
+			world.playSound(null, pos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.puffer_fish.blow_out")), SoundSource.BLOCKS, 1.0F, 1.0F);
+			world.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
+		}
+	}
 }

@@ -210,6 +210,24 @@ public class TheLastKnightEntity extends Animal implements GeoEntity, SyncedAnim
 	}
 
 	@Override
+	public boolean doHurtTarget(Entity target) {
+		float attackDamage = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
+		return target.hurt(new DamageSource(this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.MOB_ATTACK), this),
+				this.applyFrozenExecutionBonus(target, attackDamage));
+	}
+
+	public float applyFrozenExecutionBonus(Entity target, float baseDamage) {
+		float damage = baseDamage;
+		if (target.getTicksFrozen() >= 200) {
+			damage *= 1.75F;
+		}
+		if (target.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+			damage *= 1.5F;
+		}
+		return damage;
+	}
+
+	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
 		EntityUtils.initLastKnightAttributes(this);
@@ -497,7 +515,7 @@ public class TheLastKnightEntity extends Animal implements GeoEntity, SyncedAnim
 					}
 				}
 				entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "last_knight_attack"))), this),
-						(float) damage);
+						this.applyFrozenExecutionBonus(entityiterator, (float) damage));
 			}
 		}
 
@@ -509,7 +527,7 @@ public class TheLastKnightEntity extends Animal implements GeoEntity, SyncedAnim
 					}
 				}
 				entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "last_knight_attack")))),
-						(float) damage);
+						this.applyFrozenExecutionBonus(entityiterator, (float) damage));
 			}
 		}
 	}

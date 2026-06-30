@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.Set;
 
 @Mod.EventBusSubscriber
-public class CustomBossBarProcedure {
+public class CustomBossBarEventHandler {
 	public static final Map<BossEvent, BossBarRenderContext> CACHE = new HashMap<>();
 	public static final Set<BossEvent> BLACK_LIST = new HashSet<>();
 
