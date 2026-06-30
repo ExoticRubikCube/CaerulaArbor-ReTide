@@ -3,7 +3,7 @@ package com.apocalypse.caerulaarbor.entity;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
-import com.apocalypse.caerulaarbor.init.CAParticleTypes;
+import com.apocalypse.caerulaarbor.init.CAParticles;
 import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
@@ -591,7 +591,7 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
     private void showBullets(double bulletCount) {
         if (this.tickCount % 2 == 0) {
             for (int index = 0; index < (int) bulletCount; index++) {
-                this.level().addParticle(CAParticleTypes.BULLETS.get(), (this.getX() + 1), (this.getY() + 1.5 + index * 0.25), (this.getZ() + 1), 0, 0, 0);
+                this.level().addParticle(CAParticles.BULLETS.get(), (this.getX() + 1), (this.getY() + 1.5 + index * 0.25), (this.getZ() + 1), 0, 0, 0);
             }
         }
     }

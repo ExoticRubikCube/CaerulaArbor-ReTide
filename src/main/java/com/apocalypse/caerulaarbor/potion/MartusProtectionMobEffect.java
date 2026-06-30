@@ -1,21 +1,20 @@
 
 package com.apocalypse.caerulaarbor.potion;
 
-import com.apocalypse.caerulaarbor.init.CAParticleTypes;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAParticles;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffect;
-
-import com.apocalypse.caerulaarbor.init.CAAttributes;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LevelAccessor;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MartusProtectionMobEffect extends MobEffect {
     public MartusProtectionMobEffect() {
@@ -49,8 +48,8 @@ public class MartusProtectionMobEffect extends MobEffect {
                 r = 1.5 + 0.5 * Math.sin(Math.toRadians(index0 * 36));
                 tx = entity.getX() + r * Math.sin(Math.toRadians(t));
                 yz = entity.getZ() + r * Math.cos(Math.toRadians(t));
-                world.addParticle(CAParticleTypes.MARTUS_CHARS.get(), tx, (y + 1), yz, 0, 0.15, 0);
-                world.addParticle(CAParticleTypes.MARTUS_CHARS.get(), tx, (y + 0.8), yz, 0, (-0.08), 0);
+                world.addParticle(CAParticles.MARTUS_CHARS.get(), tx, (y + 1), yz, 0, 0.15, 0);
+                world.addParticle(CAParticles.MARTUS_CHARS.get(), tx, (y + 0.8), yz, 0, (-0.08), 0);
             }
         }
     }

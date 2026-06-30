@@ -3,9 +3,9 @@ package com.apocalypse.caerulaarbor.item;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.api.event.SanityEvent;
 import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
-import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.init.CAItems;
-import com.apocalypse.caerulaarbor.init.CAParticleTypes;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CAParticles;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -66,7 +66,7 @@ public class TrailriteAxeItem extends AxeItem {
             ((Entity) entity).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "axe_cleave"))), sourceentity),
                     (float) (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * (0.08 + itemstack.getEnchantmentLevel(Enchantments.BLOCK_EFFICIENCY) * 0.03 + itemstack.getEnchantmentLevel(Enchantments.SHARPNESS) * 0.02)));
             if (world instanceof ServerLevel _level)
-                _level.sendParticles(CAParticleTypes.BLOODOOZE.get(), x, (y + 1), z, 32, 2, 2, 2, 0.15);
+                _level.sendParticles(CAParticles.BLOODOOZE.get(), x, (y + 1), z, 32, 2, 2, 2, 0.15);
             if (world instanceof Level _level) {
                 _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("intentionally_empty")), SoundSource.PLAYERS, 1, 1);
             }

@@ -314,7 +314,7 @@ public class FirstTellerEntity extends SeaMonster implements RangedAttackMob {
 		TellerShotEntity.shoot(this, target, (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttributeValue(Attributes.ATTACK_DAMAGE) : 0) * (4.0 / 7.0));
 	}
 
-	public static void init() {
+	public static void registerSpawnPlacements() {
 		SpawnPlacements.register(CAEntities.FIRST_TO_TALK.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
 			int x = pos.getX();
 			int y = pos.getY();
@@ -415,3 +415,4 @@ public class FirstTellerEntity extends SeaMonster implements RangedAttackMob {
 		this.animationprocedure = animation;
 	}
 }
+

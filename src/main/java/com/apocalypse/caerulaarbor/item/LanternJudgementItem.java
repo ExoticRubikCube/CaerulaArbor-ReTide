@@ -2,9 +2,10 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.*;
+import com.apocalypse.caerulaarbor.init.CABlocks;
 import com.apocalypse.caerulaarbor.init.CAItems;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CAParticles;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
@@ -41,7 +42,6 @@ import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -127,7 +127,7 @@ public class LanternJudgementItem extends Item {
                 void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                     for (int index0 = 0; index0 < 120; index0++) {
                         if ((LevelAccessor) world instanceof ServerLevel _level)
-                            _level.sendParticles(CAParticleTypes.PURPLE_FLAME.get(), (x + 2 * (timedloopiterator + 1) * Math.sin(Math.toRadians(index0 * 3))), y,
+                            _level.sendParticles(CAParticles.PURPLE_FLAME.get(), (x + 2 * (timedloopiterator + 1) * Math.sin(Math.toRadians(index0 * 3))), y,
                                     (z + 2 * (timedloopiterator + 1) * Math.cos(Math.toRadians(index0 * 3))), 4, 0.15, 0.2, 0.15, 0.1);
                     }
                     final int tick2 = ticks;
@@ -199,7 +199,7 @@ public class LanternJudgementItem extends Item {
                 || blockstate.getBlock() == CABlocks.SEA_TRAIL_STOP.get() || blockstate.getBlock() == CABlocks.SEA_TRAIL_SOLID.get() || blockstate.getBlock() == CABlocks.TRAIL_PULSE.get()) {
             WorldUtils.burndownTrail(world, blockstate, x, y, z);
             if (world instanceof ServerLevel _level)
-                _level.sendParticles(CAParticleTypes.PURPLE_FLAME.get(), (x + 0.5), (y + 1), (z + 0.5), 48, 0.75, 0.75, 0.75, 0.15);
+                _level.sendParticles(CAParticles.PURPLE_FLAME.get(), (x + 0.5), (y + 1), (z + 0.5), 48, 0.75, 0.75, 0.75, 0.15);
             for (Direction directioniterator : Direction.values()) {
                 output = (world.getBlockState(BlockPos.containing(x + directioniterator.getStepX(), y + directioniterator.getStepY(), z + directioniterator.getStepZ())));
                 if (output.getBlock() == CABlocks.SEA_TRAIL_INIT.get() || output.getBlock() == CABlocks.SEA_TRAIL_GROWING.get() || output.getBlock() == CABlocks.SEA_TRAIL_GROWN.get()
@@ -235,7 +235,7 @@ public class LanternJudgementItem extends Item {
                 world.destroyBlock(_pos, false);
             }
             if (world instanceof ServerLevel _level)
-                _level.sendParticles(CAParticleTypes.PURPLE_FLAME.get(), (x + 0.5), (y + 1), (z + 0.5), 48, 0.75, 0.75, 0.75, 0.15);
+                _level.sendParticles(CAParticles.PURPLE_FLAME.get(), (x + 0.5), (y + 1), (z + 0.5), 48, 0.75, 0.75, 0.75, 0.15);
             for (Direction directioniterator : Direction.values()) {
                 output = (world.getBlockState(BlockPos.containing(x + directioniterator.getStepX(), y + directioniterator.getStepY(), z + directioniterator.getStepZ())));
                 if (output.getBlock() == CABlocks.TRAIL_LEAVE.get()) {
@@ -262,7 +262,7 @@ public class LanternJudgementItem extends Item {
             }
             world.destroyBlock(BlockPos.containing(x, y, z), false);
             if (world instanceof ServerLevel _level)
-                _level.sendParticles(CAParticleTypes.PURPLE_FLAME.get(), (x + 0.5), (y + 1), (z + 0.5), 48, 0.75, 0.75, 0.75, 0.15);
+                _level.sendParticles(CAParticles.PURPLE_FLAME.get(), (x + 0.5), (y + 1), (z + 0.5), 48, 0.75, 0.75, 0.75, 0.15);
             if (world instanceof Level _level) {
                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.fire.extinguish")), SoundSource.BLOCKS, 1, 1);
             }

@@ -822,7 +822,7 @@ public class EndspeakerEntity extends SeaMonster {
             }
         }
         if (world instanceof ServerLevel level) {
-			level.sendParticles(CAParticleTypes.ENDSPEAKER_PARTICLE.get(), targetX, targetY + 1, targetZ, 128, 1, 1, 1, 0.075);
+			level.sendParticles(CAParticles.ENDSPEAKER_PARTICLE.get(), targetX, targetY + 1, targetZ, 128, 1, 1, 1, 0.075);
 			EndspeakerEntity.spawnForPhase(level, BlockPos.containing(targetX, targetY, targetZ), MobSpawnType.MOB_SUMMONED, nextPhase);
 		}
 	}
@@ -1268,7 +1268,7 @@ public class EndspeakerEntity extends SeaMonster {
 			return;
 		}
 		if (this.level() instanceof ServerLevel serverLevel) {
-			serverLevel.sendParticles(CAParticleTypes.ENDSPEAKER_PARTICLE.get(), target.getX(), target.getY() + 0.75, target.getZ(), 8, 0.75, 0.75, 0.75, 0.1);
+			serverLevel.sendParticles(CAParticles.ENDSPEAKER_PARTICLE.get(), target.getX(), target.getY() + 0.75, target.getZ(), 8, 0.75, 0.75, 0.75, 0.1);
 		}
 		if (this.getHealth() >= this.getMaxHealth() * 0.4F) {
 			this.setHealth(this.getHealth() + dealtDamage * 1.4F);

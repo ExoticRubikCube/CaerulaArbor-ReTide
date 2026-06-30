@@ -4,7 +4,7 @@ package com.apocalypse.caerulaarbor.item;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.init.CAItems;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
-import com.apocalypse.caerulaarbor.init.CAParticleTypes;
+import com.apocalypse.caerulaarbor.init.CAParticles;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -115,7 +115,7 @@ public class LancXiaoItem extends SwordItem {
                                         if (_ent instanceof ServerPlayer _serverPlayer)
                                             _serverPlayer.connection.teleport(tx, ty, tz, _ent.getYRot(), _ent.getXRot());
                                         if ((LevelAccessor) world instanceof ServerLevel _level)
-                                            _level.sendParticles(CAParticleTypes.ENDSPEAKER_PARTICLE.get(), tx, (ty + 0.75), tz, 18, 0.75, 0.75, 0.75, 0.15);
+                                            _level.sendParticles(CAParticles.ENDSPEAKER_PARTICLE.get(), tx, (ty + 0.75), tz, 18, 0.75, 0.75, 0.75, 0.15);
                                         if ((LevelAccessor) world instanceof Level _level) {
                                                 _level.playSound(null, BlockPos.containing(tx, ty, tz), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "endspeaker_attack_hit")), SoundSource.PLAYERS, (float) 1.5, 1);
                                         }
@@ -214,7 +214,7 @@ public class LancXiaoItem extends SwordItem {
 		}
 		for (int index0 = 0; index0 < (int) size; index0++) {
 			if (world instanceof ServerLevel level) {
-				level.sendParticles(CAParticleTypes.ENDSPEAKER_INV.get(), fromX + (vx / size) * index0, fromY + (vy / size) * index0 + 0.5, fromZ + (vz / size) * index0, 8, 0.32, 0.5, 0.32, 0.05);
+				level.sendParticles(CAParticles.ENDSPEAKER_INV.get(), fromX + (vx / size) * index0, fromY + (vy / size) * index0 + 0.5, fromZ + (vz / size) * index0, 8, 0.32, 0.5, 0.32, 0.05);
 			}
 		}
 	}

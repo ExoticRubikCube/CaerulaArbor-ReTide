@@ -203,7 +203,7 @@ public class GuideAbyssalEntity extends SeaMonster {
 		return super.getDimensions(p_33597_).scale((float) 1.1);
 	}
 
-	public static void init() {
+	public static void registerSpawnPlacements() {
 		SpawnPlacements.register(CAEntities.GUIDE_ABYSSAL.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
 			int x = pos.getX();
 			int y = pos.getY();
@@ -302,3 +302,4 @@ public class GuideAbyssalEntity extends SeaMonster {
 		this.animationprocedure = animation;
 	}
 }
+

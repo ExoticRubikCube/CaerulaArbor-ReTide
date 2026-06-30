@@ -4,7 +4,7 @@ import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.api.event.SanityEvent;
 import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.init.CAEntities;
-import com.apocalypse.caerulaarbor.init.CAParticleTypes;
+import com.apocalypse.caerulaarbor.init.CAParticles;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -226,7 +226,7 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
                     }
                 }.entityFromStringUUID(uuid1, (Level) world);
                 if (world instanceof ServerLevel _level)
-                    _level.sendParticles(CAParticleTypes.EDERMAN_PTC.get(), x, (y + 0.25), z, 3, 0.1, 0.1, 0.1, 0.1);
+                    _level.sendParticles(CAParticles.EDERMAN_PTC.get(), x, (y + 0.25), z, 3, 0.1, 0.1, 0.1, 0.1);
                 if (!(enemy == null) && enemy.isAlive()) {
                     ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY() + 0.5), (enemy.getZ())));
                     if (tickCount > 20) {

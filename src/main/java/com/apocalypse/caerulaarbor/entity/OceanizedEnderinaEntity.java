@@ -83,7 +83,7 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 		double size = Math.max(Math.min(Math.round(Math.sqrt(vx * vx + vy * vy + vz * vz)), 32), 1);
 		for (int index0 = 0; index0 < (int) size; index0++) {
 			if (world instanceof ServerLevel serverLevel) {
-				serverLevel.sendParticles(CAParticleTypes.EDERMAN_PTC.get(), fromX + (vx / size) * index0, fromY + (vy / size) * index0 + 1, fromZ + (vz / size) * index0, 1, 0, 0, 0, 0.01);
+				serverLevel.sendParticles(CAParticles.EDERMAN_PTC.get(), fromX + (vx / size) * index0, fromY + (vy / size) * index0 + 1, fromZ + (vz / size) * index0, 1, 0, 0, 0, 0.01);
 			}
 		}
 	}

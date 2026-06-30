@@ -191,7 +191,7 @@ public class NetherseaSlimeEntity extends SeaMonster {
 		return super.getDimensions(p_33597_).scale((float) EntityUtils.getSlimeSize(entity));
 	}
 
-	public static void init() {
+	public static void registerDungeonMob() {
 		DungeonHooks.addDungeonMob(CAEntities.NETHERSEA_SLIME.get(), 180);
 	}
 
@@ -304,3 +304,4 @@ public class NetherseaSlimeEntity extends SeaMonster {
 		this.animationprocedure = animation;
 	}
 }
+

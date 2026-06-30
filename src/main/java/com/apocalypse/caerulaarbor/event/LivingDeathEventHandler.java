@@ -155,7 +155,7 @@ public class LivingDeathEventHandler {
                 ModCapabilities.getSanityInjury(entity).heal(1000);
                 if (is_shield) {
                     if (world instanceof ServerLevel _level)
-                        _level.sendParticles(CAParticleTypes.SHIELDLOSS.get(), x, (y + 0.95), z, 72, 0.75, 0.55, 0.75, 0.2);
+                        _level.sendParticles(CAParticles.SHIELDLOSS.get(), x, (y + 0.95), z, 72, 0.75, 0.55, 0.75, 0.2);
                     if (!world.isClientSide()) {
                         entity.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 100, 0));
                         entity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 200, 4));
@@ -164,7 +164,7 @@ public class LivingDeathEventHandler {
                     entity.setHealth(entity.getMaxHealth());
                 } else {
                     if (world instanceof ServerLevel _level)
-                        _level.sendParticles(CAParticleTypes.LIFELOSS.get(), x, (y + 0.95), z, 72, 0.75, 0.55, 0.75, 0.2);
+                        _level.sendParticles(CAParticles.LIFELOSS.get(), x, (y + 0.95), z, 72, 0.75, 0.55, 0.75, 0.2);
                     if (!world.isClientSide())
                         entity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 200, 2));
                     entity.setHealth(entity.getMaxHealth() * 0.5f);

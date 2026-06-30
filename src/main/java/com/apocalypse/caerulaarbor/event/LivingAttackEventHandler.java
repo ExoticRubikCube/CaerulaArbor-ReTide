@@ -108,7 +108,7 @@ public class LivingAttackEventHandler {
             if (sourceentity instanceof LivingEntity _livingEntity2 && _livingEntity2.getAttributes().hasAttribute(CAAttributes.NUMB.get()))
                 _livingEntity2.getAttribute(CAAttributes.NUMB.get()).setBaseValue((numb - 1));
             if (world instanceof ServerLevel _level)
-                _level.sendParticles(CAParticleTypes.NUMBNESS.get(), (sourceentity.getX()), (sourceentity.getY() + 1), (sourceentity.getZ()), 12, 1, 1, 1, 0.1);
+                _level.sendParticles(CAParticles.NUMBNESS.get(), (sourceentity.getX()), (sourceentity.getY() + 1), (sourceentity.getZ()), 12, 1, 1, 1, 0.1);
             if (world instanceof Level _level) {
                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sign.waxed_interact_fail")), SoundSource.HOSTILE, 2, 1);
             }
@@ -136,7 +136,7 @@ public class LivingAttackEventHandler {
                 if (!(entity instanceof LivingEntity _livEnt3 && _livEnt3.hasEffect(CAMobEffects.MUTE.get()))) {
                     if (Math.random() * 100 < missRate) {
                         if (world instanceof ServerLevel _level)
-                            _level.sendParticles(CAParticleTypes.MISS.get(), x, y, z, 6, 1, 1, 1, 0.1);
+                            _level.sendParticles(CAParticles.MISS.get(), x, y, z, 6, 1, 1, 1, 0.1);
                         if (entity instanceof PredatorAbyssalEntity) {
                             ((PredatorAbyssalEntity) entity).setAnimation("animation.predator.miss");
                         }

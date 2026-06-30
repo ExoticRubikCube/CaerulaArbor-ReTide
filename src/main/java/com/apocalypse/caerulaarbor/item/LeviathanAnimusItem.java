@@ -3,7 +3,7 @@ package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler;
-import com.apocalypse.caerulaarbor.init.CAParticleTypes;
+import com.apocalypse.caerulaarbor.init.CAParticles;
 import com.apocalypse.caerulaarbor.system.UpgradeSilenceProcedure;
 import com.apocalypse.caerulaarbor.util.StrategyUtils;
 import net.minecraft.core.BlockPos;
@@ -64,7 +64,7 @@ public class LeviathanAnimusItem extends Item {
                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.end_portal.spawn")), SoundSource.PLAYERS, 4, (float) 0.85);
             }
             if ((LevelAccessor) world instanceof ServerLevel _level)
-                _level.sendParticles(CAParticleTypes.MOIST_BOOM.get(), x, (y + 2), z, 32, 2, 2, 2, 0.33);
+                _level.sendParticles(CAParticles.MOIST_BOOM.get(), x, (y + 2), z, 32, 2, 2, 2, 0.33);
             if (!((LevelAccessor) world).isClientSide() && ((LevelAccessor) world).getServer() != null)
                 ((LevelAccessor) world).getServer().getPlayerList().broadcastSystemMessage(Component.literal((Component.translatable("item.caerula_arbor.language_key.description_14").getString())), false);
             itemstack.shrink(1);

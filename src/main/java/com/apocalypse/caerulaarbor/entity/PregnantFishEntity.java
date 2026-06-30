@@ -295,7 +295,7 @@ public class PregnantFishEntity extends SeaMonster implements RangedAttackMob, P
 		FakerggShootEntity.shoot(this, target, (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttributeValue(Attributes.ATTACK_DAMAGE) : 0) * 0.5);
 	}
 
-	public static void init() {
+	public static void registerSpawnPlacements() {
 		SpawnPlacements.register(CAEntities.PREGNANT_FISH.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
 			int x = pos.getX();
 			int y = pos.getY();
@@ -390,3 +390,4 @@ public class PregnantFishEntity extends SeaMonster implements RangedAttackMob, P
 		this.animationprocedure = animation;
 	}
 }
+

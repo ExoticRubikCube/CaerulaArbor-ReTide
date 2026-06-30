@@ -1,4 +1,4 @@
-package com.apocalypse.caerulaarbor.entity;
+﻿package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.PolarMountRider;
@@ -212,7 +212,7 @@ public class PunctureFishEntity extends SeaMonster implements PolarMountRider {
 		return super.getDimensions(p_33597_).scale((float) 1);
 	}
 
-	public static void init() {
+	public static void registerSpawnPlacements() {
 		SpawnPlacements.register(CAEntities.PUNCTURE_FISH.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
 			int x = pos.getX();
 			int y = pos.getY();
@@ -313,3 +313,4 @@ public class PunctureFishEntity extends SeaMonster implements PolarMountRider {
 		this.animationprocedure = animation;
 	}
 }
+

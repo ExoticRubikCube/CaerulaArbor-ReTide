@@ -200,7 +200,7 @@ public class CreeperFishEntity extends SeaMonster implements RangedSanityAttacke
 		return super.getDimensions(p_33597_).scale((float) 1);
 	}
 
-	public static void init() {
+	public static void registerSpawnPlacements() {
 		SpawnPlacements.register(CAEntities.CREEPER_FISH.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
 			int x = pos.getX();
 			int y = pos.getY();
@@ -312,3 +312,4 @@ public class CreeperFishEntity extends SeaMonster implements RangedSanityAttacke
 		this.animationprocedure = animation;
 	}
 }
+

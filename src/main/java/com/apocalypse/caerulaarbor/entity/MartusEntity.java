@@ -576,8 +576,8 @@ public class MartusEntity extends SeaMonster {
             double radius = 2.5 + 0.5 * Math.sin(Math.toRadians(index0 * 24));
             double particleX = this.getX() + radius * Math.sin(Math.toRadians(angle));
             double particleZ = this.getZ() + radius * Math.cos(Math.toRadians(angle));
-            this.level().addParticle(CAParticleTypes.MARTUS_CHARS.get(), particleX, this.getY() + 1, particleZ, 0, 0.15, 0);
-            this.level().addParticle(CAParticleTypes.MARTUS_CHARS.get(), particleX, this.getY() + 0.8, particleZ, 0, -0.08, 0);
+            this.level().addParticle(CAParticles.MARTUS_CHARS.get(), particleX, this.getY() + 1, particleZ, 0, 0.15, 0);
+            this.level().addParticle(CAParticles.MARTUS_CHARS.get(), particleX, this.getY() + 0.8, particleZ, 0, -0.08, 0);
         }
     }
 

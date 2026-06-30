@@ -2,7 +2,7 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.init.CAEntities;
-import com.apocalypse.caerulaarbor.init.CAParticleTypes;
+import com.apocalypse.caerulaarbor.init.CAParticles;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.protocol.Packet;
@@ -142,7 +142,7 @@ public class AbandonedShootEntity extends AbstractArrow implements ItemSupplier 
 	@Override
 	public void tick() {
 		super.tick();
-        this.level().addParticle(CAParticleTypes.SEA_SPLASH.get(), this.getX(), this.getY(), this.getZ(), ((-0.05) * getDeltaMovement().x()), ((-0.05) * getDeltaMovement().y()),
+        this.level().addParticle(CAParticles.SEA_SPLASH.get(), this.getX(), this.getY(), this.getZ(), ((-0.05) * getDeltaMovement().x()), ((-0.05) * getDeltaMovement().y()),
                 ((-0.05) * getDeltaMovement().z()));
         if (tickCount >= 200) {
             if (!level().isClientSide())

@@ -2,7 +2,7 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.init.CAEntities;
-import com.apocalypse.caerulaarbor.init.CAParticleTypes;
+import com.apocalypse.caerulaarbor.init.CAParticles;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -147,7 +147,7 @@ public class HighmoreShootEntity extends AbstractArrow implements ItemSupplier {
             if (!level().isClientSide())
                 discard();
         }
-		world.addParticle(CAParticleTypes.SEA_SPLASH.get(), this.getX(), this.getY(), this.getZ(), 0, 0, 0);
+		world.addParticle(CAParticles.SEA_SPLASH.get(), this.getX(), this.getY(), this.getZ(), 0, 0, 0);
 		if (this.inGround)
 			this.discard();
 	}

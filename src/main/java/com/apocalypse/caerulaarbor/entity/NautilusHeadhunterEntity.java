@@ -332,7 +332,7 @@ public class NautilusHeadhunterEntity extends Animal implements GeoEntity, Synce
 		this.updateSwingTime();
 	}
 
-	public static void init() {
+	public static void registerSpawnPlacements() {
 		SpawnPlacements.register(CAEntities.NAUTILUS_HEADHUNTER.get(), SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
 			int x = pos.getX();
 			int y = pos.getY();
@@ -424,3 +424,4 @@ public class NautilusHeadhunterEntity extends Animal implements GeoEntity, Synce
 		this.animationprocedure = animation;
 	}
 }
+

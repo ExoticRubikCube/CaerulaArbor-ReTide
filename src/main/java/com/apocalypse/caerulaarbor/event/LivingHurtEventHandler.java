@@ -143,7 +143,7 @@ public class LivingHurtEventHandler {
                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "living_barrier")), SoundSource.HOSTILE, 2, (float) Mth.nextDouble(RandomSource.create(), 0.9, 1.1));
             }
             if (world instanceof ServerLevel _level)
-                _level.sendParticles(CAParticleTypes.LIVING_BARRIER_SHOW.get(), x, (y + 0.75), z, (int) Math.min(disp * 0.5, 24), 0.75, 0.75, 0.75, 0.1);
+                _level.sendParticles(CAParticles.LIVING_BARRIER_SHOW.get(), x, (y + 0.75), z, (int) Math.min(disp * 0.5, 24), 0.75, 0.75, 0.75, 0.1);
         }
     }
 
@@ -751,7 +751,7 @@ public class LivingHurtEventHandler {
                 }
                 if (lll > 4) {
                     if (world instanceof ServerLevel _level)
-                        _level.sendParticles(CAParticleTypes.MOIST_BOOM.get(), x, (y + 0.5), z, 2, 0.1, 0.1, 0.1, 0.1);
+                        _level.sendParticles(CAParticles.MOIST_BOOM.get(), x, (y + 0.5), z, 2, 0.1, 0.1, 0.1, 0.1);
                     if (entity instanceof LivingEntity target) {
                         if (entity1 instanceof LivingEntity attacker) {
                             SIHelper.causeSanityInjury(target, attacker, amount * 5, SanityEvent.Hurt.Type.ENTITY);

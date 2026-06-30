@@ -1,7 +1,7 @@
 
 package com.apocalypse.caerulaarbor.potion;
 
-import com.apocalypse.caerulaarbor.init.CAParticleTypes;
+import com.apocalypse.caerulaarbor.init.CAParticles;
 import com.apocalypse.caerulaarbor.util.MathUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffect;
@@ -44,8 +44,8 @@ public class DizzyMobEffect extends MobEffect {
         double y = entity.getY();
         double z = entity.getZ();
         if (world instanceof ServerLevel _level)
-            _level.sendParticles(CAParticleTypes.DIZZINESS.get(), x, y, z, 2, 1, 1, 1, 0.1);
-        world.addParticle(CAParticleTypes.DIZZINESS.get(), x, y, z, (0.5 - Math.random()), 0.1, (0.5 - Math.random()));
+            _level.sendParticles(CAParticles.DIZZINESS.get(), x, y, z, 2, 1, 1, 1, 0.1);
+        world.addParticle(CAParticles.DIZZINESS.get(), x, y, z, (0.5 - Math.random()), 0.1, (0.5 - Math.random()));
     }
 
 	@Override

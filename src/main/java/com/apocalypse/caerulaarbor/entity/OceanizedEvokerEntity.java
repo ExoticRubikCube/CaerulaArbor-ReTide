@@ -6,7 +6,7 @@ import com.apocalypse.caerulaarbor.entity.base.RavagerMountRider;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAGameRules;
-import com.apocalypse.caerulaarbor.init.CAParticleTypes;
+import com.apocalypse.caerulaarbor.init.CAParticles;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -468,7 +468,7 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
                                             }
                                         }
                                         if (world instanceof ServerLevel _level)
-                                            _level.sendParticles(CAParticleTypes.EDERMAN_PTC.get(), tx, (y + 2), tz, 16, 0.5, 0.5, 0.5, 0.15);
+                                            _level.sendParticles(CAParticles.EDERMAN_PTC.get(), tx, (y + 2), tz, 16, 0.5, 0.5, 0.5, 0.15);
                                     }
                                 }
                                 final int tick2 = ticks;

@@ -1,4 +1,4 @@
-package com.apocalypse.caerulaarbor.entity;
+﻿package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
@@ -303,7 +303,7 @@ public class ShooterFishEntity extends SeaMonster implements RangedAttackMob {
 		FishShootEntity.shoot(this, target, (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttributeValue(Attributes.ATTACK_DAMAGE) : 0) * (2.0 / 3.0));
 	}
 
-	public static void init() {
+	public static void registerSpawnPlacements() {
 		SpawnPlacements.register(CAEntities.SHOOTER_FISH.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
 			int x = pos.getX();
 			int y = pos.getY();
@@ -398,3 +398,4 @@ public class ShooterFishEntity extends SeaMonster implements RangedAttackMob {
 		this.animationprocedure = animation;
 	}
 }
+

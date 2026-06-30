@@ -283,7 +283,7 @@ public class OceanizedEndermanEntity extends SeaMonster {
         }
         for (int index0 = 0; index0 < particleSteps; index0++) {
             if (this.level() instanceof ServerLevel serverLevel) {
-                serverLevel.sendParticles(CAParticleTypes.EDERMAN_PTC.get(), fromX + (vx / particleSteps) * index0, fromY + (vy / particleSteps) * index0 + 0.65, fromZ + (vz / particleSteps) * index0, 32, 0.65, 0.65,
+                serverLevel.sendParticles(CAParticles.EDERMAN_PTC.get(), fromX + (vx / particleSteps) * index0, fromY + (vy / particleSteps) * index0 + 0.65, fromZ + (vz / particleSteps) * index0, 32, 0.65, 0.65,
                         0.65, 0.05);
             }
         }

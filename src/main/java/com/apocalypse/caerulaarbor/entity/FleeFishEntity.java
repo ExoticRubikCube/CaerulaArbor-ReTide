@@ -1,4 +1,4 @@
-package com.apocalypse.caerulaarbor.entity;
+﻿package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
@@ -341,13 +341,16 @@ public class FleeFishEntity extends SeaMonster implements RangedAttackMob {
 		this.setNoGravity(true);
 	}
 
-	public static void init() {
+	public static void registerSpawnPlacements() {
 		SpawnPlacements.register(CAEntities.FLEE_FISH.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();
 			return WorldUtils.canRareSeabornSpawn(world, x, y, z);
 		});
+	}
+
+	public static void registerDungeonMob() {
 		DungeonHooks.addDungeonMob(CAEntities.FLEE_FISH.get(), 180);
 	}
 
@@ -446,3 +449,4 @@ public class FleeFishEntity extends SeaMonster implements RangedAttackMob {
 		this.animationprocedure = animation;
 	}
 }
+

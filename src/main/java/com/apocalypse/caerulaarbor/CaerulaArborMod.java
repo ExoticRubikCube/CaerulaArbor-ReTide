@@ -40,7 +40,7 @@ public class CaerulaArborMod {
 		CAMobEffects.REGISTRY.register(bus);
 		CAPotions.REGISTRY.register(bus);
 		CAPaintings.REGISTRY.register(bus);
-		CAParticleTypes.REGISTRY.register(bus);
+		CAParticles.REGISTRY.register(bus);
 		CAVillagerProfessions.PROFESSIONS.register(bus);
 		CAMenus.REGISTRY.register(bus);
 		CAAttributes.REGISTRY.register(bus);
@@ -53,6 +53,7 @@ public class CaerulaArborMod {
 	// End of user code block mod methods
 	private void onCommonSetup(final FMLCommonSetupEvent event) {
 		CaerulaArborModNetwork.register();
+		CACompostableItems.addComposterItems(event);
 	}
 
 	private static final Collection<AbstractMap.SimpleEntry<Runnable, Integer>> workQueue = new ConcurrentLinkedQueue<>();

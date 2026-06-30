@@ -5,7 +5,7 @@ import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler;
 import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler.StrategyType;
 import com.apocalypse.caerulaarbor.init.CABlocks;
-import com.apocalypse.caerulaarbor.init.CAParticleTypes;
+import com.apocalypse.caerulaarbor.init.CAParticles;
 import com.apocalypse.caerulaarbor.system.UpgradeBreedProcedure;
 import com.apocalypse.caerulaarbor.system.UpgradeGrowProcedure;
 import com.apocalypse.caerulaarbor.system.UpgradeMigraProcedure;
@@ -112,7 +112,7 @@ public class DictationChapterItem extends Item {
                 stra = Component.translatable("gui.caerula_arbor.evo_tree.label_strategy_migration").getString();
             }
             if (world instanceof ServerLevel _level)
-                _level.sendParticles(CAParticleTypes.ENDSPEAKER_INV.get(), (x + 0.5), (y + 1), (z + 0.5), 32, 0.75, 1, 0.75, 0.15);
+                _level.sendParticles(CAParticles.ENDSPEAKER_INV.get(), (x + 0.5), (y + 1), (z + 0.5), 32, 0.75, 1, 0.75, 0.15);
             info = (Component.translatable("item.caerula_arbor.dictation_chapter.use").getString()).replace("{stra}", stra);
             if (entity instanceof Player _player && !_player.level().isClientSide())
                 _player.displayClientMessage(Component.literal(info), false);

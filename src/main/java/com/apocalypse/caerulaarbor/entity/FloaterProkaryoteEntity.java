@@ -398,7 +398,7 @@ public class FloaterProkaryoteEntity extends SeaMonster implements RangedAttackM
 		this.setNoGravity(true);
 	}
 
-	public static void init() {
+	public static void registerSpawnPlacements() {
 		SpawnPlacements.register(CAEntities.FLOATER_PROKARYOTE.get(), SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
 			int x = pos.getX();
 			int y = pos.getY();
@@ -497,3 +497,4 @@ public class FloaterProkaryoteEntity extends SeaMonster implements RangedAttackM
 		this.animationprocedure = animation;
 	}
 }
+

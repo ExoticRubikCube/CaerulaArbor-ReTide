@@ -3,7 +3,7 @@ package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.init.CABlocks;
 import com.apocalypse.caerulaarbor.init.CAEntities;
-import com.apocalypse.caerulaarbor.init.CAParticleTypes;
+import com.apocalypse.caerulaarbor.init.CAParticles;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -56,7 +56,7 @@ public class CarmenTreatyItem extends Item {
             ty = y + direction.getStepY();
             tz = z + 0.5 + direction.getStepZ();
             if (world instanceof ServerLevel _level)
-                _level.sendParticles(CAParticleTypes.PURPLE_FLAME.get(), tx, (ty + 0.64), tz, 48, 0.64, 0.64, 0.64, 0.1);
+                _level.sendParticles(CAParticles.PURPLE_FLAME.get(), tx, (ty + 0.64), tz, 48, 0.64, 0.64, 0.64, 0.1);
             if (world instanceof ServerLevel _level) {
                 Entity entityToSpawn = CAEntities.SAINT_CARMEN.get().spawn(_level, BlockPos.containing(tx, ty, tz), MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn != null) {

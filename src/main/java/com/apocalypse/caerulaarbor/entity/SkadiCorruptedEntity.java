@@ -525,7 +525,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
 					ang = Math.toRadians(index0 * 6 + t * 4);
 					r = 11.5 + Math.sin(index0 * 12);
 					if (world instanceof ServerLevel _level)
-						_level.sendParticles(CAParticleTypes.CORRUPTED_FISH.get(), (x + r * Math.sin(ang)), (y + 0.15), (z + r * Math.cos(ang)), 1, 0, 0.25, 0, 0.2);
+						_level.sendParticles(CAParticles.CORRUPTED_FISH.get(), (x + r * Math.sin(ang)), (y + 0.15), (z + r * Math.cos(ang)), 1, 0, 0.25, 0, 0.2);
 				}
 			}
 			if (tickCount % 20 == 10) {
@@ -613,7 +613,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
 			for (int index0 = 0; index0 < (int) (phase1 + 1); index0++) {
 				r = Mth.nextDouble(RandomSource.create(), 2, 3.5);
 				if (world instanceof ServerLevel _level)
-					_level.sendParticles(CAParticleTypes.CORRUPTED_FISH.get(), (x + r * Math.sin(ang)), (y + 0.25), (z + r * Math.cos(ang)), 1, 0, 0, 0, 0.2);
+					_level.sendParticles(CAParticles.CORRUPTED_FISH.get(), (x + r * Math.sin(ang)), (y + 0.25), (z + r * Math.cos(ang)), 1, 0, 0, 0, 0.2);
 			}
 			if (!(phase > 1.5)) {
 				LivingEntity _livEnt = this;

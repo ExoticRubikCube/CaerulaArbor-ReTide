@@ -4,7 +4,7 @@ import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
-import com.apocalypse.caerulaarbor.init.CAParticleTypes;
+import com.apocalypse.caerulaarbor.init.CAParticles;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
@@ -407,7 +407,7 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
                                         void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                                             for (int index0 = 0; index0 < 60; index0++) {
                                                 if (world instanceof ServerLevel _level)
-                                                    _level.sendParticles(CAParticleTypes.PURPLE_FLAME.get(), (getX() + 1 * (timedloopiterator + 1) * Math.sin(Math.toRadians(index0 * 6))), (getY()),
+                                                    _level.sendParticles(CAParticles.PURPLE_FLAME.get(), (getX() + 1 * (timedloopiterator + 1) * Math.sin(Math.toRadians(index0 * 6))), (getY()),
                                                             (getZ() + 1 * (timedloopiterator + 1) * Math.cos(Math.toRadians(index0 * 6))), 2, 0.1, 0.15, 0.1, 0.1);
                                             }
                                             final int tick2 = ticks;

@@ -1,4 +1,4 @@
-package com.apocalypse.caerulaarbor.entity;
+﻿package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
@@ -253,7 +253,7 @@ public class ChestFishEntity extends SeaMonster {
 		return super.getDimensions(p_33597_).scale((float) 1);
 	}
 
-	public static void init() {
+	public static void registerSpawnPlacements() {
 		SpawnPlacements.register(CAEntities.CHEST_FISH.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
 				(entityType, world, reason, pos, random) -> (world.getDifficulty() != Difficulty.PEACEFUL && Monster.isDarkEnoughToSpawn(world, pos, random) && Mob.checkMobSpawnRules(entityType, world, reason, pos, random)));
 	}
@@ -371,3 +371,4 @@ public class ChestFishEntity extends SeaMonster {
 		this.animationprocedure = animation;
 	}
 }
+

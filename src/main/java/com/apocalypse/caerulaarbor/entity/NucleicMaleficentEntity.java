@@ -336,7 +336,7 @@ public class NucleicMaleficentEntity extends SeaMonster {
 		return false;
 	}
 
-	public static void init() {
+	public static void registerSpawnPlacements() {
 		SpawnPlacements.register(CAEntities.NUCLEIC_MALEFICENT.get(), SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
 			int x = pos.getX();
 			int y = pos.getY();
@@ -442,3 +442,4 @@ public class NucleicMaleficentEntity extends SeaMonster {
 		this.animationprocedure = animation;
 	}
 }
+

@@ -310,13 +310,16 @@ public class SplasherAbyssalEntity extends SeaMonster implements RangedAttackMob
 		FishShootEntity.shoot(this, target, (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttributeValue(Attributes.ATTACK_DAMAGE) : 0) * 0.2);
 	}
 
-	public static void init() {
+	public static void registerSpawnPlacements() {
 		SpawnPlacements.register(CAEntities.SPLASHER_ABYSSAL.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();
 			return WorldUtils.canCommonSeabornSpawn(world, x, y, z);
 		});
+	}
+
+	public static void registerDungeonMob() {
 		DungeonHooks.addDungeonMob(CAEntities.SPLASHER_ABYSSAL.get(), 180);
 	}
 
@@ -408,3 +411,4 @@ public class SplasherAbyssalEntity extends SeaMonster implements RangedAttackMob
 		this.animationprocedure = animation;
 	}
 }
+

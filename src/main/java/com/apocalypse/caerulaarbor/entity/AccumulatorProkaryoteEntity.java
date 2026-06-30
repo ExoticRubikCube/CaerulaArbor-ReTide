@@ -342,7 +342,7 @@ public class AccumulatorProkaryoteEntity extends SeaMonster {
 		return false;
 	}
 
-	public static void init() {
+	public static void registerSpawnPlacements() {
 		SpawnPlacements.register(CAEntities.ACCUMULATOR_PROKARYOTE.get(), SpawnPlacements.Type.IN_WATER, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
 			int x = pos.getX();
 			int y = pos.getY();
@@ -438,3 +438,4 @@ public class AccumulatorProkaryoteEntity extends SeaMonster {
 		this.animationprocedure = animation;
 	}
 }
+

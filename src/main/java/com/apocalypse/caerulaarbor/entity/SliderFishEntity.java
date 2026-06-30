@@ -212,13 +212,16 @@ public class SliderFishEntity extends SeaMonster {
 		return super.getDimensions(p_33597_).scale((float) 1);
 	}
 
-	public static void init() {
+	public static void registerSpawnPlacements() {
 		SpawnPlacements.register(CAEntities.SLIDER_FISH.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();
 			return WorldUtils.canCommonSeabornSpawn(world, x, y, z);
 		});
+	}
+
+	public static void registerDungeonMob() {
 		DungeonHooks.addDungeonMob(CAEntities.SLIDER_FISH.get(), 180);
 	}
 
@@ -308,3 +311,4 @@ public class SliderFishEntity extends SeaMonster {
 		this.animationprocedure = animation;
 	}
 }
+

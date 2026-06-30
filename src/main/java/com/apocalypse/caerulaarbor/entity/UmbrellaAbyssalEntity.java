@@ -7,7 +7,7 @@ import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
-import com.apocalypse.caerulaarbor.init.CAParticleTypes;
+import com.apocalypse.caerulaarbor.init.CAParticles;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -213,22 +213,22 @@ public class UmbrellaAbyssalEntity extends SeaMonster {
                 angle = Mth.nextDouble(RandomSource.create(), 0, 6.283);
                 d = Mth.nextDouble(RandomSource.create(), 1.6, 2.2);
                 if (world instanceof ServerLevel _level)
-                    _level.sendParticles(CAParticleTypes.SEA_RIPPLE.get(), (x + d * Math.sin(angle)), (y + 0.4), (z + d * Math.cos(angle)), 0, (float) Math.sin(angle), 0.0, (float) Math.cos(angle), 0.09);
+                    _level.sendParticles(CAParticles.SEA_RIPPLE.get(), (x + d * Math.sin(angle)), (y + 0.4), (z + d * Math.cos(angle)), 0, (float) Math.sin(angle), 0.0, (float) Math.cos(angle), 0.09);
                 angle = Mth.nextDouble(RandomSource.create(), 0, 6.283);
                 d = Mth.nextDouble(RandomSource.create(), 1.9, 2.5);
                 if (world instanceof ServerLevel _level)
-                    _level.sendParticles(CAParticleTypes.SEA_RIPPLE.get(), (x + d * Math.sin(angle)), (y + 0.4), (z + d * Math.cos(angle)), 0, (float) Math.sin(angle), 0.0, (float) Math.cos(angle), 0.11);
+                    _level.sendParticles(CAParticles.SEA_RIPPLE.get(), (x + d * Math.sin(angle)), (y + 0.4), (z + d * Math.cos(angle)), 0, (float) Math.sin(angle), 0.0, (float) Math.cos(angle), 0.11);
             }
             if (MapVariables.get(world).strategy_grow >= 3) {
                 for (int index1 = 0; index1 < 14; index1++) {
                     angle = Mth.nextDouble(RandomSource.create(), 0, 6.283);
                     d = Mth.nextDouble(RandomSource.create(), 3.6, 4.3);
                     if (world instanceof ServerLevel _level)
-                        _level.sendParticles(CAParticleTypes.SEA_RIPPLE.get(), (x + d * Math.sin(angle)), (y + 0.4), (z + d * Math.cos(angle)), 0, (float) Math.sin(angle), 0.0, (float) Math.cos(angle), 0.12);
+                        _level.sendParticles(CAParticles.SEA_RIPPLE.get(), (x + d * Math.sin(angle)), (y + 0.4), (z + d * Math.cos(angle)), 0, (float) Math.sin(angle), 0.0, (float) Math.cos(angle), 0.12);
                     angle = Mth.nextDouble(RandomSource.create(), 0, 6.283);
                     d = Mth.nextDouble(RandomSource.create(), 4.0, 4.7);
                     if (world instanceof ServerLevel _level)
-                        _level.sendParticles(CAParticleTypes.SEA_RIPPLE.get(), (x + d * Math.sin(angle)), (y + 0.4), (z + d * Math.cos(angle)), 0, (float) Math.sin(angle), 0.0, (float) Math.cos(angle), 0.14);
+                        _level.sendParticles(CAParticles.SEA_RIPPLE.get(), (x + d * Math.sin(angle)), (y + 0.4), (z + d * Math.cos(angle)), 0, (float) Math.sin(angle), 0.0, (float) Math.cos(angle), 0.14);
                 }
             }
             if (tickCount % 20 == 0) {
@@ -286,13 +286,16 @@ public class UmbrellaAbyssalEntity extends SeaMonster {
 		return super.getDimensions(p_33597_).scale((float) 1);
 	}
 
-	public static void init() {
+	public static void registerSpawnPlacements() {
 		SpawnPlacements.register(CAEntities.UMBRELLA_ABYSSAL.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();
 			return WorldUtils.canRareSeabornSpawn(world, x, y, z);
 		});
+	}
+
+	public static void registerDungeonMob() {
 		DungeonHooks.addDungeonMob(CAEntities.UMBRELLA_ABYSSAL.get(), 180);
 	}
 
@@ -370,3 +373,4 @@ public class UmbrellaAbyssalEntity extends SeaMonster {
 		this.animationprocedure = animation;
 	}
 }
+

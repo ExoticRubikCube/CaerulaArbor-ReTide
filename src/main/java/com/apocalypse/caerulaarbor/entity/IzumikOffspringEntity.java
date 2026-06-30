@@ -1,4 +1,4 @@
-package com.apocalypse.caerulaarbor.entity;
+﻿package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
@@ -297,7 +297,7 @@ public class IzumikOffspringEntity extends SeaMonster {
 		this.setNoGravity(true);
 	}
 
-	public static void init() {
+	public static void registerSpawnPlacements() {
 		SpawnPlacements.register(CAEntities.IZUMIK_OFFSPRING.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
 			int x = pos.getX();
 			int y = pos.getY();
@@ -376,3 +376,4 @@ public class IzumikOffspringEntity extends SeaMonster {
 		this.animationprocedure = animation;
 	}
 }
+

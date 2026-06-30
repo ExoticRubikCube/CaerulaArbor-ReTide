@@ -292,8 +292,6 @@ public class AccumulatorCloneEntity extends SeaMonster {
 		return false;
 	}
 
-	
-
 	public static AttributeSupplier.Builder createAttributes() {
 		AttributeSupplier.Builder builder = Mob.createMobAttributes();
 		builder = builder.add(Attributes.MOVEMENT_SPEED, 1.75);

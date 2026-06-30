@@ -7,7 +7,7 @@ import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import com.apocalypse.caerulaarbor.entity.FishSplashEntity;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
-import com.apocalypse.caerulaarbor.init.CAParticleTypes;
+import com.apocalypse.caerulaarbor.init.CAParticles;
 import com.apocalypse.caerulaarbor.util.MathUtils;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -87,7 +87,7 @@ public class SplasherAttackMobEffect extends MobEffect {
                     new Object() {
                         void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                             if (world instanceof ServerLevel _level)
-                                _level.sendParticles(CAParticleTypes.SEA_SPLASH.get(), (entityiterator.getX() + ((x - entityiterator.getX()) / 40) * timedloopiterator),
+                                _level.sendParticles(CAParticles.SEA_SPLASH.get(), (entityiterator.getX() + ((x - entityiterator.getX()) / 40) * timedloopiterator),
                                         (entityiterator.getY() + 9 + ((y - (entityiterator.getY() + 9)) / 40) * timedloopiterator), (entityiterator.getZ() + ((z - entityiterator.getZ()) / 40) * timedloopiterator), 1, 0.1, 0.1, 0.1, 0.01);
                             final int tick2 = ticks;
                             CaerulaArborMod.queueServerWork(tick2, () -> {

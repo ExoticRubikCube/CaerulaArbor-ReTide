@@ -4,14 +4,19 @@
 package com.apocalypse.caerulaarbor.init;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.client.model.entity.*;
+import com.apocalypse.caerulaarbor.client.renderer.entity.*;
 import com.apocalypse.caerulaarbor.entity.*;
 import com.apocalypse.caerulaarbor.entity.routeshaper.LineringPathshaperEntity;
 import com.apocalypse.caerulaarbor.entity.routeshaper.LingeringFractalEntity;
 import com.apocalypse.caerulaarbor.entity.routeshaper.RouteFractalEntity;
 import com.apocalypse.caerulaarbor.entity.routeshaper.RouteShaperEntity;
+import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -507,41 +512,53 @@ public class CAEntities {
 		return REGISTRY.register(registryname, () -> entityTypeBuilder.build(registryname));
 	}
 
-	//TODO:需要清理和下放，高优先级
 	@SubscribeEvent
 	public static void init(FMLCommonSetupEvent event) {
 		event.enqueueWork(() -> {
-			RunFishEntity.init();
-			SliderFishEntity.init();
-			ShooterFishEntity.init();
-			FlyFishEntity.init();
-			ReaperFishEntity.init();
-			CreeperFishEntity.init();
-			PunctureFishEntity.init();
-			BaselayerAbyssalEntity.init();
-			PredatorAbyssalEntity.init();
-			GuideAbyssalEntity.init();
-			SplasherAbyssalEntity.init();
-			UmbrellaAbyssalEntity.init();
-			CrackerAbyssalEntity.init();
-			CollectorProkaryoteEntity.init();
-			BoneFishEntity.init();
-			ChiselerFishEntity.init();
-			PregnantFishEntity.init();
-			FleeFishEntity.init();
-			FirstTellerEntity.init();
-			FloaterProkaryoteEntity.init();
-			ApostleProkaryoteEntity.init();
-			AccumulatorProkaryoteEntity.init();
-			FeederProkaryoteEntity.init();
-			ChestFishEntity.init();
-			SpikeChestEntity.init();
-			DepositerProkaryoteEntity.init();
-			IzumikOffspringEntity.init();
-			NucleicMaleficentEntity.init();
-			NautilusHeadhunterEntity.init();
-			NetherseaSlimeEntity.init();
+			registerSpawnPlacements();
+			registerDungeonMobs();
 		});
+	}
+
+	private static void registerSpawnPlacements() {
+		RunFishEntity.registerSpawnPlacements();
+		SliderFishEntity.registerSpawnPlacements();
+		ShooterFishEntity.registerSpawnPlacements();
+		FlyFishEntity.registerSpawnPlacements();
+		ReaperFishEntity.registerSpawnPlacements();
+		CreeperFishEntity.registerSpawnPlacements();
+		PunctureFishEntity.registerSpawnPlacements();
+		BaselayerAbyssalEntity.registerSpawnPlacements();
+		PredatorAbyssalEntity.registerSpawnPlacements();
+		GuideAbyssalEntity.registerSpawnPlacements();
+		SplasherAbyssalEntity.registerSpawnPlacements();
+		UmbrellaAbyssalEntity.registerSpawnPlacements();
+		CrackerAbyssalEntity.registerSpawnPlacements();
+		CollectorProkaryoteEntity.registerSpawnPlacements();
+		BoneFishEntity.registerSpawnPlacements();
+		ChiselerFishEntity.registerSpawnPlacements();
+		PregnantFishEntity.registerSpawnPlacements();
+		FleeFishEntity.registerSpawnPlacements();
+		FirstTellerEntity.registerSpawnPlacements();
+		FloaterProkaryoteEntity.registerSpawnPlacements();
+		ApostleProkaryoteEntity.registerSpawnPlacements();
+		AccumulatorProkaryoteEntity.registerSpawnPlacements();
+		FeederProkaryoteEntity.registerSpawnPlacements();
+		ChestFishEntity.registerSpawnPlacements();
+		SpikeChestEntity.registerSpawnPlacements();
+		DepositerProkaryoteEntity.registerSpawnPlacements();
+		IzumikOffspringEntity.registerSpawnPlacements();
+		NucleicMaleficentEntity.registerSpawnPlacements();
+		NautilusHeadhunterEntity.registerSpawnPlacements();
+	}
+
+	private static void registerDungeonMobs() {
+		SliderFishEntity.registerDungeonMob();
+		BaselayerAbyssalEntity.registerDungeonMob();
+		SplasherAbyssalEntity.registerDungeonMob();
+		UmbrellaAbyssalEntity.registerDungeonMob();
+		FleeFishEntity.registerDungeonMob();
+		NetherseaSlimeEntity.registerDungeonMob();
 	}
 
 	@SubscribeEvent
@@ -665,5 +682,159 @@ public class CAEntities {
 		event.put(OCEANIZED_CHICKEN.get(), OceanizedChickenEntity.createAttributes().build());
 		event.put(NETHERSEA_SLIME.get(), NetherseaSlimeEntity.createAttributes().build());
 		event.put(OCEANIZED_SHULKER.get(), OceanizedShulkerEntity.createAttributes().build());
+	}
+
+	@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+	public static class CARenderers {
+		@SubscribeEvent
+		public static void registerEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
+			event.registerEntityRenderer(CAEntities.RUN_FISH.get(), RunFishRenderer::new);
+			event.registerEntityRenderer(CAEntities.SLIDER_FISH.get(), SliderFishRenderer::new);
+			event.registerEntityRenderer(CAEntities.SUPER_SLIDER.get(), SuperSliderRenderer::new);
+			event.registerEntityRenderer(CAEntities.SHOOTER_FISH.get(), ShooterFishRenderer::new);
+			event.registerEntityRenderer(CAEntities.FISH_SHOOT.get(), FishShootRenderer::new);
+			event.registerEntityRenderer(CAEntities.FLY_FISH.get(), FlyFishRenderer::new);
+			event.registerEntityRenderer(CAEntities.REAPER_FISH.get(), ReaperFishRenderer::new);
+			event.registerEntityRenderer(CAEntities.CREEPER_FISH.get(), CreeperFishRenderer::new);
+			event.registerEntityRenderer(CAEntities.PUNCTURE_FISH.get(), PunctureFishRenderer::new);
+			event.registerEntityRenderer(CAEntities.BASELAYER_ABYSSAL.get(), BaselayerAbyssalRenderer::new);
+			event.registerEntityRenderer(CAEntities.PREDATOR_ABYSSAL.get(), PredatorAbyssalRenderer::new);
+			event.registerEntityRenderer(CAEntities.GUIDE_ABYSSAL.get(), GuideAbyssalRenderer::new);
+			event.registerEntityRenderer(CAEntities.SPLASHER_ABYSSAL.get(), SplasherAbyssalRenderer::new);
+			event.registerEntityRenderer(CAEntities.FISH_SPLASH.get(), FishSplashRenderer::new);
+			event.registerEntityRenderer(CAEntities.UMBRELLA_ABYSSAL.get(), UmbrellaAbyssalRenderer::new);
+			event.registerEntityRenderer(CAEntities.CRACKER_ABYSSAL.get(), CrackerAbyssalRenderer::new);
+			event.registerEntityRenderer(CAEntities.COLLECTOR_PROKARYOTE.get(), CollectorProkaryoteRenderer::new);
+			event.registerEntityRenderer(CAEntities.BONE_FISH.get(), BoneFishRenderer::new);
+			event.registerEntityRenderer(CAEntities.CHISELER_FISH.get(), ChiselerFishRenderer::new);
+			event.registerEntityRenderer(CAEntities.FAKERGG_SHOOT.get(), FakerggShootRenderer::new);
+			event.registerEntityRenderer(CAEntities.PREGNANT_FISH.get(), PregnantFishRenderer::new);
+			event.registerEntityRenderer(CAEntities.FAKE_OFFSPRING.get(), FakeOffspringRenderer::new);
+			event.registerEntityRenderer(CAEntities.FLEEFISH_BULLET.get(), FleefishBulletRenderer::new);
+			event.registerEntityRenderer(CAEntities.FLEE_FISH.get(), FleeFishRenderer::new);
+			event.registerEntityRenderer(CAEntities.ROUTE_SHAPER.get(), RouteShaperRenderer::new);
+			event.registerEntityRenderer(CAEntities.ROUTE_FRACTAL.get(), RouteFractalRenderer::new);
+			event.registerEntityRenderer(CAEntities.TELLER_SHOT.get(), TellerShotRenderer::new);
+			event.registerEntityRenderer(CAEntities.FIRST_TO_TALK.get(), FirstTellerRenderer::new);
+			event.registerEntityRenderer(CAEntities.REAPER_PET.get(), ReaperPetRenderer::new);
+			event.registerEntityRenderer(CAEntities.BISHOP_FISH.get(), BishopFishRenderer::new);
+			event.registerEntityRenderer(CAEntities.TIDE_BISHOP.get(), TideBishopRenderer::new);
+			event.registerEntityRenderer(CAEntities.SONS.get(), SonsRenderer::new);
+			event.registerEntityRenderer(CAEntities.FLOATER_PROKARYOTE.get(), FloaterProkaryoteRenderer::new);
+			event.registerEntityRenderer(CAEntities.CHITIN_GOLEM.get(), ChitinGolemRenderer::new);
+			event.registerEntityRenderer(CAEntities.TIDE_DEATHREPELLER.get(), TideDeathrepellerRenderer::new);
+			event.registerEntityRenderer(CAEntities.MEGA_CHEST.get(), MegaChestRenderer::new);
+			event.registerEntityRenderer(CAEntities.APOSTLE_PROKARYOTE.get(), ApostleProkaryoteRenderer::new);
+			event.registerEntityRenderer(CAEntities.HIGHMORE_SHOOT.get(), HighmoreShootRenderer::new);
+			event.registerEntityRenderer(CAEntities.HIGHMORE.get(), HighmoreRenderer::new);
+			event.registerEntityRenderer(CAEntities.ACCUMULATOR_PROKARYOTE.get(), AccumulatorProkaryoteRenderer::new);
+			event.registerEntityRenderer(CAEntities.ACCUMULATOR_CLONE.get(), AccumulatorCloneRenderer::new);
+			event.registerEntityRenderer(CAEntities.FEEDER_PROKARYOTE.get(), FeederProkaryoteRenderer::new);
+			event.registerEntityRenderer(CAEntities.CHEST_FISH.get(), ChestFishRenderer::new);
+			event.registerEntityRenderer(CAEntities.SPIKE_CHEST.get(), SpikeChestRenderer::new);
+			event.registerEntityRenderer(CAEntities.SKADI.get(), SkadiRenderer::new);
+			event.registerEntityRenderer(CAEntities.DEPOSITER_PROKARYOTE.get(), DepositerProkaryoteRenderer::new);
+			event.registerEntityRenderer(CAEntities.OCEANIZED_VILLAGER.get(), OceanizedVillagerRenderer::new);
+			event.registerEntityRenderer(CAEntities.OCEANIZED_VINDICATOR.get(), OceanizedVindicatorRenderer::new);
+			event.registerEntityRenderer(CAEntities.SHOT_OCEAN_ARROW.get(), ShotOceanArrowRenderer::new);
+			event.registerEntityRenderer(CAEntities.OCEANIZED_PILLAGER.get(), OceanizedPillagerRenderer::new);
+			event.registerEntityRenderer(CAEntities.ANCHOR_FLY.get(), AnchorFlyRenderer::new);
+			event.registerEntityRenderer(CAEntities.OCEANIZED_PIG.get(), OceanizedPigRenderer::new);
+			event.registerEntityRenderer(CAEntities.OCEANIZED_COW.get(), OceanizedCowRenderer::new);
+			event.registerEntityRenderer(CAEntities.OCEANIZED_SHEEP.get(), OceanizedSheepRenderer::new);
+			event.registerEntityRenderer(CAEntities.OCEANIZED_HORSE.get(), OceanizedHorseRenderer::new);
+			event.registerEntityRenderer(CAEntities.OCEANIZED_PIGLIN.get(), OceanizedPiglinRenderer::new);
+			event.registerEntityRenderer(CAEntities.OCEANIZED_BRUTE.get(), OceanizedBruteRenderer::new);
+			event.registerEntityRenderer(CAEntities.OCEANIZED_SPIDER.get(), OceanizedSpiderRenderer::new);
+			event.registerEntityRenderer(CAEntities.OCEANIZED_ENDERMAN.get(), OceanizedEndermanRenderer::new);
+			event.registerEntityRenderer(CAEntities.OCEANIZED_WOLF.get(), OceanizedWolfRenderer::new);
+			event.registerEntityRenderer(CAEntities.OCEANIZED_DOG.get(), OceanizedDogRenderer::new);
+			event.registerEntityRenderer(CAEntities.OCEANIZED_RAVAGER.get(), OceanizedRavagerRenderer::new);
+			event.registerEntityRenderer(CAEntities.OCEANIZED_WITCH.get(), OceanziedWitchRenderer::new);
+			event.registerEntityRenderer(CAEntities.THROWABLE_POTION.get(), ThrownItemRenderer::new);
+			event.registerEntityRenderer(CAEntities.IZUMIK_OFFSPRING.get(), IzumikOffspringRenderer::new);
+			event.registerEntityRenderer(CAEntities.IZUMIK.get(), IzumikRenderer::new);
+			event.registerEntityRenderer(CAEntities.DIVICELLULAR_GO.get(), DivicellularGoRenderer::new);
+			event.registerEntityRenderer(CAEntities.OCEANIZED_EVOKER.get(), OceanizedEvokerRenderer::new);
+			event.registerEntityRenderer(CAEntities.JUNIOR_WARRIOR_PRIEST.get(), JuniorWarriorPriestRenderer::new);
+			event.registerEntityRenderer(CAEntities.WARRIOR_PRIEST.get(), WarriorPriestRenderer::new);
+			event.registerEntityRenderer(CAEntities.CORRECTIONAL_PHALANXY_INFANTRY.get(), CorrectionalPhalanxyInfantryRenderer::new);
+			event.registerEntityRenderer(CAEntities.CORRECTIONAL_PHALAX_VANGUARD.get(), CorrectinalPhalaxVanguardRenderer::new);
+			event.registerEntityRenderer(CAEntities.TRIBUNAL_HEALER.get(), TribunalHealerRenderer::new);
+			event.registerEntityRenderer(CAEntities.HEAL_BULLLET.get(), ThrownItemRenderer::new);
+			event.registerEntityRenderer(CAEntities.MARTUS.get(), MartusRenderer::new);
+			event.registerEntityRenderer(CAEntities.THE_ABANDONED.get(), TheAbandonedRenderer::new);
+			event.registerEntityRenderer(CAEntities.ABANDONED_SHOOT.get(), AbandonedShootRenderer::new);
+			event.registerEntityRenderer(CAEntities.GUNMU.get(), GunmuRenderer::new);
+			event.registerEntityRenderer(CAEntities.OCEANIZED_WARDEN.get(), OceanizedWardenRenderer::new);
+			event.registerEntityRenderer(CAEntities.OCEANIZED_CAT.get(), OceanizedCatRenderer::new);
+			event.registerEntityRenderer(CAEntities.SUPER_BIG_CAT.get(), SuperBigCatRenderer::new);
+			event.registerEntityRenderer(CAEntities.COMPLEX_CHITIN_GOLEM.get(), ComplexChitinGolemRenderer::new);
+			event.registerEntityRenderer(CAEntities.OCEANIZED_WARDENIS.get(), OceanizedWardenisRenderer::new);
+			event.registerEntityRenderer(CAEntities.NUCLEIC_MALEFICENT.get(), NucleicMaleficentRenderer::new);
+			event.registerEntityRenderer(CAEntities.OCEANIZED_WITHER.get(), OceanizedWitherRenderer::new);
+			event.registerEntityRenderer(CAEntities.WITHER_SHOOT_PRE.get(), ThrownItemRenderer::new);
+			event.registerEntityRenderer(CAEntities.OCEANIZED_WITHERIA.get(), OceannizedWitheriaRenderer::new);
+			event.registerEntityRenderer(CAEntities.THE_LAST_KNIGHT.get(), TheLastKnightRenderer::new);
+			event.registerEntityRenderer(CAEntities.LAST_KNIGHT_AND_HORSE.get(), LastKnightAndHorseRenderer::new);
+			event.registerEntityRenderer(CAEntities.ROCINANTE.get(), RocinanteRenderer::new);
+			event.registerEntityRenderer(CAEntities.APOCATA.get(), ApocataRenderer::new);
+			event.registerEntityRenderer(CAEntities.OCEANIZED_FOX.get(), OceanizedFoxRenderer::new);
+			event.registerEntityRenderer(CAEntities.TIDUTANT_EXCRESCENCE.get(), TidutantExcrescenceRenderer::new);
+			event.registerEntityRenderer(CAEntities.OCEANIZED_POLAR_BEAR.get(), OceanizedPolarBearRenderer::new);
+			event.registerEntityRenderer(CAEntities.TIDUTANT_ROCK_SPIDER.get(), TideutantRockSpiderRenderer::new);
+			event.registerEntityRenderer(CAEntities.ENDSPEAKER.get(), context -> new EndspeakerRenderer<>(context));
+			event.registerEntityRenderer(CAEntities.LINGERING_PATHSHAPER.get(), LineringPathshaperRenderer::new);
+			event.registerEntityRenderer(CAEntities.LINGERING_FRACTAL.get(), LingeringFractalRenderer::new);
+			event.registerEntityRenderer(CAEntities.LITTLE_HELPER.get(), LittleHelperRenderer::new);
+			event.registerEntityRenderer(CAEntities.AL_1_S_HELPER.get(), Al1SHelperRenderer::new);
+			event.registerEntityRenderer(CAEntities.DAMAGE_TESTER.get(), DamageTesterRenderer::new);
+			event.registerEntityRenderer(CAEntities.ULPIANS.get(), UlpiansRenderer::new);
+			event.registerEntityRenderer(CAEntities.GLADIIA.get(), GladiiaRenderer::new);
+			event.registerEntityRenderer(CAEntities.GLADIIA_WHIRL.get(), GladiiaWhirlRenderer::new);
+			event.registerEntityRenderer(CAEntities.SPECTER.get(), SpecterRenderer::new);
+			event.registerEntityRenderer(CAEntities.SPECTER_DOLL.get(), SpecterDollRenderer::new);
+			event.registerEntityRenderer(CAEntities.IRENE.get(), IreneRenderer::new);
+			event.registerEntityRenderer(CAEntities.TIDE_CHIMERA.get(), TideChimeraRenderer::new);
+			event.registerEntityRenderer(CAEntities.SKADI_CORRUPTED.get(), SkadiCorruptedRenderer::new);
+			event.registerEntityRenderer(CAEntities.OCEANIZE_RABBIT.get(), OceanizeRabbitRenderer::new);
+			event.registerEntityRenderer(CAEntities.SAINT_CARMEN.get(), SaintCarmenRenderer::new);
+			event.registerEntityRenderer(CAEntities.CARMEN_BULLET.get(), CarmenBulletRenderer::new);
+			event.registerEntityRenderer(CAEntities.OCEANIZED_ILLUSIONER.get(), OceanizedIllusionerRenderer::new);
+			event.registerEntityRenderer(CAEntities.OCEAN_ILLUSION.get(), OceanIllusionRenderer::new);
+			event.registerEntityRenderer(CAEntities.FLAMARINE_STATUE.get(), FlamarineStatueRenderer::new);
+			event.registerEntityRenderer(CAEntities.NAUTILUS_HEADHUNTER.get(), NautilusHeadhunterRenderer::new);
+			event.registerEntityRenderer(CAEntities.XANTIS.get(), XantisRenderer::new);
+			event.registerEntityRenderer(CAEntities.FLAMARINE_GOLEM.get(), FlamarineGolemRenderer::new);
+			event.registerEntityRenderer(CAEntities.OCEANIZED_VEX.get(), OceanizedVexRenderer::new);
+			event.registerEntityRenderer(CAEntities.ISHARMLA.get(), IsharmlaRenderer::new);
+			event.registerEntityRenderer(CAEntities.QUNYOU_WANTED_ISHARMLA.get(), QunyouWantedIsharmlaRenderer::new);
+			event.registerEntityRenderer(CAEntities.ISHARMLA_TEAR.get(), IsharmlaTearRenderer::new);
+			event.registerEntityRenderer(CAEntities.PRAYER_SPLASH.get(), PrayerSplashRenderer::new);
+			event.registerEntityRenderer(CAEntities.COMPASSION_PRAYER.get(), CompassionPrayerRenderer::new);
+			event.registerEntityRenderer(CAEntities.OCEANIZED_ENDERINA.get(), OceanizedEnderinaRenderer::new);
+			event.registerEntityRenderer(CAEntities.MOIST_DRAGON_BREATH.get(), MoistDragonBreathRenderer::new);
+			event.registerEntityRenderer(CAEntities.MOIST_ENDER_CRYSTAL.get(), MoistEnderCrystalRenderer::new);
+			event.registerEntityRenderer(CAEntities.THIRSTER.get(), ThirsterRenderer::new);
+			event.registerEntityRenderer(CAEntities.ABSORBER_LIMB.get(), AbsorberLimbRenderer::new);
+			event.registerEntityRenderer(CAEntities.SCREAM_CHEST_FISH.get(), ScreamChestFishRenderer::new);
+			event.registerEntityRenderer(CAEntities.OCEANIZED_CHICKEN.get(), OceanizedChickenRenderer::new);
+			event.registerEntityRenderer(CAEntities.NETHERSEA_SLIME.get(), NetherseaSlimeRenderer::new);
+			event.registerEntityRenderer(CAEntities.OCEANIZED_SHULKER.get(), OceanizedShulkerRenderer::new);
+		}
+	}
+
+	@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, value = {Dist.CLIENT})
+	public static class CAModels {
+		@SubscribeEvent
+		public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
+			event.registerLayerDefinition(ModelBulletProjectile.LAYER_LOCATION, ModelBulletProjectile::createBodyLayer);
+			event.registerLayerDefinition(ModelAnchorFly.LAYER_LOCATION, ModelAnchorFly::createBodyLayer);
+			event.registerLayerDefinition(ModelSealeatherChitinArmor.LAYER_LOCATION, ModelSealeatherChitinArmor::createBodyLayer);
+			event.registerLayerDefinition(ModelHighmoreShoot.LAYER_LOCATION, ModelHighmoreShoot::createBodyLayer);
+			event.registerLayerDefinition(ModelFleefishBullet.LAYER_LOCATION, ModelFleefishBullet::createBodyLayer);
+			event.registerLayerDefinition(ModelFakerggShoot.LAYER_LOCATION, ModelFakerggShoot::createBodyLayer);
+			event.registerLayerDefinition(ModelOceanArrow.LAYER_LOCATION, ModelOceanArrow::createBodyLayer);
+		}
 	}
 }

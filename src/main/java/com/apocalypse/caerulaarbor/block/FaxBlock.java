@@ -3,7 +3,7 @@ package com.apocalypse.caerulaarbor.block;
 
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAItems;
-import com.apocalypse.caerulaarbor.init.CAParticleTypes;
+import com.apocalypse.caerulaarbor.init.CAParticles;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -173,7 +173,7 @@ public class FaxBlock extends Block {
                     }
                     ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                     if ((LevelAccessor) world instanceof ServerLevel _level)
-                        _level.sendParticles(CAParticleTypes.PURPLE_FLAME.get(), ((double) x + 0.5), ((double) y + 1.5), ((double) z + 0.5), 32, 0.75, 0.75, 0.75, 0.1);
+                        _level.sendParticles(CAParticles.PURPLE_FLAME.get(), ((double) x + 0.5), ((double) y + 1.5), ((double) z + 0.5), 32, 0.75, 0.75, 0.75, 0.1);
                     if ((LevelAccessor) world instanceof ServerLevel _level) {
                         Entity entityToSpawn = CAEntities.IRENE.get().spawn(_level, BlockPos.containing((double) x + direction.getStepX() + 0.5, (double) y + direction.getStepY(), (double) z + direction.getStepZ() + 0.5), MobSpawnType.MOB_SUMMONED);
                         if (entityToSpawn != null) {

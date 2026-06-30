@@ -3,7 +3,7 @@ package com.apocalypse.caerulaarbor.potion;
 
 import com.apocalypse.caerulaarbor.entity.IzumikEntity;
 import com.apocalypse.caerulaarbor.init.CAAttributes;
-import com.apocalypse.caerulaarbor.init.CAParticleTypes;
+import com.apocalypse.caerulaarbor.init.CAParticles;
 import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
@@ -38,18 +38,18 @@ public class InvulnerableMobEffect extends MobEffect {
         }
         if ((double) amplifier == 0) {
             if (world instanceof ServerLevel _level)
-                _level.sendParticles(CAParticleTypes.INV_PTC_BLUE.get(), (x + 2 * Math.sin(ang)), (y + 1.25), (z + 2 * Math.cos(ang)), 1, 0.1, 2, 0.1, 0.2);
+                _level.sendParticles(CAParticles.INV_PTC_BLUE.get(), (x + 2 * Math.sin(ang)), (y + 1.25), (z + 2 * Math.cos(ang)), 1, 0.1, 2, 0.1, 0.2);
         } else if ((double) amplifier == 1) {
             if (EntityPredicateUtils.isEndspeaker(entity)) {
                 if (world instanceof ServerLevel _level)
-                    _level.sendParticles(CAParticleTypes.ENDSPEAKER_INV.get(), (x + 2 * Math.sin(ang)), (y + 1.25), (z + 2 * Math.cos(ang)), 4, 0.1, 2, 0.1, 0.2);
+                    _level.sendParticles(CAParticles.ENDSPEAKER_INV.get(), (x + 2 * Math.sin(ang)), (y + 1.25), (z + 2 * Math.cos(ang)), 4, 0.1, 2, 0.1, 0.2);
             } else {
                 if (world instanceof ServerLevel _level)
-                    _level.sendParticles(CAParticleTypes.INV_PTC.get(), (x + 2 * Math.sin(ang)), (y + 1.25), (z + 2 * Math.cos(ang)), 4, 0.1, 2, 0.1, 0.2);
+                    _level.sendParticles(CAParticles.INV_PTC.get(), (x + 2 * Math.sin(ang)), (y + 1.25), (z + 2 * Math.cos(ang)), 4, 0.1, 2, 0.1, 0.2);
             }
         } else {
             if (world instanceof ServerLevel _level)
-                _level.sendParticles(CAParticleTypes.INV_PTC_VOILET.get(), (x + 2 * Math.sin(ang)), (y + 1.25), (z + 2 * Math.cos(ang)), 4, 0.1, 2, 0.1, 0.2);
+                _level.sendParticles(CAParticles.INV_PTC_VOILET.get(), (x + 2 * Math.sin(ang)), (y + 1.25), (z + 2 * Math.cos(ang)), 4, 0.1, 2, 0.1, 0.2);
             if (entity instanceof IzumikEntity && ((Entity) entity instanceof IzumikEntity _datEntI ? _datEntI.getEntityData().get(IzumikEntity.DATA_phase) : 0) == 0) {
                 phase = Math.floor(((Entity) entity instanceof IzumikEntity _datEntI ? _datEntI.getEntityData().get(IzumikEntity.DATA_growth_p) : 0) / 5);
                 if ((Entity) entity instanceof LivingEntity _entity)

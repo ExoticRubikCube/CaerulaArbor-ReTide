@@ -337,7 +337,7 @@ public class FlyFishEntity extends SeaMonster implements RangedAttackMob {
 		this.setNoGravity(true);
 	}
 
-	public static void init() {
+	public static void registerSpawnPlacements() {
 		SpawnPlacements.register(CAEntities.FLY_FISH.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
 			int x = pos.getX();
 			int y = pos.getY();
@@ -434,3 +434,4 @@ public class FlyFishEntity extends SeaMonster implements RangedAttackMob {
 		this.animationprocedure = animation;
 	}
 }
+

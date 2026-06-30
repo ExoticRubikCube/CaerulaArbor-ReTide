@@ -203,7 +203,7 @@ public class IsharmlaEntity extends SeaMonster {
 					double sourceY = this.getY();
 					double sourceZ = this.getZ();
 					for (int index = 0; index < 12; index++) {
-						serverLevel.sendParticles(CAParticleTypes.MOIST_BOOM.get(), sourceX, sourceY + 10 + index, sourceZ, 6, index * 0.1, index * 0.1, index * 0.1, 0);
+						serverLevel.sendParticles(CAParticles.MOIST_BOOM.get(), sourceX, sourceY + 10 + index, sourceZ, 6, index * 0.1, index * 0.1, index * 0.1, 0);
 					}
 				}
 			});
@@ -266,7 +266,7 @@ public class IsharmlaEntity extends SeaMonster {
 		for (int index = 0; index < 20; index++) {
 			final double particleIndex = index;
 			CaerulaArborMod.queueServerWork(index, () -> {
-				level.sendParticles(CAParticleTypes.MOIST_BOOM.get(), x, y + 10 - particleIndex * 0.5, z, 1, 0, 0, 0, 0);
+				level.sendParticles(CAParticles.MOIST_BOOM.get(), x, y + 10 - particleIndex * 0.5, z, 1, 0, 0, 0, 0);
 				double angle = Math.toRadians(particleIndex * 9);
 				level.sendParticles(ParticleTypes.END_ROD, x + radius * Math.cos(angle), y, z + radius * Math.sin(angle), 1, 0, 0, 0, 0);
 				double oppositeAngle = Math.toRadians(particleIndex * 9 + 180);
@@ -522,14 +522,14 @@ public class IsharmlaEntity extends SeaMonster {
 							_level1.sendParticles(ParticleTypes.END_ROD, (x + r * Math.sin(ang)), (y + 0.125), (z + r * Math.cos(ang)), 1, 0, 0.25, 0, 0.2);
 					}
 					if (world instanceof ServerLevel _level1)
-						_level1.sendParticles(CAParticleTypes.EDERMAN_PTC.get(), (x + r * Math.sin(ang)), (y + 0.15), (z + r * Math.cos(ang)), 1, 0, 0.25, 0, 0.2);
+						_level1.sendParticles(CAParticles.EDERMAN_PTC.get(), (x + r * Math.sin(ang)), (y + 0.15), (z + r * Math.cos(ang)), 1, 0, 0.25, 0, 0.2);
 					r = 23 + Math.sin(index0 * 12);
 					if (Math.random() < 0.33) {
 						if (world instanceof ServerLevel _level1)
 							_level1.sendParticles(ParticleTypes.END_ROD, (x + r * Math.sin(ang)), (y + 0.125), (z + r * Math.cos(ang)), 1, 0, 0.25, 0, 0.2);
 					}
 					if (world instanceof ServerLevel _level1)
-						_level1.sendParticles(CAParticleTypes.EDERMAN_PTC.get(), (x + r * Math.sin(ang)), (y + 0.15), (z + r * Math.cos(ang)), 1, 0, 0.25, 0, 0.2);
+						_level1.sendParticles(CAParticles.EDERMAN_PTC.get(), (x + r * Math.sin(ang)), (y + 0.15), (z + r * Math.cos(ang)), 1, 0, 0.25, 0, 0.2);
 				}
 				if (sklp1 > 0) {
 					if ((Entity) this instanceof IsharmlaEntity _datEntSetI)
@@ -849,7 +849,7 @@ public class IsharmlaEntity extends SeaMonster {
 		double size = Math.max(Math.min(Math.round(Math.sqrt(vx * vx + vy * vy + vz * vz)), 32), 1);
 		for (int index = 0; index < (int) size; index++) {
 			if (world instanceof ServerLevel level) {
-				level.sendParticles(CAParticleTypes.ISHARMLA_CURSE_PARTICLE.get(), x + 0.5 + vx / size * index, y + 0.5 + vy / size * index + 0.5, z + 0.5 + vz / size * index, 5, 0.32, 0.5, 0.32, 0.05);
+				level.sendParticles(CAParticles.ISHARMLA_CURSE_PARTICLE.get(), x + 0.5 + vx / size * index, y + 0.5 + vy / size * index + 0.5, z + 0.5 + vz / size * index, 5, 0.32, 0.5, 0.32, 0.05);
 			}
 		}
 	}
@@ -986,12 +986,12 @@ public class IsharmlaEntity extends SeaMonster {
 				for (int index0 = 0; index0 < 120; index0++) {
 					int radius = expanding ? currentIter : (10 - currentIter);
 					if (world instanceof ServerLevel _level)
-						_level.sendParticles(CAParticleTypes.EDERMAN_PTC.get(), (x + radius * Math.sin(Math.toRadians(3 * index0))), (y + 0.125),
+						_level.sendParticles(CAParticles.EDERMAN_PTC.get(), (x + radius * Math.sin(Math.toRadians(3 * index0))), (y + 0.125),
 								(z + radius * Math.cos(Math.toRadians(3 * index0))), 2, 0.05, 0.05, 0.05, 0.1);
 					if (world instanceof ServerLevel _level)
 						_level.sendParticles(ParticleTypes.END_ROD, (x + radius * Math.sin(Math.toRadians(3 * index0))), (y + 0.125), (z + radius * Math.cos(Math.toRadians(3 * index0))), 1, 0.05, 0.05, 0.05, 0.1);
 					if (world instanceof ServerLevel _level)
-						_level.sendParticles(CAParticleTypes.EDERMAN_PTC.get(), (x + 2 * Math.sin(Math.toRadians(3 * index0))), (y + currentIter * 0.5), (z + 2 * Math.cos(Math.toRadians(3 * index0))), 2,
+						_level.sendParticles(CAParticles.EDERMAN_PTC.get(), (x + 2 * Math.sin(Math.toRadians(3 * index0))), (y + currentIter * 0.5), (z + 2 * Math.cos(Math.toRadians(3 * index0))), 2,
 								0.05, 0.05, 0.05, 0.1);
 					if (world instanceof ServerLevel _level)
 						_level.sendParticles(ParticleTypes.END_ROD, (x + 2 * Math.sin(Math.toRadians(3 * index0))), (y + currentIter * 0.5), (z + 2 * Math.cos(Math.toRadians(3 * index0))), 1, 0.05, 0.05, 0.05, 0.1);
