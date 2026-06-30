@@ -1,7 +1,6 @@
 package com.apocalypse.caerulaarbor;
 
 import com.apocalypse.caerulaarbor.init.*;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModNetwork;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -52,7 +51,7 @@ public class CaerulaArborMod {
 	// Start of user code block mod methods
 	// End of user code block mod methods
 	private void onCommonSetup(final FMLCommonSetupEvent event) {
-		CaerulaArborModNetwork.register();
+		CANetwork.register();
 		CACompostableItems.addComposterItems(event);
 	}
 

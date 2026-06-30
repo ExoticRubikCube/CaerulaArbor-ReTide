@@ -2,9 +2,9 @@ package com.apocalypse.caerulaarbor.client.gui;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.map.MapVariables;
+import com.apocalypse.caerulaarbor.init.CANetwork;
 import com.apocalypse.caerulaarbor.menu.EvoTreeMenu;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModNetwork;
-import com.apocalypse.caerulaarbor.network.message.send.EvoTreeButtonMessage;
+import com.apocalypse.caerulaarbor.network.send.EvoTreeButtonMessage;
 import com.apocalypse.caerulaarbor.util.StrategyUtils;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
@@ -136,7 +136,7 @@ public class EvoTreeScreen extends AbstractContainerScreen<EvoTreeMenu> {
 		super.init();
 		button_return = new PlainTextButton(this.leftPos + 218, this.topPos + 203, 38, 20, Component.translatable("gui.caerula_arbor.evo_tree.button_return"), e -> {
 			if (true) {
-				CaerulaArborModNetwork.PACKET_HANDLER.sendToServer(new EvoTreeButtonMessage(0, x, y, z));
+				CANetwork.PACKET_HANDLER.sendToServer(new EvoTreeButtonMessage(0, x, y, z));
 				EvoTreeButtonMessage.handleButtonAction(entity, 0, x, y, z);
 			}
 		}, this.font);

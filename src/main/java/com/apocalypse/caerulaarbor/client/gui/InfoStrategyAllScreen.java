@@ -3,9 +3,9 @@ package com.apocalypse.caerulaarbor.client.gui;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
+import com.apocalypse.caerulaarbor.init.CANetwork;
 import com.apocalypse.caerulaarbor.menu.InfoStrategyAllMenu;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModNetwork;
-import com.apocalypse.caerulaarbor.network.message.send.InfoStrategyNavigationButtonMessage;
+import com.apocalypse.caerulaarbor.network.send.InfoStrategyNavigationButtonMessage;
 import com.apocalypse.caerulaarbor.util.StrategyUtils;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
@@ -101,7 +101,7 @@ public class InfoStrategyAllScreen extends AbstractContainerScreen<InfoStrategyA
 		super.init();
 		button_evolution_tree = new PlainTextButton(this.leftPos + -1, this.topPos + 121, 76, 20, Component.translatable("gui.caerula_arbor.info_strategy_all.button_evolution_tree"), e -> {
 			if (true) {
-				CaerulaArborModNetwork.PACKET_HANDLER.sendToServer(new InfoStrategyNavigationButtonMessage(0, x, y, z));
+				CANetwork.PACKET_HANDLER.sendToServer(new InfoStrategyNavigationButtonMessage(0, x, y, z));
 				InfoStrategyNavigationButtonMessage.handleButtonAction(entity, 0, x, y, z);
 			}
 		}, this.font);
@@ -109,7 +109,7 @@ public class InfoStrategyAllScreen extends AbstractContainerScreen<InfoStrategyA
 		this.addRenderableWidget(button_evolution_tree);
 		imagebutton_breed_lit = new ImageButton(this.leftPos + 100, this.topPos + 29, 32, 32, 0, 0, 32, new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/atlas/imagebutton_breed_lit.png"), 32, 64, e -> {
 			if (true) {
-				CaerulaArborModNetwork.PACKET_HANDLER.sendToServer(new InfoStrategyNavigationButtonMessage(1, x, y, z));
+				CANetwork.PACKET_HANDLER.sendToServer(new InfoStrategyNavigationButtonMessage(1, x, y, z));
 				InfoStrategyNavigationButtonMessage.handleButtonAction(entity, 1, x, y, z);
 			}
 		});
@@ -117,7 +117,7 @@ public class InfoStrategyAllScreen extends AbstractContainerScreen<InfoStrategyA
 		this.addRenderableWidget(imagebutton_breed_lit);
 		imagebutton_grow_lit = new ImageButton(this.leftPos + 30, this.topPos + 29, 32, 32, 0, 0, 32, new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/atlas/imagebutton_grow_lit.png"), 32, 64, e -> {
 			if (true) {
-				CaerulaArborModNetwork.PACKET_HANDLER.sendToServer(new InfoStrategyNavigationButtonMessage(2, x, y, z));
+				CANetwork.PACKET_HANDLER.sendToServer(new InfoStrategyNavigationButtonMessage(2, x, y, z));
 				InfoStrategyNavigationButtonMessage.handleButtonAction(entity, 2, x, y, z);
 			}
 		});
@@ -125,7 +125,7 @@ public class InfoStrategyAllScreen extends AbstractContainerScreen<InfoStrategyA
 		this.addRenderableWidget(imagebutton_grow_lit);
 		imagebutton_mig_lit = new ImageButton(this.leftPos + 138, this.topPos + 29, 32, 32, 0, 0, 32, new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/atlas/imagebutton_mig_lit.png"), 32, 64, e -> {
 			if (true) {
-				CaerulaArborModNetwork.PACKET_HANDLER.sendToServer(new InfoStrategyNavigationButtonMessage(3, x, y, z));
+				CANetwork.PACKET_HANDLER.sendToServer(new InfoStrategyNavigationButtonMessage(3, x, y, z));
 				InfoStrategyNavigationButtonMessage.handleButtonAction(entity, 3, x, y, z);
 			}
 		});
@@ -133,7 +133,7 @@ public class InfoStrategyAllScreen extends AbstractContainerScreen<InfoStrategyA
 		this.addRenderableWidget(imagebutton_mig_lit);
 		imagebutton_subs_lit = new ImageButton(this.leftPos + 67, this.topPos + 30, 32, 32, 0, 0, 32, new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/atlas/imagebutton_subs_lit.png"), 32, 64, e -> {
 			if (true) {
-				CaerulaArborModNetwork.PACKET_HANDLER.sendToServer(new InfoStrategyNavigationButtonMessage(4, x, y, z));
+				CANetwork.PACKET_HANDLER.sendToServer(new InfoStrategyNavigationButtonMessage(4, x, y, z));
 				InfoStrategyNavigationButtonMessage.handleButtonAction(entity, 4, x, y, z);
 			}
 		});

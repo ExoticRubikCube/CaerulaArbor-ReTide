@@ -1,4 +1,4 @@
-package com.apocalypse.caerulaarbor.network.message.send;
+package com.apocalypse.caerulaarbor.network.send;
 
 import com.apocalypse.caerulaarbor.menu.*;
 import io.netty.buffer.Unpooled;

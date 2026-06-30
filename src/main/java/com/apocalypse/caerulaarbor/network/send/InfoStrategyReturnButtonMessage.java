@@ -1,4 +1,4 @@
-package com.apocalypse.caerulaarbor.network.message.send;
+package com.apocalypse.caerulaarbor.network.send;
 
 import com.apocalypse.caerulaarbor.menu.InfoStrategyAllMenu;
 import net.minecraft.core.BlockPos;
@@ -9,31 +9,31 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class EvoTreeButtonMessage {
+public class InfoStrategyReturnButtonMessage {
 	private final int buttonID, x, y, z;
 
-	public EvoTreeButtonMessage(FriendlyByteBuf buffer) {
+	public InfoStrategyReturnButtonMessage(FriendlyByteBuf buffer) {
 		this.buttonID = buffer.readInt();
 		this.x = buffer.readInt();
 		this.y = buffer.readInt();
 		this.z = buffer.readInt();
 	}
 
-	public EvoTreeButtonMessage(int buttonID, int x, int y, int z) {
+	public InfoStrategyReturnButtonMessage(int buttonID, int x, int y, int z) {
 		this.buttonID = buttonID;
 		this.x = x;
 		this.y = y;
 		this.z = z;
 	}
 
-	public static void buffer(EvoTreeButtonMessage message, FriendlyByteBuf buffer) {
+	public static void buffer(InfoStrategyReturnButtonMessage message, FriendlyByteBuf buffer) {
 		buffer.writeInt(message.buttonID);
 		buffer.writeInt(message.x);
 		buffer.writeInt(message.y);
 		buffer.writeInt(message.z);
 	}
 
-	public static void handler(EvoTreeButtonMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
+	public static void handler(InfoStrategyReturnButtonMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
 		NetworkEvent.Context context = contextSupplier.get();
 		context.enqueueWork(() -> {
 			Player entity = context.getSender();
@@ -58,4 +58,3 @@ public class EvoTreeButtonMessage {
 		}
 	}
 }
-

@@ -5,9 +5,9 @@ import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
 import com.apocalypse.caerulaarbor.entity.PregnantFishEntity;
 import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CANetwork;
 import com.apocalypse.caerulaarbor.menu.InfoStrategyBreedMenu;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModNetwork;
-import com.apocalypse.caerulaarbor.network.message.send.InfoStrategyReturnButtonMessage;
+import com.apocalypse.caerulaarbor.network.send.InfoStrategyReturnButtonMessage;
 import com.apocalypse.caerulaarbor.util.StrategyUtils;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
@@ -116,7 +116,7 @@ public class InfoStrategyBreedScreen extends AbstractContainerScreen<InfoStrateg
 		super.init();
 		button_return = new PlainTextButton(this.leftPos + 226, this.topPos + 156, 36, 20, Component.translatable("gui.caerula_arbor.info_strategy_breed.button_return"), e -> {
 			if (true) {
-				CaerulaArborModNetwork.PACKET_HANDLER.sendToServer(new InfoStrategyReturnButtonMessage(0, x, y, z));
+				CANetwork.PACKET_HANDLER.sendToServer(new InfoStrategyReturnButtonMessage(0, x, y, z));
 				InfoStrategyReturnButtonMessage.handleButtonAction(entity, 0, x, y, z);
 			}
 		}, this.font);

@@ -5,8 +5,8 @@ import com.apocalypse.caerulaarbor.capability.anchor.AnchorRecord;
 import com.apocalypse.caerulaarbor.capability.apoptosis.ApoptosisInjuryCapability;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import com.apocalypse.caerulaarbor.capability.sanity.SanityInjuryCapability;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModNetwork;
-import com.apocalypse.caerulaarbor.network.message.receive.SavedDataSyncMessage;
+import com.apocalypse.caerulaarbor.init.CANetwork;
+import com.apocalypse.caerulaarbor.network.receive.SavedDataSyncMessage;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
@@ -89,10 +89,10 @@ public class CapabilityEventHandler {
             SavedData mapData = ModCapabilities.getMapVariables(event.getEntity().level());
             SavedData worldData = ModCapabilities.getWorldVariables(event.getEntity().level());
             if (mapData != null) {
-                CaerulaArborModNetwork.PACKET_HANDLER.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) event.getEntity()), new SavedDataSyncMessage(0, mapData));
+                CANetwork.PACKET_HANDLER.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) event.getEntity()), new SavedDataSyncMessage(0, mapData));
             }
             if (worldData != null) {
-                CaerulaArborModNetwork.PACKET_HANDLER.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) event.getEntity()), new SavedDataSyncMessage(1, worldData));
+                CANetwork.PACKET_HANDLER.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) event.getEntity()), new SavedDataSyncMessage(1, worldData));
             }
         }
     }
@@ -102,7 +102,7 @@ public class CapabilityEventHandler {
         if (!event.getEntity().level().isClientSide()) {
             SavedData worldData = ModCapabilities.getWorldVariables(event.getEntity().level());
             if (worldData != null) {
-                CaerulaArborModNetwork.PACKET_HANDLER.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) event.getEntity()), new SavedDataSyncMessage(1, worldData));
+                CANetwork.PACKET_HANDLER.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) event.getEntity()), new SavedDataSyncMessage(1, worldData));
             }
         }
     }

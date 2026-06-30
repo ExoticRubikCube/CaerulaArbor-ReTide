@@ -5,8 +5,8 @@ import com.apocalypse.caerulaarbor.entity.Al1SHelperEntity;
 import com.apocalypse.caerulaarbor.entity.LittleHelperEntity;
 import com.apocalypse.caerulaarbor.init.CAEnchantments;
 import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CANetwork;
 import com.apocalypse.caerulaarbor.item.HighmoreScytheItem;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModNetwork;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -51,17 +51,17 @@ public class PlayerLeftClickEventHandler {
     }
 
     private static void handleHelperLeftClick(PlayerInteractEvent.LeftClickEmpty event) {
-        CaerulaArborModNetwork.PACKET_HANDLER.sendToServer(new HelperLeftClickMessage());
+        CANetwork.PACKET_HANDLER.sendToServer(new HelperLeftClickMessage());
         executeHelperLeftClick(event.getLevel(), event.getPos().getX(), event.getPos().getY(), event.getPos().getZ(), event.getEntity());
     }
 
     private static void handleHighmoreScytheAirAttack(PlayerInteractEvent.LeftClickEmpty event) {
-        CaerulaArborModNetwork.PACKET_HANDLER.sendToServer(new HighmoreScytheAirAttackMessage());
+        CANetwork.PACKET_HANDLER.sendToServer(new HighmoreScytheAirAttackMessage());
         executeHighmoreScytheAirAttack(event.getLevel(), event.getPos().getX(), event.getPos().getY(), event.getPos().getZ(), event.getEntity());
     }
 
     private static void handleRangedLightning(PlayerInteractEvent.LeftClickEmpty event) {
-        CaerulaArborModNetwork.PACKET_HANDLER.sendToServer(new RangedLightningMessage());
+        CANetwork.PACKET_HANDLER.sendToServer(new RangedLightningMessage());
         executeRangedLightning(event.getLevel(), event.getPos().getX(), event.getPos().getY(), event.getPos().getZ(), event.getEntity());
     }
 
@@ -84,7 +84,7 @@ public class PlayerLeftClickEventHandler {
 
         @SubscribeEvent
         public static void registerMessage(FMLCommonSetupEvent event) {
-            CaerulaArborModNetwork.addNetworkMessage(HelperLeftClickMessage.class, HelperLeftClickMessage::buffer, HelperLeftClickMessage::new, HelperLeftClickMessage::handler);
+            CANetwork.addNetworkMessage(HelperLeftClickMessage.class, HelperLeftClickMessage::buffer, HelperLeftClickMessage::new, HelperLeftClickMessage::handler);
         }
     }
 
@@ -107,7 +107,7 @@ public class PlayerLeftClickEventHandler {
 
         @SubscribeEvent
         public static void registerMessage(FMLCommonSetupEvent event) {
-            CaerulaArborModNetwork.addNetworkMessage(HighmoreScytheAirAttackMessage.class, HighmoreScytheAirAttackMessage::buffer, HighmoreScytheAirAttackMessage::new, HighmoreScytheAirAttackMessage::handler);
+            CANetwork.addNetworkMessage(HighmoreScytheAirAttackMessage.class, HighmoreScytheAirAttackMessage::buffer, HighmoreScytheAirAttackMessage::new, HighmoreScytheAirAttackMessage::handler);
         }
     }
 
@@ -130,7 +130,7 @@ public class PlayerLeftClickEventHandler {
 
         @SubscribeEvent
         public static void registerMessage(FMLCommonSetupEvent event) {
-            CaerulaArborModNetwork.addNetworkMessage(RangedLightningMessage.class, RangedLightningMessage::buffer, RangedLightningMessage::new, RangedLightningMessage::handler);
+            CANetwork.addNetworkMessage(RangedLightningMessage.class, RangedLightningMessage::buffer, RangedLightningMessage::new, RangedLightningMessage::handler);
         }
     }
 

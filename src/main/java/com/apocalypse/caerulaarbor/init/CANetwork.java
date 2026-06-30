@@ -1,9 +1,9 @@
-package com.apocalypse.caerulaarbor.network;
+package com.apocalypse.caerulaarbor.init;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.network.message.receive.PlayerVariablesSyncMessage;
-import com.apocalypse.caerulaarbor.network.message.receive.SavedDataSyncMessage;
-import com.apocalypse.caerulaarbor.network.message.send.*;
+import com.apocalypse.caerulaarbor.network.receive.PlayerVariablesSyncMessage;
+import com.apocalypse.caerulaarbor.network.receive.SavedDataSyncMessage;
+import com.apocalypse.caerulaarbor.network.send.*;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkEvent;
@@ -14,13 +14,13 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public class CaerulaArborModNetwork {
+public class CANetwork {
 	private static final String PROTOCOL_VERSION = "1";
 	public static final SimpleChannel PACKET_HANDLER = NetworkRegistry.newSimpleChannel(new ResourceLocation(CaerulaArborMod.MODID, CaerulaArborMod.MODID), () -> PROTOCOL_VERSION,
 			PROTOCOL_VERSION::equals, PROTOCOL_VERSION::equals);
 	private static int messageID = 0;
 
-	private CaerulaArborModNetwork() {
+	private CANetwork() {
 	}
 
 	public static <T> void addNetworkMessage(Class<T> messageType, BiConsumer<T, FriendlyByteBuf> encoder, Function<FriendlyByteBuf, T> decoder,

@@ -1,4 +1,4 @@
-package com.apocalypse.caerulaarbor.network.message.receive;
+package com.apocalypse.caerulaarbor.network.receive;
 
 import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.capability.world.WorldVariables;

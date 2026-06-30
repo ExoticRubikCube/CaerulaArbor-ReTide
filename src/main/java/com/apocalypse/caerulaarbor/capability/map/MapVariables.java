@@ -1,7 +1,7 @@
 package com.apocalypse.caerulaarbor.capability.map;
 
-import com.apocalypse.caerulaarbor.network.CaerulaArborModNetwork;
-import com.apocalypse.caerulaarbor.network.message.receive.SavedDataSyncMessage;
+import com.apocalypse.caerulaarbor.init.CANetwork;
+import com.apocalypse.caerulaarbor.network.receive.SavedDataSyncMessage;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
@@ -75,7 +75,7 @@ public class MapVariables extends SavedData {
     public void syncData(LevelAccessor world) {
         this.setDirty();
         if (world instanceof Level level && !level.isClientSide()) {
-            CaerulaArborModNetwork.PACKET_HANDLER.send(PacketDistributor.ALL.noArg(), new SavedDataSyncMessage(0, this));
+            CANetwork.PACKET_HANDLER.send(PacketDistributor.ALL.noArg(), new SavedDataSyncMessage(0, this));
         }
     }
 

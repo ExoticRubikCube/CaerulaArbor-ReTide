@@ -1,8 +1,8 @@
 package com.apocalypse.caerulaarbor.capability.player;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.network.CaerulaArborModNetwork;
-import com.apocalypse.caerulaarbor.network.message.receive.PlayerVariablesSyncMessage;
+import com.apocalypse.caerulaarbor.init.CANetwork;
+import com.apocalypse.caerulaarbor.network.receive.PlayerVariablesSyncMessage;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
@@ -110,7 +110,7 @@ public class PlayerVariable implements INBTSerializable<CompoundTag> {
 
     public void syncPlayerVariables(Entity entity) {
         if (entity instanceof ServerPlayer serverPlayer) {
-            CaerulaArborModNetwork.PACKET_HANDLER.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new PlayerVariablesSyncMessage(this));
+            CANetwork.PACKET_HANDLER.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new PlayerVariablesSyncMessage(this));
         }
     }
 

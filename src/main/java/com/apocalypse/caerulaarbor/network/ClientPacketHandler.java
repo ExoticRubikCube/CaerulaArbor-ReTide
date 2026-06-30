@@ -1,7 +1,7 @@
 package com.apocalypse.caerulaarbor.network;
 
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
-import com.apocalypse.caerulaarbor.network.message.receive.PlayerVariablesSyncMessage;
+import com.apocalypse.caerulaarbor.network.receive.PlayerVariablesSyncMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.network.NetworkEvent;
