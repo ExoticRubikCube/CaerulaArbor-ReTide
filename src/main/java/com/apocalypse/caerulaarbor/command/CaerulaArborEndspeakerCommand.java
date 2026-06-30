@@ -3,7 +3,7 @@ package com.apocalypse.caerulaarbor.command;
 
 import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler;
-import com.apocalypse.caerulaarbor.util.EntityUtils;
+import com.apocalypse.caerulaarbor.entity.EndspeakerEntity;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import net.minecraft.commands.Commands;
@@ -45,11 +45,11 @@ public class CaerulaArborEndspeakerCommand {
                 res_line_1 = res_line_1.replace("{code}", code);
                 res_line_2 = Component.translatable("command.endspeaker.inquiry.1").getString();
                 for (int index0 = 0; index0 < 3; index0++) {
-                    res_line_2 = res_line_2.replace("{a" + (index0 + 1) + "}", "" + EntityUtils.inquirybility(world, index0));
+                    res_line_2 = res_line_2.replace("{a" + (index0 + 1) + "}", "" + EndspeakerEntity.hasAbility(world, index0));
                 }
                 res_line_3 = Component.translatable("command.endspeaker.inquiry.2").getString();
                 for (int index1 = 0; index1 < 3; index1++) {
-                    res_line_3 = res_line_3.replace("{a" + (index1 + 4) + "}", "" + EntityUtils.inquirybility(world, index1 + 3));
+                    res_line_3 = res_line_3.replace("{a" + (index1 + 4) + "}", "" + EndspeakerEntity.hasAbility(world, index1 + 3));
                 }
                 if (entity instanceof Player _player && !_player.level().isClientSide())
                     _player.displayClientMessage(Component.literal(res_line_1), false);
@@ -186,7 +186,7 @@ public class CaerulaArborEndspeakerCommand {
 	}
 
     private static void revokeAbility(Level world, double index) {
-		if (EntityUtils.inquirybility(world, index)) {
+		if (EndspeakerEntity.hasAbility(world, index)) {
 			MapVariablesHandler.revokeAbility(world, index);
 		}
 	}

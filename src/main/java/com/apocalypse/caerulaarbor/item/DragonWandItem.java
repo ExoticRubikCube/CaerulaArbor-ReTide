@@ -1,10 +1,10 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.entity.MoistDragonBreathEntity;
 import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CAEnchantments;
 import com.apocalypse.caerulaarbor.init.CAItems;
-import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.client.Minecraft;
@@ -165,14 +165,14 @@ public class DragonWandItem extends Item {
                                         (float) Mth.nextDouble(RandomSource.create(), 0.9, 1.1));
                         }
                     }
-                    EntityUtils.castDragonBreath(world, x, y, z, entity, t0, 1);
-                    EntityUtils.castDragonBreath(world, x, y, z, entity, t1, 0);
-                    EntityUtils.castDragonBreath(world, x, y, z, entity, t2, 0);
+                    MoistDragonBreathEntity.spawn(world, x, y, z, entity, t0, 1);
+                    MoistDragonBreathEntity.spawn(world, x, y, z, entity, t1, 0);
+                    MoistDragonBreathEntity.spawn(world, x, y, z, entity, t2, 0);
                     if (ApocataMode) {
                         for (int index0 = 0; index0 < 2; index0++) {
-                            EntityUtils.castDragonBreath(world, x, y, z, entity, t0, 1);
-                            EntityUtils.castDragonBreath(world, x, y, z, entity, t1, 0);
-                            EntityUtils.castDragonBreath(world, x, y, z, entity, t2, 0);
+                            MoistDragonBreathEntity.spawn(world, x, y, z, entity, t0, 1);
+                            MoistDragonBreathEntity.spawn(world, x, y, z, entity, t1, 0);
+                            MoistDragonBreathEntity.spawn(world, x, y, z, entity, t2, 0);
                         }
                     }
                     if (!IsCreative) {

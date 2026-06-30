@@ -1,6 +1,7 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
@@ -70,164 +71,165 @@ import java.util.List;
 
 public class LastKnightAndHorseEntity extends Animal implements GeoEntity, SyncedAnimationEntity {
 
-	private boolean isLastKnightStarting() {
-		return EntityPredicateUtils.isLastKnightStarting(this);
-	}
-	public static final EntityDataAccessor<Boolean> DATA_IS_SHOOTING = SynchedEntityData.defineId(LastKnightAndHorseEntity.class, EntityDataSerializers.BOOLEAN);
-	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(LastKnightAndHorseEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<String> DATA_TEXTURE = SynchedEntityData.defineId(LastKnightAndHorseEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<Integer> DATA_ADDITION = SynchedEntityData.defineId(LastKnightAndHorseEntity.class, EntityDataSerializers.INT);
-	public static final EntityDataAccessor<Integer> DATA_SKILL_COOLDOWN = SynchedEntityData.defineId(LastKnightAndHorseEntity.class, EntityDataSerializers.INT);
-	public static final EntityDataAccessor<Integer> DATA_SKILL_DURATION = SynchedEntityData.defineId(LastKnightAndHorseEntity.class, EntityDataSerializers.INT);
-	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
-	private boolean swinging;
-	private boolean lastloop;
-	private long lastSwing;
-	public String animationprocedure = "empty";
-	private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.WHITE, ServerBossEvent.BossBarOverlay.NOTCHED_6);
+    private boolean isLastKnightStarting() {
+        return EntityPredicateUtils.isLastKnightStarting(this);
+    }
 
-	public LastKnightAndHorseEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CAEntities.LAST_KNIGHT_AND_HORSE.get(), world);
-	}
+    public static final EntityDataAccessor<Boolean> DATA_IS_SHOOTING = SynchedEntityData.defineId(LastKnightAndHorseEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(LastKnightAndHorseEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<String> DATA_TEXTURE = SynchedEntityData.defineId(LastKnightAndHorseEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> DATA_ADDITION = SynchedEntityData.defineId(LastKnightAndHorseEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_SKILL_COOLDOWN = SynchedEntityData.defineId(LastKnightAndHorseEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_SKILL_DURATION = SynchedEntityData.defineId(LastKnightAndHorseEntity.class, EntityDataSerializers.INT);
+    private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+    private boolean swinging;
+    private boolean lastloop;
+    private long lastSwing;
+    public String animationprocedure = "empty";
+    private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.WHITE, ServerBossEvent.BossBarOverlay.NOTCHED_6);
 
-	public LastKnightAndHorseEntity(EntityType<LastKnightAndHorseEntity> type, Level world) {
-		super(type, world);
-		xpReward = 64;
-		setNoAi(false);
-		setMaxUpStep(1.25f);
-		setPersistenceRequired();
-	}
+    public LastKnightAndHorseEntity(PlayMessages.SpawnEntity packet, Level world) {
+        this(CAEntities.LAST_KNIGHT_AND_HORSE.get(), world);
+    }
 
-	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(DATA_IS_SHOOTING, false);
-		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(DATA_TEXTURE, "knight_amd_horse");
-		this.entityData.define(DATA_ADDITION, 0);
-		this.entityData.define(DATA_SKILL_COOLDOWN, 140);
-		this.entityData.define(DATA_SKILL_DURATION, 0);
-	}
+    public LastKnightAndHorseEntity(EntityType<LastKnightAndHorseEntity> type, Level world) {
+        super(type, world);
+        xpReward = 64;
+        setNoAi(false);
+        setMaxUpStep(1.25f);
+        setPersistenceRequired();
+    }
 
-	public void setTextureName(String texture) {
-		this.entityData.set(DATA_TEXTURE, texture);
-	}
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(DATA_IS_SHOOTING, false);
+        this.entityData.define(ANIMATION, "undefined");
+        this.entityData.define(DATA_TEXTURE, "knight_amd_horse");
+        this.entityData.define(DATA_ADDITION, 0);
+        this.entityData.define(DATA_SKILL_COOLDOWN, 140);
+        this.entityData.define(DATA_SKILL_DURATION, 0);
+    }
 
-	public String getTextureName() {
-		return this.entityData.get(DATA_TEXTURE);
-	}
+    public void setTextureName(String texture) {
+        this.entityData.set(DATA_TEXTURE, texture);
+    }
 
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
-	}
+    public String getTextureName() {
+        return this.entityData.get(DATA_TEXTURE);
+    }
 
-	@Override
-	protected void registerGoals() {
-		super.registerGoals();
-		this.targetSelector.addGoal(1, new HurtByTargetGoal(this) {
-			@Override
-			public boolean canUse() {
-				return super.canUse() && isLastKnightStarting();
-			}
+    @Override
+    public Packet<ClientGamePacketListener> getAddEntityPacket() {
+        return NetworkHooks.getEntitySpawningPacket(this);
+    }
 
-			@Override
-			public boolean canContinueToUse() {
-				return super.canContinueToUse() && isLastKnightStarting();
-			}
-		});
-		this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.33, false) {
-			@Override
-			protected double getAttackReachSqr(LivingEntity entity) {
-				return 36;
-			}
+    @Override
+    protected void registerGoals() {
+        super.registerGoals();
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this) {
+            @Override
+            public boolean canUse() {
+                return super.canUse() && isLastKnightStarting();
+            }
 
-			@Override
-			public boolean canUse() {
-				return super.canUse() && isLastKnightStarting();
-			}
+            @Override
+            public boolean canContinueToUse() {
+                return super.canContinueToUse() && isLastKnightStarting();
+            }
+        });
+        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.33, false) {
+            @Override
+            protected double getAttackReachSqr(LivingEntity entity) {
+                return 36;
+            }
 
-			@Override
-			public boolean canContinueToUse() {
-				return super.canContinueToUse() && isLastKnightStarting();
-			}
+            @Override
+            public boolean canUse() {
+                return super.canUse() && isLastKnightStarting();
+            }
 
-		});
-		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Monster.class, true, false) {
-			@Override
-			public boolean canUse() {
-				return super.canUse() && isLastKnightStarting();
-			}
+            @Override
+            public boolean canContinueToUse() {
+                return super.canContinueToUse() && isLastKnightStarting();
+            }
 
-			@Override
-			public boolean canContinueToUse() {
-				return super.canContinueToUse() && isLastKnightStarting();
-			}
-		});
-		this.goalSelector.addGoal(4, new RandomStrollGoal(this, 1) {
-			@Override
-			public boolean canUse() {
-				return super.canUse() && isLastKnightStarting();
-			}
+        });
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Monster.class, true, false) {
+            @Override
+            public boolean canUse() {
+                return super.canUse() && isLastKnightStarting();
+            }
 
-			@Override
-			public boolean canContinueToUse() {
-				return super.canContinueToUse() && isLastKnightStarting();
-			}
-		});
-		this.goalSelector.addGoal(5, new RandomLookAroundGoal(this) {
-			@Override
-			public boolean canUse() {
-				return super.canUse() && isLastKnightStarting();
-			}
+            @Override
+            public boolean canContinueToUse() {
+                return super.canContinueToUse() && isLastKnightStarting();
+            }
+        });
+        this.goalSelector.addGoal(4, new RandomStrollGoal(this, 1) {
+            @Override
+            public boolean canUse() {
+                return super.canUse() && isLastKnightStarting();
+            }
 
-			@Override
-			public boolean canContinueToUse() {
-				return super.canContinueToUse() && isLastKnightStarting();
-			}
-		});
-		this.goalSelector.addGoal(6, new FloatGoal(this));
-	}
+            @Override
+            public boolean canContinueToUse() {
+                return super.canContinueToUse() && isLastKnightStarting();
+            }
+        });
+        this.goalSelector.addGoal(5, new RandomLookAroundGoal(this) {
+            @Override
+            public boolean canUse() {
+                return super.canUse() && isLastKnightStarting();
+            }
 
-	@Override
-	public MobType getMobType() {
-		return MobType.UNDEFINED;
-	}
+            @Override
+            public boolean canContinueToUse() {
+                return super.canContinueToUse() && isLastKnightStarting();
+            }
+        });
+        this.goalSelector.addGoal(6, new FloatGoal(this));
+    }
 
-	@Override
-	public boolean removeWhenFarAway(double distanceToClosestPlayer) {
-		return false;
-	}
+    @Override
+    public MobType getMobType() {
+        return MobType.UNDEFINED;
+    }
 
-	@Override
-	public SoundEvent getHurtSound(DamageSource ds) {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "last_knight_hit"));
-	}
+    @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        return false;
+    }
 
-	@Override
-	public SoundEvent getDeathSound() {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "last_knight_hit"));
-	}
+    @Override
+    public SoundEvent getHurtSound(DamageSource ds) {
+        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "last_knight_hit"));
+    }
 
-	@Override
-	public boolean hurt(DamageSource source, float amount) {
-		this.applyLastKnightFreeze(source.getEntity());
-		if (source.is(DamageTypes.IN_FIRE))
-			return false;
-		if (source.getDirectEntity() instanceof ThrownPotion || source.getDirectEntity() instanceof AreaEffectCloud)
-			return false;
-		if (source.is(DamageTypes.FALL))
-			return false;
-		if (source.is(DamageTypes.CACTUS))
-			return false;
-		if (source.is(DamageTypes.DROWN))
-			return false;
-		return super.hurt(source, amount);
-	}
+    @Override
+    public SoundEvent getDeathSound() {
+        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "last_knight_hit"));
+    }
 
-	@Override
-	public void die(DamageSource source) {
-		super.die(source);
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        this.applyLastKnightFreeze(source.getEntity());
+        if (source.is(DamageTypes.IN_FIRE))
+            return false;
+        if (source.getDirectEntity() instanceof ThrownPotion || source.getDirectEntity() instanceof AreaEffectCloud)
+            return false;
+        if (source.is(DamageTypes.FALL))
+            return false;
+        if (source.is(DamageTypes.CACTUS))
+            return false;
+        if (source.is(DamageTypes.DROWN))
+            return false;
+        return super.hurt(source, amount);
+    }
+
+    @Override
+    public void die(DamageSource source) {
+        super.die(source);
         Entity sourceentity = source.getEntity();
         if (sourceentity == null)
             return;
@@ -235,70 +237,75 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
             Advancement _adv = _player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "kill_knight_and_horse"));
             AdvancementProgress _ap;
             if (_adv != null) {
-				_ap = _player.getAdvancements().getOrStartProgress(_adv);
-				if (!_ap.isDone()) {
-					for (String criteria : _ap.getRemainingCriteria())
-						_player.getAdvancements().award(_adv, criteria);
-				}
-			}
+                _ap = _player.getAdvancements().getOrStartProgress(_adv);
+                if (!_ap.isDone()) {
+                    for (String criteria : _ap.getRemainingCriteria())
+                        _player.getAdvancements().award(_adv, criteria);
+                }
+            }
         }
     }
 
-	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-		EntityUtils.initLastKnightAttributes(this);
-		this.setAnimation("animation.last_knight_horse.start");
-		if (this.getAttributes().hasAttribute(ForgeMod.SWIM_SPEED.get()))
-			this.getAttribute(ForgeMod.SWIM_SPEED.get())
-					.setBaseValue((this.getAttributes().hasAttribute(ForgeMod.SWIM_SPEED.get()) ? this.getAttribute(ForgeMod.SWIM_SPEED.get()).getBaseValue() : 0) * 12);
-		new Object() {
-			void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
-				if (isAlive()) {
-					LastKnightAndHorseEntity.this.setHealth((float) (LastKnightAndHorseEntity.this.getMaxHealth() * (1 - (timedloopiterator + 1) * 0.0125)));
-				}
-				final int tick2 = ticks;
-				CaerulaArborMod.queueServerWork(tick2, () -> {
-					if (timedlooptotal > timedloopiterator + 1) {
-						timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
-					}
-				});
-			}
-		}.timedLoop(0, 40, 1);
-		return retval;
-	}
+    @Override
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
+        SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
+        if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get())) {
+            this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).setBaseValue(20);
+        }
+        if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())) {
+            this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(60);
+        }
+        this.setAnimation("animation.last_knight_horse.start");
+        if (this.getAttributes().hasAttribute(ForgeMod.SWIM_SPEED.get()))
+            this.getAttribute(ForgeMod.SWIM_SPEED.get())
+                    .setBaseValue((this.getAttributes().hasAttribute(ForgeMod.SWIM_SPEED.get()) ? this.getAttribute(ForgeMod.SWIM_SPEED.get()).getBaseValue() : 0) * 12);
+        new Object() {
+            void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
+                if (isAlive()) {
+                    LastKnightAndHorseEntity.this.setHealth((float) (LastKnightAndHorseEntity.this.getMaxHealth() * (1 - (timedloopiterator + 1) * 0.0125)));
+                }
+                final int tick2 = ticks;
+                CaerulaArborMod.queueServerWork(tick2, () -> {
+                    if (timedlooptotal > timedloopiterator + 1) {
+                        timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
+                    }
+                });
+            }
+        }.timedLoop(0, 40, 1);
+        return retval;
+    }
 
-	@Override
-	public void addAdditionalSaveData(CompoundTag compound) {
-		super.addAdditionalSaveData(compound);
-		compound.putString("Texture", this.getTextureName());
-		compound.putInt("Addition", this.entityData.get(DATA_ADDITION));
-		compound.putInt("SkillCooldown", this.entityData.get(DATA_SKILL_COOLDOWN));
-		compound.putInt("SkillDuration", this.entityData.get(DATA_SKILL_DURATION));
-	}
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putString("Texture", this.getTextureName());
+        compound.putInt("Addition", this.entityData.get(DATA_ADDITION));
+        compound.putInt("SkillCooldown", this.entityData.get(DATA_SKILL_COOLDOWN));
+        compound.putInt("SkillDuration", this.entityData.get(DATA_SKILL_DURATION));
+    }
 
-	@Override
-	public void readAdditionalSaveData(CompoundTag compound) {
-		super.readAdditionalSaveData(compound);
-		if (compound.contains("Texture"))
-			this.setTextureName(compound.getString("Texture"));
-		if (compound.contains("Addition"))
-			this.entityData.set(DATA_ADDITION, compound.getInt("Addition"));
-		else if (compound.contains("Dataaddiiton"))
-			this.entityData.set(DATA_ADDITION, compound.getInt("Dataaddiiton"));
-		if (compound.contains("SkillCooldown"))
-			this.entityData.set(DATA_SKILL_COOLDOWN, compound.getInt("SkillCooldown"));
-		else if (compound.contains("Dataskillp"))
-			this.entityData.set(DATA_SKILL_COOLDOWN, compound.getInt("Dataskillp"));
-		if (compound.contains("SkillDuration"))
-			this.entityData.set(DATA_SKILL_DURATION, compound.getInt("SkillDuration"));
-		else if (compound.contains("Dataduration"))
-			this.entityData.set(DATA_SKILL_DURATION, compound.getInt("Dataduration"));
-	}
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        if (compound.contains("Texture"))
+            this.setTextureName(compound.getString("Texture"));
+        if (compound.contains("Addition"))
+            this.entityData.set(DATA_ADDITION, compound.getInt("Addition"));
+        else if (compound.contains("Dataaddiiton"))
+            this.entityData.set(DATA_ADDITION, compound.getInt("Dataaddiiton"));
+        if (compound.contains("SkillCooldown"))
+            this.entityData.set(DATA_SKILL_COOLDOWN, compound.getInt("SkillCooldown"));
+        else if (compound.contains("Dataskillp"))
+            this.entityData.set(DATA_SKILL_COOLDOWN, compound.getInt("Dataskillp"));
+        if (compound.contains("SkillDuration"))
+            this.entityData.set(DATA_SKILL_DURATION, compound.getInt("SkillDuration"));
+        else if (compound.contains("Dataduration"))
+            this.entityData.set(DATA_SKILL_DURATION, compound.getInt("Dataduration"));
+    }
 
-	@Override
-	public void awardKillScore(Entity entity, int score, DamageSource damageSource) {
-		super.awardKillScore(entity, score, damageSource);
+    @Override
+    public void awardKillScore(Entity entity, int score, DamageSource damageSource) {
+        super.awardKillScore(entity, score, damageSource);
         LevelAccessor world = this.level();
         if ((this.getHealth()) < (this.getMaxHealth())) {
             this.setHealth((float) ((this.getHealth()) + (this.getMaxHealth()) * 0.03));
@@ -307,9 +314,9 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
         }
     }
 
-	@Override
-	public void baseTick() {
-		super.baseTick();
+    @Override
+    public void baseTick() {
+        super.baseTick();
         LevelAccessor world = this.level();
         double x = this.getX();
         double y = this.getY();
@@ -326,15 +333,15 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
                 if (!this.level().isClientSide())
                     this.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 20, 0, false, false));
                 if ((this.getHealth()) > (this.getMaxHealth()) * 0.5) {
-					final Vec3 _center = new Vec3(x, y, z);
-					List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(48 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-					for (Entity entityiterator : _entfound) {
-						if (entityiterator.getTicksFrozen() >= 125 && entityiterator.isAlive()) {
-							entityiterator.setTicksFrozen(200);
-							if (entityiterator instanceof LivingEntity _entity && !this.level().isClientSide())
-								this.addEffect(new MobEffectInstance(CAMobEffects.FROZEN.get(), 20, 0, false, false));
-						}
-					}
+                    final Vec3 _center = new Vec3(x, y, z);
+                    List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(48 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+                    for (Entity entityiterator : _entfound) {
+                        if (entityiterator.getTicksFrozen() >= 125 && entityiterator.isAlive()) {
+                            entityiterator.setTicksFrozen(200);
+                            if (entityiterator instanceof LivingEntity _entity && !this.level().isClientSide())
+                                this.addEffect(new MobEffectInstance(CAMobEffects.FROZEN.get(), 20, 0, false, false));
+                        }
+                    }
                 }
                 enemy = this.getTarget();
                 if (!(enemy == null) && enemy.isAlive()) {
@@ -395,7 +402,7 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
                                                 _player.getCooldowns().addCooldown(_player.getUseItem().getItem(), 100);
                                             }
                                             if (world instanceof Level _level) {
-                                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.shield.break")), SoundSource.HOSTILE, 1, 1);
+                                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.shield.break")), SoundSource.HOSTILE, 1, 1);
                                             }
                                         }
                                         CaerulaArborMod.queueServerWork(7, () -> {
@@ -415,185 +422,183 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
             }
         }
         this.refreshDimensions();
-	}
+    }
 
-	@Override
-	public EntityDimensions getDimensions(Pose p_33597_) {
-		return super.getDimensions(p_33597_).scale((float) 1);
-	}
+    @Override
+    public EntityDimensions getDimensions(Pose p_33597_) {
+        return super.getDimensions(p_33597_).scale((float) 1);
+    }
 
-	@Override
-	public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
-		LastKnightAndHorseEntity retval = CAEntities.LAST_KNIGHT_AND_HORSE.get().create(serverWorld);
-		retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null, null);
-		return retval;
-	}
+    @Override
+    public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
+        LastKnightAndHorseEntity retval = CAEntities.LAST_KNIGHT_AND_HORSE.get().create(serverWorld);
+        retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null, null);
+        return retval;
+    }
 
-	@Override
-	public boolean isFood(ItemStack stack) {
-		return List.of().contains(stack.getItem());
-	}
+    @Override
+    public boolean isFood(ItemStack stack) {
+        return List.of().contains(stack.getItem());
+    }
 
-	@Override
-	public boolean isPushable() {
-		return false;
-	}
+    @Override
+    public boolean isPushable() {
+        return false;
+    }
 
-	@Override
-	protected void doPush(Entity entityIn) {
-	}
+    @Override
+    protected void doPush(Entity entityIn) {
+    }
 
-	@Override
-	protected void pushEntities() {
-	}
+    @Override
+    protected void pushEntities() {
+    }
 
-	@Override
-	public boolean canChangeDimensions() {
-		return false;
-	}
+    @Override
+    public boolean canChangeDimensions() {
+        return false;
+    }
 
-	@Override
-	public void startSeenByPlayer(ServerPlayer player) {
-		super.startSeenByPlayer(player);
-		this.bossInfo.addPlayer(player);
-	}
+    @Override
+    public void startSeenByPlayer(ServerPlayer player) {
+        super.startSeenByPlayer(player);
+        this.bossInfo.addPlayer(player);
+    }
 
-	@Override
-	public void stopSeenByPlayer(ServerPlayer player) {
-		super.stopSeenByPlayer(player);
-		this.bossInfo.removePlayer(player);
-	}
+    @Override
+    public void stopSeenByPlayer(ServerPlayer player) {
+        super.stopSeenByPlayer(player);
+        this.bossInfo.removePlayer(player);
+    }
 
-	@Override
-	public void customServerAiStep() {
-		super.customServerAiStep();
-		this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
-	}
+    @Override
+    public void customServerAiStep() {
+        super.customServerAiStep();
+        this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
+    }
 
-	@Override
-	public void aiStep() {
-		super.aiStep();
-		this.updateSwingTime();
-	}
+    @Override
+    public void aiStep() {
+        super.aiStep();
+        this.updateSwingTime();
+    }
 
-	public static void init() {
-	}
 
-	public static AttributeSupplier.Builder createAttributes() {
-		AttributeSupplier.Builder builder = Mob.createMobAttributes();
-		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.25);
-		builder = builder.add(Attributes.MAX_HEALTH, 400);
-		builder = builder.add(Attributes.ARMOR, 24);
-		builder = builder.add(Attributes.ATTACK_DAMAGE, 20);
-		builder = builder.add(Attributes.FOLLOW_RANGE, 36);
-		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
-		builder = builder.add(Attributes.ATTACK_KNOCKBACK, 0.5);
-		return builder;
-	}
+    public static AttributeSupplier.Builder createAttributes() {
+        AttributeSupplier.Builder builder = Mob.createMobAttributes();
+        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.25);
+        builder = builder.add(Attributes.MAX_HEALTH, 400);
+        builder = builder.add(Attributes.ARMOR, 24);
+        builder = builder.add(Attributes.ATTACK_DAMAGE, 20);
+        builder = builder.add(Attributes.FOLLOW_RANGE, 36);
+        builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
+        builder = builder.add(Attributes.ATTACK_KNOCKBACK, 0.5);
+        return builder;
+    }
 
-	private PlayState movementPredicate(AnimationState event) {
-		if (this.animationprocedure.equals("empty")) {
-			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
+    private PlayState movementPredicate(AnimationState event) {
+        if (this.animationprocedure.equals("empty")) {
+            if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
 
-			) {
-				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.last_knight_horse.move"));
-			}
-			if (this.isDeadOrDying()) {
-				return event.setAndContinue(RawAnimation.begin().thenPlay("animation.last_knight_horse.die"));
-			}
-			return event.setAndContinue(RawAnimation.begin().thenLoop("animation.last_knight_horse.idle"));
-		}
-		return PlayState.STOP;
-	}
+            ) {
+                return event.setAndContinue(RawAnimation.begin().thenLoop("animation.last_knight_horse.move"));
+            }
+            if (this.isDeadOrDying()) {
+                return event.setAndContinue(RawAnimation.begin().thenPlay("animation.last_knight_horse.die"));
+            }
+            return event.setAndContinue(RawAnimation.begin().thenLoop("animation.last_knight_horse.idle"));
+        }
+        return PlayState.STOP;
+    }
 
-	private PlayState attackingPredicate(AnimationState event) {
-		double d1 = this.getX() - this.xOld;
-		double d0 = this.getZ() - this.zOld;
+    private PlayState attackingPredicate(AnimationState event) {
+        double d1 = this.getX() - this.xOld;
+        double d0 = this.getZ() - this.zOld;
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
-			this.swinging = true;
-			this.lastSwing = level().getGameTime();
-		}
-		if (this.swinging && this.lastSwing + 19L <= level().getGameTime()) {
-			this.swinging = false;
-		}
-		if (this.swinging && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
-			event.getController().forceAnimationReset();
-			return event.setAndContinue(RawAnimation.begin().thenPlay("animation.last_knight_horse.atack"));
-		}
-		return PlayState.CONTINUE;
-	}
+            this.swinging = true;
+            this.lastSwing = level().getGameTime();
+        }
+        if (this.swinging && this.lastSwing + 19L <= level().getGameTime()) {
+            this.swinging = false;
+        }
+        if (this.swinging && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+            event.getController().forceAnimationReset();
+            return event.setAndContinue(RawAnimation.begin().thenPlay("animation.last_knight_horse.atack"));
+        }
+        return PlayState.CONTINUE;
+    }
 
-	String prevAnim = "empty";
+    String prevAnim = "empty";
 
-	private PlayState procedurePredicate(AnimationState event) {
-		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
-			if (!this.animationprocedure.equals(prevAnim))
-				event.getController().forceAnimationReset();
-			event.getController().setAnimation(RawAnimation.begin().thenPlay(this.animationprocedure));
-			if (event.getController().getAnimationState() == AnimationController.State.STOPPED) {
-				this.animationprocedure = "empty";
-				event.getController().forceAnimationReset();
-			}
-		} else if (animationprocedure.equals("empty")) {
-			prevAnim = "empty";
-			return PlayState.STOP;
-		}
-		prevAnim = this.animationprocedure;
-		return PlayState.CONTINUE;
-	}
+    private PlayState procedurePredicate(AnimationState event) {
+        if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
+            if (!this.animationprocedure.equals(prevAnim))
+                event.getController().forceAnimationReset();
+            event.getController().setAnimation(RawAnimation.begin().thenPlay(this.animationprocedure));
+            if (event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+                this.animationprocedure = "empty";
+                event.getController().forceAnimationReset();
+            }
+        } else if (animationprocedure.equals("empty")) {
+            prevAnim = "empty";
+            return PlayState.STOP;
+        }
+        prevAnim = this.animationprocedure;
+        return PlayState.CONTINUE;
+    }
 
-	@Override
-	protected void tickDeath() {
-		++this.deathTime;
-		if (this.deathTime == 40) {
-			this.remove(LastKnightAndHorseEntity.RemovalReason.KILLED);
-			this.dropExperience();
-		}
-	}
+    @Override
+    protected void tickDeath() {
+        ++this.deathTime;
+        if (this.deathTime == 40) {
+            this.remove(RemovalReason.KILLED);
+            this.dropExperience();
+        }
+    }
 
-	public String getSyncedAnimation() {
-		return this.entityData.get(ANIMATION);
-	}
+    public String getSyncedAnimation() {
+        return this.entityData.get(ANIMATION);
+    }
 
-	public void setAnimation(String animation) {
-		this.entityData.set(ANIMATION, animation);
-	}
+    public void setAnimation(String animation) {
+        this.entityData.set(ANIMATION, animation);
+    }
 
-	public void applyLastKnightFreeze(Entity sourceEntity) {
-		if (sourceEntity == null) {
-			return;
-		}
-		int frozenDuration = this.getHealth() < this.getMaxHealth() * 0.5F ? 80 : 40;
-		double frozenTicks = sourceEntity.getTicksFrozen();
-		if (frozenTicks < 140) {
-			sourceEntity.setTicksFrozen((int) Math.min(frozenTicks + frozenDuration, 200));
-			return;
-		}
-		if (!(sourceEntity instanceof LivingEntity living) || !living.hasEffect(CAMobEffects.FROZEN.get())) {
-			this.level().playSound(null, BlockPos.containing(sourceEntity.getX(), sourceEntity.getY(), sourceEntity.getZ()),
-					ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "last_jnight_freeze")), SoundSource.HOSTILE,
-					4, (float) Mth.nextDouble(RandomSource.create(), 1, 1.15));
-		}
-		if (sourceEntity instanceof LivingEntity living && !living.level().isClientSide()) {
-			living.addEffect(new MobEffectInstance(CAMobEffects.FROZEN.get(), frozenDuration, 0, false, false));
-		}
-	}
+    public void applyLastKnightFreeze(Entity sourceEntity) {
+        if (sourceEntity == null) {
+            return;
+        }
+        int frozenDuration = this.getHealth() < this.getMaxHealth() * 0.5F ? 80 : 40;
+        double frozenTicks = sourceEntity.getTicksFrozen();
+        if (frozenTicks < 140) {
+            sourceEntity.setTicksFrozen((int) Math.min(frozenTicks + frozenDuration, 200));
+            return;
+        }
+        if (!(sourceEntity instanceof LivingEntity living) || !living.hasEffect(CAMobEffects.FROZEN.get())) {
+            this.level().playSound(null, BlockPos.containing(sourceEntity.getX(), sourceEntity.getY(), sourceEntity.getZ()),
+                    ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "last_jnight_freeze")), SoundSource.HOSTILE,
+                    4, (float) Mth.nextDouble(RandomSource.create(), 1, 1.15));
+        }
+        if (sourceEntity instanceof LivingEntity living && !living.level().isClientSide()) {
+            living.addEffect(new MobEffectInstance(CAMobEffects.FROZEN.get(), frozenDuration, 0, false, false));
+        }
+    }
 
-	@Override
-	public void registerControllers(AnimatableManager.ControllerRegistrar data) {
-		data.add(new AnimationController<>(this, "movement", 0, this::movementPredicate));
-		data.add(new AnimationController<>(this, "attacking", 0, this::attackingPredicate));
-		data.add(new AnimationController<>(this, "procedure", 0, this::procedurePredicate));
-	}
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar data) {
+        data.add(new AnimationController<>(this, "movement", 0, this::movementPredicate));
+        data.add(new AnimationController<>(this, "attacking", 0, this::attackingPredicate));
+        data.add(new AnimationController<>(this, "procedure", 0, this::procedurePredicate));
+    }
 
-	@Override
-	public AnimatableInstanceCache getAnimatableInstanceCache() {
-		return this.cache;
-	}
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return this.cache;
+    }
 
 
-	@Override
-	public void setAnimationProcedure(String animation) {
-		this.animationprocedure = animation;
-	}
+    @Override
+    public void setAnimationProcedure(String animation) {
+        this.animationprocedure = animation;
+    }
 }

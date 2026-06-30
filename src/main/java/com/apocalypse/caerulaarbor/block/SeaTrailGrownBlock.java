@@ -4,7 +4,7 @@ import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.init.CABlocks;
 import com.apocalypse.caerulaarbor.init.CAGameRules;
 import com.apocalypse.caerulaarbor.procedures.PokePlayerProcedure;
-import com.apocalypse.caerulaarbor.procedures.TrailReplaceProcedure;
+import com.apocalypse.caerulaarbor.util.CaerulaUtil;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.StrategyUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
@@ -186,7 +186,7 @@ public class SeaTrailGrownBlock extends Block implements SimpleWaterloggedBlock,
 								if (fluidBlock == Blocks.WATER || fluidBlock == Blocks.BUBBLE_COLUMN) {
 									watered = true;
 								}
-								TrailReplaceProcedure.execute(world, blockToPlace, watered, placePos.getX(), placePos.getY(), placePos.getZ());
+								CaerulaUtil.replaceTrail(world, blockToPlace, watered, placePos.getX(), placePos.getY(), placePos.getZ());
 							}
 						}
 					}

@@ -49,156 +49,156 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 
 public class OceanizedRavagerEntity extends SeaMonster {
-	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedRavagerEntity.class, EntityDataSerializers.STRING);
-	private boolean swinging;
-	private boolean lastloop;
-	private long lastSwing;
-	public String animationprocedure = "empty";
+    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedRavagerEntity.class, EntityDataSerializers.STRING);
+    private boolean swinging;
+    private boolean lastloop;
+    private long lastSwing;
+    public String animationprocedure = "empty";
 
-	public OceanizedRavagerEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CAEntities.OCEANIZED_RAVAGER.get(), world);
-	}
+    public OceanizedRavagerEntity(PlayMessages.SpawnEntity packet, Level world) {
+        this(CAEntities.OCEANIZED_RAVAGER.get(), world);
+    }
 
-	public OceanizedRavagerEntity(EntityType<OceanizedRavagerEntity> type, Level world) {
-		super(type, world);
-		xpReward = 24;
-		setNoAi(false);
-		setMaxUpStep(1.5f);
-		setPersistenceRequired();
-	}
+    public OceanizedRavagerEntity(EntityType<OceanizedRavagerEntity> type, Level world) {
+        super(type, world);
+        xpReward = 24;
+        setNoAi(false);
+        setMaxUpStep(1.5f);
+        setPersistenceRequired();
+    }
 
-	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(ANIMATION, "undefined");
-	}
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(ANIMATION, "undefined");
+    }
 
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
-	}
+    @Override
+    public Packet<ClientGamePacketListener> getAddEntityPacket() {
+        return NetworkHooks.getEntitySpawningPacket(this);
+    }
 
-	@Override
-	protected void registerGoals() {
-		super.registerGoals();
-		this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-		this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.75, false) {
-			@Override
-			protected double getAttackReachSqr(LivingEntity entity) {
-				return 12.25;
-			}
-		});
-		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, true, false));
-		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, SnowGolem.class, true, false));
-		this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Villager.class, true, false));
-		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, Illusioner.class, true, false));
-		this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, Pillager.class, true, false));
-		this.targetSelector.addGoal(8, new NearestAttackableTargetGoal<>(this, Vindicator.class, true, false));
-		this.targetSelector.addGoal(9, new NearestAttackableTargetGoal<>(this, Witch.class, true, false));
-		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
-		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
-		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
-		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Player.class, true, false) {
-			@Override
-			public boolean canUse() {
-				double x = OceanizedRavagerEntity.this.getX();
-				double y = OceanizedRavagerEntity.this.getY();
-				double z = OceanizedRavagerEntity.this.getZ();
-				Level world = OceanizedRavagerEntity.this.level();
-				return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
-			}
+    @Override
+    protected void registerGoals() {
+        super.registerGoals();
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.75, false) {
+            @Override
+            protected double getAttackReachSqr(LivingEntity entity) {
+                return 12.25;
+            }
+        });
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, true, false));
+        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, SnowGolem.class, true, false));
+        this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Villager.class, true, false));
+        this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, Illusioner.class, true, false));
+        this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, Pillager.class, true, false));
+        this.targetSelector.addGoal(8, new NearestAttackableTargetGoal<>(this, Vindicator.class, true, false));
+        this.targetSelector.addGoal(9, new NearestAttackableTargetGoal<>(this, Witch.class, true, false));
+        this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
+        this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
+        this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
+        this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Player.class, true, false) {
+            @Override
+            public boolean canUse() {
+                double x = OceanizedRavagerEntity.this.getX();
+                double y = OceanizedRavagerEntity.this.getY();
+                double z = OceanizedRavagerEntity.this.getZ();
+                Level world = OceanizedRavagerEntity.this.level();
+                return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
+            }
 
-			@Override
-			public boolean canContinueToUse() {
-				double x = OceanizedRavagerEntity.this.getX();
-				double y = OceanizedRavagerEntity.this.getY();
-				double z = OceanizedRavagerEntity.this.getZ();
-				Level world = OceanizedRavagerEntity.this.level();
-				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
-			}
-		});
-		this.targetSelector.addGoal(14, new NearestAttackableTargetGoal<>(this, Animal.class, true, false) {
-			@Override
-			public boolean canUse() {
-				return super.canUse() && EntityUtils.canAttackAnimals();
-			}
+            @Override
+            public boolean canContinueToUse() {
+                double x = OceanizedRavagerEntity.this.getX();
+                double y = OceanizedRavagerEntity.this.getY();
+                double z = OceanizedRavagerEntity.this.getZ();
+                Level world = OceanizedRavagerEntity.this.level();
+                return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
+            }
+        });
+        this.targetSelector.addGoal(14, new NearestAttackableTargetGoal<>(this, Animal.class, true, false) {
+            @Override
+            public boolean canUse() {
+                return super.canUse() && EntityUtils.canAttackAnimals();
+            }
 
-			@Override
-			public boolean canContinueToUse() {
-				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
-			}
-		});
-		this.goalSelector.addGoal(15, new RandomStrollGoal(this, 1));
-		this.goalSelector.addGoal(16, new RandomLookAroundGoal(this));
-	}
+            @Override
+            public boolean canContinueToUse() {
+                return super.canContinueToUse() && EntityUtils.canAttackAnimals();
+            }
+        });
+        this.goalSelector.addGoal(15, new RandomStrollGoal(this, 1));
+        this.goalSelector.addGoal(16, new RandomLookAroundGoal(this));
+    }
 
-	@Override
-	public MobType getMobType() {
-		return MobType.UNDEFINED;
-	}
+    @Override
+    public MobType getMobType() {
+        return MobType.UNDEFINED;
+    }
 
-	@Override
-	public boolean removeWhenFarAway(double distanceToClosestPlayer) {
-		return false;
-	}
+    @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        return false;
+    }
 
-	@Override
-	public SoundEvent getAmbientSound() {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.ravager.ambient"));
-	}
+    @Override
+    public SoundEvent getAmbientSound() {
+        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.ravager.ambient"));
+    }
 
-	@Override
-	public void playStepSound(BlockPos pos, BlockState blockIn) {
-		this.playSound(ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.ravager.step")), 0.15f, 1);
-	}
+    @Override
+    public void playStepSound(BlockPos pos, BlockState blockIn) {
+        this.playSound(ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.ravager.step")), 0.15f, 1);
+    }
 
-	@Override
-	public SoundEvent getHurtSound(DamageSource ds) {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.ravager.hurt"));
-	}
+    @Override
+    public SoundEvent getHurtSound(DamageSource ds) {
+        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.ravager.hurt"));
+    }
 
-	@Override
-	public SoundEvent getDeathSound() {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.ravager.death"));
-	}
+    @Override
+    public SoundEvent getDeathSound() {
+        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.ravager.death"));
+    }
 
-	@Override
-	public boolean doHurtTarget(Entity target) {
-		if (!this.level().isClientSide()) {
-			CaerulaArborMod.queueServerWork(11, () -> {
-				if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 3.8) {
-					target.hurt(
-							new DamageSource(
-									this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
-											.getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "general_seaborn_attack"))),
-									this),
-							(float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
-				}
-			});
-		}
-		return true;
-	}
+    @Override
+    public boolean doHurtTarget(Entity target) {
+        if (!this.level().isClientSide()) {
+            CaerulaArborMod.queueServerWork(11, () -> {
+                if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 3.8) {
+                    target.hurt(
+                            new DamageSource(
+                                    this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
+                                            .getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "general_seaborn_attack"))),
+                                    this),
+                            (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
+                }
+            });
+        }
+        return true;
+    }
 
-	@Override
-	public boolean hurt(DamageSource source, float amount) {
-		if (source.is(DamageTypes.DROWN))
-			return false;
-		return super.hurt(source, amount);
-	}
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        if (source.is(DamageTypes.DROWN))
+            return false;
+        return super.hurt(source, amount);
+    }
 
-	@Override
-	public void addAdditionalSaveData(CompoundTag compound) {
-		super.addAdditionalSaveData(compound);
-	}
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+    }
 
-	@Override
-	public void readAdditionalSaveData(CompoundTag compound) {
-		super.readAdditionalSaveData(compound);
-	}
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+    }
 
-	@Override
-	public void baseTick() {
-		super.baseTick();
+    @Override
+    public void baseTick() {
+        super.baseTick();
         LevelAccessor world = this.level();
         double x = this.getX();
         double y = this.getY();
@@ -236,109 +236,107 @@ public class OceanizedRavagerEntity extends SeaMonster {
             }
         }
         this.refreshDimensions();
-	}
+    }
 
-	@Override
-	public EntityDimensions getDimensions(Pose p_33597_) {
-		return super.getDimensions(p_33597_).scale((float) 1);
-	}
+    @Override
+    public EntityDimensions getDimensions(Pose p_33597_) {
+        return super.getDimensions(p_33597_).scale((float) 1);
+    }
 
-	public static void init() {
-	}
 
-	public static AttributeSupplier.Builder createAttributes() {
-		AttributeSupplier.Builder builder = Mob.createMobAttributes();
-		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.15);
-		builder = builder.add(Attributes.MAX_HEALTH, 215);
-		builder = builder.add(Attributes.ARMOR, 6);
-		builder = builder.add(Attributes.ATTACK_DAMAGE, 17);
-		builder = builder.add(Attributes.FOLLOW_RANGE, 27);
-		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 1);
-		builder = builder.add(Attributes.ATTACK_KNOCKBACK, 1);
-		return builder;
-	}
+    public static AttributeSupplier.Builder createAttributes() {
+        AttributeSupplier.Builder builder = Mob.createMobAttributes();
+        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.15);
+        builder = builder.add(Attributes.MAX_HEALTH, 215);
+        builder = builder.add(Attributes.ARMOR, 6);
+        builder = builder.add(Attributes.ATTACK_DAMAGE, 17);
+        builder = builder.add(Attributes.FOLLOW_RANGE, 27);
+        builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 1);
+        builder = builder.add(Attributes.ATTACK_KNOCKBACK, 1);
+        return builder;
+    }
 
-	private PlayState movementPredicate(AnimationState event) {
-		if (this.animationprocedure.equals("empty")) {
-			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
+    private PlayState movementPredicate(AnimationState event) {
+        if (this.animationprocedure.equals("empty")) {
+            if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
 
-					&& !this.isAggressive()) {
-				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_ravager.walk"));
-			}
-			if (this.isDeadOrDying()) {
-				return event.setAndContinue(RawAnimation.begin().thenPlay("animation.oceanized_ravager.die"));
-			}
-			if (this.isAggressive() && event.isMoving()) {
-				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_ravager.sprint"));
-			}
-			return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_ravager.idle"));
-		}
-		return PlayState.STOP;
-	}
+                    && !this.isAggressive()) {
+                return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_ravager.walk"));
+            }
+            if (this.isDeadOrDying()) {
+                return event.setAndContinue(RawAnimation.begin().thenPlay("animation.oceanized_ravager.die"));
+            }
+            if (this.isAggressive() && event.isMoving()) {
+                return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_ravager.sprint"));
+            }
+            return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_ravager.idle"));
+        }
+        return PlayState.STOP;
+    }
 
-	private PlayState attackingPredicate(AnimationState event) {
-		double d1 = this.getX() - this.xOld;
-		double d0 = this.getZ() - this.zOld;
+    private PlayState attackingPredicate(AnimationState event) {
+        double d1 = this.getX() - this.xOld;
+        double d0 = this.getZ() - this.zOld;
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
-			this.swinging = true;
-			this.lastSwing = level().getGameTime();
-		}
-		if (this.swinging && this.lastSwing + 19L <= level().getGameTime()) {
-			this.swinging = false;
-		}
-		if (this.swinging && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
-			event.getController().forceAnimationReset();
-			return event.setAndContinue(RawAnimation.begin().thenPlay("animation.oceanized_ravager.attack"));
-		}
-		return PlayState.CONTINUE;
-	}
+            this.swinging = true;
+            this.lastSwing = level().getGameTime();
+        }
+        if (this.swinging && this.lastSwing + 19L <= level().getGameTime()) {
+            this.swinging = false;
+        }
+        if (this.swinging && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+            event.getController().forceAnimationReset();
+            return event.setAndContinue(RawAnimation.begin().thenPlay("animation.oceanized_ravager.attack"));
+        }
+        return PlayState.CONTINUE;
+    }
 
-	String prevAnim = "empty";
+    String prevAnim = "empty";
 
-	private PlayState procedurePredicate(AnimationState event) {
-		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
-			if (!this.animationprocedure.equals(prevAnim))
-				event.getController().forceAnimationReset();
-			event.getController().setAnimation(RawAnimation.begin().thenPlay(this.animationprocedure));
-			if (event.getController().getAnimationState() == AnimationController.State.STOPPED) {
-				this.animationprocedure = "empty";
-				event.getController().forceAnimationReset();
-			}
-		} else if (animationprocedure.equals("empty")) {
-			prevAnim = "empty";
-			return PlayState.STOP;
-		}
-		prevAnim = this.animationprocedure;
-		return PlayState.CONTINUE;
-	}
+    private PlayState procedurePredicate(AnimationState event) {
+        if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
+            if (!this.animationprocedure.equals(prevAnim))
+                event.getController().forceAnimationReset();
+            event.getController().setAnimation(RawAnimation.begin().thenPlay(this.animationprocedure));
+            if (event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+                this.animationprocedure = "empty";
+                event.getController().forceAnimationReset();
+            }
+        } else if (animationprocedure.equals("empty")) {
+            prevAnim = "empty";
+            return PlayState.STOP;
+        }
+        prevAnim = this.animationprocedure;
+        return PlayState.CONTINUE;
+    }
 
-	@Override
-	protected void tickDeath() {
-		++this.deathTime;
-		if (this.deathTime == 30) {
-			this.remove(OceanizedRavagerEntity.RemovalReason.KILLED);
-			this.dropExperience();
-		}
-	}
+    @Override
+    protected void tickDeath() {
+        ++this.deathTime;
+        if (this.deathTime == 30) {
+            this.remove(RemovalReason.KILLED);
+            this.dropExperience();
+        }
+    }
 
-	public String getSyncedAnimation() {
-		return this.entityData.get(ANIMATION);
-	}
+    public String getSyncedAnimation() {
+        return this.entityData.get(ANIMATION);
+    }
 
-	public void setAnimation(String animation) {
-		this.entityData.set(ANIMATION, animation);
-	}
+    public void setAnimation(String animation) {
+        this.entityData.set(ANIMATION, animation);
+    }
 
-	@Override
-	public void registerControllers(AnimatableManager.ControllerRegistrar data) {
-		data.add(new AnimationController<>(this, "movement", 0, this::movementPredicate));
-		data.add(new AnimationController<>(this, "attacking", 0, this::attackingPredicate));
-		data.add(new AnimationController<>(this, "procedure", 0, this::procedurePredicate));
-	}
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar data) {
+        data.add(new AnimationController<>(this, "movement", 0, this::movementPredicate));
+        data.add(new AnimationController<>(this, "attacking", 0, this::attackingPredicate));
+        data.add(new AnimationController<>(this, "procedure", 0, this::procedurePredicate));
+    }
 
 
-	@Override
-	public void setAnimationProcedure(String animation) {
-		this.animationprocedure = animation;
-	}
+    @Override
+    public void setAnimationProcedure(String animation) {
+        this.animationprocedure = animation;
+    }
 }

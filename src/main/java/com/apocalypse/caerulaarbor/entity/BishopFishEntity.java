@@ -71,129 +71,130 @@ import javax.annotation.Nullable;
 
 public class BishopFishEntity extends SeaMonster {
 
-	private boolean isBishopStarted() {
-		return EntityPredicateUtils.isBishopStarted(this);
-	}
-	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(BishopFishEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<Integer> DATA_sklp = SynchedEntityData.defineId(BishopFishEntity.class, EntityDataSerializers.INT);
-	public static final EntityDataAccessor<Integer> DATA_endp = SynchedEntityData.defineId(BishopFishEntity.class, EntityDataSerializers.INT);
-	public static final EntityDataAccessor<Integer> DATA_locx = SynchedEntityData.defineId(BishopFishEntity.class, EntityDataSerializers.INT);
-	public static final EntityDataAccessor<Integer> DATA_locy = SynchedEntityData.defineId(BishopFishEntity.class, EntityDataSerializers.INT);
-	public static final EntityDataAccessor<Integer> DATA_locz = SynchedEntityData.defineId(BishopFishEntity.class, EntityDataSerializers.INT);
-	public static final EntityDataAccessor<Integer> DATA_summonp = SynchedEntityData.defineId(BishopFishEntity.class, EntityDataSerializers.INT);
-	public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(BishopFishEntity.class, EntityDataSerializers.INT);
-	private boolean swinging;
-	private boolean lastloop;
-	private long lastSwing;
-	public String animationprocedure = "empty";
-	private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.NOTCHED_10);
+    private boolean isBishopStarted() {
+        return EntityPredicateUtils.isBishopStarted(this);
+    }
 
-	public BishopFishEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CAEntities.BISHOP_FISH.get(), world);
-	}
+    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(BishopFishEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> DATA_sklp = SynchedEntityData.defineId(BishopFishEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_endp = SynchedEntityData.defineId(BishopFishEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_locx = SynchedEntityData.defineId(BishopFishEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_locy = SynchedEntityData.defineId(BishopFishEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_locz = SynchedEntityData.defineId(BishopFishEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_summonp = SynchedEntityData.defineId(BishopFishEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(BishopFishEntity.class, EntityDataSerializers.INT);
+    private boolean swinging;
+    private boolean lastloop;
+    private long lastSwing;
+    public String animationprocedure = "empty";
+    private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.NOTCHED_10);
 
-	public BishopFishEntity(EntityType<BishopFishEntity> type, Level world) {
-		super(type, world);
-		xpReward = 64;
-		setNoAi(false);
-		setMaxUpStep(2f);
-		setPersistenceRequired();
-	}
+    public BishopFishEntity(PlayMessages.SpawnEntity packet, Level world) {
+        this(CAEntities.BISHOP_FISH.get(), world);
+    }
 
-	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(DATA_sklp, 200);
-		this.entityData.define(DATA_endp, 1200);
-		this.entityData.define(DATA_locx, 0);
-		this.entityData.define(DATA_locy, 0);
-		this.entityData.define(DATA_locz, 0);
-		this.entityData.define(DATA_summonp, 280);
-		this.entityData.define(DATA_duration, 0);
-	}
-
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
-	}
-
-	@Override
-	protected void registerGoals() {
-		super.registerGoals();
-		this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-		this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 0, false) {
-			@Override
-			protected double getAttackReachSqr(LivingEntity entity) {
-				return 144;
-			}
-
-			@Override
-			public boolean canUse() {
-				return super.canUse() && isBishopStarted();
-			}
-
-			@Override
-			public boolean canContinueToUse() {
-				return super.canContinueToUse() && isBishopStarted();
-			}
-
-		});
-		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, true, false));
-		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, SnowGolem.class, true, false));
-		this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Villager.class, true, false));
-		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, Illusioner.class, true, false));
-		this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, Pillager.class, true, false));
-		this.targetSelector.addGoal(8, new NearestAttackableTargetGoal<>(this, Vindicator.class, true, false));
-		this.targetSelector.addGoal(9, new NearestAttackableTargetGoal<>(this, Witch.class, true, false));
-		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
-		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
-		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
-		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Player.class, true, false) {
-			@Override
-			public boolean canUse() {
-				double x = BishopFishEntity.this.getX();
-				double y = BishopFishEntity.this.getY();
-				double z = BishopFishEntity.this.getZ();
-				Entity entity = BishopFishEntity.this;
-				Level world = BishopFishEntity.this.level();
-				return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
-			}
-
-			@Override
-			public boolean canContinueToUse() {
-				double x = BishopFishEntity.this.getX();
-				double y = BishopFishEntity.this.getY();
-				double z = BishopFishEntity.this.getZ();
-				Level world = BishopFishEntity.this.level();
-				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
-			}
-		});
-		this.goalSelector.addGoal(14, new RandomLookAroundGoal(this));
-	}
+    public BishopFishEntity(EntityType<BishopFishEntity> type, Level world) {
+        super(type, world);
+        xpReward = 64;
+        setNoAi(false);
+        setMaxUpStep(2f);
+        setPersistenceRequired();
+    }
 
     @Override
-	public boolean removeWhenFarAway(double distanceToClosestPlayer) {
-		return false;
-	}
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(ANIMATION, "undefined");
+        this.entityData.define(DATA_sklp, 200);
+        this.entityData.define(DATA_endp, 1200);
+        this.entityData.define(DATA_locx, 0);
+        this.entityData.define(DATA_locy, 0);
+        this.entityData.define(DATA_locz, 0);
+        this.entityData.define(DATA_summonp, 280);
+        this.entityData.define(DATA_duration, 0);
+    }
 
-	@Override
-	public SoundEvent getAmbientSound() {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.elder_guardian.ambient"));
-	}
+    @Override
+    public Packet<ClientGamePacketListener> getAddEntityPacket() {
+        return NetworkHooks.getEntitySpawningPacket(this);
+    }
 
-	@Override
-	public SoundEvent getHurtSound(DamageSource ds) {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.elder_guardian.hurt"));
-	}
+    @Override
+    protected void registerGoals() {
+        super.registerGoals();
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 0, false) {
+            @Override
+            protected double getAttackReachSqr(LivingEntity entity) {
+                return 144;
+            }
 
-	@Override
-	public SoundEvent getDeathSound() {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.elder_guardian.death"));
-	}
+            @Override
+            public boolean canUse() {
+                return super.canUse() && isBishopStarted();
+            }
 
-	@Override
-	public boolean hurt(DamageSource source, float amount) {
+            @Override
+            public boolean canContinueToUse() {
+                return super.canContinueToUse() && isBishopStarted();
+            }
+
+        });
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, true, false));
+        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, SnowGolem.class, true, false));
+        this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Villager.class, true, false));
+        this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, Illusioner.class, true, false));
+        this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, Pillager.class, true, false));
+        this.targetSelector.addGoal(8, new NearestAttackableTargetGoal<>(this, Vindicator.class, true, false));
+        this.targetSelector.addGoal(9, new NearestAttackableTargetGoal<>(this, Witch.class, true, false));
+        this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
+        this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
+        this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
+        this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Player.class, true, false) {
+            @Override
+            public boolean canUse() {
+                double x = BishopFishEntity.this.getX();
+                double y = BishopFishEntity.this.getY();
+                double z = BishopFishEntity.this.getZ();
+                Entity entity = BishopFishEntity.this;
+                Level world = BishopFishEntity.this.level();
+                return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
+            }
+
+            @Override
+            public boolean canContinueToUse() {
+                double x = BishopFishEntity.this.getX();
+                double y = BishopFishEntity.this.getY();
+                double z = BishopFishEntity.this.getZ();
+                Level world = BishopFishEntity.this.level();
+                return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
+            }
+        });
+        this.goalSelector.addGoal(14, new RandomLookAroundGoal(this));
+    }
+
+    @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        return false;
+    }
+
+    @Override
+    public SoundEvent getAmbientSound() {
+        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.elder_guardian.ambient"));
+    }
+
+    @Override
+    public SoundEvent getHurtSound(DamageSource ds) {
+        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.elder_guardian.hurt"));
+    }
+
+    @Override
+    public SoundEvent getDeathSound() {
+        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.elder_guardian.death"));
+    }
+
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
         LevelAccessor world = this.level();
         double x = this.getX();
         double y = this.getY();
@@ -211,7 +212,7 @@ public class BishopFishEntity extends SeaMonster {
                 if ((Entity) this instanceof BishopFishEntity _datEntSetI)
                     _datEntSetI.getEntityData().set(DATA_duration, ((Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0) + 20);
                 if (world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "bishopfish_flap")), SoundSource.HOSTILE, 3, 1);
+                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "bishopfish_flap")), SoundSource.HOSTILE, 3, 1);
                 }
                 new Object() {
                     void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
@@ -324,7 +325,7 @@ public class BishopFishEntity extends SeaMonster {
                         if (world instanceof ServerLevel _level)
                             _level.sendParticles(ParticleTypes.SMOKE, (x + dx), (yfnl + 0.5), (z + dz), 16, 0.5, 0.5, 0.5, 0.2);
                         if (world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x + dx, yfnl, z + dz), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.guardian.flop")), SoundSource.HOSTILE, 1, 1);
+                            _level.playSound(null, BlockPos.containing(x + dx, yfnl, z + dz), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.guardian.flop")), SoundSource.HOSTILE, 1, 1);
                         }
                     }
                     if (this.hasEffect(CAMobEffects.ANGER_OF_BISHOP.get())) {
@@ -338,19 +339,19 @@ public class BishopFishEntity extends SeaMonster {
             }
         }
         if (source.is(DamageTypes.FALL))
-			return false;
-		if (source.is(DamageTypes.DROWN))
-			return false;
-		if (source.is(DamageTypes.LIGHTNING_BOLT))
-			return false;
-		if (source.is(DamageTypes.FALLING_ANVIL))
-			return false;
-		return super.hurt(source, amount);
-	}
+            return false;
+        if (source.is(DamageTypes.DROWN))
+            return false;
+        if (source.is(DamageTypes.LIGHTNING_BOLT))
+            return false;
+        if (source.is(DamageTypes.FALLING_ANVIL))
+            return false;
+        return super.hurt(source, amount);
+    }
 
-	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
+    @Override
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
+        SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
@@ -368,67 +369,67 @@ public class BishopFishEntity extends SeaMonster {
         if (!this.level().isClientSide())
             this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 80, 1, false, false));
         if ((LevelAccessor) world instanceof Level _level) {
-                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.emerge")), SoundSource.HOSTILE, 3, 1);
+            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.emerge")), SoundSource.HOSTILE, 3, 1);
         }
-		this.setAnimation("animation.bishop.start1");
-		return retval;
-	}
+        this.setAnimation("animation.bishop.start1");
+        return retval;
+    }
 
-	@Override
-	public void addAdditionalSaveData(CompoundTag compound) {
-		super.addAdditionalSaveData(compound);
-		compound.putInt("SkillCooldown", this.entityData.get(DATA_sklp));
-		compound.putInt("BlastCooldown", this.entityData.get(DATA_endp));
-		compound.putInt("AnchorX", this.entityData.get(DATA_locx));
-		compound.putInt("AnchorY", this.entityData.get(DATA_locy));
-		compound.putInt("AnchorZ", this.entityData.get(DATA_locz));
-		compound.putInt("SummonCooldown", this.entityData.get(DATA_summonp));
-		compound.putInt("Duration", this.entityData.get(DATA_duration));
-	}
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putInt("SkillCooldown", this.entityData.get(DATA_sklp));
+        compound.putInt("BlastCooldown", this.entityData.get(DATA_endp));
+        compound.putInt("AnchorX", this.entityData.get(DATA_locx));
+        compound.putInt("AnchorY", this.entityData.get(DATA_locy));
+        compound.putInt("AnchorZ", this.entityData.get(DATA_locz));
+        compound.putInt("SummonCooldown", this.entityData.get(DATA_summonp));
+        compound.putInt("Duration", this.entityData.get(DATA_duration));
+    }
 
-	@Override
-	public void readAdditionalSaveData(CompoundTag compound) {
-		super.readAdditionalSaveData(compound);
-		if (compound.contains("SkillCooldown")) {
-			this.entityData.set(DATA_sklp, compound.getInt("SkillCooldown"));
-		} else if (compound.contains("Datasklp")) {
-			this.entityData.set(DATA_sklp, compound.getInt("Datasklp"));
-		}
-		if (compound.contains("BlastCooldown")) {
-			this.entityData.set(DATA_endp, compound.getInt("BlastCooldown"));
-		} else if (compound.contains("Dataendp")) {
-			this.entityData.set(DATA_endp, compound.getInt("Dataendp"));
-		}
-		if (compound.contains("AnchorX")) {
-			this.entityData.set(DATA_locx, compound.getInt("AnchorX"));
-		} else if (compound.contains("Datalocx")) {
-			this.entityData.set(DATA_locx, compound.getInt("Datalocx"));
-		}
-		if (compound.contains("AnchorY")) {
-			this.entityData.set(DATA_locy, compound.getInt("AnchorY"));
-		} else if (compound.contains("Datalocy")) {
-			this.entityData.set(DATA_locy, compound.getInt("Datalocy"));
-		}
-		if (compound.contains("AnchorZ")) {
-			this.entityData.set(DATA_locz, compound.getInt("AnchorZ"));
-		} else if (compound.contains("Datalocz")) {
-			this.entityData.set(DATA_locz, compound.getInt("Datalocz"));
-		}
-		if (compound.contains("SummonCooldown")) {
-			this.entityData.set(DATA_summonp, compound.getInt("SummonCooldown"));
-		} else if (compound.contains("Datasummonp")) {
-			this.entityData.set(DATA_summonp, compound.getInt("Datasummonp"));
-		}
-		if (compound.contains("Duration")) {
-			this.entityData.set(DATA_duration, compound.getInt("Duration"));
-		} else if (compound.contains("Dataduration")) {
-			this.entityData.set(DATA_duration, compound.getInt("Dataduration"));
-		}
-	}
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        if (compound.contains("SkillCooldown")) {
+            this.entityData.set(DATA_sklp, compound.getInt("SkillCooldown"));
+        } else if (compound.contains("Datasklp")) {
+            this.entityData.set(DATA_sklp, compound.getInt("Datasklp"));
+        }
+        if (compound.contains("BlastCooldown")) {
+            this.entityData.set(DATA_endp, compound.getInt("BlastCooldown"));
+        } else if (compound.contains("Dataendp")) {
+            this.entityData.set(DATA_endp, compound.getInt("Dataendp"));
+        }
+        if (compound.contains("AnchorX")) {
+            this.entityData.set(DATA_locx, compound.getInt("AnchorX"));
+        } else if (compound.contains("Datalocx")) {
+            this.entityData.set(DATA_locx, compound.getInt("Datalocx"));
+        }
+        if (compound.contains("AnchorY")) {
+            this.entityData.set(DATA_locy, compound.getInt("AnchorY"));
+        } else if (compound.contains("Datalocy")) {
+            this.entityData.set(DATA_locy, compound.getInt("Datalocy"));
+        }
+        if (compound.contains("AnchorZ")) {
+            this.entityData.set(DATA_locz, compound.getInt("AnchorZ"));
+        } else if (compound.contains("Datalocz")) {
+            this.entityData.set(DATA_locz, compound.getInt("Datalocz"));
+        }
+        if (compound.contains("SummonCooldown")) {
+            this.entityData.set(DATA_summonp, compound.getInt("SummonCooldown"));
+        } else if (compound.contains("Datasummonp")) {
+            this.entityData.set(DATA_summonp, compound.getInt("Datasummonp"));
+        }
+        if (compound.contains("Duration")) {
+            this.entityData.set(DATA_duration, compound.getInt("Duration"));
+        } else if (compound.contains("Dataduration")) {
+            this.entityData.set(DATA_duration, compound.getInt("Dataduration"));
+        }
+    }
 
-	@Override
-	public void baseTick() {
-		super.baseTick();
+    @Override
+    public void baseTick() {
+        super.baseTick();
         LevelAccessor world = this.level();
         double x = this.getX();
         double y = this.getY();
@@ -438,7 +439,8 @@ public class BishopFishEntity extends SeaMonster {
         double smm;
         double d;
         if (this.getHealth() <= this.getMaxHealth() * 0.67) {
-            if (!this.level().isClientSide() && !this.hasEffect(CAMobEffects.ANGER_OF_BISHOP.get())) {;
+            if (!this.level().isClientSide() && !this.hasEffect(CAMobEffects.ANGER_OF_BISHOP.get())) {
+                ;
                 if (this.getHealth() <= this.getMaxHealth() * 0.33) {
                     this.addEffect(new MobEffectInstance(CAMobEffects.ANGER_OF_BISHOP.get(), 20, 1));
                 } else {
@@ -470,7 +472,7 @@ public class BishopFishEntity extends SeaMonster {
                 if ((Entity) this instanceof BishopFishEntity _datEntSetI)
                     _datEntSetI.getEntityData().set(DATA_duration, (int) (d + 40));
                 if (world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "bishopfish_blast")), SoundSource.HOSTILE, 4, 1);
+                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "bishopfish_blast")), SoundSource.HOSTILE, 4, 1);
                 }
                 if (!this.level().isClientSide())
                     this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 40, 0));
@@ -496,7 +498,7 @@ public class BishopFishEntity extends SeaMonster {
                         if (world instanceof ServerLevel _level)
                             _level.sendParticles(ParticleTypes.CLOUD, (x + dx1), (yfnl + 1), (z + dz1), 64, 1, 1, 1, 0.1);
                         if (world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x + dx1, yfnl + 1, z + dz1), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("ambient.underwater.enter")), SoundSource.NEUTRAL, (float) 1.5, 1);
+                            _level.playSound(null, BlockPos.containing(x + dx1, yfnl + 1, z + dz1), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("ambient.underwater.enter")), SoundSource.NEUTRAL, (float) 1.5, 1);
                         }
                         for (Entity entityiterator : world.getEntities(BishopFishEntity.this, new AABB((x + 18), y, (z + 18), (x - 18), (y + 12), (z - 18)))) {
                             if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
@@ -547,115 +549,113 @@ public class BishopFishEntity extends SeaMonster {
             }
         }
         this.refreshDimensions();
-	}
+    }
 
-	@Override
-	public EntityDimensions getDimensions(Pose p_33597_) {
-		return super.getDimensions(p_33597_).scale((float) 5);
-	}
+    @Override
+    public EntityDimensions getDimensions(Pose p_33597_) {
+        return super.getDimensions(p_33597_).scale((float) 5);
+    }
 
-	@Override
-	public boolean isPushable() {
-		return false;
-	}
+    @Override
+    public boolean isPushable() {
+        return false;
+    }
 
-	@Override
-	protected void doPush(Entity entityIn) {
-	}
+    @Override
+    protected void doPush(Entity entityIn) {
+    }
 
-	@Override
-	protected void pushEntities() {
-	}
+    @Override
+    protected void pushEntities() {
+    }
 
-	@Override
-	public boolean canChangeDimensions() {
-		return false;
-	}
+    @Override
+    public boolean canChangeDimensions() {
+        return false;
+    }
 
-	@Override
-	public void startSeenByPlayer(ServerPlayer player) {
-		super.startSeenByPlayer(player);
-		this.bossInfo.addPlayer(player);
-	}
+    @Override
+    public void startSeenByPlayer(ServerPlayer player) {
+        super.startSeenByPlayer(player);
+        this.bossInfo.addPlayer(player);
+    }
 
-	@Override
-	public void stopSeenByPlayer(ServerPlayer player) {
-		super.stopSeenByPlayer(player);
-		this.bossInfo.removePlayer(player);
-	}
+    @Override
+    public void stopSeenByPlayer(ServerPlayer player) {
+        super.stopSeenByPlayer(player);
+        this.bossInfo.removePlayer(player);
+    }
 
-	@Override
-	public void customServerAiStep() {
-		super.customServerAiStep();
-		this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
-	}
+    @Override
+    public void customServerAiStep() {
+        super.customServerAiStep();
+        this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
+    }
 
-	public static void init() {
-	}
 
-	public static AttributeSupplier.Builder createAttributes() {
-		AttributeSupplier.Builder builder = Mob.createMobAttributes();
-		builder = builder.add(Attributes.MOVEMENT_SPEED, 0);
-		builder = builder.add(Attributes.MAX_HEALTH, 560);
-		builder = builder.add(Attributes.ARMOR, 8);
-		builder = builder.add(Attributes.ATTACK_DAMAGE, 7);
-		builder = builder.add(Attributes.FOLLOW_RANGE, 64);
-		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
-		return builder;
-	}
+    public static AttributeSupplier.Builder createAttributes() {
+        AttributeSupplier.Builder builder = Mob.createMobAttributes();
+        builder = builder.add(Attributes.MOVEMENT_SPEED, 0);
+        builder = builder.add(Attributes.MAX_HEALTH, 560);
+        builder = builder.add(Attributes.ARMOR, 8);
+        builder = builder.add(Attributes.ATTACK_DAMAGE, 7);
+        builder = builder.add(Attributes.FOLLOW_RANGE, 64);
+        builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
+        return builder;
+    }
 
-	private PlayState movementPredicate(AnimationState event) {
-		if (this.isDeadOrDying()) {
-			return event.setAndContinue(RawAnimation.begin().thenPlay("animation.bishop.die"));
-		}
-		if (this.animationprocedure.equals("empty")) {
-			return event.setAndContinue(RawAnimation.begin().thenLoop("animation.bishop.idle"));
-		}
-		return PlayState.STOP;
-	}
+    private PlayState movementPredicate(AnimationState event) {
+        if (this.isDeadOrDying()) {
+            return event.setAndContinue(RawAnimation.begin().thenPlay("animation.bishop.die"));
+        }
+        if (this.animationprocedure.equals("empty")) {
+            return event.setAndContinue(RawAnimation.begin().thenLoop("animation.bishop.idle"));
+        }
+        return PlayState.STOP;
+    }
 
-	private PlayState attackingPredicate(AnimationState event) {
-		double d1 = this.getX() - this.xOld;
-		double d0 = this.getZ() - this.zOld;
-		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
-			this.swinging = true;
-			this.lastSwing = level().getGameTime();
-		}
-		if (this.swinging && this.lastSwing + 19L <= level().getGameTime()) {
-			this.swinging = false;
-		}
-		if (this.swinging && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
-			event.getController().forceAnimationReset();
-			return event.setAndContinue(RawAnimation.begin().thenPlay("animation.bishop.attack"));
-		}
-		return PlayState.CONTINUE;
-	}
+    private PlayState attackingPredicate(AnimationState event) {
+        double d1 = this.getX() - this.xOld;
+        double d0 = this.getZ() - this.zOld;
+        if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
+            this.swinging = true;
+            this.lastSwing = level().getGameTime();
+        }
+        if (this.swinging && this.lastSwing + 19L <= level().getGameTime()) {
+            this.swinging = false;
+        }
+        if (this.swinging && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+            event.getController().forceAnimationReset();
+            return event.setAndContinue(RawAnimation.begin().thenPlay("animation.bishop.attack"));
+        }
+        return PlayState.CONTINUE;
+    }
 
-	String prevAnim = "empty";
+    String prevAnim = "empty";
 
-	private PlayState procedurePredicate(AnimationState event) {
-		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
-			if (!this.animationprocedure.equals(prevAnim))
-				event.getController().forceAnimationReset();
-			event.getController().setAnimation(RawAnimation.begin().thenPlay(this.animationprocedure));
-			if (event.getController().getAnimationState() == AnimationController.State.STOPPED) {
-				this.animationprocedure = "empty";
-				event.getController().forceAnimationReset();
-			}
-		} else if (animationprocedure.equals("empty")) {
-			prevAnim = "empty";
-			return PlayState.STOP;
-		}
-		prevAnim = this.animationprocedure;
-		return PlayState.CONTINUE;
-	}
+    private PlayState procedurePredicate(AnimationState event) {
+        if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
+            if (!this.animationprocedure.equals(prevAnim))
+                event.getController().forceAnimationReset();
+            event.getController().setAnimation(RawAnimation.begin().thenPlay(this.animationprocedure));
+            if (event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+                this.animationprocedure = "empty";
+                event.getController().forceAnimationReset();
+            }
+        } else if (animationprocedure.equals("empty")) {
+            prevAnim = "empty";
+            return PlayState.STOP;
+        }
+        prevAnim = this.animationprocedure;
+        return PlayState.CONTINUE;
+    }
 
-	@Override
-	protected void tickDeath() {
-		++this.deathTime;
-		if (this.deathTime == 40) {
-			this.remove(BishopFishEntity.RemovalReason.KILLED);
-			this.dropExperience();
+    @Override
+    protected void tickDeath() {
+        ++this.deathTime;
+        if (this.deathTime == 40) {
+            this.remove(RemovalReason.KILLED);
+            this.dropExperience();
             LevelAccessor world = this.level();
             if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
                 if (!world.isClientSide() && world.getServer() != null) {
@@ -671,26 +671,26 @@ public class BishopFishEntity extends SeaMonster {
                 }
             }
         }
-	}
+    }
 
-	public String getSyncedAnimation() {
-		return this.entityData.get(ANIMATION);
-	}
+    public String getSyncedAnimation() {
+        return this.entityData.get(ANIMATION);
+    }
 
-	public void setAnimation(String animation) {
-		this.entityData.set(ANIMATION, animation);
-	}
+    public void setAnimation(String animation) {
+        this.entityData.set(ANIMATION, animation);
+    }
 
-	@Override
-	public void registerControllers(AnimatableManager.ControllerRegistrar data) {
-		data.add(new AnimationController<>(this, "movement", 0, this::movementPredicate));
-		data.add(new AnimationController<>(this, "attacking", 0, this::attackingPredicate));
-		data.add(new AnimationController<>(this, "procedure", 0, this::procedurePredicate));
-	}
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar data) {
+        data.add(new AnimationController<>(this, "movement", 0, this::movementPredicate));
+        data.add(new AnimationController<>(this, "attacking", 0, this::attackingPredicate));
+        data.add(new AnimationController<>(this, "procedure", 0, this::procedurePredicate));
+    }
 
 
-	@Override
-	public void setAnimationProcedure(String animation) {
-		this.animationprocedure = animation;
-	}
+    @Override
+    public void setAnimationProcedure(String animation) {
+        this.animationprocedure = animation;
+    }
 }

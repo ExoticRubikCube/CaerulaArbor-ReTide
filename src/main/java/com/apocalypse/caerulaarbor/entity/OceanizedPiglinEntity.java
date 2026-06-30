@@ -137,7 +137,7 @@ public class OceanizedPiglinEntity extends SeaMonster implements PolarMountRider
 		this.goalSelector.addGoal(19, new FloatGoal(this));
 	}
 
-    @Override
+	@Override
 	public SoundEvent getAmbientSound() {
 		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "piglin_ambient"));
 	}
@@ -194,36 +194,37 @@ public class OceanizedPiglinEntity extends SeaMonster implements PolarMountRider
 	@Override
 	public void awardKillScore(Entity entity, int score, DamageSource damageSource) {
 		super.awardKillScore(entity, score, damageSource);
-        LevelAccessor world = this.level();
-        double x = this.getX();
-        double y = this.getY();
-        double z = this.getZ();
-        double ablty;
-        ablty = (Entity) this instanceof OceanizedPiglinEntity _datEntI ? _datEntI.getEntityData().get(DATA_ability) : 0;
-        if (ablty < 5) {
-            if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
-                this.getAttribute(Attributes.ATTACK_DAMAGE)
-                        .setBaseValue(((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) + 3));
-            if ((Entity) this instanceof OceanizedPiglinEntity _datEntSetI)
-                _datEntSetI.getEntityData().set(DATA_ability, (int) (ablty + 1));
-            if (world instanceof ServerLevel _level)
-                _level.sendParticles(ParticleTypes.LAVA, x, (y + 0.75), z, 32, 0.75, 0.75, 0.75, 0.1);
-        }
-        if (this.getHealth() < this.getMaxHealth()) {;
-            this.heal((float) (this.getMaxHealth() * 0.15));
-            if (world instanceof ServerLevel _level)
-                _level.sendParticles(ParticleTypes.HAPPY_VILLAGER, x, (y + 0.75), z, 32, 0.75, 0.75, 0.75, 0.1);
-        }
-        if (entity instanceof Hoglin) {
-            if (Math.random() < 0.1) {
-                if (this instanceof OceanizedPiglinEntity) {
-                    this.setAnimation("animation.oceanized_piglin.celebrate");
-                }
-                if (!this.level().isClientSide())
-                    this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 55, 9, false, false));
-            }
-        }
-    }
+		LevelAccessor world = this.level();
+		double x = this.getX();
+		double y = this.getY();
+		double z = this.getZ();
+		double ablty;
+		ablty = (Entity) this instanceof OceanizedPiglinEntity _datEntI ? _datEntI.getEntityData().get(DATA_ability) : 0;
+		if (ablty < 5) {
+			if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
+				this.getAttribute(Attributes.ATTACK_DAMAGE)
+						.setBaseValue(((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) + 3));
+			if ((Entity) this instanceof OceanizedPiglinEntity _datEntSetI)
+				_datEntSetI.getEntityData().set(DATA_ability, (int) (ablty + 1));
+			if (world instanceof ServerLevel _level)
+				_level.sendParticles(ParticleTypes.LAVA, x, (y + 0.75), z, 32, 0.75, 0.75, 0.75, 0.1);
+		}
+		if (this.getHealth() < this.getMaxHealth()) {
+			;
+			this.heal((float) (this.getMaxHealth() * 0.15));
+			if (world instanceof ServerLevel _level)
+				_level.sendParticles(ParticleTypes.HAPPY_VILLAGER, x, (y + 0.75), z, 32, 0.75, 0.75, 0.75, 0.1);
+		}
+		if (entity instanceof Hoglin) {
+			if (Math.random() < 0.1) {
+				if (this instanceof OceanizedPiglinEntity) {
+					this.setAnimation("animation.oceanized_piglin.celebrate");
+				}
+				if (!this.level().isClientSide())
+					this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 55, 9, false, false));
+			}
+		}
+	}
 
 	@Override
 	public void baseTick() {
@@ -236,8 +237,7 @@ public class OceanizedPiglinEntity extends SeaMonster implements PolarMountRider
 		return super.getDimensions(p_33597_).scale((float) 1);
 	}
 
-	public static void init() {
-	}
+	
 
 	public static AttributeSupplier.Builder createAttributes() {
 		AttributeSupplier.Builder builder = Mob.createMobAttributes();
@@ -306,7 +306,7 @@ public class OceanizedPiglinEntity extends SeaMonster implements PolarMountRider
 	protected void tickDeath() {
 		++this.deathTime;
 		if (this.deathTime == 20) {
-			this.remove(OceanizedPiglinEntity.RemovalReason.KILLED);
+			this.remove(RemovalReason.KILLED);
 			this.dropExperience();
 		}
 	}

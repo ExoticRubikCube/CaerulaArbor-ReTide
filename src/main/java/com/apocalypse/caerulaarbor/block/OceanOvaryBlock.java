@@ -16,8 +16,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -104,7 +102,7 @@ public class OceanOvaryBlock extends AbstractOvaryBlock {
 			boolean finished = false;
 			if (blockstate.getValue(BLOCKSTATE) == 0) {
 				double rate = 0.05D;
-				int strategyBreed = MapVariables.get(world).strategy_breed;
+				double strategyBreed = MapVariables.get(world).strategy_breed;
 				if (strategyBreed >= 2) {
 					rate = 0.08D;
 				}
@@ -113,7 +111,7 @@ public class OceanOvaryBlock extends AbstractOvaryBlock {
 				}
 				int output = blockstate.getValue(OUTPUT);
 				if (random.nextFloat() < output * 0.005F) {
-					int cloneLimit = Math.min(CaerulaConfigsConfiguration.CLONE_NUM.get(), world.getGameRules().getInt(CAGameRules.CLONE_NUMBER_LIMIT));
+					double cloneLimit = Math.min(CaerulaConfigsConfiguration.CLONE_NUM.get(), world.getGameRules().getInt(CAGameRules.CLONE_NUMBER_LIMIT));
 					if (EntityUtils.getSeabornNum(world, pos.getX(), pos.getY(), pos.getZ()) >= cloneLimit) {
 						finished = true;
 					} else {
@@ -139,22 +137,22 @@ public class OceanOvaryBlock extends AbstractOvaryBlock {
 	public InteractionResult use(BlockState blockstate, Level world, BlockPos pos, Player entity, InteractionHand hand, BlockHitResult hit) {
 		super.use(blockstate, world, pos, entity, hand, hit);
 		InteractionResult result = InteractionResult.PASS;
-		if (entity != null) {
-			ItemStack fed = ItemStack.EMPTY;
-			if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).is(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "fish_food")))) {
-				fed = ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).copy();
-			} else if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).is(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "fish_food")))) {
-				fed = ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).copy();
-			}
-			if (fed.is(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "fish_food")))) {
-				if (blockstate.getValue(BLOCKSTATE) == 1) {
-					world.setBlock(pos, world.getBlockState(pos).setValue(BLOCKSTATE, 0).setValue(OUTPUT, 0), 3);
-					world.playSound(null, pos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.panda.eat")), SoundSource.BLOCKS, 0.95F, 1.0F);
-					fed.shrink(1);
-					result = InteractionResult.SUCCESS;
-				}
-			}
-		}
-		return result;
+        ItemStack fed = ItemStack.EMPTY;
+        if (entity.getMainHandItem().is(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "fish_food")))) {
+            fed = entity.getMainHandItem().copy();
+        } else {
+            if (entity.getOffhandItem().is(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "fish_food")))) {
+                fed = entity.getOffhandItem().copy();
+            }
+        }
+        if (fed.is(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "fish_food")))) {
+            if (blockstate.getValue(BLOCKSTATE) == 1) {
+                world.setBlock(pos, world.getBlockState(pos).setValue(BLOCKSTATE, 0).setValue(OUTPUT, 0), 3);
+                world.playSound(null, pos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.panda.eat")), SoundSource.BLOCKS, 0.95F, 1.0F);
+                fed.shrink(1);
+                result = InteractionResult.SUCCESS;
+            }
+        }
+        return result;
 	}
 }

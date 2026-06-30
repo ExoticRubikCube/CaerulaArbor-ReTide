@@ -50,117 +50,117 @@ import java.util.Comparator;
 import java.util.List;
 
 public class WarriorPriestEntity extends Animal implements GeoEntity, SyncedAnimationEntity {
-	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(WarriorPriestEntity.class, EntityDataSerializers.BOOLEAN);
-	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(WarriorPriestEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(WarriorPriestEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<Integer> DATA_skill_p = SynchedEntityData.defineId(WarriorPriestEntity.class, EntityDataSerializers.INT);
-	public static final EntityDataAccessor<Integer> DATA_skill_p1 = SynchedEntityData.defineId(WarriorPriestEntity.class, EntityDataSerializers.INT);
-	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
-	private boolean swinging;
-	private boolean lastloop;
-	private long lastSwing;
-	public String animationprocedure = "empty";
+    public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(WarriorPriestEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(WarriorPriestEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(WarriorPriestEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> DATA_skill_p = SynchedEntityData.defineId(WarriorPriestEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_skill_p1 = SynchedEntityData.defineId(WarriorPriestEntity.class, EntityDataSerializers.INT);
+    private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+    private boolean swinging;
+    private boolean lastloop;
+    private long lastSwing;
+    public String animationprocedure = "empty";
 
-	public WarriorPriestEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CAEntities.WARRIOR_PRIEST.get(), world);
-	}
+    public WarriorPriestEntity(PlayMessages.SpawnEntity packet, Level world) {
+        this(CAEntities.WARRIOR_PRIEST.get(), world);
+    }
 
-	public WarriorPriestEntity(EntityType<WarriorPriestEntity> type, Level world) {
-		super(type, world);
-		xpReward = 11;
-		setNoAi(false);
-		setMaxUpStep(0.8f);
-		setPersistenceRequired();
-	}
+    public WarriorPriestEntity(EntityType<WarriorPriestEntity> type, Level world) {
+        super(type, world);
+        xpReward = 11;
+        setNoAi(false);
+        setMaxUpStep(0.8f);
+        setPersistenceRequired();
+    }
 
-	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(SHOOT, false);
-		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(TEXTURE, "warriorpriest_texture");
-		this.entityData.define(DATA_skill_p, 100);
-		this.entityData.define(DATA_skill_p1, 200);
-	}
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(SHOOT, false);
+        this.entityData.define(ANIMATION, "undefined");
+        this.entityData.define(TEXTURE, "warriorpriest_texture");
+        this.entityData.define(DATA_skill_p, 100);
+        this.entityData.define(DATA_skill_p1, 200);
+    }
 
-	public void setTexture(String texture) {
-		this.entityData.set(TEXTURE, texture);
-	}
+    public void setTexture(String texture) {
+        this.entityData.set(TEXTURE, texture);
+    }
 
-	public String getTexture() {
-		return this.entityData.get(TEXTURE);
-	}
+    public String getTexture() {
+        return this.entityData.get(TEXTURE);
+    }
 
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
-	}
+    @Override
+    public Packet<ClientGamePacketListener> getAddEntityPacket() {
+        return NetworkHooks.getEntitySpawningPacket(this);
+    }
 
-	@Override
-	protected void registerGoals() {
-		super.registerGoals();
-		this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1, false) {
-			@Override
-			protected double getAttackReachSqr(LivingEntity entity) {
-				return 4.84;
-			}
-		});
-		this.targetSelector.addGoal(2, new HurtByTargetGoal(this));
-		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Monster.class, true, false));
-		this.goalSelector.addGoal(4, new RandomStrollGoal(this, 1));
-		this.goalSelector.addGoal(5, new OpenDoorGoal(this, false));
-		this.goalSelector.addGoal(6, new OpenDoorGoal(this, true));
-		this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
-		this.goalSelector.addGoal(8, new FloatGoal(this));
-	}
+    @Override
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1, false) {
+            @Override
+            protected double getAttackReachSqr(LivingEntity entity) {
+                return 4.84;
+            }
+        });
+        this.targetSelector.addGoal(2, new HurtByTargetGoal(this));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Monster.class, true, false));
+        this.goalSelector.addGoal(4, new RandomStrollGoal(this, 1));
+        this.goalSelector.addGoal(5, new OpenDoorGoal(this, false));
+        this.goalSelector.addGoal(6, new OpenDoorGoal(this, true));
+        this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(8, new FloatGoal(this));
+    }
 
-	@Override
-	public MobType getMobType() {
-		return MobType.UNDEFINED;
-	}
+    @Override
+    public MobType getMobType() {
+        return MobType.UNDEFINED;
+    }
 
-	@Override
-	public boolean removeWhenFarAway(double distanceToClosestPlayer) {
-		return false;
-	}
+    @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        return false;
+    }
 
-	protected void dropCustomDeathLoot(DamageSource source, int looting, boolean recentlyHitIn) {
-		super.dropCustomDeathLoot(source, looting, recentlyHitIn);
-		this.spawnAtLocation(new ItemStack(Blocks.WHITE_TULIP));
-	}
+    protected void dropCustomDeathLoot(DamageSource source, int looting, boolean recentlyHitIn) {
+        super.dropCustomDeathLoot(source, looting, recentlyHitIn);
+        this.spawnAtLocation(new ItemStack(Blocks.WHITE_TULIP));
+    }
 
-	@Override
-	public SoundEvent getHurtSound(DamageSource ds) {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.generic.hurt"));
-	}
+    @Override
+    public SoundEvent getHurtSound(DamageSource ds) {
+        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.generic.hurt"));
+    }
 
-	@Override
-	public SoundEvent getDeathSound() {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.generic.death"));
-	}
+    @Override
+    public SoundEvent getDeathSound() {
+        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.generic.death"));
+    }
 
-	@Override
-	public boolean doHurtTarget(Entity target) {
-		if (!this.level().isClientSide()) {
-			CaerulaArborMod.queueServerWork(8, () -> {
-				if (this.isAlive() && target.isAlive()) {
-					target.hurt(
-							new DamageSource(
-									this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
-											.getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "generic_warrior_attack"))),
-									this),
-							(float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
-					if (target instanceof LivingEntity livingTarget && !livingTarget.level().isClientSide()) {
-						livingTarget.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 60, 1, false, true));
-					}
-				}
-			});
-		}
-		return true;
-	}
+    @Override
+    public boolean doHurtTarget(Entity target) {
+        if (!this.level().isClientSide()) {
+            CaerulaArborMod.queueServerWork(8, () -> {
+                if (this.isAlive() && target.isAlive()) {
+                    target.hurt(
+                            new DamageSource(
+                                    this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
+                                            .getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "generic_warrior_attack"))),
+                                    this),
+                            (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
+                    if (target instanceof LivingEntity livingTarget && !livingTarget.level().isClientSide()) {
+                        livingTarget.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 60, 1, false, true));
+                    }
+                }
+            });
+        }
+        return true;
+    }
 
-	@Override
-	public boolean hurt(DamageSource source, float amount) {
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
         LevelAccessor world = this.level();
         double x = this.getX();
         double y = this.getY();
@@ -179,7 +179,7 @@ public class WarriorPriestEntity extends Animal implements GeoEntity, SyncedAnim
                         if (sourceentity.isAlive()) {
                             ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((sourceentity.getX()), (sourceentity.getY()), (sourceentity.getZ())));
                             if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("intentionally_empty")), SoundSource.HOSTILE, (float) 2.5, 1);
+                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("intentionally_empty")), SoundSource.HOSTILE, (float) 2.5, 1);
                             }
                             sourceentity.hurt(
                                     new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "generic_warrior_attack"))), this),
@@ -191,30 +191,30 @@ public class WarriorPriestEntity extends Animal implements GeoEntity, SyncedAnim
             }
         }
         return super.hurt(source, amount);
-	}
+    }
 
-	@Override
-	public void addAdditionalSaveData(CompoundTag compound) {
-		super.addAdditionalSaveData(compound);
-		compound.putString("Texture", this.getTexture());
-		compound.putInt("Dataskill_p", this.entityData.get(DATA_skill_p));
-		compound.putInt("Dataskill_p1", this.entityData.get(DATA_skill_p1));
-	}
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putString("Texture", this.getTexture());
+        compound.putInt("Dataskill_p", this.entityData.get(DATA_skill_p));
+        compound.putInt("Dataskill_p1", this.entityData.get(DATA_skill_p1));
+    }
 
-	@Override
-	public void readAdditionalSaveData(CompoundTag compound) {
-		super.readAdditionalSaveData(compound);
-		if (compound.contains("Texture"))
-			this.setTexture(compound.getString("Texture"));
-		if (compound.contains("Dataskill_p"))
-			this.entityData.set(DATA_skill_p, compound.getInt("Dataskill_p"));
-		if (compound.contains("Dataskill_p1"))
-			this.entityData.set(DATA_skill_p1, compound.getInt("Dataskill_p1"));
-	}
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        if (compound.contains("Texture"))
+            this.setTexture(compound.getString("Texture"));
+        if (compound.contains("Dataskill_p"))
+            this.entityData.set(DATA_skill_p, compound.getInt("Dataskill_p"));
+        if (compound.contains("Dataskill_p1"))
+            this.entityData.set(DATA_skill_p1, compound.getInt("Dataskill_p1"));
+    }
 
-	@Override
-	public void baseTick() {
-		super.baseTick();
+    @Override
+    public void baseTick() {
+        super.baseTick();
         LevelAccessor world = this.level();
         double sklp1;
         double skillp;
@@ -249,126 +249,124 @@ public class WarriorPriestEntity extends Animal implements GeoEntity, SyncedAnim
             }
         }
         this.refreshDimensions();
-	}
+    }
 
-	@Override
-	public EntityDimensions getDimensions(Pose p_33597_) {
-		return super.getDimensions(p_33597_).scale((float) 1);
-	}
+    @Override
+    public EntityDimensions getDimensions(Pose p_33597_) {
+        return super.getDimensions(p_33597_).scale((float) 1);
+    }
 
-	@Override
-	public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
-		WarriorPriestEntity retval = CAEntities.WARRIOR_PRIEST.get().create(serverWorld);
-		retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null, null);
-		return retval;
-	}
+    @Override
+    public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
+        WarriorPriestEntity retval = CAEntities.WARRIOR_PRIEST.get().create(serverWorld);
+        retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null, null);
+        return retval;
+    }
 
-	@Override
-	public boolean isFood(ItemStack stack) {
-		return List.of().contains(stack.getItem());
-	}
+    @Override
+    public boolean isFood(ItemStack stack) {
+        return List.of().contains(stack.getItem());
+    }
 
-	@Override
-	public void aiStep() {
-		super.aiStep();
-		this.updateSwingTime();
-	}
-
-	public static void init() {
-	}
-
-	public static AttributeSupplier.Builder createAttributes() {
-		AttributeSupplier.Builder builder = Mob.createMobAttributes();
-		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.25);
-		builder = builder.add(Attributes.MAX_HEALTH, 40);
-		builder = builder.add(Attributes.ARMOR, 7);
-		builder = builder.add(Attributes.ATTACK_DAMAGE, 11);
-		builder = builder.add(Attributes.FOLLOW_RANGE, 24);
-		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.5);
-		return builder;
-	}
-
-	private PlayState movementPredicate(AnimationState event) {
-		if (this.animationprocedure.equals("empty")) {
-			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
-
-			) {
-				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.warriorpriest.move"));
-			}
-			if (this.isDeadOrDying()) {
-				return event.setAndContinue(RawAnimation.begin().thenPlay("animation.warriorpriest.dead"));
-			}
-			return event.setAndContinue(RawAnimation.begin().thenLoop("animation.warriorpriest.idle"));
-		}
-		return PlayState.STOP;
-	}
-
-	private PlayState attackingPredicate(AnimationState event) {
-		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
-			this.swinging = true;
-			this.lastSwing = level().getGameTime();
-		}
-		if (this.swinging && this.lastSwing + 19L <= level().getGameTime()) {
-			this.swinging = false;
-		}
-		if (this.swinging && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
-			event.getController().forceAnimationReset();
-			return event.setAndContinue(RawAnimation.begin().thenPlay("animation.warriorpriest.attack"));
-		}
-		return PlayState.CONTINUE;
-	}
-
-	String prevAnim = "empty";
-
-	private PlayState procedurePredicate(AnimationState event) {
-		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
-			if (!this.animationprocedure.equals(prevAnim))
-				event.getController().forceAnimationReset();
-			event.getController().setAnimation(RawAnimation.begin().thenPlay(this.animationprocedure));
-			if (event.getController().getAnimationState() == AnimationController.State.STOPPED) {
-				this.animationprocedure = "empty";
-				event.getController().forceAnimationReset();
-			}
-		} else if (animationprocedure.equals("empty")) {
-			prevAnim = "empty";
-			return PlayState.STOP;
-		}
-		prevAnim = this.animationprocedure;
-		return PlayState.CONTINUE;
-	}
-
-	@Override
-	protected void tickDeath() {
-		++this.deathTime;
-		if (this.deathTime == 20) {
-			this.remove(WarriorPriestEntity.RemovalReason.KILLED);
-			this.dropExperience();
-		}
-	}
-
-	public String getSyncedAnimation() {
-		return this.entityData.get(ANIMATION);
-	}
-
-	public void setAnimation(String animation) {
-		this.entityData.set(ANIMATION, animation);
-	}
-
-	@Override
-	public void registerControllers(AnimatableManager.ControllerRegistrar data) {
-		data.add(new AnimationController<>(this, "movement", 0, this::movementPredicate));
-		data.add(new AnimationController<>(this, "attacking", 0, this::attackingPredicate));
-		data.add(new AnimationController<>(this, "procedure", 0, this::procedurePredicate));
-	}
-
-	@Override
-	public AnimatableInstanceCache getAnimatableInstanceCache() {
-		return this.cache;
-	}
+    @Override
+    public void aiStep() {
+        super.aiStep();
+        this.updateSwingTime();
+    }
 
 
-	@Override
-	public void setAnimationProcedure(String animation) {
-		this.animationprocedure = animation;
-	}
+    public static AttributeSupplier.Builder createAttributes() {
+        AttributeSupplier.Builder builder = Mob.createMobAttributes();
+        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.25);
+        builder = builder.add(Attributes.MAX_HEALTH, 40);
+        builder = builder.add(Attributes.ARMOR, 7);
+        builder = builder.add(Attributes.ATTACK_DAMAGE, 11);
+        builder = builder.add(Attributes.FOLLOW_RANGE, 24);
+        builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.5);
+        return builder;
+    }
+
+    private PlayState movementPredicate(AnimationState event) {
+        if (this.animationprocedure.equals("empty")) {
+            if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
+
+            ) {
+                return event.setAndContinue(RawAnimation.begin().thenLoop("animation.warriorpriest.move"));
+            }
+            if (this.isDeadOrDying()) {
+                return event.setAndContinue(RawAnimation.begin().thenPlay("animation.warriorpriest.dead"));
+            }
+            return event.setAndContinue(RawAnimation.begin().thenLoop("animation.warriorpriest.idle"));
+        }
+        return PlayState.STOP;
+    }
+
+    private PlayState attackingPredicate(AnimationState event) {
+        if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
+            this.swinging = true;
+            this.lastSwing = level().getGameTime();
+        }
+        if (this.swinging && this.lastSwing + 19L <= level().getGameTime()) {
+            this.swinging = false;
+        }
+        if (this.swinging && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+            event.getController().forceAnimationReset();
+            return event.setAndContinue(RawAnimation.begin().thenPlay("animation.warriorpriest.attack"));
+        }
+        return PlayState.CONTINUE;
+    }
+
+    String prevAnim = "empty";
+
+    private PlayState procedurePredicate(AnimationState event) {
+        if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
+            if (!this.animationprocedure.equals(prevAnim))
+                event.getController().forceAnimationReset();
+            event.getController().setAnimation(RawAnimation.begin().thenPlay(this.animationprocedure));
+            if (event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+                this.animationprocedure = "empty";
+                event.getController().forceAnimationReset();
+            }
+        } else if (animationprocedure.equals("empty")) {
+            prevAnim = "empty";
+            return PlayState.STOP;
+        }
+        prevAnim = this.animationprocedure;
+        return PlayState.CONTINUE;
+    }
+
+    @Override
+    protected void tickDeath() {
+        ++this.deathTime;
+        if (this.deathTime == 20) {
+            this.remove(RemovalReason.KILLED);
+            this.dropExperience();
+        }
+    }
+
+    public String getSyncedAnimation() {
+        return this.entityData.get(ANIMATION);
+    }
+
+    public void setAnimation(String animation) {
+        this.entityData.set(ANIMATION, animation);
+    }
+
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar data) {
+        data.add(new AnimationController<>(this, "movement", 0, this::movementPredicate));
+        data.add(new AnimationController<>(this, "attacking", 0, this::attackingPredicate));
+        data.add(new AnimationController<>(this, "procedure", 0, this::procedurePredicate));
+    }
+
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return this.cache;
+    }
+
+
+    @Override
+    public void setAnimationProcedure(String animation) {
+        this.animationprocedure = animation;
+    }
 }

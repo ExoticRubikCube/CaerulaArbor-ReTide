@@ -88,7 +88,7 @@ public class AbsorberLimbEntity extends SeaMonster {
 		this.goalSelector.addGoal(1, new RandomLookAroundGoal(this));
 	}
 
-    @Override
+	@Override
 	public boolean removeWhenFarAway(double distanceToClosestPlayer) {
 		return false;
 	}
@@ -118,40 +118,40 @@ public class AbsorberLimbEntity extends SeaMonster {
 	@Override
 	public void die(DamageSource source) {
 		super.die(source);
-        LevelAccessor world = this.level();
-        double x = this.getX();
-        double y = this.getY();
-        double z = this.getZ();
-        Entity thirster;
-        thirster = world.getEntitiesOfClass(ThirsterEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true).stream().min(new Object() {
-            Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
-                return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
-            }
-        }.compareDistOf(x, y, z)).orElse(null);
-        if (!(thirster == null)) {
-            if (thirster instanceof LivingEntity _livingEntity3 && _livingEntity3.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
-                _livingEntity3.getAttribute(CAAttributes.GENERAL_DEFENSE.get())
-                        .setBaseValue(Math.max((thirster instanceof LivingEntity _livingEntity2 && _livingEntity2.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get())
-                                ? _livingEntity2.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getBaseValue()
-                                : 0) - 1, 0));
-            if (thirster instanceof LivingEntity _livingEntity5 && _livingEntity5.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())) {
-                _livingEntity5.getAttribute(CAAttributes.MAGIC_RESISTANCE.get())
-                        .setBaseValue(Math.max((_livingEntity5.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())
-                                ? _livingEntity5.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).getBaseValue()
-                                : 0) - 5, 0));
-            }
-        }
-    }
+		LevelAccessor world = this.level();
+		double x = this.getX();
+		double y = this.getY();
+		double z = this.getZ();
+		Entity thirster;
+		thirster = world.getEntitiesOfClass(ThirsterEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true).stream().min(new Object() {
+			Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
+				return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
+			}
+		}.compareDistOf(x, y, z)).orElse(null);
+		if (!(thirster == null)) {
+			if (thirster instanceof LivingEntity _livingEntity3 && _livingEntity3.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
+				_livingEntity3.getAttribute(CAAttributes.GENERAL_DEFENSE.get())
+						.setBaseValue(Math.max((thirster instanceof LivingEntity _livingEntity2 && _livingEntity2.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get())
+								? _livingEntity2.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getBaseValue()
+								: 0) - 1, 0));
+			if (thirster instanceof LivingEntity _livingEntity5 && _livingEntity5.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())) {
+				_livingEntity5.getAttribute(CAAttributes.MAGIC_RESISTANCE.get())
+						.setBaseValue(Math.max((_livingEntity5.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())
+								? _livingEntity5.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).getBaseValue()
+								: 0) - 5, 0));
+			}
+		}
+	}
 
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        LivingEntity _entity = this;
-        _entity.setHealth((((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 2) / 3);
-        if (this instanceof AbsorberLimbEntity) {
-            this.setAnimation("animation.absorber_limb.start");
-        }
-        return retval;
+		LivingEntity _entity = this;
+		_entity.setHealth((((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 2) / 3);
+		if (this instanceof AbsorberLimbEntity) {
+			this.setAnimation("animation.absorber_limb.start");
+		}
+		return retval;
 	}
 
 	@Override
@@ -170,11 +170,11 @@ public class AbsorberLimbEntity extends SeaMonster {
 	@Override
 	public void baseTick() {
 		super.baseTick();
-        setDeltaMovement(new Vec3(0, 0, 0));
-        if (tickCount >= 16 && this.getHealth() >= this.getMaxHealth()) {
+		setDeltaMovement(new Vec3(0, 0, 0));
+		if (tickCount >= 16 && this.getHealth() >= this.getMaxHealth()) {
 			this.kill();
 		}
-        this.refreshDimensions();
+		this.refreshDimensions();
 	}
 
 	@Override
@@ -195,8 +195,7 @@ public class AbsorberLimbEntity extends SeaMonster {
 	protected void pushEntities() {
 	}
 
-	public static void init() {
-	}
+	
 
 	public static AttributeSupplier.Builder createAttributes() {
 		AttributeSupplier.Builder builder = Mob.createMobAttributes();
@@ -210,8 +209,8 @@ public class AbsorberLimbEntity extends SeaMonster {
 	}
 
 	@Override
-	public boolean canBeAffected(MobEffectInstance pEffectInstance){
-		if(pEffectInstance.getEffect() == MobEffects.REGENERATION) return false;
+	public boolean canBeAffected(MobEffectInstance pEffectInstance) {
+		if (pEffectInstance.getEffect() == MobEffects.REGENERATION) return false;
 		return super.canBeAffected(pEffectInstance);
 	}
 
@@ -248,7 +247,7 @@ public class AbsorberLimbEntity extends SeaMonster {
 	protected void tickDeath() {
 		++this.deathTime;
 		if (this.deathTime == 20) {
-			this.remove(AbsorberLimbEntity.RemovalReason.KILLED);
+			this.remove(RemovalReason.KILLED);
 			this.dropExperience();
 		}
 	}

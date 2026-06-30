@@ -142,7 +142,7 @@ public class OceanIllusionEntity extends SeaMonster implements RangedAttackMob {
 		this.goalSelector.addGoal(14, new RandomStrollGoal(this, 1));
 		this.goalSelector.addGoal(15, new FloatGoal(this));
 		this.goalSelector.addGoal(16, new RandomLookAroundGoal(this));
-		this.goalSelector.addGoal(1, new OceanIllusionEntity.RangedAttackGoal(this, 1.25, 30, 2f) {
+		this.goalSelector.addGoal(1, new RangedAttackGoal(this, 1.25, 30, 2f) {
 			@Override
 			public boolean canContinueToUse() {
 				return this.canUse();
@@ -178,7 +178,7 @@ public class OceanIllusionEntity extends SeaMonster implements RangedAttackMob {
 				this.attackIntervalMax = p_25776_;
 				this.attackRadius = p_25777_;
 				this.attackRadiusSqr = p_25777_ * p_25777_;
-				this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
+				this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
 			}
 		}
 
@@ -278,7 +278,7 @@ public class OceanIllusionEntity extends SeaMonster implements RangedAttackMob {
 	}
 
 	@Override
-	public void remove(RemovalReason pReason){
+	public void remove(RemovalReason pReason) {
 		illusionSmoke(this.level(), this.getX(), this.getY(), this.getZ());
 		super.remove(pReason);
 	}
@@ -299,53 +299,53 @@ public class OceanIllusionEntity extends SeaMonster implements RangedAttackMob {
 	@Override
 	public void baseTick() {
 		super.baseTick();
-        boolean finished = false;
-        LevelAccessor world = this.level();
-        double x = this.getX();
-        double y = this.getY();
-        double z = this.getZ();
-        Entity illusioner;
-        Entity enemy;
-        if (this.isAlive()) {
-            if (tickCount % 40 == 20) {
-                enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
-                if (!(enemy == null) && enemy.isAlive()) {
-                    finished = true;
-                } else {
-                    illusioner = world.getEntitiesOfClass(OceanizedIllusionerEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true).stream().sorted(new Object() {
-                        Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
-                            return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
-                        }
-                    }.compareDistOf(x, y, z)).findFirst().orElse(null);
-                    if (illusioner == null) {
-                        finished = true;
-                    } else {
-                        Vec3 ownerPos = illusioner.position();
-                        Vec3 goal;
-                        Vec3 v = ownerPos.vectorTo(position());
-                        Vec3 v1 = new Vec3(v.x, 0, v.z);
-                        if (v1.lengthSqr() > 30.25)
-                            goal = ownerPos.add(v1.normalize().scale(5));
-                        else{
-                            RandomSource random1 = level().random;
-                            int yaw = Mth.nextInt(random1, 30, 90);
-                            double r = Mth.nextDouble(random1, 3, 5);
-                            goal = ownerPos.add(v1.normalize().scale(r).yRot((float) Math.toRadians(yaw)));
-                        }
-                        if (goal.distanceToSqr(position()) > 0.25) {
-                            if ((Entity) this instanceof Mob mob){
-                                mob.getNavigation().moveTo(goal.x, goal.y, goal.z, 1);
-                            }
-                        }
-                    }
-                }
-            }
-            if (!finished) {
-                if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
-                    this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).setBaseValue(0);
-            }
-        }
-        if (!this.level().isClientSide() && this.hasEffect(CAMobEffects.MUTE.get())) this.discard();
+		boolean finished = false;
+		LevelAccessor world = this.level();
+		double x = this.getX();
+		double y = this.getY();
+		double z = this.getZ();
+		Entity illusioner;
+		Entity enemy;
+		if (this.isAlive()) {
+			if (tickCount % 40 == 20) {
+				enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+				if (!(enemy == null) && enemy.isAlive()) {
+					finished = true;
+				} else {
+					illusioner = world.getEntitiesOfClass(OceanizedIllusionerEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true).stream().sorted(new Object() {
+						Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
+							return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
+						}
+					}.compareDistOf(x, y, z)).findFirst().orElse(null);
+					if (illusioner == null) {
+						finished = true;
+					} else {
+						Vec3 ownerPos = illusioner.position();
+						Vec3 goal;
+						Vec3 v = ownerPos.vectorTo(position());
+						Vec3 v1 = new Vec3(v.x, 0, v.z);
+						if (v1.lengthSqr() > 30.25)
+							goal = ownerPos.add(v1.normalize().scale(5));
+						else {
+							RandomSource random1 = level().random;
+							int yaw = Mth.nextInt(random1, 30, 90);
+							double r = Mth.nextDouble(random1, 3, 5);
+							goal = ownerPos.add(v1.normalize().scale(r).yRot((float) Math.toRadians(yaw)));
+						}
+						if (goal.distanceToSqr(position()) > 0.25) {
+							if ((Entity) this instanceof Mob mob) {
+								mob.getNavigation().moveTo(goal.x, goal.y, goal.z, 1);
+							}
+						}
+					}
+				}
+			}
+			if (!finished) {
+				if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
+					this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).setBaseValue(0);
+			}
+		}
+		if (!this.level().isClientSide() && this.hasEffect(CAMobEffects.MUTE.get())) this.discard();
 		this.refreshDimensions();
 	}
 
@@ -359,8 +359,7 @@ public class OceanIllusionEntity extends SeaMonster implements RangedAttackMob {
 		FishSplashEntity.shoot(this, target, (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttributeValue(Attributes.ATTACK_DAMAGE) : 0) * (2.5 / 9.0));
 	}
 
-	public static void init() {
-	}
+	
 
 	public static AttributeSupplier.Builder createAttributes() {
 		AttributeSupplier.Builder builder = Mob.createMobAttributes();
@@ -411,13 +410,13 @@ public class OceanIllusionEntity extends SeaMonster implements RangedAttackMob {
 	protected void tickDeath() {
 		++this.deathTime;
 		if (this.deathTime == 20) {
-			this.remove(OceanIllusionEntity.RemovalReason.KILLED);
+			this.remove(RemovalReason.KILLED);
 			this.dropExperience();
-            LevelAccessor world = this.level();
-            if (Math.random() < 0.6) {
-                RavagerSummonFellowsProcedure.execute(world, this.getX(), this.getY(), this.getZ(), 1);
-            }
-        }
+			LevelAccessor world = this.level();
+			if (Math.random() < 0.6) {
+				RavagerSummonFellowsProcedure.execute(world, this.getX(), this.getY(), this.getZ(), 1);
+			}
+		}
 	}
 
 	public String getSyncedAnimation() {

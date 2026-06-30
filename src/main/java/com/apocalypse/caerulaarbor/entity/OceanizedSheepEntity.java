@@ -198,56 +198,56 @@ public class OceanizedSheepEntity extends SeaMonster {
 		double z = this.getZ();
 		Entity entity = this;
 		Level world = this.level();
-        if (sourceentity.isHolding(Items.SHEARS) && entity instanceof OceanizedSheepEntity _datEntL1 && _datEntL1.getEntityData().get(DATA_fur)) {
-            if (entity instanceof OceanizedSheepEntity _datEntSetL)
-                _datEntSetL.getEntityData().set(DATA_fur, false);
-            if (entity instanceof OceanizedSheepEntity animatable)
-                animatable.setTexture("oceanized_sheep_furless");
-            if ((LevelAccessor) world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.sheep.shear")), SoundSource.PLAYERS, 1, 1);
-            }
-            if ((LevelAccessor) world instanceof ServerLevel _level) {
-                ItemEntity entityToSpawn = new ItemEntity(_level, x, (y + 0.65), z, new ItemStack(Blocks.WHITE_WOOL));
-                entityToSpawn.setPickUpDelay(10);
-                _level.addFreshEntity(entityToSpawn);
-            }
-            for (int index0 = 0; index0 < Mth.nextInt(RandomSource.create(), 1, 3); index0++) {
-                if ((LevelAccessor) world instanceof ServerLevel _level) {
-                    ItemEntity entityToSpawn = new ItemEntity(_level, x, (y + 0.65), z, new ItemStack(CAItems.SEA_TRAIL_MOR.get()));
-                    entityToSpawn.setPickUpDelay(10);
-                    _level.addFreshEntity(entityToSpawn);
-                }
-            }
-            SIHelper.causeSanityInjury(sourceentity, this, 64, SanityEvent.Hurt.Type.ENTITY);
-            return InteractionResult.SUCCESS;
-        }
-        return InteractionResult.PASS;
-    }
+		if (sourceentity.isHolding(Items.SHEARS) && entity instanceof OceanizedSheepEntity _datEntL1 && _datEntL1.getEntityData().get(DATA_fur)) {
+			if (entity instanceof OceanizedSheepEntity _datEntSetL)
+				_datEntSetL.getEntityData().set(DATA_fur, false);
+			if (entity instanceof OceanizedSheepEntity animatable)
+				animatable.setTexture("oceanized_sheep_furless");
+			if ((LevelAccessor) world instanceof Level _level) {
+				_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.sheep.shear")), SoundSource.PLAYERS, 1, 1);
+			}
+			if ((LevelAccessor) world instanceof ServerLevel _level) {
+				ItemEntity entityToSpawn = new ItemEntity(_level, x, (y + 0.65), z, new ItemStack(Blocks.WHITE_WOOL));
+				entityToSpawn.setPickUpDelay(10);
+				_level.addFreshEntity(entityToSpawn);
+			}
+			for (int index0 = 0; index0 < Mth.nextInt(RandomSource.create(), 1, 3); index0++) {
+				if ((LevelAccessor) world instanceof ServerLevel _level) {
+					ItemEntity entityToSpawn = new ItemEntity(_level, x, (y + 0.65), z, new ItemStack(CAItems.SEA_TRAIL_MOR.get()));
+					entityToSpawn.setPickUpDelay(10);
+					_level.addFreshEntity(entityToSpawn);
+				}
+			}
+			SIHelper.causeSanityInjury(sourceentity, this, 64, SanityEvent.Hurt.Type.ENTITY);
+			return InteractionResult.SUCCESS;
+		}
+		return InteractionResult.PASS;
+	}
 
 	@Override
 	public void baseTick() {
 		super.baseTick();
-        LevelAccessor world = this.level();
-        double x = this.getX();
-        double y = this.getY();
-        double z = this.getZ();
-        if (!((Entity) this instanceof OceanizedSheepEntity _datEntL0 && _datEntL0.getEntityData().get(DATA_fur))) {
-            if ((world.getBlockState(BlockPos.containing(x + getLookAngle().x, y, z + getLookAngle().z))).getBlock() == CABlocks.TRAIL_MUSHROOM.get()) {
-                if (this instanceof OceanizedSheepEntity) {
-                    this.setAnimation("animation.oceanized_sheep.eat");
-                }
-                if ((Entity) this instanceof OceanizedSheepEntity _datEntSetL)
-                    _datEntSetL.getEntityData().set(DATA_fur, true);
-                world.setBlock(BlockPos.containing(x + getLookAngle().x, y, z + getLookAngle().z), Blocks.AIR.defaultBlockState(), 3);
-                CaerulaArborMod.queueServerWork(20, () -> {
-                    if ((Entity) this instanceof OceanizedSheepEntity _datEntL10 && _datEntL10.getEntityData().get(DATA_fur)) {
-                        if ((Entity) this instanceof OceanizedSheepEntity animatable)
-                            animatable.setTexture("oceanized_sheep");
-                    }
-                });
-            }
-        }
-        this.refreshDimensions();
+		LevelAccessor world = this.level();
+		double x = this.getX();
+		double y = this.getY();
+		double z = this.getZ();
+		if (!((Entity) this instanceof OceanizedSheepEntity _datEntL0 && _datEntL0.getEntityData().get(DATA_fur))) {
+			if ((world.getBlockState(BlockPos.containing(x + getLookAngle().x, y, z + getLookAngle().z))).getBlock() == CABlocks.TRAIL_MUSHROOM.get()) {
+				if (this instanceof OceanizedSheepEntity) {
+					this.setAnimation("animation.oceanized_sheep.eat");
+				}
+				if ((Entity) this instanceof OceanizedSheepEntity _datEntSetL)
+					_datEntSetL.getEntityData().set(DATA_fur, true);
+				world.setBlock(BlockPos.containing(x + getLookAngle().x, y, z + getLookAngle().z), Blocks.AIR.defaultBlockState(), 3);
+				CaerulaArborMod.queueServerWork(20, () -> {
+					if ((Entity) this instanceof OceanizedSheepEntity _datEntL10 && _datEntL10.getEntityData().get(DATA_fur)) {
+						if ((Entity) this instanceof OceanizedSheepEntity animatable)
+							animatable.setTexture("oceanized_sheep");
+					}
+				});
+			}
+		}
+		this.refreshDimensions();
 	}
 
 	@Override
@@ -255,8 +255,7 @@ public class OceanizedSheepEntity extends SeaMonster {
 		return super.getDimensions(p_33597_).scale((float) 1);
 	}
 
-	public static void init() {
-	}
+	
 
 	public static AttributeSupplier.Builder createAttributes() {
 		AttributeSupplier.Builder builder = Mob.createMobAttributes();
@@ -320,7 +319,7 @@ public class OceanizedSheepEntity extends SeaMonster {
 	protected void tickDeath() {
 		++this.deathTime;
 		if (this.deathTime == 20) {
-			this.remove(OceanizedSheepEntity.RemovalReason.KILLED);
+			this.remove(RemovalReason.KILLED);
 			this.dropExperience();
 		}
 	}

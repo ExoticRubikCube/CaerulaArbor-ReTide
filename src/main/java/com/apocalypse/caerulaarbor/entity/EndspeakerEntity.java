@@ -95,9 +95,19 @@ public class EndspeakerEntity extends SeaMonster {
 
 	public EndspeakerEntity(EntityType<? extends EndspeakerEntity> entityType, Level level) {
 		super(entityType, level);
-		this.bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.PROGRESS);
+		this.bossInfo = new ServerBossEvent(this.getBossBarName(), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.PROGRESS);
 		this.setNoAi(false);
 		this.setPersistenceRequired();
+	}
+
+	public static boolean hasAbility(LevelAccessor world, double index) {
+		int comparator = 1 << (int) index;
+		int abilities = (int) MapVariables.get(world).endspeaker_abolities;
+		return (abilities & comparator) == comparator;
+	}
+
+	public boolean hasAbility(double index) {
+		return hasAbility(this.level(), index);
 	}
 
 	@Nullable
@@ -210,6 +220,10 @@ public class EndspeakerEntity extends SeaMonster {
 		};
 	}
 
+	protected Component getBossBarName() {
+		return this.getTypeName();
+	}
+
 	protected void updatePhaseRuntimeProperties() {
 		this.xpReward = switch (this.getPhase()) {
 			case 2 -> 48;
@@ -223,7 +237,7 @@ public class EndspeakerEntity extends SeaMonster {
 		});
 		this.bossInfo.setColor(this.getPhase() >= 2 ? ServerBossEvent.BossBarColor.WHITE : ServerBossEvent.BossBarColor.BLUE);
 		this.bossInfo.setOverlay(this.getPhaseBossBarOverlay());
-		this.bossInfo.setName(this.getDisplayName());
+		this.bossInfo.setName(this.getBossBarName());
 		this.updatePhaseAttributes();
 	}
 
@@ -724,17 +738,17 @@ public class EndspeakerEntity extends SeaMonster {
 					continue;
 				}
 				if (candidate.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "endspeaker_edible")))) {
-					if (candidate instanceof BaselayerAbyssalEntity && EntityUtils.inquirybility(world, 0)) {
+					if (candidate instanceof BaselayerAbyssalEntity && hasAbility(world, 0)) {
 						continue;
-					} else if (candidate instanceof PredatorAbyssalEntity && EntityUtils.inquirybility(world, 1)) {
+					} else if (candidate instanceof PredatorAbyssalEntity && hasAbility(world, 1)) {
 						continue;
-					} else if (candidate instanceof GuideAbyssalEntity && EntityUtils.inquirybility(world, 2)) {
+					} else if (candidate instanceof GuideAbyssalEntity && hasAbility(world, 2)) {
 						continue;
-					} else if (candidate instanceof SplasherAbyssalEntity && EntityUtils.inquirybility(world, 3)) {
+					} else if (candidate instanceof SplasherAbyssalEntity && hasAbility(world, 3)) {
 						continue;
-					} else if (candidate instanceof UmbrellaAbyssalEntity && EntityUtils.inquirybility(world, 4)) {
+					} else if (candidate instanceof UmbrellaAbyssalEntity && hasAbility(world, 4)) {
 						continue;
-					} else if (candidate instanceof CrackerAbyssalEntity && EntityUtils.inquirybility(world, 5)) {
+					} else if (candidate instanceof CrackerAbyssalEntity && hasAbility(world, 5)) {
 						continue;
 					}
 					double currentDistance = this.distanceTo(candidate);
@@ -818,7 +832,7 @@ public class EndspeakerEntity extends SeaMonster {
 		int count = 0;
 		String[] prefixArray = Component.translatable("entity.caerula_arbor.endspeaker.prefix").getString().split(",");
 		for (int index = 0; index < prefixArray.length; index++) {
-			if (EntityUtils.inquirybility(this.level(), index)) {
+			if (this.hasAbility(index)) {
 				prefixes.append(prefixArray[index]);
 				count++;
 			}
@@ -967,7 +981,7 @@ public class EndspeakerEntity extends SeaMonster {
 			if (!this.level().isClientSide()) {
 				this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 50, 9, false, false));
 			}
-			EntityUtils.initEndspeakerAbilities(world, this);
+			this.applySpawnAbilities(world);
 			this.updatePrefixName();
 		} else if (this.getPhase() == 2) {
 			this.setAnimation("animation.endspeaker_2.start");
@@ -978,7 +992,7 @@ public class EndspeakerEntity extends SeaMonster {
 			if (!this.level().isClientSide()) {
 				this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 68, 9, false, false));
 			}
-			EntityUtils.initEndspeakerAbilities(world, this);
+			this.applySpawnAbilities(world);
 			this.updatePrefixName();
 		} else if (!this.hasNextPhase()) {
 			this.setAnimation("animation.endspeaker_3.start");
@@ -989,10 +1003,19 @@ public class EndspeakerEntity extends SeaMonster {
 			if (!this.level().isClientSide()) {
 				this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 50, 9, false, false));
 			}
-			EntityUtils.initEndspeakerAbilities(world, this);
+			this.applySpawnAbilities(world);
 			this.updatePrefixName();
 		}
 		return spawnData;
+	}
+
+	private void applySpawnAbilities(LevelAccessor world) {
+		if (hasAbility(world, 0) && this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())) {
+			this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).getBaseValue() + 40);
+		}
+		if (hasAbility(world, 1) && this.getAttributes().hasAttribute(CAAttributes.MISSRATE.get())) {
+			this.getAttribute(CAAttributes.MISSRATE.get()).setBaseValue(this.getAttribute(CAAttributes.MISSRATE.get()).getBaseValue() + 50);
+		}
 	}
 
 	private void tickPhaseZeroBehavior() {
@@ -1029,13 +1052,13 @@ public class EndspeakerEntity extends SeaMonster {
 		if (this.tickCount % 5 != 0) {
 			return;
 		}
-		if (EntityUtils.inquirybility(this.level(), 2) && this.getHealth() < this.getMaxHealth() * 0.4F) {
+		if (this.hasAbility(2) && this.getHealth() < this.getMaxHealth() * 0.4F) {
 			if (!this.level().isClientSide()) {
 				this.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 25, 0, false, false));
 				this.addEffect(new MobEffectInstance(CAMobEffects.ENDSPEAER_BRANDGUIDE_BUFF.get(), 25, 0));
 			}
 		}
-		if (EntityUtils.inquirybility(this.level(), 4)) {
+		if (this.hasAbility(4)) {
 			this.clearFire();
 			this.removeEffect(CAMobEffects.DIZZY.get());
 			this.removeEffect(CAMobEffects.MUTE.get());
@@ -1051,7 +1074,7 @@ public class EndspeakerEntity extends SeaMonster {
 				this.setDeltaMovement(Vec3.ZERO);
 			}
 		}
-		if (EntityUtils.inquirybility(this.level(), 1)) {
+		if (this.hasAbility(1)) {
 			double missRate = 50.0D;
 			if (this.isOnFire() && !this.fireImmune()) {
 				missRate = 0.0D;

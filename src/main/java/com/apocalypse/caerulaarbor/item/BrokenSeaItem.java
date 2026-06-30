@@ -1,6 +1,7 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.entity.GladiiaEntity;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
@@ -130,8 +131,8 @@ public class BrokenSeaItem extends SwordItem {
                     for (Entity entityiterator : _entfound) {
                         if (entityiterator instanceof Monster || (entityiterator instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == entity) {
                             if (entity.distanceTo(entityiterator) <= 6) {
-                                EntityUtils.pullToGladiia(entityiterator, entity);
-                                EntityUtils.gladiiaLinkPtcToEntity(world, entity, entityiterator);
+                                EntityUtils.pullToward(entityiterator, entity);
+                                GladiiaEntity.spawnGladiiaLinkParticles(world, entity, entityiterator);
                                 LivingEntity _entity = (LivingEntity) entityiterator;
                                 if (!_entity.level().isClientSide())
                                     _entity.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 40, 0, false, false));

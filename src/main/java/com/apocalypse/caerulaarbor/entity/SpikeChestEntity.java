@@ -1,6 +1,7 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
@@ -13,6 +14,8 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
@@ -106,7 +109,17 @@ public class SpikeChestEntity extends SeaMonster {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-		EntityUtils.initDirection(this);
+		this.setYRot((float) (90 * Mth.nextInt(RandomSource.create(), 0, 3)));
+		this.setXRot(0);
+		this.setYBodyRot(this.getYRot());
+		this.setYHeadRot(this.getYRot());
+		this.yRotO = this.getYRot();
+		this.xRotO = this.getXRot();
+		this.yBodyRotO = this.getYRot();
+		this.yHeadRotO = this.getYRot();
+		if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())) {
+			this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(18);
+		}
 		return retval;
 	}
 

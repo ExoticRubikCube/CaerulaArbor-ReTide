@@ -8,7 +8,6 @@ import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.menu.InfoStrategyGrowMenu;
 import com.apocalypse.caerulaarbor.network.CaerulaArborModNetwork;
 import com.apocalypse.caerulaarbor.network.message.send.InfoStrategyReturnButtonMessage;
-import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.StrategyUtils;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
@@ -73,7 +72,7 @@ public class InfoStrategyGrowScreen extends AbstractContainerScreen<InfoStrategy
 
 		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/sidebar.png"), this.leftPos + -3, this.topPos + -3, 0, 0, 262, 174, 262, 174);
 
-		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/bg_grow.png"), this.leftPos, this.topPos, Mth.clamp((int) EntityUtils.getStraGrow(world) * 256, 0, 1024), 0, 256, 168, 1280, 168);
+		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/bg_grow.png"), this.leftPos, this.topPos, Mth.clamp((int) StrategyUtils.getStraGrow(world) * 256, 0, 1024), 0, 256, 168, 1280, 168);
 
         double result = 18;
         double rate;
@@ -104,12 +103,12 @@ public class InfoStrategyGrowScreen extends AbstractContainerScreen<InfoStrategy
 		guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.info_strategy_grow.label_grow"), 1, 4, -1, false);
 		guiGraphics.drawString(this.font,
 
-				EntityUtils.getDescrGrow(world), 1, 100, -1, false);
+				StrategyUtils.getDescrGrow(world), 1, 100, -1, false);
 		guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.info_strategy_grow.label_proceed"), 1, 172, -1, false);
 		if (StrategyUtils.isSilence(world))
 			guiGraphics.drawString(this.font,
 
-					EntityUtils.getSilenceGrow(world), 1, 116, -3407872, false);
+					StrategyUtils.getSilenceGrow(world), 1, 116, -3407872, false);
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 package com.apocalypse.caerulaarbor.entity.routeshaper;
 
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CAGameRules;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
@@ -13,11 +14,15 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -25,6 +30,7 @@ import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 
+import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.List;
 
@@ -193,6 +199,18 @@ public abstract class AbstractPathshaperEntity extends SeaMonster {
 	}
 
 	@Override
+	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
+		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
+        if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
+            this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(24);
+        if (world.getEntitiesOfClass(Player.class, AABB.ofSize(new Vec3(this.getX(), this.getY(), this.getZ()), 16, 16, 16), e -> true).isEmpty()) {
+            if (!this.level().isClientSide())
+                this.addEffect(new MobEffectInstance(MobEffects.GLOWING, 1800, 0, false, false));
+        }
+        return retval;
+	}
+
+	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		// TODO: Other entities that still use MCreator-style flattened NBT keys should be migrated to semantic split keys too.
@@ -208,6 +226,7 @@ public abstract class AbstractPathshaperEntity extends SeaMonster {
 		if (compound.contains("HurtCount"))
 			this.setHurtSkillp(compound.getInt("HurtCount"));
 	}
+
 
 
 	@Override

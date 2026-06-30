@@ -8,7 +8,6 @@ import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.menu.InfoStrategySubsisMenu;
 import com.apocalypse.caerulaarbor.network.CaerulaArborModNetwork;
 import com.apocalypse.caerulaarbor.network.message.send.InfoStrategyReturnButtonMessage;
-import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.StrategyUtils;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
@@ -73,7 +72,7 @@ public class InfoStrategySubsisScreen extends AbstractContainerScreen<InfoStrate
 
 		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/sidebar.png"), this.leftPos + -3, this.topPos + -3, 0, 0, 262, 174, 262, 174);
 
-		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/bg_subsis.png"), this.leftPos, this.topPos, Mth.clamp((int) EntityUtils.getStraSubsis(world) * 256, 0, 1024), 0, 256, 168, 1280, 168);
+		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/bg_subsis.png"), this.leftPos, this.topPos, Mth.clamp((int) StrategyUtils.getStraSubsis(world) * 256, 0, 1024), 0, 256, 168, 1280, 168);
 
         double result = 18;
         double rate;
@@ -104,12 +103,12 @@ public class InfoStrategySubsisScreen extends AbstractContainerScreen<InfoStrate
 		guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.info_strategy_subsis.label_to_subsist_is_fundamental"), 1, 4, -1, false);
 		guiGraphics.drawString(this.font,
 
-				EntityUtils.getDescrSubsis(world), 1, 100, -1, false);
+				StrategyUtils.getDescrSubsis(world), 1, 100, -1, false);
 		guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.info_strategy_subsis.label_proceed"), 1, 172, -1, false);
 		if (StrategyUtils.isSilence(world))
 			guiGraphics.drawString(this.font,
 
-					EntityUtils.getSilenceSubsis(world), 1, 116, -3407872, false);
+					StrategyUtils.getSilenceSubsis(world), 1, 116, -3407872, false);
 	}
 
 	@Override

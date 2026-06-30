@@ -2,10 +2,10 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAItems;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
-import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -52,182 +52,186 @@ import java.util.Comparator;
 import java.util.List;
 
 public class OceanizedFoxEntity extends SeaMonster {
-	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanizedFoxEntity.class, EntityDataSerializers.BOOLEAN);
-	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedFoxEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(OceanizedFoxEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<Integer> DATA_skillp = SynchedEntityData.defineId(OceanizedFoxEntity.class, EntityDataSerializers.INT);
-	public static final EntityDataAccessor<Boolean> DATA_sleeping = SynchedEntityData.defineId(OceanizedFoxEntity.class, EntityDataSerializers.BOOLEAN);
-	public static final EntityDataAccessor<Integer> DATA_action_time = SynchedEntityData.defineId(OceanizedFoxEntity.class, EntityDataSerializers.INT);
-	public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(OceanizedFoxEntity.class, EntityDataSerializers.INT);
-	private boolean swinging;
-	private boolean lastloop;
-	private long lastSwing;
-	public String animationprocedure = "empty";
+    public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanizedFoxEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedFoxEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(OceanizedFoxEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> DATA_skillp = SynchedEntityData.defineId(OceanizedFoxEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Boolean> DATA_sleeping = SynchedEntityData.defineId(OceanizedFoxEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<Integer> DATA_action_time = SynchedEntityData.defineId(OceanizedFoxEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(OceanizedFoxEntity.class, EntityDataSerializers.INT);
+    private boolean swinging;
+    private boolean lastloop;
+    private long lastSwing;
+    public String animationprocedure = "empty";
 
-	public OceanizedFoxEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CAEntities.OCEANIZED_FOX.get(), world);
-	}
+    public OceanizedFoxEntity(PlayMessages.SpawnEntity packet, Level world) {
+        this(CAEntities.OCEANIZED_FOX.get(), world);
+    }
 
-	public OceanizedFoxEntity(EntityType<OceanizedFoxEntity> type, Level world) {
-		super(type, world);
-		xpReward = 8;
-		setNoAi(false);
-		setMaxUpStep(0.8f);
-		setPersistenceRequired();
-	}
-
-	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(SHOOT, false);
-		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(TEXTURE, "oceanized_fox");
-		this.entityData.define(DATA_skillp, 10);
-		this.entityData.define(DATA_sleeping, false);
-		this.entityData.define(DATA_action_time, 0);
-		this.entityData.define(DATA_duration, 0);
-	}
-
-	public void setTexture(String texture) {
-		this.entityData.set(TEXTURE, texture);
-	}
-
-	public String getTexture() {
-		return this.entityData.get(TEXTURE);
-	}
-
-	@Override
-	public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
-	}
-
-	@Override
-	protected void registerGoals() {
-		super.registerGoals();
-		this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-		this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 2, false) {
-			@Override
-			protected double getAttackReachSqr(@NotNull LivingEntity entity) {
-				return this.mob.getBbWidth() * this.mob.getBbWidth() + entity.getBbWidth();
-			}
-
-			@Override
-			public boolean canUse() {
-				return super.canUse() && OceanizedFoxEntity.this.notSleeping();
-			}
-
-			@Override
-			public boolean canContinueToUse() {
-				return super.canContinueToUse() && OceanizedFoxEntity.this.notSleeping();
-			}
-
-		});
-		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Chicken.class, true, false));
-		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Rabbit.class, true, false));
-		this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Turtle.class, true, false));
-		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, Salmon.class, true, true));
-		this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, TropicalFish.class, true, true));
-		this.targetSelector.addGoal(8, new NearestAttackableTargetGoal<>(this, Pufferfish.class, true, true));
-		this.goalSelector.addGoal(9, new TemptGoal(this, 1, Ingredient.of(CAItems.CANNED_CHERRY.get()), false));
-		this.goalSelector.addGoal(10, new RemoveBlockGoal(Blocks.SWEET_BERRY_BUSH, this, 1, 3));
-		this.goalSelector.addGoal(11, new RandomStrollGoal(this, 1) {
-			@Override
-			public boolean canUse() {
-				return super.canUse() && OceanizedFoxEntity.this.notSleeping();
-			}
-
-			@Override
-			public boolean canContinueToUse() {
-				return super.canContinueToUse() && OceanizedFoxEntity.this.notSleeping();
-			}
-		});
-		this.goalSelector.addGoal(12, new RandomLookAroundGoal(this) {
-			@Override
-			public boolean canUse() {
-				return super.canUse() && OceanizedFoxEntity.this.notSleeping();
-			}
-
-			@Override
-			public boolean canContinueToUse() {
-				return super.canContinueToUse() && OceanizedFoxEntity.this.notSleeping();
-			}
-		});
-		this.goalSelector.addGoal(13, new FloatGoal(this));
-	}
+    public OceanizedFoxEntity(EntityType<OceanizedFoxEntity> type, Level world) {
+        super(type, world);
+        xpReward = 8;
+        setNoAi(false);
+        setMaxUpStep(0.8f);
+        setPersistenceRequired();
+    }
 
     @Override
-	public boolean removeWhenFarAway(double distanceToClosestPlayer) {
-		return false;
-	}
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(SHOOT, false);
+        this.entityData.define(ANIMATION, "undefined");
+        this.entityData.define(TEXTURE, "oceanized_fox");
+        this.entityData.define(DATA_skillp, 10);
+        this.entityData.define(DATA_sleeping, false);
+        this.entityData.define(DATA_action_time, 0);
+        this.entityData.define(DATA_duration, 0);
+    }
 
-	@Override
-	public SoundEvent getAmbientSound() {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.fox.ambient"));
-	}
+    public void setTexture(String texture) {
+        this.entityData.set(TEXTURE, texture);
+    }
 
-	@Override
-	public SoundEvent getHurtSound(DamageSource ds) {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.fox.hurt"));
-	}
+    public String getTexture() {
+        return this.entityData.get(TEXTURE);
+    }
 
-	@Override
-	public SoundEvent getDeathSound() {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.fox.death"));
-	}
+    @Override
+    public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket() {
+        return NetworkHooks.getEntitySpawningPacket(this);
+    }
 
-	@Override
-	public boolean hurt(DamageSource source, float amount) {
+    @Override
+    protected void registerGoals() {
+        super.registerGoals();
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 2, false) {
+            @Override
+            protected double getAttackReachSqr(@NotNull LivingEntity entity) {
+                return this.mob.getBbWidth() * this.mob.getBbWidth() + entity.getBbWidth();
+            }
+
+            @Override
+            public boolean canUse() {
+                return super.canUse() && OceanizedFoxEntity.this.notSleeping();
+            }
+
+            @Override
+            public boolean canContinueToUse() {
+                return super.canContinueToUse() && OceanizedFoxEntity.this.notSleeping();
+            }
+
+        });
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Chicken.class, true, false));
+        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Rabbit.class, true, false));
+        this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Turtle.class, true, false));
+        this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, Salmon.class, true, true));
+        this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, TropicalFish.class, true, true));
+        this.targetSelector.addGoal(8, new NearestAttackableTargetGoal<>(this, Pufferfish.class, true, true));
+        this.goalSelector.addGoal(9, new TemptGoal(this, 1, Ingredient.of(CAItems.CANNED_CHERRY.get()), false));
+        this.goalSelector.addGoal(10, new RemoveBlockGoal(Blocks.SWEET_BERRY_BUSH, this, 1, 3));
+        this.goalSelector.addGoal(11, new RandomStrollGoal(this, 1) {
+            @Override
+            public boolean canUse() {
+                return super.canUse() && OceanizedFoxEntity.this.notSleeping();
+            }
+
+            @Override
+            public boolean canContinueToUse() {
+                return super.canContinueToUse() && OceanizedFoxEntity.this.notSleeping();
+            }
+        });
+        this.goalSelector.addGoal(12, new RandomLookAroundGoal(this) {
+            @Override
+            public boolean canUse() {
+                return super.canUse() && OceanizedFoxEntity.this.notSleeping();
+            }
+
+            @Override
+            public boolean canContinueToUse() {
+                return super.canContinueToUse() && OceanizedFoxEntity.this.notSleeping();
+            }
+        });
+        this.goalSelector.addGoal(13, new FloatGoal(this));
+    }
+
+    @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        return false;
+    }
+
+    @Override
+    public SoundEvent getAmbientSound() {
+        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.fox.ambient"));
+    }
+
+    @Override
+    public SoundEvent getHurtSound(DamageSource ds) {
+        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.fox.hurt"));
+    }
+
+    @Override
+    public SoundEvent getDeathSound() {
+        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.fox.death"));
+    }
+
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
         setShiftKeyDown(false);
         if ((Entity) this instanceof OceanizedFoxEntity _datEntSetL)
             _datEntSetL.getEntityData().set(DATA_sleeping, false);
         if (source.is(DamageTypes.CACTUS))
-			return false;
-		if (source.is(DamageTypes.DROWN))
-			return false;
-		return super.hurt(source, amount);
-	}
+            return false;
+        if (source.is(DamageTypes.SWEET_BERRY_BUSH))
+            return false;
+        if (source.is(DamageTypes.DROWN))
+            return false;
+        return super.hurt(source, amount);
+    }
 
-	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-		EntityUtils.initAplusMagic(this);
-		return retval;
-	}
+    @Override
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
+        SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
+        if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())) {
+            this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(30);
+        }
+        return retval;
+    }
 
-	@Override
-	public void addAdditionalSaveData(CompoundTag compound) {
-		super.addAdditionalSaveData(compound);
-		compound.putString("Texture", this.getTexture());
-		compound.putInt("Dataskillp", this.entityData.get(DATA_skillp));
-		compound.putBoolean("Datasleeping", this.entityData.get(DATA_sleeping));
-		compound.putInt("Dataaction_time", this.entityData.get(DATA_action_time));
-		compound.putInt("Dataduration", this.entityData.get(DATA_duration));
-	}
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putString("Texture", this.getTexture());
+        compound.putInt("Dataskillp", this.entityData.get(DATA_skillp));
+        compound.putBoolean("Datasleeping", this.entityData.get(DATA_sleeping));
+        compound.putInt("Dataaction_time", this.entityData.get(DATA_action_time));
+        compound.putInt("Dataduration", this.entityData.get(DATA_duration));
+    }
 
-	@Override
-	public void readAdditionalSaveData(CompoundTag compound) {
-		super.readAdditionalSaveData(compound);
-		if (compound.contains("Texture"))
-			this.setTexture(compound.getString("Texture"));
-		if (compound.contains("Dataskillp"))
-			this.entityData.set(DATA_skillp, compound.getInt("Dataskillp"));
-		if (compound.contains("Datasleeping"))
-			this.entityData.set(DATA_sleeping, compound.getBoolean("Datasleeping"));
-		if (compound.contains("Dataaction_time"))
-			this.entityData.set(DATA_action_time, compound.getInt("Dataaction_time"));
-		if (compound.contains("Dataduration"))
-			this.entityData.set(DATA_duration, compound.getInt("Dataduration"));
-	}
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        if (compound.contains("Texture"))
+            this.setTexture(compound.getString("Texture"));
+        if (compound.contains("Dataskillp"))
+            this.entityData.set(DATA_skillp, compound.getInt("Dataskillp"));
+        if (compound.contains("Datasleeping"))
+            this.entityData.set(DATA_sleeping, compound.getBoolean("Datasleeping"));
+        if (compound.contains("Dataaction_time"))
+            this.entityData.set(DATA_action_time, compound.getInt("Dataaction_time"));
+        if (compound.contains("Dataduration"))
+            this.entityData.set(DATA_duration, compound.getInt("Dataduration"));
+    }
 
-	@Override
-	public void awardKillScore(Entity entity, int score, DamageSource damageSource) {
-		super.awardKillScore(entity, score, damageSource);
+    @Override
+    public void awardKillScore(Entity entity, int score, DamageSource damageSource) {
+        super.awardKillScore(entity, score, damageSource);
         this.heal(2);
     }
 
-	@Override
-	public void baseTick() {
-		super.baseTick();
+    @Override
+    public void baseTick() {
+        super.baseTick();
         LevelAccessor world = this.level();
         double x = this.getX();
         double y = this.getY();
@@ -251,11 +255,11 @@ public class OceanizedFoxEntity extends SeaMonster {
                         if ((Entity) this instanceof OceanizedFoxEntity _datEntSetI)
                             _datEntSetI.getEntityData().set(DATA_action_time, 200);
                     } else if (!this.isAggressive()) {
-						if ((Entity) this instanceof OceanizedFoxEntity _datEntSetL)
-							_datEntSetL.getEntityData().set(DATA_sleeping, true);
-						if ((Entity) this instanceof OceanizedFoxEntity _datEntSetI)
-							_datEntSetI.getEntityData().set(DATA_action_time, 200);
-					}
+                        if ((Entity) this instanceof OceanizedFoxEntity _datEntSetL)
+                            _datEntSetL.getEntityData().set(DATA_sleeping, true);
+                        if ((Entity) this instanceof OceanizedFoxEntity _datEntSetI)
+                            _datEntSetI.getEntityData().set(DATA_action_time, 200);
+                    }
                 }
                 setShiftKeyDown(sneak);
             }
@@ -290,7 +294,7 @@ public class OceanizedFoxEntity extends SeaMonster {
                         CaerulaArborMod.queueServerWork(20, () -> {
                             if (this.isAlive() && !(((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == null)) {
                                 if (world instanceof Level _level) {
-                                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.fox.teleport")), SoundSource.HOSTILE, 1, 1);
+                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.fox.teleport")), SoundSource.HOSTILE, 1, 1);
                                 }
                                 {
                                     Entity _ent = this;
@@ -307,7 +311,7 @@ public class OceanizedFoxEntity extends SeaMonster {
                                 Entity enemy1;
                                 double damage;
                                 if (world instanceof Level _level) {
-                                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.fox.aggro")), SoundSource.HOSTILE, 2, 1);
+                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.fox.aggro")), SoundSource.HOSTILE, 2, 1);
                                 }
                                 damage = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
                                 enemy1 = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
@@ -340,95 +344,93 @@ public class OceanizedFoxEntity extends SeaMonster {
             }
         }
         this.refreshDimensions();
-	}
+    }
 
-	@Override
-	public EntityDimensions getDimensions(Pose p_33597_) {
-		return super.getDimensions(p_33597_).scale((float) 1);
-	}
-
-	public static void init() {
-	}
-
-	public static AttributeSupplier.Builder createAttributes() {
-		AttributeSupplier.Builder builder = Mob.createMobAttributes();
-		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.16);
-		builder = builder.add(Attributes.MAX_HEALTH, 37);
-		builder = builder.add(Attributes.ARMOR, 0);
-		builder = builder.add(Attributes.ATTACK_DAMAGE, 7);
-		builder = builder.add(Attributes.FOLLOW_RANGE, 24);
-		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.35);
-		return builder;
-	}
-
-	private PlayState movementPredicate(AnimationState event) {
-		if (this.animationprocedure.equals("empty")) {
-			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
-
-					&& !this.isAggressive()) {
-				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_fox.move"));
-			}
-			if (this.isShiftKeyDown()) {
-				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_fox.sleep"));
-			}
-			if (this.isAggressive() && event.isMoving()) {
-				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_fox.sprint"));
-			}
-			return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_fox.idle"));
-		}
-		return PlayState.STOP;
-	}
-
-	String prevAnim = "empty";
-
-	private PlayState procedurePredicate(AnimationState event) {
-		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
-			if (!this.animationprocedure.equals(prevAnim))
-				event.getController().forceAnimationReset();
-			event.getController().setAnimation(RawAnimation.begin().thenPlay(this.animationprocedure));
-			if (event.getController().getAnimationState() == AnimationController.State.STOPPED) {
-				this.animationprocedure = "empty";
-				event.getController().forceAnimationReset();
-			}
-		} else if (animationprocedure.equals("empty")) {
-			prevAnim = "empty";
-			return PlayState.STOP;
-		}
-		prevAnim = this.animationprocedure;
-		return PlayState.CONTINUE;
-	}
-
-	@Override
-	protected void tickDeath() {
-		++this.deathTime;
-		if (this.deathTime == 20) {
-			this.remove(OceanizedFoxEntity.RemovalReason.KILLED);
-			this.dropExperience();
-		}
-	}
-
-	public String getSyncedAnimation() {
-		return this.entityData.get(ANIMATION);
-	}
-
-	public void setAnimation(String animation) {
-		this.entityData.set(ANIMATION, animation);
-	}
-
-	@Override
-	public void registerControllers(AnimatableManager.ControllerRegistrar data) {
-		data.add(new AnimationController<>(this, "movement", 3, this::movementPredicate));
-		data.add(new AnimationController<>(this, "procedure", 3, this::procedurePredicate));
-	}
-
-	public boolean notSleeping() {
-		return !this.getEntityData().get(OceanizedFoxEntity.DATA_sleeping)
-				&& this.getEntityData().get(OceanizedFoxEntity.DATA_duration) <= 0;
-	}
+    @Override
+    public EntityDimensions getDimensions(Pose p_33597_) {
+        return super.getDimensions(p_33597_).scale((float) 1);
+    }
 
 
-	@Override
-	public void setAnimationProcedure(String animation) {
-		this.animationprocedure = animation;
-	}
+    public static AttributeSupplier.Builder createAttributes() {
+        AttributeSupplier.Builder builder = Mob.createMobAttributes();
+        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.16);
+        builder = builder.add(Attributes.MAX_HEALTH, 37);
+        builder = builder.add(Attributes.ARMOR, 0);
+        builder = builder.add(Attributes.ATTACK_DAMAGE, 7);
+        builder = builder.add(Attributes.FOLLOW_RANGE, 24);
+        builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.35);
+        return builder;
+    }
+
+    private PlayState movementPredicate(AnimationState event) {
+        if (this.animationprocedure.equals("empty")) {
+            if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
+
+                    && !this.isAggressive()) {
+                return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_fox.move"));
+            }
+            if (this.isShiftKeyDown()) {
+                return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_fox.sleep"));
+            }
+            if (this.isAggressive() && event.isMoving()) {
+                return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_fox.sprint"));
+            }
+            return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_fox.idle"));
+        }
+        return PlayState.STOP;
+    }
+
+    String prevAnim = "empty";
+
+    private PlayState procedurePredicate(AnimationState event) {
+        if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
+            if (!this.animationprocedure.equals(prevAnim))
+                event.getController().forceAnimationReset();
+            event.getController().setAnimation(RawAnimation.begin().thenPlay(this.animationprocedure));
+            if (event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+                this.animationprocedure = "empty";
+                event.getController().forceAnimationReset();
+            }
+        } else if (animationprocedure.equals("empty")) {
+            prevAnim = "empty";
+            return PlayState.STOP;
+        }
+        prevAnim = this.animationprocedure;
+        return PlayState.CONTINUE;
+    }
+
+    @Override
+    protected void tickDeath() {
+        ++this.deathTime;
+        if (this.deathTime == 20) {
+            this.remove(RemovalReason.KILLED);
+            this.dropExperience();
+        }
+    }
+
+    public String getSyncedAnimation() {
+        return this.entityData.get(ANIMATION);
+    }
+
+    public void setAnimation(String animation) {
+        this.entityData.set(ANIMATION, animation);
+    }
+
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar data) {
+        data.add(new AnimationController<>(this, "movement", 3, this::movementPredicate));
+        data.add(new AnimationController<>(this, "procedure", 3, this::procedurePredicate));
+    }
+
+    public boolean notSleeping() {
+        return !this.getEntityData().get(OceanizedFoxEntity.DATA_sleeping)
+                && this.getEntityData().get(OceanizedFoxEntity.DATA_duration) <= 0;
+    }
+
+
+    @Override
+    public void setAnimationProcedure(String animation) {
+        this.animationprocedure = animation;
+    }
 }

@@ -4,7 +4,7 @@ package com.apocalypse.caerulaarbor.potion;
 import com.apocalypse.caerulaarbor.entity.OceanizedCowEntity;
 import com.apocalypse.caerulaarbor.init.CABlocks;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
-import com.apocalypse.caerulaarbor.procedures.TrailReplaceProcedure;
+import com.apocalypse.caerulaarbor.util.CaerulaUtil;
 import com.apocalypse.caerulaarbor.util.MathUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.client.gui.GuiGraphics;
@@ -48,13 +48,13 @@ public class CowBuffMobEffect extends MobEffect {
                     && ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) <= ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5) {
                 if (WorldUtils.canGrief(world)) {
                     if (CABlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing(x, y, z)) && !(world.getBlockFloorHeight(BlockPos.containing(x, y, z)) > 0)) {
-                        TrailReplaceProcedure.execute(world, CABlocks.SEA_TRAIL_INIT.get().defaultBlockState(), (world.getFluidState(BlockPos.containing(x, y, z)).createLegacyBlock()).getBlock() == Blocks.WATER, x, y, z);
+                        CaerulaUtil.replaceTrail(world, CABlocks.SEA_TRAIL_INIT.get().defaultBlockState(), (world.getFluidState(BlockPos.containing(x, y, z)).createLegacyBlock()).getBlock() == Blocks.WATER, x, y, z);
                     }
                     for (Direction directioniterator : Direction.Plane.HORIZONTAL) {
                         if (CABlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing(x + directioniterator.getStepX(), y, z + directioniterator.getStepZ()))
                                 && !(world.getBlockFloorHeight(BlockPos.containing(x + directioniterator.getStepX(), y, z + directioniterator.getStepZ())) > 0)) {
                             if (Math.random() < 0.33) {
-                                TrailReplaceProcedure.execute(world, CABlocks.SEA_TRAIL_INIT.get().defaultBlockState(),
+                                CaerulaUtil.replaceTrail(world, CABlocks.SEA_TRAIL_INIT.get().defaultBlockState(),
                                         (world.getFluidState(BlockPos.containing(x + directioniterator.getStepX(), y, z + directioniterator.getStepZ())).createLegacyBlock()).getBlock() == Blocks.WATER, x + directioniterator.getStepX(), y,
                                         z + directioniterator.getStepZ());
                             }

@@ -62,96 +62,96 @@ import java.util.Comparator;
 import java.util.List;
 
 public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAnimationEntity {
-	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(ChitinGolemEntity.class, EntityDataSerializers.BOOLEAN);
-	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(ChitinGolemEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(ChitinGolemEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<Integer> DATA_rootX = SynchedEntityData.defineId(ChitinGolemEntity.class, EntityDataSerializers.INT);
-	public static final EntityDataAccessor<Integer> DATA_rootZ = SynchedEntityData.defineId(ChitinGolemEntity.class, EntityDataSerializers.INT);
-	public static final EntityDataAccessor<Boolean> DATA_rooted = SynchedEntityData.defineId(ChitinGolemEntity.class, EntityDataSerializers.BOOLEAN);
-	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
-	private boolean swinging;
-	private boolean lastloop;
-	private long lastSwing;
-	public String animationprocedure = "empty";
+    public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(ChitinGolemEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(ChitinGolemEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(ChitinGolemEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> DATA_rootX = SynchedEntityData.defineId(ChitinGolemEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_rootZ = SynchedEntityData.defineId(ChitinGolemEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Boolean> DATA_rooted = SynchedEntityData.defineId(ChitinGolemEntity.class, EntityDataSerializers.BOOLEAN);
+    private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+    private boolean swinging;
+    private boolean lastloop;
+    private long lastSwing;
+    public String animationprocedure = "empty";
 
-	public ChitinGolemEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CAEntities.CHITIN_GOLEM.get(), world);
-	}
+    public ChitinGolemEntity(PlayMessages.SpawnEntity packet, Level world) {
+        this(CAEntities.CHITIN_GOLEM.get(), world);
+    }
 
-	public ChitinGolemEntity(EntityType<ChitinGolemEntity> type, Level world) {
-		super(type, world);
-		xpReward = 0;
-		setNoAi(false);
-		setMaxUpStep(1.5f);
-		setPersistenceRequired();
-	}
+    public ChitinGolemEntity(EntityType<ChitinGolemEntity> type, Level world) {
+        super(type, world);
+        xpReward = 0;
+        setNoAi(false);
+        setMaxUpStep(1.5f);
+        setPersistenceRequired();
+    }
 
-	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(SHOOT, false);
-		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(TEXTURE, "chitin_golem_0");
-		this.entityData.define(DATA_rootX, 0);
-		this.entityData.define(DATA_rootZ, 0);
-		this.entityData.define(DATA_rooted, false);
-	}
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(SHOOT, false);
+        this.entityData.define(ANIMATION, "undefined");
+        this.entityData.define(TEXTURE, "chitin_golem_0");
+        this.entityData.define(DATA_rootX, 0);
+        this.entityData.define(DATA_rootZ, 0);
+        this.entityData.define(DATA_rooted, false);
+    }
 
-	public void setTexture(String texture) {
-		this.entityData.set(TEXTURE, texture);
-	}
+    public void setTexture(String texture) {
+        this.entityData.set(TEXTURE, texture);
+    }
 
-	public String getTexture() {
-		return this.entityData.get(TEXTURE);
-	}
+    public String getTexture() {
+        return this.entityData.get(TEXTURE);
+    }
 
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
-	}
+    @Override
+    public Packet<ClientGamePacketListener> getAddEntityPacket() {
+        return NetworkHooks.getEntitySpawningPacket(this);
+    }
 
-	@Override
-	protected void registerGoals() {
-		super.registerGoals();
-		this.targetSelector.addGoal(1, new HurtByTargetGoal(this).setAlertOthers());
-		this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1, false) {
-			@Override
-			protected double getAttackReachSqr(LivingEntity entity) {
-				return 12.25;
-			}
-		});
-		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Monster.class, true, false));
-		this.goalSelector.addGoal(4, new RandomStrollGoal(this, 1));
-		this.goalSelector.addGoal(5, new RandomLookAroundGoal(this));
-	}
+    @Override
+    protected void registerGoals() {
+        super.registerGoals();
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this).setAlertOthers());
+        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1, false) {
+            @Override
+            protected double getAttackReachSqr(LivingEntity entity) {
+                return 12.25;
+            }
+        });
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Monster.class, true, false));
+        this.goalSelector.addGoal(4, new RandomStrollGoal(this, 1));
+        this.goalSelector.addGoal(5, new RandomLookAroundGoal(this));
+    }
 
-	@Override
-	public MobType getMobType() {
-		return MobType.UNDEFINED;
-	}
+    @Override
+    public MobType getMobType() {
+        return MobType.UNDEFINED;
+    }
 
-	@Override
-	public boolean removeWhenFarAway(double distanceToClosestPlayer) {
-		return false;
-	}
+    @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        return false;
+    }
 
-	@Override
-	public void playStepSound(BlockPos pos, BlockState blockIn) {
-		this.playSound(ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.iron_golem.step")), 0.15f, 1);
-	}
+    @Override
+    public void playStepSound(BlockPos pos, BlockState blockIn) {
+        this.playSound(ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.iron_golem.step")), 0.15f, 1);
+    }
 
-	@Override
-	public SoundEvent getHurtSound(DamageSource ds) {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.iron_golem.hurt"));
-	}
+    @Override
+    public SoundEvent getHurtSound(DamageSource ds) {
+        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.iron_golem.hurt"));
+    }
 
-	@Override
-	public SoundEvent getDeathSound() {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.iron_golem.death"));
-	}
+    @Override
+    public SoundEvent getDeathSound() {
+        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.iron_golem.death"));
+    }
 
-	@Override
-	public boolean hurt(DamageSource source, float amount) {
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
         LevelAccessor world = this.level();
         double x = this.getX();
         double y = this.getY();
@@ -181,7 +181,7 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
                             ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((sourceentity.getX()), (sourceentity.getY()), (sourceentity.getZ())));
                             CaerulaArborMod.queueServerWork(13, () -> {
                                 if (world instanceof Level _level) {
-                                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.iron_golem.damage")), SoundSource.HOSTILE, 2, 1);
+                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.iron_golem.damage")), SoundSource.HOSTILE, 2, 1);
                                 }
                                 {
                                     final Vec3 _center = new Vec3((x + 2 * getLookAngle().x), (y + 2), (z + 2 * getLookAngle().z));
@@ -193,11 +193,11 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
                                                     (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
                                                             * 3.5));
                                         } else if (entityiterator == this.getTarget()) {
-											entityiterator.hurt(
-													new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "golem_attack"))), this),
-													(float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
-															* 3.5));
-										}
+                                            entityiterator.hurt(
+                                                    new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "golem_attack"))), this),
+                                                    (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
+                                                            * 3.5));
+                                        }
                                     }
                                 }
                             });
@@ -207,13 +207,13 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
             }
         }
         if (source.is(DamageTypes.DROWN))
-			return false;
-		return super.hurt(source, amount);
-	}
+            return false;
+        return super.hurt(source, amount);
+    }
 
-	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
+    @Override
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
+        SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
         if (this.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
             this.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.05);
         if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get()))
@@ -221,38 +221,38 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
         if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE.get()))
             this.getAttribute(CAAttributes.MISSRATE.get()).setBaseValue(33);
         return retval;
-	}
+    }
 
-	@Override
-	public void addAdditionalSaveData(CompoundTag compound) {
-		super.addAdditionalSaveData(compound);
-		compound.putString("Texture", this.getTexture());
-		compound.putInt("DatarootX", this.entityData.get(DATA_rootX));
-		compound.putInt("DatarootZ", this.entityData.get(DATA_rootZ));
-		compound.putBoolean("Datarooted", this.entityData.get(DATA_rooted));
-	}
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putString("Texture", this.getTexture());
+        compound.putInt("DatarootX", this.entityData.get(DATA_rootX));
+        compound.putInt("DatarootZ", this.entityData.get(DATA_rootZ));
+        compound.putBoolean("Datarooted", this.entityData.get(DATA_rooted));
+    }
 
-	@Override
-	public void readAdditionalSaveData(CompoundTag compound) {
-		super.readAdditionalSaveData(compound);
-		if (compound.contains("Texture"))
-			this.setTexture(compound.getString("Texture"));
-		if (compound.contains("DatarootX"))
-			this.entityData.set(DATA_rootX, compound.getInt("DatarootX"));
-		if (compound.contains("DatarootZ"))
-			this.entityData.set(DATA_rootZ, compound.getInt("DatarootZ"));
-		if (compound.contains("Datarooted"))
-			this.entityData.set(DATA_rooted, compound.getBoolean("Datarooted"));
-	}
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        if (compound.contains("Texture"))
+            this.setTexture(compound.getString("Texture"));
+        if (compound.contains("DatarootX"))
+            this.entityData.set(DATA_rootX, compound.getInt("DatarootX"));
+        if (compound.contains("DatarootZ"))
+            this.entityData.set(DATA_rootZ, compound.getInt("DatarootZ"));
+        if (compound.contains("Datarooted"))
+            this.entityData.set(DATA_rooted, compound.getBoolean("Datarooted"));
+    }
 
-	@Override
-	public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
-		super.mobInteract(sourceentity, hand);
-		double x = this.getX();
-		double y = this.getY();
-		double z = this.getZ();
-		Entity entity = this;
-		Level world = this.level();
+    @Override
+    public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
+        super.mobInteract(sourceentity, hand);
+        double x = this.getX();
+        double y = this.getY();
+        double z = this.getZ();
+        Entity entity = this;
+        Level world = this.level();
         ItemStack mainHand;
         boolean isLowHealth;
         boolean isCreative;
@@ -272,17 +272,17 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
             LivingEntity _entity = (LivingEntity) entity;
             _entity.setHealth((float) ((entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) + (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.25));
             if ((LevelAccessor) world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.iron_golem.repair")), SoundSource.PLAYERS, 1, 1);
+                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.iron_golem.repair")), SoundSource.PLAYERS, 1, 1);
             }
             if (!isCreative) {
-				sourceentity.getMainHandItem().shrink(1);
+                sourceentity.getMainHandItem().shrink(1);
             }
             return InteractionResult.SUCCESS;
         } else if (mainHand.getItem() == CAItems.CHITIN_INGOT.get() && isLowHealth) {
             if (entity instanceof LivingEntity _entity)
                 _entity.setHealth((float) ((entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) + (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5));
             if ((LevelAccessor) world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.iron_golem.repair")), SoundSource.PLAYERS, 1, 1);
+                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.iron_golem.repair")), SoundSource.PLAYERS, 1, 1);
             }
             if (!isCreative) {
                 ((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
@@ -315,9 +315,9 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
         return InteractionResult.PASS;
     }
 
-	@Override
-	public void baseTick() {
-		super.baseTick();
+    @Override
+    public void baseTick() {
+        super.baseTick();
         double x = this.getX();
         double z = this.getZ();
         boolean root;
@@ -358,119 +358,117 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
                 dist = new Vec3(0, 0, 0).distanceTo(new Vec3(rx, 0, rz));
                 if (dist >= 24) {
                     dist1 = Mth.nextDouble(RandomSource.create(), 4, 16);
-					this.getNavigation().moveTo(x - rx * dist1 / dist, this.getY(), z - rz * dist1 / dist, 1);
+                    this.getNavigation().moveTo(x - rx * dist1 / dist, this.getY(), z - rz * dist1 / dist, 1);
                 }
             }
         }
         this.refreshDimensions();
-	}
+    }
 
-	@Override
-	public EntityDimensions getDimensions(Pose p_33597_) {
-		return super.getDimensions(p_33597_).scale((float) 1);
-	}
+    @Override
+    public EntityDimensions getDimensions(Pose p_33597_) {
+        return super.getDimensions(p_33597_).scale((float) 1);
+    }
 
-	@Override
-	public void aiStep() {
-		super.aiStep();
-		this.updateSwingTime();
-	}
-
-	public static void init() {
-	}
-
-	public static AttributeSupplier.Builder createAttributes() {
-		AttributeSupplier.Builder builder = Mob.createMobAttributes();
-		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.22);
-		builder = builder.add(Attributes.MAX_HEALTH, 325);
-		builder = builder.add(Attributes.ARMOR, 12);
-		builder = builder.add(Attributes.ATTACK_DAMAGE, 17);
-		builder = builder.add(Attributes.FOLLOW_RANGE, 16);
-		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
-		return builder;
-	}
-
-	private PlayState movementPredicate(AnimationState event) {
-		if (this.animationprocedure.equals("empty")) {
-			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))) {
-				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.chitgolem.move"));
-			}
-			if (this.isDeadOrDying()) {
-				return event.setAndContinue(RawAnimation.begin().thenPlay("animation.chitgolem.die"));
-			}
-			return event.setAndContinue(RawAnimation.begin().thenLoop("animation.chitgolem.idle"));
-		}
-		return PlayState.STOP;
-	}
-
-	private PlayState attackingPredicate(AnimationState event) {
-		double d1 = this.getX() - this.xOld;
-		double d0 = this.getZ() - this.zOld;
-		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
-			this.swinging = true;
-			this.lastSwing = level().getGameTime();
-		}
-		if (this.swinging && this.lastSwing + 15L <= level().getGameTime()) {
-			this.swinging = false;
-		}
-		if (this.swinging && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
-			event.getController().forceAnimationReset();
-			return event.setAndContinue(RawAnimation.begin().thenPlay("animation.chitgolem.attack"));
-		}
-		return PlayState.CONTINUE;
-	}
-
-	String prevAnim = "empty";
-
-	private PlayState procedurePredicate(AnimationState event) {
-		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
-			if (!this.animationprocedure.equals(prevAnim))
-				event.getController().forceAnimationReset();
-			event.getController().setAnimation(RawAnimation.begin().thenPlay(this.animationprocedure));
-			if (event.getController().getAnimationState() == AnimationController.State.STOPPED) {
-				this.animationprocedure = "empty";
-				event.getController().forceAnimationReset();
-			}
-		} else if (animationprocedure.equals("empty")) {
-			prevAnim = "empty";
-			return PlayState.STOP;
-		}
-		prevAnim = this.animationprocedure;
-		return PlayState.CONTINUE;
-	}
-
-	@Override
-	protected void tickDeath() {
-		++this.deathTime;
-		if (this.deathTime == 30) {
-			this.remove(ChitinGolemEntity.RemovalReason.KILLED);
-			this.dropExperience();
-		}
-	}
-
-	public String getSyncedAnimation() {
-		return this.entityData.get(ANIMATION);
-	}
-
-	public void setAnimation(String animation) {
-		this.entityData.set(ANIMATION, animation);
-	}
-
-	@Override
-	public void registerControllers(AnimatableManager.ControllerRegistrar data) {
-		data.add(new AnimationController<>(this, "movement", 0, this::movementPredicate));
-		data.add(new AnimationController<>(this, "attacking", 0, this::attackingPredicate));
-		data.add(new AnimationController<>(this, "procedure", 0, this::procedurePredicate));
-	}
-
-	@Override
-	public AnimatableInstanceCache getAnimatableInstanceCache() {
-		return this.cache;
-	}
+    @Override
+    public void aiStep() {
+        super.aiStep();
+        this.updateSwingTime();
+    }
 
 
-	@Override
-	public void setAnimationProcedure(String animation) {
-		this.animationprocedure = animation;
-	}
+    public static AttributeSupplier.Builder createAttributes() {
+        AttributeSupplier.Builder builder = Mob.createMobAttributes();
+        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.22);
+        builder = builder.add(Attributes.MAX_HEALTH, 325);
+        builder = builder.add(Attributes.ARMOR, 12);
+        builder = builder.add(Attributes.ATTACK_DAMAGE, 17);
+        builder = builder.add(Attributes.FOLLOW_RANGE, 16);
+        builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
+        return builder;
+    }
+
+    private PlayState movementPredicate(AnimationState event) {
+        if (this.animationprocedure.equals("empty")) {
+            if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))) {
+                return event.setAndContinue(RawAnimation.begin().thenLoop("animation.chitgolem.move"));
+            }
+            if (this.isDeadOrDying()) {
+                return event.setAndContinue(RawAnimation.begin().thenPlay("animation.chitgolem.die"));
+            }
+            return event.setAndContinue(RawAnimation.begin().thenLoop("animation.chitgolem.idle"));
+        }
+        return PlayState.STOP;
+    }
+
+    private PlayState attackingPredicate(AnimationState event) {
+        double d1 = this.getX() - this.xOld;
+        double d0 = this.getZ() - this.zOld;
+        if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
+            this.swinging = true;
+            this.lastSwing = level().getGameTime();
+        }
+        if (this.swinging && this.lastSwing + 15L <= level().getGameTime()) {
+            this.swinging = false;
+        }
+        if (this.swinging && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+            event.getController().forceAnimationReset();
+            return event.setAndContinue(RawAnimation.begin().thenPlay("animation.chitgolem.attack"));
+        }
+        return PlayState.CONTINUE;
+    }
+
+    String prevAnim = "empty";
+
+    private PlayState procedurePredicate(AnimationState event) {
+        if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
+            if (!this.animationprocedure.equals(prevAnim))
+                event.getController().forceAnimationReset();
+            event.getController().setAnimation(RawAnimation.begin().thenPlay(this.animationprocedure));
+            if (event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+                this.animationprocedure = "empty";
+                event.getController().forceAnimationReset();
+            }
+        } else if (animationprocedure.equals("empty")) {
+            prevAnim = "empty";
+            return PlayState.STOP;
+        }
+        prevAnim = this.animationprocedure;
+        return PlayState.CONTINUE;
+    }
+
+    @Override
+    protected void tickDeath() {
+        ++this.deathTime;
+        if (this.deathTime == 30) {
+            this.remove(RemovalReason.KILLED);
+            this.dropExperience();
+        }
+    }
+
+    public String getSyncedAnimation() {
+        return this.entityData.get(ANIMATION);
+    }
+
+    public void setAnimation(String animation) {
+        this.entityData.set(ANIMATION, animation);
+    }
+
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar data) {
+        data.add(new AnimationController<>(this, "movement", 0, this::movementPredicate));
+        data.add(new AnimationController<>(this, "attacking", 0, this::attackingPredicate));
+        data.add(new AnimationController<>(this, "procedure", 0, this::procedurePredicate));
+    }
+
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return this.cache;
+    }
+
+
+    @Override
+    public void setAnimationProcedure(String animation) {
+        this.animationprocedure = animation;
+    }
 }

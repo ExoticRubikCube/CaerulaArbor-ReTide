@@ -66,154 +66,155 @@ import java.util.List;
 
 public class FlamarineGolemEntity extends SeaMonster {
 
-	private boolean isFlamarineDurative() {
-		return EntityPredicateUtils.isFlamarineDurative(this);
-	}
-	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(FlamarineGolemEntity.class, EntityDataSerializers.BOOLEAN);
-	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(FlamarineGolemEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(FlamarineGolemEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(FlamarineGolemEntity.class, EntityDataSerializers.INT);
-	public static final EntityDataAccessor<Integer> DATA_skillP1 = SynchedEntityData.defineId(FlamarineGolemEntity.class, EntityDataSerializers.INT);
-	public static final EntityDataAccessor<Integer> DATA_skillP2 = SynchedEntityData.defineId(FlamarineGolemEntity.class, EntityDataSerializers.INT);
-	public static final EntityDataAccessor<Integer> DATA_addition = SynchedEntityData.defineId(FlamarineGolemEntity.class, EntityDataSerializers.INT);
-	private boolean swinging;
-	private boolean lastloop;
-	private long lastSwing;
-	public String animationprocedure = "empty";
-	private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.PROGRESS);
+    private boolean isFlamarineDurative() {
+        return EntityPredicateUtils.isFlamarineDurative(this);
+    }
 
-	public FlamarineGolemEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CAEntities.FLAMARINE_GOLEM.get(), world);
-	}
+    public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(FlamarineGolemEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(FlamarineGolemEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(FlamarineGolemEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(FlamarineGolemEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_skillP1 = SynchedEntityData.defineId(FlamarineGolemEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_skillP2 = SynchedEntityData.defineId(FlamarineGolemEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_addition = SynchedEntityData.defineId(FlamarineGolemEntity.class, EntityDataSerializers.INT);
+    private boolean swinging;
+    private boolean lastloop;
+    private long lastSwing;
+    public String animationprocedure = "empty";
+    private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.PROGRESS);
 
-	public FlamarineGolemEntity(EntityType<FlamarineGolemEntity> type, Level world) {
-		super(type, world);
-		xpReward = 48;
-		setNoAi(false);
-		setMaxUpStep(1.5f);
-		setPersistenceRequired();
-	}
+    public FlamarineGolemEntity(PlayMessages.SpawnEntity packet, Level world) {
+        this(CAEntities.FLAMARINE_GOLEM.get(), world);
+    }
 
-	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(SHOOT, false);
-		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(TEXTURE, "flamarine_golem");
-		this.entityData.define(DATA_duration, 0);
-		this.entityData.define(DATA_skillP1, 6);
-		this.entityData.define(DATA_skillP2, 100);
-		this.entityData.define(DATA_addition, 40);
-	}
+    public FlamarineGolemEntity(EntityType<FlamarineGolemEntity> type, Level world) {
+        super(type, world);
+        xpReward = 48;
+        setNoAi(false);
+        setMaxUpStep(1.5f);
+        setPersistenceRequired();
+    }
 
-	public void setTexture(String texture) {
-		this.entityData.set(TEXTURE, texture);
-	}
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(SHOOT, false);
+        this.entityData.define(ANIMATION, "undefined");
+        this.entityData.define(TEXTURE, "flamarine_golem");
+        this.entityData.define(DATA_duration, 0);
+        this.entityData.define(DATA_skillP1, 6);
+        this.entityData.define(DATA_skillP2, 100);
+        this.entityData.define(DATA_addition, 40);
+    }
 
-	public String getTexture() {
-		return this.entityData.get(TEXTURE);
-	}
+    public void setTexture(String texture) {
+        this.entityData.set(TEXTURE, texture);
+    }
 
-	@Override
-	public boolean canCollideWith(Entity entity) {
-		return true;
-	}
+    public String getTexture() {
+        return this.entityData.get(TEXTURE);
+    }
 
-	@Override
-	public boolean canBeCollidedWith() {
-		Entity entity = this;
-		return EntityUtils.isAlive(entity);
-	}
+    @Override
+    public boolean canCollideWith(Entity entity) {
+        return true;
+    }
 
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
-	}
+    @Override
+    public boolean canBeCollidedWith() {
+        Entity entity = this;
+        return EntityUtils.isAlive(entity);
+    }
 
-	@Override
-	protected void registerGoals() {
-		super.registerGoals();
-		this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 2.25, false) {
-			@Override
-			protected double getAttackReachSqr(LivingEntity entity) {
-				return 20.25;
-			}
+    @Override
+    public Packet<ClientGamePacketListener> getAddEntityPacket() {
+        return NetworkHooks.getEntitySpawningPacket(this);
+    }
 
-			@Override
-			public boolean canUse() {
-				return super.canUse() && isFlamarineDurative();
-			}
+    @Override
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 2.25, false) {
+            @Override
+            protected double getAttackReachSqr(LivingEntity entity) {
+                return 20.25;
+            }
 
-			@Override
-			public boolean canContinueToUse() {
-				return super.canContinueToUse() && isFlamarineDurative();
-			}
+            @Override
+            public boolean canUse() {
+                return super.canUse() && isFlamarineDurative();
+            }
 
-		});
-		this.targetSelector.addGoal(2, new HurtByTargetGoal(this));
-		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Player.class, true, false));
-		this.goalSelector.addGoal(4, new RandomStrollGoal(this, 1) {
-			@Override
-			public boolean canUse() {
-				return super.canUse() && isFlamarineDurative();
-			}
+            @Override
+            public boolean canContinueToUse() {
+                return super.canContinueToUse() && isFlamarineDurative();
+            }
 
-			@Override
-			public boolean canContinueToUse() {
-				return super.canContinueToUse() && isFlamarineDurative();
-			}
-		});
-	}
+        });
+        this.targetSelector.addGoal(2, new HurtByTargetGoal(this));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Player.class, true, false));
+        this.goalSelector.addGoal(4, new RandomStrollGoal(this, 1) {
+            @Override
+            public boolean canUse() {
+                return super.canUse() && isFlamarineDurative();
+            }
 
-	@Override
-	public MobType getMobType() {
-		return MobType.UNDEFINED;
-	}
+            @Override
+            public boolean canContinueToUse() {
+                return super.canContinueToUse() && isFlamarineDurative();
+            }
+        });
+    }
 
-	@Override
-	public boolean removeWhenFarAway(double distanceToClosestPlayer) {
-		return false;
-	}
+    @Override
+    public MobType getMobType() {
+        return MobType.UNDEFINED;
+    }
 
-	@Override
-	public void playStepSound(BlockPos pos, BlockState blockIn) {
-		this.playSound(ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.iron_golem.step")), 0.15f, 1);
-	}
+    @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        return false;
+    }
 
-	@Override
-	public SoundEvent getHurtSound(DamageSource ds) {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.iron_golem.hurt"));
-	}
+    @Override
+    public void playStepSound(BlockPos pos, BlockState blockIn) {
+        this.playSound(ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.iron_golem.step")), 0.15f, 1);
+    }
 
-	@Override
-	public SoundEvent getDeathSound() {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.iron_golem.death"));
-	}
+    @Override
+    public SoundEvent getHurtSound(DamageSource ds) {
+        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.iron_golem.hurt"));
+    }
 
-	@Override
-	public boolean doHurtTarget(Entity target) {
-		double targetX = target.getX();
-		double targetY = target.getY();
-		double targetZ = target.getZ();
-		if (!this.level().isClientSide()) {
-			this.getEntityData().set(DATA_duration, 35);
-			CaerulaArborMod.queueServerWork(20, () -> {
-				if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 5.75) {
-					target.hurt(
-							new DamageSource(
-									this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
-											.getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "golem_attack"))),
-									this),
-							(float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
-					breakShield(this.level(), targetX, targetY, targetZ, target, 120);
-				}
-			});
-		}
-		return true;
-	}
+    @Override
+    public SoundEvent getDeathSound() {
+        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.iron_golem.death"));
+    }
 
-	@Override
-	public boolean hurt(DamageSource source, float amount) {
+    @Override
+    public boolean doHurtTarget(Entity target) {
+        double targetX = target.getX();
+        double targetY = target.getY();
+        double targetZ = target.getZ();
+        if (!this.level().isClientSide()) {
+            this.getEntityData().set(DATA_duration, 35);
+            CaerulaArborMod.queueServerWork(20, () -> {
+                if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 5.75) {
+                    target.hurt(
+                            new DamageSource(
+                                    this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
+                                            .getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "golem_attack"))),
+                                    this),
+                            (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
+                    breakShield(this.level(), targetX, targetY, targetZ, target, 120);
+                }
+            });
+        }
+        return true;
+    }
+
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
         LevelAccessor world = this.level();
         Entity sourceentity = source.getEntity();
         if (sourceentity != null) {
@@ -226,42 +227,42 @@ public class FlamarineGolemEntity extends SeaMonster {
                 }
             }
             if (!(sourceentity instanceof FlamarineGolemEntity || sourceentity instanceof FlamarineStatueEntity)) {
-				final Vec3 _center = new Vec3(this.getX(), this.getY(), this.getZ());
-				List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(32 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-				for (Entity entityiterator : _entfound) {
-					if (entityiterator instanceof FlamarineStatueEntity entity && sourceentity instanceof LivingEntity _ent && _ent.canBeSeenAsEnemy())
-						entity.setTarget(_ent);
-				}
+                final Vec3 _center = new Vec3(this.getX(), this.getY(), this.getZ());
+                List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(32 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+                for (Entity entityiterator : _entfound) {
+                    if (entityiterator instanceof FlamarineStatueEntity entity && sourceentity instanceof LivingEntity _ent && _ent.canBeSeenAsEnemy())
+                        entity.setTarget(_ent);
+                }
             }
         }
         if (source.is(DamageTypes.IN_FIRE))
-			return false;
-		if (source.getDirectEntity() instanceof ThrownPotion || source.getDirectEntity() instanceof AreaEffectCloud)
-			return false;
-		if (source.is(DamageTypes.FALL))
-			return false;
-		if (source.is(DamageTypes.CACTUS))
-			return false;
-		if (source.is(DamageTypes.DROWN))
-			return false;
-		if (source.is(DamageTypes.EXPLOSION))
-			return false;
-		if (source.is(DamageTypes.TRIDENT))
-			return false;
-		if (source.is(DamageTypes.FALLING_ANVIL))
-			return false;
-		if (source.is(DamageTypes.DRAGON_BREATH))
-			return false;
-		if (source.is(DamageTypes.WITHER))
-			return false;
-		if (source.is(DamageTypes.WITHER_SKULL))
-			return false;
-		return super.hurt(source, amount);
-	}
+            return false;
+        if (source.getDirectEntity() instanceof ThrownPotion || source.getDirectEntity() instanceof AreaEffectCloud)
+            return false;
+        if (source.is(DamageTypes.FALL))
+            return false;
+        if (source.is(DamageTypes.CACTUS))
+            return false;
+        if (source.is(DamageTypes.DROWN))
+            return false;
+        if (source.is(DamageTypes.EXPLOSION))
+            return false;
+        if (source.is(DamageTypes.TRIDENT))
+            return false;
+        if (source.is(DamageTypes.FALLING_ANVIL))
+            return false;
+        if (source.is(DamageTypes.DRAGON_BREATH))
+            return false;
+        if (source.is(DamageTypes.WITHER))
+            return false;
+        if (source.is(DamageTypes.WITHER_SKULL))
+            return false;
+        return super.hurt(source, amount);
+    }
 
-	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
+    @Override
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
+        SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
         if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
             this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).setBaseValue(5);
         if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
@@ -274,36 +275,36 @@ public class FlamarineGolemEntity extends SeaMonster {
         if ((Entity) this instanceof FlamarineGolemEntity _datEntSetI)
             _datEntSetI.getEntityData().set(DATA_duration, 60);
         return retval;
-	}
+    }
 
-	@Override
-	public void addAdditionalSaveData(CompoundTag compound) {
-		super.addAdditionalSaveData(compound);
-		compound.putString("Texture", this.getTexture());
-		compound.putInt("Dataduration", this.entityData.get(DATA_duration));
-		compound.putInt("DataskillP1", this.entityData.get(DATA_skillP1));
-		compound.putInt("DataskillP2", this.entityData.get(DATA_skillP2));
-		compound.putInt("Dataaddition", this.entityData.get(DATA_addition));
-	}
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putString("Texture", this.getTexture());
+        compound.putInt("Dataduration", this.entityData.get(DATA_duration));
+        compound.putInt("DataskillP1", this.entityData.get(DATA_skillP1));
+        compound.putInt("DataskillP2", this.entityData.get(DATA_skillP2));
+        compound.putInt("Dataaddition", this.entityData.get(DATA_addition));
+    }
 
-	@Override
-	public void readAdditionalSaveData(CompoundTag compound) {
-		super.readAdditionalSaveData(compound);
-		if (compound.contains("Texture"))
-			this.setTexture(compound.getString("Texture"));
-		if (compound.contains("Dataduration"))
-			this.entityData.set(DATA_duration, compound.getInt("Dataduration"));
-		if (compound.contains("DataskillP1"))
-			this.entityData.set(DATA_skillP1, compound.getInt("DataskillP1"));
-		if (compound.contains("DataskillP2"))
-			this.entityData.set(DATA_skillP2, compound.getInt("DataskillP2"));
-		if (compound.contains("Dataaddition"))
-			this.entityData.set(DATA_addition, compound.getInt("Dataaddition"));
-	}
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        if (compound.contains("Texture"))
+            this.setTexture(compound.getString("Texture"));
+        if (compound.contains("Dataduration"))
+            this.entityData.set(DATA_duration, compound.getInt("Dataduration"));
+        if (compound.contains("DataskillP1"))
+            this.entityData.set(DATA_skillP1, compound.getInt("DataskillP1"));
+        if (compound.contains("DataskillP2"))
+            this.entityData.set(DATA_skillP2, compound.getInt("DataskillP2"));
+        if (compound.contains("Dataaddition"))
+            this.entityData.set(DATA_addition, compound.getInt("Dataaddition"));
+    }
 
-	@Override
-	public void baseTick() {
-		super.baseTick();
+    @Override
+    public void baseTick() {
+        super.baseTick();
         LevelAccessor world = this.level();
         double x = this.getX();
         double y = this.getY();
@@ -315,7 +316,7 @@ public class FlamarineGolemEntity extends SeaMonster {
         if (this.deathTime == 46) {
             if (!world.isClientSide()) {
                 if (world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.trident.hit_ground")), SoundSource.HOSTILE, 2, 1);
+                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.trident.hit_ground")), SoundSource.HOSTILE, 2, 1);
                 }
             }
         }
@@ -356,36 +357,36 @@ public class FlamarineGolemEntity extends SeaMonster {
                                         _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.anvil.land")), SoundSource.HOSTILE, 1, 1, false);
                                     }
                                 }
-								final Vec3 _center = new Vec3(x, y, z);
-								List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(12 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-								for (Entity entityiterator : _entfound) {
-									if (!(entityiterator instanceof LivingEntity)) {
-										continue;
-									}
-									if (!entityiterator.isAlive()) {
-										continue;
-									}
-									if (entityiterator instanceof Player || (entityiterator instanceof TamableAnimal _tamEnt && _tamEnt.isTame())) {
-										if (!(entityiterator == enemy1)) {
-											continue;
-										}
-									}
-									if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "is_humanside")))) {
-										if (!(entityiterator == enemy1)) {
-											continue;
-										}
-									}
-									if (entityiterator == this) {
-										continue;
-									}
-									if ((entityiterator != null ? distanceTo(entityiterator) : -1) <= r) {
-										h = entityiterator instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1;
-										d = Math.min(damage * 4.5, Math.max(h * 0.25, damage * 1.5));
-										entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "golem_attack"))), this),
-												(float) d);
-										breakShield(world, x, y, z, entityiterator, 120);
-									}
-								}
+                                final Vec3 _center = new Vec3(x, y, z);
+                                List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(12 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+                                for (Entity entityiterator : _entfound) {
+                                    if (!(entityiterator instanceof LivingEntity)) {
+                                        continue;
+                                    }
+                                    if (!entityiterator.isAlive()) {
+                                        continue;
+                                    }
+                                    if (entityiterator instanceof Player || (entityiterator instanceof TamableAnimal _tamEnt && _tamEnt.isTame())) {
+                                        if (!(entityiterator == enemy1)) {
+                                            continue;
+                                        }
+                                    }
+                                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "is_humanside")))) {
+                                        if (!(entityiterator == enemy1)) {
+                                            continue;
+                                        }
+                                    }
+                                    if (entityiterator == this) {
+                                        continue;
+                                    }
+                                    if ((entityiterator != null ? distanceTo(entityiterator) : -1) <= r) {
+                                        h = entityiterator instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1;
+                                        d = Math.min(damage * 4.5, Math.max(h * 0.25, damage * 1.5));
+                                        entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "golem_attack"))), this),
+                                                (float) d);
+                                        breakShield(world, x, y, z, entityiterator, 120);
+                                    }
+                                }
                             }
                         });
                     }
@@ -469,114 +470,112 @@ public class FlamarineGolemEntity extends SeaMonster {
             }
         }
         this.refreshDimensions();
-	}
+    }
 
-	@Override
-	public EntityDimensions getDimensions(Pose p_33597_) {
-		return super.getDimensions(p_33597_).scale((float) 1.25);
-	}
+    @Override
+    public EntityDimensions getDimensions(Pose p_33597_) {
+        return super.getDimensions(p_33597_).scale((float) 1.25);
+    }
 
-	@Override
-	public boolean canChangeDimensions() {
-		return false;
-	}
+    @Override
+    public boolean canChangeDimensions() {
+        return false;
+    }
 
-	@Override
-	public void startSeenByPlayer(ServerPlayer player) {
-		super.startSeenByPlayer(player);
-		this.bossInfo.addPlayer(player);
-	}
+    @Override
+    public void startSeenByPlayer(ServerPlayer player) {
+        super.startSeenByPlayer(player);
+        this.bossInfo.addPlayer(player);
+    }
 
-	@Override
-	public void stopSeenByPlayer(ServerPlayer player) {
-		super.stopSeenByPlayer(player);
-		this.bossInfo.removePlayer(player);
-	}
+    @Override
+    public void stopSeenByPlayer(ServerPlayer player) {
+        super.stopSeenByPlayer(player);
+        this.bossInfo.removePlayer(player);
+    }
 
-	@Override
-	public void customServerAiStep() {
-		super.customServerAiStep();
-		this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
-	}
+    @Override
+    public void customServerAiStep() {
+        super.customServerAiStep();
+        this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
+    }
 
-	public static void init() {
-	}
 
-	public static AttributeSupplier.Builder createAttributes() {
-		AttributeSupplier.Builder builder = Mob.createMobAttributes();
-		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.18);
-		builder = builder.add(Attributes.MAX_HEALTH, 270);
-		builder = builder.add(Attributes.ARMOR, 23);
-		builder = builder.add(Attributes.ATTACK_DAMAGE, 19);
-		builder = builder.add(Attributes.FOLLOW_RANGE, 32);
-		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
-		return builder;
-	}
+    public static AttributeSupplier.Builder createAttributes() {
+        AttributeSupplier.Builder builder = Mob.createMobAttributes();
+        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.18);
+        builder = builder.add(Attributes.MAX_HEALTH, 270);
+        builder = builder.add(Attributes.ARMOR, 23);
+        builder = builder.add(Attributes.ATTACK_DAMAGE, 19);
+        builder = builder.add(Attributes.FOLLOW_RANGE, 32);
+        builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
+        return builder;
+    }
 
-	private PlayState movementPredicate(AnimationState event) {
-		if (this.isDeadOrDying()) {
-			return event.setAndContinue(RawAnimation.begin().thenPlay("animation.flamarine_golem.die"));
-		}
+    private PlayState movementPredicate(AnimationState event) {
+        if (this.isDeadOrDying()) {
+            return event.setAndContinue(RawAnimation.begin().thenPlay("animation.flamarine_golem.die"));
+        }
 
-		if (this.animationprocedure.equals("empty")) {
-			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
+        if (this.animationprocedure.equals("empty")) {
+            if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
 
-					&& !this.isAggressive() && !this.isSprinting()) {
-				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.flamarine_golem.move"));
-			}
-			if (this.isSprinting()) {
-				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.flamarine_golem.sprint"));
-			}
-			if (this.isAggressive() && event.isMoving()) {
-				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.flamarine_golem.sprint"));
-			}
-			return event.setAndContinue(RawAnimation.begin().thenLoop("animation.flamarine_golem.idle"));
-		}
-		return PlayState.STOP;
-	}
+                    && !this.isAggressive() && !this.isSprinting()) {
+                return event.setAndContinue(RawAnimation.begin().thenLoop("animation.flamarine_golem.move"));
+            }
+            if (this.isSprinting()) {
+                return event.setAndContinue(RawAnimation.begin().thenLoop("animation.flamarine_golem.sprint"));
+            }
+            if (this.isAggressive() && event.isMoving()) {
+                return event.setAndContinue(RawAnimation.begin().thenLoop("animation.flamarine_golem.sprint"));
+            }
+            return event.setAndContinue(RawAnimation.begin().thenLoop("animation.flamarine_golem.idle"));
+        }
+        return PlayState.STOP;
+    }
 
-	private PlayState attackingPredicate(AnimationState event) {
-		double d1 = this.getX() - this.xOld;
-		double d0 = this.getZ() - this.zOld;
-		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
-			this.swinging = true;
-			this.lastSwing = level().getGameTime();
-		}
-		if (this.swinging && this.lastSwing + 35L <= level().getGameTime()) {
-			this.swinging = false;
-		}
-		if (this.swinging && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
-			event.getController().forceAnimationReset();
-			return event.setAndContinue(RawAnimation.begin().thenPlay("animation.flamarine_golem.attack"));
-		}
-		return PlayState.CONTINUE;
-	}
+    private PlayState attackingPredicate(AnimationState event) {
+        double d1 = this.getX() - this.xOld;
+        double d0 = this.getZ() - this.zOld;
+        if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
+            this.swinging = true;
+            this.lastSwing = level().getGameTime();
+        }
+        if (this.swinging && this.lastSwing + 35L <= level().getGameTime()) {
+            this.swinging = false;
+        }
+        if (this.swinging && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+            event.getController().forceAnimationReset();
+            return event.setAndContinue(RawAnimation.begin().thenPlay("animation.flamarine_golem.attack"));
+        }
+        return PlayState.CONTINUE;
+    }
 
-	String prevAnim = "empty";
+    String prevAnim = "empty";
 
-	private PlayState procedurePredicate(AnimationState event) {
-		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
-			if (!this.animationprocedure.equals(prevAnim))
-				event.getController().forceAnimationReset();
-			event.getController().setAnimation(RawAnimation.begin().thenPlay(this.animationprocedure));
-			if (event.getController().getAnimationState() == AnimationController.State.STOPPED) {
-				this.animationprocedure = "empty";
-				event.getController().forceAnimationReset();
-			}
-		} else if (animationprocedure.equals("empty")) {
-			prevAnim = "empty";
-			return PlayState.STOP;
-		}
-		prevAnim = this.animationprocedure;
-		return PlayState.CONTINUE;
-	}
+    private PlayState procedurePredicate(AnimationState event) {
+        if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
+            if (!this.animationprocedure.equals(prevAnim))
+                event.getController().forceAnimationReset();
+            event.getController().setAnimation(RawAnimation.begin().thenPlay(this.animationprocedure));
+            if (event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+                this.animationprocedure = "empty";
+                event.getController().forceAnimationReset();
+            }
+        } else if (animationprocedure.equals("empty")) {
+            prevAnim = "empty";
+            return PlayState.STOP;
+        }
+        prevAnim = this.animationprocedure;
+        return PlayState.CONTINUE;
+    }
 
-	@Override
-	protected void tickDeath() {
-		++this.deathTime;
-		if (this.deathTime == 60) {
-			this.remove(FlamarineGolemEntity.RemovalReason.KILLED);
-			this.dropExperience();
+    @Override
+    protected void tickDeath() {
+        ++this.deathTime;
+        if (this.deathTime == 60) {
+            this.remove(RemovalReason.KILLED);
+            this.dropExperience();
             LevelAccessor world = this.level();
             if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
                 if (world instanceof ServerLevel _level) {
@@ -586,56 +585,56 @@ public class FlamarineGolemEntity extends SeaMonster {
                 }
             }
         }
-	}
+    }
 
-	public String getSyncedAnimation() {
-		return this.entityData.get(ANIMATION);
-	}
+    public String getSyncedAnimation() {
+        return this.entityData.get(ANIMATION);
+    }
 
-	public void setAnimation(String animation) {
-		this.entityData.set(ANIMATION, animation);
-	}
+    public void setAnimation(String animation) {
+        this.entityData.set(ANIMATION, animation);
+    }
 
-	@Override
-	public void registerControllers(AnimatableManager.ControllerRegistrar data) {
-		data.add(new AnimationController<>(this, "movement", 0, this::movementPredicate));
-		data.add(new AnimationController<>(this, "attacking", 0, this::attackingPredicate));
-		data.add(new AnimationController<>(this, "procedure", 0, this::procedurePredicate));
-	}
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar data) {
+        data.add(new AnimationController<>(this, "movement", 0, this::movementPredicate));
+        data.add(new AnimationController<>(this, "attacking", 0, this::attackingPredicate));
+        data.add(new AnimationController<>(this, "procedure", 0, this::procedurePredicate));
+    }
 
-	private void combo(LevelAccessor world, double x, double y, double z, double dist, double rate) {
-		Entity enemy;
-		double damage;
-		enemy = this.getTarget();
-		damage = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * rate;
-		if (world instanceof Level _level) {
-				_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.trident.hit")), SoundSource.HOSTILE, 1, 1);
-		}
-		if (!(enemy == null)) {
-			this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY()), (enemy.getZ())));
-			if (this.distanceTo(enemy) <= dist) {
-				enemy.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "golem_attack"))), this), (float) damage);
-				breakShield(world, x, y, z, enemy, 120);
-			}
-		}
-	}
+    private void combo(LevelAccessor world, double x, double y, double z, double dist, double rate) {
+        Entity enemy;
+        double damage;
+        enemy = this.getTarget();
+        damage = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * rate;
+        if (world instanceof Level _level) {
+            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.trident.hit")), SoundSource.HOSTILE, 1, 1);
+        }
+        if (!(enemy == null)) {
+            this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY()), (enemy.getZ())));
+            if (this.distanceTo(enemy) <= dist) {
+                enemy.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "golem_attack"))), this), (float) damage);
+                breakShield(world, x, y, z, enemy, 120);
+            }
+        }
+    }
 
-	private void breakShield(LevelAccessor world, double x, double y, double z, Entity entity, int time) {
-		if ((entity instanceof LivingEntity livingEntity ? livingEntity.getUseItem() : ItemStack.EMPTY).getItem() instanceof ShieldItem) {
-			if (entity instanceof Player player) {
-				player.getCooldowns().addCooldown(player.getUseItem().getItem(), time);
-				player.stopUsingItem();
-				player.level().broadcastEntityEvent(player, (byte) 30);
-			}
-			if (world instanceof Level level) {
-					level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.shield.break")), SoundSource.PLAYERS, 1, 1);
-			}
-		}
-	}
+    private void breakShield(LevelAccessor world, double x, double y, double z, Entity entity, int time) {
+        if ((entity instanceof LivingEntity livingEntity ? livingEntity.getUseItem() : ItemStack.EMPTY).getItem() instanceof ShieldItem) {
+            if (entity instanceof Player player) {
+                player.getCooldowns().addCooldown(player.getUseItem().getItem(), time);
+                player.stopUsingItem();
+                player.level().broadcastEntityEvent(player, (byte) 30);
+            }
+            if (world instanceof Level level) {
+                level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.shield.break")), SoundSource.PLAYERS, 1, 1);
+            }
+        }
+    }
 
 
-	@Override
-	public void setAnimationProcedure(String animation) {
-		this.animationprocedure = animation;
-	}
+    @Override
+    public void setAnimationProcedure(String animation) {
+        this.animationprocedure = animation;
+    }
 }

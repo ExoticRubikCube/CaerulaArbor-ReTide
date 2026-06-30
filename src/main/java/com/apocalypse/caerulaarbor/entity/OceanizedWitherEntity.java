@@ -26,6 +26,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
@@ -76,276 +77,278 @@ import java.util.EnumSet;
 import java.util.List;
 
 public class OceanizedWitherEntity extends SeaMonster implements RangedAttackMob {
-	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanizedWitherEntity.class, EntityDataSerializers.BOOLEAN);
-	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedWitherEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(OceanizedWitherEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<Integer> DATA_skillp = SynchedEntityData.defineId(OceanizedWitherEntity.class, EntityDataSerializers.INT);
-	public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(OceanizedWitherEntity.class, EntityDataSerializers.INT);
-	public static final EntityDataAccessor<Integer> DATA_spawn = SynchedEntityData.defineId(OceanizedWitherEntity.class, EntityDataSerializers.INT);
-	public static final EntityDataAccessor<Boolean> DATA_shelled = SynchedEntityData.defineId(OceanizedWitherEntity.class, EntityDataSerializers.BOOLEAN);
-	private boolean swinging;
-	private boolean lastloop;
-	private long lastSwing;
-	public String animationprocedure = "empty";
-	private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.WHITE, ServerBossEvent.BossBarOverlay.NOTCHED_10);
+    public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanizedWitherEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedWitherEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(OceanizedWitherEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> DATA_skillp = SynchedEntityData.defineId(OceanizedWitherEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(OceanizedWitherEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_spawn = SynchedEntityData.defineId(OceanizedWitherEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Boolean> DATA_shelled = SynchedEntityData.defineId(OceanizedWitherEntity.class, EntityDataSerializers.BOOLEAN);
+    private boolean swinging;
+    private boolean lastloop;
+    private long lastSwing;
+    public String animationprocedure = "empty";
+    private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.WHITE, ServerBossEvent.BossBarOverlay.NOTCHED_10);
 
-	public OceanizedWitherEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CAEntities.OCEANIZED_WITHER.get(), world);
-	}
+    public OceanizedWitherEntity(PlayMessages.SpawnEntity packet, Level world) {
+        this(CAEntities.OCEANIZED_WITHER.get(), world);
+    }
 
-	public OceanizedWitherEntity(EntityType<OceanizedWitherEntity> type, Level world) {
-		super(type, world);
-		xpReward = 512;
-		setNoAi(false);
-		setMaxUpStep(2f);
-		setPersistenceRequired();
-		this.moveControl = new FlyingMoveControl(this, 10, true);
-	}
+    public OceanizedWitherEntity(EntityType<OceanizedWitherEntity> type, Level world) {
+        super(type, world);
+        xpReward = 512;
+        setNoAi(false);
+        setMaxUpStep(2f);
+        setPersistenceRequired();
+        this.moveControl = new FlyingMoveControl(this, 10, true);
+    }
 
-	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(SHOOT, false);
-		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(TEXTURE, "oceanized_wither_inv");
-		this.entityData.define(DATA_skillp, 200);
-		this.entityData.define(DATA_duration, 100);
-		this.entityData.define(DATA_spawn, 0);
-		this.entityData.define(DATA_shelled, false);
-	}
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(SHOOT, false);
+        this.entityData.define(ANIMATION, "undefined");
+        this.entityData.define(TEXTURE, "oceanized_wither_inv");
+        this.entityData.define(DATA_skillp, 200);
+        this.entityData.define(DATA_duration, 100);
+        this.entityData.define(DATA_spawn, 0);
+        this.entityData.define(DATA_shelled, false);
+    }
 
-	public void setTexture(String texture) {
-		this.entityData.set(TEXTURE, texture);
-	}
+    public void setTexture(String texture) {
+        this.entityData.set(TEXTURE, texture);
+    }
 
-	public String getTexture() {
-		return this.entityData.get(TEXTURE);
-	}
+    public String getTexture() {
+        return this.entityData.get(TEXTURE);
+    }
 
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
-	}
+    @Override
+    public Packet<ClientGamePacketListener> getAddEntityPacket() {
+        return NetworkHooks.getEntitySpawningPacket(this);
+    }
 
-	@Override
-	protected PathNavigation createNavigation(Level world) {
-		return new FlyingPathNavigation(this, world);
-	}
+    @Override
+    protected PathNavigation createNavigation(Level world) {
+        return new FlyingPathNavigation(this, world);
+    }
 
-	@Override
-	protected void registerGoals() {
-		super.registerGoals();
-		this.targetSelector.addGoal(1, new HurtByTargetGoal(this) {
-			@Override
-			public boolean canUse() {
-				Entity entity = OceanizedWitherEntity.this;
-				Level world = OceanizedWitherEntity.this.level();
-				return super.canUse() && EntityPredicateUtils.isWitherDurative(entity);
-			}
+    @Override
+    protected void registerGoals() {
+        super.registerGoals();
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this) {
+            @Override
+            public boolean canUse() {
+                Entity entity = OceanizedWitherEntity.this;
+                Level world = OceanizedWitherEntity.this.level();
+                return super.canUse() && EntityPredicateUtils.isWitherDurative(entity);
+            }
 
-			@Override
-			public boolean canContinueToUse() {
-				Entity entity = OceanizedWitherEntity.this;
-				Level world = OceanizedWitherEntity.this.level();
-				return super.canContinueToUse() && EntityPredicateUtils.isWitherDurative(entity);
-			}
-		});
-		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, IronGolem.class, false, false));
-		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Villager.class, false, false));
-		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Animal.class, false, false));
-		this.goalSelector.addGoal(5, new RandomStrollGoal(this, 1, 20) {
-			@Override
-			protected Vec3 getPosition() {
-				RandomSource random = OceanizedWitherEntity.this.getRandom();
-				double dir_x = OceanizedWitherEntity.this.getX() + ((random.nextFloat() * 2 - 1) * 16);
-				double dir_y = OceanizedWitherEntity.this.getY() + ((random.nextFloat() * 2 - 1) * 16);
-				double dir_z = OceanizedWitherEntity.this.getZ() + ((random.nextFloat() * 2 - 1) * 16);
-				return new Vec3(dir_x, dir_y, dir_z);
-			}
+            @Override
+            public boolean canContinueToUse() {
+                Entity entity = OceanizedWitherEntity.this;
+                Level world = OceanizedWitherEntity.this.level();
+                return super.canContinueToUse() && EntityPredicateUtils.isWitherDurative(entity);
+            }
+        });
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, IronGolem.class, false, false));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Villager.class, false, false));
+        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Animal.class, false, false));
+        this.goalSelector.addGoal(5, new RandomStrollGoal(this, 1, 20) {
+            @Override
+            protected Vec3 getPosition() {
+                RandomSource random = OceanizedWitherEntity.this.getRandom();
+                double dir_x = OceanizedWitherEntity.this.getX() + ((random.nextFloat() * 2 - 1) * 16);
+                double dir_y = OceanizedWitherEntity.this.getY() + ((random.nextFloat() * 2 - 1) * 16);
+                double dir_z = OceanizedWitherEntity.this.getZ() + ((random.nextFloat() * 2 - 1) * 16);
+                return new Vec3(dir_x, dir_y, dir_z);
+            }
 
-			@Override
-			public boolean canUse() {
-				Entity entity = OceanizedWitherEntity.this;
-				Level world = OceanizedWitherEntity.this.level();
-				return super.canUse() && EntityPredicateUtils.isWitherDurative(entity);
-			}
+            @Override
+            public boolean canUse() {
+                Entity entity = OceanizedWitherEntity.this;
+                Level world = OceanizedWitherEntity.this.level();
+                return super.canUse() && EntityPredicateUtils.isWitherDurative(entity);
+            }
 
-			@Override
-			public boolean canContinueToUse() {
-				double z = OceanizedWitherEntity.this.getZ();
-				Entity entity = OceanizedWitherEntity.this;
-				Level world = OceanizedWitherEntity.this.level();
-				return super.canContinueToUse() && EntityPredicateUtils.isWitherDurative(entity);
-			}
+            @Override
+            public boolean canContinueToUse() {
+                double z = OceanizedWitherEntity.this.getZ();
+                Entity entity = OceanizedWitherEntity.this;
+                Level world = OceanizedWitherEntity.this.level();
+                return super.canContinueToUse() && EntityPredicateUtils.isWitherDurative(entity);
+            }
 
-		});
-		this.goalSelector.addGoal(6, new RandomLookAroundGoal(this) {
-			@Override
-			public boolean canUse() {
-				Entity entity = OceanizedWitherEntity.this;
-				Level world = OceanizedWitherEntity.this.level();
-				return super.canUse() && EntityPredicateUtils.isWitherDurative(entity);
-			}
+        });
+        this.goalSelector.addGoal(6, new RandomLookAroundGoal(this) {
+            @Override
+            public boolean canUse() {
+                Entity entity = OceanizedWitherEntity.this;
+                Level world = OceanizedWitherEntity.this.level();
+                return super.canUse() && EntityPredicateUtils.isWitherDurative(entity);
+            }
 
-			@Override
-			public boolean canContinueToUse() {
-				Entity entity = OceanizedWitherEntity.this;
-				Level world = OceanizedWitherEntity.this.level();
-				return super.canContinueToUse() && EntityPredicateUtils.isWitherDurative(entity);
-			}
-		});
-		this.goalSelector.addGoal(1, new OceanizedWitherEntity.RangedAttackGoal(this, 1.25, 30, 12f) {
-			@Override
-			public boolean canContinueToUse() {
-				return this.canUse();
-			}
-		});
-	}
+            @Override
+            public boolean canContinueToUse() {
+                Entity entity = OceanizedWitherEntity.this;
+                Level world = OceanizedWitherEntity.this.level();
+                return super.canContinueToUse() && EntityPredicateUtils.isWitherDurative(entity);
+            }
+        });
+        this.goalSelector.addGoal(1, new RangedAttackGoal(this, 1.25, 30, 12f) {
+            @Override
+            public boolean canContinueToUse() {
+                return this.canUse();
+            }
+        });
+    }
 
-	public class RangedAttackGoal extends Goal {
-		private final Mob mob;
-		private final RangedAttackMob rangedAttackMob;
-		@Nullable
-		private LivingEntity target;
-		private int attackTime = -1;
-		private final double speedModifier;
-		private int seeTime;
-		private final int attackIntervalMin;
-		private final int attackIntervalMax;
-		private final float attackRadius;
-		private final float attackRadiusSqr;
+    public class RangedAttackGoal extends Goal {
+        private final Mob mob;
+        private final RangedAttackMob rangedAttackMob;
+        @Nullable
+        private LivingEntity target;
+        private int attackTime = -1;
+        private final double speedModifier;
+        private int seeTime;
+        private final int attackIntervalMin;
+        private final int attackIntervalMax;
+        private final float attackRadius;
+        private final float attackRadiusSqr;
 
-		public RangedAttackGoal(RangedAttackMob p_25768_, double p_25769_, int p_25770_, float p_25771_) {
-			this(p_25768_, p_25769_, p_25770_, p_25770_, p_25771_);
-		}
+        public RangedAttackGoal(RangedAttackMob p_25768_, double p_25769_, int p_25770_, float p_25771_) {
+            this(p_25768_, p_25769_, p_25770_, p_25770_, p_25771_);
+        }
 
-		public RangedAttackGoal(RangedAttackMob p_25773_, double p_25774_, int p_25775_, int p_25776_, float p_25777_) {
-			if (!(p_25773_ instanceof LivingEntity)) {
-				throw new IllegalArgumentException("ArrowAttackGoal requires Mob implements RangedAttackMob");
-			} else {
-				this.rangedAttackMob = p_25773_;
-				this.mob = (Mob) p_25773_;
-				this.speedModifier = p_25774_;
-				this.attackIntervalMin = p_25775_;
-				this.attackIntervalMax = p_25776_;
-				this.attackRadius = p_25777_;
-				this.attackRadiusSqr = p_25777_ * p_25777_;
-				this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
-			}
-		}
+        public RangedAttackGoal(RangedAttackMob p_25773_, double p_25774_, int p_25775_, int p_25776_, float p_25777_) {
+            if (!(p_25773_ instanceof LivingEntity)) {
+                throw new IllegalArgumentException("ArrowAttackGoal requires Mob implements RangedAttackMob");
+            } else {
+                this.rangedAttackMob = p_25773_;
+                this.mob = (Mob) p_25773_;
+                this.speedModifier = p_25774_;
+                this.attackIntervalMin = p_25775_;
+                this.attackIntervalMax = p_25776_;
+                this.attackRadius = p_25777_;
+                this.attackRadiusSqr = p_25777_ * p_25777_;
+                this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
+            }
+        }
 
-		public boolean canUse() {
-			LivingEntity livingentity = this.mob.getTarget();
-			if (livingentity != null && livingentity.isAlive()) {
-				this.target = livingentity;
-				return true;
-			} else {
-				return false;
-			}
-		}
+        public boolean canUse() {
+            LivingEntity livingentity = this.mob.getTarget();
+            if (livingentity != null && livingentity.isAlive()) {
+                this.target = livingentity;
+                return true;
+            } else {
+                return false;
+            }
+        }
 
-		public boolean canContinueToUse() {
-			return this.canUse() || this.target.isAlive() && !this.mob.getNavigation().isDone();
-		}
+        public boolean canContinueToUse() {
+            return this.canUse() || this.target.isAlive() && !this.mob.getNavigation().isDone();
+        }
 
-		public void stop() {
-			this.target = null;
-			this.seeTime = 0;
-			this.attackTime = -1;
-			((OceanizedWitherEntity) rangedAttackMob).entityData.set(SHOOT, false);
-		}
+        public void stop() {
+            this.target = null;
+            this.seeTime = 0;
+            this.attackTime = -1;
+            ((OceanizedWitherEntity) rangedAttackMob).entityData.set(SHOOT, false);
+        }
 
-		public boolean requiresUpdateEveryTick() {
-			return true;
-		}
+        public boolean requiresUpdateEveryTick() {
+            return true;
+        }
 
-		public void tick() {
-			double d0 = this.mob.distanceToSqr(this.target.getX(), this.target.getY(), this.target.getZ());
-			boolean flag = this.mob.getSensing().hasLineOfSight(this.target);
-			if (flag) {
-				++this.seeTime;
-			} else {
-				this.seeTime = 0;
-			}
-			if (!(d0 > (double) this.attackRadiusSqr) && this.seeTime >= 5) {
-				this.mob.getNavigation().stop();
-			} else {
-				this.mob.getNavigation().moveTo(this.target, this.speedModifier);
-			}
-			this.mob.getLookControl().setLookAt(this.target, 30.0F, 30.0F);
-			if (--this.attackTime == 0) {
-				if (!flag) {
-					((OceanizedWitherEntity) rangedAttackMob).entityData.set(SHOOT, false);
-					return;
-				}
-				((OceanizedWitherEntity) rangedAttackMob).entityData.set(SHOOT, true);
-				float f = (float) Math.sqrt(d0) / this.attackRadius;
-				float f1 = Mth.clamp(f, 0.1F, 1.0F);
-				this.rangedAttackMob.performRangedAttack(this.target, f1);
-				this.attackTime = Mth.floor(f * (float) (this.attackIntervalMax - this.attackIntervalMin) + (float) this.attackIntervalMin);
-			} else if (this.attackTime < 0) {
-				this.attackTime = Mth.floor(Mth.lerp(Math.sqrt(d0) / (double) this.attackRadius, this.attackIntervalMin, this.attackIntervalMax));
-			} else
-				((OceanizedWitherEntity) rangedAttackMob).entityData.set(SHOOT, false);
-		}
-	}
+        public void tick() {
+            double d0 = this.mob.distanceToSqr(this.target.getX(), this.target.getY(), this.target.getZ());
+            boolean flag = this.mob.getSensing().hasLineOfSight(this.target);
+            if (flag) {
+                ++this.seeTime;
+            } else {
+                this.seeTime = 0;
+            }
+            if (!(d0 > (double) this.attackRadiusSqr) && this.seeTime >= 5) {
+                this.mob.getNavigation().stop();
+            } else {
+                this.mob.getNavigation().moveTo(this.target, this.speedModifier);
+            }
+            this.mob.getLookControl().setLookAt(this.target, 30.0F, 30.0F);
+            if (--this.attackTime == 0) {
+                if (!flag) {
+                    ((OceanizedWitherEntity) rangedAttackMob).entityData.set(SHOOT, false);
+                    return;
+                }
+                ((OceanizedWitherEntity) rangedAttackMob).entityData.set(SHOOT, true);
+                float f = (float) Math.sqrt(d0) / this.attackRadius;
+                float f1 = Mth.clamp(f, 0.1F, 1.0F);
+                this.rangedAttackMob.performRangedAttack(this.target, f1);
+                this.attackTime = Mth.floor(f * (float) (this.attackIntervalMax - this.attackIntervalMin) + (float) this.attackIntervalMin);
+            } else if (this.attackTime < 0) {
+                this.attackTime = Mth.floor(Mth.lerp(Math.sqrt(d0) / (double) this.attackRadius, this.attackIntervalMin, this.attackIntervalMax));
+            } else
+                ((OceanizedWitherEntity) rangedAttackMob).entityData.set(SHOOT, false);
+        }
+    }
 
-	@Override
-	public MobType getMobType() {
-		return MobType.UNDEAD;
-	}
+    @Override
+    public MobType getMobType() {
+        return MobType.UNDEAD;
+    }
 
-	@Override
-	public boolean removeWhenFarAway(double distanceToClosestPlayer) {
-		return false;
-	}
+    @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        return false;
+    }
 
-	@Override
-	public SoundEvent getAmbientSound() {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "ocean_wither_idle"));
-	}
+    @Override
+    public SoundEvent getAmbientSound() {
+        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "ocean_wither_idle"));
+    }
 
-	@Override
-	public SoundEvent getHurtSound(DamageSource ds) {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "ocean_wither_hurt"));
-	}
+    @Override
+    public SoundEvent getHurtSound(DamageSource ds) {
+        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "ocean_wither_hurt"));
+    }
 
-	@Override
-	public SoundEvent getDeathSound() {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "ocean_wither_die"));
-	}
+    @Override
+    public SoundEvent getDeathSound() {
+        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "ocean_wither_die"));
+    }
 
-	@Override
-	public boolean causeFallDamage(float l, float d, DamageSource source) {
-		return false;
-	}
+    @Override
+    public boolean causeFallDamage(float l, float d, DamageSource source) {
+        return false;
+    }
 
-	@Override
-	public boolean hurt(DamageSource source, float amount) {
-		if (source.is(DamageTypes.IN_FIRE))
-			return false;
-		if (source.is(DamageTypes.FALL))
-			return false;
-		if (source.is(DamageTypes.CACTUS))
-			return false;
-		if (source.is(DamageTypes.DROWN))
-			return false;
-		if (source.is(DamageTypes.LIGHTNING_BOLT))
-			return false;
-		if (source.is(DamageTypes.EXPLOSION))
-			return false;
-		if (source.is(DamageTypes.DRAGON_BREATH))
-			return false;
-		if (source.is(DamageTypes.WITHER))
-			return false;
-		if (source.is(DamageTypes.WITHER_SKULL))
-			return false;
-		return super.hurt(source, amount);
-	}
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        if (source.is(DamageTypes.IN_FIRE))
+            return false;
+        if (source.is(DamageTypes.FALL))
+            return false;
+        if (source.is(DamageTypes.CACTUS))
+            return false;
+        if (source.is(DamageTypes.DROWN))
+            return false;
+        if (source.is(DamageTypes.LIGHTNING_BOLT))
+            return false;
+        if (source.is(DamageTypes.EXPLOSION))
+            return false;
+        if (source.is(DamageTypes.DRAGON_BREATH))
+            return false;
+        if (source.is(DamageTypes.WITHER))
+            return false;
+        if (source.is(DamageTypes.WITHER_SKULL))
+            return false;
+        if (this.getEntityData().get(DATA_shelled) && source.is(DamageTypeTags.IS_PROJECTILE))
+            return false;
+        return super.hurt(source, amount);
+    }
 
-	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
+    @Override
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
+        SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
         if (this != null) {
             if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get()))
                 this.getAttribute(CAAttributes.SANITY_RATE.get()).setBaseValue(10);
@@ -364,43 +367,43 @@ public class OceanizedWitherEntity extends SeaMonster implements RangedAttackMob
                 _datEntSetI.getEntityData().set(DATA_duration, 100);
         }
         return retval;
-	}
+    }
 
-	@Override
-	public void addAdditionalSaveData(CompoundTag compound) {
-		super.addAdditionalSaveData(compound);
-		compound.putString("Texture", this.getTexture());
-		compound.putInt("Dataskillp", this.entityData.get(DATA_skillp));
-		compound.putInt("Dataduration", this.entityData.get(DATA_duration));
-		compound.putInt("Dataspawn", this.entityData.get(DATA_spawn));
-		compound.putBoolean("Datashelled", this.entityData.get(DATA_shelled));
-	}
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putString("Texture", this.getTexture());
+        compound.putInt("Dataskillp", this.entityData.get(DATA_skillp));
+        compound.putInt("Dataduration", this.entityData.get(DATA_duration));
+        compound.putInt("Dataspawn", this.entityData.get(DATA_spawn));
+        compound.putBoolean("Datashelled", this.entityData.get(DATA_shelled));
+    }
 
-	@Override
-	public void readAdditionalSaveData(CompoundTag compound) {
-		super.readAdditionalSaveData(compound);
-		if (compound.contains("Texture"))
-			this.setTexture(compound.getString("Texture"));
-		if (compound.contains("Dataskillp"))
-			this.entityData.set(DATA_skillp, compound.getInt("Dataskillp"));
-		if (compound.contains("Dataduration"))
-			this.entityData.set(DATA_duration, compound.getInt("Dataduration"));
-		if (compound.contains("Dataspawn"))
-			this.entityData.set(DATA_spawn, compound.getInt("Dataspawn"));
-		if (compound.contains("Datashelled"))
-			this.entityData.set(DATA_shelled, compound.getBoolean("Datashelled"));
-	}
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        if (compound.contains("Texture"))
+            this.setTexture(compound.getString("Texture"));
+        if (compound.contains("Dataskillp"))
+            this.entityData.set(DATA_skillp, compound.getInt("Dataskillp"));
+        if (compound.contains("Dataduration"))
+            this.entityData.set(DATA_duration, compound.getInt("Dataduration"));
+        if (compound.contains("Dataspawn"))
+            this.entityData.set(DATA_spawn, compound.getInt("Dataspawn"));
+        if (compound.contains("Datashelled"))
+            this.entityData.set(DATA_shelled, compound.getBoolean("Datashelled"));
+    }
 
-	@Override
-	public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
-		ItemStack itemstack = sourceentity.getItemInHand(hand);
-		InteractionResult retval = InteractionResult.sidedSuccess(this.level().isClientSide());
-		super.mobInteract(sourceentity, hand);
-		double x = this.getX();
-		double y = this.getY();
-		double z = this.getZ();
-		Entity entity = this;
-		Level world = this.level();
+    @Override
+    public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
+        ItemStack itemstack = sourceentity.getItemInHand(hand);
+        InteractionResult retval = InteractionResult.sidedSuccess(this.level().isClientSide());
+        super.mobInteract(sourceentity, hand);
+        double x = this.getX();
+        double y = this.getY();
+        double z = this.getZ();
+        Entity entity = this;
+        Level world = this.level();
         if (entity == null)
             return InteractionResult.PASS;
         if (itemstack.getItem() == CAItems.OCEANIZED_WITHER_SPAWNEGG.get()) {
@@ -419,9 +422,9 @@ public class OceanizedWitherEntity extends SeaMonster implements RangedAttackMob
         return InteractionResult.PASS;
     }
 
-	@Override
-	public void baseTick() {
-		super.baseTick();
+    @Override
+    public void baseTick() {
+        super.baseTick();
         LevelAccessor world = this.level();
         double x = this.getX();
         double y = this.getY();
@@ -468,7 +471,7 @@ public class OceanizedWitherEntity extends SeaMonster implements RangedAttackMob
                         if (world instanceof Level _level && !_level.isClientSide())
                             _level.explode(null, x, y, z, 16, Level.ExplosionInteraction.MOB);
                         if (world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "ocean_wither_spawn")), SoundSource.HOSTILE, 4, 1);
+                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "ocean_wither_spawn")), SoundSource.HOSTILE, 4, 1);
                         }
                         if (world instanceof ServerLevel _level)
                             _level.sendParticles(ParticleTypes.EXPLOSION, x, y, z, 4, 3, 3, 3, 1);
@@ -606,211 +609,209 @@ public class OceanizedWitherEntity extends SeaMonster implements RangedAttackMob
             }
         }
         this.refreshDimensions();
-	}
+    }
 
-	@Override
-	public EntityDimensions getDimensions(Pose p_33597_) {
-		return super.getDimensions(p_33597_).scale((float) 1);
-	}
+    @Override
+    public EntityDimensions getDimensions(Pose p_33597_) {
+        return super.getDimensions(p_33597_).scale((float) 1);
+    }
 
-	@Override
-	public void performRangedAttack(LivingEntity target, float flval) {
-		// TODO: Revisit this legacy system call when the pre-shot wither projectile path is cleaned up.
-		WitherShootPreEntity.shoot(this, target);
-	}
+    @Override
+    public void performRangedAttack(LivingEntity target, float flval) {
+        // TODO: Revisit this legacy system call when the pre-shot wither projectile path is cleaned up.
+        WitherShootPreEntity.shoot(this, target);
+    }
 
-	private void rimedWitherShoot(LevelAccessor world) {
-		InteractionResult start = InteractionResult.PASS;
-		new Object() {
-			void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
+    private void rimedWitherShoot(LevelAccessor world) {
+        InteractionResult start = InteractionResult.PASS;
+        new Object() {
+            void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                 double angle = getYRot() + 30 * timedloopiterator;
                 WorldUtils.shootWitherSkull(world, OceanizedWitherEntity.this, 0.1, Math.cos(Math.toRadians(angle)), Mth.nextDouble(RandomSource.create(), -0.25, 0.25), Math.sin(Math.toRadians(angle)), 5, 0.35, getX(),
                         getY() + Mth.nextDouble(RandomSource.create(), 0.25, 3), getZ());
                 final int tick2 = ticks;
-				CaerulaArborMod.queueServerWork(tick2, () -> {
-					if (timedlooptotal > timedloopiterator + 1) {
-						timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
-					}
-				});
-			}
-		}.timedLoop(0, 12, 1);
-	}
+                CaerulaArborMod.queueServerWork(tick2, () -> {
+                    if (timedlooptotal > timedloopiterator + 1) {
+                        timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
+                    }
+                });
+            }
+        }.timedLoop(0, 12, 1);
+    }
 
-	@Override
-	public boolean isPushable() {
-		return false;
-	}
+    @Override
+    public boolean isPushable() {
+        return false;
+    }
 
-	@Override
-	protected void doPush(Entity entityIn) {
-	}
+    @Override
+    protected void doPush(Entity entityIn) {
+    }
 
-	@Override
-	protected void pushEntities() {
-	}
+    @Override
+    protected void pushEntities() {
+    }
 
-	@Override
-	public boolean canChangeDimensions() {
-		return false;
-	}
+    @Override
+    public boolean canChangeDimensions() {
+        return false;
+    }
 
-	@Override
-	public void startSeenByPlayer(ServerPlayer player) {
-		super.startSeenByPlayer(player);
-		this.bossInfo.addPlayer(player);
-	}
+    @Override
+    public void startSeenByPlayer(ServerPlayer player) {
+        super.startSeenByPlayer(player);
+        this.bossInfo.addPlayer(player);
+    }
 
-	@Override
-	public void stopSeenByPlayer(ServerPlayer player) {
-		super.stopSeenByPlayer(player);
-		this.bossInfo.removePlayer(player);
-	}
+    @Override
+    public void stopSeenByPlayer(ServerPlayer player) {
+        super.stopSeenByPlayer(player);
+        this.bossInfo.removePlayer(player);
+    }
 
-	@Override
-	public void customServerAiStep() {
-		super.customServerAiStep();
-		this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
-	}
+    @Override
+    public void customServerAiStep() {
+        super.customServerAiStep();
+        this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
+    }
 
-	@Override
-	protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
-	}
+    @Override
+    protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
+    }
 
-	@Override
-	public void setNoGravity(boolean ignored) {
-		super.setNoGravity(true);
-	}
+    @Override
+    public void setNoGravity(boolean ignored) {
+        super.setNoGravity(true);
+    }
 
-	public void aiStep() {
-		super.aiStep();
-		this.setNoGravity(true);
-	}
+    public void aiStep() {
+        super.aiStep();
+        this.setNoGravity(true);
+    }
 
-	public static void init() {
-	}
 
-	public static AttributeSupplier.Builder createAttributes() {
-		AttributeSupplier.Builder builder = Mob.createMobAttributes();
-		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.35);
-		builder = builder.add(Attributes.MAX_HEALTH, 550);
-		builder = builder.add(Attributes.ARMOR, 8);
-		builder = builder.add(Attributes.ATTACK_DAMAGE, 12);
-		builder = builder.add(Attributes.FOLLOW_RANGE, 56);
-		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
-		builder = builder.add(Attributes.FLYING_SPEED, 0.35);
-		return builder;
-	}
+    public static AttributeSupplier.Builder createAttributes() {
+        AttributeSupplier.Builder builder = Mob.createMobAttributes();
+        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.35);
+        builder = builder.add(Attributes.MAX_HEALTH, 550);
+        builder = builder.add(Attributes.ARMOR, 8);
+        builder = builder.add(Attributes.ATTACK_DAMAGE, 12);
+        builder = builder.add(Attributes.FOLLOW_RANGE, 56);
+        builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
+        builder = builder.add(Attributes.FLYING_SPEED, 0.35);
+        return builder;
+    }
 
-	private PlayState movementPredicate(AnimationState event) {
-		if (this.animationprocedure.equals("empty")) {
-			if (this.isDeadOrDying()) {
-				return event.setAndContinue(RawAnimation.begin().thenPlay("animation.oceanzied_wither.die"));
-			}
-			if (this.isAggressive() && event.isMoving()) {
-				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanzied_wither.aggresive"));
-			}
-			return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanzied_wither.idle"));
-		}
-		return PlayState.STOP;
-	}
+    private PlayState movementPredicate(AnimationState event) {
+        if (this.animationprocedure.equals("empty")) {
+            if (this.isDeadOrDying()) {
+                return event.setAndContinue(RawAnimation.begin().thenPlay("animation.oceanzied_wither.die"));
+            }
+            if (this.isAggressive() && event.isMoving()) {
+                return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanzied_wither.aggresive"));
+            }
+            return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanzied_wither.idle"));
+        }
+        return PlayState.STOP;
+    }
 
-	String prevAnim = "empty";
+    String prevAnim = "empty";
 
-	private PlayState procedurePredicate(AnimationState event) {
-		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
-			if (!this.animationprocedure.equals(prevAnim))
-				event.getController().forceAnimationReset();
-			event.getController().setAnimation(RawAnimation.begin().thenPlay(this.animationprocedure));
-			if (event.getController().getAnimationState() == AnimationController.State.STOPPED) {
-				this.animationprocedure = "empty";
-				event.getController().forceAnimationReset();
-			}
-		} else if (animationprocedure.equals("empty")) {
-			prevAnim = "empty";
-			return PlayState.STOP;
-		}
-		prevAnim = this.animationprocedure;
-		return PlayState.CONTINUE;
-	}
+    private PlayState procedurePredicate(AnimationState event) {
+        if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
+            if (!this.animationprocedure.equals(prevAnim))
+                event.getController().forceAnimationReset();
+            event.getController().setAnimation(RawAnimation.begin().thenPlay(this.animationprocedure));
+            if (event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+                this.animationprocedure = "empty";
+                event.getController().forceAnimationReset();
+            }
+        } else if (animationprocedure.equals("empty")) {
+            prevAnim = "empty";
+            return PlayState.STOP;
+        }
+        prevAnim = this.animationprocedure;
+        return PlayState.CONTINUE;
+    }
 
-	@Override
-	protected void tickDeath() {
-		++this.deathTime;
-		if (this.deathTime == 30) {
-			this.remove(OceanizedWitherEntity.RemovalReason.KILLED);
-			this.dropExperience();
-			WorldUtils.dropMoistStar(this.level(), this.getX(), this.getY(), this.getZ(), this);
-		}
-	}
+    @Override
+    protected void tickDeath() {
+        ++this.deathTime;
+        if (this.deathTime == 30) {
+            this.remove(RemovalReason.KILLED);
+            this.dropExperience();
+            WorldUtils.dropMoistStar(this.level(), this.getX(), this.getY(), this.getZ(), this);
+        }
+    }
 
-	@Override
-	public void remove(RemovalReason pReason){
-		if(this.level().getDifficulty() != Difficulty.PEACEFUL && pReason == RemovalReason.DISCARDED){
-			this.hurt(
-				new DamageSource(
-					this.level().registryAccess().
-					registryOrThrow(Registries.DAMAGE_TYPE).
-					getHolderOrThrow(
-						ResourceKey.create(
-							Registries.DAMAGE_TYPE, 
-							new ResourceLocation(CaerulaArborMod.MODID, "oceankiller_damage")
-						)
-					)
-				),
-				20
-			);
-			return;
-		}
-		super.remove(pReason);
-	}
+    @Override
+    public void remove(RemovalReason pReason) {
+        if (this.level().getDifficulty() != Difficulty.PEACEFUL && pReason == RemovalReason.DISCARDED) {
+            this.hurt(
+                    new DamageSource(
+                            this.level().registryAccess().
+                                    registryOrThrow(Registries.DAMAGE_TYPE).
+                                    getHolderOrThrow(
+                                            ResourceKey.create(
+                                                    Registries.DAMAGE_TYPE,
+                                                    new ResourceLocation(CaerulaArborMod.MODID, "oceankiller_damage")
+                                            )
+                                    )
+                    ),
+                    20
+            );
+            return;
+        }
+        super.remove(pReason);
+    }
 
-	@Override
-    public void setHealth(float pHealth){
-    	float hlth = this.getHealth();
-    	float mhlth = this.getMaxHealth();
-        if(this.hasEffect(CAMobEffects.INVULNERABLE.get()) && pHealth < hlth) return;
+    @Override
+    public void setHealth(float pHealth) {
+        float hlth = this.getHealth();
+        float mhlth = this.getMaxHealth();
+        if (this.hasEffect(CAMobEffects.INVULNERABLE.get()) && pHealth < hlth) return;
         float reduction = hlth - pHealth;
         super.setHealth(reduction >= mhlth * 0.35f ? hlth - mhlth * 0.35f : hlth - reduction);
     }
 
-	public String getSyncedAnimation() {
-		return this.entityData.get(ANIMATION);
-	}
+    public String getSyncedAnimation() {
+        return this.entityData.get(ANIMATION);
+    }
 
-	public void setAnimation(String animation) {
-		this.entityData.set(ANIMATION, animation);
-	}
+    public void setAnimation(String animation) {
+        this.entityData.set(ANIMATION, animation);
+    }
 
-	@Override
-	public void registerControllers(AnimatableManager.ControllerRegistrar data) {
-		data.add(new AnimationController<>(this, "movement", 0, this::movementPredicate));
-		data.add(new AnimationController<>(this, "procedure", 0, this::procedurePredicate));
-	}
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar data) {
+        data.add(new AnimationController<>(this, "movement", 0, this::movementPredicate));
+        data.add(new AnimationController<>(this, "procedure", 0, this::procedurePredicate));
+    }
 
-	public void gatlinWitherShoot(LevelAccessor world, double x, double y, double z) {
-		double vx = 0;
-		double vy = 0;
-		double vz = 0;
-		new Object() {
-			void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
+    public void gatlinWitherShoot(LevelAccessor world, double x, double y, double z) {
+        double vx = 0;
+        double vy = 0;
+        double vz = 0;
+        new Object() {
+            void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                 double dist;
                 double rng;
                 dist = Mth.nextDouble(RandomSource.create(), 0, 16);
                 rng = Mth.nextDouble(RandomSource.create(), 0, 6.283);
                 WorldUtils.shootWitherSkull(world, OceanizedWitherEntity.this, 0.15, 0, -1, 0, 6, 0.35, x + dist * Math.cos(rng), y + Mth.nextDouble(RandomSource.create(), 4, 8), z + dist * Math.sin(rng));
                 final int tick2 = ticks;
-				CaerulaArborMod.queueServerWork(tick2, () -> {
-					if (timedlooptotal > timedloopiterator + 1) {
-						timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
-					}
-				});
-			}
-		}.timedLoop(0, 20, 1);
-	}
+                CaerulaArborMod.queueServerWork(tick2, () -> {
+                    if (timedlooptotal > timedloopiterator + 1) {
+                        timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
+                    }
+                });
+            }
+        }.timedLoop(0, 20, 1);
+    }
 
 
-	@Override
-	public void setAnimationProcedure(String animation) {
-		this.animationprocedure = animation;
-	}
+    @Override
+    public void setAnimationProcedure(String animation) {
+        this.animationprocedure = animation;
+    }
 }

@@ -6,7 +6,7 @@ import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CABlocks;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
-import com.apocalypse.caerulaarbor.procedures.TrailReplaceProcedure;
+import com.apocalypse.caerulaarbor.util.CaerulaUtil;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -308,7 +308,7 @@ public class BaselayerAbyssalEntity extends SeaMonster {
             if (CABlocks.SEA_TRAIL_GROWN.get().defaultBlockState().canSurvive(world, BlockPos.containing(x, y, z)) && !(world.getBlockFloorHeight(BlockPos.containing(x, y, z)) > 0)) {
                 if (WorldUtils.canGrief(world)) {
                     if (((Entity) this instanceof BaselayerAbyssalEntity _datEntI ? _datEntI.getEntityData().get(DATA_mute_time) : 0) <= 0) {
-                        TrailReplaceProcedure.execute(world, CABlocks.SEA_TRAIL_GROWN.get().defaultBlockState(), (world.getFluidState(BlockPos.containing(x, y, z)).createLegacyBlock()).getBlock() == Blocks.WATER, x, y, z);
+                        CaerulaUtil.replaceTrail(world, CABlocks.SEA_TRAIL_GROWN.get().defaultBlockState(), (world.getFluidState(BlockPos.containing(x, y, z)).createLegacyBlock()).getBlock() == Blocks.WATER, x, y, z);
                     }
                 }
             }

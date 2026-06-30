@@ -5,7 +5,6 @@ import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.menu.EvoTreeMenu;
 import com.apocalypse.caerulaarbor.network.CaerulaArborModNetwork;
 import com.apocalypse.caerulaarbor.network.message.send.EvoTreeButtonMessage;
-import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.StrategyUtils;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
@@ -45,25 +44,25 @@ public class EvoTreeScreen extends AbstractContainerScreen<EvoTreeMenu> {
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
 		this.renderTooltip(guiGraphics, mouseX, mouseY);
 		if (mouseX > leftPos + 33 && mouseX < leftPos + 158 && mouseY > topPos + 108 && mouseY < topPos + 140)
-			guiGraphics.renderTooltip(font, Component.literal(EntityUtils.getDescrGrow(world)), mouseX, mouseY);
+			guiGraphics.renderTooltip(font, Component.literal(StrategyUtils.getDescrGrow(world)), mouseX, mouseY);
 		if (mouseX > leftPos + 33 && mouseX < leftPos + 158 && mouseY > topPos + 68 && mouseY < topPos + 100)
-			guiGraphics.renderTooltip(font, Component.literal(EntityUtils.getDescrBreed(world)), mouseX, mouseY);
+			guiGraphics.renderTooltip(font, Component.literal(StrategyUtils.getDescrBreed(world)), mouseX, mouseY);
 		if (mouseX > leftPos + 33 && mouseX < leftPos + 158 && mouseY > topPos + 28 && mouseY < topPos + 61)
-			guiGraphics.renderTooltip(font, Component.literal(EntityUtils.getDescrSubsis(world)), mouseX, mouseY);
+			guiGraphics.renderTooltip(font, Component.literal(StrategyUtils.getDescrSubsis(world)), mouseX, mouseY);
 		if (mouseX > leftPos + 33 && mouseX < leftPos + 158 && mouseY > topPos + 148 && mouseY < topPos + 181)
-			guiGraphics.renderTooltip(font, Component.literal(EntityUtils.getDescrMigra(world)), mouseX, mouseY);
+			guiGraphics.renderTooltip(font, Component.literal(StrategyUtils.getDescrMigra(world)), mouseX, mouseY);
 		if (StrategyUtils.isSilence(world))
 			if (mouseX > leftPos + 176 && mouseX < leftPos + 200 && mouseY > topPos + 33 && mouseY < topPos + 57)
-				guiGraphics.renderTooltip(font, Component.literal(EntityUtils.getSilenceSubsis(world)), mouseX, mouseY);
+				guiGraphics.renderTooltip(font, Component.literal(StrategyUtils.getSilenceSubsis(world)), mouseX, mouseY);
 		if (StrategyUtils.isSilence(world))
 			if (mouseX > leftPos + 175 && mouseX < leftPos + 196 && mouseY > topPos + 116 && mouseY < topPos + 133)
-				guiGraphics.renderTooltip(font, Component.literal(EntityUtils.getSilenceGrow(world)), mouseX, mouseY);
+				guiGraphics.renderTooltip(font, Component.literal(StrategyUtils.getSilenceGrow(world)), mouseX, mouseY);
 		if (StrategyUtils.isSilence(world))
 			if (mouseX > leftPos + 175 && mouseX < leftPos + 193 && mouseY > topPos + 78 && mouseY < topPos + 92)
-				guiGraphics.renderTooltip(font, Component.literal(EntityUtils.getSilenceBreed(world)), mouseX, mouseY);
+				guiGraphics.renderTooltip(font, Component.literal(StrategyUtils.getSilenceBreed(world)), mouseX, mouseY);
 		if (StrategyUtils.isSilence(world))
 			if (mouseX > leftPos + 175 && mouseX < leftPos + 199 && mouseY > topPos + 151 && mouseY < topPos + 175)
-				guiGraphics.renderTooltip(font, Component.literal(EntityUtils.getSilenceMigration(world)), mouseX, mouseY);
+				guiGraphics.renderTooltip(font, Component.literal(StrategyUtils.getSilenceMigration(world)), mouseX, mouseY);
 	}
 
 	@Override
@@ -96,13 +95,13 @@ public class EvoTreeScreen extends AbstractContainerScreen<EvoTreeMenu> {
         }
         guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/evo_arrow.png"), this.leftPos + 14, this.topPos + 160, Mth.clamp((int) result4 * 161, 0, 161), 0, 161, 8, 322, 8);
 
-		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/evo_complete.png"), this.leftPos + 32, this.topPos + 28, Mth.clamp((int) EntityUtils.getStraSubsis(world) * 128, 0, 512), 0, 128, 33, 640, 33);
+		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/evo_complete.png"), this.leftPos + 32, this.topPos + 28, Mth.clamp((int) StrategyUtils.getStraSubsis(world) * 128, 0, 512), 0, 128, 33, 640, 33);
 
-		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/evo_complete.png"), this.leftPos + 32, this.topPos + 68, Mth.clamp((int) EntityUtils.getStraBreed(world) * 128, 0, 512), 0, 128, 33, 640, 33);
+		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/evo_complete.png"), this.leftPos + 32, this.topPos + 68, Mth.clamp((int) StrategyUtils.getStraBreed(world) * 128, 0, 512), 0, 128, 33, 640, 33);
 
-		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/evo_complete.png"), this.leftPos + 32, this.topPos + 108, Mth.clamp((int) EntityUtils.getStraGrow(world) * 128, 0, 512), 0, 128, 33, 640, 33);
+		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/evo_complete.png"), this.leftPos + 32, this.topPos + 108, Mth.clamp((int) StrategyUtils.getStraGrow(world) * 128, 0, 512), 0, 128, 33, 640, 33);
 
-		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/evo_complete.png"), this.leftPos + 32, this.topPos + 148, Mth.clamp((int) EntityUtils.getStraMigration(world) * 128, 0, 512), 0, 128, 33, 640, 33);
+		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/evo_complete.png"), this.leftPos + 32, this.topPos + 148, Mth.clamp((int) StrategyUtils.getStraMigration(world) * 128, 0, 512), 0, 128, 33, 640, 33);
 
         double result1 = 0;
         if (MapVariables.get(world).strategy_silence >= 1) {
@@ -110,7 +109,7 @@ public class EvoTreeScreen extends AbstractContainerScreen<EvoTreeMenu> {
         }
         guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/side_arrow.png"), this.leftPos + 176, this.topPos + 42, 0, Mth.clamp((int) result1 * 123, 0, 123), 39, 123, 39, 246);
 
-		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/silence.png"), this.leftPos + 208, this.topPos + 86, Mth.clamp((int) EntityUtils.getStraSilence(world) * 29, 0, 116), 0, 29, 33, 145, 33);
+		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/silence.png"), this.leftPos + 208, this.topPos + 86, Mth.clamp((int) StrategyUtils.getStraSilence(world) * 29, 0, 116), 0, 29, 33, 145, 33);
 
 		RenderSystem.disableBlend();
 	}

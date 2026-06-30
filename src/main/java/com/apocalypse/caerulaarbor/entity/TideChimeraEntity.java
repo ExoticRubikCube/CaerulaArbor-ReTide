@@ -71,148 +71,149 @@ import java.util.List;
 
 public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacker {
 
-	private boolean isChimeraDurative() {
-		return EntityPredicateUtils.isChimeraDurative(this);
-	}
-	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(TideChimeraEntity.class, EntityDataSerializers.BOOLEAN);
-	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(TideChimeraEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(TideChimeraEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(TideChimeraEntity.class, EntityDataSerializers.INT);
-	public static final EntityDataAccessor<Integer> DATA_summonP = SynchedEntityData.defineId(TideChimeraEntity.class, EntityDataSerializers.INT);
-	public static final EntityDataAccessor<Integer> DATA_skillP = SynchedEntityData.defineId(TideChimeraEntity.class, EntityDataSerializers.INT);
-	public static final EntityDataAccessor<Integer> DATA_deal = SynchedEntityData.defineId(TideChimeraEntity.class, EntityDataSerializers.INT);
-	private boolean swinging;
-	private boolean lastloop;
-	private long lastSwing;
-	public String animationprocedure = "empty";
-	private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.NOTCHED_12);
+    private boolean isChimeraDurative() {
+        return EntityPredicateUtils.isChimeraDurative(this);
+    }
 
-	public TideChimeraEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CAEntities.TIDE_CHIMERA.get(), world);
-	}
+    public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(TideChimeraEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(TideChimeraEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(TideChimeraEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(TideChimeraEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_summonP = SynchedEntityData.defineId(TideChimeraEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_skillP = SynchedEntityData.defineId(TideChimeraEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_deal = SynchedEntityData.defineId(TideChimeraEntity.class, EntityDataSerializers.INT);
+    private boolean swinging;
+    private boolean lastloop;
+    private long lastSwing;
+    public String animationprocedure = "empty";
+    private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.NOTCHED_12);
 
-	public TideChimeraEntity(EntityType<TideChimeraEntity> type, Level world) {
-		super(type, world);
-		xpReward = 99;
-		setNoAi(false);
-		setMaxUpStep(1.5f);
-		setPersistenceRequired();
-	}
+    public TideChimeraEntity(PlayMessages.SpawnEntity packet, Level world) {
+        this(CAEntities.TIDE_CHIMERA.get(), world);
+    }
 
-	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(SHOOT, false);
-		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(TEXTURE, "general_seaborns");
-		this.entityData.define(DATA_duration, 0);
-		this.entityData.define(DATA_summonP, 3);
-		this.entityData.define(DATA_skillP, 200);
-		this.entityData.define(DATA_deal, 0);
-	}
-
-	public void setTexture(String texture) {
-		this.entityData.set(TEXTURE, texture);
-	}
-
-	public String getTexture() {
-		return this.entityData.get(TEXTURE);
-	}
-
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
-	}
-
-	@Override
-	protected void registerGoals() {
-		super.registerGoals();
-		this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1, false) {
-			@Override
-			protected double getAttackReachSqr(LivingEntity entity) {
-				return 16;
-			}
-
-			@Override
-			public boolean canUse() {
-				return super.canUse() && isChimeraDurative();
-			}
-
-			@Override
-			public boolean canContinueToUse() {
-				return super.canContinueToUse() && isChimeraDurative();
-			}
-
-		});
-		this.targetSelector.addGoal(2, new HurtByTargetGoal(this));
-		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, SnowGolem.class, true, false));
-		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, IronGolem.class, true, false));
-		this.goalSelector.addGoal(5, new RandomStrollGoal(this, 1) {
-			@Override
-			public boolean canUse() {
-				return super.canUse() && isChimeraDurative();
-			}
-
-			@Override
-			public boolean canContinueToUse() {
-				return super.canContinueToUse() && isChimeraDurative();
-			}
-		});
-		this.goalSelector.addGoal(6, new RandomLookAroundGoal(this) {
-			@Override
-			public boolean canUse() {
-				return super.canUse() && isChimeraDurative();
-			}
-
-			@Override
-			public boolean canContinueToUse() {
-				return super.canContinueToUse() && isChimeraDurative();
-			}
-		});
-		this.goalSelector.addGoal(7, new FloatGoal(this));
-	}
+    public TideChimeraEntity(EntityType<TideChimeraEntity> type, Level world) {
+        super(type, world);
+        xpReward = 99;
+        setNoAi(false);
+        setMaxUpStep(1.5f);
+        setPersistenceRequired();
+    }
 
     @Override
-	public boolean removeWhenFarAway(double distanceToClosestPlayer) {
-		return false;
-	}
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(SHOOT, false);
+        this.entityData.define(ANIMATION, "undefined");
+        this.entityData.define(TEXTURE, "general_seaborns");
+        this.entityData.define(DATA_duration, 0);
+        this.entityData.define(DATA_summonP, 3);
+        this.entityData.define(DATA_skillP, 200);
+        this.entityData.define(DATA_deal, 0);
+    }
 
-	@Override
-	public SoundEvent getHurtSound(DamageSource ds) {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "seaborn_generic_hit"));
-	}
+    public void setTexture(String texture) {
+        this.entityData.set(TEXTURE, texture);
+    }
 
-	@Override
-	public SoundEvent getDeathSound() {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "apocata_die"));
-	}
+    public String getTexture() {
+        return this.entityData.get(TEXTURE);
+    }
 
-	@Override
-	public boolean doHurtTarget(Entity target) {
-		double targetX = target.getX();
-		double targetY = target.getY();
-		double targetZ = target.getZ();
-		if (!this.level().isClientSide()) {
-			CaerulaArborMod.queueServerWork(8, () -> {
-				if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 4) {
-					EntityUtils.giveLessArmor(target, 11);
-					this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
-							ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "puncturefish_attack")), SoundSource.HOSTILE, 3,
-							(float) Mth.nextDouble(RandomSource.create(), 0.9, 1.1));
-					target.hurt(
-							new DamageSource(
-									this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
-											.getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "general_seaborn_attack"))),
-									this),
-							(float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
-				}
-			});
-		}
-		return true;
-	}
+    @Override
+    public Packet<ClientGamePacketListener> getAddEntityPacket() {
+        return NetworkHooks.getEntitySpawningPacket(this);
+    }
 
-	@Override
-	public boolean hurt(DamageSource source, float amount) {
+    @Override
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1, false) {
+            @Override
+            protected double getAttackReachSqr(LivingEntity entity) {
+                return 16;
+            }
+
+            @Override
+            public boolean canUse() {
+                return super.canUse() && isChimeraDurative();
+            }
+
+            @Override
+            public boolean canContinueToUse() {
+                return super.canContinueToUse() && isChimeraDurative();
+            }
+
+        });
+        this.targetSelector.addGoal(2, new HurtByTargetGoal(this));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, SnowGolem.class, true, false));
+        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, IronGolem.class, true, false));
+        this.goalSelector.addGoal(5, new RandomStrollGoal(this, 1) {
+            @Override
+            public boolean canUse() {
+                return super.canUse() && isChimeraDurative();
+            }
+
+            @Override
+            public boolean canContinueToUse() {
+                return super.canContinueToUse() && isChimeraDurative();
+            }
+        });
+        this.goalSelector.addGoal(6, new RandomLookAroundGoal(this) {
+            @Override
+            public boolean canUse() {
+                return super.canUse() && isChimeraDurative();
+            }
+
+            @Override
+            public boolean canContinueToUse() {
+                return super.canContinueToUse() && isChimeraDurative();
+            }
+        });
+        this.goalSelector.addGoal(7, new FloatGoal(this));
+    }
+
+    @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        return false;
+    }
+
+    @Override
+    public SoundEvent getHurtSound(DamageSource ds) {
+        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "seaborn_generic_hit"));
+    }
+
+    @Override
+    public SoundEvent getDeathSound() {
+        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "apocata_die"));
+    }
+
+    @Override
+    public boolean doHurtTarget(Entity target) {
+        double targetX = target.getX();
+        double targetY = target.getY();
+        double targetZ = target.getZ();
+        if (!this.level().isClientSide()) {
+            CaerulaArborMod.queueServerWork(8, () -> {
+                if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 4) {
+                    EntityUtils.giveLessArmor(target, 11);
+                    this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
+                            ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "puncturefish_attack")), SoundSource.HOSTILE, 3,
+                            (float) Mth.nextDouble(RandomSource.create(), 0.9, 1.1));
+                    target.hurt(
+                            new DamageSource(
+                                    this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
+                                            .getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "general_seaborn_attack"))),
+                                    this),
+                            (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
+                }
+            });
+        }
+        return true;
+    }
+
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
         LevelAccessor world = this.level();
         Entity sourceentity = source.getEntity();
         if (sourceentity != null) {
@@ -235,25 +236,25 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
             }
         }
         if (source.is(DamageTypes.FALL))
-			return false;
-		if (source.is(DamageTypes.DROWN))
-			return false;
-		float healthBeforeDamage = this.getHealth();
-		boolean damaged = super.hurt(source, amount);
-		if (damaged && amount <= healthBeforeDamage) {
-			double accumulatedDamage = this.getEntityData().get(DATA_deal) + amount;
-			this.getEntityData().set(DATA_deal, (int) accumulatedDamage);
-			if (accumulatedDamage >= this.getMaxHealth() * 0.25) {
-				this.performRangedSanityAttack();
-				this.getEntityData().set(DATA_deal, 0);
-			}
-		}
-		return damaged;
-	}
+            return false;
+        if (source.is(DamageTypes.DROWN))
+            return false;
+        float healthBeforeDamage = this.getHealth();
+        boolean damaged = super.hurt(source, amount);
+        if (damaged && amount <= healthBeforeDamage) {
+            double accumulatedDamage = this.getEntityData().get(DATA_deal) + amount;
+            this.getEntityData().set(DATA_deal, (int) accumulatedDamage);
+            if (accumulatedDamage >= this.getMaxHealth() * 0.25) {
+                this.performRangedSanityAttack();
+                this.getEntityData().set(DATA_deal, 0);
+            }
+        }
+        return damaged;
+    }
 
-	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
+    @Override
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
+        SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
@@ -282,55 +283,55 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
         CaerulaArborMod.queueServerWork(60, () -> {
             if (this.isAlive()) {
                 if ((LevelAccessor) world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.slime.jump")), SoundSource.HOSTILE, (float) 2.5, 1);
+                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.slime.jump")), SoundSource.HOSTILE, (float) 2.5, 1);
                 }
             }
         });
         CaerulaArborMod.queueServerWork(66, () -> {
             if (this.isAlive()) {
                 if ((LevelAccessor) world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.slime.jump")), SoundSource.HOSTILE, (float) 2.5, 1);
+                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.slime.jump")), SoundSource.HOSTILE, (float) 2.5, 1);
                 }
             }
         });
         CaerulaArborMod.queueServerWork(83, () -> {
             if (this.isAlive()) {
                 if ((LevelAccessor) world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.slime_block.place")), SoundSource.HOSTILE, (float) 2.5, 1);
+                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.slime_block.place")), SoundSource.HOSTILE, (float) 2.5, 1);
                 }
             }
         });
         return retval;
-	}
+    }
 
-	@Override
-	public void addAdditionalSaveData(CompoundTag compound) {
-		super.addAdditionalSaveData(compound);
-		compound.putString("Texture", this.getTexture());
-		compound.putInt("Dataduration", this.entityData.get(DATA_duration));
-		compound.putInt("DatasummonP", this.entityData.get(DATA_summonP));
-		compound.putInt("DataskillP", this.entityData.get(DATA_skillP));
-		compound.putInt("Datadeal", this.entityData.get(DATA_deal));
-	}
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putString("Texture", this.getTexture());
+        compound.putInt("Dataduration", this.entityData.get(DATA_duration));
+        compound.putInt("DatasummonP", this.entityData.get(DATA_summonP));
+        compound.putInt("DataskillP", this.entityData.get(DATA_skillP));
+        compound.putInt("Datadeal", this.entityData.get(DATA_deal));
+    }
 
-	@Override
-	public void readAdditionalSaveData(CompoundTag compound) {
-		super.readAdditionalSaveData(compound);
-		if (compound.contains("Texture"))
-			this.setTexture(compound.getString("Texture"));
-		if (compound.contains("Dataduration"))
-			this.entityData.set(DATA_duration, compound.getInt("Dataduration"));
-		if (compound.contains("DatasummonP"))
-			this.entityData.set(DATA_summonP, compound.getInt("DatasummonP"));
-		if (compound.contains("DataskillP"))
-			this.entityData.set(DATA_skillP, compound.getInt("DataskillP"));
-		if (compound.contains("Datadeal"))
-			this.entityData.set(DATA_deal, compound.getInt("Datadeal"));
-	}
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        if (compound.contains("Texture"))
+            this.setTexture(compound.getString("Texture"));
+        if (compound.contains("Dataduration"))
+            this.entityData.set(DATA_duration, compound.getInt("Dataduration"));
+        if (compound.contains("DatasummonP"))
+            this.entityData.set(DATA_summonP, compound.getInt("DatasummonP"));
+        if (compound.contains("DataskillP"))
+            this.entityData.set(DATA_skillP, compound.getInt("DataskillP"));
+        if (compound.contains("Datadeal"))
+            this.entityData.set(DATA_deal, compound.getInt("Datadeal"));
+    }
 
-	@Override
-	public void baseTick() {
-		super.baseTick();
+    @Override
+    public void baseTick() {
+        super.baseTick();
         LevelAccessor world = this.level();
         double x = this.getX();
         double y = this.getY();
@@ -344,7 +345,7 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
         LivingEntity _livEnt = this;
         if (_livEnt.deathTime == 10) {
             if (world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.dragon_fireball.explode")), SoundSource.HOSTILE, 2, 1);
+                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.dragon_fireball.explode")), SoundSource.HOSTILE, 2, 1);
             }
             Entity entityToSpawn;
             BlockPos pos = BlockPos.containing(x, y, z);
@@ -459,7 +460,7 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
                                 if (world instanceof ServerLevel _level)
                                     _level.sendParticles(ParticleTypes.EXPLOSION, x, (y + 4), z, 3, 0, 0, 0, 0.1);
                                 if (world instanceof Level _level) {
-                                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "firstteller_attack")), SoundSource.HOSTILE, (float) 1.5, 1);
+                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "firstteller_attack")), SoundSource.HOSTILE, (float) 1.5, 1);
                                 }
                                 this.distributeBullets(world, x, y, z);
                             }
@@ -469,7 +470,7 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
                                 if (world instanceof ServerLevel _level)
                                     _level.sendParticles(ParticleTypes.EXPLOSION, x, (y + 4), z, 3, 0, 0, 0, 0.1);
                                 if (world instanceof Level _level) {
-                                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "firstteller_attack")), SoundSource.HOSTILE, (float) 1.5, 1);
+                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "firstteller_attack")), SoundSource.HOSTILE, (float) 1.5, 1);
                                 }
                                 this.distributeBullets(world, x, y, z);
                             }
@@ -479,7 +480,7 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
                                 if (world instanceof ServerLevel _level)
                                     _level.sendParticles(ParticleTypes.EXPLOSION, x, (y + 4), z, 3, 0, 0, 0, 0.1);
                                 if (world instanceof Level _level) {
-                                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "firstteller_attack")), SoundSource.HOSTILE, (float) 1.5, 1);
+                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "firstteller_attack")), SoundSource.HOSTILE, (float) 1.5, 1);
                                 }
                                 this.distributeBullets(world, x, y, z);
                             }
@@ -527,157 +528,155 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
             }
         }
         this.refreshDimensions();
-	}
+    }
 
-	private void summonRandomChimera(LevelAccessor world, double x, double y, double z) {
-		double randomValue = Math.random();
-		if (world instanceof Level level) {
-				level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.lingering_potion.throw")), SoundSource.HOSTILE, 3, 1);
-		}
-		Entity entityToSpawn = null;
-		BlockPos pos = BlockPos.containing(x, y + 3, z);
-		if (world instanceof ServerLevel serverLevel) {
-			if (randomValue < 0.01) {
-				entityToSpawn = CAEntities.IZUMIK.get().spawn(serverLevel, pos, MobSpawnType.MOB_SUMMONED);
-				if (entityToSpawn instanceof IzumikEntity izumik) {
-					izumik.getEntityData().set(IzumikEntity.DATA_growth_p, 20);
-				}
-			} else if (randomValue < 0.02) {
-				entityToSpawn = CAEntities.TIDE_CHIMERA.get().spawn(serverLevel, pos, MobSpawnType.MOB_SUMMONED);
-			} else if (randomValue < 0.21) {
-				entityToSpawn = CAEntities.TIDE_DEATHREPELLER.get().spawn(serverLevel, pos, MobSpawnType.MOB_SUMMONED);
-			} else if (randomValue < 0.4) {
-				entityToSpawn = CAEntities.LINGERING_PATHSHAPER.get().spawn(serverLevel, pos, MobSpawnType.MOB_SUMMONED);
-			} else if (randomValue < 0.6) {
-				entityToSpawn = EndspeakerEntity.spawnForPhase(serverLevel, pos, MobSpawnType.MOB_SUMMONED, 3);
-			} else if (randomValue < 0.8) {
-				entityToSpawn = CAEntities.FIRST_TO_TALK.get().spawn(serverLevel, pos, MobSpawnType.MOB_SUMMONED);
-			} else {
-				entityToSpawn = CAEntities.MEGA_CHEST.get().spawn(serverLevel, pos, MobSpawnType.MOB_SUMMONED);
-				if (entityToSpawn instanceof MegaChestEntity megaChest) {
-					megaChest.getEntityData().set(MegaChestEntity.DATA_released, true);
-				}
-			}
-		}
-		if (entityToSpawn != null) {
-			entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-			entityToSpawn.push(this.getLookAngle().x, 0.25, this.getLookAngle().z);
-		}
-	}
+    private void summonRandomChimera(LevelAccessor world, double x, double y, double z) {
+        double randomValue = Math.random();
+        if (world instanceof Level level) {
+            level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.lingering_potion.throw")), SoundSource.HOSTILE, 3, 1);
+        }
+        Entity entityToSpawn = null;
+        BlockPos pos = BlockPos.containing(x, y + 3, z);
+        if (world instanceof ServerLevel serverLevel) {
+            if (randomValue < 0.01) {
+                entityToSpawn = CAEntities.IZUMIK.get().spawn(serverLevel, pos, MobSpawnType.MOB_SUMMONED);
+                if (entityToSpawn instanceof IzumikEntity izumik) {
+                    izumik.getEntityData().set(IzumikEntity.DATA_growth_p, 20);
+                }
+            } else if (randomValue < 0.02) {
+                entityToSpawn = CAEntities.TIDE_CHIMERA.get().spawn(serverLevel, pos, MobSpawnType.MOB_SUMMONED);
+            } else if (randomValue < 0.21) {
+                entityToSpawn = CAEntities.TIDE_DEATHREPELLER.get().spawn(serverLevel, pos, MobSpawnType.MOB_SUMMONED);
+            } else if (randomValue < 0.4) {
+                entityToSpawn = CAEntities.LINGERING_PATHSHAPER.get().spawn(serverLevel, pos, MobSpawnType.MOB_SUMMONED);
+            } else if (randomValue < 0.6) {
+                entityToSpawn = EndspeakerEntity.spawnForPhase(serverLevel, pos, MobSpawnType.MOB_SUMMONED, 3);
+            } else if (randomValue < 0.8) {
+                entityToSpawn = CAEntities.FIRST_TO_TALK.get().spawn(serverLevel, pos, MobSpawnType.MOB_SUMMONED);
+            } else {
+                entityToSpawn = CAEntities.MEGA_CHEST.get().spawn(serverLevel, pos, MobSpawnType.MOB_SUMMONED);
+                if (entityToSpawn instanceof MegaChestEntity megaChest) {
+                    megaChest.getEntityData().set(MegaChestEntity.DATA_released, true);
+                }
+            }
+        }
+        if (entityToSpawn != null) {
+            entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+            entityToSpawn.push(this.getLookAngle().x, 0.25, this.getLookAngle().z);
+        }
+    }
 
-	@Override
-	public EntityDimensions getDimensions(Pose p_33597_) {
-		return super.getDimensions(p_33597_).scale((float) 1);
-	}
+    @Override
+    public EntityDimensions getDimensions(Pose p_33597_) {
+        return super.getDimensions(p_33597_).scale((float) 1);
+    }
 
-	@Override
-	public boolean isPushable() {
-		return false;
-	}
+    @Override
+    public boolean isPushable() {
+        return false;
+    }
 
-	@Override
-	protected void doPush(Entity entityIn) {
-	}
+    @Override
+    protected void doPush(Entity entityIn) {
+    }
 
-	@Override
-	protected void pushEntities() {
-	}
+    @Override
+    protected void pushEntities() {
+    }
 
-	@Override
-	public boolean canChangeDimensions() {
-		return false;
-	}
+    @Override
+    public boolean canChangeDimensions() {
+        return false;
+    }
 
-	@Override
-	public void startSeenByPlayer(ServerPlayer player) {
-		super.startSeenByPlayer(player);
-		this.bossInfo.addPlayer(player);
-	}
+    @Override
+    public void startSeenByPlayer(ServerPlayer player) {
+        super.startSeenByPlayer(player);
+        this.bossInfo.addPlayer(player);
+    }
 
-	@Override
-	public void stopSeenByPlayer(ServerPlayer player) {
-		super.stopSeenByPlayer(player);
-		this.bossInfo.removePlayer(player);
-	}
+    @Override
+    public void stopSeenByPlayer(ServerPlayer player) {
+        super.stopSeenByPlayer(player);
+        this.bossInfo.removePlayer(player);
+    }
 
-	@Override
-	public void customServerAiStep() {
-		super.customServerAiStep();
-		this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
-	}
+    @Override
+    public void customServerAiStep() {
+        super.customServerAiStep();
+        this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
+    }
 
-	public static void init() {
-	}
 
-	public static AttributeSupplier.Builder createAttributes() {
-		AttributeSupplier.Builder builder = Mob.createMobAttributes();
-		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.18);
-		builder = builder.add(Attributes.MAX_HEALTH, 300);
-		builder = builder.add(Attributes.ARMOR, 8);
-		builder = builder.add(Attributes.ATTACK_DAMAGE, 19);
-		builder = builder.add(Attributes.FOLLOW_RANGE, 48);
-		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
-		return builder;
-	}
+    public static AttributeSupplier.Builder createAttributes() {
+        AttributeSupplier.Builder builder = Mob.createMobAttributes();
+        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.18);
+        builder = builder.add(Attributes.MAX_HEALTH, 300);
+        builder = builder.add(Attributes.ARMOR, 8);
+        builder = builder.add(Attributes.ATTACK_DAMAGE, 19);
+        builder = builder.add(Attributes.FOLLOW_RANGE, 48);
+        builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
+        return builder;
+    }
 
-	private PlayState movementPredicate(AnimationState event) {
-		if (this.animationprocedure.equals("empty")) {
-			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
+    private PlayState movementPredicate(AnimationState event) {
+        if (this.animationprocedure.equals("empty")) {
+            if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
 
-			) {
-				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.super_apocata.move"));
-			}
-			if (this.isDeadOrDying()) {
-				return event.setAndContinue(RawAnimation.begin().thenPlay("animation.super_apocata.die"));
-			}
-			return event.setAndContinue(RawAnimation.begin().thenLoop("animation.super_apocata.idle"));
-		}
-		return PlayState.STOP;
-	}
+            ) {
+                return event.setAndContinue(RawAnimation.begin().thenLoop("animation.super_apocata.move"));
+            }
+            if (this.isDeadOrDying()) {
+                return event.setAndContinue(RawAnimation.begin().thenPlay("animation.super_apocata.die"));
+            }
+            return event.setAndContinue(RawAnimation.begin().thenLoop("animation.super_apocata.idle"));
+        }
+        return PlayState.STOP;
+    }
 
-	private PlayState attackingPredicate(AnimationState event) {
-		double d1 = this.getX() - this.xOld;
-		double d0 = this.getZ() - this.zOld;
-		float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
-		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
-			this.swinging = true;
-			this.lastSwing = level().getGameTime();
-		}
-		if (this.swinging && this.lastSwing + 19L <= level().getGameTime()) {
-			this.swinging = false;
-		}
-		if (this.swinging && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
-			event.getController().forceAnimationReset();
-			return event.setAndContinue(RawAnimation.begin().thenPlay("animation.super_apocata.attack"));
-		}
-		return PlayState.CONTINUE;
-	}
+    private PlayState attackingPredicate(AnimationState event) {
+        double d1 = this.getX() - this.xOld;
+        double d0 = this.getZ() - this.zOld;
+        float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
+        if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
+            this.swinging = true;
+            this.lastSwing = level().getGameTime();
+        }
+        if (this.swinging && this.lastSwing + 19L <= level().getGameTime()) {
+            this.swinging = false;
+        }
+        if (this.swinging && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+            event.getController().forceAnimationReset();
+            return event.setAndContinue(RawAnimation.begin().thenPlay("animation.super_apocata.attack"));
+        }
+        return PlayState.CONTINUE;
+    }
 
-	String prevAnim = "empty";
+    String prevAnim = "empty";
 
-	private PlayState procedurePredicate(AnimationState event) {
-		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
-			if (!this.animationprocedure.equals(prevAnim))
-				event.getController().forceAnimationReset();
-			event.getController().setAnimation(RawAnimation.begin().thenPlay(this.animationprocedure));
-			if (event.getController().getAnimationState() == AnimationController.State.STOPPED) {
-				this.animationprocedure = "empty";
-				event.getController().forceAnimationReset();
-			}
-		} else if (animationprocedure.equals("empty")) {
-			prevAnim = "empty";
-			return PlayState.STOP;
-		}
-		prevAnim = this.animationprocedure;
-		return PlayState.CONTINUE;
-	}
+    private PlayState procedurePredicate(AnimationState event) {
+        if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
+            if (!this.animationprocedure.equals(prevAnim))
+                event.getController().forceAnimationReset();
+            event.getController().setAnimation(RawAnimation.begin().thenPlay(this.animationprocedure));
+            if (event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+                this.animationprocedure = "empty";
+                event.getController().forceAnimationReset();
+            }
+        } else if (animationprocedure.equals("empty")) {
+            prevAnim = "empty";
+            return PlayState.STOP;
+        }
+        prevAnim = this.animationprocedure;
+        return PlayState.CONTINUE;
+    }
 
-	@Override
-	protected void tickDeath() {
-		++this.deathTime;
-		if (this.deathTime == 40) {
-			this.remove(TideChimeraEntity.RemovalReason.KILLED);
-			this.dropExperience();
+    @Override
+    protected void tickDeath() {
+        ++this.deathTime;
+        if (this.deathTime == 40) {
+            this.remove(RemovalReason.KILLED);
+            this.dropExperience();
             LevelAccessor world = this.level();
             if (world instanceof ServerLevel _level) {
                 ItemEntity entityToSpawn = new ItemEntity(_level, this.getX(), this.getY(), this.getZ(), new ItemStack(CAItems.APOCALYPSE.get()));
@@ -686,184 +685,184 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
                 _level.addFreshEntity(entityToSpawn);
             }
         }
-	}
+    }
 
-	@Override
-    public void setHealth(float pHealth){
-    	float hlth = this.getHealth();
-    	float mhlth = this.getMaxHealth();
-        if(this.hasEffect(CAMobEffects.INVULNERABLE.get()) && pHealth < this.getHealth()) return;
+    @Override
+    public void setHealth(float pHealth) {
+        float hlth = this.getHealth();
+        float mhlth = this.getMaxHealth();
+        if (this.hasEffect(CAMobEffects.INVULNERABLE.get()) && pHealth < this.getHealth()) return;
         float reduction = hlth - pHealth;
         float finalV = reduction >= mhlth * 0.26f ? hlth - mhlth * 0.26f : hlth - reduction;
         super.setHealth(finalV);
     }
 
-	public String getSyncedAnimation() {
-		return this.entityData.get(ANIMATION);
-	}
+    public String getSyncedAnimation() {
+        return this.entityData.get(ANIMATION);
+    }
 
-	public void setAnimation(String animation) {
-		this.entityData.set(ANIMATION, animation);
-	}
+    public void setAnimation(String animation) {
+        this.entityData.set(ANIMATION, animation);
+    }
 
-	@Override
-	public void registerControllers(AnimatableManager.ControllerRegistrar data) {
-		data.add(new AnimationController<>(this, "movement", 0, this::movementPredicate));
-		data.add(new AnimationController<>(this, "attacking", 0, this::attackingPredicate));
-		data.add(new AnimationController<>(this, "procedure", 0, this::procedurePredicate));
-	}
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar data) {
+        data.add(new AnimationController<>(this, "movement", 0, this::movementPredicate));
+        data.add(new AnimationController<>(this, "attacking", 0, this::attackingPredicate));
+        data.add(new AnimationController<>(this, "procedure", 0, this::procedurePredicate));
+    }
 
-	public void distributeBullets(LevelAccessor world, double x, double y, double z) {
-		double r;
-		double d;
-		double tx;
-		double tz;
-		double ty;
-		double dama;
-		dama = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
-		for (int index0 = 0; index0 < 3; index0++) {
-			r = Mth.nextDouble(RandomSource.create(), 0, 6.283);
-			d = Mth.nextDouble(RandomSource.create(), 2, 9);
-			tx = x + d * Math.cos(r);
-			ty = y + Mth.nextDouble(RandomSource.create(), 8, 11);
-			tz = z + d * Math.sin(r);
-			if (world instanceof ServerLevel projectileLevel) {
-				Projectile _entityToSpawn = new Object() {
-					public Projectile getArrow(Level level, Entity shooter, float damage, int knockback) {
-						AbstractArrow entityToSpawn = new FishShootEntity(CAEntities.FISH_SHOOT.get(), level);
-						entityToSpawn.setOwner(shooter);
-						entityToSpawn.setBaseDamage(damage);
-						entityToSpawn.setKnockback(knockback);
-						entityToSpawn.setSilent(true);
-						entityToSpawn.setCritArrow(true);
-						return entityToSpawn;
-					}
-				}.getArrow(projectileLevel, this, (float) dama, 0);
-				_entityToSpawn.setPos(tx, ty, tz);
-				_entityToSpawn.shoot(0, (-1), 0, 1, (float) 0.1);
-				projectileLevel.addFreshEntity(_entityToSpawn);
-			}
-		}
-		for (int index1 = 0; index1 < 3; index1++) {
-			r = Mth.nextDouble(RandomSource.create(), 0, 6.283);
-			d = Mth.nextDouble(RandomSource.create(), 2, 9);
-			tx = x + d * Math.cos(r);
-			ty = y + Mth.nextDouble(RandomSource.create(), 8, 11);
-			tz = z + d * Math.sin(r);
-			if (world instanceof ServerLevel projectileLevel) {
-				Projectile _entityToSpawn = new Object() {
-					public Projectile getArrow(Level level, Entity shooter, float damage, int knockback) {
-						AbstractArrow entityToSpawn = new FishSplashEntity(CAEntities.FISH_SPLASH.get(), level);
-						entityToSpawn.setOwner(shooter);
-						entityToSpawn.setBaseDamage(damage);
-						entityToSpawn.setKnockback(knockback);
-						entityToSpawn.setSilent(true);
-						entityToSpawn.setCritArrow(true);
-						return entityToSpawn;
-					}
-				}.getArrow(projectileLevel, this, (float) dama, 0);
-				_entityToSpawn.setPos(tx, ty, tz);
-				_entityToSpawn.shoot(0, (-1), 0, 1, (float) 0.1);
-				projectileLevel.addFreshEntity(_entityToSpawn);
-			}
-		}
-		for (int index2 = 0; index2 < 2; index2++) {
-			r = Mth.nextDouble(RandomSource.create(), 0, 6.283);
-			d = Mth.nextDouble(RandomSource.create(), 2, 9);
-			tx = x + d * Math.cos(r);
-			ty = y + Mth.nextDouble(RandomSource.create(), 8, 11);
-			tz = z + d * Math.sin(r);
-			if (world instanceof ServerLevel projectileLevel) {
-				Projectile _entityToSpawn = new Object() {
-					public Projectile getArrow(Level level, Entity shooter, float damage, int knockback) {
-						AbstractArrow entityToSpawn = new FleefishBulletEntity(CAEntities.FLEEFISH_BULLET.get(), level);
-						entityToSpawn.setOwner(shooter);
-						entityToSpawn.setBaseDamage(damage);
-						entityToSpawn.setKnockback(knockback);
-						entityToSpawn.setSilent(true);
-						entityToSpawn.setCritArrow(true);
-						return entityToSpawn;
-					}
-				}.getArrow(projectileLevel, this, (float) dama, 0);
-				_entityToSpawn.setPos(tx, ty, tz);
-				_entityToSpawn.shoot(0, (-1), 0, 1, (float) 0.1);
-				projectileLevel.addFreshEntity(_entityToSpawn);
-			}
-		}
-		for (int index3 = 0; index3 < 2; index3++) {
-			r = Mth.nextDouble(RandomSource.create(), 0, 6.283);
-			d = Mth.nextDouble(RandomSource.create(), 2, 9);
-			tx = x + d * Math.cos(r);
-			ty = y + Mth.nextDouble(RandomSource.create(), 8, 11);
-			tz = z + d * Math.sin(r);
-			if (world instanceof ServerLevel projectileLevel) {
-				Projectile _entityToSpawn = new Object() {
-					public Projectile getArrow(Level level, Entity shooter, float damage, int knockback) {
-						AbstractArrow entityToSpawn = new TellerShotEntity(CAEntities.TELLER_SHOT.get(), level);
-						entityToSpawn.setOwner(shooter);
-						entityToSpawn.setBaseDamage(damage);
-						entityToSpawn.setKnockback(knockback);
-						entityToSpawn.setSilent(true);
-						entityToSpawn.setCritArrow(true);
-						return entityToSpawn;
-					}
-				}.getArrow(projectileLevel, this, (float) dama, 0);
-				_entityToSpawn.setPos(tx, ty, tz);
-				_entityToSpawn.shoot(0, (-1), 0, 1, (float) 0.1);
-				projectileLevel.addFreshEntity(_entityToSpawn);
-			}
-		}
-		for (int index4 = 0; index4 < 2; index4++) {
-			r = Mth.nextDouble(RandomSource.create(), 0, 6.283);
-			d = Mth.nextDouble(RandomSource.create(), 2, 9);
-			tx = x + d * Math.cos(r);
-			ty = y + Mth.nextDouble(RandomSource.create(), 8, 11);
-			tz = z + d * Math.sin(r);
-			if (world instanceof ServerLevel projectileLevel) {
-				Projectile _entityToSpawn = new Object() {
-					public Projectile getArrow(Level level, Entity shooter, float damage, int knockback) {
-						AbstractArrow entityToSpawn = new AbandonedShootEntity(CAEntities.ABANDONED_SHOOT.get(), level);
-						entityToSpawn.setOwner(shooter);
-						entityToSpawn.setBaseDamage(damage);
-						entityToSpawn.setKnockback(knockback);
-						entityToSpawn.setSilent(true);
-						entityToSpawn.setCritArrow(true);
-						return entityToSpawn;
-					}
-				}.getArrow(projectileLevel, this, (float) dama, 0);
-				_entityToSpawn.setPos(tx, ty, tz);
-				_entityToSpawn.shoot(0, (-1), 0, 1, (float) 0.1);
-				projectileLevel.addFreshEntity(_entityToSpawn);
-			}
-		}
-		for (int index5 = 0; index5 < 3; index5++) {
-			r = Mth.nextDouble(RandomSource.create(), 0, 6.283);
-			d = Mth.nextDouble(RandomSource.create(), 2, 9);
-			tx = x + d * Math.cos(r);
-			ty = y + Mth.nextDouble(RandomSource.create(), 8, 11);
-			tz = z + d * Math.sin(r);
-			if (world instanceof ServerLevel projectileLevel) {
-				Projectile _entityToSpawn = new Object() {
-					public Projectile getArrow(Level level, Entity shooter, float damage, int knockback) {
-						AbstractArrow entityToSpawn = new FakerggShootEntity(CAEntities.FAKERGG_SHOOT.get(), level);
-						entityToSpawn.setOwner(shooter);
-						entityToSpawn.setBaseDamage(damage);
-						entityToSpawn.setKnockback(knockback);
-						entityToSpawn.setSilent(true);
-						entityToSpawn.setCritArrow(true);
-						return entityToSpawn;
-					}
-				}.getArrow(projectileLevel, this, (float) dama, 0);
-				_entityToSpawn.setPos(tx, ty, tz);
-				_entityToSpawn.shoot(0, (-1), 0, 1, (float) 0.1);
-				projectileLevel.addFreshEntity(_entityToSpawn);
-			}
-		}
-	}
+    public void distributeBullets(LevelAccessor world, double x, double y, double z) {
+        double r;
+        double d;
+        double tx;
+        double tz;
+        double ty;
+        double dama;
+        dama = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
+        for (int index0 = 0; index0 < 3; index0++) {
+            r = Mth.nextDouble(RandomSource.create(), 0, 6.283);
+            d = Mth.nextDouble(RandomSource.create(), 2, 9);
+            tx = x + d * Math.cos(r);
+            ty = y + Mth.nextDouble(RandomSource.create(), 8, 11);
+            tz = z + d * Math.sin(r);
+            if (world instanceof ServerLevel projectileLevel) {
+                Projectile _entityToSpawn = new Object() {
+                    public Projectile getArrow(Level level, Entity shooter, float damage, int knockback) {
+                        AbstractArrow entityToSpawn = new FishShootEntity(CAEntities.FISH_SHOOT.get(), level);
+                        entityToSpawn.setOwner(shooter);
+                        entityToSpawn.setBaseDamage(damage);
+                        entityToSpawn.setKnockback(knockback);
+                        entityToSpawn.setSilent(true);
+                        entityToSpawn.setCritArrow(true);
+                        return entityToSpawn;
+                    }
+                }.getArrow(projectileLevel, this, (float) dama, 0);
+                _entityToSpawn.setPos(tx, ty, tz);
+                _entityToSpawn.shoot(0, (-1), 0, 1, (float) 0.1);
+                projectileLevel.addFreshEntity(_entityToSpawn);
+            }
+        }
+        for (int index1 = 0; index1 < 3; index1++) {
+            r = Mth.nextDouble(RandomSource.create(), 0, 6.283);
+            d = Mth.nextDouble(RandomSource.create(), 2, 9);
+            tx = x + d * Math.cos(r);
+            ty = y + Mth.nextDouble(RandomSource.create(), 8, 11);
+            tz = z + d * Math.sin(r);
+            if (world instanceof ServerLevel projectileLevel) {
+                Projectile _entityToSpawn = new Object() {
+                    public Projectile getArrow(Level level, Entity shooter, float damage, int knockback) {
+                        AbstractArrow entityToSpawn = new FishSplashEntity(CAEntities.FISH_SPLASH.get(), level);
+                        entityToSpawn.setOwner(shooter);
+                        entityToSpawn.setBaseDamage(damage);
+                        entityToSpawn.setKnockback(knockback);
+                        entityToSpawn.setSilent(true);
+                        entityToSpawn.setCritArrow(true);
+                        return entityToSpawn;
+                    }
+                }.getArrow(projectileLevel, this, (float) dama, 0);
+                _entityToSpawn.setPos(tx, ty, tz);
+                _entityToSpawn.shoot(0, (-1), 0, 1, (float) 0.1);
+                projectileLevel.addFreshEntity(_entityToSpawn);
+            }
+        }
+        for (int index2 = 0; index2 < 2; index2++) {
+            r = Mth.nextDouble(RandomSource.create(), 0, 6.283);
+            d = Mth.nextDouble(RandomSource.create(), 2, 9);
+            tx = x + d * Math.cos(r);
+            ty = y + Mth.nextDouble(RandomSource.create(), 8, 11);
+            tz = z + d * Math.sin(r);
+            if (world instanceof ServerLevel projectileLevel) {
+                Projectile _entityToSpawn = new Object() {
+                    public Projectile getArrow(Level level, Entity shooter, float damage, int knockback) {
+                        AbstractArrow entityToSpawn = new FleefishBulletEntity(CAEntities.FLEEFISH_BULLET.get(), level);
+                        entityToSpawn.setOwner(shooter);
+                        entityToSpawn.setBaseDamage(damage);
+                        entityToSpawn.setKnockback(knockback);
+                        entityToSpawn.setSilent(true);
+                        entityToSpawn.setCritArrow(true);
+                        return entityToSpawn;
+                    }
+                }.getArrow(projectileLevel, this, (float) dama, 0);
+                _entityToSpawn.setPos(tx, ty, tz);
+                _entityToSpawn.shoot(0, (-1), 0, 1, (float) 0.1);
+                projectileLevel.addFreshEntity(_entityToSpawn);
+            }
+        }
+        for (int index3 = 0; index3 < 2; index3++) {
+            r = Mth.nextDouble(RandomSource.create(), 0, 6.283);
+            d = Mth.nextDouble(RandomSource.create(), 2, 9);
+            tx = x + d * Math.cos(r);
+            ty = y + Mth.nextDouble(RandomSource.create(), 8, 11);
+            tz = z + d * Math.sin(r);
+            if (world instanceof ServerLevel projectileLevel) {
+                Projectile _entityToSpawn = new Object() {
+                    public Projectile getArrow(Level level, Entity shooter, float damage, int knockback) {
+                        AbstractArrow entityToSpawn = new TellerShotEntity(CAEntities.TELLER_SHOT.get(), level);
+                        entityToSpawn.setOwner(shooter);
+                        entityToSpawn.setBaseDamage(damage);
+                        entityToSpawn.setKnockback(knockback);
+                        entityToSpawn.setSilent(true);
+                        entityToSpawn.setCritArrow(true);
+                        return entityToSpawn;
+                    }
+                }.getArrow(projectileLevel, this, (float) dama, 0);
+                _entityToSpawn.setPos(tx, ty, tz);
+                _entityToSpawn.shoot(0, (-1), 0, 1, (float) 0.1);
+                projectileLevel.addFreshEntity(_entityToSpawn);
+            }
+        }
+        for (int index4 = 0; index4 < 2; index4++) {
+            r = Mth.nextDouble(RandomSource.create(), 0, 6.283);
+            d = Mth.nextDouble(RandomSource.create(), 2, 9);
+            tx = x + d * Math.cos(r);
+            ty = y + Mth.nextDouble(RandomSource.create(), 8, 11);
+            tz = z + d * Math.sin(r);
+            if (world instanceof ServerLevel projectileLevel) {
+                Projectile _entityToSpawn = new Object() {
+                    public Projectile getArrow(Level level, Entity shooter, float damage, int knockback) {
+                        AbstractArrow entityToSpawn = new AbandonedShootEntity(CAEntities.ABANDONED_SHOOT.get(), level);
+                        entityToSpawn.setOwner(shooter);
+                        entityToSpawn.setBaseDamage(damage);
+                        entityToSpawn.setKnockback(knockback);
+                        entityToSpawn.setSilent(true);
+                        entityToSpawn.setCritArrow(true);
+                        return entityToSpawn;
+                    }
+                }.getArrow(projectileLevel, this, (float) dama, 0);
+                _entityToSpawn.setPos(tx, ty, tz);
+                _entityToSpawn.shoot(0, (-1), 0, 1, (float) 0.1);
+                projectileLevel.addFreshEntity(_entityToSpawn);
+            }
+        }
+        for (int index5 = 0; index5 < 3; index5++) {
+            r = Mth.nextDouble(RandomSource.create(), 0, 6.283);
+            d = Mth.nextDouble(RandomSource.create(), 2, 9);
+            tx = x + d * Math.cos(r);
+            ty = y + Mth.nextDouble(RandomSource.create(), 8, 11);
+            tz = z + d * Math.sin(r);
+            if (world instanceof ServerLevel projectileLevel) {
+                Projectile _entityToSpawn = new Object() {
+                    public Projectile getArrow(Level level, Entity shooter, float damage, int knockback) {
+                        AbstractArrow entityToSpawn = new FakerggShootEntity(CAEntities.FAKERGG_SHOOT.get(), level);
+                        entityToSpawn.setOwner(shooter);
+                        entityToSpawn.setBaseDamage(damage);
+                        entityToSpawn.setKnockback(knockback);
+                        entityToSpawn.setSilent(true);
+                        entityToSpawn.setCritArrow(true);
+                        return entityToSpawn;
+                    }
+                }.getArrow(projectileLevel, this, (float) dama, 0);
+                _entityToSpawn.setPos(tx, ty, tz);
+                _entityToSpawn.shoot(0, (-1), 0, 1, (float) 0.1);
+                projectileLevel.addFreshEntity(_entityToSpawn);
+            }
+        }
+    }
 
 
-	@Override
-	public void setAnimationProcedure(String animation) {
-		this.animationprocedure = animation;
-	}
+    @Override
+    public void setAnimationProcedure(String animation) {
+        this.animationprocedure = animation;
+    }
 }

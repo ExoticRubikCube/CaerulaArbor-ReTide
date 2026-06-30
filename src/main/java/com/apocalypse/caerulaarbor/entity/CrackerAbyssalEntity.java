@@ -3,6 +3,7 @@ package com.apocalypse.caerulaarbor.entity;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.PolarMountRider;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CABlocks;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
@@ -276,7 +277,9 @@ public class CrackerAbyssalEntity extends SeaMonster implements PolarMountRider 
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-		EntityUtils.initBplusMagic(this);
+		if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())) {
+			this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(18);
+		}
 		return retval;
 	}
 

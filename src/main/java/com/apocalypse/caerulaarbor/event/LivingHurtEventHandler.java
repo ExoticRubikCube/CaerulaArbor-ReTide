@@ -487,7 +487,7 @@ public class LivingHurtEventHandler {
 
         if (entity == null || sourceentity == null) return;
 
-        if (EntityUtils.inquirybility(world, 3)) {
+        if (EndspeakerEntity.hasAbility(world, 3)) {
             if (EntityPredicateUtils.isEndspeaker(sourceentity) && entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CAMobEffects.TRAIL_BUFF.get())) {
                 event.setAmount((float) (amount * 1.5));
             }
@@ -504,7 +504,7 @@ public class LivingHurtEventHandler {
         if (sourceentity == null) return;
 
         if (EntityPredicateUtils.isEndspeaker(sourceentity)) {
-            if (EntityUtils.inquirybility(world, 5)) {
+            if (EndspeakerEntity.hasAbility(world, 5)) {
                 double amplifi = sourceentity instanceof LivingEntity _livEnt && _livEnt.hasEffect(CAMobEffects.REEF_CRACKER.get()) ? _livEnt.getEffect(CAMobEffects.REEF_CRACKER.get()).getAmplifier() : 0;
                 if (sourceentity instanceof LivingEntity _livEnt1 && _livEnt1.hasEffect(CAMobEffects.REEF_CRACKER.get())) {
                     if (amplifi < 11) {
@@ -595,9 +595,10 @@ public class LivingHurtEventHandler {
                         if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
                             _entity.addEffect(new MobEffectInstance(CAMobEffects.ROCK_BREAK.get(), 120, 1));
                     }
-                    if (sourceentity instanceof LivingEntity _entity && !_entity.level().isClientSide())
+                    if (sourceentity instanceof LivingEntity _entity && !_entity.level().isClientSide()) {
                         _entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_REACH.get(), 120, 3, false, false));
-                    EntityUtils.heal(sourceentity, (sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.1);
+                        EntityUtils.heal(_entity, _entity.getMaxHealth() * 0.1);
+                    }
                 }
             }
         }
@@ -648,7 +649,7 @@ public class LivingHurtEventHandler {
 
         if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunters")))) {
             double factor = 1;
-            if (!(EntityUtils.getGladiiaAround(world, x, y, z) == null)) {
+            if (GladiiaEntity.getGladiiaAround(world, x, y, z) != null) {
                 factor = 0.7;
             }
             if (entity instanceof GladiiaEntity) {

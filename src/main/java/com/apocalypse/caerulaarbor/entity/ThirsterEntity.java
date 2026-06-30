@@ -64,186 +64,187 @@ import java.util.List;
 
 public class ThirsterEntity extends SeaMonster {
 
-	private boolean isThirsterDurative() {
-		return EntityPredicateUtils.isThirsterDurative(this);
-	}
-	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(ThirsterEntity.class, EntityDataSerializers.BOOLEAN);
-	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(ThirsterEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(ThirsterEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<Integer> DATA_DURATION = SynchedEntityData.defineId(ThirsterEntity.class, EntityDataSerializers.INT);
-	public static final EntityDataAccessor<Integer> DATA_SKILL_P = SynchedEntityData.defineId(ThirsterEntity.class, EntityDataSerializers.INT);
-	public static final EntityDataAccessor<Integer> DATA_INTEGRATION = SynchedEntityData.defineId(ThirsterEntity.class, EntityDataSerializers.INT);
-	public static final EntityDataAccessor<Integer> DATA_DIZZY_NUM = SynchedEntityData.defineId(ThirsterEntity.class, EntityDataSerializers.INT);
-	private boolean swinging;
-	private boolean lastloop;
-	private long lastSwing;
-	public String animationprocedure = "empty";
-	private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.PROGRESS);
+    private boolean isThirsterDurative() {
+        return EntityPredicateUtils.isThirsterDurative(this);
+    }
 
-	public ThirsterEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CAEntities.THIRSTER.get(), world);
-	}
+    public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(ThirsterEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(ThirsterEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(ThirsterEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> DATA_DURATION = SynchedEntityData.defineId(ThirsterEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_SKILL_P = SynchedEntityData.defineId(ThirsterEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_INTEGRATION = SynchedEntityData.defineId(ThirsterEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_DIZZY_NUM = SynchedEntityData.defineId(ThirsterEntity.class, EntityDataSerializers.INT);
+    private boolean swinging;
+    private boolean lastloop;
+    private long lastSwing;
+    public String animationprocedure = "empty";
+    private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.PROGRESS);
 
-	public ThirsterEntity(EntityType<ThirsterEntity> type, Level world) {
-		super(type, world);
-		xpReward = 24;
-		setNoAi(false);
-		setMaxUpStep(1.25f);
-		setPersistenceRequired();
-	}
+    public ThirsterEntity(PlayMessages.SpawnEntity packet, Level world) {
+        this(CAEntities.THIRSTER.get(), world);
+    }
 
-	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(SHOOT, false);
-		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(TEXTURE, "thirster");
-		this.entityData.define(DATA_DURATION, 0);
-		this.entityData.define(DATA_SKILL_P, 0);
-		this.entityData.define(DATA_INTEGRATION, 0);
-		this.entityData.define(DATA_DIZZY_NUM, 2);
-	}
-
-	public void setTexture(String texture) {
-		this.entityData.set(TEXTURE, texture);
-	}
-
-	public String getTexture() {
-		return this.entityData.get(TEXTURE);
-	}
-
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
-	}
-
-	@Override
-	protected void registerGoals() {
-		super.registerGoals();
-		this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-		this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.1, false) {
-			@Override
-			protected double getAttackReachSqr(LivingEntity entity) {
-				return 4;
-			}
-		});
-		this.goalSelector.addGoal(3, new RandomStrollGoal(this, 1) {
-			@Override
-			public boolean canUse() {
-				return super.canUse() && isThirsterDurative();
-			}
-
-			@Override
-			public boolean canContinueToUse() {
-				return super.canContinueToUse() && isThirsterDurative();
-			}
-		});
-		this.goalSelector.addGoal(4, new RandomLookAroundGoal(this) {
-			@Override
-			public boolean canUse() {
-				return super.canUse() && isThirsterDurative();
-			}
-
-			@Override
-			public boolean canContinueToUse() {
-				return super.canContinueToUse() && isThirsterDurative();
-			}
-		});
-		this.goalSelector.addGoal(5, new FloatGoal(this));
-	}
+    public ThirsterEntity(EntityType<ThirsterEntity> type, Level world) {
+        super(type, world);
+        xpReward = 24;
+        setNoAi(false);
+        setMaxUpStep(1.25f);
+        setPersistenceRequired();
+    }
 
     @Override
-	public boolean removeWhenFarAway(double distanceToClosestPlayer) {
-		return false;
-	}
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(SHOOT, false);
+        this.entityData.define(ANIMATION, "undefined");
+        this.entityData.define(TEXTURE, "thirster");
+        this.entityData.define(DATA_DURATION, 0);
+        this.entityData.define(DATA_SKILL_P, 0);
+        this.entityData.define(DATA_INTEGRATION, 0);
+        this.entityData.define(DATA_DIZZY_NUM, 2);
+    }
 
-	public SoundEvent HURT = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "seaborn_generic_hit"));
-	public SoundEvent DIE = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "seaborn_death"));
-	
-	@Override
-	public SoundEvent getHurtSound(DamageSource ds) {
-		return HURT;
-	}
+    public void setTexture(String texture) {
+        this.entityData.set(TEXTURE, texture);
+    }
 
-	@Override
-	public SoundEvent getDeathSound() {
-		return DIE;
-	}
+    public String getTexture() {
+        return this.entityData.get(TEXTURE);
+    }
 
-	@Override
-	public boolean hurt(DamageSource source, float amount) {
-		if (source.is(DamageTypes.DROWN))
-			return false;
-		double healthBeforeDamage = this.getHealth();
-		boolean damaged = super.hurt(source, amount);
-		if (damaged) {
-			LevelAccessor world = this.level();
-			double x = this.getX();
-			double y = this.getY();
-			double z = this.getZ();
-			double duration = this.getEntityData().get(DATA_DURATION);
-			double integration = this.getEntityData().get(DATA_INTEGRATION) + Math.max(1, amount);
-			double maxHealth = this.getMaxHealth();
-			this.getEntityData().set(DATA_INTEGRATION, (int) integration);
-			if (integration >= maxHealth * 0.15 && duration <= 0) {
-				double dizzyTargetCount = this.getEntityData().get(DATA_DIZZY_NUM);
-				Entity currentTarget = this.getTarget();
-				new Object() {
-					void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
-						double d = timedloopiterator * 4;
-						for (int index0 = 0; index0 < 120; index0++) {
-							double angle = index0 * 3;
-							if (world instanceof ServerLevel _level)
-								_level.sendParticles(ParticleTypes.CLOUD, (x + d * Math.sin(angle)), (y + 0.5), (z + d * Math.cos(angle)), 2, 0.1, 0.1, 0.1, 0.1);
-						}
-						final int tick2 = ticks;
-						CaerulaArborMod.queueServerWork(tick2, () -> {
-							if (timedlooptotal > timedloopiterator + 1) {
-								timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
-							}
-						});
-					}
-				}.timedLoop(0, 5, 1);
-				if (world instanceof Level _level) {
-						_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "bishopfish_attack")), SoundSource.HOSTILE,
-								(float) 2.5, 1);
-				}
-				final Vec3 _center = new Vec3(x, y, z);
-				List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(40 / 2d), e -> true).stream()
-						.sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-				for (Entity entityiterator : _entfound) {
-					if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
-						if (!(entityiterator == currentTarget)) {
-							continue;
-						}
-					}
-					if (!(entityiterator instanceof LivingEntity)) {
-						continue;
-					}
-					if (entityiterator instanceof Player player && (player.isCreative() || player.isSpectator())) {
-						continue;
-					}
-					if (this.distanceTo(entityiterator) < 20) {
-						if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
-							_entity.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 160, 0, false, false));
-						dizzyTargetCount = dizzyTargetCount - 1;
-						if (dizzyTargetCount <= 1) {
-							break;
-						}
-					}
-				}
-				this.getEntityData().set(DATA_INTEGRATION, 0);
-				this.getEntityData().set(DATA_DURATION, 400);
-				if (this.getAttributes().hasAttribute(CAAttributes.LIVING_BARRIER.get()))
-					this.getAttribute(CAAttributes.LIVING_BARRIER.get()).setBaseValue((maxHealth - healthBeforeDamage));
-			}
-		}
-		return damaged;
-	}
+    @Override
+    public Packet<ClientGamePacketListener> getAddEntityPacket() {
+        return NetworkHooks.getEntitySpawningPacket(this);
+    }
 
-	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
+    @Override
+    protected void registerGoals() {
+        super.registerGoals();
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.1, false) {
+            @Override
+            protected double getAttackReachSqr(LivingEntity entity) {
+                return 4;
+            }
+        });
+        this.goalSelector.addGoal(3, new RandomStrollGoal(this, 1) {
+            @Override
+            public boolean canUse() {
+                return super.canUse() && isThirsterDurative();
+            }
+
+            @Override
+            public boolean canContinueToUse() {
+                return super.canContinueToUse() && isThirsterDurative();
+            }
+        });
+        this.goalSelector.addGoal(4, new RandomLookAroundGoal(this) {
+            @Override
+            public boolean canUse() {
+                return super.canUse() && isThirsterDurative();
+            }
+
+            @Override
+            public boolean canContinueToUse() {
+                return super.canContinueToUse() && isThirsterDurative();
+            }
+        });
+        this.goalSelector.addGoal(5, new FloatGoal(this));
+    }
+
+    @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        return false;
+    }
+
+    public SoundEvent HURT = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "seaborn_generic_hit"));
+    public SoundEvent DIE = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "seaborn_death"));
+
+    @Override
+    public SoundEvent getHurtSound(DamageSource ds) {
+        return HURT;
+    }
+
+    @Override
+    public SoundEvent getDeathSound() {
+        return DIE;
+    }
+
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        if (source.is(DamageTypes.DROWN))
+            return false;
+        double healthBeforeDamage = this.getHealth();
+        boolean damaged = super.hurt(source, amount);
+        if (damaged) {
+            LevelAccessor world = this.level();
+            double x = this.getX();
+            double y = this.getY();
+            double z = this.getZ();
+            double duration = this.getEntityData().get(DATA_DURATION);
+            double integration = this.getEntityData().get(DATA_INTEGRATION) + Math.max(1, amount);
+            double maxHealth = this.getMaxHealth();
+            this.getEntityData().set(DATA_INTEGRATION, (int) integration);
+            if (integration >= maxHealth * 0.15 && duration <= 0) {
+                double dizzyTargetCount = this.getEntityData().get(DATA_DIZZY_NUM);
+                Entity currentTarget = this.getTarget();
+                new Object() {
+                    void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
+                        double d = timedloopiterator * 4;
+                        for (int index0 = 0; index0 < 120; index0++) {
+                            double angle = index0 * 3;
+                            if (world instanceof ServerLevel _level)
+                                _level.sendParticles(ParticleTypes.CLOUD, (x + d * Math.sin(angle)), (y + 0.5), (z + d * Math.cos(angle)), 2, 0.1, 0.1, 0.1, 0.1);
+                        }
+                        final int tick2 = ticks;
+                        CaerulaArborMod.queueServerWork(tick2, () -> {
+                            if (timedlooptotal > timedloopiterator + 1) {
+                                timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
+                            }
+                        });
+                    }
+                }.timedLoop(0, 5, 1);
+                if (world instanceof Level _level) {
+                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "bishopfish_attack")), SoundSource.HOSTILE,
+                            (float) 2.5, 1);
+                }
+                final Vec3 _center = new Vec3(x, y, z);
+                List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(40 / 2d), e -> true).stream()
+                        .sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+                for (Entity entityiterator : _entfound) {
+                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                        if (!(entityiterator == currentTarget)) {
+                            continue;
+                        }
+                    }
+                    if (!(entityiterator instanceof LivingEntity)) {
+                        continue;
+                    }
+                    if (entityiterator instanceof Player player && (player.isCreative() || player.isSpectator())) {
+                        continue;
+                    }
+                    if (this.distanceTo(entityiterator) < 20) {
+                        if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
+                            _entity.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 160, 0, false, false));
+                        dizzyTargetCount = dizzyTargetCount - 1;
+                        if (dizzyTargetCount <= 1) {
+                            break;
+                        }
+                    }
+                }
+                this.getEntityData().set(DATA_INTEGRATION, 0);
+                this.getEntityData().set(DATA_DURATION, 400);
+                if (this.getAttributes().hasAttribute(CAAttributes.LIVING_BARRIER.get()))
+                    this.getAttribute(CAAttributes.LIVING_BARRIER.get()).setBaseValue((maxHealth - healthBeforeDamage));
+            }
+        }
+        return damaged;
+    }
+
+    @Override
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
+        SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
         if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
             this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).setBaseValue(10);
         if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
@@ -251,36 +252,36 @@ public class ThirsterEntity extends SeaMonster {
         if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get()))
             this.getAttribute(CAAttributes.SANITY_RATE.get()).setBaseValue(50);
         return retval;
-	}
+    }
 
-	@Override
-	public void addAdditionalSaveData(CompoundTag compound) {
-		super.addAdditionalSaveData(compound);
-		compound.putString("Texture", this.getTexture());
-		compound.putInt("DataDURATION", this.entityData.get(DATA_DURATION));
-		compound.putInt("DataSKILL_P", this.entityData.get(DATA_SKILL_P));
-		compound.putInt("DataINTEGRATION", this.entityData.get(DATA_INTEGRATION));
-		compound.putInt("DataDIZZY_NUM", this.entityData.get(DATA_DIZZY_NUM));
-	}
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putString("Texture", this.getTexture());
+        compound.putInt("DataDURATION", this.entityData.get(DATA_DURATION));
+        compound.putInt("DataSKILL_P", this.entityData.get(DATA_SKILL_P));
+        compound.putInt("DataINTEGRATION", this.entityData.get(DATA_INTEGRATION));
+        compound.putInt("DataDIZZY_NUM", this.entityData.get(DATA_DIZZY_NUM));
+    }
 
-	@Override
-	public void readAdditionalSaveData(CompoundTag compound) {
-		super.readAdditionalSaveData(compound);
-		if (compound.contains("Texture"))
-			this.setTexture(compound.getString("Texture"));
-		if (compound.contains("DataDURATION"))
-			this.entityData.set(DATA_DURATION, compound.getInt("DataDURATION"));
-		if (compound.contains("DataSKILL_P"))
-			this.entityData.set(DATA_SKILL_P, compound.getInt("DataSKILL_P"));
-		if (compound.contains("DataINTEGRATION"))
-			this.entityData.set(DATA_INTEGRATION, compound.getInt("DataINTEGRATION"));
-		if (compound.contains("DataDIZZY_NUM"))
-			this.entityData.set(DATA_DIZZY_NUM, compound.getInt("DataDIZZY_NUM"));
-	}
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        if (compound.contains("Texture"))
+            this.setTexture(compound.getString("Texture"));
+        if (compound.contains("DataDURATION"))
+            this.entityData.set(DATA_DURATION, compound.getInt("DataDURATION"));
+        if (compound.contains("DataSKILL_P"))
+            this.entityData.set(DATA_SKILL_P, compound.getInt("DataSKILL_P"));
+        if (compound.contains("DataINTEGRATION"))
+            this.entityData.set(DATA_INTEGRATION, compound.getInt("DataINTEGRATION"));
+        if (compound.contains("DataDIZZY_NUM"))
+            this.entityData.set(DATA_DIZZY_NUM, compound.getInt("DataDIZZY_NUM"));
+    }
 
-	@Override
-	public void baseTick() {
-		super.baseTick();
+    @Override
+    public void baseTick() {
+        super.baseTick();
         LevelAccessor world = this.level();
         double x = this.getX();
         double y = this.getY();
@@ -484,192 +485,190 @@ public class ThirsterEntity extends SeaMonster {
             }
         }
         this.refreshDimensions();
-	}
+    }
 
-	@Override
-	public void tick(){
-		super.tick();
-		float p = (float) this.entityData.get(DATA_DURATION) / 400f;
-		if (p > 0 && !this.isDeadOrDying()) {
-			this.bossInfo.setColor(ServerBossEvent.BossBarColor.WHITE);
-			this.bossInfo.setProgress(p);
-		} else {
-			this.bossInfo.setColor(ServerBossEvent.BossBarColor.BLUE);
-			float m = this.getMaxHealth();
-			if(m > 0) this.bossInfo.setProgress(this.getHealth() / m);
-		}
-	}
+    @Override
+    public void tick() {
+        super.tick();
+        float p = (float) this.entityData.get(DATA_DURATION) / 400f;
+        if (p > 0 && !this.isDeadOrDying()) {
+            this.bossInfo.setColor(ServerBossEvent.BossBarColor.WHITE);
+            this.bossInfo.setProgress(p);
+        } else {
+            this.bossInfo.setColor(ServerBossEvent.BossBarColor.BLUE);
+            float m = this.getMaxHealth();
+            if (m > 0) this.bossInfo.setProgress(this.getHealth() / m);
+        }
+    }
 
-	@Override
-	public EntityDimensions getDimensions(Pose p_33597_) {
-		return super.getDimensions(p_33597_).scale((float) 1.2);
-	}
+    @Override
+    public EntityDimensions getDimensions(Pose p_33597_) {
+        return super.getDimensions(p_33597_).scale((float) 1.2);
+    }
 
-	@Override
-	public boolean canChangeDimensions() {
-		return false;
-	}
+    @Override
+    public boolean canChangeDimensions() {
+        return false;
+    }
 
-	@Override
-	public void startSeenByPlayer(ServerPlayer player) {
-		super.startSeenByPlayer(player);
-		this.bossInfo.addPlayer(player);
-	}
+    @Override
+    public void startSeenByPlayer(ServerPlayer player) {
+        super.startSeenByPlayer(player);
+        this.bossInfo.addPlayer(player);
+    }
 
-	@Override
-	public void stopSeenByPlayer(ServerPlayer player) {
-		super.stopSeenByPlayer(player);
-		this.bossInfo.removePlayer(player);
-	}
+    @Override
+    public void stopSeenByPlayer(ServerPlayer player) {
+        super.stopSeenByPlayer(player);
+        this.bossInfo.removePlayer(player);
+    }
 
-	@Override
-	public void customServerAiStep() {
-		super.customServerAiStep();
-		this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
-	}
-
-	public static void init() {
-	}
-
-	private void performSanityAttack() {
-		LevelAccessor world = this.level();
-		double x = this.getX();
-		double y = this.getY();
-		double z = this.getZ();
-
-		new Object() {
-			void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
-				double d = timedloopiterator * 4;
-				for (int index0 = 0; index0 < 120; index0++) {
-					double angle = index0 * 3;
-					if (world instanceof ServerLevel _level)
-						_level.sendParticles(ParticleTypes.ELECTRIC_SPARK, (x + d * Math.sin(angle)), (y + 0.5), (z + d * Math.cos(angle)), 2, 0.1, 0.1, 0.1, 0.1);
-				}
-				final int tick2 = ticks;
-				CaerulaArborMod.queueServerWork(tick2, () -> {
-					if (timedlooptotal > timedloopiterator + 1) {
-						timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
-					}
-				});
-			}
-		}.timedLoop(0, 5, 1);
-
-		if (world instanceof Level _level) {
-				_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "creeper_fish_explode")), SoundSource.HOSTILE, 3, 1);
-		}
-
-		this.getEntityData().set(DATA_DIZZY_NUM, this.getEntityData().get(DATA_DIZZY_NUM) + 1);
-
-		final Vec3 center = new Vec3(x, y, z);
-		List<Entity> nearbyEntities = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(20), e -> true).stream()
-				.sorted(Comparator.comparingDouble(ent -> ent.distanceToSqr(center)))
-				.toList();
-
-		for (Entity entityiterator : nearbyEntities) {
-			if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
-				continue;
-			}
-			if (!(entityiterator instanceof LivingEntity)) {
-				continue;
-			}
-			if (this.distanceTo(entityiterator) < 20) {
-				if (entityiterator instanceof LivingEntity target) {
-					SIHelper.causeSanityInjury(target, this, 1000, SanityEvent.Hurt.Type.ENTITY);
-				}
-			}
-		}
-	}
-
-	public static AttributeSupplier.Builder createAttributes() {
-		AttributeSupplier.Builder builder = Mob.createMobAttributes();
-		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.2);
-		builder = builder.add(Attributes.MAX_HEALTH, 340);
-		builder = builder.add(Attributes.ARMOR, 15);
-		builder = builder.add(Attributes.ATTACK_DAMAGE, 5);
-		builder = builder.add(Attributes.FOLLOW_RANGE, 36);
-		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 1);
-		return builder;
-	}
-
-	private PlayState movementPredicate(AnimationState event) {
-		if (this.animationprocedure.equals("empty")) {
-			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
-
-			) {
-				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.thirster.move"));
-			}
-			if (this.isDeadOrDying()) {
-				return event.setAndContinue(RawAnimation.begin().thenPlay("animation.thirster.die"));
-			}
-			return event.setAndContinue(RawAnimation.begin().thenLoop("animation.thirster.idle"));
-		}
-		return PlayState.STOP;
-	}
-
-	private PlayState attackingPredicate(AnimationState event) {
-		double d1 = this.getX() - this.xOld;
-		double d0 = this.getZ() - this.zOld;
-		float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
-		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
-			this.swinging = true;
-			this.lastSwing = level().getGameTime();
-		}
-		if (this.swinging && this.lastSwing + 13L <= level().getGameTime()) {
-			this.swinging = false;
-		}
-		if (this.swinging && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
-			event.getController().forceAnimationReset();
-			return event.setAndContinue(RawAnimation.begin().thenPlay("animation.thirster.attack"));
-		}
-		return PlayState.CONTINUE;
-	}
-
-	String prevAnim = "empty";
-
-	private PlayState procedurePredicate(AnimationState event) {
-		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
-			if (!this.animationprocedure.equals(prevAnim))
-				event.getController().forceAnimationReset();
-			event.getController().setAnimation(RawAnimation.begin().thenPlay(this.animationprocedure));
-			if (event.getController().getAnimationState() == AnimationController.State.STOPPED) {
-				this.animationprocedure = "empty";
-				event.getController().forceAnimationReset();
-			}
-		} else if (animationprocedure.equals("empty")) {
-			prevAnim = "empty";
-			return PlayState.STOP;
-		}
-		prevAnim = this.animationprocedure;
-		return PlayState.CONTINUE;
-	}
-
-	@Override
-	protected void tickDeath() {
-		++this.deathTime;
-		if (this.deathTime == 20) {
-			this.remove(ThirsterEntity.RemovalReason.KILLED);
-			this.dropExperience();
-		}
-	}
-
-	public String getSyncedAnimation() {
-		return this.entityData.get(ANIMATION);
-	}
-
-	public void setAnimation(String animation) {
-		this.entityData.set(ANIMATION, animation);
-	}
-
-	@Override
-	public void registerControllers(AnimatableManager.ControllerRegistrar data) {
-		data.add(new AnimationController<>(this, "movement", 1, this::movementPredicate));
-		data.add(new AnimationController<>(this, "attacking", 1, this::attackingPredicate));
-		data.add(new AnimationController<>(this, "procedure", 1, this::procedurePredicate));
-	}
+    @Override
+    public void customServerAiStep() {
+        super.customServerAiStep();
+        this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
+    }
 
 
-	@Override
-	public void setAnimationProcedure(String animation) {
-		this.animationprocedure = animation;
-	}
+    private void performSanityAttack() {
+        LevelAccessor world = this.level();
+        double x = this.getX();
+        double y = this.getY();
+        double z = this.getZ();
+
+        new Object() {
+            void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
+                double d = timedloopiterator * 4;
+                for (int index0 = 0; index0 < 120; index0++) {
+                    double angle = index0 * 3;
+                    if (world instanceof ServerLevel _level)
+                        _level.sendParticles(ParticleTypes.ELECTRIC_SPARK, (x + d * Math.sin(angle)), (y + 0.5), (z + d * Math.cos(angle)), 2, 0.1, 0.1, 0.1, 0.1);
+                }
+                final int tick2 = ticks;
+                CaerulaArborMod.queueServerWork(tick2, () -> {
+                    if (timedlooptotal > timedloopiterator + 1) {
+                        timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
+                    }
+                });
+            }
+        }.timedLoop(0, 5, 1);
+
+        if (world instanceof Level _level) {
+            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "creeper_fish_explode")), SoundSource.HOSTILE, 3, 1);
+        }
+
+        this.getEntityData().set(DATA_DIZZY_NUM, this.getEntityData().get(DATA_DIZZY_NUM) + 1);
+
+        final Vec3 center = new Vec3(x, y, z);
+        List<Entity> nearbyEntities = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(20), e -> true).stream()
+                .sorted(Comparator.comparingDouble(ent -> ent.distanceToSqr(center)))
+                .toList();
+
+        for (Entity entityiterator : nearbyEntities) {
+            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                continue;
+            }
+            if (!(entityiterator instanceof LivingEntity)) {
+                continue;
+            }
+            if (this.distanceTo(entityiterator) < 20) {
+                if (entityiterator instanceof LivingEntity target) {
+                    SIHelper.causeSanityInjury(target, this, 1000, SanityEvent.Hurt.Type.ENTITY);
+                }
+            }
+        }
+    }
+
+    public static AttributeSupplier.Builder createAttributes() {
+        AttributeSupplier.Builder builder = Mob.createMobAttributes();
+        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.2);
+        builder = builder.add(Attributes.MAX_HEALTH, 340);
+        builder = builder.add(Attributes.ARMOR, 15);
+        builder = builder.add(Attributes.ATTACK_DAMAGE, 5);
+        builder = builder.add(Attributes.FOLLOW_RANGE, 36);
+        builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 1);
+        return builder;
+    }
+
+    private PlayState movementPredicate(AnimationState event) {
+        if (this.animationprocedure.equals("empty")) {
+            if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
+
+            ) {
+                return event.setAndContinue(RawAnimation.begin().thenLoop("animation.thirster.move"));
+            }
+            if (this.isDeadOrDying()) {
+                return event.setAndContinue(RawAnimation.begin().thenPlay("animation.thirster.die"));
+            }
+            return event.setAndContinue(RawAnimation.begin().thenLoop("animation.thirster.idle"));
+        }
+        return PlayState.STOP;
+    }
+
+    private PlayState attackingPredicate(AnimationState event) {
+        double d1 = this.getX() - this.xOld;
+        double d0 = this.getZ() - this.zOld;
+        float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
+        if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
+            this.swinging = true;
+            this.lastSwing = level().getGameTime();
+        }
+        if (this.swinging && this.lastSwing + 13L <= level().getGameTime()) {
+            this.swinging = false;
+        }
+        if (this.swinging && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+            event.getController().forceAnimationReset();
+            return event.setAndContinue(RawAnimation.begin().thenPlay("animation.thirster.attack"));
+        }
+        return PlayState.CONTINUE;
+    }
+
+    String prevAnim = "empty";
+
+    private PlayState procedurePredicate(AnimationState event) {
+        if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
+            if (!this.animationprocedure.equals(prevAnim))
+                event.getController().forceAnimationReset();
+            event.getController().setAnimation(RawAnimation.begin().thenPlay(this.animationprocedure));
+            if (event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+                this.animationprocedure = "empty";
+                event.getController().forceAnimationReset();
+            }
+        } else if (animationprocedure.equals("empty")) {
+            prevAnim = "empty";
+            return PlayState.STOP;
+        }
+        prevAnim = this.animationprocedure;
+        return PlayState.CONTINUE;
+    }
+
+    @Override
+    protected void tickDeath() {
+        ++this.deathTime;
+        if (this.deathTime == 20) {
+            this.remove(RemovalReason.KILLED);
+            this.dropExperience();
+        }
+    }
+
+    public String getSyncedAnimation() {
+        return this.entityData.get(ANIMATION);
+    }
+
+    public void setAnimation(String animation) {
+        this.entityData.set(ANIMATION, animation);
+    }
+
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar data) {
+        data.add(new AnimationController<>(this, "movement", 1, this::movementPredicate));
+        data.add(new AnimationController<>(this, "attacking", 1, this::attackingPredicate));
+        data.add(new AnimationController<>(this, "procedure", 1, this::procedurePredicate));
+    }
+
+
+    @Override
+    public void setAnimationProcedure(String animation) {
+        this.animationprocedure = animation;
+    }
 }

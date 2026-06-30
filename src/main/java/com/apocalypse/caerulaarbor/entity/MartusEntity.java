@@ -67,128 +67,128 @@ import java.util.Comparator;
 import java.util.List;
 
 public class MartusEntity extends SeaMonster {
-	private int releaseTime = 0;
+    private int releaseTime = 0;
 
-	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(MartusEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(MartusEntity.class, EntityDataSerializers.STRING);
 
-	public static final EntityDataAccessor<Integer> DATA_phase = SynchedEntityData.defineId(MartusEntity.class, EntityDataSerializers.INT);
-	public static final EntityDataAccessor<Integer> DATA_skillp1 = SynchedEntityData.defineId(MartusEntity.class, EntityDataSerializers.INT);
-	public static final EntityDataAccessor<Integer> DATA_skillp2 = SynchedEntityData.defineId(MartusEntity.class, EntityDataSerializers.INT);
-	private boolean swinging;
-	private boolean lastloop;
-	private long lastSwing;
-	public String animationprocedure = "empty";
-	private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.NOTCHED_6);
+    public static final EntityDataAccessor<Integer> DATA_phase = SynchedEntityData.defineId(MartusEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_skillp1 = SynchedEntityData.defineId(MartusEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_skillp2 = SynchedEntityData.defineId(MartusEntity.class, EntityDataSerializers.INT);
+    private boolean swinging;
+    private boolean lastloop;
+    private long lastSwing;
+    public String animationprocedure = "empty";
+    private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.NOTCHED_6);
 
-	public MartusEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CAEntities.MARTUS.get(), world);
-	}
+    public MartusEntity(PlayMessages.SpawnEntity packet, Level world) {
+        this(CAEntities.MARTUS.get(), world);
+    }
 
-	public MartusEntity(EntityType<MartusEntity> type, Level world) {
-		super(type, world);
-		xpReward = 64;
-		setNoAi(false);
-		setMaxUpStep(0.6f);
-		setPersistenceRequired();
-		this.moveControl = new FlyingMoveControl(this, 10, true);
-	}
-
-	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(DATA_phase, 0);
-		this.entityData.define(DATA_skillp1, 200);
-		this.entityData.define(DATA_skillp2, 200);
-	}
-
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
-	}
-
-	@Override
-	protected PathNavigation createNavigation(Level world) {
-		return new FlyingPathNavigation(this, world);
-	}
-
-	@Override
-	protected void registerGoals() {
-		super.registerGoals();
-		this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1, false) {
-			@Override
-			protected double getAttackReachSqr(LivingEntity entity) {
-				return 4;
-			}
-		});
-		this.goalSelector.addGoal(2, new RandomStrollGoal(this, 0.8, 20) {
-			@Override
-			protected Vec3 getPosition() {
-				RandomSource random = MartusEntity.this.getRandom();
-				double dir_x = MartusEntity.this.getX() + ((random.nextFloat() * 2 - 1) * 16);
-				double dir_y = MartusEntity.this.getY() + ((random.nextFloat() * 2 - 1) * 16);
-				double dir_z = MartusEntity.this.getZ() + ((random.nextFloat() * 2 - 1) * 16);
-				return new Vec3(dir_x, dir_y, dir_z);
-			}
-		});
-		this.goalSelector.addGoal(3, new RandomLookAroundGoal(this));
-		this.goalSelector.addGoal(4, new FloatGoal(this));
-	}
+    public MartusEntity(EntityType<MartusEntity> type, Level world) {
+        super(type, world);
+        xpReward = 64;
+        setNoAi(false);
+        setMaxUpStep(0.6f);
+        setPersistenceRequired();
+        this.moveControl = new FlyingMoveControl(this, 10, true);
+    }
 
     @Override
-	public boolean removeWhenFarAway(double distanceToClosestPlayer) {
-		return false;
-	}
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(ANIMATION, "undefined");
+        this.entityData.define(DATA_phase, 0);
+        this.entityData.define(DATA_skillp1, 200);
+        this.entityData.define(DATA_skillp2, 200);
+    }
 
-	@Override
-	public SoundEvent getHurtSound(DamageSource ds) {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.generic.hurt"));
-	}
+    @Override
+    public Packet<ClientGamePacketListener> getAddEntityPacket() {
+        return NetworkHooks.getEntitySpawningPacket(this);
+    }
 
-	@Override
-	public SoundEvent getDeathSound() {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.generic.death"));
-	}
+    @Override
+    protected PathNavigation createNavigation(Level world) {
+        return new FlyingPathNavigation(this, world);
+    }
 
-	@Override
-	public boolean causeFallDamage(float l, float d, DamageSource source) {
-		return false;
-	}
+    @Override
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1, false) {
+            @Override
+            protected double getAttackReachSqr(LivingEntity entity) {
+                return 4;
+            }
+        });
+        this.goalSelector.addGoal(2, new RandomStrollGoal(this, 0.8, 20) {
+            @Override
+            protected Vec3 getPosition() {
+                RandomSource random = MartusEntity.this.getRandom();
+                double dir_x = MartusEntity.this.getX() + ((random.nextFloat() * 2 - 1) * 16);
+                double dir_y = MartusEntity.this.getY() + ((random.nextFloat() * 2 - 1) * 16);
+                double dir_z = MartusEntity.this.getZ() + ((random.nextFloat() * 2 - 1) * 16);
+                return new Vec3(dir_x, dir_y, dir_z);
+            }
+        });
+        this.goalSelector.addGoal(3, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(4, new FloatGoal(this));
+    }
 
-	@Override
-	public boolean hurt(DamageSource source, float amount) {
-		if (source.is(DamageTypes.IN_FIRE))
-			return false;
-		if (source.getDirectEntity() instanceof ThrownPotion || source.getDirectEntity() instanceof AreaEffectCloud)
-			return false;
-		if (source.is(DamageTypes.FALL))
-			return false;
-		if (source.is(DamageTypes.CACTUS))
-			return false;
-		if (source.is(DamageTypes.DROWN))
-			return false;
-		if (source.is(DamageTypes.LIGHTNING_BOLT))
-			return false;
-		if (source.is(DamageTypes.EXPLOSION))
-			return false;
-		if (source.is(DamageTypes.FALLING_ANVIL))
-			return false;
-		if (source.is(DamageTypes.DRAGON_BREATH))
-			return false;
-		if (source.is(DamageTypes.WITHER))
-			return false;
-		if (source.is(DamageTypes.WITHER_SKULL))
-			return false;
-		boolean isKiller = source.is(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "inv_killer")));
-		if (isKiller){
-			this.releaseTime = 10;
-		}
-		return super.hurt(source, amount);
-	}
+    @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        return false;
+    }
 
-	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
+    @Override
+    public SoundEvent getHurtSound(DamageSource ds) {
+        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.generic.hurt"));
+    }
+
+    @Override
+    public SoundEvent getDeathSound() {
+        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.generic.death"));
+    }
+
+    @Override
+    public boolean causeFallDamage(float l, float d, DamageSource source) {
+        return false;
+    }
+
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        if (source.is(DamageTypes.IN_FIRE))
+            return false;
+        if (source.getDirectEntity() instanceof ThrownPotion || source.getDirectEntity() instanceof AreaEffectCloud)
+            return false;
+        if (source.is(DamageTypes.FALL))
+            return false;
+        if (source.is(DamageTypes.CACTUS))
+            return false;
+        if (source.is(DamageTypes.DROWN))
+            return false;
+        if (source.is(DamageTypes.LIGHTNING_BOLT))
+            return false;
+        if (source.is(DamageTypes.EXPLOSION))
+            return false;
+        if (source.is(DamageTypes.FALLING_ANVIL))
+            return false;
+        if (source.is(DamageTypes.DRAGON_BREATH))
+            return false;
+        if (source.is(DamageTypes.WITHER))
+            return false;
+        if (source.is(DamageTypes.WITHER_SKULL))
+            return false;
+        boolean isKiller = source.is(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "inv_killer")));
+        if (isKiller) {
+            this.releaseTime = 10;
+        }
+        return super.hurt(source, amount);
+    }
+
+    @Override
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
+        SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
         LevelAccessor world1 = this.level();
         if (this != null) {
             if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
@@ -245,39 +245,39 @@ public class MartusEntity extends SeaMonster {
             }.timedLoop(0, 8, 1);
         }
         return retval;
-	}
+    }
 
-	@Override
-	public void addAdditionalSaveData(CompoundTag compound) {
-		super.addAdditionalSaveData(compound);
-		compound.putInt("Phase", this.entityData.get(DATA_phase));
-		compound.putInt("PrimarySkillCooldown", this.entityData.get(DATA_skillp1));
-		compound.putInt("SecondarySkillCooldown", this.entityData.get(DATA_skillp2));
-	}
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putInt("Phase", this.entityData.get(DATA_phase));
+        compound.putInt("PrimarySkillCooldown", this.entityData.get(DATA_skillp1));
+        compound.putInt("SecondarySkillCooldown", this.entityData.get(DATA_skillp2));
+    }
 
-	@Override
-	public void readAdditionalSaveData(CompoundTag compound) {
-		super.readAdditionalSaveData(compound);
-		if (compound.contains("Phase")) {
-			this.entityData.set(DATA_phase, compound.getInt("Phase"));
-		} else if (compound.contains("Dataphase")) {
-			this.entityData.set(DATA_phase, compound.getInt("Dataphase"));
-		}
-		if (compound.contains("PrimarySkillCooldown")) {
-			this.entityData.set(DATA_skillp1, compound.getInt("PrimarySkillCooldown"));
-		} else if (compound.contains("Dataskillp1")) {
-			this.entityData.set(DATA_skillp1, compound.getInt("Dataskillp1"));
-		}
-		if (compound.contains("SecondarySkillCooldown")) {
-			this.entityData.set(DATA_skillp2, compound.getInt("SecondarySkillCooldown"));
-		} else if (compound.contains("Dataskillp2")) {
-			this.entityData.set(DATA_skillp2, compound.getInt("Dataskillp2"));
-		}
-	}
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        if (compound.contains("Phase")) {
+            this.entityData.set(DATA_phase, compound.getInt("Phase"));
+        } else if (compound.contains("Dataphase")) {
+            this.entityData.set(DATA_phase, compound.getInt("Dataphase"));
+        }
+        if (compound.contains("PrimarySkillCooldown")) {
+            this.entityData.set(DATA_skillp1, compound.getInt("PrimarySkillCooldown"));
+        } else if (compound.contains("Dataskillp1")) {
+            this.entityData.set(DATA_skillp1, compound.getInt("Dataskillp1"));
+        }
+        if (compound.contains("SecondarySkillCooldown")) {
+            this.entityData.set(DATA_skillp2, compound.getInt("SecondarySkillCooldown"));
+        } else if (compound.contains("Dataskillp2")) {
+            this.entityData.set(DATA_skillp2, compound.getInt("Dataskillp2"));
+        }
+    }
 
-	@Override
-	public void baseTick() {
-		super.baseTick();
+    @Override
+    public void baseTick() {
+        super.baseTick();
         LevelAccessor world = this.level();
         double x = this.getX();
         double y = this.getY();
@@ -513,232 +513,230 @@ public class MartusEntity extends SeaMonster {
             }
         }
         this.refreshDimensions();
-		if(this.releaseTime > 0) this.releaseTime --;
-	}
+        if (this.releaseTime > 0) this.releaseTime--;
+    }
 
-	@Override
-	public EntityDimensions getDimensions(Pose p_33597_) {
-		return super.getDimensions(p_33597_).scale((float) 1);
-	}
+    @Override
+    public EntityDimensions getDimensions(Pose p_33597_) {
+        return super.getDimensions(p_33597_).scale((float) 1);
+    }
 
-	@Override
-	public boolean canBreatheUnderwater() {
-		return true;
-	}
+    @Override
+    public boolean canBreatheUnderwater() {
+        return true;
+    }
 
-	@Override
-	public boolean checkSpawnObstruction(LevelReader world) {
-		return world.isUnobstructed(this);
-	}
+    @Override
+    public boolean checkSpawnObstruction(LevelReader world) {
+        return world.isUnobstructed(this);
+    }
 
-	@Override
-	public boolean isPushedByFluid() {
-		return false;
-	}
+    @Override
+    public boolean isPushedByFluid() {
+        return false;
+    }
 
-	@Override
-	public boolean canChangeDimensions() {
-		return false;
-	}
+    @Override
+    public boolean canChangeDimensions() {
+        return false;
+    }
 
-	@Override
-	public void startSeenByPlayer(ServerPlayer player) {
-		super.startSeenByPlayer(player);
-		this.bossInfo.addPlayer(player);
-	}
+    @Override
+    public void startSeenByPlayer(ServerPlayer player) {
+        super.startSeenByPlayer(player);
+        this.bossInfo.addPlayer(player);
+    }
 
-	@Override
-	public void stopSeenByPlayer(ServerPlayer player) {
-		super.stopSeenByPlayer(player);
-		this.bossInfo.removePlayer(player);
-	}
+    @Override
+    public void stopSeenByPlayer(ServerPlayer player) {
+        super.stopSeenByPlayer(player);
+        this.bossInfo.removePlayer(player);
+    }
 
-	@Override
-	public void customServerAiStep() {
-		super.customServerAiStep();
-		this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
-	}
+    @Override
+    public void customServerAiStep() {
+        super.customServerAiStep();
+        this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
+    }
 
-	private void martusTimedSpawn(LevelAccessor world, double x, double y, double z) {
-		if (EntityUtils.getSeabornAround(world, x, y, z, this) < (world.getLevelData().getGameRules().getInt(CAGameRules.CLONE_NUMBER_LIMIT))) {
-			for (int index0 = 0; index0 < 2; index0++) {
-				WorldUtils.summonRandomSeaborn(world, 0.33, x, y, z);
-				if (world instanceof ServerLevel _level)
-					_level.sendParticles(ParticleTypes.CLOUD, x, y, z, 18, 0.6, 0.6, 0.6, 0.16);
-			}
-		}
-	}
+    private void martusTimedSpawn(LevelAccessor world, double x, double y, double z) {
+        if (EntityUtils.getSeabornAround(world, x, y, z, this) < (world.getLevelData().getGameRules().getInt(CAGameRules.CLONE_NUMBER_LIMIT))) {
+            for (int index0 = 0; index0 < 2; index0++) {
+                WorldUtils.summonRandomSeaborn(world, 0.33, x, y, z);
+                if (world instanceof ServerLevel _level)
+                    _level.sendParticles(ParticleTypes.CLOUD, x, y, z, 18, 0.6, 0.6, 0.6, 0.16);
+            }
+        }
+    }
 
-	private void spawnMartusParticleRim() {
-		double angleOffset = Mth.nextInt(RandomSource.create(), 0, 59);
-		for (int index0 = 0; index0 < 60; index0++) {
-			double angle = angleOffset + index0 * 6;
-			double radius = 2.5 + 0.5 * Math.sin(Math.toRadians(index0 * 24));
-			double particleX = this.getX() + radius * Math.sin(Math.toRadians(angle));
-			double particleZ = this.getZ() + radius * Math.cos(Math.toRadians(angle));
-			this.level().addParticle(CAParticleTypes.MARTUS_CHARS.get(), particleX, this.getY() + 1, particleZ, 0, 0.15, 0);
-			this.level().addParticle(CAParticleTypes.MARTUS_CHARS.get(), particleX, this.getY() + 0.8, particleZ, 0, -0.08, 0);
-		}
-	}
+    private void spawnMartusParticleRim() {
+        double angleOffset = Mth.nextInt(RandomSource.create(), 0, 59);
+        for (int index0 = 0; index0 < 60; index0++) {
+            double angle = angleOffset + index0 * 6;
+            double radius = 2.5 + 0.5 * Math.sin(Math.toRadians(index0 * 24));
+            double particleX = this.getX() + radius * Math.sin(Math.toRadians(angle));
+            double particleZ = this.getZ() + radius * Math.cos(Math.toRadians(angle));
+            this.level().addParticle(CAParticleTypes.MARTUS_CHARS.get(), particleX, this.getY() + 1, particleZ, 0, 0.15, 0);
+            this.level().addParticle(CAParticleTypes.MARTUS_CHARS.get(), particleX, this.getY() + 0.8, particleZ, 0, -0.08, 0);
+        }
+    }
 
-	private void spawnParticleLink(Entity target) {
-		if (!this.isAlive() || target == null || !(this.level() instanceof ServerLevel serverLevel)) {
-			return;
-		}
+    private void spawnParticleLink(Entity target) {
+        if (!this.isAlive() || target == null || !(this.level() instanceof ServerLevel serverLevel)) {
+            return;
+        }
 
-		double vx = target.getX() - this.getX();
-		double vy = target.getY() + target.getBbHeight() * 0.5 - (this.getY() + this.getBbHeight() * 0.5);
-		double vz = target.getZ() - this.getZ();
-		double size = Math.max(Math.min(Math.round(Math.sqrt(Math.pow(vx, 2) + Math.pow(vy, 2) + Math.pow(vz, 2))), 32), 1) * 3;
-		for (int index0 = 0; index0 < (int) size; index0++) {
-			double particleX = this.getX() + vx / size * index0;
-			double particleY = this.getY() + vy / size * index0 + this.getBbHeight() * 0.5;
-			double particleZ = this.getZ() + vz / size * index0;
-			if (Math.random() > 0.5) {
-				serverLevel.sendParticles(ParticleTypes.END_ROD, particleX, particleY, particleZ, 1, 0.08, 0.08, 0.08, 0);
-			} else {
-				serverLevel.sendParticles(ParticleTypes.FIREWORK, particleX, particleY, particleZ, 1, 0.08, 0.08, 0.08, 0);
-			}
-		}
-	}
+        double vx = target.getX() - this.getX();
+        double vy = target.getY() + target.getBbHeight() * 0.5 - (this.getY() + this.getBbHeight() * 0.5);
+        double vz = target.getZ() - this.getZ();
+        double size = Math.max(Math.min(Math.round(Math.sqrt(Math.pow(vx, 2) + Math.pow(vy, 2) + Math.pow(vz, 2))), 32), 1) * 3;
+        for (int index0 = 0; index0 < (int) size; index0++) {
+            double particleX = this.getX() + vx / size * index0;
+            double particleY = this.getY() + vy / size * index0 + this.getBbHeight() * 0.5;
+            double particleZ = this.getZ() + vz / size * index0;
+            if (Math.random() > 0.5) {
+                serverLevel.sendParticles(ParticleTypes.END_ROD, particleX, particleY, particleZ, 1, 0.08, 0.08, 0.08, 0);
+            } else {
+                serverLevel.sendParticles(ParticleTypes.FIREWORK, particleX, particleY, particleZ, 1, 0.08, 0.08, 0.08, 0);
+            }
+        }
+    }
 
-	@Override
-	protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
-	}
+    @Override
+    protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
+    }
 
-	@Override
-	public void setNoGravity(boolean ignored) {
-		super.setNoGravity(true);
-	}
+    @Override
+    public void setNoGravity(boolean ignored) {
+        super.setNoGravity(true);
+    }
 
-	public void aiStep() {
-		super.aiStep();
-		this.setNoGravity(true);
-	}
+    public void aiStep() {
+        super.aiStep();
+        this.setNoGravity(true);
+    }
 
-	public static void init() {
-	}
 
-	public static AttributeSupplier.Builder createAttributes() {
-		AttributeSupplier.Builder builder = Mob.createMobAttributes();
-		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.5);
-		builder = builder.add(Attributes.MAX_HEALTH, 500);
-		builder = builder.add(Attributes.ARMOR, 30);
-		builder = builder.add(Attributes.ATTACK_DAMAGE, 2);
-		builder = builder.add(Attributes.FOLLOW_RANGE, 24);
-		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
-		builder = builder.add(Attributes.FLYING_SPEED, 0.5);
-		builder = builder.add(ForgeMod.SWIM_SPEED.get(), 0.5);
-		return builder;
-	}
+    public static AttributeSupplier.Builder createAttributes() {
+        AttributeSupplier.Builder builder = Mob.createMobAttributes();
+        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.5);
+        builder = builder.add(Attributes.MAX_HEALTH, 500);
+        builder = builder.add(Attributes.ARMOR, 30);
+        builder = builder.add(Attributes.ATTACK_DAMAGE, 2);
+        builder = builder.add(Attributes.FOLLOW_RANGE, 24);
+        builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
+        builder = builder.add(Attributes.FLYING_SPEED, 0.5);
+        builder = builder.add(ForgeMod.SWIM_SPEED.get(), 0.5);
+        return builder;
+    }
 
-	private PlayState movementPredicate(AnimationState event) {
-		if (this.animationprocedure.equals("empty")) {
-			if (this.isDeadOrDying()) {
-				return event.setAndContinue(RawAnimation.begin().thenPlay("animation.martus.die"));
-			}
-			return event.setAndContinue(RawAnimation.begin().thenLoop("animation.martus.idle"));
-		}
-		return PlayState.STOP;
-	}
+    private PlayState movementPredicate(AnimationState event) {
+        if (this.animationprocedure.equals("empty")) {
+            if (this.isDeadOrDying()) {
+                return event.setAndContinue(RawAnimation.begin().thenPlay("animation.martus.die"));
+            }
+            return event.setAndContinue(RawAnimation.begin().thenLoop("animation.martus.idle"));
+        }
+        return PlayState.STOP;
+    }
 
-	private PlayState attackingPredicate(AnimationState event) {
-		double d1 = this.getX() - this.xOld;
-		double d0 = this.getZ() - this.zOld;
-		float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
-		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
-			this.swinging = true;
-			this.lastSwing = level().getGameTime();
-		}
-		if (this.swinging && this.lastSwing + 20L <= level().getGameTime()) {
-			this.swinging = false;
-		}
-		if (this.swinging && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
-			event.getController().forceAnimationReset();
-			return event.setAndContinue(RawAnimation.begin().thenPlay("animation.martus.attack"));
-		}
-		return PlayState.CONTINUE;
-	}
+    private PlayState attackingPredicate(AnimationState event) {
+        double d1 = this.getX() - this.xOld;
+        double d0 = this.getZ() - this.zOld;
+        float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
+        if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
+            this.swinging = true;
+            this.lastSwing = level().getGameTime();
+        }
+        if (this.swinging && this.lastSwing + 20L <= level().getGameTime()) {
+            this.swinging = false;
+        }
+        if (this.swinging && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+            event.getController().forceAnimationReset();
+            return event.setAndContinue(RawAnimation.begin().thenPlay("animation.martus.attack"));
+        }
+        return PlayState.CONTINUE;
+    }
 
-	String prevAnim = "empty";
+    String prevAnim = "empty";
 
-	private PlayState procedurePredicate(AnimationState event) {
-		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
-			if (!this.animationprocedure.equals(prevAnim))
-				event.getController().forceAnimationReset();
-			event.getController().setAnimation(RawAnimation.begin().thenPlay(this.animationprocedure));
-			if (event.getController().getAnimationState() == AnimationController.State.STOPPED) {
-				this.animationprocedure = "empty";
-				event.getController().forceAnimationReset();
-			}
-		} else if (animationprocedure.equals("empty")) {
-			prevAnim = "empty";
-			return PlayState.STOP;
-		}
-		prevAnim = this.animationprocedure;
-		return PlayState.CONTINUE;
-	}
+    private PlayState procedurePredicate(AnimationState event) {
+        if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
+            if (!this.animationprocedure.equals(prevAnim))
+                event.getController().forceAnimationReset();
+            event.getController().setAnimation(RawAnimation.begin().thenPlay(this.animationprocedure));
+            if (event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+                this.animationprocedure = "empty";
+                event.getController().forceAnimationReset();
+            }
+        } else if (animationprocedure.equals("empty")) {
+            prevAnim = "empty";
+            return PlayState.STOP;
+        }
+        prevAnim = this.animationprocedure;
+        return PlayState.CONTINUE;
+    }
 
-	@Override
-	protected void tickDeath() {
-		++this.deathTime;
-		if (this.deathTime == 25) {
-			this.remove(MartusEntity.RemovalReason.KILLED);
-			this.dropExperience();
-		}
-	}
+    @Override
+    protected void tickDeath() {
+        ++this.deathTime;
+        if (this.deathTime == 25) {
+            this.remove(RemovalReason.KILLED);
+            this.dropExperience();
+        }
+    }
 
-	@Override
-	public void remove(RemovalReason pReason){
-		if(this.level().getDifficulty() != Difficulty.PEACEFUL && pReason == RemovalReason.DISCARDED){
-			this.hurt(
-				new DamageSource(
-					this.level().registryAccess().
-					registryOrThrow(Registries.DAMAGE_TYPE).
-					getHolderOrThrow(
-						ResourceKey.create(
-							Registries.DAMAGE_TYPE, 
-							new ResourceLocation(CaerulaArborMod.MODID, "oceankiller_damage")
-						)
-					)
-				),
-				20
-			);
-			return;
-		}
-		super.remove(pReason);
-	}
+    @Override
+    public void remove(RemovalReason pReason) {
+        if (this.level().getDifficulty() != Difficulty.PEACEFUL && pReason == RemovalReason.DISCARDED) {
+            this.hurt(
+                    new DamageSource(
+                            this.level().registryAccess().
+                                    registryOrThrow(Registries.DAMAGE_TYPE).
+                                    getHolderOrThrow(
+                                            ResourceKey.create(
+                                                    Registries.DAMAGE_TYPE,
+                                                    new ResourceLocation(CaerulaArborMod.MODID, "oceankiller_damage")
+                                            )
+                                    )
+                    ),
+                    20
+            );
+            return;
+        }
+        super.remove(pReason);
+    }
 
-	@Override
-    public void heal(float amount){
+    @Override
+    public void heal(float amount) {
         super.heal(0);
     }
 
-	@Override
-    public void setHealth(float pHealth){
-    	if(this.releaseTime > 0) super.setHealth(pHealth);
-        if(this.hasEffect(CAMobEffects.INVULNERABLE.get()) && pHealth < this.getHealth()) return;
+    @Override
+    public void setHealth(float pHealth) {
+        if (this.releaseTime > 0) super.setHealth(pHealth);
+        if (this.hasEffect(CAMobEffects.INVULNERABLE.get()) && pHealth < this.getHealth()) return;
         super.setHealth(pHealth);
     }
 
-	public String getSyncedAnimation() {
-		return this.entityData.get(ANIMATION);
-	}
+    public String getSyncedAnimation() {
+        return this.entityData.get(ANIMATION);
+    }
 
-	public void setAnimation(String animation) {
-		this.entityData.set(ANIMATION, animation);
-	}
+    public void setAnimation(String animation) {
+        this.entityData.set(ANIMATION, animation);
+    }
 
-	@Override
-	public void registerControllers(AnimatableManager.ControllerRegistrar data) {
-		data.add(new AnimationController<>(this, "movement", 4, this::movementPredicate));
-		data.add(new AnimationController<>(this, "attacking", 4, this::attackingPredicate));
-		data.add(new AnimationController<>(this, "procedure", 4, this::procedurePredicate));
-	}
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar data) {
+        data.add(new AnimationController<>(this, "movement", 4, this::movementPredicate));
+        data.add(new AnimationController<>(this, "attacking", 4, this::attackingPredicate));
+        data.add(new AnimationController<>(this, "procedure", 4, this::procedurePredicate));
+    }
 
 
-	@Override
-	public void setAnimationProcedure(String animation) {
-		this.animationprocedure = animation;
-	}
+    @Override
+    public void setAnimationProcedure(String animation) {
+        this.animationprocedure = animation;
+    }
 }

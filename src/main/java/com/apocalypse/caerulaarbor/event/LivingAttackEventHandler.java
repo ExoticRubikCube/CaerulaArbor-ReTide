@@ -1,13 +1,11 @@
 package com.apocalypse.caerulaarbor.event;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.api.event.SanityEvent;
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler;
 import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler.StrategyType;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
-import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
 import com.apocalypse.caerulaarbor.entity.*;
 import com.apocalypse.caerulaarbor.init.*;
@@ -17,10 +15,8 @@ import com.apocalypse.caerulaarbor.system.UpgradeSilenceProcedure;
 import com.apocalypse.caerulaarbor.system.UpgradeSubsisProcedure;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.ValidationUtils;
-import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
@@ -31,7 +27,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
-import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -49,7 +44,6 @@ import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
@@ -73,14 +67,10 @@ public class LivingAttackEventHandler {
         handleInvulnerable(event);
         handleNumbness(event);
         handleMissRate(event);
-        handleFoxHurt(event);
         handleLittleHelperNoHurt(event);
-        handleImmueToArrow(event);
         handleMartusArrowImmue(event);
-        handleOceanWitherImmunity(event);
         handleInquisitionFriendlyFire(event);
         handleDamagePrevention(event);
-        handleEndermanTeleport(event);
         handleHighmoreCounter(event);
         handleHighmoreScytheEntityAttack(event);
         handleOceanWitherExtraAttack(event);
@@ -93,9 +83,7 @@ public class LivingAttackEventHandler {
         DamageSource damagesource = event.getSource();
         Entity entity = event.getEntity();
 
-        if (damagesource == null || entity == null) return;
-
-        if (damagesource.is(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "inv_killer")))) return;
+        if (damagesource == null || entity == null || damagesource.is(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "inv_killer")))) return;
 
         if (entity instanceof LivingEntity _livEnt1 && _livEnt1.hasEffect(CAMobEffects.INVULNERABLE.get())) {
             event.setCanceled(true);
@@ -162,17 +150,7 @@ public class LivingAttackEventHandler {
         }
     }
 
-    private static void handleFoxHurt(LivingAttackEvent event) {
-        DamageSource damagesource = event.getSource();
-        Entity entity = event.getEntity();
-
-        if (damagesource == null || entity == null) return;
-
-        if (entity instanceof OceanizedFoxEntity && damagesource.is(DamageTypes.SWEET_BERRY_BUSH)) {
-            event.setCanceled(true);
-        }
-    }
-
+    //需要下放
     private static void handleLittleHelperNoHurt(LivingAttackEvent event) {
         LevelAccessor world = event.getEntity().level();
         double x = event.getEntity().getX();
@@ -229,46 +207,6 @@ public class LivingAttackEventHandler {
         }
     }
 
-    private static void handleImmueToArrow(LivingAttackEvent event) {
-        DamageSource damageSource = event.getSource();
-        LivingEntity entity = event.getEntity();
-        Entity immediatesourceentity = event.getSource().getDirectEntity();
-        Entity sourceentity = event.getSource().getEntity();
-
-        if (entity == null || damageSource == null) return;
-
-        if (damageSource.is(TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "bypasses_enderman")))) return;
-        if (entity.hasEffect(CAMobEffects.DIZZY.get()) || entity.hasEffect(CAMobEffects.MUTE.get())) return;
-
-        if (entity instanceof OceanizedEndermanEntity) {
-            if (immediatesourceentity != sourceentity || !(sourceentity instanceof LivingEntity)) {
-                event.setCanceled(true);
-                Mob _entity = (Mob) entity;
-                if (sourceentity instanceof LivingEntity _ent)
-                    _entity.setTarget(_ent);
-
-                LevelAccessor world = entity.level();
-                double x = entity.getX();
-                double y = entity.getY();
-                double z = entity.getZ();
-
-                if (entity.isAlive()) {
-                    for (int index0 = 0; index0 < 64; index0++) {
-                        double angl = Mth.nextDouble(RandomSource.create(), 0, 6.283);
-                        double dist = Mth.nextDouble(RandomSource.create(), 3, 6);
-                        double tX = x + dist * Math.sin(angl);
-                        double tZ = z + dist * Math.cos(angl);
-                        double validY = WorldUtils.findValidY(world, tX, y, tZ);
-                        if (validY <= 114513) {
-                            EntityUtils.teleportTo(world, entity, x, y, z, tX, validY, tZ);
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     private static void handleMartusArrowImmue(LivingAttackEvent event) {
         DamageSource damagesource = event.getSource();
         Entity entity = event.getEntity();
@@ -278,28 +216,13 @@ public class LivingAttackEventHandler {
         if (damagesource == null || entity == null || sourceentity == null) return;
 
         if (entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CAMobEffects.MARTUS_PROTECTION.get())) {
-            if (damagesource.is(TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation("minecraft:is_projectile"))) && (entity != null ? sourceentity.distanceTo(entity) : -1) > 2
-                    && amount <= (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 2) {
+            if (damagesource.is(TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation("minecraft:is_projectile"))) && sourceentity.distanceTo(entity) > 2 && amount <= (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 2) {
                 event.setCanceled(true);
-            } else if ((sourceentity != null ? entity.distanceTo(sourceentity) : -1) > 3) {
+            } else if (entity.distanceTo(sourceentity) > 3) {
                 if (Math.random() < 0.5) {
                     event.setCanceled(true);
                 }
             }
-        }
-    }
-
-    //TODO需要下放回实体
-    private static void handleOceanWitherImmunity(LivingAttackEvent event) {
-        DamageSource damagesource = event.getSource();
-        Entity entity = event.getEntity();
-
-        if (damagesource == null || entity == null) return;
-
-        if ((entity instanceof OceanizedWitherEntity _datEntL0 && _datEntL0.getEntityData().get(OceanizedWitherEntity.DATA_shelled)
-                || entity instanceof OceannizedWitheriaEntity _datEntL1 && _datEntL1.getEntityData().get(OceannizedWitheriaEntity.DATA_shelled))
-                && damagesource.is(TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation("minecraft:is_projectile")))) {
-            event.setCanceled(true);
         }
     }
 
@@ -361,43 +284,7 @@ public class LivingAttackEventHandler {
         }
     }
 
-    //TODO下放回实体
-    private static void handleEndermanTeleport(LivingAttackEvent event) {
-        LevelAccessor world = event.getEntity().level();
-        double x = event.getEntity().getX();
-        double y = event.getEntity().getY();
-        double z = event.getEntity().getZ();
-        Entity entity = event.getEntity();
-        Entity sourceentity = event.getSource().getEntity();
-
-        if (entity == null || sourceentity == null) return;
-
-        if (entity instanceof OceanizedEndermanEntity) {
-            if (entity.distanceTo(sourceentity) >= 6) {
-                double sx = sourceentity.getX();
-                double sy = sourceentity.getY();
-                double sz = sourceentity.getZ();
-                if (WorldUtils.isValidPlace(world, sx, sy, sz)) {
-                    if (!sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))
-                            || (entity instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == sourceentity) {
-                        EntityUtils.teleportTo(world, entity, x, y, z, sx, sy, sz);
-                        if (sourceentity instanceof LivingEntity target && entity instanceof LivingEntity attacker) {
-                            SIHelper.causeSanityInjury(target,
-                                    attacker,
-                                    (attacker.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? attacker.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 15,
-                                    SanityEvent.Hurt.Type.ENTITY);
-                        }
-                        if (entity instanceof Mob _entity && sourceentity instanceof LivingEntity _ent)
-                            _entity.setTarget(_ent);
-                        sourceentity.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_magic"))), entity),
-                                (float) ((entity instanceof LivingEntity _livingEntity10 && _livingEntity10.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)
-                                        ? _livingEntity10.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.75));
-                    }
-                }
-            }
-        }
-    }
-
+    //TODO :需要下放
     private static void handleHighmoreCounter(LivingAttackEvent event) {
         LevelAccessor world = event.getEntity().level();
         DamageSource damagesource = event.getSource();
@@ -494,17 +381,7 @@ public class LivingAttackEventHandler {
                                 }
                             }
                         }
-                        if (!(new Object() {
-                            public boolean checkGamemode(Entity _ent) {
-                                if (_ent instanceof ServerPlayer _serverPlayer) {
-                                    return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                                } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                                    return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                            && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
-                                }
-                                return false;
-                            }
-                        }.checkGamemode(sourceentity))) {
+                        if (!(sourceentity instanceof Player player && player.getAbilities().instabuild)) {
                             {
                                 ItemStack _ist = (sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY);
                                 if (_ist.hurt(1, RandomSource.create(), null)) {
@@ -519,6 +396,7 @@ public class LivingAttackEventHandler {
         }
     }
 
+    //下放回实体
     private static void handleOceanWitherExtraAttack(LivingAttackEvent event) {
         LevelAccessor world = event.getEntity().level();
         DamageSource damagesource = event.getSource();
@@ -578,7 +456,8 @@ public class LivingAttackEventHandler {
                 && !entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanpet")))
                 && !entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "skip_migration")))) {
             if (MapVariables.get(world).strategy_migration > 0) {
-                if (!isCreativePlayer(sourceentity) && !damagesource.is(TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "bypasses_migration")))) {
+                if (!(sourceentity instanceof Player player && player.getAbilities().instabuild)
+                        && !damagesource.is(TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "bypasses_migration")))) {
                     for (Entity entityiterator : world.getEntities(entity,
                             new AABB((x - (8 + MapVariables.get(world).strategy_migration * 16)), (y - 16), (z - (8 + MapVariables.get(world).strategy_migration * 16)),
                                     (x + 8 + MapVariables.get(world).strategy_migration * 24), (y + 16), (z + 8 + MapVariables.get(world).strategy_migration * 24)))) {
@@ -805,15 +684,4 @@ public class LivingAttackEventHandler {
         }
     }
 
-    private static boolean isCreativePlayer(Entity entity) {
-        if (entity instanceof ServerPlayer serverPlayer) {
-            return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-        }
-        if (entity.level().isClientSide() && entity instanceof Player player) {
-            var connection = Minecraft.getInstance().getConnection();
-            var playerInfo = connection == null ? null : connection.getPlayerInfo(player.getGameProfile().getId());
-            return playerInfo != null && playerInfo.getGameMode() == GameType.CREATIVE;
-        }
-        return false;
-    }
 }

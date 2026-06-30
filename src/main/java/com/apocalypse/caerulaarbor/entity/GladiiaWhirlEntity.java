@@ -51,56 +51,56 @@ import java.util.Comparator;
 import java.util.List;
 
 public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity, SyncedAnimationEntity {
-	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(GladiiaWhirlEntity.class, EntityDataSerializers.BOOLEAN);
-	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(GladiiaWhirlEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(GladiiaWhirlEntity.class, EntityDataSerializers.STRING);
-	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
-	private boolean swinging;
-	private boolean lastloop;
-	private long lastSwing;
-	public String animationprocedure = "empty";
+    public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(GladiiaWhirlEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(GladiiaWhirlEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(GladiiaWhirlEntity.class, EntityDataSerializers.STRING);
+    private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+    private boolean swinging;
+    private boolean lastloop;
+    private long lastSwing;
+    public String animationprocedure = "empty";
 
-	public GladiiaWhirlEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CAEntities.GLADIIA_WHIRL.get(), world);
-	}
+    public GladiiaWhirlEntity(PlayMessages.SpawnEntity packet, Level world) {
+        this(CAEntities.GLADIIA_WHIRL.get(), world);
+    }
 
-	public GladiiaWhirlEntity(EntityType<GladiiaWhirlEntity> type, Level world) {
-		super(type, world);
-		xpReward = 0;
-		setNoAi(true);
-		setMaxUpStep(0f);
-	}
+    public GladiiaWhirlEntity(EntityType<GladiiaWhirlEntity> type, Level world) {
+        super(type, world);
+        xpReward = 0;
+        setNoAi(true);
+        setMaxUpStep(0f);
+    }
 
-	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(SHOOT, false);
-		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(TEXTURE, "gladiia_whirl");
-	}
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(SHOOT, false);
+        this.entityData.define(ANIMATION, "undefined");
+        this.entityData.define(TEXTURE, "gladiia_whirl");
+    }
 
-	public void setTexture(String texture) {
-		this.entityData.set(TEXTURE, texture);
-	}
+    public void setTexture(String texture) {
+        this.entityData.set(TEXTURE, texture);
+    }
 
-	public String getTexture() {
-		return this.entityData.get(TEXTURE);
-	}
+    public String getTexture() {
+        return this.entityData.get(TEXTURE);
+    }
 
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
-	}
+    @Override
+    public Packet<ClientGamePacketListener> getAddEntityPacket() {
+        return NetworkHooks.getEntitySpawningPacket(this);
+    }
 
-	@Override
-	public MobType getMobType() {
-		return MobType.UNDEFINED;
-	}
+    @Override
+    public MobType getMobType() {
+        return MobType.UNDEFINED;
+    }
 
-	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-		this.setNoGravity(true);
+    @Override
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
+        SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
+        this.setNoGravity(true);
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
@@ -118,26 +118,26 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity, Sync
         if (this.getAttributes().hasAttribute(ForgeMod.ENTITY_GRAVITY.get()))
             this.getAttribute(ForgeMod.ENTITY_GRAVITY.get()).setBaseValue(0);
         return retval;
-	}
+    }
 
-	@Override
-	public void addAdditionalSaveData(CompoundTag compound) {
-		super.addAdditionalSaveData(compound);
-		compound.putString("Texture", this.getTexture());
-	}
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putString("Texture", this.getTexture());
+    }
 
-	@Override
-	public void readAdditionalSaveData(CompoundTag compound) {
-		super.readAdditionalSaveData(compound);
-		if (compound.contains("Texture"))
-			this.setTexture(compound.getString("Texture"));
-	}
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        if (compound.contains("Texture"))
+            this.setTexture(compound.getString("Texture"));
+    }
 
-	@Override
-	public void baseTick() {
-		super.baseTick();
-		AttributeInstance maxHealth = this.getAttribute(Attributes.MAX_HEALTH);
-        if(maxHealth != null) maxHealth.setBaseValue(10);
+    @Override
+    public void baseTick() {
+        super.baseTick();
+        AttributeInstance maxHealth = this.getAttribute(Attributes.MAX_HEALTH);
+        if (maxHealth != null) maxHealth.setBaseValue(10);
         LevelAccessor world = this.level();
         double x = this.getX();
         double y = this.getY();
@@ -207,14 +207,14 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity, Sync
                         }
                     }
                     if (d <= 9) {
-                        EntityUtils.turnRounds(entityiterator, this);
+                        EntityUtils.applyOrbitMotion(entityiterator, this);
                     }
                 }
             }
             if (t % 20 == 11) {
                 if (!world.isClientSide()) {
                     if (world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "gladiia_skill_rim")), SoundSource.NEUTRAL, 3, 1);
+                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "gladiia_skill_rim")), SoundSource.NEUTRAL, 3, 1);
                     }
                 }
                 {
@@ -278,7 +278,7 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity, Sync
                                     _entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, 1, false, false));
                             }
                             if (d >= 3) {
-                                EntityUtils.pullToGladiia(entityiterator, this);
+                                EntityUtils.pullToward(entityiterator, this);
                             }
                         }
                     }
@@ -286,28 +286,28 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity, Sync
             }
         }
         this.refreshDimensions();
-	}
+    }
 
-	@Override
-	public EntityDimensions getDimensions(Pose p_33597_) {
-		return super.getDimensions(p_33597_).scale((float) 1);
-	}
+    @Override
+    public EntityDimensions getDimensions(Pose p_33597_) {
+        return super.getDimensions(p_33597_).scale((float) 1);
+    }
 
-	@Override
-	public boolean isPushable() {
-		return false;
-	}
+    @Override
+    public boolean isPushable() {
+        return false;
+    }
 
-	@Override
-	protected void doPush(Entity entityIn) {
-	}
+    @Override
+    protected void doPush(Entity entityIn) {
+    }
 
-	@Override
-	protected void pushEntities() {
-	}
+    @Override
+    protected void pushEntities() {
+    }
 
-	@Override
-    public boolean hurt(@NotNull DamageSource pSource, float pAmount){
+    @Override
+    public boolean hurt(@NotNull DamageSource pSource, float pAmount) {
         return false;
     }
 
@@ -327,7 +327,7 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity, Sync
 
     @Override
     public void setHealth(float pHealth) {
-        if(pHealth < this.getHealth()) return;
+        if (pHealth < this.getHealth()) return;
         super.setHealth(pHealth);
     }
 
@@ -336,84 +336,81 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity, Sync
         super.setDeltaMovement(Vec3.ZERO);
     }
 
-	@Override
-	public void aiStep() {
-		super.aiStep();
-		this.updateSwingTime();
-	}
-
-	public static void init() {
-
-	}
-
-	public static AttributeSupplier.Builder createAttributes() {
-		AttributeSupplier.Builder builder = Mob.createMobAttributes();
-		builder = builder.add(Attributes.MOVEMENT_SPEED, 0);
-		builder = builder.add(Attributes.MAX_HEALTH, 10);
-		builder = builder.add(Attributes.ARMOR, 0);
-		builder = builder.add(Attributes.ATTACK_DAMAGE, 27);
-		builder = builder.add(Attributes.FOLLOW_RANGE, 1);
-		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 99);
-		return builder;
-	}
-
-	private PlayState movementPredicate(AnimationState event) {
-		if (this.animationprocedure.equals("empty")) {
-			return event.setAndContinue(RawAnimation.begin().thenLoop("animation.gladiia_whirl.idle"));
-		}
-		return PlayState.STOP;
-	}
-
-	String prevAnim = "empty";
-
-	private PlayState procedurePredicate(AnimationState event) {
-		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
-			if (!this.animationprocedure.equals(prevAnim))
-				event.getController().forceAnimationReset();
-			event.getController().setAnimation(RawAnimation.begin().thenPlay(this.animationprocedure));
-			if (event.getController().getAnimationState() == AnimationController.State.STOPPED) {
-				this.animationprocedure = "empty";
-				event.getController().forceAnimationReset();
-			}
-		} else if (animationprocedure.equals("empty")) {
-			prevAnim = "empty";
-			return PlayState.STOP;
-		}
-		prevAnim = this.animationprocedure;
-		return PlayState.CONTINUE;
-	}
-
-	@Override
-	protected void tickDeath() {
-		++this.deathTime;
-		if (this.deathTime == 1) {
-			this.remove(GladiiaWhirlEntity.RemovalReason.KILLED);
-			this.dropExperience();
-		}
-	}
-
-	public String getSyncedAnimation() {
-		return this.entityData.get(ANIMATION);
-	}
-
-	public void setAnimation(String animation) {
-		this.entityData.set(ANIMATION, animation);
-	}
-
-	@Override
-	public void registerControllers(AnimatableManager.ControllerRegistrar data) {
-		data.add(new AnimationController<>(this, "movement", 0, this::movementPredicate));
-		data.add(new AnimationController<>(this, "procedure", 0, this::procedurePredicate));
-	}
-
-	@Override
-	public AnimatableInstanceCache getAnimatableInstanceCache() {
-		return this.cache;
-	}
+    @Override
+    public void aiStep() {
+        super.aiStep();
+        this.updateSwingTime();
+    }
 
 
-	@Override
-	public void setAnimationProcedure(String animation) {
-		this.animationprocedure = animation;
-	}
+    public static AttributeSupplier.Builder createAttributes() {
+        AttributeSupplier.Builder builder = Mob.createMobAttributes();
+        builder = builder.add(Attributes.MOVEMENT_SPEED, 0);
+        builder = builder.add(Attributes.MAX_HEALTH, 10);
+        builder = builder.add(Attributes.ARMOR, 0);
+        builder = builder.add(Attributes.ATTACK_DAMAGE, 27);
+        builder = builder.add(Attributes.FOLLOW_RANGE, 1);
+        builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 99);
+        return builder;
+    }
+
+    private PlayState movementPredicate(AnimationState event) {
+        if (this.animationprocedure.equals("empty")) {
+            return event.setAndContinue(RawAnimation.begin().thenLoop("animation.gladiia_whirl.idle"));
+        }
+        return PlayState.STOP;
+    }
+
+    String prevAnim = "empty";
+
+    private PlayState procedurePredicate(AnimationState event) {
+        if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
+            if (!this.animationprocedure.equals(prevAnim))
+                event.getController().forceAnimationReset();
+            event.getController().setAnimation(RawAnimation.begin().thenPlay(this.animationprocedure));
+            if (event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+                this.animationprocedure = "empty";
+                event.getController().forceAnimationReset();
+            }
+        } else if (animationprocedure.equals("empty")) {
+            prevAnim = "empty";
+            return PlayState.STOP;
+        }
+        prevAnim = this.animationprocedure;
+        return PlayState.CONTINUE;
+    }
+
+    @Override
+    protected void tickDeath() {
+        ++this.deathTime;
+        if (this.deathTime == 1) {
+            this.remove(RemovalReason.KILLED);
+            this.dropExperience();
+        }
+    }
+
+    public String getSyncedAnimation() {
+        return this.entityData.get(ANIMATION);
+    }
+
+    public void setAnimation(String animation) {
+        this.entityData.set(ANIMATION, animation);
+    }
+
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar data) {
+        data.add(new AnimationController<>(this, "movement", 0, this::movementPredicate));
+        data.add(new AnimationController<>(this, "procedure", 0, this::procedurePredicate));
+    }
+
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return this.cache;
+    }
+
+
+    @Override
+    public void setAnimationProcedure(String animation) {
+        this.animationprocedure = animation;
+    }
 }

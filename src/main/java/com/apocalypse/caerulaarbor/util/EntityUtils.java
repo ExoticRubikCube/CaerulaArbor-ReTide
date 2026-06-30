@@ -6,29 +6,27 @@ import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.entity.*;
-import com.apocalypse.caerulaarbor.init.*;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAEnchantments;
+import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
-import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.Brain;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.animal.Animal;
@@ -38,14 +36,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.Team;
-import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -77,6 +73,7 @@ public class EntityUtils {
 		}
 	}
 
+	//需要查看C:\Users\Administrator\Desktop\VANIILLLA\MODIFIY\CaerulaArbor\待移植文件对应的mcr辅助方法
 	public static boolean canAttackAnimals() {
 		return false;
 	}
@@ -132,12 +129,9 @@ public class EntityUtils {
 		return entity != null && entity.isAlive();
 	}
 
-	public static void heal(Entity entity, double amount) {
-		if (entity == null)
-			return;
-		if (entity instanceof LivingEntity living) {
-			living.heal((float) amount);
-		}
+	public static void heal(LivingEntity entity, double amount) {
+		if (entity != null)
+			entity.heal((float) amount);
 	}
 
 	public static void healWithParticles(LevelAccessor world, Entity entity, double flatAmount, double maxHealthMultiplier) {
@@ -145,7 +139,7 @@ public class EntityUtils {
 			return;
 		if (entity instanceof LivingEntity living) {
 			double maxHealth = living.getMaxHealth();
-			heal(entity, maxHealth * maxHealthMultiplier + flatAmount);
+			heal(living, maxHealth * maxHealthMultiplier + flatAmount);
 			if (world instanceof ServerLevel level) {
 				level.sendParticles(ParticleTypes.CHERRY_LEAVES,
 					entity.getX(), entity.getY() + 1, entity.getZ(),
@@ -182,100 +176,6 @@ public class EntityUtils {
 				if (!living.level().isClientSide()) {
 					living.addEffect(new MobEffectInstance(CAMobEffects.RUNNING_ON_TRAIL.get(), 5, 0, false, false));
 					living.addEffect(new MobEffectInstance(MobEffects.JUMP, 5, 0, false, false));
-				}
-			}
-		}
-	}
-
-	//TODO:这些init需要下放回实体
-	public static void initAplusMagic(Entity entity) {
-		if (entity == null)
-			return;
-		if (entity instanceof LivingEntity living && living.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
-			living.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(30);
-	}
-
-	public static void initBplusMagic(Entity entity) {
-		if (entity == null)
-			return;
-		if (entity instanceof LivingEntity living && living.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
-			living.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(18);
-	}
-
-	public static void initSmagic(Entity entity) {
-		if (entity == null)
-			return;
-		if (entity instanceof LivingEntity living && living.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
-			living.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(40);
-	}
-
-	public static void initBmagic(Entity entity) {
-		if (entity == null)
-			return;
-		if (entity instanceof LivingEntity living && living.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
-			living.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(15);
-	}
-
-	public static void initWardenAttributes(Entity entity) {
-		if (entity == null)
-			return;
-		if (entity instanceof LivingEntity living && living.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
-			living.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(75);
-		if (entity instanceof LivingEntity living && living.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
-			living.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.01);
-	}
-
-	public static void initLastKnightAttributes(Entity entity) {
-		if (entity == null)
-			return;
-		if (entity instanceof LivingEntity living && living.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
-			living.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).setBaseValue(20);
-		if (entity instanceof LivingEntity living && living.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
-			living.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(60);
-	}
-
-	public static void initEndspeakerAbilities(LevelAccessor world, Entity entity) {
-		if (entity == null)
-			return;
-		if (inquirybility(world, 0)) {
-			if (entity instanceof LivingEntity living && living.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
-				living.getAttribute(CAAttributes.MAGIC_RESISTANCE.get())
-						.setBaseValue((living.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())
-								? living.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).getBaseValue()
-								: 0) + 40);
-		}
-		if (inquirybility(world, 1)) {
-			if (entity instanceof LivingEntity living && living.getAttributes().hasAttribute(CAAttributes.MISSRATE.get()))
-				living.getAttribute(CAAttributes.MISSRATE.get())
-						.setBaseValue((living.getAttributes().hasAttribute(CAAttributes.MISSRATE.get())
-								? living.getAttribute(CAAttributes.MISSRATE.get()).getBaseValue()
-								: 0) + 50);
-		}
-	}
-
-	//TODO可能需要下放回实体作为辅助方法
-	public static void castDragonBreath(LevelAccessor world, double x, double y, double z, Entity owner, Entity target, double type) {
-		if (owner == null) return;
-		if (world instanceof ServerLevel _level) {
-			Entity entityToSpawn = CAEntities.MOIST_DRAGON_BREATH.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
-			if (entityToSpawn instanceof MoistDragonBreathEntity _datEntSetS){
-				RandomSource random = world.getRandom();
-				entityToSpawn.setDeltaMovement(owner.getLookAngle().scale(0.25).add(
-					Mth.nextDouble(random, -0.15, 0.15),
-					Mth.nextDouble(random, -0.15, 0.15),
-					Mth.nextDouble(random, -0.15, 0.15)
-        		));
-        		SoundEvent SHOOT = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "caster_cast"));
-        		_level.playSound(owner, BlockPos.containing(x, y, z), SHOOT, SoundSource.HOSTILE, 2, 
-        		Mth.nextFloat(owner.level().getRandom(), 0.9f, 1.1f));
-				SynchedEntityData data = _datEntSetS.getEntityData();
-				data.set(MoistDragonBreathEntity.DATA_OWNER, owner.getStringUUID());
-				if(target != null) data.set(MoistDragonBreathEntity.DATA_TARGET, target.getStringUUID());
-				data.set(MoistDragonBreathEntity.DATA_TYPE, (int) type);
-				if(type > 0.5){
-					AttributeInstance instance = _datEntSetS.getAttribute(Attributes.MAX_HEALTH);
-					if (instance != null) instance.setBaseValue(instance.getBaseValue() * 2);
-					_datEntSetS.setHealth(_datEntSetS.getMaxHealth());
 				}
 			}
 		}
@@ -341,26 +241,6 @@ public class EntityUtils {
 			}
 		}
 		return InteractionResult.FAIL;
-	}
-
-	//TODO需要下放
-	public static void initDirection(Entity entity) {
-		if (entity == null)
-			return;
-		{
-            entity.setYRot((float) (90 * Mth.nextInt(RandomSource.create(), 0, 3)));
-			entity.setXRot(0);
-			entity.setYBodyRot(entity.getYRot());
-			entity.setYHeadRot(entity.getYRot());
-			entity.yRotO = entity.getYRot();
-			entity.xRotO = entity.getXRot();
-			if (entity instanceof LivingEntity _entity) {
-				_entity.yBodyRotO = _entity.getYRot();
-				_entity.yHeadRotO = _entity.getYRot();
-			}
-		}
-		if (entity instanceof LivingEntity _livingEntity2 && _livingEntity2.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
-			_livingEntity2.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(18);
 	}
 
 	//可能需要评估放到哪个util合适
@@ -441,50 +321,10 @@ public class EntityUtils {
 		}
 	}
 
-	//需要解释，大概率需要下放
-	public static void endspeakerLinkPtcTo(LevelAccessor world, double fromX, double fromY, double fromZ, double toX, double toY, double toZ) {
-		double vx;
-		double vy;
-		double vz;
-		double size;
-		vx = toX - fromX;
-		vy = toY - fromY;
-		vz = toZ - fromZ;
-		size = Math.max(Math.min(Math.round(Math.sqrt(Math.pow(vx, 2) + Math.pow(vy, 2) + Math.pow(vz, 2))), 32), 1);
-		if (world instanceof Level _level) {
-				_level.playSound(null, BlockPos.containing(fromX, fromY, fromZ), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.enderman.teleport")), SoundSource.HOSTILE, 1, 1);
-		}
-		for (int index0 = 0; index0 < (int) size; index0++) {
-			if (world instanceof ServerLevel _level)
-				_level.sendParticles(CAParticleTypes.ENDSPEAKER_INV.get(), (fromX + (vx / size) * index0), (fromY + (vy / size) * index0 + 0.5), (fromZ + (vz / size) * index0), 8, 0.32, 0.5, 0.32, 0.05);
-		}
-	}
-
-	//同上
-	public static void enderinaLinkPtcTo(LevelAccessor world, double fromX, double fromY, double fromZ, double toX, double toY, double toZ) {
-		double vx;
-		double vy;
-		double vz;
-		double size;
-		vx = toX - fromX;
-		vy = toY - fromY;
-		vz = toZ - fromZ;
-		size = Math.max(Math.min(Math.round(Math.sqrt(Math.pow(vx, 2) + Math.pow(vy, 2) + Math.pow(vz, 2))), 32), 1);
-		for (int index0 = 0; index0 < (int) size; index0++) {
-			if (world instanceof ServerLevel serverLevel)
-				serverLevel.sendParticles(CAParticleTypes.EDERMAN_PTC.get(), (fromX + (vx / size) * index0), (fromY + (vy / size) * index0 + 1), (fromZ + (vz / size) * index0), 1, 0, 0, 0, 0.01);
-		}
-	}
-
 	public static double getNodeLivingBarrier(Entity entity) {
 		if (entity == null)
 			return 0;
 		return (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).PEVO_NODE_living_barrier;
-	}
-
-	//评估是否需要下放甚至内联
-	public static String getSilenceMigration(LevelAccessor world) {
-		return Component.translatable(("item.caerula_arbor.sample_migration.description_" + Math.round(MapVariables.get(world).strategy_silence + 5))).getString();
 	}
 
 	//同上
@@ -506,11 +346,6 @@ public class EntityUtils {
 		if (entity == null)
 			return 0;
 		return (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).PEVO_NODE_worse_break;
-	}
-
-	//同上
-	public static String getSilenceSubsis(LevelAccessor world) {
-		return Component.translatable(("item.caerula_arbor.sample_subsisting.description_" + Math.round(MapVariables.get(world).strategy_silence + 5))).getString();
 	}
 
 	//TODO评估是否需要需要下放或内联，然后处理或跳过
@@ -577,19 +412,6 @@ public class EntityUtils {
 		return count;
 	}
 
-	//需要解释
-	public static Entity getGladiiaAround(LevelAccessor world, double x, double y, double z) {
-		Entity g = world.getEntitiesOfClass(GladiiaEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).stream().min(new Object() {
-            Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
-                return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
-            }
-        }.compareDistOf(x, y, z)).orElse(null);
-		if (!(g == null) && g.isAlive()) {
-			return g;
-		}
-		return null;
-	}
-
 	//解释并评估是否需要放在其他util类
 	public static void givePlayerReserve(LevelAccessor world, double x, double y, double z, Entity entity, ItemStack itemstack) {
 		if (entity == null)
@@ -647,16 +469,6 @@ public class EntityUtils {
 					_player.displayClientMessage(Component.literal((Component.translatable("item.caerula_arbor.gene_sample.no_exp").getString())), true);
 			}
 		}
-	}
-
-	//依旧是同类型，这种有很多
-	public static String getDescrSubsis(LevelAccessor world) {
-		return Component.translatable(("item.caerula_arbor.sample_subsisting.description_" + Math.round(MapVariables.get(world).strategy_subsisting))).getString();
-	}
-
-	//同上
-	public static String getSilenceBreed(LevelAccessor world) {
-		return Component.translatable(("item.caerula_arbor.sample_breed.description_" + Math.round(MapVariables.get(world).strategy_silence + 5))).getString();
 	}
 
 	//同
@@ -719,31 +531,6 @@ public class EntityUtils {
 			}
 		}
 		return enemy;
-	}
-
-	//他们真的需要放在这里吗
-	public static double getStraSilence(LevelAccessor world) {
-		return MapVariables.get(world).strategy_silence;
-	}
-
-	//他们真的需要放在这里吗
-	public static double getStraSubsis(LevelAccessor world) {
-		return MapVariables.get(world).strategy_subsisting;
-	}
-
-	//他们真的需要放在这里吗
-	public static double getStraBreed(LevelAccessor world) {
-		return MapVariables.get(world).strategy_breed;
-	}
-
-	//他们真的需要放在这里吗
-	public static double getStraGrow(LevelAccessor world) {
-		return MapVariables.get(world).strategy_grow;
-	}
-
-	//他们真的需要放在这里吗
-	public static double getStraMigration(LevelAccessor world) {
-		return MapVariables.get(world).strategy_migration;
 	}
 
 	//需要解释
@@ -812,23 +599,11 @@ public class EntityUtils {
 		return (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).PEVO_NODE_eunectes;
 	}
 
-	public static String getSilenceGrow(LevelAccessor world) {
-		return Component.translatable(("item.caerula_arbor.sample_grow.description_" + Math.round(MapVariables.get(world).strategy_silence + 5))).getString();
-	}
-
 	public static void giveSpearFight(Entity entity) {
 		if (!(entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CAMobEffects.SPEAR_FIGHT.get()))) {
 			if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
 				_entity.addEffect(new MobEffectInstance(CAMobEffects.SPEAR_FIGHT.get(), 60, 0, false, false));
 		}
-	}
-
-	public static String getDescrBreed(LevelAccessor world) {
-		return Component.translatable(("item.caerula_arbor.sample_breed.description_" + Math.round(MapVariables.get(world).strategy_breed))).getString();
-	}
-
-	public static String getDescrGrow(LevelAccessor world) {
-		return Component.translatable(("item.caerula_arbor.sample_grow.description_" + Math.round(MapVariables.get(world).strategy_grow))).getString();
 	}
 
 	public static double getSlimeSize(Entity entity) {
@@ -837,7 +612,7 @@ public class EntityUtils {
 		return (entity instanceof NetherseaSlimeEntity _datEntI ? _datEntI.getEntityData().get(NetherseaSlimeEntity.DATA_SIZE) : 0) * 0.5;
 	}
 
-	//TODO:可能需要下放到药水类
+	//TODO:可能需要安置到别处
 	public static void giveLessArmor(Entity obj, double limit) {
 		if (obj == null)
 			return;
@@ -880,10 +655,6 @@ public class EntityUtils {
 				}
 			}
 		}
-	}
-
-	public static String getDescrMigra(LevelAccessor world) {
-		return Component.translatable(("item.caerula_arbor.sample_migration.description_" + Math.round(MapVariables.get(world).strategy_migration))).getString();
 	}
 
 	public static void gainLessSpeed(Entity entity) {
@@ -949,27 +720,6 @@ public class EntityUtils {
 		return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
 	}
 
-	//TODO 需要下放 评估是否应该分别为方块和实体添加辅助类
-	public static void gladiiaLinkPtcToEntity(LevelAccessor world, Entity entity, Entity tgt) {
-		if (entity == null || tgt == null)
-			return;
-        double fromX = entity.getX();
-        double fromY = entity.getY();
-        double fromZ = entity.getZ();
-        double vx;
-        double vy;
-        double vz;
-        double size;
-        vx = tgt.getX() - fromX;
-        vy = tgt.getY() - fromY;
-        vz = tgt.getZ() - fromZ;
-        size = Math.max(Math.min(Math.round(Math.sqrt(Math.pow(vx, 2) + Math.pow(vy, 2) + Math.pow(vz, 2))), 32), 1);
-        for (int index0 = 0; index0 < (int) size; index0++) {
-            if (world instanceof ServerLevel _level)
-                _level.sendParticles(ParticleTypes.DRIPPING_WATER, (fromX + (vx / size) * index0), (fromY + (vy / size) * index0 + 0.5), (fromZ + (vz / size) * index0), 8, 0.32, 0.5, 0.32, 0.05);
-        }
-    }
-
 	public static double getSpeed(Entity e) {
 		if (e == null)
 			return 0;
@@ -982,155 +732,6 @@ public class EntityUtils {
 		return entity.getBbWidth() * entity.getBbHeight();
 	}
 
-	//需要注释
-	public static boolean inquirybility(LevelAccessor world, double index) {
-		int comparator = (int) Math.pow(2, index);
-		int inq = (int) MapVariables.get(world).endspeaker_abolities & comparator;
-		return inq == comparator;
-	}
-
-	//需要解释
-	public static void healFromGladiia(LevelAccessor world, double x, double y, double z, Entity entity) {
-		if (entity == null)
-			return;
-		if (entity.tickCount % 5 == 0) {
-			if (!(getGladiiaAround(world, x, y, z) == null)) {
-				if (entity instanceof LivingEntity _entity)
-					_entity.setHealth((float) ((entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) + (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.008));
-			}
-		}
-	}
-
-	//TODO:需要下放
-	public static void initHunter(Entity entity) {
-		if (entity == null)
-			return;
-		if (entity instanceof LivingEntity _livingEntity1 && _livingEntity1.getAttributes().hasAttribute(ForgeMod.SWIM_SPEED.get()))
-			_livingEntity1.getAttribute(ForgeMod.SWIM_SPEED.get())
-					.setBaseValue(((entity instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(ForgeMod.SWIM_SPEED.get()) ? _livingEntity0.getAttribute(ForgeMod.SWIM_SPEED.get()).getBaseValue() : 0) * 8));
-		if (entity instanceof LivingEntity _livingEntity2 && _livingEntity2.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
-			_livingEntity2.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.33);
-	}
-
-	public static void wardenRangedAttack(LevelAccessor world, Entity obj, boolean isSonic, double rate, double xx, double yy, double zz) {
-		if (obj == null)
-			return;
-		Entity enemy;
-		double damage;
-		double r;
-		enemy = obj instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
-		r = 3;
-		if (isSonic) {
-			r = 4.5;
-		}
-		final Vec3 _center = new Vec3(xx, yy, zz);
-		List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate((2 * r) / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-		for (Entity entityiterator : _entfound) {
-			if (!(entityiterator instanceof Mob) && !(entityiterator instanceof Player)) {
-				continue;
-			}
-			if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
-				if (!(entityiterator == enemy)) {
-					continue;
-				}
-			}
-			if (entityiterator == obj) {
-				continue;
-			}
-			if (new Vec3(xx, yy, zz).distanceTo(new Vec3((entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()))) <= r) {
-				damage = (obj instanceof LivingEntity _livingEntity10 && _livingEntity10.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity10.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * rate;
-				if (isSonic) {
-					entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "warden_sonic"))), obj),
-							(float) damage);
-					if (entityiterator instanceof LivingEntity livingEntity) {
-						SIHelper.causeSanityInjury(livingEntity, damage * 1.5);
-					}
-				} else {
-					entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "warden_attack"))), obj),
-							(float) damage);
-				}
-			}
-		}
-	}
-
-	//TODO:需要下放回实体，理念同WorldUtils的对凋零的处理
-	public static void wardenSonicBoom(LevelAccessor world, Entity obj, Entity target) {
-		if (obj == null || target == null)
-			return;
-		double vx;
-		double vy;
-		double vz;
-		double len;
-		double tx;
-		double ty;
-		double tz;
-		vx = target.getX() - obj.getX();
-		vy = target.getY() - obj.getY();
-		vz = target.getZ() - obj.getZ();
-		len = Math.sqrt(vx * vx + vy * vy + vz * vz);
-		if (len > 0) {
-			vx = vx / len;
-			vy = vy / len;
-			vz = vz / len;
-		} else {
-			vx = obj.getLookAngle().y;
-			vy = obj.getLookAngle().x;
-			vz = obj.getLookAngle().z;
-		}
-		for (int index0 = 0; index0 < 32; index0++) {
-			tx = obj.getX() + vx * (index0 + 1);
-			ty = obj.getY() + 1.5 + vy * (index0 + 1);
-			tz = obj.getZ() + vz * (index0 + 1);
-			wardenRangedAttack(world, obj, true, 0.25, tx, ty, tz);
-			if (world instanceof ServerLevel _level)
-				_level.sendParticles(ParticleTypes.SONIC_BOOM, tx, ty, tz, 3, 0.1, 0.1, 0.1, 0.1);
-		}
-	}
-
-	//TODO:下放，同处理
-	public static void wardenLightBoom(LevelAccessor world, Entity obj, Entity target) {
-		if (obj == null || target == null)
-			return;
-		double vx;
-		double vy;
-		double vz;
-		double len;
-		double tx;
-		double ty;
-		double tz;
-		vx = target.getX() - obj.getX();
-		vy = target.getY() - obj.getY();
-		vz = target.getZ() - obj.getZ();
-		len = Math.sqrt(vx * vx + vy * vy + vz * vz);
-		if (len > 0) {
-			vx = vx / len;
-			vy = vy / len;
-			vz = vz / len;
-		} else {
-			vx = obj.getLookAngle().y;
-			vy = obj.getLookAngle().x;
-			vz = obj.getLookAngle().z;
-		}
-		for (int index0 = 0; index0 < 32; index0++) {
-			tx = obj.getX() + 0 + vx * (index0 + 1);
-			ty = obj.getY() + 1.5 + vy * (index0 + 1);
-			tz = obj.getZ() + 0 + vz * (index0 + 1);
-			wardenRangedAttack(world, obj, true, 0.15, tx, ty, tz);
-			if (world instanceof ServerLevel _level)
-				_level.sendParticles(ParticleTypes.SONIC_BOOM, tx, ty, tz, 1, 0.1, 0.1, 0.1, 0.1);
-		}
-	}
-
-	//TODO:制作他俩的基类并下放
-	public static void dropWardenExp(LevelAccessor world, double x, double y, double z) {
-		if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
-			for (int index0 = 0; index0 < 64; index0++) {
-				if (world instanceof ServerLevel _level)
-					_level.addFreshEntity(new ExperienceOrb(_level, (x + Mth.nextDouble(RandomSource.create(), -1, 1)), y, (z + Mth.nextDouble(RandomSource.create(), -1, 1)), Mth.nextInt(RandomSource.create(), 32, 64)));
-			}
-		}
-	}
-
 	//需要解释
 	public static void hurtMartus(LevelAccessor world, Entity obj, Entity source, double num, double perc) {
 		if (obj == null)
@@ -1139,18 +740,6 @@ public class EntityUtils {
 		amount = (obj instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * perc + num;
 		if (amount > 0) {
 			obj.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "inv_killer"))), source), (float) amount);
-		}
-	}
-
-	//可能需要下放或直接内联
-	public static void igniteRouteshaper(LevelAccessor world, double x, double y, double z, Entity entity) {
-		if (entity == null)
-			return;
-		if (entity instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
-			_livingEntity0.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(24);
-		if (world.getEntitiesOfClass(Player.class, AABB.ofSize(new Vec3(x, y, z), 16, 16, 16), e -> true).isEmpty()) {
-			if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-				_entity.addEffect(new MobEffectInstance(MobEffects.GLOWING, 1800, 0, false, false));
 		}
 	}
 
@@ -1232,7 +821,7 @@ public class EntityUtils {
 	}
 
 	//需要解释
-	public static void turnRounds(Entity another, Entity me) {
+	public static void applyOrbitMotion(Entity another, Entity me) {
 		if (another == null || me == null)
 			return;
 		Vec3 offset = another.position().add(me.position().reverse());
@@ -1243,7 +832,7 @@ public class EntityUtils {
 	}
 
 	//可疑，需要解释并评估怎么处理
-	public static void pullToGladiia(Entity another, Entity me) {
+	public static void pullToward(Entity another, Entity me) {
 		if (another == null || me == null)
 			return;
 		Vec3 offset = me.position().add(another.position().reverse());
@@ -1278,46 +867,4 @@ public class EntityUtils {
 		}
 	}
 
-	//评估他和接口的关系是否合适
-	public static Entity findNearestRidable(LevelAccessor world, double x, double y, double z, Entity entity, double distLimit, Class<? extends Entity> entityType) {
-		if (entity == null)
-			return null;
-		Entity result = null;
-		double minDist = 999;
-		for (Entity entityiterator : world.getEntities(entity, new AABB((x + distLimit), (y + distLimit), (z + distLimit), (x - distLimit), (y - distLimit), (z - distLimit)))) {
-			if (!entityType.isInstance(entityiterator)) {
-				continue;
-			}
-			if (entityiterator.isVehicle()) {
-				continue;
-			}
-			double d = entity.distanceTo(entityiterator);
-			if (d < minDist && d < distLimit) {
-				minDist = d;
-				result = entityiterator;
-			}
-		}
-		return result;
-	}
-
-	//TODO需要下放回OceanizedEndermanEntity,LivingAttackEventHandler之后需要整个处理
-	public static void teleportTo(LevelAccessor world, Entity entity, double fromX, double fromY, double fromZ, double toX, double toY, double toZ) {
-		if (entity == null || !entity.isAlive())
-			return;
-		double vx = toX - fromX;
-		double vy = toY - fromY;
-		double vz = toZ - fromZ;
-		double size = Math.max(Math.min(Math.round(Math.sqrt(vx * vx + vy * vy + vz * vz)), 32), 1);
-		if (world instanceof Level _level) {
-				_level.playSound(null, BlockPos.containing(fromX, fromY, fromZ), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.enderman.teleport")), SoundSource.HOSTILE, 1, 1);
-		}
-		for (int index0 = 0; index0 < (int) size; index0++) {
-			if (world instanceof ServerLevel _level)
-				_level.sendParticles(CAParticleTypes.EDERMAN_PTC.get(), (fromX + (vx / size) * index0), (fromY + (vy / size) * index0 + 0.65), (fromZ + (vz / size) * index0), 32, 0.65, 0.65, 0.65, 0.05);
-		}
-		entity.teleportTo(toX, toY, toZ);
-		if (entity instanceof ServerPlayer _serverPlayer)
-			_serverPlayer.connection.teleport(toX, toY, toZ, entity.getYRot(), entity.getXRot());
-		entity.clearFire();
-	}
 }

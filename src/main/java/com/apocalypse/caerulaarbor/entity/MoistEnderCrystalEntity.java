@@ -63,7 +63,7 @@ public class MoistEnderCrystalEntity extends PathfinderMob implements GeoEntity,
 	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(MoistEnderCrystalEntity.class, EntityDataSerializers.STRING);
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 	public String animationprocedure = "empty";
-	public boolean IS_STATIC= false;
+	public boolean IS_STATIC = false;
 
 	public MoistEnderCrystalEntity(PlayMessages.SpawnEntity packet, Level world) {
 		this(CAEntities.MOIST_ENDER_CRYSTAL.get(), world);
@@ -154,34 +154,34 @@ public class MoistEnderCrystalEntity extends PathfinderMob implements GeoEntity,
 	public void baseTick() {
 		super.baseTick();
 		if (this.IS_STATIC) this.setDeltaMovement(Vec3.ZERO);
-        if (!this.isAlive()) {
-            setDeltaMovement(new Vec3(0, 0, 0));
-        } else {
-            if (tickCount < 5) {
-                setDeltaMovement(new Vec3(0, 0, 0));
-            }
-            clearFire();
-            setAirSupply(20);
-        }
-        this.refreshDimensions();
-	}
-	
-	@Override
-	public void tick() {
-      this.noPhysics = true;
-      super.tick();
-      this.noPhysics = false;
-      this.setNoGravity(true);
+		if (!this.isAlive()) {
+			setDeltaMovement(new Vec3(0, 0, 0));
+		} else {
+			if (tickCount < 5) {
+				setDeltaMovement(new Vec3(0, 0, 0));
+			}
+			clearFire();
+			setAirSupply(20);
+		}
+		this.refreshDimensions();
 	}
 
 	@Override
-	public InteractionResult mobInteract(Player player, InteractionHand pHand){
+	public void tick() {
+		this.noPhysics = true;
+		super.tick();
+		this.noPhysics = false;
+		this.setNoGravity(true);
+	}
+
+	@Override
+	public InteractionResult mobInteract(Player player, InteractionHand pHand) {
 		if (!this.IS_STATIC) return InteractionResult.PASS;
 		Level level = this.level();
-		if (level instanceof ServerLevel sLevel){
+		if (level instanceof ServerLevel sLevel) {
 			if (player.getMainHandItem().isEmpty()) {
 				ItemEntity item = new ItemEntity(sLevel, this.getX(), this.getY(), this.getZ(),
-					new ItemStack(CAItems.MOIST_CRYSTAL_ITEM.get()));
+						new ItemStack(CAItems.MOIST_CRYSTAL_ITEM.get()));
 				item.setPickUpDelay(10);
 				item.setUnlimitedLifetime();
 				sLevel.addFreshEntity(item);
@@ -191,12 +191,12 @@ public class MoistEnderCrystalEntity extends PathfinderMob implements GeoEntity,
 		}
 		return InteractionResult.PASS;
 	}
-	
+
 	@Override
 	public void move(MoverType pType, Vec3 pPos) {
-      super.move(pType, pPos);
-      this.checkInsideBlocks();
-   }
+		super.move(pType, pPos);
+		this.checkInsideBlocks();
+	}
 
 	@Override
 	public EntityDimensions getDimensions(Pose p_33597_) {
@@ -217,8 +217,7 @@ public class MoistEnderCrystalEntity extends PathfinderMob implements GeoEntity,
 		this.setNoGravity(true);
 	}
 
-	public static void init() {
-	}
+	
 
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
@@ -273,60 +272,58 @@ public class MoistEnderCrystalEntity extends PathfinderMob implements GeoEntity,
 	protected void tickDeath() {
 		++this.deathTime;
 		if (this.deathTime == 20) {
-			this.remove(MoistEnderCrystalEntity.RemovalReason.KILLED);
+			this.remove(RemovalReason.KILLED);
 			this.dropExperience();
-            LevelAccessor world = this.level();
-            double x = this.getX();
-            double y = this.getY();
-            double z = this.getZ();
-            double d;
-            Entity enderina;
-            if (world.isClientSide()) {
-                return;
-            }
-            if (world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "caster_crystal_explode")), SoundSource.NEUTRAL, 3, 1);
-            }
-            if (world instanceof ServerLevel _level)
-                _level.sendParticles(ParticleTypes.EXPLOSION, x, (y + 0.5), z, 4, 0.5, 0.5, 0.5, 0.1);
-            if (world instanceof ServerLevel _level)
-                _level.sendParticles(CAParticleTypes.EDERMAN_PTC.get(), x, (y + 0.5), z, 32, 1, 1, 1, 0.18);
-            d = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
-            if (d > 0) {
-                {
-                    final Vec3 _center = new Vec3(x, y, z);
-                    List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(8 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                    for (Entity entityiterator : _entfound) {
-                        if (!(entityiterator instanceof LivingEntity)) {
-                            continue;
-                        }
-                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
-                            continue;
-                        }
-                        if (distanceTo(entityiterator) <= 4) {
-                            entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.EXPLOSION), this), (float) d);
-                        }
-                    }
-                }
-            }
-            enderina = world.getEntitiesOfClass(OceanizedEnderinaEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).stream().min(new Object() {
-                Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
-                    return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
-                }
-            }.compareDistOf(x, y, z)).orElse(null);
-            if (enderina == null) {
-                return;
-            }
-            if ((enderina instanceof OceanizedEnderinaEntity _datEntI ? _datEntI.getEntityData().get(OceanizedEnderinaEntity.DATA_REVIVE_TICK) : 0) > 0) {
-                enderina.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hand_of_choker")))),
-                        (float) ((enderina instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) * 0.25));
-            } else {
-                EntityUtils.heal(enderina, (enderina instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.05);
-                if (enderina instanceof LivingEntity livingEntity) {
-                    ModCapabilities.getSanityInjury(livingEntity).heal(1000);
-                }
-            }
-        }
+			LevelAccessor world = this.level();
+			double x = this.getX();
+			double y = this.getY();
+			double z = this.getZ();
+			double d;
+			Entity enderina;
+			if (world.isClientSide()) {
+				return;
+			}
+			if (world instanceof Level _level) {
+				_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "caster_crystal_explode")), SoundSource.NEUTRAL, 3, 1);
+			}
+			if (world instanceof ServerLevel _level)
+				_level.sendParticles(ParticleTypes.EXPLOSION, x, (y + 0.5), z, 4, 0.5, 0.5, 0.5, 0.1);
+			if (world instanceof ServerLevel _level)
+				_level.sendParticles(CAParticleTypes.EDERMAN_PTC.get(), x, (y + 0.5), z, 32, 1, 1, 1, 0.18);
+			d = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
+			if (d > 0) {
+				{
+					final Vec3 _center = new Vec3(x, y, z);
+					List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(8 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+					for (Entity entityiterator : _entfound) {
+						if (!(entityiterator instanceof LivingEntity)) {
+							continue;
+						}
+						if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+							continue;
+						}
+						if (distanceTo(entityiterator) <= 4) {
+							entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.EXPLOSION), this), (float) d);
+						}
+					}
+				}
+			}
+			enderina = world.getEntitiesOfClass(OceanizedEnderinaEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).stream().min(new Object() {
+				Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
+					return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
+				}
+			}.compareDistOf(x, y, z)).orElse(null);
+			if (enderina == null) {
+				return;
+			}
+			if ((enderina instanceof OceanizedEnderinaEntity _datEntI ? _datEntI.getEntityData().get(OceanizedEnderinaEntity.DATA_REVIVE_TICK) : 0) > 0) {
+				enderina.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hand_of_choker")))),
+						(float) ((enderina instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) * 0.25));
+			} else if (enderina instanceof LivingEntity livingEntity) {
+				EntityUtils.heal(livingEntity, (livingEntity.getMaxHealth()) * 0.05);
+				ModCapabilities.getSanityInjury(livingEntity).heal(1000);
+			}
+		}
 	}
 
 	@Override

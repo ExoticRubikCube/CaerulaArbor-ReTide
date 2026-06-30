@@ -17,7 +17,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -40,7 +39,6 @@ import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
@@ -52,7 +50,6 @@ import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 
-import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.List;
 
@@ -135,15 +132,15 @@ public class RouteShaperEntity extends AbstractPathshaperEntity {
 			@Override
 			public boolean canUse() {
 				Entity entity = RouteShaperEntity.this;
-                if (!super.canUse()) return false;
-                return EntityPredicateUtils.isNotFakeDying(entity);
+				if (!super.canUse()) return false;
+				return EntityPredicateUtils.isNotFakeDying(entity);
 			}
 
 			@Override
 			public boolean canContinueToUse() {
 				Entity entity = RouteShaperEntity.this;
-                if (!super.canContinueToUse()) return false;
-                return EntityPredicateUtils.isNotFakeDying(entity);
+				if (!super.canContinueToUse()) return false;
+				return EntityPredicateUtils.isNotFakeDying(entity);
 			}
 
 		});
@@ -163,7 +160,7 @@ public class RouteShaperEntity extends AbstractPathshaperEntity {
 				double x = RouteShaperEntity.this.getX();
 				double y = RouteShaperEntity.this.getY();
 				double z = RouteShaperEntity.this.getZ();
-                Level world = RouteShaperEntity.this.level();
+				Level world = RouteShaperEntity.this.level();
 				return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
 			}
 
@@ -192,7 +189,7 @@ public class RouteShaperEntity extends AbstractPathshaperEntity {
 		this.goalSelector.addGoal(17, new FloatGoal(this));
 	}
 
-    @Override
+	@Override
 	public boolean removeWhenFarAway(double distanceToClosestPlayer) {
 		return false;
 	}
@@ -215,7 +212,7 @@ public class RouteShaperEntity extends AbstractPathshaperEntity {
 	@Override
 	public void die(DamageSource source) {
 		super.die(source);
-        LevelAccessor world = this.level();
+		LevelAccessor world = this.level();
 		final Vec3 _center = new Vec3(this.getX(), this.getY(), this.getZ());
 		List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(64 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
 		for (Entity entityiterator : _entfound) {
@@ -223,13 +220,6 @@ public class RouteShaperEntity extends AbstractPathshaperEntity {
 				entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.FELL_OUT_OF_WORLD)), 999999);
 			}
 		}
-    }
-
-	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-		EntityUtils.igniteRouteshaper(world, this.getX(), this.getY(), this.getZ(), this);
-		return retval;
 	}
 
 	@Override
@@ -273,8 +263,7 @@ public class RouteShaperEntity extends AbstractPathshaperEntity {
 		this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
 	}
 
-	public static void init() {
-	}
+	
 
 	public static AttributeSupplier.Builder createAttributes() {
 		AttributeSupplier.Builder builder = Mob.createMobAttributes();
@@ -331,7 +320,7 @@ public class RouteShaperEntity extends AbstractPathshaperEntity {
 	protected void tickDeath() {
 		++this.deathTime;
 		if (this.deathTime == 20) {
-			this.remove(RouteShaperEntity.RemovalReason.KILLED);
+			this.remove(RemovalReason.KILLED);
 			this.dropExperience();
 			WorldUtils.dropRelicRoute(this.level(), this.getX(), this.getY(), this.getZ());
 		}

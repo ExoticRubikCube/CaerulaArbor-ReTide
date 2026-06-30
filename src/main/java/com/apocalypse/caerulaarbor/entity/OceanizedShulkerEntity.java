@@ -62,174 +62,174 @@ import software.bernie.geckolib.core.object.PlayState;
 import javax.annotation.Nullable;
 
 public class OceanizedShulkerEntity extends SeaMonster {
-	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanizedShulkerEntity.class, EntityDataSerializers.BOOLEAN);
-	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedShulkerEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(OceanizedShulkerEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<Integer> DATA_SHOOT_DELAY = SynchedEntityData.defineId(OceanizedShulkerEntity.class, EntityDataSerializers.INT);
-	public static final EntityDataAccessor<String> DATA_DIRECTION = SynchedEntityData.defineId(OceanizedShulkerEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<Boolean> DATA_WALKING = SynchedEntityData.defineId(OceanizedShulkerEntity.class, EntityDataSerializers.BOOLEAN);
-	public static final EntityDataAccessor<Integer> DATA_PEEK_TIME = SynchedEntityData.defineId(OceanizedShulkerEntity.class, EntityDataSerializers.INT);
-	public static final EntityDataAccessor<Integer> DATA_VARIANT = SynchedEntityData.defineId(OceanizedShulkerEntity.class, EntityDataSerializers.INT);
-	private boolean swinging;
-	private boolean lastloop;
-	private long lastSwing;
-	public String animationprocedure = "empty";
+    public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanizedShulkerEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedShulkerEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(OceanizedShulkerEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> DATA_SHOOT_DELAY = SynchedEntityData.defineId(OceanizedShulkerEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<String> DATA_DIRECTION = SynchedEntityData.defineId(OceanizedShulkerEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Boolean> DATA_WALKING = SynchedEntityData.defineId(OceanizedShulkerEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<Integer> DATA_PEEK_TIME = SynchedEntityData.defineId(OceanizedShulkerEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_VARIANT = SynchedEntityData.defineId(OceanizedShulkerEntity.class, EntityDataSerializers.INT);
+    private boolean swinging;
+    private boolean lastloop;
+    private long lastSwing;
+    public String animationprocedure = "empty";
 
-	public OceanizedShulkerEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CAEntities.OCEANIZED_SHULKER.get(), world);
-	}
+    public OceanizedShulkerEntity(PlayMessages.SpawnEntity packet, Level world) {
+        this(CAEntities.OCEANIZED_SHULKER.get(), world);
+    }
 
-	public OceanizedShulkerEntity(EntityType<OceanizedShulkerEntity> type, Level world) {
-		super(type, world);
-		xpReward = 0;
-		setNoAi(false);
-		setMaxUpStep(1f);
-		setPersistenceRequired();
-	}
+    public OceanizedShulkerEntity(EntityType<OceanizedShulkerEntity> type, Level world) {
+        super(type, world);
+        xpReward = 0;
+        setNoAi(false);
+        setMaxUpStep(1f);
+        setPersistenceRequired();
+    }
 
-	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(SHOOT, false);
-		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(TEXTURE, "oceanized_shulker");
-		this.entityData.define(DATA_SHOOT_DELAY, 0);
-		this.entityData.define(DATA_DIRECTION, "up");
-		this.entityData.define(DATA_WALKING, false);
-		this.entityData.define(DATA_PEEK_TIME, 0);
-		this.entityData.define(DATA_VARIANT, 0);
-	}
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(SHOOT, false);
+        this.entityData.define(ANIMATION, "undefined");
+        this.entityData.define(TEXTURE, "oceanized_shulker");
+        this.entityData.define(DATA_SHOOT_DELAY, 0);
+        this.entityData.define(DATA_DIRECTION, "up");
+        this.entityData.define(DATA_WALKING, false);
+        this.entityData.define(DATA_PEEK_TIME, 0);
+        this.entityData.define(DATA_VARIANT, 0);
+    }
 
-	public void setTexture(String texture) {
-		this.entityData.set(TEXTURE, texture);
-	}
+    public void setTexture(String texture) {
+        this.entityData.set(TEXTURE, texture);
+    }
 
-	public String getTexture() {
-		return this.entityData.get(TEXTURE);
-	}
+    public String getTexture() {
+        return this.entityData.get(TEXTURE);
+    }
 
-	@Override
-	public boolean canCollideWith(Entity entity) {
-		return true;
-	}
+    @Override
+    public boolean canCollideWith(Entity entity) {
+        return true;
+    }
 
-	@Override
-	public boolean canBeCollidedWith() {
-		Entity entity = this;
-		return EntityUtils.isAlive(entity);
-	}
+    @Override
+    public boolean canBeCollidedWith() {
+        Entity entity = this;
+        return EntityUtils.isAlive(entity);
+    }
 
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
-	}
+    @Override
+    public Packet<ClientGamePacketListener> getAddEntityPacket() {
+        return NetworkHooks.getEntitySpawningPacket(this);
+    }
 
-	@Override
-	protected void registerGoals() {
-		super.registerGoals();
-		this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1, false) {
-			@Override
-			protected double getAttackReachSqr(LivingEntity entity) {
-				return 4;
-			}
+    @Override
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1, false) {
+            @Override
+            protected double getAttackReachSqr(LivingEntity entity) {
+                return 4;
+            }
 
-			@Override
-			public boolean canUse() {
-				return super.canUse() && OceanizedShulkerEntity.this.isAlive() && OceanizedShulkerEntity.this.isWalking();
-			}
+            @Override
+            public boolean canUse() {
+                return super.canUse() && OceanizedShulkerEntity.this.isAlive() && OceanizedShulkerEntity.this.isWalking();
+            }
 
-			@Override
-			public boolean canContinueToUse() {
-				return super.canContinueToUse() && OceanizedShulkerEntity.this.isAlive() && OceanizedShulkerEntity.this.isWalking();
-			}
+            @Override
+            public boolean canContinueToUse() {
+                return super.canContinueToUse() && OceanizedShulkerEntity.this.isAlive() && OceanizedShulkerEntity.this.isWalking();
+            }
 
-		});
-		this.targetSelector.addGoal(2, new HurtByTargetGoal(this));
-		this.goalSelector.addGoal(3, new RandomStrollGoal(this, 1) {
-			@Override
-			public boolean canUse() {
-				return super.canUse() && OceanizedShulkerEntity.this.isAlive() && OceanizedShulkerEntity.this.isWalking();
-			}
+        });
+        this.targetSelector.addGoal(2, new HurtByTargetGoal(this));
+        this.goalSelector.addGoal(3, new RandomStrollGoal(this, 1) {
+            @Override
+            public boolean canUse() {
+                return super.canUse() && OceanizedShulkerEntity.this.isAlive() && OceanizedShulkerEntity.this.isWalking();
+            }
 
-			@Override
-			public boolean canContinueToUse() {
-				return super.canContinueToUse() && OceanizedShulkerEntity.this.isAlive() && OceanizedShulkerEntity.this.isWalking();
-			}
-		});
-		this.goalSelector.addGoal(4, new RandomLookAroundGoal(this) {
-			@Override
-			public boolean canUse() {
-				return super.canUse() && OceanizedShulkerEntity.this.isAlive() && OceanizedShulkerEntity.this.isWalking();
-			}
+            @Override
+            public boolean canContinueToUse() {
+                return super.canContinueToUse() && OceanizedShulkerEntity.this.isAlive() && OceanizedShulkerEntity.this.isWalking();
+            }
+        });
+        this.goalSelector.addGoal(4, new RandomLookAroundGoal(this) {
+            @Override
+            public boolean canUse() {
+                return super.canUse() && OceanizedShulkerEntity.this.isAlive() && OceanizedShulkerEntity.this.isWalking();
+            }
 
-			@Override
-			public boolean canContinueToUse() {
-				return super.canContinueToUse() && OceanizedShulkerEntity.this.isAlive() && OceanizedShulkerEntity.this.isWalking();
-			}
-		});
-	}
+            @Override
+            public boolean canContinueToUse() {
+                return super.canContinueToUse() && OceanizedShulkerEntity.this.isAlive() && OceanizedShulkerEntity.this.isWalking();
+            }
+        });
+    }
 
-	@Override
-	public MobType getMobType() {
-		return MobType.UNDEFINED;
-	}
+    @Override
+    public MobType getMobType() {
+        return MobType.UNDEFINED;
+    }
 
-	@Override
-	public boolean removeWhenFarAway(double distanceToClosestPlayer) {
-		return false;
-	}
+    @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        return false;
+    }
 
-	@Override
-	public SoundEvent getAmbientSound() {
-		return SoundEvents.SHULKER_AMBIENT;
-	}
+    @Override
+    public SoundEvent getAmbientSound() {
+        return SoundEvents.SHULKER_AMBIENT;
+    }
 
-	@Override
-	public SoundEvent getHurtSound(DamageSource ds) {
-		return peekTime() > 0 ? SoundEvents.SHULKER_HURT : SoundEvents.SHULKER_HURT_CLOSED;
-	}
+    @Override
+    public SoundEvent getHurtSound(DamageSource ds) {
+        return peekTime() > 0 ? SoundEvents.SHULKER_HURT : SoundEvents.SHULKER_HURT_CLOSED;
+    }
 
-	@Override
-	public SoundEvent getDeathSound() {
-		return SoundEvents.SHULKER_DEATH;
-	}
+    @Override
+    public SoundEvent getDeathSound() {
+        return SoundEvents.SHULKER_DEATH;
+    }
 
-	@Override
-	public boolean hurt(DamageSource source, float amount) {
-		if (peekTime() <= 0 && source.getDirectEntity() instanceof AbstractArrow)
-			return false;
-		if (source.is(DamageTypes.FALL))
-			return false;
-		if (source.is(DamageTypes.DROWN))
-			return false;
-		return super.hurt(source, amount);
-	}
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        if (peekTime() <= 0 && source.getDirectEntity() instanceof AbstractArrow)
+            return false;
+        if (source.is(DamageTypes.FALL))
+            return false;
+        if (source.is(DamageTypes.DROWN))
+            return false;
+        return super.hurt(source, amount);
+    }
 
-	@Override
-	public void setHealth(float pHealth){
-		if (pHealth <= 0 && startWalking()) return;
-		if (isBedrock() && peekTime() <= 0) return;
+    @Override
+    public void setHealth(float pHealth) {
+        if (pHealth <= 0 && startWalking()) return;
+        if (isBedrock() && peekTime() <= 0) return;
         super.setHealth(pHealth);
-	}
+    }
 
-	@Override
-	public void die(DamageSource source) {
-		if (!startWalking()) super.die(source);
-	}
+    @Override
+    public void die(DamageSource source) {
+        if (!startWalking()) super.die(source);
+    }
 
-	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
+    @Override
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
+        SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
         if (((Entity) this instanceof OceanizedShulkerEntity _datEntI ? _datEntI.getEntityData().get(DATA_VARIANT) : 0) == 0) {
             if ((Entity) this instanceof OceanizedShulkerEntity _datEntSetI)
                 _datEntSetI.getEntityData().set(DATA_VARIANT, Mth.nextInt(RandomSource.create(), 0, 1));
         }
         return retval;
-	}
+    }
 
-	@Override
-	public InteractionResult mobInteract(Player player, InteractionHand hand){
-		InteractionResult sup = super.mobInteract(player, hand);
+    @Override
+    public InteractionResult mobInteract(Player player, InteractionHand hand) {
+        InteractionResult sup = super.mobInteract(player, hand);
         InteractionResult ths = InteractionResult.PASS;
         LevelAccessor world = this.level();
         double x = this.getX();
@@ -315,40 +315,40 @@ public class OceanizedShulkerEntity extends SeaMonster {
             }
         }
         if (ths == InteractionResult.PASS) return sup;
-		return ths;
-	}
+        return ths;
+    }
 
-	@Override
-	public void addAdditionalSaveData(CompoundTag compound) {
-		super.addAdditionalSaveData(compound);
-		compound.putString("Texture", this.getTexture());
-		compound.putInt("DataSHOOT_DELAY", this.entityData.get(DATA_SHOOT_DELAY));
-		compound.putString("DataDIRECTION", this.entityData.get(DATA_DIRECTION));
-		compound.putBoolean("DataWALKING", this.entityData.get(DATA_WALKING));
-		compound.putInt("DataPEEK_TIME", this.entityData.get(DATA_PEEK_TIME));
-		compound.putInt("DataVARIANT", this.entityData.get(DATA_VARIANT));
-	}
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putString("Texture", this.getTexture());
+        compound.putInt("DataSHOOT_DELAY", this.entityData.get(DATA_SHOOT_DELAY));
+        compound.putString("DataDIRECTION", this.entityData.get(DATA_DIRECTION));
+        compound.putBoolean("DataWALKING", this.entityData.get(DATA_WALKING));
+        compound.putInt("DataPEEK_TIME", this.entityData.get(DATA_PEEK_TIME));
+        compound.putInt("DataVARIANT", this.entityData.get(DATA_VARIANT));
+    }
 
-	@Override
-	public void readAdditionalSaveData(CompoundTag compound) {
-		super.readAdditionalSaveData(compound);
-		if (compound.contains("Texture"))
-			this.setTexture(compound.getString("Texture"));
-		if (compound.contains("DataSHOOT_DELAY"))
-			this.entityData.set(DATA_SHOOT_DELAY, compound.getInt("DataSHOOT_DELAY"));
-		if (compound.contains("DataDIRECTION"))
-			this.entityData.set(DATA_DIRECTION, compound.getString("DataDIRECTION"));
-		if (compound.contains("DataWALKING"))
-			this.entityData.set(DATA_WALKING, compound.getBoolean("DataWALKING"));
-		if (compound.contains("DataPEEK_TIME"))
-			this.entityData.set(DATA_PEEK_TIME, compound.getInt("DataPEEK_TIME"));
-		if (compound.contains("DataVARIANT"))
-			this.entityData.set(DATA_VARIANT, compound.getInt("DataVARIANT"));
-	}
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        if (compound.contains("Texture"))
+            this.setTexture(compound.getString("Texture"));
+        if (compound.contains("DataSHOOT_DELAY"))
+            this.entityData.set(DATA_SHOOT_DELAY, compound.getInt("DataSHOOT_DELAY"));
+        if (compound.contains("DataDIRECTION"))
+            this.entityData.set(DATA_DIRECTION, compound.getString("DataDIRECTION"));
+        if (compound.contains("DataWALKING"))
+            this.entityData.set(DATA_WALKING, compound.getBoolean("DataWALKING"));
+        if (compound.contains("DataPEEK_TIME"))
+            this.entityData.set(DATA_PEEK_TIME, compound.getInt("DataPEEK_TIME"));
+        if (compound.contains("DataVARIANT"))
+            this.entityData.set(DATA_VARIANT, compound.getInt("DataVARIANT"));
+    }
 
-	@Override
-	public void baseTick() {
-		super.baseTick();
+    @Override
+    public void baseTick() {
+        super.baseTick();
         LevelAccessor world = this.level();
         double x = this.getX();
         double y = this.getY();
@@ -416,7 +416,7 @@ public class OceanizedShulkerEntity extends SeaMonster {
                             tDIre = getShulkerDirection(world, x + dx, y + dy, z + dz);
                             if (!(tDIre == null)) {
                                 if (world instanceof Level _level) {
-                                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.shulker.teleport")), SoundSource.HOSTILE, 1, 1);
+                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.shulker.teleport")), SoundSource.HOSTILE, 1, 1);
                                 }
                                 {
                                     Entity _ent = this;
@@ -447,7 +447,7 @@ public class OceanizedShulkerEntity extends SeaMonster {
                                 }
                             }
                             if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.shulker.open")), SoundSource.HOSTILE, 1, 1);
+                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.shulker.open")), SoundSource.HOSTILE, 1, 1);
                             }
                         }
                     } else {
@@ -462,7 +462,7 @@ public class OceanizedShulkerEntity extends SeaMonster {
                                 }
                             }
                             if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.shulker.close")), SoundSource.HOSTILE, 1, 1);
+                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.shulker.close")), SoundSource.HOSTILE, 1, 1);
                             }
                         }
                     }
@@ -524,105 +524,105 @@ public class OceanizedShulkerEntity extends SeaMonster {
             }
         }
         this.refreshDimensions();
-	}
+    }
 
-	@Override
-	public EntityDimensions getDimensions(Pose p_33597_) {
-		return super.getDimensions(p_33597_).scale((float) 1);
-	}
+    @Override
+    public EntityDimensions getDimensions(Pose p_33597_) {
+        return super.getDimensions(p_33597_).scale((float) 1);
+    }
 
-	public boolean startWalking() {
-		if (isWalking())
-			return false;
-		if (this.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
-			this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(this.getMaxHealth() * 0.6);
-		if (this.getAttributes().hasAttribute(Attributes.ARMOR))
-			this.getAttribute(Attributes.ARMOR).setBaseValue(this.getArmorValue() * 0.4);
-		this.setHealth(this.getMaxHealth());
-		if (!this.level().isClientSide())
-			this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 20, 9, false, false));
-		if (!this.level().isClientSide())
-			this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, 9, false, false));
-		setAnimation("animation.oceanized_shulker.rise");
-		setWalking(true);
-		setPeekTime(0);
-		return true;
-	}
+    public boolean startWalking() {
+        if (isWalking())
+            return false;
+        if (this.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
+            this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(this.getMaxHealth() * 0.6);
+        if (this.getAttributes().hasAttribute(Attributes.ARMOR))
+            this.getAttribute(Attributes.ARMOR).setBaseValue(this.getArmorValue() * 0.4);
+        this.setHealth(this.getMaxHealth());
+        if (!this.level().isClientSide())
+            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 20, 9, false, false));
+        if (!this.level().isClientSide())
+            this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, 9, false, false));
+        setAnimation("animation.oceanized_shulker.rise");
+        setWalking(true);
+        setPeekTime(0);
+        return true;
+    }
 
-	public void shootShulkerBullet(Entity target) {
-		if (target == null || !(this.level() instanceof ServerLevel _level))
-			return;
-		Direction dire = this.getAttachDirection();
-		Direction.Axis axis = dire != null ? dire.getAxis() : Direction.Axis.Y;
-		ShulkerBullet sBullet = new ShulkerBullet(_level, this, target, axis);
-		sBullet.getPersistentData().putBoolean("oceanized", true);
-		_level.addFreshEntity(sBullet);
-		if (!this.level().isClientSide()) {
-			this.level().playSound(null, BlockPos.containing(this.getX(), this.getY(), this.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.shulker.shoot")), SoundSource.HOSTILE, 1, 1);
-		} else {
-			this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.shulker.shoot")), SoundSource.HOSTILE, 1, 1, false);
-		}
-	}
+    public void shootShulkerBullet(Entity target) {
+        if (target == null || !(this.level() instanceof ServerLevel _level))
+            return;
+        Direction dire = this.getAttachDirection();
+        Direction.Axis axis = dire != null ? dire.getAxis() : Direction.Axis.Y;
+        ShulkerBullet sBullet = new ShulkerBullet(_level, this, target, axis);
+        sBullet.getPersistentData().putBoolean("oceanized", true);
+        _level.addFreshEntity(sBullet);
+        if (!this.level().isClientSide()) {
+            this.level().playSound(null, BlockPos.containing(this.getX(), this.getY(), this.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.shulker.shoot")), SoundSource.HOSTILE, 1, 1);
+        } else {
+            this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.shulker.shoot")), SoundSource.HOSTILE, 1, 1, false);
+        }
+    }
 
-	public static void init() {
-	}
 
-	public static AttributeSupplier.Builder createAttributes() {
-		AttributeSupplier.Builder builder = Mob.createMobAttributes();
-		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.2);
-		builder = builder.add(Attributes.MAX_HEALTH, 55);
-		builder = builder.add(Attributes.ARMOR, 5);
-		builder = builder.add(Attributes.ATTACK_DAMAGE, 3);
-		builder = builder.add(Attributes.FOLLOW_RANGE, 24);
-		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 1);
-		return builder;
-	}
+    public static AttributeSupplier.Builder createAttributes() {
+        AttributeSupplier.Builder builder = Mob.createMobAttributes();
+        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.2);
+        builder = builder.add(Attributes.MAX_HEALTH, 55);
+        builder = builder.add(Attributes.ARMOR, 5);
+        builder = builder.add(Attributes.ATTACK_DAMAGE, 3);
+        builder = builder.add(Attributes.FOLLOW_RANGE, 24);
+        builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 1);
+        return builder;
+    }
 
-	private PlayState movementPredicate(AnimationState event) {
-		if (this.isDeadOrDying()) {
-			return event.setAndContinue(RawAnimation.begin().thenPlay("animation.oceanized_shulker.die"));
-		}
-		if (this.animationprocedure.equals("empty")) {
-			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.1F && event.getLimbSwingAmount() < 0.1F))) {
-				if (this.isWalking())
-					return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_shulker.move"));
-				if (peekTime() <= 0) event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_shulker.idle"));
-				event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_shulker.idle_peeking"));
-			}
-			if (this.isWalking())
-				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_shulker.idel_withfeet"));
-			else{
-				if (this.peekTime() > 0) return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_shulker.idle_peeking"));
-				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_shulker.idle"));
-			}
-		}
-		return PlayState.STOP;
-	}
+    private PlayState movementPredicate(AnimationState event) {
+        if (this.isDeadOrDying()) {
+            return event.setAndContinue(RawAnimation.begin().thenPlay("animation.oceanized_shulker.die"));
+        }
+        if (this.animationprocedure.equals("empty")) {
+            if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.1F && event.getLimbSwingAmount() < 0.1F))) {
+                if (this.isWalking())
+                    return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_shulker.move"));
+                if (peekTime() <= 0)
+                    event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_shulker.idle"));
+                event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_shulker.idle_peeking"));
+            }
+            if (this.isWalking())
+                return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_shulker.idel_withfeet"));
+            else {
+                if (this.peekTime() > 0)
+                    return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_shulker.idle_peeking"));
+                return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_shulker.idle"));
+            }
+        }
+        return PlayState.STOP;
+    }
 
-	String prevAnim = "empty";
+    String prevAnim = "empty";
 
-	private PlayState procedurePredicate(AnimationState event) {
-		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
-			if (!this.animationprocedure.equals(prevAnim))
-				event.getController().forceAnimationReset();
-			event.getController().setAnimation(RawAnimation.begin().thenPlay(this.animationprocedure));
-			if (event.getController().getAnimationState() == AnimationController.State.STOPPED) {
-				this.animationprocedure = "empty";
-				event.getController().forceAnimationReset();
-			}
-		} else if (animationprocedure.equals("empty")) {
-			prevAnim = "empty";
-			return PlayState.STOP;
-		}
-		prevAnim = this.animationprocedure;
-		return PlayState.CONTINUE;
-	}
+    private PlayState procedurePredicate(AnimationState event) {
+        if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
+            if (!this.animationprocedure.equals(prevAnim))
+                event.getController().forceAnimationReset();
+            event.getController().setAnimation(RawAnimation.begin().thenPlay(this.animationprocedure));
+            if (event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+                this.animationprocedure = "empty";
+                event.getController().forceAnimationReset();
+            }
+        } else if (animationprocedure.equals("empty")) {
+            prevAnim = "empty";
+            return PlayState.STOP;
+        }
+        prevAnim = this.animationprocedure;
+        return PlayState.CONTINUE;
+    }
 
-	@Override
-	protected void tickDeath() {
-		++this.deathTime;
-		if (this.deathTime >= 20) {
-			this.remove(OceanizedShulkerEntity.RemovalReason.KILLED);
+    @Override
+    protected void tickDeath() {
+        ++this.deathTime;
+        if (this.deathTime >= 20) {
+            this.remove(RemovalReason.KILLED);
             LevelAccessor world = this.level();
             double x = this.getX();
             double y = this.getY();
@@ -647,88 +647,88 @@ public class OceanizedShulkerEntity extends SeaMonster {
                 }
             }
             this.dropExperience();
-		}
-	}
+        }
+    }
 
-	public String getSyncedAnimation() {
-		return this.entityData.get(ANIMATION);
-	}
+    public String getSyncedAnimation() {
+        return this.entityData.get(ANIMATION);
+    }
 
-	public void setAnimation(String animation) {
-		this.entityData.set(ANIMATION, animation);
-	}
+    public void setAnimation(String animation) {
+        this.entityData.set(ANIMATION, animation);
+    }
 
-	@Override
-	public void registerControllers(AnimatableManager.ControllerRegistrar data) {
-		data.add(new AnimationController<>(this, "movement", 2, this::movementPredicate));
-		data.add(new AnimationController<>(this, "procedure", 2, this::procedurePredicate));
-	}
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar data) {
+        data.add(new AnimationController<>(this, "movement", 2, this::movementPredicate));
+        data.add(new AnimationController<>(this, "procedure", 2, this::procedurePredicate));
+    }
 
-	public boolean isWalking(){
-		return this.entityData.get(DATA_WALKING);
-	}
+    public boolean isWalking() {
+        return this.entityData.get(DATA_WALKING);
+    }
 
-	public void setWalking(boolean walking){
-		this.entityData.set(DATA_WALKING, walking);
-	}
+    public void setWalking(boolean walking) {
+        this.entityData.set(DATA_WALKING, walking);
+    }
 
-	private int peekTime(){
-		return this.entityData.get(DATA_PEEK_TIME);
-	}
+    private int peekTime() {
+        return this.entityData.get(DATA_PEEK_TIME);
+    }
 
-	private void setPeekTime(int peekTime){
-		this.entityData.set(DATA_PEEK_TIME, peekTime);
-	}
+    private void setPeekTime(int peekTime) {
+        this.entityData.set(DATA_PEEK_TIME, peekTime);
+    }
 
-	public Direction getAttachDirection(){
-		return Direction.byName(this.entityData.get(DATA_DIRECTION));
-	}
+    public Direction getAttachDirection() {
+        return Direction.byName(this.entityData.get(DATA_DIRECTION));
+    }
 
-	private boolean isBedrock(){
-		return this.entityData.get(DATA_VARIANT) == 3;
-	}
+    private boolean isBedrock() {
+        return this.entityData.get(DATA_VARIANT) == 3;
+    }
 
-	public boolean canStay(LevelAccessor world, Direction dire) {
-		if (dire == null)
-			return false;
-		Direction opposite = dire.getOpposite();
-		return world.getBlockState(BlockPos.containing(this.getX() + opposite.getStepX(), this.getY() + opposite.getStepY(), this.getZ() + opposite.getStepZ())).isFaceSturdy(world, BlockPos.containing(this.getX() + opposite.getStepX(), this.getY() + opposite.getStepY(), this.getZ() + opposite.getStepZ()), dire);
-	}
+    public boolean canStay(LevelAccessor world, Direction dire) {
+        if (dire == null)
+            return false;
+        Direction opposite = dire.getOpposite();
+        return world.getBlockState(BlockPos.containing(this.getX() + opposite.getStepX(), this.getY() + opposite.getStepY(), this.getZ() + opposite.getStepZ())).isFaceSturdy(world, BlockPos.containing(this.getX() + opposite.getStepX(), this.getY() + opposite.getStepY(), this.getZ() + opposite.getStepZ()), dire);
+    }
 
-	public Direction getShulkerDirection(LevelAccessor world) {
-		if (world.getBlockFloorHeight(BlockPos.containing(this.getX(), this.getY(), this.getZ())) > 0) {
-			return null;
-		}
-		for (Direction directioniterator : Direction.values()) {
-			if (canStay(world, directioniterator)) {
-				return directioniterator;
-			}
-		}
-		return null;
-	}
+    public Direction getShulkerDirection(LevelAccessor world) {
+        if (world.getBlockFloorHeight(BlockPos.containing(this.getX(), this.getY(), this.getZ())) > 0) {
+            return null;
+        }
+        for (Direction directioniterator : Direction.values()) {
+            if (canStay(world, directioniterator)) {
+                return directioniterator;
+            }
+        }
+        return null;
+    }
 
-	public static Direction getShulkerDirection(LevelAccessor world, double x, double y, double z) {
-		if (world.getBlockFloorHeight(BlockPos.containing(x, y, z)) > 0) {
-			return null;
-		}
-		for (Direction directioniterator : Direction.values()) {
-			if (canStayAt(world, x, y, z, directioniterator)) {
-				return directioniterator;
-			}
-		}
-		return null;
-	}
+    public static Direction getShulkerDirection(LevelAccessor world, double x, double y, double z) {
+        if (world.getBlockFloorHeight(BlockPos.containing(x, y, z)) > 0) {
+            return null;
+        }
+        for (Direction directioniterator : Direction.values()) {
+            if (canStayAt(world, x, y, z, directioniterator)) {
+                return directioniterator;
+            }
+        }
+        return null;
+    }
 
-	private static boolean canStayAt(LevelAccessor world, double x, double y, double z, Direction dire) {
-		if (dire == null)
-			return false;
-		Direction opposite = dire.getOpposite();
-		return world.getBlockState(BlockPos.containing(x + opposite.getStepX(), y + opposite.getStepY(), z + opposite.getStepZ())).isFaceSturdy(world, BlockPos.containing(x + opposite.getStepX(), y + opposite.getStepY(), z + opposite.getStepZ()), dire);
-	}
+    private static boolean canStayAt(LevelAccessor world, double x, double y, double z, Direction dire) {
+        if (dire == null)
+            return false;
+        Direction opposite = dire.getOpposite();
+        return world.getBlockState(BlockPos.containing(x + opposite.getStepX(), y + opposite.getStepY(), z + opposite.getStepZ())).isFaceSturdy(world, BlockPos.containing(x + opposite.getStepX(), y + opposite.getStepY(), z + opposite.getStepZ()), dire);
+    }
 
 
-	@Override
-	public void setAnimationProcedure(String animation) {
-		this.animationprocedure = animation;
-	}
+    @Override
+    public void setAnimationProcedure(String animation) {
+        this.animationprocedure = animation;
+    }
 }

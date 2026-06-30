@@ -1,10 +1,11 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
-import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
@@ -48,10 +49,7 @@ import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.GameType;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -173,7 +171,7 @@ public class OceanizedWardenEntity extends SeaMonster {
 		});
 	}
 
-    @Override
+	@Override
 	public boolean removeWhenFarAway(double distanceToClosestPlayer) {
 		return false;
 	}
@@ -209,11 +207,74 @@ public class OceanizedWardenEntity extends SeaMonster {
 					this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
 							ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.attack_impact")), SoundSource.HOSTILE,
 							(float) Mth.nextDouble(RandomSource.create(), 0.9, 1.1), 1);
-					EntityUtils.wardenRangedAttack(this.level(), this, false, 1, targetX, targetY, targetZ);
+					this.performRangedAttack(false, 1, targetX, targetY, targetZ);
 				}
 			});
 		}
 		return true;
+	}
+
+	private void performRangedAttack(boolean isSonic, double rate, double x, double y, double z) {
+		Entity enemy = this.getTarget();
+		double radius = isSonic ? 4.5 : 3;
+		Vec3 center = new Vec3(x, y, z);
+		List<Entity> nearbyEntities = this.level().getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(radius), e -> true).stream()
+				.sorted(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(center)))
+				.toList();
+		for (Entity entityiterator : nearbyEntities) {
+			if (!(entityiterator instanceof Mob) && !(entityiterator instanceof Player)) {
+				continue;
+			}
+			if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring"))) && entityiterator != enemy) {
+				continue;
+			}
+			if (entityiterator == this) {
+				continue;
+			}
+			if (center.distanceTo(new Vec3(entityiterator.getX(), entityiterator.getY(), entityiterator.getZ())) <= radius) {
+				double damage = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * rate;
+				if (isSonic) {
+					entityiterator.hurt(
+							new DamageSource(this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "warden_sonic"))), this),
+							(float) damage);
+					if (entityiterator instanceof LivingEntity livingEntity) {
+						SIHelper.causeSanityInjury(livingEntity, damage * 1.5);
+					}
+				} else {
+					entityiterator.hurt(
+							new DamageSource(this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "warden_attack"))), this),
+							(float) damage);
+				}
+			}
+		}
+	}
+
+	private void performSonicBoom(Entity target, double rate, int particleCount) {
+		if (target == null) {
+			return;
+		}
+		double vx = target.getX() - this.getX();
+		double vy = target.getY() - this.getY();
+		double vz = target.getZ() - this.getZ();
+		double len = Math.sqrt(vx * vx + vy * vy + vz * vz);
+		if (len > 0) {
+			vx /= len;
+			vy /= len;
+			vz /= len;
+		} else {
+			vx = this.getLookAngle().y;
+			vy = this.getLookAngle().x;
+			vz = this.getLookAngle().z;
+		}
+		for (int index0 = 0; index0 < 32; index0++) {
+			double tx = this.getX() + vx * (index0 + 1);
+			double ty = this.getY() + 1.5 + vy * (index0 + 1);
+			double tz = this.getZ() + vz * (index0 + 1);
+			this.performRangedAttack(true, rate, tx, ty, tz);
+			if (this.level() instanceof ServerLevel serverLevel) {
+				serverLevel.sendParticles(ParticleTypes.SONIC_BOOM, tx, ty, tz, particleCount, 0.1, 0.1, 0.1, 0.1);
+			}
+		}
 	}
 
 	@Override
@@ -236,7 +297,12 @@ public class OceanizedWardenEntity extends SeaMonster {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-		EntityUtils.initWardenAttributes(this);
+		if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())) {
+			this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(75);
+		}
+		if (this.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get())) {
+			this.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.01);
+		}
 		return retval;
 	}
 
@@ -265,156 +331,159 @@ public class OceanizedWardenEntity extends SeaMonster {
 	@Override
 	public void baseTick() {
 		super.baseTick();
-        LevelAccessor world = this.level();
-        double x = this.getX();
-        double y = this.getY();
-        double z = this.getZ();
-        Entity enemy;
-        double sklp1;
-        double sklp2;
-        double perc = 0;
-        double dura;
-        double gap;
-        if (this.isAlive()) {
-            if (tickCount % 100 == 0) {
-                {
-                    final Vec3 _center = new Vec3(x, y, z);
-                    List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(24 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                    for (Entity entityiterator : _entfound) {
-                        if (new Object() {
-                            public boolean checkGamemode(Entity _ent) {
-                                if (_ent instanceof ServerPlayer _serverPlayer) {
-                                    return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                                } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                                    return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                            && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
-                                }
-                                return false;
-                            }
-                        }.checkGamemode(entityiterator) || new Object() {
-                            public boolean checkGamemode(Entity _ent) {
-                                if (_ent instanceof ServerPlayer _serverPlayer) {
-                                    return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.SPECTATOR;
-                                } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                                    return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                            && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.SPECTATOR;
-                                }
-                                return false;
-                            }
-                        }.checkGamemode(entityiterator)) {
-                            continue;
-                        }
-                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
-                            continue;
-                        }
-                        if (!(entityiterator instanceof LivingEntity _livEnt5 && _livEnt5.hasEffect(MobEffects.DARKNESS))) {
-                            if (entityiterator instanceof LivingEntity _entity && !this.level().isClientSide())
-                                this.addEffect(new MobEffectInstance(MobEffects.DARKNESS, 1200, 0, false, false));
-                        }
-                    }
-                }
-            }
-            sklp1 = (Entity) this instanceof OceanizedWardenEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp1) : 0;
-            sklp2 = (Entity) this instanceof OceanizedWardenEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp2) : 0;
-            dura = (Entity) this instanceof OceanizedWardenEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
-            enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
-            if (dura > 0) {
-                if ((Entity) this instanceof OceanizedWardenEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_duration, (int) (dura - 1));
-            }
-            gap = 40;
-            if (sklp1 > 0) {
-                if ((Entity) this instanceof OceanizedWardenEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_skillp1, (int) (sklp1 - 1));
-            } else {
-                if (!(enemy == null) && enemy.isAlive()) {
-                    if (!((enemy != null ? distanceTo(enemy) : -1) > 32 || dura > 0)) {
-                        if ((Entity) this instanceof OceanizedWardenEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_duration, 45);
-                        if (this instanceof OceanizedWardenEntity) {
-                            this.setAnimation("animation.oceanized_warden.sonic");
-                        }
-                        if (!this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 45, 0, false, false));
-                        if (!this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 45, 9, false, false));
-                        ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY()), (enemy.getZ())));
-                        if (world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.sonic_charge")), SoundSource.HOSTILE, 2, 1);
-                        }
-                        CaerulaArborMod.queueServerWork(30, () -> {
-                            if (this.isAlive()) {
-                                if (world instanceof Level _level) {
-                                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.sonic_boom")), SoundSource.HOSTILE, 2, 1);
-                                }
-                                EntityUtils.wardenSonicBoom(world, this, (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null);
-                            }
-                        });
-                        if ((Entity) this instanceof OceanizedWardenEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_skillp1, 200);
-                    }
-                }
-            }
-            if (sklp2 > 0) {
-                if ((Entity) this instanceof OceanizedWardenEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_skillp2, (int) (sklp2 - 1));
-            } else {
-                if (!(enemy == null) && enemy.isAlive()) {
-                    if (!((enemy != null ? distanceTo(enemy) : -1) > 4 || dura > 0)) {
-                        if ((Entity) this instanceof OceanizedWardenEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_duration, 45);
-                        if (this instanceof OceanizedWardenEntity) {
-                            this.setAnimation("animation.oceanized_warden.combo");
-                        }
-                        ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY()), (enemy.getZ())));
-                        CaerulaArborMod.queueServerWork(12, () -> {
-                            if (this.isAlive() && !(((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == null)) {
-                                if ((((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) != null ? distanceTo(((Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null)) : -1) <= 4) {
-                                    ((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null).hurt(
-                                            new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "warden_attack"))), this),
-                                            (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
-                                                    * 1.5));
-                                }
-                                ((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null).push(0, 1.25, 0);
-                            }
-                        });
-                        CaerulaArborMod.queueServerWork(20, () -> {
-                            if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.sonic_charge")), SoundSource.HOSTILE, 2, 1);
-                            }
-                            if (!this.level().isClientSide())
-                                this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 25, 9, false, false));
-                        });
-                        CaerulaArborMod.queueServerWork(27, () -> {
-                            if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.sonic_boom")), SoundSource.HOSTILE, 2, 1);
-                            }
-                            EntityUtils.wardenLightBoom(world, this, (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null);
-                        });
-                        if ((Entity) this instanceof OceanizedWardenEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_skillp2, 300);
-                    }
-                }
-            }
-            if (sklp1 < 60) {
-                gap = 10;
-            } else if (sklp1 < 100) {
-                gap = 20;
-            }
-            if (sklp2 < 60) {
-                gap = 10;
-            } else if (sklp2 < 100) {
-                gap = 20;
-            }
-            if (gap > 0 && !(enemy == null) && enemy.isAlive()) {
-                if (tickCount % gap == 0) {
-                    if (world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.heartbeat")), SoundSource.HOSTILE, 2, Mth.nextInt(RandomSource.create(), (int) 0.9, (int) 1.05));
-                    }
-                }
-            }
-        }
-        this.refreshDimensions();
+		LevelAccessor world = this.level();
+		double x = this.getX();
+		double y = this.getY();
+		double z = this.getZ();
+		Entity enemy;
+		double sklp1;
+		double sklp2;
+		double perc = 0;
+		double dura;
+		double gap;
+		if (this.isAlive()) {
+			if (tickCount % 100 == 0) {
+				{
+					final Vec3 _center = new Vec3(x, y, z);
+					List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(24 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+					for (Entity entityiterator : _entfound) {
+						if (new Object() {
+							public boolean checkGamemode(Entity _ent) {
+								if (_ent instanceof ServerPlayer _serverPlayer) {
+									return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+								} else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
+									return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
+											&& Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+								}
+								return false;
+							}
+						}.checkGamemode(entityiterator) || new Object() {
+							public boolean checkGamemode(Entity _ent) {
+								if (_ent instanceof ServerPlayer _serverPlayer) {
+									return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.SPECTATOR;
+								} else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
+									return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
+											&& Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.SPECTATOR;
+								}
+								return false;
+							}
+						}.checkGamemode(entityiterator)) {
+							continue;
+						}
+						if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+							continue;
+						}
+						if (!(entityiterator instanceof LivingEntity _livEnt5 && _livEnt5.hasEffect(MobEffects.DARKNESS))) {
+							if (entityiterator instanceof LivingEntity _entity && !this.level().isClientSide())
+								this.addEffect(new MobEffectInstance(MobEffects.DARKNESS, 1200, 0, false, false));
+						}
+					}
+				}
+			}
+			sklp1 = (Entity) this instanceof OceanizedWardenEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp1) : 0;
+			sklp2 = (Entity) this instanceof OceanizedWardenEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp2) : 0;
+			dura = (Entity) this instanceof OceanizedWardenEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
+			enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+			if (dura > 0) {
+				if ((Entity) this instanceof OceanizedWardenEntity _datEntSetI)
+					_datEntSetI.getEntityData().set(DATA_duration, (int) (dura - 1));
+			}
+			gap = 40;
+			if (sklp1 > 0) {
+				if ((Entity) this instanceof OceanizedWardenEntity _datEntSetI)
+					_datEntSetI.getEntityData().set(DATA_skillp1, (int) (sklp1 - 1));
+			} else {
+				if (!(enemy == null) && enemy.isAlive()) {
+					if (!((enemy != null ? distanceTo(enemy) : -1) > 32 || dura > 0)) {
+						if ((Entity) this instanceof OceanizedWardenEntity _datEntSetI)
+							_datEntSetI.getEntityData().set(DATA_duration, 45);
+						if (this instanceof OceanizedWardenEntity) {
+							this.setAnimation("animation.oceanized_warden.sonic");
+						}
+						if (!this.level().isClientSide())
+							this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 45, 0, false, false));
+						if (!this.level().isClientSide())
+							this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 45, 9, false, false));
+						((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY()), (enemy.getZ())));
+						if (world instanceof Level _level) {
+							_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.sonic_charge")), SoundSource.HOSTILE, 2, 1);
+						}
+						CaerulaArborMod.queueServerWork(30, () -> {
+							if (this.isAlive()) {
+								if (world instanceof Level _level) {
+									_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.sonic_boom")), SoundSource.HOSTILE, 2, 1);
+								}
+								this.performSonicBoom((Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null, 0.25, 3);
+							}
+						});
+						if ((Entity) this instanceof OceanizedWardenEntity _datEntSetI)
+							_datEntSetI.getEntityData().set(DATA_skillp1, 200);
+					}
+				}
+			}
+			if (sklp2 > 0) {
+				if ((Entity) this instanceof OceanizedWardenEntity _datEntSetI)
+					_datEntSetI.getEntityData().set(DATA_skillp2, (int) (sklp2 - 1));
+			} else {
+				if (!(enemy == null) && enemy.isAlive()) {
+					if (!((enemy != null ? distanceTo(enemy) : -1) > 4 || dura > 0)) {
+						if ((Entity) this instanceof OceanizedWardenEntity _datEntSetI)
+							_datEntSetI.getEntityData().set(DATA_duration, 45);
+						if (this instanceof OceanizedWardenEntity) {
+							this.setAnimation("animation.oceanized_warden.combo");
+						}
+						((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY()), (enemy.getZ())));
+						CaerulaArborMod.queueServerWork(12, () -> {
+							if (this.isAlive() && !(((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == null)) {
+								if ((((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) != null ? distanceTo(((Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null)) : -1) <= 4) {
+									((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null).hurt(
+											new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "warden_attack"))), this),
+											(float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
+													* 1.5));
+								}
+								((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null).push(0, 1.25, 0);
+							}
+						});
+						CaerulaArborMod.queueServerWork(20, () -> {
+							if (world instanceof Level _level) {
+								_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.sonic_charge")), SoundSource.HOSTILE, 2, 1);
+							}
+							if (!this.level().isClientSide())
+								this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 25, 9, false, false));
+						});
+						CaerulaArborMod.queueServerWork(27, () -> {
+							if (world instanceof Level _level) {
+								_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.sonic_boom")), SoundSource.HOSTILE, 2, 1);
+							}
+							Entity target = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+							if (this == null || target == null)
+								return;
+							this.performSonicBoom(target, 0.15, 1);
+						});
+						if ((Entity) this instanceof OceanizedWardenEntity _datEntSetI)
+							_datEntSetI.getEntityData().set(DATA_skillp2, 300);
+					}
+				}
+			}
+			if (sklp1 < 60) {
+				gap = 10;
+			} else if (sklp1 < 100) {
+				gap = 20;
+			}
+			if (sklp2 < 60) {
+				gap = 10;
+			} else if (sklp2 < 100) {
+				gap = 20;
+			}
+			if (gap > 0 && !(enemy == null) && enemy.isAlive()) {
+				if (tickCount % gap == 0) {
+					if (world instanceof Level _level) {
+						_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.heartbeat")), SoundSource.HOSTILE, 2, Mth.nextInt(RandomSource.create(), (int) 0.9, (int) 1.05));
+					}
+				}
+			}
+		}
+		this.refreshDimensions();
 	}
 
 	@Override
@@ -445,8 +514,7 @@ public class OceanizedWardenEntity extends SeaMonster {
 		this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
 	}
 
-	public static void init() {
-	}
+	
 
 	public static AttributeSupplier.Builder createAttributes() {
 		AttributeSupplier.Builder builder = Mob.createMobAttributes();
@@ -518,27 +586,33 @@ public class OceanizedWardenEntity extends SeaMonster {
 	protected void tickDeath() {
 		++this.deathTime;
 		if (this.deathTime == 50) {
-			this.remove(OceanizedWardenEntity.RemovalReason.KILLED);
+			this.remove(RemovalReason.KILLED);
 			this.dropExperience();
-			EntityUtils.dropWardenExp(this.level(), this.getX(), this.getY(), this.getZ());
+			LevelAccessor world = this.level();
+			if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
+				for (int index0 = 0; index0 < 64; index0++) {
+					if (world instanceof ServerLevel _level)
+						_level.addFreshEntity(new ExperienceOrb(_level, (this.getX() + Mth.nextDouble(RandomSource.create(), -1, 1)), this.getY(), (this.getZ() + Mth.nextDouble(RandomSource.create(), -1, 1)), Mth.nextInt(RandomSource.create(), 32, 64)));
+				}
+			}
 		}
 	}
 
 	@Override
-	public void remove(RemovalReason pReason){
-		if(this.level().getDifficulty() != Difficulty.PEACEFUL && pReason == RemovalReason.DISCARDED){
+	public void remove(RemovalReason pReason) {
+		if (this.level().getDifficulty() != Difficulty.PEACEFUL && pReason == RemovalReason.DISCARDED) {
 			this.hurt(
-				new DamageSource(
-					this.level().registryAccess().
-					registryOrThrow(Registries.DAMAGE_TYPE).
-					getHolderOrThrow(
-						ResourceKey.create(
-							Registries.DAMAGE_TYPE, 
-							new ResourceLocation(CaerulaArborMod.MODID, "oceankiller_damage")
-						)
-					)
-				),
-				20
+					new DamageSource(
+							this.level().registryAccess().
+									registryOrThrow(Registries.DAMAGE_TYPE).
+									getHolderOrThrow(
+											ResourceKey.create(
+													Registries.DAMAGE_TYPE,
+													new ResourceLocation(CaerulaArborMod.MODID, "oceankiller_damage")
+											)
+									)
+					),
+					20
 			);
 			return;
 		}
@@ -546,13 +620,13 @@ public class OceanizedWardenEntity extends SeaMonster {
 	}
 
 	@Override
-    public void setHealth(float pHealth){
-        float hlth = this.getHealth();
-    	float mhlth = this.getMaxHealth();
-        if(this.hasEffect(CAMobEffects.INVULNERABLE.get()) && pHealth < hlth) return;
-        float reduction = hlth - pHealth;
-        super.setHealth(reduction >= mhlth * 0.3f ? hlth - mhlth * 0.3f : hlth - reduction);
-    }
+	public void setHealth(float pHealth) {
+		float hlth = this.getHealth();
+		float mhlth = this.getMaxHealth();
+		if (this.hasEffect(CAMobEffects.INVULNERABLE.get()) && pHealth < hlth) return;
+		float reduction = hlth - pHealth;
+		super.setHealth(reduction >= mhlth * 0.3f ? hlth - mhlth * 0.3f : hlth - reduction);
+	}
 
 	public String getSyncedAnimation() {
 		return this.entityData.get(ANIMATION);
@@ -581,7 +655,7 @@ public class OceanizedWardenEntity extends SeaMonster {
 
 		CaerulaArborMod.queueServerWork(10, () -> {
 			if (world instanceof Level _level) {
-					_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.sonic_charge")), SoundSource.HOSTILE, (float) 0.1, 1);
+				_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.sonic_charge")), SoundSource.HOSTILE, (float) 0.1, 1);
 			}
 			for (int index0 = 0; index0 < 3; index0++) {
 				double t = Mth.nextDouble(RandomSource.create(), 0, 6.283);
@@ -594,7 +668,7 @@ public class OceanizedWardenEntity extends SeaMonster {
 
 		CaerulaArborMod.queueServerWork(20, () -> {
 			if (world instanceof Level _level) {
-					_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.sonic_charge")), SoundSource.HOSTILE, (float) 0.2, 1);
+				_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.sonic_charge")), SoundSource.HOSTILE, (float) 0.2, 1);
 			}
 			for (int index1 = 0; index1 < 5; index1++) {
 				double t = Mth.nextDouble(RandomSource.create(), 0, 6.283);
@@ -607,7 +681,7 @@ public class OceanizedWardenEntity extends SeaMonster {
 
 		CaerulaArborMod.queueServerWork(32, () -> {
 			if (world instanceof Level _level) {
-					_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.sonic_charge")), SoundSource.HOSTILE, (float) 0.3, 1);
+				_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.sonic_charge")), SoundSource.HOSTILE, (float) 0.3, 1);
 			}
 			for (int index2 = 0; index2 < 9; index2++) {
 				double t = Mth.nextDouble(RandomSource.create(), 0, 6.283);
@@ -620,7 +694,7 @@ public class OceanizedWardenEntity extends SeaMonster {
 
 		CaerulaArborMod.queueServerWork(35, () -> {
 			if (world instanceof Level _level) {
-					_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.sonic_charge")), SoundSource.HOSTILE, (float) 0.4, 1);
+				_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.sonic_charge")), SoundSource.HOSTILE, (float) 0.4, 1);
 			}
 			for (int index3 = 0; index3 < 9; index3++) {
 				double t = Mth.nextDouble(RandomSource.create(), 0, 6.283);
@@ -633,7 +707,7 @@ public class OceanizedWardenEntity extends SeaMonster {
 
 		CaerulaArborMod.queueServerWork(38, () -> {
 			if (world instanceof Level _level) {
-					_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.sonic_charge")), SoundSource.HOSTILE, (float) 0.5, 1);
+				_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.sonic_charge")), SoundSource.HOSTILE, (float) 0.5, 1);
 			}
 			for (int index4 = 0; index4 < 9; index4++) {
 				double t = Mth.nextDouble(RandomSource.create(), 0, 6.283);
@@ -646,7 +720,7 @@ public class OceanizedWardenEntity extends SeaMonster {
 
 		CaerulaArborMod.queueServerWork(40, () -> {
 			if (world instanceof Level _level) {
-					_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.sonic_charge")), SoundSource.HOSTILE, 2, 1);
+				_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.sonic_charge")), SoundSource.HOSTILE, 2, 1);
 			}
 		});
 
@@ -671,14 +745,14 @@ public class OceanizedWardenEntity extends SeaMonster {
 					continue;
 				}
 				if (this.distanceTo(entityiterator) <= 32) {
-					EntityUtils.wardenSonicBoom(world, this, entityiterator);
+					this.performSonicBoom(entityiterator, 0.25, 3);
 					hasSound = true;
 				}
 			}
 
 			if (hasSound) {
 				if (world instanceof Level _level) {
-						_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.sonic_boom")), SoundSource.HOSTILE, 22, 1);
+					_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.sonic_boom")), SoundSource.HOSTILE, 22, 1);
 				}
 			}
 		});

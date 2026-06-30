@@ -51,7 +51,7 @@ public class RedOvaryBlock extends AbstractOvaryBlock {
 		super.tick(blockstate, world, pos, random);
 		if (world.getDifficulty() != Difficulty.PEACEFUL && !(world.getBlockFloorHeight(pos.above()) > 0) && !(world.getBlockFloorHeight(pos.above(2)) > 0)) {
 			double rate = 0.5D;
-			int strategyBreed = MapVariables.get(world).strategy_breed;
+			double strategyBreed = MapVariables.get(world).strategy_breed;
 			if (strategyBreed >= 2) {
 				rate = 0.65D;
 			}
@@ -60,7 +60,7 @@ public class RedOvaryBlock extends AbstractOvaryBlock {
 			}
 			int output = blockstate.getValue(OUTPUT);
 			if (random.nextFloat() < output * 0.005F) {
-				int cloneLimit = Math.min(world.getGameRules().getInt(CAGameRules.CLONE_NUMBER_LIMIT), CaerulaConfigsConfiguration.CLONE_NUM.get());
+				double cloneLimit = Math.min(world.getGameRules().getInt(CAGameRules.CLONE_NUMBER_LIMIT), CaerulaConfigsConfiguration.CLONE_NUM.get());
 				if (EntityUtils.getSeabornNum(world, pos.getX(), pos.getY(), pos.getZ()) < cloneLimit) {
 					WorldUtils.summonRandomSeaborn(world, rate, pos.getX() + 0.5D, pos.getY() + 1.5D, pos.getZ() + 0.5D);
 					world.setBlock(pos, blockstate.setValue(OUTPUT, 0), 3);

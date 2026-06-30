@@ -136,7 +136,7 @@ public class LingeringFractalEntity extends AbstractFractalEntity {
 		this.goalSelector.addGoal(15, new RandomLookAroundGoal(this));
 	}
 
-    @Override
+	@Override
 	public boolean removeWhenFarAway(double distanceToClosestPlayer) {
 		return false;
 	}
@@ -181,31 +181,31 @@ public class LingeringFractalEntity extends AbstractFractalEntity {
 	@Override
 	public void baseTick() {
 		super.baseTick();
-        LevelAccessor world = this.level();
-        double x = this.getX();
-        double y = this.getY();
-        double z = this.getZ();
-        if (tickCount > 1200 && tickCount % 20 == 7) {
-            if (world.getEntitiesOfClass(LineringPathshaperEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).isEmpty()) {
-                {
-                    final Vec3 _center = new Vec3(x, y, z);
-                    List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(64 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                    for (Entity entityiterator : _entfound) {
-                        if (entityiterator instanceof LingeringFractalEntity) {
-                            entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceankiller_damage")))),
-                                    1145141919);
-                        }
-                    }
-                }
-                if (world instanceof ServerLevel _level) {
-                    Entity entityToSpawn = CAEntities.LINGERING_PATHSHAPER.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
-                    if (entityToSpawn != null) {
-                        entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-                    }
-                }
-            }
-        }
-        this.refreshDimensions();
+		LevelAccessor world = this.level();
+		double x = this.getX();
+		double y = this.getY();
+		double z = this.getZ();
+		if (tickCount > 1200 && tickCount % 20 == 7) {
+			if (world.getEntitiesOfClass(LineringPathshaperEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).isEmpty()) {
+				{
+					final Vec3 _center = new Vec3(x, y, z);
+					List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(64 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+					for (Entity entityiterator : _entfound) {
+						if (entityiterator instanceof LingeringFractalEntity) {
+							entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceankiller_damage")))),
+									1145141919);
+						}
+					}
+				}
+				if (world instanceof ServerLevel _level) {
+					Entity entityToSpawn = CAEntities.LINGERING_PATHSHAPER.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+					if (entityToSpawn != null) {
+						entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+					}
+				}
+			}
+		}
+		this.refreshDimensions();
 	}
 
 	@Override
@@ -213,8 +213,7 @@ public class LingeringFractalEntity extends AbstractFractalEntity {
 		return super.getDimensions(p_33597_).scale((float) 1);
 	}
 
-	public static void init() {
-	}
+	
 
 	public static AttributeSupplier.Builder createAttributes() {
 		AttributeSupplier.Builder builder = Mob.createMobAttributes();
@@ -249,7 +248,7 @@ public class LingeringFractalEntity extends AbstractFractalEntity {
 	private PlayState attackingPredicate(AnimationState event) {
 		double d1 = this.getX() - this.xOld;
 		double d0 = this.getZ() - this.zOld;
-        if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
+		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
 		}
@@ -267,7 +266,7 @@ public class LingeringFractalEntity extends AbstractFractalEntity {
 	protected void tickDeath() {
 		++this.deathTime;
 		if (this.deathTime == 20) {
-			this.remove(LingeringFractalEntity.RemovalReason.KILLED);
+			this.remove(RemovalReason.KILLED);
 			this.dropExperience();
 		}
 	}

@@ -3,19 +3,17 @@ package com.apocalypse.caerulaarbor.event;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.Al1SHelperEntity;
 import com.apocalypse.caerulaarbor.entity.LittleHelperEntity;
-import com.apocalypse.caerulaarbor.init.CAItems;
 import com.apocalypse.caerulaarbor.init.CAEnchantments;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import com.apocalypse.caerulaarbor.item.HighmoreScytheItem;
 import com.apocalypse.caerulaarbor.network.CaerulaArborModNetwork;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
@@ -26,7 +24,6 @@ import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
@@ -179,7 +176,7 @@ public class PlayerLeftClickEventHandler {
                                 }
                             }
                         }
-                        if (!isCreativePlayer(entity)) {
+                        if (!(entity instanceof Player player && player.getAbilities().instabuild)) {
                             ItemStack _ist = (entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY);
                             if (_ist.hurt(1, RandomSource.create(), null)) {
                                 _ist.shrink(1);
@@ -211,15 +208,4 @@ public class PlayerLeftClickEventHandler {
         }
     }
 
-    private static boolean isCreativePlayer(Entity entity) {
-        if (entity instanceof ServerPlayer serverPlayer) {
-            return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-        }
-        if (entity.level().isClientSide() && entity instanceof Player player) {
-            var connection = Minecraft.getInstance().getConnection();
-            var playerInfo = connection == null ? null : connection.getPlayerInfo(player.getGameProfile().getId());
-            return playerInfo != null && playerInfo.getGameMode() == GameType.CREATIVE;
-        }
-        return false;
-    }
 }

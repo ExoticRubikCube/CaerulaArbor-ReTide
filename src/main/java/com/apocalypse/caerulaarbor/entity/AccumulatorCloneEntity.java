@@ -76,7 +76,7 @@ public class AccumulatorCloneEntity extends SeaMonster {
 			public void tick() {
 				if (AccumulatorCloneEntity.this.isInWater())
 					AccumulatorCloneEntity.this.setDeltaMovement(AccumulatorCloneEntity.this.getDeltaMovement().add(0, 0.005, 0));
-				if (this.operation == MoveControl.Operation.MOVE_TO && !AccumulatorCloneEntity.this.getNavigation().isDone()) {
+				if (this.operation == Operation.MOVE_TO && !AccumulatorCloneEntity.this.getNavigation().isDone()) {
 					double dx = this.wantedX - AccumulatorCloneEntity.this.getX();
 					double dy = this.wantedY - AccumulatorCloneEntity.this.getY();
 					double dz = this.wantedZ - AccumulatorCloneEntity.this.getZ();
@@ -219,7 +219,7 @@ public class AccumulatorCloneEntity extends SeaMonster {
 		this.goalSelector.addGoal(10, new RandomLookAroundGoal(this));
 	}
 
-    protected void dropCustomDeathLoot(DamageSource source, int looting, boolean recentlyHitIn) {
+	protected void dropCustomDeathLoot(DamageSource source, int looting, boolean recentlyHitIn) {
 		super.dropCustomDeathLoot(source, looting, recentlyHitIn);
 		this.spawnAtLocation(new ItemStack(CAItems.OCEAN_CELL.get()));
 	}
@@ -249,8 +249,8 @@ public class AccumulatorCloneEntity extends SeaMonster {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        this.setHealth((float) (this.getMaxHealth() * 0.5));
-        return retval;
+		this.setHealth((float) (this.getMaxHealth() * 0.5));
+		return retval;
 	}
 
 	@Override
@@ -292,8 +292,7 @@ public class AccumulatorCloneEntity extends SeaMonster {
 		return false;
 	}
 
-	public static void init() {
-	}
+	
 
 	public static AttributeSupplier.Builder createAttributes() {
 		AttributeSupplier.Builder builder = Mob.createMobAttributes();
@@ -359,7 +358,7 @@ public class AccumulatorCloneEntity extends SeaMonster {
 	protected void tickDeath() {
 		++this.deathTime;
 		if (this.deathTime == 20) {
-			this.remove(AccumulatorCloneEntity.RemovalReason.KILLED);
+			this.remove(RemovalReason.KILLED);
 			this.dropExperience();
 		}
 	}

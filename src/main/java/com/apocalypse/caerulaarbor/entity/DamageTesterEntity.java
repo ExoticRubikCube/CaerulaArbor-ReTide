@@ -22,7 +22,6 @@ import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraftforge.network.NetworkHooks;
@@ -81,48 +80,47 @@ public class DamageTesterEntity extends PathfinderMob {
 	}
 
 	ResourceKey<DamageType> INV_KILLER = ResourceKey.create(Registries.DAMAGE_TYPE
-										, new ResourceLocation(CaerulaArborMod.MODID, "inv_killer"));
+			, new ResourceLocation(CaerulaArborMod.MODID, "inv_killer"));
 
 	boolean shouldDie = false;
 
 	@Override
-	public void actuallyHurt(DamageSource pSource, float pAmount){
+	public void actuallyHurt(DamageSource pSource, float pAmount) {
 		Level level = this.level();
-		if (!level.isClientSide() && level.getServer()!=null){
+		if (!level.isClientSide() && level.getServer() != null) {
 			level.getServer().getPlayerList().broadcastSystemMessage(Component.literal("Source: " + pSource.getMsgId()), false);
 		}
-		if (pSource.is(DamageTypes.FELL_OUT_OF_WORLD) || pSource.is(DamageTypes.GENERIC_KILL) || pSource.is(INV_KILLER)){
+		if (pSource.is(DamageTypes.FELL_OUT_OF_WORLD) || pSource.is(DamageTypes.GENERIC_KILL) || pSource.is(INV_KILLER)) {
 			this.shouldDie = true;
 		}
 		super.actuallyHurt(pSource, pAmount);
 	}
 
 	@Override
-	public void setHealth(float pHealth){
+	public void setHealth(float pHealth) {
 		if (shouldDie) super.setHealth(pHealth);
 		else super.setHealth(this.getMaxHealth());
 		float pAmount = this.getHealth() - pHealth;
 		if (pAmount <= 0) return;
 		Level level = this.level();
-		if (!level.isClientSide() && level.getServer()!=null){
+		if (!level.isClientSide() && level.getServer() != null) {
 			level.getServer().getPlayerList().broadcastSystemMessage(Component.literal("Amount:" + pAmount), false);
 		}
 	}
 
 	@Override
 	public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
-       super.mobInteract(sourceentity, hand);
+		super.mobInteract(sourceentity, hand);
 		Entity entity = this;
 		Level world = this.level();
-        if (sourceentity.isHolding(CAItems.APOCALYPSE.get()) || sourceentity.isHolding(CAItems.BANNED_ITEM.get())) {
-            entity.hurt(new DamageSource(((LevelAccessor) world).registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "inv_killer")))), 114514);
-            return InteractionResult.SUCCESS;
-        }
-        return InteractionResult.PASS;
-    }
-
-	public static void init() {
+		if (sourceentity.isHolding(CAItems.APOCALYPSE.get()) || sourceentity.isHolding(CAItems.BANNED_ITEM.get())) {
+			entity.hurt(new DamageSource(((LevelAccessor) world).registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "inv_killer")))), 114514);
+			return InteractionResult.SUCCESS;
+		}
+		return InteractionResult.PASS;
 	}
+
+	
 
 	public static AttributeSupplier.Builder createAttributes() {
 		AttributeSupplier.Builder builder = Mob.createMobAttributes();

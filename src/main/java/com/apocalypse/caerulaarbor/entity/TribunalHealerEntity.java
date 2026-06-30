@@ -5,6 +5,7 @@ import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.init.CAParticleTypes;
+import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -58,217 +59,217 @@ import java.util.EnumSet;
 import java.util.List;
 
 public class TribunalHealerEntity extends Animal implements RangedAttackMob, GeoEntity, SyncedAnimationEntity {
-	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(TribunalHealerEntity.class, EntityDataSerializers.BOOLEAN);
-	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(TribunalHealerEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(TribunalHealerEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<Integer> DATA_skillp1 = SynchedEntityData.defineId(TribunalHealerEntity.class, EntityDataSerializers.INT);
-	public static final EntityDataAccessor<Integer> DATA_skillp2 = SynchedEntityData.defineId(TribunalHealerEntity.class, EntityDataSerializers.INT);
-	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
-	private boolean swinging;
-	private boolean lastloop;
-	private long lastSwing;
-	public String animationprocedure = "empty";
+    public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(TribunalHealerEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(TribunalHealerEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(TribunalHealerEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> DATA_skillp1 = SynchedEntityData.defineId(TribunalHealerEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_skillp2 = SynchedEntityData.defineId(TribunalHealerEntity.class, EntityDataSerializers.INT);
+    private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+    private boolean swinging;
+    private boolean lastloop;
+    private long lastSwing;
+    public String animationprocedure = "empty";
 
-	public TribunalHealerEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CAEntities.TRIBUNAL_HEALER.get(), world);
-	}
+    public TribunalHealerEntity(PlayMessages.SpawnEntity packet, Level world) {
+        this(CAEntities.TRIBUNAL_HEALER.get(), world);
+    }
 
-	public TribunalHealerEntity(EntityType<TribunalHealerEntity> type, Level world) {
-		super(type, world);
-		xpReward = 8;
-		setNoAi(false);
-		setMaxUpStep(0.8f);
-		setPersistenceRequired();
-	}
+    public TribunalHealerEntity(EntityType<TribunalHealerEntity> type, Level world) {
+        super(type, world);
+        xpReward = 8;
+        setNoAi(false);
+        setMaxUpStep(0.8f);
+        setPersistenceRequired();
+    }
 
-	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(SHOOT, false);
-		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(TEXTURE, "tribunalhealer");
-		this.entityData.define(DATA_skillp1, 100);
-		this.entityData.define(DATA_skillp2, 90);
-	}
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(SHOOT, false);
+        this.entityData.define(ANIMATION, "undefined");
+        this.entityData.define(TEXTURE, "tribunalhealer");
+        this.entityData.define(DATA_skillp1, 100);
+        this.entityData.define(DATA_skillp2, 90);
+    }
 
-	public void setTexture(String texture) {
-		this.entityData.set(TEXTURE, texture);
-	}
+    public void setTexture(String texture) {
+        this.entityData.set(TEXTURE, texture);
+    }
 
-	public String getTexture() {
-		return this.entityData.get(TEXTURE);
-	}
+    public String getTexture() {
+        return this.entityData.get(TEXTURE);
+    }
 
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
-	}
+    @Override
+    public Packet<ClientGamePacketListener> getAddEntityPacket() {
+        return NetworkHooks.getEntitySpawningPacket(this);
+    }
 
-	@Override
-	protected void registerGoals() {
-		super.registerGoals();
-		this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Monster.class, true, false));
-		this.goalSelector.addGoal(3, new LookAtPlayerGoal(this, Monster.class, (float) 6));
-		this.goalSelector.addGoal(4, new RandomStrollGoal(this, 1));
-		this.goalSelector.addGoal(5, new OpenDoorGoal(this, false));
-		this.goalSelector.addGoal(6, new OpenDoorGoal(this, true));
-		this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
-		this.goalSelector.addGoal(8, new FloatGoal(this));
-		this.goalSelector.addGoal(1, new TribunalHealerEntity.RangedAttackGoal(this, 1.25, 60, 14f) {
-			@Override
-			public boolean canContinueToUse() {
-				return this.canUse();
-			}
-		});
-	}
+    @Override
+    protected void registerGoals() {
+        super.registerGoals();
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Monster.class, true, false));
+        this.goalSelector.addGoal(3, new LookAtPlayerGoal(this, Monster.class, (float) 6));
+        this.goalSelector.addGoal(4, new RandomStrollGoal(this, 1));
+        this.goalSelector.addGoal(5, new OpenDoorGoal(this, false));
+        this.goalSelector.addGoal(6, new OpenDoorGoal(this, true));
+        this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(8, new FloatGoal(this));
+        this.goalSelector.addGoal(1, new RangedAttackGoal(this, 1.25, 60, 14f) {
+            @Override
+            public boolean canContinueToUse() {
+                return this.canUse();
+            }
+        });
+    }
 
-	public class RangedAttackGoal extends Goal {
-		private final Mob mob;
-		private final RangedAttackMob rangedAttackMob;
-		@Nullable
-		private LivingEntity target;
-		private int attackTime = -1;
-		private final double speedModifier;
-		private int seeTime;
-		private final int attackIntervalMin;
-		private final int attackIntervalMax;
-		private final float attackRadius;
-		private final float attackRadiusSqr;
+    public class RangedAttackGoal extends Goal {
+        private final Mob mob;
+        private final RangedAttackMob rangedAttackMob;
+        @Nullable
+        private LivingEntity target;
+        private int attackTime = -1;
+        private final double speedModifier;
+        private int seeTime;
+        private final int attackIntervalMin;
+        private final int attackIntervalMax;
+        private final float attackRadius;
+        private final float attackRadiusSqr;
 
-		public RangedAttackGoal(RangedAttackMob p_25768_, double p_25769_, int p_25770_, float p_25771_) {
-			this(p_25768_, p_25769_, p_25770_, p_25770_, p_25771_);
-		}
+        public RangedAttackGoal(RangedAttackMob p_25768_, double p_25769_, int p_25770_, float p_25771_) {
+            this(p_25768_, p_25769_, p_25770_, p_25770_, p_25771_);
+        }
 
-		public RangedAttackGoal(RangedAttackMob p_25773_, double p_25774_, int p_25775_, int p_25776_, float p_25777_) {
-			if (!(p_25773_ instanceof LivingEntity)) {
-				throw new IllegalArgumentException("ArrowAttackGoal requires Mob implements RangedAttackMob");
-			} else {
-				this.rangedAttackMob = p_25773_;
-				this.mob = (Mob) p_25773_;
-				this.speedModifier = p_25774_;
-				this.attackIntervalMin = p_25775_;
-				this.attackIntervalMax = p_25776_;
-				this.attackRadius = p_25777_;
-				this.attackRadiusSqr = p_25777_ * p_25777_;
-				this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
-			}
-		}
+        public RangedAttackGoal(RangedAttackMob p_25773_, double p_25774_, int p_25775_, int p_25776_, float p_25777_) {
+            if (!(p_25773_ instanceof LivingEntity)) {
+                throw new IllegalArgumentException("ArrowAttackGoal requires Mob implements RangedAttackMob");
+            } else {
+                this.rangedAttackMob = p_25773_;
+                this.mob = (Mob) p_25773_;
+                this.speedModifier = p_25774_;
+                this.attackIntervalMin = p_25775_;
+                this.attackIntervalMax = p_25776_;
+                this.attackRadius = p_25777_;
+                this.attackRadiusSqr = p_25777_ * p_25777_;
+                this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
+            }
+        }
 
-		public boolean canUse() {
-			LivingEntity livingentity = this.mob.getTarget();
-			if (livingentity != null && livingentity.isAlive()) {
-				this.target = livingentity;
-				return true;
-			} else {
-				return false;
-			}
-		}
+        public boolean canUse() {
+            LivingEntity livingentity = this.mob.getTarget();
+            if (livingentity != null && livingentity.isAlive()) {
+                this.target = livingentity;
+                return true;
+            } else {
+                return false;
+            }
+        }
 
-		public boolean canContinueToUse() {
-			return this.canUse() || this.target!=null && this.target.isAlive() && !this.mob.getNavigation().isDone();
-		}
+        public boolean canContinueToUse() {
+            return this.canUse() || this.target != null && this.target.isAlive() && !this.mob.getNavigation().isDone();
+        }
 
-		public void stop() {
-			this.target = null;
-			this.seeTime = 0;
-			this.attackTime = -1;
-			((TribunalHealerEntity) rangedAttackMob).entityData.set(SHOOT, false);
-		}
+        public void stop() {
+            this.target = null;
+            this.seeTime = 0;
+            this.attackTime = -1;
+            ((TribunalHealerEntity) rangedAttackMob).entityData.set(SHOOT, false);
+        }
 
-		public boolean requiresUpdateEveryTick() {
-			return true;
-		}
+        public boolean requiresUpdateEveryTick() {
+            return true;
+        }
 
-		public void tick() {
+        public void tick() {
             double d0 = 0;
             if (this.target != null) {
                 d0 = this.mob.distanceToSqr(this.target.getX(), this.target.getY(), this.target.getZ());
             }
             boolean flag = this.mob.getSensing().hasLineOfSight(this.target);
-			if (flag) {
-				++this.seeTime;
-			} else {
-				this.seeTime = 0;
-			}
-			if (!(d0 > (double) this.attackRadiusSqr) && this.seeTime >= 5) {
-				this.mob.getNavigation().stop();
-			} else {
-				this.mob.getNavigation().moveTo(this.target, this.speedModifier);
-			}
-			this.mob.getLookControl().setLookAt(this.target, 30.0F, 30.0F);
-			if (--this.attackTime == 0) {
-				if (!flag) {
-					((TribunalHealerEntity) rangedAttackMob).entityData.set(SHOOT, false);
-					return;
-				}
-				((TribunalHealerEntity) rangedAttackMob).entityData.set(SHOOT, true);
-				float f = (float) Math.sqrt(d0) / this.attackRadius;
-				float f1 = Mth.clamp(f, 0.1F, 1.0F);
-				this.rangedAttackMob.performRangedAttack(this.target, f1);
-				this.attackTime = Mth.floor(f * (float) (this.attackIntervalMax - this.attackIntervalMin) + (float) this.attackIntervalMin);
-			} else if (this.attackTime < 0) {
-				this.attackTime = Mth.floor(Mth.lerp(Math.sqrt(d0) / (double) this.attackRadius, this.attackIntervalMin, this.attackIntervalMax));
-			} else
-				((TribunalHealerEntity) rangedAttackMob).entityData.set(SHOOT, false);
-		}
-	}
+            if (flag) {
+                ++this.seeTime;
+            } else {
+                this.seeTime = 0;
+            }
+            if (!(d0 > (double) this.attackRadiusSqr) && this.seeTime >= 5) {
+                this.mob.getNavigation().stop();
+            } else {
+                this.mob.getNavigation().moveTo(this.target, this.speedModifier);
+            }
+            this.mob.getLookControl().setLookAt(this.target, 30.0F, 30.0F);
+            if (--this.attackTime == 0) {
+                if (!flag) {
+                    ((TribunalHealerEntity) rangedAttackMob).entityData.set(SHOOT, false);
+                    return;
+                }
+                ((TribunalHealerEntity) rangedAttackMob).entityData.set(SHOOT, true);
+                float f = (float) Math.sqrt(d0) / this.attackRadius;
+                float f1 = Mth.clamp(f, 0.1F, 1.0F);
+                this.rangedAttackMob.performRangedAttack(this.target, f1);
+                this.attackTime = Mth.floor(f * (float) (this.attackIntervalMax - this.attackIntervalMin) + (float) this.attackIntervalMin);
+            } else if (this.attackTime < 0) {
+                this.attackTime = Mth.floor(Mth.lerp(Math.sqrt(d0) / (double) this.attackRadius, this.attackIntervalMin, this.attackIntervalMax));
+            } else
+                ((TribunalHealerEntity) rangedAttackMob).entityData.set(SHOOT, false);
+        }
+    }
 
-	@Override
-	public MobType getMobType() {
-		return MobType.UNDEFINED;
-	}
+    @Override
+    public MobType getMobType() {
+        return MobType.UNDEFINED;
+    }
 
-	@Override
-	public boolean removeWhenFarAway(double distanceToClosestPlayer) {
-		return false;
-	}
+    @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        return false;
+    }
 
-	protected void dropCustomDeathLoot(DamageSource source, int looting, boolean recentlyHitIn) {
-		super.dropCustomDeathLoot(source, looting, recentlyHitIn);
-		this.spawnAtLocation(new ItemStack(Items.AMETHYST_SHARD));
-	}
+    protected void dropCustomDeathLoot(DamageSource source, int looting, boolean recentlyHitIn) {
+        super.dropCustomDeathLoot(source, looting, recentlyHitIn);
+        this.spawnAtLocation(new ItemStack(Items.AMETHYST_SHARD));
+    }
 
-	@Override
-	public SoundEvent getHurtSound(DamageSource ds) {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.generic.hurt"));
-	}
+    @Override
+    public SoundEvent getHurtSound(DamageSource ds) {
+        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.generic.hurt"));
+    }
 
-	@Override
-	public SoundEvent getDeathSound() {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.generic.death"));
-	}
+    @Override
+    public SoundEvent getDeathSound() {
+        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.generic.death"));
+    }
 
-	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
+    @Override
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
+        SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
         if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
             this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(50);
         return retval;
-	}
+    }
 
-	@Override
-	public void addAdditionalSaveData(CompoundTag compound) {
-		super.addAdditionalSaveData(compound);
-		compound.putString("Texture", this.getTexture());
-		compound.putInt("Dataskillp1", this.entityData.get(DATA_skillp1));
-		compound.putInt("Dataskillp2", this.entityData.get(DATA_skillp2));
-	}
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putString("Texture", this.getTexture());
+        compound.putInt("Dataskillp1", this.entityData.get(DATA_skillp1));
+        compound.putInt("Dataskillp2", this.entityData.get(DATA_skillp2));
+    }
 
-	@Override
-	public void readAdditionalSaveData(CompoundTag compound) {
-		super.readAdditionalSaveData(compound);
-		if (compound.contains("Texture"))
-			this.setTexture(compound.getString("Texture"));
-		if (compound.contains("Dataskillp1"))
-			this.entityData.set(DATA_skillp1, compound.getInt("Dataskillp1"));
-		if (compound.contains("Dataskillp2"))
-			this.entityData.set(DATA_skillp2, compound.getInt("Dataskillp2"));
-	}
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        if (compound.contains("Texture"))
+            this.setTexture(compound.getString("Texture"));
+        if (compound.contains("Dataskillp1"))
+            this.entityData.set(DATA_skillp1, compound.getInt("Dataskillp1"));
+        if (compound.contains("Dataskillp2"))
+            this.entityData.set(DATA_skillp2, compound.getInt("Dataskillp2"));
+    }
 
-	@Override
-	public void baseTick() {
-		super.baseTick();
+    @Override
+    public void baseTick() {
+        super.baseTick();
         LevelAccessor world = this.level();
         double x = this.getX();
         double y = this.getY();
@@ -308,33 +309,33 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
                                             double count1 = 0;
                                             atk1 = (Entity) this instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity0.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
                                             if (world instanceof Level _level) {
-                                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "medic_strong")), SoundSource.NEUTRAL, 2, 1);
+                                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "medic_strong")), SoundSource.NEUTRAL, 2, 1);
                                             }
-											final Vec3 _center1 = new Vec3(x, y, z);
-											List<Entity> _entfound1 = world.getEntitiesOfClass(Entity.class, new AABB(_center1, _center1).inflate(18 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center1))).toList();
-											for (Entity entityiterator1 : _entfound1) {
-												if (entityiterator1.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "inquisition")))) {
-													if ((entityiterator1 instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < (entityiterator1 instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1)) {
-														if (entityiterator1 instanceof LivingEntity _entity && !_entity.level().isClientSide())
-															_entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 60, 1));
-														if ((entityiterator1 instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < (entityiterator1 instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5) {
-															if ((Entity) this instanceof LivingEntity _entity && !_entity.level().isClientSide())
-																_entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 200, 1));
-															if ((Entity) this instanceof LivingEntity _entity && !_entity.level().isClientSide())
-																_entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 200, 1));
-															com.apocalypse.caerulaarbor.util.EntityUtils.healWithParticles(world, entityiterator1, atk1 * 2, 20);
-														} else {
-															com.apocalypse.caerulaarbor.util.EntityUtils.healWithParticles(world, entityiterator1, atk1 * 2, 0);
-														}
-														if (!(this == entityiterator1)) {
-															count1 = count1 + 1;
-															if (count1 >= 7) {
-																break;
-															}
-														}
-													}
-												}
-											}
+                                            final Vec3 _center1 = new Vec3(x, y, z);
+                                            List<Entity> _entfound1 = world.getEntitiesOfClass(Entity.class, new AABB(_center1, _center1).inflate(18 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center1))).toList();
+                                            for (Entity entityiterator1 : _entfound1) {
+                                                if (entityiterator1.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "inquisition")))) {
+                                                    if ((entityiterator1 instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < (entityiterator1 instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1)) {
+                                                        if (entityiterator1 instanceof LivingEntity _entity && !_entity.level().isClientSide())
+                                                            _entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 60, 1));
+                                                        if ((entityiterator1 instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < (entityiterator1 instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5) {
+                                                            if ((Entity) this instanceof LivingEntity _entity && !_entity.level().isClientSide())
+                                                                _entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 200, 1));
+                                                            if ((Entity) this instanceof LivingEntity _entity && !_entity.level().isClientSide())
+                                                                _entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 200, 1));
+                                                            EntityUtils.healWithParticles(world, entityiterator1, atk1 * 2, 20);
+                                                        } else {
+                                                            EntityUtils.healWithParticles(world, entityiterator1, atk1 * 2, 0);
+                                                        }
+                                                        if (!(this == entityiterator1)) {
+                                                            count1 = count1 + 1;
+                                                            if (count1 >= 7) {
+                                                                break;
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
                                         }
                                     });
                                     break;
@@ -360,7 +361,7 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
                             double vz;
                             double dist;
                             if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "medic_blast")), SoundSource.PLAYERS, 2, 1);
+                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "medic_blast")), SoundSource.PLAYERS, 2, 1);
                             }
                             {
                                 final Vec3 _center = new Vec3((getX()), (getY()), (getZ()));
@@ -400,7 +401,7 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
                             CaerulaArborMod.queueServerWork(7, () -> {
                                 if (this.isAlive()) {
                                     if (world instanceof Level _level) {
-                                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "medic_attack")), SoundSource.PLAYERS, (float) 1.25, 1);
+                                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "medic_attack")), SoundSource.PLAYERS, (float) 1.25, 1);
                                     }
                                     new Object() {
                                         void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
@@ -425,147 +426,145 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
             }
         }
         this.refreshDimensions();
-	}
+    }
 
-	private boolean hasAggresiveMobAround(LevelAccessor world, double x, double y, double z) {
-		Vec3 center = new Vec3(x, y, z);
-		List<Entity> entities = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(8 / 2d), entity -> true).stream()
-				.sorted(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(center))).toList();
-		for (Entity entityIterator : entities) {
-			if (this.distanceTo(entityIterator) <= 4
-					&& ((entityIterator instanceof Mob mob ? mob.getTarget() : null) == this || entityIterator == this.getLastHurtByMob())) {
-				return true;
-			}
-		}
-		return false;
-	}
+    private boolean hasAggresiveMobAround(LevelAccessor world, double x, double y, double z) {
+        Vec3 center = new Vec3(x, y, z);
+        List<Entity> entities = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(8 / 2d), entity -> true).stream()
+                .sorted(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(center))).toList();
+        for (Entity entityIterator : entities) {
+            if (this.distanceTo(entityIterator) <= 4
+                    && ((entityIterator instanceof Mob mob ? mob.getTarget() : null) == this || entityIterator == this.getLastHurtByMob())) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	@Override
-	public EntityDimensions getDimensions(Pose p_33597_) {
-		return super.getDimensions(p_33597_).scale((float) 1);
-	}
+    @Override
+    public EntityDimensions getDimensions(Pose p_33597_) {
+        return super.getDimensions(p_33597_).scale((float) 1);
+    }
 
-	@Override
-	public void performRangedAttack(LivingEntity target, float flval) {
-		// TODO: Revisit this legacy system call when the healing projectile path is cleaned up.
-		HealBullletEntity.shoot(this, target);
-	}
+    @Override
+    public void performRangedAttack(LivingEntity target, float flval) {
+        // TODO: Revisit this legacy system call when the healing projectile path is cleaned up.
+        HealBullletEntity.shoot(this, target);
+    }
 
-	@Override
-	public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
-		TribunalHealerEntity retval = CAEntities.TRIBUNAL_HEALER.get().create(serverWorld);
-		retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null, null);
-		return retval;
-	}
+    @Override
+    public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {
+        TribunalHealerEntity retval = CAEntities.TRIBUNAL_HEALER.get().create(serverWorld);
+        retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null, null);
+        return retval;
+    }
 
-	@Override
-	public boolean isFood(ItemStack stack) {
-		return List.of().contains(stack.getItem());
-	}
+    @Override
+    public boolean isFood(ItemStack stack) {
+        return List.of().contains(stack.getItem());
+    }
 
-	@Override
-	public void aiStep() {
-		super.aiStep();
-		this.updateSwingTime();
-	}
-
-	public static void init() {
-	}
-
-	public static AttributeSupplier.Builder createAttributes() {
-		AttributeSupplier.Builder builder = Mob.createMobAttributes();
-		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.2);
-		builder = builder.add(Attributes.MAX_HEALTH, 70);
-		builder = builder.add(Attributes.ARMOR, 5);
-		builder = builder.add(Attributes.ATTACK_DAMAGE, 10);
-		builder = builder.add(Attributes.FOLLOW_RANGE, 18);
-		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.25);
-		return builder;
-	}
-
-	private PlayState movementPredicate(AnimationState event) {
-		if (this.animationprocedure.equals("empty")) {
-			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
-
-			) {
-				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.tribunal_healer.move"));
-			}
-			if (this.isDeadOrDying()) {
-				return event.setAndContinue(RawAnimation.begin().thenPlay("animation.tribunal_healer.death"));
-			}
-			return event.setAndContinue(RawAnimation.begin().thenLoop("animation.tribunal_healer.idle"));
-		}
-		return PlayState.STOP;
-	}
-
-	private PlayState attackingPredicate(AnimationState event) {
-		double d1 = this.getX() - this.xOld;
-		double d0 = this.getZ() - this.zOld;
-		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
-			this.swinging = true;
-			this.lastSwing = level().getGameTime();
-		}
-		if (this.swinging && this.lastSwing + 35L <= level().getGameTime()) {
-			this.swinging = false;
-		}
-		if ((this.swinging || this.entityData.get(SHOOT)) && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
-			event.getController().forceAnimationReset();
-			return event.setAndContinue(RawAnimation.begin().thenPlay("animation.tribunal_healer.heal"));
-		}
-		return PlayState.CONTINUE;
-	}
-
-	String prevAnim = "empty";
-
-	private PlayState procedurePredicate(AnimationState event) {
-		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
-			if (!this.animationprocedure.equals(prevAnim))
-				event.getController().forceAnimationReset();
-			event.getController().setAnimation(RawAnimation.begin().thenPlay(this.animationprocedure));
-			if (event.getController().getAnimationState() == AnimationController.State.STOPPED) {
-				this.animationprocedure = "empty";
-				event.getController().forceAnimationReset();
-			}
-		} else if (animationprocedure.equals("empty")) {
-			prevAnim = "empty";
-			return PlayState.STOP;
-		}
-		prevAnim = this.animationprocedure;
-		return PlayState.CONTINUE;
-	}
-
-	@Override
-	protected void tickDeath() {
-		++this.deathTime;
-		if (this.deathTime == 24) {
-			this.remove(TribunalHealerEntity.RemovalReason.KILLED);
-			this.dropExperience();
-		}
-	}
-
-	public String getSyncedAnimation() {
-		return this.entityData.get(ANIMATION);
-	}
-
-	public void setAnimation(String animation) {
-		this.entityData.set(ANIMATION, animation);
-	}
-
-	@Override
-	public void registerControllers(AnimatableManager.ControllerRegistrar data) {
-		data.add(new AnimationController<>(this, "movement", 4, this::movementPredicate));
-		data.add(new AnimationController<>(this, "attacking", 4, this::attackingPredicate));
-		data.add(new AnimationController<>(this, "procedure", 4, this::procedurePredicate));
-	}
-
-	@Override
-	public AnimatableInstanceCache getAnimatableInstanceCache() {
-		return this.cache;
-	}
+    @Override
+    public void aiStep() {
+        super.aiStep();
+        this.updateSwingTime();
+    }
 
 
-	@Override
-	public void setAnimationProcedure(String animation) {
-		this.animationprocedure = animation;
-	}
+    public static AttributeSupplier.Builder createAttributes() {
+        AttributeSupplier.Builder builder = Mob.createMobAttributes();
+        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.2);
+        builder = builder.add(Attributes.MAX_HEALTH, 70);
+        builder = builder.add(Attributes.ARMOR, 5);
+        builder = builder.add(Attributes.ATTACK_DAMAGE, 10);
+        builder = builder.add(Attributes.FOLLOW_RANGE, 18);
+        builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.25);
+        return builder;
+    }
+
+    private PlayState movementPredicate(AnimationState event) {
+        if (this.animationprocedure.equals("empty")) {
+            if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
+
+            ) {
+                return event.setAndContinue(RawAnimation.begin().thenLoop("animation.tribunal_healer.move"));
+            }
+            if (this.isDeadOrDying()) {
+                return event.setAndContinue(RawAnimation.begin().thenPlay("animation.tribunal_healer.death"));
+            }
+            return event.setAndContinue(RawAnimation.begin().thenLoop("animation.tribunal_healer.idle"));
+        }
+        return PlayState.STOP;
+    }
+
+    private PlayState attackingPredicate(AnimationState event) {
+        double d1 = this.getX() - this.xOld;
+        double d0 = this.getZ() - this.zOld;
+        if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
+            this.swinging = true;
+            this.lastSwing = level().getGameTime();
+        }
+        if (this.swinging && this.lastSwing + 35L <= level().getGameTime()) {
+            this.swinging = false;
+        }
+        if ((this.swinging || this.entityData.get(SHOOT)) && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+            event.getController().forceAnimationReset();
+            return event.setAndContinue(RawAnimation.begin().thenPlay("animation.tribunal_healer.heal"));
+        }
+        return PlayState.CONTINUE;
+    }
+
+    String prevAnim = "empty";
+
+    private PlayState procedurePredicate(AnimationState event) {
+        if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
+            if (!this.animationprocedure.equals(prevAnim))
+                event.getController().forceAnimationReset();
+            event.getController().setAnimation(RawAnimation.begin().thenPlay(this.animationprocedure));
+            if (event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+                this.animationprocedure = "empty";
+                event.getController().forceAnimationReset();
+            }
+        } else if (animationprocedure.equals("empty")) {
+            prevAnim = "empty";
+            return PlayState.STOP;
+        }
+        prevAnim = this.animationprocedure;
+        return PlayState.CONTINUE;
+    }
+
+    @Override
+    protected void tickDeath() {
+        ++this.deathTime;
+        if (this.deathTime == 24) {
+            this.remove(RemovalReason.KILLED);
+            this.dropExperience();
+        }
+    }
+
+    public String getSyncedAnimation() {
+        return this.entityData.get(ANIMATION);
+    }
+
+    public void setAnimation(String animation) {
+        this.entityData.set(ANIMATION, animation);
+    }
+
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar data) {
+        data.add(new AnimationController<>(this, "movement", 4, this::movementPredicate));
+        data.add(new AnimationController<>(this, "attacking", 4, this::attackingPredicate));
+        data.add(new AnimationController<>(this, "procedure", 4, this::procedurePredicate));
+    }
+
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return this.cache;
+    }
+
+
+    @Override
+    public void setAnimationProcedure(String animation) {
+        this.animationprocedure = animation;
+    }
 }

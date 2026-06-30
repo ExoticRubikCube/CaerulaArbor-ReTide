@@ -14,7 +14,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -34,7 +33,6 @@ import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -43,8 +41,6 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
-
-import javax.annotation.Nullable;
 
 public class LineringPathshaperEntity extends AbstractPathshaperEntity {
 	public static final EntityDataAccessor<Integer> DATA_ATTACK_SKILLP = SynchedEntityData.defineId(LineringPathshaperEntity.class, EntityDataSerializers.INT);
@@ -113,15 +109,15 @@ public class LineringPathshaperEntity extends AbstractPathshaperEntity {
 			@Override
 			public boolean canUse() {
 				Entity entity = LineringPathshaperEntity.this;
-                if (!super.canUse()) return false;
-                return EntityPredicateUtils.isNotFakeDying(entity);
+				if (!super.canUse()) return false;
+				return EntityPredicateUtils.isNotFakeDying(entity);
 			}
 
 			@Override
 			public boolean canContinueToUse() {
 				Entity entity = LineringPathshaperEntity.this;
-                if (!super.canContinueToUse()) return false;
-                return EntityPredicateUtils.isNotFakeDying(entity);
+				if (!super.canContinueToUse()) return false;
+				return EntityPredicateUtils.isNotFakeDying(entity);
 			}
 
 		});
@@ -170,7 +166,7 @@ public class LineringPathshaperEntity extends AbstractPathshaperEntity {
 		this.goalSelector.addGoal(17, new FloatGoal(this));
 	}
 
-    @Override
+	@Override
 	public boolean removeWhenFarAway(double distanceToClosestPlayer) {
 		return false;
 	}
@@ -188,13 +184,6 @@ public class LineringPathshaperEntity extends AbstractPathshaperEntity {
 	@Override
 	public SoundEvent getDeathSound() {
 		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.ravager.death"));
-	}
-
-	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-		EntityUtils.igniteRouteshaper(world, this.getX(), this.getY(), this.getZ(), this);
-		return retval;
 	}
 
 	@Override
@@ -238,8 +227,7 @@ public class LineringPathshaperEntity extends AbstractPathshaperEntity {
 		this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
 	}
 
-	public static void init() {
-	}
+	
 
 	public static AttributeSupplier.Builder createAttributes() {
 		AttributeSupplier.Builder builder = Mob.createMobAttributes();
@@ -275,7 +263,7 @@ public class LineringPathshaperEntity extends AbstractPathshaperEntity {
 	}
 
 	private PlayState attackingPredicate(AnimationState event) {
-        if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
+		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
 		}
@@ -293,7 +281,7 @@ public class LineringPathshaperEntity extends AbstractPathshaperEntity {
 	protected void tickDeath() {
 		++this.deathTime;
 		if (this.deathTime == 20) {
-			this.remove(LineringPathshaperEntity.RemovalReason.KILLED);
+			this.remove(RemovalReason.KILLED);
 			this.dropExperience();
 			WorldUtils.dropRelicRoute(this.level(), this.getX(), this.getY(), this.getZ());
 		}

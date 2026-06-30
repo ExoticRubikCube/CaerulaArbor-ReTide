@@ -4,7 +4,6 @@ import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.MoistEnderCrystalEntity;
 import com.apocalypse.caerulaarbor.entity.OceanizedEnderinaEntity;
 import com.apocalypse.caerulaarbor.init.CAEntities;
-import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
@@ -90,7 +89,7 @@ public class EnderinaCoreBlock extends Block {
                             });
                     for (MoistEnderCrystalEntity entityiterator : _entfound) {
                         count++;
-                        EntityUtils.enderinaLinkPtcTo(world, entityiterator.getX(), entityiterator.getY() + 1, entityiterator.getZ(), (double) x + 0.5, (double) y + 1, (double) z + 0.5);
+                        OceanizedEnderinaEntity.spawnLinkParticles(world, entityiterator.getX(), entityiterator.getY() + 1, entityiterator.getZ(), (double) x + 0.5, (double) y + 1, (double) z + 0.5);
                     }
                 }
                 if (count >= 4) {

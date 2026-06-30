@@ -2,10 +2,9 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.init.CAParticleTypes;
-import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -110,7 +109,7 @@ public class LancXiaoItem extends SwordItem {
                                         tx = entityiterator.getX() + Mth.nextDouble(RandomSource.create(), -0.25, 0.25);
                                         ty = entityiterator.getY();
                                         tz = entityiterator.getZ() + Mth.nextDouble(RandomSource.create(), -0.25, 0.25);
-                                        EntityUtils.endspeakerLinkPtcTo(world, entity.getX(), entity.getY(), entity.getZ(), tx, ty, tz);
+                                        spawnTeleportLinkParticles(world, entity.getX(), entity.getY(), entity.getZ(), tx, ty, tz);
                                         Entity _ent = entity;
                                         _ent.teleportTo(tx, ty, tz);
                                         if (_ent instanceof ServerPlayer _serverPlayer)
@@ -142,7 +141,7 @@ public class LancXiaoItem extends SwordItem {
                 if (!_entity.level().isClientSide())
                     _entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 20, 2, false, false));
                 CaerulaArborMod.queueServerWork((int) ((count + 2) * 2), () -> {
-                    EntityUtils.endspeakerLinkPtcTo(world, entity.getX(), entity.getY(), entity.getZ(), x, y, z);
+                    spawnTeleportLinkParticles(world, entity.getX(), entity.getY(), entity.getZ(), x, y, z);
                     {
                         Entity _ent = entity;
                         _ent.teleportTo(x, y, z);
@@ -203,5 +202,20 @@ public class LancXiaoItem extends SwordItem {
 
 	private boolean isLancXiaoReady(ItemStack itemstack) {
 		return itemstack.getOrCreateTag().getDouble("sklp") <= 0;
+	}
+
+	private static void spawnTeleportLinkParticles(LevelAccessor world, double fromX, double fromY, double fromZ, double toX, double toY, double toZ) {
+		double vx = toX - fromX;
+		double vy = toY - fromY;
+		double vz = toZ - fromZ;
+		double size = Math.max(Math.min(Math.round(Math.sqrt(vx * vx + vy * vy + vz * vz)), 32), 1);
+		if (world instanceof Level level) {
+			level.playSound(null, BlockPos.containing(fromX, fromY, fromZ), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.enderman.teleport")), SoundSource.HOSTILE, 1, 1);
+		}
+		for (int index0 = 0; index0 < (int) size; index0++) {
+			if (world instanceof ServerLevel level) {
+				level.sendParticles(CAParticleTypes.ENDSPEAKER_INV.get(), fromX + (vx / size) * index0, fromY + (vy / size) * index0 + 0.5, fromZ + (vz / size) * index0, 8, 0.32, 0.5, 0.32, 0.05);
+			}
+		}
 	}
 }

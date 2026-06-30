@@ -57,215 +57,215 @@ import javax.annotation.Nullable;
 import java.util.EnumSet;
 
 public class OceanizedChickenEntity extends SeaMonster {
-	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanizedChickenEntity.class, EntityDataSerializers.BOOLEAN);
-	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedChickenEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(OceanizedChickenEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<Integer> DATA_GROW_TIME = SynchedEntityData.defineId(OceanizedChickenEntity.class, EntityDataSerializers.INT);
-	public static final EntityDataAccessor<Integer> DATA_LAY_COOLDOWN = SynchedEntityData.defineId(OceanizedChickenEntity.class, EntityDataSerializers.INT);
-	public static final EntityDataAccessor<Boolean> DATA_IS_CHILD = SynchedEntityData.defineId(OceanizedChickenEntity.class, EntityDataSerializers.BOOLEAN);
-	public static final EntityDataAccessor<Integer> DATA_EGG_OFFSET = SynchedEntityData.defineId(OceanizedChickenEntity.class, EntityDataSerializers.INT);
-	public static final EntityDataAccessor<Integer> DATA_EGG_RATE = SynchedEntityData.defineId(OceanizedChickenEntity.class, EntityDataSerializers.INT);
-	private boolean swinging;
-	private boolean lastloop;
-	private long lastSwing;
-	public String animationprocedure = "empty";
+    public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanizedChickenEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedChickenEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(OceanizedChickenEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> DATA_GROW_TIME = SynchedEntityData.defineId(OceanizedChickenEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_LAY_COOLDOWN = SynchedEntityData.defineId(OceanizedChickenEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Boolean> DATA_IS_CHILD = SynchedEntityData.defineId(OceanizedChickenEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<Integer> DATA_EGG_OFFSET = SynchedEntityData.defineId(OceanizedChickenEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_EGG_RATE = SynchedEntityData.defineId(OceanizedChickenEntity.class, EntityDataSerializers.INT);
+    private boolean swinging;
+    private boolean lastloop;
+    private long lastSwing;
+    public String animationprocedure = "empty";
 
-	public OceanizedChickenEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CAEntities.OCEANIZED_CHICKEN.get(), world);
-	}
+    public OceanizedChickenEntity(PlayMessages.SpawnEntity packet, Level world) {
+        this(CAEntities.OCEANIZED_CHICKEN.get(), world);
+    }
 
-	public OceanizedChickenEntity(EntityType<OceanizedChickenEntity> type, Level world) {
-		super(type, world);
-		xpReward = 3;
-		setNoAi(false);
-		setMaxUpStep(0.6f);
-		this.moveControl = new FlyingMoveControl(this, 10, true);
-	}
+    public OceanizedChickenEntity(EntityType<OceanizedChickenEntity> type, Level world) {
+        super(type, world);
+        xpReward = 3;
+        setNoAi(false);
+        setMaxUpStep(0.6f);
+        this.moveControl = new FlyingMoveControl(this, 10, true);
+    }
 
-	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(SHOOT, false);
-		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(TEXTURE, "oceanized_chicken_adult");
-		this.entityData.define(DATA_GROW_TIME, 10000);
-		this.entityData.define(DATA_LAY_COOLDOWN, 1200);
-		this.entityData.define(DATA_IS_CHILD, false);
-		this.entityData.define(DATA_EGG_OFFSET, 4);
-		this.entityData.define(DATA_EGG_RATE, 1000);
-	}
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(SHOOT, false);
+        this.entityData.define(ANIMATION, "undefined");
+        this.entityData.define(TEXTURE, "oceanized_chicken_adult");
+        this.entityData.define(DATA_GROW_TIME, 10000);
+        this.entityData.define(DATA_LAY_COOLDOWN, 1200);
+        this.entityData.define(DATA_IS_CHILD, false);
+        this.entityData.define(DATA_EGG_OFFSET, 4);
+        this.entityData.define(DATA_EGG_RATE, 1000);
+    }
 
-	public void setTexture(String texture) {
-		this.entityData.set(TEXTURE, texture);
-	}
+    public void setTexture(String texture) {
+        this.entityData.set(TEXTURE, texture);
+    }
 
-	public String getTexture() {
-		return this.entityData.get(TEXTURE);
-	}
+    public String getTexture() {
+        return this.entityData.get(TEXTURE);
+    }
 
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
-	}
+    @Override
+    public Packet<ClientGamePacketListener> getAddEntityPacket() {
+        return NetworkHooks.getEntitySpawningPacket(this);
+    }
 
-	@Override
-	protected PathNavigation createNavigation(Level world) {
-		return new FlyingPathNavigation(this, world);
-	}
+    @Override
+    protected PathNavigation createNavigation(Level world) {
+        return new FlyingPathNavigation(this, world);
+    }
 
-	@Override
-	protected void registerGoals() {
-		super.registerGoals();
-		this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.2, false) {
-			@Override
-			protected double getAttackReachSqr(LivingEntity entity) {
-				return 4;
-			}
+    @Override
+    protected void registerGoals() {
+        super.registerGoals();
+        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.2, false) {
+            @Override
+            protected double getAttackReachSqr(LivingEntity entity) {
+                return 4;
+            }
 
-			@Override
-			public boolean canUse() {
-				return super.canUse() && OceanizedChickenEntity.this.isRipe();
-			}
+            @Override
+            public boolean canUse() {
+                return super.canUse() && OceanizedChickenEntity.this.isRipe();
+            }
 
-			@Override
-			public boolean canContinueToUse() {
-				return super.canContinueToUse() && OceanizedChickenEntity.this.isRipe();
-			}
+            @Override
+            public boolean canContinueToUse() {
+                return super.canContinueToUse() && OceanizedChickenEntity.this.isRipe();
+            }
 
-		});
-		this.targetSelector.addGoal(2, new HurtByTargetGoal(this));
-		this.goalSelector.addGoal(3, new Goal() {
-			{
-				this.setFlags(EnumSet.of(Goal.Flag.MOVE));
-			}
+        });
+        this.targetSelector.addGoal(2, new HurtByTargetGoal(this));
+        this.goalSelector.addGoal(3, new Goal() {
+            {
+                this.setFlags(EnumSet.of(Flag.MOVE));
+            }
 
-			public boolean canUse() {
-				if (OceanizedChickenEntity.this.getTarget() != null && !OceanizedChickenEntity.this.getMoveControl().hasWanted()) {
-					return OceanizedChickenEntity.this.isRipe();
-				} else {
-					return false;
-				}
-			}
+            public boolean canUse() {
+                if (OceanizedChickenEntity.this.getTarget() != null && !OceanizedChickenEntity.this.getMoveControl().hasWanted()) {
+                    return OceanizedChickenEntity.this.isRipe();
+                } else {
+                    return false;
+                }
+            }
 
-			@Override
-			public boolean canContinueToUse() {
-				return OceanizedChickenEntity.this.isRipe() && OceanizedChickenEntity.this.getMoveControl().hasWanted() && OceanizedChickenEntity.this.getTarget() != null && OceanizedChickenEntity.this.getTarget().isAlive();
-			}
+            @Override
+            public boolean canContinueToUse() {
+                return OceanizedChickenEntity.this.isRipe() && OceanizedChickenEntity.this.getMoveControl().hasWanted() && OceanizedChickenEntity.this.getTarget() != null && OceanizedChickenEntity.this.getTarget().isAlive();
+            }
 
-			@Override
-			public void start() {
-				LivingEntity livingentity = OceanizedChickenEntity.this.getTarget();
-				Vec3 vec3d = livingentity.getEyePosition(1);
-				OceanizedChickenEntity.this.moveControl.setWantedPosition(vec3d.x, vec3d.y, vec3d.z, 1.25);
-			}
+            @Override
+            public void start() {
+                LivingEntity livingentity = OceanizedChickenEntity.this.getTarget();
+                Vec3 vec3d = livingentity.getEyePosition(1);
+                OceanizedChickenEntity.this.moveControl.setWantedPosition(vec3d.x, vec3d.y, vec3d.z, 1.25);
+            }
 
-			@Override
-			public void tick() {
-				LivingEntity livingentity = OceanizedChickenEntity.this.getTarget();
-				if (OceanizedChickenEntity.this.getBoundingBox().intersects(livingentity.getBoundingBox())) {
-					OceanizedChickenEntity.this.doHurtTarget(livingentity);
-				} else {
-					double d0 = OceanizedChickenEntity.this.distanceToSqr(livingentity);
-					if (d0 < 16) {
-						Vec3 vec3d = livingentity.getEyePosition(1);
-						OceanizedChickenEntity.this.moveControl.setWantedPosition(vec3d.x, vec3d.y, vec3d.z, 1.25);
-					}
-				}
-			}
-		});
-		this.goalSelector.addGoal(4, new RandomStrollGoal(this, 1, 20) {
-			@Override
-			protected Vec3 getPosition() {
-				RandomSource random = OceanizedChickenEntity.this.getRandom();
-				double dir_x = OceanizedChickenEntity.this.getX() + ((random.nextFloat() * 2 - 1) * 16);
-				double dir_y = OceanizedChickenEntity.this.getY() + ((random.nextFloat() * 2 - 1) * 16);
-				double dir_z = OceanizedChickenEntity.this.getZ() + ((random.nextFloat() * 2 - 1) * 16);
-				return new Vec3(dir_x, dir_y, dir_z);
-			}
-		});
-		this.goalSelector.addGoal(5, new RandomLookAroundGoal(this));
-	}
+            @Override
+            public void tick() {
+                LivingEntity livingentity = OceanizedChickenEntity.this.getTarget();
+                if (OceanizedChickenEntity.this.getBoundingBox().intersects(livingentity.getBoundingBox())) {
+                    OceanizedChickenEntity.this.doHurtTarget(livingentity);
+                } else {
+                    double d0 = OceanizedChickenEntity.this.distanceToSqr(livingentity);
+                    if (d0 < 16) {
+                        Vec3 vec3d = livingentity.getEyePosition(1);
+                        OceanizedChickenEntity.this.moveControl.setWantedPosition(vec3d.x, vec3d.y, vec3d.z, 1.25);
+                    }
+                }
+            }
+        });
+        this.goalSelector.addGoal(4, new RandomStrollGoal(this, 1, 20) {
+            @Override
+            protected Vec3 getPosition() {
+                RandomSource random = OceanizedChickenEntity.this.getRandom();
+                double dir_x = OceanizedChickenEntity.this.getX() + ((random.nextFloat() * 2 - 1) * 16);
+                double dir_y = OceanizedChickenEntity.this.getY() + ((random.nextFloat() * 2 - 1) * 16);
+                double dir_z = OceanizedChickenEntity.this.getZ() + ((random.nextFloat() * 2 - 1) * 16);
+                return new Vec3(dir_x, dir_y, dir_z);
+            }
+        });
+        this.goalSelector.addGoal(5, new RandomLookAroundGoal(this));
+    }
 
-	@Override
-	public MobType getMobType() {
-		return MobType.UNDEFINED;
-	}
+    @Override
+    public MobType getMobType() {
+        return MobType.UNDEFINED;
+    }
 
-	@Override
-	public double getPassengersRidingOffset() {
-		return super.getPassengersRidingOffset() + -0.2;
-	}
+    @Override
+    public double getPassengersRidingOffset() {
+        return super.getPassengersRidingOffset() + -0.2;
+    }
 
-	@Override
-	public SoundEvent getHurtSound(DamageSource ds) {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.chicken.hurt"));
-	}
+    @Override
+    public SoundEvent getHurtSound(DamageSource ds) {
+        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.chicken.hurt"));
+    }
 
-	@Override
-	public SoundEvent getDeathSound() {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.chicken.death"));
-	}
+    @Override
+    public SoundEvent getDeathSound() {
+        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.chicken.death"));
+    }
 
-	@Override
-	public boolean causeFallDamage(float l, float d, DamageSource source) {
-		return false;
-	}
+    @Override
+    public boolean causeFallDamage(float l, float d, DamageSource source) {
+        return false;
+    }
 
-	@Override
-	public boolean hurt(DamageSource source, float amount) {
-		if (source.is(DamageTypes.FALL))
-			return false;
-		return super.hurt(source, amount);
-	}
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        if (source.is(DamageTypes.FALL))
+            return false;
+        return super.hurt(source, amount);
+    }
 
-	@Override
-	public void die(DamageSource source) {
-		super.die(source);
+    @Override
+    public void die(DamageSource source) {
+        super.die(source);
         push(0, (-0.64), 0);
     }
 
-	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
+    @Override
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
+        SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
         if ((Entity) this instanceof OceanizedChickenEntity _datEntSetI)
             _datEntSetI.getEntityData().set(DATA_GROW_TIME, 10000 - Mth.nextInt(RandomSource.create(), 0, 6000));
         if ((Entity) this instanceof OceanizedChickenEntity _datEntSetI)
             _datEntSetI.getEntityData().set(DATA_LAY_COOLDOWN, 1200 + Mth.nextInt(RandomSource.create(), -100, 100));
         return retval;
-	}
+    }
 
-	@Override
-	public void addAdditionalSaveData(CompoundTag compound) {
-		super.addAdditionalSaveData(compound);
-		compound.putString("Texture", this.getTexture());
-		compound.putInt("DataGROW_TIME", this.entityData.get(DATA_GROW_TIME));
-		compound.putInt("DataLAY_COOLDOWN", this.entityData.get(DATA_LAY_COOLDOWN));
-		compound.putBoolean("DataIS_CHILD", this.entityData.get(DATA_IS_CHILD));
-		compound.putInt("DataEGG_OFFSET", this.entityData.get(DATA_EGG_OFFSET));
-		compound.putInt("DataEGG_RATE", this.entityData.get(DATA_EGG_RATE));
-	}
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putString("Texture", this.getTexture());
+        compound.putInt("DataGROW_TIME", this.entityData.get(DATA_GROW_TIME));
+        compound.putInt("DataLAY_COOLDOWN", this.entityData.get(DATA_LAY_COOLDOWN));
+        compound.putBoolean("DataIS_CHILD", this.entityData.get(DATA_IS_CHILD));
+        compound.putInt("DataEGG_OFFSET", this.entityData.get(DATA_EGG_OFFSET));
+        compound.putInt("DataEGG_RATE", this.entityData.get(DATA_EGG_RATE));
+    }
 
-	@Override
-	public void readAdditionalSaveData(CompoundTag compound) {
-		super.readAdditionalSaveData(compound);
-		if (compound.contains("Texture"))
-			this.setTexture(compound.getString("Texture"));
-		if (compound.contains("DataGROW_TIME"))
-			this.entityData.set(DATA_GROW_TIME, compound.getInt("DataGROW_TIME"));
-		if (compound.contains("DataLAY_COOLDOWN"))
-			this.entityData.set(DATA_LAY_COOLDOWN, compound.getInt("DataLAY_COOLDOWN"));
-		if (compound.contains("DataIS_CHILD"))
-			this.entityData.set(DATA_IS_CHILD, compound.getBoolean("DataIS_CHILD"));
-		if (compound.contains("DataEGG_OFFSET"))
-			this.entityData.set(DATA_EGG_OFFSET, compound.getInt("DataEGG_OFFSET"));
-		if (compound.contains("DataEGG_RATE"))
-			this.entityData.set(DATA_EGG_RATE, compound.getInt("DataEGG_RATE"));
-	}
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        if (compound.contains("Texture"))
+            this.setTexture(compound.getString("Texture"));
+        if (compound.contains("DataGROW_TIME"))
+            this.entityData.set(DATA_GROW_TIME, compound.getInt("DataGROW_TIME"));
+        if (compound.contains("DataLAY_COOLDOWN"))
+            this.entityData.set(DATA_LAY_COOLDOWN, compound.getInt("DataLAY_COOLDOWN"));
+        if (compound.contains("DataIS_CHILD"))
+            this.entityData.set(DATA_IS_CHILD, compound.getBoolean("DataIS_CHILD"));
+        if (compound.contains("DataEGG_OFFSET"))
+            this.entityData.set(DATA_EGG_OFFSET, compound.getInt("DataEGG_OFFSET"));
+        if (compound.contains("DataEGG_RATE"))
+            this.entityData.set(DATA_EGG_RATE, compound.getInt("DataEGG_RATE"));
+    }
 
-	@Override
-	public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
-		super.mobInteract(sourceentity, hand);
-		Entity entity = this;
+    @Override
+    public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
+        super.mobInteract(sourceentity, hand);
+        Entity entity = this;
         if (new Object() {
             public boolean checkGamemode(Entity _ent) {
                 if (_ent instanceof ServerPlayer _serverPlayer) {
@@ -290,9 +290,9 @@ public class OceanizedChickenEntity extends SeaMonster {
         return InteractionResult.PASS;
     }
 
-	@Override
-	public void baseTick() {
-		super.baseTick();
+    @Override
+    public void baseTick() {
+        super.baseTick();
         LevelAccessor world = this.level();
         double lay;
         double grow;
@@ -324,7 +324,7 @@ public class OceanizedChickenEntity extends SeaMonster {
                 }
                 CaerulaArborMod.queueServerWork(5, () -> {
                     if (world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(getX(), getY(), getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.chicken.egg")), SoundSource.NEUTRAL, 1, 1);
+                        _level.playSound(null, BlockPos.containing(getX(), getY(), getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.chicken.egg")), SoundSource.NEUTRAL, 1, 1);
                     }
                     if (world instanceof ServerLevel _level) {
                         ItemStack result;
@@ -357,120 +357,118 @@ public class OceanizedChickenEntity extends SeaMonster {
             }
         }
         this.refreshDimensions();
-	}
+    }
 
-	@Override
-	public EntityDimensions getDimensions(Pose p_33597_) {
-		Entity entity = this;
+    @Override
+    public EntityDimensions getDimensions(Pose p_33597_) {
+        Entity entity = this;
         double result = 1;
         if (entity instanceof OceanizedChickenEntity _datEntL0 && _datEntL0.getEntityData().get(DATA_IS_CHILD)) {
             result = 0.5;
         }
         return super.getDimensions(p_33597_).scale((float) result);
-	}
+    }
 
-	@Override
-	protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
-	}
+    @Override
+    protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
+    }
 
-	@Override
-	public void setNoGravity(boolean ignored) {
-		super.setNoGravity(true);
-	}
+    @Override
+    public void setNoGravity(boolean ignored) {
+        super.setNoGravity(true);
+    }
 
-	public void aiStep() {
-		super.aiStep();
-		this.setNoGravity(true);
-	}
-
-	public static void init() {
-	}
-
-	public static AttributeSupplier.Builder createAttributes() {
-		AttributeSupplier.Builder builder = Mob.createMobAttributes();
-		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.3);
-		builder = builder.add(Attributes.MAX_HEALTH, 10);
-		builder = builder.add(Attributes.ARMOR, 0);
-		builder = builder.add(Attributes.ATTACK_DAMAGE, 2);
-		builder = builder.add(Attributes.FOLLOW_RANGE, 22);
-		builder = builder.add(Attributes.FLYING_SPEED, 0.3);
-		return builder;
-	}
-
-	private PlayState movementPredicate(AnimationState event) {
-		if (this.animationprocedure.equals("empty")) {
-			return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_chicken.idle"));
-		}
-		return PlayState.STOP;
-	}
-
-	private PlayState attackingPredicate(AnimationState event) {
-		double d1 = this.getX() - this.xOld;
-		double d0 = this.getZ() - this.zOld;
-		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
-			this.swinging = true;
-			this.lastSwing = level().getGameTime();
-		}
-		if (this.swinging && this.lastSwing + 10L <= level().getGameTime()) {
-			this.swinging = false;
-		}
-		if (this.swinging && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
-			event.getController().forceAnimationReset();
-			return event.setAndContinue(RawAnimation.begin().thenPlay("animation.oceanized_chicken.attack"));
-		}
-		return PlayState.CONTINUE;
-	}
-
-	String prevAnim = "empty";
-
-	private PlayState procedurePredicate(AnimationState event) {
-		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
-			if (!this.animationprocedure.equals(prevAnim))
-				event.getController().forceAnimationReset();
-			event.getController().setAnimation(RawAnimation.begin().thenPlay(this.animationprocedure));
-			if (event.getController().getAnimationState() == AnimationController.State.STOPPED) {
-				this.animationprocedure = "empty";
-				event.getController().forceAnimationReset();
-			}
-		} else if (animationprocedure.equals("empty")) {
-			prevAnim = "empty";
-			return PlayState.STOP;
-		}
-		prevAnim = this.animationprocedure;
-		return PlayState.CONTINUE;
-	}
-
-	@Override
-	protected void tickDeath() {
-		++this.deathTime;
-		if (this.deathTime == 20) {
-			this.remove(OceanizedChickenEntity.RemovalReason.KILLED);
-			this.dropExperience();
-		}
-	}
-
-	public String getSyncedAnimation() {
-		return this.entityData.get(ANIMATION);
-	}
-
-	public void setAnimation(String animation) {
-		this.entityData.set(ANIMATION, animation);
-	}
-
-	@Override
-	public void registerControllers(AnimatableManager.ControllerRegistrar data) {
-		data.add(new AnimationController<>(this, "movement", 1, this::movementPredicate));
-		data.add(new AnimationController<>(this, "attacking", 1, this::attackingPredicate));
-		data.add(new AnimationController<>(this, "procedure", 1, this::procedurePredicate));
-	}
-
-	public boolean isRipe() {
-		return !this.getEntityData().get(DATA_IS_CHILD);
-	}
+    public void aiStep() {
+        super.aiStep();
+        this.setNoGravity(true);
+    }
 
 
-	@Override
-	public void setAnimationProcedure(String animation) {
-		this.animationprocedure = animation;
-	}
+    public static AttributeSupplier.Builder createAttributes() {
+        AttributeSupplier.Builder builder = Mob.createMobAttributes();
+        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.3);
+        builder = builder.add(Attributes.MAX_HEALTH, 10);
+        builder = builder.add(Attributes.ARMOR, 0);
+        builder = builder.add(Attributes.ATTACK_DAMAGE, 2);
+        builder = builder.add(Attributes.FOLLOW_RANGE, 22);
+        builder = builder.add(Attributes.FLYING_SPEED, 0.3);
+        return builder;
+    }
+
+    private PlayState movementPredicate(AnimationState event) {
+        if (this.animationprocedure.equals("empty")) {
+            return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_chicken.idle"));
+        }
+        return PlayState.STOP;
+    }
+
+    private PlayState attackingPredicate(AnimationState event) {
+        double d1 = this.getX() - this.xOld;
+        double d0 = this.getZ() - this.zOld;
+        if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
+            this.swinging = true;
+            this.lastSwing = level().getGameTime();
+        }
+        if (this.swinging && this.lastSwing + 10L <= level().getGameTime()) {
+            this.swinging = false;
+        }
+        if (this.swinging && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+            event.getController().forceAnimationReset();
+            return event.setAndContinue(RawAnimation.begin().thenPlay("animation.oceanized_chicken.attack"));
+        }
+        return PlayState.CONTINUE;
+    }
+
+    String prevAnim = "empty";
+
+    private PlayState procedurePredicate(AnimationState event) {
+        if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
+            if (!this.animationprocedure.equals(prevAnim))
+                event.getController().forceAnimationReset();
+            event.getController().setAnimation(RawAnimation.begin().thenPlay(this.animationprocedure));
+            if (event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+                this.animationprocedure = "empty";
+                event.getController().forceAnimationReset();
+            }
+        } else if (animationprocedure.equals("empty")) {
+            prevAnim = "empty";
+            return PlayState.STOP;
+        }
+        prevAnim = this.animationprocedure;
+        return PlayState.CONTINUE;
+    }
+
+    @Override
+    protected void tickDeath() {
+        ++this.deathTime;
+        if (this.deathTime == 20) {
+            this.remove(RemovalReason.KILLED);
+            this.dropExperience();
+        }
+    }
+
+    public String getSyncedAnimation() {
+        return this.entityData.get(ANIMATION);
+    }
+
+    public void setAnimation(String animation) {
+        this.entityData.set(ANIMATION, animation);
+    }
+
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar data) {
+        data.add(new AnimationController<>(this, "movement", 1, this::movementPredicate));
+        data.add(new AnimationController<>(this, "attacking", 1, this::attackingPredicate));
+        data.add(new AnimationController<>(this, "procedure", 1, this::procedurePredicate));
+    }
+
+    public boolean isRipe() {
+        return !this.getEntityData().get(DATA_IS_CHILD);
+    }
+
+
+    @Override
+    public void setAnimationProcedure(String animation) {
+        this.animationprocedure = animation;
+    }
 }

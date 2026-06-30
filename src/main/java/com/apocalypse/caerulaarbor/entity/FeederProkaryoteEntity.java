@@ -306,15 +306,15 @@ public class FeederProkaryoteEntity extends SeaMonster {
 			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
 
 			) {
-				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.entity.move"));
+				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.feeder.move"));
 			}
 			if (this.isDeadOrDying()) {
-				return event.setAndContinue(RawAnimation.begin().thenPlay("animation.entity.die"));
+				return event.setAndContinue(RawAnimation.begin().thenPlay("animation.feeder.die"));
 			}
 			if (this.isInWaterOrBubble()) {
-				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.entity.move"));
+				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.feeder.move"));
 			}
-			return event.setAndContinue(RawAnimation.begin().thenLoop("animation.entity.idle"));
+			return event.setAndContinue(RawAnimation.begin().thenLoop("animation.feeder.idle"));
 		}
 		return PlayState.STOP;
 	}
@@ -329,7 +329,7 @@ public class FeederProkaryoteEntity extends SeaMonster {
 		}
 		if (this.swinging && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
 			event.getController().forceAnimationReset();
-			return event.setAndContinue(RawAnimation.begin().thenPlay("animation.entity.attack"));
+			return event.setAndContinue(RawAnimation.begin().thenPlay("animation.feeder.attack"));
 		}
 		return PlayState.CONTINUE;
 	}

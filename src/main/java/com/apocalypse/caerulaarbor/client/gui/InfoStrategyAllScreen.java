@@ -6,7 +6,6 @@ import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
 import com.apocalypse.caerulaarbor.menu.InfoStrategyAllMenu;
 import com.apocalypse.caerulaarbor.network.CaerulaArborModNetwork;
 import com.apocalypse.caerulaarbor.network.message.send.InfoStrategyNavigationButtonMessage;
-import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.StrategyUtils;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
@@ -78,7 +77,7 @@ public class InfoStrategyAllScreen extends AbstractContainerScreen<InfoStrategyA
 
 		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/wetplayer.png"), this.leftPos, this.topPos, 0, 0, 200, 120, 200, 120);
 
-		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/silence.png"), this.leftPos + -15, this.topPos + -17, Mth.clamp((int) EntityUtils.getStraSilence(world) * 29, 0, 116), 0, 29, 33, 145, 33);
+		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/silence.png"), this.leftPos + -15, this.topPos + -17, Mth.clamp((int) StrategyUtils.getStraSilence(world) * 29, 0, 116), 0, 29, 33, 145, 33);
 
 		RenderSystem.disableBlend();
 	}

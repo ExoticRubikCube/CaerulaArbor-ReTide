@@ -40,230 +40,228 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 
 public class OceanizedWolfEntity extends SeaMonster {
-	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanizedWolfEntity.class, EntityDataSerializers.BOOLEAN);
-	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedWolfEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(OceanizedWolfEntity.class, EntityDataSerializers.STRING);
-	private boolean swinging;
-	private boolean lastloop;
-	private long lastSwing;
-	public String animationprocedure = "empty";
+    public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanizedWolfEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedWolfEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(OceanizedWolfEntity.class, EntityDataSerializers.STRING);
+    private boolean swinging;
+    private boolean lastloop;
+    private long lastSwing;
+    public String animationprocedure = "empty";
 
-	public OceanizedWolfEntity(PlayMessages.SpawnEntity packet, Level world) {
-		this(CAEntities.OCEANIZED_WOLF.get(), world);
-	}
+    public OceanizedWolfEntity(PlayMessages.SpawnEntity packet, Level world) {
+        this(CAEntities.OCEANIZED_WOLF.get(), world);
+    }
 
-	public OceanizedWolfEntity(EntityType<OceanizedWolfEntity> type, Level world) {
-		super(type, world);
-		xpReward = 4;
-		setNoAi(false);
-		setMaxUpStep(0.6f);
-	}
-
-	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(SHOOT, false);
-		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(TEXTURE, "oceanized_wolf");
-	}
-
-	public void setTexture(String texture) {
-		this.entityData.set(TEXTURE, texture);
-	}
-
-	public String getTexture() {
-		return this.entityData.get(TEXTURE);
-	}
-
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
-	}
-
-	@Override
-	protected void registerGoals() {
-		super.registerGoals();
-		this.targetSelector.addGoal(1, new HurtByTargetGoal(this).setAlertOthers());
-		this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1, false) {
-			@Override
-			protected double getAttackReachSqr(LivingEntity entity) {
-				return 2.25;
-			}
-		});
-		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Fox.class, true, false));
-		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Rabbit.class, true, false));
-		this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Sheep.class, true, false));
-		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, Stray.class, true, false));
-		this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, WitherSkeleton.class, true, false));
-		this.targetSelector.addGoal(8, new NearestAttackableTargetGoal<>(this, SkeletonHorse.class, true, false));
-		this.targetSelector.addGoal(9, new NearestAttackableTargetGoal<>(this, Skeleton.class, true, false));
-		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, IronGolem.class, true, false));
-		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, SnowGolem.class, true, false));
-		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, Villager.class, true, false));
-		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Illusioner.class, true, false));
-		this.targetSelector.addGoal(14, new NearestAttackableTargetGoal<>(this, Pillager.class, true, false));
-		this.targetSelector.addGoal(15, new NearestAttackableTargetGoal<>(this, Vindicator.class, true, false));
-		this.targetSelector.addGoal(16, new NearestAttackableTargetGoal<>(this, Witch.class, true, false));
-		this.targetSelector.addGoal(17, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
-		this.targetSelector.addGoal(18, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
-		this.targetSelector.addGoal(19, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
-		this.targetSelector.addGoal(20, new NearestAttackableTargetGoal<>(this, Player.class, true, false) {
-			@Override
-			public boolean canUse() {
-				double x = OceanizedWolfEntity.this.getX();
-				double y = OceanizedWolfEntity.this.getY();
-				double z = OceanizedWolfEntity.this.getZ();
-				Level world = OceanizedWolfEntity.this.level();
-				return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
-			}
-
-			@Override
-			public boolean canContinueToUse() {
-				double x = OceanizedWolfEntity.this.getX();
-				double y = OceanizedWolfEntity.this.getY();
-				double z = OceanizedWolfEntity.this.getZ();
-				Level world = OceanizedWolfEntity.this.level();
-				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
-			}
-		});
-		this.targetSelector.addGoal(21, new NearestAttackableTargetGoal<>(this, Animal.class, true, false) {
-			@Override
-			public boolean canUse() {
-				return super.canUse() && EntityUtils.canAttackAnimals();
-			}
-
-			@Override
-			public boolean canContinueToUse() {
-				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
-			}
-		});
-		this.goalSelector.addGoal(22, new RandomStrollGoal(this, 0.5));
-		this.goalSelector.addGoal(23, new RandomLookAroundGoal(this));
-		this.goalSelector.addGoal(24, new FloatGoal(this));
-	}
+    public OceanizedWolfEntity(EntityType<OceanizedWolfEntity> type, Level world) {
+        super(type, world);
+        xpReward = 4;
+        setNoAi(false);
+        setMaxUpStep(0.6f);
+    }
 
     @Override
-	public SoundEvent getAmbientSound() {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.wolf.ambient"));
-	}
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(SHOOT, false);
+        this.entityData.define(ANIMATION, "undefined");
+        this.entityData.define(TEXTURE, "oceanized_wolf");
+    }
 
-	@Override
-	public SoundEvent getHurtSound(DamageSource ds) {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.wolf.hurt"));
-	}
+    public void setTexture(String texture) {
+        this.entityData.set(TEXTURE, texture);
+    }
 
-	@Override
-	public SoundEvent getDeathSound() {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.wolf.death"));
-	}
+    public String getTexture() {
+        return this.entityData.get(TEXTURE);
+    }
 
-	@Override
-	public boolean hurt(DamageSource source, float amount) {
-		if (source.is(DamageTypes.DROWN))
-			return false;
-		return super.hurt(source, amount);
-	}
+    @Override
+    public Packet<ClientGamePacketListener> getAddEntityPacket() {
+        return NetworkHooks.getEntitySpawningPacket(this);
+    }
 
-	@Override
-	public void addAdditionalSaveData(CompoundTag compound) {
-		super.addAdditionalSaveData(compound);
-		compound.putString("Texture", this.getTexture());
-	}
+    @Override
+    protected void registerGoals() {
+        super.registerGoals();
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this).setAlertOthers());
+        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1, false) {
+            @Override
+            protected double getAttackReachSqr(LivingEntity entity) {
+                return 2.25;
+            }
+        });
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Fox.class, true, false));
+        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Rabbit.class, true, false));
+        this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Sheep.class, true, false));
+        this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, Stray.class, true, false));
+        this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, WitherSkeleton.class, true, false));
+        this.targetSelector.addGoal(8, new NearestAttackableTargetGoal<>(this, SkeletonHorse.class, true, false));
+        this.targetSelector.addGoal(9, new NearestAttackableTargetGoal<>(this, Skeleton.class, true, false));
+        this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, IronGolem.class, true, false));
+        this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, SnowGolem.class, true, false));
+        this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, Villager.class, true, false));
+        this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Illusioner.class, true, false));
+        this.targetSelector.addGoal(14, new NearestAttackableTargetGoal<>(this, Pillager.class, true, false));
+        this.targetSelector.addGoal(15, new NearestAttackableTargetGoal<>(this, Vindicator.class, true, false));
+        this.targetSelector.addGoal(16, new NearestAttackableTargetGoal<>(this, Witch.class, true, false));
+        this.targetSelector.addGoal(17, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
+        this.targetSelector.addGoal(18, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
+        this.targetSelector.addGoal(19, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
+        this.targetSelector.addGoal(20, new NearestAttackableTargetGoal<>(this, Player.class, true, false) {
+            @Override
+            public boolean canUse() {
+                double x = OceanizedWolfEntity.this.getX();
+                double y = OceanizedWolfEntity.this.getY();
+                double z = OceanizedWolfEntity.this.getZ();
+                Level world = OceanizedWolfEntity.this.level();
+                return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
+            }
 
-	@Override
-	public void readAdditionalSaveData(CompoundTag compound) {
-		super.readAdditionalSaveData(compound);
-		if (compound.contains("Texture"))
-			this.setTexture(compound.getString("Texture"));
-	}
+            @Override
+            public boolean canContinueToUse() {
+                double x = OceanizedWolfEntity.this.getX();
+                double y = OceanizedWolfEntity.this.getY();
+                double z = OceanizedWolfEntity.this.getZ();
+                Level world = OceanizedWolfEntity.this.level();
+                return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
+            }
+        });
+        this.targetSelector.addGoal(21, new NearestAttackableTargetGoal<>(this, Animal.class, true, false) {
+            @Override
+            public boolean canUse() {
+                return super.canUse() && EntityUtils.canAttackAnimals();
+            }
 
-	@Override
-	public void baseTick() {
-		super.baseTick();
-		this.refreshDimensions();
-	}
+            @Override
+            public boolean canContinueToUse() {
+                return super.canContinueToUse() && EntityUtils.canAttackAnimals();
+            }
+        });
+        this.goalSelector.addGoal(22, new RandomStrollGoal(this, 0.5));
+        this.goalSelector.addGoal(23, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(24, new FloatGoal(this));
+    }
 
-	@Override
-	public EntityDimensions getDimensions(Pose p_33597_) {
-		return super.getDimensions(p_33597_).scale((float) 1);
-	}
+    @Override
+    public SoundEvent getAmbientSound() {
+        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.wolf.ambient"));
+    }
 
-	public static void init() {
-	}
+    @Override
+    public SoundEvent getHurtSound(DamageSource ds) {
+        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.wolf.hurt"));
+    }
 
-	public static AttributeSupplier.Builder createAttributes() {
-		AttributeSupplier.Builder builder = Mob.createMobAttributes();
-		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.35);
-		builder = builder.add(Attributes.MAX_HEALTH, 22);
-		builder = builder.add(Attributes.ARMOR, 0);
-		builder = builder.add(Attributes.ATTACK_DAMAGE, 7);
-		builder = builder.add(Attributes.FOLLOW_RANGE, 14);
-		return builder;
-	}
+    @Override
+    public SoundEvent getDeathSound() {
+        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.wolf.death"));
+    }
 
-	private PlayState movementPredicate(AnimationState event) {
-		if (this.animationprocedure.equals("empty")) {
-			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        if (source.is(DamageTypes.DROWN))
+            return false;
+        return super.hurt(source, amount);
+    }
 
-					&& !this.isAggressive()) {
-				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_wolf.walk"));
-			}
-			if (this.isShiftKeyDown()) {
-				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_wolf.sit"));
-			}
-			if (this.isAggressive() && event.isMoving()) {
-				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_wolf.chase"));
-			}
-			return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_wolf.idle"));
-		}
-		return PlayState.STOP;
-	}
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putString("Texture", this.getTexture());
+    }
 
-	String prevAnim = "empty";
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        if (compound.contains("Texture"))
+            this.setTexture(compound.getString("Texture"));
+    }
 
-	private PlayState procedurePredicate(AnimationState event) {
-		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
-			if (!this.animationprocedure.equals(prevAnim))
-				event.getController().forceAnimationReset();
-			event.getController().setAnimation(RawAnimation.begin().thenPlay(this.animationprocedure));
-			if (event.getController().getAnimationState() == AnimationController.State.STOPPED) {
-				this.animationprocedure = "empty";
-				event.getController().forceAnimationReset();
-			}
-		} else if (animationprocedure.equals("empty")) {
-			prevAnim = "empty";
-			return PlayState.STOP;
-		}
-		prevAnim = this.animationprocedure;
-		return PlayState.CONTINUE;
-	}
+    @Override
+    public void baseTick() {
+        super.baseTick();
+        this.refreshDimensions();
+    }
 
-	@Override
-	protected void tickDeath() {
-		++this.deathTime;
-		if (this.deathTime == 20) {
-			this.remove(OceanizedWolfEntity.RemovalReason.KILLED);
-			this.dropExperience();
-		}
-	}
-
-	public String getSyncedAnimation() {
-		return this.entityData.get(ANIMATION);
-	}
-
-	public void setAnimation(String animation) {
-		this.entityData.set(ANIMATION, animation);
-	}
-
-	@Override
-	public void registerControllers(AnimatableManager.ControllerRegistrar data) {
-		data.add(new AnimationController<>(this, "movement", 4, this::movementPredicate));
-		data.add(new AnimationController<>(this, "procedure", 4, this::procedurePredicate));
-	}
+    @Override
+    public EntityDimensions getDimensions(Pose p_33597_) {
+        return super.getDimensions(p_33597_).scale((float) 1);
+    }
 
 
-	@Override
-	public void setAnimationProcedure(String animation) {
-		this.animationprocedure = animation;
-	}
+    public static AttributeSupplier.Builder createAttributes() {
+        AttributeSupplier.Builder builder = Mob.createMobAttributes();
+        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.35);
+        builder = builder.add(Attributes.MAX_HEALTH, 22);
+        builder = builder.add(Attributes.ARMOR, 0);
+        builder = builder.add(Attributes.ATTACK_DAMAGE, 7);
+        builder = builder.add(Attributes.FOLLOW_RANGE, 14);
+        return builder;
+    }
+
+    private PlayState movementPredicate(AnimationState event) {
+        if (this.animationprocedure.equals("empty")) {
+            if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
+
+                    && !this.isAggressive()) {
+                return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_wolf.walk"));
+            }
+            if (this.isShiftKeyDown()) {
+                return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_wolf.sit"));
+            }
+            if (this.isAggressive() && event.isMoving()) {
+                return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_wolf.chase"));
+            }
+            return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_wolf.idle"));
+        }
+        return PlayState.STOP;
+    }
+
+    String prevAnim = "empty";
+
+    private PlayState procedurePredicate(AnimationState event) {
+        if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
+            if (!this.animationprocedure.equals(prevAnim))
+                event.getController().forceAnimationReset();
+            event.getController().setAnimation(RawAnimation.begin().thenPlay(this.animationprocedure));
+            if (event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+                this.animationprocedure = "empty";
+                event.getController().forceAnimationReset();
+            }
+        } else if (animationprocedure.equals("empty")) {
+            prevAnim = "empty";
+            return PlayState.STOP;
+        }
+        prevAnim = this.animationprocedure;
+        return PlayState.CONTINUE;
+    }
+
+    @Override
+    protected void tickDeath() {
+        ++this.deathTime;
+        if (this.deathTime == 20) {
+            this.remove(RemovalReason.KILLED);
+            this.dropExperience();
+        }
+    }
+
+    public String getSyncedAnimation() {
+        return this.entityData.get(ANIMATION);
+    }
+
+    public void setAnimation(String animation) {
+        this.entityData.set(ANIMATION, animation);
+    }
+
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar data) {
+        data.add(new AnimationController<>(this, "movement", 4, this::movementPredicate));
+        data.add(new AnimationController<>(this, "procedure", 4, this::procedurePredicate));
+    }
+
+
+    @Override
+    public void setAnimationProcedure(String animation) {
+        this.animationprocedure = animation;
+    }
 }
