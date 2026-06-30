@@ -2,10 +2,7 @@ package com.apocalypse.caerulaarbor.util;
 
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
-import com.apocalypse.caerulaarbor.init.CAMobEffects;
-import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 
 public class PlayerStateUtils {
 
@@ -39,31 +36,6 @@ public class PlayerStateUtils {
 	public static boolean isLightDim(Entity entity) {
 		double light = getPlayerLight(entity);
 		return 1 <= light && light < 50;
-	}
-
-	public static double getOceanization(Entity entity) {
-		return getPlayerVariables(entity).player_oceanization;
-	}
-
-	public static boolean hasOceanization0(Entity entity) {
-		if (entity instanceof LivingEntity living && living.hasEffect(CAMobEffects.INFESTED.get())) {
-			return living.getEffect(CAMobEffects.INFESTED.get()).getAmplifier() == 0;
-		}
-		return false;
-	}
-
-	public static boolean hasOceanization1(Entity entity) {
-		if (entity instanceof LivingEntity living && living.hasEffect(CAMobEffects.INFESTED.get())) {
-			return living.getEffect(CAMobEffects.INFESTED.get()).getAmplifier() == 1;
-		}
-		return false;
-	}
-
-	public static boolean hasOceanization2(Entity entity) {
-		if (entity instanceof LivingEntity living && living.hasEffect(CAMobEffects.INFESTED.get())) {
-			return living.getEffect(CAMobEffects.INFESTED.get()).getAmplifier() > 1;
-		}
-		return false;
 	}
 
 	public static boolean canPlayerEvo(Entity entity) {
