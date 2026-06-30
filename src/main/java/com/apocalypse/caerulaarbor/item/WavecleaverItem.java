@@ -47,7 +47,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class WavecleaverItem extends Item implements GeoItem {
+public class WavecleaverItem extends Item implements GeoItem, SyncedAnimationItem {
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 	public String animationprocedure = "empty";
 
@@ -208,5 +208,11 @@ public class WavecleaverItem extends Item implements GeoItem {
                     living.addEffect(new MobEffectInstance(CAMobEffects.ADD_REACH.get(), 20, 2, false, false));
             }
         }
+	}
+
+
+	@Override
+	public void setAnimationProcedure(String animation) {
+		this.animationprocedure = animation;
 	}
 }

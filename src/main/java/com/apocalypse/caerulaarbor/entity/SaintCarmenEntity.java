@@ -54,7 +54,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.List;
 
-public class SaintCarmenEntity extends Animal implements GeoEntity {
+public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimationEntity {
 
 	private boolean isCarmenDurative() {
 		return EntityPredicateUtils.isCarmenDurative(this);
@@ -613,5 +613,11 @@ public class SaintCarmenEntity extends Animal implements GeoEntity {
 		}
 		enemy.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "generic_warrior_attack"))), this),
 				(float) (dama * 2));
+	}
+
+
+	@Override
+	public void setAnimationProcedure(String animation) {
+		this.animationprocedure = animation;
 	}
 }

@@ -632,4 +632,10 @@ public class FlamarineGolemEntity extends SeaMonster {
 			}
 		}
 	}
+
+
+	@Override
+	public void setAnimationProcedure(String animation) {
+		this.animationprocedure = animation;
+	}
 }

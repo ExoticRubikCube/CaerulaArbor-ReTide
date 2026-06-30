@@ -2,8 +2,8 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.init.CAAttributes;
-import com.apocalypse.caerulaarbor.init.CAItems;
 import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import net.minecraft.client.Minecraft;
@@ -63,7 +63,7 @@ import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.List;
 
-public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity {
+public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAnimationEntity {
 
 	private boolean isDurative() {
 		return EntityPredicateUtils.isDurative(this);
@@ -526,5 +526,11 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity {
 	@Override
 	public AnimatableInstanceCache getAnimatableInstanceCache() {
 		return this.cache;
+	}
+
+
+	@Override
+	public void setAnimationProcedure(String animation) {
+		this.animationprocedure = animation;
 	}
 }

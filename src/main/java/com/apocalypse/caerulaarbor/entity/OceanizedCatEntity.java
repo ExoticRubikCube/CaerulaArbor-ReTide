@@ -375,4 +375,10 @@ public class OceanizedCatEntity extends SeaMonster {
 		data.add(new AnimationController<>(this, "attacking", 1, this::attackingPredicate));
 		data.add(new AnimationController<>(this, "procedure", 1, this::procedurePredicate));
 	}
+
+
+	@Override
+	public void setAnimationProcedure(String animation) {
+		this.animationprocedure = animation;
+	}
 }

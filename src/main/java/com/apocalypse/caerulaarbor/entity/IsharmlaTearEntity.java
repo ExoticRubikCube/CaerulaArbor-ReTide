@@ -49,7 +49,7 @@ import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.List;
 
-public class IsharmlaTearEntity extends PathfinderMob implements GeoEntity {
+public class IsharmlaTearEntity extends PathfinderMob implements GeoEntity, SyncedAnimationEntity {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(IsharmlaTearEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(IsharmlaTearEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(IsharmlaTearEntity.class, EntityDataSerializers.STRING);
@@ -378,5 +378,11 @@ public class IsharmlaTearEntity extends PathfinderMob implements GeoEntity {
 	@Override
 	public AnimatableInstanceCache getAnimatableInstanceCache() {
 		return this.cache;
+	}
+
+
+	@Override
+	public void setAnimationProcedure(String animation) {
+		this.animationprocedure = animation;
 	}
 }

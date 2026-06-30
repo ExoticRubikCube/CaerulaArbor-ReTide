@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-public class ChitinComplexItem extends ArmorItem implements GeoItem {
+public class ChitinComplexItem extends ArmorItem implements GeoItem, SyncedAnimationItem {
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 	public String animationprocedure = "empty";
 
@@ -171,5 +171,11 @@ public class ChitinComplexItem extends ArmorItem implements GeoItem {
 	@Override
 	public AnimatableInstanceCache getAnimatableInstanceCache() {
 		return this.cache;
+	}
+
+
+	@Override
+	public void setAnimationProcedure(String animation) {
+		this.animationprocedure = animation;
 	}
 }

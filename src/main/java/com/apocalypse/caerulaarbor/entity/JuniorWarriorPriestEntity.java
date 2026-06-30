@@ -43,7 +43,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.List;
 
-public class JuniorWarriorPriestEntity extends Animal implements GeoEntity {
+public class JuniorWarriorPriestEntity extends Animal implements GeoEntity, SyncedAnimationEntity {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(JuniorWarriorPriestEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(JuniorWarriorPriestEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(JuniorWarriorPriestEntity.class, EntityDataSerializers.STRING);
@@ -322,5 +322,11 @@ public class JuniorWarriorPriestEntity extends Animal implements GeoEntity {
 	@Override
 	public AnimatableInstanceCache getAnimatableInstanceCache() {
 		return this.cache;
+	}
+
+
+	@Override
+	public void setAnimationProcedure(String animation) {
+		this.animationprocedure = animation;
 	}
 }

@@ -3,7 +3,8 @@ package com.apocalypse.caerulaarbor.entity;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.RavagerMountRider;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.*;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAGameRules;
 import com.apocalypse.caerulaarbor.init.CAItems;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
@@ -686,5 +687,11 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
 		data.add(new AnimationController<>(this, "movement", 0, this::movementPredicate));
 		data.add(new AnimationController<>(this, "attacking", 0, this::attackingPredicate));
 		data.add(new AnimationController<>(this, "procedure", 0, this::procedurePredicate));
+	}
+
+
+	@Override
+	public void setAnimationProcedure(String animation) {
+		this.animationprocedure = animation;
 	}
 }

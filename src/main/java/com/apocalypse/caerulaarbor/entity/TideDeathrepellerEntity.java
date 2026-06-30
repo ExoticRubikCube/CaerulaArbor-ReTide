@@ -421,4 +421,10 @@ public class TideDeathrepellerEntity extends SeaMonster {
 		}
 		return !this.hasEffect(CAMobEffects.FAKE_DEATH.get());
 	}
+
+
+	@Override
+	public void setAnimationProcedure(String animation) {
+		this.animationprocedure = animation;
+	}
 }

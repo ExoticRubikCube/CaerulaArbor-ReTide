@@ -2,8 +2,8 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -407,5 +407,11 @@ public class ChiselerFishEntity extends SeaMonster implements RangedAttackMob {
 		data.add(new AnimationController<>(this, "movement", 2, this::movementPredicate));
 		data.add(new AnimationController<>(this, "attacking", 2, this::attackingPredicate));
 		data.add(new AnimationController<>(this, "procedure", 2, this::procedurePredicate));
+	}
+
+
+	@Override
+	public void setAnimationProcedure(String animation) {
+		this.animationprocedure = animation;
 	}
 }

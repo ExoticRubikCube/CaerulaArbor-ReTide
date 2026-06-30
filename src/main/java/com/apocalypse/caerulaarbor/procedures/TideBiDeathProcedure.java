@@ -163,7 +163,7 @@ public class TideBiDeathProcedure {
 			if (entity instanceof TideBishopEntity livEnt0) {
                 double sklp;
                 if (!livEnt0.hasEffect(CAMobEffects.FAKE_DEATH.get())) {
-                    sklp = entity instanceof TideBishopEntity _datEntI ? _datEntI.getEntityData().get(TideBishopEntity.DATA_skillp) : 0;
+                    sklp = entity instanceof TideBishopEntity _datEntI ? _datEntI.getEntityData().get(TideBishopEntity.DATA_SKILL_COOLDOWN) : 0;
                     if (sklp <= 0) {
                         if (!((entity instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == null)) {
                             if (entity instanceof TideBishopEntity) {
@@ -217,11 +217,11 @@ public class TideBiDeathProcedure {
                                 }
                             });
                             if (entity instanceof TideBishopEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(TideBishopEntity.DATA_skillp, 200);
+                                _datEntSetI.getEntityData().set(TideBishopEntity.DATA_SKILL_COOLDOWN, 200);
                         }
                     } else {
                         if (entity instanceof TideBishopEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(TideBishopEntity.DATA_skillp, (int) (sklp - 1));
+                            _datEntSetI.getEntityData().set(TideBishopEntity.DATA_SKILL_COOLDOWN, (int) (sklp - 1));
                     }
                 }
                 nearest = world.getEntitiesOfClass(TideDeathrepellerEntity.class, AABB.ofSize(new Vec3(x, y, z), 128, 128, 128), e -> true).stream().sorted(new Object() {

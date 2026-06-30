@@ -1,12 +1,10 @@
 package com.apocalypse.caerulaarbor.util;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler;
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
-import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
 import com.apocalypse.caerulaarbor.entity.*;
 import com.apocalypse.caerulaarbor.init.*;
 import net.minecraft.client.Minecraft;
@@ -53,7 +51,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 
 public class EntityUtils {
 
@@ -1134,55 +1131,6 @@ public class EntityUtils {
 		}
 	}
 
-	//TODO:endspeaker的几个类可以合并为一个类，使用状态机，模型和渲染就参考原版mc的河豚
-	public static void endspeakerTick(LevelAccessor world, Entity entity) {
-		if (entity == null)
-			return;
-		double missR;
-		if (entity.tickCount % 5 == 0) {
-			if (inquirybility(world, 2) && (entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.4) {
-				if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-					_entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 25, 0, false, false));
-				if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-					_entity.addEffect(new MobEffectInstance(CAMobEffects.ENDSPEAER_BRANDGUIDE_BUFF.get(), 25, 0));
-			}
-			if (inquirybility(world, 4)) {
-				entity.clearFire();
-				if (entity instanceof LivingEntity _entity)
-					_entity.removeEffect(CAMobEffects.DIZZY.get());
-				if (entity instanceof LivingEntity _entity)
-					_entity.removeEffect(CAMobEffects.MUTE.get());
-				if (entity instanceof LivingEntity _entity)
-					_entity.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
-				if (entity instanceof LivingEntity _entity)
-					_entity.removeEffect(MobEffects.WEAKNESS);
-				if (entity instanceof LivingEntity _entity)
-					_entity.removeEffect(CAMobEffects.FROZEN.get());
-				entity.setTicksFrozen(0);
-				if (entity.tickCount % 200 == 0 && !(entity instanceof LivingEntity _livEnt13 && _livEnt13.hasEffect(CAMobEffects.ESSENCE_RESISTANCE.get()))) {
-					if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-						_entity.addEffect(new MobEffectInstance(CAMobEffects.ESSENCE_RESISTANCE.get(), 180, 2, false, false));
-				}
-				if (getSpeed(entity) > (entity instanceof LivingEntity _livingEntity15 && _livingEntity15.getAttributes().hasAttribute(Attributes.MOVEMENT_SPEED) ? _livingEntity15.getAttribute(Attributes.MOVEMENT_SPEED).getValue() : 0) * 1.25) {
-					entity.setDeltaMovement(new Vec3(0, 0, 0));
-				}
-			}
-			if (inquirybility(world, 1)) {
-				missR = 50;
-				if (entity.isOnFire() && !entity.fireImmune()) {
-					missR = 0;
-				}
-				if (entity instanceof LivingEntity _livEnt19 && _livEnt19.hasEffect(CAMobEffects.DIZZY.get()) || entity instanceof LivingEntity _livEnt20 && _livEnt20.hasEffect(CAMobEffects.FROZEN.get())
-						|| entity instanceof LivingEntity _livEnt21 && _livEnt21.hasEffect(MobEffects.LEVITATION) || entity instanceof LivingEntity _livEnt22 && _livEnt22.hasEffect(MobEffects.MOVEMENT_SLOWDOWN)
-						|| entity instanceof LivingEntity _livEnt23 && _livEnt23.hasEffect(MobEffects.SLOW_FALLING)) {
-					missR = 0;
-				}
-				if (entity instanceof LivingEntity _livingEntity24 && _livingEntity24.getAttributes().hasAttribute(CAAttributes.MISSRATE.get()))
-					_livingEntity24.getAttribute(CAAttributes.MISSRATE.get()).setBaseValue(missR);
-			}
-		}
-	}
-
 	//需要解释
 	public static void hurtMartus(LevelAccessor world, Entity obj, Entity source, double num, double perc) {
 		if (obj == null)
@@ -1194,6 +1142,7 @@ public class EntityUtils {
 		}
 	}
 
+	//可能需要下放或直接内联
 	public static void igniteRouteshaper(LevelAccessor world, double x, double y, double z, Entity entity) {
 		if (entity == null)
 			return;

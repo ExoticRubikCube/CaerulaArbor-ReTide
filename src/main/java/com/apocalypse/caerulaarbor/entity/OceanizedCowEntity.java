@@ -1,8 +1,9 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.*;
 import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CABlocks;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
@@ -327,5 +328,11 @@ public class OceanizedCowEntity extends SeaMonster {
 		data.add(new AnimationController<>(this, "movement", 1, this::movementPredicate));
 		data.add(new AnimationController<>(this, "attacking", 1, this::attackingPredicate));
 		data.add(new AnimationController<>(this, "procedure", 1, this::procedurePredicate));
+	}
+
+
+	@Override
+	public void setAnimationProcedure(String animation) {
+		this.animationprocedure = animation;
 	}
 }

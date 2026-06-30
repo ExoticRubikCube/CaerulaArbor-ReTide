@@ -33,7 +33,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class HighmoreScytheItem extends Item implements GeoItem {
+public class HighmoreScytheItem extends Item implements GeoItem, SyncedAnimationItem {
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 	public String animationprocedure = "empty";
 
@@ -134,5 +134,11 @@ public class HighmoreScytheItem extends Item implements GeoItem {
 
 		TridentEnchantProcedure.execute(world, x, y, z, entity, itemstack);
 		return ar;
+	}
+
+
+	@Override
+	public void setAnimationProcedure(String animation) {
+		this.animationprocedure = animation;
 	}
 }

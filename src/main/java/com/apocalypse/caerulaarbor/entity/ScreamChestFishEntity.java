@@ -431,4 +431,10 @@ public class ScreamChestFishEntity extends SeaMonster {
 		if (!this.entityData.get(DATA_release)) return false;
 		return this.entityData.get(DATA_SCREAM_TICK) > 0;
 	}
+
+
+	@Override
+	public void setAnimationProcedure(String animation) {
+		this.animationprocedure = animation;
+	}
 }

@@ -1,7 +1,7 @@
 package com.apocalypse.caerulaarbor.entity;
 
-import com.apocalypse.caerulaarbor.init.CAItems;
 import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -48,7 +48,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
-public class XantisEntity extends TamableAnimal implements GeoEntity {
+public class XantisEntity extends TamableAnimal implements GeoEntity, SyncedAnimationEntity {
 
 	private boolean isXantisTapative() {
 		return EntityPredicateUtils.isXantisTapative(this);
@@ -461,4 +461,10 @@ public class XantisEntity extends TamableAnimal implements GeoEntity {
 
 	public boolean isNiubi(){return this.entityData.get(DATA_NIUBI);}
 	public void setNoNiubi(){this.entityData.set(DATA_NIUBI, false);}
+
+
+	@Override
+	public void setAnimationProcedure(String animation) {
+		this.animationprocedure = animation;
+	}
 }

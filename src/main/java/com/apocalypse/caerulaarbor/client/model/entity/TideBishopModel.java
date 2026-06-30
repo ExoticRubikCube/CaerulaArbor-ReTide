@@ -1,17 +1,14 @@
 package com.apocalypse.caerulaarbor.client.model.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
-import software.bernie.geckolib.model.data.EntityModelData;
-import software.bernie.geckolib.model.GeoModel;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animatable.model.CoreGeoBone;
-import software.bernie.geckolib.constant.DataTickets;
-
-import net.minecraft.util.Mth;
-import net.minecraft.resources.ResourceLocation;
-
 import com.apocalypse.caerulaarbor.entity.TideBishopEntity;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import software.bernie.geckolib.constant.DataTickets;
+import software.bernie.geckolib.core.animatable.model.CoreGeoBone;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.model.GeoModel;
+import software.bernie.geckolib.model.data.EntityModelData;
 
 public class TideBishopModel extends GeoModel<TideBishopEntity> {
 	@Override
@@ -26,7 +23,7 @@ public class TideBishopModel extends GeoModel<TideBishopEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(TideBishopEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTextureName() + ".png");
 	}
 
 	@Override

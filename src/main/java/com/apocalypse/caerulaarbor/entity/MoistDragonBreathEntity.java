@@ -55,7 +55,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
-public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity {
+public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity, SyncedAnimationEntity {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(MoistDragonBreathEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(MoistDragonBreathEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(MoistDragonBreathEntity.class, EntityDataSerializers.STRING);
@@ -500,5 +500,11 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity 
 		}
 		if (!entity.level().isClientSide())
 			entity.discard();
+	}
+
+
+	@Override
+	public void setAnimationProcedure(String animation) {
+		this.animationprocedure = animation;
 	}
 }

@@ -2,8 +2,8 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.init.CAEntities;
-import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
@@ -61,7 +61,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class TheLastKnightEntity extends Animal implements GeoEntity {
+public class TheLastKnightEntity extends Animal implements GeoEntity, SyncedAnimationEntity {
 
 	private boolean isLastKnightDurative() {
 		return EntityPredicateUtils.isLastKnightDurative(this);
@@ -512,5 +512,11 @@ public class TheLastKnightEntity extends Animal implements GeoEntity {
 						(float) damage);
 			}
 		}
+	}
+
+
+	@Override
+	public void setAnimationProcedure(String animation) {
+		this.animationprocedure = animation;
 	}
 }

@@ -41,7 +41,7 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-public class ApocataEntity extends PathfinderMob implements GeoEntity {
+public class ApocataEntity extends PathfinderMob implements GeoEntity, SyncedAnimationEntity {
 
 	private boolean isApocataDurative() {
 		return EntityPredicateUtils.isApocataDurative(this);
@@ -314,5 +314,11 @@ public class ApocataEntity extends PathfinderMob implements GeoEntity {
 	@Override
 	public AnimatableInstanceCache getAnimatableInstanceCache() {
 		return this.cache;
+	}
+
+
+	@Override
+	public void setAnimationProcedure(String animation) {
+		this.animationprocedure = animation;
 	}
 }

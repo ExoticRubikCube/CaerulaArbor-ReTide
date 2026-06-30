@@ -2,7 +2,6 @@ package com.apocalypse.caerulaarbor.util;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.*;
-import com.apocalypse.caerulaarbor.entity.EndspeakerEntity;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -88,7 +87,7 @@ public class EntityPredicateUtils {
 	public static boolean isLastKnightStarting(Entity entity) {
 		if (entity == null)
 			return false;
-		return entity.tickCount >= 40 && (entity instanceof LastKnightAndHorseEntity _datEntI ? _datEntI.getEntityData().get(LastKnightAndHorseEntity.DATA_duration) : 0) <= 0;
+		return entity.tickCount >= 40 && (entity instanceof LastKnightAndHorseEntity _datEntI ? _datEntI.getEntityData().get(LastKnightAndHorseEntity.DATA_SKILL_DURATION) : 0) <= 0;
 	}
 
 	public static boolean isWitherDurative(Entity entity) {

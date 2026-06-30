@@ -689,4 +689,10 @@ public class OceanizedWardenisEntity extends SeaMonster {
 		}
 		return false;
 	}
+
+
+	@Override
+	public void setAnimationProcedure(String animation) {
+		this.animationprocedure = animation;
+	}
 }

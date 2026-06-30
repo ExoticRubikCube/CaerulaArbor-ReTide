@@ -855,4 +855,10 @@ public class SkadiCorruptedEntity extends SeaMonster {
 	public int getPhase(){
 		return entityData.get(DATA_phase);
 	}
+
+
+	@Override
+	public void setAnimationProcedure(String animation) {
+		this.animationprocedure = animation;
+	}
 }

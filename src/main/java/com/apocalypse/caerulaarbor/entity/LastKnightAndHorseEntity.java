@@ -3,7 +3,6 @@ package com.apocalypse.caerulaarbor.entity;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
-import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.advancements.Advancement;
@@ -69,17 +68,17 @@ import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.List;
 
-public class LastKnightAndHorseEntity extends Animal implements GeoEntity {
+public class LastKnightAndHorseEntity extends Animal implements GeoEntity, SyncedAnimationEntity {
 
 	private boolean isLastKnightStarting() {
 		return EntityPredicateUtils.isLastKnightStarting(this);
 	}
-	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(LastKnightAndHorseEntity.class, EntityDataSerializers.BOOLEAN);
+	public static final EntityDataAccessor<Boolean> DATA_IS_SHOOTING = SynchedEntityData.defineId(LastKnightAndHorseEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(LastKnightAndHorseEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(LastKnightAndHorseEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<Integer> DATA_addiiton = SynchedEntityData.defineId(LastKnightAndHorseEntity.class, EntityDataSerializers.INT);
-	public static final EntityDataAccessor<Integer> DATA_skillp = SynchedEntityData.defineId(LastKnightAndHorseEntity.class, EntityDataSerializers.INT);
-	public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(LastKnightAndHorseEntity.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<String> DATA_TEXTURE = SynchedEntityData.defineId(LastKnightAndHorseEntity.class, EntityDataSerializers.STRING);
+	public static final EntityDataAccessor<Integer> DATA_ADDITION = SynchedEntityData.defineId(LastKnightAndHorseEntity.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<Integer> DATA_SKILL_COOLDOWN = SynchedEntityData.defineId(LastKnightAndHorseEntity.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<Integer> DATA_SKILL_DURATION = SynchedEntityData.defineId(LastKnightAndHorseEntity.class, EntityDataSerializers.INT);
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 	private boolean swinging;
 	private boolean lastloop;
@@ -102,20 +101,20 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity {
 	@Override
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(SHOOT, false);
+		this.entityData.define(DATA_IS_SHOOTING, false);
 		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(TEXTURE, "knight_amd_horse");
-		this.entityData.define(DATA_addiiton, 0);
-		this.entityData.define(DATA_skillp, 140);
-		this.entityData.define(DATA_duration, 0);
+		this.entityData.define(DATA_TEXTURE, "knight_amd_horse");
+		this.entityData.define(DATA_ADDITION, 0);
+		this.entityData.define(DATA_SKILL_COOLDOWN, 140);
+		this.entityData.define(DATA_SKILL_DURATION, 0);
 	}
 
-	public void setTexture(String texture) {
-		this.entityData.set(TEXTURE, texture);
+	public void setTextureName(String texture) {
+		this.entityData.set(DATA_TEXTURE, texture);
 	}
 
-	public String getTexture() {
-		return this.entityData.get(TEXTURE);
+	public String getTextureName() {
+		return this.entityData.get(DATA_TEXTURE);
 	}
 
 	@Override
@@ -272,23 +271,29 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity {
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
-		compound.putString("Texture", this.getTexture());
-		compound.putInt("Dataaddiiton", this.entityData.get(DATA_addiiton));
-		compound.putInt("Dataskillp", this.entityData.get(DATA_skillp));
-		compound.putInt("Dataduration", this.entityData.get(DATA_duration));
+		compound.putString("Texture", this.getTextureName());
+		compound.putInt("Addition", this.entityData.get(DATA_ADDITION));
+		compound.putInt("SkillCooldown", this.entityData.get(DATA_SKILL_COOLDOWN));
+		compound.putInt("SkillDuration", this.entityData.get(DATA_SKILL_DURATION));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		if (compound.contains("Texture"))
-			this.setTexture(compound.getString("Texture"));
-		if (compound.contains("Dataaddiiton"))
-			this.entityData.set(DATA_addiiton, compound.getInt("Dataaddiiton"));
-		if (compound.contains("Dataskillp"))
-			this.entityData.set(DATA_skillp, compound.getInt("Dataskillp"));
-		if (compound.contains("Dataduration"))
-			this.entityData.set(DATA_duration, compound.getInt("Dataduration"));
+			this.setTextureName(compound.getString("Texture"));
+		if (compound.contains("Addition"))
+			this.entityData.set(DATA_ADDITION, compound.getInt("Addition"));
+		else if (compound.contains("Dataaddiiton"))
+			this.entityData.set(DATA_ADDITION, compound.getInt("Dataaddiiton"));
+		if (compound.contains("SkillCooldown"))
+			this.entityData.set(DATA_SKILL_COOLDOWN, compound.getInt("SkillCooldown"));
+		else if (compound.contains("Dataskillp"))
+			this.entityData.set(DATA_SKILL_COOLDOWN, compound.getInt("Dataskillp"));
+		if (compound.contains("SkillDuration"))
+			this.entityData.set(DATA_SKILL_DURATION, compound.getInt("SkillDuration"));
+		else if (compound.contains("Dataduration"))
+			this.entityData.set(DATA_SKILL_DURATION, compound.getInt("Dataduration"));
 	}
 
 	@Override
@@ -333,9 +338,9 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity {
                 }
                 enemy = this.getTarget();
                 if (!(enemy == null) && enemy.isAlive()) {
-                    add = this.getEntityData().get(DATA_addiiton);
+                    add = this.getEntityData().get(DATA_ADDITION);
                     if (add < 20) {
-                        this.getEntityData().set(DATA_addiiton, (int) (add + 1));
+                        this.getEntityData().set(DATA_ADDITION, (int) (add + 1));
                     }
                 }
             }
@@ -347,19 +352,19 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity {
             this.removeEffect(CAMobEffects.FROZEN.get());
             this.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
             this.removeEffect(CAMobEffects.DIZZY.get());
-            skillp = this.getEntityData().get(DATA_skillp);
-            duration = this.getEntityData().get(DATA_duration);
+            skillp = this.getEntityData().get(DATA_SKILL_COOLDOWN);
+            duration = this.getEntityData().get(DATA_SKILL_DURATION);
             if (duration > 0) {
-                this.getEntityData().set(DATA_duration, (int) (duration - 1));
+                this.getEntityData().set(DATA_SKILL_DURATION, (int) (duration - 1));
             }
             enemy = this.getTarget();
             if (skillp > 0) {
-                this.getEntityData().set(DATA_skillp, (int) (skillp - 1));
+                this.getEntityData().set(DATA_SKILL_COOLDOWN, (int) (skillp - 1));
             } else {
                 if (!(enemy == null) && enemy.isAlive()) {
                     if (distanceTo(enemy) < 4) {
-                        this.getEntityData().set(DATA_duration, 40);
-                        this.getEntityData().set(DATA_skillp, 240);
+                        this.getEntityData().set(DATA_SKILL_DURATION, 40);
+                        this.getEntityData().set(DATA_SKILL_COOLDOWN, 240);
                         if (!this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 32, 0, false, false));
                         this.setAnimation("animation.last_knight_horse.skill");
@@ -584,5 +589,11 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity {
 	@Override
 	public AnimatableInstanceCache getAnimatableInstanceCache() {
 		return this.cache;
+	}
+
+
+	@Override
+	public void setAnimationProcedure(String animation) {
+		this.animationprocedure = animation;
 	}
 }

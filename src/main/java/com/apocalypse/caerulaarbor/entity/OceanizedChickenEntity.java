@@ -1,8 +1,7 @@
 package com.apocalypse.caerulaarbor.entity;
 
-import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAItems;
 import net.minecraft.client.Minecraft;
@@ -467,5 +466,11 @@ public class OceanizedChickenEntity extends SeaMonster {
 
 	public boolean isRipe() {
 		return !this.getEntityData().get(DATA_IS_CHILD);
+	}
+
+
+	@Override
+	public void setAnimationProcedure(String animation) {
+		this.animationprocedure = animation;
 	}
 }

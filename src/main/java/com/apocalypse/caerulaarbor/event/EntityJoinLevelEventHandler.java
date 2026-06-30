@@ -3,8 +3,8 @@ package com.apocalypse.caerulaarbor.event;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
-import com.apocalypse.caerulaarbor.init.CAGameRules;
 import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAGameRules;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.commands.CommandSource;
@@ -180,22 +180,20 @@ public class EntityJoinLevelEventHandler {
                                     && !finalEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanpet")))) {
                                 if (EntityUtils.getFellowAround(finalWorld, finalX, finalY, finalZ, finalEntity) < 5) {
                                     if (Math.random() < 0.05 + 0.05 * MapVariables.get(finalWorld).strategy_breed) {
-                                        Entity _ent = finalEntity;
-                                        if (!_ent.level().isClientSide() && _ent.getServer() != null) {
-                                            _ent.getServer().getCommands().performPrefixedCommand(
-                                                    new CommandSourceStack(CommandSource.NULL, _ent.position(), _ent.getRotationVector(), _ent.level() instanceof ServerLevel ? (ServerLevel) _ent.level() : null, 4, _ent.getName().getString(),
-                                                            _ent.getDisplayName(), _ent.level().getServer(), _ent),
+                                        if (!finalEntity.level().isClientSide() && finalEntity.getServer() != null) {
+                                            finalEntity.getServer().getCommands().performPrefixedCommand(
+                                                    new CommandSourceStack(CommandSource.NULL, finalEntity.position(), finalEntity.getRotationVector(), finalEntity.level() instanceof ServerLevel ? (ServerLevel) finalEntity.level() : null, 4, finalEntity.getName().getString(),
+                                                            finalEntity.getDisplayName(), finalEntity.level().getServer(), finalEntity),
                                                     ("summon " + ForgeRegistries.ENTITY_TYPES.getKey(finalEntity.getType()).toString() + " ~" + Mth.nextDouble(RandomSource.create(), -1, 1) + " ~ ~" + Mth.nextDouble(RandomSource.create(), -1, 1)));
                                         }
                                     }
                                     if (EntityUtils.getFellowAround(finalWorld, finalX, finalY, finalZ, finalEntity) < 5) {
                                         if (MapVariables.get(finalWorld).strategy_breed >= 3) {
                                             if (Math.random() < 0.05 * (MapVariables.get(finalWorld).strategy_breed - 2)) {
-                                                Entity _ent = finalEntity;
-                                                if (!_ent.level().isClientSide() && _ent.getServer() != null) {
-                                                    _ent.getServer().getCommands().performPrefixedCommand(
-                                                            new CommandSourceStack(CommandSource.NULL, _ent.position(), _ent.getRotationVector(), _ent.level() instanceof ServerLevel ? (ServerLevel) _ent.level() : null, 4,
-                                                                    _ent.getName().getString(), _ent.getDisplayName(), _ent.level().getServer(), _ent),
+                                                if (!finalEntity.level().isClientSide() && finalEntity.getServer() != null) {
+                                                    finalEntity.getServer().getCommands().performPrefixedCommand(
+                                                            new CommandSourceStack(CommandSource.NULL, finalEntity.position(), finalEntity.getRotationVector(), finalEntity.level() instanceof ServerLevel ? (ServerLevel) finalEntity.level() : null, 4,
+                                                                    finalEntity.getName().getString(), finalEntity.getDisplayName(), finalEntity.level().getServer(), finalEntity),
                                                             ("summon " + ForgeRegistries.ENTITY_TYPES.getKey(finalEntity.getType()).toString() + " ~" + Mth.nextDouble(RandomSource.create(), -1, 1) + " ~ ~"
                                                                     + Mth.nextDouble(RandomSource.create(), -1, 1)));
                                                 }

@@ -59,10 +59,10 @@ import java.util.Comparator;
 import java.util.EnumSet;
 
 public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
-	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(TideBishopEntity.class, EntityDataSerializers.BOOLEAN);
+	public static final EntityDataAccessor<Boolean> DATA_IS_SHOOTING = SynchedEntityData.defineId(TideBishopEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(TideBishopEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(TideBishopEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<Integer> DATA_skillp = SynchedEntityData.defineId(TideBishopEntity.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<String> DATA_TEXTURE = SynchedEntityData.defineId(TideBishopEntity.class, EntityDataSerializers.STRING);
+	public static final EntityDataAccessor<Integer> DATA_SKILL_COOLDOWN = SynchedEntityData.defineId(TideBishopEntity.class, EntityDataSerializers.INT);
 	private boolean swinging;
 	private boolean lastloop;
 	private long lastSwing;
@@ -83,18 +83,18 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
 	@Override
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(SHOOT, false);
+		this.entityData.define(DATA_IS_SHOOTING, false);
 		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(TEXTURE, "tidebishoptexture");
-		this.entityData.define(DATA_skillp, 160);
+		this.entityData.define(DATA_TEXTURE, "tidebishoptexture");
+		this.entityData.define(DATA_SKILL_COOLDOWN, 160);
 	}
 
-	public void setTexture(String texture) {
-		this.entityData.set(TEXTURE, texture);
+	public void setTextureName(String texture) {
+		this.entityData.set(DATA_TEXTURE, texture);
 	}
 
-	public String getTexture() {
-		return this.entityData.get(TEXTURE);
+	public String getTextureName() {
+		return this.entityData.get(DATA_TEXTURE);
 	}
 
 	@Override
@@ -219,7 +219,7 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
 			this.target = null;
 			this.seeTime = 0;
 			this.attackTime = -1;
-			((TideBishopEntity) rangedAttackMob).entityData.set(SHOOT, false);
+			((TideBishopEntity) rangedAttackMob).entityData.set(DATA_IS_SHOOTING, false);
 		}
 
 		public boolean requiresUpdateEveryTick() {
@@ -245,10 +245,10 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
 			this.mob.getLookControl().setLookAt(this.target, 30.0F, 30.0F);
 			if (--this.attackTime == 0) {
 				if (!flag) {
-					((TideBishopEntity) rangedAttackMob).entityData.set(SHOOT, false);
+					((TideBishopEntity) rangedAttackMob).entityData.set(DATA_IS_SHOOTING, false);
 					return;
 				}
-				((TideBishopEntity) rangedAttackMob).entityData.set(SHOOT, true);
+				((TideBishopEntity) rangedAttackMob).entityData.set(DATA_IS_SHOOTING, true);
 				float f = (float) Math.sqrt(d0) / this.attackRadius;
 				float f1 = Mth.clamp(f, 0.1F, 1.0F);
 				this.rangedAttackMob.performRangedAttack(this.target, f1);
@@ -256,7 +256,7 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
 			} else if (this.attackTime < 0) {
 				this.attackTime = Mth.floor(Mth.lerp(Math.sqrt(d0) / (double) this.attackRadius, this.attackIntervalMin, this.attackIntervalMax));
 			} else
-				((TideBishopEntity) rangedAttackMob).entityData.set(SHOOT, false);
+				((TideBishopEntity) rangedAttackMob).entityData.set(DATA_IS_SHOOTING, false);
 		}
 	}
 
@@ -317,17 +317,19 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
-		compound.putString("Texture", this.getTexture());
-		compound.putInt("Dataskillp", this.entityData.get(DATA_skillp));
+		compound.putString("Texture", this.getTextureName());
+		compound.putInt("SkillCooldown", this.entityData.get(DATA_SKILL_COOLDOWN));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		if (compound.contains("Texture"))
-			this.setTexture(compound.getString("Texture"));
-		if (compound.contains("Dataskillp"))
-			this.entityData.set(DATA_skillp, compound.getInt("Dataskillp"));
+			this.setTextureName(compound.getString("Texture"));
+		if (compound.contains("SkillCooldown"))
+			this.entityData.set(DATA_SKILL_COOLDOWN, compound.getInt("SkillCooldown"));
+		else if (compound.contains("Dataskillp"))
+			this.entityData.set(DATA_SKILL_COOLDOWN, compound.getInt("Dataskillp"));
 	}
 
 	@Override
@@ -415,7 +417,7 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
 		if (this.swinging && this.lastSwing + 25L <= level().getGameTime()) {
 			this.swinging = false;
 		}
-		if ((this.swinging || this.entityData.get(SHOOT)) && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+		if ((this.swinging || this.entityData.get(DATA_IS_SHOOTING)) && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
 			event.getController().forceAnimationReset();
 			return event.setAndContinue(RawAnimation.begin().thenPlay("animation.tidebishop.attack"));
 		}
@@ -464,5 +466,11 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
 		data.add(new AnimationController<>(this, "movement", 2, this::movementPredicate));
 		data.add(new AnimationController<>(this, "attacking", 2, this::attackingPredicate));
 		data.add(new AnimationController<>(this, "procedure", 2, this::procedurePredicate));
+	}
+
+
+	@Override
+	public void setAnimationProcedure(String animation) {
+		this.animationprocedure = animation;
 	}
 }

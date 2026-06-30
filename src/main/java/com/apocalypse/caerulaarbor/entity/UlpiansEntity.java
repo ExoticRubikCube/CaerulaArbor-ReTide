@@ -62,7 +62,7 @@ import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.List;
 
-public class UlpiansEntity extends Animal implements GeoEntity {
+public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationEntity {
 
 	private boolean isUlpuansDurative() {
 		return EntityPredicateUtils.isUlpuansDurative(this);
@@ -699,5 +699,11 @@ public class UlpiansEntity extends Animal implements GeoEntity {
 	@Override
 	public AnimatableInstanceCache getAnimatableInstanceCache() {
 		return this.cache;
+	}
+
+
+	@Override
+	public void setAnimationProcedure(String animation) {
+		this.animationprocedure = animation;
 	}
 }

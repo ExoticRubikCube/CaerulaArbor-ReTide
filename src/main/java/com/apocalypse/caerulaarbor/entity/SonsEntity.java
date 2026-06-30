@@ -317,4 +317,10 @@ public class SonsEntity extends SeaMonster {
 		data.add(new AnimationController<>(this, "movement", 6, this::movementPredicate));
 		data.add(new AnimationController<>(this, "procedure", 6, this::procedurePredicate));
 	}
+
+
+	@Override
+	public void setAnimationProcedure(String animation) {
+		this.animationprocedure = animation;
+	}
 }

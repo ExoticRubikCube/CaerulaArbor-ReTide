@@ -136,4 +136,10 @@ public abstract class AbstractFractalEntity extends SeaMonster {
 		if (compound.contains("AttackCount"))
 			this.setAttackSkillp(compound.getInt("AttackCount"));
 	}
+
+
+	@Override
+	public void setAnimationProcedure(String animation) {
+		this.animationprocedure = animation;
+	}
 }

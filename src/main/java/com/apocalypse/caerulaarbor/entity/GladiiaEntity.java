@@ -56,7 +56,7 @@ import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.List;
 
-public class GladiiaEntity extends Animal implements GeoEntity {
+public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationEntity {
 
 	private boolean isGladiiaDurative() {
 		return EntityPredicateUtils.isGladiiaDurative(this);
@@ -512,5 +512,11 @@ public class GladiiaEntity extends Animal implements GeoEntity {
 	@Override
 	public AnimatableInstanceCache getAnimatableInstanceCache() {
 		return this.cache;
+	}
+
+
+	@Override
+	public void setAnimationProcedure(String animation) {
+		this.animationprocedure = animation;
 	}
 }

@@ -3,9 +3,9 @@ package com.apocalypse.caerulaarbor.entity;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.CAAttributes;
-import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
@@ -724,5 +724,11 @@ public class OceanizedShulkerEntity extends SeaMonster {
 			return false;
 		Direction opposite = dire.getOpposite();
 		return world.getBlockState(BlockPos.containing(x + opposite.getStepX(), y + opposite.getStepY(), z + opposite.getStepZ())).isFaceSturdy(world, BlockPos.containing(x + opposite.getStepX(), y + opposite.getStepY(), z + opposite.getStepZ()), dire);
+	}
+
+
+	@Override
+	public void setAnimationProcedure(String animation) {
+		this.animationprocedure = animation;
 	}
 }

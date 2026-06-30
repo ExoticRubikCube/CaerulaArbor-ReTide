@@ -7,17 +7,11 @@ import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CAAttributes;
-import com.apocalypse.caerulaarbor.init.CABlocks;
-import com.apocalypse.caerulaarbor.init.CAEntities;
-import com.apocalypse.caerulaarbor.init.CAGameRules;
-import com.apocalypse.caerulaarbor.init.CAMobEffects;
-import com.apocalypse.caerulaarbor.init.CAParticleTypes;
+import com.apocalypse.caerulaarbor.init.*;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
@@ -32,13 +26,13 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -47,15 +41,10 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
-import net.minecraft.world.entity.ai.goal.BreakDoorGoal;
-import net.minecraft.world.entity.ai.goal.PanicGoal;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.SnowGolem;
@@ -65,7 +54,6 @@ import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameRules;
-import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -136,18 +124,6 @@ public class EndspeakerEntity extends SeaMonster {
 				.add(Attributes.KNOCKBACK_RESISTANCE, 0.0);
 	}
 
-	protected void tickPhaseBehavior() {
-		if (this.getPhase() == 0) {
-			this.tickPhaseZeroBehavior();
-		} else if (this.getPhase() == 1) {
-			this.tickPhaseOneBehavior();
-		} else if (this.getPhase() == 2) {
-			this.tickPhaseTwoBehavior();
-		} else if (this.getPhase() == 3) {
-			this.tickPhaseThreeBehavior();
-		}
-	}
-
 	protected int getFloatGoalPriority() {
 		if (this.getPhase() == 0) {
 			return 4;
@@ -158,7 +134,7 @@ public class EndspeakerEntity extends SeaMonster {
 		if (this.getPhase() == 2) {
 			return 16;
 		}
-		if (this.getPhase() == 3) {
+		if (!this.hasNextPhase()) {
 			return 17;
 		}
 		return 0;
@@ -180,54 +156,6 @@ public class EndspeakerEntity extends SeaMonster {
 		this.entityData.set(DATA_PHASE, Mth.clamp(phase, 0, 3));
 		this.updatePhaseRuntimeProperties();
 		this.refreshDimensions();
-	}
-
-	protected double getPhaseMovementSpeed() {
-		return switch (this.getPhase()) {
-			case 1 -> 0.16D;
-			case 2 -> 0.18D;
-			case 3 -> 0.16D;
-			default -> 0.15D;
-		};
-	}
-
-	protected double getPhaseMaxHealth() {
-		return switch (this.getPhase()) {
-			case 1 -> 120.0D;
-			case 2 -> 140.0D;
-			case 3 -> 224.0D;
-			default -> 16.0D;
-		};
-	}
-
-	protected double getPhaseArmor() {
-		return switch (this.getPhase()) {
-			case 1 -> 5.0D;
-			case 2 -> 6.0D;
-			case 3 -> 8.0D;
-			default -> 0.0D;
-		};
-	}
-
-	protected double getPhaseAttackDamage() {
-		return switch (this.getPhase()) {
-			case 1 -> 7.0D;
-			case 2 -> 9.0D;
-			case 3 -> 11.0D;
-			default -> 1.0D;
-		};
-	}
-
-	protected double getPhaseFollowRange() {
-		return switch (this.getPhase()) {
-			case 2 -> 32.0D;
-			case 1, 3 -> 36.0D;
-			default -> 16.0D;
-		};
-	}
-
-	protected double getPhaseKnockbackResistance() {
-		return this.getPhase() == 0 ? 0.0D : 10.0D;
 	}
 
 	public int getEvolveTime() {
@@ -274,35 +202,6 @@ public class EndspeakerEntity extends SeaMonster {
 		return this.isAlive() && this.getDuration() <= 0 && this.tickCount >= 50;
 	}
 
-	protected int getPhaseDeathTickThreshold() {
-		return switch (this.getPhase()) {
-			case 1 -> 40;
-			case 2 -> 45;
-			case 3 -> 50;
-			default -> 35;
-		};
-	}
-
-	protected int getPhaseXpReward() {
-		return switch (this.getPhase()) {
-			case 2 -> 48;
-			case 3 -> 64;
-			default -> 0;
-		};
-	}
-
-	protected float getPhaseMaxUpStep() {
-		return switch (this.getPhase()) {
-			case 2 -> 1.0F;
-			case 3 -> 1.5F;
-			default -> 0.6F;
-		};
-	}
-
-	protected ServerBossEvent.BossBarColor getPhaseBossBarColor() {
-		return this.getPhase() >= 2 ? ServerBossEvent.BossBarColor.WHITE : ServerBossEvent.BossBarColor.BLUE;
-	}
-
 	protected ServerBossEvent.BossBarOverlay getPhaseBossBarOverlay() {
 		return switch (this.getPhase()) {
 			case 2 -> ServerBossEvent.BossBarOverlay.NOTCHED_6;
@@ -311,19 +210,18 @@ public class EndspeakerEntity extends SeaMonster {
 		};
 	}
 
-	protected EntityDimensions getPhaseDimensions() {
-		return switch (this.getPhase()) {
-			case 1 -> EntityDimensions.scalable(0.75F, 1.5F);
-			case 2 -> EntityDimensions.scalable(1.2F, 2.8F);
-			case 3 -> EntityDimensions.scalable(1.0F, 3.375F);
-			default -> EntityDimensions.scalable(0.65F, 0.7F);
-		};
-	}
-
 	protected void updatePhaseRuntimeProperties() {
-		this.xpReward = this.getPhaseXpReward();
-		this.setMaxUpStep(this.getPhaseMaxUpStep());
-		this.bossInfo.setColor(this.getPhaseBossBarColor());
+		this.xpReward = switch (this.getPhase()) {
+			case 2 -> 48;
+			case 3 -> 64;
+			default -> 0;
+		};
+		this.setMaxUpStep(switch (this.getPhase()) {
+			case 2 -> 1.0F;
+			case 3 -> 1.5F;
+			default -> 0.6F;
+		});
+		this.bossInfo.setColor(this.getPhase() >= 2 ? ServerBossEvent.BossBarColor.WHITE : ServerBossEvent.BossBarColor.BLUE);
 		this.bossInfo.setOverlay(this.getPhaseBossBarOverlay());
 		this.bossInfo.setName(this.getDisplayName());
 		this.updatePhaseAttributes();
@@ -337,13 +235,43 @@ public class EndspeakerEntity extends SeaMonster {
 	}
 
 	protected void updatePhaseAttributes() {
-		double maxHealth = this.getPhaseMaxHealth();
-		this.setAttributeBaseValue(Attributes.MOVEMENT_SPEED, this.getPhaseMovementSpeed());
+		double maxHealth = switch (this.getPhase()) {
+			case 1 -> 120.0D;
+			case 2 -> 140.0D;
+			case 3 -> 224.0D;
+			default -> 16.0D;
+		};
 		this.setAttributeBaseValue(Attributes.MAX_HEALTH, maxHealth);
-		this.setAttributeBaseValue(Attributes.ARMOR, this.getPhaseArmor());
-		this.setAttributeBaseValue(Attributes.ATTACK_DAMAGE, this.getPhaseAttackDamage());
-		this.setAttributeBaseValue(Attributes.FOLLOW_RANGE, this.getPhaseFollowRange());
-		this.setAttributeBaseValue(Attributes.KNOCKBACK_RESISTANCE, this.getPhaseKnockbackResistance());
+
+		this.setAttributeBaseValue(Attributes.MOVEMENT_SPEED, switch (this.getPhase()) {
+			case 1 -> 0.16D;
+			case 2 -> 0.18D;
+			case 3 -> 0.16D;
+			default -> 0.15D;
+		});
+
+		this.setAttributeBaseValue(Attributes.ARMOR, switch (this.getPhase()) {
+			case 1 -> 5.0D;
+			case 2 -> 6.0D;
+			case 3 -> 8.0D;
+			default -> 0.0D;
+		});
+
+		this.setAttributeBaseValue(Attributes.ATTACK_DAMAGE, switch (this.getPhase()) {
+			case 1 -> 7.0D;
+			case 2 -> 9.0D;
+			case 3 -> 11.0D;
+			default -> 1.0D;
+		});
+
+		this.setAttributeBaseValue(Attributes.FOLLOW_RANGE, switch (this.getPhase()) {
+			case 2 -> 32.0D;
+			case 1, 3 -> 36.0D;
+			default -> 16.0D;
+		});
+
+		this.setAttributeBaseValue(Attributes.KNOCKBACK_RESISTANCE, this.getPhase() == 0 ? 0.0D : 10.0D);
+
 		if (this.getHealth() > maxHealth) {
 			this.setHealth((float) maxHealth);
 		}
@@ -384,19 +312,19 @@ public class EndspeakerEntity extends SeaMonster {
 	protected void registerGoals() {
 		super.registerGoals();
 		this.goalSelector.addGoal(this.getFloatGoalPriority(), new FloatGoal(this));
-		if (this.getPhase() == 0) {
-			this.registerPhaseZeroGoals();
-		} else if (this.getPhase() == 1) {
-			this.registerPhaseOneGoals();
-		} else if (this.getPhase() == 2) {
-			this.registerPhaseTwoGoals();
-		} else if (this.getPhase() == 3) {
-			this.registerPhaseThreeGoals();
-		}
-	}
-
-	protected void registerPhaseZeroGoals() {
-		this.goalSelector.addGoal(1, new PanicGoal(this, 1) {
+		List<Class<? extends LivingEntity>> sharedTargets = List.of(
+				IronGolem.class,
+				SnowGolem.class,
+				Villager.class,
+				Illusioner.class,
+				Pillager.class,
+				Vindicator.class,
+				Witch.class,
+				Piglin.class,
+				PiglinBrute.class,
+				ZombifiedPiglin.class
+		);
+		this.goalSelector.addGoal(1, new PanicGoal(this, 1.0D) {
 			@Override
 			public boolean canUse() {
 				return super.canUse() && EndspeakerEntity.this.isPhaseZeroStarting();
@@ -407,7 +335,7 @@ public class EndspeakerEntity extends SeaMonster {
 				return super.canContinueToUse() && EndspeakerEntity.this.isPhaseZeroStarting();
 			}
 		});
-		this.goalSelector.addGoal(2, new RandomStrollGoal(this, 1) {
+		this.goalSelector.addGoal(2, new RandomStrollGoal(this, 1.0D) {
 			@Override
 			public boolean canUse() {
 				return super.canUse() && EndspeakerEntity.this.isPhaseZeroStarting();
@@ -429,25 +357,64 @@ public class EndspeakerEntity extends SeaMonster {
 				return super.canContinueToUse() && EndspeakerEntity.this.isPhaseZeroStarting();
 			}
 		});
-	}
-
-	protected void registerPhaseOneGoals() {
-		this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-		this.goalSelector.addGoal(2, new BreakDoorGoal(this, entity -> true) {
+		this.targetSelector.addGoal(1, new HurtByTargetGoal(this) {
 			@Override
 			public boolean canUse() {
-				return super.canUse() && WorldUtils.canGrief(EndspeakerEntity.this.level());
+				return super.canUse() && (EndspeakerEntity.this.isPhaseOneStarting() || EndspeakerEntity.this.isPhaseTwoDurative() || EndspeakerEntity.this.isPhaseThreeDurative());
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				return super.canContinueToUse() && WorldUtils.canGrief(EndspeakerEntity.this.level());
+				return super.canContinueToUse() && (EndspeakerEntity.this.isPhaseOneStarting() || EndspeakerEntity.this.isPhaseTwoDurative() || EndspeakerEntity.this.isPhaseThreeDurative());
 			}
 		});
-		this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1, true) {
+		this.goalSelector.addGoal(2, new BreakDoorGoal(this, entity -> true) {
+			@Override
+			public boolean canUse() {
+				return super.canUse() && EndspeakerEntity.this.isPhaseOneStarting() && WorldUtils.canGrief(EndspeakerEntity.this.level());
+			}
+
+			@Override
+			public boolean canContinueToUse() {
+				return super.canContinueToUse() && EndspeakerEntity.this.isPhaseOneStarting() && WorldUtils.canGrief(EndspeakerEntity.this.level());
+			}
+		});
+		this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.25D, true) {
 			@Override
 			protected double getAttackReachSqr(LivingEntity entity) {
-				return 4;
+				return 20.25D;
+			}
+
+			@Override
+			public boolean canUse() {
+				return super.canUse() && EndspeakerEntity.this.isPhaseTwoDurative();
+			}
+
+			@Override
+			public boolean canContinueToUse() {
+				return super.canContinueToUse() && EndspeakerEntity.this.isPhaseTwoDurative();
+			}
+		});
+		this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0D, true) {
+			@Override
+			protected double getAttackReachSqr(LivingEntity entity) {
+				return 25.0D;
+			}
+
+			@Override
+			public boolean canUse() {
+				return super.canUse() && EndspeakerEntity.this.isPhaseThreeDurative();
+			}
+
+			@Override
+			public boolean canContinueToUse() {
+				return super.canContinueToUse() && EndspeakerEntity.this.isPhaseThreeDurative();
+			}
+		});
+		this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.0D, true) {
+			@Override
+			protected double getAttackReachSqr(LivingEntity entity) {
+				return 4.0D;
 			}
 
 			@Override
@@ -460,39 +427,95 @@ public class EndspeakerEntity extends SeaMonster {
 				return super.canContinueToUse() && EndspeakerEntity.this.isPhaseOneStarting();
 			}
 		});
-		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, IronGolem.class, true, false));
-		this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, SnowGolem.class, true, false));
-		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, Villager.class, true, false));
-		this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, Illusioner.class, true, false));
-		this.targetSelector.addGoal(8, new NearestAttackableTargetGoal<>(this, Pillager.class, true, false));
-		this.targetSelector.addGoal(9, new NearestAttackableTargetGoal<>(this, Vindicator.class, true, false));
-		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, Witch.class, true, false));
-		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
-		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
-		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
-		this.targetSelector.addGoal(14, new NearestAttackableTargetGoal<>(this, Player.class, true, false) {
+		int targetPriority = 2;
+		for (Class<? extends LivingEntity> targetClass : sharedTargets) {
+			this.targetSelector.addGoal(targetPriority++, new NearestAttackableTargetGoal(this, targetClass, true, false) {
+				@Override
+				public boolean canUse() {
+					return super.canUse() && (EndspeakerEntity.this.isPhaseOneStarting() || EndspeakerEntity.this.isPhaseTwoDurative() || EndspeakerEntity.this.isPhaseThreeDurative());
+				}
+
+				@Override
+				public boolean canContinueToUse() {
+					return super.canContinueToUse() && (EndspeakerEntity.this.isPhaseOneStarting() || EndspeakerEntity.this.isPhaseTwoDurative() || EndspeakerEntity.this.isPhaseThreeDurative());
+				}
+			});
+		}
+		this.targetSelector.addGoal(targetPriority++, new NearestAttackableTargetGoal<>(this, Player.class, true, false) {
 			@Override
 			public boolean canUse() {
-				return super.canUse() && EntityUtils.isOceanizedPlayerNearby(EndspeakerEntity.this.level(), EndspeakerEntity.this.getX(), EndspeakerEntity.this.getY(), EndspeakerEntity.this.getZ());
+				return super.canUse()
+						&& (EndspeakerEntity.this.isPhaseOneStarting() || EndspeakerEntity.this.isPhaseTwoDurative() || EndspeakerEntity.this.isPhaseThreeDurative())
+						&& EntityUtils.isOceanizedPlayerNearby(EndspeakerEntity.this.level(), EndspeakerEntity.this.getX(), EndspeakerEntity.this.getY(), EndspeakerEntity.this.getZ());
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(EndspeakerEntity.this.level(), EndspeakerEntity.this.getX(), EndspeakerEntity.this.getY(), EndspeakerEntity.this.getZ());
+				return super.canContinueToUse()
+						&& (EndspeakerEntity.this.isPhaseOneStarting() || EndspeakerEntity.this.isPhaseTwoDurative() || EndspeakerEntity.this.isPhaseThreeDurative())
+						&& EntityUtils.isOceanizedPlayerNearby(EndspeakerEntity.this.level(), EndspeakerEntity.this.getX(), EndspeakerEntity.this.getY(), EndspeakerEntity.this.getZ());
 			}
 		});
-		this.targetSelector.addGoal(15, new NearestAttackableTargetGoal<>(this, Animal.class, true, false) {
+		this.targetSelector.addGoal(targetPriority, new NearestAttackableTargetGoal<>(this, Animal.class, true, false) {
 			@Override
 			public boolean canUse() {
-				return super.canUse() && EntityUtils.canAttackAnimals();
+				return super.canUse()
+						&& (EndspeakerEntity.this.isPhaseOneStarting() || EndspeakerEntity.this.isPhaseThreeDurative())
+						&& EntityUtils.canAttackAnimals();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
+				return super.canContinueToUse()
+						&& (EndspeakerEntity.this.isPhaseOneStarting() || EndspeakerEntity.this.isPhaseThreeDurative())
+						&& EntityUtils.canAttackAnimals();
 			}
 		});
-		this.goalSelector.addGoal(16, new RandomStrollGoal(this, 1) {
+		this.goalSelector.addGoal(14, new RandomStrollGoal(this, 1.0D) {
+			@Override
+			public boolean canUse() {
+				return super.canUse() && EndspeakerEntity.this.isPhaseTwoDurative();
+			}
+
+			@Override
+			public boolean canContinueToUse() {
+				return super.canContinueToUse() && EndspeakerEntity.this.isPhaseTwoDurative();
+			}
+		});
+		this.goalSelector.addGoal(15, new RandomLookAroundGoal(this) {
+			@Override
+			public boolean canUse() {
+				return super.canUse() && EndspeakerEntity.this.isPhaseTwoDurative();
+			}
+
+			@Override
+			public boolean canContinueToUse() {
+				return super.canContinueToUse() && EndspeakerEntity.this.isPhaseTwoDurative();
+			}
+		});
+		this.goalSelector.addGoal(15, new RandomStrollGoal(this, 1.0D) {
+			@Override
+			public boolean canUse() {
+				return super.canUse() && EndspeakerEntity.this.isPhaseThreeDurative();
+			}
+
+			@Override
+			public boolean canContinueToUse() {
+				return super.canContinueToUse() && EndspeakerEntity.this.isPhaseThreeDurative();
+			}
+		});
+		this.goalSelector.addGoal(16, new RandomLookAroundGoal(this) {
+			@Override
+			public boolean canUse() {
+				return super.canUse() && EndspeakerEntity.this.isPhaseThreeDurative();
+			}
+
+			@Override
+			public boolean canContinueToUse() {
+				return super.canContinueToUse() && EndspeakerEntity.this.isPhaseThreeDurative();
+			}
+		});
+		this.goalSelector.addGoal(16, new RandomStrollGoal(this, 1.0D) {
 			@Override
 			public boolean canUse() {
 				return super.canUse() && EndspeakerEntity.this.isPhaseOneStarting();
@@ -516,166 +539,14 @@ public class EndspeakerEntity extends SeaMonster {
 		});
 	}
 
-	protected void registerPhaseTwoGoals() {
-		this.targetSelector.addGoal(1, new HurtByTargetGoal(this) {
-			@Override
-			public boolean canUse() {
-				return super.canUse() && EndspeakerEntity.this.isPhaseTwoDurative();
-			}
-
-			@Override
-			public boolean canContinueToUse() {
-				return super.canContinueToUse() && EndspeakerEntity.this.isPhaseTwoDurative();
-			}
-		});
-		this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.25, true) {
-			@Override
-			protected double getAttackReachSqr(LivingEntity entity) {
-				return 20.25;
-			}
-
-			@Override
-			public boolean canUse() {
-				return super.canUse() && EndspeakerEntity.this.isPhaseTwoDurative();
-			}
-
-			@Override
-			public boolean canContinueToUse() {
-				return super.canContinueToUse() && EndspeakerEntity.this.isPhaseTwoDurative();
-			}
-		});
-		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, true, false));
-		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, SnowGolem.class, true, false));
-		this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Villager.class, true, false));
-		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, Illusioner.class, true, false));
-		this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, Pillager.class, true, false));
-		this.targetSelector.addGoal(8, new NearestAttackableTargetGoal<>(this, Vindicator.class, true, false));
-		this.targetSelector.addGoal(9, new NearestAttackableTargetGoal<>(this, Witch.class, true, false));
-		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
-		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
-		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
-		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Player.class, true, false) {
-			@Override
-			public boolean canUse() {
-				return super.canUse() && EntityUtils.isOceanizedPlayerNearby(EndspeakerEntity.this.level(), EndspeakerEntity.this.getX(), EndspeakerEntity.this.getY(), EndspeakerEntity.this.getZ());
-			}
-
-			@Override
-			public boolean canContinueToUse() {
-				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(EndspeakerEntity.this.level(), EndspeakerEntity.this.getX(), EndspeakerEntity.this.getY(), EndspeakerEntity.this.getZ());
-			}
-		});
-		this.goalSelector.addGoal(14, new RandomStrollGoal(this, 1) {
-			@Override
-			public boolean canUse() {
-				return super.canUse() && EndspeakerEntity.this.isPhaseTwoDurative();
-			}
-
-			@Override
-			public boolean canContinueToUse() {
-				return super.canContinueToUse() && EndspeakerEntity.this.isPhaseTwoDurative();
-			}
-		});
-		this.goalSelector.addGoal(15, new RandomLookAroundGoal(this) {
-			@Override
-			public boolean canUse() {
-				return super.canUse() && EndspeakerEntity.this.isPhaseTwoDurative();
-			}
-
-			@Override
-			public boolean canContinueToUse() {
-				return super.canContinueToUse() && EndspeakerEntity.this.isPhaseTwoDurative();
-			}
-		});
-	}
-
-	protected void registerPhaseThreeGoals() {
-		this.targetSelector.addGoal(1, new HurtByTargetGoal(this) {
-			@Override
-			public boolean canUse() {
-				return super.canUse() && EndspeakerEntity.this.isPhaseThreeDurative();
-			}
-
-			@Override
-			public boolean canContinueToUse() {
-				return super.canContinueToUse() && EndspeakerEntity.this.isPhaseThreeDurative();
-			}
-		});
-		this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1, true) {
-			@Override
-			protected double getAttackReachSqr(LivingEntity entity) {
-				return 25;
-			}
-
-			@Override
-			public boolean canUse() {
-				return super.canUse() && EndspeakerEntity.this.isPhaseThreeDurative();
-			}
-
-			@Override
-			public boolean canContinueToUse() {
-				return super.canContinueToUse() && EndspeakerEntity.this.isPhaseThreeDurative();
-			}
-		});
-		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, true, false));
-		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, SnowGolem.class, true, false));
-		this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Villager.class, true, false));
-		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, Illusioner.class, true, false));
-		this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, Pillager.class, true, false));
-		this.targetSelector.addGoal(8, new NearestAttackableTargetGoal<>(this, Vindicator.class, true, false));
-		this.targetSelector.addGoal(9, new NearestAttackableTargetGoal<>(this, Witch.class, true, false));
-		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
-		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
-		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
-		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Player.class, true, false) {
-			@Override
-			public boolean canUse() {
-				return super.canUse() && EntityUtils.isOceanizedPlayerNearby(EndspeakerEntity.this.level(), EndspeakerEntity.this.getX(), EndspeakerEntity.this.getY(), EndspeakerEntity.this.getZ());
-			}
-
-			@Override
-			public boolean canContinueToUse() {
-				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(EndspeakerEntity.this.level(), EndspeakerEntity.this.getX(), EndspeakerEntity.this.getY(), EndspeakerEntity.this.getZ());
-			}
-		});
-		this.targetSelector.addGoal(14, new NearestAttackableTargetGoal<>(this, Animal.class, true, false) {
-			@Override
-			public boolean canUse() {
-				return super.canUse() && EntityUtils.canAttackAnimals();
-			}
-
-			@Override
-			public boolean canContinueToUse() {
-				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
-			}
-		});
-		this.goalSelector.addGoal(15, new RandomStrollGoal(this, 1) {
-			@Override
-			public boolean canUse() {
-				return super.canUse() && EndspeakerEntity.this.isPhaseThreeDurative();
-			}
-
-			@Override
-			public boolean canContinueToUse() {
-				return super.canContinueToUse() && EndspeakerEntity.this.isPhaseThreeDurative();
-			}
-		});
-		this.goalSelector.addGoal(16, new RandomLookAroundGoal(this) {
-			@Override
-			public boolean canUse() {
-				return super.canUse() && EndspeakerEntity.this.isPhaseThreeDurative();
-			}
-
-			@Override
-			public boolean canContinueToUse() {
-				return super.canContinueToUse() && EndspeakerEntity.this.isPhaseThreeDurative();
-			}
-		});
-	}
-
 	@Override
 	public EntityDimensions getDimensions(Pose pose) {
-		return this.getPhaseDimensions();
+		return switch (this.getPhase()) {
+			case 1 -> EntityDimensions.scalable(0.75F, 1.5F);
+			case 2 -> EntityDimensions.scalable(1.2F, 2.8F);
+			case 3 -> EntityDimensions.scalable(1.0F, 3.375F);
+			default -> EntityDimensions.scalable(0.65F, 0.7F);
+		};
 	}
 
 	@Override
@@ -710,14 +581,11 @@ public class EndspeakerEntity extends SeaMonster {
 	public SoundEvent getDeathSound() {
 		if (this.getPhase() == 0) {
 			return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "seaborn_generic_hit"));
-		}
-		if (this.getPhase() == 1) {
+		}else if (this.getPhase() == 1) {
 			return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "seaborn_death"));
-		}
-		if (this.getPhase() == 2) {
+		}else if (this.getPhase() == 2) {
 			return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "seaborn_death"));
-		}
-		if (this.getPhase() == 3) {
+		}else if (!this.hasNextPhase()) {
 			return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "seaborn_death"));
 		}
 		return super.getDeathSound();
@@ -787,8 +655,33 @@ public class EndspeakerEntity extends SeaMonster {
 			return;
 		}
 		super.die(source);
-		if (this.getPhase() == 3) {
-			this.handleFinalPhaseDeath();
+		if (!this.hasNextPhase()) {
+			LevelAccessor world = this.level();
+			double x = this.getX();
+			double y = this.getY();
+			double z = this.getZ();
+			MapVariablesHandler.resetAllEndspeakerAbilities(world);
+			if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
+				if (world.getBlockState(BlockPos.containing(x, y, z)).canBeReplaced()) {
+					world.setBlock(BlockPos.containing(x, y, z), CABlocks.ENDSPEAKER_NEST.get().defaultBlockState(), 3);
+				} else if (world.getBlockState(BlockPos.containing(x, y + 1, z)).canBeReplaced()) {
+					world.setBlock(BlockPos.containing(x, y + 1, z), CABlocks.ENDSPEAKER_NEST.get().defaultBlockState(), 3);
+				}
+			}
+			for (Entity entity : new ArrayList<>(world.players())) {
+				if (this.level().dimension() != entity.level().dimension() || this.distanceTo(entity) >= 64) {
+					continue;
+				}
+				if (entity instanceof ServerPlayer player) {
+					Advancement advancement = player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "silent_interruption"));
+					AdvancementProgress progress = player.getAdvancements().getOrStartProgress(advancement);
+					if (!progress.isDone()) {
+						for (String criteria : progress.getRemainingCriteria()) {
+							player.getAdvancements().award(advancement, criteria);
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -849,11 +742,11 @@ public class EndspeakerEntity extends SeaMonster {
 						minDist = currentDistance;
 						edibleTarget = candidate;
 					}
-				} else if (!this.isCreativeModePlayer(candidate)) {
+				} else if (candidate instanceof Player player && !player.isCreative() && !player.isSpectator()) {
 					double currentPlayerDistance = this.distanceTo(candidate);
 					if (currentPlayerDistance < minPlayerDist) {
 						minPlayerDist = currentPlayerDistance;
-						nearestPlayer = candidate;
+						nearestPlayer = player;
 					}
 				}
 			}
@@ -918,17 +811,6 @@ public class EndspeakerEntity extends SeaMonster {
 			level.sendParticles(CAParticleTypes.ENDSPEAKER_PARTICLE.get(), targetX, targetY + 1, targetZ, 128, 1, 1, 1, 0.075);
 			EndspeakerEntity.spawnForPhase(level, BlockPos.containing(targetX, targetY, targetZ), MobSpawnType.MOB_SUMMONED, nextPhase);
 		}
-	}
-
-	protected boolean isCreativeModePlayer(Entity entity) {
-		if (entity instanceof ServerPlayer serverPlayer) {
-			return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-		}
-		if (entity.level().isClientSide() && entity instanceof Player player) {
-			return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
-					&& Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
-		}
-		return false;
 	}
 
 	protected void updatePrefixName() {
@@ -1009,35 +891,6 @@ public class EndspeakerEntity extends SeaMonster {
 		}
 	}
 
-	private void handleFinalPhaseDeath() {
-		LevelAccessor world = this.level();
-		double x = this.getX();
-		double y = this.getY();
-		double z = this.getZ();
-		MapVariablesHandler.resetAllEndspeakerAbilities(world);
-		if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
-			if (world.getBlockState(BlockPos.containing(x, y, z)).canBeReplaced()) {
-				world.setBlock(BlockPos.containing(x, y, z), CABlocks.ENDSPEAKER_NEST.get().defaultBlockState(), 3);
-			} else if (world.getBlockState(BlockPos.containing(x, y + 1, z)).canBeReplaced()) {
-				world.setBlock(BlockPos.containing(x, y + 1, z), CABlocks.ENDSPEAKER_NEST.get().defaultBlockState(), 3);
-			}
-		}
-		for (Entity entity : new ArrayList<>(world.players())) {
-			if (this.level().dimension() != entity.level().dimension() || this.distanceTo(entity) >= 64) {
-				continue;
-			}
-			if (entity instanceof ServerPlayer player) {
-				Advancement advancement = player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "silent_interruption"));
-				AdvancementProgress progress = player.getAdvancements().getOrStartProgress(advancement);
-				if (!progress.isDone()) {
-					for (String criteria : progress.getRemainingCriteria()) {
-						player.getAdvancements().award(advancement, criteria);
-					}
-				}
-			}
-		}
-	}
-
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
@@ -1049,7 +902,7 @@ public class EndspeakerEntity extends SeaMonster {
 		if (this.getPhase() == 2) {
 			compound.putInt("Duration", this.getDuration());
 			compound.putInt("SkillCooldown", this.getSkillCooldown());
-		} else if (this.getPhase() == 3) {
+		} else if (!this.hasNextPhase()) {
 			compound.putInt("Duration", this.getDuration());
 			compound.putInt("SkillCooldown", this.getSkillCooldown());
 		}
@@ -1084,7 +937,7 @@ public class EndspeakerEntity extends SeaMonster {
 			} else if (compound.contains("Dataskillp")) {
 				this.setSkillCooldown(compound.getInt("Dataskillp"));
 			}
-		} else if (this.getPhase() == 3) {
+		} else if (!this.hasNextPhase()) {
 			if (compound.contains("Duration")) {
 				this.setDuration(compound.getInt("Duration"));
 			} else if (compound.contains("Dataduration")) {
@@ -1127,7 +980,7 @@ public class EndspeakerEntity extends SeaMonster {
 			}
 			EntityUtils.initEndspeakerAbilities(world, this);
 			this.updatePrefixName();
-		} else if (this.getPhase() == 3) {
+		} else if (!this.hasNextPhase()) {
 			this.setAnimation("animation.endspeaker_3.start");
 			this.setSkillCooldown(200);
 			if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())) {
@@ -1172,6 +1025,50 @@ public class EndspeakerEntity extends SeaMonster {
 		}
 	}
 
+	private void tickBestowedAbilities() {
+		if (this.tickCount % 5 != 0) {
+			return;
+		}
+		if (EntityUtils.inquirybility(this.level(), 2) && this.getHealth() < this.getMaxHealth() * 0.4F) {
+			if (!this.level().isClientSide()) {
+				this.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 25, 0, false, false));
+				this.addEffect(new MobEffectInstance(CAMobEffects.ENDSPEAER_BRANDGUIDE_BUFF.get(), 25, 0));
+			}
+		}
+		if (EntityUtils.inquirybility(this.level(), 4)) {
+			this.clearFire();
+			this.removeEffect(CAMobEffects.DIZZY.get());
+			this.removeEffect(CAMobEffects.MUTE.get());
+			this.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
+			this.removeEffect(MobEffects.WEAKNESS);
+			this.removeEffect(CAMobEffects.FROZEN.get());
+			this.setTicksFrozen(0);
+			if (this.tickCount % 200 == 0 && !this.hasEffect(CAMobEffects.ESSENCE_RESISTANCE.get()) && !this.level().isClientSide()) {
+				this.addEffect(new MobEffectInstance(CAMobEffects.ESSENCE_RESISTANCE.get(), 180, 2, false, false));
+			}
+			double movementSpeed = this.getAttributeValue(Attributes.MOVEMENT_SPEED);
+			if (EntityUtils.getSpeed(this) > movementSpeed * 1.25D) {
+				this.setDeltaMovement(Vec3.ZERO);
+			}
+		}
+		if (EntityUtils.inquirybility(this.level(), 1)) {
+			double missRate = 50.0D;
+			if (this.isOnFire() && !this.fireImmune()) {
+				missRate = 0.0D;
+			}
+			if (this.hasEffect(CAMobEffects.DIZZY.get())
+				|| this.hasEffect(CAMobEffects.FROZEN.get())
+				|| this.hasEffect(MobEffects.LEVITATION)
+				|| this.hasEffect(MobEffects.MOVEMENT_SLOWDOWN)
+				|| this.hasEffect(MobEffects.SLOW_FALLING)) {
+				missRate = 0.0D;
+			}
+			if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE.get())) {
+				this.getAttribute(CAAttributes.MISSRATE.get()).setBaseValue(missRate);
+			}
+		}
+	}
+
 	private void tickPhaseOneBehavior() {
 		if (!this.isAlive() || this.tickCount < 75) {
 			return;
@@ -1200,7 +1097,7 @@ public class EndspeakerEntity extends SeaMonster {
 		if (this.tickCount % spawnGap == 50 && EntityUtils.getSeabornNum(this.level(), this.getX(), this.getY(), this.getZ()) < 32) {
 			this.spawnSeabornWave(0.085, 4);
 		}
-		EntityUtils.endspeakerTick(this.level(), this);
+		this.tickBestowedAbilities();
 	}
 
 	private void tickPhaseTwoBehavior() {
@@ -1231,7 +1128,7 @@ public class EndspeakerEntity extends SeaMonster {
 		if (this.tickCount % spawnGap == 33 && EntityUtils.getSeabornNum(this.level(), this.getX(), this.getY(), this.getZ()) < 32) {
 			this.spawnSeabornWave(0.1, 5);
 		}
-		EntityUtils.endspeakerTick(this.level(), this);
+		this.tickBestowedAbilities();
 		Entity enemy = this.getTarget();
 		if (this.getDuration() > 0) {
 			this.setDuration(this.getDuration() - 1);
@@ -1260,7 +1157,7 @@ public class EndspeakerEntity extends SeaMonster {
 		if (this.tickCount % 400 == 33 && EntityUtils.getSeabornNum(this.level(), this.getX(), this.getY(), this.getZ()) < 32) {
 			this.spawnSeabornWave(0.15, 5);
 		}
-		EntityUtils.endspeakerTick(this.level(), this);
+		this.tickBestowedAbilities();
 		Entity enemy = this.getTarget();
 		if (this.getDuration() > 0) {
 			this.setDuration(this.getDuration() - 1);
@@ -1414,11 +1311,6 @@ public class EndspeakerEntity extends SeaMonster {
 		return PlayState.STOP;
 	}
 
-	public void registerPhaseZeroControllers(AnimatableManager.ControllerRegistrar data) {
-		data.add(new AnimationController<>(this, "movement", 0, this::phaseZeroMovementPredicate));
-		data.add(new AnimationController<>(this, "procedure", 0, this::procedurePredicate));
-	}
-
 	protected PlayState phaseOneMovementPredicate(AnimationState<?> event) {
 		if (this.animationprocedure.equals("empty")) {
 			if (event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
@@ -1445,12 +1337,6 @@ public class EndspeakerEntity extends SeaMonster {
 			return event.setAndContinue(RawAnimation.begin().thenPlay("animation.endspeaker_1.attack"));
 		}
 		return PlayState.CONTINUE;
-	}
-
-	public void registerPhaseOneControllers(AnimatableManager.ControllerRegistrar data) {
-		data.add(new AnimationController<>(this, "movement", 0, this::phaseOneMovementPredicate));
-		data.add(new AnimationController<>(this, "attacking", 0, this::phaseOneAttackingPredicate));
-		data.add(new AnimationController<>(this, "procedure", 0, this::procedurePredicate));
 	}
 
 	protected PlayState phaseTwoMovementPredicate(AnimationState<?> event) {
@@ -1481,12 +1367,6 @@ public class EndspeakerEntity extends SeaMonster {
 		return PlayState.CONTINUE;
 	}
 
-	public void registerPhaseTwoControllers(AnimatableManager.ControllerRegistrar data) {
-		data.add(new AnimationController<>(this, "movement", 0, this::phaseTwoMovementPredicate));
-		data.add(new AnimationController<>(this, "attacking", 0, this::phaseTwoAttackingPredicate));
-		data.add(new AnimationController<>(this, "procedure", 0, this::procedurePredicate));
-	}
-
 	protected PlayState phaseThreeMovementPredicate(AnimationState<?> event) {
 		if (this.animationprocedure.equals("empty")) {
 			if (event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) {
@@ -1515,22 +1395,23 @@ public class EndspeakerEntity extends SeaMonster {
 		return PlayState.CONTINUE;
 	}
 
-	public void registerPhaseThreeControllers(AnimatableManager.ControllerRegistrar data) {
-		data.add(new AnimationController<>(this, "movement", 0, this::phaseThreeMovementPredicate));
-		data.add(new AnimationController<>(this, "attacking", 0, this::phaseThreeAttackingPredicate));
-		data.add(new AnimationController<>(this, "procedure", 0, this::procedurePredicate));
-	}
-
 	@Override
 	public void registerControllers(AnimatableManager.ControllerRegistrar data) {
 		if (this.getPhase() == 0) {
-			this.registerPhaseZeroControllers(data);
+			data.add(new AnimationController<>(this, "movement", 0, this::phaseZeroMovementPredicate));
+			data.add(new AnimationController<>(this, "procedure", 0, this::procedurePredicate));
 		} else if (this.getPhase() == 1) {
-			this.registerPhaseOneControllers(data);
+			data.add(new AnimationController<>(this, "movement", 0, this::phaseOneMovementPredicate));
+			data.add(new AnimationController<>(this, "attacking", 0, this::phaseOneAttackingPredicate));
+			data.add(new AnimationController<>(this, "procedure", 0, this::procedurePredicate));
 		} else if (this.getPhase() == 2) {
-			this.registerPhaseTwoControllers(data);
-		} else if (this.getPhase() == 3) {
-			this.registerPhaseThreeControllers(data);
+			data.add(new AnimationController<>(this, "movement", 0, this::phaseTwoMovementPredicate));
+			data.add(new AnimationController<>(this, "attacking", 0, this::phaseTwoAttackingPredicate));
+			data.add(new AnimationController<>(this, "procedure", 0, this::procedurePredicate));
+		} else if (!this.hasNextPhase()) {
+			data.add(new AnimationController<>(this, "movement", 0, this::phaseThreeMovementPredicate));
+			data.add(new AnimationController<>(this, "attacking", 0, this::phaseThreeAttackingPredicate));
+			data.add(new AnimationController<>(this, "procedure", 0, this::procedurePredicate));
 		}
 	}
 
@@ -1565,16 +1446,39 @@ public class EndspeakerEntity extends SeaMonster {
 	public void baseTick() {
 		super.baseTick();
 		this.updatePhaseRuntimeProperties();
-		this.tickPhaseBehavior();
+		if (this.getPhase() == 0) {
+			this.tickPhaseZeroBehavior();
+		} else if (this.getPhase() == 1) {
+			this.tickPhaseOneBehavior();
+		} else if (this.getPhase() == 2) {
+			this.tickPhaseTwoBehavior();
+		} else if (!this.hasNextPhase()) {
+			this.tickPhaseThreeBehavior();
+		}
 		this.refreshDimensions();
 	}
 
 	@Override
 	protected void tickDeath() {
 		++this.deathTime;
-		if (this.deathTime == this.getPhaseDeathTickThreshold()) {
+		if (!this.level().isClientSide() && this.deathTime == this.getPhaseDeathTickThreshold() && !this.isRemoved()) {
 			this.remove(Mob.RemovalReason.KILLED);
 			this.dropExperience();
 		}
+	}
+
+	protected int getPhaseDeathTickThreshold() {
+		return switch (this.getPhase()) {
+			case 1 -> 40;
+			case 2 -> 45;
+			case 3 -> 50;
+			default -> 35;
+		};
+	}
+
+
+	@Override
+	public void setAnimationProcedure(String animation) {
+		this.animationprocedure = animation;
 	}
 }

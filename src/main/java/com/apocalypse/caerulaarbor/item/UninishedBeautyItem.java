@@ -50,7 +50,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class UninishedBeautyItem extends Item implements GeoItem {
+public class UninishedBeautyItem extends Item implements GeoItem, SyncedAnimationItem {
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 	public String animationprocedure = "empty";
 
@@ -255,5 +255,11 @@ public class UninishedBeautyItem extends Item implements GeoItem {
 		super.inventoryTick(itemstack, world, entity, slot, selected);
 		if (selected)
 			EntityUtils.gainLessSpeed(entity);
+	}
+
+
+	@Override
+	public void setAnimationProcedure(String animation) {
+		this.animationprocedure = animation;
 	}
 }

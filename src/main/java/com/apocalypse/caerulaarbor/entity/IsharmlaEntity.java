@@ -1005,4 +1005,10 @@ public class IsharmlaEntity extends SeaMonster {
 			}
 		});
 	}
+
+
+	@Override
+	public void setAnimationProcedure(String animation) {
+		this.animationprocedure = animation;
+	}
 }

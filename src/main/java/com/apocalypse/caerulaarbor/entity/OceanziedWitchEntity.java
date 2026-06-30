@@ -3,9 +3,10 @@ package com.apocalypse.caerulaarbor.entity;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.RavagerMountRider;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.*;
 import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CAPotions;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
@@ -588,5 +589,11 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
 		data.add(new AnimationController<>(this, "movement", 1, this::movementPredicate));
 		data.add(new AnimationController<>(this, "attacking", 1, this::attackingPredicate));
 		data.add(new AnimationController<>(this, "procedure", 1, this::procedurePredicate));
+	}
+
+
+	@Override
+	public void setAnimationProcedure(String animation) {
+		this.animationprocedure = animation;
 	}
 }

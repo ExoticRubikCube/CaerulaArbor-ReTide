@@ -310,4 +310,10 @@ public class QunyouWantedIsharmlaEntity extends SeaMonster {
 		data.add(new AnimationController<>(this, "movement", 0, this::movementPredicate));
 		data.add(new AnimationController<>(this, "procedure", 0, this::procedurePredicate));
 	}
+
+
+	@Override
+	public void setAnimationProcedure(String animation) {
+		this.animationprocedure = animation;
+	}
 }

@@ -4,7 +4,6 @@ import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
-import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
@@ -57,7 +56,7 @@ import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.List;
 
-public class SpecterEntity extends Animal implements GeoEntity {
+public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationEntity {
 
 	private boolean isSpecterDurative() {
 		return EntityPredicateUtils.isSpecterDurative(this);
@@ -549,5 +548,11 @@ public class SpecterEntity extends Animal implements GeoEntity {
 						(float) (damage * rate));
 			}
 		}
+	}
+
+
+	@Override
+	public void setAnimationProcedure(String animation) {
+		this.animationprocedure = animation;
 	}
 }

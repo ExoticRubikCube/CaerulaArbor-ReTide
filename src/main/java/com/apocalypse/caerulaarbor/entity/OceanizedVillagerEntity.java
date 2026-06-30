@@ -2,9 +2,9 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.entity.base.PolarMountRider;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CAItems;
 import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -302,5 +302,11 @@ public class OceanizedVillagerEntity extends SeaMonster implements PolarMountRid
 		data.add(new AnimationController<>(this, "movement", 5, this::movementPredicate));
 		data.add(new AnimationController<>(this, "attacking", 5, this::attackingPredicate));
 		data.add(new AnimationController<>(this, "procedure", 5, this::procedurePredicate));
+	}
+
+
+	@Override
+	public void setAnimationProcedure(String animation) {
+		this.animationprocedure = animation;
 	}
 }

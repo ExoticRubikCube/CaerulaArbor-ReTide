@@ -351,4 +351,10 @@ public class ChestFishEntity extends SeaMonster {
 		}
 		return InteractionResult.PASS;
 	}
+
+
+	@Override
+	public void setAnimationProcedure(String animation) {
+		this.animationprocedure = animation;
+	}
 }

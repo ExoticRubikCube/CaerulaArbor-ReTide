@@ -436,4 +436,10 @@ public class FleeFishEntity extends SeaMonster implements RangedAttackMob {
 		data.add(new AnimationController<>(this, "attacking", 3, this::attackingPredicate));
 		data.add(new AnimationController<>(this, "procedure", 3, this::procedurePredicate));
 	}
+
+
+	@Override
+	public void setAnimationProcedure(String animation) {
+		this.animationprocedure = animation;
+	}
 }

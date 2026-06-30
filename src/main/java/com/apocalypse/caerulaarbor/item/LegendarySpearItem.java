@@ -51,7 +51,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class LegendarySpearItem extends Item implements GeoItem {
+public class LegendarySpearItem extends Item implements GeoItem, SyncedAnimationItem {
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 	public String animationprocedure = "empty";
 
@@ -262,5 +262,11 @@ public class LegendarySpearItem extends Item implements GeoItem {
 		super.inventoryTick(itemstack, world, entity, slot, selected);
 		if (selected)
 			EntityUtils.giveSpearFight(entity);
+	}
+
+
+	@Override
+	public void setAnimationProcedure(String animation) {
+		this.animationprocedure = animation;
 	}
 }

@@ -23,7 +23,7 @@ public class LastKnightAndHorseModel extends GeoModel<LastKnightAndHorseEntity> 
 
 	@Override
 	public ResourceLocation getTextureResource(LastKnightAndHorseEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTextureName() + ".png");
 	}
 
 	@Override

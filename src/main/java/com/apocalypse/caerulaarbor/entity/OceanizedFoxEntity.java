@@ -425,4 +425,10 @@ public class OceanizedFoxEntity extends SeaMonster {
 		return !this.getEntityData().get(OceanizedFoxEntity.DATA_sleeping)
 				&& this.getEntityData().get(OceanizedFoxEntity.DATA_duration) <= 0;
 	}
+
+
+	@Override
+	public void setAnimationProcedure(String animation) {
+		this.animationprocedure = animation;
+	}
 }

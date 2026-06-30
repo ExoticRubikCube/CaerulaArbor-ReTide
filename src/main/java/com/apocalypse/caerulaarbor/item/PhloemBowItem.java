@@ -2,9 +2,9 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CAItems;
-import com.apocalypse.caerulaarbor.init.CAEnchantments;
 import com.apocalypse.caerulaarbor.client.renderer.item.PhloemBowItemRenderer;
+import com.apocalypse.caerulaarbor.init.CAEnchantments;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.core.BlockPos;
@@ -47,7 +47,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import java.util.Map;
 import java.util.function.Consumer;
 
-public class PhloemBowItem extends Item implements GeoItem {
+public class PhloemBowItem extends Item implements GeoItem, SyncedAnimationItem {
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 	public String animationprocedure = "empty";
 
@@ -362,5 +362,11 @@ public class PhloemBowItem extends Item implements GeoItem {
             }
         }
         return ar;
+	}
+
+
+	@Override
+	public void setAnimationProcedure(String animation) {
+		this.animationprocedure = animation;
 	}
 }

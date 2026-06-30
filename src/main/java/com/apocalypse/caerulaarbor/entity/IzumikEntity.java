@@ -914,4 +914,10 @@ public class IzumikEntity extends SeaMonster {
         float finalV = reduction >= mhlth * 0.33f ? hlth - mhlth * 0.33f : hlth - reduction;
         super.setHealth(finalV);
     }
+
+
+	@Override
+	public void setAnimationProcedure(String animation) {
+		this.animationprocedure = animation;
+	}
 }

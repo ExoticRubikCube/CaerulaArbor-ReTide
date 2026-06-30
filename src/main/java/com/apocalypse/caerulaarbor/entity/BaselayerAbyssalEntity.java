@@ -2,8 +2,9 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.*;
 import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CABlocks;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.procedures.TrailReplaceProcedure;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
@@ -327,5 +328,11 @@ public class BaselayerAbyssalEntity extends SeaMonster {
 		data.add(new AnimationController<>(this, "movement", 3, this::movementPredicate));
 		data.add(new AnimationController<>(this, "attacking", 3, this::attackingPredicate));
 		data.add(new AnimationController<>(this, "procedure", 3, this::procedurePredicate));
+	}
+
+
+	@Override
+	public void setAnimationProcedure(String animation) {
+		this.animationprocedure = animation;
 	}
 }

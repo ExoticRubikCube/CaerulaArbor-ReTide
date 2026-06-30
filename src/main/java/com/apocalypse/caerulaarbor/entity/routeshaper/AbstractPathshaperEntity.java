@@ -208,4 +208,10 @@ public abstract class AbstractPathshaperEntity extends SeaMonster {
 		if (compound.contains("HurtCount"))
 			this.setHurtSkillp(compound.getInt("HurtCount"));
 	}
+
+
+	@Override
+	public void setAnimationProcedure(String animation) {
+		this.animationprocedure = animation;
+	}
 }

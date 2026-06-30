@@ -1,9 +1,9 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.procedures.RavagerSummonFellowsProcedure;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.particles.ParticleTypes;
@@ -437,5 +437,11 @@ public class OceanIllusionEntity extends SeaMonster implements RangedAttackMob {
 	private void illusionSmoke(LevelAccessor world, double x, double y, double z) {
 		if (world instanceof ServerLevel _level)
 			_level.sendParticles(ParticleTypes.LARGE_SMOKE, x, (y + 0.75), z, 16, 0.75, 0.75, 0.75, 0.1);
+	}
+
+
+	@Override
+	public void setAnimationProcedure(String animation) {
+		this.animationprocedure = animation;
 	}
 }

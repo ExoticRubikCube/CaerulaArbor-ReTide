@@ -1,9 +1,5 @@
 package com.apocalypse.caerulaarbor.init;
 
-/*
- *    MCreator note: This file will be REGENERATED on each build.
- */
-
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.block.entity.*;

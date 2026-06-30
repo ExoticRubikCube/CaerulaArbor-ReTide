@@ -61,7 +61,7 @@ import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.List;
 
-public class SkadiEntity extends Animal implements GeoEntity {
+public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEntity {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(SkadiEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(SkadiEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(SkadiEntity.class, EntityDataSerializers.STRING);
@@ -189,7 +189,7 @@ public class SkadiEntity extends Animal implements GeoEntity {
                 if (result) {
                     sklp = (Entity) this instanceof SkadiEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp2) : 0;
                     if (sklp <= 0 && this.isAlive()) {
-                        if ((sourceentity != null ? distanceTo(sourceentity) : -1) <= 5) {
+                        if (distanceTo(sourceentity) <= 5) {
                             if ((Entity) this instanceof SkadiEntity _datEntSetI)
                                 _datEntSetI.getEntityData().set(DATA_skillp2, 120);
                             if (this instanceof SkadiEntity) {
@@ -212,7 +212,6 @@ public class SkadiEntity extends Animal implements GeoEntity {
                                     if (world instanceof Level _level) {
                                             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.dragon_fireball.explode")), SoundSource.HOSTILE, 2, 1);
                                     }
-                                    double sklp1 = 0;
                                     double ddd;
                                     ddd = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 2.25;
                                     {
@@ -252,14 +251,12 @@ public class SkadiEntity extends Animal implements GeoEntity {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-		if (this != null) {
-			if ((Entity) this instanceof LivingEntity _livingEntity1 && _livingEntity1.getAttributes().hasAttribute(ForgeMod.SWIM_SPEED.get()))
-				_livingEntity1.getAttribute(ForgeMod.SWIM_SPEED.get())
-						.setBaseValue((((Entity) this instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(ForgeMod.SWIM_SPEED.get()) ? _livingEntity0.getAttribute(ForgeMod.SWIM_SPEED.get()).getBaseValue() : 0) * 8));
-			if ((Entity) this instanceof LivingEntity _livingEntity2 && _livingEntity2.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
-				_livingEntity2.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.33);
-		}
-		return retval;
+        if (this.getAttributes().hasAttribute(ForgeMod.SWIM_SPEED.get()))
+			this.getAttribute(ForgeMod.SWIM_SPEED.get())
+                    .setBaseValue((((Entity) this instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(ForgeMod.SWIM_SPEED.get()) ? _livingEntity0.getAttribute(ForgeMod.SWIM_SPEED.get()).getBaseValue() : 0) * 8));
+        if ((Entity) this instanceof LivingEntity _livingEntity2 && _livingEntity2.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
+            _livingEntity2.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.33);
+        return retval;
 	}
 
 	@Override
@@ -516,5 +513,11 @@ public class SkadiEntity extends Animal implements GeoEntity {
 	@Override
 	public AnimatableInstanceCache getAnimatableInstanceCache() {
 		return this.cache;
+	}
+
+
+	@Override
+	public void setAnimationProcedure(String animation) {
+		this.animationprocedure = animation;
 	}
 }
