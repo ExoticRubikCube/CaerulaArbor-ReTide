@@ -4,7 +4,6 @@ import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
-import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
@@ -118,41 +117,41 @@ public class ChestFishEntity extends SeaMonster {
 
 			@Override
 			public boolean canUse() {
-				Entity entity = ChestFishEntity.this;
-				return super.canUse() && EntityPredicateUtils.isNotShiftKeyDown(entity);
+				if (!super.canUse()) return false;
+				return !isShiftKeyDown();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				Entity entity = ChestFishEntity.this;
-				return super.canContinueToUse() && EntityPredicateUtils.isNotShiftKeyDown(entity);
+				if (!super.canContinueToUse()) return false;
+				return !isShiftKeyDown();
 			}
 
 		});
 		this.goalSelector.addGoal(3, new RandomStrollGoal(this, 1) {
 			@Override
 			public boolean canUse() {
-				Entity entity = ChestFishEntity.this;
-				return super.canUse() && EntityPredicateUtils.isNotShiftKeyDown(entity);
+				if (!super.canUse()) return false;
+				return !isShiftKeyDown();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				Entity entity = ChestFishEntity.this;
-				return super.canContinueToUse() && EntityPredicateUtils.isNotShiftKeyDown(entity);
+				if (!super.canContinueToUse()) return false;
+				return !isShiftKeyDown();
 			}
 		});
 		this.goalSelector.addGoal(4, new RandomLookAroundGoal(this) {
 			@Override
 			public boolean canUse() {
-				Entity entity = ChestFishEntity.this;
-				return super.canUse() && EntityPredicateUtils.isNotShiftKeyDown(entity);
+				if (!super.canUse()) return false;
+				return !isShiftKeyDown();
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				Entity entity = ChestFishEntity.this;
-				return super.canContinueToUse() && EntityPredicateUtils.isNotShiftKeyDown(entity);
+				if (!super.canContinueToUse()) return false;
+				return !isShiftKeyDown();
 			}
 		});
 	}
@@ -371,4 +370,3 @@ public class ChestFishEntity extends SeaMonster {
 		this.animationprocedure = animation;
 	}
 }
-

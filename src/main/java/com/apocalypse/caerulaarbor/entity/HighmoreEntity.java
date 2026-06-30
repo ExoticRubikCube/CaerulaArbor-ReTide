@@ -4,7 +4,6 @@ import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
-import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
@@ -139,16 +138,14 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this) {
             @Override
             public boolean canUse() {
-                LivingEntity entity = HighmoreEntity.this;
                 if (!super.canUse()) return false;
-                return EntityPredicateUtils.isNotFakeDying(entity);
+                return hasEffect(CAMobEffects.FAKE_DEATH.get());
             }
 
             @Override
             public boolean canContinueToUse() {
-                LivingEntity entity = HighmoreEntity.this;
                 if (!super.canContinueToUse()) return false;
-                return EntityPredicateUtils.isNotFakeDying(entity);
+                return hasEffect(CAMobEffects.FAKE_DEATH.get());
             }
         });
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, IronGolem.class, true, false));
@@ -203,16 +200,14 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
 
             @Override
             public boolean canUse() {
-                Entity entity = HighmoreEntity.this;
                 if (!super.canUse()) return false;
-                return EntityPredicateUtils.isNotFakeDying(entity);
+                return hasEffect(CAMobEffects.FAKE_DEATH.get());
             }
 
             @Override
             public boolean canContinueToUse() {
-                Entity entity = HighmoreEntity.this;
                 if (!super.canContinueToUse()) return false;
-                return EntityPredicateUtils.isNotFakeDying(entity);
+                return hasEffect(CAMobEffects.FAKE_DEATH.get());
             }
 
         });

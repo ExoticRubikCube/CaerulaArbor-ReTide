@@ -6,7 +6,6 @@ import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
-import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
@@ -114,41 +113,37 @@ public class ScreamChestFishEntity extends SeaMonster {
 
             @Override
             public boolean canUse() {
-                ScreamChestFishEntity entity = ScreamChestFishEntity.this;
-                return super.canUse() && EntityPredicateUtils.isNotShiftKeyDown(entity) && !entity.isScreaming();
+                return super.canUse() && !isShiftKeyDown() && !ScreamChestFishEntity.this.isScreaming();
             }
 
             @Override
             public boolean canContinueToUse() {
-                ScreamChestFishEntity entity = ScreamChestFishEntity.this;
-                return super.canContinueToUse() && EntityPredicateUtils.isNotShiftKeyDown(entity) && !entity.isScreaming();
+                return super.canContinueToUse() && !isShiftKeyDown() && !ScreamChestFishEntity.this.isScreaming();
             }
 
         });
         this.goalSelector.addGoal(3, new RandomStrollGoal(this, 1) {
             @Override
             public boolean canUse() {
-                ScreamChestFishEntity entity = ScreamChestFishEntity.this;
-                return super.canUse() && EntityPredicateUtils.isNotShiftKeyDown(entity) && !entity.isScreaming();
+                return super.canUse() && !isShiftKeyDown() && !ScreamChestFishEntity.this.isScreaming();
             }
 
             @Override
             public boolean canContinueToUse() {
-                ScreamChestFishEntity entity = ScreamChestFishEntity.this;
-                return super.canContinueToUse() && EntityPredicateUtils.isNotShiftKeyDown(entity) && !entity.isScreaming();
+                return super.canContinueToUse() && !isShiftKeyDown() && !ScreamChestFishEntity.this.isScreaming();
             }
         });
         this.goalSelector.addGoal(4, new RandomLookAroundGoal(this) {
             @Override
             public boolean canUse() {
-                Entity entity = ScreamChestFishEntity.this;
-                return super.canUse() && EntityPredicateUtils.isNotShiftKeyDown(entity);
+                if (!super.canUse()) return false;
+                return !isShiftKeyDown();
             }
 
             @Override
             public boolean canContinueToUse() {
-                Entity entity = ScreamChestFishEntity.this;
-                return super.canContinueToUse() && EntityPredicateUtils.isNotShiftKeyDown(entity);
+                if (!super.canContinueToUse()) return false;
+                return !isShiftKeyDown();
             }
         });
     }

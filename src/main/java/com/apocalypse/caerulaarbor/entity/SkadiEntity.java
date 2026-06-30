@@ -4,7 +4,6 @@ import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
-import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
@@ -122,16 +121,14 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 
             @Override
             public boolean canUse() {
-                Entity entity = SkadiEntity.this;
                 if (!super.canUse()) return false;
-                return EntityPredicateUtils.isNotFakeDying(entity);
+                return hasEffect(CAMobEffects.FAKE_DEATH.get());
             }
 
             @Override
             public boolean canContinueToUse() {
-                Entity entity = SkadiEntity.this;
                 if (!super.canContinueToUse()) return false;
-                return EntityPredicateUtils.isNotFakeDying(entity);
+                return hasEffect(CAMobEffects.FAKE_DEATH.get());
             }
 
         });
@@ -184,7 +181,7 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
                 }
             }.checkGamemode(sourceentity)) {
                 boolean result;
-                result = EntityPredicateUtils.isNotFakeDying(this);
+                result = hasEffect(CAMobEffects.FAKE_DEATH.get());
                 if (result) {
                     sklp = (Entity) this instanceof SkadiEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp2) : 0;
                     if (sklp <= 0 && this.isAlive()) {
@@ -329,7 +326,7 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
                         CaerulaArborMod.queueServerWork(20, () -> {
                             spinAttack(1.5);
                         });
-                        if (EntityPredicateUtils.isSpecterAround(world, x, y, z)) {
+                        if (SpecterEntity.isSpecterAround(world, x, y, z)) {
                             sklp = 170;
                         } else {
                             sklp = 200;

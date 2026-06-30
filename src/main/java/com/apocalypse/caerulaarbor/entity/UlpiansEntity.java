@@ -5,7 +5,6 @@ import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
-import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
@@ -486,7 +485,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                         if (this instanceof UlpiansEntity) {
                             this.setAnimation("animation.ulpians.skill");
                         }
-                        if (EntityPredicateUtils.isSpecterAround(world, x, y, z)) {
+                        if (SpecterEntity.isSpecterAround(world, x, y, z)) {
                             if ((Entity) this instanceof UlpiansEntity _datEntSetI)
                                 _datEntSetI.getEntityData().set(DATA_skillp2, 820);
                         } else {

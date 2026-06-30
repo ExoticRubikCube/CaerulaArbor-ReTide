@@ -3,7 +3,6 @@ package com.apocalypse.caerulaarbor.entity.routeshaper;
 import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
-import com.apocalypse.caerulaarbor.util.EntityPredicateUtils;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.registries.Registries;
@@ -131,16 +130,14 @@ public class RouteShaperEntity extends AbstractPathshaperEntity {
 
 			@Override
 			public boolean canUse() {
-				Entity entity = RouteShaperEntity.this;
 				if (!super.canUse()) return false;
-				return EntityPredicateUtils.isNotFakeDying(entity);
+				return hasEffect(CAMobEffects.FAKE_DEATH.get());
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				Entity entity = RouteShaperEntity.this;
 				if (!super.canContinueToUse()) return false;
-				return EntityPredicateUtils.isNotFakeDying(entity);
+				return hasEffect(CAMobEffects.FAKE_DEATH.get());
 			}
 
 		});

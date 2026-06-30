@@ -57,6 +57,10 @@ import java.util.List;
 
 public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationEntity {
 
+    public static boolean isSpecterAround(LevelAccessor world, double x, double y, double z) {
+        return !world.getEntitiesOfClass(SpecterEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), Entity::isAlive).isEmpty();
+    }
+
     private boolean isSpecterDurative() {
         return this.isAlive() && this.tickCount > 15 && this.getEntityData().get(DATA_duration) <= 0;
     }
