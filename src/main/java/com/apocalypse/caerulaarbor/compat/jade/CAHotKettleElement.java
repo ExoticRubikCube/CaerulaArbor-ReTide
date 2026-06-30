@@ -1,7 +1,6 @@
 package com.apocalypse.caerulaarbor.compat.jade;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.init.CAItems;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
@@ -16,8 +15,8 @@ public class CAHotKettleElement extends Element {
     public final ItemStack item;
 
     public static final Vec2 SIZE = new Vec2(16, 16);
-    public static final ResourceLocation KETTLE = new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/kettle_icon.png");
-    public static final ResourceLocation RESULTS = new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/kettle_res.png");
+    public static final ResourceLocation KETTLE = new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/kettle_icon.png");
+    public static final ResourceLocation RESULTS = new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/kettle_res.png");
 
     public CAHotKettleElement(boolean watered, boolean noodled, boolean boiling, ItemStack item) {
         this.noodled = noodled;

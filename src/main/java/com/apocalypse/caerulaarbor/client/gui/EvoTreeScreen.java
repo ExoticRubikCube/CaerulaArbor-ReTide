@@ -75,41 +75,41 @@ public class EvoTreeScreen extends AbstractContainerScreen<EvoTreeMenu> {
         if (MapVariables.get(world).strategy_subsisting >= 4) {
             result = 1;
         }
-        guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/evo_arrow.png"), this.leftPos + 14, this.topPos + 40, Mth.clamp((int) result * 161, 0, 161), 0, 161, 8, 322, 8);
+        guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/evo_arrow.png"), this.leftPos + 14, this.topPos + 40, Mth.clamp((int) result * 161, 0, 161), 0, 161, 8, 322, 8);
 
         double result2 = 0;
         if (MapVariables.get(world).strategy_breed >= 4) {
             result2 = 1;
         }
-        guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/evo_arrow.png"), this.leftPos + 14, this.topPos + 80, Mth.clamp((int) result2 * 161, 0, 161), 0, 161, 8, 322, 8);
+        guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/evo_arrow.png"), this.leftPos + 14, this.topPos + 80, Mth.clamp((int) result2 * 161, 0, 161), 0, 161, 8, 322, 8);
 
         double result3 = 0;
         if (MapVariables.get(world).strategy_grow >= 4) {
             result3 = 1;
         }
-        guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/evo_arrow.png"), this.leftPos + 14, this.topPos + 120, Mth.clamp((int) result3 * 161, 0, 161), 0, 161, 8, 322, 8);
+        guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/evo_arrow.png"), this.leftPos + 14, this.topPos + 120, Mth.clamp((int) result3 * 161, 0, 161), 0, 161, 8, 322, 8);
 
         double result4 = 0;
         if (MapVariables.get(world).strategy_migration >= 4) {
             result4 = 1;
         }
-        guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/evo_arrow.png"), this.leftPos + 14, this.topPos + 160, Mth.clamp((int) result4 * 161, 0, 161), 0, 161, 8, 322, 8);
+        guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/evo_arrow.png"), this.leftPos + 14, this.topPos + 160, Mth.clamp((int) result4 * 161, 0, 161), 0, 161, 8, 322, 8);
 
-		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/evo_complete.png"), this.leftPos + 32, this.topPos + 28, Mth.clamp((int) StrategyUtils.getStraSubsis(world) * 128, 0, 512), 0, 128, 33, 640, 33);
+		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/evo_complete.png"), this.leftPos + 32, this.topPos + 28, Mth.clamp((int) StrategyUtils.getStraSubsis(world) * 128, 0, 512), 0, 128, 33, 640, 33);
 
-		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/evo_complete.png"), this.leftPos + 32, this.topPos + 68, Mth.clamp((int) StrategyUtils.getStraBreed(world) * 128, 0, 512), 0, 128, 33, 640, 33);
+		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/evo_complete.png"), this.leftPos + 32, this.topPos + 68, Mth.clamp((int) StrategyUtils.getStraBreed(world) * 128, 0, 512), 0, 128, 33, 640, 33);
 
-		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/evo_complete.png"), this.leftPos + 32, this.topPos + 108, Mth.clamp((int) StrategyUtils.getStraGrow(world) * 128, 0, 512), 0, 128, 33, 640, 33);
+		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/evo_complete.png"), this.leftPos + 32, this.topPos + 108, Mth.clamp((int) StrategyUtils.getStraGrow(world) * 128, 0, 512), 0, 128, 33, 640, 33);
 
-		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/evo_complete.png"), this.leftPos + 32, this.topPos + 148, Mth.clamp((int) StrategyUtils.getStraMigration(world) * 128, 0, 512), 0, 128, 33, 640, 33);
+		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/evo_complete.png"), this.leftPos + 32, this.topPos + 148, Mth.clamp((int) StrategyUtils.getStraMigration(world) * 128, 0, 512), 0, 128, 33, 640, 33);
 
         double result1 = 0;
         if (MapVariables.get(world).strategy_silence >= 1) {
             result1 = 1;
         }
-        guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/side_arrow.png"), this.leftPos + 176, this.topPos + 42, 0, Mth.clamp((int) result1 * 123, 0, 123), 39, 123, 39, 246);
+        guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/side_arrow.png"), this.leftPos + 176, this.topPos + 42, 0, Mth.clamp((int) result1 * 123, 0, 123), 39, 123, 39, 246);
 
-		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/silence.png"), this.leftPos + 208, this.topPos + 86, Mth.clamp((int) StrategyUtils.getStraSilence(world) * 29, 0, 116), 0, 29, 33, 145, 33);
+		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/silence.png"), this.leftPos + 208, this.topPos + 86, Mth.clamp((int) StrategyUtils.getStraSilence(world) * 29, 0, 116), 0, 29, 33, 145, 33);
 
 		RenderSystem.disableBlend();
 	}

@@ -1,4 +1,4 @@
-package com.apocalypse.caerulaarbor.client.screens;
+package com.apocalypse.caerulaarbor.client.overlay.skillbar;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.IsharmlaEntity;
@@ -21,7 +21,7 @@ import java.util.Comparator;
 @Mod.EventBusSubscriber({Dist.CLIENT})
 public class IsharmlasSkillBarOverlay {
 
-	public static final ResourceLocation BAR = new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/isharmla_bar.png");
+	public static final ResourceLocation BAR = new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/isharmla_bar.png");
 
 	@SubscribeEvent(priority = EventPriority.NORMAL)
 	public static void eventHandler(RenderGuiEvent.Pre event) {
@@ -40,11 +40,11 @@ public class IsharmlasSkillBarOverlay {
 		}
         boolean result = false;
         Entity corrupted;
-        corrupted = world.getEntitiesOfClass(IsharmlaEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e1 -> true).stream().sorted(new Object() {
+        corrupted = world.getEntitiesOfClass(IsharmlaEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e1 -> true).stream().min(new Object() {
             Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
                 return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
             }
-        }.compareDistOf(x, y, z)).findFirst().orElse(null);
+        }.compareDistOf(x, y, z)).orElse(null);
         if (corrupted != null) {
             result = !(corrupted instanceof IsharmlaEntity _datEntL2 && _datEntL2.getEntityData().get(IsharmlaEntity.DATA_IS_MONSTER));
         }
@@ -53,9 +53,7 @@ public class IsharmlasSkillBarOverlay {
             Entity ent;
             double ind = 0;
             ent = world.getEntitiesOfClass(IsharmlaEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true)
-            .stream()
-            .sorted(EntityUtils.compareDistOf(x, y, z))
-            .findFirst().orElse(null);
+                    .stream().min(EntityUtils.compareDistOf(x, y, z)).orElse(null);
             if (!(ent == null)) {
                 ind = 2400 - (ent instanceof IsharmlaEntity _datEntI ? _datEntI.getEntityData().get(IsharmlaEntity.DATA_SKILLP_1) : 0);
             }

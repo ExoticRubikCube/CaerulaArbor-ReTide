@@ -1,4 +1,4 @@
-package com.apocalypse.caerulaarbor.client.screens;
+package com.apocalypse.caerulaarbor.client.overlay;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
@@ -15,19 +15,19 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber({Dist.CLIENT})
-public class OceanizingOverlay {
+public class LessArmorOverlay {
 	@SubscribeEvent(priority = EventPriority.NORMAL)
 	public static void eventHandler(RenderGuiEvent.Pre event) {
 		Player player = Minecraft.getInstance().player;
 		ResourceLocation texture = null;
-		if (player.hasEffect(CAMobEffects.INFESTED.get())) {
-			int amplifier = player.getEffect(CAMobEffects.INFESTED.get()).getAmplifier();
-			if (amplifier == 0) {
-				texture = new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/transforming0.png");
-			} else if (amplifier == 1) {
-				texture = new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/transforming1.png");
-			} else if (amplifier > 1) {
-				texture = new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/transforming3.png");
+		if (player.hasEffect(CAMobEffects.LESS_ARMOR.get())) {
+			int amplifier = player.getEffect(CAMobEffects.LESS_ARMOR.get()).getAmplifier();
+			if (amplifier <= 4) {
+				texture = new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/low_armor_ui.png");
+			} else if (amplifier <= 9) {
+				texture = new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/less_armor_ui.png");
+			} else {
+				texture = new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/least_armor_ui.png");
 			}
 		}
 		if (texture != null) {

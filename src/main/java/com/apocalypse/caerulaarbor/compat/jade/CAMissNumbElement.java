@@ -1,7 +1,6 @@
 package com.apocalypse.caerulaarbor.compat.jade;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -18,8 +17,8 @@ public class CAMissNumbElement extends Element {
     private final int style;
     private final boolean showMiss;
 
-    private static final ResourceLocation MISS_ICON = new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/miss.png");
-    private static final ResourceLocation NUMB_ICON = new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/numb.png");
+    private static final ResourceLocation MISS_ICON = new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/miss.png");
+    private static final ResourceLocation NUMB_ICON = new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/numb.png");
 
     public CAMissNumbElement(int miss, int numb) {
         this.miss = "" + miss;

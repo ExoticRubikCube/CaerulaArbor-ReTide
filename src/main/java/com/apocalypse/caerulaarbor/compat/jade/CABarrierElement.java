@@ -1,7 +1,6 @@
 package com.apocalypse.caerulaarbor.compat.jade;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -17,7 +16,7 @@ import snownee.jade.overlay.OverlayRenderer;
 public class CABarrierElement extends Element {
     private final String barrier;
 
-    private static final ResourceLocation BARRIER_ICON = new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/living_barrier.png");
+    private static final ResourceLocation BARRIER_ICON = new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/living_barrier.png");
 
     public CABarrierElement(double barrier) {
         if (!PluginConfig.INSTANCE.get(Identifiers.MC_ENTITY_HEALTH_SHOW_FRACTIONS)) {

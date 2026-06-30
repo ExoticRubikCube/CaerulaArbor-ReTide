@@ -1,5 +1,5 @@
 
-package com.apocalypse.caerulaarbor.client.screens;
+package com.apocalypse.caerulaarbor.client.overlay;
 
 import com.apocalypse.caerulaarbor.init.CAItems;
 import com.apocalypse.caerulaarbor.util.ItemUtils;

@@ -1,4 +1,4 @@
-package com.apocalypse.caerulaarbor.client.screens;
+package com.apocalypse.caerulaarbor.client.overlay;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
@@ -22,15 +22,15 @@ import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber({Dist.CLIENT})
 public class LightShowOverlay {
-	public static final ResourceLocation EXTINGUISH = new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/light_extinguish.png");
-	public static final ResourceLocation DIM = new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/light_dim.png");
-	public static final ResourceLocation WAVING = new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/light_waving.png");
-	public static final ResourceLocation BRIGHT = new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/light.png");
+	public static final ResourceLocation EXTINGUISH = new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/light_extinguish.png");
+	public static final ResourceLocation DIM = new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/light_dim.png");
+	public static final ResourceLocation WAVING = new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/light_waving.png");
+	public static final ResourceLocation BRIGHT = new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/light.png");
 
-	public static final ResourceLocation LIFE_POINT = new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/target_health.png");
-	public static final ResourceLocation SHIELD_POINT = new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/target_shield.png");
+	public static final ResourceLocation LIFE_POINT = new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/target_health.png");
+	public static final ResourceLocation SHIELD_POINT = new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/target_shield.png");
 
-	public static final ResourceLocation NEAT = new ResourceLocation(CaerulaArborMod.MODID, "textures/screens/lights_neat.png");
+	public static final ResourceLocation NEAT = new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/lights_neat.png");
 
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
