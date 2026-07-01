@@ -307,6 +307,31 @@ public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMo
     }
 
     @Override
+    public void die(DamageSource source) {
+        if (this.getEntityData().get(DATA_PHASE) == 0 && this.getEntityData().get(DATA_REVIVE_TICK) <= 0) {
+            Vec3 center = new Vec3(this.getX(), this.getY(), this.getZ());
+            List<Entity> nearbyEntities = this.level().getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(32 / 2d), entity -> true).stream()
+                    .sorted(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(center)))
+                    .toList();
+            for (Entity nearbyEntity : nearbyEntities) {
+                if (nearbyEntity != this && nearbyEntity.isAlive()
+                        && nearbyEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                    if (nearbyEntity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide()) {
+                        livingEntity.addEffect(new MobEffectInstance(CAMobEffects.IMMORTAL.get(), 200, 0, false, false));
+                    }
+                }
+            }
+            this.getEntityData().set(DATA_REVIVE_TICK, 200);
+            if (!this.level().isClientSide()) {
+                this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 200, 1, false, false));
+                this.addEffect(new MobEffectInstance(CAMobEffects.FAKE_DEATH.get(), 200, 1, false, false));
+            }
+            return;
+        }
+        super.die(source);
+    }
+
+    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putString("Texture", this.getTexture());

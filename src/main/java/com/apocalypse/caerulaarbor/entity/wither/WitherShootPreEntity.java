@@ -1,11 +1,10 @@
-package com.apocalypse.caerulaarbor.entity;
+package com.apocalypse.caerulaarbor.entity.wither;
 
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
-import com.apocalypse.caerulaarbor.util.WorldUtils;
-import net.minecraft.util.Mth;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -156,7 +155,7 @@ public class WitherShootPreEntity extends AbstractArrow implements ItemSupplier 
 		double vx = target.getX() - from.getX();
 		double vy = target.getY() + target.getBbHeight() * 0.5 - (from.getY() + 2.7);
 		double vz = target.getZ() - from.getZ();
-		WorldUtils.shootWitherSkull(world, from, 0.1, vx, vy, vz, 1, Mth.nextDouble(RandomSource.create(), 0.42, 0.56), from.getX(), from.getY() + 2.7, from.getZ());
+		AbstractOceanizedWitherEntity.shootWitherSkull(world, from, 0.1, vx, vy, vz, 1, Mth.nextDouble(RandomSource.create(), 0.42, 0.56), from.getX(), from.getY() + 2.7, from.getZ());
 	}
 
 	public static WitherShootPreEntity shoot(Level world, LivingEntity entity, RandomSource source) {

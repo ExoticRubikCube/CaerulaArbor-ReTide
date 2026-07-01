@@ -9,6 +9,7 @@ import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -72,6 +73,8 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
     private boolean lastloop;
     private long lastSwing;
     public String animationprocedure = "empty";
+    @Nullable
+    private DamageSource lastDamageSource;
 
     public SkadiEntity(PlayMessages.SpawnEntity packet, Level world) {
         this(CAEntities.SKADI.get(), world);
@@ -163,6 +166,7 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
+        this.lastDamageSource = source;
         LevelAccessor world = this.level();
         double x = this.getX();
         double y = this.getY();
@@ -242,6 +246,69 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
         if (source.is(DamageTypes.DROWN))
             return false;
         return super.hurt(source, amount);
+    }
+
+    @Override
+    public void setHealth(float pHealth) {
+        float currentHealth = this.getHealth();
+        if (pHealth <= 0) {
+            ResourceKey<net.minecraft.world.damagesource.DamageType> cursedDamage = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "isharmla_cursed"));
+            if (this.lastDamageSource == null || !this.lastDamageSource.is(cursedDamage)) {
+                int phase = this.getEntityData().get(DATA_phase);
+                if (phase == 0 || phase == 1) {
+                    super.setHealth(Math.max(currentHealth, 1.0F));
+                    this.getEntityData().set(DATA_phase, phase + 1);
+                    if (this.level() instanceof Level level) {
+                        level.playSound(null, BlockPos.containing(this.getX(), this.getY(), this.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "skadi_talk")), SoundSource.HOSTILE, 2, 1);
+                    }
+                    if (!this.level().isClientSide()) {
+                        this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 100, 1, false, false));
+                        this.addEffect(new MobEffectInstance(CAMobEffects.FAKE_DEATH.get(), 100, 3, false, false));
+                        if (phase == 0) {
+                            this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 131071, 1, false, true));
+                        }
+                    }
+                    if (this.getAttributes().hasAttribute(Attributes.MAX_HEALTH)) {
+                        double scaledMaxHealth = this.getAttribute(Attributes.MAX_HEALTH).getBaseValue() * (phase == 0 ? 0.75 : 0.8);
+                        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(scaledMaxHealth);
+                    }
+                    if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)) {
+                        double scaledAttackDamage = this.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() * (phase == 0 ? 1.5 : 1.25);
+                        this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(scaledAttackDamage);
+                    }
+                    if (this.getAttributes().hasAttribute(Attributes.ARMOR)) {
+                        this.getAttribute(Attributes.ARMOR).setBaseValue(this.getAttribute(Attributes.ARMOR).getBaseValue() * 2);
+                    }
+                    super.setHealth(Math.min(currentHealth, this.getMaxHealth()));
+                    return;
+                }
+            }
+        }
+        super.setHealth(pHealth);
+    }
+
+    @Override
+    public void die(DamageSource source) {
+        ResourceKey<net.minecraft.world.damagesource.DamageType> cursedDamage = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "isharmla_cursed"));
+        if (source.is(cursedDamage)) {
+            for (Entity nearbyPlayer : this.level().players()) {
+                if (this.distanceTo(nearbyPlayer) < 32 && nearbyPlayer instanceof Player player && !player.level().isClientSide()) {
+                    player.displayClientMessage(Component.literal(Component.translatable("entity.caerula_arbor.skadi_corrupted.start").getString()), false);
+                }
+            }
+            if (!this.level().isClientSide()) {
+                this.discard();
+            }
+            if (this.level() instanceof ServerLevel level) {
+                level.sendParticles(ParticleTypes.EXPLOSION, this.getX(), this.getY() + 1, this.getZ(), 5, 0, 0, 0, 0.1);
+                Entity corruptedSkadi = CAEntities.SKADI_CORRUPTED.get().spawn(level, BlockPos.containing(this.getX(), this.getY(), this.getZ()), MobSpawnType.MOB_SUMMONED);
+                if (corruptedSkadi != null) {
+                    corruptedSkadi.setYRot(this.level().getRandom().nextFloat() * 360F);
+                }
+            }
+            return;
+        }
+        super.die(source);
     }
 
     @Override

@@ -4,11 +4,9 @@ import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
 import com.apocalypse.caerulaarbor.entity.Al1SHelperEntity;
 import com.apocalypse.caerulaarbor.entity.LittleHelperEntity;
-import com.apocalypse.caerulaarbor.entity.OceanizedWitherEntity;
 import com.apocalypse.caerulaarbor.init.CABlocks;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAGameRules;
-import com.apocalypse.caerulaarbor.init.CAItems;
 import com.apocalypse.caerulaarbor.procedures.SummonEliteFishProcedure;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -24,12 +22,8 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
-import net.minecraft.world.entity.projectile.Projectile;
-import net.minecraft.world.entity.projectile.WitherSkull;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
@@ -189,43 +183,6 @@ public class WorldUtils {
 		return (belowState.isFaceSturdy(world, belowPos, Direction.UP)
 				|| belowState.is(BlockTags.create(new ResourceLocation(CaerulaArborMod.MODID, "trail_existable"))))
 				&& belowState.getBlock() != CABlocks.SEA_TRAIL_SOLID.get();
-	}
-
-	//TODO:下放,应该为两个凋零制作一个共同的基类，然后置入那里,其他两个凋零都调用的utils方法同理
-	public static boolean checkTShape(LevelAccessor world, double x, double y, double z, BlockState target) {
-		double direction = 0;
-		boolean verticalMatched = false;
-		boolean horizontalMatched = false;
-		if ((world.getBlockState(BlockPos.containing(x, y - 1, z))).getBlock() == target.getBlock() && (world.getBlockState(BlockPos.containing(x, y - 2, z))).getBlock() == target.getBlock()) {
-			verticalMatched = true;
-		}
-		if ((world.getBlockState(BlockPos.containing(x - 1, y - 1, z))).getBlock() == target.getBlock() && (world.getBlockState(BlockPos.containing(x + 1, y - 1, z))).getBlock() == target.getBlock()
-				&& (world.getBlockState(BlockPos.containing(x - 1, y, z))).getBlock() == Blocks.WITHER_SKELETON_SKULL && (world.getBlockState(BlockPos.containing(x + 1, y, z))).getBlock() == Blocks.WITHER_SKELETON_SKULL) {
-			horizontalMatched = true;
-			direction = 0;
-		} else if ((world.getBlockState(BlockPos.containing(x, y - 1, z - 1))).getBlock() == target.getBlock() && (world.getBlockState(BlockPos.containing(x, y - 1, z + 1))).getBlock() == target.getBlock()
-				&& (world.getBlockState(BlockPos.containing(x, y, z - 1))).getBlock() == Blocks.WITHER_SKELETON_SKULL && (world.getBlockState(BlockPos.containing(x, y, z + 1))).getBlock() == Blocks.WITHER_SKELETON_SKULL) {
-			horizontalMatched = true;
-			direction = 1;
-		}
-		if (horizontalMatched && verticalMatched) {
-			world.destroyBlock(BlockPos.containing(x, y, z), false);
-			world.destroyBlock(BlockPos.containing(x, y - 1, z), false);
-			world.destroyBlock(BlockPos.containing(x, y - 2, z), false);
-			if (direction == 0) {
-				world.destroyBlock(BlockPos.containing(x - 1, y, z), false);
-				world.destroyBlock(BlockPos.containing(x + 1, y, z), false);
-				world.destroyBlock(BlockPos.containing(x - 1, y - 1, z), false);
-				world.destroyBlock(BlockPos.containing(x + 1, y - 1, z), false);
-			} else {
-				world.destroyBlock(BlockPos.containing(x, y, z - 1), false);
-				world.destroyBlock(BlockPos.containing(x, y, z + 1), false);
-				world.destroyBlock(BlockPos.containing(x, y - 1, z - 1), false);
-				world.destroyBlock(BlockPos.containing(x, y - 1, z + 1), false);
-			}
-			return true;
-		}
-		return false;
 	}
 
 	//可疑
@@ -461,32 +418,6 @@ public class WorldUtils {
 		}
 	}
 
-	//TODO:下放,应该为两个凋零制作一个共同的基类，然后置入那里
-	public static void dropMoistStar(LevelAccessor world, double x, double y, double z, Entity entity) {
-		if (entity == null)
-			return;
-		if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
-			if (world instanceof ServerLevel _level) {
-				ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, new ItemStack(CAItems.MOIST_STAR.get()));
-				entityToSpawn.setPickUpDelay(10);
-				entityToSpawn.setUnlimitedLifetime();
-				_level.addFreshEntity(entityToSpawn);
-			}
-			for (int index0 = 0; index0 < 64; index0++) {
-				if (world instanceof ServerLevel _level)
-					_level.addFreshEntity(new ExperienceOrb(_level, (x + Mth.nextDouble(RandomSource.create(), -1, 1)), y, (z + Mth.nextDouble(RandomSource.create(), -1, 1)), Mth.nextInt(RandomSource.create(), 32, 48)));
-			}
-		}
-		if (entity instanceof OceanizedWitherEntity) {
-			if (world instanceof ServerLevel _level) {
-				Entity entityToSpawn = CAEntities.OCEANIZED_WITHERIA.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
-				if (entityToSpawn != null) {
-					entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-				}
-			}
-		}
-	}
-
 	/**
 	 * 以给定目标高度为中心，向上与向下搜索可用于生成实体的 Y 坐标。
 	 *
@@ -546,42 +477,6 @@ public class WorldUtils {
 			}
 		}
 		return Double.NaN;
-	}
-
-	//TODO:之后也进行下放
-	public static void shootWitherSkull(LevelAccessor world, Entity from, double a, double dx, double dy, double dz, double inaccu, double speed, double xx, double yy, double zz) {
-		if (from == null)
-			return;
-		double ddx = 0;
-		double ddy = 0;
-		double ddz = 0;
-		double module;
-        module = Math.sqrt(dx * dx + dy * dy + dz * dz);
-		if (module > 0) {
-			ddx = (dx / module) * a;
-			ddy = (dy / module) * a;
-			ddz = (dz / module) * a;
-		}
-		CaerulaArborMod.queueServerWork(Mth.nextInt(RandomSource.create(), 0, 4), () -> {
-			if (world instanceof Level _level) {
-					_level.playSound(null, BlockPos.containing(xx, yy, zz), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.wither.shoot")), SoundSource.HOSTILE, (float) 0.85, 1);
-			}
-		});
-		if (world instanceof ServerLevel projectileLevel) {
-			Projectile _entityToSpawn = new Object() {
-				public Projectile getFireball(Level level, Entity shooter, double ax, double ay, double az) {
-					AbstractHurtingProjectile entityToSpawn = new WitherSkull(EntityType.WITHER_SKULL, level);
-					entityToSpawn.setOwner(shooter);
-					entityToSpawn.xPower = ax;
-					entityToSpawn.yPower = ay;
-					entityToSpawn.zPower = az;
-					return entityToSpawn;
-				}
-			}.getFireball(projectileLevel, from, ddx, ddy, ddz);
-			_entityToSpawn.setPos(xx, yy, zz);
-			_entityToSpawn.shoot(dx, dy, dz, (float) speed, (float) inaccu);
-			projectileLevel.addFreshEntity(_entityToSpawn);
-		}
 	}
 
 	//需要评估然后添加文档注释解释作用

@@ -1,0 +1,421 @@
+package com.apocalypse.caerulaarbor.entity.wither;
+
+import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.util.EntityUtils;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerBossEvent;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.control.FlyingMoveControl;
+import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
+import net.minecraft.world.entity.projectile.Projectile;
+import net.minecraft.world.entity.projectile.WitherSkull;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.GameRules;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.registries.ForgeRegistries;
+
+import java.util.Comparator;
+import java.util.List;
+
+
+public abstract class AbstractOceanizedWitherEntity extends SeaMonster {
+    public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(AbstractOceanizedWitherEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(AbstractOceanizedWitherEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(AbstractOceanizedWitherEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> DATA_skillp = SynchedEntityData.defineId(AbstractOceanizedWitherEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(AbstractOceanizedWitherEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Boolean> DATA_shelled = SynchedEntityData.defineId(AbstractOceanizedWitherEntity.class, EntityDataSerializers.BOOLEAN);
+
+    protected boolean swinging;
+    protected boolean lastloop;
+    protected long lastSwing;
+    protected String prevAnim = "empty";
+    public String animationprocedure = "empty";
+    protected final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.WHITE, ServerBossEvent.BossBarOverlay.NOTCHED_10);
+
+    protected AbstractOceanizedWitherEntity(EntityType<? extends AbstractOceanizedWitherEntity> type, Level world) {
+        super(type, world);
+        this.xpReward = 512;
+        this.setNoAi(false);
+        this.setMaxUpStep(2F);
+        this.setPersistenceRequired();
+        this.moveControl = new FlyingMoveControl(this, 10, true);
+    }
+
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(SHOOT, false);
+        this.entityData.define(ANIMATION, "undefined");
+        this.entityData.define(TEXTURE, this.getDefaultTexture());
+        this.entityData.define(DATA_skillp, this.getInitialSkillp());
+        this.entityData.define(DATA_duration, this.getInitialDuration());
+        this.entityData.define(DATA_shelled, false);
+    }
+
+    protected abstract String getDefaultTexture();
+
+    protected abstract int getInitialSkillp();
+
+    protected abstract int getInitialDuration();
+
+    protected abstract int getDeathDuration();
+
+    public void setTexture(String texture) {
+        this.entityData.set(TEXTURE, texture);
+    }
+
+    public String getTexture() {
+        return this.entityData.get(TEXTURE);
+    }
+
+    public String getSyncedAnimation() {
+        return this.entityData.get(ANIMATION);
+    }
+
+    public void setAnimation(String animation) {
+        this.entityData.set(ANIMATION, animation);
+    }
+
+    @Override
+    protected PathNavigation createNavigation(Level world) {
+        return new FlyingPathNavigation(this, world);
+    }
+
+    @Override
+    public MobType getMobType() {
+        return MobType.UNDEAD;
+    }
+
+    @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        return false;
+    }
+
+    @Override
+    public SoundEvent getAmbientSound() {
+        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "ocean_wither_idle"));
+    }
+
+    @Override
+    public SoundEvent getHurtSound(DamageSource source) {
+        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "ocean_wither_hurt"));
+    }
+
+    @Override
+    public SoundEvent getDeathSound() {
+        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "ocean_wither_die"));
+    }
+
+    @Override
+    public boolean causeFallDamage(float distance, float multiplier, DamageSource source) {
+        return false;
+    }
+
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        if (source.is(DamageTypes.IN_FIRE)) {
+            return false;
+        }
+        if (source.is(DamageTypes.FALL)) {
+            return false;
+        }
+        if (source.is(DamageTypes.CACTUS)) {
+            return false;
+        }
+        if (source.is(DamageTypes.DROWN)) {
+            return false;
+        }
+        if (source.is(DamageTypes.LIGHTNING_BOLT)) {
+            return false;
+        }
+        if (source.is(DamageTypes.EXPLOSION)) {
+            return false;
+        }
+        if (source.is(DamageTypes.DRAGON_BREATH)) {
+            return false;
+        }
+        if (source.is(DamageTypes.WITHER)) {
+            return false;
+        }
+        if (source.is(DamageTypes.WITHER_SKULL)) {
+            return false;
+        }
+        if (this.entityData.get(DATA_shelled) && source.is(DamageTypeTags.IS_PROJECTILE)) {
+            return false;
+        }
+        return super.hurt(source, amount);
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putString("Texture", this.getTexture());
+        compound.putInt("Dataskillp", this.entityData.get(DATA_skillp));
+        compound.putInt("Dataduration", this.entityData.get(DATA_duration));
+        compound.putBoolean("Datashelled", this.entityData.get(DATA_shelled));
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        if (compound.contains("Texture")) {
+            this.setTexture(compound.getString("Texture"));
+        }
+        if (compound.contains("Dataskillp")) {
+            this.entityData.set(DATA_skillp, compound.getInt("Dataskillp"));
+        }
+        if (compound.contains("Dataduration")) {
+            this.entityData.set(DATA_duration, compound.getInt("Dataduration"));
+        }
+        if (compound.contains("Datashelled")) {
+            this.entityData.set(DATA_shelled, compound.getBoolean("Datashelled"));
+        }
+    }
+
+    @Override
+    public EntityDimensions getDimensions(Pose pose) {
+        return super.getDimensions(pose).scale(1F);
+    }
+
+    @Override
+    public boolean isPushable() {
+        return false;
+    }
+
+    @Override
+    protected void doPush(Entity entityIn) {
+    }
+
+    @Override
+    protected void pushEntities() {
+    }
+
+    @Override
+    public boolean canChangeDimensions() {
+        return false;
+    }
+
+    @Override
+    public void startSeenByPlayer(ServerPlayer player) {
+        super.startSeenByPlayer(player);
+        this.bossInfo.addPlayer(player);
+    }
+
+    @Override
+    public void stopSeenByPlayer(ServerPlayer player) {
+        super.stopSeenByPlayer(player);
+        this.bossInfo.removePlayer(player);
+    }
+
+    @Override
+    public void customServerAiStep() {
+        super.customServerAiStep();
+        this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
+    }
+
+    @Override
+    protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
+    }
+
+    @Override
+    public void setNoGravity(boolean ignored) {
+        super.setNoGravity(true);
+    }
+
+    @Override
+    public void aiStep() {
+        super.aiStep();
+        this.setNoGravity(true);
+    }
+
+    @Override
+    public void baseTick() {
+        super.baseTick();
+        LevelAccessor world = this.level();
+        double x = this.getX();
+        double y = this.getY();
+        double z = this.getZ();
+        if (this.isAlive()) {
+            int duration = this.entityData.get(DATA_duration);
+            if (duration > 0) {
+                this.entityData.set(DATA_duration, duration - 1);
+            }
+            this.tickSubclassBaseTick(world, x, y, z);
+            if (this.tickCount % 20 == 0) {
+                this.removeEffect(MobEffects.WITHER);
+                this.removeEffect(CAMobEffects.DIZZY.get());
+
+                Vec3 center = new Vec3(x, y, z);
+                List<LivingEntity> nearbyEntities = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(64 / 2D), entity -> true).stream().sorted(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(center)))
+                        .toList();
+                for (LivingEntity living : nearbyEntities) {
+                    if (living.isAlive() && living.hasEffect(MobEffects.WITHER)) {
+                        living.hurt(
+                                new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_wither"))),
+                                        this),
+                                (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.75)
+                        );
+                        if (world instanceof ServerLevel level) {
+                            level.sendParticles(ParticleTypes.DRIPPING_OBSIDIAN_TEAR, living.getX(), living.getY() + 1, living.getZ(), 16, 1, 1, 1, 0.1);
+                        }
+                    }
+                }
+            }
+            if (this.tickCount % 40 == 0) {
+                Vec3 center = new Vec3(x, y, z);
+                List<WitherSkull> nearbyEntities = world.getEntitiesOfClass(WitherSkull.class, new AABB(center, center).inflate(72 / 2D), entity -> true).stream().sorted(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(center)))
+                        .toList();
+                for (WitherSkull skull : nearbyEntities) {
+                    if (!skull.level().isClientSide() && EntityUtils.getSpeed(skull) < 0.15) {
+                        skull.discard();
+                    }
+                }
+            }
+            if (EntityUtils.getSpeed(this) > (this.getAttributes().hasAttribute(Attributes.MOVEMENT_SPEED) ? this.getAttribute(Attributes.MOVEMENT_SPEED).getValue() : 0)) {
+                this.setDeltaMovement(new Vec3(0, 0, 0));
+            }
+            if (!this.entityData.get(DATA_shelled) && this.shouldEnterShelledState()) {
+                if (this.getAttributes().hasAttribute(Attributes.ARMOR)) {
+                    this.getAttribute(Attributes.ARMOR).setBaseValue((this.getAttributes().hasAttribute(Attributes.ARMOR) ? this.getAttribute(Attributes.ARMOR).getBaseValue() : 0) * 1.5);
+                }
+                if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)) {
+                    this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) * 1.5);
+                }
+                if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get())) {
+                    this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).setBaseValue(
+                            (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()) ? this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getBaseValue() : 0) * 1.5
+                    );
+                }
+                this.setTexture(this.getShelledTexture());
+                this.entityData.set(DATA_shelled, true);
+            }
+        }
+        this.refreshDimensions();
+    }
+
+    protected abstract void tickSubclassBaseTick(LevelAccessor world, double x, double y, double z);
+
+    protected abstract boolean shouldEnterShelledState();
+
+    protected abstract String getShelledTexture();
+
+    @Override
+    protected void tickDeath() {
+        ++this.deathTime;
+        if (this.deathTime == this.getDeathDuration()) {
+            this.remove(RemovalReason.KILLED);
+            this.dropExperience();
+            LevelAccessor world = this.level();
+            double x = this.getX();
+            double y = this.getY();
+            double z = this.getZ();
+            if (this == null)
+                return;
+            if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
+                if (world instanceof ServerLevel _level) {
+                    ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, new ItemStack(CAItems.MOIST_STAR.get()));
+                    entityToSpawn.setPickUpDelay(10);
+                    entityToSpawn.setUnlimitedLifetime();
+                    _level.addFreshEntity(entityToSpawn);
+                }
+                for (int index0 = 0; index0 < 64; index0++) {
+                    if (world instanceof ServerLevel _level)
+                        _level.addFreshEntity(new ExperienceOrb(_level, (x + Mth.nextDouble(RandomSource.create(), -1, 1)), y, (z + Mth.nextDouble(RandomSource.create(), -1, 1)), Mth.nextInt(RandomSource.create(), 32, 48)));
+                }
+            }
+            if (this instanceof OceanizedWitherEntity) {
+                if (world instanceof ServerLevel _level) {
+                    Entity entityToSpawn = CAEntities.OCEANIZED_WITHERIA.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+                    if (entityToSpawn != null) {
+                        entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
+    public void setHealth(float health) {
+        float currentHealth = this.getHealth();
+        float maxHealth = this.getMaxHealth();
+        if (this.hasEffect(CAMobEffects.INVULNERABLE.get()) && health < currentHealth) {
+            return;
+        }
+        float reduction = currentHealth - health;
+        super.setHealth(reduction >= maxHealth * 0.35F ? currentHealth - maxHealth * 0.35F : currentHealth - reduction);
+    }
+
+    public boolean isWitherDurative() {
+        return this.isAlive() && this.entityData.get(DATA_duration) <= 0;
+    }
+
+    public static void shootWitherSkull(LevelAccessor world, Entity from, double acceleration, double dx, double dy, double dz, double inaccuracy, double speed, double x, double y, double z) {
+        if (from == null) {
+            return;
+        }
+
+        double adjustedDx = 0;
+        double adjustedDy = 0;
+        double adjustedDz = 0;
+        double module = Math.sqrt(dx * dx + dy * dy + dz * dz);
+        if (module > 0) {
+            adjustedDx = dx / module * acceleration;
+            adjustedDy = dy / module * acceleration;
+            adjustedDz = dz / module * acceleration;
+        }
+
+        CaerulaArborMod.queueServerWork(Mth.nextInt(RandomSource.create(), 0, 4), () -> {
+            if (world instanceof Level level) {
+                level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.wither.shoot")), SoundSource.HOSTILE, 0.85F, 1);
+            }
+        });
+
+        if (world instanceof ServerLevel projectileLevel) {
+            Projectile projectile = new Object() {
+                public Projectile getFireball(Level level, Entity shooter, double ax, double ay, double az) {
+                    AbstractHurtingProjectile projectileToSpawn = new WitherSkull(EntityType.WITHER_SKULL, level);
+                    projectileToSpawn.setOwner(shooter);
+                    projectileToSpawn.xPower = ax;
+                    projectileToSpawn.yPower = ay;
+                    projectileToSpawn.zPower = az;
+                    return projectileToSpawn;
+                }
+            }.getFireball(projectileLevel, from, adjustedDx, adjustedDy, adjustedDz);
+            projectile.setPos(x, y, z);
+            projectile.shoot(dx, dy, dz, (float) speed, (float) inaccuracy);
+            projectileLevel.addFreshEntity(projectile);
+        }
+    }
+}

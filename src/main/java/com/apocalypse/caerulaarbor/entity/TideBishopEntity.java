@@ -310,6 +310,31 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
     }
 
     @Override
+    public void setHealth(float pHealth) {
+        if (pHealth <= 0) {
+            double x = this.getX();
+            double y = this.getY();
+            double z = this.getZ();
+            Entity repeller = this.level().getEntitiesOfClass(TideDeathrepellerEntity.class, AABB.ofSize(new Vec3(x, y, z), 128, 128, 128), candidate -> true).stream()
+                    .min(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(x, y, z))).orElse(null);
+            boolean keepup = repeller != null;
+            if (repeller instanceof LivingEntity repellerLiving && repellerLiving.hasEffect(CAMobEffects.FAKE_DEATH.get())) {
+                keepup = false;
+            }
+            if (keepup) {
+                super.setHealth(Math.max(this.getHealth(), 1.0F));
+                this.setShiftKeyDown(true);
+                if (!this.level().isClientSide()) {
+                    this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 400, 0, false, false));
+                    this.addEffect(new MobEffectInstance(CAMobEffects.FAKE_DEATH.get(), 400, 0, false, false));
+                }
+                return;
+            }
+        }
+        super.setHealth(pHealth);
+    }
+
+    @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
         SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
         if ((LevelAccessor) world instanceof ServerLevel _level) {

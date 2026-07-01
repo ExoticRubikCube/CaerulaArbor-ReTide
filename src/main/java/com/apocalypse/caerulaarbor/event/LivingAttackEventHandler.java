@@ -8,6 +8,8 @@ import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler.StrategyTy
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
 import com.apocalypse.caerulaarbor.entity.*;
+import com.apocalypse.caerulaarbor.entity.wither.OceanizedWitherEntity;
+import com.apocalypse.caerulaarbor.entity.wither.OceannizedWitheriaEntity;
 import com.apocalypse.caerulaarbor.init.*;
 import com.apocalypse.caerulaarbor.item.HighmoreScytheItem;
 import com.apocalypse.caerulaarbor.system.UpgradeGrowProcedure;

@@ -300,6 +300,17 @@ public class IzumikEntity extends SeaMonster {
 
     @Override
     public void die(DamageSource source) {
+        if (this.getEntityData().get(DATA_phase) == 1 && MapVariables.get(this.level()).strategy_silence >= 3) {
+            if (!this.level().isClientSide()) {
+                this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 200, 1, false, false));
+                this.addEffect(new MobEffectInstance(CAMobEffects.FAKE_DEATH.get(), 200, 1, false, false));
+            }
+            this.getEntityData().set(DATA_phase, 2);
+            if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get())) {
+                this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).setBaseValue(this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getBaseValue() + 2);
+            }
+            return;
+        }
         super.die(source);
         this.awardBoilingSeaAdvancement();
     }
@@ -890,6 +901,17 @@ public class IzumikEntity extends SeaMonster {
     public void setHealth(float pHealth) {
         float hlth = this.getHealth();
         float mhlth = this.getMaxHealth();
+        if (pHealth <= 0 && this.getEntityData().get(DATA_phase) == 0) {
+            super.setHealth(mhlth * 0.6f);
+            if (!this.level().isClientSide()) {
+                this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 300, 1, false, false));
+            }
+            this.getEntityData().set(DATA_phase, 1);
+            if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get())) {
+                this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).setBaseValue(this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getBaseValue() + 2);
+            }
+            return;
+        }
         if (this.hasEffect(CAMobEffects.INVULNERABLE.get()) && pHealth < this.getHealth()) return;
         float reduction = hlth - pHealth;
         float finalV = reduction >= mhlth * 0.33f ? hlth - mhlth * 0.33f : hlth - reduction;

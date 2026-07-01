@@ -1,5 +1,6 @@
 package com.apocalypse.caerulaarbor.entity.routeshaper;
 
+import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CAGameRules;
@@ -107,6 +108,19 @@ public abstract class AbstractPathshaperEntity extends SeaMonster {
 
 	protected void setPhase(int phase) {
 		this.entityData.set(DATA_PHASE, phase);
+	}
+
+	@Override
+	public void die(DamageSource source) {
+		if (MapVariables.get(this.level()).strategy_subsisting >= 4 && this.getPhase() == 0) {
+			this.setPhase(1);
+			if (!this.level().isClientSide()) {
+				this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 200, 1, false, false));
+				this.addEffect(new MobEffectInstance(CAMobEffects.FAKE_DEATH.get(), 200, 1, false, false));
+			}
+			return;
+		}
+		super.die(source);
 	}
 
 	protected void summonFractal() {

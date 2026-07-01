@@ -1,9 +1,9 @@
 
 package com.apocalypse.caerulaarbor.client.renderer.entity;
 
-import com.apocalypse.caerulaarbor.entity.OceanizedWitherEntity;
-import com.apocalypse.caerulaarbor.client.model.entity.layer.OceanizedWitherLayer;
 import com.apocalypse.caerulaarbor.client.model.entity.OceanizedWitherModel;
+import com.apocalypse.caerulaarbor.client.model.entity.layer.OceanizedWitherLayer;
+import com.apocalypse.caerulaarbor.entity.wither.OceanizedWitherEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;

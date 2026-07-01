@@ -27,7 +27,7 @@ public class LineringPathshaperEntity extends AbstractPathshaperEntity {
 
 	@Override
 	protected int getHurtSummonThreshold() {
-		return 6;
+		return 5;
 	}
 
 	public static AttributeSupplier.Builder createAttributes() {

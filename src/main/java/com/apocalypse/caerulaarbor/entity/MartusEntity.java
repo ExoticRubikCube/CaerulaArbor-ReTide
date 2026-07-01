@@ -187,6 +187,22 @@ public class MartusEntity extends SeaMonster {
     }
 
     @Override
+    public void die(DamageSource source) {
+        if (this.getEntityData().get(DATA_phase) == 0) {
+            this.removeEffect(CAMobEffects.INVULNERABLE.get());
+            if (!this.level().isClientSide()) {
+                this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 200, 1, false, false));
+                this.addEffect(new MobEffectInstance(CAMobEffects.FAKE_DEATH.get(), 200, 1, false, false));
+            }
+            this.getEntityData().set(DATA_phase, 1);
+            this.getEntityData().set(DATA_skillp1, 600);
+            this.getEntityData().set(DATA_skillp2, 200);
+            return;
+        }
+        super.die(source);
+    }
+
+    @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
         SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
         LevelAccessor world1 = this.level();

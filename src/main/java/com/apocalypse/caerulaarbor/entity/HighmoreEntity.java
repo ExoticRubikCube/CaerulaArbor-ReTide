@@ -1,6 +1,7 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
@@ -356,6 +357,20 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
         if (source.is(DamageTypes.DROWN))
             return false;
         return super.hurt(source, amount);
+    }
+
+    public void awardPreciousDaysAdvancement() {
+        for (Entity playerEntity : new ArrayList<>(this.level().players())) {
+            if (this.level().dimension() == playerEntity.level().dimension() && playerEntity instanceof ServerPlayer serverPlayer) {
+                Advancement advancement = serverPlayer.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "precious_days"));
+                AdvancementProgress advancementProgress = serverPlayer.getAdvancements().getOrStartProgress(advancement);
+                if (!advancementProgress.isDone()) {
+                    for (String criteria : advancementProgress.getRemainingCriteria()) {
+                        serverPlayer.getAdvancements().award(advancement, criteria);
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -719,8 +734,38 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
 
     @Override
     public void setHealth(float pHealth) {
+        if (pHealth <= 0 && this.getEntityData().get(DATA_phase) == 0) {
+            if (!this.level().isClientSide()) {
+                this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 400, 1, false, false));
+                this.addEffect(new MobEffectInstance(CAMobEffects.FAKE_DEATH.get(), 400, 0, false, false));
+            }
+            CaerulaArborMod.queueServerWork(300, () -> {
+                if (this.isAlive()) {
+                    this.getEntityData().set(DATA_phase, 1);
+                }
+            });
+            return;
+        }
         if (this.hasEffect(CAMobEffects.INVULNERABLE.get()) && pHealth < this.getHealth()) return;
         super.setHealth(pHealth);
+    }
+
+    @Override
+    public void die(DamageSource source) {
+        if (this.getEntityData().get(DATA_phase) == 1 && MapVariables.get(this.level()).strategy_silence >= 3) {
+            if (!this.level().isClientSide()) {
+                this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 200, 1, false, false));
+                this.addEffect(new MobEffectInstance(CAMobEffects.FAKE_DEATH.get(), 200, 1, false, false));
+            }
+            CaerulaArborMod.queueServerWork(150, () -> {
+                if (this.isAlive()) {
+                    this.getEntityData().set(DATA_phase, 2);
+                }
+            });
+            return;
+        }
+        super.die(source);
+        this.awardPreciousDaysAdvancement();
     }
 
     public String getSyncedAnimation() {

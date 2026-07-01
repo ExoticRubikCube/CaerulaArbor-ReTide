@@ -176,6 +176,14 @@ public class BaselayerAbyssalEntity extends SeaMonster {
 	}
 
 	@Override
+	public void die(DamageSource source) {
+		if (source.is(DamageTypes.IN_WALL)) {
+			this.getEntityData().set(DATA_mute_time, 999);
+		}
+		super.die(source);
+	}
+
+	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
         if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get()))

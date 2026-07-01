@@ -7,6 +7,7 @@ import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -20,6 +21,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
@@ -37,6 +39,7 @@ import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.animal.TamableAnimal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.item.ItemStack;
@@ -74,6 +77,8 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 	private boolean lastloop;
 	private long lastSwing;
 	public String animationprocedure = "empty";
+	@Nullable
+	private DamageSource lastDamageSource;
 
 	public static void spawnLinkParticles(LevelAccessor world, double fromX, double fromY, double fromZ, double toX, double toY, double toZ) {
 		double vx = toX - fromX;
@@ -294,6 +299,7 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 
 	@Override
 	public boolean hurt(DamageSource source, float amount) {
+		this.lastDamageSource = source;
 		if (source.is(DamageTypes.DRAGON_BREATH)) return false;
 		Entity sourceEntity = source.getEntity();
 		if (source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)
@@ -308,9 +314,36 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 
 	@Override
 	public void die(DamageSource source) {
-		if (!isReviving()) {
-			this.setHealth(this.getMaxHealth() * 0.5f);
+		Entity sourceEntity = source == null ? null : source.getEntity();
+		boolean canEnterSecondPhase = false;
+		if (sourceEntity != null) {
+			if ((sourceEntity instanceof LivingEntity livingEntity ? livingEntity.getOffhandItem() : ItemStack.EMPTY).getItem() == CAItems.ENDERINA_SPAWNER.get()) {
+				canEnterSecondPhase = true;
+			} else if (!sourceEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))
+					&& (!(sourceEntity instanceof TamableAnimal tamableAnimal) || !tamableAnimal.isTame())) {
+				canEnterSecondPhase = !(sourceEntity instanceof Player || sourceEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "is_humanside"))));
+			}
+		}
+		if (this.getPhase() == 0 && !this.isReviving() && canEnterSecondPhase) {
+			super.setHealth(this.getMaxHealth() * 0.5F);
+			this.getEntityData().set(DATA_PHASE, 1);
+			if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)) {
+				this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(this.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() * 2);
+			}
+			if (this.getAttributes().hasAttribute(Attributes.MAX_HEALTH)) {
+				this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(this.getAttribute(Attributes.MAX_HEALTH).getBaseValue() * 3);
+			}
+			if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get())) {
+				this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).setBaseValue(this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getBaseValue() * 2);
+			}
+			if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())) {
+				this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).getBaseValue() + 20);
+			}
 			this.reviveing();
+			if (!this.level().isClientSide()) {
+				this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 200, 1, false, false));
+				this.addEffect(new MobEffectInstance(CAMobEffects.FAKE_DEATH.get(), 200, 1, false, false));
+			}
 			return;
 		}
 		super.die(source);
@@ -320,9 +353,36 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 	public void setHealth(float pHealth) {
 		float hlth = this.getHealth();
 		float mhlth = this.getMaxHealth();
-		if (pHealth <= 0 && !isReviving()) {
-			super.setHealth(mhlth * 0.5f);
+		Entity sourceEntity = this.lastDamageSource == null ? null : this.lastDamageSource.getEntity();
+		boolean canEnterSecondPhase = false;
+		if (sourceEntity != null) {
+			if ((sourceEntity instanceof LivingEntity livingEntity ? livingEntity.getOffhandItem() : ItemStack.EMPTY).getItem() == CAItems.ENDERINA_SPAWNER.get()) {
+				canEnterSecondPhase = true;
+			} else if (!sourceEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))
+					&& (!(sourceEntity instanceof TamableAnimal tamableAnimal) || !tamableAnimal.isTame())) {
+				canEnterSecondPhase = !(sourceEntity instanceof Player || sourceEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "is_humanside"))));
+			}
+		}
+		if (pHealth <= 0 && this.getPhase() == 0 && !this.isReviving() && canEnterSecondPhase) {
+			super.setHealth(this.getMaxHealth() * 0.5F);
+			this.getEntityData().set(DATA_PHASE, 1);
+			if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)) {
+				this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(this.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() * 2);
+			}
+			if (this.getAttributes().hasAttribute(Attributes.MAX_HEALTH)) {
+				this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(this.getAttribute(Attributes.MAX_HEALTH).getBaseValue() * 3);
+			}
+			if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get())) {
+				this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).setBaseValue(this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getBaseValue() * 2);
+			}
+			if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())) {
+				this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).getBaseValue() + 20);
+			}
 			this.reviveing();
+			if (!this.level().isClientSide()) {
+				this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 200, 1, false, false));
+				this.addEffect(new MobEffectInstance(CAMobEffects.FAKE_DEATH.get(), 200, 1, false, false));
+			}
 			return;
 		}
 		float reduction = hlth - pHealth;
