@@ -24,7 +24,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.SnowGolem;
 import net.minecraft.world.entity.monster.*;
@@ -96,48 +95,7 @@ public class OceanizedVindicatorEntity extends SeaMonster implements PolarMountR
         this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
         this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
         this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
-        this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Player.class, true, false) {
-            @Override
-            public boolean canUse() {
-                double x = OceanizedVindicatorEntity.this.getX();
-                double y = OceanizedVindicatorEntity.this.getY();
-                double z = OceanizedVindicatorEntity.this.getZ();
-                Entity entity = OceanizedVindicatorEntity.this;
-                Level world = OceanizedVindicatorEntity.this.level();
-                return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
-            }
-
-            @Override
-            public boolean canContinueToUse() {
-                double x = OceanizedVindicatorEntity.this.getX();
-                double y = OceanizedVindicatorEntity.this.getY();
-                double z = OceanizedVindicatorEntity.this.getZ();
-                Entity entity = OceanizedVindicatorEntity.this;
-                Level world = OceanizedVindicatorEntity.this.level();
-                return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
-            }
-        });
-        this.targetSelector.addGoal(14, new NearestAttackableTargetGoal<>(this, Animal.class, true, false) {
-            @Override
-            public boolean canUse() {
-                double x = OceanizedVindicatorEntity.this.getX();
-                double y = OceanizedVindicatorEntity.this.getY();
-                double z = OceanizedVindicatorEntity.this.getZ();
-                Entity entity = OceanizedVindicatorEntity.this;
-                Level world = OceanizedVindicatorEntity.this.level();
-                return super.canUse() && EntityUtils.canAttackAnimals();
-            }
-
-            @Override
-            public boolean canContinueToUse() {
-                double x = OceanizedVindicatorEntity.this.getX();
-                double y = OceanizedVindicatorEntity.this.getY();
-                double z = OceanizedVindicatorEntity.this.getZ();
-                Entity entity = OceanizedVindicatorEntity.this;
-                Level world = OceanizedVindicatorEntity.this.level();
-                return super.canContinueToUse() && EntityUtils.canAttackAnimals();
-            }
-        });
+        this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, target -> EntityUtils.isOceanizedPlayerNearby(this.level(), this.getX(), this.getY(), this.getZ())));
         this.goalSelector.addGoal(15, new OpenDoorGoal(this, false));
         this.goalSelector.addGoal(16, new OpenDoorGoal(this, true));
         this.goalSelector.addGoal(17, new RandomStrollGoal(this, 1));

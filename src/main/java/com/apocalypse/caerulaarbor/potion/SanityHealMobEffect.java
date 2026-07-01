@@ -33,8 +33,6 @@ public class SanityHealMobEffect extends MobEffect {
 
     @Override
     public void applyInstantenousEffect(Entity source, Entity indirectSource, LivingEntity entity, int amplifier, double health) {
-        if (entity == null)
-            return;
         ModCapabilities.getSanityInjury(entity).heal(100 * ((double) amplifier + 1));
     }
 

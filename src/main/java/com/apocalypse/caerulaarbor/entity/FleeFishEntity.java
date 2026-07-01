@@ -2,6 +2,7 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
+import com.apocalypse.caerulaarbor.entity.bullets.FleefishBulletEntity;
 import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
@@ -121,36 +122,7 @@ public class FleeFishEntity extends SeaMonster implements RangedAttackMob {
 		this.targetSelector.addGoal(8, new NearestAttackableTargetGoal<>(this, Piglin.class, true, true));
 		this.targetSelector.addGoal(9, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, true));
 		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, true));
-		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, Player.class, true, true) {
-			@Override
-			public boolean canUse() {
-				double x = FleeFishEntity.this.getX();
-				double y = FleeFishEntity.this.getY();
-				double z = FleeFishEntity.this.getZ();
-                Level world = FleeFishEntity.this.level();
-				return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
-			}
-
-			@Override
-			public boolean canContinueToUse() {
-				double x = FleeFishEntity.this.getX();
-				double y = FleeFishEntity.this.getY();
-				double z = FleeFishEntity.this.getZ();
-				Level world = FleeFishEntity.this.level();
-				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
-			}
-		});
-		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal(this, Player.class, true, true) {
-			@Override
-			public boolean canUse() {
-				return super.canUse() && EntityUtils.canAttackAnimals();
-			}
-
-			@Override
-			public boolean canContinueToUse() {
-                return super.canContinueToUse() && EntityUtils.canAttackAnimals();
-			}
-		});
+		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, true, target -> EntityUtils.isOceanizedPlayerNearby(this.level(), this.getX(), this.getY(), this.getZ())));
 		this.targetSelector.addGoal(13, new HurtByTargetGoal(this));
 		this.goalSelector.addGoal(14, new RandomStrollGoal(this, 1, 20) {
 			@Override

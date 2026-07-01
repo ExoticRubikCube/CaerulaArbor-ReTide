@@ -39,8 +39,6 @@ public class SubHaemoMobEffect extends MobEffect {
 	@Override
 	public void applyEffectTick(LivingEntity entity, int amplifier) {
         LevelAccessor world = entity.level();
-        if (entity == null)
-            return;
         double health_cur;
         if (Math.round((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < Math.round((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1)) {
             health_cur = ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) * 0.98;

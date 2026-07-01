@@ -32,7 +32,6 @@ import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.SnowGolem;
 import net.minecraft.world.entity.monster.*;
@@ -117,48 +116,7 @@ public class PredatorAbyssalEntity extends SeaMonster {
 		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
 		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
 		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
-		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal(this, Player.class, true, false) {
-			@Override
-			public boolean canUse() {
-				double x = PredatorAbyssalEntity.this.getX();
-				double y = PredatorAbyssalEntity.this.getY();
-				double z = PredatorAbyssalEntity.this.getZ();
-				Entity entity = PredatorAbyssalEntity.this;
-				Level world = PredatorAbyssalEntity.this.level();
-				return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
-			}
-
-			@Override
-			public boolean canContinueToUse() {
-				double x = PredatorAbyssalEntity.this.getX();
-				double y = PredatorAbyssalEntity.this.getY();
-				double z = PredatorAbyssalEntity.this.getZ();
-				Entity entity = PredatorAbyssalEntity.this;
-				Level world = PredatorAbyssalEntity.this.level();
-				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
-			}
-		});
-		this.targetSelector.addGoal(14, new NearestAttackableTargetGoal(this, Animal.class, true, false) {
-			@Override
-			public boolean canUse() {
-				double x = PredatorAbyssalEntity.this.getX();
-				double y = PredatorAbyssalEntity.this.getY();
-				double z = PredatorAbyssalEntity.this.getZ();
-				Entity entity = PredatorAbyssalEntity.this;
-				Level world = PredatorAbyssalEntity.this.level();
-				return super.canUse() && EntityUtils.canAttackAnimals();
-			}
-
-			@Override
-			public boolean canContinueToUse() {
-				double x = PredatorAbyssalEntity.this.getX();
-				double y = PredatorAbyssalEntity.this.getY();
-				double z = PredatorAbyssalEntity.this.getZ();
-				Entity entity = PredatorAbyssalEntity.this;
-				Level world = PredatorAbyssalEntity.this.level();
-				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
-			}
-		});
+		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal(this, Player.class, 10, true, false, target -> EntityUtils.isOceanizedPlayerNearby(this.level(), this.getX(), this.getY(), this.getZ())));
 		this.goalSelector.addGoal(15, new RandomStrollGoal(this, 0.5));
 		this.goalSelector.addGoal(16, new RandomLookAroundGoal(this));
 		this.goalSelector.addGoal(17, new FloatGoal(this));
@@ -243,10 +201,7 @@ public class PredatorAbyssalEntity extends SeaMonster {
         this.refreshDimensions();
 	}
 
-	@Override
-	public EntityDimensions getDimensions(Pose p_33597_) {
-		return super.getDimensions(p_33597_).scale((float) 1);
-	}
+	
 
 	public static void registerSpawnPlacements() {
 		SpawnPlacements.register(CAEntities.PREDATOR_ABYSSAL.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {

@@ -109,25 +109,7 @@ public class TheAbandonedEntity extends SeaMonster implements PolarMountRider {
         this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
         this.targetSelector.addGoal(8, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
         this.targetSelector.addGoal(9, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
-        this.targetSelector.addGoal(10, new NearestAttackableTargetGoal(this, Player.class, true, false) {
-            @Override
-            public boolean canUse() {
-                double x = TheAbandonedEntity.this.getX();
-                double y = TheAbandonedEntity.this.getY();
-                double z = TheAbandonedEntity.this.getZ();
-                Level world = TheAbandonedEntity.this.level();
-                return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
-            }
-
-            @Override
-            public boolean canContinueToUse() {
-                double x = TheAbandonedEntity.this.getX();
-                double y = TheAbandonedEntity.this.getY();
-                double z = TheAbandonedEntity.this.getZ();
-                Level world = TheAbandonedEntity.this.level();
-                return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
-            }
-        });
+        this.targetSelector.addGoal(10, new NearestAttackableTargetGoal(this, Player.class, 10, true, false, target -> EntityUtils.isOceanizedPlayerNearby(this.level(), this.getX(), this.getY(), this.getZ())));
         this.goalSelector.addGoal(11, new RandomStrollGoal(this, 1));
         this.goalSelector.addGoal(12, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(13, new FloatGoal(this));

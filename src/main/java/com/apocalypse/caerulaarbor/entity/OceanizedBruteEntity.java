@@ -6,7 +6,6 @@ import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAItems;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
-import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
@@ -37,7 +36,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.SnowGolem;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
@@ -138,17 +136,6 @@ public class OceanizedBruteEntity extends SeaMonster {
         this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
         this.targetSelector.addGoal(14, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
         this.targetSelector.addGoal(15, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
-        this.targetSelector.addGoal(16, new NearestAttackableTargetGoal<>(this, Animal.class, true, false) {
-            @Override
-            public boolean canUse() {
-                return super.canUse() && EntityUtils.canAttackAnimals();
-            }
-
-            @Override
-            public boolean canContinueToUse() {
-                return super.canContinueToUse() && EntityUtils.canAttackAnimals();
-            }
-        });
         this.goalSelector.addGoal(17, new OpenDoorGoal(this, true));
         this.goalSelector.addGoal(18, new RandomStrollGoal(this, 1));
         this.goalSelector.addGoal(19, new RandomLookAroundGoal(this));

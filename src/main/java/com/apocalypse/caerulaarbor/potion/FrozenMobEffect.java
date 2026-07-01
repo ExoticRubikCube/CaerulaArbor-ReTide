@@ -49,8 +49,6 @@ public class FrozenMobEffect extends MobEffect {
         double x = entity.getX();
         double y = entity.getY();
         double z = entity.getZ();
-        if (entity == null)
-            return;
         double dh;
         double dw;
         if (entity instanceof Creeper) {

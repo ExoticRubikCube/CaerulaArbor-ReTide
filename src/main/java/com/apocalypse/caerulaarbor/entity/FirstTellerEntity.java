@@ -301,10 +301,7 @@ public class FirstTellerEntity extends SeaMonster implements RangedAttackMob {
         this.refreshDimensions();
 	}
 
-	@Override
-	public EntityDimensions getDimensions(Pose p_33597_) {
-		return super.getDimensions(p_33597_).scale((float) 1);
-	}
+	
 
 	public MobEffectInstance STOP = new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, 9, false, false);
 

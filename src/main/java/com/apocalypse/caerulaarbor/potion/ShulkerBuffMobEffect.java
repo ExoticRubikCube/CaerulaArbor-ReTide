@@ -1,13 +1,12 @@
 
 package com.apocalypse.caerulaarbor.potion;
 
-import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.effect.MobEffect;
-
 import com.apocalypse.caerulaarbor.init.CAAttributes;
-
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+//TODO:可以内联他和他的同类，记得处理isDurationEffectTick
 public class ShulkerBuffMobEffect extends MobEffect {
 	public ShulkerBuffMobEffect() {
 		super(MobEffectCategory.BENEFICIAL, -1);

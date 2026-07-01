@@ -45,7 +45,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.SnowGolem;
 import net.minecraft.world.entity.monster.*;
@@ -331,18 +330,6 @@ public class EndspeakerEntity extends SeaMonster {
 	protected void registerGoals() {
 		super.registerGoals();
 		this.goalSelector.addGoal(this.getFloatGoalPriority(), new FloatGoal(this));
-		List<Class<? extends LivingEntity>> sharedTargets = List.of(
-				IronGolem.class,
-				SnowGolem.class,
-				Villager.class,
-				Illusioner.class,
-				Pillager.class,
-				Vindicator.class,
-				Witch.class,
-				Piglin.class,
-				PiglinBrute.class,
-				ZombifiedPiglin.class
-		);
 		this.goalSelector.addGoal(1, new PanicGoal(this, 1.0D) {
 			@Override
 			public boolean canUse() {
@@ -446,48 +433,129 @@ public class EndspeakerEntity extends SeaMonster {
 				return super.canContinueToUse() && EndspeakerEntity.this.isPhaseOneStarting();
 			}
 		});
-		int targetPriority = 2;
-		for (Class<? extends LivingEntity> targetClass : sharedTargets) {
-			this.targetSelector.addGoal(targetPriority++, new NearestAttackableTargetGoal(this, targetClass, true, false) {
-				@Override
-				public boolean canUse() {
-					return super.canUse() && (EndspeakerEntity.this.isPhaseOneStarting() || EndspeakerEntity.this.isPhaseTwoDurative() || EndspeakerEntity.this.isPhaseThreeDurative());
-				}
-
-				@Override
-				public boolean canContinueToUse() {
-					return super.canContinueToUse() && (EndspeakerEntity.this.isPhaseOneStarting() || EndspeakerEntity.this.isPhaseTwoDurative() || EndspeakerEntity.this.isPhaseThreeDurative());
-				}
-			});
-		}
-		this.targetSelector.addGoal(targetPriority++, new NearestAttackableTargetGoal<>(this, Player.class, true, false) {
+		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, IronGolem.class, true, false) {
 			@Override
 			public boolean canUse() {
-				return super.canUse()
-						&& (EndspeakerEntity.this.isPhaseOneStarting() || EndspeakerEntity.this.isPhaseTwoDurative() || EndspeakerEntity.this.isPhaseThreeDurative())
-						&& EntityUtils.isOceanizedPlayerNearby(EndspeakerEntity.this.level(), EndspeakerEntity.this.getX(), EndspeakerEntity.this.getY(), EndspeakerEntity.this.getZ());
+				return super.canUse() && (EndspeakerEntity.this.isPhaseOneStarting() || EndspeakerEntity.this.isPhaseTwoDurative() || EndspeakerEntity.this.isPhaseThreeDurative());
 			}
 
 			@Override
 			public boolean canContinueToUse() {
-				return super.canContinueToUse()
-						&& (EndspeakerEntity.this.isPhaseOneStarting() || EndspeakerEntity.this.isPhaseTwoDurative() || EndspeakerEntity.this.isPhaseThreeDurative())
-						&& EntityUtils.isOceanizedPlayerNearby(EndspeakerEntity.this.level(), EndspeakerEntity.this.getX(), EndspeakerEntity.this.getY(), EndspeakerEntity.this.getZ());
+				return super.canContinueToUse() && (EndspeakerEntity.this.isPhaseOneStarting() || EndspeakerEntity.this.isPhaseTwoDurative() || EndspeakerEntity.this.isPhaseThreeDurative());
 			}
 		});
-		this.targetSelector.addGoal(targetPriority, new NearestAttackableTargetGoal<>(this, Animal.class, true, false) {
+		this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, SnowGolem.class, true, false) {
+			@Override
+			public boolean canUse() {
+				return super.canUse() && (EndspeakerEntity.this.isPhaseOneStarting() || EndspeakerEntity.this.isPhaseTwoDurative() || EndspeakerEntity.this.isPhaseThreeDurative());
+			}
+
+			@Override
+			public boolean canContinueToUse() {
+				return super.canContinueToUse() && (EndspeakerEntity.this.isPhaseOneStarting() || EndspeakerEntity.this.isPhaseTwoDurative() || EndspeakerEntity.this.isPhaseThreeDurative());
+			}
+		});
+		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Villager.class, true, false) {
+			@Override
+			public boolean canUse() {
+				return super.canUse() && (EndspeakerEntity.this.isPhaseOneStarting() || EndspeakerEntity.this.isPhaseTwoDurative() || EndspeakerEntity.this.isPhaseThreeDurative());
+			}
+
+			@Override
+			public boolean canContinueToUse() {
+				return super.canContinueToUse() && (EndspeakerEntity.this.isPhaseOneStarting() || EndspeakerEntity.this.isPhaseTwoDurative() || EndspeakerEntity.this.isPhaseThreeDurative());
+			}
+		});
+		this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Illusioner.class, true, false) {
+			@Override
+			public boolean canUse() {
+				return super.canUse() && (EndspeakerEntity.this.isPhaseOneStarting() || EndspeakerEntity.this.isPhaseTwoDurative() || EndspeakerEntity.this.isPhaseThreeDurative());
+			}
+
+			@Override
+			public boolean canContinueToUse() {
+				return super.canContinueToUse() && (EndspeakerEntity.this.isPhaseOneStarting() || EndspeakerEntity.this.isPhaseTwoDurative() || EndspeakerEntity.this.isPhaseThreeDurative());
+			}
+		});
+		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, Pillager.class, true, false) {
+			@Override
+			public boolean canUse() {
+				return super.canUse() && (EndspeakerEntity.this.isPhaseOneStarting() || EndspeakerEntity.this.isPhaseTwoDurative() || EndspeakerEntity.this.isPhaseThreeDurative());
+			}
+
+			@Override
+			public boolean canContinueToUse() {
+				return super.canContinueToUse() && (EndspeakerEntity.this.isPhaseOneStarting() || EndspeakerEntity.this.isPhaseTwoDurative() || EndspeakerEntity.this.isPhaseThreeDurative());
+			}
+		});
+		this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, Vindicator.class, true, false) {
+			@Override
+			public boolean canUse() {
+				return super.canUse() && (EndspeakerEntity.this.isPhaseOneStarting() || EndspeakerEntity.this.isPhaseTwoDurative() || EndspeakerEntity.this.isPhaseThreeDurative());
+			}
+
+			@Override
+			public boolean canContinueToUse() {
+				return super.canContinueToUse() && (EndspeakerEntity.this.isPhaseOneStarting() || EndspeakerEntity.this.isPhaseTwoDurative() || EndspeakerEntity.this.isPhaseThreeDurative());
+			}
+		});
+		this.targetSelector.addGoal(8, new NearestAttackableTargetGoal<>(this, Witch.class, true, false) {
+			@Override
+			public boolean canUse() {
+				return super.canUse() && (EndspeakerEntity.this.isPhaseOneStarting() || EndspeakerEntity.this.isPhaseTwoDurative() || EndspeakerEntity.this.isPhaseThreeDurative());
+			}
+
+			@Override
+			public boolean canContinueToUse() {
+				return super.canContinueToUse() && (EndspeakerEntity.this.isPhaseOneStarting() || EndspeakerEntity.this.isPhaseTwoDurative() || EndspeakerEntity.this.isPhaseThreeDurative());
+			}
+		});
+		this.targetSelector.addGoal(9, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false) {
+			@Override
+			public boolean canUse() {
+				return super.canUse() && (EndspeakerEntity.this.isPhaseOneStarting() || EndspeakerEntity.this.isPhaseTwoDurative() || EndspeakerEntity.this.isPhaseThreeDurative());
+			}
+
+			@Override
+			public boolean canContinueToUse() {
+				return super.canContinueToUse() && (EndspeakerEntity.this.isPhaseOneStarting() || EndspeakerEntity.this.isPhaseTwoDurative() || EndspeakerEntity.this.isPhaseThreeDurative());
+			}
+		});
+		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false) {
+			@Override
+			public boolean canUse() {
+				return super.canUse() && (EndspeakerEntity.this.isPhaseOneStarting() || EndspeakerEntity.this.isPhaseTwoDurative() || EndspeakerEntity.this.isPhaseThreeDurative());
+			}
+
+			@Override
+			public boolean canContinueToUse() {
+				return super.canContinueToUse() && (EndspeakerEntity.this.isPhaseOneStarting() || EndspeakerEntity.this.isPhaseTwoDurative() || EndspeakerEntity.this.isPhaseThreeDurative());
+			}
+		});
+		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false) {
+			@Override
+			public boolean canUse() {
+				return super.canUse() && (EndspeakerEntity.this.isPhaseOneStarting() || EndspeakerEntity.this.isPhaseTwoDurative() || EndspeakerEntity.this.isPhaseThreeDurative());
+			}
+
+			@Override
+			public boolean canContinueToUse() {
+				return super.canContinueToUse() && (EndspeakerEntity.this.isPhaseOneStarting() || EndspeakerEntity.this.isPhaseTwoDurative() || EndspeakerEntity.this.isPhaseThreeDurative());
+			}
+		});
+		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, Player.class, true, false) {
 			@Override
 			public boolean canUse() {
 				return super.canUse()
-						&& (EndspeakerEntity.this.isPhaseOneStarting() || EndspeakerEntity.this.isPhaseThreeDurative())
-						&& EntityUtils.canAttackAnimals();
+						&& (EndspeakerEntity.this.isPhaseOneStarting() || EndspeakerEntity.this.isPhaseTwoDurative() || EndspeakerEntity.this.isPhaseThreeDurative())
+						&& EntityUtils.isOceanizedPlayerNearby(EndspeakerEntity.this.level(), EndspeakerEntity.this.getX(), EndspeakerEntity.this.getY(), EndspeakerEntity.this.getZ());
 			}
 
 			@Override
 			public boolean canContinueToUse() {
 				return super.canContinueToUse()
-						&& (EndspeakerEntity.this.isPhaseOneStarting() || EndspeakerEntity.this.isPhaseThreeDurative())
-						&& EntityUtils.canAttackAnimals();
+						&& (EndspeakerEntity.this.isPhaseOneStarting() || EndspeakerEntity.this.isPhaseTwoDurative() || EndspeakerEntity.this.isPhaseThreeDurative())
+						&& EntityUtils.isOceanizedPlayerNearby(EndspeakerEntity.this.level(), EndspeakerEntity.this.getX(), EndspeakerEntity.this.getY(), EndspeakerEntity.this.getZ());
 			}
 		});
 		this.goalSelector.addGoal(14, new RandomStrollGoal(this, 1.0D) {

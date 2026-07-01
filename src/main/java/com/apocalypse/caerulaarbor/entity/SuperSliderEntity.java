@@ -110,25 +110,7 @@ public class SuperSliderEntity extends SeaMonster {
                 return 4;
             }
         });
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Player.class, false, false) {
-            @Override
-            public boolean canUse() {
-                double x = SuperSliderEntity.this.getX();
-                double y = SuperSliderEntity.this.getY();
-                double z = SuperSliderEntity.this.getZ();
-                Level world = SuperSliderEntity.this.level();
-                return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
-            }
-
-            @Override
-            public boolean canContinueToUse() {
-                double x = SuperSliderEntity.this.getX();
-                double y = SuperSliderEntity.this.getY();
-                double z = SuperSliderEntity.this.getZ();
-                Level world = SuperSliderEntity.this.level();
-                return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
-            }
-        });
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Player.class, 10, false, false, target -> EntityUtils.isOceanizedPlayerNearby(this.level(), this.getX(), this.getY(), this.getZ())));
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, IronGolem.class, false, false));
         this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, SnowGolem.class, false, false));
         this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, Villager.class, false, false));

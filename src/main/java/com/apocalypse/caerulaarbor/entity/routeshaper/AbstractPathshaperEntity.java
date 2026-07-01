@@ -32,7 +32,6 @@ import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.SnowGolem;
 import net.minecraft.world.entity.monster.*;
@@ -169,11 +168,8 @@ public abstract class AbstractPathshaperEntity extends SeaMonster {
 	}
 
 	/**
-	 * 处理塑路者本体系实体的移动、待机与死亡动画。
-	 *
-	 * @param event GeckoLib 动画状态
-	 * @return 对应控制器的播放状态
-	 */
+	 * 澶勭悊濉戣矾鑰呮湰浣撶郴瀹炰綋鐨勭Щ鍔ㄣ€佸緟鏈轰笌姝讳骸鍔ㄧ敾銆?	 *
+	 * @param event GeckoLib 鍔ㄧ敾鐘舵€?	 * @return 瀵瑰簲鎺у埗鍣ㄧ殑鎾斁鐘舵€?	 */
 	protected PlayState movementPredicate(AnimationState<?> event) {
 		if (this.animationprocedure.equals("empty")) {
 			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) && !this.isVehicle() && !this.isAggressive() && !this.isSprinting()) {
@@ -197,11 +193,8 @@ public abstract class AbstractPathshaperEntity extends SeaMonster {
 	}
 
 	/**
-	 * 处理塑路者本体系实体的普攻挥击动画。
-	 *
-	 * @param event GeckoLib 动画状态
-	 * @return 对应控制器的播放状态
-	 */
+	 * 澶勭悊濉戣矾鑰呮湰浣撶郴瀹炰綋鐨勬櫘鏀绘尌鍑诲姩鐢汇€?	 *
+	 * @param event GeckoLib 鍔ㄧ敾鐘舵€?	 * @return 瀵瑰簲鎺у埗鍣ㄧ殑鎾斁鐘舵€?	 */
 	protected PlayState attackingPredicate(AnimationState<?> event) {
 		if (this.getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
@@ -275,36 +268,7 @@ public abstract class AbstractPathshaperEntity extends SeaMonster {
 		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
 		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
 		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
-		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Player.class, true, false) {
-			@Override
-			public boolean canUse() {
-				double x = AbstractPathshaperEntity.this.getX();
-				double y = AbstractPathshaperEntity.this.getY();
-				double z = AbstractPathshaperEntity.this.getZ();
-				Level world = AbstractPathshaperEntity.this.level();
-				return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
-			}
-
-			@Override
-			public boolean canContinueToUse() {
-				double x = AbstractPathshaperEntity.this.getX();
-				double y = AbstractPathshaperEntity.this.getY();
-				double z = AbstractPathshaperEntity.this.getZ();
-				Level world = AbstractPathshaperEntity.this.level();
-				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
-			}
-		});
-		this.targetSelector.addGoal(14, new NearestAttackableTargetGoal<>(this, Animal.class, true, false) {
-			@Override
-			public boolean canUse() {
-				return super.canUse() && EntityUtils.canAttackAnimals();
-			}
-
-			@Override
-			public boolean canContinueToUse() {
-				return super.canContinueToUse() && EntityUtils.canAttackAnimals();
-			}
-		});
+		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, target -> EntityUtils.isOceanizedPlayerNearby(this.level(), this.getX(), this.getY(), this.getZ())));
 		this.goalSelector.addGoal(15, new RandomStrollGoal(this, 1));
 		this.goalSelector.addGoal(16, new RandomLookAroundGoal(this));
 		this.goalSelector.addGoal(17, new FloatGoal(this));

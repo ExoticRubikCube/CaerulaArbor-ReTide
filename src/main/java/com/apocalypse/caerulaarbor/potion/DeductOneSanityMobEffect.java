@@ -32,8 +32,6 @@ public class DeductOneSanityMobEffect extends MobEffect {
 
 	@Override
 	public void applyEffectTick(LivingEntity entity, int amplifier) {
-        if (entity == null)
-            return;
         SIHelper.causeSanityInjury(entity, (double) amplifier + 1, SanityEvent.Hurt.Type.POTION);
     }
 

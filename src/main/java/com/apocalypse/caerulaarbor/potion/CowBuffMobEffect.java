@@ -41,8 +41,6 @@ public class CowBuffMobEffect extends MobEffect {
         double x = entity.getX();
         double y = entity.getY();
         double z = entity.getZ();
-        if (entity == null)
-            return;
         if ((Entity) entity instanceof OceanizedCowEntity _datEntL0 && _datEntL0.getEntityData().get(OceanizedCowEntity.DATA_skill) && ((Entity) entity).isAlive()) {
             if (!((Entity) entity instanceof LivingEntity _livEnt2 && _livEnt2.hasEffect(CAMobEffects.MUTE.get()))
                     && ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) <= ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5) {

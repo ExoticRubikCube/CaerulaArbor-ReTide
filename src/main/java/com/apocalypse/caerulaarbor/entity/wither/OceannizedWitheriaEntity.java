@@ -27,11 +27,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.SnowGolem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -92,17 +88,6 @@ public class OceannizedWitheriaEntity extends AbstractOceanizedWitherEntity {
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.targetSelector.addGoal(1, new HurtByTargetGoal(this) {
-            @Override
-            public boolean canUse() {
-                return super.canUse() && isWitherDurative();
-            }
-
-            @Override
-            public boolean canContinueToUse() {
-                return super.canContinueToUse() && isWitherDurative();
-            }
-        });
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.25, false) {
             @Override
             protected double getAttackReachSqr(LivingEntity entity) {
@@ -120,40 +105,7 @@ public class OceannizedWitheriaEntity extends AbstractOceanizedWitherEntity {
             }
 
         });
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, false, false));
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, SnowGolem.class, false, false));
-        this.goalSelector.addGoal(5, new RandomStrollGoal(this, 1, 20) {
-            @Override
-            protected Vec3 getPosition() {
-                RandomSource random = OceannizedWitheriaEntity.this.getRandom();
-                double dir_x = OceannizedWitheriaEntity.this.getX() + ((random.nextFloat() * 2 - 1) * 16);
-                double dir_y = OceannizedWitheriaEntity.this.getY() + ((random.nextFloat() * 2 - 1) * 16);
-                double dir_z = OceannizedWitheriaEntity.this.getZ() + ((random.nextFloat() * 2 - 1) * 16);
-                return new Vec3(dir_x, dir_y, dir_z);
-            }
-
-            @Override
-            public boolean canUse() {
-                return super.canUse() && isWitherDurative();
-            }
-
-            @Override
-            public boolean canContinueToUse() {
-                return super.canContinueToUse() && isWitherDurative();
-            }
-
-        });
-        this.goalSelector.addGoal(6, new RandomLookAroundGoal(this) {
-            @Override
-            public boolean canUse() {
-                return super.canUse() && isWitherDurative();
-            }
-
-            @Override
-            public boolean canContinueToUse() {
-                return super.canContinueToUse() && isWitherDurative();
-            }
-        });
     }
 
     @Override

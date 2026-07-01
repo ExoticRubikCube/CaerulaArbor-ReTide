@@ -92,25 +92,7 @@ public abstract class AbstractFractalEntity extends SeaMonster {
 		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, Piglin.class, false, false));
 		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, false, false));
 		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, false, false));
-		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Player.class, false, false) {
-			@Override
-			public boolean canUse() {
-				double x = AbstractFractalEntity.this.getX();
-				double y = AbstractFractalEntity.this.getY();
-				double z = AbstractFractalEntity.this.getZ();
-				Level world = AbstractFractalEntity.this.level();
-				return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
-			}
-
-			@Override
-			public boolean canContinueToUse() {
-				double x = AbstractFractalEntity.this.getX();
-				double y = AbstractFractalEntity.this.getY();
-				double z = AbstractFractalEntity.this.getZ();
-				Level world = AbstractFractalEntity.this.level();
-				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
-			}
-		});
+		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Player.class, 10, false, false, target -> EntityUtils.isOceanizedPlayerNearby(this.level(), this.getX(), this.getY(), this.getZ())));
 		this.goalSelector.addGoal(14, new RandomStrollGoal(this, 0.5));
 		this.goalSelector.addGoal(15, new RandomLookAroundGoal(this));
 	}

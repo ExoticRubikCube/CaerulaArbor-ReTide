@@ -2,7 +2,6 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.CAEntities;
-import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -19,11 +18,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.animal.Pufferfish;
-import net.minecraft.world.entity.animal.Salmon;
-import net.minecraft.world.entity.animal.Squid;
-import net.minecraft.world.entity.animal.TropicalFish;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -86,66 +80,6 @@ public class DivicellularGoEntity extends SeaMonster {
             @Override
             protected double getAttackReachSqr(LivingEntity entity) {
                 return 1.5625;
-            }
-        });
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Pufferfish.class, true, false) {
-            @Override
-            public boolean canUse() {
-                return super.canUse() && EntityUtils.canAttackAnimals();
-            }
-
-            @Override
-            public boolean canContinueToUse() {
-                double x = DivicellularGoEntity.this.getX();
-                double y = DivicellularGoEntity.this.getY();
-                double z = DivicellularGoEntity.this.getZ();
-                Entity entity = DivicellularGoEntity.this;
-                Level world = DivicellularGoEntity.this.level();
-                return super.canContinueToUse() && EntityUtils.canAttackAnimals();
-            }
-        });
-        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, GlowSquid.class, true, false) {
-            @Override
-            public boolean canUse() {
-                return super.canUse() && EntityUtils.canAttackAnimals();
-            }
-
-            @Override
-            public boolean canContinueToUse() {
-                return super.canContinueToUse() && EntityUtils.canAttackAnimals();
-            }
-        });
-        this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Squid.class, true, false) {
-            @Override
-            public boolean canUse() {
-                return super.canUse() && EntityUtils.canAttackAnimals();
-            }
-
-            @Override
-            public boolean canContinueToUse() {
-                return super.canContinueToUse() && EntityUtils.canAttackAnimals();
-            }
-        });
-        this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, TropicalFish.class, true, false) {
-            @Override
-            public boolean canUse() {
-                return super.canUse() && EntityUtils.canAttackAnimals();
-            }
-
-            @Override
-            public boolean canContinueToUse() {
-                return super.canContinueToUse() && EntityUtils.canAttackAnimals();
-            }
-        });
-        this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, Salmon.class, true, false) {
-            @Override
-            public boolean canUse() {
-                return super.canUse() && EntityUtils.canAttackAnimals();
-            }
-
-            @Override
-            public boolean canContinueToUse() {
-                return super.canContinueToUse() && EntityUtils.canAttackAnimals();
             }
         });
         this.goalSelector.addGoal(8, new RandomStrollGoal(this, 1));

@@ -2,12 +2,17 @@ package com.apocalypse.caerulaarbor.event;
 
 import com.apocalypse.caerulaarbor.entity.helper.LittleHelperEntity;
 import com.apocalypse.caerulaarbor.init.CANetwork;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.network.NetworkEvent;
-@Mod.EventBusSubscriber(value = {Dist.CLIENT})
+
+import java.util.function.Supplier;
 
 @Mod.EventBusSubscriber(value = {Dist.CLIENT})
 public class PlayerLeftClickEventHandler {

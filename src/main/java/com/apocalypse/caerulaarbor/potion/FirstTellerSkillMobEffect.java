@@ -10,7 +10,6 @@ import com.apocalypse.caerulaarbor.entity.FirstTellerEntity;
 import com.apocalypse.caerulaarbor.entity.TellerShotEntity;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
-import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.MathUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
@@ -67,8 +66,6 @@ public class FirstTellerSkillMobEffect extends MobEffect {
         double x = entity.getX();
         double y = entity.getY();
         double z = entity.getZ();
-        if (entity == null)
-            return;
         double ayk;
         Entity enemy;
         new Object() {
@@ -94,11 +91,11 @@ public class FirstTellerSkillMobEffect extends MobEffect {
                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "firetteller_skill_attack")), SoundSource.NEUTRAL, 3,
                             (float) Mth.nextDouble(RandomSource.create(), 0.85, 1.15));
             }
-            enemy = world.getEntitiesOfClass(FirstTellerEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).stream().sorted(new Object() {
+            enemy = world.getEntitiesOfClass(FirstTellerEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).stream().min(new Object() {
                 Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
                     return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
                 }
-            }.compareDistOf(x, y, z)).findFirst().orElse(null);
+            }.compareDistOf(x, y, z)).orElse(null);
             if (enemy == null) {
                 if ((Entity) entity instanceof LivingEntity _entity)
                     _entity.removeEffect(CAMobEffects.FIRST_TELLER_SKILL.get());
@@ -117,14 +114,12 @@ public class FirstTellerSkillMobEffect extends MobEffect {
                 if (entityiterator instanceof Player && (entityiterator.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization >= 3) {
                     continue;
                 }
-                if (!(entityiterator instanceof Mob)) {
+                if (!(entityiterator instanceof Mob livingEntity)) {
                     continue;
                 }
                 entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_magic")))),
                         (float) (ayk * 0.6));
-                if (entityiterator instanceof LivingEntity livingEntity) {
-                    SIHelper.causeSanityInjury(livingEntity, ayk * 60, SanityEvent.Hurt.Type.POTION);
-                }
+                SIHelper.causeSanityInjury(livingEntity, ayk * 60, SanityEvent.Hurt.Type.POTION);
             }
             if (world instanceof ServerLevel projectileLevel) {
                 Projectile _entityToSpawn = new Object() {

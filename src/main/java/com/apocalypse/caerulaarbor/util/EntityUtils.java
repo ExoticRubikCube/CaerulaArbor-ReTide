@@ -71,11 +71,6 @@ public class EntityUtils {
 		}
 	}
 
-	//TODO 需要查看C:\Users\Administrator\Desktop\VANIILLLA\MODIFIY\CaerulaArbor\待移植文件对应的mcr辅助方法
-	public static boolean canAttackAnimals() {
-		return false;
-	}
-
 	public static boolean canPlayerEvo(Entity entity) {
 		if (entity == null)
 			return false;
@@ -287,15 +282,13 @@ public class EntityUtils {
 	//查看参考文件是怎么做的，很可能需要下放到海嗣的基类
 	public static double getSeabornNum(LevelAccessor world, double x, double y, double z) {
 		double count = 0;
-		{
-			final Vec3 _center = new Vec3(x, y, z);
-			List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(32 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-			for (Entity entityiterator : _entfound) {
-				if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
-					if (!(entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "bossoffspring")))
-							|| entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanpet"))))) {
-						count = count + 1;
-					}
+		final Vec3 _center = new Vec3(x, y, z);
+		List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(32 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+		for (Entity entityiterator : _entfound) {
+			if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+				if (!(entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "bossoffspring")))
+						|| entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanpet"))))) {
+					count = count + 1;
 				}
 			}
 		}

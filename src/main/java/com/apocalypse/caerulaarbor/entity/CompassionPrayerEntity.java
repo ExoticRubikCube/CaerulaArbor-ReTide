@@ -140,27 +140,7 @@ public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMo
         this.targetSelector.addGoal(9, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
         this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
         this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
-        this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, Player.class, true, false) {
-            @Override
-            public boolean canUse() {
-                double x = CompassionPrayerEntity.this.getX();
-                double y = CompassionPrayerEntity.this.getY();
-                double z = CompassionPrayerEntity.this.getZ();
-                Entity entity = CompassionPrayerEntity.this;
-                Level world = CompassionPrayerEntity.this.level();
-                return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
-            }
-
-            @Override
-            public boolean canContinueToUse() {
-                double x = CompassionPrayerEntity.this.getX();
-                double y = CompassionPrayerEntity.this.getY();
-                double z = CompassionPrayerEntity.this.getZ();
-                Entity entity = CompassionPrayerEntity.this;
-                Level world = CompassionPrayerEntity.this.level();
-                return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
-            }
-        });
+        this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, target -> EntityUtils.isOceanizedPlayerNearby(this.level(), this.getX(), this.getY(), this.getZ())));
         this.goalSelector.addGoal(13, new RandomStrollGoal(this, 0.8) {
             @Override
             public boolean canUse() {

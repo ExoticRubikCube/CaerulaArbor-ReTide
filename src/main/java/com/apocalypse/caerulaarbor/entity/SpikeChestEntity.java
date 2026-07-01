@@ -158,10 +158,7 @@ public class SpikeChestEntity extends SeaMonster {
 		this.refreshDimensions();
 	}
 
-	@Override
-	public EntityDimensions getDimensions(Pose p_33597_) {
-		return super.getDimensions(p_33597_).scale((float) 1);
-	}
+	
 
 	public static void registerSpawnPlacements() {
 		SpawnPlacements.register(CAEntities.SPIKE_CHEST.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,

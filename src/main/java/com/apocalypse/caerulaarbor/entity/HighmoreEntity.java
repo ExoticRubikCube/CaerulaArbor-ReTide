@@ -45,7 +45,6 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
-import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.SnowGolem;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -159,36 +158,7 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
         this.targetSelector.addGoal(9, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
         this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
         this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
-        this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, Player.class, true, false) {
-            @Override
-            public boolean canUse() {
-                double x = HighmoreEntity.this.getX();
-                double y = HighmoreEntity.this.getY();
-                double z = HighmoreEntity.this.getZ();
-                Level world = HighmoreEntity.this.level();
-                return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
-            }
-
-            @Override
-            public boolean canContinueToUse() {
-                double x = HighmoreEntity.this.getX();
-                double y = HighmoreEntity.this.getY();
-                double z = HighmoreEntity.this.getZ();
-                Level world = HighmoreEntity.this.level();
-                return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
-            }
-        });
-        this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Animal.class, true, false) {
-            @Override
-            public boolean canUse() {
-                return super.canUse() && EntityUtils.canAttackAnimals();
-            }
-
-            @Override
-            public boolean canContinueToUse() {
-                return super.canContinueToUse() && EntityUtils.canAttackAnimals();
-            }
-        });
+        this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, target -> EntityUtils.isOceanizedPlayerNearby(this.level(), this.getX(), this.getY(), this.getZ())));
         this.goalSelector.addGoal(14, new RandomStrollGoal(this, 0.5, 20) {
             @Override
             protected Vec3 getPosition() {

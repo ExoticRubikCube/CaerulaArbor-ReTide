@@ -219,10 +219,7 @@ public class ApocataEntity extends PathfinderMob implements GeoEntity, SyncedAni
         this.refreshDimensions();
 	}
 
-	@Override
-	public EntityDimensions getDimensions(Pose p_33597_) {
-		return super.getDimensions(p_33597_).scale((float) 1);
-	}
+	
 
 	@Override
 	public void aiStep() {

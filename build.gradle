@@ -181,7 +181,8 @@ dependencies {
 
     // 开发环境调试
     runtimeOnly fg.deobf("curse.maven:spark-361579:4738952")
-    runtimeOnly fg.deobf("curse.maven:mmmmmmmmmmmm-225738:7963208") //测试假人
+    runtimeOnly fg.deobf("curse.maven:mmmmmmmmmmmm-225738:6860192")
+    runtimeOnly fg.deobf("curse.maven:selene-499980:8261419") //测试假人前置
 }
 
 mixin {

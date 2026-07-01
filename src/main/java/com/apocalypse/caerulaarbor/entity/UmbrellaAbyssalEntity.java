@@ -123,27 +123,7 @@ public class UmbrellaAbyssalEntity extends SeaMonster {
 		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, Piglin.class, false, false));
 		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, false, false));
 		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, false, false));
-		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal(this, Player.class, false, false) {
-			@Override
-			public boolean canUse() {
-				double x = UmbrellaAbyssalEntity.this.getX();
-				double y = UmbrellaAbyssalEntity.this.getY();
-				double z = UmbrellaAbyssalEntity.this.getZ();
-				Entity entity = UmbrellaAbyssalEntity.this;
-				Level world = UmbrellaAbyssalEntity.this.level();
-				return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
-			}
-
-			@Override
-			public boolean canContinueToUse() {
-				double x = UmbrellaAbyssalEntity.this.getX();
-				double y = UmbrellaAbyssalEntity.this.getY();
-				double z = UmbrellaAbyssalEntity.this.getZ();
-				Entity entity = UmbrellaAbyssalEntity.this;
-				Level world = UmbrellaAbyssalEntity.this.level();
-				return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
-			}
-		});
+		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal(this, Player.class, 10, false, false, target -> EntityUtils.isOceanizedPlayerNearby(this.level(), this.getX(), this.getY(), this.getZ())));
 		this.goalSelector.addGoal(14, new RandomStrollGoal(this, 0.4));
 		this.goalSelector.addGoal(15, new RandomLookAroundGoal(this));
 	}
@@ -281,10 +261,7 @@ public class UmbrellaAbyssalEntity extends SeaMonster {
         this.refreshDimensions();
 	}
 
-	@Override
-	public EntityDimensions getDimensions(Pose p_33597_) {
-		return super.getDimensions(p_33597_).scale((float) 1);
-	}
+	
 
 	public static void registerSpawnPlacements() {
 		SpawnPlacements.register(CAEntities.UMBRELLA_ABYSSAL.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {

@@ -34,8 +34,6 @@ public class MuteMobEffect extends MobEffect {
 	@Override
 	public void applyEffectTick(LivingEntity entity, int amplifier) {
         LevelAccessor world = entity.level();
-        if (entity == null)
-            return;
         if (world instanceof ServerLevel _level)
             _level.sendParticles(CAParticles.MUTENESS.get(), entity.getX(), entity.getY(), entity.getZ(), 2, 1, 1, 1, 0.1);
         if (entity instanceof Creeper) {

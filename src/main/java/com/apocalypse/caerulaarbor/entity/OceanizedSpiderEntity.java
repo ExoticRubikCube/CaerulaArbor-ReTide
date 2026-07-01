@@ -34,7 +34,6 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
-import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.SnowGolem;
 import net.minecraft.world.entity.item.FallingBlockEntity;
@@ -183,38 +182,7 @@ public class OceanizedSpiderEntity extends SeaMonster {
         this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
         this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
         this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
-        this.targetSelector.addGoal(14, new NearestAttackableTargetGoal<>(this, Player.class, true, false) {
-            @Override
-            public boolean canUse() {
-                double x = OceanizedSpiderEntity.this.getX();
-                double y = OceanizedSpiderEntity.this.getY();
-                double z = OceanizedSpiderEntity.this.getZ();
-                Entity entity = OceanizedSpiderEntity.this;
-                Level world = OceanizedSpiderEntity.this.level();
-                return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
-            }
-
-            @Override
-            public boolean canContinueToUse() {
-                double x = OceanizedSpiderEntity.this.getX();
-                double y = OceanizedSpiderEntity.this.getY();
-                double z = OceanizedSpiderEntity.this.getZ();
-                Entity entity = OceanizedSpiderEntity.this;
-                Level world = OceanizedSpiderEntity.this.level();
-                return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
-            }
-        });
-        this.targetSelector.addGoal(15, new NearestAttackableTargetGoal<>(this, Animal.class, true, false) {
-            @Override
-            public boolean canUse() {
-                return super.canUse() && EntityUtils.canAttackAnimals();
-            }
-
-            @Override
-            public boolean canContinueToUse() {
-                return super.canContinueToUse() && EntityUtils.canAttackAnimals();
-            }
-        });
+        this.targetSelector.addGoal(14, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, target -> EntityUtils.isOceanizedPlayerNearby(this.level(), this.getX(), this.getY(), this.getZ())));
         this.goalSelector.addGoal(16, new RandomStrollGoal(this, 1, 20) {
             @Override
             protected Vec3 getPosition() {

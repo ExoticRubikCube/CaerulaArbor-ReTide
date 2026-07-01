@@ -30,8 +30,13 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.FlyingMoveControl;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -176,6 +181,54 @@ public abstract class AbstractOceanizedWitherEntity extends SeaMonster {
             return false;
         }
         return super.hurt(source, amount);
+    }
+
+    @Override
+    protected void registerGoals() {
+        super.registerGoals();
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this) {
+            @Override
+            public boolean canUse() {
+                return super.canUse() && isWitherDurative();
+            }
+
+            @Override
+            public boolean canContinueToUse() {
+                return super.canContinueToUse() && isWitherDurative();
+            }
+        });
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, IronGolem.class, false, false));
+        this.goalSelector.addGoal(5, new RandomStrollGoal(this, 1, 20) {
+            @Override
+            protected Vec3 getPosition() {
+                RandomSource random = AbstractOceanizedWitherEntity.this.getRandom();
+                double dirX = AbstractOceanizedWitherEntity.this.getX() + ((random.nextFloat() * 2 - 1) * 16);
+                double dirY = AbstractOceanizedWitherEntity.this.getY() + ((random.nextFloat() * 2 - 1) * 16);
+                double dirZ = AbstractOceanizedWitherEntity.this.getZ() + ((random.nextFloat() * 2 - 1) * 16);
+                return new Vec3(dirX, dirY, dirZ);
+            }
+
+            @Override
+            public boolean canUse() {
+                return super.canUse() && isWitherDurative();
+            }
+
+            @Override
+            public boolean canContinueToUse() {
+                return super.canContinueToUse() && isWitherDurative();
+            }
+        });
+        this.goalSelector.addGoal(6, new RandomLookAroundGoal(this) {
+            @Override
+            public boolean canUse() {
+                return super.canUse() && isWitherDurative();
+            }
+
+            @Override
+            public boolean canContinueToUse() {
+                return super.canContinueToUse() && isWitherDurative();
+            }
+        });
     }
 
     @Override
@@ -341,8 +394,6 @@ public abstract class AbstractOceanizedWitherEntity extends SeaMonster {
             double x = this.getX();
             double y = this.getY();
             double z = this.getZ();
-            if (this == null)
-                return;
             if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
                 if (world instanceof ServerLevel _level) {
                     ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, new ItemStack(CAItems.MOIST_STAR.get()));

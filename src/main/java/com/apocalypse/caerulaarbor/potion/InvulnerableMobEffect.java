@@ -27,8 +27,6 @@ public class InvulnerableMobEffect extends MobEffect {
         double x = entity.getX();
         double y = entity.getY();
         double z = entity.getZ();
-        if (entity == null)
-            return;
         double ang;
         double phase;
         entity.invulnerableTime = 10;

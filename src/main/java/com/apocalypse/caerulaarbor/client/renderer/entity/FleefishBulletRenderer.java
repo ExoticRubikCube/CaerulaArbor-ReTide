@@ -1,9 +1,8 @@
 package com.apocalypse.caerulaarbor.client.renderer.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.client.model.entity.ModelFleefishBullet;
-import com.apocalypse.caerulaarbor.entity.FleefishBulletEntity;
+import com.apocalypse.caerulaarbor.entity.bullets.FleefishBulletEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;

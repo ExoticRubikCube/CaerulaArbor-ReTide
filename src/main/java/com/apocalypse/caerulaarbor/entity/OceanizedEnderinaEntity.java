@@ -647,10 +647,7 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 		}
 	}
 
-	@Override
-	public EntityDimensions getDimensions(Pose p_33597_) {
-		return super.getDimensions(p_33597_).scale((float) 1);
-	}
+	
 
 	@Override
 	public void performRangedAttack(LivingEntity target, float flval) {

@@ -31,12 +31,8 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
@@ -98,52 +94,8 @@ public class OceanizedWitherEntity extends AbstractOceanizedWitherEntity impleme
     @Override
     protected void registerGoals() {
         super.registerGoals();
-        this.targetSelector.addGoal(1, new HurtByTargetGoal(this) {
-            @Override
-            public boolean canUse() {
-                return super.canUse() && isWitherDurative();
-            }
-
-            @Override
-            public boolean canContinueToUse() {
-                return super.canContinueToUse() && isWitherDurative();
-            }
-        });
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, IronGolem.class, false, false));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Villager.class, false, false));
         this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, Animal.class, false, false));
-        this.goalSelector.addGoal(5, new RandomStrollGoal(this, 1, 20) {
-            @Override
-            protected Vec3 getPosition() {
-                RandomSource random = OceanizedWitherEntity.this.getRandom();
-                double dir_x = OceanizedWitherEntity.this.getX() + ((random.nextFloat() * 2 - 1) * 16);
-                double dir_y = OceanizedWitherEntity.this.getY() + ((random.nextFloat() * 2 - 1) * 16);
-                double dir_z = OceanizedWitherEntity.this.getZ() + ((random.nextFloat() * 2 - 1) * 16);
-                return new Vec3(dir_x, dir_y, dir_z);
-            }
-
-            @Override
-            public boolean canUse() {
-                return super.canUse() && isWitherDurative();
-            }
-
-            @Override
-            public boolean canContinueToUse() {
-                return super.canContinueToUse() && isWitherDurative();
-            }
-
-        });
-        this.goalSelector.addGoal(6, new RandomLookAroundGoal(this) {
-            @Override
-            public boolean canUse() {
-                return super.canUse() && isWitherDurative();
-            }
-
-            @Override
-            public boolean canContinueToUse() {
-                return super.canContinueToUse() && isWitherDurative();
-            }
-        });
         this.goalSelector.addGoal(1, new RangedAttackGoal(this, 1.25, 30, 12f) {
             @Override
             public boolean canContinueToUse() {

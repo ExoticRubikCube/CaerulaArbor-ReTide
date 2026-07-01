@@ -137,25 +137,7 @@ public class OceanizedVexEntity extends SeaMonster {
         this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
         this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
         this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
-        this.targetSelector.addGoal(13, new NearestAttackableTargetGoal(this, Player.class, true, false) {
-            @Override
-            public boolean canUse() {
-                double x = OceanizedVexEntity.this.getX();
-                double y = OceanizedVexEntity.this.getY();
-                double z = OceanizedVexEntity.this.getZ();
-                Level world = OceanizedVexEntity.this.level();
-                return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
-            }
-
-            @Override
-            public boolean canContinueToUse() {
-                double x = OceanizedVexEntity.this.getX();
-                double y = OceanizedVexEntity.this.getY();
-                double z = OceanizedVexEntity.this.getZ();
-                Level world = OceanizedVexEntity.this.level();
-                return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
-            }
-        });
+        this.targetSelector.addGoal(13, new NearestAttackableTargetGoal(this, Player.class, 10, true, false, target -> EntityUtils.isOceanizedPlayerNearby(this.level(), this.getX(), this.getY(), this.getZ())));
         this.goalSelector.addGoal(14, new RandomStrollGoal(this, 1, 20) {
             @Override
             protected Vec3 getPosition() {

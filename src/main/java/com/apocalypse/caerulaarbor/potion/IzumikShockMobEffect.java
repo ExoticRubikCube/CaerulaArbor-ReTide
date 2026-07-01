@@ -47,9 +47,7 @@ public class IzumikShockMobEffect extends MobEffect {
         double x = entity.getX();
         double y = entity.getY();
         double z = entity.getZ();
-        if (entity == null)
-            return;
-        Entity izumik;
+        LivingEntity izumik;
         double dama;
         if (((Entity) entity).isAlive()) {
             izumik = world.getEntitiesOfClass(IzumikEntity.class, AABB.ofSize(new Vec3(x, y, z), 27, 27, 27), e -> true).stream().sorted(new Object() {
@@ -58,8 +56,8 @@ public class IzumikShockMobEffect extends MobEffect {
                 }
             }.compareDistOf(x, y, z)).findFirst().orElse(null);
             dama = 12;
-            if (!(izumik == null)) {
-                dama = izumik instanceof LivingEntity _livingEntity3 && _livingEntity3.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity3.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
+            if (izumik != null) {
+                dama = izumik.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? izumik.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
             }
             ((Entity) entity).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "izumik_skill")))), (float) (dama * 0.12));
             if (world instanceof ServerLevel _level)

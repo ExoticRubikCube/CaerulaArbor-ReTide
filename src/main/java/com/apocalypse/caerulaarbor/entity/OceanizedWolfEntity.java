@@ -107,36 +107,7 @@ public class OceanizedWolfEntity extends SeaMonster {
         this.targetSelector.addGoal(17, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
         this.targetSelector.addGoal(18, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
         this.targetSelector.addGoal(19, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
-        this.targetSelector.addGoal(20, new NearestAttackableTargetGoal<>(this, Player.class, true, false) {
-            @Override
-            public boolean canUse() {
-                double x = OceanizedWolfEntity.this.getX();
-                double y = OceanizedWolfEntity.this.getY();
-                double z = OceanizedWolfEntity.this.getZ();
-                Level world = OceanizedWolfEntity.this.level();
-                return super.canUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
-            }
-
-            @Override
-            public boolean canContinueToUse() {
-                double x = OceanizedWolfEntity.this.getX();
-                double y = OceanizedWolfEntity.this.getY();
-                double z = OceanizedWolfEntity.this.getZ();
-                Level world = OceanizedWolfEntity.this.level();
-                return super.canContinueToUse() && EntityUtils.isOceanizedPlayerNearby(world, x, y, z);
-            }
-        });
-        this.targetSelector.addGoal(21, new NearestAttackableTargetGoal<>(this, Animal.class, true, false) {
-            @Override
-            public boolean canUse() {
-                return super.canUse() && EntityUtils.canAttackAnimals();
-            }
-
-            @Override
-            public boolean canContinueToUse() {
-                return super.canContinueToUse() && EntityUtils.canAttackAnimals();
-            }
-        });
+        this.targetSelector.addGoal(20, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, target -> EntityUtils.isOceanizedPlayerNearby(this.level(), this.getX(), this.getY(), this.getZ())));
         this.goalSelector.addGoal(22, new RandomStrollGoal(this, 0.5));
         this.goalSelector.addGoal(23, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(24, new FloatGoal(this));
