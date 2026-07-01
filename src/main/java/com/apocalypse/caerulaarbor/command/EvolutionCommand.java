@@ -3,10 +3,10 @@ package com.apocalypse.caerulaarbor.command;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler;
 import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler.StrategyType;
-import com.apocalypse.caerulaarbor.system.UpgradeBreedProcedure;
-import com.apocalypse.caerulaarbor.system.UpgradeGrowProcedure;
-import com.apocalypse.caerulaarbor.system.UpgradeMigraProcedure;
-import com.apocalypse.caerulaarbor.system.UpgradeSubsisProcedure;
+import com.apocalypse.caerulaarbor.manager.BreedUpgradeManager;
+import com.apocalypse.caerulaarbor.manager.GrowUpgradeManager;
+import com.apocalypse.caerulaarbor.manager.MigrationUpgradeManager;
+import com.apocalypse.caerulaarbor.manager.SubsistingUpgradeManager;
 import com.apocalypse.caerulaarbor.util.StrategyUtils;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import net.minecraft.commands.Commands;
@@ -42,7 +42,7 @@ public class EvolutionCommand {
 			if (entity != null)
                 entity.getDirection();
 
-			UpgradeGrowProcedure.execute(world);
+			GrowUpgradeManager.execute(world);
 			return 0;
 		})).then(Commands.argument("lvl", DoubleArgumentType.doubleArg(0, 4)).executes(arguments -> {
 			Level world = arguments.getSource().getUnsidedLevel();
@@ -90,7 +90,7 @@ public class EvolutionCommand {
 			if (entity != null)
                 entity.getDirection();
 
-			UpgradeBreedProcedure.execute(world);
+			BreedUpgradeManager.execute(world);
 			return 0;
 		})).then(Commands.argument("lvl", DoubleArgumentType.doubleArg(0, 4)).executes(arguments -> {
 			Level world = arguments.getSource().getUnsidedLevel();
@@ -138,7 +138,7 @@ public class EvolutionCommand {
 			if (entity != null)
                 entity.getDirection();
 
-			UpgradeMigraProcedure.execute(world);
+			MigrationUpgradeManager.execute(world);
 			return 0;
 		})).then(Commands.argument("lvl", DoubleArgumentType.doubleArg(0, 4)).executes(arguments -> {
 			Level world = arguments.getSource().getUnsidedLevel();
@@ -186,7 +186,7 @@ public class EvolutionCommand {
 			if (entity != null)
                 entity.getDirection();
 
-			UpgradeSubsisProcedure.execute(world);
+			SubsistingUpgradeManager.execute(world);
 			return 0;
 		})).then(Commands.argument("lvl", DoubleArgumentType.doubleArg(0, 4)).executes(arguments -> {
 			Level world = arguments.getSource().getUnsidedLevel();

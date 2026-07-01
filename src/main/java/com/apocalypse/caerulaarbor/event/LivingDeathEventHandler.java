@@ -10,9 +10,9 @@ import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
 import com.apocalypse.caerulaarbor.entity.MartusEntity;
 import com.apocalypse.caerulaarbor.entity.SkadiEntity;
 import com.apocalypse.caerulaarbor.init.*;
-import com.apocalypse.caerulaarbor.system.TransformIndexProcedure;
-import com.apocalypse.caerulaarbor.system.UpgradeBreedProcedure;
-import com.apocalypse.caerulaarbor.system.UpgradeSilenceProcedure;
+import com.apocalypse.caerulaarbor.manager.BreedUpgradeManager;
+import com.apocalypse.caerulaarbor.manager.SilenceUpgradeManager;
+import com.apocalypse.caerulaarbor.manager.TransformManager;
 import com.apocalypse.caerulaarbor.util.CaerulaUtil;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.advancements.Advancement;
@@ -290,8 +290,8 @@ public class LivingDeathEventHandler {
             if (world.getLevelData().getGameRules().getBoolean(CAGameRules.NATURAL_EVOLUTION)) {
                 if (!world.getEntitiesOfClass(Player.class, AABB.ofSize(new Vec3(x, y, z), 128, 128, 128), e -> true).isEmpty()) {
                     MapVariablesHandler.addEvoPoint(world, StrategyType.BREED, (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.1);
-                    UpgradeBreedProcedure.execute(world);
-                    UpgradeSilenceProcedure.execute(world, (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.1);
+                    BreedUpgradeManager.execute(world);
+                    SilenceUpgradeManager.execute(world, (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.1);
                 }
             }
         }
@@ -442,7 +442,7 @@ public class LivingDeathEventHandler {
         if (entity instanceof SkadiEntity) return;
 
         if (damagesource.is(TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "can_trigger_oceanization")))) {
-            if (TransformIndexProcedure.transformToSeaborn(world, x, y, z, entity)) {
+            if (TransformManager.transformToSeaborn(world, x, y, z, entity)) {
                 if (event.isCancelable()) {
                     event.setCanceled(true);
                 }
@@ -602,7 +602,7 @@ public class LivingDeathEventHandler {
         if (event.isCanceled()) return;
 
         if (!entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring"))) && sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
-            if (TransformIndexProcedure.transformToSeaborn(world, x, y, z, entity)) {
+            if (TransformManager.transformToSeaborn(world, x, y, z, entity)) {
                 if (event.isCancelable()) {
                     event.setCanceled(true);
                 }

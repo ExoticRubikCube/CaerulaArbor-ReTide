@@ -7,8 +7,8 @@ import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler.StrategyTy
 import com.apocalypse.caerulaarbor.entity.*;
 import com.apocalypse.caerulaarbor.init.CAGameRules;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
-import com.apocalypse.caerulaarbor.system.UpgradeMigraProcedure;
-import com.apocalypse.caerulaarbor.system.UpgradeSilenceProcedure;
+import com.apocalypse.caerulaarbor.manager.MigrationUpgradeManager;
+import com.apocalypse.caerulaarbor.manager.SilenceUpgradeManager;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -290,8 +290,8 @@ public class LivingTickEventHandler {
             double pnt = Mth.nextDouble(RandomSource.create(), 0, 0.005);
             MapVariablesHandler.addEvoPoint(world, StrategyType.MIGRATION,
                     pnt * Math.max(MapVariables.get(world).strategy_subsisting + MapVariables.get(world).strategy_grow + MapVariables.get(world).strategy_breed, 1));
-            UpgradeMigraProcedure.execute(world);
-            UpgradeSilenceProcedure.execute(world, pnt);
+            MigrationUpgradeManager.execute(world);
+            SilenceUpgradeManager.execute(world, pnt);
         }
     }
 }

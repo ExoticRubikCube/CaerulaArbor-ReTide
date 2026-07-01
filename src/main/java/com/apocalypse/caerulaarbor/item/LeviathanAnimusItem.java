@@ -4,7 +4,7 @@ package com.apocalypse.caerulaarbor.item;
 import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler;
 import com.apocalypse.caerulaarbor.init.CAParticles;
-import com.apocalypse.caerulaarbor.system.UpgradeSilenceProcedure;
+import com.apocalypse.caerulaarbor.manager.SilenceUpgradeManager;
 import com.apocalypse.caerulaarbor.util.StrategyUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -70,7 +70,7 @@ public class LeviathanAnimusItem extends Item {
             itemstack.shrink(1);
         } else {
             if (MapVariables.get(world).strategy_silence < 4 && StrategyUtils.canEnableSilence(world)) {
-                UpgradeSilenceProcedure.execute(world, 99999999);
+                SilenceUpgradeManager.execute(world, 99999999);
                 itemstack.shrink(1);
             } else {
                 if ((LevelAccessor) world instanceof Level _level) {

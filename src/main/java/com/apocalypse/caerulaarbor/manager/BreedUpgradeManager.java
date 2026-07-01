@@ -1,4 +1,4 @@
-package com.apocalypse.caerulaarbor.system;
+package com.apocalypse.caerulaarbor.manager;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.map.MapVariables;
@@ -19,14 +19,14 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 
-public class UpgradeSubsisProcedure {
+public class BreedUpgradeManager {
 	public static void execute(LevelAccessor world) {
 		double stra;
 		String num = "";
 		String prefix = "";
-		stra = MapVariables.get(world).strategy_subsisting;
+		stra = MapVariables.get(world).strategy_breed;
 		if (stra < 4) {
-			if (MapVariables.get(world).evo_point_subsisting >= Math.pow(stra + 1, 3) * CaerulaConfigsConfiguration.COEFFICIENT.get()) {
+			if (MapVariables.get(world).evo_point_breed >= Math.pow(stra + 1, 3) * CaerulaConfigsConfiguration.COEFFICIENT.get()) {
 				for (Entity entityiterator : new ArrayList<>(world.players())) {
 					if (entityiterator instanceof ServerPlayer _player) {
 						Advancement _adv = _player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "to_experience_evolution"));
@@ -37,9 +37,9 @@ public class UpgradeSubsisProcedure {
 						}
 					}
 				}
-				MapVariablesHandler.setStrategyLevel(world, StrategyType.SUBSISTING, stra + 1);
-				stra = MapVariables.get(world).strategy_subsisting;
-				MapVariablesHandler.setEvoPoint(world, StrategyType.SUBSISTING, 0);
+				MapVariablesHandler.setStrategyLevel(world, StrategyType.BREED, stra + 1);
+				stra = MapVariables.get(world).strategy_breed;
+				MapVariablesHandler.setEvoPoint(world, StrategyType.BREED, 0);
 				if (stra == 1) {
 					num = "I";
 					prefix = "§p";
@@ -57,35 +57,32 @@ public class UpgradeSubsisProcedure {
 					for (Entity entityiterator : new ArrayList<>(world.players())) {
 						if (stra >= 3) {
 							if (world instanceof Level _level) {
-									_level.playSound(null, BlockPos.containing(entityiterator.getX(), entityiterator.getY(), entityiterator.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "subsisting2")),
+									_level.playSound(null, BlockPos.containing(entityiterator.getX(), entityiterator.getY(), entityiterator.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "breed2")),
 											SoundSource.NEUTRAL, 4, 1);
 							}
 						} else if (stra > 0) {
 							if (world instanceof Level _level) {
-									_level.playSound(null, BlockPos.containing(entityiterator.getX(), entityiterator.getY(), entityiterator.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "subsisting1")),
+									_level.playSound(null, BlockPos.containing(entityiterator.getX(), entityiterator.getY(), entityiterator.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "breed1")),
 											SoundSource.NEUTRAL, 4, 1);
 							}
 						}
 					}
 				}
 				if (!world.isClientSide() && world.getServer() != null)
-					world.getServer().getPlayerList().broadcastSystemMessage(Component.literal((prefix + Component.translatable("item.caerula_arbor.sample_subsisting.description_5").getString() + num)), false);
+					world.getServer().getPlayerList().broadcastSystemMessage(Component.literal((prefix + Component.translatable("item.caerula_arbor.sample_breed.description_5").getString() + num)), false);
 			}
 		} else {
 			for (Entity entityiterator : new ArrayList<>(world.players())) {
 				if (entityiterator instanceof ServerPlayer _player) {
 					Advancement _adv = _player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "to_terminate_evolution"));
-                    AdvancementProgress _ap;
-                    if (_adv != null) {
-						_ap = _player.getAdvancements().getOrStartProgress(_adv);
-						if (!_ap.isDone()) {
-							for (String criteria : _ap.getRemainingCriteria())
-								_player.getAdvancements().award(_adv, criteria);
-						}
+					AdvancementProgress _ap = _player.getAdvancements().getOrStartProgress(_adv);
+					if (!_ap.isDone()) {
+						for (String criteria : _ap.getRemainingCriteria())
+							_player.getAdvancements().award(_adv, criteria);
 					}
 				}
 			}
-			MapVariablesHandler.setEvoPoint(world, StrategyType.SUBSISTING, 1);
+			MapVariablesHandler.setEvoPoint(world, StrategyType.BREED, 1);
 		}
 	}
 }

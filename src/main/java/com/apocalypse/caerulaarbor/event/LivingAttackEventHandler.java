@@ -12,9 +12,9 @@ import com.apocalypse.caerulaarbor.entity.wither.OceanizedWitherEntity;
 import com.apocalypse.caerulaarbor.entity.wither.OceannizedWitheriaEntity;
 import com.apocalypse.caerulaarbor.init.*;
 import com.apocalypse.caerulaarbor.item.HighmoreScytheItem;
-import com.apocalypse.caerulaarbor.system.UpgradeGrowProcedure;
-import com.apocalypse.caerulaarbor.system.UpgradeSilenceProcedure;
-import com.apocalypse.caerulaarbor.system.UpgradeSubsisProcedure;
+import com.apocalypse.caerulaarbor.manager.GrowUpgradeManager;
+import com.apocalypse.caerulaarbor.manager.SilenceUpgradeManager;
+import com.apocalypse.caerulaarbor.manager.SubsistingUpgradeManager;
 import com.apocalypse.caerulaarbor.util.CaerulaUtil;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.advancements.Advancement;
@@ -499,8 +499,8 @@ public class LivingAttackEventHandler {
         if (sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
             if (world.getLevelData().getGameRules().getBoolean(CAGameRules.NATURAL_EVOLUTION)) {
                 MapVariablesHandler.addEvoPoint(world, StrategyType.GROW, amount * 0.025);
-                UpgradeGrowProcedure.execute(world);
-                UpgradeSilenceProcedure.execute(world, amount * 0.025);
+                GrowUpgradeManager.execute(world);
+                SilenceUpgradeManager.execute(world, amount * 0.025);
             }
         }
 
@@ -518,8 +518,8 @@ public class LivingAttackEventHandler {
                     && !damagesource.is(TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "bypasses_evolution")))) {
                 MapVariablesHandler.addEvoPoint(world, StrategyType.SUBSISTING,
                         Math.min(amount, entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.025);
-                UpgradeSubsisProcedure.execute(world);
-                UpgradeSilenceProcedure.execute(world, Math.min(amount, entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.025);
+                SubsistingUpgradeManager.execute(world);
+                SilenceUpgradeManager.execute(world, Math.min(amount, entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.025);
             }
 
             if (sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {

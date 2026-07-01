@@ -4,8 +4,8 @@ package com.apocalypse.caerulaarbor.item;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.client.renderer.item.LegendarySpearItemRenderer;
 import com.apocalypse.caerulaarbor.init.CAEnchantments;
-import com.apocalypse.caerulaarbor.system.TridentEnchantProcedure;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
+import com.apocalypse.caerulaarbor.util.ItemUtils;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.client.Minecraft;
@@ -147,7 +147,7 @@ public class LegendarySpearItem extends Item implements GeoItem, SyncedAnimation
 		double y = entity.getY();
 		double z = entity.getZ();
 
-		TridentEnchantProcedure.execute(world, x, y, z, entity, itemstack);
+		ItemUtils.transferSharpnessToSynesthesia(world, x, y, z, entity, itemstack);
 		return ar;
 	}
 

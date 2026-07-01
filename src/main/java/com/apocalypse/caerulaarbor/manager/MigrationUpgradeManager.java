@@ -1,4 +1,4 @@
-package com.apocalypse.caerulaarbor.system;
+package com.apocalypse.caerulaarbor.manager;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.map.MapVariables;
@@ -19,7 +19,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 
-public class UpgradeMigraProcedure {
+public class MigrationUpgradeManager {
 	public static void execute(LevelAccessor world) {
 		double stra;
 		String num = "";

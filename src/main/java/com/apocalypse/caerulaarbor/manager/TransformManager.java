@@ -1,4 +1,4 @@
-package com.apocalypse.caerulaarbor.system;
+package com.apocalypse.caerulaarbor.manager;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
@@ -30,7 +30,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class TransformIndexProcedure {
+public class TransformManager {
 	private static final TagKey<EntityType<?>> HOMO_SAPIENS = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "homo_sapiens"));
 
 	private static final List<TransformRule> STANDARD_TRANSFORM_RULES = List.of(

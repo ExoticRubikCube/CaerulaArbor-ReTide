@@ -2,7 +2,7 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.client.renderer.item.HighmoreScytheItemRenderer;
-import com.apocalypse.caerulaarbor.system.TridentEnchantProcedure;
+import com.apocalypse.caerulaarbor.util.ItemUtils;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
@@ -132,7 +132,7 @@ public class HighmoreScytheItem extends Item implements GeoItem, SyncedAnimation
 		double y = entity.getY();
 		double z = entity.getZ();
 
-		TridentEnchantProcedure.execute(world, x, y, z, entity, itemstack);
+		ItemUtils.transferSharpnessToSynesthesia(world, x, y, z, entity, itemstack);
 		return ar;
 	}
 
