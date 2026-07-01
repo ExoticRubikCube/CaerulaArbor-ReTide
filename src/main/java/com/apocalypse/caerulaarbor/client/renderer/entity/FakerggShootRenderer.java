@@ -1,9 +1,8 @@
 package com.apocalypse.caerulaarbor.client.renderer.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.client.model.entity.ModelFakerggShoot;
-import com.apocalypse.caerulaarbor.entity.FakerggShootEntity;
+import com.apocalypse.caerulaarbor.entity.bullets.FakerggShootEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;

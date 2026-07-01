@@ -3,7 +3,7 @@ package com.apocalypse.caerulaarbor.client.renderer.entity;
 
 import com.apocalypse.caerulaarbor.client.model.entity.LittleHelperModel;
 import com.apocalypse.caerulaarbor.client.model.entity.layer.LittleHelperLayer;
-import com.apocalypse.caerulaarbor.entity.LittleHelperEntity;
+import com.apocalypse.caerulaarbor.entity.helper.LittleHelperEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;

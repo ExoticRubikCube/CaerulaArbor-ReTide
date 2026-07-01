@@ -1,5 +1,6 @@
 package com.apocalypse.caerulaarbor.entity;
 
+import com.apocalypse.caerulaarbor.entity.base.SyncedAnimationEntity;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;

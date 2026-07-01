@@ -27,7 +27,7 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
-
+//TODO 需要重命名
 public class DamageTesterEntity extends PathfinderMob {
 	public DamageTesterEntity(PlayMessages.SpawnEntity packet, Level world) {
 		this(CAEntities.DAMAGE_TESTER.get(), world);
@@ -119,8 +119,6 @@ public class DamageTesterEntity extends PathfinderMob {
 		}
 		return InteractionResult.PASS;
 	}
-
-	
 
 	public static AttributeSupplier.Builder createAttributes() {
 		AttributeSupplier.Builder builder = Mob.createMobAttributes();

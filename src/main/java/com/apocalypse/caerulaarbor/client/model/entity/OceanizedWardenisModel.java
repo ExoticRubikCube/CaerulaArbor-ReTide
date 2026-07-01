@@ -1,8 +1,7 @@
 package com.apocalypse.caerulaarbor.client.model.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
-import com.apocalypse.caerulaarbor.entity.OceanizedWardenisEntity;
+import com.apocalypse.caerulaarbor.entity.warden.OceanizedWardenisEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import software.bernie.geckolib.constant.DataTickets;

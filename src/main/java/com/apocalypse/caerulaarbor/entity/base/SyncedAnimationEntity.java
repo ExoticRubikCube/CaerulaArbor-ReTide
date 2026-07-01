@@ -1,4 +1,4 @@
-package com.apocalypse.caerulaarbor.entity;
+package com.apocalypse.caerulaarbor.entity.base;
 
 public interface SyncedAnimationEntity {
 	String UNDEFINED_ANIMATION = "undefined";

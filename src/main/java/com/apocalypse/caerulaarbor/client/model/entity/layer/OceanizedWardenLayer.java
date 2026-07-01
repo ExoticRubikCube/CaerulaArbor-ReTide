@@ -1,8 +1,7 @@
 package com.apocalypse.caerulaarbor.client.model.entity.layer;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
-import com.apocalypse.caerulaarbor.entity.OceanizedWardenEntity;
+import com.apocalypse.caerulaarbor.entity.warden.OceanizedWardenEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;

@@ -8,10 +8,11 @@ import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler.StrategyTy
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
 import com.apocalypse.caerulaarbor.entity.*;
+import com.apocalypse.caerulaarbor.entity.helper.Al1SHelperEntity;
+import com.apocalypse.caerulaarbor.entity.helper.LittleHelperEntity;
 import com.apocalypse.caerulaarbor.entity.wither.OceanizedWitherEntity;
 import com.apocalypse.caerulaarbor.entity.wither.OceannizedWitheriaEntity;
 import com.apocalypse.caerulaarbor.init.*;
-import com.apocalypse.caerulaarbor.item.HighmoreScytheItem;
 import com.apocalypse.caerulaarbor.manager.GrowUpgradeManager;
 import com.apocalypse.caerulaarbor.manager.SilenceUpgradeManager;
 import com.apocalypse.caerulaarbor.manager.SubsistingUpgradeManager;
@@ -29,14 +30,12 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Monster;
@@ -74,7 +73,6 @@ public class LivingAttackEventHandler {
         handleInquisitionFriendlyFire(event);
         handleDamagePrevention(event);
         handleHighmoreCounter(event);
-        handleHighmoreScytheEntityAttack(event);
         handleOceanWitherExtraAttack(event);
         handleTidutantArmorBreak(event);
         handleMobHit(event);
@@ -338,64 +336,6 @@ public class LivingAttackEventHandler {
         entityToSpawn.setPos(x, y, z);
         entityToSpawn.shoot(dx, dy, dz, 2, 2);
         projectileLevel.addFreshEntity(entityToSpawn);
-    }
-
-    private static void handleHighmoreScytheEntityAttack(LivingAttackEvent event) {
-        LevelAccessor world = event.getEntity().level();
-        double x = event.getEntity().getX();
-        double y = event.getEntity().getY();
-        double z = event.getEntity().getZ();
-        DamageSource damagesource = event.getSource();
-        Entity entity = event.getEntity();
-        Entity sourceentity = event.getSource().getEntity();
-
-        if (damagesource == null || entity == null || sourceentity == null) return;
-
-        if ((sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.HIGHMORE_SCYTHE.get()
-                && damagesource.is(DamageTypes.PLAYER_ATTACK)) {
-            if (entity == null || sourceentity == null)
-                return;
-            if ((sourceentity instanceof Player _plr ? _plr.getAttackStrengthScale(0) : 0) >= 0.95) {
-                EntityUtils.giveLessArmor(entity, 15);
-                if ((sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() instanceof HighmoreScytheItem)
-                    (sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getOrCreateTag().putString("geckoAnim", "animation.highmore_scythe.attack");
-                CaerulaArborMod.queueServerWork(10, () -> {
-                    if ((sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.HIGHMORE_SCYTHE.get()) {
-                        if (world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "scythe_highmore")), SoundSource.PLAYERS, (float) 1.5, 1);
-                        }
-                        {
-                            final Vec3 _center = new Vec3(x, (y + 0.5), z);
-                            List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(8 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                            for (Entity entityiterator : _entfound) {
-                                if ((sourceentity != null ? entityiterator.distanceTo(sourceentity) : -1) <= 4) {
-                                    if (entityiterator instanceof LivingEntity && !(entityiterator == sourceentity)) {
-                                        if (!(entityiterator instanceof TamableAnimal _tamIsTamedBy && sourceentity instanceof LivingEntity _livEnt && _tamIsTamedBy.isOwnedBy(_livEnt))) {
-                                            entityiterator.hurt(
-                                                    new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "highmore_attack"))),
-                                                            sourceentity),
-                                                    (float) ((sourceentity instanceof LivingEntity _livingEntity10 && _livingEntity10.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)
-                                                            ? _livingEntity10.getAttribute(Attributes.ATTACK_DAMAGE).getValue()
-                                                            : 0) * (1.5 + 0.2 * (sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getEnchantmentLevel(CAEnchantments.SYNESTHESIA.get()))));
-                                            EntityUtils.giveLessArmor(entityiterator, 15);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        if (!(sourceentity instanceof Player player && player.getAbilities().instabuild)) {
-                            {
-                                ItemStack _ist = (sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY);
-                                if (_ist.hurt(1, RandomSource.create(), null)) {
-                                    _ist.shrink(1);
-                                    _ist.setDamageValue(0);
-                                }
-                            }
-                        }
-                    }
-                });
-            }
-        }
     }
 
     //下放回实体

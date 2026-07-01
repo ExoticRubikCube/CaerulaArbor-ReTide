@@ -3,7 +3,7 @@ package com.apocalypse.caerulaarbor.client.renderer.entity;
 
 import com.apocalypse.caerulaarbor.client.model.entity.Al1SHelperModel;
 import com.apocalypse.caerulaarbor.client.model.entity.layer.Al1SHelperLayer;
-import com.apocalypse.caerulaarbor.entity.Al1SHelperEntity;
+import com.apocalypse.caerulaarbor.entity.helper.Al1SHelperEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;

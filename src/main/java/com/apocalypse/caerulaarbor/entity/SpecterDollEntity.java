@@ -1,6 +1,7 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.entity.base.SyncedAnimationEntity;
 import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAParticles;
@@ -349,7 +350,6 @@ public class SpecterDollEntity extends Animal implements GeoEntity, SyncedAnimat
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return this.cache;
     }
-
 
     @Override
     public void setAnimationProcedure(String animation) {

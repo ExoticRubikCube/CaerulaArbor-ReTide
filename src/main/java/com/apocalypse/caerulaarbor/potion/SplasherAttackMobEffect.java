@@ -4,7 +4,7 @@ package com.apocalypse.caerulaarbor.potion;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
-import com.apocalypse.caerulaarbor.entity.FishSplashEntity;
+import com.apocalypse.caerulaarbor.entity.bullets.FishSplashEntity;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.init.CAParticles;

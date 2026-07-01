@@ -1,7 +1,7 @@
 package com.apocalypse.caerulaarbor.client.model.entity.layer;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.entity.LittleHelperEntity;
+import com.apocalypse.caerulaarbor.entity.helper.LittleHelperEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;

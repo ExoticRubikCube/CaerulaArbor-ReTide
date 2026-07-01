@@ -1,5 +1,7 @@
-package com.apocalypse.caerulaarbor.entity.wither;
+package com.apocalypse.caerulaarbor.entity.bullets;
 
+import com.apocalypse.caerulaarbor.entity.wither.AbstractOceanizedWitherEntity;
+import com.apocalypse.caerulaarbor.entity.wither.OceanizedWitherEntity;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.network.protocol.Packet;

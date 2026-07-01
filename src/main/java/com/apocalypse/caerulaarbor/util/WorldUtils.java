@@ -2,8 +2,8 @@ package com.apocalypse.caerulaarbor.util;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
-import com.apocalypse.caerulaarbor.entity.Al1SHelperEntity;
-import com.apocalypse.caerulaarbor.entity.LittleHelperEntity;
+import com.apocalypse.caerulaarbor.entity.helper.Al1SHelperEntity;
+import com.apocalypse.caerulaarbor.entity.helper.LittleHelperEntity;
 import com.apocalypse.caerulaarbor.init.CABlocks;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAGameRules;
@@ -28,7 +28,6 @@ import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LightLayer;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -579,53 +578,6 @@ public class WorldUtils {
 			}
 		}
 		return true;
-	}
-
-	//TODO:可能需要下放
-	public static void witheriaDestroyBlocks(LevelAccessor world, double x, double y, double z) {
-		boolean once = false;
-		double dx;
-		double dy;
-		double dz;
-		double hardness;
-		BlockState block;
-		if (canGrief(world)) {
-			dx = -1;
-			for (int index0 = 0; index0 < 3; index0++) {
-				dz = -1;
-				for (int index1 = 0; index1 < 3; index1++) {
-					dy = 0;
-					for (int index2 = 0; index2 < 2; index2++) {
-						block = (world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz)));
-						if (!block.is(BlockTags.create(new ResourceLocation("minecraft:wither_immnue")))) {
-							hardness = block.getDestroySpeed(world, BlockPos.containing(0, 0, 0));
-							if (hardness <= 7.5 && hardness >= 0 && world.getBlockFloorHeight(BlockPos.containing(x + dx, y + dy, z + dz)) > 0) {
-								{
-									BlockPos _pos = BlockPos.containing(x + dx, y + dy, z + dz);
-									Block.dropResources(world.getBlockState(_pos), world, BlockPos.containing(x, y, z), null);
-									world.destroyBlock(_pos, false);
-								}
-								if (world instanceof Level _level)
-									_level.updateNeighborsAt(BlockPos.containing(x + dx, y + dy, z + dz), _level.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz)).getBlock());
-								once = true;
-							}
-						}
-						dy = dy + 1;
-					}
-					dz = dz + 1;
-				}
-				dx = dx + 1;
-			}
-			if (once) {
-				if (world instanceof Level _level) {
-					if (!_level.isClientSide()) {
-						_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.wither.break_block")), SoundSource.NEUTRAL, 1, 1);
-					} else {
-						_level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.wither.break_block")), SoundSource.NEUTRAL, 1, 1, false);
-					}
-				}
-			}
-		}
 	}
 
 	//需要注释解释

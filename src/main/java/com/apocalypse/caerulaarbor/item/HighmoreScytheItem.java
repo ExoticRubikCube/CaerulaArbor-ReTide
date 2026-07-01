@@ -1,15 +1,28 @@
 
 package com.apocalypse.caerulaarbor.item;
 
+import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.client.renderer.item.HighmoreScytheItemRenderer;
+import com.apocalypse.caerulaarbor.init.CAEnchantments;
+import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.ItemUtils;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -20,7 +33,12 @@ import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import net.minecraftforge.common.ForgeMod;
+import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -30,6 +48,7 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -134,6 +153,80 @@ public class HighmoreScytheItem extends Item implements GeoItem, SyncedAnimation
 
 		ItemUtils.transferSharpnessToSynesthesia(world, x, y, z, entity, itemstack);
 		return ar;
+	}
+
+	@Override
+	public boolean onEntitySwing(ItemStack itemstack, LivingEntity entity) {
+		boolean result = super.onEntitySwing(itemstack, entity);
+		if (entity instanceof Player player && this.canUseSpecialAttack(player, itemstack)) {
+			HitResult hitResult = player.pick(player.getAttributeValue(ForgeMod.ENTITY_REACH.get()), 0.0F, false);
+			if (hitResult.getType() == HitResult.Type.MISS) {
+				this.setAttackAnimation(itemstack);
+				if (!player.level().isClientSide()) {
+					this.scheduleAreaAttack(itemstack, player, player.getX(), player.getY(), player.getZ());
+				}
+			}
+		}
+		return result;
+	}
+
+	@Override
+	public boolean hurtEnemy(ItemStack itemstack, LivingEntity entity, LivingEntity sourceentity) {
+		boolean result = super.hurtEnemy(itemstack, entity, sourceentity);
+		if (sourceentity instanceof Player player && this.canUseSpecialAttack(player, itemstack)) {
+			EntityUtils.giveLessArmor(entity, 15);
+			this.setAttackAnimation(itemstack);
+			if (!sourceentity.level().isClientSide()) {
+				this.scheduleAreaAttack(itemstack, sourceentity, entity.getX(), entity.getY(), entity.getZ());
+			}
+		}
+		return result;
+	}
+
+	private boolean canUseSpecialAttack(Player player, ItemStack itemstack) {
+		return player.getMainHandItem() == itemstack && player.getAttackStrengthScale(0) >= 0.95F;
+	}
+
+	private void setAttackAnimation(ItemStack itemstack) {
+		itemstack.getOrCreateTag().putString("geckoAnim", "animation.highmore_scythe.attack");
+	}
+
+	private void scheduleAreaAttack(ItemStack itemstack, LivingEntity attacker, double x, double y, double z) {
+		CaerulaArborMod.queueServerWork(10, () -> {
+			if (attacker.getMainHandItem() != itemstack) {
+				return;
+			}
+			Level level = attacker.level();
+			level.playSound(null, BlockPos.containing(x, y, z),
+					ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "scythe_highmore")),
+					SoundSource.PLAYERS, 1.5F, 1.0F);
+			Vec3 center = new Vec3(x, y + 0.5, z);
+			List<Entity> nearbyEntities = level.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(4.0), target -> true).stream()
+					.sorted(Comparator.comparingDouble(target -> target.distanceToSqr(center)))
+					.toList();
+			for (Entity nearbyEntity : nearbyEntities) {
+				if (nearbyEntity.distanceTo(attacker) > 4.0F) {
+					continue;
+				}
+				if (!(nearbyEntity instanceof LivingEntity) || nearbyEntity == attacker) {
+					continue;
+				}
+				if (nearbyEntity instanceof TamableAnimal tamableAnimal && tamableAnimal.isOwnedBy(attacker)) {
+					continue;
+				}
+				nearbyEntity.hurt(
+						new DamageSource(level.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(
+								ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "highmore_attack"))), attacker),
+						(float) (attacker.getAttributeValue(Attributes.ATTACK_DAMAGE) * (1.5F + 0.2F * itemstack.getEnchantmentLevel(CAEnchantments.SYNESTHESIA.get()))));
+				EntityUtils.giveLessArmor(nearbyEntity, 15);
+			}
+			if (!(attacker instanceof Player player) || !player.getAbilities().instabuild) {
+				if (itemstack.hurt(1, RandomSource.create(), null)) {
+					itemstack.shrink(1);
+					itemstack.setDamageValue(0);
+				}
+			}
+		});
 	}
 
 

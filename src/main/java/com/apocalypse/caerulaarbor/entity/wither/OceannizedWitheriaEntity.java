@@ -15,6 +15,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
@@ -35,6 +36,8 @@ import net.minecraft.world.entity.animal.SnowGolem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.PlayMessages;
@@ -250,7 +253,7 @@ public class OceannizedWitheriaEntity extends AbstractOceanizedWitherEntity {
             });
         }
         if (this.tickCount % 10 == 0) {
-            WorldUtils.witheriaDestroyBlocks(world, x, y, z);
+            this.witheriaDestroyBlocks();
         }
         if (idle > 1800) {
             this.entityData.set(DATA_skillp, 1800);
@@ -264,6 +267,50 @@ public class OceannizedWitheriaEntity extends AbstractOceanizedWitherEntity {
                     this.discard();
                 }
             });
+        }
+    }
+
+    private void witheriaDestroyBlocks() {
+        LevelAccessor world = this.level();
+        if (!WorldUtils.canGrief(world)) {
+            return;
+        }
+        boolean once = false;
+        double x = this.getX();
+        double y = this.getY();
+        double z = this.getZ();
+        BlockPos originPos = this.blockPosition();
+        double dx = -1;
+        for (int index0 = 0; index0 < 3; index0++) {
+            double dz = -1;
+            for (int index1 = 0; index1 < 3; index1++) {
+                double dy = 0;
+                for (int index2 = 0; index2 < 2; index2++) {
+                    BlockPos blockPos = BlockPos.containing(x + dx, y + dy, z + dz);
+                    BlockState block = world.getBlockState(blockPos);
+                    if (!block.is(BlockTags.create(new ResourceLocation("minecraft:wither_immnue")))) {
+                        double hardness = block.getDestroySpeed(world, BlockPos.containing(0, 0, 0));
+                        if (hardness <= 7.5 && hardness >= 0 && world.getBlockFloorHeight(blockPos) > 0) {
+                            Block.dropResources(world.getBlockState(blockPos), world, originPos, null);
+                            world.destroyBlock(blockPos, false);
+                            if (world instanceof Level level) {
+                                level.updateNeighborsAt(blockPos, level.getBlockState(blockPos).getBlock());
+                            }
+                            once = true;
+                        }
+                    }
+                    dy = dy + 1;
+                }
+                dz = dz + 1;
+            }
+            dx = dx + 1;
+        }
+        if (once && world instanceof Level level) {
+            if (!level.isClientSide()) {
+                level.playSound(null, originPos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.wither.break_block")), SoundSource.NEUTRAL, 1, 1);
+            } else {
+                level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.wither.break_block")), SoundSource.NEUTRAL, 1, 1, false);
+            }
         }
     }
 

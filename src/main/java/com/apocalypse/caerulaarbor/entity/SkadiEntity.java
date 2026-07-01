@@ -1,12 +1,14 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.entity.base.SyncedAnimationEntity;
 import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import net.minecraft.client.Minecraft;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -205,7 +207,7 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
                                                 new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))), this),
                                                 (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
                                                         * 2.5));
-                                        if (sourceentity instanceof LivingEntity _entity && !this.level().isClientSide())
+                                        if (sourceentity instanceof LivingEntity && !this.level().isClientSide())
                                             this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 100, 0, false, false));
                                         sourceentity.push((getLookAngle().x + 0.33), 0, (getLookAngle().z + 0.33));
                                     }
@@ -230,7 +232,7 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
                                             if (distanceTo(entityiterator) <= 3) {
                                                 entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))), this),
                                                         (float) ddd);
-                                                if (entityiterator instanceof LivingEntity _entity && !this.level().isClientSide())
+                                                if (entityiterator instanceof LivingEntity && !this.level().isClientSide())
                                                     this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 100, 0, false, false));
                                                 entityiterator.push((getLookAngle().x + 0.33), 0, (getLookAngle().z + 0.33));
                                             }
@@ -258,9 +260,8 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
                 if (phase == 0 || phase == 1) {
                     super.setHealth(Math.max(currentHealth, 1.0F));
                     this.getEntityData().set(DATA_phase, phase + 1);
-                    if (this.level() instanceof Level level) {
-                        level.playSound(null, BlockPos.containing(this.getX(), this.getY(), this.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "skadi_talk")), SoundSource.HOSTILE, 2, 1);
-                    }
+                    this.level().playSound(null, BlockPos.containing(this.getX(), this.getY(), this.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "skadi_talk")), SoundSource.HOSTILE, 2, 1);
+
                     if (!this.level().isClientSide()) {
                         this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 100, 1, false, false));
                         this.addEffect(new MobEffectInstance(CAMobEffects.FAKE_DEATH.get(), 100, 3, false, false));

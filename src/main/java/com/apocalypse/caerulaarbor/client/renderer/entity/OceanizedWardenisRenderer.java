@@ -1,20 +1,17 @@
 
 package com.apocalypse.caerulaarbor.client.renderer.entity;
 
-import software.bernie.geckolib.renderer.GeoEntityRenderer;
-import software.bernie.geckolib.cache.object.BakedGeoModel;
-
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.MultiBufferSource;
-
 import com.apocalypse.caerulaarbor.client.model.entity.OceanizedWardenisModel;
 import com.apocalypse.caerulaarbor.client.model.entity.layer.OceanizedWardenisLayer;
-import com.apocalypse.caerulaarbor.entity.OceanizedWardenisEntity;
-
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.apocalypse.caerulaarbor.entity.warden.OceanizedWardenisEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.resources.ResourceLocation;
+import software.bernie.geckolib.cache.object.BakedGeoModel;
+import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 public class OceanizedWardenisRenderer extends GeoEntityRenderer<OceanizedWardenisEntity> {
 	public OceanizedWardenisRenderer(EntityRendererProvider.Context renderManager) {

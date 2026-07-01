@@ -20,6 +20,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
@@ -39,14 +40,15 @@ import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
-import net.minecraft.world.entity.animal.TamableAnimal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.RangedAttackMob;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -558,7 +560,7 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 			}
 			if (tickCount % 20 == 10) {
 				if (!(enemy == null) && enemy.isAlive()) {
-					WorldUtils.witheriaDestroyBlocks(world, x, y, z);
+					this.witheriaDestroyBlocks();
 				}
 			}
 			if (tickCount % 400 == 100) {
@@ -599,6 +601,50 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 			}
 		}
 		this.refreshDimensions();
+	}
+
+	private void witheriaDestroyBlocks() {
+		LevelAccessor world = this.level();
+		if (!WorldUtils.canGrief(world)) {
+			return;
+		}
+		boolean once = false;
+		double x = this.getX();
+		double y = this.getY();
+		double z = this.getZ();
+		BlockPos originPos = this.blockPosition();
+		double dx = -1;
+		for (int index0 = 0; index0 < 3; index0++) {
+			double dz = -1;
+			for (int index1 = 0; index1 < 3; index1++) {
+				double dy = 0;
+				for (int index2 = 0; index2 < 2; index2++) {
+					BlockPos blockPos = BlockPos.containing(x + dx, y + dy, z + dz);
+					BlockState block = world.getBlockState(blockPos);
+					if (!block.is(BlockTags.create(new ResourceLocation("minecraft:wither_immnue")))) {
+						double hardness = block.getDestroySpeed(world, BlockPos.containing(0, 0, 0));
+						if (hardness <= 7.5 && hardness >= 0 && world.getBlockFloorHeight(blockPos) > 0) {
+							Block.dropResources(world.getBlockState(blockPos), world, originPos, null);
+							world.destroyBlock(blockPos, false);
+							if (world instanceof Level level) {
+								level.updateNeighborsAt(blockPos, level.getBlockState(blockPos).getBlock());
+							}
+							once = true;
+						}
+					}
+					dy = dy + 1;
+				}
+				dz = dz + 1;
+			}
+			dx = dx + 1;
+		}
+		if (once && world instanceof Level level) {
+			if (!level.isClientSide()) {
+				level.playSound(null, originPos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.wither.break_block")), SoundSource.NEUTRAL, 1, 1);
+			} else {
+				level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.wither.break_block")), SoundSource.NEUTRAL, 1, 1, false);
+			}
+		}
 	}
 
 	@Override

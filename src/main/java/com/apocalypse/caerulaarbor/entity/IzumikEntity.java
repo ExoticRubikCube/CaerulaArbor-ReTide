@@ -154,21 +154,11 @@ public class IzumikEntity extends SeaMonster {
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this) {
             @Override
             public boolean canUse() {
-                double x = IzumikEntity.this.getX();
-                double y = IzumikEntity.this.getY();
-                double z = IzumikEntity.this.getZ();
-                Entity entity = IzumikEntity.this;
-                Level world = IzumikEntity.this.level();
                 return super.canUse() && IzumikEntity.this.getEntityData().get(DATA_phase) > 0;
             }
 
             @Override
             public boolean canContinueToUse() {
-                double x = IzumikEntity.this.getX();
-                double y = IzumikEntity.this.getY();
-                double z = IzumikEntity.this.getZ();
-                Entity entity = IzumikEntity.this;
-                Level world = IzumikEntity.this.level();
                 return super.canContinueToUse() && IzumikEntity.this.getEntityData().get(DATA_phase) > 0;
             }
         });
@@ -397,7 +387,6 @@ public class IzumikEntity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        Entity enemy = null;
         double sklp;
         double grow;
         double phase;
@@ -407,7 +396,6 @@ public class IzumikEntity extends SeaMonster {
         if (this.isAlive()) {
             this.removeEffect(CAMobEffects.DIZZY.get());
             this.removeEffect(CAMobEffects.FROZEN.get());
-            this.getTarget();
             sklp = this.getEntityData().get(DATA_skillp);
             sklp1 = this.getEntityData().get(DATA_skillp_1);
             grow = this.getEntityData().get(DATA_growth_p);
@@ -917,7 +905,6 @@ public class IzumikEntity extends SeaMonster {
         float finalV = reduction >= mhlth * 0.33f ? hlth - mhlth * 0.33f : hlth - reduction;
         super.setHealth(finalV);
     }
-
 
     @Override
     public void setAnimationProcedure(String animation) {

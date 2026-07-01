@@ -1,6 +1,6 @@
 package com.apocalypse.caerulaarbor.init;
 
-import com.apocalypse.caerulaarbor.entity.SyncedAnimationEntity;
+import com.apocalypse.caerulaarbor.entity.base.SyncedAnimationEntity;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;

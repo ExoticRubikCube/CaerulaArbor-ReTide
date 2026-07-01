@@ -1,4 +1,4 @@
-package com.apocalypse.caerulaarbor.entity;
+package com.apocalypse.caerulaarbor.entity.helper;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.init.CAEntities;
@@ -40,6 +40,14 @@ public class Al1SHelperEntity extends LittleHelperEntity {
 			return InteractionResult.SUCCESS;
 		}
 		return InteractionResult.PASS;
+	}
+
+	@Override
+	protected void playPassengerLeftClickSound(Player passenger) {
+		if (!this.level().isClientSide()) {
+			this.level().playSound(null, BlockPos.containing(passenger.getX(), passenger.getY(), passenger.getZ()),
+					ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "al1s_work")), SoundSource.BLOCKS, 3, 1);
+		}
 	}
 
 	@Override

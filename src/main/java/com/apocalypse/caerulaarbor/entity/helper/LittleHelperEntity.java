@@ -1,6 +1,7 @@
-package com.apocalypse.caerulaarbor.entity;
+package com.apocalypse.caerulaarbor.entity.helper;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.entity.base.SyncedAnimationEntity;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAItems;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
@@ -101,6 +102,14 @@ public class LittleHelperEntity extends PathfinderMob implements GeoEntity, Sync
 
     protected ItemStack getRecycleItemStack() {
         return new ItemStack(CAItems.ITEM_HELPER.get());
+    }
+
+    public void handlePassengerLeftClick(Player passenger) {
+        this.playPassengerLeftClickSound(passenger);
+        WorldUtils.clearNetherseaAround(this.level(), this.getX(), this.getY() - 1, this.getZ(), this);
+    }
+
+    protected void playPassengerLeftClickSound(Player passenger) {
     }
 
     @Override

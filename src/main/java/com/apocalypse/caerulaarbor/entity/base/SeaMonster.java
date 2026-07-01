@@ -1,6 +1,5 @@
 package com.apocalypse.caerulaarbor.entity.base;
 
-import com.apocalypse.caerulaarbor.entity.SyncedAnimationEntity;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.world.entity.EntityType;
