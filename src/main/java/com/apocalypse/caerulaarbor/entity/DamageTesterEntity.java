@@ -27,7 +27,7 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
-//TODO 需要重命名
+//TODO 需要清理，记得清理渲染器和贴图以及模型
 public class DamageTesterEntity extends PathfinderMob {
 	public DamageTesterEntity(PlayMessages.SpawnEntity packet, Level world) {
 		this(CAEntities.DAMAGE_TESTER.get(), world);

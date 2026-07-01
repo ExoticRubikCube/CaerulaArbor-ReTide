@@ -148,7 +148,7 @@ dependencies {
 
     implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.20.1:4.4.9')
 
-    // 可选mod依赖
+    // 可选mod依赖 //
 
     // JEI相关
     // compile against the JEI API but do not include it at runtime
@@ -178,6 +178,7 @@ dependencies {
 
     // 开发环境调试
     runtimeOnly fg.deobf("curse.maven:spark-361579:4738952")
+    runtimeOnly fg.deobf("curse.maven:mmmmmmmmmmmm-225738:7963208") //测试假人
 }
 
 mixin {

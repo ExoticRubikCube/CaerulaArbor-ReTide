@@ -9,12 +9,19 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.ForgeMod;
 
+import java.util.Comparator;
 import java.util.List;
 
 public class ApocataSwordItem extends SwordItem {
@@ -54,6 +61,33 @@ public class ApocataSwordItem extends SwordItem {
             ((Entity) entity).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "inv_killer")))), 114514);
         }
         return retval;
+	}
+
+	@Override
+	public boolean onEntitySwing(ItemStack itemstack, LivingEntity entity) {
+		boolean retval = super.onEntitySwing(itemstack, entity);
+		if (entity instanceof Player player && player.getMainHandItem() == itemstack) {
+			HitResult hitResult = player.pick(player.getAttributeValue(ForgeMod.ENTITY_REACH.get()), 0.0F, false);
+			if (hitResult.getType() == HitResult.Type.MISS && !player.level().isClientSide()) {
+				Vec3 center = new Vec3(player.getX(), player.getY(), player.getZ());
+				List<Entity> entities = player.level().getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(32.0), target -> true).stream()
+						.sorted(Comparator.comparingDouble(target -> target.distanceToSqr(center)))
+						.toList();
+				for (Entity target : entities) {
+					if (target instanceof LightningBolt) {
+						continue;
+					}
+					if (target.getDisplayName().getString().equals("item")) {
+						continue;
+					}
+					if (target != entity) {
+						target.hurt(new DamageSource(player.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(
+								ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "inv_killer")))), 114514);
+					}
+				}
+			}
+		}
+		return retval;
 	}
 
 	@Override
