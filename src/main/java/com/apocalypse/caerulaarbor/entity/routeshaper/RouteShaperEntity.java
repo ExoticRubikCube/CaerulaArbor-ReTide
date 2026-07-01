@@ -43,15 +43,14 @@ public class RouteShaperEntity extends AbstractPathshaperEntity {
 	@Override
 	public void die(DamageSource source) {
 		super.die(source);
-		if (!this.isDeadOrDying()) {
-			return;
-		}
-		LevelAccessor world = this.level();
-		final Vec3 _center = new Vec3(this.getX(), this.getY(), this.getZ());
-		List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(64 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-		for (Entity entityiterator : _entfound) {
-			if (entityiterator instanceof RouteFractalEntity) {
-				entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.FELL_OUT_OF_WORLD)), 999999);
+		if (this.isDeadOrDying()) {
+			LevelAccessor world = this.level();
+			final Vec3 _center = new Vec3(this.getX(), this.getY(), this.getZ());
+			List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(64 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+			for (Entity entityiterator : _entfound) {
+				if (entityiterator instanceof RouteFractalEntity) {
+					entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.FELL_OUT_OF_WORLD)), 999999);
+				}
 			}
 		}
 	}

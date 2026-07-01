@@ -1,7 +1,7 @@
 
 package com.apocalypse.caerulaarbor.item;
 
-import com.apocalypse.caerulaarbor.system.GainRelicARMORProcedure;
+import com.apocalypse.caerulaarbor.util.RelicUtils;
 import com.google.common.collect.Iterables;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
@@ -89,7 +89,7 @@ public abstract class WearableChestItem extends ArmorItem {
 		public void inventoryTick(ItemStack itemstack, Level world, Entity entity, int slot, boolean selected) {
 			super.inventoryTick(itemstack, world, entity, slot, selected);
 			if (entity instanceof Player player && Iterables.contains(player.getArmorSlots(), itemstack)) {
-				GainRelicARMORProcedure.execute(world, entity.getX(), entity.getY(), entity.getZ(), entity, itemstack);
+				RelicUtils.gainArmor(world, entity.getX(), entity.getY(), entity.getZ(), entity, itemstack);
 			}
 		}
 	}
