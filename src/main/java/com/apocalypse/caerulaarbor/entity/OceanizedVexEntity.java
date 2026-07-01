@@ -290,7 +290,7 @@ public class OceanizedVexEntity extends SeaMonster {
         if (tickCount % 40 == 15) {
             if (getY() <= -64) {
                 push(0, 0.64, 0);
-            } else if (WorldUtils.isDistFromGround(world, this.getX(), this.getY(), this.getZ())) {
+            } else if (WorldUtils.hasNoSolidGroundWithin20Below(world, this.getX(), this.getY(), this.getZ())) {
                 push(0, (-0.64), 0);
             }
         }

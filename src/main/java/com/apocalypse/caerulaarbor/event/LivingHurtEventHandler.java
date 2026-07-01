@@ -458,7 +458,7 @@ public class LivingHurtEventHandler {
             } else {
                 regName = ForgeRegistries.ENTITY_TYPES.getKey(sourceentity.getType()).toString();
                 for (String stringiterator : CaerulaConfigsConfiguration.CRIMSON_TREATY.get()) {
-                    if (ValidationUtils.isValidString(stringiterator, regName)) {
+                    if (CaerulaUtil.matchesRegistryName(stringiterator, regName)) {
                         valid = true;
                         break;
                     }
@@ -975,7 +975,7 @@ public class LivingHurtEventHandler {
         }
 
         if (EntityUtils.getHealthPerc(player) <= 0.5) {
-            e = EntityUtils.getNodeEutectes(player);
+            e = NodeUtils.getNodeEunectes(player);
             if (e >= 4) rate = 0.5;
             else if (e >= 3) rate = 0.3;
             else if (e >= 2) rate = 0.15;
@@ -1003,7 +1003,7 @@ public class LivingHurtEventHandler {
 
         boolean isIndirect = damagesource.isIndirect();
         double rate = 1;
-        double e = EntityUtils.getNodeAddDamage(attacker);
+        double e = NodeUtils.getNodeAddDamage(attacker);
         double finalValue = 0;
 
         if (e >= 1 && !isIndirect) rate = 1.2;
@@ -1016,7 +1016,7 @@ public class LivingHurtEventHandler {
         }
 
         if (entity instanceof LivingEntity _livEnt && _livEnt.hasEffect(CAMobEffects.UNDER_BREAK.get())) {
-            e = EntityUtils.getNodeWorseBreak(attacker);
+            e = NodeUtils.getNodeWorseBreak(attacker);
             if (e >= 4) rate = 2.4;
             else if (e >= 3) rate = 1.9;
             else if (e >= 2) rate = 1.5;

@@ -6,22 +6,17 @@ package com.apocalypse.caerulaarbor.init;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.block.item.*;
 import com.apocalypse.caerulaarbor.item.*;
-import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.ForgeSpawnEggItem;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -29,12 +24,15 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class CAItems {
 	public static final DeferredRegister<Item> REGISTRY = DeferredRegister.create(ForgeRegistries.ITEMS, CaerulaArborMod.MODID);
+	private static final Map<ResourceLocation, Integer> TOOLTIP_COUNTS = new HashMap<>();
 	public static final RegistryObject<Item> CAERULA_RECORDER = REGISTRY.register("caerula_recorder", () -> new CaerulaRecorderItem());
 	public static final RegistryObject<Item> RELIC_CURSE_EMELIGHT = REGISTRY.register("relic_curse_emelight", () -> new RelicCurseEMELIGHTItem());
 	public static final RegistryObject<Item> EMERGENCY_LIGHT = block(CABlocks.EMERGENCY_LIGHT);
@@ -77,7 +75,7 @@ public class CAItems {
 	public static final RegistryObject<Item> GOLDEN_STORM = REGISTRY.register("golden_storm", () -> new GoldenStormItem());
 	public static final RegistryObject<Item> PAPER_BAG = REGISTRY.register("paper_bag", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)));
 	public static final RegistryObject<Item> COFFEE_CANDY = REGISTRY.register("coffee_candy", () -> new CoffeeCandyItem());
-	public static final RegistryObject<Item> CAFFEINE = registerTooltipItem("caffeine", new Item.Properties().stacksTo(64).rarity(Rarity.COMMON), "item.caerula_arbor.caffeine.description_0");
+	public static final RegistryObject<Item> CAFFEINE = tooltipItem("caffeine", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)),1);
 	public static final RegistryObject<Item> CANNED_CHERRY = REGISTRY.register("canned_cherry", () -> new CannedCherryItem());
 	public static final RegistryObject<Item> BERRY_CAN = block(CABlocks.BERRY_CAN);
 	public static final RegistryObject<Item> RAINBOW_CANDY = REGISTRY.register("rainbow_candy", () -> new RainbowCandyItem());
@@ -107,17 +105,18 @@ public class CAItems {
 	public static final RegistryObject<Item> BOMB_TRAILER = block(CABlocks.BOMB_TRAILER);
 	public static final RegistryObject<Item> CANNED_WATER = REGISTRY.register("canned_water", () -> new CannedWaterItem());
 	public static final RegistryObject<Item> CANNED_LAVA = REGISTRY.register("canned_lava", () -> new CannedLavaItem());
-	public static final RegistryObject<Item> BONE_SHARD = registerTooltipItem("bone_shard", new Item.Properties().stacksTo(64).rarity(Rarity.COMMON), "item.caerula_arbor.bone_shard.description_0");
-	public static final RegistryObject<Item> OCEAN_PHLOEM = registerTooltipItem("ocean_phloem", new Item.Properties().stacksTo(64).rarity(Rarity.COMMON), "item.caerula_arbor.ocean_phloem.description_0");
-	public static final RegistryObject<Item> OCEAN_FIBRE = registerTooltipItem("ocean_fibre", new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(2).saturationMod(0.2f).meat().build()), "item.caerula_arbor.ocean_fibre.description_0");
+	public static final RegistryObject<Item> BONE_SHARD = tooltipItem("bone_shard", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)),1);
+	public static final RegistryObject<Item> OCEAN_PHLOEM = tooltipItem("ocean_phloem", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)),1);
+	public static final RegistryObject<Item> OCEAN_FIBRE = tooltipItem("ocean_fibre",
+			() -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(2).saturationMod(0.2f).meat().build())),1);
 	public static final RegistryObject<Item> OCEAN_EYE = REGISTRY.register("ocean_eye", () -> new OceanEyeItem());
-	public static final RegistryObject<Item> OCEAN_CRYSTAL = registerTooltipItem("ocean_crystal", new Item.Properties().stacksTo(64).rarity(Rarity.COMMON), "item.caerula_arbor.ocean_crystal.description_0");
-	public static final RegistryObject<Item> OCEAN_CUTIN = registerTooltipItem("ocean_cutin", new Item.Properties().stacksTo(64).rarity(Rarity.COMMON), "item.caerula_arbor.ocean_cutin.description_0");
+	public static final RegistryObject<Item> OCEAN_CRYSTAL = tooltipItem("ocean_crystal", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)),1);
+	public static final RegistryObject<Item> OCEAN_CUTIN = tooltipItem("ocean_cutin", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)),1);
 	public static final RegistryObject<Item> COOKED_FIBRE = REGISTRY.register("cooked_fibre", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(6).saturationMod(0.5f).meat().build())));
 	public static final RegistryObject<Item> BASELAYER_ABYSSAL_SPAWN_EGG = REGISTRY.register("baselayer_abyssal_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.BASELAYER_ABYSSAL, -16776961, -2056595, new Item.Properties()));
 	public static final RegistryObject<Item> OCEAN_GLASS = block(CABlocks.OCEAN_GLASS);
 	public static final RegistryObject<Item> OCEAN_GLASSPANE = block(CABlocks.OCEAN_GLASSPANE);
-	public static final RegistryObject<Item> OCEAN_CHITIN = registerTooltipItem("ocean_chitin", new Item.Properties().stacksTo(64).rarity(Rarity.COMMON), "item.caerula_arbor.ocean_chitin.description_0");
+	public static final RegistryObject<Item> OCEAN_CHITIN = tooltipItem("ocean_chitin", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)),1);
 	public static final RegistryObject<Item> CHITIN_BLOCK = block(CABlocks.CHITIN_BLOCK);
 	public static final RegistryObject<Item> COOKED_MOR = REGISTRY.register("cooked_mor", () -> new CookedMorItem());
 	public static final RegistryObject<Item> SWORD_OCEAN_CRYSTAL = REGISTRY.register("sword_ocean_crystal", () -> new SwordOceanCrystalItem());
@@ -143,9 +142,9 @@ public class CAItems {
 	public static final RegistryObject<Item> CANNED_BOILED_WATER = REGISTRY.register("canned_boiled_water", () -> new CannedBoiledWaterItem());
 	public static final RegistryObject<Item> OBISIDIAN_BALL = REGISTRY.register("obisidian_ball", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)));
 	public static final RegistryObject<Item> CHITIN_KNIFE = REGISTRY.register("chitin_knife", () -> new ChitinKnifeItem());
-	public static final RegistryObject<Item> COMPLEX_CHITIN = registerTooltipItem("complex_chitin", new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.UNCOMMON), "item.caerula_arbor.complex_chitin.description_0");
+	public static final RegistryObject<Item> COMPLEX_CHITIN = tooltipItem("complex_chitin", () -> new Item(new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.UNCOMMON)),1);
 	public static final RegistryObject<Item> COMPLEX_CHITIN_SWORD = REGISTRY.register("complex_chitin_sword", () -> new ComplexChitinSwordItem());
-	public static final RegistryObject<Item> OCEAN_TRIM_TEMPLATE = registerTooltipItem("ocean_trim_template", new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.COMMON), "item.caerula_arbor.ocean_trim_template.description_0", "item.caerula_arbor.ocean_trim_template.description_1", "item.caerula_arbor.ocean_trim_template.description_2", "item.caerula_arbor.ocean_trim_template.description_3", "item.caerula_arbor.ocean_trim_template.description_4", "item.caerula_arbor.ocean_trim_template.description_5", "item.caerula_arbor.ocean_trim_template.description_6");
+	public static final RegistryObject<Item> OCEAN_TRIM_TEMPLATE = tooltipItem("ocean_trim_template", () -> new Item(new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.COMMON)),7);
 	public static final RegistryObject<Item> COMPLEX_CHITIN_PICKAXE = REGISTRY.register("complex_chitin_pickaxe", () -> new ComplexChitinPickaxeItem());
 	public static final RegistryObject<Item> COMPLEX_CHITIN_AXE = REGISTRY.register("complex_chitin_axe", () -> new ComplexChitinAxeItem());
 	public static final RegistryObject<Item> COMPLEX_CHITIN_SHOVEL = REGISTRY.register("complex_chitin_shovel", () -> new ComplexChitinShovelItem());
@@ -162,7 +161,7 @@ public class CAItems {
 	public static final RegistryObject<Item> OMNI_KEY = REGISTRY.register("omni_key", () -> new OmniKeyItem());
 	public static final RegistryObject<Item> SCORE = REGISTRY.register("score", () -> new ScoreItem());
 	public static final RegistryObject<Item> RESCISSION = REGISTRY.register("rescission", () -> new RescissionItem());
-	public static final RegistryObject<Item> LANGUAGE_KEY = registerTooltipItem("language_key", new Item.Properties().stacksTo(64).rarity(Rarity.COMMON), "item.caerula_arbor.language_key.description_0", "item.caerula_arbor.language_key.description_1", "item.caerula_arbor.language_key.description_2", "item.caerula_arbor.language_key.description_3", "item.caerula_arbor.language_key.description_4", "item.caerula_arbor.language_key.description_5", "item.caerula_arbor.language_key.description_6", "item.caerula_arbor.language_key.description_7", "item.caerula_arbor.language_key.description_8", "item.caerula_arbor.language_key.description_9", "item.caerula_arbor.language_key.description_10", "item.caerula_arbor.language_key.description_11", "item.caerula_arbor.language_key.description_12", "item.caerula_arbor.language_key.description_13", "item.caerula_arbor.language_key.description_14", "item.caerula_arbor.language_key.description_15", "item.caerula_arbor.language_key.description_16");
+	public static final RegistryObject<Item> LANGUAGE_KEY = tooltipItem("language_key", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)),17);
 	public static final RegistryObject<Item> TRAIL_CAKE = block(CABlocks.TRAIL_CAKE);
 	public static final RegistryObject<Item> TRAIL_CAKE_PIECE = REGISTRY.register("trail_cake_piece", () -> new TrailCakePieceItem());
 	public static final RegistryObject<Item> CARAMEL_CAKE = block(CABlocks.CARAMEL_CAKE);
@@ -184,10 +183,10 @@ public class CAItems {
 	public static final RegistryObject<Item> GUARDIAN_STARE = REGISTRY.register("guardian_stare", () -> new GuardianStareItem());
 	public static final RegistryObject<Item> HAND_SWORD = REGISTRY.register("hand_sword", () -> new HandSwordItem());
 	public static final RegistryObject<Item> TIDE_OBSERVATION = block(CABlocks.TIDE_OBSERVATION);
-	public static final RegistryObject<Item> SAMPLE_SUBSISTING = registerTooltipItem("sample_subsisting", new Item.Properties().stacksTo(64).rarity(Rarity.COMMON), "item.caerula_arbor.sample_subsisting.description_0", "item.caerula_arbor.sample_subsisting.description_1", "item.caerula_arbor.sample_subsisting.description_2", "item.caerula_arbor.sample_subsisting.description_3", "item.caerula_arbor.sample_subsisting.description_4", "item.caerula_arbor.sample_subsisting.description_5", "item.caerula_arbor.sample_subsisting.description_6", "item.caerula_arbor.sample_subsisting.description_7", "item.caerula_arbor.sample_subsisting.description_8", "item.caerula_arbor.sample_subsisting.description_9");
-	public static final RegistryObject<Item> SAMPLE_GROW = registerTooltipItem("sample_grow", new Item.Properties().stacksTo(64).rarity(Rarity.COMMON), "item.caerula_arbor.sample_grow.description_0", "item.caerula_arbor.sample_grow.description_1", "item.caerula_arbor.sample_grow.description_2", "item.caerula_arbor.sample_grow.description_3", "item.caerula_arbor.sample_grow.description_4", "item.caerula_arbor.sample_grow.description_5", "item.caerula_arbor.sample_grow.description_6", "item.caerula_arbor.sample_grow.description_7", "item.caerula_arbor.sample_grow.description_8", "item.caerula_arbor.sample_grow.description_9");
+	public static final RegistryObject<Item> SAMPLE_SUBSISTING = tooltipItem("sample_subsisting", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)),10);
+	public static final RegistryObject<Item> SAMPLE_GROW = tooltipItem("sample_grow", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)),10);
 	public static final RegistryObject<Item> SAMPLE_BREED = REGISTRY.register("sample_breed", () -> new SampleBreedItem());
-	public static final RegistryObject<Item> SAMPLE_MIGRATION = registerTooltipItem("sample_migration", new Item.Properties().stacksTo(64).rarity(Rarity.COMMON), "item.caerula_arbor.sample_migration.description_0", "item.caerula_arbor.sample_migration.description_1", "item.caerula_arbor.sample_migration.description_2", "item.caerula_arbor.sample_migration.description_3", "item.caerula_arbor.sample_migration.description_4", "item.caerula_arbor.sample_migration.description_5", "item.caerula_arbor.sample_migration.description_6", "item.caerula_arbor.sample_migration.description_7", "item.caerula_arbor.sample_migration.description_8", "item.caerula_arbor.sample_migration.description_9");
+	public static final RegistryObject<Item> SAMPLE_MIGRATION = tooltipItem("sample_migration", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)),10);
 	public static final RegistryObject<Item> ANCHOR_LOWER = block(CABlocks.ANCHOR_LOWER);
 	public static final RegistryObject<Item> ANCHOR_MEDIUM = block(CABlocks.ANCHOR_MEDIUM);
 	public static final RegistryObject<Item> ANCHOR_UPPER = block(CABlocks.ANCHOR_UPPER);
@@ -202,9 +201,9 @@ public class CAItems {
 	public static final RegistryObject<Item> CRACKER_ABYSSAL_SPAWN_EGG = REGISTRY.register("cracker_abyssal_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.CRACKER_ABYSSAL, -16436298, -2056595, new Item.Properties()));
 	public static final RegistryObject<Item> DISPATCH_STICK = REGISTRY.register("dispatch_stick", () -> new DispatchStickItem());
 	public static final RegistryObject<Item> COLLECTOR_PROKARYOTE_SPAWN_EGG = REGISTRY.register("collector_prokaryote_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.COLLECTOR_PROKARYOTE, -16776961, -16316408, new Item.Properties()));
-	public static final RegistryObject<Item> BROKEN_OCEAN_CELL = registerTooltipItem("broken_ocean_cell", new Item.Properties().stacksTo(64).rarity(Rarity.COMMON), "item.caerula_arbor.broken_ocean_cell.description_0");
+	public static final RegistryObject<Item> BROKEN_OCEAN_CELL = tooltipItem("broken_ocean_cell", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)),1);
 	public static final RegistryObject<Item> BROKEN_CELL_CLUSTER = REGISTRY.register("broken_cell_cluster", () -> new BrokenCellClusterItem());
-	public static final RegistryObject<Item> OCEAN_CELL = registerTooltipItem("ocean_cell", new Item.Properties().stacksTo(64).rarity(Rarity.COMMON), "item.caerula_arbor.ocean_cell.description_0");
+	public static final RegistryObject<Item> OCEAN_CELL = tooltipItem("ocean_cell", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)),1);
 	public static final RegistryObject<Item> CELL_CLUSTER = REGISTRY.register("cell_cluster", () -> new CellClusterItem());
 	public static final RegistryObject<Item> COOKED_BROKEN_CELL_CLUSTER = REGISTRY.register("cooked_broken_cell_cluster", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(6).saturationMod(0.25f).meat().build())));
 	public static final RegistryObject<Item> COOKED_CELL_CLUSTER = REGISTRY.register("cooked_cell_cluster", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(8).saturationMod(0.3f).meat().build())));
@@ -232,15 +231,15 @@ public class CAItems {
 	public static final RegistryObject<Item> FIRST_TO_TALK_SPAWN_EGG = REGISTRY.register("first_to_talk_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.FIRST_TO_TALK, -1, -1, new Item.Properties()));
 	public static final RegistryObject<Item> REAPER_PET_SPAWN_EGG = REGISTRY.register("reaper_pet_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.REAPER_PET, -6750157, -3355444, new Item.Properties()));
 	public static final RegistryObject<Item> OCEAN_EXTRACTOR = REGISTRY.register("ocean_extractor", () -> new OceanExtractorItem());
-	public static final RegistryObject<Item> DNA_REAPER = registerTooltipItem("dna_reaper", new Item.Properties().stacksTo(16).rarity(Rarity.UNCOMMON), "item.caerula_arbor.dna_reaper.description_0");
+	public static final RegistryObject<Item> DNA_REAPER = tooltipItem("dna_reaper", () -> new Item(new Item.Properties().stacksTo(16).rarity(Rarity.UNCOMMON)),1);
 	public static final RegistryObject<Item> REAPER_EGG = block(CABlocks.REAPER_EGG);
-	public static final RegistryObject<Item> BASE_EGG = registerTooltipItem("base_egg", new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON), "item.caerula_arbor.base_egg.description_0");
+	public static final RegistryObject<Item> BASE_EGG = tooltipItem("base_egg", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON)),1);
 	public static final RegistryObject<Item> OCEAN_OVARY = block(CABlocks.OCEAN_OVARY);
-	public static final RegistryObject<Item> WHIRL_EYE = registerTooltipItem("whirl_eye", new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON), "item.caerula_arbor.whirl_eye.description_0");
+	public static final RegistryObject<Item> WHIRL_EYE = tooltipItem("whirl_eye", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON)),1);
 	public static final RegistryObject<Item> OCARINA = REGISTRY.register("ocarina", () -> new OcarinaItem());
 	public static final RegistryObject<Item> BOILED_EGG = REGISTRY.register("boiled_egg", () -> new BoiledEggItem());
 	public static final RegistryObject<Item> FRIED_EGG = REGISTRY.register("fried_egg", () -> new FriedEggItem());
-	public static final RegistryObject<Item> A_SECOND_KEY = registerTooltipItem("a_second_key", new Item.Properties().stacksTo(64).rarity(Rarity.COMMON), "item.caerula_arbor.a_second_key.description_0", "item.caerula_arbor.a_second_key.description_1", "item.caerula_arbor.a_second_key.description_2", "item.caerula_arbor.a_second_key.description_3");
+	public static final RegistryObject<Item> A_SECOND_KEY = tooltipItem("a_second_key", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)),4);
 	public static final RegistryObject<Item> SEALEATHER_HELMET = REGISTRY.register("sealeather_helmet", () -> new SealeatherItem.Helmet());
 	public static final RegistryObject<Item> SEALEATHER_CHESTPLATE = REGISTRY.register("sealeather_chestplate", () -> new SealeatherItem.Chestplate());
 	public static final RegistryObject<Item> SEALEATHER_LEGGINGS = REGISTRY.register("sealeather_leggings", () -> new SealeatherItem.Leggings());
@@ -250,25 +249,25 @@ public class CAItems {
 	public static final RegistryObject<Item> CHITIN_GOLEM_SPAWN_EGG = REGISTRY.register("chitin_golem_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.CHITIN_GOLEM, -3629966, -12951147, new Item.Properties()));
 	public static final RegistryObject<Item> TRAIL_PUMPKING = block(CABlocks.TRAIL_PUMPKING);
 	public static final RegistryObject<Item> MEGA_CHEST_SPAWN_EGG = REGISTRY.register("mega_chest_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.MEGA_CHEST, -1, -1, new Item.Properties()));
-	public static final RegistryObject<Item> TRAILRITE = registerTooltipItem("trailrite", new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.RARE), "item.caerula_arbor.trailrite.description_0");
+	public static final RegistryObject<Item> TRAILRITE = tooltipItem("trailrite", () -> new Item(new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.RARE)),1);
 	public static final RegistryObject<Item> TRAILRITE_AXE = REGISTRY.register("trailrite_axe", () -> new TrailriteAxeItem());
 	public static final RegistryObject<Item> BUCKET_RUNFISH = REGISTRY.register("bucket_runfish",
-			() -> new SeaMonsterBucketItem(CAEntities.RUN_FISH.get(), SoundEvents.BUCKET_EMPTY_FISH, new Item.Properties().stacksTo(1).rarity(Rarity.COMMON)));
+			() -> new MobBucketItem(() -> CAEntities.RUN_FISH.get(), () -> Fluids.WATER, () -> SoundEvents.BUCKET_EMPTY_FISH, new Item.Properties().stacksTo(1).rarity(Rarity.COMMON)));
 	public static final RegistryObject<Item> TRAILRITE_SWORD = REGISTRY.register("trailrite_sword", () -> new TrailriteSwordItem());
 	public static final RegistryObject<Item> BUCKET_SLIDER = REGISTRY.register("bucket_slider",
-			() -> new SeaMonsterBucketItem(CAEntities.SLIDER_FISH.get(), SoundEvents.BUCKET_EMPTY_FISH, new Item.Properties().stacksTo(1).rarity(Rarity.COMMON)));
+			() -> new MobBucketItem(() -> CAEntities.SLIDER_FISH.get(), () -> Fluids.WATER, () -> SoundEvents.BUCKET_EMPTY_FISH, new Item.Properties().stacksTo(1).rarity(Rarity.COMMON)));
 	public static final RegistryObject<Item> TRAIL_DEBRIS = block(CABlocks.TRAIL_DEBRIS);
-	public static final RegistryObject<Item> TRAIL_SHARD = registerTooltipItem("trail_shard", new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.UNCOMMON), "item.caerula_arbor.trail_shard.description_0");
+	public static final RegistryObject<Item> TRAIL_SHARD = tooltipItem("trail_shard", () -> new Item(new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.UNCOMMON)),1);
 	public static final RegistryObject<Item> TRAILRITE_BLOCK = block(CABlocks.TRAILRITE_BLOCK);
 	public static final RegistryObject<Item> APOSTLE_PROKARYOTE_SPAWN_EGG = REGISTRY.register("apostle_prokaryote_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.APOSTLE_PROKARYOTE, -15191057, -3933705, new Item.Properties()));
 	public static final RegistryObject<Item> BUCKET_CHISELER = REGISTRY.register("bucket_chiseler",
-			() -> new SeaMonsterBucketItem(CAEntities.CHISELER_FISH.get(), SoundEvents.BUCKET_EMPTY_FISH, new Item.Properties().stacksTo(1).rarity(Rarity.COMMON)));
+			() -> new MobBucketItem(() -> CAEntities.CHISELER_FISH.get(), () -> Fluids.WATER, () -> SoundEvents.BUCKET_EMPTY_FISH, new Item.Properties().stacksTo(1).rarity(Rarity.COMMON)));
 	public static final RegistryObject<Item> BUCKET_FLOATER = REGISTRY.register("bucket_floater",
-			() -> new SeaMonsterBucketItem(CAEntities.FLOATER_PROKARYOTE.get(), SoundEvents.BUCKET_EMPTY_FISH, new Item.Properties().stacksTo(1).rarity(Rarity.COMMON)));
+			() -> new MobBucketItem(() -> CAEntities.FLOATER_PROKARYOTE.get(), () -> Fluids.WATER, () -> SoundEvents.BUCKET_EMPTY_FISH, new Item.Properties().stacksTo(1).rarity(Rarity.COMMON)));
 	public static final RegistryObject<Item> BUCKET_BONEFISH = REGISTRY.register("bucket_bonefish",
-			() -> new SeaMonsterBucketItem(CAEntities.BONE_FISH.get(), SoundEvents.BUCKET_EMPTY_FISH, new Item.Properties().stacksTo(1).rarity(Rarity.COMMON)));
+			() -> new MobBucketItem(() -> CAEntities.BONE_FISH.get(), () -> Fluids.WATER, () -> SoundEvents.BUCKET_EMPTY_FISH, new Item.Properties().stacksTo(1).rarity(Rarity.COMMON)));
 	public static final RegistryObject<Item> BUCKET_COLLECTOR = REGISTRY.register("bucket_collector",
-			() -> new SeaMonsterBucketItem(CAEntities.COLLECTOR_PROKARYOTE.get(), SoundEvents.BUCKET_EMPTY_FISH, new Item.Properties().stacksTo(1).rarity(Rarity.COMMON)));
+			() -> new MobBucketItem(() -> CAEntities.COLLECTOR_PROKARYOTE.get(), () -> Fluids.WATER, () -> SoundEvents.BUCKET_EMPTY_FISH, new Item.Properties().stacksTo(1).rarity(Rarity.COMMON)));
 	public static final RegistryObject<Item> WAVECLEAVER = REGISTRY.register("wavecleaver", () -> new WavecleaverItem());
 	public static final RegistryObject<Item> TRAIL_WALL = block(CABlocks.TRAIL_WALL);
 	public static final RegistryObject<Item> RED_OVARY = block(CABlocks.RED_OVARY);
@@ -300,7 +299,7 @@ public class CAItems {
 	public static final RegistryObject<Item> SMOOTH_SALTWIND_SAND_WALL = block(CABlocks.SMOOTH_SALTWIND_SAND_WALL);
 	public static final RegistryObject<Item> TIDE_BISHOP_CORE = block(CABlocks.TIDE_BISHOP_CORE);
 	public static final RegistryObject<Item> ADV_ITEM = REGISTRY.register("adv_item", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)));
-	public static final RegistryObject<Item> HETEROPIC_PIECE = registerTooltipItem("heteropic_piece", new Item.Properties().stacksTo(64).rarity(Rarity.COMMON), "item.caerula_arbor.heteropic_piece.description_0");
+	public static final RegistryObject<Item> HETEROPIC_PIECE = tooltipItem("heteropic_piece", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)),1);
 	public static final RegistryObject<Item> HETEROPIC_BLOCK = block(CABlocks.HETEROPIC_BLOCK);
 	public static final RegistryObject<Item> TRAIL_LOG = block(CABlocks.TRAIL_LOG);
 	public static final RegistryObject<Item> TRAIL_LEAVE = block(CABlocks.TRAIL_LEAVE);
@@ -321,9 +320,9 @@ public class CAItems {
 	public static final RegistryObject<Item> SEA_TRAIL_BURNT = block(CABlocks.SEA_TRAIL_BURNT);
 	public static final RegistryObject<Item> SEA_TRAIL_BURNT_SOLID = block(CABlocks.SEA_TRAIL_BURNT_SOLID);
 	public static final RegistryObject<Item> REDSTONIUM = REGISTRY.register("redstonium", () -> new Item(new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.RARE)));
-	public static final RegistryObject<Item> TRAIL_POWDER = registerTooltipItem("trail_powder", new Item.Properties().stacksTo(64).rarity(Rarity.COMMON), "item.caerula_arbor.trail_powder.description_0");
-	public static final RegistryObject<Item> TRAIL_POWDER_CORE = registerTooltipItem("trail_powder_core", new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.COMMON), "item.caerula_arbor.trail_powder_core.description_0");
-	public static final RegistryObject<Item> HUNTER_GENE = registerTooltipItem("hunter_gene", new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON), "item.caerula_arbor.hunter_gene.description_0");
+	public static final RegistryObject<Item> TRAIL_POWDER = tooltipItem("trail_powder", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)),1);
+	public static final RegistryObject<Item> TRAIL_POWDER_CORE = tooltipItem("trail_powder_core", () -> new Item(new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.COMMON)),1);
+	public static final RegistryObject<Item> HUNTER_GENE = tooltipItem("hunter_gene", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON)),1);
 	public static final RegistryObject<Item> CHESTMEGA_SPAWNER = REGISTRY.register(CABlocks.CHESTMEGA_SPAWNER.getId().getPath(),
 			() -> new ChestmegaSpawnerDisplayItem(CABlocks.CHESTMEGA_SPAWNER.get(), new Item.Properties()));
 	public static final RegistryObject<Item> CRACKED_TRAIL_BRICK = block(CABlocks.CRACKED_TRAIL_BRICK);
@@ -337,7 +336,7 @@ public class CAItems {
 	public static final RegistryObject<Item> SALTWIND_BRICK_SLAB = block(CABlocks.SALTWIND_BRICK_SLAB);
 	public static final RegistryObject<Item> SALTWIND_SMOOTH_SLAB = block(CABlocks.SALTWIND_SMOOTH_SLAB);
 	public static final RegistryObject<Item> SALTWIND_STAIR = block(CABlocks.SALTWIND_STAIR);
-	public static final RegistryObject<Item> WHITE_CHITIN = registerTooltipItem("white_chitin", new Item.Properties().stacksTo(64).rarity(Rarity.COMMON), "item.caerula_arbor.white_chitin.description_0");
+	public static final RegistryObject<Item> WHITE_CHITIN = tooltipItem("white_chitin", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)),1);
 	public static final RegistryObject<ChitinComplexItem> COMPLEXCHITIN_ARMOR_HELMET = REGISTRY.register("complexchitin_armor_helmet", () -> new ChitinComplexItem(ArmorItem.Type.HELMET, new Item.Properties().fireResistant()));
 	public static final RegistryObject<ChitinComplexItem> COMPLEXCHITIN_ARMOR_CHESTPLATE = REGISTRY.register("complexchitin_armor_chestplate", () -> new ChitinComplexItem(ArmorItem.Type.CHESTPLATE, new Item.Properties().fireResistant()));
 	public static final RegistryObject<ChitinComplexItem> COMPLEXCHITIN_ARMOR_LEGGINGS = REGISTRY.register("complexchitin_armor_leggings", () -> new ChitinComplexItem(ArmorItem.Type.LEGGINGS, new Item.Properties().fireResistant()));
@@ -374,7 +373,7 @@ public class CAItems {
 	public static final RegistryObject<Item> OCEANIZED_ENDERMAN_SPAWN_EGG = REGISTRY.register("oceanized_enderman_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.OCEANIZED_ENDERMAN, -13878972, -10763556, new Item.Properties()));
 	public static final RegistryObject<Item> OCEANIZED_WOLF_SPAWN_EGG = REGISTRY.register("oceanized_wolf_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.OCEANIZED_WOLF, -8420214, -11250088, new Item.Properties()));
 	public static final RegistryObject<Item> OCEANIZED_DOG_SPAWN_EGG = REGISTRY.register("oceanized_dog_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.OCEANIZED_DOG, -8420214, -11250088, new Item.Properties()));
-	public static final RegistryObject<Item> REJECTION_KEY = registerTooltipItem("rejection_key", new Item.Properties().stacksTo(64).rarity(Rarity.COMMON), "item.caerula_arbor.rejection_key.description_0", "item.caerula_arbor.rejection_key.description_1", "item.caerula_arbor.rejection_key.description_2", "item.caerula_arbor.rejection_key.description_3", "item.caerula_arbor.rejection_key.description_4");
+	public static final RegistryObject<Item> REJECTION_KEY = tooltipItem("rejection_key", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)),5);
 	public static final RegistryObject<Item> TULIP_MEDCINE = REGISTRY.register("tulip_medcine", () -> new TulipMedcineItem());
 	public static final RegistryObject<Item> IMMUNOSUPPRESSOR = REGISTRY.register("immunosuppressor", () -> new ImmunosuppressorItem());
 	public static final RegistryObject<Item> OIL_AND_CREAM = REGISTRY.register("oil_and_cream", () -> new OilAndCreamItem());
@@ -383,14 +382,14 @@ public class CAItems {
 	public static final RegistryObject<Item> IZUMIK_OFFSPRING_SPAWN_EGG = REGISTRY.register("izumik_offspring_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.IZUMIK_OFFSPRING, -592138, -405009, new Item.Properties()));
 	public static final RegistryObject<Item> DEEP_SEAGRASS = block(CABlocks.DEEP_SEAGRASS);
 	public static final RegistryObject<Item> SEA_TRAIL_STOP = block(CABlocks.SEA_TRAIL_STOP);
-	public static final RegistryObject<Item> WATER_LOGGED_PEARL = registerTooltipItem("water_logged_pearl", new Item.Properties().stacksTo(64).rarity(Rarity.COMMON), "item.caerula_arbor.water_logged_pearl.description_0");
+	public static final RegistryObject<Item> WATER_LOGGED_PEARL = tooltipItem("water_logged_pearl", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)),1);
 	public static final RegistryObject<Item> QUINTUS_SPAWNEGG = REGISTRY.register("quintus_spawnegg", () -> new ForgeSpawnEggItem(CAEntities.BISHOP_FISH, -1, -1, new Item.Properties().stacksTo(64).rarity(Rarity.RARE)));
 	public static final RegistryObject<Item> PATH_SHAPER_SPAWNEGG = REGISTRY.register("path_shaper_spawnegg", () -> new PathShaperSpawneggItem());
 	public static final RegistryObject<Item> TIDE_BISHOP_SPAWNEGG = REGISTRY.register("tide_bishop_spawnegg", () -> new TideBishopSpawneggItem());
 	public static final RegistryObject<Item> DEATHREPELLER_SPAWNEGG = REGISTRY.register("deathrepeller_spawnegg", () -> new ForgeSpawnEggItem(CAEntities.TIDE_DEATHREPELLER, -1, -1, new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON)));
 	public static final RegistryObject<Item> HIGHMORE_SPAWNEGG = REGISTRY.register("highmore_spawnegg", () -> new ForgeSpawnEggItem(CAEntities.HIGHMORE, -1, -1, new Item.Properties().stacksTo(64).rarity(Rarity.RARE)));
-	public static final RegistryObject<Item> IZUMIK_SPAWNEGG = registerTooltipSpawnEgg("izumik_spawnegg", CAEntities.IZUMIK, -1, -1, new Item.Properties().stacksTo(64).rarity(Rarity.EPIC),
-			"item.caerula_arbor.izumik_spawnegg.description_0");
+	public static final RegistryObject<Item> IZUMIK_SPAWNEGG = tooltipItem("izumik_spawnegg",
+			() -> new ForgeSpawnEggItem(CAEntities.IZUMIK, -1, -1, new Item.Properties().stacksTo(64).rarity(Rarity.EPIC)),1);
 	public static final RegistryObject<Item> COLOURFULL_JELLY = REGISTRY.register("colourfull_jelly", () -> new ColourfullJellyItem());
 	public static final RegistryObject<Item> CHITIN_SHIELD = REGISTRY.register("chitin_shield", () -> new ChitinShieldItem());
 	public static final RegistryObject<Item> COMPLEX_CHITIN_SHIELD = REGISTRY.register("complex_chitin_shield", () -> new ComplexChitinShieldItem());
@@ -408,13 +407,13 @@ public class CAItems {
 	public static final RegistryObject<Item> CORRECTIONAL_PHALAX_VANGUARD_SPAWN_EGG = REGISTRY.register("correctional_phalax_vanguard_spawn_egg",
 			() -> new ForgeSpawnEggItem(CAEntities.CORRECTIONAL_PHALAX_VANGUARD, -9473918, -7405225, new Item.Properties()));
 	public static final RegistryObject<Item> FAX = block(CABlocks.FAX);
-	public static final RegistryObject<Item> TREATY_COPPER = registerTooltipItem("treaty_copper", new Item.Properties().stacksTo(64).rarity(Rarity.COMMON), "item.caerula_arbor.treaty_copper.description_0", "item.caerula_arbor.treaty_copper.description_1", "item.caerula_arbor.treaty_copper.description_2");
-	public static final RegistryObject<Item> TREATY_EMPTY = registerTooltipItem("treaty_empty", new Item.Properties().stacksTo(64).rarity(Rarity.COMMON), "item.caerula_arbor.treaty_empty.description_0", "item.caerula_arbor.treaty_empty.description_1");
-	public static final RegistryObject<Item> TREATY_IRON = registerTooltipItem("treaty_iron", new Item.Properties().stacksTo(64).rarity(Rarity.COMMON), "item.caerula_arbor.treaty_iron.description_0", "item.caerula_arbor.treaty_iron.description_1", "item.caerula_arbor.treaty_iron.description_2");
-	public static final RegistryObject<Item> TREATY_GOLD = registerTooltipItem("treaty_gold", new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON), "item.caerula_arbor.treaty_gold.description_0", "item.caerula_arbor.treaty_gold.description_1", "item.caerula_arbor.treaty_gold.description_2");
-	public static final RegistryObject<Item> TREATY_DIAMOND = registerTooltipItem("treaty_diamond", new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON), "item.caerula_arbor.treaty_diamond.description_0", "item.caerula_arbor.treaty_diamond.description_1", "item.caerula_arbor.treaty_diamond.description_2");
-	public static final RegistryObject<Item> TREATY_NETHERITE = registerTooltipItem("treaty_netherite", new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.RARE), "item.caerula_arbor.treaty_netherite.description_0", "item.caerula_arbor.treaty_netherite.description_1", "item.caerula_arbor.treaty_netherite.description_2");
-	public static final RegistryObject<Item> EMERALD_TREATY = registerTooltipItem("emerald_treaty", new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON), "item.caerula_arbor.emerald_treaty.description_0", "item.caerula_arbor.emerald_treaty.description_1", "item.caerula_arbor.emerald_treaty.description_2");
+	public static final RegistryObject<Item> TREATY_COPPER = tooltipItem("treaty_copper", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)),3);
+	public static final RegistryObject<Item> TREATY_EMPTY = tooltipItem("treaty_empty", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)),2);
+	public static final RegistryObject<Item> TREATY_IRON = tooltipItem("treaty_iron", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)),3);
+	public static final RegistryObject<Item> TREATY_GOLD = tooltipItem("treaty_gold", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON)),3);
+	public static final RegistryObject<Item> TREATY_DIAMOND = tooltipItem("treaty_diamond", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON)),3);
+	public static final RegistryObject<Item> TREATY_NETHERITE = tooltipItem("treaty_netherite", () -> new Item(new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.RARE)),3);
+	public static final RegistryObject<Item> EMERALD_TREATY = tooltipItem("emerald_treaty", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON)),3);
 	public static final RegistryObject<Item> TRIBUNAL_HEALER_SPAWN_EGG = REGISTRY.register("tribunal_healer_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.TRIBUNAL_HEALER, -11776947, -5232043, new Item.Properties()));
 	public static final RegistryObject<Item> INTERPHONE = REGISTRY.register("interphone", () -> new InterphoneItem());
 	public static final RegistryObject<Item> BANNED_ITEM = REGISTRY.register("banned_item", () -> new BannedItemItem());
@@ -429,16 +428,16 @@ public class CAItems {
 	public static final RegistryObject<Item> NETHERSEA_PUMPKIN_PIE = REGISTRY.register("nethersea_pumpkin_pie", () -> new NetherseaPumpkinPieItem());
 	public static final RegistryObject<Item> NETHERSEA_STEW = REGISTRY.register("nethersea_stew", () -> new NetherseaStewItem());
 	public static final RegistryObject<Item> RECORD_WHISPER = REGISTRY.register("record_whisper", () -> new RecordItem(6, () -> ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "whisper_illusion")), new Item.Properties().stacksTo(1).rarity(Rarity.RARE), 4480));
-	public static final RegistryObject<Item> MOIST_ECHO_SHARD = registerTooltipItem("moist_echo_shard", new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.UNCOMMON), "item.caerula_arbor.moist_echo_shard.description_0");
+	public static final RegistryObject<Item> MOIST_ECHO_SHARD = tooltipItem("moist_echo_shard", () -> new Item(new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.UNCOMMON)),1);
 	public static final RegistryObject<Item> OCEANIZED_WARDEN_SPAWNEGG = REGISTRY.register("oceanized_warden_spawnegg", () -> new OceanizedWardenSpawneggItem());
 	public static final RegistryObject<Item> MUTAGENISIS_CAPSULE = REGISTRY.register("mutagenisis_capsule", () -> new MutagenisisCapsuleItem());
 	public static final RegistryObject<Item> ECHO_JELLY = REGISTRY.register("echo_jelly", () -> new EchoJellyItem());
 	public static final RegistryObject<Item> APOCALYPSE = REGISTRY.register("apocalypse", () -> new ApocalypseItem());
 	public static final RegistryObject<Item> OCEANIZED_CAT_SPAWN_EGG = REGISTRY.register("oceanized_cat_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.OCEANIZED_CAT, -3491156, -7897500, new Item.Properties()));
 	public static final RegistryObject<Item> SUPER_BIG_CAT_SPAWN_EGG = REGISTRY.register("super_big_cat_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.SUPER_BIG_CAT, -1, -1, new Item.Properties()));
-	public static final RegistryObject<Item> OCEANIZE_CATALYST = registerTooltipItem("oceanize_catalyst", new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON), "item.caerula_arbor.oceanize_catalyst.description_0", "item.caerula_arbor.oceanize_catalyst.description_1");
-	public static final RegistryObject<Item> ANCHOR_SHARD = registerTooltipItem("anchor_shard", new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.UNCOMMON), "item.caerula_arbor.anchor_shard.description_0", "item.caerula_arbor.anchor_shard.description_1");
-	public static final RegistryObject<Item> ANCHOR_FORGE_INGOT = registerTooltipItem("anchor_forge_ingot", new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.RARE), "item.caerula_arbor.anchor_forge_ingot.description_0", "item.caerula_arbor.anchor_forge_ingot.description_1");
+	public static final RegistryObject<Item> OCEANIZE_CATALYST = tooltipItem("oceanize_catalyst", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON)),2);
+	public static final RegistryObject<Item> ANCHOR_SHARD = tooltipItem("anchor_shard", () -> new Item(new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.UNCOMMON)),2);
+	public static final RegistryObject<Item> ANCHOR_FORGE_INGOT = tooltipItem("anchor_forge_ingot", () -> new Item(new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.RARE)),2);
 	public static final RegistryObject<Item> HAND_ANCHOR = REGISTRY.register("hand_anchor", () -> new HandAnchorItem());
 	public static final RegistryObject<Item> COMPLEX_CHITIN_GOLEM_SPAWN_EGG = REGISTRY.register("complex_chitin_golem_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.COMPLEX_CHITIN_GOLEM, -2631220, -9079451, new Item.Properties()));
 	public static final RegistryObject<Item> HIGHMORE_SPAWNING_BLOCK = REGISTRY.register(CABlocks.HIGHMORE_SPAWNING_BLOCK.getId().getPath(),
@@ -466,15 +465,15 @@ public class CAItems {
 	public static final RegistryObject<Item> GOODSQUIDS_SERVERER = REGISTRY.register("goodsquids_serverer", () -> new GoodsquidsServererItem());
 	public static final RegistryObject<Item> NOURISHED_APPLE_PIE = REGISTRY.register("nourished_apple_pie", () -> new NourishedApplePieItem());
 	public static final RegistryObject<Item> LAST_KNIGHT_SPAWNER = REGISTRY.register("last_knight_spawner", () -> new LastKnightSpawnerItem());
-	public static final RegistryObject<Item> DIORITE_SCULPTURE = registerTooltipItem("diorite_sculpture", new Item.Properties().stacksTo(8).fireResistant().rarity(Rarity.UNCOMMON), "item.caerula_arbor.diorite_sculpture.description_0");
+	public static final RegistryObject<Item> DIORITE_SCULPTURE = tooltipItem("diorite_sculpture", () -> new Item(new Item.Properties().stacksTo(8).fireResistant().rarity(Rarity.UNCOMMON)),1);
 	public static final RegistryObject<Item> ROCINANTE_SPAWN_EGG = REGISTRY.register("rocinante_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.ROCINANTE, -13027013, -9471010, new Item.Properties()));
 	public static final RegistryObject<Item> APOCATA_SPAWN_EGG = REGISTRY.register("apocata_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.APOCATA, -26164, -13421773, new Item.Properties()));
-	public static final RegistryObject<Item> KNIGHT_CORPSE = registerTooltipItem("knight_corpse", new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.UNCOMMON), "item.caerula_arbor.knight_corpse.description_0", "item.caerula_arbor.knight_corpse.description_1", "item.caerula_arbor.knight_corpse.description_2");
+	public static final RegistryObject<Item> KNIGHT_CORPSE = tooltipItem("knight_corpse", () -> new Item(new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.UNCOMMON)),3);
 	public static final RegistryObject<Item> IRON_SWORD_OF_KNIGHT_CORPUS = REGISTRY.register("iron_sword_of_knight_corpus", () -> new SwordOfLastKnightCorpusItem());
 	public static final RegistryObject<Item> LONG_SWORD_OF_KNIGHT_CORPUS = REGISTRY.register("long_sword_of_knight_corpus", () -> new LongSwordOfKnightCorpusItem());
-	public static final RegistryObject<Item> TIDE_HUNET_TEMPLATE = registerTooltipItem("tide_hunet_template", new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.COMMON), "item.caerula_arbor.tide_hunet_template.description_0", "item.caerula_arbor.tide_hunet_template.description_1", "item.caerula_arbor.tide_hunet_template.description_2", "item.caerula_arbor.tide_hunet_template.description_3", "item.caerula_arbor.tide_hunet_template.description_4", "item.caerula_arbor.tide_hunet_template.description_5", "item.caerula_arbor.tide_hunet_template.description_6");
-	public static final RegistryObject<Item> DNA_HORSE = registerTooltipItem("dna_horse", new Item.Properties().stacksTo(16).rarity(Rarity.UNCOMMON), "item.caerula_arbor.dna_horse.description_0");
-	public static final RegistryObject<Item> ROCINANTE_INJECTOR = registerTooltipItem("rocinante_injector", new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON), "item.caerula_arbor.rocinante_injector.description_0");
+	public static final RegistryObject<Item> TIDE_HUNET_TEMPLATE = tooltipItem("tide_hunet_template", () -> new Item(new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.COMMON)),7);
+	public static final RegistryObject<Item> DNA_HORSE = tooltipItem("dna_horse", () -> new Item(new Item.Properties().stacksTo(16).rarity(Rarity.UNCOMMON)),1);
+	public static final RegistryObject<Item> ROCINANTE_INJECTOR = tooltipItem("rocinante_injector", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON)),1);
 	public static final RegistryObject<Item> MARTUS_BOOK = REGISTRY.register("martus_book", () -> new MartusBookItem());
 	public static final RegistryObject<Item> OCEANIZED_FOX_SPAWN_EGG = REGISTRY.register("oceanized_fox_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.OCEANIZED_FOX, -1968903, -6433566, new Item.Properties()));
 	public static final RegistryObject<Item> TIDUTANT_EXCRESCENCE_SPAWN_EGG = REGISTRY.register("tidutant_excrescence_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.TIDUTANT_EXCRESCENCE, -10392431, -3177597, new Item.Properties()));
@@ -504,20 +503,20 @@ public class CAItems {
 	public static final RegistryObject<Item> GLADIIA_SPAWN_EGG = REGISTRY.register("gladiia_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.GLADIIA, -13419440, -9077307, new Item.Properties()));
 	public static final RegistryObject<Item> OPERATION_TABLE = block(CABlocks.OPERATION_TABLE);
 	public static final RegistryObject<Item> CENTRIFUGER = REGISTRY.register(CABlocks.CENTRIFUGER.getId().getPath(), () -> new CentrifugerDisplayItem(CABlocks.CENTRIFUGER.get(), new Item.Properties()));
-	public static final RegistryObject<Item> TARGETED_BASE = registerTooltipItem("targeted_base", new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON), "item.caerula_arbor.targeted_base.description_0");
-	public static final RegistryObject<Item> HUNTER_GENE_SKADI = registerTooltipItem("hunter_gene_skadi", new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON), "item.caerula_arbor.hunter_gene_skadi.description_0", "item.caerula_arbor.hunter_gene_skadi.description_1");
-	public static final RegistryObject<Item> HUNTER_GENE_ULPIANS = registerTooltipItem("hunter_gene_ulpians", new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON), "item.caerula_arbor.hunter_gene_ulpians.description_0", "item.caerula_arbor.hunter_gene_ulpians.description_1");
-	public static final RegistryObject<Item> HUNTER_GENE_GLADIIA = registerTooltipItem("hunter_gene_gladiia", new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON), "item.caerula_arbor.hunter_gene_gladiia.description_0", "item.caerula_arbor.hunter_gene_gladiia.description_1");
-	public static final RegistryObject<Item> TARGETED_TRANSMITTER_SKADI = registerTooltipItem("targeted_transmitter_skadi", new Item.Properties().stacksTo(64).rarity(Rarity.RARE), "item.caerula_arbor.targeted_transmitter_skadi.description_0", "item.caerula_arbor.targeted_transmitter_skadi.description_1");
-	public static final RegistryObject<Item> TARGETED_TRANSMITTER_ULPIANS = registerTooltipItem("targeted_transmitter_ulpians", new Item.Properties().stacksTo(64).rarity(Rarity.RARE), "item.caerula_arbor.targeted_transmitter_ulpians.description_0", "item.caerula_arbor.targeted_transmitter_ulpians.description_1");
-	public static final RegistryObject<Item> TARGETED_TRANSMITTER_GLADIIA = registerTooltipItem("targeted_transmitter_gladiia", new Item.Properties().stacksTo(64).rarity(Rarity.RARE), "item.caerula_arbor.targeted_transmitter_gladiia.description_0", "item.caerula_arbor.targeted_transmitter_gladiia.description_1");
+	public static final RegistryObject<Item> TARGETED_BASE = tooltipItem("targeted_base", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON)),1);
+	public static final RegistryObject<Item> HUNTER_GENE_SKADI = tooltipItem("hunter_gene_skadi", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON)),2);
+	public static final RegistryObject<Item> HUNTER_GENE_ULPIANS = tooltipItem("hunter_gene_ulpians", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON)),2);
+	public static final RegistryObject<Item> HUNTER_GENE_GLADIIA = tooltipItem("hunter_gene_gladiia", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON)),2);
+	public static final RegistryObject<Item> TARGETED_TRANSMITTER_SKADI = tooltipItem("targeted_transmitter_skadi", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.RARE)),2);
+	public static final RegistryObject<Item> TARGETED_TRANSMITTER_ULPIANS = tooltipItem("targeted_transmitter_ulpians", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.RARE)),2);
+	public static final RegistryObject<Item> TARGETED_TRANSMITTER_GLADIIA = tooltipItem("targeted_transmitter_gladiia", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.RARE)),2);
 	public static final RegistryObject<Item> PERSONNEL_TRANSPORTER = REGISTRY.register("personnel_transporter", () -> new PersonnelTransporterItem());
 	public static final RegistryObject<Item> INJECTOR = block(CABlocks.INJECTOR);
 	public static final RegistryObject<Item> DICTATION_CHAPTER = REGISTRY.register("dictation_chapter", () -> new DictationChapterItem());
-	public static final RegistryObject<Item> BASE_OPERATION_KIT = registerTooltipItem("base_operation_kit", new Item.Properties().stacksTo(8).rarity(Rarity.COMMON), "item.caerula_arbor.base_operation_kit.description_0");
-	public static final RegistryObject<Item> OPERATION_KIT_SKADI = registerTooltipItem("operation_kit_skadi", new Item.Properties().stacksTo(8).rarity(Rarity.UNCOMMON), "item.caerula_arbor.operation_kit_skadi.description_0", "item.caerula_arbor.operation_kit_skadi.description_1");
-	public static final RegistryObject<Item> OPERATION_KIT_ULPIANS = registerTooltipItem("operation_kit_ulpians", new Item.Properties().stacksTo(8).rarity(Rarity.UNCOMMON), "item.caerula_arbor.operation_kit_ulpians.description_0", "item.caerula_arbor.operation_kit_ulpians.description_1");
-	public static final RegistryObject<Item> OPERATION_KIT_GLADIIA = registerTooltipItem("operation_kit_gladiia", new Item.Properties().stacksTo(8).rarity(Rarity.UNCOMMON), "item.caerula_arbor.operation_kit_gladiia.description_0", "item.caerula_arbor.operation_kit_gladiia.description_1");
+	public static final RegistryObject<Item> BASE_OPERATION_KIT = tooltipItem("base_operation_kit", () -> new Item(new Item.Properties().stacksTo(8).rarity(Rarity.COMMON)),1);
+	public static final RegistryObject<Item> OPERATION_KIT_SKADI = tooltipItem("operation_kit_skadi", () -> new Item(new Item.Properties().stacksTo(8).rarity(Rarity.UNCOMMON)),2);
+	public static final RegistryObject<Item> OPERATION_KIT_ULPIANS = tooltipItem("operation_kit_ulpians", () -> new Item(new Item.Properties().stacksTo(8).rarity(Rarity.UNCOMMON)),2);
+	public static final RegistryObject<Item> OPERATION_KIT_GLADIIA = tooltipItem("operation_kit_gladiia", () -> new Item(new Item.Properties().stacksTo(8).rarity(Rarity.UNCOMMON)),2);
 	public static final RegistryObject<Item> SEALEATHER_CHITIN_HELMET = REGISTRY.register("sealeather_chitin_helmet", () -> new SealeatherChitinItem.Helmet());
 	public static final RegistryObject<Item> SEALEATHER_CHITIN_CHESTPLATE = REGISTRY.register("sealeather_chitin_chestplate", () -> new SealeatherChitinItem.Chestplate());
 	public static final RegistryObject<Item> SEALEATHER_CHITIN_LEGGINGS = REGISTRY.register("sealeather_chitin_leggings", () -> new SealeatherChitinItem.Leggings());
@@ -525,17 +524,17 @@ public class CAItems {
 	public static final RegistryObject<Item> NETHERSEA_WOOD = block(CABlocks.NETHERSEA_WOOD);
 	public static final RegistryObject<Item> STRIPPED_NETHERSEA_WOOD = block(CABlocks.STRIPPED_NETHERSEA_WOOD);
 	public static final RegistryObject<Item> SPECTER_SPAWN_EGG = REGISTRY.register("specter_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.SPECTER, -9340526, -5326397, new Item.Properties()));
-	public static final RegistryObject<Item> HUNTER_GENE_SPECTER = registerTooltipItem("hunter_gene_specter", new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON), "item.caerula_arbor.hunter_gene_specter.description_0", "item.caerula_arbor.hunter_gene_specter.description_1");
-	public static final RegistryObject<Item> OPERATION_KIT_SPECTER = registerTooltipItem("operation_kit_specter", new Item.Properties().stacksTo(8).rarity(Rarity.UNCOMMON), "item.caerula_arbor.operation_kit_specter.description_0", "item.caerula_arbor.operation_kit_specter.description_1");
-	public static final RegistryObject<Item> TARGETED_TRANSMITTER_SPECTER = registerTooltipItem("targeted_transmitter_specter", new Item.Properties().stacksTo(64).rarity(Rarity.RARE), "item.caerula_arbor.targeted_transmitter_specter.description_0", "item.caerula_arbor.targeted_transmitter_specter.description_1");
+	public static final RegistryObject<Item> HUNTER_GENE_SPECTER = tooltipItem("hunter_gene_specter", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON)),2);
+	public static final RegistryObject<Item> OPERATION_KIT_SPECTER = tooltipItem("operation_kit_specter", () -> new Item(new Item.Properties().stacksTo(8).rarity(Rarity.UNCOMMON)),2);
+	public static final RegistryObject<Item> TARGETED_TRANSMITTER_SPECTER = tooltipItem("targeted_transmitter_specter", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.RARE)),2);
 	public static final RegistryObject<Item> AEGIR_LANCET = REGISTRY.register("aegir_lancet", () -> new AegirLancetItem());
 	public static final RegistryObject<Item> BROKEN_SEA = REGISTRY.register("broken_sea", () -> new BrokenSeaItem());
-	public static final RegistryObject<Item> PALE_GOLD_PENDANT = registerTooltipItem("pale_gold_pendant", new Item.Properties().stacksTo(8).rarity(Rarity.UNCOMMON), "item.caerula_arbor.pale_gold_pendant.description_0");
+	public static final RegistryObject<Item> PALE_GOLD_PENDANT = tooltipItem("pale_gold_pendant", () -> new Item(new Item.Properties().stacksTo(8).rarity(Rarity.UNCOMMON)),1);
 	public static final RegistryObject<Item> IRENE_SPAWN_EGG = REGISTRY.register("irene_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.IRENE, -5065798, -4494458, new Item.Properties()));
 	public static final RegistryObject<Item> TIDE_CHIMERA_SPAWN_EGG = REGISTRY.register("tide_chimera_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.TIDE_CHIMERA, -16762940, -10496001, new Item.Properties()));
 	public static final RegistryObject<Item> AEGIR_SWORD = REGISTRY.register("aegir_sword", () -> new AegirSwordItem());
 	public static final RegistryObject<Item> SKADI_SWORD = REGISTRY.register("skadi_sword", () -> new SkadiSwordItem());
-	public static final RegistryObject<Item> MOIST_BAG = registerTooltipItem("moist_bag", new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.UNCOMMON), "item.caerula_arbor.moist_bag.description_0");
+	public static final RegistryObject<Item> MOIST_BAG = tooltipItem("moist_bag", () -> new Item(new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.UNCOMMON)),1);
 	public static final RegistryObject<Item> CORRUPTED_HEART_SPAWNER = REGISTRY.register("corrupted_heart_spawner", () -> new CorruptedHeartSpawnerItem());
 	public static final RegistryObject<Item> INCANDESCENT_ANIMA = REGISTRY.register("incandescent_anima", () -> new IncandescentAnimaItem());
 	public static final RegistryObject<Item> ISHARMLA_REMAIN = block(CABlocks.ISHARMLA_REMAIN);
@@ -563,7 +562,8 @@ public class CAItems {
 			() -> new LivingArmorstandDisplayItem(CABlocks.LIVING_ARMORSTAND.get(), new Item.Properties()));
 	public static final RegistryObject<Item> NAUTILUS_HEADHUNTER_SPAWN_EGG = REGISTRY.register("nautilus_headhunter_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.NAUTILUS_HEADHUNTER, -30360, -3593216, new Item.Properties()));
 	public static final RegistryObject<Item> XANTIS_SPAWN_EGG = REGISTRY.register("xantis_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.XANTIS, -10063429, -7364642, new Item.Properties()));
-	public static final RegistryObject<Item> FLAMARINE_UPGRADE_TEMPLATE = registerTooltipItem("flamarine_upgrade_template", new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.UNCOMMON), "item.caerula_arbor.flamarine_upgrade_template.description_0", "item.caerula_arbor.flamarine_upgrade_template.description_1", "item.caerula_arbor.flamarine_upgrade_template.description_2", "item.caerula_arbor.flamarine_upgrade_template.description_3", "item.caerula_arbor.flamarine_upgrade_template.description_4", "item.caerula_arbor.flamarine_upgrade_template.description_5", "item.caerula_arbor.flamarine_upgrade_template.description_6", "item.caerula_arbor.flamarine_upgrade_template.description_7");
+	public static final RegistryObject<Item> FLAMARINE_UPGRADE_TEMPLATE = tooltipItem("flamarine_upgrade_template",
+			() -> new Item(new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.UNCOMMON)),8);
 	public static final RegistryObject<Item> FLAMARINE_GOLEM_SPAWN_EGG = REGISTRY.register("flamarine_golem_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.FLAMARINE_GOLEM, -1, -1, new Item.Properties()));
 	public static final RegistryObject<Item> TRAILRITE_ARMORSTAND = REGISTRY.register(CABlocks.TRAILRITE_ARMORSTAND.getId().getPath(),
 			() -> new TrailriteArmorstandDisplayItem(CABlocks.TRAILRITE_ARMORSTAND.get(), new Item.Properties()));
@@ -575,12 +575,12 @@ public class CAItems {
 	public static final RegistryObject<KnightIronItem> KNIGHT_IRON_CHESTPLATE = REGISTRY.register("knight_iron_chestplate", () -> new KnightIronItem(ArmorItem.Type.CHESTPLATE, new Item.Properties()));
 	public static final RegistryObject<KnightIronItem> KNIGHT_IRON_LEGGINGS = REGISTRY.register("knight_iron_leggings", () -> new KnightIronItem(ArmorItem.Type.LEGGINGS, new Item.Properties()));
 	public static final RegistryObject<KnightIronItem> KNIGHT_IRON_BOOTS = REGISTRY.register("knight_iron_boots", () -> new KnightIronItem(ArmorItem.Type.BOOTS, new Item.Properties()));
-	public static final RegistryObject<Item> ISHARMLA_SPAWNER = registerTooltipSpawnEgg("isharmla_spawner", CAEntities.ISHARMLA, -1, -1, new Item.Properties().stacksTo(64).rarity(Rarity.EPIC),
-			"item.caerula_arbor.isharmla_spawner.description_0");
+	public static final RegistryObject<Item> ISHARMLA_SPAWNER = tooltipItem("isharmla_spawner",
+			() -> new ForgeSpawnEggItem(CAEntities.ISHARMLA, -1, -1, new Item.Properties().stacksTo(64).rarity(Rarity.EPIC)),1);
 	public static final RegistryObject<Item> QUNYOU_WANTED_ISHARMLA_SPAWN_EGG = REGISTRY.register("qunyou_wanted_isharmla_spawn_egg",
 			() -> new ForgeSpawnEggItem(CAEntities.QUNYOU_WANTED_ISHARMLA, -2499866, -10115, new Item.Properties()));
 	public static final RegistryObject<Item> ISHARMLA_TEAR_SPAWN_EGG = REGISTRY.register("isharmla_tear_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.ISHARMLA_TEAR, -3034976, -328990, new Item.Properties()));
-	public static final RegistryObject<Item> MIZUKI_DETERMINATION = registerTooltipItem("mizuki_determination", new Item.Properties().stacksTo(16).fireResistant().rarity(Rarity.RARE), "item.caerula_arbor.mizuki_determination.description_0", "item.caerula_arbor.mizuki_determination.description_1");
+	public static final RegistryObject<Item> MIZUKI_DETERMINATION = tooltipItem("mizuki_determination", () -> new Item(new Item.Properties().stacksTo(16).fireResistant().rarity(Rarity.RARE)),2);
 	public static final RegistryObject<Item> LEVIATHAN_ANIMUS = REGISTRY.register("leviathan_animus", () -> new LeviathanAnimusItem());
 	public static final RegistryObject<Item> RECORD_ISHARMLA = REGISTRY.register("record_isharmla", () -> new RecordItem(4, () -> ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "conquerer")), new Item.Properties().stacksTo(1).rarity(Rarity.RARE), 4020));
 	public static final RegistryObject<Item> TEAR_ISHARMLA = REGISTRY.register("tear_isharmla", () -> new TearIsharmlaItem());
@@ -596,12 +596,12 @@ public class CAItems {
 	public static final RegistryObject<Item> ISHARMLA_WALL_GILDED = block(CABlocks.ISHARMLA_WALL_GILDED);
 	public static final RegistryObject<Item> COMPASSION_PRAYER_SPAWN_EGG = REGISTRY.register("compassion_prayer_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.COMPASSION_PRAYER, -11571331, -2371137, new Item.Properties()));
 	public static final RegistryObject<Item> MOIST_ENDER_CRYSTAL_SPAWN_EGG = REGISTRY.register("moist_ender_crystal_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.MOIST_ENDER_CRYSTAL, -1, -1, new Item.Properties()));
-	public static final RegistryObject<Item> ENDERINA_SPAWNER = registerTooltipSpawnEgg("enderina_spawner", CAEntities.OCEANIZED_ENDERINA, -1, -1, new Item.Properties().stacksTo(64).rarity(Rarity.EPIC),
-			"item.caerula_arbor.enderina_spawner.description_0");
+	public static final RegistryObject<Item> ENDERINA_SPAWNER = tooltipItem("enderina_spawner",
+			() -> new ForgeSpawnEggItem(CAEntities.OCEANIZED_ENDERINA, -1, -1, new Item.Properties().stacksTo(64).rarity(Rarity.EPIC)),1);
 	public static final RegistryObject<Item> DRAGON_BRAND = block(CABlocks.DRAGON_BRAND);
 	public static final RegistryObject<Item> MOIST_CRYSTAL_ITEM = REGISTRY.register("moist_crystal_item", () -> new MoistCrystalItemItem());
 	public static final RegistryObject<Item> ENDERINA_CORE = block(CABlocks.ENDERINA_CORE);
-	public static final RegistryObject<Item> MOIST_DRAGON_HEART = registerTooltipItem("moist_dragon_heart", new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.RARE), "item.caerula_arbor.moist_dragon_heart.description_0");
+	public static final RegistryObject<Item> MOIST_DRAGON_HEART = tooltipItem("moist_dragon_heart", () -> new Item(new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.RARE)),1);
 	public static final RegistryObject<Item> DRAGON_WAND = REGISTRY.register("dragon_wand", () -> new DragonWandItem());
 	public static final RegistryObject<Item> CAERULA_BOOK_HOLDER = REGISTRY.register("caerula_book_holder", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)));
 	public static final RegistryObject<Item> THIRSTER_SPAWN_EGG = REGISTRY.register("thirster_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.THIRSTER, -1, -1, new Item.Properties()));
@@ -629,29 +629,9 @@ public class CAItems {
 	public static final RegistryObject<Item> ARCHIVE_OF_MARTUS = REGISTRY.register("archive_of_martus", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON)));
 	public static final RegistryObject<Item> ARCHIVE_OF_RAIDER = REGISTRY.register("archive_of_raider", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON)));
 
-	// Start of user code block custom items
-	// End of user code block custom items
-	private static RegistryObject<Item> registerTooltipItem(String name, Item.Properties properties, String... tooltipKeys) {
-		return REGISTRY.register(name, () -> new Item(properties) {
-			@Override
-			public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-				super.appendHoverText(itemstack, level, list, flag);
-				for (String tooltipKey : tooltipKeys)
-					list.add(Component.translatable(tooltipKey));
-			}
-		});
-	}
-
-	private static RegistryObject<Item> registerTooltipSpawnEgg(String name, Supplier<? extends EntityType<? extends Mob>> entityType, int primaryColor, int secondaryColor, Item.Properties properties,
-			String... tooltipKeys) {
-		return REGISTRY.register(name, () -> new ForgeSpawnEggItem(entityType, primaryColor, secondaryColor, properties) {
-			@Override
-			public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
-				super.appendHoverText(itemstack, level, list, flag);
-				for (String tooltipKey : tooltipKeys)
-					list.add(Component.translatable(tooltipKey));
-			}
-		});
+	private static <T extends Item> RegistryObject<T> tooltipItem(String name, Supplier<T> factory, int tooltipCount) {
+		TOOLTIP_COUNTS.put(new ResourceLocation(CaerulaArborMod.MODID, name), tooltipCount);
+		return REGISTRY.register(name, factory);
 	}
 
 	private static RegistryObject<Item> block(RegistryObject<Block> block) {
@@ -666,30 +646,40 @@ public class CAItems {
 	public static void clientLoad(FMLClientSetupEvent event) {
 		event.enqueueWork(() -> {
 			ItemProperties.register(MUSIC_BOX_FIXED.get(), new ResourceLocation(CaerulaArborMod.MODID, "music_box_fixed_playing"),
-					(itemStackToRender, clientWorld, entity, itemEntityId) -> {
-                        double result = 0;
-                        if (entity != null) {
-                            if ((Entity) entity instanceof Player _plrCldCheck1 && _plrCldCheck1.getCooldowns().isOnCooldown(itemStackToRender.getItem())) {
-                                result = 1;
-                            }
-                        }
-                        return (float) result;
-                    });
+					(itemStackToRender, clientWorld, living, itemEntityId) -> living instanceof Player player
+							&& player.getCooldowns().isOnCooldown(itemStackToRender.getItem()) ? 1.0F : 0.0F);
 			ItemProperties.register(CHITIN_SHIELD.get(), new ResourceLocation("blocking"), ItemProperties.getProperty(Items.SHIELD, new ResourceLocation("blocking")));
 			ItemProperties.register(COMPLEX_CHITIN_SHIELD.get(), new ResourceLocation("blocking"), ItemProperties.getProperty(Items.SHIELD, new ResourceLocation("blocking")));
 			ItemProperties.register(TIDELINKED_SHIELD.get(), new ResourceLocation("blocking"), ItemProperties.getProperty(Items.SHIELD, new ResourceLocation("blocking")));
-			ItemProperties.register(CHITIN_BOW.get(), new ResourceLocation(CaerulaArborMod.MODID, "chitin_bow_pulling"), (itemStackToRender, clientWorld, entity, itemEntityId) -> {
-                double result = 0;
-                if (entity != null) {
-                    if ((Entity) entity instanceof LivingEntity _entity && _entity.isHolding(CHITIN_BOW.get())) {
-                        result = (Entity) entity instanceof LivingEntity _entUseTicks1 ? _entUseTicks1.getTicksUsingItem() : 0;
-                    }
-                }
-                return (float) result;
-            });
+			ItemProperties.register(CHITIN_BOW.get(), new ResourceLocation(CaerulaArborMod.MODID, "chitin_bow_pulling"),
+					(itemStackToRender, clientWorld, living, itemEntityId) -> living != null && living.isUsingItem()
+							&& living.getUseItem().is(itemStackToRender.getItem()) ? living.getTicksUsingItem() : 0.0F);
 			ItemProperties.register(COMPLEX_CHITIN_BOW.get(), new ResourceLocation(CaerulaArborMod.MODID, "complex_chitin_bow_pulling"),
-					(itemStackToRender, clientWorld, entity, itemEntityId) -> (float) EntityUtils.getComplexPulling(entity, itemStackToRender));
-			ItemProperties.register(TRAILRITE_BOW.get(), new ResourceLocation(CaerulaArborMod.MODID, "trailrite_bow_pulling"), (itemStackToRender, clientWorld, entity, itemEntityId) -> (float) EntityUtils.getComplexPulling(entity, itemStackToRender));
+					(itemStackToRender, clientWorld, living, itemEntityId) -> living != null && living.isUsingItem()
+							&& living.getUseItem().is(itemStackToRender.getItem()) ? living.getTicksUsingItem() : 0.0F);
+			ItemProperties.register(TRAILRITE_BOW.get(), new ResourceLocation(CaerulaArborMod.MODID, "trailrite_bow_pulling"),
+					(itemStackToRender, clientWorld, living, itemEntityId) -> living != null && living.isUsingItem()
+							&& living.getUseItem().is(itemStackToRender.getItem()) ? living.getTicksUsingItem() : 0.0F);
 		});
+	}
+
+	@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
+	public static class ClientEvents {
+		@SubscribeEvent
+		public static void appendRegisteredTooltips(ItemTooltipEvent event) {
+			ResourceLocation itemId = ForgeRegistries.ITEMS.getKey(event.getItemStack().getItem());
+			if (itemId == null) {
+				return;
+			}
+
+			Integer tooltipCount = TOOLTIP_COUNTS.get(itemId);
+			if (tooltipCount != null && tooltipCount > 0) {
+				List<Component> tooltip = event.getToolTip();
+				String baseKey = "item." + itemId.getNamespace() + "." + itemId.getPath() + ".description_";
+				for (int i = 0; i < tooltipCount; i++) {
+					tooltip.add(Component.translatable(baseKey + i));
+				}
+			}
+		}
 	}
 }

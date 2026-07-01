@@ -1,9 +1,7 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CAEntities;
-import com.apocalypse.caerulaarbor.init.CAItems;
-import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.*;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -40,6 +38,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
@@ -374,7 +373,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 		double less = 0;
 		if (this.isAlive()) {
 			if (tickCount % 40 == 15) {
-				WorldUtils.ireneBurnBrandAround(world, x, y, z);
+				burnBrandAround(world, x, y, z);
 			}
 			sklp1 = (Entity) this instanceof IreneEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp1) : 0;
 			skillp2 = (Entity) this instanceof IreneEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp2) : 0;
@@ -523,6 +522,31 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 			EntityUtils.vanguardBuff(world, x, y, z, this);
 		}
 		this.refreshDimensions();
+	}
+
+	// TODO: HIGH: IreneEntity 与 SaintCarmenEntity 之后应抽取共同基类承载该逻辑，而不是继续通过静态方法复用。
+	public static void burnBrandAround(LevelAccessor world, double x, double y, double z) {
+		BlockState toBeBurn;
+		double px;
+		double py;
+		double pz;
+		for (int index0 = 0; index0 < 3; index0++) {
+			for (int index1 = 0; index1 < 3; index1++) {
+				for (int index2 = 0; index2 < 3; index2++) {
+					px = x + index0 - 1;
+					py = y + index1 - 1;
+					pz = z + index2 - 1;
+					toBeBurn = world.getBlockState(BlockPos.containing(px, py, pz));
+					if (toBeBurn.getBlock() == CABlocks.SEA_TRAIL_INIT.get() || toBeBurn.getBlock() == CABlocks.SEA_TRAIL_GROWING.get() || toBeBurn.getBlock() == CABlocks.SEA_TRAIL_GROWN.get()
+							|| toBeBurn.getBlock() == CABlocks.SEA_TRAIL_STOP.get() || toBeBurn.getBlock() == CABlocks.SEA_TRAIL_SOLID.get() || toBeBurn.getBlock() == CABlocks.TRAIL_PULSE.get()) {
+						WorldUtils.burndownTrail(world, toBeBurn, px, py, pz);
+						if (world instanceof ServerLevel level) {
+							level.sendParticles(CAParticles.PURPLE_FLAME.get(), x + 0.5, y + 1, z + 0.5, 16, 0.75, 0.75, 0.75, 0.15);
+						}
+					}
+				}
+			}
+		}
 	}
 
 	@Override

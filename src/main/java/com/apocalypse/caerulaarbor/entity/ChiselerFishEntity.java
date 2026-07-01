@@ -3,6 +3,7 @@ package com.apocalypse.caerulaarbor.entity;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
@@ -15,6 +16,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -32,6 +34,7 @@ import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.animal.Bucketable;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.SnowGolem;
 import net.minecraft.world.entity.monster.*;
@@ -39,6 +42,7 @@ import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -54,13 +58,14 @@ import software.bernie.geckolib.core.object.PlayState;
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 
-public class ChiselerFishEntity extends SeaMonster implements RangedAttackMob {
+public class ChiselerFishEntity extends SeaMonster implements RangedAttackMob, Bucketable {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(ChiselerFishEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(ChiselerFishEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(ChiselerFishEntity.class, EntityDataSerializers.STRING);
 	private boolean swinging;
 	private boolean lastloop;
 	private long lastSwing;
+	private boolean fromBucket;
 	public String animationprocedure = "empty";
 
 	public ChiselerFishEntity(PlayMessages.SpawnEntity packet, Level world) {
@@ -278,21 +283,66 @@ public class ChiselerFishEntity extends SeaMonster implements RangedAttackMob {
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
+		compound.putBoolean("FromBucket", this.fromBucket());
 		compound.putString("Texture", this.getTexture());
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
+		this.setFromBucket(compound.getBoolean("FromBucket"));
 		if (compound.contains("Texture"))
 			this.setTexture(compound.getString("Texture"));
 	}
 
 	@Override
+	public boolean fromBucket() {
+		return this.fromBucket;
+	}
+
+	@Override
+	public void setFromBucket(boolean fromBucket) {
+		this.fromBucket = fromBucket;
+	}
+
+	@Override
+	public void saveToBucketTag(ItemStack bucketStack) {
+		Bucketable.saveDefaultDataToBucketTag(this, bucketStack);
+		bucketStack.getOrCreateTag().putString("Texture", this.getTexture());
+	}
+
+	@Override
+	public void loadFromBucketTag(CompoundTag bucketTag) {
+		Bucketable.loadDefaultDataFromBucketTag(this, bucketTag);
+		if (bucketTag.contains("Texture")) {
+			this.setTexture(bucketTag.getString("Texture"));
+		}
+		this.setFromBucket(true);
+	}
+
+	@Override
+	public ItemStack getBucketItemStack() {
+		return new ItemStack(CAItems.BUCKET_CHISELER.get());
+	}
+
+	@Override
+	public SoundEvent getPickupSound() {
+		return SoundEvents.BUCKET_FILL_FISH;
+	}
+
+	@Override
 	public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
-		super.mobInteract(sourceentity, hand);
-		Entity entity = this;
-		return EntityUtils.containFish(entity, sourceentity);
+		return Bucketable.bucketMobPickup(sourceentity, hand, this).orElse(super.mobInteract(sourceentity, hand));
+	}
+
+	@Override
+	public boolean requiresCustomPersistence() {
+		return super.requiresCustomPersistence() || this.fromBucket();
+	}
+
+	@Override
+	public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+		return !this.fromBucket() && !this.hasCustomName();
 	}
 
 	@Override

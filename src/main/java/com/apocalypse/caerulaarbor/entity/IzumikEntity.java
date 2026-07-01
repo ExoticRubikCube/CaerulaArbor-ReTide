@@ -7,6 +7,7 @@ import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
+import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.client.Minecraft;
@@ -524,18 +525,18 @@ public class IzumikEntity extends SeaMonster {
                         double tgtX = 0;
                         double tgtZ = 0;
                         double validY;
-                        validY = 114514;
+                        validY = Double.NaN;
                         for (int index1 = 0; index1 < 24; index1++) {
                             range = Mth.nextInt(RandomSource.create(), 28, 42);
                             t = Mth.nextDouble(RandomSource.create(), 0, 6.283);
                             tgtX = x + range * Math.sin(t);
                             tgtZ = z + range * Math.cos(t);
-                            validY = findValidYOffspr(world, x, y, z, tgtX, y + 4, tgtZ);
-                            if (validY < 114513) {
+                            validY = WorldUtils.findValidSpawnY(world, x, y, z, tgtX, y + 4, tgtZ);
+                            if (!Double.isNaN(validY)) {
                                 break;
                             }
                         }
-                        if (validY < 114513) {
+                        if (!Double.isNaN(validY)) {
                             if (world instanceof ServerLevel _level) {
                                 Entity entityToSpawn = CAEntities.IZUMIK_OFFSPRING.get().spawn(_level, BlockPos.containing(tgtX, validY, tgtZ), MobSpawnType.MOB_SUMMONED);
                                 if (entityToSpawn != null) {
@@ -772,24 +773,6 @@ public class IzumikEntity extends SeaMonster {
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
         builder = builder.add(Attributes.FLYING_SPEED, 0.6);
         return builder;
-    }
-
-    private double findValidYOffspr(LevelAccessor world, double x, double y, double z, double xx, double yy, double zz) {
-        double y_found;
-        if (world instanceof Level _level) {
-            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.azalea.hit")), SoundSource.NEUTRAL, 0, 1);
-        }
-        for (int index0 = 0; index0 < 12; index0++) {
-            y_found = yy + index0;
-            if (!(world.getBlockFloorHeight(BlockPos.containing(xx, y_found, zz)) > 0)) {
-                return y_found;
-            }
-            y_found = yy - index0 - 1;
-            if (!(world.getBlockFloorHeight(BlockPos.containing(xx, y_found, zz)) > 0)) {
-                return y_found;
-            }
-        }
-        return 114514;
     }
 
     private PlayState movementPredicate(AnimationState event) {

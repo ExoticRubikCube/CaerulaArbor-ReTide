@@ -13,8 +13,8 @@ import com.apocalypse.caerulaarbor.init.*;
 import com.apocalypse.caerulaarbor.system.TransformIndexProcedure;
 import com.apocalypse.caerulaarbor.system.UpgradeBreedProcedure;
 import com.apocalypse.caerulaarbor.system.UpgradeSilenceProcedure;
+import com.apocalypse.caerulaarbor.util.CaerulaUtil;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
-import com.apocalypse.caerulaarbor.util.ValidationUtils;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
@@ -708,7 +708,7 @@ public class LivingDeathEventHandler {
                 } else {
                     String rname = ForgeRegistries.ITEMS.getKey((sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem()).toString();
                     for (String stringiterator : CaerulaConfigsConfiguration.HAND_ENGRAVE.get()) {
-                        if (ValidationUtils.isValidString(stringiterator, rname)) {
+                        if (CaerulaUtil.matchesRegistryName(stringiterator, rname)) {
                             validweapon = true;
                             break;
                         }

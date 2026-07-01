@@ -826,8 +826,8 @@ public class IsharmlaEntity extends SeaMonster {
 			d = Mth.nextDouble(RandomSource.create(), 4, 18);
 			tx = x + d * Math.cos(r);
 			tz = z + d * Math.sin(r);
-			ty = WorldUtils.findYzforTear(world, tx, y, tz);
-			if (ty < 114110) {
+			ty = WorldUtils.findFirstEmptyYAbove(world, tx, y, tz);
+			if (!Double.isNaN(ty)) {
 				if (world instanceof ServerLevel _level) {
 					Entity entityToSpawn = CAEntities.ISHARMLA_TEAR.get().spawn(_level, BlockPos.containing(tx, ty, tz), MobSpawnType.MOB_SUMMONED);
 					if (entityToSpawn != null) {

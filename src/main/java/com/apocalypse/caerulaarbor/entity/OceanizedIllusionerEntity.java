@@ -477,7 +477,7 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
                             this.setAnimation("animation.oceanized_illusioner.fission");
                         }
                         for (int index0 = 0; index0 < 5; index0++) {
-                            if (WorldUtils.isValidForMan(world, x + 4 - index0, y, z)) {
+                            if (WorldUtils.isValidHumanoidPlace(world, x + 4 - index0, y, z)) {
                                 if (world instanceof ServerLevel _level) {
                                     Entity entityToSpawn = CAEntities.OCEAN_ILLUSION.get().spawn(_level, BlockPos.containing(x + 4 - index0, y, z), MobSpawnType.MOB_SUMMONED);
                                     if (entityToSpawn != null) {
@@ -488,7 +488,7 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
                             }
                         }
                         for (int index1 = 0; index1 < 5; index1++) {
-                            if (WorldUtils.isValidForMan(world, x - (4 - index1), y, z)) {
+                            if (WorldUtils.isValidHumanoidPlace(world, x - (4 - index1), y, z)) {
                                 if (world instanceof ServerLevel _level) {
                                     Entity entityToSpawn = CAEntities.OCEAN_ILLUSION.get().spawn(_level, BlockPos.containing(x - (4 - index1), y, z), MobSpawnType.MOB_SUMMONED);
                                     if (entityToSpawn != null) {
@@ -499,7 +499,7 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
                             }
                         }
                         for (int index2 = 0; index2 < 5; index2++) {
-                            if (WorldUtils.isValidForMan(world, x, y, z + 4 - index2)) {
+                            if (WorldUtils.isValidHumanoidPlace(world, x, y, z + 4 - index2)) {
                                 if (world instanceof ServerLevel _level) {
                                     Entity entityToSpawn = CAEntities.OCEAN_ILLUSION.get().spawn(_level, BlockPos.containing(x, y, z + 4 - index2), MobSpawnType.MOB_SUMMONED);
                                     if (entityToSpawn != null) {
@@ -510,7 +510,7 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
                             }
                         }
                         for (int index3 = 0; index3 < 5; index3++) {
-                            if (WorldUtils.isValidForMan(world, x, y, z - (4 - index3))) {
+                            if (WorldUtils.isValidHumanoidPlace(world, x, y, z - (4 - index3))) {
                                 if (world instanceof ServerLevel _level) {
                                     Entity entityToSpawn = CAEntities.OCEAN_ILLUSION.get().spawn(_level, BlockPos.containing(x, y, z - (4 - index3)), MobSpawnType.MOB_SUMMONED);
                                     if (entityToSpawn != null) {

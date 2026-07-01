@@ -33,6 +33,11 @@ import net.minecraftforge.registries.ForgeRegistries;
 import java.util.ArrayList;
 
 public class CaerulaUtil {
+
+	private CaerulaUtil() {
+		throw new UnsupportedOperationException("Utility class");
+	}
+
 	// Shared utility methods migrated from procedures.
 	// Life points
 	public static int getLifePoint(Player player){
@@ -166,6 +171,28 @@ public class CaerulaUtil {
 				}
 			}
 		}
+	}
+
+	/**
+	 * 根据配置规则匹配注册名。
+	 * <p>
+	 * 支持 {@code *} 全匹配、完整注册名精确匹配，以及形如 {@code prefix*} 的前缀匹配。
+	 * 不支持通配符出现在开头或中间的复杂匹配形式。
+	 *
+	 * @param item 用于匹配的配置规则
+	 * @param name 待检测的完整注册名
+	 * @return 当规则匹配该注册名时返回 {@code true}，否则返回 {@code false}
+	 */
+	public static boolean matchesRegistryName(String item, String name) {
+		if (item == null || name == null) {
+			return false;
+		}
+		if ("*".equals(item) || name.equals(item)) {
+			return true;
+		}
+		int wildcardIndex = item.indexOf('*');
+		// 示例："minecraft:*" 可匹配 "minecraft:bow"，"minecraft:bow" 仅精确匹配，"*" 匹配任意注册名。
+		return wildcardIndex > 0 && name.startsWith(item.substring(0, wildcardIndex));
 	}
 
 	public static class Tags{

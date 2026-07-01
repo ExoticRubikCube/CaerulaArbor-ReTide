@@ -325,7 +325,7 @@ public class MartusEntity extends SeaMonster {
                 }
             }
             if (tickCount % 100 == 0) {
-                if (WorldUtils.isDistFromGround(world, x, y, z)) {
+                if (WorldUtils.hasNoSolidGroundWithin20Below(world, x, y, z)) {
                     push(0, (-0.64), 0);
                 }
             }

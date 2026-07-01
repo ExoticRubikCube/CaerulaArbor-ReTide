@@ -5,6 +5,7 @@ import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
+import com.apocalypse.caerulaarbor.util.NodeUtils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -107,7 +108,7 @@ public class LivingDamageEventHandler {
 
         double rate;
         double max;
-        double lvl = EntityUtils.getNodeLivingBarrier(attacker);
+        double lvl = NodeUtils.getNodeLivingBarrier(attacker);
 
         if (lvl >= 4) { rate = 0.3; max = 10; }
         else if (lvl >= 3) { rate = 0.18; max = 10; }
@@ -122,7 +123,7 @@ public class LivingDamageEventHandler {
                 attacker.getAttribute(CAAttributes.LIVING_BARRIER.get()).setBaseValue(Math.min(barrier + event.getAmount() * rate, max));
         }
 
-        lvl = EntityUtils.getNodeRealDamage(attacker);
+        lvl = NodeUtils.getNodeRealDamage(attacker);
 
         if (lvl >= 4) rate = 0.3;
         else if (lvl >= 3) rate = 0.18;

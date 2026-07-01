@@ -163,6 +163,6 @@ public class SeaTrailGrowingBlock extends Block implements SimpleWaterloggedBloc
 
 	@Override
 	public void performBonemeal(ServerLevel world, RandomSource random, BlockPos pos, BlockState blockstate) {
-		WorldUtils.addGrowAge(world, pos, blockstate);
+		WorldUtils.addGrowAge(world, pos);
 	}
 }

@@ -5,7 +5,10 @@ import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
 import com.apocalypse.caerulaarbor.entity.Al1SHelperEntity;
 import com.apocalypse.caerulaarbor.entity.LittleHelperEntity;
 import com.apocalypse.caerulaarbor.entity.OceanizedWitherEntity;
-import com.apocalypse.caerulaarbor.init.*;
+import com.apocalypse.caerulaarbor.init.CABlocks;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAGameRules;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import com.apocalypse.caerulaarbor.procedures.SummonEliteFishProcedure;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -19,7 +22,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ExperienceOrb;
@@ -90,24 +92,29 @@ public class WorldUtils {
 		throw new UnsupportedOperationException("Utility class");
 	}
 
-	//TODO可疑,或许可以下放到基类
-	public static InteractionResult convertToOceanFarmland(LevelAccessor world, BlockPos pos, BlockState blockstate, Entity entity) {
-		if (entity == null)
-			return InteractionResult.PASS;
-		if (entity.isShiftKeyDown() && blockstate.getBlock() == Blocks.FARMLAND) {
-			BlockState _bs = CABlocks.OCEAN_FARMLAND.get().withPropertiesOf(blockstate);
-			world.setBlock(pos, _bs, 3);
-		}
-		return InteractionResult.SUCCESS;
-	}
-
-	//或许可以使用基类或接口
-	public static void addGrowAge(LevelAccessor world, BlockPos pos, BlockState blockstate) {
-		if ((blockstate.getBlock().getStateDefinition().getProperty("grow_age") instanceof IntegerProperty _getip1 ? blockstate.getValue(_getip1) : -1) < 30) {
-			int value = (blockstate.getBlock().getStateDefinition().getProperty("grow_age") instanceof IntegerProperty _getip3 ? blockstate.getValue(_getip3) : -1) + 8;
-			BlockState _bs = world.getBlockState(pos);
-			if (_bs.getBlock().getStateDefinition().getProperty("grow_age") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-				world.setBlock(pos, _bs.setValue(integerProp, value), 3);
+	/**
+	 * 按当前海嗣痕迹方块的生长规则提高其 {@code grow_age}。
+	 *
+	 * <p>该方法会直接读取目标位置上的方块状态；若该方块不存在 {@code grow_age}
+	 * 整型属性，则不执行任何操作。当前实现仅在年龄小于 {@code 30} 时生效，
+	 * 并尝试将其一次性增加 {@code 8}。只有当增加后的值仍属于该属性允许的取值范围时，
+	 * 才会真正写回世界。
+	 *
+	 * @param world 世界
+	 * @param pos 目标方块位置
+	 */
+	public static void addGrowAge(LevelAccessor world, BlockPos pos) {
+		BlockState state = world.getBlockState(pos);
+		if (state.getBlock().getStateDefinition().getProperty("grow_age") instanceof IntegerProperty growAgeProperty) {
+			int growAge = state.getValue(growAgeProperty);
+			if (growAge >= 30) {
+				return;
+			}
+			int nextGrowAge = growAge + 8;
+			if (!growAgeProperty.getPossibleValues().contains(nextGrowAge)) {
+				return;
+			}
+			world.setBlock(pos, state.setValue(growAgeProperty, nextGrowAge), 3);
 		}
 	}
 
@@ -135,26 +142,22 @@ public class WorldUtils {
 		if (success) {
 			if (output.getBlock() == Blocks.AIR) {
 				if (watered) {
-					{
-						BlockPos _bp = BlockPos.containing(px, py, pz);
-						BlockState _bso = world.getBlockState(_bp);
-						BlockState _bs = Blocks.WATER.withPropertiesOf(_bso);
-						world.setBlock(_bp, _bs, 3);
-					}
+					BlockPos _bp = BlockPos.containing(px, py, pz);
+					BlockState _bso = world.getBlockState(_bp);
+					BlockState _bs = Blocks.WATER.withPropertiesOf(_bso);
+					world.setBlock(_bp, _bs, 3);
 				} else {
 					world.setBlock(BlockPos.containing(px, py, pz), Blocks.AIR.defaultBlockState(), 3);
 				}
 			} else {
-				{
-					BlockPos _bp = BlockPos.containing(px, py, pz);
-					BlockState _bso = world.getBlockState(_bp);
-					BlockState _bs = output.getBlock().withPropertiesOf(_bso);
-					if (output.hasProperty(BlockStateProperties.WATERLOGGED) && _bs.hasProperty(BlockStateProperties.WATERLOGGED))
-						_bs = _bs.setValue(BlockStateProperties.WATERLOGGED, output.getValue(BlockStateProperties.WATERLOGGED));
-					if (output.getBlock().getStateDefinition().getProperty("longevity") instanceof IntegerProperty _integerProp && _bs.hasProperty(_integerProp))
-						_bs = _bs.setValue(_integerProp, output.getValue(_integerProp));
-					world.setBlock(_bp, _bs, 3);
-				}
+				BlockPos _bp = BlockPos.containing(px, py, pz);
+				BlockState _bso = world.getBlockState(_bp);
+				BlockState _bs = output.getBlock().withPropertiesOf(_bso);
+				if (output.hasProperty(BlockStateProperties.WATERLOGGED) && _bs.hasProperty(BlockStateProperties.WATERLOGGED))
+					_bs = _bs.setValue(BlockStateProperties.WATERLOGGED, output.getValue(BlockStateProperties.WATERLOGGED));
+				if (output.getBlock().getStateDefinition().getProperty("longevity") instanceof IntegerProperty _integerProp && _bs.hasProperty(_integerProp))
+					_bs = _bs.setValue(_integerProp, output.getValue(_integerProp));
+				world.setBlock(_bp, _bs, 3);
 			}
 			if (world instanceof Level _level) {
 					_level.playSound(null, BlockPos.containing(px, py, pz), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.fire.extinguish")), SoundSource.BLOCKS, (float) 0.6, 1);
@@ -167,11 +170,25 @@ public class WorldUtils {
 		return world.getBlockState(BlockPos.containing(x, y - 1, z)).isFaceSturdy(world, BlockPos.containing(x, y - 1, z), Direction.UP);
 	}
 
-	//或许可以使用基类或接口
+	/**
+	 * 判断目标位置是否允许放置海嗣痕迹方块。
+	 *
+	 * <p>该方法检查目标位置正下方的方块：它的上表面必须能够承托方块，
+	 * 或者被显式标记进 {@code trail_existable} 标签；同时该支撑方块不能是
+	 * {@code SEA_TRAIL_SOLID}，以避免在实心海嗣痕迹上继续叠放普通痕迹。
+	 *
+	 * @param world 世界
+	 * @param x 目标 X 坐标
+	 * @param y 目标 Y 坐标
+	 * @param z 目标 Z 坐标
+	 * @return 若当前位置允许放置海嗣痕迹，则返回 {@code true}
+	 */
 	public static boolean canPutTrail(LevelAccessor world, double x, double y, double z) {
-		return (world.getBlockState(BlockPos.containing(x, y - 1, z)).isFaceSturdy(world, BlockPos.containing(x, y - 1, z), Direction.UP)
-				|| (world.getBlockState(BlockPos.containing(x, y - 1, z))).is(BlockTags.create(new ResourceLocation(CaerulaArborMod.MODID, "trail_existable"))))
-				&& !((world.getBlockState(BlockPos.containing(x, y - 1, z))).getBlock() == CABlocks.SEA_TRAIL_SOLID.get());
+		BlockPos belowPos = BlockPos.containing(x, y - 1, z);
+		BlockState belowState = world.getBlockState(belowPos);
+		return (belowState.isFaceSturdy(world, belowPos, Direction.UP)
+				|| belowState.is(BlockTags.create(new ResourceLocation(CaerulaArborMod.MODID, "trail_existable"))))
+				&& belowState.getBlock() != CABlocks.SEA_TRAIL_SOLID.get();
 	}
 
 	//TODO:下放,应该为两个凋零制作一个共同的基类，然后置入那里,其他两个凋零都调用的utils方法同理
@@ -340,9 +357,8 @@ public class WorldUtils {
 				T = Mth.nextDouble(RandomSource.create(), 0, 6.283);
 				tx = x + R * Math.sin(T);
 				tz = z + R * Math.cos(T);
-				ty = findValidYForCat(world, x, y, z, tx, y, tz);
-				if (ty < 999) {
-					assert Boolean.TRUE;
+				ty = findValidSpawnY(world, x, y, z, tx, y, tz);
+				if (!Double.isNaN(ty)) {
 					summonRandomSeaborn(world, 0.33, tx, ty, tz);
 					if (world instanceof ServerLevel _level)
 						_level.sendParticles(ParticleTypes.CLOUD, tx, (ty + 0.75), tz, 64, 0.75, 0.75, 0.75, 0.1);
@@ -369,9 +385,20 @@ public class WorldUtils {
 		}
 	}
 
-	//可疑
-	public static boolean isDistFromGround(LevelAccessor world, double x, double y, double z) {
-        if (y < -32) {
+	/**
+	 * 判断目标位置下方 20 格内是否不存在可作为地面的实心方块。
+	 *
+	 * <p>该方法会将空气和液体都视为“未接地”，因此可用于悬浮单位检测自己是否长期位于
+	 * 深坑、水柱或其他无实心支撑的空间上方。
+	 *
+	 * @param world 世界
+	 * @param x 目标 X 坐标
+	 * @param y 目标 Y 坐标
+	 * @param z 目标 Z 坐标
+	 * @return 若下方 20 格内都没有实心地面，则返回 {@code true}
+	 */
+	public static boolean hasNoSolidGroundWithin20Below(LevelAccessor world, double x, double y, double z) {
+		if (y < -32) {
 			return false;
 		}
 		for (int index0 = 0; index0 < 20; index0++) {
@@ -460,57 +487,65 @@ public class WorldUtils {
 		}
 	}
 
-	//TODO:下放回SuperBigCatEntity作为辅助方法并更新调用
-	public static double findValidYForCat(LevelAccessor world, double x, double y, double z, double xx, double yy, double zz) {
-		double y_found;
-		if (world instanceof Level _level) {
-				_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.azalea.hit")), SoundSource.NEUTRAL, 0, 1);
+	/**
+	 * 以给定目标高度为中心，向上与向下搜索可用于生成实体的 Y 坐标。
+	 *
+	 * <p>这个方法适用于需要落在开阔空间内的普通生成逻辑。它会在搜索前于参考坐标
+	 * {@code (x, y, z)} 播放一次方块音效，并在 {@code (xx, yy, zz)} 附近的 12 格范围内
+	 * 交替检查上下高度，返回首个未被地板高度判定阻挡的位置。
+	 *
+	 * <p>与 {@link #findFirstEmptyYAbove(LevelAccessor, double, double, double)} 不同，
+	 * 这里关注的是“可落位的生成高度”，而不是单纯寻找空方块。
+	 *
+	 * @param world 世界
+	 * @param x 触发音效的参考 X 坐标
+	 * @param y 触发音效的参考 Y 坐标
+	 * @param z 触发音效的参考 Z 坐标
+	 * @param xx 目标生成点 X 坐标
+	 * @param yy 目标生成点起始 Y 坐标
+	 * @param zz 目标生成点 Z 坐标
+	 * @return 找到的可生成 Y；若 12 格内未找到，则返回 {@link Double#NaN}
+	 */
+	public static double findValidSpawnY(LevelAccessor world, double x, double y, double z, double xx, double yy, double zz) {
+		double validY;
+		if (world instanceof Level level) {
+			level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.azalea.hit")), SoundSource.NEUTRAL, 0, 1);
 		}
-        for (int index0 = 0; index0 < 12; index0++) {
-			y_found = yy + index0;
-			if (!(world.getBlockFloorHeight(BlockPos.containing(xx, y_found, zz)) > 0)) {
-				return y_found;
+		for (int index0 = 0; index0 < 12; index0++) {
+			validY = yy + index0;
+			if (!(world.getBlockFloorHeight(BlockPos.containing(xx, validY, zz)) > 0)) {
+				return validY;
+			}
+			validY = yy - index0 - 1;
+			if (!(world.getBlockFloorHeight(BlockPos.containing(xx, validY, zz)) > 0)) {
+				return validY;
 			}
 		}
-		return 114514;
+		return Double.NaN;
 	}
 
 	/**
-	 * Finds the nearest valid standing Y around the given Y within a small vertical range.
+	 * 自给定高度起向上搜索首个可用的空方块 Y 坐标。
+	 *
+	 * <p>这个方法适用于泪滴、肢体等悬空生成物。它只要求目标方块本身为空，
+	 * 不像 {@link #findValidSpawnY(LevelAccessor, double, double, double, double, double, double)}
+	 * 那样还会校验脚下是否存在可站立表面。
+	 *
+	 * @param world 世界
+	 * @param x 目标 X 坐标
+	 * @param startY 搜索起始 Y 坐标
+	 * @param z 目标 Z 坐标
+	 * @return 找到的首个空方块 Y；若 12 格内未找到，则返回 {@link Double#NaN}
 	 */
-	//可以，需要解释
-	public static double findValidY(LevelAccessor world, double xx, double yy, double zz) {
-		double yFound;
+	public static double findFirstEmptyYAbove(LevelAccessor world, double x, double startY, double z) {
+		double validY;
 		for (int index0 = 0; index0 < 12; index0++) {
-			yFound = yy + index0;
-			if (isValidPlace(world, xx, yFound, zz)) {
-				return yFound;
-			}
-			yFound = yy - index0 - 1;
-			if (isValidPlace(world, xx, yFound, zz)) {
-				return yFound;
+			validY = startY + index0;
+			if (world.isEmptyBlock(BlockPos.containing(x, validY, z))) {
+				return validY;
 			}
 		}
-		return 114514;
-	}
-
-	//或许可以下放或制作接口
-	public static void playFractalSummonSound(LevelAccessor world, double x, double y, double z) {
-		if (world instanceof Level _level) {
-				_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.axolotl.splash")), SoundSource.HOSTILE, (float) 0.75, 1);
-		}
-	}
-
-	//同，需要解释
-	public static double findYzforTear(LevelAccessor world, double xx, double yy, double zz) {
-		double y_found;
-        for (int index0 = 0; index0 < 12; index0++) {
-			y_found = yy + index0;
-			if (world.isEmptyBlock(BlockPos.containing(xx, y_found, zz))) {
-				return y_found;
-			}
-		}
-		return 114514;
+		return Double.NaN;
 	}
 
 	//TODO:之后也进行下放
@@ -549,30 +584,6 @@ public class WorldUtils {
 		}
 	}
 
-	//TODO:下放
-	public static void ireneBurnBrandAround(LevelAccessor world, double x, double y, double z) {
-		BlockState toBeBurn;
-		double px;
-		double py;
-		double pz;
-		for (int index0 = 0; index0 < 3; index0++) {
-			for (int index1 = 0; index1 < 3; index1++) {
-				for (int index2 = 0; index2 < 3; index2++) {
-					px = x + index0 - 1;
-					py = y + index1 - 1;
-					pz = z + index2 - 1;
-					toBeBurn = (world.getBlockState(BlockPos.containing(px, py, pz)));
-					if (toBeBurn.getBlock() == CABlocks.SEA_TRAIL_INIT.get() || toBeBurn.getBlock() == CABlocks.SEA_TRAIL_GROWING.get() || toBeBurn.getBlock() == CABlocks.SEA_TRAIL_GROWN.get()
-							|| toBeBurn.getBlock() == CABlocks.SEA_TRAIL_STOP.get() || toBeBurn.getBlock() == CABlocks.SEA_TRAIL_SOLID.get() || toBeBurn.getBlock() == CABlocks.TRAIL_PULSE.get()) {
-						burndownTrail(world, toBeBurn, px, py, pz);
-						if (world instanceof ServerLevel _level)
-							_level.sendParticles(CAParticles.PURPLE_FLAME.get(), (x + 0.5), (y + 1), (z + 0.5), 16, 0.75, 0.75, 0.75, 0.15);
-					}
-				}
-			}
-		}
-	}
-
 	//需要评估然后添加文档注释解释作用
 	public static boolean isOrganic(BlockState block) {
 		if (block.getBlock() == CABlocks.TRAIL_PULSE.get() || block.getBlock() == CABlocks.TRAIL_LOG.get() || block.getBlock() == CABlocks.TRAIL_LEAVE.get()
@@ -585,27 +596,21 @@ public class WorldUtils {
 		return block.is(BlockTags.create(new ResourceLocation(CaerulaArborMod.MODID, "organic")));
 	}
 
-	//同，需要注释
-	public static boolean isValidPlace(LevelAccessor world, double xx, double yy, double zz) {
-		if (world instanceof Level _level) {
-			if (_level.isClientSide()) {
-				_level.playLocalSound(xx, yy, zz, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.enderman.ambient")), SoundSource.HOSTILE, 0, 1, false);
-			}
-		}
-		for (int dy = 0; dy <= 3; dy++) {
-			if (world.getBlockFloorHeight(BlockPos.containing(xx, yy + dy, zz)) > 0) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	//TODO:可疑
-	public static boolean isValidForMan(LevelAccessor world, double xx, double yy, double zz) {
-		if (world instanceof Level _level) {
-			if (_level.isClientSide()) {
-				_level.playLocalSound(xx, yy, zz, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.enderman.ambient")), SoundSource.HOSTILE, 0, 1, false);
-			}
+	/**
+	 * 判断指定位置是否具备人形单位可用的落点空间。
+	 * <p>
+	 * 该方法会检查目标坐标向上 3 格内是否存在会占用站立空间的地形。
+	 * 若在客户端调用，还会在该位置播放一次末影人环境音，用于配合相关传送或生成表现。
+	 *
+	 * @param world 世界访问器
+	 * @param xx 目标 X 坐标
+	 * @param yy 目标 Y 坐标
+	 * @param zz 目标 Z 坐标
+	 * @return 若该位置可容纳人形单位站立则返回 {@code true}，否则返回 {@code false}
+	 */
+	public static boolean isValidHumanoidPlace(LevelAccessor world, double xx, double yy, double zz) {
+		if (world instanceof Level _level &&_level.isClientSide()) {
+			_level.playLocalSound(xx, yy, zz, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.enderman.ambient")), SoundSource.HOSTILE, 0, 1, false);
 		}
 		for (int dy = 0; dy <= 2; dy++) {
 			if (world.getBlockFloorHeight(BlockPos.containing(xx, yy + dy, zz)) > 0) {
@@ -615,7 +620,7 @@ public class WorldUtils {
 		return true;
 	}
 
-	//TODO:下放，但是需要先制作基类
+	//TODO:可能需要下放
 	public static void witheriaDestroyBlocks(LevelAccessor world, double x, double y, double z) {
 		boolean once = false;
 		double dx;

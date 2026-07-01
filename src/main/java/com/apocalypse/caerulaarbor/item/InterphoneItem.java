@@ -2,7 +2,6 @@ package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
-import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.client.Minecraft;
@@ -159,7 +158,7 @@ public class InterphoneItem extends Item {
 						for (int index0 = 0; index0 < 8; index0++) {
 							dx = Mth.nextDouble(RandomSource.create(), -2, 2);
 							dz = Mth.nextDouble(RandomSource.create(), -2, 2);
-							if (WorldUtils.isValidForMan(world, tx + dx, tY, tz + dz)) {
+							if (WorldUtils.isValidHumanoidPlace(world, tx + dx, tY, tz + dz)) {
 								num = num + 1;
 								entityiterator.getPersistentData().putString("recentCommander", name);
 								EntityUtils.clearTarget(entityiterator);

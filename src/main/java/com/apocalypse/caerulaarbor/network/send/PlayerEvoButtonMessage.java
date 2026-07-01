@@ -4,7 +4,6 @@ import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import com.apocalypse.caerulaarbor.menu.PlayerEvoMenu;
-import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.NodeUtils;
 import com.apocalypse.caerulaarbor.util.PlayerStateUtils;
 import io.netty.buffer.Unpooled;
@@ -149,7 +148,7 @@ public class PlayerEvoButtonMessage {
                     }
                 }
             } else if (title.contains("node.add_resis")) {
-                add_def = EntityUtils.getNodeAddResis(entity);
+                add_def = NodeUtils.getNodeAddResis(entity);
                 for (int index1 = 0; index1 < 4; index1++) {
                     if (add_def < index1 + 1) {
                         if (quantity >= index1 + 1) {
@@ -166,7 +165,7 @@ public class PlayerEvoButtonMessage {
                     }
                 }
             } else if (title.contains("node.add_speed")) {
-                add_def = EntityUtils.getNodeAddSpeed(entity);
+                add_def = NodeUtils.getNodeAddSpeed(entity);
                 for (int index2 = 0; index2 < 4; index2++) {
                     if (add_def < index2 + 1) {
                         if (quantity >= index2 + 1) {
@@ -200,7 +199,7 @@ public class PlayerEvoButtonMessage {
                     }
                 }
             } else if (title.contains("node.add_damage")) {
-                add_def = EntityUtils.getNodeAddDamage(entity);
+                add_def = NodeUtils.getNodeAddDamage(entity);
                 for (int index4 = 0; index4 < 4; index4++) {
                     if (add_def < index4 + 1) {
                         if (index4 + 1 <= 2) {
@@ -244,7 +243,7 @@ public class PlayerEvoButtonMessage {
                     }
                 }
             } else if (title.contains("node.living_barrier")) {
-                add_def = EntityUtils.getNodeLivingBarrier(entity);
+                add_def = NodeUtils.getNodeLivingBarrier(entity);
                 for (int index6 = 0; index6 < 4; index6++) {
                     if (add_def < index6 + 1) {
                         quantity_cost = index6 + 2;
@@ -262,7 +261,7 @@ public class PlayerEvoButtonMessage {
                     }
                 }
             } else if (title.contains("node.add_miss")) {
-                add_def = EntityUtils.getNodeAddMiss(entity);
+                add_def = NodeUtils.getNodeAddMiss(entity);
                 for (int index7 = 0; index7 < 4; index7++) {
                     if (add_def < index7 + 1) {
                         quantity_cost = index7 + 2;
@@ -280,7 +279,7 @@ public class PlayerEvoButtonMessage {
                     }
                 }
             } else if (title.contains("node.real_damage")) {
-                add_def = EntityUtils.getNodeRealDamage(entity);
+                add_def = NodeUtils.getNodeRealDamage(entity);
                 for (int index8 = 0; index8 < 4; index8++) {
                     if (add_def < index8 + 1) {
                         quantity_cost = 2 * index8 + 2;
@@ -298,7 +297,7 @@ public class PlayerEvoButtonMessage {
                     }
                 }
             } else if (title.contains("node.heal_damage")) {
-                add_def = EntityUtils.getNodeHealDamage(entity);
+                add_def = NodeUtils.getNodeHealDamage(entity);
                 for (int index9 = 0; index9 < 4; index9++) {
                     if (add_def < index9 + 1) {
                         quantity_cost = 2 * index9 + 2;
@@ -316,7 +315,7 @@ public class PlayerEvoButtonMessage {
                     }
                 }
             } else if (title.contains("node.worse_break")) {
-                add_def = EntityUtils.getNodeWorseBreak(entity);
+                add_def = NodeUtils.getNodeWorseBreak(entity);
                 for (int index10 = 0; index10 < 4; index10++) {
                     if (add_def < index10 + 1) {
                         quantity_cost = 2 * index10 + 2;
@@ -334,7 +333,7 @@ public class PlayerEvoButtonMessage {
                     }
                 }
             } else if (title.contains("node.eunectes")) {
-                add_def = EntityUtils.getNodeEutectes(entity);
+                add_def = NodeUtils.getNodeEunectes(entity);
                 for (int index11 = 0; index11 < 4; index11++) {
                     if (add_def < index11 + 1) {
                         quantity_cost = 2 * index11 + 3;

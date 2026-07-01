@@ -205,8 +205,8 @@ public class OceanizedEndermanEntity extends SeaMonster {
                         dist = Mth.nextDouble(random, 3, 6);
                         tX = x + dist * Math.sin(angl);
                         tZ = z + dist * Math.cos(angl);
-                        validY = WorldUtils.findValidY(world, tX, y, tZ);
-                        if (validY <= 114513) {
+                        validY = findValidTeleportY(world, tX, y, tZ);
+                        if (!Double.isNaN(validY)) {
                             this.teleportTo(x, y, z, tX, validY, tZ);
                             break;
                         }
@@ -226,8 +226,8 @@ public class OceanizedEndermanEntity extends SeaMonster {
                     dist = Mth.nextDouble(random, 3, 6);
                     tX = x + dist * Math.sin(angl);
                     tZ = z + dist * Math.cos(angl);
-                    validY = WorldUtils.findValidY(world, tX, y, tZ);
-                    if (validY <= 114513) {
+                    validY = findValidTeleportY(world, tX, y, tZ);
+                    if (!Double.isNaN(validY)) {
                         this.teleportTo(x, y, z, tX, validY, tZ);
                         if ((Entity) this instanceof LivingEntity _entity)
                             _entity.setHealth((float) (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) + ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.075));
@@ -240,7 +240,7 @@ public class OceanizedEndermanEntity extends SeaMonster {
             double sx = sourceentity.getX();
             double sy = sourceentity.getY();
             double sz = sourceentity.getZ();
-            if (WorldUtils.isValidPlace(world, sx, sy, sz)) {
+            if (isValidTeleportPlace(world, sx, sy, sz)) {
                 if (!sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring"))) || this.getTarget() == sourceentity) {
                     this.teleportTo(x, y, z, sx, sy, sz);
                     if (sourceentity instanceof LivingEntity target) {
@@ -261,6 +261,33 @@ public class OceanizedEndermanEntity extends SeaMonster {
         if (source.is(DamageTypes.DROWN))
             return false;
         return super.hurt(source, amount);
+    }
+
+    private static double findValidTeleportY(LevelAccessor world, double x, double y, double z) {
+        double validY;
+        for (int index0 = 0; index0 < 12; index0++) {
+            validY = y + index0;
+            if (isValidTeleportPlace(world, x, validY, z)) {
+                return validY;
+            }
+            validY = y - index0 - 1;
+            if (isValidTeleportPlace(world, x, validY, z)) {
+                return validY;
+            }
+        }
+        return Double.NaN;
+    }
+
+    private static boolean isValidTeleportPlace(LevelAccessor world, double x, double y, double z) {
+        if (world instanceof Level level && level.isClientSide()) {
+            level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.enderman.ambient")), SoundSource.HOSTILE, 0, 1, false);
+        }
+        for (int dy = 0; dy <= 3; dy++) {
+            if (world.getBlockFloorHeight(BlockPos.containing(x, y + dy, z)) > 0) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private boolean teleportTo(double fromX, double fromY, double fromZ, double toX, double toY, double toZ) {

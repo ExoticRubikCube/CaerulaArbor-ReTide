@@ -395,8 +395,8 @@ public class ThirsterEntity extends SeaMonster {
                             if (num < 2) {
                                 tX = tX / (2 - num);
                                 tZ = tZ / (2 - num);
-                                tY = WorldUtils.findYzforTear(world, tX, y, tZ);
-                                if (tY < 1111) {
+                                tY = WorldUtils.findFirstEmptyYAbove(world, tX, y, tZ);
+                                if (!Double.isNaN(tY)) {
                                     if (world instanceof ServerLevel _level) {
                                         Entity entityToSpawn = CAEntities.ABSORBER_LIMB.get().spawn(_level, BlockPos.containing(tX, tY, tZ), MobSpawnType.MOB_SUMMONED);
                                         if (entityToSpawn != null) {

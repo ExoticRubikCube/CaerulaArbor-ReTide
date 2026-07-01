@@ -424,8 +424,8 @@ public class SuperBigCatEntity extends SeaMonster {
                 t = Mth.nextDouble(RandomSource.create(), 2, 6);
                 xxx = x + t * Math.sin(angl);
                 zzz = z + t * Math.cos(angl);
-                yyy = WorldUtils.findValidYForCat(world, x, y, z, xxx, y + 1, zzz);
-                if (yyy < 114513) {
+                yyy = WorldUtils.findValidSpawnY(world, x, y, z, xxx, y + 1, zzz);
+                if (!Double.isNaN(yyy)) {
                     if (world instanceof ServerLevel _level) {
                         Entity entityToSpawn = CAEntities.OCEANIZED_CAT.get().spawn(_level, BlockPos.containing(xxx, yyy, zzz), MobSpawnType.MOB_SUMMONED);
                         if (entityToSpawn != null) {

@@ -1,13 +1,13 @@
 package com.apocalypse.caerulaarbor.event;
 
-import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
-import com.apocalypse.caerulaarbor.capability.ModCapabilities;
-import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.capability.ModCapabilities;
+import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
+import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
 import com.apocalypse.caerulaarbor.init.CAAttributes;
-import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.init.CAEnchantments;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.NodeUtils;
 import com.apocalypse.caerulaarbor.util.PlayerStateUtils;
@@ -247,7 +247,7 @@ public class PlayerTickEventHandler {
             }
         }
 
-        addDef = EntityUtils.getNodeAddResis(entity);
+        addDef = NodeUtils.getNodeAddResis(entity);
         if (addDef > 0 && !entity.level().isClientSide()) {
             if (addDef == 1) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_RESIS_TINY.get(), 20, 0, false, false));
             else if (addDef == 2) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_RESIS_TINY.get(), 20, 2, false, false));
@@ -255,7 +255,7 @@ public class PlayerTickEventHandler {
             else if (addDef == 4) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_RESIS_TINY.get(), 20, 9, false, false));
         }
 
-        addDef = EntityUtils.getNodeAddSpeed(entity);
+        addDef = NodeUtils.getNodeAddSpeed(entity);
         if (addDef > 0 && !entity.level().isClientSide()) {
             if (addDef == 1) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_ATTACK_SPEED_TINY.get(), 20, 0, false, false));
             else if (addDef == 2) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_ATTACK_SPEED_TINY.get(), 20, 2, false, false));
@@ -271,7 +271,7 @@ public class PlayerTickEventHandler {
             else if (addDef == 4) entity.addEffect(new MobEffectInstance(CAMobEffects.REDUCE_SANITY_MODIFIER.get(), 20, 9, false, false));
         }
 
-        addDef = EntityUtils.getNodeAddMiss(entity);
+        addDef = NodeUtils.getNodeAddMiss(entity);
         boolean lowerHealth = EntityUtils.getHealthPerc(entity) <= 0.5;
         if (addDef > 0 && !entity.level().isClientSide()) {
             if (addDef == 1) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_MISS_RATE.get(), 20, 2, false, false));
@@ -280,7 +280,7 @@ public class PlayerTickEventHandler {
             else if (addDef == 4) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_MISS_RATE.get(), 20, lowerHealth ? 41 : 23, false, false));
         }
 
-        addDef = EntityUtils.getNodeEutectes(entity);
+        addDef = NodeUtils.getNodeEunectes(entity);
         if (addDef > 0 && !lowerHealth && !entity.level().isClientSide()) {
             if (addDef == 1) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_DAMAGE_TINY.get(), 20, 0, false, false));
             else if (addDef == 2) entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_DAMAGE_TINY.get(), 20, 2, false, false));

@@ -4,6 +4,7 @@ import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -15,6 +16,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
@@ -34,12 +36,10 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
-import net.minecraft.world.entity.animal.Pufferfish;
-import net.minecraft.world.entity.animal.Salmon;
-import net.minecraft.world.entity.animal.Squid;
-import net.minecraft.world.entity.animal.TropicalFish;
+import net.minecraft.world.entity.animal.*;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -59,13 +59,14 @@ import software.bernie.geckolib.core.object.PlayState;
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 
-public class FloaterProkaryoteEntity extends SeaMonster implements RangedAttackMob {
+public class FloaterProkaryoteEntity extends SeaMonster implements RangedAttackMob, Bucketable {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(FloaterProkaryoteEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(FloaterProkaryoteEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(FloaterProkaryoteEntity.class, EntityDataSerializers.STRING);
 	private boolean swinging;
 	private boolean lastloop;
 	private long lastSwing;
+	private boolean fromBucket;
 	public String animationprocedure = "empty";
 
 	public FloaterProkaryoteEntity(PlayMessages.SpawnEntity packet, Level world) {
@@ -337,20 +338,66 @@ public class FloaterProkaryoteEntity extends SeaMonster implements RangedAttackM
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
+		compound.putBoolean("FromBucket", this.fromBucket());
 		compound.putString("Texture", this.getTexture());
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
+		this.setFromBucket(compound.getBoolean("FromBucket"));
 		if (compound.contains("Texture"))
 			this.setTexture(compound.getString("Texture"));
 	}
 
 	@Override
+	public boolean fromBucket() {
+		return this.fromBucket;
+	}
+
+	@Override
+	public void setFromBucket(boolean fromBucket) {
+		this.fromBucket = fromBucket;
+	}
+
+	@Override
+	public void saveToBucketTag(ItemStack bucketStack) {
+		Bucketable.saveDefaultDataToBucketTag(this, bucketStack);
+		bucketStack.getOrCreateTag().putString("Texture", this.getTexture());
+	}
+
+	@Override
+	public void loadFromBucketTag(CompoundTag bucketTag) {
+		Bucketable.loadDefaultDataFromBucketTag(this, bucketTag);
+		if (bucketTag.contains("Texture")) {
+			this.setTexture(bucketTag.getString("Texture"));
+		}
+		this.setFromBucket(true);
+	}
+
+	@Override
+	public ItemStack getBucketItemStack() {
+		return new ItemStack(CAItems.BUCKET_FLOATER.get());
+	}
+
+	@Override
+	public SoundEvent getPickupSound() {
+		return SoundEvents.BUCKET_FILL_FISH;
+	}
+
+	@Override
 	public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
-		super.mobInteract(sourceentity, hand);
-        return EntityUtils.containFish(this, sourceentity);
+		return Bucketable.bucketMobPickup(sourceentity, hand, this).orElse(super.mobInteract(sourceentity, hand));
+	}
+
+	@Override
+	public boolean requiresCustomPersistence() {
+		return super.requiresCustomPersistence() || this.fromBucket();
+	}
+
+	@Override
+	public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+		return !this.fromBucket() && !this.hasCustomName();
 	}
 
 	@Override

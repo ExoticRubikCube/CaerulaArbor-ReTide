@@ -4,6 +4,7 @@ import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.api.event.SanityEvent;
 import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
+import com.apocalypse.caerulaarbor.util.NodeUtils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -47,7 +48,7 @@ public class PEVOHealEventHandle {
 			return;
 		}
 
-		double healDamageNodeLevel = EntityUtils.getNodeHealDamage(entity);
+		double healDamageNodeLevel = NodeUtils.getNodeHealDamage(entity);
 		double damageRate = 0;
 		double sanityDamageRate = 0;
 		if (healDamageNodeLevel >= 4) {

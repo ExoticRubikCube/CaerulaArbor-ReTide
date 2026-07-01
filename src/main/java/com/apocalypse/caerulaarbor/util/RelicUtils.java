@@ -252,18 +252,15 @@ public class RelicUtils {
 
 	public static void gainSpear(LevelAccessor world, double x, double y, double z, Entity entity, ItemStack itemstack) {
 		if (entity != null && !hasSpear(entity)) {
-			if (world instanceof Level _level) {
-					_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.totem.use")), SoundSource.NEUTRAL, 2, 1);
+			if (world instanceof Level level) {
+				level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.totem.use")), SoundSource.NEUTRAL, 2, 1);
+				if (world instanceof ServerLevel serverLevel)
+					serverLevel.sendParticles(ParticleTypes.ENCHANTED_HIT, x, y, z, 72, 1, 1, 1, 1);
 			}
-			if (world instanceof ServerLevel _level)
-				_level.sendParticles(ParticleTypes.ENCHANTED_HIT, x, y, z, 72, 1, 1, 1, 1);
-			{
-				boolean _setval = true;
-				entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-					capability.relic_king_SPEAR = _setval;
-					capability.syncPlayerVariables(entity);
-				});
-			}
+            entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+				capability.relic_king_SPEAR = true;
+				capability.syncPlayerVariables(entity);
+			});
 			if (world.isClientSide())
 				Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);
 		}

@@ -1,6 +1,6 @@
 {
   "display": {
-    "background": "caerula_arbor:textures/screens/adv_bg.png",
+    "background": "caerula_arbor:textures/overlay/adv_bg.png",
     "icon": {
       "item": "caerula_arbor:bucket_floater"
     },

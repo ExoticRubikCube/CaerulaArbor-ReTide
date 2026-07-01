@@ -5,7 +5,8 @@ import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
-import com.apocalypse.caerulaarbor.entity.*;
+import com.apocalypse.caerulaarbor.entity.NetherseaSlimeEntity;
+import com.apocalypse.caerulaarbor.entity.OceanIllusionEntity;
 import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CAEnchantments;
 import com.apocalypse.caerulaarbor.init.CAItems;
@@ -21,7 +22,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -33,7 +33,6 @@ import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.GameType;
@@ -42,7 +41,6 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.scores.Team;
-import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Comparator;
@@ -165,82 +163,17 @@ public class EntityUtils {
 			if (!living.level().isClientSide()) {
 				living.addEffect(new MobEffectInstance(CAMobEffects.RUNNING_ON_TRAIL.get(), 5, 0, false, false));
 			}
-		} else if (entity instanceof Player) {
-			if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null)
-					.orElse(new PlayerVariable())).player_oceanization >= 3) {
-				if (mapVars.strategy_silence >= 2) {
-					living.heal((float) (living.getMaxHealth() * 0.0025));
-				} else if (mapVars.strategy_subsisting >= 3) {
-					living.heal((float) (living.getMaxHealth() * 0.001));
-				}
-				if (!living.level().isClientSide()) {
-					living.addEffect(new MobEffectInstance(CAMobEffects.RUNNING_ON_TRAIL.get(), 5, 0, false, false));
-					living.addEffect(new MobEffectInstance(MobEffects.JUMP, 5, 0, false, false));
-				}
+		} else if (entity instanceof Player && entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable()).player_oceanization >= 3) {
+			if (mapVars.strategy_silence >= 2) {
+				living.heal((float) (living.getMaxHealth() * 0.0025));
+			} else if (mapVars.strategy_subsisting >= 3) {
+				living.heal((float) (living.getMaxHealth() * 0.001));
+			}
+			if (!living.level().isClientSide()) {
+				living.addEffect(new MobEffectInstance(CAMobEffects.RUNNING_ON_TRAIL.get(), 5, 0, false, false));
+				living.addEffect(new MobEffectInstance(MobEffects.JUMP, 5, 0, false, false));
 			}
 		}
-	}
-
-	//需要解释，大概率需要处理
-	public static InteractionResult containFish(Entity entity, Entity sourceentity) {
-		if (entity == null || sourceentity == null)
-			return InteractionResult.PASS;
-		boolean given = false;
-		if (sourceentity instanceof LivingEntity _entity && _entity.isHolding(Items.BUCKET)) {
-			if (entity instanceof RunFishEntity) {
-				if (sourceentity instanceof Player _player) {
-					ItemStack _setstack = new ItemStack(CAItems.BUCKET_RUNFISH.get()).copy();
-					_setstack.setCount(1);
-					ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
-				}
-				given = true;
-			} else if (entity instanceof SliderFishEntity) {
-				if (sourceentity instanceof Player _player) {
-					ItemStack _setstack = new ItemStack(CAItems.BUCKET_SLIDER.get()).copy();
-					_setstack.setCount(1);
-					ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
-				}
-				given = true;
-			} else if (entity instanceof ChiselerFishEntity) {
-				if (sourceentity instanceof Player _player) {
-					ItemStack _setstack = new ItemStack(CAItems.BUCKET_CHISELER.get()).copy();
-					_setstack.setCount(1);
-					ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
-				}
-				given = true;
-			} else if (entity instanceof FloaterProkaryoteEntity) {
-				if (sourceentity instanceof Player _player) {
-					ItemStack _setstack = new ItemStack(CAItems.BUCKET_FLOATER.get()).copy();
-					_setstack.setCount(1);
-					ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
-				}
-				given = true;
-			} else if (entity instanceof BoneFishEntity) {
-				if (sourceentity instanceof Player _player) {
-					ItemStack _setstack = new ItemStack(CAItems.BUCKET_BONEFISH.get()).copy();
-					_setstack.setCount(1);
-					ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
-				}
-				given = true;
-			} else if (entity instanceof CollectorProkaryoteEntity) {
-				if (sourceentity instanceof Player _player) {
-					ItemStack _setstack = new ItemStack(CAItems.BUCKET_COLLECTOR.get()).copy();
-					_setstack.setCount(1);
-					ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
-				}
-				given = true;
-			}
-			if (given) {
-				if (sourceentity instanceof Player _player) {
-					ItemStack _stktoremove = new ItemStack(Items.BUCKET);
-					_player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
-				}
-				if (!entity.level().isClientSide())
-					entity.discard();
-				return InteractionResult.SUCCESS;
-			}
-		}
-		return InteractionResult.FAIL;
 	}
 
 	//可能需要评估放到哪个util合适
@@ -321,40 +254,7 @@ public class EntityUtils {
 		}
 	}
 
-	public static double getNodeLivingBarrier(Entity entity) {
-		if (entity == null)
-			return 0;
-		return (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).PEVO_NODE_living_barrier;
-	}
-
-	//同上
-	public static double getNodeRealDamage(Entity entity) {
-		if (entity == null)
-			return 0;
-		return (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).PEVO_NODE_real_damage;
-	}
-
-	//同上
-	public static double getNodeHealDamage(Entity entity) {
-		if (entity == null)
-			return 0;
-		return (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).PEVO_NODE_heal_damage;
-	}
-
-	//同上
-	public static double getNodeWorseBreak(Entity entity) {
-		if (entity == null)
-			return 0;
-		return (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).PEVO_NODE_worse_break;
-	}
-
 	//同上，需要评估
-	public static double getNodeAddDamage(Entity entity) {
-		if (entity == null)
-			return 0;
-		return (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).PEVO_NODE_add_damage;
-	}
-
 	public static String getPlayerSurvconta(Entity entity) {
 		if (entity == null)
 			return "";
@@ -462,13 +362,6 @@ public class EntityUtils {
 	}
 
 	//同
-	public static double getNodeAddResis(Entity entity) {
-		if (entity == null)
-			return 0;
-		return (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).PEVO_NODE_add_resis;
-	}
-
-	//同
 	public static String getPlayerEnrave(Entity entity) {
 		if (entity == null)
 			return "";
@@ -550,13 +443,6 @@ public class EntityUtils {
 		return num;
 	}
 
-	//同上
-	public static double getNodeAddSpeed(Entity entity) {
-		if (entity == null)
-			return 0;
-		return (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).PEVO_NODE_add_speed;
-	}
-
 	public static double getIllusionNum(LevelAccessor world, double x, double y, double z) {
 		double count = 0;
 		{
@@ -571,22 +457,10 @@ public class EntityUtils {
 		return count;
 	}
 
-	public static double getNodeAddMiss(Entity entity) {
-		if (entity == null)
-			return 0;
-		return (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).PEVO_NODE_add_miss;
-	}
-
 	public static String getLiveMaxShown(Entity entity) {
 		if (entity == null)
 			return "";
 		return "/" + Math.round((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_maxlive);
-	}
-
-	public static double getNodeEutectes(Entity entity) {
-		if (entity == null)
-			return 0;
-		return (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).PEVO_NODE_eunectes;
 	}
 
 	public static void giveSpearFight(Entity entity) {

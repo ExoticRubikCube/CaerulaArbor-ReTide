@@ -13,8 +13,8 @@ import com.apocalypse.caerulaarbor.item.HighmoreScytheItem;
 import com.apocalypse.caerulaarbor.system.UpgradeGrowProcedure;
 import com.apocalypse.caerulaarbor.system.UpgradeSilenceProcedure;
 import com.apocalypse.caerulaarbor.system.UpgradeSubsisProcedure;
+import com.apocalypse.caerulaarbor.util.CaerulaUtil;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
-import com.apocalypse.caerulaarbor.util.ValidationUtils;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
@@ -598,7 +598,7 @@ public class LivingAttackEventHandler {
                     validItem = true;
                 } else {
                     for (String stringiterator : CaerulaConfigsConfiguration.HAND_STRANGLE.get()) {
-                        if (ValidationUtils.isValidString(stringiterator, rname)) {
+                        if (CaerulaUtil.matchesRegistryName(stringiterator, rname)) {
                             validItem = true;
                             break;
                         }
@@ -630,7 +630,7 @@ public class LivingAttackEventHandler {
                     validItem = true;
                 } else {
                     for (String stringiterator : CaerulaConfigsConfiguration.HAND_FIREWORK.get()) {
-                        if (ValidationUtils.isValidString(stringiterator, rname)) {
+                        if (CaerulaUtil.matchesRegistryName(stringiterator, rname)) {
                             validItem = true;
                             break;
                         }

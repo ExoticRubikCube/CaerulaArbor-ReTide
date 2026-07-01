@@ -410,7 +410,7 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 			dura = (Entity) this instanceof OceanizedEnderinaEntity _datEntI ? _datEntI.getEntityData().get(DATA_DURATION) : 0;
 			rev = (Entity) this instanceof OceanizedEnderinaEntity _datEntI ? _datEntI.getEntityData().get(DATA_REVIVE_TICK) : 0;
 			if (tickCount % 100 == 0) {
-				if (WorldUtils.isDistFromGround(world, x, y, z)) {
+				if (WorldUtils.hasNoSolidGroundWithin20Below(world, x, y, z)) {
 					push(0, (-0.35), 0);
 				}
 			}

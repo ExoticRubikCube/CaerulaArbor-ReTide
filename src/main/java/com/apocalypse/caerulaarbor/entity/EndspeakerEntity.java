@@ -235,13 +235,15 @@ public class EndspeakerEntity extends SeaMonster {
 			case 3 -> 1.5F;
 			default -> 0.6F;
 		});
+		this.updatePhaseAttributes();
 		if (this.bossInfo != null) {
 			this.bossInfo.setColor(this.getPhase() >= 2 ? ServerBossEvent.BossBarColor.WHITE : ServerBossEvent.BossBarColor.BLUE);
 			this.bossInfo.setOverlay(this.getPhaseBossBarOverlay());
 			this.bossInfo.setName(this.getBossBarName());
-			this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
+			float maxHealth = this.getMaxHealth();
+			float progress = maxHealth <= 0.0F ? 0.0F : Mth.clamp(this.getHealth() / maxHealth, 0.0F, 1.0F);
+			this.bossInfo.setProgress(progress);
 		}
-		this.updatePhaseAttributes();
 	}
 
 	private void setAttributeBaseValue(Attribute attribute, double value) {
@@ -653,10 +655,18 @@ public class EndspeakerEntity extends SeaMonster {
 	public void setHealth(float pHealth) {
 		if (pHealth <= 0.0F && this.canTransitionToNextPhase()) {
 			super.setHealth(1.0F);
+			if (this.bossInfo != null) {
+				float maxHealth = this.getMaxHealth();
+				this.bossInfo.setProgress(maxHealth <= 0.0F ? 0.0F : Mth.clamp(this.getHealth() / maxHealth, 0.0F, 1.0F));
+			}
 			this.startNextPhaseTransition();
 			return;
 		}
 		super.setHealth(pHealth);
+		if (this.bossInfo != null) {
+			float maxHealth = this.getMaxHealth();
+			this.bossInfo.setProgress(maxHealth <= 0.0F ? 0.0F : Mth.clamp(this.getHealth() / maxHealth, 0.0F, 1.0F));
+		}
 	}
 
 	@Override
@@ -864,8 +874,8 @@ public class EndspeakerEntity extends SeaMonster {
 		for (int attempt = 0; attempt < 8; attempt++) {
 			spawnX = x + Mth.nextInt(RandomSource.create(), -8, 8);
 			spawnZ = z + Mth.nextInt(RandomSource.create(), -8, 8);
-			spawnY = WorldUtils.findValidYForCat(world, x, y, z, spawnX, y, spawnZ);
-			if (spawnY >= 999) {
+			spawnY = WorldUtils.findValidSpawnY(world, x, y, z, spawnX, y, spawnZ);
+			if (Double.isNaN(spawnY)) {
 				continue;
 			}
 			int randomType = Mth.nextInt(RandomSource.create(), 0, 5);
@@ -889,8 +899,8 @@ public class EndspeakerEntity extends SeaMonster {
 			for (int attempt = 0; attempt < 8; attempt++) {
 				spawnX = x + Mth.nextInt(RandomSource.create(), -8, 8);
 				spawnZ = z + Mth.nextInt(RandomSource.create(), -8, 8);
-				spawnY = WorldUtils.findValidYForCat(world, x, y, z, spawnX, y, spawnZ);
-				if (spawnY >= 999) {
+				spawnY = WorldUtils.findValidSpawnY(world, x, y, z, spawnX, y, spawnZ);
+				if (Double.isNaN(spawnY)) {
 					continue;
 				}
 				WorldUtils.summonRandomSeaborn(world, eliteChance, spawnX, spawnY, spawnZ);
@@ -1465,7 +1475,6 @@ public class EndspeakerEntity extends SeaMonster {
 	@Override
 	public void baseTick() {
 		super.baseTick();
-		this.updatePhaseRuntimeProperties();
 		if (this.getPhase() == 0) {
 			this.tickPhaseZeroBehavior();
 		} else if (this.getPhase() == 1) {
@@ -1475,6 +1484,7 @@ public class EndspeakerEntity extends SeaMonster {
 		} else if (!this.hasNextPhase()) {
 			this.tickPhaseThreeBehavior();
 		}
+		this.updatePhaseRuntimeProperties();
 		this.refreshDimensions();
 	}
 
