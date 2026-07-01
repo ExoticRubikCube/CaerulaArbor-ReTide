@@ -62,7 +62,7 @@ public class CAAttributes {
 				CAEntities.OCEANIZED_WARDENIS.get(), CAEntities.SUPER_BIG_CAT.get(), CAEntities.OCEANIZED_WITHER.get(), CAEntities.OCEANIZED_WITHERIA.get(),
 				CAEntities.LAST_KNIGHT_AND_HORSE.get(), CAEntities.THE_LAST_KNIGHT.get(), CAEntities.WITHER_SHOOT_PRE.get(), CAEntities.APOCATA.get(), CAEntities.OCEANIZED_FOX.get(),
 				CAEntities.ROCINANTE.get(), CAEntities.TIDUTANT_EXCRESCENCE.get(), CAEntities.OCEANIZED_POLAR_BEAR.get(), CAEntities.ENDSPEAKER.get(),
-				CAEntities.TIDUTANT_ROCK_SPIDER.get(), CAEntities.TIDE_CHIMERA.get(), CAEntities.AL_1_S_HELPER.get(), CAEntities.DAMAGE_TESTER.get(),
+				CAEntities.TIDUTANT_ROCK_SPIDER.get(), CAEntities.TIDE_CHIMERA.get(), CAEntities.AL_1_S_HELPER.get(),
 				CAEntities.GLADIIA.get(), CAEntities.GLADIIA_WHIRL.get(), CAEntities.IRENE.get(), CAEntities.LINGERING_PATHSHAPER.get(),
 				CAEntities.LINGERING_FRACTAL.get(), CAEntities.LITTLE_HELPER.get(), CAEntities.SPECTER.get(), CAEntities.SPECTER_DOLL.get(), CAEntities.ULPIANS.get(),
 				CAEntities.CARMEN_BULLET.get(), CAEntities.FLAMARINE_GOLEM.get(), CAEntities.FLAMARINE_STATUE.get(), CAEntities.NAUTILUS_HEADHUNTER.get(),

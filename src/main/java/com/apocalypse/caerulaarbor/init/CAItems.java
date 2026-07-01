@@ -497,7 +497,6 @@ public class CAItems {
 	public static final RegistryObject<Item> ITEM_HELPER_AL_1S = REGISTRY.register("item_helper_al_1s", () -> new ItemHelperAl1sItem());
 	public static final RegistryObject<Item> DICTATIONLESS_CHAPTER = REGISTRY.register("dictationless_chapter", () -> new DictationlessChapterItem());
 	public static final RegistryObject<Item> LANC_XIAO = REGISTRY.register("lanc_xiao", () -> new LancXiaoItem());
-	public static final RegistryObject<Item> DAMAGE_TESTER_SPAWN_EGG = REGISTRY.register("damage_tester_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.DAMAGE_TESTER, -16777216, -16777216, new Item.Properties()));
 	public static final RegistryObject<Item> APOCATA_SWORD = REGISTRY.register("apocata_sword", () -> new ApocataSwordItem());
 	public static final RegistryObject<Item> CHITIN_INGOT = REGISTRY.register("chitin_ingot", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)));
 	public static final RegistryObject<Item> ULPIANS_SPAWN_EGG = REGISTRY.register("ulpians_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.ULPIANS, -12958887, -1121571, new Item.Properties()));

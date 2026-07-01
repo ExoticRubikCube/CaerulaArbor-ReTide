@@ -574,7 +574,6 @@ public class CATabs {
 		} else if (tabData.getTabKey() == CreativeModeTabs.OP_BLOCKS) {
 			if (tabData.hasPermissions()) {
 				tabData.accept(CAItems.GUNMU_SPAWN_EGG.get());
-				tabData.accept(CAItems.DAMAGE_TESTER_SPAWN_EGG.get());
 				tabData.accept(CAItems.XANTIS_SPAWN_EGG.get());
 				tabData.accept(CAItems.QUNYOU_WANTED_ISHARMLA_SPAWN_EGG.get());
 				tabData.accept(CAItems.BANNED_ITEM.get());

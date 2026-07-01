@@ -106,7 +106,7 @@ repositories {
         url = "https://maven.blamejared.com/"
         content {
             includeGroup "mezz.jei"
-//            includeGroup "vazkii.patchouli"
+            //includeGroup "vazkii.patchouli"
         }
     }
     maven {
@@ -169,6 +169,9 @@ dependencies {
 
     // Configured相关
     runtimeOnly fg.deobf("curse.maven:configured-457570:${configured_version}")
+
+    // 手册相关
+    runtimeOnly fg.deobf("curse.maven:patchouli-306770:${patchouli_version}")
 
     //联动相关
     runtimeOnly fg.deobf("maven.modrinth:A2l0YkuP:${bobs_originium_dream_version}")

@@ -388,10 +388,6 @@ public class CAEntities {
 			.setTrackingRange(12).setUpdateInterval(3).setCustomClientFactory(LittleHelperEntity::new).fireImmune().sized(0.875f, 0.2f));
 	public static final RegistryObject<EntityType<Al1SHelperEntity>> AL_1_S_HELPER = register("al_1_s_helper", EntityType.Builder.<Al1SHelperEntity>of(Al1SHelperEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true)
 			.setTrackingRange(12).setUpdateInterval(3).setCustomClientFactory(Al1SHelperEntity::new).fireImmune().sized(0.875f, 0.2f));
-	public static final RegistryObject<EntityType<DamageTesterEntity>> DAMAGE_TESTER = register("damage_tester",
-			EntityType.Builder.<DamageTesterEntity>of(DamageTesterEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(64).setUpdateInterval(3).setCustomClientFactory(DamageTesterEntity::new)
-
-					.sized(0.6f, 1.8f));
 	public static final RegistryObject<EntityType<UlpiansEntity>> ULPIANS = register("ulpians",
 			EntityType.Builder.<UlpiansEntity>of(UlpiansEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(12).setUpdateInterval(3).setCustomClientFactory(UlpiansEntity::new)
 
@@ -658,7 +654,6 @@ public class CAEntities {
 		event.put(LINGERING_FRACTAL.get(), LingeringFractalEntity.createAttributes().build());
 		event.put(LITTLE_HELPER.get(), LittleHelperEntity.createAttributes().build());
 		event.put(AL_1_S_HELPER.get(), Al1SHelperEntity.createAttributes().build());
-		event.put(DAMAGE_TESTER.get(), DamageTesterEntity.createAttributes().build());
 		event.put(ULPIANS.get(), UlpiansEntity.createAttributes().build());
 		event.put(GLADIIA.get(), GladiiaEntity.createAttributes().build());
 		event.put(GLADIIA_WHIRL.get(), GladiiaWhirlEntity.createAttributes().build());
@@ -795,7 +790,6 @@ public class CAEntities {
 			event.registerEntityRenderer(CAEntities.LINGERING_FRACTAL.get(), LingeringFractalRenderer::new);
 			event.registerEntityRenderer(CAEntities.LITTLE_HELPER.get(), LittleHelperRenderer::new);
 			event.registerEntityRenderer(CAEntities.AL_1_S_HELPER.get(), Al1SHelperRenderer::new);
-			event.registerEntityRenderer(CAEntities.DAMAGE_TESTER.get(), DamageTesterRenderer::new);
 			event.registerEntityRenderer(CAEntities.ULPIANS.get(), UlpiansRenderer::new);
 			event.registerEntityRenderer(CAEntities.GLADIIA.get(), GladiiaRenderer::new);
 			event.registerEntityRenderer(CAEntities.GLADIIA_WHIRL.get(), GladiiaWhirlRenderer::new);
