@@ -53,7 +53,6 @@ import javax.annotation.Nullable;
 public class OceanizedCatEntity extends SeaMonster {
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanizedCatEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedCatEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(OceanizedCatEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_action_time = SynchedEntityData.defineId(OceanizedCatEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Boolean> DATA_stateSneaking = SynchedEntityData.defineId(OceanizedCatEntity.class, EntityDataSerializers.BOOLEAN);
     private boolean swinging;
@@ -77,18 +76,10 @@ public class OceanizedCatEntity extends SeaMonster {
         super.defineSynchedData();
         this.entityData.define(SHOOT, false);
         this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(TEXTURE, "oceanized_cat");
         this.entityData.define(DATA_action_time, 0);
         this.entityData.define(DATA_stateSneaking, false);
     }
 
-    public void setTexture(String texture) {
-        this.entityData.set(TEXTURE, texture);
-    }
-
-    public String getTexture() {
-        return this.entityData.get(TEXTURE);
-    }
 
     @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket() {
@@ -196,24 +187,21 @@ public class OceanizedCatEntity extends SeaMonster {
         return retval;
     }
 
-    @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
+	@Override
+	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putString("Texture", this.getTexture());
         compound.putInt("Dataaction_time", this.entityData.get(DATA_action_time));
         compound.putBoolean("DatastateSneaking", this.entityData.get(DATA_stateSneaking));
-    }
+	}
 
-    @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
+	@Override
+	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Texture"))
-            this.setTexture(compound.getString("Texture"));
         if (compound.contains("Dataaction_time"))
             this.entityData.set(DATA_action_time, compound.getInt("Dataaction_time"));
         if (compound.contains("DatastateSneaking"))
             this.entityData.set(DATA_stateSneaking, compound.getBoolean("DatastateSneaking"));
-    }
+	}
 
     @Override
     public void baseTick() {

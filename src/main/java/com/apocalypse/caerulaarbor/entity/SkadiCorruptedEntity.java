@@ -71,7 +71,6 @@ import java.util.List;
 public class SkadiCorruptedEntity extends SeaMonster {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(SkadiCorruptedEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(SkadiCorruptedEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(SkadiCorruptedEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<Integer> DATA_convertP = SynchedEntityData.defineId(SkadiCorruptedEntity.class, EntityDataSerializers.INT);
 	public static final EntityDataAccessor<Boolean> DATA_mayCorrupt = SynchedEntityData.defineId(SkadiCorruptedEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(SkadiCorruptedEntity.class, EntityDataSerializers.INT);
@@ -101,21 +100,12 @@ public class SkadiCorruptedEntity extends SeaMonster {
 		super.defineSynchedData();
 		this.entityData.define(SHOOT, false);
 		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(TEXTURE, "skadi_corrupted_0");
 		this.entityData.define(DATA_convertP, 900);
 		this.entityData.define(DATA_mayCorrupt, true);
 		this.entityData.define(DATA_duration, 0);
 		this.entityData.define(DATA_convertTick, 1000);
 		this.entityData.define(DATA_deal, 0);
 		this.entityData.define(DATA_phase, 0);
-	}
-
-	public void setTexture(String texture) {
-		this.entityData.set(TEXTURE, texture);
-	}
-
-	public String getTexture() {
-		return this.entityData.get(TEXTURE);
 	}
 
 	@Override
@@ -275,7 +265,6 @@ public class SkadiCorruptedEntity extends SeaMonster {
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
-		compound.putString("Texture", this.getTexture());
 		compound.putInt("DataconvertP", this.entityData.get(DATA_convertP));
 		compound.putBoolean("DatamayCorrupt", this.entityData.get(DATA_mayCorrupt));
 		compound.putInt("Dataduration", this.entityData.get(DATA_duration));
@@ -287,8 +276,6 @@ public class SkadiCorruptedEntity extends SeaMonster {
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
-		if (compound.contains("Texture"))
-			this.setTexture(compound.getString("Texture"));
 		if (compound.contains("DataconvertP"))
 			this.entityData.set(DATA_convertP, compound.getInt("DataconvertP"));
 		if (compound.contains("DatamayCorrupt"))
@@ -363,9 +350,6 @@ public class SkadiCorruptedEntity extends SeaMonster {
 			dura = (Entity) this instanceof SkadiCorruptedEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
 			deal = (Entity) this instanceof SkadiCorruptedEntity _datEntI ? _datEntI.getEntityData().get(DATA_deal) : 0;
 			phase = (Entity) this instanceof SkadiCorruptedEntity _datEntI ? _datEntI.getEntityData().get(DATA_phase) : 0;
-			if ((Entity) this instanceof Mob _mobEnt) {
-				_mobEnt.getTarget();
-			}
 			if (dura > 0) {
 				if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetI)
 					_datEntSetI.getEntityData().set(DATA_duration, (int) (dura - 1));
@@ -380,8 +364,6 @@ public class SkadiCorruptedEntity extends SeaMonster {
 					if (this instanceof SkadiCorruptedEntity) {
 						this.setAnimation("animation.skadi_corrupted.to_phase_2");
 					}
-					if ((Entity) this instanceof SkadiCorruptedEntity animatable)
-						animatable.setTexture("skadi_corrupted_1");
 					if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetI)
 						_datEntSetI.getEntityData().set(DATA_convertP, 1120);
 					if ((Entity) this instanceof LivingEntity _entity)
@@ -408,8 +390,6 @@ public class SkadiCorruptedEntity extends SeaMonster {
 					if (this instanceof SkadiCorruptedEntity) {
 						this.setAnimation("animation.skadi_corrupted.to_phase_3");
 					}
-					if ((Entity) this instanceof SkadiCorruptedEntity animatable)
-						animatable.setTexture("skadi_corrupted");
 					if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetI)
 						_datEntSetI.getEntityData().set(DATA_convertP, 99999);
 					if ((Entity) this instanceof LivingEntity _entity)

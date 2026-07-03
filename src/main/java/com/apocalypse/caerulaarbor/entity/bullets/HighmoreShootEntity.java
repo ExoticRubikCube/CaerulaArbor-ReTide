@@ -1,6 +1,7 @@
-package com.apocalypse.caerulaarbor.entity;
+package com.apocalypse.caerulaarbor.entity.bullets;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.entity.HighmoreEntity;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAParticles;
 import net.minecraft.core.registries.Registries;

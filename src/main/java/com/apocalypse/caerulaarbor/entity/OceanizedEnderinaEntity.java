@@ -69,7 +69,6 @@ import java.util.List;
 public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackMob {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanizedEnderinaEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedEnderinaEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(OceanizedEnderinaEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<Integer> DATA_REVIVE_TICK = SynchedEntityData.defineId(OceanizedEnderinaEntity.class, EntityDataSerializers.INT);
 	public static final EntityDataAccessor<Integer> DATA_PHASE = SynchedEntityData.defineId(OceanizedEnderinaEntity.class, EntityDataSerializers.INT);
 	public static final EntityDataAccessor<Integer> DATA_SKILL_P = SynchedEntityData.defineId(OceanizedEnderinaEntity.class, EntityDataSerializers.INT);
@@ -114,19 +113,10 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 		super.defineSynchedData();
 		this.entityData.define(SHOOT, false);
 		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(TEXTURE, "oceanized_enderina");
 		this.entityData.define(DATA_REVIVE_TICK, 0);
 		this.entityData.define(DATA_PHASE, 0);
 		this.entityData.define(DATA_SKILL_P, 0);
 		this.entityData.define(DATA_DURATION, 50);
-	}
-
-	public void setTexture(String texture) {
-		this.entityData.set(TEXTURE, texture);
-	}
-
-	public String getTexture() {
-		return this.entityData.get(TEXTURE);
 	}
 
 	@Override
@@ -421,7 +411,6 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
-		compound.putString("Texture", this.getTexture());
 		compound.putInt("DataREVIVE_TICK", this.entityData.get(DATA_REVIVE_TICK));
 		compound.putInt("DataPHASE", this.entityData.get(DATA_PHASE));
 		compound.putInt("DataSKILL_P", this.entityData.get(DATA_SKILL_P));
@@ -431,8 +420,6 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
-		if (compound.contains("Texture"))
-			this.setTexture(compound.getString("Texture"));
 		if (compound.contains("DataREVIVE_TICK"))
 			this.entityData.set(DATA_REVIVE_TICK, compound.getInt("DataREVIVE_TICK"));
 		if (compound.contains("DataPHASE"))
@@ -457,16 +444,6 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 		double rev;
 		double deadTime;
 		deadTime = this.deathTime;
-		if (deadTime >= 30) {
-			if ((Entity) this instanceof OceanizedEnderinaEntity animatable)
-				animatable.setTexture("oceanized_enderina_3");
-		} else if (deadTime >= 20) {
-			if ((Entity) this instanceof OceanizedEnderinaEntity animatable)
-				animatable.setTexture("oceanized_enderina_2");
-		} else if (deadTime >= 10) {
-			if ((Entity) this instanceof OceanizedEnderinaEntity animatable)
-				animatable.setTexture("oceanized_enderina_1");
-		}
 		if (this.isAlive()) {
 			sklp1 = (Entity) this instanceof OceanizedEnderinaEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILL_P) : 0;
 			dura = (Entity) this instanceof OceanizedEnderinaEntity _datEntI ? _datEntI.getEntityData().get(DATA_DURATION) : 0;
@@ -499,12 +476,8 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 					if (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) >= ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1)) {
 						if ((Entity) this instanceof OceanizedEnderinaEntity _datEntSetI)
 							_datEntSetI.getEntityData().set(DATA_REVIVE_TICK, 0);
-						if ((Entity) this instanceof OceanizedEnderinaEntity animatable)
-							animatable.setTexture("oceanized_enderina_noise");
 					}
 					if (rev < 100) {
-						if ((Entity) this instanceof OceanizedEnderinaEntity animatable)
-							animatable.setTexture("oceanized_enderina_noise");
 					}
 				} else {
 					if (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) >= ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1)) {
@@ -797,6 +770,10 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 
 	public void setAnimation(String animation) {
 		this.entityData.set(ANIMATION, animation);
+	}
+
+	public int getDeathTextureTick() {
+		return this.deathTime;
 	}
 
 	@Override

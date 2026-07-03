@@ -11,6 +11,11 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class ComplexChitinGolemModel extends GeoModel<ComplexChitinGolemEntity> {
+	private static final ResourceLocation HEALTHY_TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/complex_chitin_golem.png");
+	private static final ResourceLocation DAMAGED_TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/complex_chitin_golem_1.png");
+	private static final ResourceLocation HEAVY_DAMAGED_TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/complex_chitin_golem_2.png");
+	private static final ResourceLocation CRITICAL_TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/complex_chitin_golem_3.png");
+
 	@Override
 	public ResourceLocation getAnimationResource(ComplexChitinGolemEntity entity) {
 		return new ResourceLocation(CaerulaArborMod.MODID, "animations/complex_chitin_golem.animation.json");
@@ -23,7 +28,17 @@ public class ComplexChitinGolemModel extends GeoModel<ComplexChitinGolemEntity> 
 
 	@Override
 	public ResourceLocation getTextureResource(ComplexChitinGolemEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		float healthRatio = entity.getHealth() / entity.getMaxHealth();
+		if (healthRatio < 0.25F) {
+			return CRITICAL_TEXTURE;
+		}
+		if (healthRatio < 0.5F) {
+			return HEAVY_DAMAGED_TEXTURE;
+		}
+		if (healthRatio < 0.75F) {
+			return DAMAGED_TEXTURE;
+		}
+		return HEALTHY_TEXTURE;
 	}
 
 	@Override

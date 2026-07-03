@@ -1,8 +1,8 @@
-package com.apocalypse.caerulaarbor.entity;
+package com.apocalypse.caerulaarbor.entity.bullets;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CAItems;
 import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;

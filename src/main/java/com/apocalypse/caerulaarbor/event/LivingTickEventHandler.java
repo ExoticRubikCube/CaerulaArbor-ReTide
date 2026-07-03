@@ -85,28 +85,29 @@ public class LivingTickEventHandler {
                 }
             }
             other = tgt_blessed != null ? tgt_blessed : tgt_ent;
-        } else if (enemy instanceof EndspeakerEntity endspeaker && endspeaker.getPhase() < 3
-                && enemy instanceof LivingEntity _livEnt15 && _livEnt15.hasEffect(CAMobEffects.INVULNERABLE.get())) {
-            double minDist = 999;
-            double d;
-            Entity enemy1 = null;
-            for (Entity entityiterator : world.getEntities(enemy, new AABB((x + 32), (y + 32), (z + 32), (x - 32), (y - 32), (z - 32)))) {
-                if (!(entityiterator instanceof LivingEntity)) continue;
-                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
-                    d = enemy.distanceTo(entityiterator);
-                    if (d < minDist) {
-                        minDist = d;
-                        enemy1 = entityiterator;
+        } else {
+            if (enemy instanceof EndspeakerEntity endspeaker && endspeaker.getPhase() < 3 && endspeaker.hasEffect(CAMobEffects.INVULNERABLE.get())) {
+                    double minDist = 999;
+                    double d;
+                    Entity enemy1 = null;
+                    for (Entity entityiterator : world.getEntities(enemy, new AABB((x + 32), (y + 32), (z + 32), (x - 32), (y - 32), (z - 32)))) {
+                        if (!(entityiterator instanceof LivingEntity)) continue;
+                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                            d = enemy.distanceTo(entityiterator);
+                            if (d < minDist) {
+                                minDist = d;
+                                enemy1 = entityiterator;
+                            }
+                        }
                     }
-                }
+                    other = enemy1;
+            } else if (enemy instanceof OceanizedIllusionerEntity) {
+                other = world.getEntitiesOfClass(OceanIllusionEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true).stream()
+                        .sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(x, y, z))).findFirst().orElse(null);
+            } else if (enemy instanceof OceanizedEnderinaEntity enderina && !enderina.isEnderinaDurative()) {
+                other = world.getEntitiesOfClass(MoistEnderCrystalEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true).stream()
+                        .sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(x, y, z))).findFirst().orElse(null);
             }
-            other = enemy1;
-        } else if (enemy instanceof OceanizedIllusionerEntity) {
-            other = world.getEntitiesOfClass(OceanIllusionEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true).stream()
-                    .sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(x, y, z))).findFirst().orElse(null);
-        } else if (enemy instanceof OceanizedEnderinaEntity enderina && !enderina.isEnderinaDurative()) {
-            other = world.getEntitiesOfClass(MoistEnderCrystalEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true).stream()
-                    .sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(x, y, z))).findFirst().orElse(null);
         }
 
         if (other != null) {

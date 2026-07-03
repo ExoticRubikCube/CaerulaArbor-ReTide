@@ -1,7 +1,6 @@
 package com.apocalypse.caerulaarbor.client.model.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.entity.TheLastKnightEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -12,6 +11,8 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class TheLastKnightModel extends GeoModel<TheLastKnightEntity> {
+	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/last_knight.png");
+
 	@Override
 	public ResourceLocation getAnimationResource(TheLastKnightEntity entity) {
 		return new ResourceLocation(CaerulaArborMod.MODID, "animations/last_knight.animation.json");
@@ -24,7 +25,7 @@ public class TheLastKnightModel extends GeoModel<TheLastKnightEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(TheLastKnightEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return TEXTURE;
 	}
 
 	@Override

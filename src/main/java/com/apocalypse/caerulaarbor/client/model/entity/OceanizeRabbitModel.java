@@ -1,7 +1,6 @@
 package com.apocalypse.caerulaarbor.client.model.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.entity.OceanizeRabbitEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -12,6 +11,8 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class OceanizeRabbitModel extends GeoModel<OceanizeRabbitEntity> {
+	private static final ResourceLocation BLOODY_TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/oceanized_rabbit_bloody.png");
+
 	@Override
 	public ResourceLocation getAnimationResource(OceanizeRabbitEntity entity) {
 		return new ResourceLocation(CaerulaArborMod.MODID, "animations/oceanized_rabbit.animation.json");
@@ -24,7 +25,11 @@ public class OceanizeRabbitModel extends GeoModel<OceanizeRabbitEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(OceanizeRabbitEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		int variant = entity.getEntityData().get(OceanizeRabbitEntity.DATA_variant);
+		if (variant == 5) {
+			return BLOODY_TEXTURE;
+		}
+		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/oceanized_rabbit_" + variant + ".png");
 	}
 
 	@Override

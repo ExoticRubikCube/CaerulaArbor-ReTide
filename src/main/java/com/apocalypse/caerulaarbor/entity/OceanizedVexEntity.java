@@ -69,7 +69,6 @@ import java.util.UUID;
 public class OceanizedVexEntity extends SeaMonster {
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanizedVexEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedVexEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(OceanizedVexEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_leftSurvivalTick = SynchedEntityData.defineId(OceanizedVexEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<String> DATA_SAYER = SynchedEntityData.defineId(OceanizedVexEntity.class, EntityDataSerializers.STRING);
     private boolean swinging;
@@ -94,17 +93,8 @@ public class OceanizedVexEntity extends SeaMonster {
         super.defineSynchedData();
         this.entityData.define(SHOOT, false);
         this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(TEXTURE, "oceanized_vex");
         this.entityData.define(DATA_leftSurvivalTick, 600);
         this.entityData.define(DATA_SAYER, "");
-    }
-
-    public void setTexture(String texture) {
-        this.entityData.set(TEXTURE, texture);
-    }
-
-    public String getTexture() {
-        return this.entityData.get(TEXTURE);
     }
 
     @Override
@@ -205,7 +195,6 @@ public class OceanizedVexEntity extends SeaMonster {
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putString("Texture", this.getTexture());
         compound.putInt("DataleftSurvivalTick", this.entityData.get(DATA_leftSurvivalTick));
         compound.putString("DataSAYER", this.entityData.get(DATA_SAYER));
     }
@@ -213,8 +202,6 @@ public class OceanizedVexEntity extends SeaMonster {
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Texture"))
-            this.setTexture(compound.getString("Texture"));
         if (compound.contains("DataleftSurvivalTick"))
             this.entityData.set(DATA_leftSurvivalTick, compound.getInt("DataleftSurvivalTick"));
         if (compound.contains("DataSAYER"))
@@ -239,13 +226,6 @@ public class OceanizedVexEntity extends SeaMonster {
                 if ((Entity) this instanceof OceanizedVexEntity _datEntSetI)
                     _datEntSetI.getEntityData().set(DATA_leftSurvivalTick, (int) (sklp1 - 1));
             }
-            if ((Entity) this instanceof Mob _mobEnt7 && _mobEnt7.isAggressive()) {
-                if ((Entity) this instanceof OceanizedVexEntity animatable)
-                    animatable.setTexture("oceanized_vex_charging");
-            } else {
-                if ((Entity) this instanceof OceanizedVexEntity animatable)
-                    animatable.setTexture("oceanized_vex");
-            }
         } else {
             uuid1 = (Entity) this instanceof OceanizedVexEntity _datEntS ? _datEntS.getEntityData().get(DATA_SAYER) : "";
             enemy = new Object() {
@@ -254,7 +234,7 @@ public class OceanizedVexEntity extends SeaMonster {
                     if (world instanceof ServerLevel _server) {
                         try {
                             _uuidentity = _server.getEntity(UUID.fromString(uuid2));
-                        } catch (Exception e) {
+                        } catch (Exception ignored) {
                         }
                     }
                     return _uuidentity;

@@ -4,7 +4,6 @@ import com.apocalypse.caerulaarbor.entity.base.SyncedAnimationEntity;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -51,7 +50,6 @@ import java.util.Objects;
 public class RocinanteEntity extends Animal implements GeoEntity, SyncedAnimationEntity {
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(RocinanteEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(RocinanteEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(RocinanteEntity.class, EntityDataSerializers.STRING);
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private boolean swinging;
     private boolean lastloop;
@@ -76,16 +74,8 @@ public class RocinanteEntity extends Animal implements GeoEntity, SyncedAnimatio
         super.defineSynchedData();
         this.entityData.define(SHOOT, false);
         this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(TEXTURE, "mere_horse");
     }
 
-    public void setTexture(String texture) {
-        this.entityData.set(TEXTURE, texture);
-    }
-
-    public String getTexture() {
-        return this.entityData.get(TEXTURE);
-    }
 
     @Override
     public boolean canCollideWith(Entity entity) {
@@ -172,18 +162,6 @@ public class RocinanteEntity extends Animal implements GeoEntity, SyncedAnimatio
         return super.hurt(source, amount);
     }
 
-    @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
-        super.addAdditionalSaveData(compound);
-        compound.putString("Texture", this.getTexture());
-    }
-
-    @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
-        super.readAdditionalSaveData(compound);
-        if (compound.contains("Texture"))
-            this.setTexture(compound.getString("Texture"));
-    }
 
     @Override
     public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {

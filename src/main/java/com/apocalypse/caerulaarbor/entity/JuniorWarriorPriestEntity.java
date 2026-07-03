@@ -47,7 +47,6 @@ import java.util.List;
 public class JuniorWarriorPriestEntity extends Animal implements GeoEntity, SyncedAnimationEntity {
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(JuniorWarriorPriestEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(JuniorWarriorPriestEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(JuniorWarriorPriestEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_skill_p = SynchedEntityData.defineId(JuniorWarriorPriestEntity.class, EntityDataSerializers.INT);
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private boolean swinging;
@@ -72,17 +71,9 @@ public class JuniorWarriorPriestEntity extends Animal implements GeoEntity, Sync
         super.defineSynchedData();
         this.entityData.define(SHOOT, false);
         this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(TEXTURE, "warriorpriest_junior_texture");
         this.entityData.define(DATA_skill_p, 200);
     }
 
-    public void setTexture(String texture) {
-        this.entityData.set(TEXTURE, texture);
-    }
-
-    public String getTexture() {
-        return this.entityData.get(TEXTURE);
-    }
 
     @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket() {
@@ -178,21 +169,18 @@ public class JuniorWarriorPriestEntity extends Animal implements GeoEntity, Sync
         return super.hurt(source, amount);
     }
 
-    @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
+	@Override
+	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putString("Texture", this.getTexture());
         compound.putInt("Dataskill_p", this.entityData.get(DATA_skill_p));
-    }
+	}
 
-    @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
+	@Override
+	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Texture"))
-            this.setTexture(compound.getString("Texture"));
         if (compound.contains("Dataskill_p"))
             this.entityData.set(DATA_skill_p, compound.getInt("Dataskill_p"));
-    }
+	}
 
     @Override
     public void baseTick() {

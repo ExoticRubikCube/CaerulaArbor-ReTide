@@ -62,7 +62,6 @@ import java.util.List;
 public class TideDeathrepellerEntity extends SeaMonster {
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(TideDeathrepellerEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(TideDeathrepellerEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(TideDeathrepellerEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_skillp = SynchedEntityData.defineId(TideDeathrepellerEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(TideDeathrepellerEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
@@ -88,18 +87,10 @@ public class TideDeathrepellerEntity extends SeaMonster {
         super.defineSynchedData();
         this.entityData.define(SHOOT, false);
         this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(TEXTURE, "deathrepellertexture");
         this.entityData.define(DATA_skillp, 100);
         this.entityData.define(DATA_duration, 0);
     }
 
-    public void setTexture(String texture) {
-        this.entityData.set(TEXTURE, texture);
-    }
-
-    public String getTexture() {
-        return this.entityData.get(TEXTURE);
-    }
 
     @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket() {
@@ -262,24 +253,21 @@ public class TideDeathrepellerEntity extends SeaMonster {
         super.setHealth(pHealth);
     }
 
-    @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
+	@Override
+	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putString("Texture", this.getTexture());
         compound.putInt("Dataskillp", this.entityData.get(DATA_skillp));
         compound.putInt("Dataduration", this.entityData.get(DATA_duration));
-    }
+	}
 
-    @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
+	@Override
+	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Texture"))
-            this.setTexture(compound.getString("Texture"));
         if (compound.contains("Dataskillp"))
             this.entityData.set(DATA_skillp, compound.getInt("Dataskillp"));
         if (compound.contains("Dataduration"))
             this.entityData.set(DATA_duration, compound.getInt("Dataduration"));
-    }
+	}
 
     @Override
     public void baseTick() {

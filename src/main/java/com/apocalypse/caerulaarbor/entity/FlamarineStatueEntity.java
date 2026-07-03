@@ -44,7 +44,6 @@ import javax.annotation.Nullable;
 public class FlamarineStatueEntity extends SeaMonster {
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(FlamarineStatueEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(FlamarineStatueEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(FlamarineStatueEntity.class, EntityDataSerializers.STRING);
     private boolean swinging;
     private boolean lastloop;
     private long lastSwing;
@@ -67,16 +66,8 @@ public class FlamarineStatueEntity extends SeaMonster {
         super.defineSynchedData();
         this.entityData.define(SHOOT, false);
         this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(TEXTURE, "living_armor");
     }
 
-    public void setTexture(String texture) {
-        this.entityData.set(TEXTURE, texture);
-    }
-
-    public String getTexture() {
-        return this.entityData.get(TEXTURE);
-    }
 
     @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket() {
@@ -176,18 +167,6 @@ public class FlamarineStatueEntity extends SeaMonster {
         return retval;
     }
 
-    @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
-        super.addAdditionalSaveData(compound);
-        compound.putString("Texture", this.getTexture());
-    }
-
-    @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
-        super.readAdditionalSaveData(compound);
-        if (compound.contains("Texture"))
-            this.setTexture(compound.getString("Texture"));
-    }
 
     @Override
     public void baseTick() {
@@ -227,9 +206,6 @@ public class FlamarineStatueEntity extends SeaMonster {
     }
 
     private PlayState attackingPredicate(AnimationState event) {
-        double d1 = this.getX() - this.xOld;
-        double d0 = this.getZ() - this.zOld;
-        float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
             this.swinging = true;
             this.lastSwing = level().getGameTime();

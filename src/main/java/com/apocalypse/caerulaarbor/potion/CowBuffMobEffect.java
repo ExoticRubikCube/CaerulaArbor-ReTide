@@ -60,8 +60,6 @@ public class CowBuffMobEffect extends MobEffect {
                     }
                     if ((Entity) entity instanceof OceanizedCowEntity _datEntSetL)
                         _datEntSetL.getEntityData().set(OceanizedCowEntity.DATA_skill, false);
-                    if ((Entity) entity instanceof OceanizedCowEntity animatable)
-                        animatable.setTexture("oceanzied_cow_trailless");
                 }
             }
         }

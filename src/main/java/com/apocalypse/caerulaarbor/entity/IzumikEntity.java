@@ -79,7 +79,6 @@ import java.util.List;
 public class IzumikEntity extends SeaMonster {
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(IzumikEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(IzumikEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(IzumikEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_growth_p = SynchedEntityData.defineId(IzumikEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_skillp = SynchedEntityData.defineId(IzumikEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_phase = SynchedEntityData.defineId(IzumikEntity.class, EntityDataSerializers.INT);
@@ -110,7 +109,6 @@ public class IzumikEntity extends SeaMonster {
         super.defineSynchedData();
         this.entityData.define(SHOOT, false);
         this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(TEXTURE, "izumik_base");
         this.entityData.define(DATA_growth_p, 0);
         this.entityData.define(DATA_skillp, 5);
         this.entityData.define(DATA_phase, 0);
@@ -119,13 +117,6 @@ public class IzumikEntity extends SeaMonster {
         this.entityData.define(DATA_deal, 0);
     }
 
-    public void setTexture(String texture) {
-        this.entityData.set(TEXTURE, texture);
-    }
-
-    public String getTexture() {
-        return this.entityData.get(TEXTURE);
-    }
 
     @Override
     public boolean canCollideWith(Entity entity) {
@@ -322,23 +313,20 @@ public class IzumikEntity extends SeaMonster {
         return retval;
     }
 
-    @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
+	@Override
+	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putString("Texture", this.getTexture());
         compound.putInt("Datagrowth_p", this.entityData.get(DATA_growth_p));
         compound.putInt("Dataskillp", this.entityData.get(DATA_skillp));
         compound.putInt("Dataphase", this.entityData.get(DATA_phase));
         compound.putInt("Datawave", this.entityData.get(DATA_wave));
         compound.putInt("Dataskillp_1", this.entityData.get(DATA_skillp_1));
         compound.putInt("Datadeal", this.entityData.get(DATA_deal));
-    }
+	}
 
-    @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
+	@Override
+	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Texture"))
-            this.setTexture(compound.getString("Texture"));
         if (compound.contains("Datagrowth_p"))
             this.entityData.set(DATA_growth_p, compound.getInt("Datagrowth_p"));
         if (compound.contains("Dataskillp"))
@@ -351,7 +339,7 @@ public class IzumikEntity extends SeaMonster {
             this.entityData.set(DATA_skillp_1, compound.getInt("Dataskillp_1"));
         if (compound.contains("Datadeal"))
             this.entityData.set(DATA_deal, compound.getInt("Datadeal"));
-    }
+	}
 
     @Override
     public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {

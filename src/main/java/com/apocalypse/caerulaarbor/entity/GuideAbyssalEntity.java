@@ -46,7 +46,6 @@ import software.bernie.geckolib.core.object.PlayState;
 public class GuideAbyssalEntity extends SeaMonster {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(GuideAbyssalEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(GuideAbyssalEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(GuideAbyssalEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<Integer> DATA_delay = SynchedEntityData.defineId(GuideAbyssalEntity.class, EntityDataSerializers.INT);
 	public static final EntityDataAccessor<Integer> DATA_laylimit = SynchedEntityData.defineId(GuideAbyssalEntity.class, EntityDataSerializers.INT);
 	private boolean swinging;
@@ -70,18 +69,10 @@ public class GuideAbyssalEntity extends SeaMonster {
 		super.defineSynchedData();
 		this.entityData.define(SHOOT, false);
 		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(TEXTURE, "nethersea__bandguider");
 		this.entityData.define(DATA_delay, 0);
 		this.entityData.define(DATA_laylimit, 64);
 	}
 
-	public void setTexture(String texture) {
-		this.entityData.set(TEXTURE, texture);
-	}
-
-	public String getTexture() {
-		return this.entityData.get(TEXTURE);
-	}
 
 	@Override
 	public Packet<ClientGamePacketListener> getAddEntityPacket() {
@@ -145,7 +136,6 @@ public class GuideAbyssalEntity extends SeaMonster {
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
-		compound.putString("Texture", this.getTexture());
 		compound.putInt("Datadelay", this.entityData.get(DATA_delay));
 		compound.putInt("Datalaylimit", this.entityData.get(DATA_laylimit));
 	}
@@ -153,8 +143,6 @@ public class GuideAbyssalEntity extends SeaMonster {
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
-		if (compound.contains("Texture"))
-			this.setTexture(compound.getString("Texture"));
 		if (compound.contains("Datadelay"))
 			this.entityData.set(DATA_delay, compound.getInt("Datadelay"));
 		if (compound.contains("Datalaylimit"))

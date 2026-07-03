@@ -51,7 +51,6 @@ import software.bernie.geckolib.core.object.PlayState;
 public class FeederProkaryoteEntity extends SeaMonster {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(FeederProkaryoteEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(FeederProkaryoteEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(FeederProkaryoteEntity.class, EntityDataSerializers.STRING);
 	private boolean swinging;
 	private boolean lastloop;
 	private long lastSwing;
@@ -106,16 +105,9 @@ public class FeederProkaryoteEntity extends SeaMonster {
 		super.defineSynchedData();
 		this.entityData.define(SHOOT, false);
 		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(TEXTURE, "feeder");
 	}
 
-	public void setTexture(String texture) {
-		this.entityData.set(TEXTURE, texture);
-	}
 
-	public String getTexture() {
-		return this.entityData.get(TEXTURE);
-	}
 
 	@Override
 	public Packet<ClientGamePacketListener> getAddEntityPacket() {
@@ -167,14 +159,11 @@ public class FeederProkaryoteEntity extends SeaMonster {
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
-		compound.putString("Texture", this.getTexture());
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
-		if (compound.contains("Texture"))
-			this.setTexture(compound.getString("Texture"));
 	}
 
 	@Override

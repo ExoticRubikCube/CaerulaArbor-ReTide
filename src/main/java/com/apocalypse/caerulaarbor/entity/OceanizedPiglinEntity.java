@@ -56,7 +56,6 @@ import javax.annotation.Nullable;
 public class OceanizedPiglinEntity extends SeaMonster implements PolarMountRider {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanizedPiglinEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedPiglinEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(OceanizedPiglinEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<Integer> DATA_ability = SynchedEntityData.defineId(OceanizedPiglinEntity.class, EntityDataSerializers.INT);
 	private boolean swinging;
 	private boolean lastloop;
@@ -79,17 +78,9 @@ public class OceanizedPiglinEntity extends SeaMonster implements PolarMountRider
 		super.defineSynchedData();
 		this.entityData.define(SHOOT, false);
 		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(TEXTURE, "oceanized_piglin");
 		this.entityData.define(DATA_ability, 0);
 	}
 
-	public void setTexture(String texture) {
-		this.entityData.set(TEXTURE, texture);
-	}
-
-	public String getTexture() {
-		return this.entityData.get(TEXTURE);
-	}
 
 	@Override
 	public Packet<ClientGamePacketListener> getAddEntityPacket() {
@@ -165,15 +156,12 @@ public class OceanizedPiglinEntity extends SeaMonster implements PolarMountRider
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
-		compound.putString("Texture", this.getTexture());
 		compound.putInt("Dataability", this.entityData.get(DATA_ability));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
-		if (compound.contains("Texture"))
-			this.setTexture(compound.getString("Texture"));
 		if (compound.contains("Dataability"))
 			this.entityData.set(DATA_ability, compound.getInt("Dataability"));
 	}

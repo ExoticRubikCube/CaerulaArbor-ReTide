@@ -6,8 +6,6 @@ import com.apocalypse.caerulaarbor.init.CAItems;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -41,7 +39,6 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -53,7 +50,6 @@ import software.bernie.geckolib.core.object.PlayState;
 public class BoneFishEntity extends SeaMonster implements Bucketable {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(BoneFishEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(BoneFishEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(BoneFishEntity.class, EntityDataSerializers.STRING);
 	private boolean swinging;
 	private boolean lastloop;
 	private long lastSwing;
@@ -109,23 +105,11 @@ public class BoneFishEntity extends SeaMonster implements Bucketable {
 		super.defineSynchedData();
 		this.entityData.define(SHOOT, false);
 		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(TEXTURE, "bonefish");
 	}
 
-	public void setTexture(String texture) {
-		this.entityData.set(TEXTURE, texture);
-	}
 
-	public String getTexture() {
-		return this.entityData.get(TEXTURE);
-	}
 
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
-	}
-
-	@Override
+    @Override
 	protected PathNavigation createNavigation(Level world) {
 		return new WaterBoundPathNavigation(this, world);
 	}
@@ -176,15 +160,12 @@ public class BoneFishEntity extends SeaMonster implements Bucketable {
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putBoolean("FromBucket", this.fromBucket());
-		compound.putString("Texture", this.getTexture());
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		this.setFromBucket(compound.getBoolean("FromBucket"));
-		if (compound.contains("Texture"))
-			this.setTexture(compound.getString("Texture"));
 	}
 
 	@Override
@@ -200,15 +181,11 @@ public class BoneFishEntity extends SeaMonster implements Bucketable {
 	@Override
 	public void saveToBucketTag(ItemStack bucketStack) {
 		Bucketable.saveDefaultDataToBucketTag(this, bucketStack);
-		bucketStack.getOrCreateTag().putString("Texture", this.getTexture());
 	}
 
 	@Override
 	public void loadFromBucketTag(CompoundTag bucketTag) {
 		Bucketable.loadDefaultDataFromBucketTag(this, bucketTag);
-		if (bucketTag.contains("Texture")) {
-			this.setTexture(bucketTag.getString("Texture"));
-		}
 		this.setFromBucket(true);
 	}
 
@@ -346,7 +323,6 @@ public class BoneFishEntity extends SeaMonster implements Bucketable {
 		data.add(new AnimationController<>(this, "attacking", 3, this::attackingPredicate));
 		data.add(new AnimationController<>(this, "procedure", 3, this::procedurePredicate));
 	}
-
 
 	@Override
 	public void setAnimationProcedure(String animation) {

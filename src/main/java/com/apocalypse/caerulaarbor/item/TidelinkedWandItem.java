@@ -1,7 +1,7 @@
 
 package com.apocalypse.caerulaarbor.item;
 
-import com.apocalypse.caerulaarbor.entity.TellerShotEntity;
+import com.apocalypse.caerulaarbor.entity.bullets.TellerShotEntity;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;

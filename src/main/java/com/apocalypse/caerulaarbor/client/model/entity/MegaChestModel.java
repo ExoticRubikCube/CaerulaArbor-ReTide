@@ -6,6 +6,8 @@ import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.GeoModel;
 
 public class MegaChestModel extends GeoModel<MegaChestEntity> {
+	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/megachest.png");
+
 	@Override
 	public ResourceLocation getAnimationResource(MegaChestEntity entity) {
 		return new ResourceLocation(CaerulaArborMod.MODID, "animations/chestmega.animation.json");
@@ -18,7 +20,7 @@ public class MegaChestModel extends GeoModel<MegaChestEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(MegaChestEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return TEXTURE;
 	}
 
 }

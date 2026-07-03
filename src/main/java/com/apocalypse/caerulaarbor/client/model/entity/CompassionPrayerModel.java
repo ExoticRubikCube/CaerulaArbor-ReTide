@@ -11,6 +11,9 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class CompassionPrayerModel extends GeoModel<CompassionPrayerEntity> {
+	private static final ResourceLocation PHASE_0_TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/compassion_prayer.png");
+	private static final ResourceLocation PHASE_1_TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/compassion_prayer_a.png");
+
 	@Override
 	public ResourceLocation getAnimationResource(CompassionPrayerEntity entity) {
 		return new ResourceLocation(CaerulaArborMod.MODID, "animations/compassion_prayer.animation.json");
@@ -23,7 +26,7 @@ public class CompassionPrayerModel extends GeoModel<CompassionPrayerEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(CompassionPrayerEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return entity.getEntityData().get(CompassionPrayerEntity.DATA_PHASE) == 0 ? PHASE_0_TEXTURE : PHASE_1_TEXTURE;
 	}
 
 	@Override

@@ -11,6 +11,8 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class OceanizedPillagerModel extends GeoModel<OceanizedPillagerEntity> {
+	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/oceanized_pillager.png");
+
 	@Override
 	public ResourceLocation getAnimationResource(OceanizedPillagerEntity entity) {
 		return new ResourceLocation(CaerulaArborMod.MODID, "animations/oceanized_pillager.animation.json");
@@ -23,7 +25,7 @@ public class OceanizedPillagerModel extends GeoModel<OceanizedPillagerEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(OceanizedPillagerEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return TEXTURE;
 	}
 
 	@Override

@@ -1,7 +1,6 @@
 package com.apocalypse.caerulaarbor.client.model.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.entity.SpecterEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -12,6 +11,8 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class SpecterModel extends GeoModel<SpecterEntity> {
+	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/hunter_specter.png");
+
 	@Override
 	public ResourceLocation getAnimationResource(SpecterEntity entity) {
 		return new ResourceLocation(CaerulaArborMod.MODID, "animations/specter.animation.json");
@@ -24,7 +25,7 @@ public class SpecterModel extends GeoModel<SpecterEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(SpecterEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return TEXTURE;
 	}
 
 	@Override

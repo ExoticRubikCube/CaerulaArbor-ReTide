@@ -1,12 +1,13 @@
 package com.apocalypse.caerulaarbor.client.model.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.entity.QunyouWantedIsharmlaEntity;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.GeoModel;
 
 public class QunyouWantedIsharmlaModel extends GeoModel<QunyouWantedIsharmlaEntity> {
+	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/isharmla_corrupted_heart.png");
+
 	@Override
 	public ResourceLocation getAnimationResource(QunyouWantedIsharmlaEntity entity) {
 		return new ResourceLocation(CaerulaArborMod.MODID, "animations/isharmla.animation.json");
@@ -19,7 +20,7 @@ public class QunyouWantedIsharmlaModel extends GeoModel<QunyouWantedIsharmlaEnti
 
 	@Override
 	public ResourceLocation getTextureResource(QunyouWantedIsharmlaEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return TEXTURE;
 	}
 
 }

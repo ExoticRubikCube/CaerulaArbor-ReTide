@@ -62,7 +62,6 @@ import java.util.List;
 public class ReaperFishEntity extends SeaMonster {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(ReaperFishEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(ReaperFishEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(ReaperFishEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<Integer> DATA_CHARGE_TICK = SynchedEntityData.defineId(ReaperFishEntity.class, EntityDataSerializers.INT);
 	public static final EntityDataAccessor<Boolean> DATA_IS_CHARGING = SynchedEntityData.defineId(ReaperFishEntity.class, EntityDataSerializers.BOOLEAN);
 	private boolean swinging;
@@ -86,18 +85,10 @@ public class ReaperFishEntity extends SeaMonster {
 		super.defineSynchedData();
 		this.entityData.define(SHOOT, false);
 		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(TEXTURE, "reaperfish");
 		this.entityData.define(DATA_CHARGE_TICK, 0);
 		this.entityData.define(DATA_IS_CHARGING, false);
 	}
 
-	public void setTexture(String texture) {
-		this.entityData.set(TEXTURE, texture);
-	}
-
-	public String getTexture() {
-		return this.entityData.get(TEXTURE);
-	}
 
 	@Override
 	public Packet<ClientGamePacketListener> getAddEntityPacket() {
@@ -220,7 +211,6 @@ public class ReaperFishEntity extends SeaMonster {
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
-		compound.putString("Texture", this.getTexture());
 		compound.putInt("DataCHARGE_TICK", this.entityData.get(DATA_CHARGE_TICK));
 		compound.putBoolean("DataIS_CHARGING", this.entityData.get(DATA_IS_CHARGING));
 	}
@@ -228,8 +218,6 @@ public class ReaperFishEntity extends SeaMonster {
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
-		if (compound.contains("Texture"))
-			this.setTexture(compound.getString("Texture"));
 		if (compound.contains("DataCHARGE_TICK"))
 			this.entityData.set(DATA_CHARGE_TICK, compound.getInt("DataCHARGE_TICK"));
 		if (compound.contains("DataIS_CHARGING"))

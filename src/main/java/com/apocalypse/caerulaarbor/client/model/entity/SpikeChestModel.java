@@ -1,14 +1,13 @@
 package com.apocalypse.caerulaarbor.client.model.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
+import com.apocalypse.caerulaarbor.entity.SpikeChestEntity;
+import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.GeoModel;
 
-import net.minecraft.resources.ResourceLocation;
-
-import com.apocalypse.caerulaarbor.entity.SpikeChestEntity;
-
 public class SpikeChestModel extends GeoModel<SpikeChestEntity> {
+	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/chest_spike.png");
+
 	@Override
 	public ResourceLocation getAnimationResource(SpikeChestEntity entity) {
 		return new ResourceLocation(CaerulaArborMod.MODID, "animations/spike_chest.animation.json");
@@ -21,7 +20,7 @@ public class SpikeChestModel extends GeoModel<SpikeChestEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(SpikeChestEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return TEXTURE;
 	}
 
 }

@@ -59,7 +59,6 @@ import java.util.EnumSet;
 public class OceanizedChickenEntity extends SeaMonster {
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanizedChickenEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedChickenEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(OceanizedChickenEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_GROW_TIME = SynchedEntityData.defineId(OceanizedChickenEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_LAY_COOLDOWN = SynchedEntityData.defineId(OceanizedChickenEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Boolean> DATA_IS_CHILD = SynchedEntityData.defineId(OceanizedChickenEntity.class, EntityDataSerializers.BOOLEAN);
@@ -87,20 +86,11 @@ public class OceanizedChickenEntity extends SeaMonster {
         super.defineSynchedData();
         this.entityData.define(SHOOT, false);
         this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(TEXTURE, "oceanized_chicken_adult");
         this.entityData.define(DATA_GROW_TIME, 10000);
         this.entityData.define(DATA_LAY_COOLDOWN, 1200);
         this.entityData.define(DATA_IS_CHILD, false);
         this.entityData.define(DATA_EGG_OFFSET, 4);
         this.entityData.define(DATA_EGG_RATE, 1000);
-    }
-
-    public void setTexture(String texture) {
-        this.entityData.set(TEXTURE, texture);
-    }
-
-    public String getTexture() {
-        return this.entityData.get(TEXTURE);
     }
 
     @Override
@@ -237,7 +227,6 @@ public class OceanizedChickenEntity extends SeaMonster {
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putString("Texture", this.getTexture());
         compound.putInt("DataGROW_TIME", this.entityData.get(DATA_GROW_TIME));
         compound.putInt("DataLAY_COOLDOWN", this.entityData.get(DATA_LAY_COOLDOWN));
         compound.putBoolean("DataIS_CHILD", this.entityData.get(DATA_IS_CHILD));
@@ -248,8 +237,6 @@ public class OceanizedChickenEntity extends SeaMonster {
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Texture"))
-            this.setTexture(compound.getString("Texture"));
         if (compound.contains("DataGROW_TIME"))
             this.entityData.set(DATA_GROW_TIME, compound.getInt("DataGROW_TIME"));
         if (compound.contains("DataLAY_COOLDOWN"))
@@ -299,8 +286,6 @@ public class OceanizedChickenEntity extends SeaMonster {
         boolean is_child;
         is_child = (Entity) this instanceof OceanizedChickenEntity _datEntL0 && _datEntL0.getEntityData().get(DATA_IS_CHILD);
         if (is_child) {
-            if ((Entity) this instanceof OceanizedChickenEntity animatable)
-                animatable.setTexture("oceanized_chicken_child");
             grow = (Entity) this instanceof OceanizedChickenEntity _datEntI ? _datEntI.getEntityData().get(DATA_GROW_TIME) : 0;
             if (grow > 0) {
                 if ((Entity) this instanceof OceanizedChickenEntity _datEntSetI)
@@ -310,8 +295,6 @@ public class OceanizedChickenEntity extends SeaMonster {
                     _datEntSetL.getEntityData().set(DATA_IS_CHILD, false);
             }
         } else {
-            if ((Entity) this instanceof OceanizedChickenEntity animatable)
-                animatable.setTexture("oceanized_chicken_adult");
             lay = (Entity) this instanceof OceanizedChickenEntity _datEntI ? _datEntI.getEntityData().get(DATA_LAY_COOLDOWN) : 0;
             if (lay > 0) {
                 if ((Entity) this instanceof OceanizedChickenEntity _datEntSetI)

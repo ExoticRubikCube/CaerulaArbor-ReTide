@@ -257,13 +257,11 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
         SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this != null) {
-            if ((Entity) this instanceof LivingEntity _livingEntity1 && _livingEntity1.getAttributes().hasAttribute(ForgeMod.SWIM_SPEED.get()))
-                _livingEntity1.getAttribute(ForgeMod.SWIM_SPEED.get())
-                        .setBaseValue((((Entity) this instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(ForgeMod.SWIM_SPEED.get()) ? _livingEntity0.getAttribute(ForgeMod.SWIM_SPEED.get()).getBaseValue() : 0) * 8));
-            if ((Entity) this instanceof LivingEntity _livingEntity2 && _livingEntity2.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
-                _livingEntity2.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.33);
-        }
+        if ((Entity) this instanceof LivingEntity _livingEntity1 && _livingEntity1.getAttributes().hasAttribute(ForgeMod.SWIM_SPEED.get()))
+            _livingEntity1.getAttribute(ForgeMod.SWIM_SPEED.get())
+                    .setBaseValue((((Entity) this instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(ForgeMod.SWIM_SPEED.get()) ? _livingEntity0.getAttribute(ForgeMod.SWIM_SPEED.get()).getBaseValue() : 0) * 8));
+        if ((Entity) this instanceof LivingEntity _livingEntity2 && _livingEntity2.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
+            _livingEntity2.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.33);
         return retval;
     }
 
@@ -363,7 +361,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                     _datEntSetI.getEntityData().set(DATA_skillp1, (int) (sklp1 - 1));
             } else {
                 if (!(enemy == null) && enemy.isAlive()) {
-                    if ((enemy != null ? distanceTo(enemy) : -1) <= 3.5) {
+                    if (distanceTo(enemy) <= 3.5) {
                         if (this instanceof UlpiansEntity) {
                             this.setAnimation("animation.ulpians.pull");
                         }

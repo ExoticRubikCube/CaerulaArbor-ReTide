@@ -64,7 +64,6 @@ import javax.annotation.Nullable;
 public class OceanizedShulkerEntity extends SeaMonster {
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanizedShulkerEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedShulkerEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(OceanizedShulkerEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_SHOOT_DELAY = SynchedEntityData.defineId(OceanizedShulkerEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<String> DATA_DIRECTION = SynchedEntityData.defineId(OceanizedShulkerEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Boolean> DATA_WALKING = SynchedEntityData.defineId(OceanizedShulkerEntity.class, EntityDataSerializers.BOOLEAN);
@@ -92,20 +91,11 @@ public class OceanizedShulkerEntity extends SeaMonster {
         super.defineSynchedData();
         this.entityData.define(SHOOT, false);
         this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(TEXTURE, "oceanized_shulker");
         this.entityData.define(DATA_SHOOT_DELAY, 0);
         this.entityData.define(DATA_DIRECTION, "up");
         this.entityData.define(DATA_WALKING, false);
         this.entityData.define(DATA_PEEK_TIME, 0);
         this.entityData.define(DATA_VARIANT, 0);
-    }
-
-    public void setTexture(String texture) {
-        this.entityData.set(TEXTURE, texture);
-    }
-
-    public String getTexture() {
-        return this.entityData.get(TEXTURE);
     }
 
     @Override
@@ -321,7 +311,6 @@ public class OceanizedShulkerEntity extends SeaMonster {
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putString("Texture", this.getTexture());
         compound.putInt("DataSHOOT_DELAY", this.entityData.get(DATA_SHOOT_DELAY));
         compound.putString("DataDIRECTION", this.entityData.get(DATA_DIRECTION));
         compound.putBoolean("DataWALKING", this.entityData.get(DATA_WALKING));
@@ -332,8 +321,6 @@ public class OceanizedShulkerEntity extends SeaMonster {
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Texture"))
-            this.setTexture(compound.getString("Texture"));
         if (compound.contains("DataSHOOT_DELAY"))
             this.entityData.set(DATA_SHOOT_DELAY, compound.getInt("DataSHOOT_DELAY"));
         if (compound.contains("DataDIRECTION"))
@@ -377,19 +364,6 @@ public class OceanizedShulkerEntity extends SeaMonster {
                 }
             }
             variant = (Entity) this instanceof OceanizedShulkerEntity _datEntI ? _datEntI.getEntityData().get(DATA_VARIANT) : 0;
-            if (variant == 1) {
-                if ((Entity) this instanceof OceanizedShulkerEntity animatable)
-                    animatable.setTexture("oceanized_shulker_white");
-            } else if (variant == 2) {
-                if ((Entity) this instanceof OceanizedShulkerEntity animatable)
-                    animatable.setTexture("oceanized_shulker_complex");
-            } else if (variant == 3) {
-                if ((Entity) this instanceof OceanizedShulkerEntity animatable)
-                    animatable.setTexture("oceanized_shulker_bedrock");
-            } else {
-                if ((Entity) this instanceof OceanizedShulkerEntity animatable)
-                    animatable.setTexture("oceanized_shulker");
-            }
             curDIreName = (Entity) this instanceof OceanizedShulkerEntity _datEntS ? _datEntS.getEntityData().get(DATA_DIRECTION) : "";
             Direction.byName(curDIreName);
             peekTime = (Entity) this instanceof OceanizedShulkerEntity _datEntI ? _datEntI.getEntityData().get(DATA_PEEK_TIME) : 0;

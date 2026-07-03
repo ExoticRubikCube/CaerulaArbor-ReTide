@@ -1,7 +1,6 @@
 package com.apocalypse.caerulaarbor.client.model.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.entity.OceanizedWolfEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -12,6 +11,8 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class OceanizedWolfModel extends GeoModel<OceanizedWolfEntity> {
+	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/oceanized_wolf.png");
+
 	@Override
 	public ResourceLocation getAnimationResource(OceanizedWolfEntity entity) {
 		return new ResourceLocation(CaerulaArborMod.MODID, "animations/oceanized_wolf.animation.json");
@@ -24,7 +25,7 @@ public class OceanizedWolfModel extends GeoModel<OceanizedWolfEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(OceanizedWolfEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return TEXTURE;
 	}
 
 	@Override

@@ -1,7 +1,6 @@
 package com.apocalypse.caerulaarbor.client.model.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.entity.ShooterFishEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -12,6 +11,8 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class ShooterFishModel extends GeoModel<ShooterFishEntity> {
+	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/shooter.png");
+
 	@Override
 	public ResourceLocation getAnimationResource(ShooterFishEntity entity) {
 		return new ResourceLocation(CaerulaArborMod.MODID, "animations/shootfish.animation.json");
@@ -24,7 +25,7 @@ public class ShooterFishModel extends GeoModel<ShooterFishEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(ShooterFishEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return TEXTURE;
 	}
 
 	@Override

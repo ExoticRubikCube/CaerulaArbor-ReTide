@@ -53,7 +53,6 @@ import javax.annotation.Nullable;
 public class PunctureFishEntity extends SeaMonster implements PolarMountRider {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(PunctureFishEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(PunctureFishEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(PunctureFishEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<Integer> DATA_delay = SynchedEntityData.defineId(PunctureFishEntity.class, EntityDataSerializers.INT);
 	private boolean swinging;
 	private boolean lastloop;
@@ -76,17 +75,9 @@ public class PunctureFishEntity extends SeaMonster implements PolarMountRider {
 		super.defineSynchedData();
 		this.entityData.define(SHOOT, false);
 		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(TEXTURE, "puncturefish");
 		this.entityData.define(DATA_delay, 40);
 	}
 
-	public void setTexture(String texture) {
-		this.entityData.set(TEXTURE, texture);
-	}
-
-	public String getTexture() {
-		return this.entityData.get(TEXTURE);
-	}
 
 	@Override
 	public Packet<ClientGamePacketListener> getAddEntityPacket() {
@@ -158,15 +149,12 @@ public class PunctureFishEntity extends SeaMonster implements PolarMountRider {
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
-		compound.putString("Texture", this.getTexture());
 		compound.putInt("Datadelay", this.entityData.get(DATA_delay));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
-		if (compound.contains("Texture"))
-			this.setTexture(compound.getString("Texture"));
 		if (compound.contains("Datadelay"))
 			this.entityData.set(DATA_delay, compound.getInt("Datadelay"));
 	}

@@ -7,9 +7,6 @@ import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -43,7 +40,6 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -55,7 +51,6 @@ import software.bernie.geckolib.core.object.PlayState;
 public class DepositerProkaryoteEntity extends SeaMonster {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(DepositerProkaryoteEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(DepositerProkaryoteEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(DepositerProkaryoteEntity.class, EntityDataSerializers.STRING);
 	private boolean swinging;
 	private boolean lastloop;
 	private long lastSwing;
@@ -110,23 +105,10 @@ public class DepositerProkaryoteEntity extends SeaMonster {
 		super.defineSynchedData();
 		this.entityData.define(SHOOT, false);
 		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(TEXTURE, "depositer");
 	}
 
-	public void setTexture(String texture) {
-		this.entityData.set(TEXTURE, texture);
-	}
 
-	public String getTexture() {
-		return this.entityData.get(TEXTURE);
-	}
-
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
-	}
-
-	@Override
+    @Override
 	protected PathNavigation createNavigation(Level world) {
 		return new WaterBoundPathNavigation(this, world);
 	}
@@ -163,18 +145,6 @@ public class DepositerProkaryoteEntity extends SeaMonster {
 		return super.hurt(source, amount);
 	}
 
-	@Override
-	public void addAdditionalSaveData(CompoundTag compound) {
-		super.addAdditionalSaveData(compound);
-		compound.putString("Texture", this.getTexture());
-	}
-
-	@Override
-	public void readAdditionalSaveData(CompoundTag compound) {
-		super.readAdditionalSaveData(compound);
-		if (compound.contains("Texture"))
-			this.setTexture(compound.getString("Texture"));
-	}
 
 	@Override
 	public void baseTick() {

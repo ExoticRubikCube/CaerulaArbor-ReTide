@@ -11,6 +11,8 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class AbsorberLimbModel extends GeoModel<AbsorberLimbEntity> {
+	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/absorber_limb.png");
+
 	@Override
 	public ResourceLocation getAnimationResource(AbsorberLimbEntity entity) {
 		return new ResourceLocation(CaerulaArborMod.MODID, "animations/absorber_limb.animation.json");
@@ -23,7 +25,7 @@ public class AbsorberLimbModel extends GeoModel<AbsorberLimbEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(AbsorberLimbEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return TEXTURE;
 	}
 
 	@Override

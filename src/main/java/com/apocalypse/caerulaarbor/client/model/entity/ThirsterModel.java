@@ -1,12 +1,13 @@
 package com.apocalypse.caerulaarbor.client.model.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.entity.ThirsterEntity;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.GeoModel;
 
 public class ThirsterModel extends GeoModel<ThirsterEntity> {
+	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/thirster.png");
+
 	@Override
 	public ResourceLocation getAnimationResource(ThirsterEntity entity) {
 		return new ResourceLocation(CaerulaArborMod.MODID, "animations/thirster.animation.json");
@@ -19,7 +20,7 @@ public class ThirsterModel extends GeoModel<ThirsterEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(ThirsterEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return TEXTURE;
 	}
 
 }

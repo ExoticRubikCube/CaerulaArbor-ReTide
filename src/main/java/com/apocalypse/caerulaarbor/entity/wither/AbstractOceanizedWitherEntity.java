@@ -57,7 +57,6 @@ import java.util.List;
 public abstract class AbstractOceanizedWitherEntity extends SeaMonster {
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(AbstractOceanizedWitherEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(AbstractOceanizedWitherEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(AbstractOceanizedWitherEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_skillp = SynchedEntityData.defineId(AbstractOceanizedWitherEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(AbstractOceanizedWitherEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Boolean> DATA_shelled = SynchedEntityData.defineId(AbstractOceanizedWitherEntity.class, EntityDataSerializers.BOOLEAN);
@@ -83,27 +82,16 @@ public abstract class AbstractOceanizedWitherEntity extends SeaMonster {
         super.defineSynchedData();
         this.entityData.define(SHOOT, false);
         this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(TEXTURE, this.getDefaultTexture());
         this.entityData.define(DATA_skillp, this.getInitialSkillp());
         this.entityData.define(DATA_duration, this.getInitialDuration());
         this.entityData.define(DATA_shelled, false);
     }
-
-    protected abstract String getDefaultTexture();
 
     protected abstract int getInitialSkillp();
 
     protected abstract int getInitialDuration();
 
     protected abstract int getDeathDuration();
-
-    public void setTexture(String texture) {
-        this.entityData.set(TEXTURE, texture);
-    }
-
-    public String getTexture() {
-        return this.entityData.get(TEXTURE);
-    }
 
     public String getSyncedAnimation() {
         return this.entityData.get(ANIMATION);
@@ -263,7 +251,6 @@ public abstract class AbstractOceanizedWitherEntity extends SeaMonster {
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putString("Texture", this.getTexture());
         compound.putInt("Dataskillp", this.entityData.get(DATA_skillp));
         compound.putInt("Dataduration", this.entityData.get(DATA_duration));
         compound.putBoolean("Datashelled", this.entityData.get(DATA_shelled));
@@ -272,9 +259,6 @@ public abstract class AbstractOceanizedWitherEntity extends SeaMonster {
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Texture")) {
-            this.setTexture(compound.getString("Texture"));
-        }
         if (compound.contains("Dataskillp")) {
             this.entityData.set(DATA_skillp, compound.getInt("Dataskillp"));
         }
@@ -399,7 +383,6 @@ public abstract class AbstractOceanizedWitherEntity extends SeaMonster {
                             (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()) ? this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getBaseValue() : 0) * 1.5
                     );
                 }
-                this.setTexture(this.getShelledTexture());
                 this.entityData.set(DATA_shelled, true);
             }
         }
@@ -409,8 +392,6 @@ public abstract class AbstractOceanizedWitherEntity extends SeaMonster {
     protected abstract void tickSubclassBaseTick(LevelAccessor world, double x, double y, double z);
 
     protected abstract boolean shouldEnterShelledState();
-
-    protected abstract String getShelledTexture();
 
     @Override
     protected void tickDeath() {

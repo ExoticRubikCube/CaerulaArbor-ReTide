@@ -72,11 +72,6 @@ public class OceanizedWitherEntity extends AbstractOceanizedWitherEntity impleme
     }
 
     @Override
-    protected String getDefaultTexture() {
-        return "oceanized_wither_inv";
-    }
-
-    @Override
     protected int getInitialSkillp() {
         return 200;
     }
@@ -212,18 +207,18 @@ public class OceanizedWitherEntity extends AbstractOceanizedWitherEntity impleme
         return retval;
     }
 
-    @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
+	@Override
+	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("Dataspawn", this.entityData.get(DATA_spawn));
-    }
+	}
 
-    @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
+	@Override
+	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         if (compound.contains("Dataspawn"))
             this.entityData.set(DATA_spawn, compound.getInt("Dataspawn"));
-    }
+	}
 
     @Override
     public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
@@ -235,7 +230,6 @@ public class OceanizedWitherEntity extends AbstractOceanizedWitherEntity impleme
 
         this.entityData.set(DATA_duration, 0);
         this.entityData.set(DATA_spawn, 100);
-        this.setTexture("oceanized_wither");
         this.setHealth(this.getMaxHealth());
         this.removeEffect(CAMobEffects.INVULNERABLE.get());
         return InteractionResult.SUCCESS;
@@ -249,22 +243,7 @@ public class OceanizedWitherEntity extends AbstractOceanizedWitherEntity impleme
         if (spawn < 100) {
             this.setHealth((float) (this.getMaxHealth() * (spawn + 1) * 0.01));
             this.entityData.set(DATA_spawn, (int) (spawn + 1));
-            if (spawn == 19) {
-                this.setTexture("oceanized_wither_inv");
-            } else if (spawn == 39) {
-                this.setTexture("oceanized_wither");
-            } else if (spawn == 49) {
-                this.setTexture("oceanized_wither_inv");
-            } else if (spawn == 59) {
-                this.setTexture("oceanized_wither");
-            } else if (spawn == 69) {
-                this.setTexture("oceanized_wither_inv");
-            } else if (spawn == 79) {
-                this.setTexture("oceanized_wither");
-            } else if (spawn == 89) {
-                this.setTexture("oceanized_wither_inv");
-            } else if (spawn == 99) {
-                this.setTexture("oceanized_wither");
+            if (spawn == 99) {
                 if (world instanceof Level level && !level.isClientSide()) {
                     level.explode(null, x, y, z, 16, Level.ExplosionInteraction.MOB);
                 }
@@ -332,11 +311,6 @@ public class OceanizedWitherEntity extends AbstractOceanizedWitherEntity impleme
     @Override
     protected boolean shouldEnterShelledState() {
         return this.getHealth() < this.getMaxHealth() * 0.5 && this.entityData.get(DATA_spawn) > 99;
-    }
-
-    @Override
-    protected String getShelledTexture() {
-        return "oceanized_wither_anger";
     }
 
     @Override

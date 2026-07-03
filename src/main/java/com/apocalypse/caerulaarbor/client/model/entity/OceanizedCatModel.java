@@ -1,7 +1,6 @@
 package com.apocalypse.caerulaarbor.client.model.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.entity.OceanizedCatEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -12,6 +11,8 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class OceanizedCatModel extends GeoModel<OceanizedCatEntity> {
+	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/oceanized_cat.png");
+
 	@Override
 	public ResourceLocation getAnimationResource(OceanizedCatEntity entity) {
 		return new ResourceLocation(CaerulaArborMod.MODID, "animations/oceanized_cat.animation.json");
@@ -24,7 +25,7 @@ public class OceanizedCatModel extends GeoModel<OceanizedCatEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(OceanizedCatEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return TEXTURE;
 	}
 
 	@Override

@@ -66,7 +66,6 @@ import java.util.Optional;
 public class IzumikOffspringEntity extends SeaMonster {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(IzumikOffspringEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(IzumikOffspringEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(IzumikOffspringEntity.class, EntityDataSerializers.STRING);
 	private static final TagKey<EntityType<?>> ENTITY_TAG = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "izumik_discovers"));
 	public String animationprocedure = "empty";
 
@@ -87,16 +86,8 @@ public class IzumikOffspringEntity extends SeaMonster {
 		super.defineSynchedData();
 		this.entityData.define(SHOOT, false);
 		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(TEXTURE, "izumik_offspring");
 	}
 
-	public void setTexture(String texture) {
-		this.entityData.set(TEXTURE, texture);
-	}
-
-	public String getTexture() {
-		return this.entityData.get(TEXTURE);
-	}
 
 	public static boolean spawnRandomEntityFromTag(ServerLevel serverLevel, double x, double y, double z) {
 		if (serverLevel == null) {
@@ -234,18 +225,6 @@ public class IzumikOffspringEntity extends SeaMonster {
 		return retval;
 	}
 
-	@Override
-	public void addAdditionalSaveData(CompoundTag compound) {
-		super.addAdditionalSaveData(compound);
-		compound.putString("Texture", this.getTexture());
-	}
-
-	@Override
-	public void readAdditionalSaveData(CompoundTag compound) {
-		super.readAdditionalSaveData(compound);
-		if (compound.contains("Texture"))
-			this.setTexture(compound.getString("Texture"));
-	}
 
 	@Override
 	public void baseTick() {

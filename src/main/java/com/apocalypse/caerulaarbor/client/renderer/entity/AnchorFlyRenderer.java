@@ -2,7 +2,7 @@ package com.apocalypse.caerulaarbor.client.renderer.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.client.model.entity.ModelAnchorFly;
-import com.apocalypse.caerulaarbor.entity.AnchorFlyEntity;
+import com.apocalypse.caerulaarbor.entity.bullets.AnchorFlyEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;

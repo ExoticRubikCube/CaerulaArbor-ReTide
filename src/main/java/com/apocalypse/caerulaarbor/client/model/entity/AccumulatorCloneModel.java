@@ -6,6 +6,8 @@ import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.GeoModel;
 
 public class AccumulatorCloneModel extends GeoModel<AccumulatorCloneEntity> {
+	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/accumulator.png");
+
 	@Override
 	public ResourceLocation getAnimationResource(AccumulatorCloneEntity entity) {
 		return new ResourceLocation(CaerulaArborMod.MODID, "animations/accumulator.animation.json");
@@ -18,7 +20,7 @@ public class AccumulatorCloneModel extends GeoModel<AccumulatorCloneEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(AccumulatorCloneEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return TEXTURE;
 	}
 
 }

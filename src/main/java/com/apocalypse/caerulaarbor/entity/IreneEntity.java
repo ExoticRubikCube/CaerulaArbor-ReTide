@@ -65,7 +65,6 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(IreneEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(IreneEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(IreneEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<Integer> DATA_skillp1 = SynchedEntityData.defineId(IreneEntity.class, EntityDataSerializers.INT);
 	public static final EntityDataAccessor<Integer> DATA_skillp2 = SynchedEntityData.defineId(IreneEntity.class, EntityDataSerializers.INT);
 	public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(IreneEntity.class, EntityDataSerializers.INT);
@@ -93,20 +92,13 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 		super.defineSynchedData();
 		this.entityData.define(SHOOT, false);
 		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(TEXTURE, "irene");
 		this.entityData.define(DATA_skillp1, 0);
 		this.entityData.define(DATA_skillp2, 12);
 		this.entityData.define(DATA_duration, 0);
 		this.entityData.define(DATA_tapTick, 0);
 	}
 
-	public void setTexture(String texture) {
-		this.entityData.set(TEXTURE, texture);
-	}
 
-	public String getTexture() {
-		return this.entityData.get(TEXTURE);
-	}
 
 	@Override
 	public Packet<ClientGamePacketListener> getAddEntityPacket() {
@@ -253,11 +245,11 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 		if (sourceentity != null) {
 			Entity specter;
 			if (!(sourceentity instanceof Player) && !(sourceentity instanceof SpecterEntity)) {
-				specter = world.getEntitiesOfClass(SpecterEntity.class, AABB.ofSize(new Vec3(x, y, z), 32, 32, 32), e -> true).stream().sorted(new Object() {
-					Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
-						return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
-					}
-				}.compareDistOf(x, y, z)).findFirst().orElse(null);
+				specter = world.getEntitiesOfClass(SpecterEntity.class, AABB.ofSize(new Vec3(x, y, z), 32, 32, 32), e -> true).stream().min(new Object() {
+                    Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
+                        return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
+                    }
+                }.compareDistOf(x, y, z)).orElse(null);
 				if (specter instanceof Mob _entity) {
 					_entity.getNavigation().moveTo(x, y, z, 1);
 					if (sourceentity instanceof LivingEntity _ent)
@@ -298,7 +290,6 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
-		compound.putString("Texture", this.getTexture());
 		compound.putInt("Dataskillp1", this.entityData.get(DATA_skillp1));
 		compound.putInt("Dataskillp2", this.entityData.get(DATA_skillp2));
 		compound.putInt("Dataduration", this.entityData.get(DATA_duration));
@@ -308,8 +299,6 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
-		if (compound.contains("Texture"))
-			this.setTexture(compound.getString("Texture"));
 		if (compound.contains("Dataskillp1"))
 			this.entityData.set(DATA_skillp1, compound.getInt("Dataskillp1"));
 		if (compound.contains("Dataskillp2"))
@@ -371,8 +360,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 		double dura;
 		double skillp2;
 		double tap;
-		double less = 0;
-		if (this.isAlive()) {
+        if (this.isAlive()) {
 			if (tickCount % 40 == 15) {
 				burnBrandAround(world, x, y, z);
 			}
@@ -598,8 +586,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 	}
 
 	private PlayState attackingPredicate(AnimationState event) {
-		double d1 = this.getX() - this.xOld;
-		double d0 = this.getZ() - this.zOld;if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
+        if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
 		}

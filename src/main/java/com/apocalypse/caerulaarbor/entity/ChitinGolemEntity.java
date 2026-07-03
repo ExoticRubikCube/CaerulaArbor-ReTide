@@ -65,7 +65,6 @@ import java.util.List;
 public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAnimationEntity {
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(ChitinGolemEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(ChitinGolemEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(ChitinGolemEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_rootX = SynchedEntityData.defineId(ChitinGolemEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_rootZ = SynchedEntityData.defineId(ChitinGolemEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Boolean> DATA_rooted = SynchedEntityData.defineId(ChitinGolemEntity.class, EntityDataSerializers.BOOLEAN);
@@ -92,18 +91,9 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
         super.defineSynchedData();
         this.entityData.define(SHOOT, false);
         this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(TEXTURE, "chitin_golem_0");
         this.entityData.define(DATA_rootX, 0);
         this.entityData.define(DATA_rootZ, 0);
         this.entityData.define(DATA_rooted, false);
-    }
-
-    public void setTexture(String texture) {
-        this.entityData.set(TEXTURE, texture);
-    }
-
-    public String getTexture() {
-        return this.entityData.get(TEXTURE);
     }
 
     @Override
@@ -227,7 +217,6 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putString("Texture", this.getTexture());
         compound.putInt("DatarootX", this.entityData.get(DATA_rootX));
         compound.putInt("DatarootZ", this.entityData.get(DATA_rootZ));
         compound.putBoolean("Datarooted", this.entityData.get(DATA_rooted));
@@ -236,8 +225,6 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Texture"))
-            this.setTexture(compound.getString("Texture"));
         if (compound.contains("DatarootX"))
             this.entityData.set(DATA_rootX, compound.getInt("DatarootX"));
         if (compound.contains("DatarootZ"))
@@ -326,21 +313,6 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
         double rz;
         double dist;
         double dist1;
-        double perc;
-        perc = this.getHealth() / this.getMaxHealth();
-        if (perc < 0.25) {
-            if ((Entity) this instanceof ChitinGolemEntity animatable)
-                animatable.setTexture("chitin_golem_3");
-        } else if (perc < 0.5) {
-            if ((Entity) this instanceof ChitinGolemEntity animatable)
-                animatable.setTexture("chitin_golem_2");
-        } else if (perc < 0.75) {
-            if ((Entity) this instanceof ChitinGolemEntity animatable)
-                animatable.setTexture("chitin_golem_1");
-        } else {
-            if ((Entity) this instanceof ChitinGolemEntity animatable)
-                animatable.setTexture("chitin_golem_0");
-        }
         if (this.isAlive()) {
             root = (Entity) this instanceof ChitinGolemEntity _datEntL1 && _datEntL1.getEntityData().get(DATA_rooted);
             if (!root) {

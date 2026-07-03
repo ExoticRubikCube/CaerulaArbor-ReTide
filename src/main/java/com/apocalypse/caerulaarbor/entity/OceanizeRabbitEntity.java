@@ -54,7 +54,6 @@ import javax.annotation.Nullable;
 public class OceanizeRabbitEntity extends SeaMonster {
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanizeRabbitEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizeRabbitEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(OceanizeRabbitEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_variant = SynchedEntityData.defineId(OceanizeRabbitEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_swallowP = SynchedEntityData.defineId(OceanizeRabbitEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
@@ -78,17 +77,8 @@ public class OceanizeRabbitEntity extends SeaMonster {
         super.defineSynchedData();
         this.entityData.define(SHOOT, false);
         this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(TEXTURE, "oceanized_rabbit_0");
         this.entityData.define(DATA_variant, 0);
         this.entityData.define(DATA_swallowP, 40);
-    }
-
-    public void setTexture(String texture) {
-        this.entityData.set(TEXTURE, texture);
-    }
-
-    public String getTexture() {
-        return this.entityData.get(TEXTURE);
     }
 
     @Override
@@ -177,15 +167,12 @@ public class OceanizeRabbitEntity extends SeaMonster {
         } else {
             variant = curVar;
         }
-        if ((Entity) this instanceof OceanizeRabbitEntity animatable)
-            animatable.setTexture(("oceanized_rabbit_" + (int) variant));
         return retval;
     }
 
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putString("Texture", this.getTexture());
         compound.putInt("Datavariant", this.entityData.get(DATA_variant));
         compound.putInt("DataswallowP", this.entityData.get(DATA_swallowP));
     }
@@ -193,8 +180,6 @@ public class OceanizeRabbitEntity extends SeaMonster {
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Texture"))
-            this.setTexture(compound.getString("Texture"));
         if (compound.contains("Datavariant"))
             this.entityData.set(DATA_variant, compound.getInt("Datavariant"));
         if (compound.contains("DataswallowP"))
@@ -211,8 +196,6 @@ public class OceanizeRabbitEntity extends SeaMonster {
         if (sourceentity.isHolding(CAItems.APOCALYPSE.get())) {
             if (entity instanceof OceanizeRabbitEntity _datEntSetI)
                 _datEntSetI.getEntityData().set(DATA_variant, 5);
-            if (entity instanceof OceanizeRabbitEntity animatable)
-                animatable.setTexture("oceanized_rabbit_bloody");
             if (entity instanceof LivingEntity livingEntity) {
                 if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
                     this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue((livingEntity.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) * 10);

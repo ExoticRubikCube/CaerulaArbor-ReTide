@@ -11,6 +11,8 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class TideBishopModel extends GeoModel<TideBishopEntity> {
+	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/tidebishoptexture.png");
+
 	@Override
 	public ResourceLocation getAnimationResource(TideBishopEntity entity) {
 		return new ResourceLocation(CaerulaArborMod.MODID, "animations/tidebishop.animation.json");
@@ -23,7 +25,7 @@ public class TideBishopModel extends GeoModel<TideBishopEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(TideBishopEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTextureName() + ".png");
+		return TEXTURE;
 	}
 
 	@Override

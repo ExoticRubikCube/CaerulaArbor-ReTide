@@ -7,7 +7,7 @@ import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.entity.FirstTellerEntity;
-import com.apocalypse.caerulaarbor.entity.TellerShotEntity;
+import com.apocalypse.caerulaarbor.entity.bullets.TellerShotEntity;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.MathUtils;

@@ -11,6 +11,8 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class IreneModel extends GeoModel<IreneEntity> {
+	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/irene.png");
+
 	@Override
 	public ResourceLocation getAnimationResource(IreneEntity entity) {
 		return new ResourceLocation(CaerulaArborMod.MODID, "animations/irene.animation.json");
@@ -23,7 +25,7 @@ public class IreneModel extends GeoModel<IreneEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(IreneEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return TEXTURE;
 	}
 
 	@Override

@@ -1,7 +1,6 @@
 package com.apocalypse.caerulaarbor.client.model.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.entity.FlamarineStatueEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -12,6 +11,8 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class FlamarineStatueModel extends GeoModel<FlamarineStatueEntity> {
+	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/living_armor.png");
+
 	@Override
 	public ResourceLocation getAnimationResource(FlamarineStatueEntity entity) {
 		return new ResourceLocation(CaerulaArborMod.MODID, "animations/living_armor.animation.json");
@@ -24,7 +25,7 @@ public class FlamarineStatueModel extends GeoModel<FlamarineStatueEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(FlamarineStatueEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return TEXTURE;
 	}
 
 	@Override

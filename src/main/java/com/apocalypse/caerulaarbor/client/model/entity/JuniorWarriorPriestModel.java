@@ -11,6 +11,8 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class JuniorWarriorPriestModel extends GeoModel<JuniorWarriorPriestEntity> {
+	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/warriorpriest_junior_texture.png");
+
 	@Override
 	public ResourceLocation getAnimationResource(JuniorWarriorPriestEntity entity) {
 		return new ResourceLocation(CaerulaArborMod.MODID, "animations/warriorpriest.animation.json");
@@ -23,7 +25,7 @@ public class JuniorWarriorPriestModel extends GeoModel<JuniorWarriorPriestEntity
 
 	@Override
 	public ResourceLocation getTextureResource(JuniorWarriorPriestEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return TEXTURE;
 	}
 
 	@Override

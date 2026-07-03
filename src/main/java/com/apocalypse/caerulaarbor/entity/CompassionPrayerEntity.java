@@ -63,7 +63,6 @@ import java.util.List;
 public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMob {
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(CompassionPrayerEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(CompassionPrayerEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(CompassionPrayerEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_PHASE = SynchedEntityData.defineId(CompassionPrayerEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_REVIVE_TICK = SynchedEntityData.defineId(CompassionPrayerEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
@@ -88,17 +87,8 @@ public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMo
         super.defineSynchedData();
         this.entityData.define(SHOOT, false);
         this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(TEXTURE, "compassion_prayer");
         this.entityData.define(DATA_PHASE, 0);
         this.entityData.define(DATA_REVIVE_TICK, 0);
-    }
-
-    public void setTexture(String texture) {
-        this.entityData.set(TEXTURE, texture);
-    }
-
-    public String getTexture() {
-        return this.entityData.get(TEXTURE);
     }
 
     @Override
@@ -315,7 +305,6 @@ public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMo
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putString("Texture", this.getTexture());
         compound.putInt("DataPHASE", this.entityData.get(DATA_PHASE));
         compound.putInt("DataREVIVE_TICK", this.entityData.get(DATA_REVIVE_TICK));
     }
@@ -323,8 +312,6 @@ public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMo
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Texture"))
-            this.setTexture(compound.getString("Texture"));
         if (compound.contains("DataPHASE"))
             this.entityData.set(DATA_PHASE, compound.getInt("DataPHASE"));
         if (compound.contains("DataREVIVE_TICK"))
@@ -358,8 +345,6 @@ public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMo
             }
             P = (Entity) this instanceof CompassionPrayerEntity _datEntI ? _datEntI.getEntityData().get(DATA_PHASE) : 0;
             if (P == 0) {
-                if ((Entity) this instanceof CompassionPrayerEntity animatable)
-                    animatable.setTexture("compassion_prayer");
                 if (tickCount % 10 == 0) {
                     {
                         final Vec3 _center = new Vec3(x, y, z);
@@ -384,8 +369,6 @@ public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMo
                     }
                 }
             } else {
-                if ((Entity) this instanceof CompassionPrayerEntity animatable)
-                    animatable.setTexture("compassion_prayer_a");
                 Mob _mobEnt = this;
                 enemy = _mobEnt.getTarget();
                 LivingEntity _livingEntity19 = this;

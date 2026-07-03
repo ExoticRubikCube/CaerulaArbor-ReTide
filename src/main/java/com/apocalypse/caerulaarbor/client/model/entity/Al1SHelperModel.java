@@ -6,6 +6,8 @@ import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.GeoModel;
 
 public class Al1SHelperModel extends GeoModel<Al1SHelperEntity> {
+	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/little_helper_al1s.png");
+
 	@Override
 	public ResourceLocation getAnimationResource(Al1SHelperEntity entity) {
 		return new ResourceLocation(CaerulaArborMod.MODID, "animations/little_helper.animation.json");
@@ -18,7 +20,7 @@ public class Al1SHelperModel extends GeoModel<Al1SHelperEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(Al1SHelperEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return TEXTURE;
 	}
 
 }

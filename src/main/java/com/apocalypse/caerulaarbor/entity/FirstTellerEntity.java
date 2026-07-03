@@ -3,6 +3,7 @@ package com.apocalypse.caerulaarbor.entity;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
+import com.apocalypse.caerulaarbor.entity.bullets.TellerShotEntity;
 import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
@@ -54,7 +55,6 @@ import java.util.EnumSet;
 public class FirstTellerEntity extends SeaMonster implements RangedAttackMob {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(FirstTellerEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(FirstTellerEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(FirstTellerEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<Integer> DATA_sklp = SynchedEntityData.defineId(FirstTellerEntity.class, EntityDataSerializers.INT);
 	private boolean swinging;
 	private boolean lastloop;
@@ -78,17 +78,9 @@ public class FirstTellerEntity extends SeaMonster implements RangedAttackMob {
 		super.defineSynchedData();
 		this.entityData.define(SHOOT, false);
 		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(TEXTURE, "firstlit");
 		this.entityData.define(DATA_sklp, 200);
 	}
 
-	public void setTexture(String texture) {
-		this.entityData.set(TEXTURE, texture);
-	}
-
-	public String getTexture() {
-		return this.entityData.get(TEXTURE);
-	}
 
 	@Override
 	public Packet<ClientGamePacketListener> getAddEntityPacket() {
@@ -247,15 +239,12 @@ public class FirstTellerEntity extends SeaMonster implements RangedAttackMob {
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
-		compound.putString("Texture", this.getTexture());
 		compound.putInt("Datasklp", this.entityData.get(DATA_sklp));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
-		if (compound.contains("Texture"))
-			this.setTexture(compound.getString("Texture"));
 		if (compound.contains("Datasklp"))
 			this.entityData.set(DATA_sklp, compound.getInt("Datasklp"));
 	}

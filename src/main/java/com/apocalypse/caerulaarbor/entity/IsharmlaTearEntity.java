@@ -53,7 +53,6 @@ import java.util.List;
 public class IsharmlaTearEntity extends PathfinderMob implements GeoEntity, SyncedAnimationEntity {
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(IsharmlaTearEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(IsharmlaTearEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(IsharmlaTearEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_FUNC_COOLDOWN = SynchedEntityData.defineId(IsharmlaTearEntity.class, EntityDataSerializers.INT);
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private boolean swinging;
@@ -78,17 +77,10 @@ public class IsharmlaTearEntity extends PathfinderMob implements GeoEntity, Sync
         super.defineSynchedData();
         this.entityData.define(SHOOT, false);
         this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(TEXTURE, "isharmla_tear");
         this.entityData.define(DATA_FUNC_COOLDOWN, 85);
     }
 
-    public void setTexture(String texture) {
-        this.entityData.set(TEXTURE, texture);
-    }
 
-    public String getTexture() {
-        return this.entityData.get(TEXTURE);
-    }
 
     @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket() {
@@ -197,15 +189,12 @@ public class IsharmlaTearEntity extends PathfinderMob implements GeoEntity, Sync
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putString("Texture", this.getTexture());
         compound.putInt("DataFUNC_COOLDOWN", this.entityData.get(DATA_FUNC_COOLDOWN));
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Texture"))
-            this.setTexture(compound.getString("Texture"));
         if (compound.contains("DataFUNC_COOLDOWN"))
             this.entityData.set(DATA_FUNC_COOLDOWN, compound.getInt("DataFUNC_COOLDOWN"));
     }

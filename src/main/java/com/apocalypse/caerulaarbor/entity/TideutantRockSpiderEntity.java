@@ -60,7 +60,6 @@ public class TideutantRockSpiderEntity extends SeaMonster {
 
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(TideutantRockSpiderEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(TideutantRockSpiderEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(TideutantRockSpiderEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(TideutantRockSpiderEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
     private boolean lastloop;
@@ -84,17 +83,9 @@ public class TideutantRockSpiderEntity extends SeaMonster {
         super.defineSynchedData();
         this.entityData.define(SHOOT, false);
         this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(TEXTURE, "tideutant_rock_spider");
         this.entityData.define(DATA_duration, 0);
     }
 
-    public void setTexture(String texture) {
-        this.entityData.set(TEXTURE, texture);
-    }
-
-    public String getTexture() {
-        return this.entityData.get(TEXTURE);
-    }
 
     @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket() {
@@ -192,21 +183,18 @@ public class TideutantRockSpiderEntity extends SeaMonster {
         return super.hurt(source, amount);
     }
 
-    @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
+	@Override
+	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putString("Texture", this.getTexture());
         compound.putInt("Dataduration", this.entityData.get(DATA_duration));
-    }
+	}
 
-    @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
+	@Override
+	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Texture"))
-            this.setTexture(compound.getString("Texture"));
         if (compound.contains("Dataduration"))
             this.entityData.set(DATA_duration, compound.getInt("Dataduration"));
-    }
+	}
 
     @Override
     public void baseTick() {

@@ -61,7 +61,6 @@ import javax.annotation.Nullable;
 public class OceanizedCowEntity extends SeaMonster {
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanizedCowEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedCowEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(OceanizedCowEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Boolean> DATA_skill = SynchedEntityData.defineId(OceanizedCowEntity.class, EntityDataSerializers.BOOLEAN);
     private boolean swinging;
     private boolean lastloop;
@@ -84,16 +83,7 @@ public class OceanizedCowEntity extends SeaMonster {
         super.defineSynchedData();
         this.entityData.define(SHOOT, false);
         this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(TEXTURE, "oceanzied_cow");
         this.entityData.define(DATA_skill, true);
-    }
-
-    public void setTexture(String texture) {
-        this.entityData.set(TEXTURE, texture);
-    }
-
-    public String getTexture() {
-        return this.entityData.get(TEXTURE);
     }
 
     @Override
@@ -159,15 +149,12 @@ public class OceanizedCowEntity extends SeaMonster {
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putString("Texture", this.getTexture());
         compound.putBoolean("Dataskill", this.entityData.get(DATA_skill));
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Texture"))
-            this.setTexture(compound.getString("Texture"));
         if (compound.contains("Dataskill"))
             this.entityData.set(DATA_skill, compound.getBoolean("Dataskill"));
     }
@@ -183,8 +170,6 @@ public class OceanizedCowEntity extends SeaMonster {
         if (sourceentity.isHolding(Items.SHEARS) && entity instanceof OceanizedCowEntity _datEntL1 && _datEntL1.getEntityData().get(DATA_skill)) {
             if (entity instanceof OceanizedCowEntity _datEntSetL)
                 _datEntSetL.getEntityData().set(DATA_skill, false);
-            if (entity instanceof OceanizedCowEntity animatable)
-                animatable.setTexture("oceanzied_cow_trailless");
             if ((LevelAccessor) world instanceof Level _level) {
                 _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.mooshroom.shear")), SoundSource.PLAYERS, 1, 1);
             }

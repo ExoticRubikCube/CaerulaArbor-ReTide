@@ -77,7 +77,6 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
 
     public static final EntityDataAccessor<Boolean> DATA_IS_SHOOTING = SynchedEntityData.defineId(LastKnightAndHorseEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(LastKnightAndHorseEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<String> DATA_TEXTURE = SynchedEntityData.defineId(LastKnightAndHorseEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_ADDITION = SynchedEntityData.defineId(LastKnightAndHorseEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_SKILL_COOLDOWN = SynchedEntityData.defineId(LastKnightAndHorseEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_SKILL_DURATION = SynchedEntityData.defineId(LastKnightAndHorseEntity.class, EntityDataSerializers.INT);
@@ -105,18 +104,9 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
         super.defineSynchedData();
         this.entityData.define(DATA_IS_SHOOTING, false);
         this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(DATA_TEXTURE, "knight_amd_horse");
         this.entityData.define(DATA_ADDITION, 0);
         this.entityData.define(DATA_SKILL_COOLDOWN, 140);
         this.entityData.define(DATA_SKILL_DURATION, 0);
-    }
-
-    public void setTextureName(String texture) {
-        this.entityData.set(DATA_TEXTURE, texture);
-    }
-
-    public String getTextureName() {
-        return this.entityData.get(DATA_TEXTURE);
     }
 
     @Override
@@ -275,20 +265,17 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
         return retval;
     }
 
-    @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
+	@Override
+	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putString("Texture", this.getTextureName());
         compound.putInt("Addition", this.entityData.get(DATA_ADDITION));
         compound.putInt("SkillCooldown", this.entityData.get(DATA_SKILL_COOLDOWN));
         compound.putInt("SkillDuration", this.entityData.get(DATA_SKILL_DURATION));
-    }
+	}
 
-    @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
+	@Override
+	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Texture"))
-            this.setTextureName(compound.getString("Texture"));
         if (compound.contains("Addition"))
             this.entityData.set(DATA_ADDITION, compound.getInt("Addition"));
         else if (compound.contains("Dataaddiiton"))
@@ -301,7 +288,7 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
             this.entityData.set(DATA_SKILL_DURATION, compound.getInt("SkillDuration"));
         else if (compound.contains("Dataduration"))
             this.entityData.set(DATA_SKILL_DURATION, compound.getInt("Dataduration"));
-    }
+	}
 
     @Override
     public void awardKillScore(Entity entity, int score, DamageSource damageSource) {

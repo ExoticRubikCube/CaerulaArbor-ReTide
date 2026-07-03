@@ -1,7 +1,6 @@
 package com.apocalypse.caerulaarbor.client.model.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.entity.TheAbandonedEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -12,6 +11,8 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class TheAbandonedModel extends GeoModel<TheAbandonedEntity> {
+	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/theabandoned_texture.png");
+
 	@Override
 	public ResourceLocation getAnimationResource(TheAbandonedEntity entity) {
 		return new ResourceLocation(CaerulaArborMod.MODID, "animations/the_abandoned.animation.json");
@@ -24,7 +25,7 @@ public class TheAbandonedModel extends GeoModel<TheAbandonedEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(TheAbandonedEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return TEXTURE;
 	}
 
 	@Override

@@ -1,19 +1,18 @@
 package com.apocalypse.caerulaarbor.client.model.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
-import software.bernie.geckolib.model.data.EntityModelData;
-import software.bernie.geckolib.model.GeoModel;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animatable.model.CoreGeoBone;
-import software.bernie.geckolib.constant.DataTickets;
-
-import net.minecraft.util.Mth;
-import net.minecraft.resources.ResourceLocation;
-
 import com.apocalypse.caerulaarbor.entity.RocinanteEntity;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import software.bernie.geckolib.constant.DataTickets;
+import software.bernie.geckolib.core.animatable.model.CoreGeoBone;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.model.GeoModel;
+import software.bernie.geckolib.model.data.EntityModelData;
 
 public class RocinanteModel extends GeoModel<RocinanteEntity> {
+	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/mere_horse.png");
+
 	@Override
 	public ResourceLocation getAnimationResource(RocinanteEntity entity) {
 		return new ResourceLocation(CaerulaArborMod.MODID, "animations/rocinante.animation.json");
@@ -26,7 +25,7 @@ public class RocinanteModel extends GeoModel<RocinanteEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(RocinanteEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return TEXTURE;
 	}
 
 	@Override

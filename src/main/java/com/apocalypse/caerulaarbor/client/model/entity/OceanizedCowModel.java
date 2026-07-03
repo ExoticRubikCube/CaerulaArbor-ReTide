@@ -11,6 +11,9 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class OceanizedCowModel extends GeoModel<OceanizedCowEntity> {
+	private static final ResourceLocation TRAIL_TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/oceanzied_cow.png");
+	private static final ResourceLocation TRAILLESS_TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/oceanzied_cow_trailless.png");
+
 	@Override
 	public ResourceLocation getAnimationResource(OceanizedCowEntity entity) {
 		return new ResourceLocation(CaerulaArborMod.MODID, "animations/oceanized_cow.animation.json");
@@ -23,7 +26,7 @@ public class OceanizedCowModel extends GeoModel<OceanizedCowEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(OceanizedCowEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return entity.getEntityData().get(OceanizedCowEntity.DATA_skill) ? TRAIL_TEXTURE : TRAILLESS_TEXTURE;
 	}
 
 	@Override

@@ -54,7 +54,6 @@ import java.util.List;
 public class OceanizedFoxEntity extends SeaMonster {
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanizedFoxEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedFoxEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(OceanizedFoxEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_skillp = SynchedEntityData.defineId(OceanizedFoxEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Boolean> DATA_sleeping = SynchedEntityData.defineId(OceanizedFoxEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<Integer> DATA_action_time = SynchedEntityData.defineId(OceanizedFoxEntity.class, EntityDataSerializers.INT);
@@ -81,20 +80,12 @@ public class OceanizedFoxEntity extends SeaMonster {
         super.defineSynchedData();
         this.entityData.define(SHOOT, false);
         this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(TEXTURE, "oceanized_fox");
         this.entityData.define(DATA_skillp, 10);
         this.entityData.define(DATA_sleeping, false);
         this.entityData.define(DATA_action_time, 0);
         this.entityData.define(DATA_duration, 0);
     }
 
-    public void setTexture(String texture) {
-        this.entityData.set(TEXTURE, texture);
-    }
-
-    public String getTexture() {
-        return this.entityData.get(TEXTURE);
-    }
 
     @Override
     public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket() {
@@ -198,21 +189,18 @@ public class OceanizedFoxEntity extends SeaMonster {
         return retval;
     }
 
-    @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
+	@Override
+	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putString("Texture", this.getTexture());
         compound.putInt("Dataskillp", this.entityData.get(DATA_skillp));
         compound.putBoolean("Datasleeping", this.entityData.get(DATA_sleeping));
         compound.putInt("Dataaction_time", this.entityData.get(DATA_action_time));
         compound.putInt("Dataduration", this.entityData.get(DATA_duration));
-    }
+	}
 
-    @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
+	@Override
+	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Texture"))
-            this.setTexture(compound.getString("Texture"));
         if (compound.contains("Dataskillp"))
             this.entityData.set(DATA_skillp, compound.getInt("Dataskillp"));
         if (compound.contains("Datasleeping"))
@@ -221,7 +209,7 @@ public class OceanizedFoxEntity extends SeaMonster {
             this.entityData.set(DATA_action_time, compound.getInt("Dataaction_time"));
         if (compound.contains("Dataduration"))
             this.entityData.set(DATA_duration, compound.getInt("Dataduration"));
-    }
+	}
 
     @Override
     public void awardKillScore(Entity entity, int score, DamageSource damageSource) {

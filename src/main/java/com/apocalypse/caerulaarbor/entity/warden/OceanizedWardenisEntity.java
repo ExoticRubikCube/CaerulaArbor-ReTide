@@ -25,11 +25,6 @@ public class OceanizedWardenisEntity extends AbstractOceanizedWardenEntity {
 	}
 
 	@Override
-	protected String getDefaultTexture() {
-		return "oceanized_wardenis";
-	}
-
-	@Override
 	protected String getAmbientSoundId() {
 		return CaerulaArborMod.MODID + ":wardenis_idle";
 	}

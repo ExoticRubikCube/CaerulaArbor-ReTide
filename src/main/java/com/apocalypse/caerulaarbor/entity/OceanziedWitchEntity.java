@@ -74,7 +74,6 @@ import java.util.List;
 public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob, RavagerMountRider {
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanziedWitchEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanziedWitchEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(OceanziedWitchEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_skillp = SynchedEntityData.defineId(OceanziedWitchEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
     private boolean lastloop;
@@ -97,17 +96,9 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
         super.defineSynchedData();
         this.entityData.define(SHOOT, false);
         this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(TEXTURE, "oceanized_witch");
         this.entityData.define(DATA_skillp, 200);
     }
 
-    public void setTexture(String texture) {
-        this.entityData.set(TEXTURE, texture);
-    }
-
-    public String getTexture() {
-        return this.entityData.get(TEXTURE);
-    }
 
     @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket() {
@@ -366,21 +357,18 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
         return retval;
     }
 
-    @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
+	@Override
+	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putString("Texture", this.getTexture());
         compound.putInt("Dataskillp", this.entityData.get(DATA_skillp));
-    }
+	}
 
-    @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
+	@Override
+	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Texture"))
-            this.setTexture(compound.getString("Texture"));
         if (compound.contains("Dataskillp"))
             this.entityData.set(DATA_skillp, compound.getInt("Dataskillp"));
-    }
+	}
 
     @Override
     public void baseTick() {

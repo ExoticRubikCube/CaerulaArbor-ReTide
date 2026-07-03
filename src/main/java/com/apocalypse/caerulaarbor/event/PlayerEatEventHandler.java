@@ -1,8 +1,8 @@
 package com.apocalypse.caerulaarbor.event;
 
-import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
-import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.capability.ModCapabilities;
+import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;

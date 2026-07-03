@@ -69,7 +69,6 @@ import java.util.List;
 public class IsharmlaEntity extends SeaMonster {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(IsharmlaEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(IsharmlaEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(IsharmlaEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<Boolean> DATA_IS_MONSTER = SynchedEntityData.defineId(IsharmlaEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<Integer> DATA_SKILLP_1 = SynchedEntityData.defineId(IsharmlaEntity.class, EntityDataSerializers.INT);
 	public static final EntityDataAccessor<Integer> DATA_SKILLP_2 = SynchedEntityData.defineId(IsharmlaEntity.class, EntityDataSerializers.INT);
@@ -104,7 +103,6 @@ public class IsharmlaEntity extends SeaMonster {
 		super.defineSynchedData();
 		this.entityData.define(SHOOT, false);
 		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(TEXTURE, "isharmla_corrupted_heart");
 		this.entityData.define(DATA_IS_MONSTER, false);
 		this.entityData.define(DATA_SKILLP_1, 400);
 		this.entityData.define(DATA_SKILLP_2, 240);
@@ -114,13 +112,6 @@ public class IsharmlaEntity extends SeaMonster {
 		this.entityData.define(DATA_HEAL_P, 60);
 	}
 
-	public void setTexture(String texture) {
-		this.entityData.set(TEXTURE, texture);
-	}
-
-	public String getTexture() {
-		return this.entityData.get(TEXTURE);
-	}
 
 	@Override
 	public Packet<ClientGamePacketListener> getAddEntityPacket() {
@@ -369,7 +360,6 @@ public class IsharmlaEntity extends SeaMonster {
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
-		compound.putString("Texture", this.getTexture());
 		compound.putBoolean("DataIS_MONSTER", this.entityData.get(DATA_IS_MONSTER));
 		compound.putInt("DataSKILLP_1", this.entityData.get(DATA_SKILLP_1));
 		compound.putInt("DataSKILLP_2", this.entityData.get(DATA_SKILLP_2));
@@ -383,8 +373,6 @@ public class IsharmlaEntity extends SeaMonster {
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
-		if (compound.contains("Texture"))
-			this.setTexture(compound.getString("Texture"));
 		if (compound.contains("DataIS_MONSTER"))
 			this.entityData.set(DATA_IS_MONSTER, compound.getBoolean("DataIS_MONSTER"));
 		if (compound.contains("DataSKILLP_1"))

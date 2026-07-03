@@ -6,6 +6,8 @@ import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.GeoModel;
 
 public class IzumikOffspringModel extends GeoModel<IzumikOffspringEntity> {
+	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/izumik_offspring.png");
+
 	@Override
 	public ResourceLocation getAnimationResource(IzumikOffspringEntity entity) {
 		return new ResourceLocation(CaerulaArborMod.MODID, "animations/izumik_offspring.animation.json");
@@ -18,7 +20,7 @@ public class IzumikOffspringModel extends GeoModel<IzumikOffspringEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(IzumikOffspringEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return TEXTURE;
 	}
 
 }

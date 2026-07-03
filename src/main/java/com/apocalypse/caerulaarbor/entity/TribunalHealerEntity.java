@@ -63,7 +63,6 @@ import java.util.List;
 public class TribunalHealerEntity extends Animal implements RangedAttackMob, GeoEntity, SyncedAnimationEntity {
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(TribunalHealerEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(TribunalHealerEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(TribunalHealerEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_skillp1 = SynchedEntityData.defineId(TribunalHealerEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_skillp2 = SynchedEntityData.defineId(TribunalHealerEntity.class, EntityDataSerializers.INT);
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
@@ -89,18 +88,10 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
         super.defineSynchedData();
         this.entityData.define(SHOOT, false);
         this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(TEXTURE, "tribunalhealer");
         this.entityData.define(DATA_skillp1, 100);
         this.entityData.define(DATA_skillp2, 90);
     }
 
-    public void setTexture(String texture) {
-        this.entityData.set(TEXTURE, texture);
-    }
-
-    public String getTexture() {
-        return this.entityData.get(TEXTURE);
-    }
 
     @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket() {
@@ -250,24 +241,21 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
         return retval;
     }
 
-    @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
+	@Override
+	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putString("Texture", this.getTexture());
         compound.putInt("Dataskillp1", this.entityData.get(DATA_skillp1));
         compound.putInt("Dataskillp2", this.entityData.get(DATA_skillp2));
-    }
+	}
 
-    @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
+	@Override
+	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Texture"))
-            this.setTexture(compound.getString("Texture"));
         if (compound.contains("Dataskillp1"))
             this.entityData.set(DATA_skillp1, compound.getInt("Dataskillp1"));
         if (compound.contains("Dataskillp2"))
             this.entityData.set(DATA_skillp2, compound.getInt("Dataskillp2"));
-    }
+	}
 
     @Override
     public void baseTick() {
@@ -563,7 +551,6 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return this.cache;
     }
-
 
     @Override
     public void setAnimationProcedure(String animation) {

@@ -69,7 +69,6 @@ public class ThirsterEntity extends SeaMonster {
 
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(ThirsterEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(ThirsterEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(ThirsterEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_DURATION = SynchedEntityData.defineId(ThirsterEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_SKILL_P = SynchedEntityData.defineId(ThirsterEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_INTEGRATION = SynchedEntityData.defineId(ThirsterEntity.class, EntityDataSerializers.INT);
@@ -97,20 +96,12 @@ public class ThirsterEntity extends SeaMonster {
         super.defineSynchedData();
         this.entityData.define(SHOOT, false);
         this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(TEXTURE, "thirster");
         this.entityData.define(DATA_DURATION, 0);
         this.entityData.define(DATA_SKILL_P, 0);
         this.entityData.define(DATA_INTEGRATION, 0);
         this.entityData.define(DATA_DIZZY_NUM, 2);
     }
 
-    public void setTexture(String texture) {
-        this.entityData.set(TEXTURE, texture);
-    }
-
-    public String getTexture() {
-        return this.entityData.get(TEXTURE);
-    }
 
     @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket() {
@@ -253,21 +244,18 @@ public class ThirsterEntity extends SeaMonster {
         return retval;
     }
 
-    @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
+	@Override
+	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putString("Texture", this.getTexture());
         compound.putInt("DataDURATION", this.entityData.get(DATA_DURATION));
         compound.putInt("DataSKILL_P", this.entityData.get(DATA_SKILL_P));
         compound.putInt("DataINTEGRATION", this.entityData.get(DATA_INTEGRATION));
         compound.putInt("DataDIZZY_NUM", this.entityData.get(DATA_DIZZY_NUM));
-    }
+	}
 
-    @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
+	@Override
+	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Texture"))
-            this.setTexture(compound.getString("Texture"));
         if (compound.contains("DataDURATION"))
             this.entityData.set(DATA_DURATION, compound.getInt("DataDURATION"));
         if (compound.contains("DataSKILL_P"))
@@ -276,7 +264,7 @@ public class ThirsterEntity extends SeaMonster {
             this.entityData.set(DATA_INTEGRATION, compound.getInt("DataINTEGRATION"));
         if (compound.contains("DataDIZZY_NUM"))
             this.entityData.set(DATA_DIZZY_NUM, compound.getInt("DataDIZZY_NUM"));
-    }
+	}
 
     @Override
     public void baseTick() {

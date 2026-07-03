@@ -8,8 +8,6 @@ import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -42,7 +40,6 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -58,7 +55,6 @@ import java.util.EnumSet;
 public class OceanIllusionEntity extends SeaMonster implements RangedAttackMob {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanIllusionEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanIllusionEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(OceanIllusionEntity.class, EntityDataSerializers.STRING);
 	public String animationprocedure = "empty";
 
 	public OceanIllusionEntity(PlayMessages.SpawnEntity packet, Level world) {
@@ -78,23 +74,11 @@ public class OceanIllusionEntity extends SeaMonster implements RangedAttackMob {
 		super.defineSynchedData();
 		this.entityData.define(SHOOT, false);
 		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(TEXTURE, "oceanized_illusioner");
 	}
 
-	public void setTexture(String texture) {
-		this.entityData.set(TEXTURE, texture);
-	}
 
-	public String getTexture() {
-		return this.entityData.get(TEXTURE);
-	}
 
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
-	}
-
-	@Override
+    @Override
 	protected void registerGoals() {
 		super.registerGoals();
 		this.targetSelector.addGoal(1, new HurtByTargetGoal(this).setAlertOthers());
@@ -256,14 +240,11 @@ public class OceanIllusionEntity extends SeaMonster implements RangedAttackMob {
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
-		compound.putString("Texture", this.getTexture());
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
-		if (compound.contains("Texture"))
-			this.setTexture(compound.getString("Texture"));
 	}
 
 	@Override
@@ -282,11 +263,11 @@ public class OceanIllusionEntity extends SeaMonster implements RangedAttackMob {
 				if (!(enemy == null) && enemy.isAlive()) {
 					finished = true;
 				} else {
-					illusioner = world.getEntitiesOfClass(OceanizedIllusionerEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true).stream().sorted(new Object() {
-						Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
-							return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
-						}
-					}.compareDistOf(x, y, z)).findFirst().orElse(null);
+					illusioner = world.getEntitiesOfClass(OceanizedIllusionerEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true).stream().min(new Object() {
+                        Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
+                            return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
+                        }
+                    }.compareDistOf(x, y, z)).orElse(null);
 					if (illusioner == null) {
 						finished = true;
 					} else {
@@ -303,10 +284,8 @@ public class OceanIllusionEntity extends SeaMonster implements RangedAttackMob {
 							goal = ownerPos.add(v1.normalize().scale(r).yRot((float) Math.toRadians(yaw)));
 						}
 						if (goal.distanceToSqr(position()) > 0.25) {
-							if ((Entity) this instanceof Mob mob) {
-								mob.getNavigation().moveTo(goal.x, goal.y, goal.z, 1);
-							}
-						}
+							this.getNavigation().moveTo(goal.x, goal.y, goal.z, 1);
+                        }
 					}
 				}
 			}

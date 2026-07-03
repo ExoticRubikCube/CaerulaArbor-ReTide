@@ -1,12 +1,13 @@
 package com.apocalypse.caerulaarbor.client.model.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.entity.TideutantRockSpiderEntity;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.GeoModel;
 
 public class TideutantRockSpiderModel extends GeoModel<TideutantRockSpiderEntity> {
+	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/tideutant_rock_spider.png");
+
 	@Override
 	public ResourceLocation getAnimationResource(TideutantRockSpiderEntity entity) {
 		return new ResourceLocation(CaerulaArborMod.MODID, "animations/tidutant_rock_spider.animation.json");
@@ -19,7 +20,7 @@ public class TideutantRockSpiderModel extends GeoModel<TideutantRockSpiderEntity
 
 	@Override
 	public ResourceLocation getTextureResource(TideutantRockSpiderEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return TEXTURE;
 	}
 
 }

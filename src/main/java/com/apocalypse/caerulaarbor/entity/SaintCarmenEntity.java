@@ -64,7 +64,6 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
 
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(SaintCarmenEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(SaintCarmenEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(SaintCarmenEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_skillP1 = SynchedEntityData.defineId(SaintCarmenEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_skillP2 = SynchedEntityData.defineId(SaintCarmenEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_shootP = SynchedEntityData.defineId(SaintCarmenEntity.class, EntityDataSerializers.INT);
@@ -94,7 +93,6 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
         super.defineSynchedData();
         this.entityData.define(SHOOT, false);
         this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(TEXTURE, "saint_carmen");
         this.entityData.define(DATA_skillP1, 200);
         this.entityData.define(DATA_skillP2, 100);
         this.entityData.define(DATA_shootP, 80);
@@ -103,13 +101,6 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
         this.entityData.define(DATA_reloadP, 500);
     }
 
-    public void setTexture(String texture) {
-        this.entityData.set(TEXTURE, texture);
-    }
-
-    public String getTexture() {
-        return this.entityData.get(TEXTURE);
-    }
 
     @Override
     protected float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
@@ -218,23 +209,20 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
         }
     }
 
-    @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
+	@Override
+	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putString("Texture", this.getTexture());
         compound.putInt("DataskillP1", this.entityData.get(DATA_skillP1));
         compound.putInt("DataskillP2", this.entityData.get(DATA_skillP2));
         compound.putInt("DatashootP", this.entityData.get(DATA_shootP));
         compound.putInt("Databullet", this.entityData.get(DATA_bullet));
         compound.putInt("Dataduration", this.entityData.get(DATA_duration));
         compound.putInt("DatareloadP", this.entityData.get(DATA_reloadP));
-    }
+	}
 
-    @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
+	@Override
+	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Texture"))
-            this.setTexture(compound.getString("Texture"));
         if (compound.contains("DataskillP1"))
             this.entityData.set(DATA_skillP1, compound.getInt("DataskillP1"));
         if (compound.contains("DataskillP2"))
@@ -247,7 +235,7 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
             this.entityData.set(DATA_duration, compound.getInt("Dataduration"));
         if (compound.contains("DatareloadP"))
             this.entityData.set(DATA_reloadP, compound.getInt("DatareloadP"));
-    }
+	}
 
     @Override
     public void baseTick() {

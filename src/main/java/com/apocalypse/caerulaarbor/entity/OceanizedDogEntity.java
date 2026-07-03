@@ -53,7 +53,6 @@ import java.util.Objects;
 public class OceanizedDogEntity extends TamableAnimal implements GeoEntity, SyncedAnimationEntity {
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanizedDogEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedDogEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(OceanizedDogEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Boolean> DATA_sitting = SynchedEntityData.defineId(OceanizedDogEntity.class, EntityDataSerializers.BOOLEAN);
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private boolean swinging;
@@ -77,17 +76,9 @@ public class OceanizedDogEntity extends TamableAnimal implements GeoEntity, Sync
         super.defineSynchedData();
         this.entityData.define(SHOOT, false);
         this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(TEXTURE, "oceanized_wolf_tamed");
         this.entityData.define(DATA_sitting, false);
     }
 
-    public void setTexture(String texture) {
-        this.entityData.set(TEXTURE, texture);
-    }
-
-    public String getTexture() {
-        return this.entityData.get(TEXTURE);
-    }
 
     public boolean isNotSitting() {
         return !this.entityData.get(DATA_sitting);
@@ -185,21 +176,18 @@ public class OceanizedDogEntity extends TamableAnimal implements GeoEntity, Sync
         return super.hurt(source, amount);
     }
 
-    @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
+	@Override
+	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putString("Texture", this.getTexture());
         compound.putBoolean("Datasitting", this.entityData.get(DATA_sitting));
-    }
+	}
 
-    @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
+	@Override
+	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Texture"))
-            this.setTexture(compound.getString("Texture"));
         if (compound.contains("Datasitting"))
             this.entityData.set(DATA_sitting, compound.getBoolean("Datasitting"));
-    }
+	}
 
     @Override
     public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {

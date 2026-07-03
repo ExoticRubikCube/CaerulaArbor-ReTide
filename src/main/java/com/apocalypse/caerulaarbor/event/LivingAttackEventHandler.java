@@ -8,6 +8,7 @@ import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler.StrategyTy
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
 import com.apocalypse.caerulaarbor.entity.*;
+import com.apocalypse.caerulaarbor.entity.bullets.HighmoreShootEntity;
 import com.apocalypse.caerulaarbor.entity.helper.Al1SHelperEntity;
 import com.apocalypse.caerulaarbor.entity.helper.LittleHelperEntity;
 import com.apocalypse.caerulaarbor.init.*;
@@ -147,7 +148,7 @@ public class LivingAttackEventHandler {
         }
     }
 
-    //需要下放
+    //TODO 需要下放
     private static void handleLittleHelperNoHurt(LivingAttackEvent event) {
         LevelAccessor world = event.getEntity().level();
         double x = event.getEntity().getX();

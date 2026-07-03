@@ -403,9 +403,10 @@ public class MartusEntity extends SeaMonster {
                             }
                             tgt.getPersistentData().putBoolean("blessed", true);
                             perc = (tgt instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) / (tgt instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1);
-                            if (tgt instanceof LivingEntity _livingEntity22 && _livingEntity22.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
+                            if (tgt instanceof LivingEntity _livingEntity22 && _livingEntity22.getAttributes().hasAttribute(Attributes.MAX_HEALTH)) {
                                 _livingEntity22.getAttribute(Attributes.MAX_HEALTH)
-                                        .setBaseValue(((tgt instanceof LivingEntity _livingEntity21 && _livingEntity21.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? _livingEntity21.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0) * 2.5));
+                                        .setBaseValue((_livingEntity22.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? _livingEntity22.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0) * 2.5);
+                            }
                             if (tgt instanceof LivingEntity _livingEntity24 && _livingEntity24.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
                                 _livingEntity24.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
                                         ((tgt instanceof LivingEntity _livingEntity23 && _livingEntity23.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity23.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) * 2.5));
@@ -492,11 +493,9 @@ public class MartusEntity extends SeaMonster {
                         this.setAnimation("animation.martus.reject");
                     }
                     CaerulaArborMod.queueServerWork(15, () -> {
-                        if (this == null)
-                            return;
                         Entity tgt_ent;
                         double max_h = 0;
-                        tgt_ent = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+                        tgt_ent = this.getTarget();
                         if (tgt_ent == null || tgt_ent instanceof LivingEntity _livEnt2 && _livEnt2.hasEffect(CAMobEffects.SUB_HAEMO.get())) {
                             tgt_ent = ((Entity) this instanceof LivingEntity _entity) ? _entity.getLastHurtByMob() : null;
                         }
@@ -657,9 +656,6 @@ public class MartusEntity extends SeaMonster {
     }
 
     private PlayState attackingPredicate(AnimationState event) {
-        double d1 = this.getX() - this.xOld;
-        double d0 = this.getZ() - this.zOld;
-        float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
             this.swinging = true;
             this.lastSwing = level().getGameTime();

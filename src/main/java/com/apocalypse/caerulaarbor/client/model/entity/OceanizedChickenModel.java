@@ -1,7 +1,6 @@
 package com.apocalypse.caerulaarbor.client.model.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.entity.OceanizedChickenEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -12,6 +11,9 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class OceanizedChickenModel extends GeoModel<OceanizedChickenEntity> {
+	private static final ResourceLocation ADULT_TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/oceanized_chicken_adult.png");
+	private static final ResourceLocation CHILD_TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/oceanized_chicken_child.png");
+
 	@Override
 	public ResourceLocation getAnimationResource(OceanizedChickenEntity entity) {
 		return new ResourceLocation(CaerulaArborMod.MODID, "animations/oceanized_chicken.animation.json");
@@ -24,7 +26,7 @@ public class OceanizedChickenModel extends GeoModel<OceanizedChickenEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(OceanizedChickenEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return entity.getEntityData().get(OceanizedChickenEntity.DATA_IS_CHILD) ? CHILD_TEXTURE : ADULT_TEXTURE;
 	}
 
 	@Override

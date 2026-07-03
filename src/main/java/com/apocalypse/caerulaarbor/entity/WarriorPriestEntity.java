@@ -53,7 +53,6 @@ import java.util.List;
 public class WarriorPriestEntity extends Animal implements GeoEntity, SyncedAnimationEntity {
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(WarriorPriestEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(WarriorPriestEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(WarriorPriestEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_skill_p = SynchedEntityData.defineId(WarriorPriestEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_skill_p1 = SynchedEntityData.defineId(WarriorPriestEntity.class, EntityDataSerializers.INT);
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
@@ -79,18 +78,10 @@ public class WarriorPriestEntity extends Animal implements GeoEntity, SyncedAnim
         super.defineSynchedData();
         this.entityData.define(SHOOT, false);
         this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(TEXTURE, "warriorpriest_texture");
         this.entityData.define(DATA_skill_p, 100);
         this.entityData.define(DATA_skill_p1, 200);
     }
 
-    public void setTexture(String texture) {
-        this.entityData.set(TEXTURE, texture);
-    }
-
-    public String getTexture() {
-        return this.entityData.get(TEXTURE);
-    }
 
     @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket() {
@@ -194,24 +185,21 @@ public class WarriorPriestEntity extends Animal implements GeoEntity, SyncedAnim
         return super.hurt(source, amount);
     }
 
-    @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
+	@Override
+	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putString("Texture", this.getTexture());
         compound.putInt("Dataskill_p", this.entityData.get(DATA_skill_p));
         compound.putInt("Dataskill_p1", this.entityData.get(DATA_skill_p1));
-    }
+	}
 
-    @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
+	@Override
+	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Texture"))
-            this.setTexture(compound.getString("Texture"));
         if (compound.contains("Dataskill_p"))
             this.entityData.set(DATA_skill_p, compound.getInt("Dataskill_p"));
         if (compound.contains("Dataskill_p1"))
             this.entityData.set(DATA_skill_p1, compound.getInt("Dataskill_p1"));
-    }
+	}
 
     @Override
     public void baseTick() {
@@ -274,7 +262,6 @@ public class WarriorPriestEntity extends Animal implements GeoEntity, SyncedAnim
         super.aiStep();
         this.updateSwingTime();
     }
-
 
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();

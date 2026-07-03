@@ -11,6 +11,8 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class LastKnightAndHorseModel extends GeoModel<LastKnightAndHorseEntity> {
+	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/knight_amd_horse.png");
+
 	@Override
 	public ResourceLocation getAnimationResource(LastKnightAndHorseEntity entity) {
 		return new ResourceLocation(CaerulaArborMod.MODID, "animations/last_knight_horse.animation.json");
@@ -23,7 +25,7 @@ public class LastKnightAndHorseModel extends GeoModel<LastKnightAndHorseEntity> 
 
 	@Override
 	public ResourceLocation getTextureResource(LastKnightAndHorseEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTextureName() + ".png");
+		return TEXTURE;
 	}
 
 	@Override

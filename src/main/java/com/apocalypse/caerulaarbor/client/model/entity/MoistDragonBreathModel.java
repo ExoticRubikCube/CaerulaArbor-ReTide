@@ -11,6 +11,8 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class MoistDragonBreathModel extends GeoModel<MoistDragonBreathEntity> {
+	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/moist_dragon_ball.png");
+
 	@Override
 	public ResourceLocation getAnimationResource(MoistDragonBreathEntity entity) {
 		return new ResourceLocation(CaerulaArborMod.MODID, "animations/moist_dragon_breath.animation.json");
@@ -23,7 +25,7 @@ public class MoistDragonBreathModel extends GeoModel<MoistDragonBreathEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(MoistDragonBreathEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return TEXTURE;
 	}
 
 	@Override

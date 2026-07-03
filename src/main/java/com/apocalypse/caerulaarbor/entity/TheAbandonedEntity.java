@@ -51,7 +51,6 @@ import software.bernie.geckolib.core.object.PlayState;
 public class TheAbandonedEntity extends SeaMonster implements PolarMountRider {
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(TheAbandonedEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(TheAbandonedEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(TheAbandonedEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_skillp = SynchedEntityData.defineId(TheAbandonedEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
     private boolean lastloop;
@@ -75,17 +74,9 @@ public class TheAbandonedEntity extends SeaMonster implements PolarMountRider {
         super.defineSynchedData();
         this.entityData.define(SHOOT, false);
         this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(TEXTURE, "theabandoned_texture");
         this.entityData.define(DATA_skillp, 100);
     }
 
-    public void setTexture(String texture) {
-        this.entityData.set(TEXTURE, texture);
-    }
-
-    public String getTexture() {
-        return this.entityData.get(TEXTURE);
-    }
 
     @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket() {
@@ -163,21 +154,18 @@ public class TheAbandonedEntity extends SeaMonster implements PolarMountRider {
         return super.hurt(source, amount);
     }
 
-    @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
+	@Override
+	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putString("Texture", this.getTexture());
         compound.putInt("Dataskillp", this.entityData.get(DATA_skillp));
-    }
+	}
 
-    @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
+	@Override
+	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Texture"))
-            this.setTexture(compound.getString("Texture"));
         if (compound.contains("Dataskillp"))
             this.entityData.set(DATA_skillp, compound.getInt("Dataskillp"));
-    }
+	}
 
     @Override
     public void baseTick() {

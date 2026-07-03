@@ -6,6 +6,8 @@ import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.GeoModel;
 
 public class IsharmlaTearModel extends GeoModel<IsharmlaTearEntity> {
+	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/isharmla_tear.png");
+
 	@Override
 	public ResourceLocation getAnimationResource(IsharmlaTearEntity entity) {
 		return new ResourceLocation(CaerulaArborMod.MODID, "animations/isharmla_tear.animation.json");
@@ -18,7 +20,7 @@ public class IsharmlaTearModel extends GeoModel<IsharmlaTearEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(IsharmlaTearEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return TEXTURE;
 	}
 
 }

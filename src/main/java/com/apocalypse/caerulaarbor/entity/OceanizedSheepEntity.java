@@ -58,7 +58,6 @@ import software.bernie.geckolib.core.object.PlayState;
 public class OceanizedSheepEntity extends SeaMonster {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanizedSheepEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedSheepEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(OceanizedSheepEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<Boolean> DATA_fur = SynchedEntityData.defineId(OceanizedSheepEntity.class, EntityDataSerializers.BOOLEAN);
 	private boolean swinging;
 	private boolean lastloop;
@@ -81,16 +80,7 @@ public class OceanizedSheepEntity extends SeaMonster {
 		super.defineSynchedData();
 		this.entityData.define(SHOOT, false);
 		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(TEXTURE, "oceanized_sheep");
 		this.entityData.define(DATA_fur, true);
-	}
-
-	public void setTexture(String texture) {
-		this.entityData.set(TEXTURE, texture);
-	}
-
-	public String getTexture() {
-		return this.entityData.get(TEXTURE);
 	}
 
 	@Override
@@ -147,15 +137,12 @@ public class OceanizedSheepEntity extends SeaMonster {
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
-		compound.putString("Texture", this.getTexture());
 		compound.putBoolean("Datafur", this.entityData.get(DATA_fur));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
-		if (compound.contains("Texture"))
-			this.setTexture(compound.getString("Texture"));
 		if (compound.contains("Datafur"))
 			this.entityData.set(DATA_fur, compound.getBoolean("Datafur"));
 	}
@@ -171,8 +158,6 @@ public class OceanizedSheepEntity extends SeaMonster {
 		if (sourceentity.isHolding(Items.SHEARS) && entity instanceof OceanizedSheepEntity _datEntL1 && _datEntL1.getEntityData().get(DATA_fur)) {
 			if (entity instanceof OceanizedSheepEntity _datEntSetL)
 				_datEntSetL.getEntityData().set(DATA_fur, false);
-			if (entity instanceof OceanizedSheepEntity animatable)
-				animatable.setTexture("oceanized_sheep_furless");
 			if ((LevelAccessor) world instanceof Level _level) {
 				_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.sheep.shear")), SoundSource.PLAYERS, 1, 1);
 			}
@@ -211,8 +196,6 @@ public class OceanizedSheepEntity extends SeaMonster {
 				world.setBlock(BlockPos.containing(x + getLookAngle().x, y, z + getLookAngle().z), Blocks.AIR.defaultBlockState(), 3);
 				CaerulaArborMod.queueServerWork(20, () -> {
 					if ((Entity) this instanceof OceanizedSheepEntity _datEntL10 && _datEntL10.getEntityData().get(DATA_fur)) {
-						if ((Entity) this instanceof OceanizedSheepEntity animatable)
-							animatable.setTexture("oceanized_sheep");
 					}
 				});
 			}

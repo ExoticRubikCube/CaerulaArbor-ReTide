@@ -68,7 +68,6 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
 
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(SpecterEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(SpecterEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(SpecterEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_skillp1 = SynchedEntityData.defineId(SpecterEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_skillp2 = SynchedEntityData.defineId(SpecterEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(SpecterEntity.class, EntityDataSerializers.INT);
@@ -96,19 +95,11 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
         super.defineSynchedData();
         this.entityData.define(SHOOT, false);
         this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(TEXTURE, "hunter_specter");
         this.entityData.define(DATA_skillp1, 2);
         this.entityData.define(DATA_skillp2, 240);
         this.entityData.define(DATA_duration, 0);
     }
 
-    public void setTexture(String texture) {
-        this.entityData.set(TEXTURE, texture);
-    }
-
-    public String getTexture() {
-        return this.entityData.get(TEXTURE);
-    }
 
     @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket() {
@@ -264,27 +255,24 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
         return retval;
     }
 
-    @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
+	@Override
+	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putString("Texture", this.getTexture());
         compound.putInt("Dataskillp1", this.entityData.get(DATA_skillp1));
         compound.putInt("Dataskillp2", this.entityData.get(DATA_skillp2));
         compound.putInt("Dataduration", this.entityData.get(DATA_duration));
-    }
+	}
 
-    @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
+	@Override
+	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Texture"))
-            this.setTexture(compound.getString("Texture"));
         if (compound.contains("Dataskillp1"))
             this.entityData.set(DATA_skillp1, compound.getInt("Dataskillp1"));
         if (compound.contains("Dataskillp2"))
             this.entityData.set(DATA_skillp2, compound.getInt("Dataskillp2"));
         if (compound.contains("Dataduration"))
             this.entityData.set(DATA_duration, compound.getInt("Dataduration"));
-    }
+	}
 
     @Override
     public void baseTick() {

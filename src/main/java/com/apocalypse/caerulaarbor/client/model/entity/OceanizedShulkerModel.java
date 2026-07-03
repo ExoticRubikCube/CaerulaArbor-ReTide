@@ -12,6 +12,11 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class OceanizedShulkerModel extends GeoModel<OceanizedShulkerEntity> {
+	private static final ResourceLocation DEFAULT_TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/oceanized_shulker.png");
+	private static final ResourceLocation WHITE_TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/oceanized_shulker_white.png");
+	private static final ResourceLocation COMPLEX_TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/oceanized_shulker_complex.png");
+	private static final ResourceLocation BEDROCK_TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/oceanized_shulker_bedrock.png");
+
 	@Override
 	public ResourceLocation getAnimationResource(OceanizedShulkerEntity entity) {
 		return new ResourceLocation(CaerulaArborMod.MODID, "animations/oceanized_shulker.animation.json");
@@ -24,7 +29,12 @@ public class OceanizedShulkerModel extends GeoModel<OceanizedShulkerEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(OceanizedShulkerEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return switch (entity.getEntityData().get(OceanizedShulkerEntity.DATA_VARIANT)) {
+			case 1 -> WHITE_TEXTURE;
+			case 2 -> COMPLEX_TEXTURE;
+			case 3 -> BEDROCK_TEXTURE;
+			default -> DEFAULT_TEXTURE;
+		};
 	}
 
 	@Override

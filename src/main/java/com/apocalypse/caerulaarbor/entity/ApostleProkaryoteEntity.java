@@ -11,8 +11,6 @@ import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -44,7 +42,6 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -58,7 +55,6 @@ import javax.annotation.Nullable;
 public class ApostleProkaryoteEntity extends SeaMonster {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(ApostleProkaryoteEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(ApostleProkaryoteEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(ApostleProkaryoteEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<Boolean> DATA_shelled = SynchedEntityData.defineId(ApostleProkaryoteEntity.class, EntityDataSerializers.BOOLEAN);
 	private boolean swinging;
 	private boolean lastloop;
@@ -114,24 +110,10 @@ public class ApostleProkaryoteEntity extends SeaMonster {
 		super.defineSynchedData();
 		this.entityData.define(SHOOT, false);
 		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(TEXTURE, "apostle_unshelled");
 		this.entityData.define(DATA_shelled, false);
 	}
 
-	public void setTexture(String texture) {
-		this.entityData.set(TEXTURE, texture);
-	}
-
-	public String getTexture() {
-		return this.entityData.get(TEXTURE);
-	}
-
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
-	}
-
-	@Override
+    @Override
 	protected PathNavigation createNavigation(Level world) {
 		return new WaterBoundPathNavigation(this, world);
 	}
@@ -185,15 +167,12 @@ public class ApostleProkaryoteEntity extends SeaMonster {
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
-		compound.putString("Texture", this.getTexture());
 		compound.putBoolean("Datashelled", this.entityData.get(DATA_shelled));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
-		if (compound.contains("Texture"))
-			this.setTexture(compound.getString("Texture"));
 		if (compound.contains("Datashelled"))
 			this.entityData.set(DATA_shelled, compound.getBoolean("Datashelled"));
 	}
@@ -205,22 +184,17 @@ public class ApostleProkaryoteEntity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if (this != null) {
-            boolean found = false;
-            double perc;
-            if (this.isAlive()) {
-                if (!((Entity) this instanceof ApostleProkaryoteEntity _datEntL1 && _datEntL1.getEntityData().get(DATA_shelled))) {
-                    for (int dx = -2; dx <= 2; dx++) {
-                        for (int dy = -2; dy <= 3; dy++) {
-                            for (int dz = -2; dz <= 2; dz++) {
-                                if ((world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz))).getBlock() == CABlocks.WHITE_CHITIN_BLOCK.get()) {
-                                    ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((x + dx), (y + dy), (z + dz)));
-                                    world.destroyBlock(BlockPos.containing(x + dx, y + dy, z + dz), false);
-                                    found = true;
-                                    break;
-                                }
-                            }
-                            if (found) {
+        boolean found = false;
+        double perc;
+        if (this.isAlive()) {
+            if (!((Entity) this instanceof ApostleProkaryoteEntity _datEntL1 && _datEntL1.getEntityData().get(DATA_shelled))) {
+                for (int dx = -2; dx <= 2; dx++) {
+                    for (int dy = -2; dy <= 3; dy++) {
+                        for (int dz = -2; dz <= 2; dz++) {
+                            if ((world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz))).getBlock() == CABlocks.WHITE_CHITIN_BLOCK.get()) {
+                                ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((x + dx), (y + dy), (z + dz)));
+                                world.destroyBlock(BlockPos.containing(x + dx, y + dy, z + dz), false);
+                                found = true;
                                 break;
                             }
                         }
@@ -229,38 +203,38 @@ public class ApostleProkaryoteEntity extends SeaMonster {
                         }
                     }
                     if (found) {
-                        perc = ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) / ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1);
-                        if (MapVariables.get(world).strategy_subsisting >= 4) {
-                            if (this.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
-                                this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(
-                                        ((this.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? this.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0) * 2.2));
-                            if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
-                                this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
-                                        ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) * 1.8));
-                        } else {
-                            if (this.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
-                                this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(
-                                        ((this.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? this.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0) * 1.6));
-                            if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
-                                this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
-                                        ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) * 1.4));
-                        }
-                        if ((Entity) this instanceof LivingEntity _entity)
-                            _entity.setHealth((float) (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * perc));
-                        if ((Entity) this instanceof ApostleProkaryoteEntity _datEntSetL)
-                            _datEntSetL.getEntityData().set(DATA_shelled, true);
-                        if (this instanceof ApostleProkaryoteEntity) {
-                            this.setAnimation("animation.apostle.skill");
-                        }
-                        CaerulaArborMod.queueServerWork(17, () -> {
-                            if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.armor.equip_leather")), SoundSource.HOSTILE, 1, 1);
-                            }
-                        });
+                        break;
                     }
-                } else {
-                    if ((Entity) this instanceof ApostleProkaryoteEntity animatable)
-                        animatable.setTexture("apostle");
+                }
+                if (found) {
+                    perc = ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) / ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1);
+                    if (MapVariables.get(world).strategy_subsisting >= 4) {
+                        if (this.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
+                            this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(
+                                    ((this.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? this.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0) * 2.2));
+                        if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
+                            this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
+                                    ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) * 1.8));
+                    } else {
+                        if (this.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
+                            this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(
+                                    ((this.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? this.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0) * 1.6));
+                        if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
+                            this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
+                                    ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) * 1.4));
+                    }
+                    if ((Entity) this instanceof LivingEntity _entity)
+                        _entity.setHealth((float) (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * perc));
+                    if ((Entity) this instanceof ApostleProkaryoteEntity _datEntSetL)
+                        _datEntSetL.getEntityData().set(DATA_shelled, true);
+                    if (this instanceof ApostleProkaryoteEntity) {
+                        this.setAnimation("animation.apostle.skill");
+                    }
+                    CaerulaArborMod.queueServerWork(17, () -> {
+                        if (world instanceof Level _level) {
+                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.armor.equip_leather")), SoundSource.HOSTILE, 1, 1);
+                        }
+                    });
                 }
             }
         }

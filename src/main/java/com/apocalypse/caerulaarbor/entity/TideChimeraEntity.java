@@ -77,7 +77,6 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
 
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(TideChimeraEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(TideChimeraEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(TideChimeraEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(TideChimeraEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_summonP = SynchedEntityData.defineId(TideChimeraEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_skillP = SynchedEntityData.defineId(TideChimeraEntity.class, EntityDataSerializers.INT);
@@ -105,20 +104,12 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
         super.defineSynchedData();
         this.entityData.define(SHOOT, false);
         this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(TEXTURE, "general_seaborns");
         this.entityData.define(DATA_duration, 0);
         this.entityData.define(DATA_summonP, 3);
         this.entityData.define(DATA_skillP, 200);
         this.entityData.define(DATA_deal, 0);
     }
 
-    public void setTexture(String texture) {
-        this.entityData.set(TEXTURE, texture);
-    }
-
-    public String getTexture() {
-        return this.entityData.get(TEXTURE);
-    }
 
     @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket() {
@@ -308,21 +299,18 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
         return retval;
     }
 
-    @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
+	@Override
+	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putString("Texture", this.getTexture());
         compound.putInt("Dataduration", this.entityData.get(DATA_duration));
         compound.putInt("DatasummonP", this.entityData.get(DATA_summonP));
         compound.putInt("DataskillP", this.entityData.get(DATA_skillP));
         compound.putInt("Datadeal", this.entityData.get(DATA_deal));
-    }
+	}
 
-    @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
+	@Override
+	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Texture"))
-            this.setTexture(compound.getString("Texture"));
         if (compound.contains("Dataduration"))
             this.entityData.set(DATA_duration, compound.getInt("Dataduration"));
         if (compound.contains("DatasummonP"))
@@ -331,7 +319,7 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
             this.entityData.set(DATA_skillP, compound.getInt("DataskillP"));
         if (compound.contains("Datadeal"))
             this.entityData.set(DATA_deal, compound.getInt("Datadeal"));
-    }
+	}
 
     @Override
     public void baseTick() {

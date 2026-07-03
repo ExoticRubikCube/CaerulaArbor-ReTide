@@ -6,6 +6,8 @@ import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.GeoModel;
 
 public class DepositerProkaryoteModel extends GeoModel<DepositerProkaryoteEntity> {
+	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/depositer.png");
+
 	@Override
 	public ResourceLocation getAnimationResource(DepositerProkaryoteEntity entity) {
 		return new ResourceLocation(CaerulaArborMod.MODID, "animations/depsoiter.animation.json");
@@ -18,7 +20,7 @@ public class DepositerProkaryoteModel extends GeoModel<DepositerProkaryoteEntity
 
 	@Override
 	public ResourceLocation getTextureResource(DepositerProkaryoteEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return TEXTURE;
 	}
 
 }

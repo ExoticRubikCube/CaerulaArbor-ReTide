@@ -1,14 +1,13 @@
 package com.apocalypse.caerulaarbor.client.model.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
+import com.apocalypse.caerulaarbor.entity.ReaperFishEntity;
+import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.GeoModel;
 
-import net.minecraft.resources.ResourceLocation;
-
-import com.apocalypse.caerulaarbor.entity.ReaperFishEntity;
-
 public class ReaperFishModel extends GeoModel<ReaperFishEntity> {
+	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/reaperfish.png");
+
 	@Override
 	public ResourceLocation getAnimationResource(ReaperFishEntity entity) {
 		return new ResourceLocation(CaerulaArborMod.MODID, "animations/reaperfish.animation.json");
@@ -21,7 +20,7 @@ public class ReaperFishModel extends GeoModel<ReaperFishEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(ReaperFishEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return TEXTURE;
 	}
 
 }

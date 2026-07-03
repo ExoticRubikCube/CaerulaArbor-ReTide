@@ -61,7 +61,6 @@ import java.util.List;
 public class MoistEnderCrystalEntity extends PathfinderMob implements GeoEntity, SyncedAnimationEntity {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(MoistEnderCrystalEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(MoistEnderCrystalEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(MoistEnderCrystalEntity.class, EntityDataSerializers.STRING);
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 	public String animationprocedure = "empty";
 	public boolean IS_STATIC = false;
@@ -84,16 +83,8 @@ public class MoistEnderCrystalEntity extends PathfinderMob implements GeoEntity,
 		super.defineSynchedData();
 		this.entityData.define(SHOOT, false);
 		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(TEXTURE, "moist_crystal");
 	}
 
-	public void setTexture(String texture) {
-		this.entityData.set(TEXTURE, texture);
-	}
-
-	public String getTexture() {
-		return this.entityData.get(TEXTURE);
-	}
 
 	@Override
 	public Packet<ClientGamePacketListener> getAddEntityPacket() {
@@ -138,15 +129,12 @@ public class MoistEnderCrystalEntity extends PathfinderMob implements GeoEntity,
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
-		compound.putString("Texture", this.getTexture());
 		compound.putBoolean("isStatic", this.IS_STATIC);
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
-		if (compound.contains("Texture"))
-			this.setTexture(compound.getString("Texture"));
 		if (compound.contains("isStatic"))
 			this.IS_STATIC = compound.getBoolean("isStatic");
 	}

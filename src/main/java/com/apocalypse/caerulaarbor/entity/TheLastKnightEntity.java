@@ -46,6 +46,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -69,7 +70,6 @@ public class TheLastKnightEntity extends Animal implements GeoEntity, SyncedAnim
 
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(TheLastKnightEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(TheLastKnightEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(TheLastKnightEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(TheLastKnightEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_skillp = SynchedEntityData.defineId(TheLastKnightEntity.class, EntityDataSerializers.INT);
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
@@ -96,18 +96,11 @@ public class TheLastKnightEntity extends Animal implements GeoEntity, SyncedAnim
         super.defineSynchedData();
         this.entityData.define(SHOOT, false);
         this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(TEXTURE, "last_knight");
         this.entityData.define(DATA_duration, 0);
         this.entityData.define(DATA_skillp, 200);
     }
 
-    public void setTexture(String texture) {
-        this.entityData.set(TEXTURE, texture);
-    }
 
-    public String getTexture() {
-        return this.entityData.get(TEXTURE);
-    }
 
     @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket() {
@@ -237,6 +230,10 @@ public class TheLastKnightEntity extends Animal implements GeoEntity, SyncedAnim
         if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())) {
             this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(60);
         }
+        if (this.getAttributes().hasAttribute(ForgeMod.SWIM_SPEED.get())) {
+            this.getAttribute(ForgeMod.SWIM_SPEED.get())
+                    .setBaseValue((this.getAttributes().hasAttribute(ForgeMod.SWIM_SPEED.get()) ? this.getAttribute(ForgeMod.SWIM_SPEED.get()).getBaseValue() : 0) * 8);
+        }
         this.getEntityData().set(DATA_duration, 45);
         this.setAnimation("animation.last_knight.start");
         if (!this.level().isClientSide())
@@ -247,7 +244,6 @@ public class TheLastKnightEntity extends Animal implements GeoEntity, SyncedAnim
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putString("Texture", this.getTexture());
         compound.putInt("Dataduration", this.entityData.get(DATA_duration));
         compound.putInt("Dataskillp", this.entityData.get(DATA_skillp));
     }
@@ -255,8 +251,6 @@ public class TheLastKnightEntity extends Animal implements GeoEntity, SyncedAnim
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Texture"))
-            this.setTexture(compound.getString("Texture"));
         if (compound.contains("Dataduration"))
             this.entityData.set(DATA_duration, compound.getInt("Dataduration"));
         if (compound.contains("Dataskillp"))
@@ -281,13 +275,13 @@ public class TheLastKnightEntity extends Animal implements GeoEntity, SyncedAnim
             }
             setTicksFrozen(0);
             this.removeEffect(CAMobEffects.FROZEN.get());
-            enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+            enemy = this.getTarget();
             if (skillp > 0) {
                 if ((Entity) this instanceof TheLastKnightEntity _datEntSetI)
                     _datEntSetI.getEntityData().set(DATA_skillp, (int) (skillp - 1));
             } else {
                 if (!(enemy == null) && enemy.isAlive()) {
-                    if ((enemy != null ? distanceTo(enemy) : -1) < 4) {
+                    if (distanceTo(enemy) < 4) {
                         if ((Entity) this instanceof TheLastKnightEntity _datEntSetI)
                             _datEntSetI.getEntityData().set(DATA_duration, 90);
                         if ((Entity) this instanceof TheLastKnightEntity _datEntSetI)

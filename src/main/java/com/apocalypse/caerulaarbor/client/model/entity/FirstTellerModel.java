@@ -1,19 +1,18 @@
 package com.apocalypse.caerulaarbor.client.model.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
-import software.bernie.geckolib.model.data.EntityModelData;
-import software.bernie.geckolib.model.GeoModel;
-import software.bernie.geckolib.core.animation.AnimationState;
-import software.bernie.geckolib.core.animatable.model.CoreGeoBone;
-import software.bernie.geckolib.constant.DataTickets;
-
-import net.minecraft.util.Mth;
-import net.minecraft.resources.ResourceLocation;
-
 import com.apocalypse.caerulaarbor.entity.FirstTellerEntity;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import software.bernie.geckolib.constant.DataTickets;
+import software.bernie.geckolib.core.animatable.model.CoreGeoBone;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.model.GeoModel;
+import software.bernie.geckolib.model.data.EntityModelData;
 
 public class FirstTellerModel extends GeoModel<FirstTellerEntity> {
+	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/firstlit.png");
+
 	@Override
 	public ResourceLocation getAnimationResource(FirstTellerEntity entity) {
 		return new ResourceLocation(CaerulaArborMod.MODID, "animations/firstspeak.animation.json");
@@ -26,7 +25,7 @@ public class FirstTellerModel extends GeoModel<FirstTellerEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(FirstTellerEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return TEXTURE;
 	}
 
 	@Override

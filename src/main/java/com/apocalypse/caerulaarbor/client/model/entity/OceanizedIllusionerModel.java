@@ -11,6 +11,9 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class OceanizedIllusionerModel extends GeoModel<OceanizedIllusionerEntity> {
+	private static final ResourceLocation NORMAL_TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/oceanized_illusioner.png");
+	private static final ResourceLocation BROKEN_TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/oceanized_illusioner_broken.png");
+
 	@Override
 	public ResourceLocation getAnimationResource(OceanizedIllusionerEntity entity) {
 		return new ResourceLocation(CaerulaArborMod.MODID, "animations/oceanized_illusioner.animation.json");
@@ -23,7 +26,7 @@ public class OceanizedIllusionerModel extends GeoModel<OceanizedIllusionerEntity
 
 	@Override
 	public ResourceLocation getTextureResource(OceanizedIllusionerEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return entity.getHealth() < entity.getMaxHealth() * 0.5F ? BROKEN_TEXTURE : NORMAL_TEXTURE;
 	}
 
 	@Override

@@ -8,7 +8,6 @@ import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -56,7 +55,6 @@ import java.util.EnumSet;
 public class PregnantFishEntity extends SeaMonster implements RangedAttackMob, PolarMountRider {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(PregnantFishEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(PregnantFishEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(PregnantFishEntity.class, EntityDataSerializers.STRING);
 	private boolean swinging;
 	private boolean lastloop;
 	private long lastSwing;
@@ -78,16 +76,8 @@ public class PregnantFishEntity extends SeaMonster implements RangedAttackMob, P
 		super.defineSynchedData();
 		this.entityData.define(SHOOT, false);
 		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(TEXTURE, "pergnantfish");
 	}
 
-	public void setTexture(String texture) {
-		this.entityData.set(TEXTURE, texture);
-	}
-
-	public String getTexture() {
-		return this.entityData.get(TEXTURE);
-	}
 
 	@Override
 	public Packet<ClientGamePacketListener> getAddEntityPacket() {
@@ -235,18 +225,6 @@ public class PregnantFishEntity extends SeaMonster implements RangedAttackMob, P
 		return super.hurt(source, amount);
 	}
 
-	@Override
-	public void addAdditionalSaveData(CompoundTag compound) {
-		super.addAdditionalSaveData(compound);
-		compound.putString("Texture", this.getTexture());
-	}
-
-	@Override
-	public void readAdditionalSaveData(CompoundTag compound) {
-		super.readAdditionalSaveData(compound);
-		if (compound.contains("Texture"))
-			this.setTexture(compound.getString("Texture"));
-	}
 
 	@Override
 	public void baseTick() {

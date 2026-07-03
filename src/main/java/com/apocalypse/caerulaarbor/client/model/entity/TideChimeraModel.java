@@ -1,7 +1,6 @@
 package com.apocalypse.caerulaarbor.client.model.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.entity.TideChimeraEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -12,6 +11,8 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class TideChimeraModel extends GeoModel<TideChimeraEntity> {
+	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/general_seaborns.png");
+
 	@Override
 	public ResourceLocation getAnimationResource(TideChimeraEntity entity) {
 		return new ResourceLocation(CaerulaArborMod.MODID, "animations/super_apocata.animation.json");
@@ -24,7 +25,7 @@ public class TideChimeraModel extends GeoModel<TideChimeraEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(TideChimeraEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return TEXTURE;
 	}
 
 	@Override

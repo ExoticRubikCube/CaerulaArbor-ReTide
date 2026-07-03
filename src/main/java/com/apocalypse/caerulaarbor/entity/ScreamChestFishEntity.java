@@ -58,7 +58,6 @@ import javax.annotation.Nullable;
 public class ScreamChestFishEntity extends SeaMonster {
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(ScreamChestFishEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(ScreamChestFishEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(ScreamChestFishEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Boolean> DATA_release = SynchedEntityData.defineId(ScreamChestFishEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<Integer> DATA_SCREAM_TICK = SynchedEntityData.defineId(ScreamChestFishEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
@@ -83,18 +82,10 @@ public class ScreamChestFishEntity extends SeaMonster {
         super.defineSynchedData();
         this.entityData.define(SHOOT, false);
         this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(TEXTURE, "scream_chest_fish");
         this.entityData.define(DATA_release, false);
         this.entityData.define(DATA_SCREAM_TICK, 201);
     }
 
-    public void setTexture(String texture) {
-        this.entityData.set(TEXTURE, texture);
-    }
-
-    public String getTexture() {
-        return this.entityData.get(TEXTURE);
-    }
 
     @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket() {
@@ -228,41 +219,36 @@ public class ScreamChestFishEntity extends SeaMonster {
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
         SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
         {
-            Entity _ent = this;
+            LivingEntity _ent = this;
             _ent.setYRot((float) (90 * Mth.nextInt(RandomSource.create(), 0, 3)));
             _ent.setXRot(0);
             _ent.setYBodyRot(_ent.getYRot());
             _ent.setYHeadRot(_ent.getYRot());
             _ent.yRotO = _ent.getYRot();
             _ent.xRotO = _ent.getXRot();
-            if (_ent instanceof LivingEntity _entity) {
-                _entity.yBodyRotO = _entity.getYRot();
-                _entity.yHeadRotO = _entity.getYRot();
-            }
+            _ent.yBodyRotO = _ent.getYRot();
+            _ent.yHeadRotO = _ent.getYRot();
         }
         if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
             this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(25);
         return retval;
     }
 
-    @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
+	@Override
+	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putString("Texture", this.getTexture());
         compound.putBoolean("Datarelease", this.entityData.get(DATA_release));
         compound.putInt("DataSCREAM_TICK", this.entityData.get(DATA_SCREAM_TICK));
-    }
+	}
 
-    @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
+	@Override
+	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Texture"))
-            this.setTexture(compound.getString("Texture"));
         if (compound.contains("Datarelease"))
             this.entityData.set(DATA_release, compound.getBoolean("Datarelease"));
         if (compound.contains("DataSCREAM_TICK"))
             this.entityData.set(DATA_SCREAM_TICK, compound.getInt("DataSCREAM_TICK"));
-    }
+	}
 
     @Override
     public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
@@ -425,7 +411,6 @@ public class ScreamChestFishEntity extends SeaMonster {
         if (!this.entityData.get(DATA_release)) return false;
         return this.entityData.get(DATA_SCREAM_TICK) > 0;
     }
-
 
     @Override
     public void setAnimationProcedure(String animation) {

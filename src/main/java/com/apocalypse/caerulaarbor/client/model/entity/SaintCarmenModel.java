@@ -1,7 +1,6 @@
 package com.apocalypse.caerulaarbor.client.model.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.entity.SaintCarmenEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -12,6 +11,8 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class SaintCarmenModel extends GeoModel<SaintCarmenEntity> {
+	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/saint_carmen.png");
+
 	@Override
 	public ResourceLocation getAnimationResource(SaintCarmenEntity entity) {
 		return new ResourceLocation(CaerulaArborMod.MODID, "animations/saint_carmen.animation.json");
@@ -24,7 +25,7 @@ public class SaintCarmenModel extends GeoModel<SaintCarmenEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(SaintCarmenEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return TEXTURE;
 	}
 
 	@Override

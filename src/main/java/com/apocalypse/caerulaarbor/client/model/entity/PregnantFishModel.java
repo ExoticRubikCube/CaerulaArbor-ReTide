@@ -1,7 +1,6 @@
 package com.apocalypse.caerulaarbor.client.model.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.entity.PregnantFishEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -12,6 +11,8 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class PregnantFishModel extends GeoModel<PregnantFishEntity> {
+	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/pergnantfish.png");
+
 	@Override
 	public ResourceLocation getAnimationResource(PregnantFishEntity entity) {
 		return new ResourceLocation(CaerulaArborMod.MODID, "animations/pregnant.animation.json");
@@ -24,7 +25,7 @@ public class PregnantFishModel extends GeoModel<PregnantFishEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(PregnantFishEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return TEXTURE;
 	}
 
 	@Override

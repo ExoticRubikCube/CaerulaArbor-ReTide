@@ -11,6 +11,8 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class CreeperFishModel extends GeoModel<CreeperFishEntity> {
+	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/creeperfish.png");
+
 	@Override
 	public ResourceLocation getAnimationResource(CreeperFishEntity entity) {
 		return new ResourceLocation(CaerulaArborMod.MODID, "animations/explosivefish.animation.json");
@@ -23,7 +25,7 @@ public class CreeperFishModel extends GeoModel<CreeperFishEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(CreeperFishEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return TEXTURE;
 	}
 
 	@Override

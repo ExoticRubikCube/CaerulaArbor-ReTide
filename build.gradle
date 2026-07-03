@@ -38,6 +38,7 @@ minecraft {
     runs {
         configureEach {
             // 开发环境的JVM参数:使用JBR热重载增强,并补充较稳妥的G1GC优化配置
+            //TODO 需要评估优化配置是否会合适
             jvmArgs = [
                     "-Xms2G",
                     "-Xmx4G",

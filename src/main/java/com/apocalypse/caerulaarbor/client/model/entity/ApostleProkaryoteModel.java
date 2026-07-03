@@ -11,6 +11,9 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class ApostleProkaryoteModel extends GeoModel<ApostleProkaryoteEntity> {
+	private static final ResourceLocation UNSHELLED_TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/apostle_unshelled.png");
+	private static final ResourceLocation SHELLED_TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/apostle.png");
+
 	@Override
 	public ResourceLocation getAnimationResource(ApostleProkaryoteEntity entity) {
 		return new ResourceLocation(CaerulaArborMod.MODID, "animations/apostle.animation.json");
@@ -23,7 +26,7 @@ public class ApostleProkaryoteModel extends GeoModel<ApostleProkaryoteEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(ApostleProkaryoteEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return entity.getEntityData().get(ApostleProkaryoteEntity.DATA_shelled) ? SHELLED_TEXTURE : UNSHELLED_TEXTURE;
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 
 package com.apocalypse.caerulaarbor.client.renderer.entity;
 
+import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.client.model.entity.CrackerAbyssalModel;
 import com.apocalypse.caerulaarbor.entity.CrackerAbyssalEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -13,9 +14,16 @@ import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 public class CrackerAbyssalRenderer extends GeoEntityRenderer<CrackerAbyssalEntity> {
+	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/reefbreaker.png");
+
 	public CrackerAbyssalRenderer(EntityRendererProvider.Context renderManager) {
 		super(renderManager, new CrackerAbyssalModel());
 		this.shadowRadius = 0.5f;
+	}
+
+	@Override
+	public ResourceLocation getTextureLocation(CrackerAbyssalEntity entity) {
+		return TEXTURE;
 	}
 
 	@Override

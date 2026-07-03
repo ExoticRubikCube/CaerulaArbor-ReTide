@@ -35,11 +35,6 @@ public class OceanizedWardenEntity extends AbstractOceanizedWardenEntity {
 	}
 
 	@Override
-	protected String getDefaultTexture() {
-		return "oceanized_warden";
-	}
-
-	@Override
 	protected String getAmbientSoundId() {
 		return "entity.warden.ambient";
 	}

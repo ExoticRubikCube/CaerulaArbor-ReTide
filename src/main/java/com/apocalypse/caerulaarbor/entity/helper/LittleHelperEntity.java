@@ -50,7 +50,6 @@ import javax.annotation.Nullable;
 public class LittleHelperEntity extends PathfinderMob implements GeoEntity, SyncedAnimationEntity {
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(LittleHelperEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(LittleHelperEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(LittleHelperEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_durability = SynchedEntityData.defineId(LittleHelperEntity.class, EntityDataSerializers.INT);
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private boolean swinging;
@@ -75,25 +74,12 @@ public class LittleHelperEntity extends PathfinderMob implements GeoEntity, Sync
         super.defineSynchedData();
         this.entityData.define(SHOOT, false);
         this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(TEXTURE, this.getDefaultTexture());
         this.entityData.define(DATA_durability, 4);
-    }
-
-    protected String getDefaultTexture() {
-        return "little_helper";
     }
 
     @Nullable
     protected ResourceLocation getCustomDeathSound() {
         return new ResourceLocation("entity.armor_stand.break");
-    }
-
-    public void setTexture(String texture) {
-        this.entityData.set(TEXTURE, texture);
-    }
-
-    public String getTexture() {
-        return this.entityData.get(TEXTURE);
     }
 
     protected InteractionResult handleApocalypseInteract(Player sourceentity) {
@@ -189,15 +175,12 @@ public class LittleHelperEntity extends PathfinderMob implements GeoEntity, Sync
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putString("Texture", this.getTexture());
         compound.putInt("Datadurability", this.entityData.get(DATA_durability));
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Texture"))
-            this.setTexture(compound.getString("Texture"));
         if (compound.contains("Datadurability"))
             this.entityData.set(DATA_durability, compound.getInt("Datadurability"));
     }

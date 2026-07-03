@@ -51,7 +51,6 @@ import javax.annotation.Nullable;
 public class OceanizedHorseEntity extends SeaMonster {
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanizedHorseEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedHorseEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(OceanizedHorseEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_lay_limit = SynchedEntityData.defineId(OceanizedHorseEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
     private boolean lastloop;
@@ -74,17 +73,9 @@ public class OceanizedHorseEntity extends SeaMonster {
         super.defineSynchedData();
         this.entityData.define(SHOOT, false);
         this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(TEXTURE, "oceanized_horse");
         this.entityData.define(DATA_lay_limit, 36);
     }
 
-    public void setTexture(String texture) {
-        this.entityData.set(TEXTURE, texture);
-    }
-
-    public String getTexture() {
-        return this.entityData.get(TEXTURE);
-    }
 
     @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket() {
@@ -148,21 +139,18 @@ public class OceanizedHorseEntity extends SeaMonster {
         return retval;
     }
 
-    @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
+	@Override
+	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putString("Texture", this.getTexture());
         compound.putInt("Datalay_limit", this.entityData.get(DATA_lay_limit));
-    }
+	}
 
-    @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
+	@Override
+	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Texture"))
-            this.setTexture(compound.getString("Texture"));
         if (compound.contains("Datalay_limit"))
             this.entityData.set(DATA_lay_limit, compound.getInt("Datalay_limit"));
-    }
+	}
 
     @Override
     public void baseTick() {

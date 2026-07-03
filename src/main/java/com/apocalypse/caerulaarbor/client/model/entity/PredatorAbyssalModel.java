@@ -1,7 +1,6 @@
 package com.apocalypse.caerulaarbor.client.model.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.entity.PredatorAbyssalEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -12,6 +11,8 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class PredatorAbyssalModel extends GeoModel<PredatorAbyssalEntity> {
+	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/predator.png");
+
 	@Override
 	public ResourceLocation getAnimationResource(PredatorAbyssalEntity entity) {
 		return new ResourceLocation(CaerulaArborMod.MODID, "animations/predator.animation.json");
@@ -24,7 +25,7 @@ public class PredatorAbyssalModel extends GeoModel<PredatorAbyssalEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(PredatorAbyssalEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return TEXTURE;
 	}
 
 	@Override

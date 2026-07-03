@@ -62,7 +62,6 @@ import java.util.List;
 public class NautilusHeadhunterEntity extends Animal implements GeoEntity, SyncedAnimationEntity {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(NautilusHeadhunterEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(NautilusHeadhunterEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(NautilusHeadhunterEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<Integer> DATA_DRY_TICK = SynchedEntityData.defineId(NautilusHeadhunterEntity.class, EntityDataSerializers.INT);
 	public static final EntityDataAccessor<Integer> DATA_BONUS = SynchedEntityData.defineId(NautilusHeadhunterEntity.class, EntityDataSerializers.INT);
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
@@ -117,18 +116,10 @@ public class NautilusHeadhunterEntity extends Animal implements GeoEntity, Synce
 		super.defineSynchedData();
 		this.entityData.define(SHOOT, false);
 		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(TEXTURE, "nautilus_headhunter");
 		this.entityData.define(DATA_DRY_TICK, 0);
 		this.entityData.define(DATA_BONUS, 0);
 	}
 
-	public void setTexture(String texture) {
-		this.entityData.set(TEXTURE, texture);
-	}
-
-	public String getTexture() {
-		return this.entityData.get(TEXTURE);
-	}
 
 	@Override
 	protected float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
@@ -208,7 +199,6 @@ public class NautilusHeadhunterEntity extends Animal implements GeoEntity, Synce
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
-		compound.putString("Texture", this.getTexture());
 		compound.putInt("DataDRY_TICK", this.entityData.get(DATA_DRY_TICK));
 		compound.putInt("DataBONUS", this.entityData.get(DATA_BONUS));
 	}
@@ -216,8 +206,6 @@ public class NautilusHeadhunterEntity extends Animal implements GeoEntity, Synce
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
-		if (compound.contains("Texture"))
-			this.setTexture(compound.getString("Texture"));
 		if (compound.contains("DataDRY_TICK"))
 			this.entityData.set(DATA_DRY_TICK, compound.getInt("DataDRY_TICK"));
 		if (compound.contains("DataBONUS"))
@@ -251,7 +239,7 @@ public class NautilusHeadhunterEntity extends Animal implements GeoEntity, Synce
         Entity vehicle;
         if (this.isAlive()) {
             dryTick = (Entity) this instanceof NautilusHeadhunterEntity _datEntI ? _datEntI.getEntityData().get(DATA_DRY_TICK) : 0;
-            enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+            enemy = this.getTarget();
             isMounting = isPassenger();
             if (isInWaterRainOrBubble() || isMounting) {
                 if ((Entity) this instanceof NautilusHeadhunterEntity _datEntSetI)
@@ -262,7 +250,7 @@ public class NautilusHeadhunterEntity extends Animal implements GeoEntity, Synce
             }
             if (tickCount % 20 == 5) {
                 if (dryTick > 300) {
-                    ((Entity) this).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.DRY_OUT)), (float) (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.05));
+                    this.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.DRY_OUT)), (float) (this.getMaxHealth() * 0.05));
                 }
                 if (isMounting) {
                     vehicle = getVehicle();

@@ -65,7 +65,6 @@ import java.util.List;
 public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEntity {
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(SkadiEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(SkadiEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(SkadiEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_relax_cooldown = SynchedEntityData.defineId(SkadiEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_skillp = SynchedEntityData.defineId(SkadiEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_phase = SynchedEntityData.defineId(SkadiEntity.class, EntityDataSerializers.INT);
@@ -95,20 +94,12 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
         super.defineSynchedData();
         this.entityData.define(SHOOT, false);
         this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(TEXTURE, "hunter_skadi");
         this.entityData.define(DATA_relax_cooldown, 200);
         this.entityData.define(DATA_skillp, 120);
         this.entityData.define(DATA_phase, 0);
         this.entityData.define(DATA_skillp2, 0);
     }
 
-    public void setTexture(String texture) {
-        this.entityData.set(TEXTURE, texture);
-    }
-
-    public String getTexture() {
-        return this.entityData.get(TEXTURE);
-    }
 
     @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket() {
@@ -323,21 +314,18 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
         return retval;
     }
 
-    @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
+	@Override
+	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putString("Texture", this.getTexture());
         compound.putInt("Datarelax_cooldown", this.entityData.get(DATA_relax_cooldown));
         compound.putInt("Dataskillp", this.entityData.get(DATA_skillp));
         compound.putInt("Dataphase", this.entityData.get(DATA_phase));
         compound.putInt("Dataskillp2", this.entityData.get(DATA_skillp2));
-    }
+	}
 
-    @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
+	@Override
+	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Texture"))
-            this.setTexture(compound.getString("Texture"));
         if (compound.contains("Datarelax_cooldown"))
             this.entityData.set(DATA_relax_cooldown, compound.getInt("Datarelax_cooldown"));
         if (compound.contains("Dataskillp"))
@@ -346,7 +334,7 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
             this.entityData.set(DATA_phase, compound.getInt("Dataphase"));
         if (compound.contains("Dataskillp2"))
             this.entityData.set(DATA_skillp2, compound.getInt("Dataskillp2"));
-    }
+	}
 
     @Override
     public void baseTick() {

@@ -3,6 +3,7 @@ package com.apocalypse.caerulaarbor.entity;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.RavagerMountRider;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
+import com.apocalypse.caerulaarbor.entity.bullets.ShotOceanArrowEntity;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAGameRules;
 import com.apocalypse.caerulaarbor.init.CAItems;
@@ -70,7 +71,6 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
 
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanizedIllusionerEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedIllusionerEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(OceanizedIllusionerEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_spellP = SynchedEntityData.defineId(OceanizedIllusionerEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_mirrorP = SynchedEntityData.defineId(OceanizedIllusionerEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(OceanizedIllusionerEntity.class, EntityDataSerializers.INT);
@@ -98,18 +98,9 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
         super.defineSynchedData();
         this.entityData.define(SHOOT, false);
         this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(TEXTURE, "oceanized_illusioner");
         this.entityData.define(DATA_spellP, 180);
         this.entityData.define(DATA_mirrorP, 340);
         this.entityData.define(DATA_duration, 0);
-    }
-
-    public void setTexture(String texture) {
-        this.entityData.set(TEXTURE, texture);
-    }
-
-    public String getTexture() {
-        return this.entityData.get(TEXTURE);
     }
 
     @Override
@@ -351,7 +342,6 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putString("Texture", this.getTexture());
         compound.putInt("DataspellP", this.entityData.get(DATA_spellP));
         compound.putInt("DatamirrorP", this.entityData.get(DATA_mirrorP));
         compound.putInt("Dataduration", this.entityData.get(DATA_duration));
@@ -360,8 +350,6 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Texture"))
-            this.setTexture(compound.getString("Texture"));
         if (compound.contains("DataspellP"))
             this.entityData.set(DATA_spellP, compound.getInt("DataspellP"));
         if (compound.contains("DatamirrorP"))
@@ -381,10 +369,6 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
         double sklp1;
         double sklp2;
         double dura;
-        if (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5) {
-            if ((Entity) this instanceof OceanizedIllusionerEntity animatable)
-                animatable.setTexture("oceanized_illusioner_broken");
-        }
         if (!this.isAlive()) {
             this.removeEffect(MobEffects.INVISIBILITY);
         } else {

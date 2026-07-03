@@ -1,7 +1,6 @@
 package com.apocalypse.caerulaarbor.client.model.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.entity.FakeOffspringEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -12,6 +11,8 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class FakeOffspringModel extends GeoModel<FakeOffspringEntity> {
+	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/fakepffspr.png");
+
 	@Override
 	public ResourceLocation getAnimationResource(FakeOffspringEntity entity) {
 		return new ResourceLocation(CaerulaArborMod.MODID, "animations/fakeegg.animation.json");
@@ -24,7 +25,7 @@ public class FakeOffspringModel extends GeoModel<FakeOffspringEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(FakeOffspringEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return TEXTURE;
 	}
 
 	@Override

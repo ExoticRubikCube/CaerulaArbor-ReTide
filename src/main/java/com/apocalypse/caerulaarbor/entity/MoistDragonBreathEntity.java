@@ -60,7 +60,6 @@ import java.util.UUID;
 public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity, SyncedAnimationEntity {
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(MoistDragonBreathEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(MoistDragonBreathEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(MoistDragonBreathEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<String> DATA_TARGET = SynchedEntityData.defineId(MoistDragonBreathEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<String> DATA_OWNER = SynchedEntityData.defineId(MoistDragonBreathEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_TYPE = SynchedEntityData.defineId(MoistDragonBreathEntity.class, EntityDataSerializers.INT);
@@ -114,19 +113,11 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
         super.defineSynchedData();
         this.entityData.define(SHOOT, false);
         this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(TEXTURE, "moist_dragon_ball");
         this.entityData.define(DATA_TARGET, "");
         this.entityData.define(DATA_OWNER, "");
         this.entityData.define(DATA_TYPE, 0);
     }
 
-    public void setTexture(String texture) {
-        this.entityData.set(TEXTURE, texture);
-    }
-
-    public String getTexture() {
-        return this.entityData.get(TEXTURE);
-    }
 
     @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket() {
@@ -158,27 +149,24 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
         return false;
     }
 
-    @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
+	@Override
+	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putString("Texture", this.getTexture());
         compound.putString("DataTARGET", this.entityData.get(DATA_TARGET));
         compound.putString("DataOWNER", this.entityData.get(DATA_OWNER));
         compound.putInt("DataTYPE", this.entityData.get(DATA_TYPE));
-    }
+	}
 
-    @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
+	@Override
+	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Texture"))
-            this.setTexture(compound.getString("Texture"));
         if (compound.contains("DataTARGET"))
             this.entityData.set(DATA_TARGET, compound.getString("DataTARGET"));
         if (compound.contains("DataOWNER"))
             this.entityData.set(DATA_OWNER, compound.getString("DataOWNER"));
         if (compound.contains("DataTYPE"))
             this.entityData.set(DATA_TYPE, compound.getInt("DataTYPE"));
-    }
+	}
 
     @Override
     public void baseTick() {

@@ -1,7 +1,6 @@
 package com.apocalypse.caerulaarbor.client.model.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.entity.SkadiCorruptedEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -12,6 +11,10 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class SkadiCorruptedModel extends GeoModel<SkadiCorruptedEntity> {
+	private static final ResourceLocation PHASE_0_TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/skadi_corrupted_0.png");
+	private static final ResourceLocation PHASE_1_TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/skadi_corrupted_1.png");
+	private static final ResourceLocation PHASE_2_TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/skadi_corrupted.png");
+
 	@Override
 	public ResourceLocation getAnimationResource(SkadiCorruptedEntity entity) {
 		return new ResourceLocation(CaerulaArborMod.MODID, "animations/skadi_corrupted.animation.json");
@@ -24,7 +27,11 @@ public class SkadiCorruptedModel extends GeoModel<SkadiCorruptedEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(SkadiCorruptedEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return switch (entity.getPhase()) {
+			case 1 -> PHASE_1_TEXTURE;
+			case 2 -> PHASE_2_TEXTURE;
+			default -> PHASE_0_TEXTURE;
+		};
 	}
 
 	@Override

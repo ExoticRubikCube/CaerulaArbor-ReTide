@@ -11,6 +11,8 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class BaselayerAbyssalModel extends GeoModel<BaselayerAbyssalEntity> {
+	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/baselayer.png");
+
 	@Override
 	public ResourceLocation getAnimationResource(BaselayerAbyssalEntity entity) {
 		return new ResourceLocation(CaerulaArborMod.MODID, "animations/baselayer.animation.json");
@@ -23,7 +25,7 @@ public class BaselayerAbyssalModel extends GeoModel<BaselayerAbyssalEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(BaselayerAbyssalEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return TEXTURE;
 	}
 
 	@Override

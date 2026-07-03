@@ -57,7 +57,6 @@ public class XantisEntity extends TamableAnimal implements GeoEntity, SyncedAnim
 
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(XantisEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(XantisEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(XantisEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Boolean> DATA_NIUBI = SynchedEntityData.defineId(XantisEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<Integer> DATA_TAP_TICK = SynchedEntityData.defineId(XantisEntity.class, EntityDataSerializers.INT);
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
@@ -83,18 +82,10 @@ public class XantisEntity extends TamableAnimal implements GeoEntity, SyncedAnim
         super.defineSynchedData();
         this.entityData.define(SHOOT, false);
         this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(TEXTURE, "xantis");
         this.entityData.define(DATA_NIUBI, true);
         this.entityData.define(DATA_TAP_TICK, 0);
     }
 
-    public void setTexture(String texture) {
-        this.entityData.set(TEXTURE, texture);
-    }
-
-    public String getTexture() {
-        return this.entityData.get(TEXTURE);
-    }
 
     @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket() {
@@ -190,24 +181,21 @@ public class XantisEntity extends TamableAnimal implements GeoEntity, SyncedAnim
         super.die(pSource);
     }
 
-    @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
+	@Override
+	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putString("Texture", this.getTexture());
         compound.putBoolean("DataNIUBI", this.entityData.get(DATA_NIUBI));
         compound.putInt("DataTAP_TICK", this.entityData.get(DATA_TAP_TICK));
-    }
+	}
 
-    @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
+	@Override
+	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Texture"))
-            this.setTexture(compound.getString("Texture"));
         if (compound.contains("DataNIUBI"))
             this.entityData.set(DATA_NIUBI, compound.getBoolean("DataNIUBI"));
         if (compound.contains("DataTAP_TICK"))
             this.entityData.set(DATA_TAP_TICK, compound.getInt("DataTAP_TICK"));
-    }
+	}
 
     @Override
     public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {

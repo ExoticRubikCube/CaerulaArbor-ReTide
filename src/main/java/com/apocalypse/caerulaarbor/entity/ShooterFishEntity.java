@@ -52,7 +52,6 @@ import java.util.EnumSet;
 public class ShooterFishEntity extends SeaMonster implements RangedAttackMob {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(ShooterFishEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(ShooterFishEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(ShooterFishEntity.class, EntityDataSerializers.STRING);
 	private boolean swinging;
 	private boolean lastloop;
 	private long lastSwing;
@@ -74,16 +73,8 @@ public class ShooterFishEntity extends SeaMonster implements RangedAttackMob {
 		super.defineSynchedData();
 		this.entityData.define(SHOOT, false);
 		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(TEXTURE, "shooter");
 	}
 
-	public void setTexture(String texture) {
-		this.entityData.set(TEXTURE, texture);
-	}
-
-	public String getTexture() {
-		return this.entityData.get(TEXTURE);
-	}
 
 	@Override
 	public Packet<ClientGamePacketListener> getAddEntityPacket() {
@@ -235,26 +226,12 @@ public class ShooterFishEntity extends SeaMonster implements RangedAttackMob {
 		return retval;
 	}
 
-	@Override
-	public void addAdditionalSaveData(CompoundTag compound) {
-		super.addAdditionalSaveData(compound);
-		compound.putString("Texture", this.getTexture());
-	}
-
-	@Override
-	public void readAdditionalSaveData(CompoundTag compound) {
-		super.readAdditionalSaveData(compound);
-		if (compound.contains("Texture"))
-			this.setTexture(compound.getString("Texture"));
-	}
 
 	@Override
 	public void baseTick() {
 		super.baseTick();
 		this.refreshDimensions();
 	}
-
-	
 
 	@Override
 	public void performRangedAttack(LivingEntity target, float flval) {

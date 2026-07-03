@@ -54,7 +54,6 @@ import javax.annotation.Nullable;
 public class MegaChestEntity extends SeaMonster {
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(MegaChestEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(MegaChestEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(MegaChestEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Boolean> DATA_released = SynchedEntityData.defineId(MegaChestEntity.class, EntityDataSerializers.BOOLEAN);
     private boolean swinging;
     private boolean lastloop;
@@ -79,17 +78,9 @@ public class MegaChestEntity extends SeaMonster {
         super.defineSynchedData();
         this.entityData.define(SHOOT, false);
         this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(TEXTURE, "megachest");
         this.entityData.define(DATA_released, false);
     }
 
-    public void setTexture(String texture) {
-        this.entityData.set(TEXTURE, texture);
-    }
-
-    public String getTexture() {
-        return this.entityData.get(TEXTURE);
-    }
 
     @Override
     public boolean canCollideWith(Entity entity) {
@@ -191,21 +182,18 @@ public class MegaChestEntity extends SeaMonster {
         return retval;
     }
 
-    @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
+	@Override
+	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putString("Texture", this.getTexture());
         compound.putBoolean("Datareleased", this.entityData.get(DATA_released));
-    }
+	}
 
-    @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
+	@Override
+	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Texture"))
-            this.setTexture(compound.getString("Texture"));
         if (compound.contains("Datareleased"))
             this.entityData.set(DATA_released, compound.getBoolean("Datareleased"));
-    }
+	}
 
     @Override
     public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {

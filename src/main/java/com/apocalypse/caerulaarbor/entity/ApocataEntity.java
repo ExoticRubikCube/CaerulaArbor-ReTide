@@ -48,7 +48,6 @@ public class ApocataEntity extends PathfinderMob implements GeoEntity, SyncedAni
 	}
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(ApocataEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(ApocataEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(ApocataEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(ApocataEntity.class, EntityDataSerializers.INT);
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 	private boolean swinging;
@@ -75,17 +74,9 @@ public class ApocataEntity extends PathfinderMob implements GeoEntity, SyncedAni
 		super.defineSynchedData();
 		this.entityData.define(SHOOT, false);
 		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(TEXTURE, "new_bocchi");
 		this.entityData.define(DATA_duration, 0);
 	}
 
-	public void setTexture(String texture) {
-		this.entityData.set(TEXTURE, texture);
-	}
-
-	public String getTexture() {
-		return this.entityData.get(TEXTURE);
-	}
 
 	@Override
 	public Packet<ClientGamePacketListener> getAddEntityPacket() {
@@ -166,15 +157,12 @@ public class ApocataEntity extends PathfinderMob implements GeoEntity, SyncedAni
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
-		compound.putString("Texture", this.getTexture());
 		compound.putInt("Dataduration", this.entityData.get(DATA_duration));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
-		if (compound.contains("Texture"))
-			this.setTexture(compound.getString("Texture"));
 		if (compound.contains("Dataduration"))
 			this.entityData.set(DATA_duration, compound.getInt("Dataduration"));
 	}
@@ -190,8 +178,7 @@ public class ApocataEntity extends PathfinderMob implements GeoEntity, SyncedAni
         if ((entity instanceof ApocataEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0) > 0) {
             return InteractionResult.PASS;
         }
-        if (((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()
-                && ((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()) {
+        if (sourceentity.getMainHandItem().getItem() == Blocks.AIR.asItem() && ((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()) {
             if (entity instanceof ApocataEntity) {
                 ((ApocataEntity) entity).setAnimation("animation.apocata.tap");
             }

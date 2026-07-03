@@ -64,7 +64,6 @@ import java.util.List;
 public abstract class AbstractOceanizedWardenEntity extends SeaMonster {
 	protected static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(AbstractOceanizedWardenEntity.class, EntityDataSerializers.BOOLEAN);
 	protected static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(AbstractOceanizedWardenEntity.class, EntityDataSerializers.STRING);
-	protected static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(AbstractOceanizedWardenEntity.class, EntityDataSerializers.STRING);
 	protected static final EntityDataAccessor<Integer> DATA_SKILL_1 = SynchedEntityData.defineId(AbstractOceanizedWardenEntity.class, EntityDataSerializers.INT);
 	protected static final EntityDataAccessor<Integer> DATA_SKILL_2 = SynchedEntityData.defineId(AbstractOceanizedWardenEntity.class, EntityDataSerializers.INT);
 	protected static final EntityDataAccessor<Integer> DATA_DURATION = SynchedEntityData.defineId(AbstractOceanizedWardenEntity.class, EntityDataSerializers.INT);
@@ -81,8 +80,6 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonster {
 		this.setMaxUpStep(0.6F);
 		this.setPersistenceRequired();
 	}
-
-	protected abstract String getDefaultTexture();
 
 	protected abstract String getAmbientSoundId();
 
@@ -101,18 +98,9 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonster {
 		super.defineSynchedData();
 		this.entityData.define(SHOOT, false);
 		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(TEXTURE, this.getDefaultTexture());
 		this.entityData.define(DATA_SKILL_1, 100);
 		this.entityData.define(DATA_SKILL_2, 120);
 		this.entityData.define(DATA_DURATION, 0);
-	}
-
-	public void setTexture(String texture) {
-		this.entityData.set(TEXTURE, texture);
-	}
-
-	public String getTexture() {
-		return this.entityData.get(TEXTURE);
 	}
 
 	public String getSyncedAnimation() {
@@ -422,7 +410,6 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonster {
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
-		compound.putString("Texture", this.getTexture());
 		compound.putInt("Dataskillp1", this.entityData.get(DATA_SKILL_1));
 		compound.putInt("Dataskillp2", this.entityData.get(DATA_SKILL_2));
 		compound.putInt("Dataduration", this.entityData.get(DATA_DURATION));
@@ -431,9 +418,6 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonster {
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
-		if (compound.contains("Texture")) {
-			this.setTexture(compound.getString("Texture"));
-		}
 		if (compound.contains("Dataskillp1")) {
 			this.entityData.set(DATA_SKILL_1, compound.getInt("Dataskillp1"));
 		}

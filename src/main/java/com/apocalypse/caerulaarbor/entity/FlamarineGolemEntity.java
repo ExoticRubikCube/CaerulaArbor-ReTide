@@ -71,7 +71,6 @@ public class FlamarineGolemEntity extends SeaMonster {
 
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(FlamarineGolemEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(FlamarineGolemEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(FlamarineGolemEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(FlamarineGolemEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_skillP1 = SynchedEntityData.defineId(FlamarineGolemEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_skillP2 = SynchedEntityData.defineId(FlamarineGolemEntity.class, EntityDataSerializers.INT);
@@ -99,20 +98,12 @@ public class FlamarineGolemEntity extends SeaMonster {
         super.defineSynchedData();
         this.entityData.define(SHOOT, false);
         this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(TEXTURE, "flamarine_golem");
         this.entityData.define(DATA_duration, 0);
         this.entityData.define(DATA_skillP1, 6);
         this.entityData.define(DATA_skillP2, 100);
         this.entityData.define(DATA_addition, 40);
     }
 
-    public void setTexture(String texture) {
-        this.entityData.set(TEXTURE, texture);
-    }
-
-    public String getTexture() {
-        return this.entityData.get(TEXTURE);
-    }
 
     @Override
     public boolean canCollideWith(Entity entity) {
@@ -276,21 +267,18 @@ public class FlamarineGolemEntity extends SeaMonster {
         return retval;
     }
 
-    @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
+	@Override
+	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putString("Texture", this.getTexture());
         compound.putInt("Dataduration", this.entityData.get(DATA_duration));
         compound.putInt("DataskillP1", this.entityData.get(DATA_skillP1));
         compound.putInt("DataskillP2", this.entityData.get(DATA_skillP2));
         compound.putInt("Dataaddition", this.entityData.get(DATA_addition));
-    }
+	}
 
-    @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
+	@Override
+	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Texture"))
-            this.setTexture(compound.getString("Texture"));
         if (compound.contains("Dataduration"))
             this.entityData.set(DATA_duration, compound.getInt("Dataduration"));
         if (compound.contains("DataskillP1"))
@@ -299,7 +287,7 @@ public class FlamarineGolemEntity extends SeaMonster {
             this.entityData.set(DATA_skillP2, compound.getInt("DataskillP2"));
         if (compound.contains("Dataaddition"))
             this.entityData.set(DATA_addition, compound.getInt("Dataaddition"));
-    }
+	}
 
     @Override
     public void baseTick() {

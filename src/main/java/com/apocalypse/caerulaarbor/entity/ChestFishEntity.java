@@ -54,7 +54,6 @@ import javax.annotation.Nullable;
 public class ChestFishEntity extends SeaMonster {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(ChestFishEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(ChestFishEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(ChestFishEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<Boolean> DATA_release = SynchedEntityData.defineId(ChestFishEntity.class, EntityDataSerializers.BOOLEAN);
 	private boolean swinging;
 	private boolean lastloop;
@@ -77,17 +76,9 @@ public class ChestFishEntity extends SeaMonster {
 		super.defineSynchedData();
 		this.entityData.define(SHOOT, false);
 		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(TEXTURE, "chest_fish");
 		this.entityData.define(DATA_release, false);
 	}
 
-	public void setTexture(String texture) {
-		this.entityData.set(TEXTURE, texture);
-	}
-
-	public String getTexture() {
-		return this.entityData.get(TEXTURE);
-	}
 
 	@Override
 	public boolean canCollideWith(Entity entity) {
@@ -210,15 +201,12 @@ public class ChestFishEntity extends SeaMonster {
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
-		compound.putString("Texture", this.getTexture());
 		compound.putBoolean("Datarelease", this.entityData.get(DATA_release));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
-		if (compound.contains("Texture"))
-			this.setTexture(compound.getString("Texture"));
 		if (compound.contains("Datarelease"))
 			this.entityData.set(DATA_release, compound.getBoolean("Datarelease"));
 	}

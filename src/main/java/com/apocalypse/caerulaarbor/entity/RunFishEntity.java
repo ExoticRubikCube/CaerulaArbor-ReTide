@@ -52,7 +52,6 @@ import javax.annotation.Nullable;
 public class RunFishEntity extends SeaMonster implements Bucketable {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(RunFishEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(RunFishEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(RunFishEntity.class, EntityDataSerializers.STRING);
 	private boolean swinging;
 	private boolean lastloop;
 	private long lastSwing;
@@ -75,16 +74,9 @@ public class RunFishEntity extends SeaMonster implements Bucketable {
 		super.defineSynchedData();
 		this.entityData.define(SHOOT, false);
 		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(TEXTURE, "shell_sea_runner");
 	}
 
-	public void setTexture(String texture) {
-		this.entityData.set(TEXTURE, texture);
-	}
 
-	public String getTexture() {
-		return this.entityData.get(TEXTURE);
-	}
 
 	@Override
 	public Packet<ClientGamePacketListener> getAddEntityPacket() {
@@ -152,15 +144,12 @@ public class RunFishEntity extends SeaMonster implements Bucketable {
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putBoolean("FromBucket", this.fromBucket());
-		compound.putString("Texture", this.getTexture());
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
 		this.setFromBucket(compound.getBoolean("FromBucket"));
-		if (compound.contains("Texture"))
-			this.setTexture(compound.getString("Texture"));
 	}
 
 	@Override
@@ -176,15 +165,11 @@ public class RunFishEntity extends SeaMonster implements Bucketable {
 	@Override
 	public void saveToBucketTag(ItemStack bucketStack) {
 		Bucketable.saveDefaultDataToBucketTag(this, bucketStack);
-		bucketStack.getOrCreateTag().putString("Texture", this.getTexture());
 	}
 
 	@Override
 	public void loadFromBucketTag(CompoundTag bucketTag) {
 		Bucketable.loadDefaultDataFromBucketTag(this, bucketTag);
-		if (bucketTag.contains("Texture")) {
-			this.setTexture(bucketTag.getString("Texture"));
-		}
 		this.setFromBucket(true);
 	}
 

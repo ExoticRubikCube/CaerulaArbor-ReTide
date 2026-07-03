@@ -11,6 +11,8 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class CorrectinalPhalaxVanguardModel extends GeoModel<CorrectinalPhalaxVanguardEntity> {
+	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/correctionalphalanx_infantry.png");
+
 	@Override
 	public ResourceLocation getAnimationResource(CorrectinalPhalaxVanguardEntity entity) {
 		return new ResourceLocation(CaerulaArborMod.MODID, "animations/correctional_phalanx__vanguard.animation.json");
@@ -23,7 +25,7 @@ public class CorrectinalPhalaxVanguardModel extends GeoModel<CorrectinalPhalaxVa
 
 	@Override
 	public ResourceLocation getTextureResource(CorrectinalPhalaxVanguardEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return TEXTURE;
 	}
 
 	@Override

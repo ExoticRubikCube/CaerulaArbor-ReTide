@@ -6,6 +6,8 @@ import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.GeoModel;
 
 public class BoneFishModel extends GeoModel<BoneFishEntity> {
+	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/bonefish.png");
+
 	@Override
 	public ResourceLocation getAnimationResource(BoneFishEntity entity) {
 		return new ResourceLocation(CaerulaArborMod.MODID, "animations/bonefish.animation.json");
@@ -18,7 +20,7 @@ public class BoneFishModel extends GeoModel<BoneFishEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(BoneFishEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + entity.getTexture() + ".png");
+		return TEXTURE;
 	}
 
 }

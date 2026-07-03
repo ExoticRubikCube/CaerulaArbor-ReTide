@@ -49,7 +49,6 @@ import software.bernie.geckolib.core.object.PlayState;
 public class NetherseaSlimeEntity extends SeaMonster {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(NetherseaSlimeEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(NetherseaSlimeEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(NetherseaSlimeEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<Integer> DATA_SIZE = SynchedEntityData.defineId(NetherseaSlimeEntity.class, EntityDataSerializers.INT);
 	public String animationprocedure = "empty";
 
@@ -69,17 +68,9 @@ public class NetherseaSlimeEntity extends SeaMonster {
 		super.defineSynchedData();
 		this.entityData.define(SHOOT, false);
 		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(TEXTURE, "nethersea_slime");
 		this.entityData.define(DATA_SIZE, 4);
 	}
 
-	public void setTexture(String texture) {
-		this.entityData.set(TEXTURE, texture);
-	}
-
-	public String getTexture() {
-		return this.entityData.get(TEXTURE);
-	}
 
 	@Override
 	public Packet<ClientGamePacketListener> getAddEntityPacket() {
@@ -147,15 +138,12 @@ public class NetherseaSlimeEntity extends SeaMonster {
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
-		compound.putString("Texture", this.getTexture());
 		compound.putInt("DataSIZE", this.entityData.get(DATA_SIZE));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
-		if (compound.contains("Texture"))
-			this.setTexture(compound.getString("Texture"));
 		if (compound.contains("DataSIZE"))
 			this.entityData.set(DATA_SIZE, compound.getInt("DataSIZE"));
 	}

@@ -3,7 +3,6 @@ package com.apocalypse.caerulaarbor.entity;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -34,7 +33,6 @@ import software.bernie.geckolib.core.object.PlayState;
 public class DivicellularGoEntity extends SeaMonster {
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(DivicellularGoEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(DivicellularGoEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(DivicellularGoEntity.class, EntityDataSerializers.STRING);
     private boolean swinging;
     private boolean lastloop;
     private long lastSwing;
@@ -56,15 +54,6 @@ public class DivicellularGoEntity extends SeaMonster {
         super.defineSynchedData();
         this.entityData.define(SHOOT, false);
         this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(TEXTURE, "accumulator");
-    }
-
-    public void setTexture(String texture) {
-        this.entityData.set(TEXTURE, texture);
-    }
-
-    public String getTexture() {
-        return this.entityData.get(TEXTURE);
     }
 
     @Override
@@ -116,19 +105,6 @@ public class DivicellularGoEntity extends SeaMonster {
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
-        super.addAdditionalSaveData(compound);
-        compound.putString("Texture", this.getTexture());
-    }
-
-    @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
-        super.readAdditionalSaveData(compound);
-        if (compound.contains("Texture"))
-            this.setTexture(compound.getString("Texture"));
-    }
-
-    @Override
     public void baseTick() {
         super.baseTick();
         this.refreshDimensions();
@@ -138,7 +114,6 @@ public class DivicellularGoEntity extends SeaMonster {
     public EntityDimensions getDimensions(Pose p_33597_) {
         return super.getDimensions(p_33597_).scale((float) 1);
     }
-
 
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();

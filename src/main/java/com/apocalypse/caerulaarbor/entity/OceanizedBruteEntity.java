@@ -69,7 +69,6 @@ import java.util.List;
 public class OceanizedBruteEntity extends SeaMonster {
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanizedBruteEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedBruteEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(OceanizedBruteEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_ability = SynchedEntityData.defineId(OceanizedBruteEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_skillp = SynchedEntityData.defineId(OceanizedBruteEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
@@ -95,18 +94,10 @@ public class OceanizedBruteEntity extends SeaMonster {
         super.defineSynchedData();
         this.entityData.define(SHOOT, false);
         this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(TEXTURE, "oceanized_brute");
         this.entityData.define(DATA_ability, 0);
         this.entityData.define(DATA_skillp, 3);
     }
 
-    public void setTexture(String texture) {
-        this.entityData.set(TEXTURE, texture);
-    }
-
-    public String getTexture() {
-        return this.entityData.get(TEXTURE);
-    }
 
     @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket() {
@@ -341,24 +332,21 @@ public class OceanizedBruteEntity extends SeaMonster {
         return retval;
     }
 
-    @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
+	@Override
+	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putString("Texture", this.getTexture());
         compound.putInt("Dataability", this.entityData.get(DATA_ability));
         compound.putInt("Dataskillp", this.entityData.get(DATA_skillp));
-    }
+	}
 
-    @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
+	@Override
+	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Texture"))
-            this.setTexture(compound.getString("Texture"));
         if (compound.contains("Dataability"))
             this.entityData.set(DATA_ability, compound.getInt("Dataability"));
         if (compound.contains("Dataskillp"))
             this.entityData.set(DATA_skillp, compound.getInt("Dataskillp"));
-    }
+	}
 
     @Override
     public void awardKillScore(Entity entity, int score, DamageSource damageSource) {

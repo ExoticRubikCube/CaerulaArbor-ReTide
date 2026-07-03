@@ -1,7 +1,7 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.entity.AnchorFlyEntity;
+import com.apocalypse.caerulaarbor.entity.bullets.AnchorFlyEntity;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityUtils;

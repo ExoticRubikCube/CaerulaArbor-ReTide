@@ -28,11 +28,6 @@ public class Al1SHelperEntity extends LittleHelperEntity {
 	}
 
 	@Override
-	protected String getDefaultTexture() {
-		return "little_helper_al1s";
-	}
-
-	@Override
 	protected InteractionResult handleApocalypseInteract(Player sourceentity) {
 		if (this.level() instanceof ServerLevel serverLevel && sourceentity.isHolding(CAItems.APOCALYPSE.get())) {
 			serverLevel.sendParticles(ParticleTypes.FLAME, this.getX(), this.getY(), this.getZ(), 32, 0.75, 0.75, 0.75, 0.15);

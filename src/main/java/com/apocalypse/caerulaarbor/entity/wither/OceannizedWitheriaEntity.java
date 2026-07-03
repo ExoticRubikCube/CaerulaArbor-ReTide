@@ -66,11 +66,6 @@ public class OceannizedWitheriaEntity extends AbstractOceanizedWitherEntity {
     }
 
     @Override
-    protected String getDefaultTexture() {
-        return "oceanized_witheria";
-    }
-
-    @Override
     protected int getInitialSkillp() {
         return 100;
     }
@@ -269,11 +264,6 @@ public class OceannizedWitheriaEntity extends AbstractOceanizedWitherEntity {
     @Override
     protected boolean shouldEnterShelledState() {
         return this.getHealth() < this.getMaxHealth() * 0.5;
-    }
-
-    @Override
-    protected String getShelledTexture() {
-        return "oceanized_witheria_anger";
     }
 
     private void purchaseEnemy() {

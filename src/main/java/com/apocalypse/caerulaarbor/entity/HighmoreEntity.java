@@ -3,6 +3,7 @@ package com.apocalypse.caerulaarbor.entity;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
+import com.apocalypse.caerulaarbor.entity.bullets.HighmoreShootEntity;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
@@ -80,7 +81,6 @@ import java.util.List;
 public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(HighmoreEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(HighmoreEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<String> TEXTURE = SynchedEntityData.defineId(HighmoreEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_phase = SynchedEntityData.defineId(HighmoreEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_skillp1 = SynchedEntityData.defineId(HighmoreEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_skillp2 = SynchedEntityData.defineId(HighmoreEntity.class, EntityDataSerializers.INT);
@@ -108,19 +108,12 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
         super.defineSynchedData();
         this.entityData.define(SHOOT, false);
         this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(TEXTURE, "highmore");
         this.entityData.define(DATA_phase, 0);
         this.entityData.define(DATA_skillp1, 200);
         this.entityData.define(DATA_skillp2, 100);
     }
 
-    public void setTexture(String texture) {
-        this.entityData.set(TEXTURE, texture);
-    }
 
-    public String getTexture() {
-        return this.entityData.get(TEXTURE);
-    }
 
     @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket() {
@@ -357,7 +350,6 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putString("Texture", this.getTexture());
         compound.putInt("Dataphase", this.entityData.get(DATA_phase));
         compound.putInt("Dataskillp1", this.entityData.get(DATA_skillp1));
         compound.putInt("Dataskillp2", this.entityData.get(DATA_skillp2));
@@ -366,8 +358,6 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Texture"))
-            this.setTexture(compound.getString("Texture"));
         if (compound.contains("Dataphase"))
             this.entityData.set(DATA_phase, compound.getInt("Dataphase"));
         if (compound.contains("Dataskillp1"))
