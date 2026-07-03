@@ -60,8 +60,6 @@ public class CaerulaHeartItem extends Item {
         double x = entity.getX();
         double y = entity.getY();
         double z = entity.getZ();
-        if (entity == null)
-            return;
         if (!itemstack.getOrCreateTag().getBoolean("used")) {
             {
                 boolean _setval = true;

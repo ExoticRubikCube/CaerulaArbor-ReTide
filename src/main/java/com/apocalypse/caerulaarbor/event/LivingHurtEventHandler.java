@@ -68,20 +68,15 @@ public class LivingHurtEventHandler {
 
         handleBarrierFunc(event);
         handleMagicResis(event);
-        handleCompchitinLimitDamage(event);
         handleFlamarineHurt(event);
         handleTrailriteAttackBonus(event);
         handleArmorKnight(event);
         handleBossHit(event);
-        handleChimeraReefbreaker(event);
         handleChimeraKilledByApocata(event);
         handleCorruptedBurdenDamage(event);
         handleDamageBurdenVeicle(event);
         handleCrimsonTreaty(event);
-        handleEndspeakerHurt(event);
-        handleEndspeakerttack(event);
         handleExtraMagicdamage(event);
-        handleGladiiaAttackBonus(event);
         handleHandHoeSword(event);
         handleHandThorns(event);
         handleHuntersHit(event);
@@ -172,21 +167,6 @@ public class LivingHurtEventHandler {
             if (def > 0 && !damagesource.is(B_DEFENSE)) {
                 event.setAmount((float) Math.max(amount - def, amount * 0.05));
             }
-        }
-    }
-
-    private static void handleCompchitinLimitDamage(LivingHurtEvent event) {
-        DamageSource damagesource = event.getSource();
-        Entity entity = event.getEntity();
-        double amount = event.getAmount();
-
-        if (damagesource == null || entity == null) return;
-
-        if (damagesource.is(TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation("minecraft:bypasses_invulnerability")))) return;
-        if (damagesource.is(B_PROTECTION)) return;
-
-        if (entity instanceof ComplexChitinGolemEntity && amount > (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.1) {
-            event.setAmount((float) ((entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.1));
         }
     }
 
@@ -344,30 +324,6 @@ public class LivingHurtEventHandler {
         }
     }
 
-    private static void handleChimeraReefbreaker(LivingHurtEvent event) {
-        Entity sourceentity = event.getSource().getEntity();
-        if (sourceentity == null) return;
-
-        if (sourceentity instanceof TideChimeraEntity livEnt) {
-            double amplifi = livEnt.hasEffect(CAMobEffects.REEF_CRACKER.get()) ? livEnt.getEffect(CAMobEffects.REEF_CRACKER.get()).getAmplifier() : 0;
-            if (livEnt.hasEffect(CAMobEffects.REEF_CRACKER.get())) {
-                if (amplifi < 31) {
-                    LivingEntity _entity = (LivingEntity) sourceentity;
-                    if (!_entity.level().isClientSide())
-                        _entity.addEffect(new MobEffectInstance(CAMobEffects.REEF_CRACKER.get(), 100, (int) (amplifi + 1), false, false));
-                } else {
-                    LivingEntity _entity = (LivingEntity) sourceentity;
-                    if (!_entity.level().isClientSide())
-                        _entity.addEffect(new MobEffectInstance(CAMobEffects.REEF_CRACKER.get(), 100, 31, false, false));
-                }
-            } else {
-                LivingEntity _entity = (LivingEntity) sourceentity;
-                if (!_entity.level().isClientSide())
-                    _entity.addEffect(new MobEffectInstance(CAMobEffects.REEF_CRACKER.get(), 100, 0, false, false));
-            }
-        }
-    }
-
     private static void handleChimeraKilledByApocata(LivingHurtEvent event) {
         Entity entity = event.getEntity();
         Entity sourceentity = event.getSource().getEntity();
@@ -479,49 +435,6 @@ public class LivingHurtEventHandler {
         }
     }
 
-    private static void handleEndspeakerHurt(LivingHurtEvent event) {
-        LevelAccessor world = event.getEntity().level();
-        Entity entity = event.getEntity();
-        Entity sourceentity = event.getSource().getEntity();
-        double amount = event.getAmount();
-
-        if (entity == null || sourceentity == null) return;
-
-        if (EndspeakerEntity.hasAbility(world, 3)) {
-            if (sourceentity instanceof EndspeakerEntity && entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CAMobEffects.TRAIL_BUFF.get())) {
-                event.setAmount((float) (amount * 1.5));
-            }
-            if (entity instanceof EndspeakerEntity
-                    && (entity instanceof LivingEntity _livEnt2 && _livEnt2.hasEffect(CAMobEffects.TRAIL_BUFF.get()) || sourceentity instanceof LivingEntity _livEnt3 && _livEnt3.hasEffect(CAMobEffects.TRAIL_BUFF.get()))) {
-                event.setAmount((float) (amount * 0.65));
-            }
-        }
-    }
-
-    private static void handleEndspeakerttack(LivingHurtEvent event) {
-        LevelAccessor world = event.getEntity().level();
-        Entity sourceentity = event.getSource().getEntity();
-        if (sourceentity == null) return;
-
-        if (sourceentity instanceof EndspeakerEntity) {
-            if (EndspeakerEntity.hasAbility(world, 5)) {
-                double amplifi = sourceentity instanceof LivingEntity _livEnt && _livEnt.hasEffect(CAMobEffects.REEF_CRACKER.get()) ? _livEnt.getEffect(CAMobEffects.REEF_CRACKER.get()).getAmplifier() : 0;
-                if (sourceentity instanceof LivingEntity _livEnt1 && _livEnt1.hasEffect(CAMobEffects.REEF_CRACKER.get())) {
-                    if (amplifi < 11) {
-                        if (sourceentity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                            _entity.addEffect(new MobEffectInstance(CAMobEffects.REEF_CRACKER.get(), 120, (int) (amplifi + 1), false, false));
-                    } else {
-                        if (sourceentity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                            _entity.addEffect(new MobEffectInstance(CAMobEffects.REEF_CRACKER.get(), 80, 11, false, false));
-                    }
-                } else {
-                    if (sourceentity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                        _entity.addEffect(new MobEffectInstance(CAMobEffects.REEF_CRACKER.get(), 80, 0, false, false));
-                }
-            }
-        }
-    }
-
     private static void handleExtraMagicdamage(LivingHurtEvent event) {
         LevelAccessor world = event.getEntity().level();
         DamageSource damagesource = event.getSource();
@@ -539,32 +452,6 @@ public class LivingHurtEventHandler {
                             (float) (amount * 0.2 * (MapVariables.get(world).strategy_grow - 2)));
                 }
             }
-        }
-    }
-
-    private static void handleGladiiaAttackBonus(LivingHurtEvent event) {
-        Entity entity = event.getEntity();
-        Entity sourceentity = event.getSource().getEntity();
-        double amount = event.getAmount();
-
-        if (entity == null || sourceentity == null) return;
-
-        double factor;
-        if (sourceentity instanceof GladiiaEntity) {
-            factor = 1;
-            if (EntityUtils.getSize(entity) < EntityUtils.getSize(sourceentity) * 2) {
-                factor = factor * 1.3;
-            }
-            if (EntityUtils.getHealthPerc(entity) < EntityUtils.getHealthPerc(sourceentity)) {
-                factor = factor * 1.5;
-            }
-            event.setAmount((float) (amount * factor));
-        } else if (entity instanceof GladiiaEntity) {
-            factor = 1;
-            if (EntityUtils.getSize(sourceentity) >= EntityUtils.getSize(entity) * 2) {
-                factor = 0.75;
-            }
-            event.setAmount((float) (amount * factor));
         }
     }
 

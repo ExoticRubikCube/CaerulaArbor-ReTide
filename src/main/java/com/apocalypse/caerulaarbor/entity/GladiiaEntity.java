@@ -223,22 +223,36 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 				if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 5) {
 					this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
 							ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "gladiia_attack_hit")), SoundSource.NEUTRAL, 2.75F, 1);
-					target.hurt(
-							new DamageSource(
-									this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
-											.getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))),
-									this),
-							(float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
+					this.hurtWithHunterAttack(target, (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
 				}
 			});
 		}
 		return true;
 	}
 
+	private boolean hurtWithHunterAttack(Entity target, float amount) {
+		if (EntityUtils.getSize(target) < EntityUtils.getSize(this) * 2) {
+			amount *= 1.3F;
+		}
+		if (EntityUtils.getHealthPerc(target) < EntityUtils.getHealthPerc(this)) {
+			amount *= 1.5F;
+		}
+		return target.hurt(
+				new DamageSource(
+						this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
+								.getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))),
+						this),
+				amount);
+	}
+
 	@Override
 	public boolean hurt(DamageSource source, float amount) {
 		if (source.is(DamageTypes.DROWN))
 			return false;
+		Entity sourceEntity = source.getEntity();
+		if (sourceEntity != null && EntityUtils.getSize(sourceEntity) >= EntityUtils.getSize(this) * 2) {
+			amount *= 0.75F;
+		}
 		return super.hurt(source, amount);
 	}
 
@@ -334,12 +348,12 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 								EntityUtils.pullToward(ene, this);
 								GladiiaEntity.spawnGladiiaLinkParticles(world, this, ene);
 								damage = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
-								ene.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))), this), (float) (damage * 3));
+								this.hurtWithHunterAttack(ene, (float) (damage * 3));
 								side = EntityUtils.catchNearestEnemy(world, ene.getX(), ene.getY(), ene.getZ(), ene);
 								if (!(side == null)) {
 									EntityUtils.pullToward(side, this);
 									GladiiaEntity.spawnGladiiaLinkParticles(world, this, side);
-									side.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))), this), (float) (damage * 3));
+									this.hurtWithHunterAttack(side, (float) (damage * 3));
 								}
 								CaerulaArborMod.queueServerWork(10, () -> {
 									if (world instanceof Level _level) {
@@ -423,8 +437,7 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 											if (d <= 4) {
 												EntityUtils.pullToward(entityiterator, this);
 												GladiiaEntity.spawnGladiiaLinkParticles(world, this, entityiterator);
-												entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))), this),
-														(float) (damage * 1.8));
+												this.hurtWithHunterAttack(entityiterator, (float) (damage * 1.8F));
 											}
 										}
 									}

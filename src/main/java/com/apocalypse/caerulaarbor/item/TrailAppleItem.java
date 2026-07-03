@@ -1,4 +1,3 @@
-
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.api.event.SanityEvent;
@@ -24,9 +23,10 @@ public class TrailAppleItem extends Item {
 		double x = entity.getX();
 		double y = entity.getY();
 		double z = entity.getZ();
-        SIHelper.causeSanityInjury(entity, 75, SanityEvent.Hurt.Type.FOOD);
-        if ((LevelAccessor) world instanceof ServerLevel _level)
-            _level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, (y + 0.8), z, 48, 0.5, 1, 0.5, 0.1);
-        return retval;
+		SIHelper.causeSanityInjury(entity, 75, SanityEvent.Hurt.Type.FOOD);
+		if ((LevelAccessor) world instanceof ServerLevel level) {
+			level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, y + 0.8, z, 48, 0.5, 1, 0.5, 0.1);
+		}
+		return retval;
 	}
 }

@@ -2,8 +2,8 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
-import com.apocalypse.caerulaarbor.init.CAItems;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -42,13 +42,11 @@ public class MeatCanItem extends Item {
 		if (!entity.level().isClientSide())
 			entity.addEffect(new MobEffectInstance(MobEffects.HEAL, 1, 0));
 		if (!(entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_util_MEATCAN) {
-			{
-				boolean _setval = true;
-				entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-					capability.relic_util_MEATCAN = _setval;
-					capability.syncPlayerVariables(entity);
-				});
-			}
+			boolean _setval = true;
+			entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+				capability.relic_util_MEATCAN = _setval;
+				capability.syncPlayerVariables(entity);
+			});
 		}
 		if (itemstack.isEmpty()) {
 			return retval;

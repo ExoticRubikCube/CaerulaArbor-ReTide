@@ -200,12 +200,16 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
                     this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
                             ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "puncturefish_attack")), SoundSource.HOSTILE, 3,
                             (float) Mth.nextDouble(RandomSource.create(), 0.9, 1.1));
-                    target.hurt(
+                    if (target.hurt(
                             new DamageSource(
                                     this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
                                             .getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "general_seaborn_attack"))),
                                     this),
-                            (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
+                            (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0))) {
+                        int amplifier = this.hasEffect(CAMobEffects.REEF_CRACKER.get()) ? this.getEffect(CAMobEffects.REEF_CRACKER.get()).getAmplifier() : -1;
+                        int nextAmplifier = amplifier < 0 ? 0 : Math.min(amplifier + 1, 31);
+                        this.addEffect(new MobEffectInstance(CAMobEffects.REEF_CRACKER.get(), 100, nextAmplifier, false, false));
+                    }
                 }
             });
         }

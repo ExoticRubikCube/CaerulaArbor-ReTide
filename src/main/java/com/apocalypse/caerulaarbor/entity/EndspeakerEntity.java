@@ -716,7 +716,31 @@ public class EndspeakerEntity extends SeaMonster {
 		if (source.is(DamageTypes.DROWN)) {
 			return false;
 		}
+		if (this.hasAbility(3)) {
+			Entity sourceEntity = source.getEntity();
+			if (this.hasEffect(CAMobEffects.TRAIL_BUFF.get()) || sourceEntity instanceof LivingEntity livingSource && livingSource.hasEffect(CAMobEffects.TRAIL_BUFF.get())) {
+				amount *= 0.65F;
+			}
+		}
 		return super.hurt(source, amount);
+	}
+
+	private boolean hurtWithEndspeakerAttack(LivingEntity target, float amount) {
+		if (this.hasAbility(3) && target.hasEffect(CAMobEffects.TRAIL_BUFF.get())) {
+			amount *= 1.5F;
+		}
+		boolean damaged = target.hurt(
+				new DamageSource(this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
+						.getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "endspeaker_attack"))), this),
+				amount
+		);
+		if (damaged && this.hasAbility(5) && !this.level().isClientSide()) {
+			int amplifier = this.hasEffect(CAMobEffects.REEF_CRACKER.get()) ? this.getEffect(CAMobEffects.REEF_CRACKER.get()).getAmplifier() : -1;
+			int nextAmplifier = amplifier < 0 ? 0 : Math.min(amplifier + 1, 11);
+			int duration = amplifier >= 0 && amplifier < 11 ? 120 : 80;
+			this.addEffect(new MobEffectInstance(CAMobEffects.REEF_CRACKER.get(), duration, nextAmplifier, false, false));
+		}
+		return damaged;
 	}
 
 	@Override
@@ -1303,8 +1327,7 @@ public class EndspeakerEntity extends SeaMonster {
 		} else if (canAttack && target instanceof LivingEntity livingTarget) {
 			float healthBeforeHit = livingTarget.getHealth();
 			float absorptionBeforeHit = livingTarget.getAbsorptionAmount();
-			if (livingTarget.hurt(new DamageSource(this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
-				.getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "endspeaker_attack"))), this), (float) (attackDamage * 1.5))) {
+			if (this.hurtWithEndspeakerAttack(livingTarget, (float) (attackDamage * 1.5))) {
 				this.handlePhaseThreeAttackHit(livingTarget, healthBeforeHit, absorptionBeforeHit);
 			}
 		}
@@ -1329,8 +1352,7 @@ public class EndspeakerEntity extends SeaMonster {
 			if (this.distanceTo(nearbyEntity) <= 4) {
 				float healthBeforeHit = livingTarget.getHealth();
 				float absorptionBeforeHit = livingTarget.getAbsorptionAmount();
-				if (livingTarget.hurt(new DamageSource(this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
-					.getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "endspeaker_attack"))), this), (float) (attackDamage * 0.9))) {
+				if (this.hurtWithEndspeakerAttack(livingTarget, (float) (attackDamage * 0.9))) {
 					this.handlePhaseThreeAttackHit(livingTarget, healthBeforeHit, absorptionBeforeHit);
 				}
 			}
@@ -1359,12 +1381,11 @@ public class EndspeakerEntity extends SeaMonster {
 		Entity target = this.getTarget();
 		double remainingTargets = maxTargets;
 		double attackDamage = this.getAttribute(Attributes.ATTACK_DAMAGE).getValue();
-		if (target != null && target.isAlive()) {
+		if (target instanceof LivingEntity livingTarget && target.isAlive()) {
 			if (radius <= 8) {
 				target.push(0, 0.33, 0);
 			}
-			target.hurt(new DamageSource(this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
-				.getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "endspeaker_attack"))), this), (float) (attackDamage * damageMultiplier));
+			this.hurtWithEndspeakerAttack(livingTarget, (float) (attackDamage * damageMultiplier));
 			remainingTargets -= 1;
 		}
 		Vec3 center = new Vec3(this.getX(), this.getY(), this.getZ());
@@ -1386,8 +1407,7 @@ public class EndspeakerEntity extends SeaMonster {
 				if (radius <= 8) {
 					nearbyEntity.push(0, 0.33, 0);
 				}
-				nearbyEntity.hurt(new DamageSource(this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
-					.getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "endspeaker_attack"))), this), (float) (attackDamage * damageMultiplier));
+				this.hurtWithEndspeakerAttack((LivingEntity) nearbyEntity, (float) (attackDamage * damageMultiplier));
 				remainingTargets -= 1;
 			}
 			if (remainingTargets <= 0) {

@@ -201,8 +201,6 @@ public class WavecleaverItem extends Item implements GeoItem, SyncedAnimationIte
 	public void inventoryTick(ItemStack itemstack, Level world, Entity entity, int slot, boolean selected) {
 		super.inventoryTick(itemstack, world, entity, slot, selected);
 		if (selected) {
-            if (entity == null)
-                return;
             if (!(entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CAMobEffects.ADD_REACH.get()))) {
                 if (entity instanceof LivingEntity living && !living.level().isClientSide())
                     living.addEffect(new MobEffectInstance(CAMobEffects.ADD_REACH.get(), 20, 2, false, false));

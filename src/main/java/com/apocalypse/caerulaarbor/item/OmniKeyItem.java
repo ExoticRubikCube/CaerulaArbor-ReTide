@@ -1,8 +1,8 @@
 
 package com.apocalypse.caerulaarbor.item;
 
-import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.util.ItemUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -38,7 +38,6 @@ public class OmniKeyItem extends Item {
 	@Override
 	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
 		super.appendHoverText(itemstack, level, list, flag);
-		Entity entity = itemstack.getEntityRepresentation();
 		String hoverText = ItemUtils.getOneUseItemDescription(itemstack);
 		if (hoverText != null) {
 			for (String line : hoverText.split("\n")) {
@@ -54,24 +53,22 @@ public class OmniKeyItem extends Item {
         double y = entity.getY();
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
-        if (entity != null) {
-            if (!itemstack.getOrCreateTag().getBoolean("used")) {
-                {
-                    boolean _setval = true;
-                    ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                        capability.relic_util_OMNIKEY = _setval;
-                        capability.syncPlayerVariables(entity);
-                    });
-                }
-                if ((Entity) entity instanceof Player _player)
-                    _player.giveExperienceLevels(3);
-                if ((LevelAccessor) world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.player.levelup")), SoundSource.NEUTRAL, 2, 1);
-                }
-                if ((LevelAccessor) world instanceof ServerLevel _level)
-                    _level.sendParticles(ParticleTypes.HAPPY_VILLAGER, x, y, z, 72, 1, 1, 1, 1);
-                itemstack.getOrCreateTag().putBoolean("used", true);
+        if (!itemstack.getOrCreateTag().getBoolean("used")) {
+            {
+                boolean _setval = true;
+                ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                    capability.relic_util_OMNIKEY = _setval;
+                    capability.syncPlayerVariables(entity);
+                });
             }
+            if ((Entity) entity instanceof Player _player)
+                _player.giveExperienceLevels(3);
+            if ((LevelAccessor) world instanceof Level _level) {
+                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.player.levelup")), SoundSource.NEUTRAL, 2, 1);
+            }
+            if ((LevelAccessor) world instanceof ServerLevel _level)
+                _level.sendParticles(ParticleTypes.HAPPY_VILLAGER, x, y, z, 72, 1, 1, 1, 1);
+            itemstack.getOrCreateTag().putBoolean("used", true);
         }
         return ar;
 	}

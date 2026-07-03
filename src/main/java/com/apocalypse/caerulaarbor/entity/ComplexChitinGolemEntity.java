@@ -20,6 +20,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
@@ -175,6 +177,10 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity, Sy
             return false;
         if (source.is(DamageTypes.DROWN))
             return false;
+        if (!source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)
+                && !source.is(TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "bypass_protection")))) {
+            amount = Math.min(amount, this.getMaxHealth() * 0.1F);
+        }
         return super.hurt(source, amount);
     }
 

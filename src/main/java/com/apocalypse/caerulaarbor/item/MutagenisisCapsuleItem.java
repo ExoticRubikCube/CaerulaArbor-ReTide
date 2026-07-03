@@ -1,8 +1,8 @@
 package com.apocalypse.caerulaarbor.item;
 
+import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.api.event.SanityEvent;
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
-import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import net.minecraft.advancements.Advancement;
@@ -42,45 +42,31 @@ public class MutagenisisCapsuleItem extends Item {
 	@Override
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
 		ItemStack retval = super.finishUsingItem(itemstack, world, entity);
-		double x = entity.getX();
-		double y = entity.getY();
-		double z = entity.getZ();
-        if (entity != null) {
-            double ocean;
-            ocean = (((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization;
-            if (ocean < 2.9) {
-                SIHelper.causeSanityInjury(entity, (ocean + 1) * 40, SanityEvent.Hurt.Type.FOOD);
-                ((Entity) entity).hurt(new DamageSource(((LevelAccessor) world).registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanize_damage")))), (float) (3 * (ocean + 1)));
-                if (!entity.level().isClientSide()) {
-                    entity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 2400, (int) ocean));
-                    entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 400, (int) ocean));
+        double ocean;
+        ocean = (((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization;
+        if (ocean < 2.9) {
+            SIHelper.causeSanityInjury(entity, (ocean + 1) * 40, SanityEvent.Hurt.Type.FOOD);
+            ((Entity) entity).hurt(new DamageSource(((LevelAccessor) world).registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanize_damage")))), (float) (3 * (ocean + 1)));
+            if (!entity.level().isClientSide()) {
+                entity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 2400, (int) ocean));
+                entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 400, (int) ocean));
+            }
+            if (((Entity) entity).isAlive()) {
+                {
+                    double _setval = ocean + 1;
+                    ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                        capability.player_oceanization = _setval;
+                        capability.syncPlayerVariables(entity);
+                    });
                 }
-                if (((Entity) entity).isAlive()) {
-                    {
-                        double _setval = ocean + 1;
-                        ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                            capability.player_oceanization = _setval;
-                            capability.syncPlayerVariables(entity);
-                        });
-                    }
-                }
-                if (ocean + 1 > 2.9) {
-                    if ((Entity) entity instanceof ServerPlayer _player) {
-                        Advancement _adv = _player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "they_shall_pay"));
-                        AdvancementProgress _ap = _player.getAdvancements().getOrStartProgress(_adv);
-                        if (!_ap.isDone()) {
-                            for (String criteria : _ap.getRemainingCriteria())
-                                _player.getAdvancements().award(_adv, criteria);
-                        }
-                    }
-                } else {
-                    if ((Entity) entity instanceof ServerPlayer _player) {
-                        Advancement _adv = _player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "they_shall_welcome"));
-                        AdvancementProgress _ap = _player.getAdvancements().getOrStartProgress(_adv);
-                        if (!_ap.isDone()) {
-                            for (String criteria : _ap.getRemainingCriteria())
-                                _player.getAdvancements().award(_adv, criteria);
-                        }
+            }
+            if (ocean + 1 > 2.9) {
+                if ((Entity) entity instanceof ServerPlayer _player) {
+                    Advancement _adv = _player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "they_shall_pay"));
+                    AdvancementProgress _ap = _player.getAdvancements().getOrStartProgress(_adv);
+                    if (!_ap.isDone()) {
+                        for (String criteria : _ap.getRemainingCriteria())
+                            _player.getAdvancements().award(_adv, criteria);
                     }
                 }
             } else {
@@ -91,6 +77,15 @@ public class MutagenisisCapsuleItem extends Item {
                         for (String criteria : _ap.getRemainingCriteria())
                             _player.getAdvancements().award(_adv, criteria);
                     }
+                }
+            }
+        } else {
+            if ((Entity) entity instanceof ServerPlayer _player) {
+                Advancement _adv = _player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "they_shall_welcome"));
+                AdvancementProgress _ap = _player.getAdvancements().getOrStartProgress(_adv);
+                if (!_ap.isDone()) {
+                    for (String criteria : _ap.getRemainingCriteria())
+                        _player.getAdvancements().award(_adv, criteria);
                 }
             }
         }

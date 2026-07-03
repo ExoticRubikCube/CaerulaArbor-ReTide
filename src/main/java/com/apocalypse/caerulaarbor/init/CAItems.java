@@ -5,11 +5,14 @@ package com.apocalypse.caerulaarbor.init;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.block.item.*;
+import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.item.*;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.*;
@@ -167,7 +170,14 @@ public class CAItems {
 	public static final RegistryObject<Item> TRAIL_CAKE_PIECE = REGISTRY.register("trail_cake_piece", () -> new TrailCakePieceItem());
 	public static final RegistryObject<Item> CARAMEL_CAKE = block(CABlocks.CARAMEL_CAKE);
 	public static final RegistryObject<Item> CARAMEL_CAKE_PIECE = REGISTRY.register("caramel_cake_piece", () -> new CaramelCakePieceItem());
-	public static final RegistryObject<Item> CARAMEL_MOR = REGISTRY.register("caramel_mor", () -> new CaramelMorItem());
+	public static final RegistryObject<Item> CARAMEL_MOR = REGISTRY.register("caramel_mor", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(3).saturationMod(1f).build())) {
+		@Override
+		public ItemStack finishUsingItem(ItemStack itemstack, net.minecraft.world.level.Level world, net.minecraft.world.entity.LivingEntity entity) {
+			ItemStack retval = super.finishUsingItem(itemstack, world, entity);
+			ModCapabilities.getSanityInjury(entity).heal(15);
+			return retval;
+		}
+	});
 	public static final RegistryObject<Item> GUIDE_ABYSSAL_SPAWN_EGG = REGISTRY.register("guide_abyssal_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.GUIDE_ABYSSAL, -13434778, -2056595, new Item.Properties()));
 	public static final RegistryObject<Item> SPLASHER_ABYSSAL_SPAWN_EGG = REGISTRY.register("splasher_abyssal_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.SPLASHER_ABYSSAL, -16777012, -2056595, new Item.Properties()));
 	public static final RegistryObject<Item> FAKE_EGG = REGISTRY.register("fake_egg", () -> new FakeEggItem());
@@ -227,7 +237,14 @@ public class CAItems {
 	public static final RegistryObject<Item> COIN_OF_TRADE = REGISTRY.register("coin_of_trade", () -> new CoinOfTradeItem());
 	public static final RegistryObject<Item> OCEAN_PEDUNCLE = REGISTRY.register("ocean_peduncle", () -> new OceanPeduncleItem());
 	public static final RegistryObject<Item> ELITE_PEDUNCLE = REGISTRY.register("elite_peduncle", () -> new ElitePeduncleItem());
-	public static final RegistryObject<Item> COOKED_PEDUNCLE = REGISTRY.register("cooked_peduncle", () -> new CookedPeduncleItem());
+	public static final RegistryObject<Item> COOKED_PEDUNCLE = REGISTRY.register("cooked_peduncle", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(6).saturationMod(1f).meat().build())) {
+		@Override
+		public ItemStack finishUsingItem(ItemStack itemstack, net.minecraft.world.level.Level world, net.minecraft.world.entity.LivingEntity entity) {
+			ItemStack retval = super.finishUsingItem(itemstack, world, entity);
+			ModCapabilities.getSanityInjury(entity).heal(15);
+			return retval;
+		}
+	});
 	public static final RegistryObject<Item> OCEAN_ARROW = REGISTRY.register("ocean_arrow", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)));
 	public static final RegistryObject<Item> FIRST_TO_TALK_SPAWN_EGG = REGISTRY.register("first_to_talk_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.FIRST_TO_TALK, -1, -1, new Item.Properties()));
 	public static final RegistryObject<Item> REAPER_PET_SPAWN_EGG = REGISTRY.register("reaper_pet_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.REAPER_PET, -6750157, -3355444, new Item.Properties()));
@@ -238,7 +255,14 @@ public class CAItems {
 	public static final RegistryObject<Item> OCEAN_OVARY = block(CABlocks.OCEAN_OVARY);
 	public static final RegistryObject<Item> WHIRL_EYE = tooltipItem("whirl_eye", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON)),1);
 	public static final RegistryObject<Item> OCARINA = REGISTRY.register("ocarina", () -> new OcarinaItem());
-	public static final RegistryObject<Item> BOILED_EGG = REGISTRY.register("boiled_egg", () -> new BoiledEggItem());
+	public static final RegistryObject<Item> BOILED_EGG = REGISTRY.register("boiled_egg", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(6).saturationMod(0.5f).alwaysEat().build())) {
+		@Override
+		public ItemStack finishUsingItem(ItemStack itemstack, net.minecraft.world.level.Level world, net.minecraft.world.entity.LivingEntity entity) {
+			ItemStack retval = super.finishUsingItem(itemstack, world, entity);
+			ModCapabilities.getSanityInjury(entity).heal(125);
+			return retval;
+		}
+	});
 	public static final RegistryObject<Item> FRIED_EGG = REGISTRY.register("fried_egg", () -> new FriedEggItem());
 	public static final RegistryObject<Item> A_SECOND_KEY = tooltipItem("a_second_key", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)),4);
 	public static final RegistryObject<Item> SEALEATHER_HELMET = REGISTRY.register("sealeather_helmet", () -> new SealeatherItem.Helmet());
@@ -281,8 +305,8 @@ public class CAItems {
 	public static final RegistryObject<Item> COLLECTOR_MEAT = REGISTRY.register("collector_meat", () -> new CollectorMeatItem());
 	public static final RegistryObject<Item> COOKED_COLLECTOR = REGISTRY.register("cooked_collector", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(6).saturationMod(0.5f).meat().build())));
 	public static final RegistryObject<Item> CLAW = REGISTRY.register("claw", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(2).saturationMod(0f).build())));
-	public static final RegistryObject<Item> COOKED_CLAW = REGISTRY.register("cooked_claw", () -> new CookedClawItem());
-	public static final RegistryObject<Item> SEABORN_SOUP = REGISTRY.register("seaborn_soup", () -> new SeabornSoupItem());
+	public static final RegistryObject<Item> COOKED_CLAW = REGISTRY.register("cooked_claw", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food(new FoodProperties.Builder().nutrition(7).saturationMod(0.5f).meat().effect(() -> new MobEffectInstance(CAMobEffects.ADD_ATTACK_PERCLY.get(), 600, 1), 1.0F).build())));
+	public static final RegistryObject<Item> SEABORN_SOUP = REGISTRY.register("seaborn_soup", () -> new BowlFoodItem(new Item.Properties().stacksTo(1).rarity(Rarity.COMMON).food(new FoodProperties.Builder().nutrition(12).saturationMod(0.75f).effect(() -> new MobEffectInstance(CAMobEffects.SANITY_IMMUE.get(), 400, 0), 1.0F).effect(() -> new MobEffectInstance(MobEffects.REGENERATION, 200, 1), 1.0F).build())));
 	public static final RegistryObject<Item> REPELLER_SHELL = REGISTRY.register("repeller_shell", () -> new RepellerShellItem());
 	public static final RegistryObject<Item> FEEDER_PROKARYOTE_SPAWN_EGG = REGISTRY.register("feeder_prokaryote_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.FEEDER_PROKARYOTE, -12698628, -6754314, new Item.Properties()));
 	public static final RegistryObject<Item> CHEST_FISH_SPAWN_EGG = REGISTRY.register("chest_fish_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.CHEST_FISH, -8882056, -858389, new Item.Properties()));
@@ -436,7 +460,7 @@ public class CAItems {
 	public static final RegistryObject<Item> APOCALYPSE = REGISTRY.register("apocalypse", () -> new ApocalypseItem());
 	public static final RegistryObject<Item> OCEANIZED_CAT_SPAWN_EGG = REGISTRY.register("oceanized_cat_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.OCEANIZED_CAT, -3491156, -7897500, new Item.Properties()));
 	public static final RegistryObject<Item> SUPER_BIG_CAT_SPAWN_EGG = REGISTRY.register("super_big_cat_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.SUPER_BIG_CAT, -1, -1, new Item.Properties()));
-	public static final RegistryObject<Item> OCEANIZE_CATALYST = tooltipItem("oceanize_catalyst", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON)),2);
+	public static final RegistryObject<Item> OCEANIZE_CATALYST = tooltipItem("oceanize_catalyst", OceanizeCatalystItem::new, 2);
 	public static final RegistryObject<Item> ANCHOR_SHARD = tooltipItem("anchor_shard", () -> new Item(new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.UNCOMMON)),2);
 	public static final RegistryObject<Item> ANCHOR_FORGE_INGOT = tooltipItem("anchor_forge_ingot", () -> new Item(new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.RARE)),2);
 	public static final RegistryObject<Item> HAND_ANCHOR = REGISTRY.register("hand_anchor", () -> new HandAnchorItem());
@@ -474,7 +498,7 @@ public class CAItems {
 	public static final RegistryObject<Item> LONG_SWORD_OF_KNIGHT_CORPUS = REGISTRY.register("long_sword_of_knight_corpus", () -> new LongSwordOfKnightCorpusItem());
 	public static final RegistryObject<Item> TIDE_HUNET_TEMPLATE = tooltipItem("tide_hunet_template", () -> new Item(new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.COMMON)),7);
 	public static final RegistryObject<Item> DNA_HORSE = tooltipItem("dna_horse", () -> new Item(new Item.Properties().stacksTo(16).rarity(Rarity.UNCOMMON)),1);
-	public static final RegistryObject<Item> ROCINANTE_INJECTOR = tooltipItem("rocinante_injector", () -> new Item(new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON)),1);
+	public static final RegistryObject<Item> ROCINANTE_INJECTOR = tooltipItem("rocinante_injector", RocinanteInjectorItem::new, 1);
 	public static final RegistryObject<Item> MARTUS_BOOK = REGISTRY.register("martus_book", () -> new MartusBookItem());
 	public static final RegistryObject<Item> OCEANIZED_FOX_SPAWN_EGG = REGISTRY.register("oceanized_fox_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.OCEANIZED_FOX, -1968903, -6433566, new Item.Properties()));
 	public static final RegistryObject<Item> TIDUTANT_EXCRESCENCE_SPAWN_EGG = REGISTRY.register("tidutant_excrescence_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.TIDUTANT_EXCRESCENCE, -10392431, -3177597, new Item.Properties()));
@@ -493,7 +517,7 @@ public class CAItems {
 	public static final RegistryObject<Item> ENDSPEAKER_SPAWNEGG = REGISTRY.register("endspeaker_spawnegg", () -> new EndspeakerSpawneggItem());
 	public static final RegistryObject<Item> LINGERING_FRACTAL_SPAWN_EGG = REGISTRY.register("lingering_fractal_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.LINGERING_FRACTAL, -15986675, -14861545, new Item.Properties()));
 	public static final RegistryObject<Item> ENDSPEAKER_NEST = block(CABlocks.ENDSPEAKER_NEST);
-	public static final RegistryObject<Item> ITEM_HELPER = REGISTRY.register("item_helper", () -> new ItemHelperItem());
+	public static final RegistryObject<Item> ITEM_HELPER = REGISTRY.register("item_helper", () -> new LittleHelperItem());
 	public static final RegistryObject<Item> ITEM_HELPER_AL_1S = REGISTRY.register("item_helper_al_1s", () -> new ItemHelperAl1sItem());
 	public static final RegistryObject<Item> DICTATIONLESS_CHAPTER = REGISTRY.register("dictationless_chapter", () -> new DictationlessChapterItem());
 	public static final RegistryObject<Item> LANC_XIAO = REGISTRY.register("lanc_xiao", () -> new LancXiaoItem());
@@ -616,7 +640,7 @@ public class CAItems {
 	public static final RegistryObject<Item> OCEANIZED_CHICKEN_SPAWN_EGG = REGISTRY.register("oceanized_chicken_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.OCEANIZED_CHICKEN, -9467992, -16762940, new Item.Properties()));
 	public static final RegistryObject<Item> NETHERSEA_CHICKEN_EGG = REGISTRY.register("nethersea_chicken_egg", () -> new NetherseaChickenEggItem());
 	public static final RegistryObject<Item> NETHERSEA_EGG_CUSTARD = REGISTRY.register("nethersea_egg_custard", () -> new NetherseaEggCustardItem());
-	public static final RegistryObject<Item> NETHERSEA_PRESERVED_EGG = REGISTRY.register("nethersea_preserved_egg", () -> new NetherseaPreservedEggItem());
+	public static final RegistryObject<Item> NETHERSEA_PRESERVED_EGG = tooltipItem("nethersea_preserved_egg", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food(new FoodProperties.Builder().nutrition(4).saturationMod(0.4f).alwaysEat().effect(() -> new MobEffectInstance(CAMobEffects.ESSENCE_RESISTANCE.get(), 400, 1, false, true), 1.0F).effect(() -> new MobEffectInstance(CAMobEffects.DEDUCT_ONE_SANITY.get(), 60, 0, false, false), 1.0F).build())), 1);
 	public static final RegistryObject<Item> NETHERSEA_SLIME_SPAWN_EGG = REGISTRY.register("nethersea_slime_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.NETHERSEA_SLIME, -10983573, -12426093, new Item.Properties()));
 	public static final RegistryObject<Item> OCEANIZED_SHULKER_SPAWN_EGG = REGISTRY.register("oceanized_shulker_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.OCEANIZED_SHULKER, -5999788, -13398106, new Item.Properties()));
 	public static final RegistryObject<Item> NURTURE_GENE_SET = REGISTRY.register("nurture_gene_set", () -> new NurtureGeneSetItem());

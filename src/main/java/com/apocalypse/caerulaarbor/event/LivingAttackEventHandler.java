@@ -10,8 +10,6 @@ import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
 import com.apocalypse.caerulaarbor.entity.*;
 import com.apocalypse.caerulaarbor.entity.helper.Al1SHelperEntity;
 import com.apocalypse.caerulaarbor.entity.helper.LittleHelperEntity;
-import com.apocalypse.caerulaarbor.entity.wither.OceanizedWitherEntity;
-import com.apocalypse.caerulaarbor.entity.wither.OceannizedWitheriaEntity;
 import com.apocalypse.caerulaarbor.init.*;
 import com.apocalypse.caerulaarbor.manager.GrowUpgradeManager;
 import com.apocalypse.caerulaarbor.manager.SilenceUpgradeManager;
@@ -73,7 +71,6 @@ public class LivingAttackEventHandler {
         handleInquisitionFriendlyFire(event);
         handleDamagePrevention(event);
         handleHighmoreCounter(event);
-        handleOceanWitherExtraAttack(event);
         handleTidutantArmorBreak(event);
         handleMobHit(event);
         handlePlayerHit(event);
@@ -336,29 +333,6 @@ public class LivingAttackEventHandler {
         entityToSpawn.setPos(x, y, z);
         entityToSpawn.shoot(dx, dy, dz, 2, 2);
         projectileLevel.addFreshEntity(entityToSpawn);
-    }
-
-    //下放回实体
-    private static void handleOceanWitherExtraAttack(LivingAttackEvent event) {
-        LevelAccessor world = event.getEntity().level();
-        DamageSource damagesource = event.getSource();
-        Entity entity = event.getEntity();
-        Entity immediatesourceentity = event.getSource().getDirectEntity();
-        Entity sourceentity = event.getSource().getEntity();
-
-        if (damagesource == null || entity == null || immediatesourceentity == null || sourceentity == null) return;
-        if (event.isCanceled()) return;
-        if (sourceentity == entity) return;
-
-        if (sourceentity instanceof OceanizedWitherEntity || sourceentity instanceof OceannizedWitheriaEntity) {
-            if (damagesource.is(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_wither"))) || damagesource.is(DamageTypes.WITHER_SKULL)) {
-                entity.hurt(
-                        new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_magic"))), immediatesourceentity, sourceentity),
-                        (float) (sourceentity instanceof LivingEntity _livingEntity6 && _livingEntity6.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)
-                                ? _livingEntity6.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
-                entity.invulnerableTime = 0;
-            }
-        }
     }
 
     private static void handleTidutantArmorBreak(LivingAttackEvent event) {

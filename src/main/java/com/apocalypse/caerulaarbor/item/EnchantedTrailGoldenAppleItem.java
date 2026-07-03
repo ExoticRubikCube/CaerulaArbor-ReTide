@@ -48,8 +48,9 @@ public class EnchantedTrailGoldenAppleItem extends Item {
 			entity.addEffect(new MobEffectInstance(CAMobEffects.SANITY_IMMUE.get(), 2400, 0));
 			entity.addEffect(new MobEffectInstance(CAMobEffects.ESSENCE_RESISTANCE.get(), 3600, 1));
 		}
-		if (world instanceof ServerLevel level)
-			level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, (y + 0.8), z, 48, 0.5, 1, 0.5, 0.1);
+		if (world instanceof ServerLevel level) {
+			level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, y + 0.8, z, 48, 0.5, 1, 0.5, 0.1);
+		}
 		return retval;
 	}
 }

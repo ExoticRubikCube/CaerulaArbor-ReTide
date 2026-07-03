@@ -38,7 +38,6 @@ import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.WitherSkull;
 import net.minecraft.world.item.ItemStack;
@@ -47,6 +46,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -181,6 +181,35 @@ public abstract class AbstractOceanizedWitherEntity extends SeaMonster {
             return false;
         }
         return super.hurt(source, amount);
+    }
+
+    public void applyOceanMagicFollowup(Entity target, Entity directSource) {
+        if (!(target instanceof LivingEntity livingTarget) || directSource == null || target == this) {
+            return;
+        }
+        livingTarget.hurt(
+                new DamageSource(
+                        this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_magic"))),
+                        directSource,
+                        this
+                ),
+                this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE) : 0
+        );
+        livingTarget.invulnerableTime = 0;
+    }
+
+    protected void dealOceanWitherAttack(LivingEntity target, float damage) {
+        if (target == null || target == this) {
+            return;
+        }
+        this.applyOceanMagicFollowup(target, this);
+        target.hurt(
+                new DamageSource(
+                        this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_wither"))),
+                        this
+                ),
+                damage
+        );
     }
 
     @Override
@@ -335,9 +364,8 @@ public abstract class AbstractOceanizedWitherEntity extends SeaMonster {
                         .toList();
                 for (LivingEntity living : nearbyEntities) {
                     if (living.isAlive() && living.hasEffect(MobEffects.WITHER)) {
-                        living.hurt(
-                                new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_wither"))),
-                                        this),
+                        this.dealOceanWitherAttack(
+                                living,
                                 (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.75)
                         );
                         if (world instanceof ServerLevel level) {
@@ -454,16 +482,21 @@ public abstract class AbstractOceanizedWitherEntity extends SeaMonster {
         });
 
         if (world instanceof ServerLevel projectileLevel) {
-            Projectile projectile = new Object() {
-                public Projectile getFireball(Level level, Entity shooter, double ax, double ay, double az) {
-                    AbstractHurtingProjectile projectileToSpawn = new WitherSkull(EntityType.WITHER_SKULL, level);
-                    projectileToSpawn.setOwner(shooter);
-                    projectileToSpawn.xPower = ax;
-                    projectileToSpawn.yPower = ay;
-                    projectileToSpawn.zPower = az;
-                    return projectileToSpawn;
+            Projectile projectile = new WitherSkull(EntityType.WITHER_SKULL, projectileLevel) {
+                @Override
+                protected void onHitEntity(EntityHitResult result) {
+                    Entity target = result.getEntity();
+                    Entity owner = this.getOwner();
+                    if (owner instanceof AbstractOceanizedWitherEntity oceanizedWither && target instanceof LivingEntity livingTarget && target != owner) {
+                        oceanizedWither.applyOceanMagicFollowup(livingTarget, this);
+                    }
+                    super.onHitEntity(result);
                 }
-            }.getFireball(projectileLevel, from, adjustedDx, adjustedDy, adjustedDz);
+            };
+            projectile.setOwner(from);
+            ((WitherSkull) projectile).xPower = adjustedDx;
+            ((WitherSkull) projectile).yPower = adjustedDy;
+            ((WitherSkull) projectile).zPower = adjustedDz;
             projectile.setPos(x, y, z);
             projectile.shoot(dx, dy, dz, (float) speed, (float) inaccuracy);
             projectileLevel.addFreshEntity(projectile);

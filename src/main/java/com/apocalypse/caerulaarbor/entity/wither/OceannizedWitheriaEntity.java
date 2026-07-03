@@ -391,8 +391,7 @@ public class OceannizedWitheriaEntity extends AbstractOceanizedWitherEntity {
                 damage = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * rate;
                 if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
                     _entity.addEffect(new MobEffectInstance(MobEffects.WITHER, 80, 0));
-                entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_wither"))), this),
-                        (float) damage);
+                this.dealOceanWitherAttack((LivingEntity) entityiterator, (float) damage);
             }
         }
         if (!world.isClientSide()) {

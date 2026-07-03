@@ -247,7 +247,6 @@ public class ChestFishEntity extends SeaMonster {
         this.refreshDimensions();
 	}
 
-	
 
 	public static void registerSpawnPlacements() {
 		SpawnPlacements.register(CAEntities.CHEST_FISH.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,

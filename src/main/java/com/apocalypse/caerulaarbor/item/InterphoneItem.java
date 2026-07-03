@@ -57,18 +57,11 @@ public class InterphoneItem extends Item {
         double y = entity.getY();
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
-        if (entity != null) {
-            double num = 0;
-            double tX = 0;
-            double tZ = 0;
-            double rand = 0;
-            String log = "";
-            if (!((Entity) entity instanceof Player _plrCldCheck1 && _plrCldCheck1.getCooldowns().isOnCooldown(itemstack.getItem()))) {
-                if (!entity.isShiftKeyDown()) {
-                    dispatchInquisition(world, entity, itemstack, entity.getLookAngle().x * 2 + x, y, entity.getLookAngle().z * 2 + z);
-                } else {
-					teleportInquisitions(world, entity, itemstack, entity.getLookAngle().x * 2 + x, y, entity.getLookAngle().z * 2 + z);
-                }
+        if (!((Entity) entity instanceof Player _plrCldCheck1 && _plrCldCheck1.getCooldowns().isOnCooldown(itemstack.getItem()))) {
+            if (!entity.isShiftKeyDown()) {
+                dispatchInquisition(world, entity, itemstack, entity.getLookAngle().x * 2 + x, y, entity.getLookAngle().z * 2 + z);
+            } else {
+                teleportInquisitions(world, entity, itemstack, entity.getLookAngle().x * 2 + x, y, entity.getLookAngle().z * 2 + z);
             }
         }
         return ar;

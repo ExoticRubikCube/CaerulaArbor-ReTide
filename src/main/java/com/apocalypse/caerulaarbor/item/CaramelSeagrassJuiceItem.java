@@ -45,9 +45,6 @@ public class CaramelSeagrassJuiceItem extends Item {
 	@Override
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
 		ItemStack resultStack = super.finishUsingItem(itemstack, world, entity);
-		double x = entity.getX();
-		double y = entity.getY();
-		double z = entity.getZ();
         if (!entity.level().isClientSide()) {
             entity.addEffect(new MobEffectInstance(MobEffects.SATURATION, 1, 2, false, false));
             entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 300, 1));

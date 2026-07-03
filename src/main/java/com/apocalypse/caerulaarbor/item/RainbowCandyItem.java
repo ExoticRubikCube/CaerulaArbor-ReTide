@@ -4,9 +4,12 @@ package com.apocalypse.caerulaarbor.item;
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.init.CAItems;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.Sheep;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
@@ -14,6 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -27,6 +31,18 @@ public class RainbowCandyItem extends Item {
 		super.appendHoverText(itemstack, level, list, flag);
 		list.add(Component.translatable("item.caerula_arbor.rainbow_candy.description_0"));
 		list.add(Component.translatable("item.caerula_arbor.rainbow_candy.description_1"));
+	}
+
+	@Override
+	public @NotNull InteractionResult interactLivingEntity(
+			@NotNull ItemStack stack, @NotNull Player player, @NotNull LivingEntity target, @NotNull InteractionHand hand
+	) {
+		if (!(target instanceof Sheep)) {
+			return InteractionResult.PASS;
+		}
+		stack.shrink(1);
+		target.setCustomName(Component.literal("jeb_"));
+		return InteractionResult.sidedSuccess(player.level().isClientSide());
 	}
 
 	@Override

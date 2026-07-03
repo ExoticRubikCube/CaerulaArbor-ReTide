@@ -1,4 +1,3 @@
-
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.api.event.SanityEvent;
@@ -34,8 +33,9 @@ public class FakeEggItem extends Item {
 			if ((Entity) entity instanceof LivingEntity livingEntity) {
 				SIHelper.causeSanityInjury(livingEntity, 160, SanityEvent.Hurt.Type.FOOD);
 			}
-			if ((LevelAccessor) world instanceof ServerLevel serverLevel)
-				serverLevel.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, (y + 0.8), z, 48, 0.5, 1, 0.5, 0.1);
+			if ((LevelAccessor) world instanceof ServerLevel serverLevel) {
+				serverLevel.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, y + 0.8, z, 48, 0.5, 1, 0.5, 0.1);
+			}
 		}
 		return retval;
 	}

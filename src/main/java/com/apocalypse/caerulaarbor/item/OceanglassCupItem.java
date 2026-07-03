@@ -34,19 +34,17 @@ public class OceanglassCupItem extends Item {
         double y = entity.getY();
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
-        if (entity != null) {
-            BlockState target;
-            target = (((LevelAccessor) world).getFluidState(BlockPos.containing(x + entity.getLookAngle().x, y + entity.getLookAngle().y + 1.6, z + entity.getLookAngle().z)).createLegacyBlock());
-            if (Blocks.WATER == target.getBlock()) {
-                if ((Entity) entity instanceof Player _player) {
-                    ItemStack _setstack = new ItemStack(CAItems.A_CUP_OF_WATER.get()).copy();
-                    _setstack.setCount(1);
-                    ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
-                }
-                itemstack.shrink(1);
-                if ((LevelAccessor) world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.bottle.fill")), SoundSource.NEUTRAL, 1, 1);
-                }
+        BlockState target;
+        target = (((LevelAccessor) world).getFluidState(BlockPos.containing(x + entity.getLookAngle().x, y + entity.getLookAngle().y + 1.6, z + entity.getLookAngle().z)).createLegacyBlock());
+        if (Blocks.WATER == target.getBlock()) {
+            if ((Entity) entity instanceof Player _player) {
+                ItemStack _setstack = new ItemStack(CAItems.A_CUP_OF_WATER.get()).copy();
+                _setstack.setCount(1);
+                ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
+            }
+            itemstack.shrink(1);
+            if ((LevelAccessor) world instanceof Level _level) {
+                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.bottle.fill")), SoundSource.NEUTRAL, 1, 1);
             }
         }
         return ar;
@@ -62,7 +60,7 @@ public class OceanglassCupItem extends Item {
         Direction direction = context.getClickedFace();
         Entity entity = context.getPlayer();
         ItemStack itemstack = context.getItemInHand();
-        if (direction == null || entity == null)
+        if (entity == null)
             return InteractionResult.PASS;
         if (Blocks.WATER == (world.getFluidState(BlockPos.containing(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ())).createLegacyBlock()).getBlock()) {
             itemstack.shrink(1);

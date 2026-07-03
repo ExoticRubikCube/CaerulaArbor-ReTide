@@ -35,8 +35,9 @@ public class TrailGoldenAppleItem extends Item {
 			entity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 1250, 1));
 			entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 60, 2));
 		}
-		if (world instanceof ServerLevel level)
-			level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, (y + 0.8), z, 48, 0.5, 1, 0.5, 0.1);
+		if (world instanceof ServerLevel level) {
+			level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, y + 0.8, z, 48, 0.5, 1, 0.5, 0.1);
+		}
 		return retval;
 	}
 }

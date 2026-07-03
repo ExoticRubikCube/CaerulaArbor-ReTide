@@ -35,11 +35,13 @@ public class BrokenCellClusterItem extends Item {
 		double x = entity.getX();
 		double y = entity.getY();
 		double z = entity.getZ();
-		if (!entity.level().isClientSide())
+		if (!entity.level().isClientSide()) {
 			entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 80, 0));
+		}
 		SIHelper.causeSanityInjury(entity, 75);
-		if (world instanceof ServerLevel level)
-			level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, (y + 1), z, 32, 0.5, 1, 0.5, 0.1);
+		if (world instanceof ServerLevel level) {
+			level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, y + 1, z, 32, 0.5, 1, 0.5, 0.1);
+		}
 		return retval;
 	}
 }

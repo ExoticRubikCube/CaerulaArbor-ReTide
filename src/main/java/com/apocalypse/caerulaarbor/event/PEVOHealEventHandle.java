@@ -33,7 +33,7 @@ public class PEVOHealEventHandle {
 			return;
 		}
 
-		if (!entity.isShiftKeyDown() || !(entity instanceof Player) || !EntityUtils.canPlayerEvo(entity)) {
+		if (!entity.isShiftKeyDown() || !(entity instanceof Player livingEntity1) || !EntityUtils.canPlayerEvo(entity)) {
 			return;
 		}
 
@@ -41,9 +41,7 @@ public class PEVOHealEventHandle {
 		double x = entity.getX();
 		double y = entity.getY();
 		double z = entity.getZ();
-		double currentHealth = entity instanceof LivingEntity livingEntity ? livingEntity.getHealth() : -1;
-		double maxHealth = entity instanceof LivingEntity livingEntity ? livingEntity.getMaxHealth() : -1;
-		double overflowHealing = currentHealth + event.getAmount() - maxHealth;
+        double overflowHealing = (double) livingEntity1.getHealth() + event.getAmount() - (double) livingEntity1.getMaxHealth();
 		if (overflowHealing <= 0) {
 			return;
 		}
