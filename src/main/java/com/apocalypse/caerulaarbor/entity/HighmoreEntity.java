@@ -64,7 +64,6 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -89,7 +88,7 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
     public String animationprocedure = "empty";
     private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.YELLOW, ServerBossEvent.BossBarOverlay.NOTCHED_10);
 
-    public HighmoreEntity(PlayMessages.SpawnEntity packet, Level world) {
+    public HighmoreEntity(Level world) {
         this(CAEntities.HIGHMORE.get(), world);
     }
 

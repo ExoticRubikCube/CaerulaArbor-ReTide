@@ -36,7 +36,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -51,7 +50,7 @@ import java.util.List;
 public class OceannizedWitheriaEntity extends AbstractOceanizedWitherEntity {
     public static final EntityDataAccessor<Integer> DATA_idle_time = SynchedEntityData.defineId(OceannizedWitheriaEntity.class, EntityDataSerializers.INT);
 
-    public OceannizedWitheriaEntity(PlayMessages.SpawnEntity packet, Level world) {
+    public OceannizedWitheriaEntity(Level world) {
         this(CAEntities.OCEANIZED_WITHERIA.get(), world);
     }
 

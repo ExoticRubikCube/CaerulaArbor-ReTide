@@ -54,7 +54,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -79,7 +78,7 @@ public class MartusEntity extends SeaMonster {
     public String animationprocedure = "empty";
     private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.NOTCHED_6);
 
-    public MartusEntity(PlayMessages.SpawnEntity packet, Level world) {
+    public MartusEntity(Level world) {
         this(CAEntities.MARTUS.get(), world);
     }
 

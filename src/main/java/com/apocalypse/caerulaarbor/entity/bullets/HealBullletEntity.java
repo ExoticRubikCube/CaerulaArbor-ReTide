@@ -28,7 +28,6 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Comparator;
@@ -38,7 +37,7 @@ import java.util.List;
 public class HealBullletEntity extends AbstractArrow implements ItemSupplier {
 	public static final ItemStack PROJECTILE_ITEM = new ItemStack(Items.AMETHYST_SHARD);
 
-	public HealBullletEntity(PlayMessages.SpawnEntity packet, Level world) {
+	public HealBullletEntity(Level world) {
 		super(CAEntities.HEAL_BULLLET.get(), world);
 	}
 

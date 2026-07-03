@@ -13,13 +13,12 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 
 public class Al1SHelperEntity extends LittleHelperEntity {
-	public Al1SHelperEntity(PlayMessages.SpawnEntity packet, Level world) {
+	public Al1SHelperEntity(Level world) {
 		this(CAEntities.AL_1_S_HELPER.get(), world);
 	}
 

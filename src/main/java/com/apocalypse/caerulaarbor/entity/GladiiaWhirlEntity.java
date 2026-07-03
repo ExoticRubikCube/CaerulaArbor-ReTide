@@ -35,7 +35,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -59,7 +58,7 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity, Sync
     private long lastSwing;
     public String animationprocedure = "empty";
 
-    public GladiiaWhirlEntity(PlayMessages.SpawnEntity packet, Level world) {
+    public GladiiaWhirlEntity(Level world) {
         this(CAEntities.GLADIIA_WHIRL.get(), world);
     }
 

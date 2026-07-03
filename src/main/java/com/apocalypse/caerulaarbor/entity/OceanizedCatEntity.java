@@ -40,7 +40,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -59,7 +58,7 @@ public class OceanizedCatEntity extends SeaMonster {
     private long lastSwing;
     public String animationprocedure = "empty";
 
-    public OceanizedCatEntity(PlayMessages.SpawnEntity packet, Level world) {
+    public OceanizedCatEntity(Level world) {
         this(CAEntities.OCEANIZED_CAT.get(), world);
     }
 

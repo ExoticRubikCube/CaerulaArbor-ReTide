@@ -43,7 +43,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -65,7 +64,7 @@ public class MoistEnderCrystalEntity extends PathfinderMob implements GeoEntity,
 	public String animationprocedure = "empty";
 	public boolean IS_STATIC = false;
 
-	public MoistEnderCrystalEntity(PlayMessages.SpawnEntity packet, Level world) {
+	public MoistEnderCrystalEntity(Level world) {
 		this(CAEntities.MOIST_ENDER_CRYSTAL.get(), world);
 	}
 

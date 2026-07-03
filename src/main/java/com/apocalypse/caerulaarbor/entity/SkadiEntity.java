@@ -47,7 +47,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -76,7 +75,7 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
     @Nullable
     private DamageSource lastDamageSource;
 
-    public SkadiEntity(PlayMessages.SpawnEntity packet, Level world) {
+    public SkadiEntity(Level world) {
         this(CAEntities.SKADI.get(), world);
     }
 

@@ -39,7 +39,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -58,7 +57,7 @@ public class FakeOffspringEntity extends SeaMonster {
     private long lastSwing;
     public String animationprocedure = "empty";
 
-    public FakeOffspringEntity(PlayMessages.SpawnEntity packet, Level world) {
+    public FakeOffspringEntity(Level world) {
         this(CAEntities.FAKE_OFFSPRING.get(), world);
     }
 

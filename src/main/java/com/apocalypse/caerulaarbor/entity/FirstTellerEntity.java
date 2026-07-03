@@ -41,7 +41,6 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -60,7 +59,7 @@ public class FirstTellerEntity extends SeaMonster implements RangedAttackMob {
 	private long lastSwing;
 	public String animationprocedure = "empty";
 
-	public FirstTellerEntity(PlayMessages.SpawnEntity packet, Level world) {
+	public FirstTellerEntity(Level world) {
 		this(CAEntities.FIRST_TO_TALK.get(), world);
 	}
 

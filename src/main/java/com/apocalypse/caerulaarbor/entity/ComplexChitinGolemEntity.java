@@ -50,7 +50,6 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -67,10 +66,6 @@ import java.util.List;
 
 public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAnimationEntity {
 
-    private boolean isDurative() {
-        return this.isAlive() && this.getEntityData().get(DATA_duration) <= 0;
-    }
-
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(ComplexChitinGolemEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(ComplexChitinGolemEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_skillp = SynchedEntityData.defineId(ComplexChitinGolemEntity.class, EntityDataSerializers.INT);
@@ -83,7 +78,7 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity, Sy
     private long lastSwing;
     public String animationprocedure = "empty";
 
-    public ComplexChitinGolemEntity(PlayMessages.SpawnEntity packet, Level world) {
+    public ComplexChitinGolemEntity(Level world) {
         this(CAEntities.COMPLEX_CHITIN_GOLEM.get(), world);
     }
 
@@ -505,6 +500,9 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity, Sy
         return this.cache;
     }
 
+    private boolean isDurative() {
+        return this.isAlive() && this.getEntityData().get(DATA_duration) <= 0;
+    }
 
     @Override
     public void setAnimationProcedure(String animation) {

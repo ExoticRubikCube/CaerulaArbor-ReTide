@@ -22,13 +22,12 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 
 @OnlyIn(value = Dist.CLIENT, _interface = ItemSupplier.class)
 public class WitherShootPreEntity extends AbstractArrow implements ItemSupplier {
 	public static final ItemStack PROJECTILE_ITEM = new ItemStack(Blocks.WITHER_SKELETON_SKULL);
 
-	public WitherShootPreEntity(PlayMessages.SpawnEntity packet, Level world) {
+	public WitherShootPreEntity(Level world) {
 		super(CAEntities.WITHER_SHOOT_PRE.get(), world);
 	}
 

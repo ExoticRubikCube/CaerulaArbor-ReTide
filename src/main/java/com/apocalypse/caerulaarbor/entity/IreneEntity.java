@@ -43,7 +43,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -74,7 +73,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 	private long lastSwing;
 	public String animationprocedure = "empty";
 
-	public IreneEntity(PlayMessages.SpawnEntity packet, Level world) {
+	public IreneEntity(Level world) {
 		this(CAEntities.IRENE.get(), world);
 	}
 

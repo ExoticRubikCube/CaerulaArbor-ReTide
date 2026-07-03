@@ -38,7 +38,6 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -61,7 +60,7 @@ public class SpecterDollEntity extends Animal implements GeoEntity, SyncedAnimat
     private long lastSwing;
     public String animationprocedure = "empty";
 
-    public SpecterDollEntity(PlayMessages.SpawnEntity packet, Level world) {
+    public SpecterDollEntity(Level world) {
         this(CAEntities.SPECTER_DOLL.get(), world);
     }
 

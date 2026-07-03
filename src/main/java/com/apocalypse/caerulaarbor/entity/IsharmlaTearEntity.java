@@ -35,7 +35,6 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -59,7 +58,7 @@ public class IsharmlaTearEntity extends PathfinderMob implements GeoEntity, Sync
     private long lastSwing;
     public String animationprocedure = "empty";
 
-    public IsharmlaTearEntity(PlayMessages.SpawnEntity packet, Level world) {
+    public IsharmlaTearEntity(Level world) {
         this(CAEntities.ISHARMLA_TEAR.get(), world);
     }
 

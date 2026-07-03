@@ -13,13 +13,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.network.PlayMessages;
 
 import java.util.Comparator;
 import java.util.List;
 
 public class LingeringFractalEntity extends AbstractFractalEntity {
-	public LingeringFractalEntity(PlayMessages.SpawnEntity packet, Level world) {
+	public LingeringFractalEntity(Level world) {
 		this(CAEntities.LINGERING_FRACTAL.get(), world);
 	}
 

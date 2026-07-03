@@ -40,7 +40,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -56,7 +55,7 @@ public class TheAbandonedEntity extends SeaMonster implements PolarMountRider {
     private long lastSwing;
     public String animationprocedure = "empty";
 
-    public TheAbandonedEntity(PlayMessages.SpawnEntity packet, Level world) {
+    public TheAbandonedEntity(Level world) {
         this(CAEntities.THE_ABANDONED.get(), world);
     }
 

@@ -46,7 +46,6 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.DungeonHooks;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -64,7 +63,7 @@ public class FleeFishEntity extends SeaMonster implements RangedAttackMob {
 	private long lastSwing;
 	public String animationprocedure = "empty";
 
-	public FleeFishEntity(PlayMessages.SpawnEntity packet, Level world) {
+	public FleeFishEntity(Level world) {
 		this(CAEntities.FLEE_FISH.get(), world);
 	}
 

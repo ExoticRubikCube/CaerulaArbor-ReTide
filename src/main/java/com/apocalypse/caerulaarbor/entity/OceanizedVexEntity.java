@@ -53,7 +53,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -75,7 +74,7 @@ public class OceanizedVexEntity extends SeaMonster {
     private long lastSwing;
     public String animationprocedure = "empty";
 
-    public OceanizedVexEntity(PlayMessages.SpawnEntity packet, Level world) {
+    public OceanizedVexEntity(Level world) {
         this(CAEntities.OCEANIZED_VEX.get(), world);
     }
 

@@ -42,7 +42,6 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -60,7 +59,7 @@ public class ApostleProkaryoteEntity extends SeaMonster {
 	private long lastSwing;
 	public String animationprocedure = "empty";
 
-	public ApostleProkaryoteEntity(PlayMessages.SpawnEntity packet, Level world) {
+	public ApostleProkaryoteEntity(Level world) {
 		this(CAEntities.APOSTLE_PROKARYOTE.get(), world);
 	}
 

@@ -41,7 +41,6 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -60,7 +59,7 @@ public class MegaChestEntity extends SeaMonster {
     public String animationprocedure = "empty";
     private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.WHITE, ServerBossEvent.BossBarOverlay.NOTCHED_10);
 
-    public MegaChestEntity(PlayMessages.SpawnEntity packet, Level world) {
+    public MegaChestEntity(Level world) {
         this(CAEntities.MEGA_CHEST.get(), world);
     }
 

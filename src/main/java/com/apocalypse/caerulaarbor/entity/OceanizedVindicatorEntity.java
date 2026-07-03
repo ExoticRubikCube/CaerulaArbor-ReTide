@@ -36,7 +36,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -52,7 +51,7 @@ public class OceanizedVindicatorEntity extends SeaMonster implements PolarMountR
     private long lastSwing;
     public String animationprocedure = "empty";
 
-    public OceanizedVindicatorEntity(PlayMessages.SpawnEntity packet, Level world) {
+    public OceanizedVindicatorEntity(Level world) {
         this(CAEntities.OCEANIZED_VINDICATOR.get(), world);
     }
 

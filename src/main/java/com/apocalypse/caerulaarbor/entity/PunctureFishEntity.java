@@ -40,7 +40,6 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -58,7 +57,7 @@ public class PunctureFishEntity extends SeaMonster implements PolarMountRider {
 	private long lastSwing;
 	public String animationprocedure = "empty";
 
-	public PunctureFishEntity(PlayMessages.SpawnEntity packet, Level world) {
+	public PunctureFishEntity(Level world) {
 		this(CAEntities.PUNCTURE_FISH.get(), world);
 	}
 

@@ -48,7 +48,6 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -78,7 +77,7 @@ public class TheLastKnightEntity extends Animal implements GeoEntity, SyncedAnim
     public String animationprocedure = "empty";
     private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.WHITE, ServerBossEvent.BossBarOverlay.NOTCHED_6);
 
-    public TheLastKnightEntity(PlayMessages.SpawnEntity packet, Level world) {
+    public TheLastKnightEntity(Level world) {
         this(CAEntities.THE_LAST_KNIGHT.get(), world);
     }
 

@@ -30,7 +30,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -54,7 +53,7 @@ public class ApocataEntity extends PathfinderMob implements GeoEntity, SyncedAni
 	private long lastSwing;
 	public String animationprocedure = "empty";
 
-	public ApocataEntity(PlayMessages.SpawnEntity packet, Level world) {
+	public ApocataEntity(Level world) {
 		this(CAEntities.APOCATA.get(), world);
 	}
 

@@ -44,7 +44,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.common.DungeonHooks;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -62,7 +61,7 @@ public class SplasherAbyssalEntity extends SeaMonster implements RangedAttackMob
 	private long lastSwing;
 	public String animationprocedure = "empty";
 
-	public SplasherAbyssalEntity(PlayMessages.SpawnEntity packet, Level world) {
+	public SplasherAbyssalEntity(Level world) {
 		this(CAEntities.SPLASHER_ABYSSAL.get(), world);
 	}
 

@@ -41,7 +41,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -60,7 +59,7 @@ public class OceanizedPillagerEntity extends SeaMonster implements RangedAttackM
     private long lastSwing;
     public String animationprocedure = "empty";
 
-    public OceanizedPillagerEntity(PlayMessages.SpawnEntity packet, Level world) {
+    public OceanizedPillagerEntity(Level world) {
         this(CAEntities.OCEANIZED_PILLAGER.get(), world);
     }
 

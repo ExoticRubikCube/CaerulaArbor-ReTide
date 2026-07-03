@@ -47,7 +47,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -73,7 +72,7 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
     private long lastSwing;
     public String animationprocedure = "empty";
 
-    public ChitinGolemEntity(PlayMessages.SpawnEntity packet, Level world) {
+    public ChitinGolemEntity(Level world) {
         this(CAEntities.CHITIN_GOLEM.get(), world);
     }
 

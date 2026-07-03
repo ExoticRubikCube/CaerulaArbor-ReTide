@@ -52,7 +52,6 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.DungeonHooks;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -69,7 +68,7 @@ public class UmbrellaAbyssalEntity extends SeaMonster {
 	private long lastSwing;
 	public String animationprocedure = "empty";
 
-	public UmbrellaAbyssalEntity(PlayMessages.SpawnEntity packet, Level world) {
+	public UmbrellaAbyssalEntity(Level world) {
 		this(CAEntities.UMBRELLA_ABYSSAL.get(), world);
 	}
 

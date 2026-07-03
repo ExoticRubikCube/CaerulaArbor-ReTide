@@ -50,7 +50,6 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -69,7 +68,7 @@ public class IzumikOffspringEntity extends SeaMonster {
 	private static final TagKey<EntityType<?>> ENTITY_TAG = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "izumik_discovers"));
 	public String animationprocedure = "empty";
 
-	public IzumikOffspringEntity(PlayMessages.SpawnEntity packet, Level world) {
+	public IzumikOffspringEntity(Level world) {
 		this(CAEntities.IZUMIK_OFFSPRING.get(), world);
 	}
 

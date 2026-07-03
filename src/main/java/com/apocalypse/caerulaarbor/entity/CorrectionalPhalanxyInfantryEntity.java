@@ -33,7 +33,6 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -57,7 +56,7 @@ public class CorrectionalPhalanxyInfantryEntity extends Animal implements GeoEnt
     private long lastSwing;
     public String animationprocedure = "empty";
 
-    public CorrectionalPhalanxyInfantryEntity(PlayMessages.SpawnEntity packet, Level world) {
+    public CorrectionalPhalanxyInfantryEntity(Level world) {
         this(CAEntities.CORRECTIONAL_PHALANXY_INFANTRY.get(), world);
     }
 

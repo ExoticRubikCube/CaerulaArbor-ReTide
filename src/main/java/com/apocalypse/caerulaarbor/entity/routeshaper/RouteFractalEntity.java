@@ -13,12 +13,11 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.network.PlayMessages;
 
 public class RouteFractalEntity extends AbstractFractalEntity {
     public static final EntityDataAccessor<Integer> DATA_time_left = SynchedEntityData.defineId(RouteFractalEntity.class, EntityDataSerializers.INT);
 
-    public RouteFractalEntity(PlayMessages.SpawnEntity packet, Level world) {
+    public RouteFractalEntity(Level world) {
         this(CAEntities.ROUTE_FRACTAL.get(), world);
     }
 

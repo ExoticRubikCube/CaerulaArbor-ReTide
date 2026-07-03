@@ -42,7 +42,6 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -60,7 +59,7 @@ public class OceanizedPigEntity extends SeaMonster {
     private long lastSwing;
     public String animationprocedure = "empty";
 
-    public OceanizedPigEntity(PlayMessages.SpawnEntity packet, Level world) {
+    public OceanizedPigEntity(Level world) {
         this(CAEntities.OCEANIZED_PIG.get(), world);
     }
 

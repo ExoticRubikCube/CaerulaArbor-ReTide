@@ -39,7 +39,6 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -55,7 +54,7 @@ public class BoneFishEntity extends SeaMonster implements Bucketable {
 	private boolean fromBucket;
 	public String animationprocedure = "empty";
 
-	public BoneFishEntity(PlayMessages.SpawnEntity packet, Level world) {
+	public BoneFishEntity(Level world) {
 		this(CAEntities.BONE_FISH.get(), world);
 	}
 

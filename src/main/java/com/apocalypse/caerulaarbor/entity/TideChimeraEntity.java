@@ -57,7 +57,6 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -71,10 +70,6 @@ import java.util.List;
 
 public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacker {
 
-    private boolean isChimeraDurative() {
-        return this.isAlive() && this.tickCount > 100 && this.getEntityData().get(DATA_duration) <= 0;
-    }
-
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(TideChimeraEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(TideChimeraEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(TideChimeraEntity.class, EntityDataSerializers.INT);
@@ -86,7 +81,7 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
     public String animationprocedure = "empty";
     private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.NOTCHED_12);
 
-    public TideChimeraEntity(PlayMessages.SpawnEntity packet, Level world) {
+    public TideChimeraEntity(Level world) {
         this(CAEntities.TIDE_CHIMERA.get(), world);
     }
 
@@ -851,6 +846,9 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
         }
     }
 
+    private boolean isChimeraDurative() {
+        return this.isAlive() && this.tickCount > 100 && this.getEntityData().get(DATA_duration) <= 0;
+    }
 
     @Override
     public void setAnimationProcedure(String animation) {

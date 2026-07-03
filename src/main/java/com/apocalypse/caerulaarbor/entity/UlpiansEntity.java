@@ -47,7 +47,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -78,7 +77,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
     private long lastSwing;
     public String animationprocedure = "empty";
 
-    public UlpiansEntity(PlayMessages.SpawnEntity packet, Level world) {
+    public UlpiansEntity(Level world) {
         this(CAEntities.ULPIANS.get(), world);
     }
 

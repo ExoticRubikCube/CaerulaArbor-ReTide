@@ -38,7 +38,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.DungeonHooks;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -52,7 +51,7 @@ public class NetherseaSlimeEntity extends SeaMonster {
 	public static final EntityDataAccessor<Integer> DATA_SIZE = SynchedEntityData.defineId(NetherseaSlimeEntity.class, EntityDataSerializers.INT);
 	public String animationprocedure = "empty";
 
-	public NetherseaSlimeEntity(PlayMessages.SpawnEntity packet, Level world) {
+	public NetherseaSlimeEntity(Level world) {
 		this(CAEntities.NETHERSEA_SLIME.get(), world);
 	}
 

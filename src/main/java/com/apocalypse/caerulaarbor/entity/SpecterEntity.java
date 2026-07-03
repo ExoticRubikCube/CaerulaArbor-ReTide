@@ -41,7 +41,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -58,14 +57,6 @@ import java.util.List;
 
 public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationEntity {
 
-    public static boolean isSpecterAround(LevelAccessor world, double x, double y, double z) {
-        return !world.getEntitiesOfClass(SpecterEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), Entity::isAlive).isEmpty();
-    }
-
-    private boolean isSpecterDurative() {
-        return this.isAlive() && this.tickCount > 15 && this.getEntityData().get(DATA_duration) <= 0;
-    }
-
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(SpecterEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(SpecterEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_skillp1 = SynchedEntityData.defineId(SpecterEntity.class, EntityDataSerializers.INT);
@@ -77,7 +68,7 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
     public String animationprocedure = "empty";
 
 
-    public SpecterEntity(PlayMessages.SpawnEntity packet, Level world) {
+    public SpecterEntity(Level world) {
         this(CAEntities.SPECTER.get(), world);
     }
 
@@ -540,6 +531,13 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
         }
     }
 
+    public static boolean isSpecterAround(LevelAccessor world, double x, double y, double z) {
+        return !world.getEntitiesOfClass(SpecterEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), Entity::isAlive).isEmpty();
+    }
+
+    private boolean isSpecterDurative() {
+        return this.isAlive() && this.tickCount > 15 && this.getEntityData().get(DATA_duration) <= 0;
+    }
 
     @Override
     public void setAnimationProcedure(String animation) {

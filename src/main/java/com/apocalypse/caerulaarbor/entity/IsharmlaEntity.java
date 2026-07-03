@@ -53,7 +53,6 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -84,7 +83,7 @@ public class IsharmlaEntity extends SeaMonster {
 
 	public static final SoundEvent SKADI_HIT = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "skadi_hit"));
 
-	public IsharmlaEntity(PlayMessages.SpawnEntity packet, Level world) {
+	public IsharmlaEntity(Level world) {
 		this(CAEntities.ISHARMLA.get(), world);
 	}
 

@@ -37,7 +37,6 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -59,7 +58,7 @@ public class OceanizedDogEntity extends TamableAnimal implements GeoEntity, Sync
     private long lastSwing;
     public String animationprocedure = "empty";
 
-    public OceanizedDogEntity(PlayMessages.SpawnEntity packet, Level world) {
+    public OceanizedDogEntity(Level world) {
         this(CAEntities.OCEANIZED_DOG.get(), world);
     }
 

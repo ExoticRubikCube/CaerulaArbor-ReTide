@@ -31,7 +31,6 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Comparator;
@@ -41,7 +40,7 @@ import java.util.List;
 public class AbandonedShootEntity extends AbstractArrow implements ItemSupplier {
 	public static final ItemStack PROJECTILE_ITEM = new ItemStack(Blocks.BLUE_CANDLE);
 
-	public AbandonedShootEntity(PlayMessages.SpawnEntity packet, Level world) {
+	public AbandonedShootEntity(Level world) {
 		super(CAEntities.ABANDONED_SHOOT.get(), world);
 	}
 

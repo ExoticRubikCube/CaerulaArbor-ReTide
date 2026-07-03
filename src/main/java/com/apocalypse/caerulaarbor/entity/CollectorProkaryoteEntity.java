@@ -43,7 +43,6 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -59,7 +58,7 @@ public class CollectorProkaryoteEntity extends SeaMonster implements Bucketable 
 	private boolean fromBucket;
 	public String animationprocedure = "empty";
 
-	public CollectorProkaryoteEntity(PlayMessages.SpawnEntity packet, Level world) {
+	public CollectorProkaryoteEntity(Level world) {
 		this(CAEntities.COLLECTOR_PROKARYOTE.get(), world);
 	}
 

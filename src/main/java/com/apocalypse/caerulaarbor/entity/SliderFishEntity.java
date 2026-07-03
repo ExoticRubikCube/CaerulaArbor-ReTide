@@ -40,7 +40,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.common.DungeonHooks;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -58,7 +57,7 @@ public class SliderFishEntity extends SeaMonster implements Bucketable {
 	private boolean fromBucket;
 	public String animationprocedure = "empty";
 
-	public SliderFishEntity(PlayMessages.SpawnEntity packet, Level world) {
+	public SliderFishEntity(Level world) {
 		this(CAEntities.SLIDER_FISH.get(), world);
 	}
 

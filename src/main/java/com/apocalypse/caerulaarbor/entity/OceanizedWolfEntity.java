@@ -31,7 +31,6 @@ import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -46,7 +45,7 @@ public class OceanizedWolfEntity extends SeaMonster {
     private long lastSwing;
     public String animationprocedure = "empty";
 
-    public OceanizedWolfEntity(PlayMessages.SpawnEntity packet, Level world) {
+    public OceanizedWolfEntity(Level world) {
         this(CAEntities.OCEANIZED_WOLF.get(), world);
     }
 

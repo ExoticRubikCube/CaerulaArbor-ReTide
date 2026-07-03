@@ -41,7 +41,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
@@ -49,7 +48,7 @@ import javax.annotation.Nullable;
 public class GunmuEntity extends Monster {
     private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.WHITE, ServerBossEvent.BossBarOverlay.PROGRESS);
 
-    public GunmuEntity(PlayMessages.SpawnEntity packet, Level world) {
+    public GunmuEntity(Level world) {
         this(CAEntities.GUNMU.get(), world);
     }
 

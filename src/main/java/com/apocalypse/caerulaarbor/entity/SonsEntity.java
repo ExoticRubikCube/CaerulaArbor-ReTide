@@ -39,7 +39,6 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -57,7 +56,7 @@ public class SonsEntity extends SeaMonster {
     private long lastSwing;
     public String animationprocedure = "empty";
 
-    public SonsEntity(PlayMessages.SpawnEntity packet, Level world) {
+    public SonsEntity(Level world) {
         this(CAEntities.SONS.get(), world);
     }
 

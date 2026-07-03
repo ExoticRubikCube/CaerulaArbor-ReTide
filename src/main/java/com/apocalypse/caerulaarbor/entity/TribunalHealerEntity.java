@@ -44,7 +44,6 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -70,7 +69,7 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
     private long lastSwing;
     public String animationprocedure = "empty";
 
-    public TribunalHealerEntity(PlayMessages.SpawnEntity packet, Level world) {
+    public TribunalHealerEntity(Level world) {
         this(CAEntities.TRIBUNAL_HEALER.get(), world);
     }
 

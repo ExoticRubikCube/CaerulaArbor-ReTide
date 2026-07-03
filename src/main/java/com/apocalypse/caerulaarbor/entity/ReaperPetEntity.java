@@ -48,7 +48,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -71,7 +70,7 @@ public class ReaperPetEntity extends TamableAnimal implements GeoEntity, SyncedA
 	private long lastSwing;
 	public String animationprocedure = "empty";
 
-	public ReaperPetEntity(PlayMessages.SpawnEntity packet, Level world) {
+	public ReaperPetEntity(Level world) {
 		this(CAEntities.REAPER_PET.get(), world);
 	}
 

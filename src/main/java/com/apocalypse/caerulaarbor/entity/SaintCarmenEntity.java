@@ -43,7 +43,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -75,7 +74,7 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
     private long lastSwing;
     public String animationprocedure = "empty";
 
-    public SaintCarmenEntity(PlayMessages.SpawnEntity packet, Level world) {
+    public SaintCarmenEntity(Level world) {
         this(CAEntities.SAINT_CARMEN.get(), world);
     }
 

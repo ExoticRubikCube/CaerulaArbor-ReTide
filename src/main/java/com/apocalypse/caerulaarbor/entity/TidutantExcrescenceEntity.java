@@ -40,7 +40,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -56,7 +55,7 @@ public class TidutantExcrescenceEntity extends SeaMonster {
     private long lastSwing;
     public String animationprocedure = "empty";
 
-    public TidutantExcrescenceEntity(PlayMessages.SpawnEntity packet, Level world) {
+    public TidutantExcrescenceEntity(Level world) {
         this(CAEntities.TIDUTANT_EXCRESCENCE.get(), world);
     }
 

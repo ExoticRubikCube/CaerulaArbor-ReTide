@@ -34,7 +34,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -56,7 +55,7 @@ public class LittleHelperEntity extends PathfinderMob implements GeoEntity, Sync
     private long lastSwing;
     public String animationprocedure = "empty";
 
-    public LittleHelperEntity(PlayMessages.SpawnEntity packet, Level world) {
+    public LittleHelperEntity(Level world) {
         this(CAEntities.LITTLE_HELPER.get(), world);
     }
 

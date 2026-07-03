@@ -48,7 +48,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -68,7 +67,7 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
     private long lastSwing;
     public String animationprocedure = "empty";
 
-    public OceanizedEvokerEntity(PlayMessages.SpawnEntity packet, Level world) {
+    public OceanizedEvokerEntity(Level world) {
         this(CAEntities.OCEANIZED_EVOKER.get(), world);
     }
 

@@ -34,7 +34,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -64,7 +63,7 @@ public class XantisEntity extends TamableAnimal implements GeoEntity, SyncedAnim
     private long lastSwing;
     public String animationprocedure = "empty";
 
-    public XantisEntity(PlayMessages.SpawnEntity packet, Level world) {
+    public XantisEntity(Level world) {
         this(CAEntities.XANTIS.get(), world);
     }
 

@@ -23,14 +23,13 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 
 @OnlyIn(value = Dist.CLIENT, _interface = ItemSupplier.class)
 public class FishSplashEntity extends AbstractArrow implements ItemSupplier {
 	public static final ItemStack PROJECTILE_ITEM = new ItemStack(Items.GHAST_TEAR);
 
-	public FishSplashEntity(PlayMessages.SpawnEntity packet, Level world) {
+	public FishSplashEntity(Level world) {
 		super(CAEntities.FISH_SPLASH.get(), world);
 	}
 

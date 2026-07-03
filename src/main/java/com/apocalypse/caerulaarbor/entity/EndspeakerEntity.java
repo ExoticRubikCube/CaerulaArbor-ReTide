@@ -60,7 +60,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -88,7 +87,7 @@ public class EndspeakerEntity extends SeaMonster {
 
 	private final ServerBossEvent bossInfo;
 
-	public EndspeakerEntity(PlayMessages.SpawnEntity packet, Level level) {
+	public EndspeakerEntity(Level level) {
 		this(CAEntities.ENDSPEAKER.get(), level);
 	}
 

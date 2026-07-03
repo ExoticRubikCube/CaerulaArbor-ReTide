@@ -43,7 +43,6 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -57,7 +56,7 @@ import java.util.EnumSet;
 public class OceanizedWitherEntity extends AbstractOceanizedWitherEntity implements RangedAttackMob {
     public static final EntityDataAccessor<Integer> DATA_spawn = SynchedEntityData.defineId(OceanizedWitherEntity.class, EntityDataSerializers.INT);
 
-    public OceanizedWitherEntity(PlayMessages.SpawnEntity packet, Level world) {
+    public OceanizedWitherEntity(Level world) {
         this(CAEntities.OCEANIZED_WITHER.get(), world);
     }
 

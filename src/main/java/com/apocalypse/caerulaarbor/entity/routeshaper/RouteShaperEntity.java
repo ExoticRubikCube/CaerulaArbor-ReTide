@@ -14,13 +14,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.network.PlayMessages;
 
 import java.util.Comparator;
 import java.util.List;
 
 public class RouteShaperEntity extends AbstractPathshaperEntity {
-	public RouteShaperEntity(PlayMessages.SpawnEntity packet, Level world) {
+	public RouteShaperEntity(Level world) {
 		this(CAEntities.ROUTE_SHAPER.get(), world);
 	}
 

@@ -9,10 +9,9 @@ import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.network.PlayMessages;
 
 public class OceanizedWardenEntity extends AbstractOceanizedWardenEntity {
-	public OceanizedWardenEntity(PlayMessages.SpawnEntity packet, Level world) {
+	public OceanizedWardenEntity(Level world) {
 		this(CAEntities.OCEANIZED_WARDEN.get(), world);
 	}
 

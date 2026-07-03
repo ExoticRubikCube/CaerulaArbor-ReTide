@@ -17,13 +17,12 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 
 @OnlyIn(value = Dist.CLIENT, _interface = ItemSupplier.class)
 public class ThrowablePotionEntity extends AbstractArrow implements ItemSupplier {
 	public static final ItemStack PROJECTILE_ITEM = new ItemStack(Items.SPLASH_POTION);
 
-	public ThrowablePotionEntity(PlayMessages.SpawnEntity packet, Level world) {
+	public ThrowablePotionEntity(Level world) {
 		super(CAEntities.THROWABLE_POTION.get(), world);
 	}
 

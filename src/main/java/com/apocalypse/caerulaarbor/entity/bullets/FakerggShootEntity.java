@@ -25,14 +25,13 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 
 @OnlyIn(value = Dist.CLIENT, _interface = ItemSupplier.class)
 public class FakerggShootEntity extends AbstractArrow implements ItemSupplier {
 	public static final ItemStack PROJECTILE_ITEM = new ItemStack(CAItems.FAKE_EGG.get());
 
-	public FakerggShootEntity(PlayMessages.SpawnEntity packet, Level world) {
+	public FakerggShootEntity(Level world) {
 		super(CAEntities.FAKERGG_SHOOT.get(), world);
 	}
 

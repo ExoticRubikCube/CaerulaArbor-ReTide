@@ -11,12 +11,11 @@ import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraftforge.network.PlayMessages;
 
 import javax.annotation.Nullable;
 
 public class OceanizedWardenisEntity extends AbstractOceanizedWardenEntity {
-	public OceanizedWardenisEntity(PlayMessages.SpawnEntity packet, Level world) {
+	public OceanizedWardenisEntity(Level world) {
 		this(CAEntities.OCEANIZED_WARDENIS.get(), world);
 	}
 

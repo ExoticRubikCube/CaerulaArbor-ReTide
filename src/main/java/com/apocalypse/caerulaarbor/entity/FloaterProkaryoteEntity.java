@@ -49,7 +49,6 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -68,7 +67,7 @@ public class FloaterProkaryoteEntity extends SeaMonster implements RangedAttackM
 	private boolean fromBucket;
 	public String animationprocedure = "empty";
 
-	public FloaterProkaryoteEntity(PlayMessages.SpawnEntity packet, Level world) {
+	public FloaterProkaryoteEntity(Level world) {
 		this(CAEntities.FLOATER_PROKARYOTE.get(), world);
 	}
 

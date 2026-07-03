@@ -54,7 +54,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -86,7 +85,7 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
     public String animationprocedure = "empty";
     private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.WHITE, ServerBossEvent.BossBarOverlay.NOTCHED_6);
 
-    public LastKnightAndHorseEntity(PlayMessages.SpawnEntity packet, Level world) {
+    public LastKnightAndHorseEntity(Level world) {
         this(CAEntities.LAST_KNIGHT_AND_HORSE.get(), world);
     }
 

@@ -43,7 +43,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.common.DungeonHooks;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -61,7 +60,7 @@ public class BaselayerAbyssalEntity extends SeaMonster {
 	private long lastSwing;
 	public String animationprocedure = "empty";
 
-	public BaselayerAbyssalEntity(PlayMessages.SpawnEntity packet, Level world) {
+	public BaselayerAbyssalEntity(Level world) {
 		this(CAEntities.BASELAYER_ABYSSAL.get(), world);
 	}
 

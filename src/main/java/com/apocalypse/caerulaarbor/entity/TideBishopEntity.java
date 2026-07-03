@@ -53,7 +53,6 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -74,7 +73,7 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
     public String animationprocedure = "empty";
     private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.GREEN, ServerBossEvent.BossBarOverlay.NOTCHED_6);
 
-    public TideBishopEntity(PlayMessages.SpawnEntity packet, Level world) {
+    public TideBishopEntity(Level world) {
         this(CAEntities.TIDE_BISHOP.get(), world);
     }
 

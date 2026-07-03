@@ -35,7 +35,6 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -52,7 +51,7 @@ public class AccumulatorCloneEntity extends SeaMonster {
 	private long lastSwing;
 	public String animationprocedure = "empty";
 
-	public AccumulatorCloneEntity(PlayMessages.SpawnEntity packet, Level world) {
+	public AccumulatorCloneEntity(Level world) {
 		this(CAEntities.ACCUMULATOR_CLONE.get(), world);
 	}
 

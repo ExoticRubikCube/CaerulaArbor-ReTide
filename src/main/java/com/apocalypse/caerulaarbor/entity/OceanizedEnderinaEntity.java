@@ -53,7 +53,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -94,7 +93,7 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 
 	private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.PINK, ServerBossEvent.BossBarOverlay.NOTCHED_10);
 
-	public OceanizedEnderinaEntity(PlayMessages.SpawnEntity packet, Level world) {
+	public OceanizedEnderinaEntity(Level world) {
 		this(CAEntities.OCEANIZED_ENDERINA.get(), world);
 	}
 

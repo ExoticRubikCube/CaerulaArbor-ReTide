@@ -41,7 +41,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -59,7 +58,7 @@ public class PregnantFishEntity extends SeaMonster implements RangedAttackMob, P
 	private long lastSwing;
 	public String animationprocedure = "empty";
 
-	public PregnantFishEntity(PlayMessages.SpawnEntity packet, Level world) {
+	public PregnantFishEntity(Level world) {
 		this(CAEntities.PREGNANT_FISH.get(), world);
 	}
 

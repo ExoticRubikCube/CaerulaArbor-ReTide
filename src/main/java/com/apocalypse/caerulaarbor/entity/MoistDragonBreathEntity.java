@@ -42,7 +42,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -66,7 +65,7 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     public String animationprocedure = "empty";
 
-    public MoistDragonBreathEntity(PlayMessages.SpawnEntity packet, Level world) {
+    public MoistDragonBreathEntity(Level world) {
         this(CAEntities.MOIST_DRAGON_BREATH.get(), world);
     }
 

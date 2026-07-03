@@ -46,7 +46,6 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -67,7 +66,7 @@ public class NautilusHeadhunterEntity extends Animal implements GeoEntity, Synce
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 	public String animationprocedure = "empty";
 
-	public NautilusHeadhunterEntity(PlayMessages.SpawnEntity packet, Level world) {
+	public NautilusHeadhunterEntity(Level world) {
 		this(CAEntities.NAUTILUS_HEADHUNTER.get(), world);
 	}
 

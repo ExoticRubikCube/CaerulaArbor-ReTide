@@ -32,7 +32,6 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -47,7 +46,7 @@ public class SpikeChestEntity extends SeaMonster {
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(SpikeChestEntity.class, EntityDataSerializers.STRING);
 	public String animationprocedure = "empty";
 
-	public SpikeChestEntity(PlayMessages.SpawnEntity packet, Level world) {
+	public SpikeChestEntity(Level world) {
 		this(CAEntities.SPIKE_CHEST.get(), world);
 	}
 
