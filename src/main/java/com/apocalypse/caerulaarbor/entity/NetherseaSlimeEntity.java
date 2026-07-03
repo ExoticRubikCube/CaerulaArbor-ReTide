@@ -7,8 +7,6 @@ import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -37,7 +35,6 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.DungeonHooks;
-import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -70,12 +67,6 @@ public class NetherseaSlimeEntity extends SeaMonster {
 		this.entityData.define(DATA_SIZE, 4);
 	}
 
-
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
-	}
-
 	@Override
 	protected void registerGoals() {
 		super.registerGoals();
@@ -98,6 +89,7 @@ public class NetherseaSlimeEntity extends SeaMonster {
 		return MobType.UNDEFINED;
 	}
 
+	//TODO 修改为所有注册.get()而不是forge接口
 	@Override
 	public void playStepSound(BlockPos pos, BlockState blockIn) {
 		this.playSound(ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.slime.jump_small")), 0.15f, 1);

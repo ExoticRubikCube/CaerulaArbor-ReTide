@@ -74,8 +74,6 @@ public class CorrectinalPhalaxVanguardEntity extends Animal implements GeoEntity
         this.entityData.define(DATA_skillp, 300);
     }
 
-
-
     public void vanguardSwing(double rate) {
         double x = this.getX();
         double y = this.getY();
