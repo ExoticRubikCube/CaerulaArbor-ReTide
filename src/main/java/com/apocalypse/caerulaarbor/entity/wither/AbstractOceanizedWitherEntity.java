@@ -62,7 +62,6 @@ public abstract class AbstractOceanizedWitherEntity extends SeaMonster {
     public static final EntityDataAccessor<Boolean> DATA_shelled = SynchedEntityData.defineId(AbstractOceanizedWitherEntity.class, EntityDataSerializers.BOOLEAN);
 
     protected boolean swinging;
-    protected boolean lastloop;
     protected long lastSwing;
     protected String prevAnim = "empty";
     public String animationprocedure = "empty";

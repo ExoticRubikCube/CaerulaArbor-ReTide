@@ -68,7 +68,6 @@ public class CrackerAbyssalEntity extends SeaMonster implements PolarMountRider 
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(CrackerAbyssalEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(CrackerAbyssalEntity.class, EntityDataSerializers.STRING);
 	private boolean swinging;
-	private boolean lastloop;
 	private long lastSwing;
 	public String animationprocedure = "empty";
 

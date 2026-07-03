@@ -56,7 +56,6 @@ public class OceanizedCatEntity extends SeaMonster {
     public static final EntityDataAccessor<Integer> DATA_action_time = SynchedEntityData.defineId(OceanizedCatEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Boolean> DATA_stateSneaking = SynchedEntityData.defineId(OceanizedCatEntity.class, EntityDataSerializers.BOOLEAN);
     private boolean swinging;
-    private boolean lastloop;
     private long lastSwing;
     public String animationprocedure = "empty";
 

@@ -52,7 +52,6 @@ public class CorrectinalPhalaxVanguardEntity extends Animal implements GeoEntity
     public static final EntityDataAccessor<Integer> DATA_skillp = SynchedEntityData.defineId(CorrectinalPhalaxVanguardEntity.class, EntityDataSerializers.INT);
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private boolean swinging;
-    private boolean lastloop;
     private long lastSwing;
     public String animationprocedure = "empty";
 

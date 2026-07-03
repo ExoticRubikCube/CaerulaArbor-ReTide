@@ -51,7 +51,6 @@ import software.bernie.geckolib.core.object.PlayState;
 public class OceanizedRavagerEntity extends SeaMonster {
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedRavagerEntity.class, EntityDataSerializers.STRING);
     private boolean swinging;
-    private boolean lastloop;
     private long lastSwing;
     public String animationprocedure = "empty";
 

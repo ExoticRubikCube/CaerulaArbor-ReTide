@@ -56,7 +56,6 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity, Sync
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(GladiiaWhirlEntity.class, EntityDataSerializers.STRING);
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private boolean swinging;
-    private boolean lastloop;
     private long lastSwing;
     public String animationprocedure = "empty";
 

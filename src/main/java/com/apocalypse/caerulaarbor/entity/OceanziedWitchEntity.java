@@ -76,7 +76,6 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanziedWitchEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_skillp = SynchedEntityData.defineId(OceanziedWitchEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
-    private boolean lastloop;
     private long lastSwing;
     public String animationprocedure = "empty";
 

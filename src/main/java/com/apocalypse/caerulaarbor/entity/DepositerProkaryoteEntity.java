@@ -52,7 +52,6 @@ public class DepositerProkaryoteEntity extends SeaMonster {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(DepositerProkaryoteEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(DepositerProkaryoteEntity.class, EntityDataSerializers.STRING);
 	private boolean swinging;
-	private boolean lastloop;
 	private long lastSwing;
 	public String animationprocedure = "empty";
 

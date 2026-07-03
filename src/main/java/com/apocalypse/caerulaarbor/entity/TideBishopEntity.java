@@ -70,7 +70,6 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(TideBishopEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_SKILL_COOLDOWN = SynchedEntityData.defineId(TideBishopEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
-    private boolean lastloop;
     private long lastSwing;
     public String animationprocedure = "empty";
     private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.GREEN, ServerBossEvent.BossBarOverlay.NOTCHED_6);

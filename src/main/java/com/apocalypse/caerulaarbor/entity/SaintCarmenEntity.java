@@ -72,7 +72,6 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
     public static final EntityDataAccessor<Integer> DATA_reloadP = SynchedEntityData.defineId(SaintCarmenEntity.class, EntityDataSerializers.INT);
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private boolean swinging;
-    private boolean lastloop;
     private long lastSwing;
     public String animationprocedure = "empty";
 

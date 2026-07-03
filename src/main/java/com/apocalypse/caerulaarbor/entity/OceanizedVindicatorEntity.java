@@ -49,7 +49,6 @@ import javax.annotation.Nullable;
 public class OceanizedVindicatorEntity extends SeaMonster implements PolarMountRider {
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedVindicatorEntity.class, EntityDataSerializers.STRING);
     private boolean swinging;
-    private boolean lastloop;
     private long lastSwing;
     public String animationprocedure = "empty";
 

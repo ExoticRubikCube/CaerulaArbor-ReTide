@@ -86,7 +86,6 @@ public class IzumikEntity extends SeaMonster {
     public static final EntityDataAccessor<Integer> DATA_skillp_1 = SynchedEntityData.defineId(IzumikEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_deal = SynchedEntityData.defineId(IzumikEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
-    private boolean lastloop;
     private long lastSwing;
     public String animationprocedure = "empty";
     private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.PINK, ServerBossEvent.BossBarOverlay.NOTCHED_12);

@@ -65,7 +65,6 @@ public class OceanizedChickenEntity extends SeaMonster {
     public static final EntityDataAccessor<Integer> DATA_EGG_OFFSET = SynchedEntityData.defineId(OceanizedChickenEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_EGG_RATE = SynchedEntityData.defineId(OceanizedChickenEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
-    private boolean lastloop;
     private long lastSwing;
     public String animationprocedure = "empty";
 

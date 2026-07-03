@@ -78,7 +78,6 @@ public class IsharmlaEntity extends SeaMonster {
 	public static final EntityDataAccessor<Integer> DATA_HEAL_P = SynchedEntityData.defineId(IsharmlaEntity.class, EntityDataSerializers.INT);
 	private boolean IS_ANGERED;
 	private boolean swinging;
-	private boolean lastloop;
 	private long lastSwing;
 	public String animationprocedure = "empty";
 	private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.YELLOW, ServerBossEvent.BossBarOverlay.NOTCHED_6);

@@ -53,7 +53,6 @@ public class OceanizedHorseEntity extends SeaMonster {
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedHorseEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_lay_limit = SynchedEntityData.defineId(OceanizedHorseEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
-    private boolean lastloop;
     private long lastSwing;
     public String animationprocedure = "empty";
 

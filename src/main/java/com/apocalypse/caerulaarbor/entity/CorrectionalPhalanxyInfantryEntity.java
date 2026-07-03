@@ -54,7 +54,6 @@ public class CorrectionalPhalanxyInfantryEntity extends Animal implements GeoEnt
     public static final EntityDataAccessor<Integer> DATA_skillp2 = SynchedEntityData.defineId(CorrectionalPhalanxyInfantryEntity.class, EntityDataSerializers.INT);
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private boolean swinging;
-    private boolean lastloop;
     private long lastSwing;
     public String animationprocedure = "empty";
 

@@ -44,7 +44,6 @@ public class AbsorberLimbEntity extends SeaMonster {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(AbsorberLimbEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(AbsorberLimbEntity.class, EntityDataSerializers.STRING);
 	private boolean swinging;
-	private boolean lastloop;
 	private long lastSwing;
 	public String animationprocedure = "empty";
 

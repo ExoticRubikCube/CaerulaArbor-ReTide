@@ -51,7 +51,6 @@ public class ApocataEntity extends PathfinderMob implements GeoEntity, SyncedAni
 	public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(ApocataEntity.class, EntityDataSerializers.INT);
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 	private boolean swinging;
-	private boolean lastloop;
 	private long lastSwing;
 	public String animationprocedure = "empty";
 

@@ -51,7 +51,6 @@ public class BoneFishEntity extends SeaMonster implements Bucketable {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(BoneFishEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(BoneFishEntity.class, EntityDataSerializers.STRING);
 	private boolean swinging;
-	private boolean lastloop;
 	private long lastSwing;
 	private boolean fromBucket;
 	public String animationprocedure = "empty";

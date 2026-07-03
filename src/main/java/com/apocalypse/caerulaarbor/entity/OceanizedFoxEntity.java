@@ -59,7 +59,6 @@ public class OceanizedFoxEntity extends SeaMonster {
     public static final EntityDataAccessor<Integer> DATA_action_time = SynchedEntityData.defineId(OceanizedFoxEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(OceanizedFoxEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
-    private boolean lastloop;
     private long lastSwing;
     public String animationprocedure = "empty";
 

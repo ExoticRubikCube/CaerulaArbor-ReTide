@@ -70,7 +70,6 @@ public class OceanizedShulkerEntity extends SeaMonster {
     public static final EntityDataAccessor<Integer> DATA_PEEK_TIME = SynchedEntityData.defineId(OceanizedShulkerEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_VARIANT = SynchedEntityData.defineId(OceanizedShulkerEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
-    private boolean lastloop;
     private long lastSwing;
     public String animationprocedure = "empty";
 

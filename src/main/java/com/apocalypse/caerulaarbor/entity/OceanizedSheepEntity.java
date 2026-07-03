@@ -60,7 +60,6 @@ public class OceanizedSheepEntity extends SeaMonster {
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedSheepEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<Boolean> DATA_fur = SynchedEntityData.defineId(OceanizedSheepEntity.class, EntityDataSerializers.BOOLEAN);
 	private boolean swinging;
-	private boolean lastloop;
 	private long lastSwing;
 	public String animationprocedure = "empty";
 

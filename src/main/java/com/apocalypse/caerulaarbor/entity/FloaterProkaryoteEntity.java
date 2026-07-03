@@ -64,7 +64,6 @@ public class FloaterProkaryoteEntity extends SeaMonster implements RangedAttackM
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(FloaterProkaryoteEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(FloaterProkaryoteEntity.class, EntityDataSerializers.STRING);
 	private boolean swinging;
-	private boolean lastloop;
 	private long lastSwing;
 	private boolean fromBucket;
 	public String animationprocedure = "empty";

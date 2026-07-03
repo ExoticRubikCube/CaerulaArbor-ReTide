@@ -58,7 +58,6 @@ public class OceanizedPiglinEntity extends SeaMonster implements PolarMountRider
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedPiglinEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<Integer> DATA_ability = SynchedEntityData.defineId(OceanizedPiglinEntity.class, EntityDataSerializers.INT);
 	private boolean swinging;
-	private boolean lastloop;
 	private long lastSwing;
 	public String animationprocedure = "empty";
 

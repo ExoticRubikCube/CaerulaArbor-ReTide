@@ -50,7 +50,6 @@ public class JuniorWarriorPriestEntity extends Animal implements GeoEntity, Sync
     public static final EntityDataAccessor<Integer> DATA_skill_p = SynchedEntityData.defineId(JuniorWarriorPriestEntity.class, EntityDataSerializers.INT);
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private boolean swinging;
-    private boolean lastloop;
     private long lastSwing;
     public String animationprocedure = "empty";
 

@@ -70,7 +70,6 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
     public static final EntityDataAccessor<Boolean> DATA_rooted = SynchedEntityData.defineId(ChitinGolemEntity.class, EntityDataSerializers.BOOLEAN);
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private boolean swinging;
-    private boolean lastloop;
     private long lastSwing;
     public String animationprocedure = "empty";
 

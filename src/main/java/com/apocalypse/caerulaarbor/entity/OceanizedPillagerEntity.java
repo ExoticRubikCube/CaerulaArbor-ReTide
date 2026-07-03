@@ -57,7 +57,6 @@ public class OceanizedPillagerEntity extends SeaMonster implements RangedAttackM
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedPillagerEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_skillp = SynchedEntityData.defineId(OceanizedPillagerEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
-    private boolean lastloop;
     private long lastSwing;
     public String animationprocedure = "empty";
 

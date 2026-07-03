@@ -55,7 +55,6 @@ public class FakeOffspringEntity extends SeaMonster {
     public static final EntityDataAccessor<Integer> DATA_dx = SynchedEntityData.defineId(FakeOffspringEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_dz = SynchedEntityData.defineId(FakeOffspringEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
-    private boolean lastloop;
     private long lastSwing;
     public String animationprocedure = "empty";
 

@@ -85,7 +85,6 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
     public static final EntityDataAccessor<Integer> DATA_skillp1 = SynchedEntityData.defineId(HighmoreEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_skillp2 = SynchedEntityData.defineId(HighmoreEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
-    private boolean lastloop;
     private long lastSwing;
     public String animationprocedure = "empty";
     private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.YELLOW, ServerBossEvent.BossBarOverlay.NOTCHED_10);

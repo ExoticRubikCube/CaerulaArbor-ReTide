@@ -58,7 +58,6 @@ public class SpecterDollEntity extends Animal implements GeoEntity, SyncedAnimat
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(SpecterDollEntity.class, EntityDataSerializers.STRING);
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private boolean swinging;
-    private boolean lastloop;
     private long lastSwing;
     public String animationprocedure = "empty";
 

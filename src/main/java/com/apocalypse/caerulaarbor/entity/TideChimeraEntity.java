@@ -82,7 +82,6 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
     public static final EntityDataAccessor<Integer> DATA_skillP = SynchedEntityData.defineId(TideChimeraEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_deal = SynchedEntityData.defineId(TideChimeraEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
-    private boolean lastloop;
     private long lastSwing;
     public String animationprocedure = "empty";
     private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.NOTCHED_12);

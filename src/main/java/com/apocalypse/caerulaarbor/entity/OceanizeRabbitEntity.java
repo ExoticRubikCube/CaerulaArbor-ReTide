@@ -57,7 +57,6 @@ public class OceanizeRabbitEntity extends SeaMonster {
     public static final EntityDataAccessor<Integer> DATA_variant = SynchedEntityData.defineId(OceanizeRabbitEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_swallowP = SynchedEntityData.defineId(OceanizeRabbitEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
-    private boolean lastloop;
     private long lastSwing;
     public String animationprocedure = "empty";
 

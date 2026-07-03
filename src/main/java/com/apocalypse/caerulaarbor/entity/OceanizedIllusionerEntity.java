@@ -75,7 +75,6 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
     public static final EntityDataAccessor<Integer> DATA_mirrorP = SynchedEntityData.defineId(OceanizedIllusionerEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(OceanizedIllusionerEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
-    private boolean lastloop;
     private long lastSwing;
     public String animationprocedure = "empty";
     private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.GREEN, ServerBossEvent.BossBarOverlay.PROGRESS);

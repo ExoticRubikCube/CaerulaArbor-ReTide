@@ -75,7 +75,6 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 	public static final EntityDataAccessor<Integer> DATA_DURATION = SynchedEntityData.defineId(OceanizedEnderinaEntity.class, EntityDataSerializers.INT);
 	public static SoundEvent PRE = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "caster_pre"));
 	private boolean swinging;
-	private boolean lastloop;
 	private long lastSwing;
 	public String animationprocedure = "empty";
 	@Nullable

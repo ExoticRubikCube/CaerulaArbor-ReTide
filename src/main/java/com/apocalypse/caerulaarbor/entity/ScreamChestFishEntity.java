@@ -61,7 +61,6 @@ public class ScreamChestFishEntity extends SeaMonster {
     public static final EntityDataAccessor<Boolean> DATA_release = SynchedEntityData.defineId(ScreamChestFishEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<Integer> DATA_SCREAM_TICK = SynchedEntityData.defineId(ScreamChestFishEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
-    private boolean lastloop;
     private long lastSwing;
     public String animationprocedure = "empty";
 

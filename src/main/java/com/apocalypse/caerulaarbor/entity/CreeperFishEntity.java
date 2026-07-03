@@ -53,7 +53,6 @@ public class CreeperFishEntity extends SeaMonster implements RangedSanityAttacke
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(CreeperFishEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<Integer> DATA_deal = SynchedEntityData.defineId(CreeperFishEntity.class, EntityDataSerializers.INT);
 	private boolean swinging;
-	private boolean lastloop;
 	private long lastSwing;
 	public String animationprocedure = "empty";
 

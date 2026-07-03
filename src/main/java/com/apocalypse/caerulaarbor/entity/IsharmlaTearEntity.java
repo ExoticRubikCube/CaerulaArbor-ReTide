@@ -56,7 +56,6 @@ public class IsharmlaTearEntity extends PathfinderMob implements GeoEntity, Sync
     public static final EntityDataAccessor<Integer> DATA_FUNC_COOLDOWN = SynchedEntityData.defineId(IsharmlaTearEntity.class, EntityDataSerializers.INT);
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private boolean swinging;
-    private boolean lastloop;
     private long lastSwing;
     public String animationprocedure = "empty";
 

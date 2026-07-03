@@ -52,7 +52,6 @@ public class RocinanteEntity extends Animal implements GeoEntity, SyncedAnimatio
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(RocinanteEntity.class, EntityDataSerializers.STRING);
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private boolean swinging;
-    private boolean lastloop;
     private long lastSwing;
     public String animationprocedure = "empty";
 

@@ -62,7 +62,6 @@ public class ChiselerFishEntity extends SeaMonster implements RangedAttackMob, B
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(ChiselerFishEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(ChiselerFishEntity.class, EntityDataSerializers.STRING);
 	private boolean swinging;
-	private boolean lastloop;
 	private long lastSwing;
 	private boolean fromBucket;
 	public String animationprocedure = "empty";

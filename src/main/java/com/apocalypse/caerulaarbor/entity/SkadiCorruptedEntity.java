@@ -78,7 +78,6 @@ public class SkadiCorruptedEntity extends SeaMonster {
 	public static final EntityDataAccessor<Integer> DATA_deal = SynchedEntityData.defineId(SkadiCorruptedEntity.class, EntityDataSerializers.INT);
 	public static final EntityDataAccessor<Integer> DATA_phase = SynchedEntityData.defineId(SkadiCorruptedEntity.class, EntityDataSerializers.INT);
 	private boolean swinging;
-	private boolean lastloop;
 	private long lastSwing;
 	public String animationprocedure = "empty";
 	private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.RED, ServerBossEvent.BossBarOverlay.NOTCHED_6);

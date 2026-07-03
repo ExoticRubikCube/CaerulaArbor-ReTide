@@ -65,7 +65,6 @@ public class ReaperFishEntity extends SeaMonster {
 	public static final EntityDataAccessor<Integer> DATA_CHARGE_TICK = SynchedEntityData.defineId(ReaperFishEntity.class, EntityDataSerializers.INT);
 	public static final EntityDataAccessor<Boolean> DATA_IS_CHARGING = SynchedEntityData.defineId(ReaperFishEntity.class, EntityDataSerializers.BOOLEAN);
 	private boolean swinging;
-	private boolean lastloop;
 	private long lastSwing;
 	public String animationprocedure = "empty";
 

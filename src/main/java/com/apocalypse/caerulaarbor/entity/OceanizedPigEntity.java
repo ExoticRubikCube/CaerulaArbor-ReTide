@@ -57,7 +57,6 @@ public class OceanizedPigEntity extends SeaMonster {
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedPigEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_mute_time = SynchedEntityData.defineId(OceanizedPigEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
-    private boolean lastloop;
     private long lastSwing;
     public String animationprocedure = "empty";
 

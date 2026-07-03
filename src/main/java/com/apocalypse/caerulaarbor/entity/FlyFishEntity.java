@@ -54,7 +54,6 @@ public class FlyFishEntity extends SeaMonster implements RangedAttackMob {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(FlyFishEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(FlyFishEntity.class, EntityDataSerializers.STRING);
 	private boolean swinging;
-	private boolean lastloop;
 	private long lastSwing;
 	public String animationprocedure = "empty";
 

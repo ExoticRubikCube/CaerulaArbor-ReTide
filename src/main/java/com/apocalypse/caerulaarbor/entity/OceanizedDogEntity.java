@@ -56,7 +56,6 @@ public class OceanizedDogEntity extends TamableAnimal implements GeoEntity, Sync
     public static final EntityDataAccessor<Boolean> DATA_sitting = SynchedEntityData.defineId(OceanizedDogEntity.class, EntityDataSerializers.BOOLEAN);
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private boolean swinging;
-    private boolean lastloop;
     private long lastSwing;
     public String animationprocedure = "empty";
 

@@ -67,7 +67,6 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
     public static final EntityDataAccessor<Integer> DATA_skillp2 = SynchedEntityData.defineId(TribunalHealerEntity.class, EntityDataSerializers.INT);
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private boolean swinging;
-    private boolean lastloop;
     private long lastSwing;
     public String animationprocedure = "empty";
 

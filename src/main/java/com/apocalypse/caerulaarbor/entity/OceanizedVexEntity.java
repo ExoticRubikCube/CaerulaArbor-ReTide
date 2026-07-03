@@ -72,7 +72,6 @@ public class OceanizedVexEntity extends SeaMonster {
     public static final EntityDataAccessor<Integer> DATA_leftSurvivalTick = SynchedEntityData.defineId(OceanizedVexEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<String> DATA_SAYER = SynchedEntityData.defineId(OceanizedVexEntity.class, EntityDataSerializers.STRING);
     private boolean swinging;
-    private boolean lastloop;
     private long lastSwing;
     public String animationprocedure = "empty";
 

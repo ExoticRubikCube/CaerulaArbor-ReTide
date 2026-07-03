@@ -53,7 +53,6 @@ public class TidutantExcrescenceEntity extends SeaMonster {
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(TidutantExcrescenceEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_mute_time = SynchedEntityData.defineId(TidutantExcrescenceEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
-    private boolean lastloop;
     private long lastSwing;
     public String animationprocedure = "empty";
 

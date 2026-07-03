@@ -49,7 +49,6 @@ public class GuideAbyssalEntity extends SeaMonster {
 	public static final EntityDataAccessor<Integer> DATA_delay = SynchedEntityData.defineId(GuideAbyssalEntity.class, EntityDataSerializers.INT);
 	public static final EntityDataAccessor<Integer> DATA_laylimit = SynchedEntityData.defineId(GuideAbyssalEntity.class, EntityDataSerializers.INT);
 	private boolean swinging;
-	private boolean lastloop;
 	private long lastSwing;
 	public String animationprocedure = "empty";
 

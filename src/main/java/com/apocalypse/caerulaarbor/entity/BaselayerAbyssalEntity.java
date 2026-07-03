@@ -58,7 +58,6 @@ public class BaselayerAbyssalEntity extends SeaMonster {
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(BaselayerAbyssalEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<Integer> DATA_mute_time = SynchedEntityData.defineId(BaselayerAbyssalEntity.class, EntityDataSerializers.INT);
 	private boolean swinging;
-	private boolean lastloop;
 	private long lastSwing;
 	public String animationprocedure = "empty";
 

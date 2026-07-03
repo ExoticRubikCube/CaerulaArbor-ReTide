@@ -51,7 +51,6 @@ public class OceanizedVillagerEntity extends SeaMonster implements PolarMountRid
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanizedVillagerEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedVillagerEntity.class, EntityDataSerializers.STRING);
     private boolean swinging;
-    private boolean lastloop;
     private long lastSwing;
     public String animationprocedure = "empty";
 

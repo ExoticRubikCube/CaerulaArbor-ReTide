@@ -55,7 +55,6 @@ public class PunctureFishEntity extends SeaMonster implements PolarMountRider {
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(PunctureFishEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<Integer> DATA_delay = SynchedEntityData.defineId(PunctureFishEntity.class, EntityDataSerializers.INT);
 	private boolean swinging;
-	private boolean lastloop;
 	private long lastSwing;
 	public String animationprocedure = "empty";
 

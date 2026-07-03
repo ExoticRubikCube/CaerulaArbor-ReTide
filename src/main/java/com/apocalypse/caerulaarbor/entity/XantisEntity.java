@@ -61,7 +61,6 @@ public class XantisEntity extends TamableAnimal implements GeoEntity, SyncedAnim
     public static final EntityDataAccessor<Integer> DATA_TAP_TICK = SynchedEntityData.defineId(XantisEntity.class, EntityDataSerializers.INT);
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private boolean swinging;
-    private boolean lastloop;
     private long lastSwing;
     public String animationprocedure = "empty";
 

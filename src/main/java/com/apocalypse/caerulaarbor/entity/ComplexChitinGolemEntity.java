@@ -80,7 +80,6 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity, Sy
     public static final EntityDataAccessor<Integer> DATA_rootZ = SynchedEntityData.defineId(ComplexChitinGolemEntity.class, EntityDataSerializers.INT);
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private boolean swinging;
-    private boolean lastloop;
     private long lastSwing;
     public String animationprocedure = "empty";
 

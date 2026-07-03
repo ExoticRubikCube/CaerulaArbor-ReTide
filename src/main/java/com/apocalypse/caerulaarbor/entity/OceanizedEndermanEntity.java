@@ -71,7 +71,6 @@ public class OceanizedEndermanEntity extends SeaMonster {
     public static final EntityDataAccessor<Integer> DATA_skillp = SynchedEntityData.defineId(OceanizedEndermanEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_cooldown = SynchedEntityData.defineId(OceanizedEndermanEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
-    private boolean lastloop;
     private long lastSwing;
     public String animationprocedure = "empty";
 

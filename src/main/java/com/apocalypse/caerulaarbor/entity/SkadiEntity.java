@@ -71,7 +71,6 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
     public static final EntityDataAccessor<Integer> DATA_skillp2 = SynchedEntityData.defineId(SkadiEntity.class, EntityDataSerializers.INT);
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private boolean swinging;
-    private boolean lastloop;
     private long lastSwing;
     public String animationprocedure = "empty";
     @Nullable

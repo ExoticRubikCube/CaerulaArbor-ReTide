@@ -69,7 +69,6 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 	public static final EntityDataAccessor<Integer> DATA_skillP2 = SynchedEntityData.defineId(GladiiaEntity.class, EntityDataSerializers.INT);
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 	private boolean swinging;
-	private boolean lastloop;
 	private long lastSwing;
 	public String animationprocedure = "empty";
 

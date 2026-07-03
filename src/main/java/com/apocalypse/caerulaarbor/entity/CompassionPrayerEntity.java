@@ -66,7 +66,6 @@ public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMo
     public static final EntityDataAccessor<Integer> DATA_PHASE = SynchedEntityData.defineId(CompassionPrayerEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_REVIVE_TICK = SynchedEntityData.defineId(CompassionPrayerEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
-    private boolean lastloop;
     private long lastSwing;
     public String animationprocedure = "empty";
 

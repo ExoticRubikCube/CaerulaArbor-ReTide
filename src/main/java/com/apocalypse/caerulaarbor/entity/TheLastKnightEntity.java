@@ -74,7 +74,6 @@ public class TheLastKnightEntity extends Animal implements GeoEntity, SyncedAnim
     public static final EntityDataAccessor<Integer> DATA_skillp = SynchedEntityData.defineId(TheLastKnightEntity.class, EntityDataSerializers.INT);
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private boolean swinging;
-    private boolean lastloop;
     private long lastSwing;
     public String animationprocedure = "empty";
     private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.WHITE, ServerBossEvent.BossBarOverlay.NOTCHED_6);

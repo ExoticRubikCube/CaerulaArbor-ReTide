@@ -53,7 +53,6 @@ public class TheAbandonedEntity extends SeaMonster implements PolarMountRider {
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(TheAbandonedEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_skillp = SynchedEntityData.defineId(TheAbandonedEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
-    private boolean lastloop;
     private long lastSwing;
     public String animationprocedure = "empty";
 

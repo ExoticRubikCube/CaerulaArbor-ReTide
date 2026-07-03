@@ -56,7 +56,6 @@ public class PregnantFishEntity extends SeaMonster implements RangedAttackMob, P
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(PregnantFishEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(PregnantFishEntity.class, EntityDataSerializers.STRING);
 	private boolean swinging;
-	private boolean lastloop;
 	private long lastSwing;
 	public String animationprocedure = "empty";
 
