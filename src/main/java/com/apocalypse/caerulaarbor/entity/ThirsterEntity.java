@@ -61,11 +61,6 @@ import java.util.Comparator;
 import java.util.List;
 
 public class ThirsterEntity extends SeaMonster {
-
-    private boolean isThirsterDurative() {
-        return this.isAlive() && this.getEntityData().get(DATA_DURATION) <= 0;
-    }
-
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(ThirsterEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(ThirsterEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_DURATION = SynchedEntityData.defineId(ThirsterEntity.class, EntityDataSerializers.INT);
@@ -651,6 +646,9 @@ public class ThirsterEntity extends SeaMonster {
         data.add(new AnimationController<>(this, "procedure", 1, this::procedurePredicate));
     }
 
+    private boolean isThirsterDurative() {
+        return this.isAlive() && this.getEntityData().get(DATA_DURATION) <= 0;
+    }
 
     @Override
     public void setAnimationProcedure(String animation) {

@@ -105,7 +105,7 @@ public class PredatorAbyssalEntity extends SeaMonster {
 		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
 		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
 		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
-		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal(this, Player.class, 10, true, false, target -> EntityUtils.isOceanizedPlayerNearby(this.level(), this.getX(), this.getY(), this.getZ())));
+		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, target -> EntityUtils.isOceanizedPlayerNearby(this.level(), this.getX(), this.getY(), this.getZ())));
 		this.goalSelector.addGoal(15, new RandomStrollGoal(this, 0.5));
 		this.goalSelector.addGoal(16, new RandomLookAroundGoal(this));
 		this.goalSelector.addGoal(17, new FloatGoal(this));

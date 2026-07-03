@@ -61,6 +61,7 @@ import java.util.List;
 public class TideDeathrepellerEntity extends SeaMonster {
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(TideDeathrepellerEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(TideDeathrepellerEntity.class, EntityDataSerializers.STRING);
+   //TODO NBT的书写风格需要对齐原版
     public static final EntityDataAccessor<Integer> DATA_skillp = SynchedEntityData.defineId(TideDeathrepellerEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(TideDeathrepellerEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
@@ -488,7 +489,6 @@ public class TideDeathrepellerEntity extends SeaMonster {
         }
         return !this.hasEffect(CAMobEffects.FAKE_DEATH.get());
     }
-
 
     @Override
     public void setAnimationProcedure(String animation) {

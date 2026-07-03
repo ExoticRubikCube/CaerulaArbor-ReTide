@@ -52,11 +52,6 @@ import java.util.Comparator;
 import java.util.List;
 
 public class TideutantRockSpiderEntity extends SeaMonster {
-
-    private boolean isRockSpiderDurative() {
-        return this.isAlive() && this.getEntityData().get(DATA_duration) <= 0;
-    }
-
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(TideutantRockSpiderEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(TideutantRockSpiderEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(TideutantRockSpiderEntity.class, EntityDataSerializers.INT);
@@ -362,6 +357,9 @@ public class TideutantRockSpiderEntity extends SeaMonster {
         data.add(new AnimationController<>(this, "procedure", 1, this::procedurePredicate));
     }
 
+    private boolean isRockSpiderDurative() {
+        return this.isAlive() && this.getEntityData().get(DATA_duration) <= 0;
+    }
 
     @Override
     public void setAnimationProcedure(String animation) {

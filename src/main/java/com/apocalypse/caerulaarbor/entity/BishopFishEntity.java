@@ -66,10 +66,6 @@ import javax.annotation.Nullable;
 
 public class BishopFishEntity extends SeaMonster {
 
-    private boolean isBishopStarted() {
-        return this.isAlive() && this.tickCount >= 80 && this.getEntityData().get(DATA_duration) <= 0;
-    }
-
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(BishopFishEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_sklp = SynchedEntityData.defineId(BishopFishEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_endp = SynchedEntityData.defineId(BishopFishEntity.class, EntityDataSerializers.INT);
@@ -658,6 +654,9 @@ public class BishopFishEntity extends SeaMonster {
         data.add(new AnimationController<>(this, "procedure", 0, this::procedurePredicate));
     }
 
+    private boolean isBishopStarted() {
+        return this.isAlive() && this.tickCount >= 80 && this.getEntityData().get(DATA_duration) <= 0;
+    }
 
     @Override
     public void setAnimationProcedure(String animation) {

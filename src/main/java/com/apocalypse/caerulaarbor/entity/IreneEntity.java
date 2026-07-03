@@ -58,10 +58,6 @@ import java.util.List;
 
 public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEntity {
 
-	private boolean isIreneDurative() {
-		return this.isAlive() && this.getEntityData().get(DATA_duration) <= 0;
-	}
-
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(IreneEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(IreneEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<Integer> DATA_skillp1 = SynchedEntityData.defineId(IreneEntity.class, EntityDataSerializers.INT);
@@ -646,6 +642,9 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 		return this.cache;
 	}
 
+	private boolean isIreneDurative() {
+		return this.isAlive() && this.getEntityData().get(DATA_duration) <= 0;
+	}
 
 	@Override
 	public void setAnimationProcedure(String animation) {

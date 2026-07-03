@@ -120,6 +120,7 @@ public class BaselayerAbyssalEntity extends SeaMonster {
 		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "seaborn_generic_hit"));
 	}
 
+	//修改为注册名，而不是ForgeRegistries.SOUND_EVENTS
 	@Override
 	public SoundEvent getDeathSound() {
 		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "seaborn_death"));
@@ -145,7 +146,8 @@ public class BaselayerAbyssalEntity extends SeaMonster {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get()))
+        //直接注册属性而不是在finalizeSpawn时手动获取
+		if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get()))
             this.getAttribute(CAAttributes.SANITY_RATE.get()).setBaseValue(9);
         if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
             this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(20);

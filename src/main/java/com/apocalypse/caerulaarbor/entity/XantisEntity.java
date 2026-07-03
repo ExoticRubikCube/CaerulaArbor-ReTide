@@ -50,10 +50,6 @@ import java.util.Objects;
 
 public class XantisEntity extends TamableAnimal implements GeoEntity, SyncedAnimationEntity {
 
-    private boolean isXantisTapative() {
-        return this.isAlive() && this.getEntityData().get(DATA_TAP_TICK) <= 0;
-    }
-
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(XantisEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(XantisEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Boolean> DATA_NIUBI = SynchedEntityData.defineId(XantisEntity.class, EntityDataSerializers.BOOLEAN);
@@ -455,6 +451,9 @@ public class XantisEntity extends TamableAnimal implements GeoEntity, SyncedAnim
         this.entityData.set(DATA_NIUBI, false);
     }
 
+    private boolean isXantisTapative() {
+        return this.isAlive() && this.getEntityData().get(DATA_TAP_TICK) <= 0;
+    }
 
     @Override
     public void setAnimationProcedure(String animation) {

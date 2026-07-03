@@ -62,11 +62,6 @@ import java.util.Comparator;
 import java.util.List;
 
 public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationEntity {
-
-    private boolean isUlpuansDurative() {
-        return this.isAlive() && this.getEntityData().get(DATA_duration) <= 0;
-    }
-
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(UlpiansEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(UlpiansEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_skillp1 = SynchedEntityData.defineId(UlpiansEntity.class, EntityDataSerializers.INT);
@@ -618,6 +613,9 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
         return builder;
     }
 
+    private boolean isUlpuansDurative() {
+        return this.isAlive() && this.getEntityData().get(DATA_duration) <= 0;
+    }
     private PlayState movementPredicate(AnimationState event) {
         if (this.animationprocedure.equals("empty")) {
             if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))

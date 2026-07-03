@@ -64,10 +64,6 @@ import java.util.List;
 
 public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttackMob, RavagerMountRider {
 
-    private boolean isIllusionerDurative() {
-        return this.isAlive() && this.getEntityData().get(DATA_duration) <= 0;
-    }
-
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanizedIllusionerEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedIllusionerEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_spellP = SynchedEntityData.defineId(OceanizedIllusionerEntity.class, EntityDataSerializers.INT);
@@ -638,6 +634,9 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
         data.add(new AnimationController<>(this, "procedure", 0, this::procedurePredicate));
     }
 
+    private boolean isIllusionerDurative() {
+        return this.isAlive() && this.getEntityData().get(DATA_duration) <= 0;
+    }
 
     @Override
     public void setAnimationProcedure(String animation) {

@@ -64,10 +64,6 @@ import java.util.List;
 
 public class FlamarineGolemEntity extends SeaMonster {
 
-    private boolean isFlamarineDurative() {
-        return this.isAlive() && this.getEntityData().get(DATA_duration) <= 0;
-    }
-
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(FlamarineGolemEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(FlamarineGolemEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(FlamarineGolemEntity.class, EntityDataSerializers.INT);
@@ -617,6 +613,9 @@ public class FlamarineGolemEntity extends SeaMonster {
         }
     }
 
+    private boolean isFlamarineDurative() {
+        return this.isAlive() && this.getEntityData().get(DATA_duration) <= 0;
+    }
 
     @Override
     public void setAnimationProcedure(String animation) {

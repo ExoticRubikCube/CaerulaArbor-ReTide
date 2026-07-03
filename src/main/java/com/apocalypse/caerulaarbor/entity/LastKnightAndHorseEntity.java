@@ -70,10 +70,6 @@ import java.util.List;
 
 public class LastKnightAndHorseEntity extends Animal implements GeoEntity, SyncedAnimationEntity {
 
-    private boolean isLastKnightStarting() {
-        return this.tickCount >= 40 && this.getEntityData().get(DATA_SKILL_DURATION) <= 0;
-    }
-
     public static final EntityDataAccessor<Boolean> DATA_IS_SHOOTING = SynchedEntityData.defineId(LastKnightAndHorseEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(LastKnightAndHorseEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_ADDITION = SynchedEntityData.defineId(LastKnightAndHorseEntity.class, EntityDataSerializers.INT);
@@ -581,6 +577,9 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
         return this.cache;
     }
 
+    private boolean isLastKnightStarting() {
+        return this.tickCount >= 40 && this.getEntityData().get(DATA_SKILL_DURATION) <= 0;
+    }
 
     @Override
     public void setAnimationProcedure(String animation) {

@@ -89,8 +89,6 @@ public class ReaperPetEntity extends TamableAnimal implements GeoEntity, SyncedA
 		this.entityData.define(DATA_state, 0);
 	}
 
-
-
 	@Override
 	public Packet<ClientGamePacketListener> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);

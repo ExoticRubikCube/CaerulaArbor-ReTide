@@ -58,10 +58,6 @@ import java.util.List;
 
 public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationEntity {
 
-	private boolean isGladiiaDurative() {
-		return this.isAlive() && this.getEntityData().get(DATA_duration) <= 0;
-	}
-
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(GladiiaEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<Integer> DATA_skillP = SynchedEntityData.defineId(GladiiaEntity.class, EntityDataSerializers.INT);
 	public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(GladiiaEntity.class, EntityDataSerializers.INT);
@@ -566,6 +562,9 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 		return this.cache;
 	}
 
+	private boolean isGladiiaDurative() {
+		return this.isAlive() && this.getEntityData().get(DATA_duration) <= 0;
+	}
 
 	@Override
 	public void setAnimationProcedure(String animation) {

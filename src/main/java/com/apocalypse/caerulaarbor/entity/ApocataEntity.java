@@ -41,10 +41,6 @@ import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 public class ApocataEntity extends PathfinderMob implements GeoEntity, SyncedAnimationEntity {
-
-	private boolean isApocataDurative() {
-		return this.isAlive() && this.getEntityData().get(DATA_duration) <= 0;
-	}
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(ApocataEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(ApocataEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(ApocataEntity.class, EntityDataSerializers.INT);
@@ -221,6 +217,10 @@ public class ApocataEntity extends PathfinderMob implements GeoEntity, SyncedAni
 		builder = builder.add(Attributes.FOLLOW_RANGE, 16);
 		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.5);
 		return builder;
+	}
+
+	private boolean isApocataDurative() {
+		return this.isAlive() && this.getEntityData().get(DATA_duration) <= 0;
 	}
 
 	private PlayState movementPredicate(AnimationState event) {

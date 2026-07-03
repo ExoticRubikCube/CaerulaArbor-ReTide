@@ -13,8 +13,6 @@ import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -51,7 +49,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.common.DungeonHooks;
-import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -86,12 +83,6 @@ public class UmbrellaAbyssalEntity extends SeaMonster {
 		this.entityData.define(ANIMATION, "undefined");
 	}
 
-
-	@Override
-	public Packet<ClientGamePacketListener> getAddEntityPacket() {
-		return NetworkHooks.getEntitySpawningPacket(this);
-	}
-
 	@Override
 	protected void registerGoals() {
 		super.registerGoals();
@@ -112,7 +103,7 @@ public class UmbrellaAbyssalEntity extends SeaMonster {
 		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, Piglin.class, false, false));
 		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, false, false));
 		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, false, false));
-		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal(this, Player.class, 10, false, false, target -> EntityUtils.isOceanizedPlayerNearby(this.level(), this.getX(), this.getY(), this.getZ())));
+		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Player.class, 10, false, false, target -> EntityUtils.isOceanizedPlayerNearby(this.level(), this.getX(), this.getY(), this.getZ())));
 		this.goalSelector.addGoal(14, new RandomStrollGoal(this, 0.4));
 		this.goalSelector.addGoal(15, new RandomLookAroundGoal(this));
 	}

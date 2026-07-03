@@ -56,11 +56,6 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import java.util.List;
 
 public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimationEntity {
-
-    private boolean isCarmenDurative() {
-        return this.isAlive() && this.getEntityData().get(DATA_duration) <= 0;
-    }
-
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(SaintCarmenEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(SaintCarmenEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_skillP1 = SynchedEntityData.defineId(SaintCarmenEntity.class, EntityDataSerializers.INT);
@@ -611,6 +606,10 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
                 (float) (dama * 2));
     }
 
+
+    private boolean isCarmenDurative() {
+        return this.isAlive() && this.getEntityData().get(DATA_duration) <= 0;
+    }
 
     @Override
     public void setAnimationProcedure(String animation) {

@@ -62,11 +62,6 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class TheLastKnightEntity extends Animal implements GeoEntity, SyncedAnimationEntity {
-
-    private boolean isLastKnightDurative() {
-        return this.isAlive() && this.getEntityData().get(DATA_duration) <= 0;
-    }
-
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(TheLastKnightEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(TheLastKnightEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(TheLastKnightEntity.class, EntityDataSerializers.INT);
@@ -528,6 +523,9 @@ public class TheLastKnightEntity extends Animal implements GeoEntity, SyncedAnim
         }
     }
 
+    private boolean isLastKnightDurative() {
+        return this.isAlive() && this.getEntityData().get(DATA_duration) <= 0;
+    }
 
     @Override
     public void setAnimationProcedure(String animation) {

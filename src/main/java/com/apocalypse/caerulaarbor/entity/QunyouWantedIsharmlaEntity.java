@@ -73,7 +73,7 @@ public class QunyouWantedIsharmlaEntity extends SeaMonster {
         this.entityData.define(ANIMATION, "undefined");
     }
 
-
+    //TODO 方法getAddEntityPacket()与其 super方法相同,记得清理同类
     @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
@@ -87,6 +87,7 @@ public class QunyouWantedIsharmlaEntity extends SeaMonster {
     @Override
     protected void registerGoals() {
         super.registerGoals();
+        //TODO 可疑的攻击范围
         this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.5, false) {
             @Override
             protected double getAttackReachSqr(LivingEntity entity) {
