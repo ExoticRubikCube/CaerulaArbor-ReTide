@@ -190,14 +190,13 @@ public class OceanizedDogEntity extends TamableAnimal implements GeoEntity, Sync
     @Override
     public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
         ItemStack itemstack = sourceentity.getItemInHand(hand);
-        this.level().isClientSide();
         InteractionResult retval;
         Item item = itemstack.getItem();
         if (itemstack.getItem() instanceof SpawnEggItem) {
             super.mobInteract(sourceentity, hand);
         } else if (this.level().isClientSide()) {
             if ((this.isTame() && this.isOwnedBy(sourceentity) || this.isFood(itemstack))) {
-                this.level().isClientSide();
+               //TODO可疑，需要查看mcr版本代码
             }
         } else {
             if (this.isTame()) {
@@ -277,8 +276,7 @@ public class OceanizedDogEntity extends TamableAnimal implements GeoEntity, Sync
             setShiftKeyDown(false);
         }
         if (enemy == owner || (enemy instanceof TamableAnimal _tamEnt ? (Entity) _tamEnt.getOwner() : null) == owner) {
-            if ((Entity) this instanceof Mob _entity)
-                _entity.setTarget(null);
+           this.setTarget(null);
         }
         this.refreshDimensions();
     }

@@ -2,7 +2,6 @@ package com.apocalypse.caerulaarbor.entity.routeshaper;
 
 import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CAGameRules;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
@@ -345,8 +344,6 @@ public abstract class AbstractPathshaperEntity extends SeaMonster {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
-            this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(24);
         if (world.getEntitiesOfClass(Player.class, AABB.ofSize(new Vec3(this.getX(), this.getY(), this.getZ()), 16, 16, 16), e -> true).isEmpty()) {
             if (!this.level().isClientSide())
                 this.addEffect(new MobEffectInstance(MobEffects.GLOWING, 1800, 0, false, false));

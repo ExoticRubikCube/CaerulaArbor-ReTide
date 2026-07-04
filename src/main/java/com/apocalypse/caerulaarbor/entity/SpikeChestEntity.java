@@ -24,7 +24,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -69,8 +68,7 @@ public class SpikeChestEntity extends SeaMonster {
 
 	@Override
 	public boolean canBeCollidedWith() {
-		Entity entity = this;
-		return EntityUtils.isAlive(entity);
+        return EntityUtils.isAlive(this);
 	}
 
 	@Override
@@ -99,23 +97,17 @@ public class SpikeChestEntity extends SeaMonster {
 		this.xRotO = this.getXRot();
 		this.yBodyRotO = this.getYRot();
 		this.yHeadRotO = this.getYRot();
-		if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())) {
-			this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(18);
-		}
 		return retval;
 	}
 
 
 	@Override
 	public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
-		ItemStack itemstack = sourceentity.getItemInHand(hand);
-		InteractionResult retval = InteractionResult.sidedSuccess(this.level().isClientSide());
-		super.mobInteract(sourceentity, hand);
+        super.mobInteract(sourceentity, hand);
 		double x = this.getX();
 		double y = this.getY();
 		double z = this.getZ();
-		Entity entity = this;
-		Level world = this.level();
+        Level world = this.level();
         if ((LevelAccessor) world instanceof Level _level) {
                 _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.chest.locked")), SoundSource.NEUTRAL, 1, 1);
         }
@@ -138,6 +130,7 @@ public class SpikeChestEntity extends SeaMonster {
 	public static AttributeSupplier.Builder createAttributes() {
 		AttributeSupplier.Builder builder = Mob.createMobAttributes();
 		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.3);
+		builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 18);
 		builder = builder.add(Attributes.MAX_HEALTH, 30);
 		builder = builder.add(Attributes.ARMOR, 0);
 		builder = builder.add(Attributes.ATTACK_DAMAGE, 0);

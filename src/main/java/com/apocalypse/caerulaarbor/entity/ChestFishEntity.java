@@ -182,9 +182,6 @@ public class ChestFishEntity extends SeaMonster {
 		this.xRotO = this.getXRot();
 		this.yBodyRotO = this.getYRot();
 		this.yHeadRotO = this.getYRot();
-		if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())) {
-			this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(18);
-		}
 		return retval;
 	}
 
@@ -234,6 +231,7 @@ public class ChestFishEntity extends SeaMonster {
 	public static AttributeSupplier.Builder createAttributes() {
 		AttributeSupplier.Builder builder = Mob.createMobAttributes();
 		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.2);
+		builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 18);
 		builder = builder.add(Attributes.MAX_HEALTH, 120);
 		builder = builder.add(Attributes.ARMOR, 0);
 		builder = builder.add(Attributes.ATTACK_DAMAGE, 12);

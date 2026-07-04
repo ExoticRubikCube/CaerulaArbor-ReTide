@@ -216,10 +216,6 @@ public class FirstTellerEntity extends SeaMonster implements RangedAttackMob {
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get()))
-            this.getAttribute(CAAttributes.SANITY_RATE.get()).setBaseValue(16);
-        if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
-            this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(15);
         if (!this.level().isClientSide())
             this.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL.get(), 200, 0, false, false));
         return retval;
@@ -301,6 +297,8 @@ public class FirstTellerEntity extends SeaMonster implements RangedAttackMob {
 	public static AttributeSupplier.Builder createAttributes() {
 		AttributeSupplier.Builder builder = Mob.createMobAttributes();
 		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.17);
+		builder = builder.add(CAAttributes.SANITY_RATE.get(), 16);
+		builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 15);
 		builder = builder.add(Attributes.MAX_HEALTH, 112);
 		builder = builder.add(Attributes.ARMOR, 10);
 		builder = builder.add(Attributes.ATTACK_DAMAGE, 7);

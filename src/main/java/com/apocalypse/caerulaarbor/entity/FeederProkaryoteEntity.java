@@ -117,7 +117,7 @@ public class FeederProkaryoteEntity extends SeaMonster {
 				return 2.25;
 			}
 		});
-		this.targetSelector.addGoal(8, new NearestAttackableTargetGoal(this, Player.class, 10, true, false, target -> EntityUtils.isOceanizedPlayerNearby(this.level(), this.getX(), this.getY(), this.getZ())));
+		this.targetSelector.addGoal(8, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, target -> EntityUtils.isOceanizedPlayerNearby(this.level(), this.getX(), this.getY(), this.getZ())));
 		this.goalSelector.addGoal(9, new RandomSwimmingGoal(this, 1, 40));
 		this.goalSelector.addGoal(10, new RandomLookAroundGoal(this));
 	}

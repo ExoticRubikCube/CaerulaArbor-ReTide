@@ -224,10 +224,9 @@ public class IsharmlaEntity extends SeaMonster {
 							}
 							if (this.distanceTo(entityIterator) <= 24) {
 								count++;
-								Entity dropTarget = entityIterator;
-								int delayTicks = 2 * count;
+                                int delayTicks = 2 * count;
 								CaerulaArborMod.queueServerWork(delayTicks, () -> {
-									isharmlaDroppedAttack(this.level(), dropTarget.getX(), dropTarget.getY(), dropTarget.getZ(), Mth.nextDouble(RandomSource.create(), 1.5, 3), 1);
+									isharmlaDroppedAttack(this.level(), entityIterator.getX(), entityIterator.getY(), entityIterator.getZ(), Mth.nextDouble(RandomSource.create(), 1.5, 3), 1);
 								});
 							}
 						}
@@ -325,12 +324,6 @@ public class IsharmlaEntity extends SeaMonster {
 		if ((LevelAccessor) world instanceof Level _level) {
 			_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "isharmla_to_human")), SoundSource.HOSTILE, 2, 1);
 		}
-		if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
-			this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).setBaseValue(4);
-		if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
-			this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(50);
-		if (this.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
-			this.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.01);
 		for (Entity entityiterator : new ArrayList<>(world.players())) {
 			if ((level().dimension()) == (entityiterator.level().dimension())) {
 				if (entityiterator instanceof ServerPlayer _player) {
@@ -413,7 +406,7 @@ public class IsharmlaEntity extends SeaMonster {
 			dura = (Entity) this instanceof IsharmlaEntity _datEntI ? _datEntI.getEntityData().get(DATA_DURATION) : 0;
 			absP = (Entity) this instanceof IsharmlaEntity _datEntI ? _datEntI.getEntityData().get(DATA_ABSORPTION) : 0;
 			isMonster = (Entity) this instanceof IsharmlaEntity _datEntL5 && _datEntL5.getEntityData().get(DATA_IS_MONSTER);
-			enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+            enemy = this.getTarget();
 			if (dura > 0) {
 				if ((Entity) this instanceof IsharmlaEntity _datEntSetI)
 					_datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura - 1));
@@ -428,9 +421,7 @@ public class IsharmlaEntity extends SeaMonster {
 				double itrAttack;
 				double beforeHealth;
 				double beforeAttack;
-				double t;
-				t = 60 - absP;
-				damage = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.15;
+                damage = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.15;
 				{
 					final Vec3 _center = new Vec3(x, y, z);
 					List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(64 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
@@ -486,8 +477,7 @@ public class IsharmlaEntity extends SeaMonster {
 			}
 			canAttack = !(enemy == null) && enemy.isAlive();
 			if (isMonster) {
-				double p = 0;
-				double r;
+                double r;
 				double t;
 				double ang;
 				t = tickCount % 90;
@@ -710,9 +700,7 @@ public class IsharmlaEntity extends SeaMonster {
 	}
 
 	private PlayState attackingPredicate(AnimationState event) {
-		double d1 = this.getX() - this.xOld;
-		double d0 = this.getZ() - this.zOld;
-		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
+        if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
 		}

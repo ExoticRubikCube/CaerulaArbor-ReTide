@@ -22,7 +22,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
@@ -38,7 +37,6 @@ import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.SnowGolem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -51,7 +49,6 @@ import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 
-import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.List;
 
@@ -186,18 +183,6 @@ public class ReaperFishEntity extends SeaMonster {
 	}
 
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this != null) {
-            if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get()))
-                this.getAttribute(CAAttributes.SANITY_RATE.get()).setBaseValue(6);
-            if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
-                this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(40);
-        }
-        return retval;
-	}
-
-	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putInt("DataCHARGE_TICK", this.entityData.get(DATA_CHARGE_TICK));
@@ -220,69 +205,63 @@ public class ReaperFishEntity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if (this != null) {
-            double angle;
-            double cTick;
-            boolean isCharging;
-            if (!(((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == null) && tickCount % 20 == 0) {
-                if ((Entity) this instanceof Mob _mobEnt3 && _mobEnt3.isAggressive() && this.isAlive()) {
-                    for (int index0 = 0; index0 < 120; index0++) {
-                        angle = Mth.nextDouble(RandomSource.create(), 0, 6.283);
-                        if (world instanceof ServerLevel _level)
-                            _level.sendParticles(ParticleTypes.ELECTRIC_SPARK, (x + 5 * Math.sin(angle)), y, (z + 4 * Math.cos(angle)), 8, 0.1, 0.1, 0.1, 0.2);
-                    }
-                    {
-                        final Vec3 _center = new Vec3(x, y, z);
-                        List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(10 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                        for (Entity entityiterator : _entfound) {
-                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
-                                if (!(entityiterator == this.getTarget())) {
-                                    continue;
-                                }
-                            }
-                            if (distanceTo(entityiterator) < 5) {
-                                if (!(entityiterator == this)) {
-                                    if (entityiterator instanceof LivingEntity target) {
-                                        SIHelper.causeSanityInjury(target,
-                                                this,
-                                                (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 12,
-                                                SanityEvent.Hurt.Type.ENTITY);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    ((Entity) this).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.DRY_OUT)),
-                            (float) ((this.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? this.getAttribute(Attributes.MAX_HEALTH).getValue() : 0) * 0.01));
+        double angle;
+        double cTick;
+        boolean isCharging;
+        if (this.getTarget() != null && tickCount % 20 == 0) {
+            if (this.isAggressive() && this.isAlive()) {
+                for (int index0 = 0; index0 < 120; index0++) {
+                    angle = Mth.nextDouble(RandomSource.create(), 0, 6.283);
+                    if (world instanceof ServerLevel _level)
+                        _level.sendParticles(ParticleTypes.ELECTRIC_SPARK, (x + 5 * Math.sin(angle)), y, (z + 4 * Math.cos(angle)), 8, 0.1, 0.1, 0.1, 0.2);
                 }
+				final Vec3 _center = new Vec3(x, y, z);
+				List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(10 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+				for (Entity entityiterator : _entfound) {
+					if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+						if (!(entityiterator == this.getTarget())) {
+							continue;
+						}
+					}
+					if (distanceTo(entityiterator) < 5) {
+						if (!(entityiterator == this)) {
+							if (entityiterator instanceof LivingEntity target) {
+								SIHelper.causeSanityInjury(target,
+										this,
+										(this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 12,
+										SanityEvent.Hurt.Type.ENTITY);
+							}
+						}
+					}
+				}
+                ((Entity) this).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.DRY_OUT)),
+                        (float) ((this.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? this.getAttribute(Attributes.MAX_HEALTH).getValue() : 0) * 0.01));
             }
-            isCharging = (Entity) this instanceof ReaperFishEntity _datEntL17 && _datEntL17.getEntityData().get(DATA_IS_CHARGING);
-            cTick = (Entity) this instanceof ReaperFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_CHARGE_TICK) : 0;
-            if (cTick > 0) {
+        }
+        isCharging = (Entity) this instanceof ReaperFishEntity _datEntL17 && _datEntL17.getEntityData().get(DATA_IS_CHARGING);
+        cTick = (Entity) this instanceof ReaperFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_CHARGE_TICK) : 0;
+        if (cTick > 0) {
+            if ((Entity) this instanceof ReaperFishEntity _datEntSetI)
+                _datEntSetI.getEntityData().set(DATA_CHARGE_TICK, (int) (cTick - 1));
+        }
+        if (this.isAggressive()) {
+            if (!isCharging && cTick <= 0) {
                 if ((Entity) this instanceof ReaperFishEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_CHARGE_TICK, (int) (cTick - 1));
-            }
-            if ((Entity) this instanceof Mob _mobEnt20 && _mobEnt20.isAggressive()) {
-                if (!isCharging && cTick <= 0) {
-                    if ((Entity) this instanceof ReaperFishEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_CHARGE_TICK, 200);
-                    if ((Entity) this instanceof ReaperFishEntity _datEntSetL)
-                        _datEntSetL.getEntityData().set(DATA_IS_CHARGING, true);
-                    if (!world.isClientSide()) {
-                        if (world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "reaper_angry")), SoundSource.HOSTILE, (float) 1.5, 1);
-                        }
+                    _datEntSetI.getEntityData().set(DATA_CHARGE_TICK, 200);
+                if ((Entity) this instanceof ReaperFishEntity _datEntSetL)
+                    _datEntSetL.getEntityData().set(DATA_IS_CHARGING, true);
+                if (!world.isClientSide()) {
+                    if (world instanceof Level _level) {
+                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "reaper_angry")), SoundSource.HOSTILE, (float) 1.5, 1);
                     }
                 }
-            } else {
-                if ((Entity) this instanceof ReaperFishEntity _datEntSetL)
-                    _datEntSetL.getEntityData().set(DATA_IS_CHARGING, false);
             }
+        } else {
+            if ((Entity) this instanceof ReaperFishEntity _datEntSetL)
+                _datEntSetL.getEntityData().set(DATA_IS_CHARGING, false);
         }
         this.refreshDimensions();
 	}
-
-	
 
 	public static void registerSpawnPlacements() {
 		SpawnPlacements.register(CAEntities.REAPER_FISH.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
@@ -301,6 +280,8 @@ public class ReaperFishEntity extends SeaMonster {
 		builder = builder.add(Attributes.ATTACK_DAMAGE, 7);
 		builder = builder.add(Attributes.FOLLOW_RANGE, 32);
 		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.75);
+		builder = builder.add(CAAttributes.SANITY_RATE.get(), 6);
+		builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 40);
 		return builder;
 	}
 
@@ -326,9 +307,7 @@ public class ReaperFishEntity extends SeaMonster {
 	}
 
 	private PlayState attackingPredicate(AnimationState event) {
-		double d1 = this.getX() - this.xOld;
-		double d0 = this.getZ() - this.zOld;
-		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
+        if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
 		}

@@ -56,8 +56,6 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-import java.util.List;
-
 public class NautilusHeadhunterEntity extends Animal implements GeoEntity, SyncedAnimationEntity {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(NautilusHeadhunterEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(NautilusHeadhunterEntity.class, EntityDataSerializers.STRING);
@@ -293,7 +291,8 @@ public class NautilusHeadhunterEntity extends Animal implements GeoEntity, Synce
 
 	@Override
 	public boolean isFood(ItemStack stack) {
-		return List.of().contains(stack.getItem());
+        stack.getItem();
+        return false;
 	}
 
 	@Override

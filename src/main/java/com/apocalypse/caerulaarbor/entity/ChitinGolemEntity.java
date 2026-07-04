@@ -21,7 +21,6 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -42,7 +41,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -57,7 +55,6 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.List;
 
@@ -201,18 +198,6 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
     }
 
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-        SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
-            this.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.05);
-        if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get()))
-            this.getAttribute(CAAttributes.SANITY_RATE.get()).setBaseValue(10);
-        if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE.get()))
-            this.getAttribute(CAAttributes.MISSRATE.get()).setBaseValue(33);
-        return retval;
-    }
-
-    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("DatarootX", this.entityData.get(DATA_rootX));
@@ -294,7 +279,7 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
                 }
             }
             if (!isCreative) {
-                ((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(3);
+                sourceentity.getMainHandItem().shrink(3);
             }
             return InteractionResult.SUCCESS;
         }
@@ -356,6 +341,9 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
         builder = builder.add(Attributes.ATTACK_DAMAGE, 17);
         builder = builder.add(Attributes.FOLLOW_RANGE, 16);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
+        builder = builder.add(CAAttributes.SANITY_MODIFIER.get(), 0.05);
+        builder = builder.add(CAAttributes.SANITY_RATE.get(), 10);
+        builder = builder.add(CAAttributes.MISSRATE.get(), 33);
         return builder;
     }
 
@@ -373,8 +361,6 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
     }
 
     private PlayState attackingPredicate(AnimationState event) {
-        double d1 = this.getX() - this.xOld;
-        double d0 = this.getZ() - this.zOld;
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
             this.swinging = true;
             this.lastSwing = level().getGameTime();

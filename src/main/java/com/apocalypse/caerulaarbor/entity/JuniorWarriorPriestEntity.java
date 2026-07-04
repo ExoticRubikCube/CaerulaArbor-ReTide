@@ -41,8 +41,6 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-import java.util.List;
-
 public class JuniorWarriorPriestEntity extends Animal implements GeoEntity, SyncedAnimationEntity {
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(JuniorWarriorPriestEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(JuniorWarriorPriestEntity.class, EntityDataSerializers.STRING);
@@ -141,7 +139,6 @@ public class JuniorWarriorPriestEntity extends Animal implements GeoEntity, Sync
         double z = this.getZ();
         Entity sourceentity = source.getEntity();
         if (sourceentity != null) {
-            double dist = 0;
             if (this.isAlive() && sourceentity.isAlive()) {
                 if (distanceTo(sourceentity) <= 2.4 && ((Entity) this instanceof JuniorWarriorPriestEntity _datEntI ? _datEntI.getEntityData().get(DATA_skill_p) : 0) <= 0) {
                     if (this instanceof JuniorWarriorPriestEntity) {
@@ -208,7 +205,8 @@ public class JuniorWarriorPriestEntity extends Animal implements GeoEntity, Sync
 
     @Override
     public boolean isFood(ItemStack stack) {
-        return List.of().contains(stack.getItem());
+        stack.getItem();
+        return false;
     }
 
     @Override
@@ -244,9 +242,6 @@ public class JuniorWarriorPriestEntity extends Animal implements GeoEntity, Sync
     }
 
     private PlayState attackingPredicate(AnimationState event) {
-        double d1 = this.getX() - this.xOld;
-        double d0 = this.getZ() - this.zOld;
-        float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
             this.swinging = true;
             this.lastSwing = level().getGameTime();

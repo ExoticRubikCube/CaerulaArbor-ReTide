@@ -238,12 +238,6 @@ public class FlamarineGolemEntity extends SeaMonster {
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
         SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
-            this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).setBaseValue(5);
-        if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
-            this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(15);
-        if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RESISTANCE.get()))
-            this.getAttribute(CAAttributes.SANITY_RESISTANCE.get()).setBaseValue(60);
         if (this instanceof FlamarineGolemEntity) {
             this.setAnimation("animation.flamarine_golem.start");
         }
@@ -475,6 +469,9 @@ public class FlamarineGolemEntity extends SeaMonster {
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
         builder = builder.add(Attributes.MOVEMENT_SPEED, 0.18);
+        builder = builder.add(CAAttributes.GENERAL_DEFENSE.get(), 5);
+        builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 15);
+        builder = builder.add(CAAttributes.SANITY_RESISTANCE.get(), 60);
         builder = builder.add(Attributes.MAX_HEALTH, 270);
         builder = builder.add(Attributes.ARMOR, 23);
         builder = builder.add(Attributes.ATTACK_DAMAGE, 19);

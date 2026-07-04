@@ -12,7 +12,6 @@ import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -23,7 +22,6 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffects;
@@ -44,7 +42,6 @@ import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
@@ -55,8 +52,6 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
-
-import javax.annotation.Nullable;
 
 public class UmbrellaAbyssalEntity extends SeaMonster {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(UmbrellaAbyssalEntity.class, EntityDataSerializers.BOOLEAN);
@@ -136,92 +131,77 @@ public class UmbrellaAbyssalEntity extends SeaMonster {
 	}
 
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-		if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())) {
-			this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(30);
-		}
-		return retval;
-	}
-
-
-	@Override
 	public void baseTick() {
 		super.baseTick();
         LevelAccessor world = this.level();
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if (this != null) {
-            double angle;
-            double d;
-            if ((Entity) this instanceof LivingEntity _entity)
-                _entity.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
-            for (int index0 = 0; index0 < 8; index0++) {
+        double angle;
+        double d;
+        this.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
+        for (int index0 = 0; index0 < 8; index0++) {
+            angle = Mth.nextDouble(RandomSource.create(), 0, 6.283);
+            d = Mth.nextDouble(RandomSource.create(), 1.6, 2.2);
+            if (world instanceof ServerLevel _level)
+                _level.sendParticles(CAParticles.SEA_RIPPLE.get(), (x + d * Math.sin(angle)), (y + 0.4), (z + d * Math.cos(angle)), 0, (float) Math.sin(angle), 0.0, (float) Math.cos(angle), 0.09);
+            angle = Mth.nextDouble(RandomSource.create(), 0, 6.283);
+            d = Mth.nextDouble(RandomSource.create(), 1.9, 2.5);
+            if (world instanceof ServerLevel _level)
+                _level.sendParticles(CAParticles.SEA_RIPPLE.get(), (x + d * Math.sin(angle)), (y + 0.4), (z + d * Math.cos(angle)), 0, (float) Math.sin(angle), 0.0, (float) Math.cos(angle), 0.11);
+        }
+        if (MapVariables.get(world).strategy_grow >= 3) {
+            for (int index1 = 0; index1 < 14; index1++) {
                 angle = Mth.nextDouble(RandomSource.create(), 0, 6.283);
-                d = Mth.nextDouble(RandomSource.create(), 1.6, 2.2);
+                d = Mth.nextDouble(RandomSource.create(), 3.6, 4.3);
                 if (world instanceof ServerLevel _level)
-                    _level.sendParticles(CAParticles.SEA_RIPPLE.get(), (x + d * Math.sin(angle)), (y + 0.4), (z + d * Math.cos(angle)), 0, (float) Math.sin(angle), 0.0, (float) Math.cos(angle), 0.09);
+                    _level.sendParticles(CAParticles.SEA_RIPPLE.get(), (x + d * Math.sin(angle)), (y + 0.4), (z + d * Math.cos(angle)), 0, (float) Math.sin(angle), 0.0, (float) Math.cos(angle), 0.12);
                 angle = Mth.nextDouble(RandomSource.create(), 0, 6.283);
-                d = Mth.nextDouble(RandomSource.create(), 1.9, 2.5);
+                d = Mth.nextDouble(RandomSource.create(), 4.0, 4.7);
                 if (world instanceof ServerLevel _level)
-                    _level.sendParticles(CAParticles.SEA_RIPPLE.get(), (x + d * Math.sin(angle)), (y + 0.4), (z + d * Math.cos(angle)), 0, (float) Math.sin(angle), 0.0, (float) Math.cos(angle), 0.11);
+                    _level.sendParticles(CAParticles.SEA_RIPPLE.get(), (x + d * Math.sin(angle)), (y + 0.4), (z + d * Math.cos(angle)), 0, (float) Math.sin(angle), 0.0, (float) Math.cos(angle), 0.14);
+            }
+        }
+        if (tickCount % 20 == 0) {
+            for (Entity entityiterator : world.getEntities(this, new AABB((x - 4), (y - 1.5), (z - 4), (x + 4), (y + 2), (z + 4)))) {
+                if ((entityiterator != null ? distanceTo(entityiterator) : -1) <= 4) {
+                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                        if (entityiterator != this.getTarget()) {
+                            continue;
+                        }
+                    }
+                    if (!(entityiterator instanceof Mob)) {
+                        if (!(entityiterator instanceof Player)) {
+                            continue;
+                        }
+                    }
+                    if (entityiterator instanceof LivingEntity target) {
+                        SIHelper.causeSanityInjury(target,
+                                this,
+                                (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 4,
+                                SanityEvent.Hurt.Type.ENTITY);
+                    }
+                    entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_magic")))),
+                            (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
+                }
             }
             if (MapVariables.get(world).strategy_grow >= 3) {
-                for (int index1 = 0; index1 < 14; index1++) {
-                    angle = Mth.nextDouble(RandomSource.create(), 0, 6.283);
-                    d = Mth.nextDouble(RandomSource.create(), 3.6, 4.3);
-                    if (world instanceof ServerLevel _level)
-                        _level.sendParticles(CAParticles.SEA_RIPPLE.get(), (x + d * Math.sin(angle)), (y + 0.4), (z + d * Math.cos(angle)), 0, (float) Math.sin(angle), 0.0, (float) Math.cos(angle), 0.12);
-                    angle = Mth.nextDouble(RandomSource.create(), 0, 6.283);
-                    d = Mth.nextDouble(RandomSource.create(), 4.0, 4.7);
-                    if (world instanceof ServerLevel _level)
-                        _level.sendParticles(CAParticles.SEA_RIPPLE.get(), (x + d * Math.sin(angle)), (y + 0.4), (z + d * Math.cos(angle)), 0, (float) Math.sin(angle), 0.0, (float) Math.cos(angle), 0.14);
-                }
-            }
-            if (tickCount % 20 == 0) {
-                for (Entity entityiterator : world.getEntities(this, new AABB((x - 4), (y - 1.5), (z - 4), (x + 4), (y + 2), (z + 4)))) {
-                    if ((entityiterator != null ? distanceTo(entityiterator) : -1) <= 4) {
+                for (Entity entityiterator : world.getEntities(this, new AABB((x - 7), (y - 1.75), (z - 7), (x + 7), (y + 3), (z + 7)))) {
+                    if ((entityiterator != null ? distanceTo(entityiterator) : -1) <= 7) {
                         if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
-                            if (!(entityiterator == ((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null))) {
+                            if (entityiterator !=  this.getTarget()) {
                                 continue;
                             }
                         }
-                        if (!(entityiterator instanceof Mob)) {
-                            if (!(entityiterator instanceof Player)) {
-                                continue;
-                            }
+                        if (!(entityiterator instanceof Mob target)) {
+                            continue;
                         }
-                        if (entityiterator instanceof LivingEntity target) {
-                            SIHelper.causeSanityInjury(target,
-                                    this,
-                                    (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 4,
-                                    SanityEvent.Hurt.Type.ENTITY);
-                        }
+                        SIHelper.causeSanityInjury(target,
+                                this,
+                                (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 4,
+                                SanityEvent.Hurt.Type.ENTITY);
                         entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_magic")))),
                                 (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
-                    }
-                }
-                if (MapVariables.get(world).strategy_grow >= 3) {
-                    for (Entity entityiterator : world.getEntities(this, new AABB((x - 7), (y - 1.75), (z - 7), (x + 7), (y + 3), (z + 7)))) {
-                        if ((entityiterator != null ? distanceTo(entityiterator) : -1) <= 7) {
-                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
-                                if (!(entityiterator == ((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null))) {
-                                    continue;
-                                }
-                            }
-                            if (!(entityiterator instanceof Mob)) {
-                                continue;
-                            }
-                            if (entityiterator instanceof LivingEntity target) {
-                                SIHelper.causeSanityInjury(target,
-                                        this,
-                                        (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 4,
-                                        SanityEvent.Hurt.Type.ENTITY);
-                            }
-                            entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_magic")))),
-                                    (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
-                        }
                     }
                 }
             }
@@ -252,6 +232,7 @@ public class UmbrellaAbyssalEntity extends SeaMonster {
 		builder = builder.add(Attributes.ATTACK_DAMAGE, 2);
 		builder = builder.add(Attributes.FOLLOW_RANGE, 16);
 		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.5);
+		builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 30);
 		return builder;
 	}
 

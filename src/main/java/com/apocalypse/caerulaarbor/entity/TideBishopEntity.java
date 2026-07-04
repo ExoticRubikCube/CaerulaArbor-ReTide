@@ -233,11 +233,11 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
         double y = this.getY();
         double z = this.getZ();
         Entity call;
-        call = world.getEntitiesOfClass(TideDeathrepellerEntity.class, AABB.ofSize(new Vec3(x, y, z), 96, 96, 96), e -> true).stream().sorted(new Object() {
+        call = world.getEntitiesOfClass(TideDeathrepellerEntity.class, AABB.ofSize(new Vec3(x, y, z), 96, 96, 96), e -> true).stream().min(new Object() {
             Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
                 return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
             }
-        }.compareDistOf(x, y, z)).findFirst().orElse(null);
+        }.compareDistOf(x, y, z)).orElse(null);
         if (call instanceof Mob _entity)
             _entity.getNavigation().moveTo(x, y, z, 0.8);
         if ((Entity) this instanceof LivingEntity _livEnt3 && _livEnt3.hasEffect(CAMobEffects.INVULNERABLE.get())) {
@@ -311,7 +311,7 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        Entity nearest = null;
+        Entity nearest;
         if (this.hasEffect(CAMobEffects.FAKE_DEATH.get())) {
             nearest = this.level().getEntitiesOfClass(TideDeathrepellerEntity.class, AABB.ofSize(new Vec3(x, y, z), 128, 128, 128), candidate -> true).stream()
                     .min(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(x, y, z))).orElse(null);
@@ -334,7 +334,7 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
                     this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 50, 0, false, false));
                 }
                 CaerulaArborMod.queueServerWork(33, () -> {
-                    Entity repeller = null;
+                    Entity repeller;
                     if (this.isAlive() && this.getHealth() < this.getMaxHealth()) {
                         Level projectileLevel = this.level();
                         if (!projectileLevel.isClientSide()) {
@@ -458,8 +458,6 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
     }
 
     private PlayState attackingPredicate(AnimationState event) {
-        double d1 = this.getX() - this.xOld;
-        double d0 = this.getZ() - this.zOld;
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
             this.swinging = true;
             this.lastSwing = level().getGameTime();

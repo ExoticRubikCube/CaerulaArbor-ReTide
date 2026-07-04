@@ -262,30 +262,29 @@ public class OceanizedPillagerEntity extends SeaMonster implements RangedAttackM
                                     if (world instanceof Level _level) {
                                         _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.crossbow.shoot")), SoundSource.HOSTILE, 1, 1);
                                     }
-                                    {
-                                        Entity _shootFrom = OceanizedPillagerEntity.this;
-                                        Level projectileLevel = _shootFrom.level();
-                                        if (!projectileLevel.isClientSide()) {
-                                            Projectile _entityToSpawn = new Object() {
-                                                public Projectile getArrow(Level level, Entity shooter, float damage, int knockback, byte piercing) {
-                                                    AbstractArrow entityToSpawn = new ShotOceanArrowEntity(CAEntities.SHOT_OCEAN_ARROW.get(), level);
-                                                    entityToSpawn.setOwner(shooter);
-                                                    entityToSpawn.setBaseDamage(damage);
-                                                    entityToSpawn.setKnockback(knockback);
-                                                    entityToSpawn.setSilent(true);
-                                                    entityToSpawn.setPierceLevel(piercing);
-                                                    entityToSpawn.setCritArrow(true);
-                                                    return entityToSpawn;
-                                                }
-                                            }.getArrow(projectileLevel, (Entity) OceanizedPillagerEntity.this,
-                                                    (float) ((Entity) OceanizedPillagerEntity.this instanceof LivingEntity _livingEntity22 && _livingEntity22.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)
-                                                            ? _livingEntity22.getAttribute(Attributes.ATTACK_DAMAGE).getValue()
-                                                            : 0),
-                                                    0, (byte) 1);
-                                            _entityToSpawn.setPos(_shootFrom.getX(), _shootFrom.getEyeY() - 0.1, _shootFrom.getZ());
-                                            _entityToSpawn.shoot(_shootFrom.getLookAngle().x, _shootFrom.getLookAngle().y, _shootFrom.getLookAngle().z, 2, 5);
-                                            projectileLevel.addFreshEntity(_entityToSpawn);
-                                        }
+                                    Entity _shootFrom = OceanizedPillagerEntity.this;
+                                    Level projectileLevel = _shootFrom.level();
+                                    if (!projectileLevel.isClientSide()) {
+                                        LivingEntity _livingEntity22 = OceanizedPillagerEntity.this;
+                                        Projectile _entityToSpawn = new Object() {
+                                            public Projectile getArrow(Level level, Entity shooter, float damage, int knockback, byte piercing) {
+                                                AbstractArrow entityToSpawn = new ShotOceanArrowEntity(CAEntities.SHOT_OCEAN_ARROW.get(), level);
+                                                entityToSpawn.setOwner(shooter);
+                                                entityToSpawn.setBaseDamage(damage);
+                                                entityToSpawn.setKnockback(knockback);
+                                                entityToSpawn.setSilent(true);
+                                                entityToSpawn.setPierceLevel(piercing);
+                                                entityToSpawn.setCritArrow(true);
+                                                return entityToSpawn;
+                                            }
+                                        }.getArrow(projectileLevel, (Entity) OceanizedPillagerEntity.this,
+                                                (float) (_livingEntity22.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)
+                                                        ? _livingEntity22.getAttribute(Attributes.ATTACK_DAMAGE).getValue()
+                                                        : 0),
+                                                0, (byte) 1);
+                                        _entityToSpawn.setPos(_shootFrom.getX(), _shootFrom.getEyeY() - 0.1, _shootFrom.getZ());
+                                        _entityToSpawn.shoot(_shootFrom.getLookAngle().x, _shootFrom.getLookAngle().y, _shootFrom.getLookAngle().z, 2, 5);
+                                        projectileLevel.addFreshEntity(_entityToSpawn);
                                     }
                                 }
                                 final int tick2 = ticks;

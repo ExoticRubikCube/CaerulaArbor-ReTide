@@ -9,14 +9,12 @@ import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -39,7 +37,6 @@ import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -48,8 +45,6 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
-
-import javax.annotation.Nullable;
 
 public class PredatorAbyssalEntity extends SeaMonster {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(PredatorAbyssalEntity.class, EntityDataSerializers.BOOLEAN);
@@ -130,41 +125,28 @@ public class PredatorAbyssalEntity extends SeaMonster {
 	}
 
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this != null) {
-            if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get()))
-                this.getAttribute(CAAttributes.SANITY_RATE.get()).setBaseValue(9);
-        }
-        return retval;
-	}
-
-
-	@Override
 	public void baseTick() {
 		super.baseTick();
         LevelAccessor world = this.level();
-        if (this != null) {
-            if (tickCount % 20 == 0 && (world.getBlockState(BlockPos.containing(this.getX(), this.getY(), this.getZ()))).is(BlockTags.create(new ResourceLocation(CaerulaArborMod.MODID, "sea_trail")))) {
-                if (!this.level().isClientSide())
-                    this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 40, 1));
-            }
+        if (tickCount % 20 == 0 && (world.getBlockState(BlockPos.containing(this.getX(), this.getY(), this.getZ()))).is(BlockTags.create(new ResourceLocation(CaerulaArborMod.MODID, "sea_trail")))) {
+            if (!this.level().isClientSide())
+                this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 40, 1));
+        }
+        if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE.get()))
+            this.getAttribute(CAAttributes.MISSRATE.get()).setBaseValue(80);
+        if (MapVariables.get(world).strategy_subsisting >= 4) {
             if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE.get()))
-                this.getAttribute(CAAttributes.MISSRATE.get()).setBaseValue(80);
-            if (MapVariables.get(world).strategy_subsisting >= 4) {
-                if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE.get()))
-                    this.getAttribute(CAAttributes.MISSRATE.get()).setBaseValue(90);
-            }
-            if (isOnFire() && !fireImmune()) {
-                if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE.get()))
-                    this.getAttribute(CAAttributes.MISSRATE.get()).setBaseValue(0);
-            }
-            if ((Entity) this instanceof LivingEntity _livEnt9 && _livEnt9.hasEffect(CAMobEffects.DIZZY.get()) || (Entity) this instanceof LivingEntity _livEnt10 && _livEnt10.hasEffect(CAMobEffects.FROZEN.get())
-                    || (Entity) this instanceof LivingEntity _livEnt11 && _livEnt11.hasEffect(MobEffects.LEVITATION) || (Entity) this instanceof LivingEntity _livEnt12 && _livEnt12.hasEffect(MobEffects.MOVEMENT_SLOWDOWN)
-                    || (Entity) this instanceof LivingEntity _livEnt13 && _livEnt13.hasEffect(MobEffects.SLOW_FALLING)) {
-                if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE.get()))
-                    this.getAttribute(CAAttributes.MISSRATE.get()).setBaseValue(0);
-            }
+                this.getAttribute(CAAttributes.MISSRATE.get()).setBaseValue(90);
+        }
+        if (isOnFire() && !fireImmune()) {
+            if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE.get()))
+                this.getAttribute(CAAttributes.MISSRATE.get()).setBaseValue(0);
+        }
+        if ((Entity) this instanceof LivingEntity _livEnt9 && _livEnt9.hasEffect(CAMobEffects.DIZZY.get()) || (Entity) this instanceof LivingEntity _livEnt10 && _livEnt10.hasEffect(CAMobEffects.FROZEN.get())
+                || (Entity) this instanceof LivingEntity _livEnt11 && _livEnt11.hasEffect(MobEffects.LEVITATION) || (Entity) this instanceof LivingEntity _livEnt12 && _livEnt12.hasEffect(MobEffects.MOVEMENT_SLOWDOWN)
+                || (Entity) this instanceof LivingEntity _livEnt13 && _livEnt13.hasEffect(MobEffects.SLOW_FALLING)) {
+            if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE.get()))
+                this.getAttribute(CAAttributes.MISSRATE.get()).setBaseValue(0);
         }
         this.refreshDimensions();
 	}
@@ -187,6 +169,7 @@ public class PredatorAbyssalEntity extends SeaMonster {
 		builder = builder.add(Attributes.ARMOR, 0);
 		builder = builder.add(Attributes.ATTACK_DAMAGE, 5);
 		builder = builder.add(Attributes.FOLLOW_RANGE, 32);
+		builder = builder.add(CAAttributes.SANITY_RATE.get(), 9);
 		return builder;
 	}
 
@@ -203,9 +186,6 @@ public class PredatorAbyssalEntity extends SeaMonster {
 	}
 
 	private PlayState attackingPredicate(AnimationState event) {
-		double d1 = this.getX() - this.xOld;
-		double d0 = this.getZ() - this.zOld;
-		float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
 		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();

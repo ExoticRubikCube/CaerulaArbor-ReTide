@@ -23,7 +23,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -52,7 +51,6 @@ import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -338,14 +336,6 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
         return super.hurt(source, amount);
     }
 
-    @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-        SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
-            this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(90);
-        return retval;
-    }
-
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
@@ -367,8 +357,8 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
         if (this.isAlive()) {
             sklp = (Entity) this instanceof OceanziedWitchEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp) : 0;
             if (sklp <= 0) {
-                enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
-                if (!(enemy == null) && enemy.isAlive() && (enemy != null ? distanceTo(enemy) : -1) <= 9) {
+                enemy = this.getTarget();
+                if (!(enemy == null) && enemy.isAlive() && distanceTo(enemy) <= 9) {
                     if (this instanceof OceanziedWitchEntity) {
                         this.setAnimation("animation.oceanized_witch.throw");
                     }
@@ -453,6 +443,7 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
 
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
+        builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 90);
         builder = builder.add(Attributes.MOVEMENT_SPEED, 0.16);
         builder = builder.add(Attributes.MAX_HEALTH, 60);
         builder = builder.add(Attributes.ARMOR, 0);
@@ -536,7 +527,6 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
         data.add(new AnimationController<>(this, "attacking", 1, this::attackingPredicate));
         data.add(new AnimationController<>(this, "procedure", 1, this::procedurePredicate));
     }
-
 
     @Override
     public void setAnimationProcedure(String animation) {

@@ -6,14 +6,12 @@ import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -33,7 +31,6 @@ import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -43,7 +40,6 @@ import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 
-import javax.annotation.Nullable;
 import java.util.Comparator;
 
 public class SonsEntity extends SeaMonster {
@@ -118,15 +114,6 @@ public class SonsEntity extends SeaMonster {
     }
 
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-        SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get()))
-            this.getAttribute(CAAttributes.SANITY_RATE.get()).setBaseValue(50);
-        return retval;
-    }
-
-
-    @Override
     public void awardKillScore(Entity entity, int score, DamageSource damageSource) {
         super.awardKillScore(entity, score, damageSource);
         if (this instanceof SonsEntity) {
@@ -143,11 +130,11 @@ public class SonsEntity extends SeaMonster {
         double z = this.getZ();
         Entity owner;
         Entity tgt;
-        owner = world.getEntitiesOfClass(BishopFishEntity.class, AABB.ofSize(new Vec3(x, y, z), 96, 96, 96), e -> true).stream().sorted(new Object() {
+        owner = world.getEntitiesOfClass(BishopFishEntity.class, AABB.ofSize(new Vec3(x, y, z), 96, 96, 96), e -> true).stream().min(new Object() {
             Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
                 return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
             }
-        }.compareDistOf(x, y, z)).findFirst().orElse(null);
+        }.compareDistOf(x, y, z)).orElse(null);
         if (!(owner == null)) {
             this.getNavigation().moveTo((owner.getX()), (owner.getY()), (owner.getZ()), 0.33);
         } else {
@@ -156,14 +143,13 @@ public class SonsEntity extends SeaMonster {
         if (!((Entity) this instanceof LivingEntity _livEnt7 && _livEnt7.hasEffect(CAMobEffects.COOLDOWN_SINAL.get()))) {
             tgt = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
             if (!(null == tgt)) {
-                if ((tgt != null ? distanceTo(tgt) : -1) <= 3.5) {
-                    if (tgt instanceof LivingEntity _entity && !this.level().isClientSide())
+                if (distanceTo(tgt) <= 3.5) {
+                    if (tgt instanceof LivingEntity && !this.level().isClientSide())
                         this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 30, 3, false, false));
                     {
-                        Entity _ent = tgt;
-                        _ent.teleportTo((getX() + getLookAngle().x * 0.33), (getY()), (getZ() + getLookAngle().z * 0.33));
-                        if (_ent instanceof ServerPlayer _serverPlayer)
-                            _serverPlayer.connection.teleport((getX() + getLookAngle().x * 0.33), (getY()), (getZ() + getLookAngle().z * 0.33), _ent.getYRot(), _ent.getXRot());
+                        tgt.teleportTo((getX() + getLookAngle().x * 0.33), (getY()), (getZ() + getLookAngle().z * 0.33));
+                        if (tgt instanceof ServerPlayer _serverPlayer)
+                            _serverPlayer.connection.teleport((getX() + getLookAngle().x * 0.33), (getY()), (getZ() + getLookAngle().z * 0.33), tgt.getYRot(), tgt.getXRot());
                     }
                     tgt.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3(x, y, z));
                     if (this instanceof SonsEntity) {
@@ -196,6 +182,7 @@ public class SonsEntity extends SeaMonster {
 
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
+        builder = builder.add(CAAttributes.SANITY_RATE.get(), 50);
         builder = builder.add(Attributes.MOVEMENT_SPEED, 0.3);
         builder = builder.add(Attributes.MAX_HEALTH, 12);
         builder = builder.add(Attributes.ARMOR, 0);

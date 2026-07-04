@@ -125,7 +125,7 @@ public class RocinanteEntity extends Animal implements GeoEntity, SyncedAnimatio
 
     @Override
     public double getPassengersRidingOffset() {
-        return super.getPassengersRidingOffset() + -0.5;
+        return super.getPassengersRidingOffset() - 0.5;
     }
 
     @Override

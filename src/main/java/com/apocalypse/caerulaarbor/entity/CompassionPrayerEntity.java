@@ -92,14 +92,13 @@ public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMo
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this) {
             @Override
             public boolean canUse() {
-                Level world = CompassionPrayerEntity.this.level();
+                //TODO 需要清理mcr残留
                 if (!super.canUse()) return false;
                 return hasEffect(CAMobEffects.FAKE_DEATH.get());
             }
 
             @Override
             public boolean canContinueToUse() {
-                Level world = CompassionPrayerEntity.this.level();
                 if (!super.canContinueToUse()) return false;
                 return hasEffect(CAMobEffects.FAKE_DEATH.get());
             }

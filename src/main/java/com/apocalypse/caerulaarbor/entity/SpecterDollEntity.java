@@ -131,12 +131,6 @@ public class SpecterDollEntity extends Animal implements GeoEntity, SyncedAnimat
         }
         if ((LevelAccessor) world instanceof ServerLevel _level)
             _level.sendParticles(CAParticles.SPECTER_GLITTER.get(), x, (y + 0.75), z, 64, 0.75, 0.75, 0.75, 0.1);
-        if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
-            this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(50);
-        if (this.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
-            this.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.33);
-        if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE.get()))
-            this.getAttribute(CAAttributes.MISSRATE.get()).setBaseValue(18);
         return retval;
     }
 
@@ -153,13 +147,13 @@ public class SpecterDollEntity extends Animal implements GeoEntity, SyncedAnimat
             GladiiaEntity.healFromGladiia(world, x, y, z, this);
             setDeltaMovement(new Vec3(0, (getDeltaMovement().y()), 0));
             tickCount1 = tickCount;
-            this.setHealth((float) (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) + ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.0005));
+            this.setHealth((float) (this.getHealth() + this.getMaxHealth() * 0.0005));
             if (tickCount1 > 20 && tickCount1 < 200) {
                 if (tickCount1 % 20 == 0) {
                     Entity enemy;
                     double damage;
                     double r;
-                    enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+                    enemy = this.getTarget();
                     r = 6;
                     damage = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.8;
                     {
@@ -228,7 +222,7 @@ public class SpecterDollEntity extends Animal implements GeoEntity, SyncedAnimat
 
     @Override
     public boolean isFood(ItemStack stack) {
-        return List.of().contains(stack.getItem());
+        return false;
     }
 
     @Override
@@ -268,6 +262,9 @@ public class SpecterDollEntity extends Animal implements GeoEntity, SyncedAnimat
         builder = builder.add(Attributes.ATTACK_DAMAGE, 34);
         builder = builder.add(Attributes.FOLLOW_RANGE, 32);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
+        builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 50);
+        builder = builder.add(CAAttributes.SANITY_MODIFIER.get(), 0.33);
+        builder = builder.add(CAAttributes.MISSRATE.get(), 18);
         return builder;
     }
 

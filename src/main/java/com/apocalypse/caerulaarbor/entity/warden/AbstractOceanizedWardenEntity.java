@@ -24,7 +24,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -43,7 +42,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -54,7 +52,6 @@ import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 
-import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.List;
 
@@ -388,18 +385,6 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonster {
 	}
 
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-		SpawnGroupData spawnGroupData = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-		if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())) {
-			this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(75);
-		}
-		if (this.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get())) {
-			this.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.01);
-		}
-		return spawnGroupData;
-	}
-
-	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putInt("Dataskillp1", this.entityData.get(DATA_SKILL_1));
@@ -580,6 +565,8 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonster {
 		builder = builder.add(Attributes.ATTACK_DAMAGE, 50);
 		builder = builder.add(Attributes.FOLLOW_RANGE, 48);
 		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
+		builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 75);
+		builder = builder.add(CAAttributes.SANITY_MODIFIER.get(), 0.01);
 		return builder;
 	}
 

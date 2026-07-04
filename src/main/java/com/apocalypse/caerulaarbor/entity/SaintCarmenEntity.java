@@ -53,8 +53,6 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-import java.util.List;
-
 public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimationEntity {
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(SaintCarmenEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(SaintCarmenEntity.class, EntityDataSerializers.STRING);
@@ -255,7 +253,7 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
             bullet = (Entity) this instanceof SaintCarmenEntity _datEntI ? _datEntI.getEntityData().get(DATA_bullet) : 0;
             reloadP = (Entity) this instanceof SaintCarmenEntity _datEntI ? _datEntI.getEntityData().get(DATA_reloadP) : 0;
             dura = (Entity) this instanceof SaintCarmenEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
-            enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+            enemy = this.getTarget();
             if (dura > 0) {
                 if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
                     _datEntSetI.getEntityData().set(DATA_duration, (int) (dura - 1));
@@ -269,7 +267,7 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
                     _datEntSetI.getEntityData().set(DATA_skillP1, (int) (sklp1 - 1));
             } else if (dura <= 0) {
                 if (!(enemy == null) && enemy.isAlive()) {
-                    if ((enemy != null ? distanceTo(enemy) : -1) <= 24) {
+                    if (distanceTo(enemy) <= 24) {
                         if (this instanceof SaintCarmenEntity) {
                             this.setAnimation("animation.saint_carmen.melee_skill");
                         }
@@ -297,7 +295,7 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
                     _datEntSetI.getEntityData().set(DATA_skillP2, (int) (sklp2 - 1));
             } else if (dura <= 0 && canShoot) {
                 if (!(enemy == null) && enemy.isAlive()) {
-                    if ((enemy != null ? distanceTo(enemy) : -1) <= 24) {
+                    if (distanceTo(enemy) <= 24) {
                         if (this instanceof SaintCarmenEntity) {
                             this.setAnimation("animation.saint_carmen.gun_skill");
                         }
@@ -331,7 +329,7 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
             if (canShoot) {
                 if (dura <= 0) {
                     if (!(enemy == null) && enemy.isAlive()) {
-                        if ((enemy != null ? distanceTo(enemy) : -1) <= 6) {
+                        if (distanceTo(enemy) <= 6) {
                             if (this instanceof SaintCarmenEntity) {
                                 this.setAnimation("animation.saint_carmen.gun");
                             }
@@ -390,7 +388,8 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
 
     @Override
     public boolean isFood(ItemStack stack) {
-        return List.of().contains(stack.getItem());
+        stack.getItem();
+        return false;
     }
 
     @Override
@@ -430,9 +429,6 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
     }
 
     private PlayState attackingPredicate(AnimationState event) {
-        double d1 = this.getX() - this.xOld;
-        double d0 = this.getZ() - this.zOld;
-        float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
             this.swinging = true;
             this.lastSwing = level().getGameTime();
@@ -551,7 +547,7 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
         if (!enemy.isAlive()) {
             return;
         }
-        if ((enemy != null ? this.distanceTo(enemy) : -1) > 8) {
+        if (this.distanceTo(enemy) > 8) {
             return;
         }
         xx = enemy.getX();
@@ -590,7 +586,7 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
         if (!enemy.isAlive()) {
             return;
         }
-        if ((enemy != null ? this.distanceTo(enemy) : -1) > 24) {
+        if (this.distanceTo(enemy) > 24) {
             return;
         }
         xx = enemy.getX();

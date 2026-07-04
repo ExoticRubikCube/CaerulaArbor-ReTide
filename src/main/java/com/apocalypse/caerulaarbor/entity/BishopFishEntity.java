@@ -327,10 +327,6 @@ public class BishopFishEntity extends SeaMonster {
             _datEntSetI.getEntityData().set(DATA_locy, (int) Math.round(y));
         if ((Entity) this instanceof BishopFishEntity _datEntSetI)
             _datEntSetI.getEntityData().set(DATA_locz, (int) Math.round(z));
-        if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get()))
-            this.getAttribute(CAAttributes.SANITY_RATE.get()).setBaseValue(10);
-        if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
-            this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(24);
         setNoGravity(true);
         if (!this.level().isClientSide())
             this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 80, 1, false, false));
@@ -567,6 +563,8 @@ public class BishopFishEntity extends SeaMonster {
         builder = builder.add(Attributes.ATTACK_DAMAGE, 7);
         builder = builder.add(Attributes.FOLLOW_RANGE, 64);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
+        builder = builder.add(CAAttributes.SANITY_RATE.get(), 10);
+        builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 24);
         return builder;
     }
 

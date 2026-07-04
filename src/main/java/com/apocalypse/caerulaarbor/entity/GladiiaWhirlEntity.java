@@ -96,11 +96,11 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity, Sync
         double y = this.getY();
         double z = this.getZ();
         Entity gladiia;
-        gladiia = world.getEntitiesOfClass(GladiiaEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true).stream().sorted(new Object() {
+        gladiia = world.getEntitiesOfClass(GladiiaEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true).stream().min(new Object() {
             Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
                 return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
             }
-        }.compareDistOf(x, y, z)).findFirst().orElse(null);
+        }.compareDistOf(x, y, z)).orElse(null);
         if (!(gladiia == null)) {
             if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
                 this.getAttribute(Attributes.ATTACK_DAMAGE)

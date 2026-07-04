@@ -24,7 +24,6 @@ import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -46,7 +45,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
@@ -60,7 +58,6 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.List;
 
@@ -166,20 +163,6 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity, Sy
             amount = Math.min(amount, this.getMaxHealth() * 0.1F);
         }
         return super.hurt(source, amount);
-    }
-
-    @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-        SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get()))
-            this.getAttribute(CAAttributes.SANITY_RATE.get()).setBaseValue(8);
-        if (this.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
-            this.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.05);
-        if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
-            this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(50);
-        if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
-            this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).setBaseValue(12);
-        return retval;
     }
 
     @Override
@@ -404,6 +387,10 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity, Sy
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
         builder = builder.add(Attributes.MOVEMENT_SPEED, 0.17);
+        builder = builder.add(CAAttributes.SANITY_RATE.get(), 8);
+        builder = builder.add(CAAttributes.SANITY_MODIFIER.get(), 0.05);
+        builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 50);
+        builder = builder.add(CAAttributes.GENERAL_DEFENSE.get(), 12);
         builder = builder.add(Attributes.MAX_HEALTH, 675);
         builder = builder.add(Attributes.ARMOR, 16);
         builder = builder.add(Attributes.ATTACK_DAMAGE, 28);

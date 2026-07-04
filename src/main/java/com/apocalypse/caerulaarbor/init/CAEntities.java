@@ -785,7 +785,7 @@ public class CAEntities {
 			event.registerEntityRenderer(CAEntities.TIDUTANT_EXCRESCENCE.get(), TidutantExcrescenceRenderer::new);
 			event.registerEntityRenderer(CAEntities.OCEANIZED_POLAR_BEAR.get(), OceanizedPolarBearRenderer::new);
 			event.registerEntityRenderer(CAEntities.TIDUTANT_ROCK_SPIDER.get(), TideutantRockSpiderRenderer::new);
-			event.registerEntityRenderer(CAEntities.ENDSPEAKER.get(), context -> new EndspeakerRenderer<>(context));
+			event.registerEntityRenderer(CAEntities.ENDSPEAKER.get(), EndspeakerRenderer::new);
 			event.registerEntityRenderer(CAEntities.LINGERING_PATHSHAPER.get(), LineringPathshaperRenderer::new);
 			event.registerEntityRenderer(CAEntities.LINGERING_FRACTAL.get(), LingeringFractalRenderer::new);
 			event.registerEntityRenderer(CAEntities.LITTLE_HELPER.get(), LittleHelperRenderer::new);

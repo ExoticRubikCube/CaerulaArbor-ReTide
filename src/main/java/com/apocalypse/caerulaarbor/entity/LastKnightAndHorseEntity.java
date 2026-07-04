@@ -233,16 +233,7 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
         SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get())) {
-            this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).setBaseValue(20);
-        }
-        if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())) {
-            this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(60);
-        }
         this.setAnimation("animation.last_knight_horse.start");
-        if (this.getAttributes().hasAttribute(ForgeMod.SWIM_SPEED.get()))
-            this.getAttribute(ForgeMod.SWIM_SPEED.get())
-                    .setBaseValue((this.getAttributes().hasAttribute(ForgeMod.SWIM_SPEED.get()) ? this.getAttribute(ForgeMod.SWIM_SPEED.get()).getBaseValue() : 0) * 12);
         new Object() {
             void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                 if (isAlive()) {
@@ -468,6 +459,9 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
         builder = builder.add(Attributes.MOVEMENT_SPEED, 0.25);
+        builder = builder.add(ForgeMod.SWIM_SPEED.get(), 12);
+        builder = builder.add(CAAttributes.GENERAL_DEFENSE.get(), 20);
+        builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 60);
         builder = builder.add(Attributes.MAX_HEALTH, 400);
         builder = builder.add(Attributes.ARMOR, 24);
         builder = builder.add(Attributes.ATTACK_DAMAGE, 20);

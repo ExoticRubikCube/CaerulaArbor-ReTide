@@ -144,9 +144,6 @@ public class SuperSliderEntity extends SeaMonster {
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
         SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get())) {
-            this.getAttribute(CAAttributes.SANITY_RATE.get()).setBaseValue(10);
-        }
         return retval;
     }
 
@@ -194,6 +191,7 @@ public class SuperSliderEntity extends SeaMonster {
         builder = builder.add(Attributes.ATTACK_DAMAGE, 24);
         builder = builder.add(Attributes.FOLLOW_RANGE, 48);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 1);
+        builder = builder.add(CAAttributes.SANITY_RATE.get(), 10);
         return builder;
     }
 

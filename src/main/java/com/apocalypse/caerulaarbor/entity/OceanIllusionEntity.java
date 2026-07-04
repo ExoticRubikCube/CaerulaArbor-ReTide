@@ -258,7 +258,7 @@ public class OceanIllusionEntity extends SeaMonster implements RangedAttackMob {
 		Entity enemy;
 		if (this.isAlive()) {
 			if (tickCount % 40 == 20) {
-				enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+                enemy = this.getTarget();
 				if (!(enemy == null) && enemy.isAlive()) {
 					finished = true;
 				} else {

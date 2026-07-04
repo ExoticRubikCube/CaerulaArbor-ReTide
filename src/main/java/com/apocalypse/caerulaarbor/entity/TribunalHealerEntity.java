@@ -22,7 +22,6 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -40,7 +39,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
@@ -231,14 +229,6 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
         return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.generic.death"));
     }
 
-    @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-        SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
-            this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(50);
-        return retval;
-    }
-
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
@@ -262,7 +252,6 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        Entity enemy = null;
         double sklp1;
         double sklp2;
         double count = 0;
@@ -291,11 +280,9 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
                                     }
                                     CaerulaArborMod.queueServerWork(20, () -> {
                                         if (this.isAlive()) {
-                                            if (this == null)
-                                                return;
                                             double atk1;
                                             double count1 = 0;
-                                            atk1 = (Entity) this instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity0.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
+                                            atk1 = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
                                             if (world instanceof Level _level) {
                                                 _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "medic_strong")), SoundSource.NEUTRAL, 2, 1);
                                             }
@@ -467,6 +454,7 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
         builder = builder.add(Attributes.ATTACK_DAMAGE, 10);
         builder = builder.add(Attributes.FOLLOW_RANGE, 18);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.25);
+        builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 50);
         return builder;
     }
 

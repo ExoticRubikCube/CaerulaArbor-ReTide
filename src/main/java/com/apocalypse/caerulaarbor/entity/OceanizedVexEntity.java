@@ -117,7 +117,7 @@ public class OceanizedVexEntity extends SeaMonster {
         this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
         this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
         this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
-        this.targetSelector.addGoal(13, new NearestAttackableTargetGoal(this, Player.class, 10, true, false, target -> EntityUtils.isOceanizedPlayerNearby(this.level(), this.getX(), this.getY(), this.getZ())));
+        this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, target -> EntityUtils.isOceanizedPlayerNearby(this.level(), this.getX(), this.getY(), this.getZ())));
         this.goalSelector.addGoal(14, new RandomStrollGoal(this, 1, 20) {
             @Override
             protected Vec3 getPosition() {
@@ -176,10 +176,8 @@ public class OceanizedVexEntity extends SeaMonster {
 
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-        SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if ((Entity) this instanceof OceanizedVexEntity _datEntSetI)
-            _datEntSetI.getEntityData().set(DATA_leftSurvivalTick, 600 + Mth.nextInt(RandomSource.create(), 0, 1800));
-        return retval;
+        this.getEntityData().set(DATA_leftSurvivalTick, 600 + Mth.nextInt(RandomSource.create(), 0, 1800));
+        return super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
     }
 
     @Override
@@ -206,9 +204,6 @@ public class OceanizedVexEntity extends SeaMonster {
         double sklp1;
         String uuid1;
         if (this.isAlive()) {
-            if ((Entity) this instanceof Mob _mobEnt) {
-                _mobEnt.getTarget();
-            }
             sklp1 = (Entity) this instanceof OceanizedVexEntity _datEntI ? _datEntI.getEntityData().get(DATA_leftSurvivalTick) : 0;
             if (sklp1 <= 0) {
                 ((Entity) this).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.STARVE)), (float) Math.max(0.075 * ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1), 1));
@@ -327,9 +322,6 @@ public class OceanizedVexEntity extends SeaMonster {
     }
 
     private PlayState attackingPredicate(AnimationState event) {
-        double d1 = this.getX() - this.xOld;
-        double d0 = this.getZ() - this.zOld;
-        float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
             this.swinging = true;
             this.lastSwing = level().getGameTime();
@@ -390,7 +382,7 @@ public class OceanizedVexEntity extends SeaMonster {
                     if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
                         continue;
                     }
-                    if ((entityiterator != null ? distanceTo(entityiterator) : -1) <= 4) {
+                    if (distanceTo(entityiterator) <= 4) {
                         entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_magic"))), this),
                                 (float) (sanity * 3));
                         if (entityiterator instanceof LivingEntity target) {

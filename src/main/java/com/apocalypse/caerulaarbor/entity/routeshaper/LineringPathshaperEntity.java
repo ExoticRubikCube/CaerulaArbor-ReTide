@@ -1,5 +1,6 @@
 package com.apocalypse.caerulaarbor.entity.routeshaper;
 
+import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.world.entity.EntityType;
@@ -38,6 +39,7 @@ public class LineringPathshaperEntity extends AbstractPathshaperEntity {
 		builder = builder.add(Attributes.ATTACK_DAMAGE, 10);
 		builder = builder.add(Attributes.FOLLOW_RANGE, 48);
 		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 1);
+		builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 24);
 		return builder;
 	}
 }

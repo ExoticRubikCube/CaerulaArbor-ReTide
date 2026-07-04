@@ -170,8 +170,8 @@ public class TheAbandonedEntity extends SeaMonster implements PolarMountRider {
             if ((Entity) this instanceof TheAbandonedEntity _datEntSetI)
                 _datEntSetI.getEntityData().set(DATA_skillp, (int) (sklp - 1));
         } else {
-            enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
-            if (!(enemy == null) && enemy.isAlive() && (enemy != null ? distanceTo(enemy) : -1) < 7) {
+            enemy = this.getTarget();
+            if (!(enemy == null) && enemy.isAlive() && distanceTo(enemy) < 7) {
                 if ((Entity) this instanceof TheAbandonedEntity _datEntSetI)
                     _datEntSetI.getEntityData().set(DATA_skillp, 100);
                 ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY() + enemy.getBbHeight()), (enemy.getZ())));
@@ -189,6 +189,7 @@ public class TheAbandonedEntity extends SeaMonster implements PolarMountRider {
                                     Entity _shootFrom = TheAbandonedEntity.this;
                                     Level projectileLevel = _shootFrom.level();
                                     if (!projectileLevel.isClientSide()) {
+                                        LivingEntity _livingEntity15 = TheAbandonedEntity.this;
                                         Projectile _entityToSpawn = new Object() {
                                             public Projectile getArrow(Level level, Entity shooter, float damage, int knockback) {
                                                 AbstractArrow entityToSpawn = new AbandonedShootEntity(CAEntities.ABANDONED_SHOOT.get(), level);
@@ -199,7 +200,7 @@ public class TheAbandonedEntity extends SeaMonster implements PolarMountRider {
                                                 return entityToSpawn;
                                             }
                                         }.getArrow(projectileLevel, (Entity) TheAbandonedEntity.this,
-                                                (float) (((Entity) TheAbandonedEntity.this instanceof LivingEntity _livingEntity15 && _livingEntity15.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)
+                                                (float) ((_livingEntity15.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)
                                                         ? _livingEntity15.getAttribute(Attributes.ATTACK_DAMAGE).getValue()
                                                         : 0) * 0.85),
                                                 0);
@@ -257,9 +258,6 @@ public class TheAbandonedEntity extends SeaMonster implements PolarMountRider {
     }
 
     private PlayState attackingPredicate(AnimationState event) {
-        double d1 = this.getX() - this.xOld;
-        double d0 = this.getZ() - this.zOld;
-        float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
             this.swinging = true;
             this.lastSwing = level().getGameTime();

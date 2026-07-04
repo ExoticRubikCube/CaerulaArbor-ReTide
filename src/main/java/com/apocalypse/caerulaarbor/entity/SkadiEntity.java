@@ -24,7 +24,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -42,7 +41,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeMod;
@@ -301,17 +299,6 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
         super.die(source);
     }
 
-    @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-        SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this.getAttributes().hasAttribute(ForgeMod.SWIM_SPEED.get()))
-            this.getAttribute(ForgeMod.SWIM_SPEED.get())
-                    .setBaseValue((((Entity) this instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(ForgeMod.SWIM_SPEED.get()) ? _livingEntity0.getAttribute(ForgeMod.SWIM_SPEED.get()).getBaseValue() : 0) * 8));
-        if ((Entity) this instanceof LivingEntity _livingEntity2 && _livingEntity2.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
-            _livingEntity2.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.33);
-        return retval;
-    }
-
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
@@ -471,6 +458,8 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
         builder = builder.add(Attributes.MOVEMENT_SPEED, 0.18);
+        builder = builder.add(ForgeMod.SWIM_SPEED.get(), 8);
+        builder = builder.add(CAAttributes.SANITY_MODIFIER.get(), 0.33);
         builder = builder.add(Attributes.MAX_HEALTH, 270);
         builder = builder.add(Attributes.ARMOR, 5);
         builder = builder.add(Attributes.ATTACK_DAMAGE, 38);

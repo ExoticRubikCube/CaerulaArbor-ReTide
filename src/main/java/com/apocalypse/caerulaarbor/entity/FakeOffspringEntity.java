@@ -13,7 +13,6 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -163,14 +162,9 @@ public class FakeOffspringEntity extends SeaMonster {
             obj = this.getTarget();
             if (!(obj == null)) {
                 if (distanceTo(obj) <= 4) {
-                    {
-                        Entity _ent = this;
-                        _ent.teleportTo((obj.getX() + obj.getBbWidth() * ((Entity) this instanceof FakeOffspringEntity _datEntI ? _datEntI.getEntityData().get(DATA_dx) : 0) * 0.01), (obj.getY()),
-                                (obj.getZ() + obj.getBbWidth() * ((Entity) this instanceof FakeOffspringEntity _datEntI ? _datEntI.getEntityData().get(DATA_dz) : 0) * 0.01));
-                        if (_ent instanceof ServerPlayer _serverPlayer)
-                            _serverPlayer.connection.teleport((obj.getX() + obj.getBbWidth() * ((Entity) this instanceof FakeOffspringEntity _datEntI ? _datEntI.getEntityData().get(DATA_dx) : 0) * 0.01), (obj.getY()),
-                                    (obj.getZ() + obj.getBbWidth() * ((Entity) this instanceof FakeOffspringEntity _datEntI ? _datEntI.getEntityData().get(DATA_dz) : 0) * 0.01), _ent.getYRot(), _ent.getXRot());
-                    }
+                    Entity _ent = this;
+                    _ent.teleportTo((obj.getX() + obj.getBbWidth() * ((Entity) this instanceof FakeOffspringEntity _datEntI ? _datEntI.getEntityData().get(DATA_dx) : 0) * 0.01), (obj.getY()),
+                            (obj.getZ() + obj.getBbWidth() * ((Entity) this instanceof FakeOffspringEntity _datEntI ? _datEntI.getEntityData().get(DATA_dz) : 0) * 0.01));
                 }
             }
         }

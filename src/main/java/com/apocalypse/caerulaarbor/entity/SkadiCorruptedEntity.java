@@ -287,8 +287,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
 		double x = this.getX();
 		double y = this.getY();
 		double z = this.getZ();
-		Entity enemy = null;
-		double dura;
+        double dura;
 		double conv;
 		double deal;
 		double phase = 0;
@@ -302,35 +301,33 @@ public class SkadiCorruptedEntity extends SeaMonster {
 					_datEntSetL.getEntityData().set(DATA_mayCorrupt, false);
 				if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetI)
 					_datEntSetI.getEntityData().set(DATA_convertTick, (int) (converT - 1));
-			} else {
-				if (phase < 0.5) {
-					for (Entity entityiterator : new ArrayList<>(world.players())) {
-						if ((entityiterator != null ? distanceTo(entityiterator) : -1) < 32) {
-							if (entityiterator instanceof Player _player && !_player.level().isClientSide())
-								_player.displayClientMessage(Component.literal((Component.translatable("entity.caerula_arbor.skadi_corrupted.convert").getString())), false);
-						}
+			} else if (phase < 0.5) {
+				for (Entity entityiterator : new ArrayList<>(world.players())) {
+					if ((entityiterator != null ? distanceTo(entityiterator) : -1) < 32) {
+						if (entityiterator instanceof Player _player && !_player.level().isClientSide())
+							_player.displayClientMessage(Component.literal((Component.translatable("entity.caerula_arbor.skadi_corrupted.convert").getString())), false);
 					}
-					if (world instanceof ServerLevel _level) {
-						ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, new ItemStack(CAItems.INCANDESCENT_ANIMA.get()));
-						entityToSpawn.setPickUpDelay(10);
-						entityToSpawn.setUnlimitedLifetime();
-						_level.addFreshEntity(entityToSpawn);
-					}
-					if (world instanceof ServerLevel _level) {
-						ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, new ItemStack(CAItems.RECORD_UNDERTIDES.get()));
-						entityToSpawn.setPickUpDelay(10);
-						entityToSpawn.setUnlimitedLifetime();
-						_level.addFreshEntity(entityToSpawn);
-					}
-					if (world instanceof Level _level) {
-						_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "corrupted_convert")), SoundSource.HOSTILE, 2, 1);
-					}
-					if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetL)
-						_datEntSetL.getEntityData().set(DATA_mayCorrupt, false);
-					if (!level().isClientSide())
-						discard();
-					this.spawnHurtSkadi(world, x, y, z);
 				}
+				if (world instanceof ServerLevel _level) {
+					ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, new ItemStack(CAItems.INCANDESCENT_ANIMA.get()));
+					entityToSpawn.setPickUpDelay(10);
+					entityToSpawn.setUnlimitedLifetime();
+					_level.addFreshEntity(entityToSpawn);
+				}
+				if (world instanceof ServerLevel _level) {
+					ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, new ItemStack(CAItems.RECORD_UNDERTIDES.get()));
+					entityToSpawn.setPickUpDelay(10);
+					entityToSpawn.setUnlimitedLifetime();
+					_level.addFreshEntity(entityToSpawn);
+				}
+				if (world instanceof Level _level) {
+					_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "corrupted_convert")), SoundSource.HOSTILE, 2, 1);
+				}
+				if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetL)
+					_datEntSetL.getEntityData().set(DATA_mayCorrupt, false);
+				if (!level().isClientSide())
+					discard();
+				this.spawnHurtSkadi(world, x, y, z);
 			}
 		}
 		if (this.isAlive()) {
@@ -423,7 +420,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
 					double ddd;
 					double dama;
 					ddd = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
-					enemy1 = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+                    enemy1 = this.getTarget();
 					{
 						final Vec3 _center = new Vec3(x, y, z);
 						List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(24 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
@@ -465,7 +462,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
 							}.checkGamemode(entityiterator)) {
 								continue;
 							}
-							if ((entityiterator != null ? distanceTo(entityiterator) : -1) <= 12) {
+							if (distanceTo(entityiterator) <= 12) {
 								entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "sanity_break")))),
 										(float) (ddd * 1.1));
 							}
@@ -479,8 +476,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
 						((Entity) this).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceankiller_damage")))), 99999);
 					}
 				}
-				double phase1 = 0;
-				double ang;
+                double ang;
 				double r;
 				double t;
 				t = tickCount % 90;
@@ -499,7 +495,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
 				Entity enemy1;
 				ddd = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
 				healPerc = 0.1;
-				enemy1 = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+                enemy1 = this.getTarget();
 				if (phase > 0.5) {
 					healPerc = 0.2;
 				}
@@ -672,10 +668,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
 	}
 
 	private PlayState attackingPredicate(AnimationState event) {
-		double d1 = this.getX() - this.xOld;
-		double d0 = this.getZ() - this.zOld;
-		float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
-		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
+        if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
 		}

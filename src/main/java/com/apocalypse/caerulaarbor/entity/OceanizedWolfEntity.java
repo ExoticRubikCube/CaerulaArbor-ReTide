@@ -115,6 +115,7 @@ public class OceanizedWolfEntity extends SeaMonster {
         return super.hurt(source, amount);
     }
 
+    //TODO 需要清理 查看是否有同类
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);

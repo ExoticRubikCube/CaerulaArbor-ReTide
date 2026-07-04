@@ -15,7 +15,6 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -28,7 +27,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrownPotion;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
@@ -182,16 +180,6 @@ public class LittleHelperEntity extends PathfinderMob implements GeoEntity, Sync
     }
 
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-        SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        //TODO 直接设置属性就行而不是在finalizeSpawn手动赋予
-        if (this.getAttributes().hasAttribute(ForgeMod.SWIM_SPEED.get()))
-            this.getAttribute(ForgeMod.SWIM_SPEED.get())
-                    .setBaseValue((((Entity) this instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(Attributes.MOVEMENT_SPEED) ? _livingEntity0.getAttribute(Attributes.MOVEMENT_SPEED).getBaseValue() : 0) * 10));
-        return retval;
-    }
-
-    @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("Datadurability", this.entityData.get(DATA_durability));
@@ -281,6 +269,7 @@ public class LittleHelperEntity extends PathfinderMob implements GeoEntity, Sync
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
         builder = builder.add(Attributes.MOVEMENT_SPEED, 0.25);
+        builder = builder.add(ForgeMod.SWIM_SPEED.get(), 2.5);
         builder = builder.add(Attributes.MAX_HEALTH, 799);
         builder = builder.add(Attributes.ARMOR, 5);
         builder = builder.add(Attributes.ATTACK_DAMAGE, 256);

@@ -144,10 +144,6 @@ public class QunyouWantedIsharmlaEntity extends SeaMonster {
         if (this instanceof QunyouWantedIsharmlaEntity) {
             this.setAnimation("animation.isharmla.to_monster");
         }
-        if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
-            this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).setBaseValue(1656);
-        if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
-            this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(90);
         if ((LevelAccessor) world instanceof Level _level) {
             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "isharmla_to_monsterr")), SoundSource.HOSTILE, 2, 1);
         }
@@ -226,6 +222,8 @@ public class QunyouWantedIsharmlaEntity extends SeaMonster {
         builder = builder.add(Attributes.FOLLOW_RANGE, 36);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
         builder = builder.add(Attributes.FLYING_SPEED, 0.6);
+        builder = builder.add(CAAttributes.GENERAL_DEFENSE.get(), 1656);
+        builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 90);
         return builder;
     }
 

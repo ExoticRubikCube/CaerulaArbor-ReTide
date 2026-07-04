@@ -159,6 +159,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 		this.goalSelector.addGoal(9, new FloatGoal(this));
 	}
 
+	//TODO 需要处理同类
 	@Override
 	public MobType getMobType() {
 		return MobType.UNDEFINED;
@@ -316,7 +317,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 		if (!entity.isAlive()) {
 			return InteractionResult.PASS;
 		}
-		if ((Entity) sourceentity instanceof LivingEntity _entity && _entity.isHolding(CAItems.PERSONNEL_TRANSPORTER.get())) {
+        if (sourceentity.isHolding(CAItems.PERSONNEL_TRANSPORTER.get())) {
 			return InteractionResult.PASS;
 		}
 		tap = entity instanceof IreneEntity _datEntI ? _datEntI.getEntityData().get(DATA_tapTick) : 0;
@@ -362,7 +363,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 			skillp2 = (Entity) this instanceof IreneEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp2) : 0;
 			dura = (Entity) this instanceof IreneEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
 			tap = (Entity) this instanceof IreneEntity _datEntI ? _datEntI.getEntityData().get(DATA_tapTick) : 0;
-			enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+            enemy = this.getTarget();
 			if (dura > 0) {
 				if ((Entity) this instanceof IreneEntity _datEntSetI)
 					_datEntSetI.getEntityData().set(DATA_duration, (int) (dura - 1));
@@ -386,7 +387,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 								if (world instanceof Level _level) {
 									_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_fly")), SoundSource.NEUTRAL, 3, 1);
 								}
-								Entity enemy1 = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+                                Entity enemy1 = this.getTarget();
 								if (enemy1 == null)
 									return;
 								enemy1.push(0, 0.4, 0);

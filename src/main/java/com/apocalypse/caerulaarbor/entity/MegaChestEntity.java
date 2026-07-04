@@ -18,7 +18,6 @@ import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -35,7 +34,6 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -44,8 +42,6 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
-
-import javax.annotation.Nullable;
 
 public class MegaChestEntity extends SeaMonster {
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(MegaChestEntity.class, EntityDataSerializers.BOOLEAN);
@@ -161,15 +157,6 @@ public class MegaChestEntity extends SeaMonster {
                     player.getAdvancements().award(advancement, criteria);
             }
         }
-    }
-
-    @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-        SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())) {
-            this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(40);
-        }
-        return retval;
     }
 
 	@Override
@@ -288,6 +275,7 @@ public class MegaChestEntity extends SeaMonster {
 
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
+        builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 40);
         builder = builder.add(Attributes.MOVEMENT_SPEED, 0.7);
         builder = builder.add(Attributes.MAX_HEALTH, 240);
         builder = builder.add(Attributes.ARMOR, 17);

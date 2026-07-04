@@ -1576,6 +1576,7 @@ public class EndspeakerEntity extends SeaMonster {
 		}
 	}
 
+	//TODO 或许可以修改为每级+5
 	protected int getPhaseDeathTickThreshold() {
 		return switch (this.getPhase()) {
 			case 1 -> 40;
@@ -1584,7 +1585,6 @@ public class EndspeakerEntity extends SeaMonster {
 			default -> 35;
 		};
 	}
-
 
 	@Override
 	public void setAnimationProcedure(String animation) {

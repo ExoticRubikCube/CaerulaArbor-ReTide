@@ -138,13 +138,11 @@ public class TidutantExcrescenceEntity extends SeaMonster {
     public void baseTick() {
         super.baseTick();
         if (this.isAlive()) {
-            if ((Entity) this instanceof LivingEntity _livEnt1 && _livEnt1.hasEffect(CAMobEffects.MUTE.get())) {
-                if ((Entity) this instanceof TidutantExcrescenceEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_mute_time,
-                            (Entity) this instanceof LivingEntity _livEnt && _livEnt.hasEffect(CAMobEffects.MUTE.get()) ? _livEnt.getEffect(CAMobEffects.MUTE.get()).getDuration() : 0);
-            } else if (((Entity) this instanceof TidutantExcrescenceEntity _datEntI ? _datEntI.getEntityData().get(DATA_mute_time) : 0) == 1) {
-                if ((Entity) this instanceof TidutantExcrescenceEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_mute_time, 0);
+            if (this.hasEffect(CAMobEffects.MUTE.get())) {
+                this.getEntityData().set(DATA_mute_time,
+                        this.hasEffect(CAMobEffects.MUTE.get()) ? this.getEffect(CAMobEffects.MUTE.get()).getDuration() : 0);
+            } else if (this.getEntityData().get(DATA_mute_time) == 1) {
+                this.getEntityData().set(DATA_mute_time, 0);
             }
         }
         this.refreshDimensions();

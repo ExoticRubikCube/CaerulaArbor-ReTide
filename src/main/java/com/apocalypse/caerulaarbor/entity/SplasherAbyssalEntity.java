@@ -10,18 +10,19 @@ import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -37,7 +38,6 @@ import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.common.DungeonHooks;
@@ -217,19 +217,6 @@ public class SplasherAbyssalEntity extends SeaMonster implements RangedAttackMob
 	}
 
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this != null) {
-            if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get()))
-                this.getAttribute(CAAttributes.SANITY_RATE.get()).setBaseValue(2);
-            if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
-                this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(27);
-        }
-        return retval;
-	}
-
-
-	@Override
 	public void baseTick() {
 		super.baseTick();
         if (!this.hasEffect(CAMobEffects.SPLASHER_ATTACK.get())) {
@@ -238,8 +225,6 @@ public class SplasherAbyssalEntity extends SeaMonster implements RangedAttackMob
         }
         this.refreshDimensions();
 	}
-
-	
 
 	@Override
 	public void performRangedAttack(LivingEntity target, float flval) {
@@ -266,6 +251,8 @@ public class SplasherAbyssalEntity extends SeaMonster implements RangedAttackMob
 		builder = builder.add(Attributes.ARMOR, 5);
 		builder = builder.add(Attributes.ATTACK_DAMAGE, 10);
 		builder = builder.add(Attributes.FOLLOW_RANGE, 16);
+		builder = builder.add(CAAttributes.SANITY_RATE.get(), 2);
+		builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 27);
 		return builder;
 	}
 
@@ -282,8 +269,6 @@ public class SplasherAbyssalEntity extends SeaMonster implements RangedAttackMob
 	}
 
 	private PlayState attackingPredicate(AnimationState event) {
-		double d1 = this.getX() - this.xOld;
-		double d0 = this.getZ() - this.zOld;
 		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();

@@ -199,12 +199,11 @@ public class OceanizedShulkerEntity extends SeaMonster {
 
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-        SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
         if (((Entity) this instanceof OceanizedShulkerEntity _datEntI ? _datEntI.getEntityData().get(DATA_VARIANT) : 0) == 0) {
             if ((Entity) this instanceof OceanizedShulkerEntity _datEntSetI)
                 _datEntSetI.getEntityData().set(DATA_VARIANT, Mth.nextInt(RandomSource.create(), 0, 1));
         }
-        return retval;
+        return super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
     }
 
     @Override
@@ -258,7 +257,7 @@ public class OceanizedShulkerEntity extends SeaMonster {
                     }
                 }
                 ths = InteractionResult.SUCCESS;
-            } else if (((Entity) player instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == Blocks.BEDROCK.asItem()) {
+            } else if ( player.getMainHandItem().getItem() == Blocks.BEDROCK.asItem()) {
                 if ((Entity) this instanceof OceanizedShulkerEntity _datEntSetI)
                     _datEntSetI.getEntityData().set(DATA_VARIANT, 3);
                 if (this.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
@@ -341,16 +340,15 @@ public class OceanizedShulkerEntity extends SeaMonster {
         if (this.isAlive()) {
             if (tickCount <= 3) {
                 {
-                    Entity _ent = this;
+                    LivingEntity _ent = this;
                     _ent.setYRot(0);
                     _ent.setXRot(0);
                     _ent.setYBodyRot(_ent.getYRot());
                     _ent.setYHeadRot(_ent.getYRot());
                     _ent.yRotO = _ent.getYRot();
                     _ent.xRotO = _ent.getXRot();
-                    LivingEntity _entity = (LivingEntity) _ent;
-                    _entity.yBodyRotO = _entity.getYRot();
-                    _entity.yHeadRotO = _entity.getYRot();
+                    _ent.yBodyRotO = _ent.getYRot();
+                    _ent.yHeadRotO = _ent.getYRot();
                 }
             }
             variant = (Entity) this instanceof OceanizedShulkerEntity _datEntI ? _datEntI.getEntityData().get(DATA_VARIANT) : 0;
@@ -382,12 +380,7 @@ public class OceanizedShulkerEntity extends SeaMonster {
                                 if (world instanceof Level _level) {
                                     _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.shulker.teleport")), SoundSource.HOSTILE, 1, 1);
                                 }
-                                {
-                                    Entity _ent = this;
-                                    _ent.teleportTo((x + dx), (y + dy), (z + dz));
-                                    if (_ent instanceof ServerPlayer _serverPlayer)
-                                        _serverPlayer.connection.teleport((x + dx), (y + dy), (z + dz), _ent.getYRot(), _ent.getXRot());
-                                }
+                                this.teleportTo((x + dx), (y + dy), (z + dz));
                                 if ((Entity) this instanceof OceanizedShulkerEntity _datEntSetS)
                                     _datEntSetS.getEntityData().set(DATA_DIRECTION, tDIre.toString());
                                 break;

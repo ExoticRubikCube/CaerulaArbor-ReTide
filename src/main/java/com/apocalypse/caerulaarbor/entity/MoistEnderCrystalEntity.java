@@ -202,7 +202,6 @@ public class MoistEnderCrystalEntity extends PathfinderMob implements GeoEntity,
 		this.setNoGravity(true);
 	}
 
-	
 
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
@@ -210,7 +209,6 @@ public class MoistEnderCrystalEntity extends PathfinderMob implements GeoEntity,
 		this.setDeltaMovement(Vec3.ZERO);
 		return retval;
 	}
-
 
 	public static AttributeSupplier.Builder createAttributes() {
 		AttributeSupplier.Builder builder = Mob.createMobAttributes();

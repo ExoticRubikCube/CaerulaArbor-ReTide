@@ -661,7 +661,7 @@ public class EntityUtils {
 		}
 	}
 
-	//TODO 或许可以放入海嗣的基类,参考参考文件，重命名为合适的名字
+	//TODO 或许可以放入海嗣的基类,参考 参考文件，重命名为合适的名字
 	public static boolean isOceanizedPlayerNearby(LevelAccessor world, double x, double y, double z) {
 		{
 			final Vec3 _center = new Vec3(x, y, z);

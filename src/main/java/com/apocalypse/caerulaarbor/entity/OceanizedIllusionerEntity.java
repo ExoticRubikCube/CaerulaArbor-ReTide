@@ -174,7 +174,7 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
             }
         }
 
-        public boolean isDurative(Entity entity) {
+        public boolean isDurative() {
             return isIllusionerDurative();
         }
 
@@ -182,7 +182,7 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
             LivingEntity livingentity = this.mob.getTarget();
             if (livingentity != null && livingentity.isAlive()) {
                 this.target = livingentity;
-                return isDurative(this.mob);
+                return isDurative();
             } else {
                 return false;
             }
@@ -271,11 +271,11 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
         Entity illusion;
         if (!isPassenger()) {
             if (Math.random() < 0.75) {
-                illusion = world.getEntitiesOfClass(OceanIllusionEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true).stream().sorted(new Object() {
+                illusion = world.getEntitiesOfClass(OceanIllusionEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true).stream().min(new Object() {
                     Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
                         return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
                     }
-                }.compareDistOf(x, y, z)).findFirst().orElse(null);
+                }.compareDistOf(x, y, z)).orElse(null);
                 if (illusion != null) {
                     if (illusion.isAlive()) {
                         {
@@ -361,7 +361,7 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
             sklp1 = (Entity) this instanceof OceanizedIllusionerEntity _datEntI ? _datEntI.getEntityData().get(DATA_spellP) : 0;
             sklp2 = (Entity) this instanceof OceanizedIllusionerEntity _datEntI ? _datEntI.getEntityData().get(DATA_mirrorP) : 0;
             dura = (Entity) this instanceof OceanizedIllusionerEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
-            enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+            enemy = this.getTarget();
             if (dura > 0) {
                 if ((Entity) this instanceof OceanizedIllusionerEntity _datEntSetI)
                     _datEntSetI.getEntityData().set(DATA_duration, (int) (dura - 1));
@@ -383,9 +383,9 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
                         if (this instanceof OceanizedIllusionerEntity) {
                             this.setAnimation("animation.oceanized_illusioner.cast");
                         }
-                        if (enemy instanceof LivingEntity _entity && !this.level().isClientSide())
+                        if (enemy instanceof LivingEntity && !this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 400, 0));
-                        if (enemy instanceof LivingEntity _entity && !this.level().isClientSide())
+                        if (enemy instanceof LivingEntity && !this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(CAMobEffects.DEDUCT_ONE_SANITY.get(), 200, 1));
                         if ((Entity) this instanceof OceanizedIllusionerEntity _datEntSetI)
                             _datEntSetI.getEntityData().set(DATA_spellP, 180);
@@ -556,8 +556,6 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
     }
 
     private PlayState attackingPredicate(AnimationState event) {
-        double d1 = this.getX() - this.xOld;
-        double d0 = this.getZ() - this.zOld;
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
             this.swinging = true;
             this.lastSwing = level().getGameTime();

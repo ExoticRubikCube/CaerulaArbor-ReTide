@@ -382,14 +382,6 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
 		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-		if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
-			this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(85);
-		if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
-			this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).setBaseValue(4);
-		if (this.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
-			this.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.0125);
-		if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RESISTANCE.get()))
-			this.getAttribute(CAAttributes.SANITY_RESISTANCE.get()).setBaseValue(75);
 		if (this instanceof OceanizedEnderinaEntity) {
 			this.setAnimation("animation.oceanized_enderina.start");
 		}
@@ -677,6 +669,10 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 		builder = builder.add(Attributes.FOLLOW_RANGE, 36);
 		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
 		builder = builder.add(Attributes.FLYING_SPEED, 0.55);
+		builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 85);
+		builder = builder.add(CAAttributes.GENERAL_DEFENSE.get(), 4);
+		builder = builder.add(CAAttributes.SANITY_MODIFIER.get(), 0.0125);
+		builder = builder.add(CAAttributes.SANITY_RESISTANCE.get(), 75);
 		return builder;
 	}
 

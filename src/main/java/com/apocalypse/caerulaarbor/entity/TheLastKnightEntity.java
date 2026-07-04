@@ -59,7 +59,6 @@ import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
-import java.util.List;
 
 public class TheLastKnightEntity extends Animal implements GeoEntity, SyncedAnimationEntity {
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(TheLastKnightEntity.class, EntityDataSerializers.BOOLEAN);
@@ -121,7 +120,7 @@ public class TheLastKnightEntity extends Animal implements GeoEntity, SyncedAnim
             }
 
         });
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal(this, Monster.class, true, false) {
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Monster.class, true, false) {
             @Override
             public boolean canUse() {
                 return super.canUse() && isLastKnightDurative();
@@ -217,16 +216,6 @@ public class TheLastKnightEntity extends Animal implements GeoEntity, SyncedAnim
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
         SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get())) {
-            this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).setBaseValue(20);
-        }
-        if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())) {
-            this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(60);
-        }
-        if (this.getAttributes().hasAttribute(ForgeMod.SWIM_SPEED.get())) {
-            this.getAttribute(ForgeMod.SWIM_SPEED.get())
-                    .setBaseValue((this.getAttributes().hasAttribute(ForgeMod.SWIM_SPEED.get()) ? this.getAttribute(ForgeMod.SWIM_SPEED.get()).getBaseValue() : 0) * 8);
-        }
         this.getEntityData().set(DATA_duration, 45);
         this.setAnimation("animation.last_knight.start");
         if (!this.level().isClientSide())
@@ -320,7 +309,7 @@ public class TheLastKnightEntity extends Animal implements GeoEntity, SyncedAnim
 
     @Override
     public boolean isFood(ItemStack stack) {
-        return List.of().contains(stack.getItem());
+        return false;
     }
 
     @Override
@@ -356,6 +345,9 @@ public class TheLastKnightEntity extends Animal implements GeoEntity, SyncedAnim
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
         builder = builder.add(Attributes.MOVEMENT_SPEED, 0.2);
+        builder = builder.add(ForgeMod.SWIM_SPEED.get(), 8);
+        builder = builder.add(CAAttributes.GENERAL_DEFENSE.get(), 20);
+        builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 60);
         builder = builder.add(Attributes.MAX_HEALTH, 400);
         builder = builder.add(Attributes.ARMOR, 24);
         builder = builder.add(Attributes.ATTACK_DAMAGE, 20);
@@ -380,8 +372,6 @@ public class TheLastKnightEntity extends Animal implements GeoEntity, SyncedAnim
     }
 
     private PlayState attackingPredicate(AnimationState event) {
-        double d1 = this.getX() - this.xOld;
-        double d0 = this.getZ() - this.zOld;
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
             this.swinging = true;
             this.lastSwing = level().getGameTime();

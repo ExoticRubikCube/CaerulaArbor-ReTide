@@ -16,7 +16,6 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
@@ -36,7 +35,6 @@ import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.common.DungeonHooks;
@@ -46,8 +44,6 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
-
-import javax.annotation.Nullable;
 
 public class BaselayerAbyssalEntity extends SeaMonster {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(BaselayerAbyssalEntity.class, EntityDataSerializers.BOOLEAN);
@@ -135,17 +131,6 @@ public class BaselayerAbyssalEntity extends SeaMonster {
 	}
 
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        //直接注册属性而不是在finalizeSpawn时手动获取
-		if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get()))
-            this.getAttribute(CAAttributes.SANITY_RATE.get()).setBaseValue(9);
-        if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
-            this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(20);
-        return retval;
-	}
-
-	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putInt("Datamute_time", this.entityData.get(DATA_mute_time));
@@ -175,8 +160,6 @@ public class BaselayerAbyssalEntity extends SeaMonster {
         this.refreshDimensions();
 	}
 
-	
-
 	public static void registerSpawnPlacements() {
 		SpawnPlacements.register(CAEntities.BASELAYER_ABYSSAL.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
 			int x = pos.getX();
@@ -198,6 +181,8 @@ public class BaselayerAbyssalEntity extends SeaMonster {
 		builder = builder.add(Attributes.ATTACK_DAMAGE, 5);
 		builder = builder.add(Attributes.FOLLOW_RANGE, 24);
 		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.75);
+		builder = builder.add(CAAttributes.SANITY_RATE.get(), 9);
+		builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 20);
 		return builder;
 	}
 
@@ -286,7 +271,6 @@ public class BaselayerAbyssalEntity extends SeaMonster {
 		data.add(new AnimationController<>(this, "attacking", 3, this::attackingPredicate));
 		data.add(new AnimationController<>(this, "procedure", 3, this::procedurePredicate));
 	}
-
 
 	@Override
 	public void setAnimationProcedure(String animation) {

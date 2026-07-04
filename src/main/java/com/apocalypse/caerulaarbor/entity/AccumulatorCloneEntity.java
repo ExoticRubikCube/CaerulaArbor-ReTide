@@ -152,11 +152,9 @@ public class AccumulatorCloneEntity extends SeaMonster {
 
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-		this.setHealth((float) (this.getMaxHealth() * 0.5));
-		return retval;
+        this.setHealth((float) (this.getMaxHealth() * 0.5));
+		return super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
 	}
-
 
 	@Override
 	public void baseTick() {
@@ -203,10 +201,7 @@ public class AccumulatorCloneEntity extends SeaMonster {
 	}
 
 	private PlayState attackingPredicate(AnimationState event) {
-		double d1 = this.getX() - this.xOld;
-		double d0 = this.getZ() - this.zOld;
-		float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
-		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
+        if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
 		}

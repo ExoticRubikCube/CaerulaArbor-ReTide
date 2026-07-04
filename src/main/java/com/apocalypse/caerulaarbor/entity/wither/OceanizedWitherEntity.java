@@ -189,14 +189,6 @@ public class OceanizedWitherEntity extends AbstractOceanizedWitherEntity impleme
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
         SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get()))
-            this.getAttribute(CAAttributes.SANITY_RATE.get()).setBaseValue(10);
-        if (this.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
-            this.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.01);
-        if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
-            this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(65);
-        if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
-            this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).setBaseValue(5);
         if (!this.level().isClientSide())
             this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 100, 9, false, false));
         this.setHealth(1);
@@ -344,6 +336,10 @@ public class OceanizedWitherEntity extends AbstractOceanizedWitherEntity impleme
         builder = builder.add(Attributes.FOLLOW_RANGE, 56);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
         builder = builder.add(Attributes.FLYING_SPEED, 0.35);
+        builder = builder.add(CAAttributes.SANITY_RATE.get(), 10);
+        builder = builder.add(CAAttributes.SANITY_MODIFIER.get(), 0.01);
+        builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 65);
+        builder = builder.add(CAAttributes.GENERAL_DEFENSE.get(), 5);
         return builder;
     }
 

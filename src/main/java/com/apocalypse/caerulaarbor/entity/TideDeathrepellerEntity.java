@@ -168,49 +168,48 @@ public class TideDeathrepellerEntity extends SeaMonster {
         Entity sourceentity = source.getEntity();
         if (sourceentity != null) {
             double num;
-            if (this.isAlive() && !((Entity) this instanceof LivingEntity _livEnt1 && _livEnt1.hasEffect(CAMobEffects.COOLDOWN_SINAL.get()))
-                    && !((Entity) this instanceof LivingEntity _livEnt2 && _livEnt2.hasEffect(CAMobEffects.FAKE_DEATH.get()))) {
-                if (distanceTo(sourceentity) <= 6) {
-                    num = 0;
-                    {
-                        final Vec3 _center = new Vec3(x, y, z);
-                        List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(8 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                        for (Entity entityiterator : _entfound) {
-                            if (!(entityiterator == this) && (entityiterator instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) >= 10) {
-                                num = num + 1;
+            if (this.isAlive() && !this.hasEffect(CAMobEffects.COOLDOWN_SINAL.get()) && !((Entity) this instanceof LivingEntity _livEnt2 && _livEnt2.hasEffect(CAMobEffects.FAKE_DEATH.get()))) {
+                    if (distanceTo(sourceentity) <= 6) {
+                        num = 0;
+                        {
+                            final Vec3 _center = new Vec3(x, y, z);
+                            List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(8 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+                            for (Entity entityiterator : _entfound) {
+                                if (!(entityiterator == this) && (entityiterator instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) >= 10) {
+                                    num = num + 1;
+                                }
                             }
                         }
-                    }
-                    if (num >= 2 || ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5) {
-                        if (this instanceof TideDeathrepellerEntity) {
-                            this.setAnimation("animation.deathrepeller.enchantattack");
-                        }
-                        if (!this.level().isClientSide())
-                            this.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL.get(), 60, 0, false, false));
-                        ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((sourceentity.getX()), (sourceentity.getY()), (sourceentity.getZ())));
-                        CaerulaArborMod.queueServerWork(12, () -> {
-                            if (world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.player.attack.sweep")), SoundSource.HOSTILE, 2, 1);
+                        if (num >= 2 || ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5) {
+                            if (this instanceof TideDeathrepellerEntity) {
+                                this.setAnimation("animation.deathrepeller.enchantattack");
                             }
-                            {
-                                final Vec3 _center = new Vec3((x + 1.8 * getLookAngle().x), (y + 1.5), (z + 1.8 * getLookAngle().z));
-                                List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(5 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                                for (Entity entityiterator : _entfound) {
-                                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring"))) && ((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == entityiterator
-                                            || !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring"))) && (entityiterator instanceof Mob || entityiterator instanceof Player)) {
-                                        entityiterator.hurt(
-                                                new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "repeller_attack"))), this),
-                                                (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
-                                                        * 2.5));
-                                        for (int index0 = 0; index0 < 2; index0++) {
-                                            EntityUtils.giveLessArmor(entityiterator, 11);
+                            if (!this.level().isClientSide())
+                                this.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL.get(), 60, 0, false, false));
+                            ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((sourceentity.getX()), (sourceentity.getY()), (sourceentity.getZ())));
+                            CaerulaArborMod.queueServerWork(12, () -> {
+                                if (world instanceof Level _level) {
+                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.player.attack.sweep")), SoundSource.HOSTILE, 2, 1);
+                                }
+                                {
+                                    final Vec3 _center = new Vec3((x + 1.8 * getLookAngle().x), (y + 1.5), (z + 1.8 * getLookAngle().z));
+                                    List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(5 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+                                    for (Entity entityiterator : _entfound) {
+                                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring"))) && ((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == entityiterator
+                                                || !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring"))) && (entityiterator instanceof Mob || entityiterator instanceof Player)) {
+                                            entityiterator.hurt(
+                                                    new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "repeller_attack"))), this),
+                                                    (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
+                                                            * 2.5));
+                                            for (int index0 = 0; index0 < 2; index0++) {
+                                                EntityUtils.giveLessArmor(entityiterator, 11);
+                                            }
                                         }
                                     }
                                 }
-                            }
-                        });
+                            });
+                        }
                     }
-                }
             }
         }
         if (source.is(DamageTypes.DROWN))
@@ -270,7 +269,7 @@ public class TideDeathrepellerEntity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        Entity nearest = null;
+        Entity nearest;
         if (this.hasEffect(CAMobEffects.FAKE_DEATH.get())) {
             nearest = this.level().getEntitiesOfClass(TideBishopEntity.class, AABB.ofSize(new Vec3(x, y, z), 128, 128, 128), candidate -> true).stream()
                     .min(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(x, y, z))).orElse(null);
@@ -414,8 +413,6 @@ public class TideDeathrepellerEntity extends SeaMonster {
     }
 
     private PlayState attackingPredicate(AnimationState event) {
-        double d1 = this.getX() - this.xOld;
-        double d0 = this.getZ() - this.zOld;
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
             this.swinging = true;
             this.lastSwing = level().getGameTime();

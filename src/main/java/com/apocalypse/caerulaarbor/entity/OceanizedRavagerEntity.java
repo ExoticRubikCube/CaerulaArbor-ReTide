@@ -189,8 +189,7 @@ public class OceanizedRavagerEntity extends SeaMonster {
         if (this.deathTime == 22) {
             summonFellows(world, x, y, z, 3);
         }
-        Mob _mobEnt1 = this;
-        if (_mobEnt1.isAggressive()) {
+        if (this.isAggressive()) {
             if (WorldUtils.canGrief(world)) {
                 if (Math.random() < 0.05) {
                     for (int dx = -1; dx <= 1; dx++) {
@@ -224,7 +223,6 @@ public class OceanizedRavagerEntity extends SeaMonster {
         return super.getDimensions(p_33597_).scale((float) 1);
     }
 
-
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
         builder = builder.add(Attributes.MOVEMENT_SPEED, 0.15);
@@ -256,8 +254,6 @@ public class OceanizedRavagerEntity extends SeaMonster {
     }
 
     private PlayState attackingPredicate(AnimationState event) {
-        double d1 = this.getX() - this.xOld;
-        double d0 = this.getZ() - this.zOld;
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
             this.swinging = true;
             this.lastSwing = level().getGameTime();

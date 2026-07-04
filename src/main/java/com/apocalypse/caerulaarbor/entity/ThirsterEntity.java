@@ -27,7 +27,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -43,7 +42,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -53,7 +51,6 @@ import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 
-import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.List;
 
@@ -216,18 +213,6 @@ public class ThirsterEntity extends SeaMonster {
         return damaged;
     }
 
-    @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-        SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
-            this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).setBaseValue(10);
-        if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
-            this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(95);
-        if (this.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get()))
-            this.getAttribute(CAAttributes.SANITY_RATE.get()).setBaseValue(50);
-        return retval;
-    }
-
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
@@ -264,7 +249,6 @@ public class ThirsterEntity extends SeaMonster {
         double d;
         double maxH;
         double angle;
-        double interg = 0;
         double dura;
         if (!world.isClientSide()) {
             if (this.isAlive()) {
@@ -273,7 +257,7 @@ public class ThirsterEntity extends SeaMonster {
                 if ((Entity) this instanceof ThirsterEntity _datEntI) {
                     _datEntI.getEntityData().get(DATA_INTEGRATION);
                 }
-                enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+                enemy = this.getTarget();
                 barr = this.getAttributes().hasAttribute(CAAttributes.LIVING_BARRIER.get())
                         ? this.getAttribute(CAAttributes.LIVING_BARRIER.get()).getBaseValue()
                         : 0;
@@ -558,6 +542,9 @@ public class ThirsterEntity extends SeaMonster {
         builder = builder.add(Attributes.ATTACK_DAMAGE, 5);
         builder = builder.add(Attributes.FOLLOW_RANGE, 36);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 1);
+        builder = builder.add(CAAttributes.GENERAL_DEFENSE.get(), 10);
+        builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 95);
+        builder = builder.add(CAAttributes.SANITY_RATE.get(), 50);
         return builder;
     }
 

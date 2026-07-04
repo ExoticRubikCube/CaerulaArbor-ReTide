@@ -177,10 +177,6 @@ public class IsharmlaTearEntity extends PathfinderMob implements GeoEntity, Sync
         if (this instanceof IsharmlaTearEntity) {
             this.setAnimation("animation.isharmla_tear.start");
         }
-        if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
-            this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(60);
-        if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
-            this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).setBaseValue(6);
         return retval;
     }
 
@@ -306,6 +302,8 @@ public class IsharmlaTearEntity extends PathfinderMob implements GeoEntity, Sync
         builder = builder.add(Attributes.ATTACK_DAMAGE, 5);
         builder = builder.add(Attributes.FOLLOW_RANGE, 16);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
+        builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 60);
+        builder = builder.add(CAAttributes.GENERAL_DEFENSE.get(), 6);
         return builder;
     }
 

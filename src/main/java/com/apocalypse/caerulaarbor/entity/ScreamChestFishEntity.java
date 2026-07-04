@@ -206,21 +206,15 @@ public class ScreamChestFishEntity extends SeaMonster {
 
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-        SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        {
-            LivingEntity _ent = this;
-            _ent.setYRot((float) (90 * Mth.nextInt(RandomSource.create(), 0, 3)));
-            _ent.setXRot(0);
-            _ent.setYBodyRot(_ent.getYRot());
-            _ent.setYHeadRot(_ent.getYRot());
-            _ent.yRotO = _ent.getYRot();
-            _ent.xRotO = _ent.getXRot();
-            _ent.yBodyRotO = _ent.getYRot();
-            _ent.yHeadRotO = _ent.getYRot();
-        }
-        if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
-            this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(25);
-        return retval;
+        this.setYRot((float) (90 * Mth.nextInt(RandomSource.create(), 0, 3)));
+        this.setXRot(0);
+        this.setYBodyRot(this.getYRot());
+        this.setYHeadRot(this.getYRot());
+        this.yRotO = this.getYRot();
+        this.xRotO = this.getXRot();
+        this.yBodyRotO = this.getYRot();
+        this.yHeadRotO = this.getYRot();
+        return super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
     }
 
 	@Override
@@ -282,7 +276,7 @@ public class ScreamChestFishEntity extends SeaMonster {
                     for (Entity entityiterator : world.getEntities(this, new AABB((x - 5), (y - 2), (z - 5), (x + 5), (y + 3), (z + 5)))) {
                         if ((entityiterator != null ? distanceTo(entityiterator) : -1) <= 5) {
                             if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
-                                if (!(entityiterator == ((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null))) {
+                                if (!(entityiterator == this.getTarget())) {
                                     continue;
                                 }
                             }
@@ -309,6 +303,7 @@ public class ScreamChestFishEntity extends SeaMonster {
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
         builder = builder.add(Attributes.MOVEMENT_SPEED, 0.2);
+        builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 25);
         builder = builder.add(Attributes.MAX_HEALTH, 40);
         builder = builder.add(Attributes.ARMOR, 10);
         builder = builder.add(Attributes.ATTACK_DAMAGE, 5);
@@ -336,9 +331,6 @@ public class ScreamChestFishEntity extends SeaMonster {
     }
 
     private PlayState attackingPredicate(AnimationState event) {
-        double d1 = this.getX() - this.xOld;
-        double d0 = this.getZ() - this.zOld;
-        float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
             this.swinging = true;
             this.lastSwing = level().getGameTime();

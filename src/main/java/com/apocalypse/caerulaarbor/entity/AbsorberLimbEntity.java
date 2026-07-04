@@ -125,15 +125,10 @@ public class AbsorberLimbEntity extends SeaMonster {
 
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-		LivingEntity _entity = this;
-		_entity.setHealth((((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 2) / 3);
-		if (this instanceof AbsorberLimbEntity) {
-			this.setAnimation("animation.absorber_limb.start");
-		}
-		return retval;
+        this.setHealth(this.getMaxHealth() * 2 / 3);
+		this.setAnimation("animation.absorber_limb.start");
+		return super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
 	}
-
 
 	@Override
 	public void baseTick() {

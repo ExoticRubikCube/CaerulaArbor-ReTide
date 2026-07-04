@@ -173,7 +173,7 @@ public class OceanizedChickenEntity extends SeaMonster {
 
     @Override
     public double getPassengersRidingOffset() {
-        return super.getPassengersRidingOffset() + -0.2;
+        return super.getPassengersRidingOffset() - 0.2;
     }
 
     @Override
@@ -376,8 +376,6 @@ public class OceanizedChickenEntity extends SeaMonster {
     }
 
     private PlayState attackingPredicate(AnimationState event) {
-        double d1 = this.getX() - this.xOld;
-        double d0 = this.getZ() - this.zOld;
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
             this.swinging = true;
             this.lastSwing = level().getGameTime();

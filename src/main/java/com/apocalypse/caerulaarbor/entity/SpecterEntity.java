@@ -229,7 +229,6 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
 
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-        SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
@@ -237,12 +236,7 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
             _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "saw_spect_skill")), SoundSource.NEUTRAL, (float) 2.5, 1);
         }
         this.setAnimation("animation.specter.start");
-        if (this.getAttributes().hasAttribute(ForgeMod.SWIM_SPEED.get()))
-            this.getAttribute(ForgeMod.SWIM_SPEED.get())
-                    .setBaseValue((this.getAttributes().hasAttribute(ForgeMod.SWIM_SPEED.get()) ? this.getAttribute(ForgeMod.SWIM_SPEED.get()).getBaseValue() : 0) * 8);
-        if (this.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
-            this.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.33);
-        return retval;
+        return super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
     }
 
 	@Override
@@ -272,7 +266,6 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
         double y = this.getY();
         double z = this.getZ();
         Entity enemy;
-        double gap = 0;
         double sklp1;
         double dura;
         double skillp2;
@@ -378,7 +371,8 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
 
     @Override
     public boolean isFood(ItemStack stack) {
-        return List.of().contains(stack.getItem());
+        stack.getItem();
+        return false;
     }
 
     @Override
@@ -391,6 +385,8 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
         builder = builder.add(Attributes.MOVEMENT_SPEED, 0.18);
+        builder = builder.add(ForgeMod.SWIM_SPEED.get(), 8);
+        builder = builder.add(CAAttributes.SANITY_MODIFIER.get(), 0.33);
         builder = builder.add(Attributes.MAX_HEALTH, 218);
         builder = builder.add(Attributes.ARMOR, 4);
         builder = builder.add(Attributes.ATTACK_DAMAGE, 34);
@@ -418,8 +414,6 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
     }
 
     private PlayState attackingPredicate(AnimationState event) {
-        double d1 = this.getX() - this.xOld;
-        double d0 = this.getZ() - this.zOld;
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
             this.swinging = true;
             this.lastSwing = level().getGameTime();

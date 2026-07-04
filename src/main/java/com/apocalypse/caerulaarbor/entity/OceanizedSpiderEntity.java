@@ -243,11 +243,11 @@ public class OceanizedSpiderEntity extends SeaMonster {
         super.setNoGravity(true);
     }
 
+    @Override
     public void aiStep() {
         super.aiStep();
         this.setNoGravity(true);
     }
-
 
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();

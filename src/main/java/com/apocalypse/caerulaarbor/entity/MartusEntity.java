@@ -196,60 +196,54 @@ public class MartusEntity extends SeaMonster {
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
         SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
         LevelAccessor world1 = this.level();
-        if (this != null) {
-            if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
-                this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).setBaseValue(16384);
-            if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
-                this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(100);
-            new Object() {
-                void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
-                    double r;
-                    double d;
-                    double tx;
-                    double tz;
-                    double ty;
-                    for (int index0 = 0; index0 < 8; index0++) {
-                        r = Mth.nextDouble(RandomSource.create(), 0, 6.283);
-                        d = Mth.nextDouble(RandomSource.create(), 6, 12);
-                        tx = MartusEntity.this.getX() + d * Math.cos(r);
-                        ty = MartusEntity.this.getY() + Mth.nextDouble(RandomSource.create(), 4, 9);
-                        tz = MartusEntity.this.getZ() + d * Math.sin(r);
-                        if ((world1.getBlockState(BlockPos.containing(tx, ty, tz))).canBeReplaced()) {
-                            if (world1 instanceof ServerLevel _level)
-                                FallingBlockEntity.fall(_level, BlockPos.containing(tx, ty, tz), (new Object() {
-                                    public BlockState with(BlockState _bs, Direction newValue) {
-                                        Property<?> _prop = _bs.getBlock().getStateDefinition().getProperty("facing");
-                                        if (_prop instanceof DirectionProperty _dp && _dp.getPossibleValues().contains(newValue))
-                                            return _bs.setValue(_dp, newValue);
-                                        _prop = _bs.getBlock().getStateDefinition().getProperty("axis");
-                                        return _prop instanceof EnumProperty _ep && _ep.getPossibleValues().contains(newValue.getAxis()) ? _bs.setValue(_ep, newValue.getAxis()) : _bs;
+        new Object() {
+            void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
+                double r;
+                double d;
+                double tx;
+                double tz;
+                double ty;
+                for (int index0 = 0; index0 < 8; index0++) {
+                    r = Mth.nextDouble(RandomSource.create(), 0, 6.283);
+                    d = Mth.nextDouble(RandomSource.create(), 6, 12);
+                    tx = MartusEntity.this.getX() + d * Math.cos(r);
+                    ty = MartusEntity.this.getY() + Mth.nextDouble(RandomSource.create(), 4, 9);
+                    tz = MartusEntity.this.getZ() + d * Math.sin(r);
+                    if ((world1.getBlockState(BlockPos.containing(tx, ty, tz))).canBeReplaced()) {
+                        if (world1 instanceof ServerLevel _level)
+                            FallingBlockEntity.fall(_level, BlockPos.containing(tx, ty, tz), (new Object() {
+                                public BlockState with(BlockState _bs, Direction newValue) {
+                                    Property<?> _prop = _bs.getBlock().getStateDefinition().getProperty("facing");
+                                    if (_prop instanceof DirectionProperty _dp && _dp.getPossibleValues().contains(newValue))
+                                        return _bs.setValue(_dp, newValue);
+                                    _prop = _bs.getBlock().getStateDefinition().getProperty("axis");
+                                    return _prop instanceof EnumProperty _ep && _ep.getPossibleValues().contains(newValue.getAxis()) ? _bs.setValue(_ep, newValue.getAxis()) : _bs;
+                                }
+                            }.with(CABlocks.ABANDONED_SULPTURE.get().defaultBlockState(), new Object() {
+                                public Direction getValue() {
+                                    Direction _dir = Direction.NORTH;
+                                    int _num = Mth.nextInt(RandomSource.create(), 1, 4);
+                                    if (_num == 1) {
+                                        _dir = Direction.EAST;
+                                    } else if (_num == 2) {
+                                        _dir = Direction.SOUTH;
+                                    } else if (_num == 3) {
+                                        _dir = Direction.WEST;
                                     }
-                                }.with(CABlocks.ABANDONED_SULPTURE.get().defaultBlockState(), new Object() {
-                                    public Direction getValue() {
-                                        Direction _dir = Direction.NORTH;
-                                        int _num = Mth.nextInt(RandomSource.create(), 1, 4);
-                                        if (_num == 1) {
-                                            _dir = Direction.EAST;
-                                        } else if (_num == 2) {
-                                            _dir = Direction.SOUTH;
-                                        } else if (_num == 3) {
-                                            _dir = Direction.WEST;
-                                        }
-                                        return _dir;
-                                    }
-                                }.getValue())));
-                            break;
-                        }
+                                    return _dir;
+                                }
+                            }.getValue())));
+                        break;
                     }
-                    final int tick2 = ticks;
-                    CaerulaArborMod.queueServerWork(tick2, () -> {
-                        if (timedlooptotal > timedloopiterator + 1) {
-                            timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
-                        }
-                    });
                 }
-            }.timedLoop(0, 8, 1);
-        }
+                final int tick2 = ticks;
+                CaerulaArborMod.queueServerWork(tick2, () -> {
+                    if (timedlooptotal > timedloopiterator + 1) {
+                        timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
+                    }
+                });
+            }
+        }.timedLoop(0, 8, 1);
         return retval;
     }
 
@@ -308,10 +302,10 @@ public class MartusEntity extends SeaMonster {
                     final Vec3 _center = new Vec3(x, y, z);
                     List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(96 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
                     for (Entity entityiterator : _entfound) {
-                        if (!(entityiterator instanceof Mob)) {
+                        if (!(entityiterator instanceof Mob livEnt1)) {
                             continue;
                         }
-                        if (entityiterator instanceof LivingEntity _livEnt1 && _livEnt1.hasEffect(CAMobEffects.GUIDED_EVO.get())) {
+                        if (livEnt1.hasEffect(CAMobEffects.GUIDED_EVO.get())) {
                             num = num + 1;
                             this.spawnParticleLink(entityiterator);
                             CaerulaArborMod.queueServerWork(3, () -> {
@@ -362,7 +356,7 @@ public class MartusEntity extends SeaMonster {
                             limit = 3;
                         }
                         for (Entity entityiterator : world.getEntities(this, new AABB((x + 32), (y + 32), (z + 32), (x - 32), (y - 32), (z - 32)))) {
-                            if (!(entityiterator instanceof Mob)) {
+                            if (!(entityiterator instanceof Mob livEnt1)) {
                                 continue;
                             }
                             if (!entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
@@ -378,7 +372,7 @@ public class MartusEntity extends SeaMonster {
                             if (num >= limit) {
                                 break;
                             }
-                            if ((entityiterator instanceof LivingEntity _livEnt1 ? _livEnt1.getMaxHealth() : -1) > max_h) {
+                            if (livEnt1.getMaxHealth() > max_h) {
                                 max_h = entityiterator instanceof LivingEntity _livEnt1 ? _livEnt1.getMaxHealth() : -1;
                                 tgt_ent = entityiterator;
                             }
@@ -632,6 +626,8 @@ public class MartusEntity extends SeaMonster {
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
         builder = builder.add(Attributes.FLYING_SPEED, 0.5);
         builder = builder.add(ForgeMod.SWIM_SPEED.get(), 0.5);
+        builder = builder.add(CAAttributes.GENERAL_DEFENSE.get(), 16384);
+        builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 100);
         return builder;
     }
 

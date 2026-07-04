@@ -172,19 +172,19 @@ public class ApocataEntity extends PathfinderMob implements GeoEntity, SyncedAni
         if ((entity instanceof ApocataEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0) > 0) {
             return InteractionResult.PASS;
         }
-        if (sourceentity.getMainHandItem().getItem() == Blocks.AIR.asItem() && ((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()) {
-            if (entity instanceof ApocataEntity) {
-                ((ApocataEntity) entity).setAnimation("animation.apocata.tap");
-            }
-            if (!((LevelAccessor) world).isClientSide()) {
-                if ((LevelAccessor) world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "apocata_interact")), SoundSource.NEUTRAL, 3, (float) 1.5);
-                }
-            }
-            if (entity instanceof ApocataEntity _datEntSetI)
-                _datEntSetI.getEntityData().set(DATA_duration, 20);
-            return InteractionResult.SUCCESS;
-        }
+        if (sourceentity.getMainHandItem().getItem() == Blocks.AIR.asItem() && sourceentity.getOffhandItem().getItem() == Blocks.AIR.asItem()) {
+			if (entity instanceof ApocataEntity) {
+				((ApocataEntity) entity).setAnimation("animation.apocata.tap");
+			}
+			if (!((LevelAccessor) world).isClientSide()) {
+				if ((LevelAccessor) world instanceof Level _level) {
+					_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "apocata_interact")), SoundSource.NEUTRAL, 3, (float) 1.5);
+				}
+			}
+			if (entity instanceof ApocataEntity _datEntSetI)
+				_datEntSetI.getEntityData().set(DATA_duration, 20);
+			return InteractionResult.SUCCESS;
+		}
         return InteractionResult.PASS;
     }
 

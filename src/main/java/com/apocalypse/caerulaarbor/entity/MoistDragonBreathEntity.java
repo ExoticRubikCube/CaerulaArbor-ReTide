@@ -117,7 +117,6 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
         this.entityData.define(DATA_TYPE, 0);
     }
 
-
     @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);

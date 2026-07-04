@@ -18,7 +18,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
@@ -36,7 +35,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
@@ -48,8 +46,6 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
-
-import javax.annotation.Nullable;
 
 public class ApostleProkaryoteEntity extends SeaMonster {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(ApostleProkaryoteEntity.class, EntityDataSerializers.BOOLEAN);
@@ -154,15 +150,6 @@ public class ApostleProkaryoteEntity extends SeaMonster {
 	}
 
 	@Override
-	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-		if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())) {
-			this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(18);
-		}
-		return retval;
-	}
-
-	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putBoolean("Datashelled", this.entityData.get(DATA_shelled));
@@ -205,7 +192,7 @@ public class ApostleProkaryoteEntity extends SeaMonster {
                     }
                 }
                 if (found) {
-                    perc = ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) / ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1);
+                    perc = this.getHealth() / this.getMaxHealth();
                     if (MapVariables.get(world).strategy_subsisting >= 4) {
                         if (this.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
                             this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(
@@ -221,8 +208,7 @@ public class ApostleProkaryoteEntity extends SeaMonster {
                             this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
                                     ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) * 1.4));
                     }
-                    if ((Entity) this instanceof LivingEntity _entity)
-                        _entity.setHealth((float) (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * perc));
+                    this.setHealth((float) (this.getMaxHealth() * perc));
                     if ((Entity) this instanceof ApostleProkaryoteEntity _datEntSetL)
                         _datEntSetL.getEntityData().set(DATA_shelled, true);
                     if (this instanceof ApostleProkaryoteEntity) {
@@ -238,8 +224,6 @@ public class ApostleProkaryoteEntity extends SeaMonster {
         }
         this.refreshDimensions();
 	}
-
-	
 
 	@Override
 	public boolean canBreatheUnderwater() {
@@ -273,6 +257,7 @@ public class ApostleProkaryoteEntity extends SeaMonster {
 		builder = builder.add(Attributes.ATTACK_DAMAGE, 9);
 		builder = builder.add(Attributes.FOLLOW_RANGE, 24);
 		builder = builder.add(ForgeMod.SWIM_SPEED.get(), 1.5);
+		builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 18);
 		return builder;
 	}
 

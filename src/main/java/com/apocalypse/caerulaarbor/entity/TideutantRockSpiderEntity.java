@@ -148,15 +148,12 @@ public class TideutantRockSpiderEntity extends SeaMonster {
         LevelAccessor world = this.level();
         Entity sourceentity = source.getEntity();
         if (sourceentity != null) {
-            double sklp = 0;
             if (!(sourceentity instanceof TideutantRockSpiderEntity) && !(sourceentity instanceof TidutantExcrescenceEntity)) {
-                {
-                    final Vec3 _center = new Vec3(this.getX(), this.getY(), this.getZ());
-                    List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(32 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                    for (Entity entityiterator : _entfound) {
-                        if (entityiterator instanceof TidutantExcrescenceEntity entity && sourceentity instanceof LivingEntity _ent)
-                            entity.setTarget(_ent);
-                    }
+                final Vec3 _center = new Vec3(this.getX(), this.getY(), this.getZ());
+                List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(32 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+                for (Entity entityiterator : _entfound) {
+                    if (entityiterator instanceof TidutantExcrescenceEntity entity && sourceentity instanceof LivingEntity _ent)
+                        entity.setTarget(_ent);
                 }
             }
         }
@@ -318,7 +315,6 @@ public class TideutantRockSpiderEntity extends SeaMonster {
             this.remove(RemovalReason.KILLED);
             this.dropExperience();
             LevelAccessor world = this.level();
-            double dura = 0;
             for (int index0 = 0; index0 < 4; index0++) {
                 if (world instanceof ServerLevel _level) {
                     Entity entityToSpawn = CAEntities.TIDUTANT_EXCRESCENCE.get().spawn(_level, BlockPos.containing(this.getX(), this.getY(), this.getZ()), MobSpawnType.MOB_SUMMONED);
