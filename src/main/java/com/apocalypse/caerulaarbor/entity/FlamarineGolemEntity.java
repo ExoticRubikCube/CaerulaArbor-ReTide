@@ -60,7 +60,6 @@ import java.util.Comparator;
 import java.util.List;
 
 public class FlamarineGolemEntity extends SeaMonster {
-
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(FlamarineGolemEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(FlamarineGolemEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(FlamarineGolemEntity.class, EntityDataSerializers.INT);
@@ -297,7 +296,7 @@ public class FlamarineGolemEntity extends SeaMonster {
             sklp1 = (Entity) this instanceof FlamarineGolemEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillP1) : 0;
             sklp2 = (Entity) this instanceof FlamarineGolemEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillP2) : 0;
             dura = (Entity) this instanceof FlamarineGolemEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
-            enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+            enemy = this.getTarget();
             if (dura > 0) {
                 if ((Entity) this instanceof FlamarineGolemEntity _datEntSetI)
                     _datEntSetI.getEntityData().set(DATA_duration, (int) (dura - 1));
@@ -352,7 +351,7 @@ public class FlamarineGolemEntity extends SeaMonster {
                                     if (entityiterator == this) {
                                         continue;
                                     }
-                                    if ((entityiterator != null ? distanceTo(entityiterator) : -1) <= r) {
+                                    if (distanceTo(entityiterator) <= r) {
                                         h = entityiterator instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1;
                                         d = Math.min(damage * 4.5, Math.max(h * 0.25, damage * 1.5));
                                         entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "golem_attack"))), this),
@@ -400,7 +399,6 @@ public class FlamarineGolemEntity extends SeaMonster {
                     double dy;
                     double dz;
                     double hardness;
-                    double lose = 0;
                     BlockState block;
                     if (WorldUtils.canGrief(world)) {
                         dx = -1;
@@ -508,8 +506,6 @@ public class FlamarineGolemEntity extends SeaMonster {
     }
 
     private PlayState attackingPredicate(AnimationState event) {
-        double d1 = this.getX() - this.xOld;
-        double d0 = this.getZ() - this.zOld;
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
             this.swinging = true;
             this.lastSwing = level().getGameTime();

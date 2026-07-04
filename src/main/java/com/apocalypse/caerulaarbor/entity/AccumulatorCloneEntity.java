@@ -164,8 +164,6 @@ public class AccumulatorCloneEntity extends SeaMonster {
 		this.refreshDimensions();
 	}
 
-	
-
 	@Override
 	public boolean canBreatheUnderwater() {
 		return true;

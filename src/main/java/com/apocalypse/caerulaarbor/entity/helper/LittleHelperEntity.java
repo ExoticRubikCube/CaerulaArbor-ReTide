@@ -88,6 +88,9 @@ public class LittleHelperEntity extends PathfinderMob implements GeoEntity, Sync
         return new ItemStack(CAItems.ITEM_HELPER.get());
     }
 
+    protected void playBreakSound(ServerLevel serverLevel) {
+    }
+
     public void handlePassengerLeftClick(Player passenger) {
         this.playPassengerLeftClickSound(passenger);
         WorldUtils.clearNetherseaAround(this.level(), this.getX(), this.getY() - 1, this.getZ(), this);
@@ -158,12 +161,30 @@ public class LittleHelperEntity extends PathfinderMob implements GeoEntity, Sync
             return false;
         if (source.is(DamageTypes.WITHER_SKULL))
             return false;
-        return super.hurt(source, amount);
+        int durability = this.entityData.get(DATA_durability);
+        if (durability > 0) {
+            this.entityData.set(DATA_durability, durability - 1);
+            return false;
+        }
+        if (durability >= 0 && this.isAlive()) {
+            if (!this.level().isClientSide()) {
+                this.discard();
+            }
+            if (this.level() instanceof ServerLevel serverLevel) {
+                ItemEntity itemEntity = new ItemEntity(serverLevel, this.getX(), this.getY(), this.getZ(), this.getRecycleItemStack());
+                itemEntity.setPickUpDelay(10);
+                itemEntity.setUnlimitedLifetime();
+                serverLevel.addFreshEntity(itemEntity);
+                this.playBreakSound(serverLevel);
+            }
+        }
+        return false;
     }
 
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
         SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
+        //TODO 直接设置属性就行而不是在finalizeSpawn手动赋予
         if (this.getAttributes().hasAttribute(ForgeMod.SWIM_SPEED.get()))
             this.getAttribute(ForgeMod.SWIM_SPEED.get())
                     .setBaseValue((((Entity) this instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(Attributes.MOVEMENT_SPEED) ? _livingEntity0.getAttribute(Attributes.MOVEMENT_SPEED).getBaseValue() : 0) * 10));
@@ -209,6 +230,9 @@ public class LittleHelperEntity extends PathfinderMob implements GeoEntity, Sync
     @Override
     public void baseTick() {
         super.baseTick();
+        if (this.tickCount % 30 == 5 && this.entityData.get(DATA_durability) < 4) {
+            this.entityData.set(DATA_durability, this.entityData.get(DATA_durability) + 1);
+        }
         WorldUtils.clearNetherseaAround(this.level(), this.getX(), this.getY(), this.getZ(), this);
         this.refreshDimensions();
     }

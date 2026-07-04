@@ -247,7 +247,7 @@ public class CorrectionalPhalanxyInfantryEntity extends Animal implements GeoEnt
 
     @Override
     public boolean isFood(ItemStack stack) {
-        return List.of().contains(stack.getItem());
+        return false;
     }
 
     @Override
@@ -284,9 +284,6 @@ public class CorrectionalPhalanxyInfantryEntity extends Animal implements GeoEnt
     }
 
     private PlayState attackingPredicate(AnimationState event) {
-        double d1 = this.getX() - this.xOld;
-        double d0 = this.getZ() - this.zOld;
-        float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
             this.swinging = true;
             this.lastSwing = level().getGameTime();

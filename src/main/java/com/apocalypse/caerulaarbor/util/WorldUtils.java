@@ -2,8 +2,6 @@ package com.apocalypse.caerulaarbor.util;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
-import com.apocalypse.caerulaarbor.entity.helper.Al1SHelperEntity;
-import com.apocalypse.caerulaarbor.entity.helper.LittleHelperEntity;
 import com.apocalypse.caerulaarbor.init.CABlocks;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAGameRules;
@@ -222,21 +220,6 @@ public class WorldUtils {
 		double px;
 		double pz;
 		double py;
-		double dur;
-		if (entity.tickCount % 30 == 5) {
-			if (entity instanceof LittleHelperEntity) {
-				dur = entity instanceof LittleHelperEntity _datEntI ? _datEntI.getEntityData().get(LittleHelperEntity.DATA_durability) : 0;
-			} else {
-				dur = entity instanceof Al1SHelperEntity _datEntI ? _datEntI.getEntityData().get(Al1SHelperEntity.DATA_durability) : 0;
-			}
-			if (dur < 4) {
-				dur = dur + 1;
-				if (entity instanceof LittleHelperEntity _datEntSetI)
-					_datEntSetI.getEntityData().set(LittleHelperEntity.DATA_durability, (int) dur);
-				if (entity instanceof Al1SHelperEntity _datEntSetI)
-					_datEntSetI.getEntityData().set(Al1SHelperEntity.DATA_durability, (int) dur);
-			}
-		}
 		if (!entity.isVehicle()) {
 			return;
 		}

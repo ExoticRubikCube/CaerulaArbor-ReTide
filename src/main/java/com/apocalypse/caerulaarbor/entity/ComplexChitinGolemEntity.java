@@ -278,8 +278,7 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity, Sy
         double sklp1;
         double dura;
         if (this.isAlive()) {
-            LivingEntity _entity = (LivingEntity) (Entity) this;
-            _entity.removeEffect(CAMobEffects.DIZZY.get());
+            this.removeEffect(CAMobEffects.DIZZY.get());
             boolean root;
             double rx;
             double rz;
@@ -297,15 +296,14 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity, Sy
                     CaerulaArborMod.LOGGER.info(("Complex Chitin Golem " + getDisplayName().getString() + "has recognize x:" + Math.round(x) + " z:" + Math.round(z) + " as base"));
                 }
             } else if (Math.random() < 0.01) {
-                Mob _mobEnt8 = (Mob) (Entity) this;
+                Mob _mobEnt8 = this;
                 if (!_mobEnt8.isAggressive()) {
                     rx = x - ((Entity) this instanceof ComplexChitinGolemEntity _datEntI1 ? _datEntI1.getEntityData().get(DATA_rootX) : 0);
                     rz = z - ((Entity) this instanceof ComplexChitinGolemEntity _datEntI1 ? _datEntI1.getEntityData().get(DATA_rootZ) : 0);
                     dist = new Vec3(0, 0, 0).distanceTo(new Vec3(rx, 0, rz));
                     if (dist >= 24) {
                         dist1 = Mth.nextDouble(RandomSource.create(), 4, 16);
-                        Mob _entity1 = (Mob) (Entity) this;
-                        _entity1.getNavigation().moveTo(x - rx * dist1 / dist, y, z - rz * dist1 / dist, 1);
+                        this.getNavigation().moveTo(x - rx * dist1 / dist, y, z - rz * dist1 / dist, 1);
                     }
                 }
             }
@@ -357,23 +355,21 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity, Sy
                                     Entity enemy1 = null;
                                     double damage;
                                     double r = 0;
-                                    {
-                                        final Vec3 _center = new Vec3((getX()), (getY()), (getZ()));
-                                        List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(10 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                                        for (Entity entityiterator : _entfound) {
-                                            if (!(entityiterator instanceof Monster)) {
-                                                if (!(entityiterator == this.getTarget())) {
-                                                    continue;
-                                                }
-                                            }
-                                            if (entityiterator == this) {
+                                    final Vec3 _center = new Vec3((getX()), (getY()), (getZ()));
+                                    List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(10 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+                                    for (Entity entityiterator : _entfound) {
+                                        if (!(entityiterator instanceof Monster)) {
+                                            if (!(entityiterator == this.getTarget())) {
                                                 continue;
                                             }
-                                            if (entityiterator != null && distanceTo(entityiterator) <= 5) {
-                                                damage = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.75;
-                                                entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "golem_attack"))), this),
-                                                        (float) damage);
-                                            }
+                                        }
+                                        if (entityiterator == this) {
+                                            continue;
+                                        }
+                                        if (entityiterator != null && distanceTo(entityiterator) <= 5) {
+                                            damage = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.75;
+                                            entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "golem_attack"))), this),
+                                                    (float) damage);
                                         }
                                     }
                                 }
@@ -435,9 +431,6 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity, Sy
     }
 
     private PlayState attackingPredicate(AnimationState event) {
-        double d1 = this.getX() - this.xOld;
-        double d0 = this.getZ() - this.zOld;
-        float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
             this.swinging = true;
             this.lastSwing = level().getGameTime();

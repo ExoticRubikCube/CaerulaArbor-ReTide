@@ -49,6 +49,12 @@ public class Al1SHelperEntity extends LittleHelperEntity {
 		return new ItemStack(CAItems.ITEM_HELPER_AL_1S.get());
 	}
 
+	@Override 
+	protected void playBreakSound(ServerLevel serverLevel) {
+		serverLevel.playSound(null, BlockPos.containing(this.getX(), this.getY(), this.getZ()),
+				ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "al1s_break")), SoundSource.BLOCKS, 3, 1);
+	}
+
 	@Override
 	@Nullable
 	protected ResourceLocation getCustomDeathSound() {

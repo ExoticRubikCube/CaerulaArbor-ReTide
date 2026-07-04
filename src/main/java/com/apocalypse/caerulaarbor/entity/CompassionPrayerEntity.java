@@ -92,9 +92,6 @@ public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMo
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this) {
             @Override
             public boolean canUse() {
-                double x = CompassionPrayerEntity.this.getX();
-                double y = CompassionPrayerEntity.this.getY();
-                double z = CompassionPrayerEntity.this.getZ();
                 Level world = CompassionPrayerEntity.this.level();
                 if (!super.canUse()) return false;
                 return hasEffect(CAMobEffects.FAKE_DEATH.get());
@@ -102,9 +99,6 @@ public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMo
 
             @Override
             public boolean canContinueToUse() {
-                double x = CompassionPrayerEntity.this.getX();
-                double y = CompassionPrayerEntity.this.getY();
-                double z = CompassionPrayerEntity.this.getZ();
                 Level world = CompassionPrayerEntity.this.level();
                 if (!super.canContinueToUse()) return false;
                 return hasEffect(CAMobEffects.FAKE_DEATH.get());
@@ -192,8 +186,8 @@ public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMo
             LivingEntity livingentity = this.mob.getTarget();
             if (livingentity != null && livingentity.isAlive()) {
                 this.target = livingentity;
-                Entity entity = CompassionPrayerEntity.this;
-                return ((LivingEntity) entity).hasEffect(CAMobEffects.FAKE_DEATH.get());
+                LivingEntity entity = CompassionPrayerEntity.this;
+                return entity.hasEffect(CAMobEffects.FAKE_DEATH.get());
             } else {
                 return false;
             }
@@ -438,8 +432,6 @@ public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMo
     }
 
     private PlayState attackingPredicate(AnimationState event) {
-        double d1 = this.getX() - this.xOld;
-        double d0 = this.getZ() - this.zOld;
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
             this.swinging = true;
             this.lastSwing = level().getGameTime();

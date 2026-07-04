@@ -9,8 +9,6 @@ import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
 import com.apocalypse.caerulaarbor.entity.*;
 import com.apocalypse.caerulaarbor.entity.bullets.HighmoreShootEntity;
-import com.apocalypse.caerulaarbor.entity.helper.Al1SHelperEntity;
-import com.apocalypse.caerulaarbor.entity.helper.LittleHelperEntity;
 import com.apocalypse.caerulaarbor.init.*;
 import com.apocalypse.caerulaarbor.manager.GrowUpgradeManager;
 import com.apocalypse.caerulaarbor.manager.SilenceUpgradeManager;
@@ -36,7 +34,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BowItem;
@@ -67,7 +64,6 @@ public class LivingAttackEventHandler {
         handleInvulnerable(event);
         handleNumbness(event);
         handleMissRate(event);
-        handleLittleHelperNoHurt(event);
         handleMartusArrowImmue(event);
         handleInquisitionFriendlyFire(event);
         handleDamagePrevention(event);
@@ -142,63 +138,6 @@ public class LivingAttackEventHandler {
                             ((ChitinGolemEntity) entity).setAnimation("animation.chitgolem.block");
                         }
                         event.setCanceled(true);
-                    }
-                }
-            }
-        }
-    }
-
-    //TODO 需要下放
-    private static void handleLittleHelperNoHurt(LivingAttackEvent event) {
-        LevelAccessor world = event.getEntity().level();
-        double x = event.getEntity().getX();
-        double y = event.getEntity().getY();
-        double z = event.getEntity().getZ();
-        Entity entity = event.getEntity();
-
-        if (entity == null) return;
-
-        if (entity instanceof LittleHelperEntity || entity instanceof Al1SHelperEntity) {
-            event.setCanceled(true);
-
-            boolean isAl1s = entity instanceof LittleHelperEntity;
-            double dur;
-
-            if (isAl1s) {
-                dur = entity instanceof LittleHelperEntity _datEntI ? _datEntI.getEntityData().get(LittleHelperEntity.DATA_durability) : 0;
-            } else {
-                dur = entity instanceof Al1SHelperEntity _datEntI ? _datEntI.getEntityData().get(Al1SHelperEntity.DATA_durability) : 0;
-            }
-
-            if (dur > 0) {
-                dur = dur - 1;
-                if (entity instanceof LittleHelperEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(LittleHelperEntity.DATA_durability, (int) dur);
-                if (entity instanceof Al1SHelperEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(Al1SHelperEntity.DATA_durability, (int) dur);
-            } else {
-                if (dur >= 0 && entity.isAlive()) {
-                    if (!entity.level().isClientSide())
-                        entity.discard();
-                    if (isAl1s) {
-                        if (world instanceof ServerLevel _level) {
-                            ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, new ItemStack(CAItems.ITEM_HELPER.get()));
-                            entityToSpawn.setPickUpDelay(10);
-                            entityToSpawn.setUnlimitedLifetime();
-                            _level.addFreshEntity(entityToSpawn);
-                        }
-                    } else {
-                        if (world instanceof ServerLevel _level) {
-                            ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, new ItemStack(CAItems.ITEM_HELPER_AL_1S.get()));
-                            entityToSpawn.setPickUpDelay(10);
-                            entityToSpawn.setUnlimitedLifetime();
-                            _level.addFreshEntity(entityToSpawn);
-                        }
-                        if (!world.isClientSide()) {
-                            if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "al1s_break")), SoundSource.BLOCKS, 3, 1);
-                            }
-                        }
                     }
                 }
             }
@@ -600,5 +539,4 @@ public class LivingAttackEventHandler {
             }
         }
     }
-
 }

@@ -183,7 +183,6 @@ public class CorrectinalPhalaxVanguardEntity extends Animal implements GeoEntity
         double y = this.getY();
         double z = this.getZ();
         double sklp1;
-        double less = 0;
         Entity enemy;
         if (this.isAlive()) {
             sklp1 = (Entity) this instanceof CorrectinalPhalaxVanguardEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp) : 0;
@@ -232,7 +231,7 @@ public class CorrectinalPhalaxVanguardEntity extends Animal implements GeoEntity
 
     @Override
     public boolean isFood(ItemStack stack) {
-        return List.of().contains(stack.getItem());
+        return false;
     }
 
     @Override
@@ -267,9 +266,6 @@ public class CorrectinalPhalaxVanguardEntity extends Animal implements GeoEntity
     }
 
     private PlayState attackingPredicate(AnimationState event) {
-        double d1 = this.getX() - this.xOld;
-        double d0 = this.getZ() - this.zOld;
-        float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
             this.swinging = true;
             this.lastSwing = level().getGameTime();
