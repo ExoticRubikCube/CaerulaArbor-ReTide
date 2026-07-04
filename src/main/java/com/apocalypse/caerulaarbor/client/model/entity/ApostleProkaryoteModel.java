@@ -26,7 +26,7 @@ public class ApostleProkaryoteModel extends GeoModel<ApostleProkaryoteEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(ApostleProkaryoteEntity entity) {
-		return entity.getEntityData().get(ApostleProkaryoteEntity.DATA_shelled) ? SHELLED_TEXTURE : UNSHELLED_TEXTURE;
+		return entity.getEntityData().get(ApostleProkaryoteEntity.DATA_SHELLED) ? SHELLED_TEXTURE : UNSHELLED_TEXTURE;
 	}
 
 	@Override

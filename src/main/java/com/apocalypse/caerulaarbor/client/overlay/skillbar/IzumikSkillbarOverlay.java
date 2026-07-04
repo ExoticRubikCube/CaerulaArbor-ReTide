@@ -46,8 +46,8 @@ public class IzumikSkillbarOverlay {
                 }
             }.compareDistOf(x, y, z)).orElse(null);
             if (!(ent == null)) {
-                phase = ent instanceof IzumikEntity _datEntI ? _datEntI.getEntityData().get(IzumikEntity.DATA_phase) : 0;
-                ind = ent instanceof IzumikEntity _datEntI ? _datEntI.getEntityData().get(IzumikEntity.DATA_skillp) : 0;
+                phase = ent instanceof IzumikEntity _datEntI ? _datEntI.getEntityData().get(IzumikEntity.DATA_PHASE) : 0;
+                ind = ent instanceof IzumikEntity _datEntI ? _datEntI.getEntityData().get(IzumikEntity.DATA_SKILLP) : 0;
                 if (phase == 0) {
                     ind = Math.round(ind * 20);
                 } else if (phase == 1) {

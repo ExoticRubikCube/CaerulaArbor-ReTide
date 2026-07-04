@@ -52,7 +52,7 @@ public class HighmoreSpawnblockTileEntity extends RandomizableContainerBlockEnti
 			blockstateOld = blockstateNew;
 			return PlayState.STOP;
 		}
-		String animationprocedure = ("" + this.getBlockState().getValue(HighmoreSpawnblockBlock.ANIMATION));
+		String animationprocedure = ("" + this.getBlockState().getValue(HighmoreSpawnblockBlock.DATA_ANIMATION));
 		if (animationprocedure.equals("0")) {
 			return event.setAndContinue(RawAnimation.begin().thenLoop(animationprocedure));
 		}
@@ -62,7 +62,7 @@ public class HighmoreSpawnblockTileEntity extends RandomizableContainerBlockEnti
 	String prevAnim = "0";
 
 	private PlayState procedurePredicate(AnimationState event) {
-		String animationprocedure = ("" + this.getBlockState().getValue(HighmoreSpawnblockBlock.ANIMATION));
+		String animationprocedure = ("" + this.getBlockState().getValue(HighmoreSpawnblockBlock.DATA_ANIMATION));
 		if (!animationprocedure.equals("0") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!animationprocedure.equals(prevAnim) && !animationprocedure.equals("0"))) {
 			if (!animationprocedure.equals(prevAnim))
 				event.getController().forceAnimationReset();

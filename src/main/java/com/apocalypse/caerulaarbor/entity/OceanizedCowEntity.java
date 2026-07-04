@@ -14,6 +14,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -47,12 +48,11 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
-import net.minecraft.sounds.SoundEvents;
 
 public class OceanizedCowEntity extends SeaMonster {
-    public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanizedCowEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedCowEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<Boolean> DATA_skill = SynchedEntityData.defineId(OceanizedCowEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(OceanizedCowEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(OceanizedCowEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Boolean> DATA_SKILL = SynchedEntityData.defineId(OceanizedCowEntity.class, EntityDataSerializers.BOOLEAN);
     private boolean swinging;
     private long lastSwing;
     public String animationprocedure = "empty";
@@ -71,9 +71,9 @@ public class OceanizedCowEntity extends SeaMonster {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(SHOOT, false);
-        this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(DATA_skill, true);
+        this.entityData.define(DATA_SHOOT, false);
+        this.entityData.define(DATA_ANIMATION, "undefined");
+        this.entityData.define(DATA_SKILL, true);
     }
 
     @Override
@@ -125,14 +125,15 @@ public class OceanizedCowEntity extends SeaMonster {
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putBoolean("Dataskill", this.entityData.get(DATA_skill));
+        compound.putBoolean("Skill", this.entityData.get(DATA_SKILL));
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Dataskill"))
-            this.entityData.set(DATA_skill, compound.getBoolean("Dataskill"));
+        if (compound.contains("Skill")) {
+            this.entityData.set(DATA_SKILL, compound.getBoolean("Skill"));
+        }
     }
 
     @Override
@@ -143,9 +144,9 @@ public class OceanizedCowEntity extends SeaMonster {
         double z = this.getZ();
         Entity entity = this;
         Level world = this.level();
-        if (sourceentity.isHolding(Items.SHEARS) && entity instanceof OceanizedCowEntity _datEntL1 && _datEntL1.getEntityData().get(DATA_skill)) {
+        if (sourceentity.isHolding(Items.SHEARS) && entity instanceof OceanizedCowEntity _datEntL1 && _datEntL1.getEntityData().get(DATA_SKILL)) {
             if (entity instanceof OceanizedCowEntity _datEntSetL)
-                _datEntSetL.getEntityData().set(DATA_skill, false);
+                _datEntSetL.getEntityData().set(DATA_SKILL, false);
             if ((LevelAccessor) world instanceof Level _level) {
                 _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.MOOSHROOM_SHEAR, SoundSource.PLAYERS, 1, 1);
             }
@@ -165,7 +166,7 @@ public class OceanizedCowEntity extends SeaMonster {
     public void baseTick() {
         super.baseTick();
         LevelAccessor world = this.level();
-        if (!this.hasEffect(CAMobEffects.MUTE.get()) && (Entity) this instanceof OceanizedCowEntity _datEntL1 && _datEntL1.getEntityData().get(DATA_skill) && WorldUtils.canGrief(world)) {
+        if (!this.hasEffect(CAMobEffects.MUTE.get()) && (Entity) this instanceof OceanizedCowEntity _datEntL1 && _datEntL1.getEntityData().get(DATA_SKILL) && WorldUtils.canGrief(world)) {
             if (!this.level().isClientSide() && !_datEntL1.hasEffect(CAMobEffects.COW_BUFF.get())) {
                 this.addEffect(new MobEffectInstance(CAMobEffects.COW_BUFF.get(), 20, 0, false, false));
             }
@@ -246,11 +247,11 @@ public class OceanizedCowEntity extends SeaMonster {
     }
 
     public String getSyncedAnimation() {
-        return this.entityData.get(ANIMATION);
+        return this.entityData.get(DATA_ANIMATION);
     }
 
     public void setAnimation(String animation) {
-        this.entityData.set(ANIMATION, animation);
+        this.entityData.set(DATA_ANIMATION, animation);
     }
 
     @Override

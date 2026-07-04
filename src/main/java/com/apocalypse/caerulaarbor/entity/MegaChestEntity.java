@@ -17,6 +17,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -41,12 +42,11 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
-import net.minecraft.sounds.SoundEvents;
 
 public class MegaChestEntity extends SeaMonster {
-    public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(MegaChestEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(MegaChestEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<Boolean> DATA_released = SynchedEntityData.defineId(MegaChestEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(MegaChestEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(MegaChestEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Boolean> DATA_RELEASED = SynchedEntityData.defineId(MegaChestEntity.class, EntityDataSerializers.BOOLEAN);
     private boolean swinging;
     private long lastSwing;
     public String animationprocedure = "empty";
@@ -67,9 +67,9 @@ public class MegaChestEntity extends SeaMonster {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(SHOOT, false);
-        this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(DATA_released, false);
+        this.entityData.define(DATA_SHOOT, false);
+        this.entityData.define(DATA_ANIMATION, "undefined");
+        this.entityData.define(DATA_RELEASED, false);
     }
 
 
@@ -162,14 +162,15 @@ public class MegaChestEntity extends SeaMonster {
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putBoolean("Datareleased", this.entityData.get(DATA_released));
+        compound.putBoolean("Released", this.entityData.get(DATA_RELEASED));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Datareleased"))
-            this.entityData.set(DATA_released, compound.getBoolean("Datareleased"));
+        if (compound.contains("Released")) {
+            this.entityData.set(DATA_RELEASED, compound.getBoolean("Released"));
+        }
 	}
 
     @Override
@@ -186,7 +187,7 @@ public class MegaChestEntity extends SeaMonster {
         double y = this.getY();
         double z = this.getZ();
         Entity enemy;
-        if (!((Entity) this instanceof MegaChestEntity _datEntL0 && _datEntL0.getEntityData().get(DATA_released))) {
+        if (!((Entity) this instanceof MegaChestEntity _datEntL0 && _datEntL0.getEntityData().get(DATA_RELEASED))) {
             setShiftKeyDown(true);
             if (!this.level().isClientSide())
                 this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, 8, false, false));
@@ -261,7 +262,7 @@ public class MegaChestEntity extends SeaMonster {
             }
 
             this.setShiftKeyDown(false);
-            this.getEntityData().set(DATA_released, true);
+            this.getEntityData().set(DATA_RELEASED, true);
 
             this.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
 
@@ -292,7 +293,7 @@ public class MegaChestEntity extends SeaMonster {
         if (this.animationprocedure.equals("empty")) {
             if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
 
-                    && this.entityData.get(DATA_released)) {
+                    && this.entityData.get(DATA_RELEASED)) {
                 return event.setAndContinue(RawAnimation.begin().thenLoop("animation.chestmega.move"));
             }
             if (this.isShiftKeyDown()) {
@@ -349,11 +350,11 @@ public class MegaChestEntity extends SeaMonster {
     }
 
     public String getSyncedAnimation() {
-        return this.entityData.get(ANIMATION);
+        return this.entityData.get(DATA_ANIMATION);
     }
 
     public void setAnimation(String animation) {
-        this.entityData.set(ANIMATION, animation);
+        this.entityData.set(DATA_ANIMATION, animation);
     }
 
     @Override

@@ -57,11 +57,11 @@ import java.util.List;
 
 public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationEntity {
 
-    public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(SpecterEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(SpecterEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<Integer> DATA_skillp1 = SynchedEntityData.defineId(SpecterEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Integer> DATA_skillp2 = SynchedEntityData.defineId(SpecterEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(SpecterEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(SpecterEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(SpecterEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> DATA_SKILLP_1 = SynchedEntityData.defineId(SpecterEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_SKILLP_2 = SynchedEntityData.defineId(SpecterEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_DURATION = SynchedEntityData.defineId(SpecterEntity.class, EntityDataSerializers.INT);
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private boolean swinging;
     private long lastSwing;
@@ -83,11 +83,11 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(SHOOT, false);
-        this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(DATA_skillp1, 2);
-        this.entityData.define(DATA_skillp2, 240);
-        this.entityData.define(DATA_duration, 0);
+        this.entityData.define(DATA_SHOOT, false);
+        this.entityData.define(DATA_ANIMATION, "undefined");
+        this.entityData.define(DATA_SKILLP_1, 2);
+        this.entityData.define(DATA_SKILLP_2, 240);
+        this.entityData.define(DATA_DURATION, 0);
     }
 
 
@@ -182,8 +182,8 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
         double targetY = target.getY();
         double targetZ = target.getZ();
         if (!this.level().isClientSide()) {
-            this.getEntityData().set(DATA_duration, this.getEntityData().get(DATA_duration) + 30);
-            this.getEntityData().set(DATA_skillp1, this.getEntityData().get(DATA_skillp1) + 1);
+            this.getEntityData().set(DATA_DURATION, this.getEntityData().get(DATA_DURATION) + 30);
+            this.getEntityData().set(DATA_SKILLP_1, this.getEntityData().get(DATA_SKILLP_1) + 1);
             this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
                     CASounds.SPECTER_ATTACK.get(), SoundSource.HOSTILE, 2.5F, 1);
             CaerulaArborMod.queueServerWork(12, () -> {
@@ -242,20 +242,23 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putInt("Dataskillp1", this.entityData.get(DATA_skillp1));
-        compound.putInt("Dataskillp2", this.entityData.get(DATA_skillp2));
-        compound.putInt("Dataduration", this.entityData.get(DATA_duration));
+        compound.putInt("Skillp1", this.entityData.get(DATA_SKILLP_1));
+        compound.putInt("Skillp2", this.entityData.get(DATA_SKILLP_2));
+        compound.putInt("Duration", this.entityData.get(DATA_DURATION));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Dataskillp1"))
-            this.entityData.set(DATA_skillp1, compound.getInt("Dataskillp1"));
-        if (compound.contains("Dataskillp2"))
-            this.entityData.set(DATA_skillp2, compound.getInt("Dataskillp2"));
-        if (compound.contains("Dataduration"))
-            this.entityData.set(DATA_duration, compound.getInt("Dataduration"));
+        if (compound.contains("Skillp1")) {
+            this.entityData.set(DATA_SKILLP_1, compound.getInt("Skillp1"));
+        }
+        if (compound.contains("Skillp2")) {
+            this.entityData.set(DATA_SKILLP_2, compound.getInt("Skillp2"));
+        }
+        if (compound.contains("Duration")) {
+            this.entityData.set(DATA_DURATION, compound.getInt("Duration"));
+        }
 	}
 
     @Override
@@ -270,19 +273,19 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
         double dura;
         double skillp2;
         if (this.isAlive()) {
-            sklp1 = this.getEntityData().get(DATA_skillp1);
-            skillp2 = this.getEntityData().get(DATA_skillp2);
-            dura = this.getEntityData().get(DATA_duration);
+            sklp1 = this.getEntityData().get(DATA_SKILLP_1);
+            skillp2 = this.getEntityData().get(DATA_SKILLP_2);
+            dura = this.getEntityData().get(DATA_DURATION);
             enemy = this.getTarget();
             if (dura > 0) {
-                this.getEntityData().set(DATA_duration, (int) (dura - 1));
+                this.getEntityData().set(DATA_DURATION, (int) (dura - 1));
             }
             if (sklp1 >= 5) {
                 if (!(enemy == null) && enemy.isAlive()) {
                     if (distanceTo(enemy) <= 4) {
                         this.setAnimation("animation.specter.skill");
-                        this.getEntityData().set(DATA_skillp1, 0);
-                        this.getEntityData().set(DATA_duration, (int) (dura + 45));
+                        this.getEntityData().set(DATA_SKILLP_1, 0);
+                        this.getEntityData().set(DATA_DURATION, (int) (dura + 45));
                         if (!this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 35, 0, false, false));
                         CaerulaArborMod.queueServerWork(8, () -> {
@@ -310,9 +313,9 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
             }
             if (skillp2 > 0) {
                 if (EntityUtils.getHealthPerc(this) <= 0.5 && skillp2 < 600) {
-                    this.getEntityData().set(DATA_skillp2, (int) (skillp2 - 2));
+                    this.getEntityData().set(DATA_SKILLP_2, (int) (skillp2 - 2));
                 } else {
-                    this.getEntityData().set(DATA_skillp2, (int) (skillp2 - 1));
+                    this.getEntityData().set(DATA_SKILLP_2, (int) (skillp2 - 1));
                 }
             } else {
                 if (!(enemy == null) && enemy.isAlive()) {
@@ -323,7 +326,7 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
                         if (world instanceof Level _level) {
                             _level.playSound(null, BlockPos.containing(x, y, z), CASounds.SPECTER_SKILL.get(), SoundSource.NEUTRAL, 3, 1);
                         }
-                        this.getEntityData().set(DATA_skillp2, 1000);
+                        this.getEntityData().set(DATA_SKILLP_2, 1000);
                         if (!this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(CAMobEffects.IMMORTAL.get(), 400, 0, false, false));
                         if (!this.level().isClientSide())
@@ -464,11 +467,11 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
     }
 
     public String getSyncedAnimation() {
-        return this.entityData.get(ANIMATION);
+        return this.entityData.get(DATA_ANIMATION);
     }
 
     public void setAnimation(String animation) {
-        this.entityData.set(ANIMATION, animation);
+        this.entityData.set(DATA_ANIMATION, animation);
     }
 
     @Override
@@ -530,7 +533,7 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
     }
 
     private boolean isSpecterDurative() {
-        return this.isAlive() && this.tickCount > 15 && this.getEntityData().get(DATA_duration) <= 0;
+        return this.isAlive() && this.tickCount > 15 && this.getEntityData().get(DATA_DURATION) <= 0;
     }
 
     @Override

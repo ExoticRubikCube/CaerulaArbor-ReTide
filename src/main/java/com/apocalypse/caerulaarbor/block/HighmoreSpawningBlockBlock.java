@@ -46,7 +46,7 @@ import java.util.List;
 
 public class HighmoreSpawningBlockBlock extends BaseEntityBlock implements SimpleWaterloggedBlock, EntityBlock {
 	public static final IntegerProperty BLOCKSTATE = IntegerProperty.create("blockstate", 0, 1);
-	public static final IntegerProperty ANIMATION = IntegerProperty.create("animation", 0, 2);
+	public static final IntegerProperty DATA_ANIMATION = IntegerProperty.create("animation", 0, 2);
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
 	public HighmoreSpawningBlockBlock() {
@@ -95,7 +95,7 @@ public class HighmoreSpawningBlockBlock extends BaseEntityBlock implements Simpl
 
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-		builder.add(ANIMATION, WATERLOGGED, BLOCKSTATE);
+		builder.add(DATA_ANIMATION, WATERLOGGED, BLOCKSTATE);
 	}
 
 	@Override

@@ -67,9 +67,9 @@ import java.util.EnumSet;
 import java.util.List;
 
 public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob, RavagerMountRider {
-    public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanziedWitchEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanziedWitchEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<Integer> DATA_skillp = SynchedEntityData.defineId(OceanziedWitchEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(OceanziedWitchEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(OceanziedWitchEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> DATA_SKILLP = SynchedEntityData.defineId(OceanziedWitchEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
     private long lastSwing;
     public String animationprocedure = "empty";
@@ -88,9 +88,9 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(SHOOT, false);
-        this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(DATA_skillp, 200);
+        this.entityData.define(DATA_SHOOT, false);
+        this.entityData.define(DATA_ANIMATION, "undefined");
+        this.entityData.define(DATA_SKILLP, 200);
     }
 
     @Override
@@ -169,7 +169,7 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
             this.target = null;
             this.seeTime = 0;
             this.attackTime = -1;
-            ((OceanziedWitchEntity) rangedAttackMob).entityData.set(SHOOT, false);
+            ((OceanziedWitchEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
         }
 
         public boolean requiresUpdateEveryTick() {
@@ -192,10 +192,10 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
             this.mob.getLookControl().setLookAt(this.target, 30.0F, 30.0F);
             if (--this.attackTime == 0) {
                 if (!flag) {
-                    ((OceanziedWitchEntity) rangedAttackMob).entityData.set(SHOOT, false);
+                    ((OceanziedWitchEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
                     return;
                 }
-                ((OceanziedWitchEntity) rangedAttackMob).entityData.set(SHOOT, true);
+                ((OceanziedWitchEntity) rangedAttackMob).entityData.set(DATA_SHOOT, true);
                 float f = (float) Math.sqrt(d0) / this.attackRadius;
                 float f1 = Mth.clamp(f, 0.1F, 1.0F);
                 this.rangedAttackMob.performRangedAttack(this.target, f1);
@@ -203,7 +203,7 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
             } else if (this.attackTime < 0) {
                 this.attackTime = Mth.floor(Mth.lerp(Math.sqrt(d0) / (double) this.attackRadius, this.attackIntervalMin, this.attackIntervalMax));
             } else
-                ((OceanziedWitchEntity) rangedAttackMob).entityData.set(SHOOT, false);
+                ((OceanziedWitchEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
         }
     }
 
@@ -340,14 +340,15 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putInt("Dataskillp", this.entityData.get(DATA_skillp));
+        compound.putInt("Skillp", this.entityData.get(DATA_SKILLP));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Dataskillp"))
-            this.entityData.set(DATA_skillp, compound.getInt("Dataskillp"));
+        if (compound.contains("Skillp")) {
+            this.entityData.set(DATA_SKILLP, compound.getInt("Skillp"));
+        }
 	}
 
     @Override
@@ -356,7 +357,7 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
         double sklp;
         Entity enemy;
         if (this.isAlive()) {
-            sklp = (Entity) this instanceof OceanziedWitchEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp) : 0;
+            sklp = (Entity) this instanceof OceanziedWitchEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP) : 0;
             if (sklp <= 0) {
                 enemy = this.getTarget();
                 if (!(enemy == null) && enemy.isAlive() && distanceTo(enemy) <= 9) {
@@ -364,7 +365,7 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
                         this.setAnimation("animation.oceanized_witch.throw");
                     }
                     if ((Entity) this instanceof OceanziedWitchEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_skillp, 250);
+                        _datEntSetI.getEntityData().set(DATA_SKILLP, 250);
                     if (!this.level().isClientSide())
                         this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 60, 0, false, false));
                     CaerulaArborMod.queueServerWork(14, this::shootRandomPotion);
@@ -378,7 +379,7 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
                 }
             } else {
                 if ((Entity) this instanceof OceanziedWitchEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_skillp, (int) (sklp - 1));
+                    _datEntSetI.getEntityData().set(DATA_SKILLP, (int) (sklp - 1));
             }
             this.removeEffect(MobEffects.POISON);
             this.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
@@ -479,7 +480,7 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
         if (this.swinging && this.lastSwing + 25L <= level().getGameTime()) {
             this.swinging = false;
         }
-        if ((this.swinging || this.entityData.get(SHOOT)) && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+        if ((this.swinging || this.entityData.get(DATA_SHOOT)) && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
             event.getController().forceAnimationReset();
             return event.setAndContinue(RawAnimation.begin().thenPlay("animation.oceanized_witch.attack"));
         }
@@ -515,11 +516,11 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
     }
 
     public String getSyncedAnimation() {
-        return this.entityData.get(ANIMATION);
+        return this.entityData.get(DATA_ANIMATION);
     }
 
     public void setAnimation(String animation) {
-        this.entityData.set(ANIMATION, animation);
+        this.entityData.set(DATA_ANIMATION, animation);
     }
 
     @Override

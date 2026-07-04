@@ -49,9 +49,9 @@ import net.minecraft.sounds.SoundEvents;
 import com.apocalypse.caerulaarbor.init.CASounds;
 
 public class OceanizedPiglinEntity extends SeaMonster implements PolarMountRider {
-	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanizedPiglinEntity.class, EntityDataSerializers.BOOLEAN);
-	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedPiglinEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<Integer> DATA_ability = SynchedEntityData.defineId(OceanizedPiglinEntity.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(OceanizedPiglinEntity.class, EntityDataSerializers.BOOLEAN);
+	public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(OceanizedPiglinEntity.class, EntityDataSerializers.STRING);
+	public static final EntityDataAccessor<Integer> DATA_ABILITY = SynchedEntityData.defineId(OceanizedPiglinEntity.class, EntityDataSerializers.INT);
 	private boolean swinging;
 	private long lastSwing;
 	public String animationprocedure = "empty";
@@ -70,9 +70,9 @@ public class OceanizedPiglinEntity extends SeaMonster implements PolarMountRider
 	@Override
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(SHOOT, false);
-		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(DATA_ability, 0);
+		this.entityData.define(DATA_SHOOT, false);
+		this.entityData.define(DATA_ANIMATION, "undefined");
+		this.entityData.define(DATA_ABILITY, 0);
 	}
 
 	@Override
@@ -135,14 +135,15 @@ public class OceanizedPiglinEntity extends SeaMonster implements PolarMountRider
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
-		compound.putInt("Dataability", this.entityData.get(DATA_ability));
+		compound.putInt("Ability", this.entityData.get(DATA_ABILITY));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
-		if (compound.contains("Dataability"))
-			this.entityData.set(DATA_ability, compound.getInt("Dataability"));
+		if (compound.contains("Ability")) {
+		    this.entityData.set(DATA_ABILITY, compound.getInt("Ability"));
+		}
 	}
 
 	@Override
@@ -153,13 +154,13 @@ public class OceanizedPiglinEntity extends SeaMonster implements PolarMountRider
 		double y = this.getY();
 		double z = this.getZ();
 		double ablty;
-		ablty = (Entity) this instanceof OceanizedPiglinEntity _datEntI ? _datEntI.getEntityData().get(DATA_ability) : 0;
+		ablty = (Entity) this instanceof OceanizedPiglinEntity _datEntI ? _datEntI.getEntityData().get(DATA_ABILITY) : 0;
 		if (ablty < 5) {
 			if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
 				this.getAttribute(Attributes.ATTACK_DAMAGE)
 						.setBaseValue(((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) + 3));
 			if ((Entity) this instanceof OceanizedPiglinEntity _datEntSetI)
-				_datEntSetI.getEntityData().set(DATA_ability, (int) (ablty + 1));
+				_datEntSetI.getEntityData().set(DATA_ABILITY, (int) (ablty + 1));
 			if (world instanceof ServerLevel _level)
 				_level.sendParticles(ParticleTypes.LAVA, x, (y + 0.75), z, 32, 0.75, 0.75, 0.75, 0.1);
 		}
@@ -264,11 +265,11 @@ public class OceanizedPiglinEntity extends SeaMonster implements PolarMountRider
 	}
 
 	public String getSyncedAnimation() {
-		return this.entityData.get(ANIMATION);
+		return this.entityData.get(DATA_ANIMATION);
 	}
 
 	public void setAnimation(String animation) {
-		this.entityData.set(ANIMATION, animation);
+		this.entityData.set(DATA_ANIMATION, animation);
 	}
 
 	@Override

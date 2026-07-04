@@ -70,7 +70,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class EndspeakerEntity extends SeaMonster {
-	protected static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(EndspeakerEntity.class, EntityDataSerializers.STRING);
+	protected static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(EndspeakerEntity.class, EntityDataSerializers.STRING);
 	protected static final EntityDataAccessor<Integer> DATA_PHASE = SynchedEntityData.defineId(EndspeakerEntity.class, EntityDataSerializers.INT);
 	protected static final EntityDataAccessor<Boolean> DATA_IS_EVOLVING = SynchedEntityData.defineId(EndspeakerEntity.class, EntityDataSerializers.BOOLEAN);
 	protected static final EntityDataAccessor<Integer> DATA_EVOLVE_TIME = SynchedEntityData.defineId(EndspeakerEntity.class, EntityDataSerializers.INT);
@@ -294,7 +294,7 @@ public class EndspeakerEntity extends SeaMonster {
 	@Override
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(ANIMATION, "undefined");
+		this.entityData.define(DATA_ANIMATION, "undefined");
 		this.entityData.define(DATA_PHASE, 0);
 		this.entityData.define(DATA_IS_EVOLVING, false);
 		this.entityData.define(DATA_EVOLVE_TIME, 0);
@@ -1020,37 +1020,25 @@ public class EndspeakerEntity extends SeaMonster {
 		}
 		if (this.getPhase() == 0 || this.getPhase() == 1 || this.getPhase() == 2) {
 			if (compound.contains("IsEvolving")) {
-				this.entityData.set(DATA_IS_EVOLVING, compound.getBoolean("IsEvolving"));
-			} else if (compound.contains("DataisEvolving")) {
-				this.entityData.set(DATA_IS_EVOLVING, compound.getBoolean("DataisEvolving"));
+			    this.entityData.set(DATA_IS_EVOLVING, compound.getBoolean("IsEvolving"));
 			}
 			if (compound.contains("EvolveTime")) {
 				this.setEvolveTime(compound.getInt("EvolveTime"));
-			} else if (compound.contains("DataEvolveTime")) {
-				this.setEvolveTime(compound.getInt("DataEvolveTime"));
 			}
 		}
 		if (this.getPhase() == 2) {
 			if (compound.contains("Duration")) {
 				this.setDuration(compound.getInt("Duration"));
-			} else if (compound.contains("Dataduration")) {
-				this.setDuration(compound.getInt("Dataduration"));
 			}
 			if (compound.contains("SkillCooldown")) {
 				this.setSkillCooldown(compound.getInt("SkillCooldown"));
-			} else if (compound.contains("Dataskillp")) {
-				this.setSkillCooldown(compound.getInt("Dataskillp"));
 			}
 		} else if (!this.hasNextPhase()) {
 			if (compound.contains("Duration")) {
 				this.setDuration(compound.getInt("Duration"));
-			} else if (compound.contains("Dataduration")) {
-				this.setDuration(compound.getInt("Dataduration"));
 			}
 			if (compound.contains("SkillCooldown")) {
 				this.setSkillCooldown(compound.getInt("SkillCooldown"));
-			} else if (compound.contains("Dataskillp")) {
-				this.setSkillCooldown(compound.getInt("Dataskillp"));
 			}
 		}
 	}
@@ -1544,11 +1532,11 @@ public class EndspeakerEntity extends SeaMonster {
 	}
 
 	public String getSyncedAnimation() {
-		return this.entityData.get(ANIMATION);
+		return this.entityData.get(DATA_ANIMATION);
 	}
 
 	public void setAnimation(String animation) {
-		this.entityData.set(ANIMATION, animation);
+		this.entityData.set(DATA_ANIMATION, animation);
 	}
 
 	@Override

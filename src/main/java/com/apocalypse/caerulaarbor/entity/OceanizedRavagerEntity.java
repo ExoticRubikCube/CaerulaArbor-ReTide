@@ -45,7 +45,7 @@ import software.bernie.geckolib.core.object.PlayState;
 import net.minecraft.sounds.SoundEvents;
 
 public class OceanizedRavagerEntity extends SeaMonster {
-    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedRavagerEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(OceanizedRavagerEntity.class, EntityDataSerializers.STRING);
     private boolean swinging;
     private long lastSwing;
     public String animationprocedure = "empty";
@@ -85,7 +85,7 @@ public class OceanizedRavagerEntity extends SeaMonster {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(ANIMATION, "undefined");
+        this.entityData.define(DATA_ANIMATION, "undefined");
     }
 
     @Override
@@ -297,11 +297,11 @@ public class OceanizedRavagerEntity extends SeaMonster {
     }
 
     public String getSyncedAnimation() {
-        return this.entityData.get(ANIMATION);
+        return this.entityData.get(DATA_ANIMATION);
     }
 
     public void setAnimation(String animation) {
-        this.entityData.set(ANIMATION, animation);
+        this.entityData.set(DATA_ANIMATION, animation);
     }
 
     @Override

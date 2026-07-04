@@ -44,7 +44,7 @@ public class SwarmcallerDollTileEntity extends RandomizableContainerBlockEntity 
 	}
 
 	private PlayState predicate(AnimationState event) {
-		String animationprocedure = ("" + this.getBlockState().getValue(SwarmcallerDollBlock.ANIMATION));
+		String animationprocedure = ("" + this.getBlockState().getValue(SwarmcallerDollBlock.DATA_ANIMATION));
 		if (animationprocedure.equals("0")) {
 			return event.setAndContinue(RawAnimation.begin().thenLoop(animationprocedure));
 		}
@@ -54,7 +54,7 @@ public class SwarmcallerDollTileEntity extends RandomizableContainerBlockEntity 
 	String prevAnim = "0";
 
 	private PlayState procedurePredicate(AnimationState event) {
-		String animationprocedure = ("" + this.getBlockState().getValue(SwarmcallerDollBlock.ANIMATION));
+		String animationprocedure = ("" + this.getBlockState().getValue(SwarmcallerDollBlock.DATA_ANIMATION));
 		if (!animationprocedure.equals("0") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!animationprocedure.equals(prevAnim) && !animationprocedure.equals("0"))) {
 			if (!animationprocedure.equals(prevAnim))
 				event.getController().forceAnimationReset();

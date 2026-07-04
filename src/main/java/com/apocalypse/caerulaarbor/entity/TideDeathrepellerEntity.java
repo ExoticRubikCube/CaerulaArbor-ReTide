@@ -56,11 +56,11 @@ import java.util.Comparator;
 import java.util.List;
 
 public class TideDeathrepellerEntity extends SeaMonster {
-    public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(TideDeathrepellerEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(TideDeathrepellerEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(TideDeathrepellerEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(TideDeathrepellerEntity.class, EntityDataSerializers.STRING);
    //TODO NBT的书写风格需要对齐原版
-    public static final EntityDataAccessor<Integer> DATA_skillp = SynchedEntityData.defineId(TideDeathrepellerEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(TideDeathrepellerEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_SKILLP = SynchedEntityData.defineId(TideDeathrepellerEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_DURATION = SynchedEntityData.defineId(TideDeathrepellerEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
     private long lastSwing;
     public String animationprocedure = "empty";
@@ -81,10 +81,10 @@ public class TideDeathrepellerEntity extends SeaMonster {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(SHOOT, false);
-        this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(DATA_skillp, 100);
-        this.entityData.define(DATA_duration, 0);
+        this.entityData.define(DATA_SHOOT, false);
+        this.entityData.define(DATA_ANIMATION, "undefined");
+        this.entityData.define(DATA_SKILLP, 100);
+        this.entityData.define(DATA_DURATION, 0);
     }
 
     @Override
@@ -245,17 +245,19 @@ public class TideDeathrepellerEntity extends SeaMonster {
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putInt("Dataskillp", this.entityData.get(DATA_skillp));
-        compound.putInt("Dataduration", this.entityData.get(DATA_duration));
+        compound.putInt("Skillp", this.entityData.get(DATA_SKILLP));
+        compound.putInt("Duration", this.entityData.get(DATA_DURATION));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Dataskillp"))
-            this.entityData.set(DATA_skillp, compound.getInt("Dataskillp"));
-        if (compound.contains("Dataduration"))
-            this.entityData.set(DATA_duration, compound.getInt("Dataduration"));
+        if (compound.contains("Skillp")) {
+            this.entityData.set(DATA_SKILLP, compound.getInt("Skillp"));
+        }
+        if (compound.contains("Duration")) {
+            this.entityData.set(DATA_DURATION, compound.getInt("Duration"));
+        }
 	}
 
     @Override
@@ -284,10 +286,10 @@ public class TideDeathrepellerEntity extends SeaMonster {
             }
             return;
         }
-        double skillCooldown = this.getEntityData().get(DATA_skillp);
-        double skillDuration = this.getEntityData().get(DATA_duration);
+        double skillCooldown = this.getEntityData().get(DATA_SKILLP);
+        double skillDuration = this.getEntityData().get(DATA_DURATION);
         if (skillDuration > 0) {
-            this.getEntityData().set(DATA_duration, (int) (skillDuration - 1));
+            this.getEntityData().set(DATA_DURATION, (int) (skillDuration - 1));
         }
         if (skillCooldown <= 0) {
             double nearbyCount = 0;
@@ -328,14 +330,14 @@ public class TideDeathrepellerEntity extends SeaMonster {
                             EntityUtils.repellerChop(this.level(), x, y, z, this, 3.5);
                         }
                     });
-                    this.getEntityData().set(DATA_duration, 53);
-                    this.getEntityData().set(DATA_skillp, 300);
+                    this.getEntityData().set(DATA_DURATION, 53);
+                    this.getEntityData().set(DATA_SKILLP, 300);
                 }
             }
         } else {
-            this.getEntityData().set(DATA_skillp, (int) (skillCooldown - 1));
+            this.getEntityData().set(DATA_SKILLP, (int) (skillCooldown - 1));
             if (MapVariables.get(this.level()).strategy_grow >= 3) {
-                this.getEntityData().set(DATA_skillp, (int) (skillCooldown - 2));
+                this.getEntityData().set(DATA_SKILLP, (int) (skillCooldown - 2));
             }
         }
         nearest = this.level().getEntitiesOfClass(TideBishopEntity.class, AABB.ofSize(new Vec3(x, y, z), 128, 128, 128), candidate -> true).stream()
@@ -457,11 +459,11 @@ public class TideDeathrepellerEntity extends SeaMonster {
     }
 
     public String getSyncedAnimation() {
-        return this.entityData.get(ANIMATION);
+        return this.entityData.get(DATA_ANIMATION);
     }
 
     public void setAnimation(String animation) {
-        this.entityData.set(ANIMATION, animation);
+        this.entityData.set(DATA_ANIMATION, animation);
     }
 
     @Override
@@ -472,7 +474,7 @@ public class TideDeathrepellerEntity extends SeaMonster {
     }
 
     public boolean isFaking() {
-        if (this.getEntityData().get(TideDeathrepellerEntity.DATA_duration) > 0) {
+        if (this.getEntityData().get(TideDeathrepellerEntity.DATA_DURATION) > 0) {
             return false;
         }
         return !this.hasEffect(CAMobEffects.FAKE_DEATH.get());

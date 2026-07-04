@@ -53,7 +53,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public abstract class AbstractPathshaperEntity extends SeaMonster {
-	protected static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(AbstractPathshaperEntity.class, EntityDataSerializers.STRING);
+	protected static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(AbstractPathshaperEntity.class, EntityDataSerializers.STRING);
 	protected static final EntityDataAccessor<Integer> DATA_ATTACK_SKILLP = SynchedEntityData.defineId(AbstractPathshaperEntity.class, EntityDataSerializers.INT);
 	protected static final EntityDataAccessor<Integer> DATA_HURT_SKILLP = SynchedEntityData.defineId(AbstractPathshaperEntity.class, EntityDataSerializers.INT);
 	protected static final EntityDataAccessor<Integer> DATA_PHASE = SynchedEntityData.defineId(AbstractPathshaperEntity.class, EntityDataSerializers.INT);
@@ -73,7 +73,7 @@ public abstract class AbstractPathshaperEntity extends SeaMonster {
 	@Override
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(ANIMATION, "undefined");
+		this.entityData.define(DATA_ANIMATION, "undefined");
 		this.entityData.define(DATA_ATTACK_SKILLP, 0);
 		this.entityData.define(DATA_HURT_SKILLP, 0);
 		this.entityData.define(DATA_PHASE, 0);
@@ -209,11 +209,11 @@ public abstract class AbstractPathshaperEntity extends SeaMonster {
 	}
 
 	public String getSyncedAnimation() {
-		return this.entityData.get(ANIMATION);
+		return this.entityData.get(DATA_ANIMATION);
 	}
 
 	public void setAnimation(String animation) {
-		this.entityData.set(ANIMATION, animation);
+		this.entityData.set(DATA_ANIMATION, animation);
 	}
 
 	@Override
@@ -378,10 +378,9 @@ public abstract class AbstractPathshaperEntity extends SeaMonster {
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
-		// TODO: Other entities that still use MCreator-style flattened NBT keys should be migrated to semantic split keys too.
 		compound.putInt("AttackCount", this.getAttackSkillp());
 		compound.putInt("HurtCount", this.getHurtSkillp());
-		compound.putInt("Dataphase", this.getPhase());
+		compound.putInt("Phase", this.getPhase());
 	}
 
 	@Override
@@ -391,8 +390,8 @@ public abstract class AbstractPathshaperEntity extends SeaMonster {
 			this.setAttackSkillp(compound.getInt("AttackCount"));
 		if (compound.contains("HurtCount"))
 			this.setHurtSkillp(compound.getInt("HurtCount"));
-		if (compound.contains("Dataphase"))
-			this.setPhase(compound.getInt("Dataphase"));
+		if (compound.contains("Phase"))
+			this.setPhase(compound.getInt("Phase"));
 	}
 
 

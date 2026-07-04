@@ -57,8 +57,8 @@ import java.util.EnumSet;
 import java.util.List;
 
 public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMob {
-    public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(CompassionPrayerEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(CompassionPrayerEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(CompassionPrayerEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(CompassionPrayerEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_PHASE = SynchedEntityData.defineId(CompassionPrayerEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_REVIVE_TICK = SynchedEntityData.defineId(CompassionPrayerEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
@@ -80,8 +80,8 @@ public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMo
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(SHOOT, false);
-        this.entityData.define(ANIMATION, "undefined");
+        this.entityData.define(DATA_SHOOT, false);
+        this.entityData.define(DATA_ANIMATION, "undefined");
         this.entityData.define(DATA_PHASE, 0);
         this.entityData.define(DATA_REVIVE_TICK, 0);
     }
@@ -200,7 +200,7 @@ public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMo
             this.target = null;
             this.seeTime = 0;
             this.attackTime = -1;
-            ((CompassionPrayerEntity) rangedAttackMob).entityData.set(SHOOT, false);
+            ((CompassionPrayerEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
         }
 
         public boolean requiresUpdateEveryTick() {
@@ -223,10 +223,10 @@ public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMo
             this.mob.getLookControl().setLookAt(this.target, 30.0F, 30.0F);
             if (--this.attackTime == 0) {
                 if (!flag) {
-                    ((CompassionPrayerEntity) rangedAttackMob).entityData.set(SHOOT, false);
+                    ((CompassionPrayerEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
                     return;
                 }
-                ((CompassionPrayerEntity) rangedAttackMob).entityData.set(SHOOT, true);
+                ((CompassionPrayerEntity) rangedAttackMob).entityData.set(DATA_SHOOT, true);
                 float f = (float) Math.sqrt(d0) / this.attackRadius;
                 float f1 = Mth.clamp(f, 0.1F, 1.0F);
                 this.rangedAttackMob.performRangedAttack(this.target, f1);
@@ -234,7 +234,7 @@ public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMo
             } else if (this.attackTime < 0) {
                 this.attackTime = Mth.floor(Mth.lerp(Math.sqrt(d0) / (double) this.attackRadius, this.attackIntervalMin, this.attackIntervalMax));
             } else
-                ((CompassionPrayerEntity) rangedAttackMob).entityData.set(SHOOT, false);
+                ((CompassionPrayerEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
         }
     }
 
@@ -288,17 +288,19 @@ public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMo
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putInt("DataPHASE", this.entityData.get(DATA_PHASE));
-        compound.putInt("DataREVIVE_TICK", this.entityData.get(DATA_REVIVE_TICK));
+        compound.putInt("Phase", this.entityData.get(DATA_PHASE));
+        compound.putInt("ReviveTick", this.entityData.get(DATA_REVIVE_TICK));
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("DataPHASE"))
-            this.entityData.set(DATA_PHASE, compound.getInt("DataPHASE"));
-        if (compound.contains("DataREVIVE_TICK"))
-            this.entityData.set(DATA_REVIVE_TICK, compound.getInt("DataREVIVE_TICK"));
+        if (compound.contains("Phase")) {
+            this.entityData.set(DATA_PHASE, compound.getInt("Phase"));
+        }
+        if (compound.contains("ReviveTick")) {
+            this.entityData.set(DATA_REVIVE_TICK, compound.getInt("ReviveTick"));
+        }
     }
 
     @Override
@@ -438,7 +440,7 @@ public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMo
         if (this.swinging && this.lastSwing + 20L <= level().getGameTime()) {
             this.swinging = false;
         }
-        if ((this.swinging || this.entityData.get(SHOOT)) && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+        if ((this.swinging || this.entityData.get(DATA_SHOOT)) && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
             event.getController().forceAnimationReset();
             return event.setAndContinue(RawAnimation.begin().thenPlay("animation.compassion_prayer.attack"));
         }
@@ -474,11 +476,11 @@ public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMo
     }
 
     public String getSyncedAnimation() {
-        return this.entityData.get(ANIMATION);
+        return this.entityData.get(DATA_ANIMATION);
     }
 
     public void setAnimation(String animation) {
-        this.entityData.set(ANIMATION, animation);
+        this.entityData.set(DATA_ANIMATION, animation);
     }
 
     @Override

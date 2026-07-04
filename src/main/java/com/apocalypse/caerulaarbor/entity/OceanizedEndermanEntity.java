@@ -58,10 +58,10 @@ import java.util.List;
 
 public class OceanizedEndermanEntity extends SeaMonster {
     private static final TagKey<DamageType> BYPASSES_ENDERMAN = TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "bypasses_enderman"));
-    public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanizedEndermanEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedEndermanEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<Integer> DATA_skillp = SynchedEntityData.defineId(OceanizedEndermanEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Integer> DATA_cooldown = SynchedEntityData.defineId(OceanizedEndermanEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(OceanizedEndermanEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(OceanizedEndermanEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> DATA_SKILLP = SynchedEntityData.defineId(OceanizedEndermanEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_COOLDOWN = SynchedEntityData.defineId(OceanizedEndermanEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
     private long lastSwing;
     public String animationprocedure = "empty";
@@ -81,10 +81,10 @@ public class OceanizedEndermanEntity extends SeaMonster {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(SHOOT, false);
-        this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(DATA_skillp, 150);
-        this.entityData.define(DATA_cooldown, 200);
+        this.entityData.define(DATA_SHOOT, false);
+        this.entityData.define(DATA_ANIMATION, "undefined");
+        this.entityData.define(DATA_SKILLP, 150);
+        this.entityData.define(DATA_COOLDOWN, 200);
     }
 
     @Override
@@ -297,17 +297,19 @@ public class OceanizedEndermanEntity extends SeaMonster {
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putInt("Dataskillp", this.entityData.get(DATA_skillp));
-        compound.putInt("Datacooldown", this.entityData.get(DATA_cooldown));
+        compound.putInt("Skillp", this.entityData.get(DATA_SKILLP));
+        compound.putInt("Cooldown", this.entityData.get(DATA_COOLDOWN));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Dataskillp"))
-            this.entityData.set(DATA_skillp, compound.getInt("Dataskillp"));
-        if (compound.contains("Datacooldown"))
-            this.entityData.set(DATA_cooldown, compound.getInt("Datacooldown"));
+        if (compound.contains("Skillp")) {
+            this.entityData.set(DATA_SKILLP, compound.getInt("Skillp"));
+        }
+        if (compound.contains("Cooldown")) {
+            this.entityData.set(DATA_COOLDOWN, compound.getInt("Cooldown"));
+        }
 	}
 
     @Override
@@ -321,13 +323,13 @@ public class OceanizedEndermanEntity extends SeaMonster {
         double sklp;
         double cool;
         if (this.isAlive()) {
-            sklp = (Entity) this instanceof OceanizedEndermanEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp) : 0;
-            cool = (Entity) this instanceof OceanizedEndermanEntity _datEntI ? _datEntI.getEntityData().get(DATA_cooldown) : 0;
+            sklp = (Entity) this instanceof OceanizedEndermanEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP) : 0;
+            cool = (Entity) this instanceof OceanizedEndermanEntity _datEntI ? _datEntI.getEntityData().get(DATA_COOLDOWN) : 0;
             enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
             if (!(enemy == null)) {
                 if (sklp <= 0) {
                     if ((Entity) this instanceof OceanizedEndermanEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_skillp, 300);
+                        _datEntSetI.getEntityData().set(DATA_SKILLP, 300);
                     if (this instanceof OceanizedEndermanEntity) {
                         this.setAnimation("animation.oceanzied_enderman.skill");
                     }
@@ -391,19 +393,19 @@ public class OceanizedEndermanEntity extends SeaMonster {
                     });
                 } else {
                     if ((Entity) this instanceof OceanizedEndermanEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_skillp, (int) (sklp - 1));
+                        _datEntSetI.getEntityData().set(DATA_SKILLP, (int) (sklp - 1));
                 }
                 if (cool <= 0 && enemy.isAlive()) {
                     if ((enemy != null ? distanceTo(enemy) : -1) >= 8 && !((Entity) this instanceof LivingEntity _livEnt13 && _livEnt13.hasEffect(CAMobEffects.COOLDOWN_SINAL.get()))) {
                         if ((Entity) this instanceof OceanizedEndermanEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_cooldown, 100);
+                            _datEntSetI.getEntityData().set(DATA_COOLDOWN, 100);
                         this.teleportTo(x, y, z, enemy.getX(), enemy.getY(), enemy.getZ());
                         if (!this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL.get(), 100, 0, false, false));
                     }
                 } else {
                     if ((Entity) this instanceof OceanizedEndermanEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_cooldown, (int) (cool - 1));
+                        _datEntSetI.getEntityData().set(DATA_COOLDOWN, (int) (cool - 1));
                 }
             }
         }
@@ -505,11 +507,11 @@ public class OceanizedEndermanEntity extends SeaMonster {
     }
 
     public String getSyncedAnimation() {
-        return this.entityData.get(ANIMATION);
+        return this.entityData.get(DATA_ANIMATION);
     }
 
     public void setAnimation(String animation) {
-        this.entityData.set(ANIMATION, animation);
+        this.entityData.set(DATA_ANIMATION, animation);
     }
 
     @Override

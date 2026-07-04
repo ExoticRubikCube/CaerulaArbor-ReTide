@@ -2,10 +2,7 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CAAttributes;
-import com.apocalypse.caerulaarbor.init.CAEntities;
-import com.apocalypse.caerulaarbor.init.CAItems;
-import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.*;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
@@ -22,6 +19,7 @@ import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageSource;
@@ -54,17 +52,15 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
-import net.minecraft.sounds.SoundEvents;
-import com.apocalypse.caerulaarbor.init.CASounds;
 
 import java.util.Comparator;
 import java.util.List;
 
 public class OceanizedBruteEntity extends SeaMonster {
-    public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanizedBruteEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedBruteEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<Integer> DATA_ability = SynchedEntityData.defineId(OceanizedBruteEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Integer> DATA_skillp = SynchedEntityData.defineId(OceanizedBruteEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(OceanizedBruteEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(OceanizedBruteEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> DATA_ABILITY = SynchedEntityData.defineId(OceanizedBruteEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_SKILLP = SynchedEntityData.defineId(OceanizedBruteEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
     private long lastSwing;
     public String animationprocedure = "empty";
@@ -85,10 +81,10 @@ public class OceanizedBruteEntity extends SeaMonster {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(SHOOT, false);
-        this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(DATA_ability, 0);
-        this.entityData.define(DATA_skillp, 3);
+        this.entityData.define(DATA_SHOOT, false);
+        this.entityData.define(DATA_ANIMATION, "undefined");
+        this.entityData.define(DATA_ABILITY, 0);
+        this.entityData.define(DATA_SKILLP, 3);
     }
 
     @Override
@@ -175,10 +171,10 @@ public class OceanizedBruteEntity extends SeaMonster {
         if (sourceentity != null) {
             double sklp;
             if (this.isAlive()) {
-                sklp = (Entity) this instanceof OceanizedBruteEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp) : 0;
+                sklp = (Entity) this instanceof OceanizedBruteEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP) : 0;
                 if (sklp >= 0) {
                     if ((Entity) this instanceof OceanizedBruteEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_skillp, (int) (sklp - 1));
+                        _datEntSetI.getEntityData().set(DATA_SKILLP, (int) (sklp - 1));
                 } else {
                     if (distanceTo(sourceentity) <= 5 && !this.hasEffect(CAMobEffects.COOLDOWN_SINAL.get())) {
                         if (this instanceof OceanizedBruteEntity) {
@@ -188,7 +184,7 @@ public class OceanizedBruteEntity extends SeaMonster {
                             this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 40, 1, false, false));
                         ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((sourceentity.getX()), (sourceentity.getY()), (sourceentity.getZ())));
                         if ((Entity) this instanceof OceanizedBruteEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_skillp, 5);
+                            _datEntSetI.getEntityData().set(DATA_SKILLP, 5);
                         if (!this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL.get(), 80, 0, false, false));
                         CaerulaArborMod.queueServerWork(20, () -> {
@@ -309,17 +305,19 @@ public class OceanizedBruteEntity extends SeaMonster {
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putInt("Dataability", this.entityData.get(DATA_ability));
-        compound.putInt("Dataskillp", this.entityData.get(DATA_skillp));
+        compound.putInt("Ability", this.entityData.get(DATA_ABILITY));
+        compound.putInt("Skillp", this.entityData.get(DATA_SKILLP));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Dataability"))
-            this.entityData.set(DATA_ability, compound.getInt("Dataability"));
-        if (compound.contains("Dataskillp"))
-            this.entityData.set(DATA_skillp, compound.getInt("Dataskillp"));
+        if (compound.contains("Ability")) {
+            this.entityData.set(DATA_ABILITY, compound.getInt("Ability"));
+        }
+        if (compound.contains("Skillp")) {
+            this.entityData.set(DATA_SKILLP, compound.getInt("Skillp"));
+        }
 	}
 
     @Override
@@ -330,13 +328,13 @@ public class OceanizedBruteEntity extends SeaMonster {
         double y = this.getY();
         double z = this.getZ();
         double ablty;
-        ablty = (Entity) this instanceof OceanizedBruteEntity _datEntI ? _datEntI.getEntityData().get(DATA_ability) : 0;
+        ablty = (Entity) this instanceof OceanizedBruteEntity _datEntI ? _datEntI.getEntityData().get(DATA_ABILITY) : 0;
         if (ablty < 7) {
             if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
                 this.getAttribute(Attributes.ATTACK_DAMAGE)
                         .setBaseValue(((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) + 4));
             if ((Entity) this instanceof OceanizedBruteEntity _datEntSetI)
-                _datEntSetI.getEntityData().set(DATA_ability, (int) (ablty + 1));
+                _datEntSetI.getEntityData().set(DATA_ABILITY, (int) (ablty + 1));
             if (world instanceof ServerLevel _level)
                 _level.sendParticles(ParticleTypes.LAVA, x, (y + 0.75), z, 32, 0.75, 0.75, 0.75, 0.1);
         }
@@ -455,11 +453,11 @@ public class OceanizedBruteEntity extends SeaMonster {
     }
 
     public String getSyncedAnimation() {
-        return this.entityData.get(ANIMATION);
+        return this.entityData.get(DATA_ANIMATION);
     }
 
     public void setAnimation(String animation) {
-        this.entityData.set(ANIMATION, animation);
+        this.entityData.set(DATA_ANIMATION, animation);
     }
 
     @Override

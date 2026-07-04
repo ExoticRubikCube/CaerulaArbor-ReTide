@@ -16,6 +16,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -49,16 +50,15 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
-import net.minecraft.sounds.SoundEvents;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
 
 public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob, RavagerMountRider {
-    public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanizedEvokerEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedEvokerEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<Integer> DATA_skillp1 = SynchedEntityData.defineId(OceanizedEvokerEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Integer> DATA_skillp2 = SynchedEntityData.defineId(OceanizedEvokerEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(OceanizedEvokerEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(OceanizedEvokerEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> DATA_SKILLP_1 = SynchedEntityData.defineId(OceanizedEvokerEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_SKILLP_2 = SynchedEntityData.defineId(OceanizedEvokerEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
     private long lastSwing;
     public String animationprocedure = "empty";
@@ -79,10 +79,10 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(SHOOT, false);
-        this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(DATA_skillp1, 100);
-        this.entityData.define(DATA_skillp2, 150);
+        this.entityData.define(DATA_SHOOT, false);
+        this.entityData.define(DATA_ANIMATION, "undefined");
+        this.entityData.define(DATA_SKILLP_1, 100);
+        this.entityData.define(DATA_SKILLP_2, 150);
     }
 
     @Override
@@ -162,7 +162,7 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
             this.target = null;
             this.seeTime = 0;
             this.attackTime = -1;
-            ((OceanizedEvokerEntity) rangedAttackMob).entityData.set(SHOOT, false);
+            ((OceanizedEvokerEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
         }
 
         public boolean requiresUpdateEveryTick() {
@@ -185,10 +185,10 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
             this.mob.getLookControl().setLookAt(this.target, 30.0F, 30.0F);
             if (--this.attackTime == 0) {
                 if (!flag) {
-                    ((OceanizedEvokerEntity) rangedAttackMob).entityData.set(SHOOT, false);
+                    ((OceanizedEvokerEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
                     return;
                 }
-                ((OceanizedEvokerEntity) rangedAttackMob).entityData.set(SHOOT, true);
+                ((OceanizedEvokerEntity) rangedAttackMob).entityData.set(DATA_SHOOT, true);
                 float f = (float) Math.sqrt(d0) / this.attackRadius;
                 float f1 = Mth.clamp(f, 0.1F, 1.0F);
                 this.rangedAttackMob.performRangedAttack(this.target, f1);
@@ -196,7 +196,7 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
             } else if (this.attackTime < 0) {
                 this.attackTime = Mth.floor(Mth.lerp(Math.sqrt(d0) / (double) this.attackRadius, this.attackIntervalMin, this.attackIntervalMax));
             } else
-                ((OceanizedEvokerEntity) rangedAttackMob).entityData.set(SHOOT, false);
+                ((OceanizedEvokerEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
         }
     }
 
@@ -230,17 +230,19 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putInt("Dataskillp1", this.entityData.get(DATA_skillp1));
-        compound.putInt("Dataskillp2", this.entityData.get(DATA_skillp2));
+        compound.putInt("Skillp1", this.entityData.get(DATA_SKILLP_1));
+        compound.putInt("Skillp2", this.entityData.get(DATA_SKILLP_2));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Dataskillp1"))
-            this.entityData.set(DATA_skillp1, compound.getInt("Dataskillp1"));
-        if (compound.contains("Dataskillp2"))
-            this.entityData.set(DATA_skillp2, compound.getInt("Dataskillp2"));
+        if (compound.contains("Skillp1")) {
+            this.entityData.set(DATA_SKILLP_1, compound.getInt("Skillp1"));
+        }
+        if (compound.contains("Skillp2")) {
+            this.entityData.set(DATA_SKILLP_2, compound.getInt("Skillp2"));
+        }
 	}
 
     @Override
@@ -256,8 +258,8 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
         double dist;
         if (this.isAlive()) {
             enemy = this.getTarget();
-            sklp1 = (Entity) this instanceof OceanizedEvokerEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp1) : 0;
-            sklp2 = (Entity) this instanceof OceanizedEvokerEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp2) : 0;
+            sklp1 = (Entity) this instanceof OceanizedEvokerEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP_1) : 0;
+            sklp2 = (Entity) this instanceof OceanizedEvokerEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP_2) : 0;
             if (sklp1 <= 0) {
                 if (!(enemy == null) && enemy.isAlive()) {
                     dist = Math.round(distanceTo(enemy));
@@ -266,7 +268,7 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
                             this.setAnimation("animation.oceanized_evoker.spell");
                         }
                         if ((Entity) this instanceof OceanizedEvokerEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_skillp1, 100);
+                            _datEntSetI.getEntityData().set(DATA_SKILLP_1, 100);
                         if (!this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 40, 9, false, false));
                         if (dist > 6) {
@@ -333,7 +335,7 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
                 }
             } else {
                 if ((Entity) this instanceof OceanizedEvokerEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_skillp1, (int) (sklp1 - 1));
+                    _datEntSetI.getEntityData().set(DATA_SKILLP_1, (int) (sklp1 - 1));
                 if (sklp1 == 20) {
                     if (world instanceof Level _level) {
                         _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.EVOKER_PREPARE_ATTACK, SoundSource.NEUTRAL, 1, 1);
@@ -349,7 +351,7 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
                         _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.EVOKER_CAST_SPELL, SoundSource.NEUTRAL, 1, 1);
                     }
                     if ((Entity) this instanceof OceanizedEvokerEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_skillp2, 300);
+                        _datEntSetI.getEntityData().set(DATA_SKILLP_2, 300);
                     if (!this.level().isClientSide())
                         this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 40, 9, false, false));
                     assert Boolean.TRUE; //#dbg:EvokerSkill:evo_skl_2
@@ -430,7 +432,7 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
                 }
             } else {
                 if ((Entity) this instanceof OceanizedEvokerEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_skillp2, (int) (sklp2 - 1));
+                    _datEntSetI.getEntityData().set(DATA_SKILLP_2, (int) (sklp2 - 1));
                 if (sklp2 == 20) {
                     if (world instanceof Level _level) {
                         _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.EVOKER_PREPARE_SUMMON, SoundSource.NEUTRAL, 1, 1);
@@ -522,7 +524,7 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
         if (this.swinging && this.lastSwing + 20L <= level().getGameTime()) {
             this.swinging = false;
         }
-        if ((this.swinging || this.entityData.get(SHOOT)) && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+        if ((this.swinging || this.entityData.get(DATA_SHOOT)) && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
             event.getController().forceAnimationReset();
             return event.setAndContinue(RawAnimation.begin().thenPlay("animation.oceanized_evoker.attack"));
         }
@@ -558,11 +560,11 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
     }
 
     public String getSyncedAnimation() {
-        return this.entityData.get(ANIMATION);
+        return this.entityData.get(DATA_ANIMATION);
     }
 
     public void setAnimation(String animation) {
-        this.entityData.set(ANIMATION, animation);
+        this.entityData.set(DATA_ANIMATION, animation);
     }
 
     @Override

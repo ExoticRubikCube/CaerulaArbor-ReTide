@@ -7,6 +7,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -31,7 +32,6 @@ import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraft.sounds.SoundEvents;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -39,7 +39,7 @@ import java.util.List;
 
 public class MizukiStatueBlock extends BaseEntityBlock implements SimpleWaterloggedBlock, EntityBlock {
 	public static final IntegerProperty BLOCKSTATE = IntegerProperty.create("blockstate", 0, 1);
-	public static final IntegerProperty ANIMATION = IntegerProperty.create("animation", 0, 2);
+	public static final IntegerProperty DATA_ANIMATION = IntegerProperty.create("animation", 0, 2);
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
 	public MizukiStatueBlock() {
@@ -88,7 +88,7 @@ public class MizukiStatueBlock extends BaseEntityBlock implements SimpleWaterlog
 
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-		builder.add(ANIMATION, WATERLOGGED, BLOCKSTATE);
+		builder.add(DATA_ANIMATION, WATERLOGGED, BLOCKSTATE);
 	}
 
 	@Override

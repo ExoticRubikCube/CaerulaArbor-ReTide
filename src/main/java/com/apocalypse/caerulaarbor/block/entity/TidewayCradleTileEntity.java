@@ -52,7 +52,7 @@ public class TidewayCradleTileEntity extends RandomizableContainerBlockEntity im
 			blockstateOld = blockstateNew;
 			return PlayState.STOP;
 		}
-		String animationprocedure = ("" + this.getBlockState().getValue(TidewayCradleBlock.ANIMATION));
+		String animationprocedure = ("" + this.getBlockState().getValue(TidewayCradleBlock.DATA_ANIMATION));
 		if (animationprocedure.equals("0")) {
 			return event.setAndContinue(RawAnimation.begin().thenLoop(animationprocedure));
 		}
@@ -62,7 +62,7 @@ public class TidewayCradleTileEntity extends RandomizableContainerBlockEntity im
 	String prevAnim = "0";
 
 	private PlayState procedurePredicate(AnimationState event) {
-		String animationprocedure = ("" + this.getBlockState().getValue(TidewayCradleBlock.ANIMATION));
+		String animationprocedure = ("" + this.getBlockState().getValue(TidewayCradleBlock.DATA_ANIMATION));
 		if (!animationprocedure.equals("0") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!animationprocedure.equals(prevAnim) && !animationprocedure.equals("0"))) {
 			if (!animationprocedure.equals(prevAnim))
 				event.getController().forceAnimationReset();

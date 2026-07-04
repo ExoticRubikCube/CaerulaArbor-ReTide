@@ -5,6 +5,7 @@ import com.apocalypse.caerulaarbor.entity.base.SyncedAnimationEntity;
 import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CASounds;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
@@ -23,6 +24,7 @@ import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
@@ -62,8 +64,6 @@ import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
-import net.minecraft.sounds.SoundEvents;
-import com.apocalypse.caerulaarbor.init.CASounds;
 
 import javax.annotation.Nullable;
 import java.util.Comparator;
@@ -72,7 +72,7 @@ import java.util.List;
 public class LastKnightAndHorseEntity extends Animal implements GeoEntity, SyncedAnimationEntity {
 
     public static final EntityDataAccessor<Boolean> DATA_IS_SHOOTING = SynchedEntityData.defineId(LastKnightAndHorseEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(LastKnightAndHorseEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(LastKnightAndHorseEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_ADDITION = SynchedEntityData.defineId(LastKnightAndHorseEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_SKILL_COOLDOWN = SynchedEntityData.defineId(LastKnightAndHorseEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_SKILL_DURATION = SynchedEntityData.defineId(LastKnightAndHorseEntity.class, EntityDataSerializers.INT);
@@ -98,7 +98,7 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(DATA_IS_SHOOTING, false);
-        this.entityData.define(ANIMATION, "undefined");
+        this.entityData.define(DATA_ANIMATION, "undefined");
         this.entityData.define(DATA_ADDITION, 0);
         this.entityData.define(DATA_SKILL_COOLDOWN, 140);
         this.entityData.define(DATA_SKILL_DURATION, 0);
@@ -264,16 +264,10 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
         super.readAdditionalSaveData(compound);
         if (compound.contains("Addition"))
             this.entityData.set(DATA_ADDITION, compound.getInt("Addition"));
-        else if (compound.contains("Dataaddiiton"))
-            this.entityData.set(DATA_ADDITION, compound.getInt("Dataaddiiton"));
         if (compound.contains("SkillCooldown"))
             this.entityData.set(DATA_SKILL_COOLDOWN, compound.getInt("SkillCooldown"));
-        else if (compound.contains("Dataskillp"))
-            this.entityData.set(DATA_SKILL_COOLDOWN, compound.getInt("Dataskillp"));
         if (compound.contains("SkillDuration"))
             this.entityData.set(DATA_SKILL_DURATION, compound.getInt("SkillDuration"));
-        else if (compound.contains("Dataduration"))
-            this.entityData.set(DATA_SKILL_DURATION, compound.getInt("Dataduration"));
 	}
 
     @Override
@@ -533,11 +527,11 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
     }
 
     public String getSyncedAnimation() {
-        return this.entityData.get(ANIMATION);
+        return this.entityData.get(DATA_ANIMATION);
     }
 
     public void setAnimation(String animation) {
-        this.entityData.set(ANIMATION, animation);
+        this.entityData.set(DATA_ANIMATION, animation);
     }
 
     public void applyLastKnightFreeze(Entity sourceEntity) {

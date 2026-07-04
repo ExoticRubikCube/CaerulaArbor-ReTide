@@ -59,11 +59,11 @@ import java.util.Comparator;
 import java.util.List;
 
 public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationEntity {
-    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(UlpiansEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(UlpiansEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Integer> DATA_skillp1 = SynchedEntityData.defineId(UlpiansEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Integer> DATA_skillp2 = SynchedEntityData.defineId(UlpiansEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Integer> DATA_bonus = SynchedEntityData.defineId(UlpiansEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(UlpiansEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> DATA_DURATION = SynchedEntityData.defineId(UlpiansEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_SKILLP_1 = SynchedEntityData.defineId(UlpiansEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_SKILLP_2 = SynchedEntityData.defineId(UlpiansEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_BONUS = SynchedEntityData.defineId(UlpiansEntity.class, EntityDataSerializers.INT);
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private boolean swinging;
     private long lastSwing;
@@ -84,11 +84,11 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(DATA_duration, 0);
-        this.entityData.define(DATA_skillp1, 80);
-        this.entityData.define(DATA_skillp2, 160);
-        this.entityData.define(DATA_bonus, 0);
+        this.entityData.define(DATA_ANIMATION, "undefined");
+        this.entityData.define(DATA_DURATION, 0);
+        this.entityData.define(DATA_SKILLP_1, 80);
+        this.entityData.define(DATA_SKILLP_2, 160);
+        this.entityData.define(DATA_BONUS, 0);
     }
 
     @Override
@@ -171,7 +171,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
         double targetY = target.getY();
         double targetZ = target.getZ();
         if (!this.level().isClientSide()) {
-            this.getEntityData().set(DATA_duration, this.getEntityData().get(DATA_duration) + 30);
+            this.getEntityData().set(DATA_DURATION, this.getEntityData().get(DATA_DURATION) + 30);
             this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
                     CASounds.ANCHOR_PRE.get(), SoundSource.HOSTILE, 2.2F, 1);
             CaerulaArborMod.queueServerWork(14, () -> {
@@ -230,11 +230,10 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
         if (this.isAlive()) {
             if (invulnerableTime <= 15) {
                 healAmoun = 8;
-                if (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.6) {
+                if (this.getHealth() < this.getMaxHealth() * 0.6) {
                     healAmoun = 12;
                 }
-                if ((Entity) this instanceof LivingEntity _entity)
-                    _entity.setHealth((float) Math.min(((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) + healAmoun, (Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1));
+                this.setHealth((float) Math.min(this.getHealth() + healAmoun, this.getMaxHealth()));
             }
         }
         if (source.is(DamageTypes.FALL))
@@ -247,34 +246,26 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putInt("Duration", this.entityData.get(DATA_duration));
-        compound.putInt("PrimarySkillCooldown", this.entityData.get(DATA_skillp1));
-        compound.putInt("SecondarySkillCooldown", this.entityData.get(DATA_skillp2));
-        compound.putInt("BonusStacks", this.entityData.get(DATA_bonus));
+        compound.putInt("Duration", this.entityData.get(DATA_DURATION));
+        compound.putInt("Skillp1", this.entityData.get(DATA_SKILLP_1));
+        compound.putInt("Skillp2", this.entityData.get(DATA_SKILLP_2));
+        compound.putInt("Bonus", this.entityData.get(DATA_BONUS));
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         if (compound.contains("Duration")) {
-            this.entityData.set(DATA_duration, compound.getInt("Duration"));
-        } else if (compound.contains("Dataduration")) {
-            this.entityData.set(DATA_duration, compound.getInt("Dataduration"));
+            this.entityData.set(DATA_DURATION, compound.getInt("Duration"));
         }
-        if (compound.contains("PrimarySkillCooldown")) {
-            this.entityData.set(DATA_skillp1, compound.getInt("PrimarySkillCooldown"));
-        } else if (compound.contains("Dataskillp1")) {
-            this.entityData.set(DATA_skillp1, compound.getInt("Dataskillp1"));
+        if (compound.contains("Skillp1")) {
+            this.entityData.set(DATA_SKILLP_1, compound.getInt("Skillp1"));
         }
-        if (compound.contains("SecondarySkillCooldown")) {
-            this.entityData.set(DATA_skillp2, compound.getInt("SecondarySkillCooldown"));
-        } else if (compound.contains("Dataskillp2")) {
-            this.entityData.set(DATA_skillp2, compound.getInt("Dataskillp2"));
+        if (compound.contains("Skillp2")) {
+            this.entityData.set(DATA_SKILLP_2, compound.getInt("Skillp2"));
         }
-        if (compound.contains("BonusStacks")) {
-            this.entityData.set(DATA_bonus, compound.getInt("BonusStacks"));
-        } else if (compound.contains("Databonus")) {
-            this.entityData.set(DATA_bonus, compound.getInt("Databonus"));
+        if (compound.contains("Bonus")) {
+            this.entityData.set(DATA_BONUS, compound.getInt("Bonus"));
         }
     }
 
@@ -284,10 +275,10 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
         LevelAccessor world = this.level();
         double bns;
         double perc;
-        bns = (Entity) this instanceof UlpiansEntity _datEntI ? _datEntI.getEntityData().get(DATA_bonus) : 0;
+        bns = (Entity) this instanceof UlpiansEntity _datEntI ? _datEntI.getEntityData().get(DATA_BONUS) : 0;
         if (bns < 10) {
             if ((Entity) this instanceof UlpiansEntity _datEntSetI)
-                _datEntSetI.getEntityData().set(DATA_bonus, (int) (bns + 1));
+                _datEntSetI.getEntityData().set(DATA_BONUS, (int) (bns + 1));
             {
                 final Vec3 _center = new Vec3(this.getX(), this.getY(), this.getZ());
                 List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(48 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
@@ -327,17 +318,17 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
         double dura;
         double skillp2;
         if (this.isAlive()) {
-            sklp1 = (Entity) this instanceof UlpiansEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp1) : 0;
-            skillp2 = (Entity) this instanceof UlpiansEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp2) : 0;
-            dura = (Entity) this instanceof UlpiansEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
+            sklp1 = (Entity) this instanceof UlpiansEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP_1) : 0;
+            skillp2 = (Entity) this instanceof UlpiansEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP_2) : 0;
+            dura = (Entity) this instanceof UlpiansEntity _datEntI ? _datEntI.getEntityData().get(DATA_DURATION) : 0;
             enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
             if (dura > 0) {
                 if ((Entity) this instanceof UlpiansEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_duration, (int) (dura - 1));
+                    _datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura - 1));
             }
             if (sklp1 > 0) {
                 if ((Entity) this instanceof UlpiansEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_skillp1, (int) (sklp1 - 1));
+                    _datEntSetI.getEntityData().set(DATA_SKILLP_1, (int) (sklp1 - 1));
             } else {
                 if (!(enemy == null) && enemy.isAlive()) {
                     if (distanceTo(enemy) <= 3.5) {
@@ -345,9 +336,9 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                             this.setAnimation("animation.ulpians.pull");
                         }
                         if ((Entity) this instanceof UlpiansEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_skillp1, 120);
+                            _datEntSetI.getEntityData().set(DATA_SKILLP_1, 120);
                         if ((Entity) this instanceof UlpiansEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_duration, (int) (dura + 40));
+                            _datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura + 40));
                         if (world instanceof Level _level) {
                             _level.playSound(null, BlockPos.containing(x, y, z), CASounds.ULPIANS_PUL_PRE.get(), SoundSource.NEUTRAL, (float) 2.2, 1);
                         }
@@ -456,7 +447,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
             }
             if (skillp2 > 0) {
                 if ((Entity) this instanceof UlpiansEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_skillp2, (int) (skillp2 - 1));
+                    _datEntSetI.getEntityData().set(DATA_SKILLP_2, (int) (skillp2 - 1));
             } else {
                 if (!(enemy == null) && enemy.isAlive()) {
                     if ((enemy != null ? distanceTo(enemy) : -1) <= 24) {
@@ -465,13 +456,13 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                         }
                         if (SpecterEntity.isSpecterAround(world, x, y, z)) {
                             if ((Entity) this instanceof UlpiansEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_skillp2, 820);
+                                _datEntSetI.getEntityData().set(DATA_SKILLP_2, 820);
                         } else {
                             if ((Entity) this instanceof UlpiansEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_skillp2, 900);
+                                _datEntSetI.getEntityData().set(DATA_SKILLP_2, 900);
                         }
                         if ((Entity) this instanceof UlpiansEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_duration, (int) (dura + 40));
+                            _datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura + 40));
                         if (world instanceof Level _level) {
                             _level.playSound(null, BlockPos.containing(x, y, z), CASounds.ULPIANS_PUL_PRE.get(), SoundSource.NEUTRAL, (float) 2.2, 1);
                         }
@@ -602,7 +593,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
     }
 
     private boolean isUlpuansDurative() {
-        return this.isAlive() && this.getEntityData().get(DATA_duration) <= 0;
+        return this.isAlive() && this.getEntityData().get(DATA_DURATION) <= 0;
     }
     private PlayState movementPredicate(AnimationState event) {
         if (this.animationprocedure.equals("empty")) {
@@ -663,11 +654,11 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
     }
 
     public String getSyncedAnimation() {
-        return this.entityData.get(ANIMATION);
+        return this.entityData.get(DATA_ANIMATION);
     }
 
     public void setAnimation(String animation) {
-        this.entityData.set(ANIMATION, animation);
+        this.entityData.set(DATA_ANIMATION, animation);
     }
 
     @Override

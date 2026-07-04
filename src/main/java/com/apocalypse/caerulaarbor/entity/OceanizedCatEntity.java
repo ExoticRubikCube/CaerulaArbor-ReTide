@@ -14,6 +14,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -40,13 +41,12 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
-import net.minecraft.sounds.SoundEvents;
 
 public class OceanizedCatEntity extends SeaMonster {
-    public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanizedCatEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedCatEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<Integer> DATA_action_time = SynchedEntityData.defineId(OceanizedCatEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Boolean> DATA_stateSneaking = SynchedEntityData.defineId(OceanizedCatEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(OceanizedCatEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(OceanizedCatEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> DATA_ACTION_TIME = SynchedEntityData.defineId(OceanizedCatEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Boolean> DATA_STATE_SNEAKING = SynchedEntityData.defineId(OceanizedCatEntity.class, EntityDataSerializers.BOOLEAN);
     private boolean swinging;
     private long lastSwing;
     public String animationprocedure = "empty";
@@ -65,10 +65,10 @@ public class OceanizedCatEntity extends SeaMonster {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(SHOOT, false);
-        this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(DATA_action_time, 0);
-        this.entityData.define(DATA_stateSneaking, false);
+        this.entityData.define(DATA_SHOOT, false);
+        this.entityData.define(DATA_ANIMATION, "undefined");
+        this.entityData.define(DATA_ACTION_TIME, 0);
+        this.entityData.define(DATA_STATE_SNEAKING, false);
     }
 
     @Override
@@ -152,7 +152,7 @@ public class OceanizedCatEntity extends SeaMonster {
     public boolean hurt(DamageSource source, float amount) {
         setShiftKeyDown(false);
         if ((Entity) this instanceof OceanizedCatEntity _datEntSetL)
-            _datEntSetL.getEntityData().set(DATA_stateSneaking, false);
+            _datEntSetL.getEntityData().set(DATA_STATE_SNEAKING, false);
         if (source.is(DamageTypes.FALL))
             return false;
         if (source.is(DamageTypes.DROWN))
@@ -163,17 +163,19 @@ public class OceanizedCatEntity extends SeaMonster {
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putInt("Dataaction_time", this.entityData.get(DATA_action_time));
-        compound.putBoolean("DatastateSneaking", this.entityData.get(DATA_stateSneaking));
+        compound.putInt("ActionTime", this.entityData.get(DATA_ACTION_TIME));
+        compound.putBoolean("StateSneaking", this.entityData.get(DATA_STATE_SNEAKING));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Dataaction_time"))
-            this.entityData.set(DATA_action_time, compound.getInt("Dataaction_time"));
-        if (compound.contains("DatastateSneaking"))
-            this.entityData.set(DATA_stateSneaking, compound.getBoolean("DatastateSneaking"));
+        if (compound.contains("ActionTime")) {
+            this.entityData.set(DATA_ACTION_TIME, compound.getInt("ActionTime"));
+        }
+        if (compound.contains("StateSneaking")) {
+            this.entityData.set(DATA_STATE_SNEAKING, compound.getBoolean("StateSneaking"));
+        }
 	}
 
     @Override
@@ -182,22 +184,22 @@ public class OceanizedCatEntity extends SeaMonster {
         double time_stamp;
         boolean sneak;
         if (this.isAlive() && tickCount % 10 == 0) {
-            time_stamp = (Entity) this instanceof OceanizedCatEntity _datEntI ? _datEntI.getEntityData().get(DATA_action_time) : 0;
-            sneak = (Entity) this instanceof OceanizedCatEntity _datEntL3 && _datEntL3.getEntityData().get(DATA_stateSneaking);
+            time_stamp = (Entity) this instanceof OceanizedCatEntity _datEntI ? _datEntI.getEntityData().get(DATA_ACTION_TIME) : 0;
+            sneak = (Entity) this instanceof OceanizedCatEntity _datEntL3 && _datEntL3.getEntityData().get(DATA_STATE_SNEAKING);
             if (time_stamp > 0) {
                 if ((Entity) this instanceof OceanizedCatEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_action_time, (int) (time_stamp - 1));
+                    _datEntSetI.getEntityData().set(DATA_ACTION_TIME, (int) (time_stamp - 1));
             } else if (Math.random() < 0.02) {
                 if (sneak) {
                     if ((Entity) this instanceof OceanizedCatEntity _datEntSetL)
-                        _datEntSetL.getEntityData().set(DATA_stateSneaking, false);
+                        _datEntSetL.getEntityData().set(DATA_STATE_SNEAKING, false);
                     if ((Entity) this instanceof OceanizedCatEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_action_time, 10);
+                        _datEntSetI.getEntityData().set(DATA_ACTION_TIME, 10);
                 } else if (!this.isAggressive()) {
                     if ((Entity) this instanceof OceanizedCatEntity _datEntSetL)
-                        _datEntSetL.getEntityData().set(DATA_stateSneaking, true);
+                        _datEntSetL.getEntityData().set(DATA_STATE_SNEAKING, true);
                     if ((Entity) this instanceof OceanizedCatEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_action_time, 10);
+                        _datEntSetI.getEntityData().set(DATA_ACTION_TIME, 10);
                 }
             }
             setShiftKeyDown(sneak);
@@ -205,7 +207,7 @@ public class OceanizedCatEntity extends SeaMonster {
         if (this.isAggressive()) {
             setShiftKeyDown(false);
             if ((Entity) this instanceof OceanizedCatEntity _datEntSetL)
-                _datEntSetL.getEntityData().set(DATA_stateSneaking, false);
+                _datEntSetL.getEntityData().set(DATA_STATE_SNEAKING, false);
         }
         this.refreshDimensions();
     }
@@ -294,11 +296,11 @@ public class OceanizedCatEntity extends SeaMonster {
     }
 
     public String getSyncedAnimation() {
-        return this.entityData.get(ANIMATION);
+        return this.entityData.get(DATA_ANIMATION);
     }
 
     public void setAnimation(String animation) {
-        this.entityData.set(ANIMATION, animation);
+        this.entityData.set(DATA_ANIMATION, animation);
     }
 
     @Override

@@ -48,10 +48,10 @@ import software.bernie.geckolib.core.object.PlayState;
 import javax.annotation.Nullable;
 
 public class FakeOffspringEntity extends SeaMonster {
-    public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(FakeOffspringEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(FakeOffspringEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<Integer> DATA_dx = SynchedEntityData.defineId(FakeOffspringEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Integer> DATA_dz = SynchedEntityData.defineId(FakeOffspringEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(FakeOffspringEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(FakeOffspringEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> DATA_DX = SynchedEntityData.defineId(FakeOffspringEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_DZ = SynchedEntityData.defineId(FakeOffspringEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
     private long lastSwing;
     public String animationprocedure = "empty";
@@ -70,10 +70,10 @@ public class FakeOffspringEntity extends SeaMonster {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(SHOOT, false);
-        this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(DATA_dx, 0);
-        this.entityData.define(DATA_dz, 0);
+        this.entityData.define(DATA_SHOOT, false);
+        this.entityData.define(DATA_ANIMATION, "undefined");
+        this.entityData.define(DATA_DX, 0);
+        this.entityData.define(DATA_DZ, 0);
     }
 
 
@@ -129,8 +129,8 @@ public class FakeOffspringEntity extends SeaMonster {
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
         SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
         if ((Entity) this instanceof FakeOffspringEntity _datEntSetI) {
-            _datEntSetI.getEntityData().set(DATA_dx, Mth.nextInt(RandomSource.create(), -50, 50));
-            _datEntSetI.getEntityData().set(DATA_dz, Mth.nextInt(RandomSource.create(), -50, 50));
+            _datEntSetI.getEntityData().set(DATA_DX, Mth.nextInt(RandomSource.create(), -50, 50));
+            _datEntSetI.getEntityData().set(DATA_DZ, Mth.nextInt(RandomSource.create(), -50, 50));
         }
         return retval;
     }
@@ -138,17 +138,19 @@ public class FakeOffspringEntity extends SeaMonster {
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putInt("Datadx", this.entityData.get(DATA_dx));
-        compound.putInt("Datadz", this.entityData.get(DATA_dz));
+        compound.putInt("Dx", this.entityData.get(DATA_DX));
+        compound.putInt("Dz", this.entityData.get(DATA_DZ));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Datadx"))
-            this.entityData.set(DATA_dx, compound.getInt("Datadx"));
-        if (compound.contains("Datadz"))
-            this.entityData.set(DATA_dz, compound.getInt("Datadz"));
+        if (compound.contains("Dx")) {
+            this.entityData.set(DATA_DX, compound.getInt("Dx"));
+        }
+        if (compound.contains("Dz")) {
+            this.entityData.set(DATA_DZ, compound.getInt("Dz"));
+        }
 	}
 
     @Override
@@ -163,8 +165,8 @@ public class FakeOffspringEntity extends SeaMonster {
             if (!(obj == null)) {
                 if (distanceTo(obj) <= 4) {
                     Entity _ent = this;
-                    _ent.teleportTo((obj.getX() + obj.getBbWidth() * ((Entity) this instanceof FakeOffspringEntity _datEntI ? _datEntI.getEntityData().get(DATA_dx) : 0) * 0.01), (obj.getY()),
-                            (obj.getZ() + obj.getBbWidth() * ((Entity) this instanceof FakeOffspringEntity _datEntI ? _datEntI.getEntityData().get(DATA_dz) : 0) * 0.01));
+                    _ent.teleportTo((obj.getX() + obj.getBbWidth() * ((Entity) this instanceof FakeOffspringEntity _datEntI ? _datEntI.getEntityData().get(DATA_DX) : 0) * 0.01), (obj.getY()),
+                            (obj.getZ() + obj.getBbWidth() * ((Entity) this instanceof FakeOffspringEntity _datEntI ? _datEntI.getEntityData().get(DATA_DZ) : 0) * 0.01));
                 }
             }
         }
@@ -274,11 +276,11 @@ public class FakeOffspringEntity extends SeaMonster {
     }
 
     public String getSyncedAnimation() {
-        return this.entityData.get(ANIMATION);
+        return this.entityData.get(DATA_ANIMATION);
     }
 
     public void setAnimation(String animation) {
-        this.entityData.set(ANIMATION, animation);
+        this.entityData.set(DATA_ANIMATION, animation);
     }
 
     @Override

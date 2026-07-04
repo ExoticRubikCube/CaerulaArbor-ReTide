@@ -56,8 +56,8 @@ import java.util.Comparator;
 import java.util.List;
 
 public abstract class AbstractOceanizedWardenEntity extends SeaMonster {
-	protected static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(AbstractOceanizedWardenEntity.class, EntityDataSerializers.BOOLEAN);
-	protected static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(AbstractOceanizedWardenEntity.class, EntityDataSerializers.STRING);
+	protected static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(AbstractOceanizedWardenEntity.class, EntityDataSerializers.BOOLEAN);
+	protected static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(AbstractOceanizedWardenEntity.class, EntityDataSerializers.STRING);
 	protected static final EntityDataAccessor<Integer> DATA_SKILL_1 = SynchedEntityData.defineId(AbstractOceanizedWardenEntity.class, EntityDataSerializers.INT);
 	protected static final EntityDataAccessor<Integer> DATA_SKILL_2 = SynchedEntityData.defineId(AbstractOceanizedWardenEntity.class, EntityDataSerializers.INT);
 	protected static final EntityDataAccessor<Integer> DATA_DURATION = SynchedEntityData.defineId(AbstractOceanizedWardenEntity.class, EntityDataSerializers.INT);
@@ -90,19 +90,19 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonster {
 	@Override
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(SHOOT, false);
-		this.entityData.define(ANIMATION, "undefined");
+		this.entityData.define(DATA_SHOOT, false);
+		this.entityData.define(DATA_ANIMATION, "undefined");
 		this.entityData.define(DATA_SKILL_1, 100);
 		this.entityData.define(DATA_SKILL_2, 120);
 		this.entityData.define(DATA_DURATION, 0);
 	}
 
 	public String getSyncedAnimation() {
-		return this.entityData.get(ANIMATION);
+		return this.entityData.get(DATA_ANIMATION);
 	}
 
 	public void setAnimation(String animation) {
-		this.entityData.set(ANIMATION, animation);
+		this.entityData.set(DATA_ANIMATION, animation);
 	}
 
 	@Override
@@ -387,22 +387,22 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonster {
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
-		compound.putInt("Dataskillp1", this.entityData.get(DATA_SKILL_1));
-		compound.putInt("Dataskillp2", this.entityData.get(DATA_SKILL_2));
-		compound.putInt("Dataduration", this.entityData.get(DATA_DURATION));
+		compound.putInt("Skill1", this.entityData.get(DATA_SKILL_1));
+		compound.putInt("Skill2", this.entityData.get(DATA_SKILL_2));
+		compound.putInt("Duration", this.entityData.get(DATA_DURATION));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
-		if (compound.contains("Dataskillp1")) {
-			this.entityData.set(DATA_SKILL_1, compound.getInt("Dataskillp1"));
+		if (compound.contains("Skill1")) {
+		    this.entityData.set(DATA_SKILL_1, compound.getInt("Skill1"));
 		}
-		if (compound.contains("Dataskillp2")) {
-			this.entityData.set(DATA_SKILL_2, compound.getInt("Dataskillp2"));
+		if (compound.contains("Skill2")) {
+		    this.entityData.set(DATA_SKILL_2, compound.getInt("Skill2"));
 		}
-		if (compound.contains("Dataduration")) {
-			this.entityData.set(DATA_DURATION, compound.getInt("Dataduration"));
+		if (compound.contains("Duration")) {
+		    this.entityData.set(DATA_DURATION, compound.getInt("Duration"));
 		}
 	}
 

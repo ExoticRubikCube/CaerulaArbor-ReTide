@@ -64,14 +64,14 @@ import java.util.Comparator;
 import java.util.List;
 
 public class SkadiCorruptedEntity extends SeaMonster {
-	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(SkadiCorruptedEntity.class, EntityDataSerializers.BOOLEAN);
-	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(SkadiCorruptedEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<Integer> DATA_convertP = SynchedEntityData.defineId(SkadiCorruptedEntity.class, EntityDataSerializers.INT);
-	public static final EntityDataAccessor<Boolean> DATA_mayCorrupt = SynchedEntityData.defineId(SkadiCorruptedEntity.class, EntityDataSerializers.BOOLEAN);
-	public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(SkadiCorruptedEntity.class, EntityDataSerializers.INT);
-	public static final EntityDataAccessor<Integer> DATA_convertTick = SynchedEntityData.defineId(SkadiCorruptedEntity.class, EntityDataSerializers.INT);
-	public static final EntityDataAccessor<Integer> DATA_deal = SynchedEntityData.defineId(SkadiCorruptedEntity.class, EntityDataSerializers.INT);
-	public static final EntityDataAccessor<Integer> DATA_phase = SynchedEntityData.defineId(SkadiCorruptedEntity.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(SkadiCorruptedEntity.class, EntityDataSerializers.BOOLEAN);
+	public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(SkadiCorruptedEntity.class, EntityDataSerializers.STRING);
+	public static final EntityDataAccessor<Integer> DATA_CONVERT_P = SynchedEntityData.defineId(SkadiCorruptedEntity.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<Boolean> DATA_MAY_CORRUPT = SynchedEntityData.defineId(SkadiCorruptedEntity.class, EntityDataSerializers.BOOLEAN);
+	public static final EntityDataAccessor<Integer> DATA_DURATION = SynchedEntityData.defineId(SkadiCorruptedEntity.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<Integer> DATA_CONVERT_TICK = SynchedEntityData.defineId(SkadiCorruptedEntity.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<Integer> DATA_DEAL = SynchedEntityData.defineId(SkadiCorruptedEntity.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<Integer> DATA_PHASE = SynchedEntityData.defineId(SkadiCorruptedEntity.class, EntityDataSerializers.INT);
 	private boolean swinging;
 	private long lastSwing;
 	public String animationprocedure = "empty";
@@ -92,14 +92,14 @@ public class SkadiCorruptedEntity extends SeaMonster {
 	@Override
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(SHOOT, false);
-		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(DATA_convertP, 900);
-		this.entityData.define(DATA_mayCorrupt, true);
-		this.entityData.define(DATA_duration, 0);
-		this.entityData.define(DATA_convertTick, 1000);
-		this.entityData.define(DATA_deal, 0);
-		this.entityData.define(DATA_phase, 0);
+		this.entityData.define(DATA_SHOOT, false);
+		this.entityData.define(DATA_ANIMATION, "undefined");
+		this.entityData.define(DATA_CONVERT_P, 900);
+		this.entityData.define(DATA_MAY_CORRUPT, true);
+		this.entityData.define(DATA_DURATION, 0);
+		this.entityData.define(DATA_CONVERT_TICK, 1000);
+		this.entityData.define(DATA_DEAL, 0);
+		this.entityData.define(DATA_PHASE, 0);
 	}
 
 	@Override
@@ -207,7 +207,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
 							entityIterator.push(pushVec.x, pushVec.y, pushVec.z);
 						}
 					}
-					this.getEntityData().set(DATA_duration, 40);
+					this.getEntityData().set(DATA_DURATION, 40);
 				}
 			});
 		}
@@ -228,24 +228,24 @@ public class SkadiCorruptedEntity extends SeaMonster {
 		}
 		boolean damaged = super.hurt(source, newAmount);
 		if (damaged && this.isCorruptedSource(source)) {
-			if (this.getEntityData().get(DATA_phase) > 1.5) {
+			if (this.getEntityData().get(DATA_PHASE) > 1.5) {
 				return damaged;
 			}
-			double accumulatedDamage = this.getEntityData().get(DATA_deal) + newAmount;
-			this.getEntityData().set(DATA_deal, (int) accumulatedDamage);
+			double accumulatedDamage = this.getEntityData().get(DATA_DEAL) + newAmount;
+			this.getEntityData().set(DATA_DEAL, (int) accumulatedDamage);
 			if (accumulatedDamage >= this.getMaxHealth() * 0.7) {
-				this.getEntityData().set(DATA_mayCorrupt, false);
-				if (this.getEntityData().get(DATA_phase) > 0.5) {
+				this.getEntityData().set(DATA_MAY_CORRUPT, false);
+				if (this.getEntityData().get(DATA_PHASE) > 0.5) {
 					return damaged;
 				}
 				this.setAnimation("animation.skadi_corrupted.convert_in_1");
 				if (!this.level().isClientSide())
 					this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 9999, 9, false, false));
-				this.getEntityData().set(DATA_duration, 10000);
-				this.getEntityData().set(DATA_convertTick, 30);
-				this.getEntityData().set(DATA_convertP, 10000);
+				this.getEntityData().set(DATA_DURATION, 10000);
+				this.getEntityData().set(DATA_CONVERT_TICK, 30);
+				this.getEntityData().set(DATA_CONVERT_P, 10000);
 			} else {
-				this.getEntityData().set(DATA_mayCorrupt, true);
+				this.getEntityData().set(DATA_MAY_CORRUPT, true);
 			}
 		}
 		return damaged;
@@ -254,29 +254,35 @@ public class SkadiCorruptedEntity extends SeaMonster {
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
-		compound.putInt("DataconvertP", this.entityData.get(DATA_convertP));
-		compound.putBoolean("DatamayCorrupt", this.entityData.get(DATA_mayCorrupt));
-		compound.putInt("Dataduration", this.entityData.get(DATA_duration));
-		compound.putInt("DataconvertTick", this.entityData.get(DATA_convertTick));
-		compound.putInt("Datadeal", this.entityData.get(DATA_deal));
-		compound.putInt("Dataphase", this.entityData.get(DATA_phase));
+		compound.putInt("ConvertP", this.entityData.get(DATA_CONVERT_P));
+		compound.putBoolean("MayCorrupt", this.entityData.get(DATA_MAY_CORRUPT));
+		compound.putInt("Duration", this.entityData.get(DATA_DURATION));
+		compound.putInt("ConvertTick", this.entityData.get(DATA_CONVERT_TICK));
+		compound.putInt("Deal", this.entityData.get(DATA_DEAL));
+		compound.putInt("Phase", this.entityData.get(DATA_PHASE));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
-		if (compound.contains("DataconvertP"))
-			this.entityData.set(DATA_convertP, compound.getInt("DataconvertP"));
-		if (compound.contains("DatamayCorrupt"))
-			this.entityData.set(DATA_mayCorrupt, compound.getBoolean("DatamayCorrupt"));
-		if (compound.contains("Dataduration"))
-			this.entityData.set(DATA_duration, compound.getInt("Dataduration"));
-		if (compound.contains("DataconvertTick"))
-			this.entityData.set(DATA_convertTick, compound.getInt("DataconvertTick"));
-		if (compound.contains("Datadeal"))
-			this.entityData.set(DATA_deal, compound.getInt("Datadeal"));
-		if (compound.contains("Dataphase"))
-			this.entityData.set(DATA_phase, compound.getInt("Dataphase"));
+		if (compound.contains("ConvertP")) {
+		    this.entityData.set(DATA_CONVERT_P, compound.getInt("ConvertP"));
+		}
+		if (compound.contains("MayCorrupt")) {
+		    this.entityData.set(DATA_MAY_CORRUPT, compound.getBoolean("MayCorrupt"));
+		}
+		if (compound.contains("Duration")) {
+		    this.entityData.set(DATA_DURATION, compound.getInt("Duration"));
+		}
+		if (compound.contains("ConvertTick")) {
+		    this.entityData.set(DATA_CONVERT_TICK, compound.getInt("ConvertTick"));
+		}
+		if (compound.contains("Deal")) {
+		    this.entityData.set(DATA_DEAL, compound.getInt("Deal"));
+		}
+		if (compound.contains("Phase")) {
+		    this.entityData.set(DATA_PHASE, compound.getInt("Phase"));
+		}
 	}
 
 	@Override
@@ -293,13 +299,13 @@ public class SkadiCorruptedEntity extends SeaMonster {
 		double converT;
 		double gap;
 		double nn;
-		converT = (Entity) this instanceof SkadiCorruptedEntity _datEntI ? _datEntI.getEntityData().get(DATA_convertTick) : 0;
+		converT = (Entity) this instanceof SkadiCorruptedEntity _datEntI ? _datEntI.getEntityData().get(DATA_CONVERT_TICK) : 0;
 		if (converT < 999) {
 			if (converT > 0) {
 				if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetL)
-					_datEntSetL.getEntityData().set(DATA_mayCorrupt, false);
+					_datEntSetL.getEntityData().set(DATA_MAY_CORRUPT, false);
 				if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetI)
-					_datEntSetI.getEntityData().set(DATA_convertTick, (int) (converT - 1));
+					_datEntSetI.getEntityData().set(DATA_CONVERT_TICK, (int) (converT - 1));
 			} else if (phase < 0.5) {
 				for (Entity entityiterator : new ArrayList<>(world.players())) {
 					if ((entityiterator != null ? distanceTo(entityiterator) : -1) < 32) {
@@ -323,7 +329,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
 					_level.playSound(null, BlockPos.containing(x, y, z), CASounds.CORRUPTED_CONVERT.get(), SoundSource.HOSTILE, 2, 1);
 				}
 				if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetL)
-					_datEntSetL.getEntityData().set(DATA_mayCorrupt, false);
+					_datEntSetL.getEntityData().set(DATA_MAY_CORRUPT, false);
 				if (!level().isClientSide())
 					discard();
 				this.spawnHurtSkadi(world, x, y, z);
@@ -332,18 +338,18 @@ public class SkadiCorruptedEntity extends SeaMonster {
 		if (this.isAlive()) {
 			if (!this.level().isClientSide())
 				this.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 20, 0, false, false));
-			conv = (Entity) this instanceof SkadiCorruptedEntity _datEntI ? _datEntI.getEntityData().get(DATA_convertP) : 0;
-			dura = (Entity) this instanceof SkadiCorruptedEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
-			deal = (Entity) this instanceof SkadiCorruptedEntity _datEntI ? _datEntI.getEntityData().get(DATA_deal) : 0;
-			phase = (Entity) this instanceof SkadiCorruptedEntity _datEntI ? _datEntI.getEntityData().get(DATA_phase) : 0;
+			conv = (Entity) this instanceof SkadiCorruptedEntity _datEntI ? _datEntI.getEntityData().get(DATA_CONVERT_P) : 0;
+			dura = (Entity) this instanceof SkadiCorruptedEntity _datEntI ? _datEntI.getEntityData().get(DATA_DURATION) : 0;
+			deal = (Entity) this instanceof SkadiCorruptedEntity _datEntI ? _datEntI.getEntityData().get(DATA_DEAL) : 0;
+			phase = (Entity) this instanceof SkadiCorruptedEntity _datEntI ? _datEntI.getEntityData().get(DATA_PHASE) : 0;
 			if (dura > 0) {
 				if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetI)
-					_datEntSetI.getEntityData().set(DATA_duration, (int) (dura - 1));
+					_datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura - 1));
 			}
 			if (conv > 0) {
 				if (phase < 1.9) {
 					if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetI)
-						_datEntSetI.getEntityData().set(DATA_convertP, (int) (conv - 1));
+						_datEntSetI.getEntityData().set(DATA_CONVERT_P, (int) (conv - 1));
 				}
 			} else if (dura <= 0) {
 				if (phase < 0.5) {
@@ -351,20 +357,20 @@ public class SkadiCorruptedEntity extends SeaMonster {
 						this.setAnimation("animation.skadi_corrupted.to_phase_2");
 					}
 					if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetI)
-						_datEntSetI.getEntityData().set(DATA_convertP, 1120);
+						_datEntSetI.getEntityData().set(DATA_CONVERT_P, 1120);
 					if ((Entity) this instanceof LivingEntity _entity)
 						_entity.setHealth((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1);
 					if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetI)
-						_datEntSetI.getEntityData().set(DATA_phase, 1);
+						_datEntSetI.getEntityData().set(DATA_PHASE, 1);
 					if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetI)
-						_datEntSetI.getEntityData().set(DATA_deal, 0);
+						_datEntSetI.getEntityData().set(DATA_DEAL, 0);
 					if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetI)
-						_datEntSetI.getEntityData().set(DATA_duration, 60);
+						_datEntSetI.getEntityData().set(DATA_DURATION, 60);
 					if (this.getAttributes().hasAttribute(Attributes.ARMOR))
 						this.getAttribute(Attributes.ARMOR)
 								.setBaseValue(((this.getAttributes().hasAttribute(Attributes.ARMOR) ? this.getAttribute(Attributes.ARMOR).getBaseValue() : 0) * 1.5));
 					if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetL)
-						_datEntSetL.getEntityData().set(DATA_mayCorrupt, true);
+						_datEntSetL.getEntityData().set(DATA_MAY_CORRUPT, true);
 					if (!this.level().isClientSide())
 						this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 60, 9, false, false));
 					if (!world.isClientSide()) {
@@ -377,15 +383,15 @@ public class SkadiCorruptedEntity extends SeaMonster {
 						this.setAnimation("animation.skadi_corrupted.to_phase_3");
 					}
 					if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetI)
-						_datEntSetI.getEntityData().set(DATA_convertP, 99999);
+						_datEntSetI.getEntityData().set(DATA_CONVERT_P, 99999);
 					if ((Entity) this instanceof LivingEntity _entity)
 						_entity.setHealth((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1);
 					if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetI)
-						_datEntSetI.getEntityData().set(DATA_phase, 2);
+						_datEntSetI.getEntityData().set(DATA_PHASE, 2);
 					if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetI)
-						_datEntSetI.getEntityData().set(DATA_deal, 0);
+						_datEntSetI.getEntityData().set(DATA_DEAL, 0);
 					if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetI)
-						_datEntSetI.getEntityData().set(DATA_duration, 80);
+						_datEntSetI.getEntityData().set(DATA_DURATION, 80);
 					if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()))
 						this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get())
 								.setBaseValue(((this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())
@@ -395,7 +401,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
 						this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
 								((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) * 1.25));
 					if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetL)
-						_datEntSetL.getEntityData().set(DATA_mayCorrupt, true);
+						_datEntSetL.getEntityData().set(DATA_MAY_CORRUPT, true);
 					if (!this.level().isClientSide())
 						this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 80, 9, false, false));
 					if (!world.isClientSide()) {
@@ -502,7 +508,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
 					EntityUtils.heal(this, ddd * healPerc * 3);
 					if (phase > 0.5) {
 						if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetI)
-							_datEntSetI.getEntityData().set(DATA_deal, (int) (((Entity) this instanceof SkadiCorruptedEntity _datEntI ? _datEntI.getEntityData().get(DATA_deal) : 0) - ddd * healPerc * 3));
+							_datEntSetI.getEntityData().set(DATA_DEAL, (int) (((Entity) this instanceof SkadiCorruptedEntity _datEntI ? _datEntI.getEntityData().get(DATA_DEAL) : 0) - ddd * healPerc * 3));
 					}
 				}
 				{
@@ -567,7 +573,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
 			double ang;
 			double r;
 			ang = Mth.nextDouble(RandomSource.create(), 0, 6.283);
-			phase1 = (Entity) this instanceof SkadiCorruptedEntity _datEntI ? _datEntI.getEntityData().get(DATA_phase) : 0;
+			phase1 = (Entity) this instanceof SkadiCorruptedEntity _datEntI ? _datEntI.getEntityData().get(DATA_PHASE) : 0;
 			for (int index0 = 0; index0 < (int) (phase1 + 1); index0++) {
 				r = Mth.nextDouble(RandomSource.create(), 2, 3.5);
 				if (world instanceof ServerLevel _level)
@@ -577,14 +583,14 @@ public class SkadiCorruptedEntity extends SeaMonster {
 				LivingEntity _livEnt = this;
 				if (deal >= _livEnt.getMaxHealth() * 0.75) {
 					if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetL)
-						_datEntSetL.getEntityData().set(DATA_mayCorrupt, false);
+						_datEntSetL.getEntityData().set(DATA_MAY_CORRUPT, false);
 				} else {
 					if ((Entity) this instanceof SkadiCorruptedEntity _datEntSetL)
-						_datEntSetL.getEntityData().set(DATA_mayCorrupt, true);
+						_datEntSetL.getEntityData().set(DATA_MAY_CORRUPT, true);
 				}
 			}
 		}
-		if (entityData.get(DATA_mayCorrupt) || getPhase() >= 2) bossInfo.setColor(ServerBossEvent.BossBarColor.RED);
+		if (entityData.get(DATA_MAY_CORRUPT) || getPhase() >= 2) bossInfo.setColor(ServerBossEvent.BossBarColor.RED);
 		else bossInfo.setColor(ServerBossEvent.BossBarColor.BLUE);
 		this.refreshDimensions();
 	}
@@ -592,7 +598,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
 	@Override
 	public InteractionResult mobInteract(Player player, InteractionHand hand) {
 		if (player.getMainHandItem().getItem() == CAItems.CORRUPTED_HEART_SPAWNER.get()) {
-			entityData.set(DATA_convertP, 1);
+			entityData.set(DATA_CONVERT_P, 1);
 			return InteractionResult.SUCCESS;
 		}
 		return InteractionResult.PASS;
@@ -701,7 +707,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
 	}
 
 	public boolean isCorruptedDurative() {
-		return this.isAlive() && this.getEntityData().get(DATA_duration) <= 0;
+		return this.isAlive() && this.getEntityData().get(DATA_DURATION) <= 0;
 	}
 
 	private void spawnHurtSkadi(LevelAccessor world, double x, double y, double z) {
@@ -735,7 +741,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
 			double x = this.getX();
 			double y = this.getY();
 			double z = this.getZ();
-			if ((Entity) this instanceof SkadiCorruptedEntity _datEntL0 && _datEntL0.getEntityData().get(DATA_mayCorrupt)) {
+			if ((Entity) this instanceof SkadiCorruptedEntity _datEntL0 && _datEntL0.getEntityData().get(DATA_MAY_CORRUPT)) {
 				if (!world.isClientSide()) {
 					if (world instanceof Level _level) {
 						_level.playSound(null, BlockPos.containing(x, y, z), CASounds.CORRUPTED_CORRUPT.get(), SoundSource.HOSTILE, 2, 1);
@@ -784,8 +790,8 @@ public class SkadiCorruptedEntity extends SeaMonster {
 
 	@Override
 	public void setHealth(float pHealth) {
-		if (getPhase() < 2 && pHealth <= 0 && entityData.get(DATA_mayCorrupt)) {
-			entityData.set(DATA_convertP, 1);
+		if (getPhase() < 2 && pHealth <= 0 && entityData.get(DATA_MAY_CORRUPT)) {
+			entityData.set(DATA_CONVERT_P, 1);
 			super.setHealth(this.getMaxHealth());
 			return;
 		}
@@ -793,11 +799,11 @@ public class SkadiCorruptedEntity extends SeaMonster {
 	}
 
 	public String getSyncedAnimation() {
-		return this.entityData.get(ANIMATION);
+		return this.entityData.get(DATA_ANIMATION);
 	}
 
 	public void setAnimation(String animation) {
-		this.entityData.set(ANIMATION, animation);
+		this.entityData.set(DATA_ANIMATION, animation);
 	}
 
 	@Override
@@ -808,7 +814,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
 	}
 
 	public int getPhase() {
-		return entityData.get(DATA_phase);
+		return entityData.get(DATA_PHASE);
 	}
 
 

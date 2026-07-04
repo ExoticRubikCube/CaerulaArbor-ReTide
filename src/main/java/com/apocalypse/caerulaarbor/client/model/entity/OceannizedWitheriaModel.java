@@ -27,7 +27,7 @@ public class OceannizedWitheriaModel extends GeoModel<OceannizedWitheriaEntity> 
 
 	@Override
 	public ResourceLocation getTextureResource(OceannizedWitheriaEntity entity) {
-		return entity.getEntityData().get(AbstractOceanizedWitherEntity.DATA_shelled) ? SHELLED_TEXTURE : DEFAULT_TEXTURE;
+		return entity.getEntityData().get(AbstractOceanizedWitherEntity.DATA_SHELLED) ? SHELLED_TEXTURE : DEFAULT_TEXTURE;
 	}
 
 	@Override

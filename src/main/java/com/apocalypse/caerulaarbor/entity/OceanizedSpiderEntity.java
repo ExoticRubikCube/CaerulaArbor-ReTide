@@ -55,9 +55,9 @@ import net.minecraft.sounds.SoundEvents;
 import java.util.EnumSet;
 
 public class OceanizedSpiderEntity extends SeaMonster {
-    public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanizedSpiderEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedSpiderEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<Integer> DATA_mute_time = SynchedEntityData.defineId(OceanizedSpiderEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(OceanizedSpiderEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(OceanizedSpiderEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> DATA_MUTE_TIME = SynchedEntityData.defineId(OceanizedSpiderEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
     private long lastSwing;
     public String animationprocedure = "empty";
@@ -77,9 +77,9 @@ public class OceanizedSpiderEntity extends SeaMonster {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(SHOOT, false);
-        this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(DATA_mute_time, 0);
+        this.entityData.define(DATA_SHOOT, false);
+        this.entityData.define(DATA_ANIMATION, "undefined");
+        this.entityData.define(DATA_MUTE_TIME, 0);
     }
 
     @Override
@@ -213,14 +213,15 @@ public class OceanizedSpiderEntity extends SeaMonster {
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putInt("Datamute_time", this.entityData.get(DATA_mute_time));
+        compound.putInt("MuteTime", this.entityData.get(DATA_MUTE_TIME));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Datamute_time"))
-            this.entityData.set(DATA_mute_time, compound.getInt("Datamute_time"));
+        if (compound.contains("MuteTime")) {
+            this.entityData.set(DATA_MUTE_TIME, compound.getInt("MuteTime"));
+        }
 	}
 
     @Override
@@ -322,7 +323,7 @@ public class OceanizedSpiderEntity extends SeaMonster {
             double z = this.getZ();
             if (WorldUtils.canGrief(world)) {
                 if ((world.getBlockState(BlockPos.containing(x, y, z))).canBeReplaced()) {
-                    if (((Entity) this instanceof OceanizedSpiderEntity _datEntI ? _datEntI.getEntityData().get(DATA_mute_time) : 0) <= 0) {
+                    if (((Entity) this instanceof OceanizedSpiderEntity _datEntI ? _datEntI.getEntityData().get(DATA_MUTE_TIME) : 0) <= 0) {
                         if (Math.random() < 0.25) {
                             world.levelEvent(2001, BlockPos.containing(x, y, z), Block.getId(CABlocks.RED_OVARY.get().defaultBlockState()));
                             if (world instanceof Level _level) {
@@ -345,11 +346,11 @@ public class OceanizedSpiderEntity extends SeaMonster {
     }
 
     public String getSyncedAnimation() {
-        return this.entityData.get(ANIMATION);
+        return this.entityData.get(DATA_ANIMATION);
     }
 
     public void setAnimation(String animation) {
-        this.entityData.set(ANIMATION, animation);
+        this.entityData.set(DATA_ANIMATION, animation);
     }
 
     @Override

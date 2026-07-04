@@ -55,14 +55,14 @@ import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimationEntity {
-    public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(SaintCarmenEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(SaintCarmenEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<Integer> DATA_skillP1 = SynchedEntityData.defineId(SaintCarmenEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Integer> DATA_skillP2 = SynchedEntityData.defineId(SaintCarmenEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Integer> DATA_shootP = SynchedEntityData.defineId(SaintCarmenEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Integer> DATA_bullet = SynchedEntityData.defineId(SaintCarmenEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(SaintCarmenEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Integer> DATA_reloadP = SynchedEntityData.defineId(SaintCarmenEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(SaintCarmenEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(SaintCarmenEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> DATA_SKILL_P1 = SynchedEntityData.defineId(SaintCarmenEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_SKILL_P2 = SynchedEntityData.defineId(SaintCarmenEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_SHOOT_P = SynchedEntityData.defineId(SaintCarmenEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_BULLET = SynchedEntityData.defineId(SaintCarmenEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_DURATION = SynchedEntityData.defineId(SaintCarmenEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_RELOAD_P = SynchedEntityData.defineId(SaintCarmenEntity.class, EntityDataSerializers.INT);
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private boolean swinging;
     private long lastSwing;
@@ -83,14 +83,14 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(SHOOT, false);
-        this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(DATA_skillP1, 200);
-        this.entityData.define(DATA_skillP2, 100);
-        this.entityData.define(DATA_shootP, 80);
-        this.entityData.define(DATA_bullet, 3);
-        this.entityData.define(DATA_duration, 0);
-        this.entityData.define(DATA_reloadP, 500);
+        this.entityData.define(DATA_SHOOT, false);
+        this.entityData.define(DATA_ANIMATION, "undefined");
+        this.entityData.define(DATA_SKILL_P1, 200);
+        this.entityData.define(DATA_SKILL_P2, 100);
+        this.entityData.define(DATA_SHOOT_P, 80);
+        this.entityData.define(DATA_BULLET, 3);
+        this.entityData.define(DATA_DURATION, 0);
+        this.entityData.define(DATA_RELOAD_P, 500);
     }
 
 
@@ -204,29 +204,35 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putInt("DataskillP1", this.entityData.get(DATA_skillP1));
-        compound.putInt("DataskillP2", this.entityData.get(DATA_skillP2));
-        compound.putInt("DatashootP", this.entityData.get(DATA_shootP));
-        compound.putInt("Databullet", this.entityData.get(DATA_bullet));
-        compound.putInt("Dataduration", this.entityData.get(DATA_duration));
-        compound.putInt("DatareloadP", this.entityData.get(DATA_reloadP));
+        compound.putInt("SkillP1", this.entityData.get(DATA_SKILL_P1));
+        compound.putInt("SkillP2", this.entityData.get(DATA_SKILL_P2));
+        compound.putInt("ShootP", this.entityData.get(DATA_SHOOT_P));
+        compound.putInt("Bullet", this.entityData.get(DATA_BULLET));
+        compound.putInt("Duration", this.entityData.get(DATA_DURATION));
+        compound.putInt("ReloadP", this.entityData.get(DATA_RELOAD_P));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("DataskillP1"))
-            this.entityData.set(DATA_skillP1, compound.getInt("DataskillP1"));
-        if (compound.contains("DataskillP2"))
-            this.entityData.set(DATA_skillP2, compound.getInt("DataskillP2"));
-        if (compound.contains("DatashootP"))
-            this.entityData.set(DATA_shootP, compound.getInt("DatashootP"));
-        if (compound.contains("Databullet"))
-            this.entityData.set(DATA_bullet, compound.getInt("Databullet"));
-        if (compound.contains("Dataduration"))
-            this.entityData.set(DATA_duration, compound.getInt("Dataduration"));
-        if (compound.contains("DatareloadP"))
-            this.entityData.set(DATA_reloadP, compound.getInt("DatareloadP"));
+        if (compound.contains("SkillP1")) {
+            this.entityData.set(DATA_SKILL_P1, compound.getInt("SkillP1"));
+        }
+        if (compound.contains("SkillP2")) {
+            this.entityData.set(DATA_SKILL_P2, compound.getInt("SkillP2"));
+        }
+        if (compound.contains("ShootP")) {
+            this.entityData.set(DATA_SHOOT_P, compound.getInt("ShootP"));
+        }
+        if (compound.contains("Bullet")) {
+            this.entityData.set(DATA_BULLET, compound.getInt("Bullet"));
+        }
+        if (compound.contains("Duration")) {
+            this.entityData.set(DATA_DURATION, compound.getInt("Duration"));
+        }
+        if (compound.contains("ReloadP")) {
+            this.entityData.set(DATA_RELOAD_P, compound.getInt("ReloadP"));
+        }
 	}
 
     @Override
@@ -248,24 +254,24 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
             if (tickCount % 40 == 20) {
                 IreneEntity.burnBrandAround(world, x, y, z);
             }
-            sklp1 = (Entity) this instanceof SaintCarmenEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillP1) : 0;
-            sklp2 = (Entity) this instanceof SaintCarmenEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillP2) : 0;
-            shootCooldown = (Entity) this instanceof SaintCarmenEntity _datEntI ? _datEntI.getEntityData().get(DATA_shootP) : 0;
-            bullet = (Entity) this instanceof SaintCarmenEntity _datEntI ? _datEntI.getEntityData().get(DATA_bullet) : 0;
-            reloadP = (Entity) this instanceof SaintCarmenEntity _datEntI ? _datEntI.getEntityData().get(DATA_reloadP) : 0;
-            dura = (Entity) this instanceof SaintCarmenEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
+            sklp1 = (Entity) this instanceof SaintCarmenEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILL_P1) : 0;
+            sklp2 = (Entity) this instanceof SaintCarmenEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILL_P2) : 0;
+            shootCooldown = (Entity) this instanceof SaintCarmenEntity _datEntI ? _datEntI.getEntityData().get(DATA_SHOOT_P) : 0;
+            bullet = (Entity) this instanceof SaintCarmenEntity _datEntI ? _datEntI.getEntityData().get(DATA_BULLET) : 0;
+            reloadP = (Entity) this instanceof SaintCarmenEntity _datEntI ? _datEntI.getEntityData().get(DATA_RELOAD_P) : 0;
+            dura = (Entity) this instanceof SaintCarmenEntity _datEntI ? _datEntI.getEntityData().get(DATA_DURATION) : 0;
             enemy = this.getTarget();
             if (dura > 0) {
                 if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_duration, (int) (dura - 1));
+                    _datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura - 1));
             }
             if (shootCooldown > 0) {
                 if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_shootP, (int) (shootCooldown - 1));
+                    _datEntSetI.getEntityData().set(DATA_SHOOT_P, (int) (shootCooldown - 1));
             }
             if (sklp1 > 0) {
                 if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_skillP1, (int) (sklp1 - 1));
+                    _datEntSetI.getEntityData().set(DATA_SKILL_P1, (int) (sklp1 - 1));
             } else if (dura <= 0) {
                 if (!(enemy == null) && enemy.isAlive()) {
                     if (distanceTo(enemy) <= 24) {
@@ -273,9 +279,9 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
                             this.setAnimation("animation.saint_carmen.melee_skill");
                         }
                         if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_skillP1, 240);
+                            _datEntSetI.getEntityData().set(DATA_SKILL_P1, 240);
                         if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_duration, 33);
+                            _datEntSetI.getEntityData().set(DATA_DURATION, 33);
                         dura = 33;
                         CaerulaArborMod.queueServerWork(10, () -> {
                             if (this.isAlive()) {
@@ -293,7 +299,7 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
             canShoot = bullet > 0 && shootCooldown <= 0;
             if (sklp2 > 0) {
                 if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_skillP2, (int) (sklp2 - 1));
+                    _datEntSetI.getEntityData().set(DATA_SKILL_P2, (int) (sklp2 - 1));
             } else if (dura <= 0 && canShoot) {
                 if (!(enemy == null) && enemy.isAlive()) {
                     if (distanceTo(enemy) <= 24) {
@@ -301,11 +307,11 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
                             this.setAnimation("animation.saint_carmen.gun_skill");
                         }
                         if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_skillP2, 480);
+                            _datEntSetI.getEntityData().set(DATA_SKILL_P2, 480);
                         if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_duration, 50);
+                            _datEntSetI.getEntityData().set(DATA_DURATION, 50);
                         if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_shootP, 50);
+                            _datEntSetI.getEntityData().set(DATA_SHOOT_P, 50);
                         dura = 50;
                         push((getLookAngle().x * (-1.5)), 0, (getLookAngle().z * (-1.5)));
                         ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (getY() + 1.8), (enemy.getZ())));
@@ -335,11 +341,11 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
                                 this.setAnimation("animation.saint_carmen.gun");
                             }
                             if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_duration, 20);
+                                _datEntSetI.getEntityData().set(DATA_DURATION, 20);
                             if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_shootP, 80);
+                                _datEntSetI.getEntityData().set(DATA_SHOOT_P, 80);
                             if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_bullet, (int) (bullet - 1));
+                                _datEntSetI.getEntityData().set(DATA_BULLET, (int) (bullet - 1));
                             ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (getY() + 1.8), (enemy.getZ())));
                             CaerulaArborMod.queueServerWork(9, () -> {
                                 if (this.isAlive()) {
@@ -352,19 +358,19 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
             } else {
                 if (reloadP > 0) {
                     if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_reloadP, (int) (reloadP - 1));
+                        _datEntSetI.getEntityData().set(DATA_RELOAD_P, (int) (reloadP - 1));
                 } else if (dura <= 0) {
                     if (this instanceof SaintCarmenEntity) {
                         this.setAnimation("animation.saint_carmen.reload");
                     }
                     if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_bullet, 3);
+                        _datEntSetI.getEntityData().set(DATA_BULLET, 3);
                     if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_duration, 20);
+                        _datEntSetI.getEntityData().set(DATA_DURATION, 20);
                     if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_reloadP, 600);
+                        _datEntSetI.getEntityData().set(DATA_RELOAD_P, 600);
                     if ((Entity) this instanceof SaintCarmenEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_shootP, 20);
+                        _datEntSetI.getEntityData().set(DATA_SHOOT_P, 20);
                     if (world instanceof Level _level) {
                         _level.playSound(null, BlockPos.containing(x, y, z), CASounds.IRENE_RELOAD.get(), SoundSource.NEUTRAL, 2, 1);
                     }
@@ -473,11 +479,11 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
     }
 
     public String getSyncedAnimation() {
-        return this.entityData.get(ANIMATION);
+        return this.entityData.get(DATA_ANIMATION);
     }
 
     public void setAnimation(String animation) {
-        this.entityData.set(ANIMATION, animation);
+        this.entityData.set(DATA_ANIMATION, animation);
     }
 
     @Override
@@ -605,7 +611,7 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
 
 
     private boolean isCarmenDurative() {
-        return this.isAlive() && this.getEntityData().get(DATA_duration) <= 0;
+        return this.isAlive() && this.getEntityData().get(DATA_DURATION) <= 0;
     }
 
     @Override

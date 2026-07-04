@@ -55,10 +55,10 @@ import java.util.List;
 
 public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationEntity {
 
-	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(GladiiaEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<Integer> DATA_skillP = SynchedEntityData.defineId(GladiiaEntity.class, EntityDataSerializers.INT);
-	public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(GladiiaEntity.class, EntityDataSerializers.INT);
-	public static final EntityDataAccessor<Integer> DATA_skillP2 = SynchedEntityData.defineId(GladiiaEntity.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(GladiiaEntity.class, EntityDataSerializers.STRING);
+	public static final EntityDataAccessor<Integer> DATA_SKILL_P = SynchedEntityData.defineId(GladiiaEntity.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<Integer> DATA_DURATION = SynchedEntityData.defineId(GladiiaEntity.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<Integer> DATA_SKILL_P2 = SynchedEntityData.defineId(GladiiaEntity.class, EntityDataSerializers.INT);
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 	private boolean swinging;
 	private long lastSwing;
@@ -122,10 +122,10 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 	@Override
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(DATA_skillP, 100);
-		this.entityData.define(DATA_duration, 0);
-		this.entityData.define(DATA_skillP2, 200);
+		this.entityData.define(DATA_ANIMATION, "undefined");
+		this.entityData.define(DATA_SKILL_P, 100);
+		this.entityData.define(DATA_DURATION, 0);
+		this.entityData.define(DATA_SKILL_P2, 200);
 	}
 
 	@Override
@@ -250,28 +250,22 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
-		compound.putInt("PrimarySkillCooldown", this.entityData.get(DATA_skillP));
-		compound.putInt("Duration", this.entityData.get(DATA_duration));
-		compound.putInt("SecondarySkillCooldown", this.entityData.get(DATA_skillP2));
+		compound.putInt("SkillP", this.entityData.get(DATA_SKILL_P));
+		compound.putInt("Duration", this.entityData.get(DATA_DURATION));
+		compound.putInt("SkillP2", this.entityData.get(DATA_SKILL_P2));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
-		if (compound.contains("PrimarySkillCooldown")) {
-			this.entityData.set(DATA_skillP, compound.getInt("PrimarySkillCooldown"));
-		} else if (compound.contains("DataskillP")) {
-			this.entityData.set(DATA_skillP, compound.getInt("DataskillP"));
+		if (compound.contains("SkillP")) {
+		    this.entityData.set(DATA_SKILL_P, compound.getInt("SkillP"));
 		}
 		if (compound.contains("Duration")) {
-			this.entityData.set(DATA_duration, compound.getInt("Duration"));
-		} else if (compound.contains("Dataduration")) {
-			this.entityData.set(DATA_duration, compound.getInt("Dataduration"));
+		    this.entityData.set(DATA_DURATION, compound.getInt("Duration"));
 		}
-		if (compound.contains("SecondarySkillCooldown")) {
-			this.entityData.set(DATA_skillP2, compound.getInt("SecondarySkillCooldown"));
-		} else if (compound.contains("DataskillP2")) {
-			this.entityData.set(DATA_skillP2, compound.getInt("DataskillP2"));
+		if (compound.contains("SkillP2")) {
+		    this.entityData.set(DATA_SKILL_P2, compound.getInt("SkillP2"));
 		}
 	}
 
@@ -288,17 +282,17 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 		double dura;
 		double skillp2;
 		if (this.isAlive()) {
-			sklp1 = (Entity) this instanceof GladiiaEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillP) : 0;
-			skillp2 = (Entity) this instanceof GladiiaEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillP2) : 0;
-			dura = (Entity) this instanceof GladiiaEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
+			sklp1 = (Entity) this instanceof GladiiaEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILL_P) : 0;
+			skillp2 = (Entity) this instanceof GladiiaEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILL_P2) : 0;
+			dura = (Entity) this instanceof GladiiaEntity _datEntI ? _datEntI.getEntityData().get(DATA_DURATION) : 0;
 			enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
 			if (dura > 0) {
 				if ((Entity) this instanceof GladiiaEntity _datEntSetI)
-					_datEntSetI.getEntityData().set(DATA_duration, (int) (dura - 1));
+					_datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura - 1));
 			}
 			if (sklp1 > 0) {
 				if ((Entity) this instanceof GladiiaEntity _datEntSetI)
-					_datEntSetI.getEntityData().set(DATA_skillP, (int) (sklp1 - 1));
+					_datEntSetI.getEntityData().set(DATA_SKILL_P, (int) (sklp1 - 1));
 			} else {
 				if (!(enemy == null) && enemy.isAlive()) {
 					if (distanceTo(enemy) <= 7.5 && dura <= 0) {
@@ -306,9 +300,9 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 							this.setAnimation("animation.gladiia.pull");
 						}
 						if ((Entity) this instanceof GladiiaEntity _datEntSetI)
-							_datEntSetI.getEntityData().set(DATA_skillP, 160);
+							_datEntSetI.getEntityData().set(DATA_SKILL_P, 160);
 						if ((Entity) this instanceof GladiiaEntity _datEntSetI)
-							_datEntSetI.getEntityData().set(DATA_duration, 30);
+							_datEntSetI.getEntityData().set(DATA_DURATION, 30);
 						if (world instanceof Level _level) {
 							_level.playSound(null, BlockPos.containing(x, y, z), CASounds.GLADIIA_PULL_PRE.get(), SoundSource.NEUTRAL, (float) 2.5, 1);
 						}
@@ -349,7 +343,7 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 			}
 			if (skillp2 > 0) {
 				if ((Entity) this instanceof GladiiaEntity _datEntSetI)
-					_datEntSetI.getEntityData().set(DATA_skillP2, (int) (skillp2 - 1));
+					_datEntSetI.getEntityData().set(DATA_SKILL_P2, (int) (skillp2 - 1));
 			} else {
 				if (!(enemy == null) && enemy.isAlive()) {
 					if (distanceTo(enemy) <= 21 && dura <= 0) {
@@ -358,13 +352,13 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 						}
 						if (SpecterEntity.isSpecterAround(world, x, y, z)) {
 							if ((Entity) this instanceof GladiiaEntity _datEntSetI)
-								_datEntSetI.getEntityData().set(DATA_skillP2, 400);
+								_datEntSetI.getEntityData().set(DATA_SKILL_P2, 400);
 						} else {
 							if ((Entity) this instanceof GladiiaEntity _datEntSetI)
-								_datEntSetI.getEntityData().set(DATA_skillP2, 500);
+								_datEntSetI.getEntityData().set(DATA_SKILL_P2, 500);
 						}
 						if ((Entity) this instanceof GladiiaEntity _datEntSetI)
-							_datEntSetI.getEntityData().set(DATA_duration, 120);
+							_datEntSetI.getEntityData().set(DATA_DURATION, 120);
 						if (world instanceof Level _level) {
 							_level.playSound(null, BlockPos.containing(x, y, z), CASounds.GLADIIA_SKILL_RELEASE.get(), SoundSource.NEUTRAL, 3, 1);
 						}
@@ -529,11 +523,11 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 	}
 
 	public String getSyncedAnimation() {
-		return this.entityData.get(ANIMATION);
+		return this.entityData.get(DATA_ANIMATION);
 	}
 
 	public void setAnimation(String animation) {
-		this.entityData.set(ANIMATION, animation);
+		this.entityData.set(DATA_ANIMATION, animation);
 	}
 
 	@Override
@@ -549,7 +543,7 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 	}
 
 	private boolean isGladiiaDurative() {
-		return this.isAlive() && this.getEntityData().get(DATA_duration) <= 0;
+		return this.isAlive() && this.getEntityData().get(DATA_DURATION) <= 0;
 	}
 
 	@Override

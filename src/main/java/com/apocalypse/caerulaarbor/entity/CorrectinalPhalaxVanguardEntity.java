@@ -46,9 +46,9 @@ import java.util.Comparator;
 import java.util.List;
 
 public class CorrectinalPhalaxVanguardEntity extends Animal implements GeoEntity, SyncedAnimationEntity {
-    public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(CorrectinalPhalaxVanguardEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(CorrectinalPhalaxVanguardEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<Integer> DATA_skillp = SynchedEntityData.defineId(CorrectinalPhalaxVanguardEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(CorrectinalPhalaxVanguardEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(CorrectinalPhalaxVanguardEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> DATA_SKILLP = SynchedEntityData.defineId(CorrectinalPhalaxVanguardEntity.class, EntityDataSerializers.INT);
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private boolean swinging;
     private long lastSwing;
@@ -69,9 +69,9 @@ public class CorrectinalPhalaxVanguardEntity extends Animal implements GeoEntity
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(SHOOT, false);
-        this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(DATA_skillp, 300);
+        this.entityData.define(DATA_SHOOT, false);
+        this.entityData.define(DATA_ANIMATION, "undefined");
+        this.entityData.define(DATA_SKILLP, 300);
     }
 
     public void vanguardSwing(double rate) {
@@ -165,14 +165,15 @@ public class CorrectinalPhalaxVanguardEntity extends Animal implements GeoEntity
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putInt("Dataskillp", this.entityData.get(DATA_skillp));
+        compound.putInt("Skillp", this.entityData.get(DATA_SKILLP));
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Dataskillp"))
-            this.entityData.set(DATA_skillp, compound.getInt("Dataskillp"));
+        if (compound.contains("Skillp")) {
+            this.entityData.set(DATA_SKILLP, compound.getInt("Skillp"));
+        }
     }
 
     @Override
@@ -183,18 +184,19 @@ public class CorrectinalPhalaxVanguardEntity extends Animal implements GeoEntity
         double y = this.getY();
         double z = this.getZ();
         double sklp1;
+        //TODO 批量替换enemy为target
         Entity enemy;
         if (this.isAlive()) {
-            sklp1 = (Entity) this instanceof CorrectinalPhalaxVanguardEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp) : 0;
+            sklp1 = (Entity) this instanceof CorrectinalPhalaxVanguardEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP) : 0;
             if (sklp1 > 0) {
                 if ((Entity) this instanceof CorrectinalPhalaxVanguardEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_skillp, (int) (sklp1 - 1));
+                    _datEntSetI.getEntityData().set(DATA_SKILLP, (int) (sklp1 - 1));
             } else {
                 enemy = this.getTarget();
                 if (!(enemy == null)) {
                     if (distanceTo(enemy) <= 5 && enemy.isAlive()) {
                         if ((Entity) this instanceof CorrectinalPhalaxVanguardEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_skillp, 300);
+                            _datEntSetI.getEntityData().set(DATA_SKILLP, 300);
                         if (this instanceof CorrectinalPhalaxVanguardEntity) {
                             this.setAnimation("animation.correctional_phalanx _vanguard.swing");
                         }
@@ -309,11 +311,11 @@ public class CorrectinalPhalaxVanguardEntity extends Animal implements GeoEntity
     }
 
     public String getSyncedAnimation() {
-        return this.entityData.get(ANIMATION);
+        return this.entityData.get(DATA_ANIMATION);
     }
 
     public void setAnimation(String animation) {
-        this.entityData.set(ANIMATION, animation);
+        this.entityData.set(DATA_ANIMATION, animation);
     }
 
     @Override

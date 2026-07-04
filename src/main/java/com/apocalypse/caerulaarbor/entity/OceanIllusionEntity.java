@@ -13,6 +13,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
@@ -44,15 +45,14 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
-import net.minecraft.sounds.SoundEvents;
 
 import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.EnumSet;
 
 public class OceanIllusionEntity extends SeaMonster implements RangedAttackMob {
-	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanIllusionEntity.class, EntityDataSerializers.BOOLEAN);
-	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanIllusionEntity.class, EntityDataSerializers.STRING);
+	public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(OceanIllusionEntity.class, EntityDataSerializers.BOOLEAN);
+	public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(OceanIllusionEntity.class, EntityDataSerializers.STRING);
 	public String animationprocedure = "empty";
 
 	public OceanIllusionEntity(Level world) {
@@ -70,8 +70,8 @@ public class OceanIllusionEntity extends SeaMonster implements RangedAttackMob {
 	@Override
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(SHOOT, false);
-		this.entityData.define(ANIMATION, "undefined");
+		this.entityData.define(DATA_SHOOT, false);
+		this.entityData.define(DATA_ANIMATION, "undefined");
 	}
 
 
@@ -152,7 +152,7 @@ public class OceanIllusionEntity extends SeaMonster implements RangedAttackMob {
 			this.target = null;
 			this.seeTime = 0;
 			this.attackTime = -1;
-			((OceanIllusionEntity) rangedAttackMob).entityData.set(SHOOT, false);
+			((OceanIllusionEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
 		}
 
 		public boolean requiresUpdateEveryTick() {
@@ -175,10 +175,10 @@ public class OceanIllusionEntity extends SeaMonster implements RangedAttackMob {
 			this.mob.getLookControl().setLookAt(this.target, 30.0F, 30.0F);
 			if (--this.attackTime == 0) {
 				if (!flag) {
-					((OceanIllusionEntity) rangedAttackMob).entityData.set(SHOOT, false);
+					((OceanIllusionEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
 					return;
 				}
-				((OceanIllusionEntity) rangedAttackMob).entityData.set(SHOOT, true);
+				((OceanIllusionEntity) rangedAttackMob).entityData.set(DATA_SHOOT, true);
 				float f = (float) Math.sqrt(d0) / this.attackRadius;
 				float f1 = Mth.clamp(f, 0.1F, 1.0F);
 				this.rangedAttackMob.performRangedAttack(this.target, f1);
@@ -186,7 +186,7 @@ public class OceanIllusionEntity extends SeaMonster implements RangedAttackMob {
 			} else if (this.attackTime < 0) {
 				this.attackTime = Mth.floor(Mth.lerp(Math.sqrt(d0) / (double) this.attackRadius, this.attackIntervalMin, this.attackIntervalMax));
 			} else
-				((OceanIllusionEntity) rangedAttackMob).entityData.set(SHOOT, false);
+				((OceanIllusionEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
 		}
 	}
 
@@ -364,11 +364,11 @@ public class OceanIllusionEntity extends SeaMonster implements RangedAttackMob {
 	}
 
 	public String getSyncedAnimation() {
-		return this.entityData.get(ANIMATION);
+		return this.entityData.get(DATA_ANIMATION);
 	}
 
 	public void setAnimation(String animation) {
-		this.entityData.set(ANIMATION, animation);
+		this.entityData.set(DATA_ANIMATION, animation);
 	}
 
 	@Override

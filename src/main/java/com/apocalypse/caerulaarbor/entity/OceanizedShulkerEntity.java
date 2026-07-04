@@ -57,8 +57,8 @@ import software.bernie.geckolib.core.object.PlayState;
 import javax.annotation.Nullable;
 
 public class OceanizedShulkerEntity extends SeaMonster {
-    public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanizedShulkerEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedShulkerEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(OceanizedShulkerEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(OceanizedShulkerEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_SHOOT_DELAY = SynchedEntityData.defineId(OceanizedShulkerEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<String> DATA_DIRECTION = SynchedEntityData.defineId(OceanizedShulkerEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Boolean> DATA_WALKING = SynchedEntityData.defineId(OceanizedShulkerEntity.class, EntityDataSerializers.BOOLEAN);
@@ -83,8 +83,8 @@ public class OceanizedShulkerEntity extends SeaMonster {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(SHOOT, false);
-        this.entityData.define(ANIMATION, "undefined");
+        this.entityData.define(DATA_SHOOT, false);
+        this.entityData.define(DATA_ANIMATION, "undefined");
         this.entityData.define(DATA_SHOOT_DELAY, 0);
         this.entityData.define(DATA_DIRECTION, "up");
         this.entityData.define(DATA_WALKING, false);
@@ -299,26 +299,31 @@ public class OceanizedShulkerEntity extends SeaMonster {
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putInt("DataSHOOT_DELAY", this.entityData.get(DATA_SHOOT_DELAY));
-        compound.putString("DataDIRECTION", this.entityData.get(DATA_DIRECTION));
-        compound.putBoolean("DataWALKING", this.entityData.get(DATA_WALKING));
-        compound.putInt("DataPEEK_TIME", this.entityData.get(DATA_PEEK_TIME));
-        compound.putInt("DataVARIANT", this.entityData.get(DATA_VARIANT));
+        compound.putInt("ShootDelay", this.entityData.get(DATA_SHOOT_DELAY));
+        compound.putString("Direction", this.entityData.get(DATA_DIRECTION));
+        compound.putBoolean("Walking", this.entityData.get(DATA_WALKING));
+        compound.putInt("PeekTime", this.entityData.get(DATA_PEEK_TIME));
+        compound.putInt("Variant", this.entityData.get(DATA_VARIANT));
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("DataSHOOT_DELAY"))
-            this.entityData.set(DATA_SHOOT_DELAY, compound.getInt("DataSHOOT_DELAY"));
-        if (compound.contains("DataDIRECTION"))
-            this.entityData.set(DATA_DIRECTION, compound.getString("DataDIRECTION"));
-        if (compound.contains("DataWALKING"))
-            this.entityData.set(DATA_WALKING, compound.getBoolean("DataWALKING"));
-        if (compound.contains("DataPEEK_TIME"))
-            this.entityData.set(DATA_PEEK_TIME, compound.getInt("DataPEEK_TIME"));
-        if (compound.contains("DataVARIANT"))
-            this.entityData.set(DATA_VARIANT, compound.getInt("DataVARIANT"));
+        if (compound.contains("ShootDelay")) {
+            this.entityData.set(DATA_SHOOT_DELAY, compound.getInt("ShootDelay"));
+        }
+        if (compound.contains("Direction")) {
+            this.entityData.set(DATA_DIRECTION, compound.getString("Direction"));
+        }
+        if (compound.contains("Walking")) {
+            this.entityData.set(DATA_WALKING, compound.getBoolean("Walking"));
+        }
+        if (compound.contains("PeekTime")) {
+            this.entityData.set(DATA_PEEK_TIME, compound.getInt("PeekTime"));
+        }
+        if (compound.contains("Variant")) {
+            this.entityData.set(DATA_VARIANT, compound.getInt("Variant"));
+        }
     }
 
     @Override
@@ -607,11 +612,11 @@ public class OceanizedShulkerEntity extends SeaMonster {
     }
 
     public String getSyncedAnimation() {
-        return this.entityData.get(ANIMATION);
+        return this.entityData.get(DATA_ANIMATION);
     }
 
     public void setAnimation(String animation) {
-        this.entityData.set(ANIMATION, animation);
+        this.entityData.set(DATA_ANIMATION, animation);
     }
 
     @Override

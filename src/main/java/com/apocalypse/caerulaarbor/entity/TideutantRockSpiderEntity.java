@@ -49,9 +49,9 @@ import java.util.Comparator;
 import java.util.List;
 
 public class TideutantRockSpiderEntity extends SeaMonster {
-    public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(TideutantRockSpiderEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(TideutantRockSpiderEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(TideutantRockSpiderEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(TideutantRockSpiderEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(TideutantRockSpiderEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> DATA_DURATION = SynchedEntityData.defineId(TideutantRockSpiderEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
     private long lastSwing;
     public String animationprocedure = "empty";
@@ -71,9 +71,9 @@ public class TideutantRockSpiderEntity extends SeaMonster {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(SHOOT, false);
-        this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(DATA_duration, 0);
+        this.entityData.define(DATA_SHOOT, false);
+        this.entityData.define(DATA_ANIMATION, "undefined");
+        this.entityData.define(DATA_DURATION, 0);
     }
 
     @Override
@@ -167,14 +167,15 @@ public class TideutantRockSpiderEntity extends SeaMonster {
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putInt("Dataduration", this.entityData.get(DATA_duration));
+        compound.putInt("Duration", this.entityData.get(DATA_DURATION));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Dataduration"))
-            this.entityData.set(DATA_duration, compound.getInt("Dataduration"));
+        if (compound.contains("Duration")) {
+            this.entityData.set(DATA_DURATION, compound.getInt("Duration"));
+        }
 	}
 
     @Override
@@ -186,10 +187,10 @@ public class TideutantRockSpiderEntity extends SeaMonster {
         double z = this.getZ();
         double dura;
         if (this.isAlive()) {
-            dura = (Entity) this instanceof TideutantRockSpiderEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
+            dura = (Entity) this instanceof TideutantRockSpiderEntity _datEntI ? _datEntI.getEntityData().get(DATA_DURATION) : 0;
             if (dura > 0) {
                 if ((Entity) this instanceof TideutantRockSpiderEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_duration, (int) (dura - 1));
+                    _datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura - 1));
             }
             double count = 0;
             {
@@ -207,7 +208,7 @@ public class TideutantRockSpiderEntity extends SeaMonster {
                         this.setAnimation("animation.tidutant_rock_spider.skill");
                     }
                     if ((Entity) this instanceof TideutantRockSpiderEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_duration, 20);
+                        _datEntSetI.getEntityData().set(DATA_DURATION, 20);
                     CaerulaArborMod.queueServerWork(11, () -> {
                         if (this.isAlive()) {
                             if (world instanceof Level _level) {
@@ -330,11 +331,11 @@ public class TideutantRockSpiderEntity extends SeaMonster {
     }
 
     public String getSyncedAnimation() {
-        return this.entityData.get(ANIMATION);
+        return this.entityData.get(DATA_ANIMATION);
     }
 
     public void setAnimation(String animation) {
-        this.entityData.set(ANIMATION, animation);
+        this.entityData.set(DATA_ANIMATION, animation);
     }
 
     @Override
@@ -345,7 +346,7 @@ public class TideutantRockSpiderEntity extends SeaMonster {
     }
 
     private boolean isRockSpiderDurative() {
-        return this.isAlive() && this.getEntityData().get(DATA_duration) <= 0;
+        return this.isAlive() && this.getEntityData().get(DATA_DURATION) <= 0;
     }
 
     @Override

@@ -49,9 +49,9 @@ import javax.annotation.Nullable;
 import java.util.EnumSet;
 
 public class FirstTellerEntity extends SeaMonster implements RangedAttackMob {
-	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(FirstTellerEntity.class, EntityDataSerializers.BOOLEAN);
-	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(FirstTellerEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<Integer> DATA_sklp = SynchedEntityData.defineId(FirstTellerEntity.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(FirstTellerEntity.class, EntityDataSerializers.BOOLEAN);
+	public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(FirstTellerEntity.class, EntityDataSerializers.STRING);
+	public static final EntityDataAccessor<Integer> DATA_SKLP = SynchedEntityData.defineId(FirstTellerEntity.class, EntityDataSerializers.INT);
 	private boolean swinging;
 	private long lastSwing;
 	public String animationprocedure = "empty";
@@ -71,9 +71,9 @@ public class FirstTellerEntity extends SeaMonster implements RangedAttackMob {
 	@Override
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(SHOOT, false);
-		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(DATA_sklp, 200);
+		this.entityData.define(DATA_SHOOT, false);
+		this.entityData.define(DATA_ANIMATION, "undefined");
+		this.entityData.define(DATA_SKLP, 200);
 	}
 
 	@Override
@@ -148,7 +148,7 @@ public class FirstTellerEntity extends SeaMonster implements RangedAttackMob {
 			this.target = null;
 			this.seeTime = 0;
 			this.attackTime = -1;
-			((FirstTellerEntity) rangedAttackMob).entityData.set(SHOOT, false);
+			((FirstTellerEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
 		}
 
 		public boolean requiresUpdateEveryTick() {
@@ -171,10 +171,10 @@ public class FirstTellerEntity extends SeaMonster implements RangedAttackMob {
 			this.mob.getLookControl().setLookAt(this.target, 30.0F, 30.0F);
 			if (--this.attackTime == 0) {
 				if (!flag) {
-					((FirstTellerEntity) rangedAttackMob).entityData.set(SHOOT, false);
+					((FirstTellerEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
 					return;
 				}
-				((FirstTellerEntity) rangedAttackMob).entityData.set(SHOOT, true);
+				((FirstTellerEntity) rangedAttackMob).entityData.set(DATA_SHOOT, true);
 				float f = (float) Math.sqrt(d0) / this.attackRadius;
 				float f1 = Mth.clamp(f, 0.1F, 1.0F);
 				this.rangedAttackMob.performRangedAttack(this.target, f1);
@@ -182,7 +182,7 @@ public class FirstTellerEntity extends SeaMonster implements RangedAttackMob {
 			} else if (this.attackTime < 0) {
 				this.attackTime = Mth.floor(Mth.lerp(Math.sqrt(d0) / (double) this.attackRadius, this.attackIntervalMin, this.attackIntervalMax));
 			} else
-				((FirstTellerEntity) rangedAttackMob).entityData.set(SHOOT, false);
+				((FirstTellerEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
 		}
 	}
 
@@ -224,14 +224,15 @@ public class FirstTellerEntity extends SeaMonster implements RangedAttackMob {
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
-		compound.putInt("Datasklp", this.entityData.get(DATA_sklp));
+		compound.putInt("Sklp", this.entityData.get(DATA_SKLP));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
-		if (compound.contains("Datasklp"))
-			this.entityData.set(DATA_sklp, compound.getInt("Datasklp"));
+		if (compound.contains("Sklp")) {
+		    this.entityData.set(DATA_SKLP, compound.getInt("Sklp"));
+		}
 	}
 
 	@Override
@@ -244,13 +245,13 @@ public class FirstTellerEntity extends SeaMonster implements RangedAttackMob {
         Entity enemy;
         if (this.isAlive()) {
             if ((Entity) this instanceof FirstTellerEntity _datEntSetI)
-                _datEntSetI.getEntityData().set(DATA_sklp, ((Entity) this instanceof FirstTellerEntity _datEntI ? _datEntI.getEntityData().get(DATA_sklp) : 0) + 1);
+                _datEntSetI.getEntityData().set(DATA_SKLP, ((Entity) this instanceof FirstTellerEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKLP) : 0) + 1);
             if (MapVariables.get(world).strategy_grow >= 4) {
                 if ((Entity) this instanceof FirstTellerEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_sklp, ((Entity) this instanceof FirstTellerEntity _datEntI ? _datEntI.getEntityData().get(DATA_sklp) : 0) + 1);
+                    _datEntSetI.getEntityData().set(DATA_SKLP, ((Entity) this instanceof FirstTellerEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKLP) : 0) + 1);
             }
             enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
-            if (((Entity) this instanceof FirstTellerEntity _datEntI ? _datEntI.getEntityData().get(DATA_sklp) : 0) >= 400 && !(enemy == null)) {
+            if (((Entity) this instanceof FirstTellerEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKLP) : 0) >= 400 && !(enemy == null)) {
                 if (distanceTo(enemy) <= 8) {
                     if (world instanceof Level _level) {
                             _level.playSound(null, BlockPos.containing(x, y, z), CASounds.FIRSTTELLER_SKILL.get(), SoundSource.HOSTILE, 3, 1);
@@ -268,7 +269,7 @@ public class FirstTellerEntity extends SeaMonster implements RangedAttackMob {
                         }
                     });
                     if ((Entity) this instanceof FirstTellerEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_sklp, 0);
+                        _datEntSetI.getEntityData().set(DATA_SKLP, 0);
                 }
             }
         }
@@ -332,7 +333,7 @@ public class FirstTellerEntity extends SeaMonster implements RangedAttackMob {
 		if (this.swinging && this.lastSwing + 20L <= level().getGameTime()) {
 			this.swinging = false;
 		}
-		if ((this.swinging || this.entityData.get(SHOOT)) && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+		if ((this.swinging || this.entityData.get(DATA_SHOOT)) && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
 			event.getController().forceAnimationReset();
 			return event.setAndContinue(RawAnimation.begin().thenPlay("animation.firstspeak.attack"));
 		}
@@ -368,11 +369,11 @@ public class FirstTellerEntity extends SeaMonster implements RangedAttackMob {
 	}
 
 	public String getSyncedAnimation() {
-		return this.entityData.get(ANIMATION);
+		return this.entityData.get(DATA_ANIMATION);
 	}
 
 	public void setAnimation(String animation) {
-		this.entityData.set(ANIMATION, animation);
+		this.entityData.set(DATA_ANIMATION, animation);
 	}
 
 	@Override

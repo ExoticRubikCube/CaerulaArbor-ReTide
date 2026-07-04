@@ -63,13 +63,13 @@ import java.util.List;
 
 public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAnimationEntity {
 
-    public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(ComplexChitinGolemEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(ComplexChitinGolemEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<Integer> DATA_skillp = SynchedEntityData.defineId(ComplexChitinGolemEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(ComplexChitinGolemEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Boolean> DATA_rooted = SynchedEntityData.defineId(ComplexChitinGolemEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<Integer> DATA_rootX = SynchedEntityData.defineId(ComplexChitinGolemEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Integer> DATA_rootZ = SynchedEntityData.defineId(ComplexChitinGolemEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(ComplexChitinGolemEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(ComplexChitinGolemEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> DATA_SKILLP = SynchedEntityData.defineId(ComplexChitinGolemEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_DURATION = SynchedEntityData.defineId(ComplexChitinGolemEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Boolean> DATA_ROOTED = SynchedEntityData.defineId(ComplexChitinGolemEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<Integer> DATA_ROOT_X = SynchedEntityData.defineId(ComplexChitinGolemEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_ROOT_Z = SynchedEntityData.defineId(ComplexChitinGolemEntity.class, EntityDataSerializers.INT);
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private boolean swinging;
     private long lastSwing;
@@ -90,13 +90,13 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity, Sy
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(SHOOT, false);
-        this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(DATA_skillp, 200);
-        this.entityData.define(DATA_duration, 0);
-        this.entityData.define(DATA_rooted, false);
-        this.entityData.define(DATA_rootX, 0);
-        this.entityData.define(DATA_rootZ, 0);
+        this.entityData.define(DATA_SHOOT, false);
+        this.entityData.define(DATA_ANIMATION, "undefined");
+        this.entityData.define(DATA_SKILLP, 200);
+        this.entityData.define(DATA_DURATION, 0);
+        this.entityData.define(DATA_ROOTED, false);
+        this.entityData.define(DATA_ROOT_X, 0);
+        this.entityData.define(DATA_ROOT_Z, 0);
     }
 
     @Override
@@ -168,26 +168,31 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity, Sy
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putInt("Dataskillp", this.entityData.get(DATA_skillp));
-        compound.putInt("Dataduration", this.entityData.get(DATA_duration));
-        compound.putBoolean("Datarooted", this.entityData.get(DATA_rooted));
-        compound.putInt("DatarootX", this.entityData.get(DATA_rootX));
-        compound.putInt("DatarootZ", this.entityData.get(DATA_rootZ));
+        compound.putInt("Skillp", this.entityData.get(DATA_SKILLP));
+        compound.putInt("Duration", this.entityData.get(DATA_DURATION));
+        compound.putBoolean("Rooted", this.entityData.get(DATA_ROOTED));
+        compound.putInt("RootX", this.entityData.get(DATA_ROOT_X));
+        compound.putInt("RootZ", this.entityData.get(DATA_ROOT_Z));
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Dataskillp"))
-            this.entityData.set(DATA_skillp, compound.getInt("Dataskillp"));
-        if (compound.contains("Dataduration"))
-            this.entityData.set(DATA_duration, compound.getInt("Dataduration"));
-        if (compound.contains("Datarooted"))
-            this.entityData.set(DATA_rooted, compound.getBoolean("Datarooted"));
-        if (compound.contains("DatarootX"))
-            this.entityData.set(DATA_rootX, compound.getInt("DatarootX"));
-        if (compound.contains("DatarootZ"))
-            this.entityData.set(DATA_rootZ, compound.getInt("DatarootZ"));
+        if (compound.contains("Skillp")) {
+            this.entityData.set(DATA_SKILLP, compound.getInt("Skillp"));
+        }
+        if (compound.contains("Duration")) {
+            this.entityData.set(DATA_DURATION, compound.getInt("Duration"));
+        }
+        if (compound.contains("Rooted")) {
+            this.entityData.set(DATA_ROOTED, compound.getBoolean("Rooted"));
+        }
+        if (compound.contains("RootX")) {
+            this.entityData.set(DATA_ROOT_X, compound.getInt("RootX"));
+        }
+        if (compound.contains("RootZ")) {
+            this.entityData.set(DATA_ROOT_Z, compound.getInt("RootZ"));
+        }
     }
 
     @Override
@@ -267,22 +272,22 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity, Sy
             double rz;
             double dist;
             double dist1;
-            root = (Entity) this instanceof ComplexChitinGolemEntity _datEntL0 && _datEntL0.getEntityData().get(DATA_rooted);
+            root = (Entity) this instanceof ComplexChitinGolemEntity _datEntL0 && _datEntL0.getEntityData().get(DATA_ROOTED);
             if (!root) {
                 if (!(getDisplayName().getString()).equals(getType().getDescription().getString())) {
                     if ((Entity) this instanceof ComplexChitinGolemEntity _datEntSetI1)
-                        _datEntSetI1.getEntityData().set(DATA_rootX, (int) Math.round(x));
+                        _datEntSetI1.getEntityData().set(DATA_ROOT_X, (int) Math.round(x));
                     if ((Entity) this instanceof ComplexChitinGolemEntity _datEntSetI1)
-                        _datEntSetI1.getEntityData().set(DATA_rootZ, (int) Math.round(z));
+                        _datEntSetI1.getEntityData().set(DATA_ROOT_Z, (int) Math.round(z));
                     if ((Entity) this instanceof ComplexChitinGolemEntity _datEntSetL)
-                        _datEntSetL.getEntityData().set(DATA_rooted, true);
+                        _datEntSetL.getEntityData().set(DATA_ROOTED, true);
                     CaerulaArborMod.LOGGER.info(("Complex Chitin Golem " + getDisplayName().getString() + "has recognize x:" + Math.round(x) + " z:" + Math.round(z) + " as base"));
                 }
             } else if (Math.random() < 0.01) {
                 Mob _mobEnt8 = this;
                 if (!_mobEnt8.isAggressive()) {
-                    rx = x - ((Entity) this instanceof ComplexChitinGolemEntity _datEntI1 ? _datEntI1.getEntityData().get(DATA_rootX) : 0);
-                    rz = z - ((Entity) this instanceof ComplexChitinGolemEntity _datEntI1 ? _datEntI1.getEntityData().get(DATA_rootZ) : 0);
+                    rx = x - ((Entity) this instanceof ComplexChitinGolemEntity _datEntI1 ? _datEntI1.getEntityData().get(DATA_ROOT_X) : 0);
+                    rz = z - ((Entity) this instanceof ComplexChitinGolemEntity _datEntI1 ? _datEntI1.getEntityData().get(DATA_ROOT_Z) : 0);
                     dist = new Vec3(0, 0, 0).distanceTo(new Vec3(rx, 0, rz));
                     if (dist >= 24) {
                         dist1 = Mth.nextDouble(RandomSource.create(), 4, 16);
@@ -290,28 +295,28 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity, Sy
                     }
                 }
             }
-            sklp1 = (Entity) this instanceof ComplexChitinGolemEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp) : 0;
-            dura = (Entity) this instanceof ComplexChitinGolemEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
+            sklp1 = (Entity) this instanceof ComplexChitinGolemEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP) : 0;
+            dura = (Entity) this instanceof ComplexChitinGolemEntity _datEntI ? _datEntI.getEntityData().get(DATA_DURATION) : 0;
             enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
             if (dura > 0) {
                 if ((Entity) this instanceof ComplexChitinGolemEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_duration, (int) (dura - 1));
+                    _datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura - 1));
             }
             if (sklp1 > 0) {
                 if ((Entity) this instanceof ComplexChitinGolemEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_skillp, (int) (sklp1 - 1));
+                    _datEntSetI.getEntityData().set(DATA_SKILLP, (int) (sklp1 - 1));
             } else {
                 if (!(enemy == null) && enemy.isAlive()) {
                     if (distanceTo(enemy) <= 5 && dura < 1) {
                         if ((Entity) this instanceof ComplexChitinGolemEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_duration, 110);
+                            _datEntSetI.getEntityData().set(DATA_DURATION, 110);
                         if (this instanceof ComplexChitinGolemEntity) {
                             this.setAnimation("animation.complex_chitin_golem.spin");
                         }
                         if (!this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 110, 9, false, false));
                         if ((Entity) this instanceof ComplexChitinGolemEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_skillp, 400);
+                            _datEntSetI.getEntityData().set(DATA_SKILLP, 400);
                         CaerulaArborMod.queueServerWork(6, () -> {
                             if (this.isAlive()) {
                                 if (world instanceof Level _level) {
@@ -461,11 +466,11 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity, Sy
     }
 
     public String getSyncedAnimation() {
-        return this.entityData.get(ANIMATION);
+        return this.entityData.get(DATA_ANIMATION);
     }
 
     public void setAnimation(String animation) {
-        this.entityData.set(ANIMATION, animation);
+        this.entityData.set(DATA_ANIMATION, animation);
     }
 
     @Override
@@ -481,7 +486,7 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity, Sy
     }
 
     private boolean isDurative() {
-        return this.isAlive() && this.getEntityData().get(DATA_duration) <= 0;
+        return this.isAlive() && this.getEntityData().get(DATA_DURATION) <= 0;
     }
 
     @Override

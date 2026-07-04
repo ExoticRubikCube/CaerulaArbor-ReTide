@@ -47,10 +47,10 @@ import net.minecraft.sounds.SoundEvents;
 import javax.annotation.Nullable;
 
 public class OceanizeRabbitEntity extends SeaMonster {
-    public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanizeRabbitEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizeRabbitEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<Integer> DATA_variant = SynchedEntityData.defineId(OceanizeRabbitEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Integer> DATA_swallowP = SynchedEntityData.defineId(OceanizeRabbitEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(OceanizeRabbitEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(OceanizeRabbitEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> DATA_VARIANT = SynchedEntityData.defineId(OceanizeRabbitEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_SWALLOW_P = SynchedEntityData.defineId(OceanizeRabbitEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
     private long lastSwing;
     public String animationprocedure = "empty";
@@ -69,10 +69,10 @@ public class OceanizeRabbitEntity extends SeaMonster {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(SHOOT, false);
-        this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(DATA_variant, 0);
-        this.entityData.define(DATA_swallowP, 40);
+        this.entityData.define(DATA_SHOOT, false);
+        this.entityData.define(DATA_ANIMATION, "undefined");
+        this.entityData.define(DATA_VARIANT, 0);
+        this.entityData.define(DATA_SWALLOW_P, 40);
     }
 
     @Override
@@ -123,7 +123,7 @@ public class OceanizeRabbitEntity extends SeaMonster {
         double variant;
         double rrr;
         double curVar;
-        curVar = this.getEntityData().get(DATA_variant);
+        curVar = this.getEntityData().get(DATA_VARIANT);
         if (curVar == 0) {
             rrr = Math.random();
             if (rrr < 0.35) {
@@ -139,7 +139,7 @@ public class OceanizeRabbitEntity extends SeaMonster {
             }
             if (variant != 0) {
                 if ((Entity) this instanceof OceanizeRabbitEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_variant, (int) variant);
+                    _datEntSetI.getEntityData().set(DATA_VARIANT, (int) variant);
                 if (variant != 2) {
                     if (this.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
                         this.getAttribute(Attributes.MAX_HEALTH)
@@ -159,29 +159,31 @@ public class OceanizeRabbitEntity extends SeaMonster {
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putInt("Datavariant", this.entityData.get(DATA_variant));
-        compound.putInt("DataswallowP", this.entityData.get(DATA_swallowP));
+        compound.putInt("Variant", this.entityData.get(DATA_VARIANT));
+        compound.putInt("SwallowP", this.entityData.get(DATA_SWALLOW_P));
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Datavariant"))
-            this.entityData.set(DATA_variant, compound.getInt("Datavariant"));
-        if (compound.contains("DataswallowP"))
-            this.entityData.set(DATA_swallowP, compound.getInt("DataswallowP"));
+        if (compound.contains("Variant")) {
+            this.entityData.set(DATA_VARIANT, compound.getInt("Variant"));
+        }
+        if (compound.contains("SwallowP")) {
+            this.entityData.set(DATA_SWALLOW_P, compound.getInt("SwallowP"));
+        }
     }
 
     @Override
     public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
         super.mobInteract(sourceentity, hand);
         Entity entity = this;
-        if ((entity instanceof OceanizeRabbitEntity _datEntI ? _datEntI.getEntityData().get(DATA_variant) : 0) > 4.5) {
+        if ((entity instanceof OceanizeRabbitEntity _datEntI ? _datEntI.getEntityData().get(DATA_VARIANT) : 0) > 4.5) {
             return InteractionResult.PASS;
         }
         if (sourceentity.isHolding(CAItems.APOCALYPSE.get())) {
             if (entity instanceof OceanizeRabbitEntity _datEntSetI)
-                _datEntSetI.getEntityData().set(DATA_variant, 5);
+                _datEntSetI.getEntityData().set(DATA_VARIANT, 5);
             LivingEntity livingEntity = (LivingEntity) entity;
             if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
                 this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue((livingEntity.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) * 10);
@@ -212,20 +214,20 @@ public class OceanizeRabbitEntity extends SeaMonster {
         LevelAccessor world = this.level();
         Entity enemy;
         double sklp1;
-        if (!(((Entity) this instanceof OceanizeRabbitEntity _datEntI ? _datEntI.getEntityData().get(DATA_variant) : 0) < 4.5)) {
+        if (!(((Entity) this instanceof OceanizeRabbitEntity _datEntI ? _datEntI.getEntityData().get(DATA_VARIANT) : 0) < 4.5)) {
             if (this.isAlive()) {
-                sklp1 = (Entity) this instanceof OceanizeRabbitEntity _datEntI ? _datEntI.getEntityData().get(DATA_swallowP) : 0;
+                sklp1 = (Entity) this instanceof OceanizeRabbitEntity _datEntI ? _datEntI.getEntityData().get(DATA_SWALLOW_P) : 0;
                 enemy = this.getTarget();
                 if (sklp1 > 0) {
                     if ((Entity) this instanceof OceanizeRabbitEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_swallowP, (int) (sklp1 - 1));
+                        _datEntSetI.getEntityData().set(DATA_SWALLOW_P, (int) (sklp1 - 1));
                 } else {
                     if (!(enemy == null) && enemy.isAlive() && distanceTo(enemy) <= 5) {
                         if (this instanceof OceanizeRabbitEntity) {
                             this.setAnimation("animation.oceanized_rabbit.swallow");
                         }
                         if ((Entity) this instanceof OceanizeRabbitEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_swallowP, 200);
+                            _datEntSetI.getEntityData().set(DATA_SWALLOW_P, 200);
                         if (!this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 15, 9, false, false));
                         CaerulaArborMod.queueServerWork(8, () -> {
@@ -318,7 +320,7 @@ public class OceanizeRabbitEntity extends SeaMonster {
             double vvv;
             ItemStack coral = ItemStack.EMPTY;
             if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
-                vvv = (Entity) this instanceof OceanizeRabbitEntity _datEntI ? _datEntI.getEntityData().get(DATA_variant) : 0;
+                vvv = (Entity) this instanceof OceanizeRabbitEntity _datEntI ? _datEntI.getEntityData().get(DATA_VARIANT) : 0;
                 if (vvv == 0) {
                     coral = new ItemStack(Blocks.BRAIN_CORAL_FAN).copy();
                 } else if (vvv == 1) {
@@ -342,11 +344,11 @@ public class OceanizeRabbitEntity extends SeaMonster {
     }
 
     public String getSyncedAnimation() {
-        return this.entityData.get(ANIMATION);
+        return this.entityData.get(DATA_ANIMATION);
     }
 
     public void setAnimation(String animation) {
-        this.entityData.set(ANIMATION, animation);
+        this.entityData.set(DATA_ANIMATION, animation);
     }
 
     @Override

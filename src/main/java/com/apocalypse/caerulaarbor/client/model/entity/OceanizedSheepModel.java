@@ -26,7 +26,7 @@ public class OceanizedSheepModel extends GeoModel<OceanizedSheepEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(OceanizedSheepEntity entity) {
-		return entity.getEntityData().get(OceanizedSheepEntity.DATA_fur) ? FUR_TEXTURE : FURLESS_TEXTURE;
+		return entity.getEntityData().get(OceanizedSheepEntity.DATA_FUR) ? FUR_TEXTURE : FURLESS_TEXTURE;
 	}
 
 	@Override

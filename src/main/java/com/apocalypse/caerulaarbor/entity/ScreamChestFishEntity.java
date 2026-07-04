@@ -52,9 +52,9 @@ import software.bernie.geckolib.core.object.PlayState;
 import javax.annotation.Nullable;
 
 public class ScreamChestFishEntity extends SeaMonster {
-    public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(ScreamChestFishEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(ScreamChestFishEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<Boolean> DATA_release = SynchedEntityData.defineId(ScreamChestFishEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(ScreamChestFishEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(ScreamChestFishEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Boolean> DATA_RELEASE = SynchedEntityData.defineId(ScreamChestFishEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<Integer> DATA_SCREAM_TICK = SynchedEntityData.defineId(ScreamChestFishEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
     private long lastSwing;
@@ -75,9 +75,9 @@ public class ScreamChestFishEntity extends SeaMonster {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(SHOOT, false);
-        this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(DATA_release, false);
+        this.entityData.define(DATA_SHOOT, false);
+        this.entityData.define(DATA_ANIMATION, "undefined");
+        this.entityData.define(DATA_RELEASE, false);
         this.entityData.define(DATA_SCREAM_TICK, 201);
     }
 
@@ -175,7 +175,7 @@ public class ScreamChestFishEntity extends SeaMonster {
             this.setAnimation("animation.scream_chest_fish.open");
             this.level().playSound(null, BlockPos.containing(this.getX(), this.getY(), this.getZ()), SoundEvents.CHEST_OPEN, SoundSource.HOSTILE, 1, 1);
             this.setShiftKeyDown(false);
-            this.getEntityData().set(DATA_release, true);
+            this.getEntityData().set(DATA_RELEASE, true);
             this.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
             if (sourceEntity instanceof LivingEntity livingEntity) {
                 this.setTarget(livingEntity);
@@ -220,17 +220,19 @@ public class ScreamChestFishEntity extends SeaMonster {
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putBoolean("Datarelease", this.entityData.get(DATA_release));
-        compound.putInt("DataSCREAM_TICK", this.entityData.get(DATA_SCREAM_TICK));
+        compound.putBoolean("Release", this.entityData.get(DATA_RELEASE));
+        compound.putInt("ScreamTick", this.entityData.get(DATA_SCREAM_TICK));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Datarelease"))
-            this.entityData.set(DATA_release, compound.getBoolean("Datarelease"));
-        if (compound.contains("DataSCREAM_TICK"))
-            this.entityData.set(DATA_SCREAM_TICK, compound.getInt("DataSCREAM_TICK"));
+        if (compound.contains("Release")) {
+            this.entityData.set(DATA_RELEASE, compound.getBoolean("Release"));
+        }
+        if (compound.contains("ScreamTick")) {
+            this.entityData.set(DATA_SCREAM_TICK, compound.getInt("ScreamTick"));
+        }
 	}
 
     @Override
@@ -250,7 +252,7 @@ public class ScreamChestFishEntity extends SeaMonster {
         double d;
         double angle;
         double t;
-        if (!((Entity) this instanceof ScreamChestFishEntity _datEntL0 && _datEntL0.getEntityData().get(DATA_release))) {
+        if (!((Entity) this instanceof ScreamChestFishEntity _datEntL0 && _datEntL0.getEntityData().get(DATA_RELEASE))) {
             setShiftKeyDown(true);
             if (!this.level().isClientSide())
                 this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, 8, false, false));
@@ -322,7 +324,7 @@ public class ScreamChestFishEntity extends SeaMonster {
             if (this.isShiftKeyDown()) {
                 return event.setAndContinue(RawAnimation.begin().thenLoop("animation.scream_chest_fish.chest"));
             }
-            if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.1F && event.getLimbSwingAmount() < 0.1F)) && this.entityData.get(DATA_release)) {
+            if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.1F && event.getLimbSwingAmount() < 0.1F)) && this.entityData.get(DATA_RELEASE)) {
                 return event.setAndContinue(RawAnimation.begin().thenLoop("animation.scream_chest_fish.move"));
             }
             return event.setAndContinue(RawAnimation.begin().thenLoop("animation.scream_chest_fish.idle"));
@@ -374,11 +376,11 @@ public class ScreamChestFishEntity extends SeaMonster {
     }
 
     public String getSyncedAnimation() {
-        return this.entityData.get(ANIMATION);
+        return this.entityData.get(DATA_ANIMATION);
     }
 
     public void setAnimation(String animation) {
-        this.entityData.set(ANIMATION, animation);
+        this.entityData.set(DATA_ANIMATION, animation);
     }
 
     @Override
@@ -389,7 +391,7 @@ public class ScreamChestFishEntity extends SeaMonster {
     }
 
     private boolean isScreaming() {
-        if (!this.entityData.get(DATA_release)) return false;
+        if (!this.entityData.get(DATA_RELEASE)) return false;
         return this.entityData.get(DATA_SCREAM_TICK) > 0;
     }
 

@@ -26,7 +26,7 @@ public class OceanizedCowModel extends GeoModel<OceanizedCowEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(OceanizedCowEntity entity) {
-		return entity.getEntityData().get(OceanizedCowEntity.DATA_skill) ? TRAIL_TEXTURE : TRAILLESS_TEXTURE;
+		return entity.getEntityData().get(OceanizedCowEntity.DATA_SKILL) ? TRAIL_TEXTURE : TRAILLESS_TEXTURE;
 	}
 
 	@Override

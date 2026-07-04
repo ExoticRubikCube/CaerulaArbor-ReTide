@@ -55,10 +55,10 @@ import java.util.EnumSet;
 import java.util.List;
 
 public class TribunalHealerEntity extends Animal implements RangedAttackMob, GeoEntity, SyncedAnimationEntity {
-    public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(TribunalHealerEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(TribunalHealerEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<Integer> DATA_skillp1 = SynchedEntityData.defineId(TribunalHealerEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Integer> DATA_skillp2 = SynchedEntityData.defineId(TribunalHealerEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(TribunalHealerEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(TribunalHealerEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> DATA_SKILLP_1 = SynchedEntityData.defineId(TribunalHealerEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_SKILLP_2 = SynchedEntityData.defineId(TribunalHealerEntity.class, EntityDataSerializers.INT);
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private boolean swinging;
     private long lastSwing;
@@ -79,12 +79,11 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(SHOOT, false);
-        this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(DATA_skillp1, 100);
-        this.entityData.define(DATA_skillp2, 90);
+        this.entityData.define(DATA_SHOOT, false);
+        this.entityData.define(DATA_ANIMATION, "undefined");
+        this.entityData.define(DATA_SKILLP_1, 100);
+        this.entityData.define(DATA_SKILLP_2, 90);
     }
-
 
     @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket() {
@@ -160,7 +159,7 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
             this.target = null;
             this.seeTime = 0;
             this.attackTime = -1;
-            ((TribunalHealerEntity) rangedAttackMob).entityData.set(SHOOT, false);
+            ((TribunalHealerEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
         }
 
         public boolean requiresUpdateEveryTick() {
@@ -186,10 +185,10 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
             this.mob.getLookControl().setLookAt(this.target, 30.0F, 30.0F);
             if (--this.attackTime == 0) {
                 if (!flag) {
-                    ((TribunalHealerEntity) rangedAttackMob).entityData.set(SHOOT, false);
+                    ((TribunalHealerEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
                     return;
                 }
-                ((TribunalHealerEntity) rangedAttackMob).entityData.set(SHOOT, true);
+                ((TribunalHealerEntity) rangedAttackMob).entityData.set(DATA_SHOOT, true);
                 float f = (float) Math.sqrt(d0) / this.attackRadius;
                 float f1 = Mth.clamp(f, 0.1F, 1.0F);
                 this.rangedAttackMob.performRangedAttack(this.target, f1);
@@ -197,7 +196,7 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
             } else if (this.attackTime < 0) {
                 this.attackTime = Mth.floor(Mth.lerp(Math.sqrt(d0) / (double) this.attackRadius, this.attackIntervalMin, this.attackIntervalMax));
             } else
-                ((TribunalHealerEntity) rangedAttackMob).entityData.set(SHOOT, false);
+                ((TribunalHealerEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
         }
     }
 
@@ -229,17 +228,19 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putInt("Dataskillp1", this.entityData.get(DATA_skillp1));
-        compound.putInt("Dataskillp2", this.entityData.get(DATA_skillp2));
+        compound.putInt("Skillp1", this.entityData.get(DATA_SKILLP_1));
+        compound.putInt("Skillp2", this.entityData.get(DATA_SKILLP_2));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Dataskillp1"))
-            this.entityData.set(DATA_skillp1, compound.getInt("Dataskillp1"));
-        if (compound.contains("Dataskillp2"))
-            this.entityData.set(DATA_skillp2, compound.getInt("Dataskillp2"));
+        if (compound.contains("Skillp1")) {
+            this.entityData.set(DATA_SKILLP_1, compound.getInt("Skillp1"));
+        }
+        if (compound.contains("Skillp2")) {
+            this.entityData.set(DATA_SKILLP_2, compound.getInt("Skillp2"));
+        }
 	}
 
     @Override
@@ -251,14 +252,12 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
         double z = this.getZ();
         double sklp1;
         double sklp2;
-        double count = 0;
-        double atk = 0;
         if (this.isAlive()) {
-            sklp1 = (Entity) this instanceof TribunalHealerEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp1) : 0;
-            sklp2 = (Entity) this instanceof TribunalHealerEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp2) : 0;
+            sklp1 = (Entity) this instanceof TribunalHealerEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP_1) : 0;
+            sklp2 = (Entity) this instanceof TribunalHealerEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP_2) : 0;
             if (sklp1 > 0) {
                 if ((Entity) this instanceof TribunalHealerEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_skillp1, (int) (sklp1 - 1));
+                    _datEntSetI.getEntityData().set(DATA_SKILLP_1, (int) (sklp1 - 1));
             } else {
                 if (tickCount % 5 == 0) {
                     if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)) {
@@ -271,7 +270,7 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
                             if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "homo_sapiens")))) {
                                 if (!(this == entityiterator)) {
                                     if ((Entity) this instanceof TribunalHealerEntity _datEntSetI)
-                                        _datEntSetI.getEntityData().set(DATA_skillp1, 100);
+                                        _datEntSetI.getEntityData().set(DATA_SKILLP_1, 100);
                                     if (this instanceof TribunalHealerEntity) {
                                         this.setAnimation("animation.tribunal_healer.concentratedheal");
                                     }
@@ -319,11 +318,11 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
             }
             if (sklp2 > 0) {
                 if ((Entity) this instanceof TribunalHealerEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_skillp2, (int) (sklp2 - 1));
+                    _datEntSetI.getEntityData().set(DATA_SKILLP_2, (int) (sklp2 - 1));
             } else {
                 if (tickCount % 5 == 0 && hasAggresiveMobAround(world, x, y, z)) {
                     if ((Entity) this instanceof TribunalHealerEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_skillp2, 240);
+                        _datEntSetI.getEntityData().set(DATA_SKILLP_2, 240);
                     if (this instanceof TribunalHealerEntity) {
                         this.setAnimation("animation.tribunal_healer.shockwave");
                     }
@@ -432,8 +431,8 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
     }
 
     @Override
-    public boolean isFood(ItemStack stack) {
-        return List.of().contains(stack.getItem());
+    public boolean isFood(ItemStack stack) {                                            
+        return false;
     }
 
     @Override
@@ -480,7 +479,7 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
         if (this.swinging && this.lastSwing + 35L <= level().getGameTime()) {
             this.swinging = false;
         }
-        if ((this.swinging || this.entityData.get(SHOOT)) && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+        if ((this.swinging || this.entityData.get(DATA_SHOOT)) && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
             event.getController().forceAnimationReset();
             return event.setAndContinue(RawAnimation.begin().thenPlay("animation.tribunal_healer.heal"));
         }
@@ -516,11 +515,11 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
     }
 
     public String getSyncedAnimation() {
-        return this.entityData.get(ANIMATION);
+        return this.entityData.get(DATA_ANIMATION);
     }
 
     public void setAnimation(String animation) {
-        this.entityData.set(ANIMATION, animation);
+        this.entityData.set(DATA_ANIMATION, animation);
     }
 
     @Override

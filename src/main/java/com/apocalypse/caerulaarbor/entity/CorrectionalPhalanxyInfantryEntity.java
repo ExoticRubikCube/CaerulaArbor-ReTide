@@ -47,10 +47,10 @@ import java.util.Comparator;
 import java.util.List;
 
 public class CorrectionalPhalanxyInfantryEntity extends Animal implements GeoEntity, SyncedAnimationEntity {
-    public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(CorrectionalPhalanxyInfantryEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(CorrectionalPhalanxyInfantryEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<Integer> DATA_skillp1 = SynchedEntityData.defineId(CorrectionalPhalanxyInfantryEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Integer> DATA_skillp2 = SynchedEntityData.defineId(CorrectionalPhalanxyInfantryEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(CorrectionalPhalanxyInfantryEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(CorrectionalPhalanxyInfantryEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> DATA_SKILLP_1 = SynchedEntityData.defineId(CorrectionalPhalanxyInfantryEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_SKILLP_2 = SynchedEntityData.defineId(CorrectionalPhalanxyInfantryEntity.class, EntityDataSerializers.INT);
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private boolean swinging;
     private long lastSwing;
@@ -71,10 +71,10 @@ public class CorrectionalPhalanxyInfantryEntity extends Animal implements GeoEnt
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(SHOOT, false);
-        this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(DATA_skillp1, 100);
-        this.entityData.define(DATA_skillp2, 200);
+        this.entityData.define(DATA_SHOOT, false);
+        this.entityData.define(DATA_ANIMATION, "undefined");
+        this.entityData.define(DATA_SKILLP_1, 100);
+        this.entityData.define(DATA_SKILLP_2, 200);
     }
 
 
@@ -149,10 +149,10 @@ public class CorrectionalPhalanxyInfantryEntity extends Animal implements GeoEnt
         Entity sourceentity = source.getEntity();
         if (sourceentity != null) {
             if (!(sourceentity instanceof Player)) {
-                if (((Entity) this instanceof CorrectionalPhalanxyInfantryEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp1) : 0) <= 0) {
+                if (((Entity) this instanceof CorrectionalPhalanxyInfantryEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP_1) : 0) <= 0) {
                     if (distanceTo(sourceentity) <= 5 && this.isAlive()) {
                         if ((Entity) this instanceof CorrectionalPhalanxyInfantryEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_skillp1, 100);
+                            _datEntSetI.getEntityData().set(DATA_SKILLP_1, 100);
                         if (this instanceof CorrectionalPhalanxyInfantryEntity) {
                             this.setAnimation("animation.correctional_phalanx _infantry.heavyattack");
                         }
@@ -171,17 +171,19 @@ public class CorrectionalPhalanxyInfantryEntity extends Animal implements GeoEnt
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putInt("Dataskillp1", this.entityData.get(DATA_skillp1));
-        compound.putInt("Dataskillp2", this.entityData.get(DATA_skillp2));
+        compound.putInt("Skillp1", this.entityData.get(DATA_SKILLP_1));
+        compound.putInt("Skillp2", this.entityData.get(DATA_SKILLP_2));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Dataskillp1"))
-            this.entityData.set(DATA_skillp1, compound.getInt("Dataskillp1"));
-        if (compound.contains("Dataskillp2"))
-            this.entityData.set(DATA_skillp2, compound.getInt("Dataskillp2"));
+        if (compound.contains("Skillp1")) {
+            this.entityData.set(DATA_SKILLP_1, compound.getInt("Skillp1"));
+        }
+        if (compound.contains("Skillp2")) {
+            this.entityData.set(DATA_SKILLP_2, compound.getInt("Skillp2"));
+        }
 	}
 
     @Override
@@ -192,21 +194,21 @@ public class CorrectionalPhalanxyInfantryEntity extends Animal implements GeoEnt
         double sklp2;
         Entity enemy;
         if (this.isAlive()) {
-            sklp1 = (Entity) this instanceof CorrectionalPhalanxyInfantryEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp1) : 0;
-            sklp2 = (Entity) this instanceof CorrectionalPhalanxyInfantryEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp2) : 0;
+            sklp1 = (Entity) this instanceof CorrectionalPhalanxyInfantryEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP_1) : 0;
+            sklp2 = (Entity) this instanceof CorrectionalPhalanxyInfantryEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP_2) : 0;
             if (sklp1 > 0) {
                 if ((Entity) this instanceof CorrectionalPhalanxyInfantryEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_skillp1, (int) (sklp1 - 1));
+                    _datEntSetI.getEntityData().set(DATA_SKILLP_1, (int) (sklp1 - 1));
             }
             if (sklp2 > 0) {
                 if ((Entity) this instanceof CorrectionalPhalanxyInfantryEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_skillp2, (int) (sklp2 - 1));
+                    _datEntSetI.getEntityData().set(DATA_SKILLP_2, (int) (sklp2 - 1));
             } else {
                 enemy = this.getTarget();
                 if (!(enemy == null)) {
                     if (distanceTo(enemy) <= 5 && enemy.isAlive()) {
                         if ((Entity) this instanceof CorrectionalPhalanxyInfantryEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_skillp2, 200);
+                            _datEntSetI.getEntityData().set(DATA_SKILLP_2, 200);
                         if (this instanceof CorrectionalPhalanxyInfantryEntity) {
                             this.setAnimation("animation.correctional_phalanx _infantry.swing");
                         }
@@ -327,11 +329,11 @@ public class CorrectionalPhalanxyInfantryEntity extends Animal implements GeoEnt
     }
 
     public String getSyncedAnimation() {
-        return this.entityData.get(ANIMATION);
+        return this.entityData.get(DATA_ANIMATION);
     }
 
     public void setAnimation(String animation) {
-        this.entityData.set(ANIMATION, animation);
+        this.entityData.set(DATA_ANIMATION, animation);
     }
 
     @Override

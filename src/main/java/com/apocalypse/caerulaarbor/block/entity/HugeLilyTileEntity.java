@@ -44,7 +44,7 @@ public class HugeLilyTileEntity extends RandomizableContainerBlockEntity impleme
 	}
 
 	private PlayState predicate(AnimationState event) {
-		String animationprocedure = ("" + this.getBlockState().getValue(HugeLilyBlock.ANIMATION));
+		String animationprocedure = ("" + this.getBlockState().getValue(HugeLilyBlock.DATA_ANIMATION));
 		if (animationprocedure.equals("0")) {
 			return event.setAndContinue(RawAnimation.begin().thenLoop(animationprocedure));
 		}
@@ -54,7 +54,7 @@ public class HugeLilyTileEntity extends RandomizableContainerBlockEntity impleme
 	String prevAnim = "0";
 
 	private PlayState procedurePredicate(AnimationState event) {
-		String animationprocedure = ("" + this.getBlockState().getValue(HugeLilyBlock.ANIMATION));
+		String animationprocedure = ("" + this.getBlockState().getValue(HugeLilyBlock.DATA_ANIMATION));
 		if (!animationprocedure.equals("0") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!animationprocedure.equals(prevAnim) && !animationprocedure.equals("0"))) {
 			if (!animationprocedure.equals(prevAnim))
 				event.getController().forceAnimationReset();

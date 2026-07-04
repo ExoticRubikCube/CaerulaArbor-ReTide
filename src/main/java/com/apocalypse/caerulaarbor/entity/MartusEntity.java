@@ -20,6 +20,7 @@ import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -56,7 +57,6 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
-import net.minecraft.sounds.SoundEvents;
 
 import javax.annotation.Nullable;
 import java.util.Comparator;
@@ -65,11 +65,11 @@ import java.util.List;
 public class MartusEntity extends SeaMonster {
     private int releaseTime = 0;
 
-    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(MartusEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(MartusEntity.class, EntityDataSerializers.STRING);
 
-    public static final EntityDataAccessor<Integer> DATA_phase = SynchedEntityData.defineId(MartusEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Integer> DATA_skillp1 = SynchedEntityData.defineId(MartusEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Integer> DATA_skillp2 = SynchedEntityData.defineId(MartusEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_PHASE = SynchedEntityData.defineId(MartusEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_SKILLP_1 = SynchedEntityData.defineId(MartusEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_SKILLP_2 = SynchedEntityData.defineId(MartusEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
     private long lastSwing;
     public String animationprocedure = "empty";
@@ -91,10 +91,10 @@ public class MartusEntity extends SeaMonster {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(DATA_phase, 0);
-        this.entityData.define(DATA_skillp1, 200);
-        this.entityData.define(DATA_skillp2, 200);
+        this.entityData.define(DATA_ANIMATION, "undefined");
+        this.entityData.define(DATA_PHASE, 0);
+        this.entityData.define(DATA_SKILLP_1, 200);
+        this.entityData.define(DATA_SKILLP_2, 200);
     }
 
     @Override
@@ -178,15 +178,15 @@ public class MartusEntity extends SeaMonster {
 
     @Override
     public void die(DamageSource source) {
-        if (this.getEntityData().get(DATA_phase) == 0) {
+        if (this.getEntityData().get(DATA_PHASE) == 0) {
             this.removeEffect(CAMobEffects.INVULNERABLE.get());
             if (!this.level().isClientSide()) {
                 this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 200, 1, false, false));
                 this.addEffect(new MobEffectInstance(CAMobEffects.FAKE_DEATH.get(), 200, 1, false, false));
             }
-            this.getEntityData().set(DATA_phase, 1);
-            this.getEntityData().set(DATA_skillp1, 600);
-            this.getEntityData().set(DATA_skillp2, 200);
+            this.getEntityData().set(DATA_PHASE, 1);
+            this.getEntityData().set(DATA_SKILLP_1, 600);
+            this.getEntityData().set(DATA_SKILLP_2, 200);
             return;
         }
         super.die(source);
@@ -250,28 +250,22 @@ public class MartusEntity extends SeaMonster {
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putInt("Phase", this.entityData.get(DATA_phase));
-        compound.putInt("PrimarySkillCooldown", this.entityData.get(DATA_skillp1));
-        compound.putInt("SecondarySkillCooldown", this.entityData.get(DATA_skillp2));
+        compound.putInt("Phase", this.entityData.get(DATA_PHASE));
+        compound.putInt("Skillp1", this.entityData.get(DATA_SKILLP_1));
+        compound.putInt("Skillp2", this.entityData.get(DATA_SKILLP_2));
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         if (compound.contains("Phase")) {
-            this.entityData.set(DATA_phase, compound.getInt("Phase"));
-        } else if (compound.contains("Dataphase")) {
-            this.entityData.set(DATA_phase, compound.getInt("Dataphase"));
+            this.entityData.set(DATA_PHASE, compound.getInt("Phase"));
         }
-        if (compound.contains("PrimarySkillCooldown")) {
-            this.entityData.set(DATA_skillp1, compound.getInt("PrimarySkillCooldown"));
-        } else if (compound.contains("Dataskillp1")) {
-            this.entityData.set(DATA_skillp1, compound.getInt("Dataskillp1"));
+        if (compound.contains("Skillp1")) {
+            this.entityData.set(DATA_SKILLP_1, compound.getInt("Skillp1"));
         }
-        if (compound.contains("SecondarySkillCooldown")) {
-            this.entityData.set(DATA_skillp2, compound.getInt("SecondarySkillCooldown"));
-        } else if (compound.contains("Dataskillp2")) {
-            this.entityData.set(DATA_skillp2, compound.getInt("Dataskillp2"));
+        if (compound.contains("Skillp2")) {
+            this.entityData.set(DATA_SKILLP_2, compound.getInt("Skillp2"));
         }
     }
 
@@ -288,9 +282,9 @@ public class MartusEntity extends SeaMonster {
         double phase;
         double perc;
         if (this.isAlive()) {
-            sklp1 = (Entity) this instanceof MartusEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp1) : 0;
-            sklp2 = (Entity) this instanceof MartusEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp2) : 0;
-            phase = (Entity) this instanceof MartusEntity _datEntI ? _datEntI.getEntityData().get(DATA_phase) : 0;
+            sklp1 = (Entity) this instanceof MartusEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP_1) : 0;
+            sklp2 = (Entity) this instanceof MartusEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP_2) : 0;
+            phase = (Entity) this instanceof MartusEntity _datEntI ? _datEntI.getEntityData().get(DATA_PHASE) : 0;
             if (tickCount % 12 == 0) {
                 double num = 0;
                 double limit;
@@ -339,10 +333,10 @@ public class MartusEntity extends SeaMonster {
                 }
                 if (sklp1 > 0) {
                     if ((Entity) this instanceof MartusEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_skillp1, (int) (sklp1 - 1));
+                        _datEntSetI.getEntityData().set(DATA_SKILLP_1, (int) (sklp1 - 1));
                     if (MapVariables.get(world).strategy_subsisting > 3) {
                         if ((Entity) this instanceof MartusEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_skillp1, (int) (sklp1 - 1));
+                            _datEntSetI.getEntityData().set(DATA_SKILLP_1, (int) (sklp1 - 1));
                     }
                 } else {
                     if (tickCount % 10 == 0) {
@@ -381,7 +375,7 @@ public class MartusEntity extends SeaMonster {
                         tgt = result;
                         if (!(tgt == null) && tgt.isAlive() && !tgt.getPersistentData().getBoolean("blessed")) {
                             if ((Entity) this instanceof MartusEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_skillp1, 400);
+                                _datEntSetI.getEntityData().set(DATA_SKILLP_1, 400);
                             if (this instanceof MartusEntity) {
                                 this.setAnimation("animation.martus.buff");
                             }
@@ -421,11 +415,11 @@ public class MartusEntity extends SeaMonster {
                 }
                 if (sklp1 > 0) {
                     if ((Entity) this instanceof MartusEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_skillp1, (int) (sklp1 - 1));
+                        _datEntSetI.getEntityData().set(DATA_SKILLP_1, (int) (sklp1 - 1));
                 } else {
                     if (tickCount % 10 == 0 && EntityUtils.getSeabornAround(world, x, y, z, this) > 0) {
                         if ((Entity) this instanceof MartusEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_skillp1, 1000);
+                            _datEntSetI.getEntityData().set(DATA_SKILLP_1, 1000);
                         if (this instanceof MartusEntity) {
                             this.setAnimation("animation.martus.cure");
                         }
@@ -469,10 +463,10 @@ public class MartusEntity extends SeaMonster {
                 }
                 if (sklp2 > 0) {
                     if ((Entity) this instanceof MartusEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_skillp2, (int) (sklp2 - 1));
+                        _datEntSetI.getEntityData().set(DATA_SKILLP_2, (int) (sklp2 - 1));
                 } else {
                     if ((Entity) this instanceof MartusEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_skillp2, 600);
+                        _datEntSetI.getEntityData().set(DATA_SKILLP_2, 600);
                     if (this instanceof MartusEntity) {
                         this.setAnimation("animation.martus.reject");
                     }
@@ -718,11 +712,11 @@ public class MartusEntity extends SeaMonster {
     }
 
     public String getSyncedAnimation() {
-        return this.entityData.get(ANIMATION);
+        return this.entityData.get(DATA_ANIMATION);
     }
 
     public void setAnimation(String animation) {
-        this.entityData.set(ANIMATION, animation);
+        this.entityData.set(DATA_ANIMATION, animation);
     }
 
     @Override

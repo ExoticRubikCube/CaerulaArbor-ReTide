@@ -47,9 +47,9 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 
 public class AccumulatorProkaryoteEntity extends SeaMonster {
-	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(AccumulatorProkaryoteEntity.class, EntityDataSerializers.BOOLEAN);
-	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(AccumulatorProkaryoteEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<Boolean> DATA_split = SynchedEntityData.defineId(AccumulatorProkaryoteEntity.class, EntityDataSerializers.BOOLEAN);
+	public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(AccumulatorProkaryoteEntity.class, EntityDataSerializers.BOOLEAN);
+	public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(AccumulatorProkaryoteEntity.class, EntityDataSerializers.STRING);
+	public static final EntityDataAccessor<Boolean> DATA_SPLIT = SynchedEntityData.defineId(AccumulatorProkaryoteEntity.class, EntityDataSerializers.BOOLEAN);
 	private boolean swinging;
 	private long lastSwing;
 	public String animationprocedure = "empty";
@@ -101,9 +101,9 @@ public class AccumulatorProkaryoteEntity extends SeaMonster {
 	@Override
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(SHOOT, false);
-		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(DATA_split, true);
+		this.entityData.define(DATA_SHOOT, false);
+		this.entityData.define(DATA_ANIMATION, "undefined");
+		this.entityData.define(DATA_SPLIT, true);
 	}
 
 	@Override
@@ -151,14 +151,15 @@ public class AccumulatorProkaryoteEntity extends SeaMonster {
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
-		compound.putBoolean("Datasplit", this.entityData.get(DATA_split));
+		compound.putBoolean("Split", this.entityData.get(DATA_SPLIT));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
-		if (compound.contains("Datasplit"))
-			this.entityData.set(DATA_split, compound.getBoolean("Datasplit"));
+		if (compound.contains("Split")) {
+		    this.entityData.set(DATA_SPLIT, compound.getBoolean("Split"));
+		}
 	}
 
 	@Override
@@ -167,14 +168,14 @@ public class AccumulatorProkaryoteEntity extends SeaMonster {
         LevelAccessor world = this.level();
         if (this.isAlive() && tickCount % 10 == 0) {
             if (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) <= ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5 && (Entity) this instanceof AccumulatorProkaryoteEntity _datEntL4
-                    && _datEntL4.getEntityData().get(DATA_split)) {
+                    && _datEntL4.getEntityData().get(DATA_SPLIT)) {
                 if (this instanceof AccumulatorProkaryoteEntity) {
                     this.setAnimation("animation.accumulator.split");
                 }
                 if ((Entity) this instanceof LivingEntity _entity)
                     _entity.setHealth((float) (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5));
                 if ((Entity) this instanceof AccumulatorProkaryoteEntity _datEntSetL)
-                    _datEntSetL.getEntityData().set(DATA_split, false);
+                    _datEntSetL.getEntityData().set(DATA_SPLIT, false);
                 if (!((Entity) this instanceof LivingEntity _livEnt9 && _livEnt9.hasEffect(CAMobEffects.MUTE.get()))) {
                     CaerulaArborMod.queueServerWork(10, () -> {
                         if (isInWater()) {
@@ -296,11 +297,11 @@ public class AccumulatorProkaryoteEntity extends SeaMonster {
 	}
 
 	public String getSyncedAnimation() {
-		return this.entityData.get(ANIMATION);
+		return this.entityData.get(DATA_ANIMATION);
 	}
 
 	public void setAnimation(String animation) {
-		this.entityData.set(ANIMATION, animation);
+		this.entityData.set(DATA_ANIMATION, animation);
 	}
 
 	@Override

@@ -48,9 +48,9 @@ import software.bernie.geckolib.core.object.PlayState;
 import javax.annotation.Nullable;
 
 public class ChestFishEntity extends SeaMonster {
-	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(ChestFishEntity.class, EntityDataSerializers.BOOLEAN);
-	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(ChestFishEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<Boolean> DATA_release = SynchedEntityData.defineId(ChestFishEntity.class, EntityDataSerializers.BOOLEAN);
+	public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(ChestFishEntity.class, EntityDataSerializers.BOOLEAN);
+	public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(ChestFishEntity.class, EntityDataSerializers.STRING);
+	public static final EntityDataAccessor<Boolean> DATA_RELEASE = SynchedEntityData.defineId(ChestFishEntity.class, EntityDataSerializers.BOOLEAN);
 	private boolean swinging;
 	private long lastSwing;
 	public String animationprocedure = "empty";
@@ -69,11 +69,10 @@ public class ChestFishEntity extends SeaMonster {
 	@Override
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(SHOOT, false);
-		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(DATA_release, false);
+		this.entityData.define(DATA_SHOOT, false);
+		this.entityData.define(DATA_ANIMATION, "undefined");
+		this.entityData.define(DATA_RELEASE, false);
 	}
-
 
 	@Override
 	public boolean canCollideWith(Entity entity) {
@@ -188,14 +187,15 @@ public class ChestFishEntity extends SeaMonster {
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
-		compound.putBoolean("Datarelease", this.entityData.get(DATA_release));
+		compound.putBoolean("Release", this.entityData.get(DATA_RELEASE));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
-		if (compound.contains("Datarelease"))
-			this.entityData.set(DATA_release, compound.getBoolean("Datarelease"));
+		if (compound.contains("Release")) {
+		    this.entityData.set(DATA_RELEASE, compound.getBoolean("Release"));
+		}
 	}
 
 	@Override
@@ -212,7 +212,7 @@ public class ChestFishEntity extends SeaMonster {
 	@Override
 	public void baseTick() {
 		super.baseTick();
-        if (!((Entity) this instanceof ChestFishEntity _datEntL0 && _datEntL0.getEntityData().get(DATA_release))) {
+        if (!((Entity) this instanceof ChestFishEntity _datEntL0 && _datEntL0.getEntityData().get(DATA_RELEASE))) {
             setShiftKeyDown(true);
             if (!this.level().isClientSide())
                 this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, 8, false, false));
@@ -247,7 +247,7 @@ public class ChestFishEntity extends SeaMonster {
 		if (this.animationprocedure.equals("empty")) {
 			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
 
-			&& this.entityData.get(DATA_release)) {
+			&& this.entityData.get(DATA_RELEASE)) {
 				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.chest_fish.move"));
 			}
 			if (this.isShiftKeyDown()) {
@@ -304,11 +304,11 @@ public class ChestFishEntity extends SeaMonster {
 	}
 
 	public String getSyncedAnimation() {
-		return this.entityData.get(ANIMATION);
+		return this.entityData.get(DATA_ANIMATION);
 	}
 
 	public void setAnimation(String animation) {
-		this.entityData.set(ANIMATION, animation);
+		this.entityData.set(DATA_ANIMATION, animation);
 	}
 
 	@Override
@@ -327,7 +327,7 @@ public class ChestFishEntity extends SeaMonster {
 				world.playLocalSound(x, y, z, SoundEvents.CHEST_OPEN, SoundSource.HOSTILE, 1, 1, false);
 			}
 			this.setShiftKeyDown(false);
-			this.getEntityData().set(DATA_release, true);
+			this.getEntityData().set(DATA_RELEASE, true);
 			this.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
 			if (sourceentity instanceof LivingEntity _ent)
 				this.setTarget(_ent);

@@ -80,7 +80,7 @@ public class HighmoreShootEntity extends AbstractArrow implements ItemSupplier {
             return;
         entity.invulnerableTime = 0;
         if (!(sourceentity == entity)) {
-            if ((sourceentity instanceof HighmoreEntity _datEntI ? _datEntI.getEntityData().get(HighmoreEntity.DATA_phase) : 0) == 0) {
+            if ((sourceentity instanceof HighmoreEntity _datEntI ? _datEntI.getEntityData().get(HighmoreEntity.DATA_PHASE) : 0) == 0) {
                 CaerulaArborMod.queueServerWork(3, () -> {
                     new Object() {
                         void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
@@ -96,7 +96,7 @@ public class HighmoreShootEntity extends AbstractArrow implements ItemSupplier {
                         }
                     }.timedLoop(0, 2, 3);
                 });
-            } else if ((sourceentity instanceof HighmoreEntity _datEntI ? _datEntI.getEntityData().get(HighmoreEntity.DATA_phase) : 0) == 1) {
+            } else if ((sourceentity instanceof HighmoreEntity _datEntI ? _datEntI.getEntityData().get(HighmoreEntity.DATA_PHASE) : 0) == 1) {
                 CaerulaArborMod.queueServerWork(3, () -> {
                     new Object() {
                         void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {

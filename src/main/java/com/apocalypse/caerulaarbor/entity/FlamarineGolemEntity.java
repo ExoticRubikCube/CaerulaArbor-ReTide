@@ -60,12 +60,12 @@ import java.util.Comparator;
 import java.util.List;
 
 public class FlamarineGolemEntity extends SeaMonster {
-    public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(FlamarineGolemEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(FlamarineGolemEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(FlamarineGolemEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Integer> DATA_skillP1 = SynchedEntityData.defineId(FlamarineGolemEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Integer> DATA_skillP2 = SynchedEntityData.defineId(FlamarineGolemEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Integer> DATA_addition = SynchedEntityData.defineId(FlamarineGolemEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(FlamarineGolemEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(FlamarineGolemEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> DATA_DURATION = SynchedEntityData.defineId(FlamarineGolemEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_SKILL_P1 = SynchedEntityData.defineId(FlamarineGolemEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_SKILL_P2 = SynchedEntityData.defineId(FlamarineGolemEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_ADDITION = SynchedEntityData.defineId(FlamarineGolemEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
     private long lastSwing;
     public String animationprocedure = "empty";
@@ -86,12 +86,12 @@ public class FlamarineGolemEntity extends SeaMonster {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(SHOOT, false);
-        this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(DATA_duration, 0);
-        this.entityData.define(DATA_skillP1, 6);
-        this.entityData.define(DATA_skillP2, 100);
-        this.entityData.define(DATA_addition, 40);
+        this.entityData.define(DATA_SHOOT, false);
+        this.entityData.define(DATA_ANIMATION, "undefined");
+        this.entityData.define(DATA_DURATION, 0);
+        this.entityData.define(DATA_SKILL_P1, 6);
+        this.entityData.define(DATA_SKILL_P2, 100);
+        this.entityData.define(DATA_ADDITION, 40);
     }
 
 
@@ -172,7 +172,7 @@ public class FlamarineGolemEntity extends SeaMonster {
         double targetY = target.getY();
         double targetZ = target.getZ();
         if (!this.level().isClientSide()) {
-            this.getEntityData().set(DATA_duration, 35);
+            this.getEntityData().set(DATA_DURATION, 35);
             CaerulaArborMod.queueServerWork(20, () -> {
                 if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 5.75) {
                     target.hurt(
@@ -195,10 +195,10 @@ public class FlamarineGolemEntity extends SeaMonster {
         if (sourceentity != null) {
             double sklp;
             if (this.isAlive()) {
-                sklp = (Entity) this instanceof FlamarineGolemEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillP1) : 0;
+                sklp = (Entity) this instanceof FlamarineGolemEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILL_P1) : 0;
                 if (sklp > 0) {
                     if ((Entity) this instanceof FlamarineGolemEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_skillP1, (int) (sklp - 1));
+                        _datEntSetI.getEntityData().set(DATA_SKILL_P1, (int) (sklp - 1));
                 }
             }
             if (!(sourceentity instanceof FlamarineGolemEntity || sourceentity instanceof FlamarineStatueEntity)) {
@@ -242,30 +242,34 @@ public class FlamarineGolemEntity extends SeaMonster {
             this.setAnimation("animation.flamarine_golem.start");
         }
         if ((Entity) this instanceof FlamarineGolemEntity _datEntSetI)
-            _datEntSetI.getEntityData().set(DATA_duration, 60);
+            _datEntSetI.getEntityData().set(DATA_DURATION, 60);
         return retval;
     }
 
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putInt("Dataduration", this.entityData.get(DATA_duration));
-        compound.putInt("DataskillP1", this.entityData.get(DATA_skillP1));
-        compound.putInt("DataskillP2", this.entityData.get(DATA_skillP2));
-        compound.putInt("Dataaddition", this.entityData.get(DATA_addition));
+        compound.putInt("Duration", this.entityData.get(DATA_DURATION));
+        compound.putInt("SkillP1", this.entityData.get(DATA_SKILL_P1));
+        compound.putInt("SkillP2", this.entityData.get(DATA_SKILL_P2));
+        compound.putInt("Addition", this.entityData.get(DATA_ADDITION));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Dataduration"))
-            this.entityData.set(DATA_duration, compound.getInt("Dataduration"));
-        if (compound.contains("DataskillP1"))
-            this.entityData.set(DATA_skillP1, compound.getInt("DataskillP1"));
-        if (compound.contains("DataskillP2"))
-            this.entityData.set(DATA_skillP2, compound.getInt("DataskillP2"));
-        if (compound.contains("Dataaddition"))
-            this.entityData.set(DATA_addition, compound.getInt("Dataaddition"));
+        if (compound.contains("Duration")) {
+            this.entityData.set(DATA_DURATION, compound.getInt("Duration"));
+        }
+        if (compound.contains("SkillP1")) {
+            this.entityData.set(DATA_SKILL_P1, compound.getInt("SkillP1"));
+        }
+        if (compound.contains("SkillP2")) {
+            this.entityData.set(DATA_SKILL_P2, compound.getInt("SkillP2"));
+        }
+        if (compound.contains("Addition")) {
+            this.entityData.set(DATA_ADDITION, compound.getInt("Addition"));
+        }
 	}
 
     @Override
@@ -287,13 +291,13 @@ public class FlamarineGolemEntity extends SeaMonster {
             }
         }
         if (this.isAlive()) {
-            sklp1 = (Entity) this instanceof FlamarineGolemEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillP1) : 0;
-            sklp2 = (Entity) this instanceof FlamarineGolemEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillP2) : 0;
-            dura = (Entity) this instanceof FlamarineGolemEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
+            sklp1 = (Entity) this instanceof FlamarineGolemEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILL_P1) : 0;
+            sklp2 = (Entity) this instanceof FlamarineGolemEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILL_P2) : 0;
+            dura = (Entity) this instanceof FlamarineGolemEntity _datEntI ? _datEntI.getEntityData().get(DATA_DURATION) : 0;
             enemy = this.getTarget();
             if (dura > 0) {
                 if ((Entity) this instanceof FlamarineGolemEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_duration, (int) (dura - 1));
+                    _datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura - 1));
             }
             if (sklp1 <= 0 && dura <= 0) {
                 if (!(enemy == null) && enemy.isAlive()) {
@@ -302,9 +306,9 @@ public class FlamarineGolemEntity extends SeaMonster {
                             this.setAnimation("animation.flamarine_golem.heavy");
                         }
                         if ((Entity) this instanceof FlamarineGolemEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_skillP1, 11);
+                            _datEntSetI.getEntityData().set(DATA_SKILL_P1, 11);
                         if ((Entity) this instanceof FlamarineGolemEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_duration, 40);
+                            _datEntSetI.getEntityData().set(DATA_DURATION, 40);
                         dura = 40;
                         CaerulaArborMod.queueServerWork(20, () -> {
                             if (this.isAlive()) {
@@ -360,7 +364,7 @@ public class FlamarineGolemEntity extends SeaMonster {
             }
             if (sklp2 > 0) {
                 if ((Entity) this instanceof FlamarineGolemEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_skillP2, (int) (sklp2 - 1));
+                    _datEntSetI.getEntityData().set(DATA_SKILL_P2, (int) (sklp2 - 1));
             } else if (dura <= 0) {
                 if (!(enemy == null) && enemy.isAlive()) {
                     if (distanceTo(enemy) <= 5) {
@@ -368,9 +372,9 @@ public class FlamarineGolemEntity extends SeaMonster {
                             this.setAnimation("animation.flamarine_golem.combo");
                         }
                         if ((Entity) this instanceof FlamarineGolemEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_skillP2, 380);
+                            _datEntSetI.getEntityData().set(DATA_SKILL_P2, 380);
                         if ((Entity) this instanceof FlamarineGolemEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_duration, 60);
+                            _datEntSetI.getEntityData().set(DATA_DURATION, 60);
                         if (!this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 30, 9, false, false));
                         CaerulaArborMod.queueServerWork(22, () -> {
@@ -554,11 +558,11 @@ public class FlamarineGolemEntity extends SeaMonster {
     }
 
     public String getSyncedAnimation() {
-        return this.entityData.get(ANIMATION);
+        return this.entityData.get(DATA_ANIMATION);
     }
 
     public void setAnimation(String animation) {
-        this.entityData.set(ANIMATION, animation);
+        this.entityData.set(DATA_ANIMATION, animation);
     }
 
     @Override
@@ -599,7 +603,7 @@ public class FlamarineGolemEntity extends SeaMonster {
     }
 
     private boolean isFlamarineDurative() {
-        return this.isAlive() && this.getEntityData().get(DATA_duration) <= 0;
+        return this.isAlive() && this.getEntityData().get(DATA_DURATION) <= 0;
     }
 
     @Override

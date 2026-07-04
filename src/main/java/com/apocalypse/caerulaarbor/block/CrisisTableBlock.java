@@ -56,7 +56,7 @@ import java.util.List;
 
 public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
 	public static final IntegerProperty BLOCKSTATE = IntegerProperty.create("blockstate", 0, 1);
-	public static final IntegerProperty ANIMATION = IntegerProperty.create("animation", 0, 4);
+	public static final IntegerProperty DATA_ANIMATION = IntegerProperty.create("animation", 0, 4);
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 
 	public CrisisTableBlock() {
@@ -115,7 +115,7 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
 
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-		builder.add(ANIMATION, FACING, BLOCKSTATE);
+		builder.add(DATA_ANIMATION, FACING, BLOCKSTATE);
 	}
 
 	@Override

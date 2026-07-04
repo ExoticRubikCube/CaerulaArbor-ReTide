@@ -45,7 +45,7 @@ public class HighmoreSkillBarOverlay {
                 }
             }.compareDistOf(x, y, z)).orElse(null);
             if (!(ent == null)) {
-                ind = Math.round((float) (ent instanceof HighmoreEntity _datEntI ? _datEntI.getEntityData().get(HighmoreEntity.DATA_skillp2) : 0) / 8);
+                ind = Math.round((float) (ent instanceof HighmoreEntity _datEntI ? _datEntI.getEntityData().get(HighmoreEntity.DATA_SKILLP_2) : 0) / 8);
             }
             if (ind > 85) {
                 ind = 85;

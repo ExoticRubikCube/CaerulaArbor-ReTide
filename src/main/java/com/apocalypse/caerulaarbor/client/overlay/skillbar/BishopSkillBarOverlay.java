@@ -45,7 +45,7 @@ public class BishopSkillBarOverlay {
                 }
             }.compareDistOf(x, y, z)).orElse(null);
             if (!(ent == null)) {
-                ind = Math.round((float) (ent instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(BishopFishEntity.DATA_endp) : 0) / 24);
+                ind = Math.round((float) (ent instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(BishopFishEntity.DATA_ENDP) : 0) / 24);
             }
             if (ind > 100) {
                 ind = 100;

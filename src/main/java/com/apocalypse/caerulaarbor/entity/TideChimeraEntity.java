@@ -64,12 +64,12 @@ import java.util.List;
 
 public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacker {
 
-    public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(TideChimeraEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(TideChimeraEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(TideChimeraEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Integer> DATA_summonP = SynchedEntityData.defineId(TideChimeraEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Integer> DATA_skillP = SynchedEntityData.defineId(TideChimeraEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Integer> DATA_deal = SynchedEntityData.defineId(TideChimeraEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(TideChimeraEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(TideChimeraEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> DATA_DURATION = SynchedEntityData.defineId(TideChimeraEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_SUMMON_P = SynchedEntityData.defineId(TideChimeraEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_SKILL_P = SynchedEntityData.defineId(TideChimeraEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_DEAL = SynchedEntityData.defineId(TideChimeraEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
     private long lastSwing;
     public String animationprocedure = "empty";
@@ -90,12 +90,12 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(SHOOT, false);
-        this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(DATA_duration, 0);
-        this.entityData.define(DATA_summonP, 3);
-        this.entityData.define(DATA_skillP, 200);
-        this.entityData.define(DATA_deal, 0);
+        this.entityData.define(DATA_SHOOT, false);
+        this.entityData.define(DATA_ANIMATION, "undefined");
+        this.entityData.define(DATA_DURATION, 0);
+        this.entityData.define(DATA_SUMMON_P, 3);
+        this.entityData.define(DATA_SKILL_P, 200);
+        this.entityData.define(DATA_DEAL, 0);
     }
 
     @Override
@@ -219,11 +219,11 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
         float healthBeforeDamage = this.getHealth();
         boolean damaged = super.hurt(source, amount);
         if (damaged && amount <= healthBeforeDamage) {
-            double accumulatedDamage = this.getEntityData().get(DATA_deal) + amount;
-            this.getEntityData().set(DATA_deal, (int) accumulatedDamage);
+            double accumulatedDamage = this.getEntityData().get(DATA_DEAL) + amount;
+            this.getEntityData().set(DATA_DEAL, (int) accumulatedDamage);
             if (accumulatedDamage >= this.getMaxHealth() * 0.25) {
                 this.performRangedSanityAttack();
-                this.getEntityData().set(DATA_deal, 0);
+                this.getEntityData().set(DATA_DEAL, 0);
             }
         }
         return damaged;
@@ -277,23 +277,27 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putInt("Dataduration", this.entityData.get(DATA_duration));
-        compound.putInt("DatasummonP", this.entityData.get(DATA_summonP));
-        compound.putInt("DataskillP", this.entityData.get(DATA_skillP));
-        compound.putInt("Datadeal", this.entityData.get(DATA_deal));
+        compound.putInt("Duration", this.entityData.get(DATA_DURATION));
+        compound.putInt("SummonP", this.entityData.get(DATA_SUMMON_P));
+        compound.putInt("SkillP", this.entityData.get(DATA_SKILL_P));
+        compound.putInt("Deal", this.entityData.get(DATA_DEAL));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Dataduration"))
-            this.entityData.set(DATA_duration, compound.getInt("Dataduration"));
-        if (compound.contains("DatasummonP"))
-            this.entityData.set(DATA_summonP, compound.getInt("DatasummonP"));
-        if (compound.contains("DataskillP"))
-            this.entityData.set(DATA_skillP, compound.getInt("DataskillP"));
-        if (compound.contains("Datadeal"))
-            this.entityData.set(DATA_deal, compound.getInt("Datadeal"));
+        if (compound.contains("Duration")) {
+            this.entityData.set(DATA_DURATION, compound.getInt("Duration"));
+        }
+        if (compound.contains("SummonP")) {
+            this.entityData.set(DATA_SUMMON_P, compound.getInt("SummonP"));
+        }
+        if (compound.contains("SkillP")) {
+            this.entityData.set(DATA_SKILL_P, compound.getInt("SkillP"));
+        }
+        if (compound.contains("Deal")) {
+            this.entityData.set(DATA_DEAL, compound.getInt("Deal"));
+        }
 	}
 
     @Override
@@ -368,14 +372,14 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
             }
         }
         if (this.isAlive()) {
-            sklp1 = (Entity) this instanceof TideChimeraEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillP) : 0;
-            dura = (Entity) this instanceof TideChimeraEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
-            tap = (Entity) this instanceof TideChimeraEntity _datEntI ? _datEntI.getEntityData().get(DATA_summonP) : 0;
+            sklp1 = (Entity) this instanceof TideChimeraEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILL_P) : 0;
+            dura = (Entity) this instanceof TideChimeraEntity _datEntI ? _datEntI.getEntityData().get(DATA_DURATION) : 0;
+            tap = (Entity) this instanceof TideChimeraEntity _datEntI ? _datEntI.getEntityData().get(DATA_SUMMON_P) : 0;
             perc = EntityUtils.getHealthPerc(this);
             enemy = this.getTarget();
             if (dura > 0) {
                 if ((Entity) this instanceof TideChimeraEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_duration, (int) (dura - 1));
+                    _datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura - 1));
             }
             if (dura <= 0) {
                 if (perc <= 0.25 && tap >= 1) {
@@ -400,9 +404,9 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
                     if (!this.level().isClientSide())
                         this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 20, 0, false, false));
                     if ((Entity) this instanceof TideChimeraEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_summonP, (int) (tap - 1));
+                        _datEntSetI.getEntityData().set(DATA_SUMMON_P, (int) (tap - 1));
                     if ((Entity) this instanceof TideChimeraEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_duration, 18);
+                        _datEntSetI.getEntityData().set(DATA_DURATION, 18);
                     dura = 18;
                     if (this instanceof TideChimeraEntity) {
                         this.setAnimation("animation.super_apocata.throw");
@@ -411,7 +415,7 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
             }
             if (sklp1 > 0) {
                 if ((Entity) this instanceof TideChimeraEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_skillP, (int) (sklp1 - 1));
+                    _datEntSetI.getEntityData().set(DATA_SKILL_P, (int) (sklp1 - 1));
             } else if (dura <= 0) {
                 if (!(enemy == null) && enemy.isAlive()) {
                     if (distanceTo(enemy) <= 8) {
@@ -419,9 +423,9 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
                             this.setAnimation("animation.super_apocata.ranged");
                         }
                         if ((Entity) this instanceof TideChimeraEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_skillP, 300);
+                            _datEntSetI.getEntityData().set(DATA_SKILL_P, 300);
                         if ((Entity) this instanceof TideChimeraEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_duration, 28);
+                            _datEntSetI.getEntityData().set(DATA_DURATION, 28);
                         CaerulaArborMod.queueServerWork(12, () -> {
                             if (this.isAlive()) {
                                 if (world instanceof ServerLevel _level)
@@ -505,7 +509,7 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
             if (randomValue < 0.01) {
                 entityToSpawn = CAEntities.IZUMIK.get().spawn(serverLevel, pos, MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn instanceof IzumikEntity izumik) {
-                    izumik.getEntityData().set(IzumikEntity.DATA_growth_p, 20);
+                    izumik.getEntityData().set(IzumikEntity.DATA_GROWTH_P, 20);
                 }
             } else if (randomValue < 0.02) {
                 entityToSpawn = CAEntities.TIDE_CHIMERA.get().spawn(serverLevel, pos, MobSpawnType.MOB_SUMMONED);
@@ -520,7 +524,7 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
             } else {
                 entityToSpawn = CAEntities.MEGA_CHEST.get().spawn(serverLevel, pos, MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn instanceof MegaChestEntity megaChest) {
-                    megaChest.getEntityData().set(MegaChestEntity.DATA_released, true);
+                    megaChest.getEntityData().set(MegaChestEntity.DATA_RELEASED, true);
                 }
             }
         }
@@ -662,11 +666,11 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
     }
 
     public String getSyncedAnimation() {
-        return this.entityData.get(ANIMATION);
+        return this.entityData.get(DATA_ANIMATION);
     }
 
     public void setAnimation(String animation) {
-        this.entityData.set(ANIMATION, animation);
+        this.entityData.set(DATA_ANIMATION, animation);
     }
 
     @Override
@@ -825,7 +829,7 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
     }
 
     private boolean isChimeraDurative() {
-        return this.isAlive() && this.tickCount > 100 && this.getEntityData().get(DATA_duration) <= 0;
+        return this.isAlive() && this.tickCount > 100 && this.getEntityData().get(DATA_DURATION) <= 0;
     }
 
     @Override

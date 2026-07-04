@@ -47,7 +47,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public abstract class AbstractFractalEntity extends SeaMonster {
-	protected static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(AbstractFractalEntity.class, EntityDataSerializers.STRING);
+	protected static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(AbstractFractalEntity.class, EntityDataSerializers.STRING);
 	protected static final EntityDataAccessor<Integer> DATA_ATTACK_SKILLP = SynchedEntityData.defineId(AbstractFractalEntity.class, EntityDataSerializers.INT);
 	protected static final EntityDataAccessor<String> DATA_OWNER = SynchedEntityData.defineId(AbstractFractalEntity.class, EntityDataSerializers.STRING);
 	public String animationprocedure = "empty";
@@ -65,7 +65,7 @@ public abstract class AbstractFractalEntity extends SeaMonster {
 	@Override
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(ANIMATION, "undefined");
+		this.entityData.define(DATA_ANIMATION, "undefined");
 		this.entityData.define(DATA_ATTACK_SKILLP, 0);
 		this.entityData.define(DATA_OWNER, "null");
 	}
@@ -214,11 +214,11 @@ public abstract class AbstractFractalEntity extends SeaMonster {
 	}
 
 	public String getSyncedAnimation() {
-		return this.entityData.get(ANIMATION);
+		return this.entityData.get(DATA_ANIMATION);
 	}
 
 	public void setAnimation(String animation) {
-		this.entityData.set(ANIMATION, animation);
+		this.entityData.set(DATA_ANIMATION, animation);
 	}
 
 	@Override
@@ -256,7 +256,7 @@ public abstract class AbstractFractalEntity extends SeaMonster {
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putInt("AttackCount", this.getAttackSkillp());
-		compound.putString("Dataowner", this.getOwner());
+		compound.putString("Owner", this.getOwner());
 	}
 
 	@Override
@@ -264,8 +264,8 @@ public abstract class AbstractFractalEntity extends SeaMonster {
 		super.readAdditionalSaveData(compound);
 		if (compound.contains("AttackCount"))
 			this.setAttackSkillp(compound.getInt("AttackCount"));
-		if (compound.contains("Dataowner"))
-			this.setOwner(compound.getString("Dataowner"));
+		if (compound.contains("Owner"))
+			this.setOwner(compound.getString("Owner"));
 	}
 
 	@Override

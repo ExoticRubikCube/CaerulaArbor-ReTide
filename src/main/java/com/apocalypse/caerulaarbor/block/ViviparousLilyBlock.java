@@ -44,7 +44,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class ViviparousLilyBlock extends BaseEntityBlock implements SimpleWaterloggedBlock, EntityBlock {
-	public static final IntegerProperty ANIMATION = IntegerProperty.create("animation", 0, 1);
+	public static final IntegerProperty DATA_ANIMATION = IntegerProperty.create("animation", 0, 1);
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 	private static final net.minecraft.tags.TagKey<Block> TRAIL_TAG = BlockTags.create(new ResourceLocation(CaerulaArborMod.MODID, "trail"));
@@ -90,7 +90,7 @@ public class ViviparousLilyBlock extends BaseEntityBlock implements SimpleWaterl
 
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-		builder.add(ANIMATION, FACING, WATERLOGGED);
+		builder.add(DATA_ANIMATION, FACING, WATERLOGGED);
 	}
 
 	@Override
@@ -173,7 +173,7 @@ public class ViviparousLilyBlock extends BaseEntityBlock implements SimpleWaterl
 				}
 			}
 			world.sendParticles(ParticleTypes.EXPLOSION_EMITTER, pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, 2, 0.1D, 0.1D, 0.1D, 0.1D);
-			world.setBlock(pos, blockstate.setValue(ANIMATION, 1), 3);
+			world.setBlock(pos, blockstate.setValue(DATA_ANIMATION, 1), 3);
 			CaerulaArborMod.queueServerWork(20, () -> {
 				if (world.getBlockState(pos).getBlock() == CABlocks.VIVIPAROUS_LILY.get()) {
 					world.setBlock(pos, CABlocks.HUGE_LILY.get().withPropertiesOf(blockstate), 3);

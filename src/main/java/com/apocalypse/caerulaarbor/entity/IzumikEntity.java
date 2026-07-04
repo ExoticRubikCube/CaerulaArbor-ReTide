@@ -6,6 +6,7 @@ import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CASounds;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.advancements.Advancement;
@@ -65,7 +66,6 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
-import com.apocalypse.caerulaarbor.init.CASounds;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -73,14 +73,14 @@ import java.util.Comparator;
 import java.util.List;
 
 public class IzumikEntity extends SeaMonster {
-    public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(IzumikEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(IzumikEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<Integer> DATA_growth_p = SynchedEntityData.defineId(IzumikEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Integer> DATA_skillp = SynchedEntityData.defineId(IzumikEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Integer> DATA_phase = SynchedEntityData.defineId(IzumikEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Integer> DATA_wave = SynchedEntityData.defineId(IzumikEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Integer> DATA_skillp_1 = SynchedEntityData.defineId(IzumikEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Integer> DATA_deal = SynchedEntityData.defineId(IzumikEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(IzumikEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(IzumikEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> DATA_GROWTH_P = SynchedEntityData.defineId(IzumikEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_SKILLP = SynchedEntityData.defineId(IzumikEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_PHASE = SynchedEntityData.defineId(IzumikEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_WAVE = SynchedEntityData.defineId(IzumikEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_SKILLP_1 = SynchedEntityData.defineId(IzumikEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_DEAL = SynchedEntityData.defineId(IzumikEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
     private long lastSwing;
     public String animationprocedure = "empty";
@@ -102,14 +102,14 @@ public class IzumikEntity extends SeaMonster {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(SHOOT, false);
-        this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(DATA_growth_p, 0);
-        this.entityData.define(DATA_skillp, 5);
-        this.entityData.define(DATA_phase, 0);
-        this.entityData.define(DATA_wave, 8);
-        this.entityData.define(DATA_skillp_1, 100);
-        this.entityData.define(DATA_deal, 0);
+        this.entityData.define(DATA_SHOOT, false);
+        this.entityData.define(DATA_ANIMATION, "undefined");
+        this.entityData.define(DATA_GROWTH_P, 0);
+        this.entityData.define(DATA_SKILLP, 5);
+        this.entityData.define(DATA_PHASE, 0);
+        this.entityData.define(DATA_WAVE, 8);
+        this.entityData.define(DATA_SKILLP_1, 100);
+        this.entityData.define(DATA_DEAL, 0);
     }
 
 
@@ -135,12 +135,12 @@ public class IzumikEntity extends SeaMonster {
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this) {
             @Override
             public boolean canUse() {
-                return super.canUse() && IzumikEntity.this.getEntityData().get(DATA_phase) > 0;
+                return super.canUse() && IzumikEntity.this.getEntityData().get(DATA_PHASE) > 0;
             }
 
             @Override
             public boolean canContinueToUse() {
-                return super.canContinueToUse() && IzumikEntity.this.getEntityData().get(DATA_phase) > 0;
+                return super.canContinueToUse() && IzumikEntity.this.getEntityData().get(DATA_PHASE) > 0;
             }
         });
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.15, false) {
@@ -151,12 +151,12 @@ public class IzumikEntity extends SeaMonster {
 
             @Override
             public boolean canUse() {
-                return super.canUse() && IzumikEntity.this.getEntityData().get(DATA_phase) > 0;
+                return super.canUse() && IzumikEntity.this.getEntityData().get(DATA_PHASE) > 0;
             }
 
             @Override
             public boolean canContinueToUse() {
-                return super.canContinueToUse() && IzumikEntity.this.getEntityData().get(DATA_phase) > 0;
+                return super.canContinueToUse() && IzumikEntity.this.getEntityData().get(DATA_PHASE) > 0;
             }
 
         });
@@ -207,7 +207,7 @@ public class IzumikEntity extends SeaMonster {
                                             .getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "izumik_normal_attack"))),
                                     this),
                             (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
-                    if (this.getEntityData().get(DATA_phase) >= 1) {
+                    if (this.getEntityData().get(DATA_PHASE) >= 1) {
                         float oceanMagicDamage = (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0);
                         if (MapVariables.get(this.level()).strategy_grow >= 4) {
                             oceanMagicDamage *= 1.5F;
@@ -218,7 +218,7 @@ public class IzumikEntity extends SeaMonster {
                                                 .getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_magic"))),
                                         this),
                                 oceanMagicDamage);
-                        if (this.getEntityData().get(DATA_phase) >= 2 && Math.random() < 0.15 && target instanceof LivingEntity livingTarget
+                        if (this.getEntityData().get(DATA_PHASE) >= 2 && Math.random() < 0.15 && target instanceof LivingEntity livingTarget
                                 && livingTarget.getAttributes().hasAttribute(CAAttributes.NUMB.get())) {
                             livingTarget.getAttribute(CAAttributes.NUMB.get())
                                     .setBaseValue(livingTarget.getAttribute(CAAttributes.NUMB.get()).getBaseValue() + 1);
@@ -258,12 +258,12 @@ public class IzumikEntity extends SeaMonster {
             return false;
         boolean damaged = super.hurt(source, amount);
         if (damaged) {
-            double accumulatedDamage = this.getEntityData().get(DATA_deal);
+            double accumulatedDamage = this.getEntityData().get(DATA_DEAL);
             if (accumulatedDamage >= this.getMaxHealth() * 0.3) {
-                this.getEntityData().set(DATA_skillp, 0);
-                this.getEntityData().set(DATA_deal, 0);
+                this.getEntityData().set(DATA_SKILLP, 0);
+                this.getEntityData().set(DATA_DEAL, 0);
             } else {
-                this.getEntityData().set(DATA_deal, (int) (accumulatedDamage + amount));
+                this.getEntityData().set(DATA_DEAL, (int) (accumulatedDamage + amount));
             }
         }
         return damaged;
@@ -271,12 +271,12 @@ public class IzumikEntity extends SeaMonster {
 
     @Override
     public void die(DamageSource source) {
-        if (this.getEntityData().get(DATA_phase) == 1 && MapVariables.get(this.level()).strategy_silence >= 3) {
+        if (this.getEntityData().get(DATA_PHASE) == 1 && MapVariables.get(this.level()).strategy_silence >= 3) {
             if (!this.level().isClientSide()) {
                 this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 200, 1, false, false));
                 this.addEffect(new MobEffectInstance(CAMobEffects.FAKE_DEATH.get(), 200, 1, false, false));
             }
-            this.getEntityData().set(DATA_phase, 2);
+            this.getEntityData().set(DATA_PHASE, 2);
             if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get())) {
                 this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).setBaseValue(this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getBaseValue() + 2);
             }
@@ -300,36 +300,42 @@ public class IzumikEntity extends SeaMonster {
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putInt("Datagrowth_p", this.entityData.get(DATA_growth_p));
-        compound.putInt("Dataskillp", this.entityData.get(DATA_skillp));
-        compound.putInt("Dataphase", this.entityData.get(DATA_phase));
-        compound.putInt("Datawave", this.entityData.get(DATA_wave));
-        compound.putInt("Dataskillp_1", this.entityData.get(DATA_skillp_1));
-        compound.putInt("Datadeal", this.entityData.get(DATA_deal));
+        compound.putInt("GrowthP", this.entityData.get(DATA_GROWTH_P));
+        compound.putInt("Skillp", this.entityData.get(DATA_SKILLP));
+        compound.putInt("Phase", this.entityData.get(DATA_PHASE));
+        compound.putInt("Wave", this.entityData.get(DATA_WAVE));
+        compound.putInt("Skillp1", this.entityData.get(DATA_SKILLP_1));
+        compound.putInt("Deal", this.entityData.get(DATA_DEAL));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Datagrowth_p"))
-            this.entityData.set(DATA_growth_p, compound.getInt("Datagrowth_p"));
-        if (compound.contains("Dataskillp"))
-            this.entityData.set(DATA_skillp, compound.getInt("Dataskillp"));
-        if (compound.contains("Dataphase"))
-            this.entityData.set(DATA_phase, compound.getInt("Dataphase"));
-        if (compound.contains("Datawave"))
-            this.entityData.set(DATA_wave, compound.getInt("Datawave"));
-        if (compound.contains("Dataskillp_1"))
-            this.entityData.set(DATA_skillp_1, compound.getInt("Dataskillp_1"));
-        if (compound.contains("Datadeal"))
-            this.entityData.set(DATA_deal, compound.getInt("Datadeal"));
+        if (compound.contains("GrowthP")) {
+            this.entityData.set(DATA_GROWTH_P, compound.getInt("GrowthP"));
+        }
+        if (compound.contains("Skillp")) {
+            this.entityData.set(DATA_SKILLP, compound.getInt("Skillp"));
+        }
+        if (compound.contains("Phase")) {
+            this.entityData.set(DATA_PHASE, compound.getInt("Phase"));
+        }
+        if (compound.contains("Wave")) {
+            this.entityData.set(DATA_WAVE, compound.getInt("Wave"));
+        }
+        if (compound.contains("Skillp1")) {
+            this.entityData.set(DATA_SKILLP_1, compound.getInt("Skillp1"));
+        }
+        if (compound.contains("Deal")) {
+            this.entityData.set(DATA_DEAL, compound.getInt("Deal"));
+        }
 	}
 
     @Override
     public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
         super.mobInteract(sourceentity, hand);
         Entity entity = this;
-        if ((entity instanceof IzumikEntity _datEntI ? _datEntI.getEntityData().get(DATA_phase) : 0) == 0) {
+        if ((entity instanceof IzumikEntity _datEntI ? _datEntI.getEntityData().get(DATA_PHASE) : 0) == 0) {
             if (new Object() {
                 public boolean checkGamemode(Entity _ent) {
                     if (_ent instanceof ServerPlayer _serverPlayer) {
@@ -346,7 +352,7 @@ public class IzumikEntity extends SeaMonster {
                 if ((Entity) sourceentity instanceof Player _player && !_player.level().isClientSide())
                     _player.displayClientMessage(Component.literal((Component.translatable("izumik.saying").getString())), false);
                 if (entity instanceof IzumikEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_growth_p, 20);
+                    _datEntSetI.getEntityData().set(DATA_GROWTH_P, 20);
             }
         }
         return InteractionResult.PASS;
@@ -368,11 +374,11 @@ public class IzumikEntity extends SeaMonster {
         if (this.isAlive()) {
             this.removeEffect(CAMobEffects.DIZZY.get());
             this.removeEffect(CAMobEffects.FROZEN.get());
-            sklp = this.getEntityData().get(DATA_skillp);
-            sklp1 = this.getEntityData().get(DATA_skillp_1);
-            grow = this.getEntityData().get(DATA_growth_p);
-            phase = this.getEntityData().get(DATA_phase);
-            waves = this.getEntityData().get(DATA_wave);
+            sklp = this.getEntityData().get(DATA_SKILLP);
+            sklp1 = this.getEntityData().get(DATA_SKILLP_1);
+            grow = this.getEntityData().get(DATA_GROWTH_P);
+            phase = this.getEntityData().get(DATA_PHASE);
+            waves = this.getEntityData().get(DATA_WAVE);
             if (!this.hasEffect(CAMobEffects.IZUMIK_LEARN.get())) {
                 amplifi = Math.floor(grow / 5);
                 if (MapVariables.get(world).strategy_silence > 3) {
@@ -401,8 +407,8 @@ public class IzumikEntity extends SeaMonster {
                             if (entityiterator instanceof IzumikOffspringEntity && distanceTo(entityiterator) <= 7) {
                                 if (!entityiterator.level().isClientSide())
                                     entityiterator.discard();
-                                this.getEntityData().set(DATA_growth_p, (int) (grow + 1));
-                                this.getEntityData().set(DATA_skillp, (int) (sklp - 1));
+                                this.getEntityData().set(DATA_GROWTH_P, (int) (grow + 1));
+                                this.getEntityData().set(DATA_SKILLP, (int) (sklp - 1));
                                 if (world instanceof ServerLevel _level)
                                     _level.sendParticles(ParticleTypes.CLOUD, (entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()), 32, 0.6, 0.6, 0.6, 0.1);
                                 CaerulaArborMod.LOGGER.info(("Izumik absorb offspr and grow to " + Math.round(grow + 1)));
@@ -414,11 +420,11 @@ public class IzumikEntity extends SeaMonster {
                     if (this instanceof IzumikEntity) {
                         this.setAnimation("animation.izumik.revive");
                     }
-                    this.getEntityData().set(DATA_phase, 1);
+                    this.getEntityData().set(DATA_PHASE, 1);
                     this.removeEffect(CAMobEffects.INVULNERABLE.get());
                     if (!this.level().isClientSide())
                         this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 300, 1, false, false));
-                    this.getEntityData().set(DATA_skillp, 300);
+                    this.getEntityData().set(DATA_SKILLP, 300);
                     {
                         final Vec3 _center = new Vec3(x, y, z);
                         List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(72 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
@@ -429,7 +435,7 @@ public class IzumikEntity extends SeaMonster {
                     }
                 }
                 if (sklp <= 0) {
-                    this.getEntityData().set(DATA_skillp, 5);
+                    this.getEntityData().set(DATA_SKILLP, 5);
                     if (grow + 1 < 20) {
                         if (this instanceof IzumikEntity) {
                             this.setAnimation("animation.izumik.grow");
@@ -475,11 +481,11 @@ public class IzumikEntity extends SeaMonster {
                     if (this instanceof IzumikEntity) {
                         this.setAnimation("animation.izumik.revive");
                     }
-                    this.getEntityData().set(DATA_phase, 1);
+                    this.getEntityData().set(DATA_PHASE, 1);
                     this.removeEffect(CAMobEffects.INVULNERABLE.get());
                     if (!this.level().isClientSide())
                         this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 300, 1, false, false));
-                    this.getEntityData().set(DATA_skillp, 300);
+                    this.getEntityData().set(DATA_SKILLP, 300);
                     {
                         final Vec3 _center = new Vec3(x, y, z);
                         List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(72 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
@@ -518,19 +524,19 @@ public class IzumikEntity extends SeaMonster {
                                 _level.sendParticles(ParticleTypes.CLOUD, tgtX, validY, tgtZ, 32, 0.5, 0.5, 0.5, 0.15);
                         }
                     }
-                    this.getEntityData().set(DATA_wave, (int) (waves - 1));
-                    this.getEntityData().set(DATA_skillp_1, 600);
+                    this.getEntityData().set(DATA_WAVE, (int) (waves - 1));
+                    this.getEntityData().set(DATA_SKILLP_1, 600);
                 } else {
-                    this.getEntityData().set(DATA_skillp_1, (int) (sklp1 - 1));
+                    this.getEntityData().set(DATA_SKILLP_1, (int) (sklp1 - 1));
                 }
             } else {
                 if (sklp <= 0) {
                     if (!(this.getTarget() == null) && ((Entity) this.getTarget()).isAlive()) {
                         if ((this.getTarget() != null ? distanceTo(this.getTarget()) : -1) <= 24) {
                             if (phase >= 2) {
-                                this.getEntityData().set(DATA_skillp, 400);
+                                this.getEntityData().set(DATA_SKILLP, 400);
                             } else {
-                                this.getEntityData().set(DATA_skillp, 600);
+                                this.getEntityData().set(DATA_SKILLP, 600);
                             }
                             if (!this.level().isClientSide())
                                 this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 50, 0, false, false));
@@ -552,7 +558,7 @@ public class IzumikEntity extends SeaMonster {
                                 if (MapVariables.get(world).strategy_grow >= 4) {
                                     range = 14;
                                 }
-                                if ((this.getEntityData().get(DATA_phase)) >= 2) {
+                                if ((this.getEntityData().get(DATA_PHASE)) >= 2) {
                                     range = range + 3;
                                 }
                                 new Object() {
@@ -571,9 +577,9 @@ public class IzumikEntity extends SeaMonster {
                     }
                 } else {
                     if ((this.getHealth()) < (this.getMaxHealth()) * 0.33) {
-                        this.getEntityData().set(DATA_skillp, (int) (sklp - 2));
+                        this.getEntityData().set(DATA_SKILLP, (int) (sklp - 2));
                     } else {
-                        this.getEntityData().set(DATA_skillp, (int) (sklp - 1));
+                        this.getEntityData().set(DATA_SKILLP, (int) (sklp - 1));
                     }
                 }
             }
@@ -712,7 +718,7 @@ public class IzumikEntity extends SeaMonster {
                                     ? this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getBaseValue()
                                     : 0) + 0.25, this.getMaxHealth() * 0.05));
 
-                if ((this.getEntityData().get(DATA_phase) >= 2)) {
+                if ((this.getEntityData().get(DATA_PHASE) >= 2)) {
                     if (Math.random() < 0.33) {
                         if (MapVariables.get(world).strategy_grow >= 4) {
                             if (entityiterator instanceof LivingEntity _livingEntity20 && _livingEntity20.getAttributes().hasAttribute(CAAttributes.NUMB.get()))
@@ -826,11 +832,11 @@ public class IzumikEntity extends SeaMonster {
     }
 
     public String getSyncedAnimation() {
-        return this.entityData.get(ANIMATION);
+        return this.entityData.get(DATA_ANIMATION);
     }
 
     public void setAnimation(String animation) {
-        this.entityData.set(ANIMATION, animation);
+        this.entityData.set(DATA_ANIMATION, animation);
     }
 
     @Override
@@ -861,12 +867,12 @@ public class IzumikEntity extends SeaMonster {
     public void setHealth(float pHealth) {
         float hlth = this.getHealth();
         float mhlth = this.getMaxHealth();
-        if (pHealth <= 0 && this.getEntityData().get(DATA_phase) == 0) {
+        if (pHealth <= 0 && this.getEntityData().get(DATA_PHASE) == 0) {
             super.setHealth(mhlth * 0.6f);
             if (!this.level().isClientSide()) {
                 this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 300, 1, false, false));
             }
-            this.getEntityData().set(DATA_phase, 1);
+            this.getEntityData().set(DATA_PHASE, 1);
             if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get())) {
                 this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).setBaseValue(this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getBaseValue() + 2);
             }

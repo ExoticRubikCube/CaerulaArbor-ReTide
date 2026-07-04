@@ -15,7 +15,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.level.Level;
 
 public class RouteFractalEntity extends AbstractFractalEntity {
-    public static final EntityDataAccessor<Integer> DATA_time_left = SynchedEntityData.defineId(RouteFractalEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_TIME_LEFT = SynchedEntityData.defineId(RouteFractalEntity.class, EntityDataSerializers.INT);
 
     public RouteFractalEntity(Level world) {
         this(CAEntities.ROUTE_FRACTAL.get(), world);
@@ -29,7 +29,7 @@ public class RouteFractalEntity extends AbstractFractalEntity {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(DATA_time_left, 1800);
+        this.entityData.define(DATA_TIME_LEFT, 1800);
     }
 
     @Override
@@ -40,25 +40,26 @@ public class RouteFractalEntity extends AbstractFractalEntity {
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putInt("Datatime_left", this.entityData.get(DATA_time_left));
+        compound.putInt("TimeLeft", this.entityData.get(DATA_TIME_LEFT));
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Datatime_left"))
-            this.entityData.set(DATA_time_left, compound.getInt("Datatime_left"));
+        if (compound.contains("TimeLeft")) {
+            this.entityData.set(DATA_TIME_LEFT, compound.getInt("TimeLeft"));
+        }
     }
 
     @Override
     public void baseTick() {
         super.baseTick();
         double timel;
-        timel =  this.getEntityData().get(DATA_time_left);
+        timel =  this.getEntityData().get(DATA_TIME_LEFT);
         if (timel <= 0) {
             this.hurt(new DamageSource((this.level()).registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.STARVE)), 10000);
         }
-        this.getEntityData().set(DATA_time_left, (int) (timel - 1));
+        this.getEntityData().set(DATA_TIME_LEFT, (int) (timel - 1));
         this.refreshDimensions();
     }
 

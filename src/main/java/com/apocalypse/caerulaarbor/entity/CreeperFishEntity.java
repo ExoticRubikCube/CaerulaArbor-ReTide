@@ -45,9 +45,9 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 
 public class CreeperFishEntity extends SeaMonster implements RangedSanityAttacker {
-	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(CreeperFishEntity.class, EntityDataSerializers.BOOLEAN);
-	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(CreeperFishEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<Integer> DATA_deal = SynchedEntityData.defineId(CreeperFishEntity.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(CreeperFishEntity.class, EntityDataSerializers.BOOLEAN);
+	public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(CreeperFishEntity.class, EntityDataSerializers.STRING);
+	public static final EntityDataAccessor<Integer> DATA_DEAL = SynchedEntityData.defineId(CreeperFishEntity.class, EntityDataSerializers.INT);
 	private boolean swinging;
 	private long lastSwing;
 	public String animationprocedure = "empty";
@@ -66,9 +66,9 @@ public class CreeperFishEntity extends SeaMonster implements RangedSanityAttacke
 	@Override
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(SHOOT, false);
-		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(DATA_deal, 0);
+		this.entityData.define(DATA_SHOOT, false);
+		this.entityData.define(DATA_ANIMATION, "undefined");
+		this.entityData.define(DATA_DEAL, 0);
 	}
 
 	@Override
@@ -77,7 +77,7 @@ public class CreeperFishEntity extends SeaMonster implements RangedSanityAttacke
 		this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1, true) {
 			@Override
 			protected double getAttackReachSqr(LivingEntity entity) {
-				return 1;
+				return 0;
 			}
 		});
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Cat.class, false, false));
@@ -87,6 +87,7 @@ public class CreeperFishEntity extends SeaMonster implements RangedSanityAttacke
 		this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
 	}
 
+	@Override
     protected void dropCustomDeathLoot(DamageSource source, int looting, boolean recentlyHitIn) {
 		super.dropCustomDeathLoot(source, looting, recentlyHitIn);
 		this.spawnAtLocation(new ItemStack(CAItems.OCEAN_CRYSTAL.get()));
@@ -114,11 +115,11 @@ public class CreeperFishEntity extends SeaMonster implements RangedSanityAttacke
 		float healthBeforeDamage = this.getHealth();
 		boolean damaged = super.hurt(source, amount);
 		if (damaged && amount <= healthBeforeDamage) {
-			double accumulatedDamage = this.getEntityData().get(DATA_deal) + amount;
-			this.getEntityData().set(DATA_deal, (int) accumulatedDamage);
+			double accumulatedDamage = this.getEntityData().get(DATA_DEAL) + amount;
+			this.getEntityData().set(DATA_DEAL, (int) accumulatedDamage);
 			if (accumulatedDamage >= this.getMaxHealth() * 0.15) {
 				this.performRangedSanityAttack();
-				this.getEntityData().set(DATA_deal, 0);
+				this.getEntityData().set(DATA_DEAL, 0);
 			}
 		}
 		return damaged;
@@ -127,14 +128,15 @@ public class CreeperFishEntity extends SeaMonster implements RangedSanityAttacke
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
-		compound.putInt("Datadeal", this.entityData.get(DATA_deal));
+		compound.putInt("Deal", this.entityData.get(DATA_DEAL));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
-		if (compound.contains("Datadeal"))
-			this.entityData.set(DATA_deal, compound.getInt("Datadeal"));
+		if (compound.contains("Deal")) {
+		    this.entityData.set(DATA_DEAL, compound.getInt("Deal"));
+		}
 	}
 
 	@Override
@@ -266,11 +268,11 @@ public class CreeperFishEntity extends SeaMonster implements RangedSanityAttacke
 	}
 
 	public String getSyncedAnimation() {
-		return this.entityData.get(ANIMATION);
+		return this.entityData.get(DATA_ANIMATION);
 	}
 
 	public void setAnimation(String animation) {
-		this.entityData.set(ANIMATION, animation);
+		this.entityData.set(DATA_ANIMATION, animation);
 	}
 
 	@Override

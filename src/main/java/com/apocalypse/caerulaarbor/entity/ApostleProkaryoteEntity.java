@@ -48,9 +48,9 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 
 public class ApostleProkaryoteEntity extends SeaMonster {
-	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(ApostleProkaryoteEntity.class, EntityDataSerializers.BOOLEAN);
-	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(ApostleProkaryoteEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<Boolean> DATA_shelled = SynchedEntityData.defineId(ApostleProkaryoteEntity.class, EntityDataSerializers.BOOLEAN);
+	public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(ApostleProkaryoteEntity.class, EntityDataSerializers.BOOLEAN);
+	public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(ApostleProkaryoteEntity.class, EntityDataSerializers.STRING);
+	public static final EntityDataAccessor<Boolean> DATA_SHELLED = SynchedEntityData.defineId(ApostleProkaryoteEntity.class, EntityDataSerializers.BOOLEAN);
 	private boolean swinging;
 	private long lastSwing;
 	public String animationprocedure = "empty";
@@ -102,9 +102,9 @@ public class ApostleProkaryoteEntity extends SeaMonster {
 	@Override
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(SHOOT, false);
-		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(DATA_shelled, false);
+		this.entityData.define(DATA_SHOOT, false);
+		this.entityData.define(DATA_ANIMATION, "undefined");
+		this.entityData.define(DATA_SHELLED, false);
 	}
 
     @Override
@@ -152,14 +152,15 @@ public class ApostleProkaryoteEntity extends SeaMonster {
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
-		compound.putBoolean("Datashelled", this.entityData.get(DATA_shelled));
+		compound.putBoolean("Shelled", this.entityData.get(DATA_SHELLED));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
-		if (compound.contains("Datashelled"))
-			this.entityData.set(DATA_shelled, compound.getBoolean("Datashelled"));
+		if (compound.contains("Shelled")) {
+		    this.entityData.set(DATA_SHELLED, compound.getBoolean("Shelled"));
+		}
 	}
 
 	@Override
@@ -172,7 +173,7 @@ public class ApostleProkaryoteEntity extends SeaMonster {
         boolean found = false;
         double perc;
         if (this.isAlive()) {
-            if (!((Entity) this instanceof ApostleProkaryoteEntity _datEntL1 && _datEntL1.getEntityData().get(DATA_shelled))) {
+            if (!((Entity) this instanceof ApostleProkaryoteEntity _datEntL1 && _datEntL1.getEntityData().get(DATA_SHELLED))) {
                 for (int dx = -2; dx <= 2; dx++) {
                     for (int dy = -2; dy <= 3; dy++) {
                         for (int dz = -2; dz <= 2; dz++) {
@@ -210,7 +211,7 @@ public class ApostleProkaryoteEntity extends SeaMonster {
                     }
                     this.setHealth((float) (this.getMaxHealth() * perc));
                     if ((Entity) this instanceof ApostleProkaryoteEntity _datEntSetL)
-                        _datEntSetL.getEntityData().set(DATA_shelled, true);
+                        _datEntSetL.getEntityData().set(DATA_SHELLED, true);
                     if (this instanceof ApostleProkaryoteEntity) {
                         this.setAnimation("animation.apostle.skill");
                     }
@@ -326,11 +327,11 @@ public class ApostleProkaryoteEntity extends SeaMonster {
 	}
 
 	public String getSyncedAnimation() {
-		return this.entityData.get(ANIMATION);
+		return this.entityData.get(DATA_ANIMATION);
 	}
 
 	public void setAnimation(String animation) {
-		this.entityData.set(ANIMATION, animation);
+		this.entityData.set(DATA_ANIMATION, animation);
 	}
 
 	@Override

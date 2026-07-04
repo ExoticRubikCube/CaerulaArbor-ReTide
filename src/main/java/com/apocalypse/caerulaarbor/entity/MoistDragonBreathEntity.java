@@ -6,6 +6,7 @@ import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.entity.base.SyncedAnimationEntity;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAParticles;
+import com.apocalypse.caerulaarbor.init.CASounds;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -20,6 +21,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
@@ -50,16 +52,14 @@ import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
-import net.minecraft.sounds.SoundEvents;
-import com.apocalypse.caerulaarbor.init.CASounds;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
 public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity, SyncedAnimationEntity {
-    public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(MoistDragonBreathEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(MoistDragonBreathEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(MoistDragonBreathEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(MoistDragonBreathEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<String> DATA_TARGET = SynchedEntityData.defineId(MoistDragonBreathEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<String> DATA_OWNER = SynchedEntityData.defineId(MoistDragonBreathEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_TYPE = SynchedEntityData.defineId(MoistDragonBreathEntity.class, EntityDataSerializers.INT);
@@ -111,8 +111,8 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(SHOOT, false);
-        this.entityData.define(ANIMATION, "undefined");
+        this.entityData.define(DATA_SHOOT, false);
+        this.entityData.define(DATA_ANIMATION, "undefined");
         this.entityData.define(DATA_TARGET, "");
         this.entityData.define(DATA_OWNER, "");
         this.entityData.define(DATA_TYPE, 0);
@@ -151,20 +151,23 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putString("DataTARGET", this.entityData.get(DATA_TARGET));
-        compound.putString("DataOWNER", this.entityData.get(DATA_OWNER));
-        compound.putInt("DataTYPE", this.entityData.get(DATA_TYPE));
+        compound.putString("Target", this.entityData.get(DATA_TARGET));
+        compound.putString("Owner", this.entityData.get(DATA_OWNER));
+        compound.putInt("Type", this.entityData.get(DATA_TYPE));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("DataTARGET"))
-            this.entityData.set(DATA_TARGET, compound.getString("DataTARGET"));
-        if (compound.contains("DataOWNER"))
-            this.entityData.set(DATA_OWNER, compound.getString("DataOWNER"));
-        if (compound.contains("DataTYPE"))
-            this.entityData.set(DATA_TYPE, compound.getInt("DataTYPE"));
+        if (compound.contains("Target")) {
+            this.entityData.set(DATA_TARGET, compound.getString("Target"));
+        }
+        if (compound.contains("Owner")) {
+            this.entityData.set(DATA_OWNER, compound.getString("Owner"));
+        }
+        if (compound.contains("Type")) {
+            this.entityData.set(DATA_TYPE, compound.getInt("Type"));
+        }
 	}
 
     @Override
@@ -359,11 +362,11 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
     }
 
     public String getSyncedAnimation() {
-        return this.entityData.get(ANIMATION);
+        return this.entityData.get(DATA_ANIMATION);
     }
 
     public void setAnimation(String animation) {
-        this.entityData.set(ANIMATION, animation);
+        this.entityData.set(DATA_ANIMATION, animation);
     }
 
     @Override

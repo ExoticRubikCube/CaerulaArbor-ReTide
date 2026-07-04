@@ -57,10 +57,10 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import javax.annotation.Nullable;
 
 public class TheLastKnightEntity extends Animal implements GeoEntity, SyncedAnimationEntity {
-    public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(TheLastKnightEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(TheLastKnightEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(TheLastKnightEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Integer> DATA_skillp = SynchedEntityData.defineId(TheLastKnightEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(TheLastKnightEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(TheLastKnightEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> DATA_DURATION = SynchedEntityData.defineId(TheLastKnightEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_SKILLP = SynchedEntityData.defineId(TheLastKnightEntity.class, EntityDataSerializers.INT);
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private boolean swinging;
     private long lastSwing;
@@ -82,10 +82,10 @@ public class TheLastKnightEntity extends Animal implements GeoEntity, SyncedAnim
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(SHOOT, false);
-        this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(DATA_duration, 0);
-        this.entityData.define(DATA_skillp, 200);
+        this.entityData.define(DATA_SHOOT, false);
+        this.entityData.define(DATA_ANIMATION, "undefined");
+        this.entityData.define(DATA_DURATION, 0);
+        this.entityData.define(DATA_SKILLP, 200);
     }
 
 
@@ -212,7 +212,7 @@ public class TheLastKnightEntity extends Animal implements GeoEntity, SyncedAnim
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
         SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        this.getEntityData().set(DATA_duration, 45);
+        this.getEntityData().set(DATA_DURATION, 45);
         this.setAnimation("animation.last_knight.start");
         if (!this.level().isClientSide())
             this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 45, 9, false, false));
@@ -222,17 +222,19 @@ public class TheLastKnightEntity extends Animal implements GeoEntity, SyncedAnim
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putInt("Dataduration", this.entityData.get(DATA_duration));
-        compound.putInt("Dataskillp", this.entityData.get(DATA_skillp));
+        compound.putInt("Duration", this.entityData.get(DATA_DURATION));
+        compound.putInt("Skillp", this.entityData.get(DATA_SKILLP));
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Dataduration"))
-            this.entityData.set(DATA_duration, compound.getInt("Dataduration"));
-        if (compound.contains("Dataskillp"))
-            this.entityData.set(DATA_skillp, compound.getInt("Dataskillp"));
+        if (compound.contains("Duration")) {
+            this.entityData.set(DATA_DURATION, compound.getInt("Duration"));
+        }
+        if (compound.contains("Skillp")) {
+            this.entityData.set(DATA_SKILLP, compound.getInt("Skillp"));
+        }
     }
 
     @Override
@@ -245,25 +247,25 @@ public class TheLastKnightEntity extends Animal implements GeoEntity, SyncedAnim
         double duration;
         double idle = 0;
         if (this.isAlive()) {
-            skillp = (Entity) this instanceof TheLastKnightEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp) : 0;
-            duration = (Entity) this instanceof TheLastKnightEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
+            skillp = (Entity) this instanceof TheLastKnightEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP) : 0;
+            duration = (Entity) this instanceof TheLastKnightEntity _datEntI ? _datEntI.getEntityData().get(DATA_DURATION) : 0;
             if (duration > 0) {
                 if ((Entity) this instanceof TheLastKnightEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_duration, (int) (duration - 1));
+                    _datEntSetI.getEntityData().set(DATA_DURATION, (int) (duration - 1));
             }
             setTicksFrozen(0);
             this.removeEffect(CAMobEffects.FROZEN.get());
             enemy = this.getTarget();
             if (skillp > 0) {
                 if ((Entity) this instanceof TheLastKnightEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_skillp, (int) (skillp - 1));
+                    _datEntSetI.getEntityData().set(DATA_SKILLP, (int) (skillp - 1));
             } else {
                 if (!(enemy == null) && enemy.isAlive()) {
                     if (distanceTo(enemy) < 4) {
                         if ((Entity) this instanceof TheLastKnightEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_duration, 90);
+                            _datEntSetI.getEntityData().set(DATA_DURATION, 90);
                         if ((Entity) this instanceof TheLastKnightEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_skillp, 390);
+                            _datEntSetI.getEntityData().set(DATA_SKILLP, 390);
                         if (!this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 30, 0, false, false));
                         if (this instanceof TheLastKnightEntity) {
@@ -421,11 +423,11 @@ public class TheLastKnightEntity extends Animal implements GeoEntity, SyncedAnim
     }
 
     public String getSyncedAnimation() {
-        return this.entityData.get(ANIMATION);
+        return this.entityData.get(DATA_ANIMATION);
     }
 
     public void setAnimation(String animation) {
-        this.entityData.set(ANIMATION, animation);
+        this.entityData.set(DATA_ANIMATION, animation);
     }
 
     public void applyLastKnightFreeze(Entity sourceEntity) {
@@ -510,7 +512,7 @@ public class TheLastKnightEntity extends Animal implements GeoEntity, SyncedAnim
     }
 
     private boolean isLastKnightDurative() {
-        return this.isAlive() && this.getEntityData().get(DATA_duration) <= 0;
+        return this.isAlive() && this.getEntityData().get(DATA_DURATION) <= 0;
     }
 
     @Override

@@ -35,7 +35,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import javax.annotation.Nullable;
 
 public class LivingArmorstandBlock extends BaseEntityBlock implements SimpleWaterloggedBlock, EntityBlock {
-	public static final IntegerProperty ANIMATION = IntegerProperty.create("animation", 0, 1);
+	public static final IntegerProperty DATA_ANIMATION = IntegerProperty.create("animation", 0, 1);
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
@@ -80,7 +80,7 @@ public class LivingArmorstandBlock extends BaseEntityBlock implements SimpleWate
 
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-		builder.add(ANIMATION, FACING, WATERLOGGED);
+		builder.add(DATA_ANIMATION, FACING, WATERLOGGED);
 	}
 
 	@Override

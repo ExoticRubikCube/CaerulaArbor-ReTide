@@ -63,9 +63,9 @@ import java.util.List;
 import java.util.UUID;
 
 public class OceanizedVexEntity extends SeaMonster {
-    public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanizedVexEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedVexEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<Integer> DATA_leftSurvivalTick = SynchedEntityData.defineId(OceanizedVexEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(OceanizedVexEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(OceanizedVexEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> DATA_LEFT_SURVIVAL_TICK = SynchedEntityData.defineId(OceanizedVexEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<String> DATA_SAYER = SynchedEntityData.defineId(OceanizedVexEntity.class, EntityDataSerializers.STRING);
     private boolean swinging;
     private long lastSwing;
@@ -86,9 +86,9 @@ public class OceanizedVexEntity extends SeaMonster {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(SHOOT, false);
-        this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(DATA_leftSurvivalTick, 600);
+        this.entityData.define(DATA_SHOOT, false);
+        this.entityData.define(DATA_ANIMATION, "undefined");
+        this.entityData.define(DATA_LEFT_SURVIVAL_TICK, 600);
         this.entityData.define(DATA_SAYER, "");
     }
 
@@ -176,24 +176,26 @@ public class OceanizedVexEntity extends SeaMonster {
 
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-        this.getEntityData().set(DATA_leftSurvivalTick, 600 + Mth.nextInt(RandomSource.create(), 0, 1800));
+        this.getEntityData().set(DATA_LEFT_SURVIVAL_TICK, 600 + Mth.nextInt(RandomSource.create(), 0, 1800));
         return super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
     }
 
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putInt("DataleftSurvivalTick", this.entityData.get(DATA_leftSurvivalTick));
-        compound.putString("DataSAYER", this.entityData.get(DATA_SAYER));
+        compound.putInt("LeftSurvivalTick", this.entityData.get(DATA_LEFT_SURVIVAL_TICK));
+        compound.putString("Sayer", this.entityData.get(DATA_SAYER));
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("DataleftSurvivalTick"))
-            this.entityData.set(DATA_leftSurvivalTick, compound.getInt("DataleftSurvivalTick"));
-        if (compound.contains("DataSAYER"))
-            this.entityData.set(DATA_SAYER, compound.getString("DataSAYER"));
+        if (compound.contains("LeftSurvivalTick")) {
+            this.entityData.set(DATA_LEFT_SURVIVAL_TICK, compound.getInt("LeftSurvivalTick"));
+        }
+        if (compound.contains("Sayer")) {
+            this.entityData.set(DATA_SAYER, compound.getString("Sayer"));
+        }
     }
 
     @Override
@@ -204,12 +206,12 @@ public class OceanizedVexEntity extends SeaMonster {
         double sklp1;
         String uuid1;
         if (this.isAlive()) {
-            sklp1 = (Entity) this instanceof OceanizedVexEntity _datEntI ? _datEntI.getEntityData().get(DATA_leftSurvivalTick) : 0;
+            sklp1 = (Entity) this instanceof OceanizedVexEntity _datEntI ? _datEntI.getEntityData().get(DATA_LEFT_SURVIVAL_TICK) : 0;
             if (sklp1 <= 0) {
                 ((Entity) this).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.STARVE)), (float) Math.max(0.075 * ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1), 1));
             } else {
                 if ((Entity) this instanceof OceanizedVexEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_leftSurvivalTick, (int) (sklp1 - 1));
+                    _datEntSetI.getEntityData().set(DATA_LEFT_SURVIVAL_TICK, (int) (sklp1 - 1));
             }
         } else {
             uuid1 = (Entity) this instanceof OceanizedVexEntity _datEntS ? _datEntS.getEntityData().get(DATA_SAYER) : "";
@@ -410,11 +412,11 @@ public class OceanizedVexEntity extends SeaMonster {
     }
 
     public String getSyncedAnimation() {
-        return this.entityData.get(ANIMATION);
+        return this.entityData.get(DATA_ANIMATION);
     }
 
     public void setAnimation(String animation) {
-        this.entityData.set(ANIMATION, animation);
+        this.entityData.set(DATA_ANIMATION, animation);
     }
 
     @Override

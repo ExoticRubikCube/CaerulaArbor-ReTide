@@ -28,10 +28,10 @@ public class OceanizedWitherModel extends GeoModel<OceanizedWitherEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(OceanizedWitherEntity entity) {
-		if (entity.getEntityData().get(AbstractOceanizedWitherEntity.DATA_shelled)) {
+		if (entity.getEntityData().get(AbstractOceanizedWitherEntity.DATA_SHELLED)) {
 			return SHELLED_TEXTURE;
 		}
-		int spawn = entity.getEntityData().get(OceanizedWitherEntity.DATA_spawn);
+		int spawn = entity.getEntityData().get(OceanizedWitherEntity.DATA_SPAWN);
 		if (spawn < 40) {
 			return INVULNERABLE_TEXTURE;
 		}

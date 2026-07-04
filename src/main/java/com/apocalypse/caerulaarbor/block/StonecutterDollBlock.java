@@ -37,7 +37,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class StonecutterDollBlock extends BaseEntityBlock implements SimpleWaterloggedBlock, EntityBlock {
-	public static final IntegerProperty ANIMATION = IntegerProperty.create("animation", 0, 2);
+	public static final IntegerProperty DATA_ANIMATION = IntegerProperty.create("animation", 0, 2);
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
@@ -82,7 +82,7 @@ public class StonecutterDollBlock extends BaseEntityBlock implements SimpleWater
 
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-		builder.add(ANIMATION, FACING, WATERLOGGED);
+		builder.add(DATA_ANIMATION, FACING, WATERLOGGED);
 	}
 
 	@Override

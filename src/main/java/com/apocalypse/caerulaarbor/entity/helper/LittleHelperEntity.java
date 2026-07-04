@@ -1,6 +1,5 @@
 package com.apocalypse.caerulaarbor.entity.helper;
 
-import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SyncedAnimationEntity;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAItems;
@@ -45,9 +44,9 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import javax.annotation.Nullable;
 
 public class LittleHelperEntity extends PathfinderMob implements GeoEntity, SyncedAnimationEntity {
-    public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(LittleHelperEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(LittleHelperEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<Integer> DATA_durability = SynchedEntityData.defineId(LittleHelperEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(LittleHelperEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(LittleHelperEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> DATA_DURABILITY = SynchedEntityData.defineId(LittleHelperEntity.class, EntityDataSerializers.INT);
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private boolean swinging;
     private long lastSwing;
@@ -68,9 +67,9 @@ public class LittleHelperEntity extends PathfinderMob implements GeoEntity, Sync
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(SHOOT, false);
-        this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(DATA_durability, 4);
+        this.entityData.define(DATA_SHOOT, false);
+        this.entityData.define(DATA_ANIMATION, "undefined");
+        this.entityData.define(DATA_DURABILITY, 4);
     }
 
     @Nullable
@@ -159,9 +158,9 @@ public class LittleHelperEntity extends PathfinderMob implements GeoEntity, Sync
             return false;
         if (source.is(DamageTypes.WITHER_SKULL))
             return false;
-        int durability = this.entityData.get(DATA_durability);
+        int durability = this.entityData.get(DATA_DURABILITY);
         if (durability > 0) {
-            this.entityData.set(DATA_durability, durability - 1);
+            this.entityData.set(DATA_DURABILITY, durability - 1);
             return false;
         }
         if (durability >= 0 && this.isAlive()) {
@@ -182,14 +181,15 @@ public class LittleHelperEntity extends PathfinderMob implements GeoEntity, Sync
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putInt("Datadurability", this.entityData.get(DATA_durability));
+        compound.putInt("Durability", this.entityData.get(DATA_DURABILITY));
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Datadurability"))
-            this.entityData.set(DATA_durability, compound.getInt("Datadurability"));
+        if (compound.contains("Durability")) {
+            this.entityData.set(DATA_DURABILITY, compound.getInt("Durability"));
+        }
     }
 
     @Override
@@ -218,8 +218,8 @@ public class LittleHelperEntity extends PathfinderMob implements GeoEntity, Sync
     @Override
     public void baseTick() {
         super.baseTick();
-        if (this.tickCount % 30 == 5 && this.entityData.get(DATA_durability) < 4) {
-            this.entityData.set(DATA_durability, this.entityData.get(DATA_durability) + 1);
+        if (this.tickCount % 30 == 5 && this.entityData.get(DATA_DURABILITY) < 4) {
+            this.entityData.set(DATA_DURABILITY, this.entityData.get(DATA_DURABILITY) + 1);
         }
         WorldUtils.clearNetherseaAround(this.level(), this.getX(), this.getY(), this.getZ(), this);
         this.refreshDimensions();
@@ -317,11 +317,11 @@ public class LittleHelperEntity extends PathfinderMob implements GeoEntity, Sync
     }
 
     public String getSyncedAnimation() {
-        return this.entityData.get(ANIMATION);
+        return this.entityData.get(DATA_ANIMATION);
     }
 
     public void setAnimation(String animation) {
-        this.entityData.set(ANIMATION, animation);
+        this.entityData.set(DATA_ANIMATION, animation);
     }
 
     @Override

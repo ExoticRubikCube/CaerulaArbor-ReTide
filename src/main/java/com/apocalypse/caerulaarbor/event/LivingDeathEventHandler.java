@@ -24,6 +24,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
@@ -53,8 +54,6 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraft.sounds.SoundEvents;
-import com.apocalypse.caerulaarbor.init.CASounds;
 
 import java.util.Comparator;
 
@@ -586,7 +585,7 @@ public class LivingDeathEventHandler {
         if (entity.getPersistentData().getBoolean("blessed")) {
             EntityUtils.hurtMartus(world, martus, sourceentity, Math.max(Math.min((entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.25, martus.getMaxHealth() * 0.4),
                     martus.getMaxHealth()) * 0.05, 0);
-        } else if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring"))) && martus.getEntityData().get(MartusEntity.DATA_phase) >= 1) {
+        } else if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring"))) && martus.getEntityData().get(MartusEntity.DATA_PHASE) >= 1) {
             EntityUtils.hurtMartus(world, martus, sourceentity, Math.max(Math.min((entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.03, martus.getMaxHealth() * 0.025),
                     martus.getMaxHealth() * 0.018), 0);
         }

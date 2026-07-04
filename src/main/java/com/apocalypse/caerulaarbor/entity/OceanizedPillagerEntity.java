@@ -48,9 +48,9 @@ import javax.annotation.Nullable;
 import java.util.EnumSet;
 
 public class OceanizedPillagerEntity extends SeaMonster implements RangedAttackMob, RavagerMountRider {
-    public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanizedPillagerEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedPillagerEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<Integer> DATA_skillp = SynchedEntityData.defineId(OceanizedPillagerEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(OceanizedPillagerEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(OceanizedPillagerEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> DATA_SKILLP = SynchedEntityData.defineId(OceanizedPillagerEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
     private long lastSwing;
     public String animationprocedure = "empty";
@@ -70,9 +70,9 @@ public class OceanizedPillagerEntity extends SeaMonster implements RangedAttackM
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(SHOOT, false);
-        this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(DATA_skillp, 200);
+        this.entityData.define(DATA_SHOOT, false);
+        this.entityData.define(DATA_ANIMATION, "undefined");
+        this.entityData.define(DATA_SKILLP, 200);
     }
 
     @Override
@@ -153,7 +153,7 @@ public class OceanizedPillagerEntity extends SeaMonster implements RangedAttackM
             this.target = null;
             this.seeTime = 0;
             this.attackTime = -1;
-            ((OceanizedPillagerEntity) rangedAttackMob).entityData.set(SHOOT, false);
+            ((OceanizedPillagerEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
         }
 
         public boolean requiresUpdateEveryTick() {
@@ -179,10 +179,10 @@ public class OceanizedPillagerEntity extends SeaMonster implements RangedAttackM
             this.mob.getLookControl().setLookAt(this.target, 30.0F, 30.0F);
             if (--this.attackTime == 0) {
                 if (!flag) {
-                    ((OceanizedPillagerEntity) rangedAttackMob).entityData.set(SHOOT, false);
+                    ((OceanizedPillagerEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
                     return;
                 }
-                ((OceanizedPillagerEntity) rangedAttackMob).entityData.set(SHOOT, true);
+                ((OceanizedPillagerEntity) rangedAttackMob).entityData.set(DATA_SHOOT, true);
                 float f = (float) Math.sqrt(d0) / this.attackRadius;
                 float f1 = Mth.clamp(f, 0.1F, 1.0F);
                 this.rangedAttackMob.performRangedAttack(this.target, f1);
@@ -190,7 +190,7 @@ public class OceanizedPillagerEntity extends SeaMonster implements RangedAttackM
             } else if (this.attackTime < 0) {
                 this.attackTime = Mth.floor(Mth.lerp(Math.sqrt(d0) / (double) this.attackRadius, this.attackIntervalMin, this.attackIntervalMax));
             } else
-                ((OceanizedPillagerEntity) rangedAttackMob).entityData.set(SHOOT, false);
+                ((OceanizedPillagerEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
         }
     }
 
@@ -219,14 +219,15 @@ public class OceanizedPillagerEntity extends SeaMonster implements RangedAttackM
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putInt("Dataskillp", this.entityData.get(DATA_skillp));
+        compound.putInt("Skillp", this.entityData.get(DATA_SKILLP));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Dataskillp"))
-            this.entityData.set(DATA_skillp, compound.getInt("Dataskillp"));
+        if (compound.contains("Skillp")) {
+            this.entityData.set(DATA_SKILLP, compound.getInt("Skillp"));
+        }
 	}
 
     @Override
@@ -239,7 +240,7 @@ public class OceanizedPillagerEntity extends SeaMonster implements RangedAttackM
         double sklp;
         Entity enemy;
         if (this.isAlive()) {
-            sklp = (Entity) this instanceof OceanizedPillagerEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp) : 0;
+            sklp = (Entity) this instanceof OceanizedPillagerEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP) : 0;
             if (sklp <= 0) {
                 enemy = this.getTarget();
                 if (!(enemy == null) && enemy.isAlive()) {
@@ -248,7 +249,7 @@ public class OceanizedPillagerEntity extends SeaMonster implements RangedAttackM
                             this.setAnimation("animation.oceanized_pillager.pour");
                         }
                         if ((Entity) this instanceof OceanizedPillagerEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_skillp, 300);
+                            _datEntSetI.getEntityData().set(DATA_SKILLP, 300);
                         new Object() {
                             void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                                 if (OceanizedPillagerEntity.this.getTarget() != null) {
@@ -298,7 +299,7 @@ public class OceanizedPillagerEntity extends SeaMonster implements RangedAttackM
                 }
             } else {
                 if ((Entity) this instanceof OceanizedPillagerEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_skillp, (int) (sklp - 1));
+                    _datEntSetI.getEntityData().set(DATA_SKILLP, (int) (sklp - 1));
             }
         }
         this.refreshDimensions();
@@ -345,7 +346,7 @@ public class OceanizedPillagerEntity extends SeaMonster implements RangedAttackM
         if (this.swinging && this.lastSwing + 20L <= level().getGameTime()) {
             this.swinging = false;
         }
-        if ((this.swinging || this.entityData.get(SHOOT)) && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+        if ((this.swinging || this.entityData.get(DATA_SHOOT)) && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
             event.getController().forceAnimationReset();
             return event.setAndContinue(RawAnimation.begin().thenPlay("animation.oceanized_pillager.shoot"));
         }
@@ -381,11 +382,11 @@ public class OceanizedPillagerEntity extends SeaMonster implements RangedAttackM
     }
 
     public String getSyncedAnimation() {
-        return this.entityData.get(ANIMATION);
+        return this.entityData.get(DATA_ANIMATION);
     }
 
     public void setAnimation(String animation) {
-        this.entityData.set(ANIMATION, animation);
+        this.entityData.set(DATA_ANIMATION, animation);
     }
 
     @Override

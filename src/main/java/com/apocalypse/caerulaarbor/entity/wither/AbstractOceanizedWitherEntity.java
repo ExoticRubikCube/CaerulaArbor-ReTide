@@ -52,11 +52,11 @@ import java.util.List;
 
 
 public abstract class AbstractOceanizedWitherEntity extends SeaMonster {
-    public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(AbstractOceanizedWitherEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(AbstractOceanizedWitherEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<Integer> DATA_skillp = SynchedEntityData.defineId(AbstractOceanizedWitherEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(AbstractOceanizedWitherEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Boolean> DATA_shelled = SynchedEntityData.defineId(AbstractOceanizedWitherEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(AbstractOceanizedWitherEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(AbstractOceanizedWitherEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> DATA_SKILLP = SynchedEntityData.defineId(AbstractOceanizedWitherEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_DURATION = SynchedEntityData.defineId(AbstractOceanizedWitherEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Boolean> DATA_SHELLED = SynchedEntityData.defineId(AbstractOceanizedWitherEntity.class, EntityDataSerializers.BOOLEAN);
 
     protected boolean swinging;
     protected long lastSwing;
@@ -76,11 +76,11 @@ public abstract class AbstractOceanizedWitherEntity extends SeaMonster {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(SHOOT, false);
-        this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(DATA_skillp, this.getInitialSkillp());
-        this.entityData.define(DATA_duration, this.getInitialDuration());
-        this.entityData.define(DATA_shelled, false);
+        this.entityData.define(DATA_SHOOT, false);
+        this.entityData.define(DATA_ANIMATION, "undefined");
+        this.entityData.define(DATA_SKILLP, this.getInitialSkillp());
+        this.entityData.define(DATA_DURATION, this.getInitialDuration());
+        this.entityData.define(DATA_SHELLED, false);
     }
 
     protected abstract int getInitialSkillp();
@@ -90,11 +90,11 @@ public abstract class AbstractOceanizedWitherEntity extends SeaMonster {
     protected abstract int getDeathDuration();
 
     public String getSyncedAnimation() {
-        return this.entityData.get(ANIMATION);
+        return this.entityData.get(DATA_ANIMATION);
     }
 
     public void setAnimation(String animation) {
-        this.entityData.set(ANIMATION, animation);
+        this.entityData.set(DATA_ANIMATION, animation);
     }
 
     @Override
@@ -161,7 +161,7 @@ public abstract class AbstractOceanizedWitherEntity extends SeaMonster {
         if (source.is(DamageTypes.WITHER_SKULL)) {
             return false;
         }
-        if (this.entityData.get(DATA_shelled) && source.is(DamageTypeTags.IS_PROJECTILE)) {
+        if (this.entityData.get(DATA_SHELLED) && source.is(DamageTypeTags.IS_PROJECTILE)) {
             return false;
         }
         return super.hurt(source, amount);
@@ -247,22 +247,22 @@ public abstract class AbstractOceanizedWitherEntity extends SeaMonster {
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putInt("Dataskillp", this.entityData.get(DATA_skillp));
-        compound.putInt("Dataduration", this.entityData.get(DATA_duration));
-        compound.putBoolean("Datashelled", this.entityData.get(DATA_shelled));
+        compound.putInt("Skillp", this.entityData.get(DATA_SKILLP));
+        compound.putInt("Duration", this.entityData.get(DATA_DURATION));
+        compound.putBoolean("Shelled", this.entityData.get(DATA_SHELLED));
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Dataskillp")) {
-            this.entityData.set(DATA_skillp, compound.getInt("Dataskillp"));
+        if (compound.contains("Skillp")) {
+            this.entityData.set(DATA_SKILLP, compound.getInt("Skillp"));
         }
-        if (compound.contains("Dataduration")) {
-            this.entityData.set(DATA_duration, compound.getInt("Dataduration"));
+        if (compound.contains("Duration")) {
+            this.entityData.set(DATA_DURATION, compound.getInt("Duration"));
         }
-        if (compound.contains("Datashelled")) {
-            this.entityData.set(DATA_shelled, compound.getBoolean("Datashelled"));
+        if (compound.contains("Shelled")) {
+            this.entityData.set(DATA_SHELLED, compound.getBoolean("Shelled"));
         }
     }
 
@@ -330,9 +330,9 @@ public abstract class AbstractOceanizedWitherEntity extends SeaMonster {
         double y = this.getY();
         double z = this.getZ();
         if (this.isAlive()) {
-            int duration = this.entityData.get(DATA_duration);
+            int duration = this.entityData.get(DATA_DURATION);
             if (duration > 0) {
-                this.entityData.set(DATA_duration, duration - 1);
+                this.entityData.set(DATA_DURATION, duration - 1);
             }
             this.tickSubclassBaseTick(world, x, y, z);
             if (this.tickCount % 20 == 0) {
@@ -367,7 +367,7 @@ public abstract class AbstractOceanizedWitherEntity extends SeaMonster {
             if (EntityUtils.getSpeed(this) > (this.getAttributes().hasAttribute(Attributes.MOVEMENT_SPEED) ? this.getAttribute(Attributes.MOVEMENT_SPEED).getValue() : 0)) {
                 this.setDeltaMovement(new Vec3(0, 0, 0));
             }
-            if (!this.entityData.get(DATA_shelled) && this.shouldEnterShelledState()) {
+            if (!this.entityData.get(DATA_SHELLED) && this.shouldEnterShelledState()) {
                 if (this.getAttributes().hasAttribute(Attributes.ARMOR)) {
                     this.getAttribute(Attributes.ARMOR).setBaseValue((this.getAttributes().hasAttribute(Attributes.ARMOR) ? this.getAttribute(Attributes.ARMOR).getBaseValue() : 0) * 1.5);
                 }
@@ -379,7 +379,7 @@ public abstract class AbstractOceanizedWitherEntity extends SeaMonster {
                             (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()) ? this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getBaseValue() : 0) * 1.5
                     );
                 }
-                this.entityData.set(DATA_shelled, true);
+                this.entityData.set(DATA_SHELLED, true);
             }
         }
         this.refreshDimensions();
@@ -434,7 +434,7 @@ public abstract class AbstractOceanizedWitherEntity extends SeaMonster {
     }
 
     public boolean isWitherDurative() {
-        return this.isAlive() && this.entityData.get(DATA_duration) <= 0;
+        return this.isAlive() && this.entityData.get(DATA_DURATION) <= 0;
     }
 
     public static void shootWitherSkull(LevelAccessor world, Entity from, double acceleration, double dx, double dy, double dz, double inaccuracy, double speed, double x, double y, double z) {

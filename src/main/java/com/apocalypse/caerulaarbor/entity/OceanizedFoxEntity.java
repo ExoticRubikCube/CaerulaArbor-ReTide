@@ -15,6 +15,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageSource;
@@ -39,18 +40,17 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
-import net.minecraft.sounds.SoundEvents;
 
 import java.util.Comparator;
 import java.util.List;
 
 public class OceanizedFoxEntity extends SeaMonster {
-    public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanizedFoxEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedFoxEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<Integer> DATA_skillp = SynchedEntityData.defineId(OceanizedFoxEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Boolean> DATA_sleeping = SynchedEntityData.defineId(OceanizedFoxEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<Integer> DATA_action_time = SynchedEntityData.defineId(OceanizedFoxEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(OceanizedFoxEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(OceanizedFoxEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(OceanizedFoxEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> DATA_SKILLP = SynchedEntityData.defineId(OceanizedFoxEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Boolean> DATA_SLEEPING = SynchedEntityData.defineId(OceanizedFoxEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<Integer> DATA_ACTION_TIME = SynchedEntityData.defineId(OceanizedFoxEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_DURATION = SynchedEntityData.defineId(OceanizedFoxEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
     private long lastSwing;
     public String animationprocedure = "empty";
@@ -70,12 +70,12 @@ public class OceanizedFoxEntity extends SeaMonster {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(SHOOT, false);
-        this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(DATA_skillp, 10);
-        this.entityData.define(DATA_sleeping, false);
-        this.entityData.define(DATA_action_time, 0);
-        this.entityData.define(DATA_duration, 0);
+        this.entityData.define(DATA_SHOOT, false);
+        this.entityData.define(DATA_ANIMATION, "undefined");
+        this.entityData.define(DATA_SKILLP, 10);
+        this.entityData.define(DATA_SLEEPING, false);
+        this.entityData.define(DATA_ACTION_TIME, 0);
+        this.entityData.define(DATA_DURATION, 0);
     }
 
     @Override
@@ -156,7 +156,7 @@ public class OceanizedFoxEntity extends SeaMonster {
     public boolean hurt(DamageSource source, float amount) {
         setShiftKeyDown(false);
         if ((Entity) this instanceof OceanizedFoxEntity _datEntSetL)
-            _datEntSetL.getEntityData().set(DATA_sleeping, false);
+            _datEntSetL.getEntityData().set(DATA_SLEEPING, false);
         if (source.is(DamageTypes.CACTUS))
             return false;
         if (source.is(DamageTypes.SWEET_BERRY_BUSH))
@@ -169,23 +169,27 @@ public class OceanizedFoxEntity extends SeaMonster {
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putInt("Dataskillp", this.entityData.get(DATA_skillp));
-        compound.putBoolean("Datasleeping", this.entityData.get(DATA_sleeping));
-        compound.putInt("Dataaction_time", this.entityData.get(DATA_action_time));
-        compound.putInt("Dataduration", this.entityData.get(DATA_duration));
+        compound.putInt("Skillp", this.entityData.get(DATA_SKILLP));
+        compound.putBoolean("Sleeping", this.entityData.get(DATA_SLEEPING));
+        compound.putInt("ActionTime", this.entityData.get(DATA_ACTION_TIME));
+        compound.putInt("Duration", this.entityData.get(DATA_DURATION));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Dataskillp"))
-            this.entityData.set(DATA_skillp, compound.getInt("Dataskillp"));
-        if (compound.contains("Datasleeping"))
-            this.entityData.set(DATA_sleeping, compound.getBoolean("Datasleeping"));
-        if (compound.contains("Dataaction_time"))
-            this.entityData.set(DATA_action_time, compound.getInt("Dataaction_time"));
-        if (compound.contains("Dataduration"))
-            this.entityData.set(DATA_duration, compound.getInt("Dataduration"));
+        if (compound.contains("Skillp")) {
+            this.entityData.set(DATA_SKILLP, compound.getInt("Skillp"));
+        }
+        if (compound.contains("Sleeping")) {
+            this.entityData.set(DATA_SLEEPING, compound.getBoolean("Sleeping"));
+        }
+        if (compound.contains("ActionTime")) {
+            this.entityData.set(DATA_ACTION_TIME, compound.getInt("ActionTime"));
+        }
+        if (compound.contains("Duration")) {
+            this.entityData.set(DATA_DURATION, compound.getInt("Duration"));
+        }
 	}
 
     @Override
@@ -208,22 +212,22 @@ public class OceanizedFoxEntity extends SeaMonster {
         Entity enemy;
         if (this.isAlive()) {
             if (tickCount % 10 == 0) {
-                time_stamp = (Entity) this instanceof OceanizedFoxEntity _datEntI ? _datEntI.getEntityData().get(DATA_action_time) : 0;
-                sneak = (Entity) this instanceof OceanizedFoxEntity _datEntL3 && _datEntL3.getEntityData().get(DATA_sleeping);
+                time_stamp = (Entity) this instanceof OceanizedFoxEntity _datEntI ? _datEntI.getEntityData().get(DATA_ACTION_TIME) : 0;
+                sneak = (Entity) this instanceof OceanizedFoxEntity _datEntL3 && _datEntL3.getEntityData().get(DATA_SLEEPING);
                 if (time_stamp > 0) {
                     if ((Entity) this instanceof OceanizedFoxEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_action_time, (int) (time_stamp - 1));
+                        _datEntSetI.getEntityData().set(DATA_ACTION_TIME, (int) (time_stamp - 1));
                 } else if (Math.random() < 0.02) {
                     if (sneak) {
                         if ((Entity) this instanceof OceanizedFoxEntity _datEntSetL)
-                            _datEntSetL.getEntityData().set(DATA_sleeping, false);
+                            _datEntSetL.getEntityData().set(DATA_SLEEPING, false);
                         if ((Entity) this instanceof OceanizedFoxEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_action_time, 200);
+                            _datEntSetI.getEntityData().set(DATA_ACTION_TIME, 200);
                     } else if (!this.isAggressive()) {
                         if ((Entity) this instanceof OceanizedFoxEntity _datEntSetL)
-                            _datEntSetL.getEntityData().set(DATA_sleeping, true);
+                            _datEntSetL.getEntityData().set(DATA_SLEEPING, true);
                         if ((Entity) this instanceof OceanizedFoxEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_action_time, 200);
+                            _datEntSetI.getEntityData().set(DATA_ACTION_TIME, 200);
                     }
                 }
                 setShiftKeyDown(sneak);
@@ -232,24 +236,24 @@ public class OceanizedFoxEntity extends SeaMonster {
             if (!(enemy == null) && enemy.isAlive()) {
                 setShiftKeyDown(false);
                 if ((Entity) this instanceof OceanizedFoxEntity _datEntSetL)
-                    _datEntSetL.getEntityData().set(DATA_sleeping, false);
+                    _datEntSetL.getEntityData().set(DATA_SLEEPING, false);
             }
-            skillp = (Entity) this instanceof OceanizedFoxEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp) : 0;
-            dura = (Entity) this instanceof OceanizedFoxEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
+            skillp = (Entity) this instanceof OceanizedFoxEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP) : 0;
+            dura = (Entity) this instanceof OceanizedFoxEntity _datEntI ? _datEntI.getEntityData().get(DATA_DURATION) : 0;
             if (dura > 0) {
                 if ((Entity) this instanceof OceanizedFoxEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_duration, (int) (dura - 1));
+                    _datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura - 1));
             }
             if (skillp > 0) {
                 if ((Entity) this instanceof OceanizedFoxEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_skillp, (int) (skillp - 1));
+                    _datEntSetI.getEntityData().set(DATA_SKILLP, (int) (skillp - 1));
             } else {
                 if (!(enemy == null) && enemy.isAlive()) {
                     if (distanceTo(enemy) <= 4) {
                         if ((Entity) this instanceof OceanizedFoxEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_duration, 45);
+                            _datEntSetI.getEntityData().set(DATA_DURATION, 45);
                         if ((Entity) this instanceof OceanizedFoxEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_skillp, 200);
+                            _datEntSetI.getEntityData().set(DATA_SKILLP, 200);
                         if (this instanceof OceanizedFoxEntity) {
                             this.setAnimation("animation.oceanized_fox.jump");
                         }
@@ -376,11 +380,11 @@ public class OceanizedFoxEntity extends SeaMonster {
     }
 
     public String getSyncedAnimation() {
-        return this.entityData.get(ANIMATION);
+        return this.entityData.get(DATA_ANIMATION);
     }
 
     public void setAnimation(String animation) {
-        this.entityData.set(ANIMATION, animation);
+        this.entityData.set(DATA_ANIMATION, animation);
     }
 
     @Override
@@ -390,8 +394,8 @@ public class OceanizedFoxEntity extends SeaMonster {
     }
 
     public boolean notSleeping() {
-        return !this.getEntityData().get(OceanizedFoxEntity.DATA_sleeping)
-                && this.getEntityData().get(OceanizedFoxEntity.DATA_duration) <= 0;
+        return !this.getEntityData().get(OceanizedFoxEntity.DATA_SLEEPING)
+                && this.getEntityData().get(OceanizedFoxEntity.DATA_DURATION) <= 0;
     }
 
 

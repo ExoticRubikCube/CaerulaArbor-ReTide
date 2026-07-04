@@ -41,9 +41,9 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 
 public class BaselayerAbyssalEntity extends SeaMonster {
-	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(BaselayerAbyssalEntity.class, EntityDataSerializers.BOOLEAN);
-	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(BaselayerAbyssalEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<Integer> DATA_mute_time = SynchedEntityData.defineId(BaselayerAbyssalEntity.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(BaselayerAbyssalEntity.class, EntityDataSerializers.BOOLEAN);
+	public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(BaselayerAbyssalEntity.class, EntityDataSerializers.STRING);
+	public static final EntityDataAccessor<Integer> DATA_MUTE_TIME = SynchedEntityData.defineId(BaselayerAbyssalEntity.class, EntityDataSerializers.INT);
 	private boolean swinging;
 	private long lastSwing;
 	public String animationprocedure = "empty";
@@ -62,9 +62,9 @@ public class BaselayerAbyssalEntity extends SeaMonster {
 	@Override
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(SHOOT, false);
-		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(DATA_mute_time, 0);
+		this.entityData.define(DATA_SHOOT, false);
+		this.entityData.define(DATA_ANIMATION, "undefined");
+		this.entityData.define(DATA_MUTE_TIME, 0);
 	}
 
 	@Override
@@ -119,7 +119,7 @@ public class BaselayerAbyssalEntity extends SeaMonster {
 	@Override
 	public void die(DamageSource source) {
 		if (source.is(DamageTypes.IN_WALL)) {
-			this.getEntityData().set(DATA_mute_time, 999);
+			this.getEntityData().set(DATA_MUTE_TIME, 999);
 		}
 		super.die(source);
 	}
@@ -127,14 +127,15 @@ public class BaselayerAbyssalEntity extends SeaMonster {
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
-		compound.putInt("Datamute_time", this.entityData.get(DATA_mute_time));
+		compound.putInt("MuteTime", this.entityData.get(DATA_MUTE_TIME));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
-		if (compound.contains("Datamute_time"))
-			this.entityData.set(DATA_mute_time, compound.getInt("Datamute_time"));
+		if (compound.contains("MuteTime")) {
+		    this.entityData.set(DATA_MUTE_TIME, compound.getInt("MuteTime"));
+		}
 	}
 
 	@Override
@@ -143,12 +144,12 @@ public class BaselayerAbyssalEntity extends SeaMonster {
         if (this.isAlive()) {
             if (this.hasEffect(CAMobEffects.MUTE.get())) {
                 if ((Entity) this instanceof BaselayerAbyssalEntity _datEntSetI) {
-                    _datEntSetI.getEntityData().set(DATA_mute_time,
+                    _datEntSetI.getEntityData().set(DATA_MUTE_TIME,
                     _datEntSetI.hasEffect(CAMobEffects.MUTE.get()) ? _datEntSetI.getEffect(CAMobEffects.MUTE.get()).getDuration() : 0);
                 }
-            } else if (((Entity) this instanceof BaselayerAbyssalEntity _datEntI ? _datEntI.getEntityData().get(DATA_mute_time) : 0) == 1) {
+            } else if (((Entity) this instanceof BaselayerAbyssalEntity _datEntI ? _datEntI.getEntityData().get(DATA_MUTE_TIME) : 0) == 1) {
                 if ((Entity) this instanceof BaselayerAbyssalEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_mute_time, 0);
+                    _datEntSetI.getEntityData().set(DATA_MUTE_TIME, 0);
             }
         }
         this.refreshDimensions();
@@ -243,7 +244,7 @@ public class BaselayerAbyssalEntity extends SeaMonster {
             double z = this.getZ();
             if (CABlocks.SEA_TRAIL_GROWN.get().defaultBlockState().canSurvive(world, BlockPos.containing(x, y, z)) && !(world.getBlockFloorHeight(BlockPos.containing(x, y, z)) > 0)) {
                 if (WorldUtils.canGrief(world)) {
-                    if (((Entity) this instanceof BaselayerAbyssalEntity _datEntI ? _datEntI.getEntityData().get(DATA_mute_time) : 0) <= 0) {
+                    if (((Entity) this instanceof BaselayerAbyssalEntity _datEntI ? _datEntI.getEntityData().get(DATA_MUTE_TIME) : 0) <= 0) {
                         CaerulaUtil.replaceTrail(world, CABlocks.SEA_TRAIL_GROWN.get().defaultBlockState(), (world.getFluidState(BlockPos.containing(x, y, z)).createLegacyBlock()).getBlock() == Blocks.WATER, x, y, z);
                     }
                 }
@@ -252,11 +253,11 @@ public class BaselayerAbyssalEntity extends SeaMonster {
 	}
 
 	public String getSyncedAnimation() {
-		return this.entityData.get(ANIMATION);
+		return this.entityData.get(DATA_ANIMATION);
 	}
 
 	public void setAnimation(String animation) {
-		this.entityData.set(ANIMATION, animation);
+		this.entityData.set(DATA_ANIMATION, animation);
 	}
 
 	@Override

@@ -55,7 +55,7 @@ import javax.annotation.Nullable;
 import java.util.EnumSet;
 
 public class OceanizedWitherEntity extends AbstractOceanizedWitherEntity implements RangedAttackMob {
-    public static final EntityDataAccessor<Integer> DATA_spawn = SynchedEntityData.defineId(OceanizedWitherEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_SPAWN = SynchedEntityData.defineId(OceanizedWitherEntity.class, EntityDataSerializers.INT);
 
     public OceanizedWitherEntity(Level world) {
         this(CAEntities.OCEANIZED_WITHER.get(), world);
@@ -68,7 +68,7 @@ public class OceanizedWitherEntity extends AbstractOceanizedWitherEntity impleme
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(DATA_spawn, 0);
+        this.entityData.define(DATA_SPAWN, 0);
     }
 
     @Override
@@ -149,7 +149,7 @@ public class OceanizedWitherEntity extends AbstractOceanizedWitherEntity impleme
             this.target = null;
             this.seeTime = 0;
             this.attackTime = -1;
-            ((OceanizedWitherEntity) rangedAttackMob).entityData.set(SHOOT, false);
+            ((OceanizedWitherEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
         }
 
         public boolean requiresUpdateEveryTick() {
@@ -172,10 +172,10 @@ public class OceanizedWitherEntity extends AbstractOceanizedWitherEntity impleme
             this.mob.getLookControl().setLookAt(this.target, 30.0F, 30.0F);
             if (--this.attackTime == 0) {
                 if (!flag) {
-                    ((OceanizedWitherEntity) rangedAttackMob).entityData.set(SHOOT, false);
+                    ((OceanizedWitherEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
                     return;
                 }
-                ((OceanizedWitherEntity) rangedAttackMob).entityData.set(SHOOT, true);
+                ((OceanizedWitherEntity) rangedAttackMob).entityData.set(DATA_SHOOT, true);
                 float f = (float) Math.sqrt(d0) / this.attackRadius;
                 float f1 = Mth.clamp(f, 0.1F, 1.0F);
                 this.rangedAttackMob.performRangedAttack(this.target, f1);
@@ -183,7 +183,7 @@ public class OceanizedWitherEntity extends AbstractOceanizedWitherEntity impleme
             } else if (this.attackTime < 0) {
                 this.attackTime = Mth.floor(Mth.lerp(Math.sqrt(d0) / (double) this.attackRadius, this.attackIntervalMin, this.attackIntervalMax));
             } else
-                ((OceanizedWitherEntity) rangedAttackMob).entityData.set(SHOOT, false);
+                ((OceanizedWitherEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
         }
     }
 
@@ -195,21 +195,22 @@ public class OceanizedWitherEntity extends AbstractOceanizedWitherEntity impleme
         this.setHealth(1);
         setDeltaMovement(new Vec3(0, (-0.75), 0));
         if ((Entity) this instanceof OceanizedWitherEntity _datEntSetI)
-            _datEntSetI.getEntityData().set(DATA_duration, 100);
+            _datEntSetI.getEntityData().set(DATA_DURATION, 100);
         return retval;
     }
 
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putInt("Dataspawn", this.entityData.get(DATA_spawn));
+        compound.putInt("Spawn", this.entityData.get(DATA_SPAWN));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Dataspawn"))
-            this.entityData.set(DATA_spawn, compound.getInt("Dataspawn"));
+        if (compound.contains("Spawn")) {
+            this.entityData.set(DATA_SPAWN, compound.getInt("Spawn"));
+        }
 	}
 
     @Override
@@ -220,8 +221,8 @@ public class OceanizedWitherEntity extends AbstractOceanizedWitherEntity impleme
             return InteractionResult.PASS;
         }
 
-        this.entityData.set(DATA_duration, 0);
-        this.entityData.set(DATA_spawn, 100);
+        this.entityData.set(DATA_DURATION, 0);
+        this.entityData.set(DATA_SPAWN, 100);
         this.setHealth(this.getMaxHealth());
         this.removeEffect(CAMobEffects.INVULNERABLE.get());
         return InteractionResult.SUCCESS;
@@ -229,12 +230,12 @@ public class OceanizedWitherEntity extends AbstractOceanizedWitherEntity impleme
 
     @Override
     protected void tickSubclassBaseTick(LevelAccessor world, double x, double y, double z) {
-        double spawn = this.entityData.get(DATA_spawn);
-        double skillp = this.entityData.get(DATA_skillp);
+        double spawn = this.entityData.get(DATA_SPAWN);
+        double skillp = this.entityData.get(DATA_SKILLP);
 
         if (spawn < 100) {
             this.setHealth((float) (this.getMaxHealth() * (spawn + 1) * 0.01));
-            this.entityData.set(DATA_spawn, (int) (spawn + 1));
+            this.entityData.set(DATA_SPAWN, (int) (spawn + 1));
             if (spawn == 99) {
                 if (world instanceof Level level && !level.isClientSide()) {
                     level.explode(null, x, y, z, 16, Level.ExplosionInteraction.MOB);
@@ -250,10 +251,10 @@ public class OceanizedWitherEntity extends AbstractOceanizedWitherEntity impleme
 
         Entity enemy = this.getTarget();
         if (skillp > 0) {
-            this.entityData.set(DATA_skillp, (int) (skillp - 1));
+            this.entityData.set(DATA_SKILLP, (int) (skillp - 1));
         } else if (enemy != null && enemy.isAlive()) {
-            this.entityData.set(DATA_duration, 40);
-            this.entityData.set(DATA_skillp, 300);
+            this.entityData.set(DATA_DURATION, 40);
+            this.entityData.set(DATA_SKILLP, 300);
             if (!this.level().isClientSide()) {
                 this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 20, 0, false, false));
             }
@@ -302,7 +303,7 @@ public class OceanizedWitherEntity extends AbstractOceanizedWitherEntity impleme
 
     @Override
     protected boolean shouldEnterShelledState() {
-        return this.getHealth() < this.getMaxHealth() * 0.5 && this.entityData.get(DATA_spawn) > 99;
+        return this.getHealth() < this.getMaxHealth() * 0.5 && this.entityData.get(DATA_SPAWN) > 99;
     }
 
     @Override

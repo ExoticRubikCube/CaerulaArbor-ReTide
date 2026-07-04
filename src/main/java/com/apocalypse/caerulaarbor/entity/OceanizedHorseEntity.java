@@ -40,9 +40,9 @@ import software.bernie.geckolib.core.object.PlayState;
 import net.minecraft.sounds.SoundEvents;
 
 public class OceanizedHorseEntity extends SeaMonster {
-    public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanizedHorseEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedHorseEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<Integer> DATA_lay_limit = SynchedEntityData.defineId(OceanizedHorseEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(OceanizedHorseEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(OceanizedHorseEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> DATA_LAY_LIMIT = SynchedEntityData.defineId(OceanizedHorseEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
     private long lastSwing;
     public String animationprocedure = "empty";
@@ -61,9 +61,9 @@ public class OceanizedHorseEntity extends SeaMonster {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(SHOOT, false);
-        this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(DATA_lay_limit, 36);
+        this.entityData.define(DATA_SHOOT, false);
+        this.entityData.define(DATA_ANIMATION, "undefined");
+        this.entityData.define(DATA_LAY_LIMIT, 36);
     }
 
     @Override
@@ -117,14 +117,15 @@ public class OceanizedHorseEntity extends SeaMonster {
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putInt("Datalay_limit", this.entityData.get(DATA_lay_limit));
+        compound.putInt("LayLimit", this.entityData.get(DATA_LAY_LIMIT));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Datalay_limit"))
-            this.entityData.set(DATA_lay_limit, compound.getInt("Datalay_limit"));
+        if (compound.contains("LayLimit")) {
+            this.entityData.set(DATA_LAY_LIMIT, compound.getInt("LayLimit"));
+        }
 	}
 
     @Override
@@ -237,11 +238,11 @@ public class OceanizedHorseEntity extends SeaMonster {
     }
 
     public String getSyncedAnimation() {
-        return this.entityData.get(ANIMATION);
+        return this.entityData.get(DATA_ANIMATION);
     }
 
     public void setAnimation(String animation) {
-        this.entityData.set(ANIMATION, animation);
+        this.entityData.set(DATA_ANIMATION, animation);
     }
 
     @Override

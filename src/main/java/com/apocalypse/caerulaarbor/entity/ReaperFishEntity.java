@@ -54,8 +54,8 @@ import java.util.Comparator;
 import java.util.List;
 
 public class ReaperFishEntity extends SeaMonster {
-	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(ReaperFishEntity.class, EntityDataSerializers.BOOLEAN);
-	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(ReaperFishEntity.class, EntityDataSerializers.STRING);
+	public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(ReaperFishEntity.class, EntityDataSerializers.BOOLEAN);
+	public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(ReaperFishEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<Integer> DATA_CHARGE_TICK = SynchedEntityData.defineId(ReaperFishEntity.class, EntityDataSerializers.INT);
 	public static final EntityDataAccessor<Boolean> DATA_IS_CHARGING = SynchedEntityData.defineId(ReaperFishEntity.class, EntityDataSerializers.BOOLEAN);
 	private boolean swinging;
@@ -76,8 +76,8 @@ public class ReaperFishEntity extends SeaMonster {
 	@Override
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(SHOOT, false);
-		this.entityData.define(ANIMATION, "undefined");
+		this.entityData.define(DATA_SHOOT, false);
+		this.entityData.define(DATA_ANIMATION, "undefined");
 		this.entityData.define(DATA_CHARGE_TICK, 0);
 		this.entityData.define(DATA_IS_CHARGING, false);
 	}
@@ -186,17 +186,19 @@ public class ReaperFishEntity extends SeaMonster {
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
-		compound.putInt("DataCHARGE_TICK", this.entityData.get(DATA_CHARGE_TICK));
-		compound.putBoolean("DataIS_CHARGING", this.entityData.get(DATA_IS_CHARGING));
+		compound.putInt("ChargeTick", this.entityData.get(DATA_CHARGE_TICK));
+		compound.putBoolean("IsCharging", this.entityData.get(DATA_IS_CHARGING));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
-		if (compound.contains("DataCHARGE_TICK"))
-			this.entityData.set(DATA_CHARGE_TICK, compound.getInt("DataCHARGE_TICK"));
-		if (compound.contains("DataIS_CHARGING"))
-			this.entityData.set(DATA_IS_CHARGING, compound.getBoolean("DataIS_CHARGING"));
+		if (compound.contains("ChargeTick")) {
+		    this.entityData.set(DATA_CHARGE_TICK, compound.getInt("ChargeTick"));
+		}
+		if (compound.contains("IsCharging")) {
+		    this.entityData.set(DATA_IS_CHARGING, compound.getBoolean("IsCharging"));
+		}
 	}
 
 	@Override
@@ -351,11 +353,11 @@ public class ReaperFishEntity extends SeaMonster {
 	}
 
 	public String getSyncedAnimation() {
-		return this.entityData.get(ANIMATION);
+		return this.entityData.get(DATA_ANIMATION);
 	}
 
 	public void setAnimation(String animation) {
-		this.entityData.set(ANIMATION, animation);
+		this.entityData.set(DATA_ANIMATION, animation);
 	}
 
 	@Override

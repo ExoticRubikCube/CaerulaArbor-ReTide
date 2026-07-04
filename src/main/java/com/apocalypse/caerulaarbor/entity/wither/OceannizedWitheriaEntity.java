@@ -49,7 +49,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class OceannizedWitheriaEntity extends AbstractOceanizedWitherEntity {
-    public static final EntityDataAccessor<Integer> DATA_idle_time = SynchedEntityData.defineId(OceannizedWitheriaEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_IDLE_TIME = SynchedEntityData.defineId(OceannizedWitheriaEntity.class, EntityDataSerializers.INT);
 
     public OceannizedWitheriaEntity(Level world) {
         this(CAEntities.OCEANIZED_WITHERIA.get(), world);
@@ -62,7 +62,7 @@ public class OceannizedWitheriaEntity extends AbstractOceanizedWitherEntity {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(DATA_idle_time, 0);
+        this.entityData.define(DATA_IDLE_TIME, 0);
     }
 
     @Override
@@ -117,14 +117,15 @@ public class OceannizedWitheriaEntity extends AbstractOceanizedWitherEntity {
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putInt("Dataidle_time", this.entityData.get(DATA_idle_time));
+        compound.putInt("IdleTime", this.entityData.get(DATA_IDLE_TIME));
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Dataidle_time"))
-            this.entityData.set(DATA_idle_time, compound.getInt("Dataidle_time"));
+        if (compound.contains("IdleTime")) {
+            this.entityData.set(DATA_IDLE_TIME, compound.getInt("IdleTime"));
+        }
     }
 
     @Override
@@ -132,21 +133,21 @@ public class OceannizedWitheriaEntity extends AbstractOceanizedWitherEntity {
         Entity enemy = null;
         double skillp;
         double idle = 0;
-        skillp = this.entityData.get(DATA_skillp);
+        skillp = this.entityData.get(DATA_SKILLP);
         if ((this.getDisplayName().getString()).equals(this.getType().getDescription().getString())) {
             enemy = this.getTarget();
-            idle = this.entityData.get(DATA_idle_time);
+            idle = this.entityData.get(DATA_IDLE_TIME);
             if (enemy == null || !enemy.isAlive()) {
-                this.entityData.set(DATA_idle_time, (int) (idle + 1));
+                this.entityData.set(DATA_IDLE_TIME, (int) (idle + 1));
             } else {
-                this.entityData.set(DATA_idle_time, 0);
+                this.entityData.set(DATA_IDLE_TIME, 0);
             }
         }
         if (skillp > 0) {
-            this.entityData.set(DATA_skillp, (int) (skillp - 1));
+            this.entityData.set(DATA_SKILLP, (int) (skillp - 1));
         } else if (enemy != null && enemy.isAlive()) {
-            this.entityData.set(DATA_duration, 65);
-            this.entityData.set(DATA_skillp, 400);
+            this.entityData.set(DATA_DURATION, 65);
+            this.entityData.set(DATA_SKILLP, 400);
             if (!this.level().isClientSide()) {
                 this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 65, 0, false, false));
             }
@@ -165,7 +166,7 @@ public class OceannizedWitheriaEntity extends AbstractOceanizedWitherEntity {
             CaerulaArborMod.queueServerWork(30, () -> {
                 if (this.isAlive()) {
                     this.purchaseEnemy();
-                    if (this.entityData.get(DATA_duration) <= 0) {
+                    if (this.entityData.get(DATA_DURATION) <= 0) {
                         Entity enemy1 = this.getTarget();
                         if (enemy1 != null && enemy1.isAlive()) {
                             this.shootWitheriaTo(enemy1);
@@ -195,8 +196,8 @@ public class OceannizedWitheriaEntity extends AbstractOceanizedWitherEntity {
             this.witheriaDestroyBlocks();
         }
         if (idle > 1800) {
-            this.entityData.set(DATA_skillp, 1800);
-            this.entityData.set(DATA_duration, 1800);
+            this.entityData.set(DATA_SKILLP, 1800);
+            this.entityData.set(DATA_DURATION, 1800);
             if (!this.level().isClientSide()) {
                 this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 999, 9, false, false));
             }
@@ -328,7 +329,7 @@ public class OceannizedWitheriaEntity extends AbstractOceanizedWitherEntity {
 
     @Override
     public void remove(RemovalReason pReason) {
-        if (this.getEntityData().get(DATA_duration) > 999) super.remove(pReason);
+        if (this.getEntityData().get(DATA_DURATION) > 999) super.remove(pReason);
         if (this.level().getDifficulty() != Difficulty.PEACEFUL && pReason == RemovalReason.DISCARDED) {
             this.hurt(
                     new DamageSource(

@@ -40,9 +40,9 @@ import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 public class ApocataEntity extends PathfinderMob implements GeoEntity, SyncedAnimationEntity {
-	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(ApocataEntity.class, EntityDataSerializers.BOOLEAN);
-	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(ApocataEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(ApocataEntity.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(ApocataEntity.class, EntityDataSerializers.BOOLEAN);
+	public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(ApocataEntity.class, EntityDataSerializers.STRING);
+	public static final EntityDataAccessor<Integer> DATA_DURATION = SynchedEntityData.defineId(ApocataEntity.class, EntityDataSerializers.INT);
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 	private boolean swinging;
 	private long lastSwing;
@@ -65,9 +65,9 @@ public class ApocataEntity extends PathfinderMob implements GeoEntity, SyncedAni
 	@Override
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(SHOOT, false);
-		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(DATA_duration, 0);
+		this.entityData.define(DATA_SHOOT, false);
+		this.entityData.define(DATA_ANIMATION, "undefined");
+		this.entityData.define(DATA_DURATION, 0);
 	}
 
 
@@ -150,14 +150,15 @@ public class ApocataEntity extends PathfinderMob implements GeoEntity, SyncedAni
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
-		compound.putInt("Dataduration", this.entityData.get(DATA_duration));
+		compound.putInt("Duration", this.entityData.get(DATA_DURATION));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
-		if (compound.contains("Dataduration"))
-			this.entityData.set(DATA_duration, compound.getInt("Dataduration"));
+		if (compound.contains("Duration")) {
+		    this.entityData.set(DATA_DURATION, compound.getInt("Duration"));
+		}
 	}
 
 	@Override
@@ -168,7 +169,7 @@ public class ApocataEntity extends PathfinderMob implements GeoEntity, SyncedAni
 		double z = this.getZ();
 		Entity entity = this;
 		Level world = this.level();
-        if ((entity instanceof ApocataEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0) > 0) {
+        if ((entity instanceof ApocataEntity _datEntI ? _datEntI.getEntityData().get(DATA_DURATION) : 0) > 0) {
             return InteractionResult.PASS;
         }
         if (sourceentity.getMainHandItem().getItem() == Blocks.AIR.asItem() && sourceentity.getOffhandItem().getItem() == Blocks.AIR.asItem()) {
@@ -181,7 +182,7 @@ public class ApocataEntity extends PathfinderMob implements GeoEntity, SyncedAni
 				}
 			}
 			if (entity instanceof ApocataEntity _datEntSetI)
-				_datEntSetI.getEntityData().set(DATA_duration, 20);
+				_datEntSetI.getEntityData().set(DATA_DURATION, 20);
 			return InteractionResult.SUCCESS;
 		}
         return InteractionResult.PASS;
@@ -191,10 +192,10 @@ public class ApocataEntity extends PathfinderMob implements GeoEntity, SyncedAni
 	public void baseTick() {
 		super.baseTick();
         double dura;
-        dura = (Entity) this instanceof ApocataEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
+        dura = (Entity) this instanceof ApocataEntity _datEntI ? _datEntI.getEntityData().get(DATA_DURATION) : 0;
         if (dura > 0) {
             if ((Entity) this instanceof ApocataEntity _datEntSetI)
-                _datEntSetI.getEntityData().set(DATA_duration, (int) (dura - 1));
+                _datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura - 1));
         }
         this.refreshDimensions();
 	}
@@ -219,7 +220,7 @@ public class ApocataEntity extends PathfinderMob implements GeoEntity, SyncedAni
 	}
 
 	private boolean isApocataDurative() {
-		return this.isAlive() && this.getEntityData().get(DATA_duration) <= 0;
+		return this.isAlive() && this.getEntityData().get(DATA_DURATION) <= 0;
 	}
 
 	private PlayState movementPredicate(AnimationState event) {
@@ -276,11 +277,11 @@ public class ApocataEntity extends PathfinderMob implements GeoEntity, SyncedAni
 	}
 
 	public String getSyncedAnimation() {
-		return this.entityData.get(ANIMATION);
+		return this.entityData.get(DATA_ANIMATION);
 	}
 
 	public void setAnimation(String animation) {
-		this.entityData.set(ANIMATION, animation);
+		this.entityData.set(DATA_ANIMATION, animation);
 	}
 
 	@Override

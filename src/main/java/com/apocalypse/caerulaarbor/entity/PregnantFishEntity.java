@@ -48,8 +48,8 @@ import javax.annotation.Nullable;
 import java.util.EnumSet;
 
 public class PregnantFishEntity extends SeaMonster implements RangedAttackMob, PolarMountRider {
-	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(PregnantFishEntity.class, EntityDataSerializers.BOOLEAN);
-	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(PregnantFishEntity.class, EntityDataSerializers.STRING);
+	public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(PregnantFishEntity.class, EntityDataSerializers.BOOLEAN);
+	public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(PregnantFishEntity.class, EntityDataSerializers.STRING);
 	private boolean swinging;
 	private long lastSwing;
 	public String animationprocedure = "empty";
@@ -68,8 +68,8 @@ public class PregnantFishEntity extends SeaMonster implements RangedAttackMob, P
 	@Override
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(SHOOT, false);
-		this.entityData.define(ANIMATION, "undefined");
+		this.entityData.define(DATA_SHOOT, false);
+		this.entityData.define(DATA_ANIMATION, "undefined");
 	}
 
 	@Override
@@ -148,7 +148,7 @@ public class PregnantFishEntity extends SeaMonster implements RangedAttackMob, P
 			this.target = null;
 			this.seeTime = 0;
 			this.attackTime = -1;
-			((PregnantFishEntity) rangedAttackMob).entityData.set(SHOOT, false);
+			((PregnantFishEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
 		}
 
 		public boolean requiresUpdateEveryTick() {
@@ -171,10 +171,10 @@ public class PregnantFishEntity extends SeaMonster implements RangedAttackMob, P
 			this.mob.getLookControl().setLookAt(this.target, 30.0F, 30.0F);
 			if (--this.attackTime == 0) {
 				if (!flag) {
-					((PregnantFishEntity) rangedAttackMob).entityData.set(SHOOT, false);
+					((PregnantFishEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
 					return;
 				}
-				((PregnantFishEntity) rangedAttackMob).entityData.set(SHOOT, true);
+				((PregnantFishEntity) rangedAttackMob).entityData.set(DATA_SHOOT, true);
 				float f = (float) Math.sqrt(d0) / this.attackRadius;
 				float f1 = Mth.clamp(f, 0.1F, 1.0F);
 				this.rangedAttackMob.performRangedAttack(this.target, f1);
@@ -182,7 +182,7 @@ public class PregnantFishEntity extends SeaMonster implements RangedAttackMob, P
 			} else if (this.attackTime < 0) {
 				this.attackTime = Mth.floor(Mth.lerp(Math.sqrt(d0) / (double) this.attackRadius, this.attackIntervalMin, this.attackIntervalMax));
 			} else
-				((PregnantFishEntity) rangedAttackMob).entityData.set(SHOOT, false);
+				((PregnantFishEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
 		}
 	}
 
@@ -271,7 +271,7 @@ public class PregnantFishEntity extends SeaMonster implements RangedAttackMob, P
 		if (this.swinging && this.lastSwing + 20L <= level().getGameTime()) {
 			this.swinging = false;
 		}
-		if ((this.swinging || this.entityData.get(SHOOT)) && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+		if ((this.swinging || this.entityData.get(DATA_SHOOT)) && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
 			event.getController().forceAnimationReset();
 			return event.setAndContinue(RawAnimation.begin().thenPlay("animation.pregnant.attack"));
 		}
@@ -307,11 +307,11 @@ public class PregnantFishEntity extends SeaMonster implements RangedAttackMob, P
 	}
 
 	public String getSyncedAnimation() {
-		return this.entityData.get(ANIMATION);
+		return this.entityData.get(DATA_ANIMATION);
 	}
 
 	public void setAnimation(String animation) {
-		this.entityData.set(ANIMATION, animation);
+		this.entityData.set(DATA_ANIMATION, animation);
 	}
 
 	@Override

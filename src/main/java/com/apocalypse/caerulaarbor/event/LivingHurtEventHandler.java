@@ -16,6 +16,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.ItemTags;
@@ -50,8 +51,6 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraft.sounds.SoundEvents;
-import com.apocalypse.caerulaarbor.init.CASounds;
 
 import java.util.Comparator;
 import java.util.List;
@@ -102,7 +101,7 @@ public class LivingHurtEventHandler {
 
         if (damagesource.is(DamageTypes.GENERIC_KILL)) {
             if (entity instanceof BaselayerAbyssalEntity _datEntSetI)
-                _datEntSetI.getEntityData().set(BaselayerAbyssalEntity.DATA_mute_time, 100);
+                _datEntSetI.getEntityData().set(BaselayerAbyssalEntity.DATA_MUTE_TIME, 100);
         }
     }
 
@@ -202,7 +201,7 @@ public class LivingHurtEventHandler {
                                     ? _livingEntity9.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).getBaseValue()
                                     : 0) - 2, 15));
             } else {
-                double add = entity instanceof FlamarineGolemEntity _datEntI ? _datEntI.getEntityData().get(FlamarineGolemEntity.DATA_addition) : 0;
+                double add = entity instanceof FlamarineGolemEntity _datEntI ? _datEntI.getEntityData().get(FlamarineGolemEntity.DATA_ADDITION) : 0;
                 if (add > 0) {
                     if (entity instanceof LivingEntity _livingEntity13 && _livingEntity13.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
                         _livingEntity13.getAttribute(CAAttributes.GENERAL_DEFENSE.get())
@@ -215,7 +214,7 @@ public class LivingHurtEventHandler {
                                         ? _livingEntity14.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).getBaseValue()
                                         : 0) + 1.5));
                     if (entity instanceof FlamarineGolemEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(FlamarineGolemEntity.DATA_addition, (int) (add - 1));
+                        _datEntSetI.getEntityData().set(FlamarineGolemEntity.DATA_ADDITION, (int) (add - 1));
                 }
             }
         }
@@ -366,7 +365,7 @@ public class LivingHurtEventHandler {
             if (skadiCorrupted == sourceentity) return;
             if (entity == (skadiCorrupted instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null)) return;
 
-            if ((skadiCorrupted instanceof SkadiCorruptedEntity _datEntI ? _datEntI.getEntityData().get(SkadiCorruptedEntity.DATA_phase) : 0) < 0.5) {
+            if ((skadiCorrupted instanceof SkadiCorruptedEntity _datEntI ? _datEntI.getEntityData().get(SkadiCorruptedEntity.DATA_PHASE) : 0) < 0.5) {
                 event.setAmount((float) (amount * 0.5));
                 skadiCorrupted.hurt(damagesource, (float) (amount * 0.5));
             }

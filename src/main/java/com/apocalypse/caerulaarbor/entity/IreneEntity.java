@@ -51,19 +51,18 @@ import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
-import com.apocalypse.caerulaarbor.init.CASounds;
 
 import java.util.Comparator;
 import java.util.List;
 
 public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEntity {
 
-	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(IreneEntity.class, EntityDataSerializers.BOOLEAN);
-	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(IreneEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<Integer> DATA_skillp1 = SynchedEntityData.defineId(IreneEntity.class, EntityDataSerializers.INT);
-	public static final EntityDataAccessor<Integer> DATA_skillp2 = SynchedEntityData.defineId(IreneEntity.class, EntityDataSerializers.INT);
-	public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(IreneEntity.class, EntityDataSerializers.INT);
-	public static final EntityDataAccessor<Integer> DATA_tapTick = SynchedEntityData.defineId(IreneEntity.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(IreneEntity.class, EntityDataSerializers.BOOLEAN);
+	public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(IreneEntity.class, EntityDataSerializers.STRING);
+	public static final EntityDataAccessor<Integer> DATA_SKILLP_1 = SynchedEntityData.defineId(IreneEntity.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<Integer> DATA_SKILLP_2 = SynchedEntityData.defineId(IreneEntity.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<Integer> DATA_DURATION = SynchedEntityData.defineId(IreneEntity.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<Integer> DATA_TAP_TICK = SynchedEntityData.defineId(IreneEntity.class, EntityDataSerializers.INT);
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 	private boolean swinging;
 	private long lastSwing;
@@ -84,12 +83,12 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 	@Override
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(SHOOT, false);
-		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(DATA_skillp1, 0);
-		this.entityData.define(DATA_skillp2, 12);
-		this.entityData.define(DATA_duration, 0);
-		this.entityData.define(DATA_tapTick, 0);
+		this.entityData.define(DATA_SHOOT, false);
+		this.entityData.define(DATA_ANIMATION, "undefined");
+		this.entityData.define(DATA_SKILLP_1, 0);
+		this.entityData.define(DATA_SKILLP_2, 12);
+		this.entityData.define(DATA_DURATION, 0);
+		this.entityData.define(DATA_TAP_TICK, 0);
 	}
 
 
@@ -192,8 +191,8 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 		double targetZ = target.getZ();
 		float attackDamage = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
 		if (!this.level().isClientSide()) {
-			this.getEntityData().set(DATA_skillp1, this.getEntityData().get(DATA_skillp1) + 1);
-			this.getEntityData().set(DATA_skillp2, this.getEntityData().get(DATA_skillp2) + 1);
+			this.getEntityData().set(DATA_SKILLP_1, this.getEntityData().get(DATA_SKILLP_1) + 1);
+			this.getEntityData().set(DATA_SKILLP_2, this.getEntityData().get(DATA_SKILLP_2) + 1);
 			CaerulaArborMod.queueServerWork(6, () -> {
 				if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 3) {
 					this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
@@ -285,23 +284,27 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
-		compound.putInt("Dataskillp1", this.entityData.get(DATA_skillp1));
-		compound.putInt("Dataskillp2", this.entityData.get(DATA_skillp2));
-		compound.putInt("Dataduration", this.entityData.get(DATA_duration));
-		compound.putInt("DatatapTick", this.entityData.get(DATA_tapTick));
+		compound.putInt("Skillp1", this.entityData.get(DATA_SKILLP_1));
+		compound.putInt("Skillp2", this.entityData.get(DATA_SKILLP_2));
+		compound.putInt("Duration", this.entityData.get(DATA_DURATION));
+		compound.putInt("TapTick", this.entityData.get(DATA_TAP_TICK));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
-		if (compound.contains("Dataskillp1"))
-			this.entityData.set(DATA_skillp1, compound.getInt("Dataskillp1"));
-		if (compound.contains("Dataskillp2"))
-			this.entityData.set(DATA_skillp2, compound.getInt("Dataskillp2"));
-		if (compound.contains("Dataduration"))
-			this.entityData.set(DATA_duration, compound.getInt("Dataduration"));
-		if (compound.contains("DatatapTick"))
-			this.entityData.set(DATA_tapTick, compound.getInt("DatatapTick"));
+		if (compound.contains("Skillp1")) {
+		    this.entityData.set(DATA_SKILLP_1, compound.getInt("Skillp1"));
+		}
+		if (compound.contains("Skillp2")) {
+		    this.entityData.set(DATA_SKILLP_2, compound.getInt("Skillp2"));
+		}
+		if (compound.contains("Duration")) {
+		    this.entityData.set(DATA_DURATION, compound.getInt("Duration"));
+		}
+		if (compound.contains("TapTick")) {
+		    this.entityData.set(DATA_TAP_TICK, compound.getInt("TapTick"));
+		}
 	}
 
 	@Override
@@ -320,7 +323,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
         if (sourceentity.isHolding(CAItems.PERSONNEL_TRANSPORTER.get())) {
 			return InteractionResult.PASS;
 		}
-		tap = entity instanceof IreneEntity _datEntI ? _datEntI.getEntityData().get(DATA_tapTick) : 0;
+		tap = entity instanceof IreneEntity _datEntI ? _datEntI.getEntityData().get(DATA_TAP_TICK) : 0;
 		if (tap <= 0) {
 			enemy = entity instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
 			if (!(enemy == null) && enemy.isAlive()) {
@@ -335,9 +338,9 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 				((IreneEntity) entity).setAnimation("animation.irene.interact");
 			}
 			if (entity instanceof IreneEntity _datEntSetI)
-				_datEntSetI.getEntityData().set(DATA_tapTick, 35);
+				_datEntSetI.getEntityData().set(DATA_TAP_TICK, 35);
 			if (entity instanceof IreneEntity _datEntSetI)
-				_datEntSetI.getEntityData().set(DATA_duration, 35);
+				_datEntSetI.getEntityData().set(DATA_DURATION, 35);
 			return InteractionResult.SUCCESS;
 		}
 		return InteractionResult.PASS;
@@ -359,18 +362,18 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 			if (tickCount % 40 == 15) {
 				burnBrandAround(world, x, y, z);
 			}
-			sklp1 = (Entity) this instanceof IreneEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp1) : 0;
-			skillp2 = (Entity) this instanceof IreneEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp2) : 0;
-			dura = (Entity) this instanceof IreneEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
-			tap = (Entity) this instanceof IreneEntity _datEntI ? _datEntI.getEntityData().get(DATA_tapTick) : 0;
+			sklp1 = (Entity) this instanceof IreneEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP_1) : 0;
+			skillp2 = (Entity) this instanceof IreneEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP_2) : 0;
+			dura = (Entity) this instanceof IreneEntity _datEntI ? _datEntI.getEntityData().get(DATA_DURATION) : 0;
+			tap = (Entity) this instanceof IreneEntity _datEntI ? _datEntI.getEntityData().get(DATA_TAP_TICK) : 0;
             enemy = this.getTarget();
 			if (dura > 0) {
 				if ((Entity) this instanceof IreneEntity _datEntSetI)
-					_datEntSetI.getEntityData().set(DATA_duration, (int) (dura - 1));
+					_datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura - 1));
 			}
 			if (tap > 0) {
 				if ((Entity) this instanceof IreneEntity _datEntSetI)
-					_datEntSetI.getEntityData().set(DATA_tapTick, (int) (tap - 1));
+					_datEntSetI.getEntityData().set(DATA_TAP_TICK, (int) (tap - 1));
 			}
 			if (sklp1 >= 4 && dura <= 0) {
 				if (!(enemy == null) && enemy.isAlive()) {
@@ -379,9 +382,9 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 							this.setAnimation("animation.irene.skill_1");
 						}
 						if ((Entity) this instanceof IreneEntity _datEntSetI)
-							_datEntSetI.getEntityData().set(DATA_skillp1, 0);
+							_datEntSetI.getEntityData().set(DATA_SKILLP_1, 0);
 						if ((Entity) this instanceof IreneEntity _datEntSetI)
-							_datEntSetI.getEntityData().set(DATA_duration, 27);
+							_datEntSetI.getEntityData().set(DATA_DURATION, 27);
 						CaerulaArborMod.queueServerWork(10, () -> {
 							if (this.isAlive()) {
 								if (world instanceof Level _level) {
@@ -420,9 +423,9 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 					_level.playSound(null, BlockPos.containing(x, y, z), CASounds.IRENE_SKILL.get(), SoundSource.NEUTRAL, 3, 1);
 				}
 				if ((Entity) this instanceof IreneEntity _datEntSetI)
-					_datEntSetI.getEntityData().set(DATA_skillp2, 0);
+					_datEntSetI.getEntityData().set(DATA_SKILLP_2, 0);
 				if ((Entity) this instanceof IreneEntity _datEntSetI)
-					_datEntSetI.getEntityData().set(DATA_duration, 70);
+					_datEntSetI.getEntityData().set(DATA_DURATION, 70);
 				CaerulaArborMod.queueServerWork(9, () -> {
 					if (this.isAlive()) {
 						double damage;
@@ -624,11 +627,11 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 	}
 
 	public String getSyncedAnimation() {
-		return this.entityData.get(ANIMATION);
+		return this.entityData.get(DATA_ANIMATION);
 	}
 
 	public void setAnimation(String animation) {
-		this.entityData.set(ANIMATION, animation);
+		this.entityData.set(DATA_ANIMATION, animation);
 	}
 
 	@Override
@@ -644,7 +647,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 	}
 
 	private boolean isIreneDurative() {
-		return this.isAlive() && this.getEntityData().get(DATA_duration) <= 0;
+		return this.isAlive() && this.getEntityData().get(DATA_DURATION) <= 0;
 	}
 
 	@Override

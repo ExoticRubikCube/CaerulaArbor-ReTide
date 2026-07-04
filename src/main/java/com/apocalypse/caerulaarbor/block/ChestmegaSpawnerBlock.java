@@ -41,7 +41,7 @@ import java.util.List;
 
 public class ChestmegaSpawnerBlock extends BaseEntityBlock implements SimpleWaterloggedBlock, EntityBlock {
 	public static final IntegerProperty BLOCKSTATE = IntegerProperty.create("blockstate", 0, 1);
-	public static final IntegerProperty ANIMATION = IntegerProperty.create("animation", 0, 1);
+	public static final IntegerProperty DATA_ANIMATION = IntegerProperty.create("animation", 0, 1);
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
@@ -101,7 +101,7 @@ public class ChestmegaSpawnerBlock extends BaseEntityBlock implements SimpleWate
 
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-		builder.add(ANIMATION, FACING, WATERLOGGED, BLOCKSTATE);
+		builder.add(DATA_ANIMATION, FACING, WATERLOGGED, BLOCKSTATE);
 	}
 
 	@Override
@@ -165,7 +165,7 @@ public class ChestmegaSpawnerBlock extends BaseEntityBlock implements SimpleWate
 		}
 
 		world.setBlock(pos, world.getBlockState(pos).setValue(BLOCKSTATE, 1), 3);
-		world.setBlock(pos, world.getBlockState(pos).setValue(ANIMATION, 1), 3);
+		world.setBlock(pos, world.getBlockState(pos).setValue(DATA_ANIMATION, 1), 3);
 
 		Direction facing = blockstate.getValue(FACING);
 		CaerulaArborMod.queueServerWork(15, () -> {

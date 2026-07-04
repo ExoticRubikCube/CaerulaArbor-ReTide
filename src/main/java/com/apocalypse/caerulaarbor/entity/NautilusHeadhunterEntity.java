@@ -15,6 +15,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -53,11 +54,10 @@ import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
-import net.minecraft.sounds.SoundEvents;
 
 public class NautilusHeadhunterEntity extends Animal implements GeoEntity, SyncedAnimationEntity {
-	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(NautilusHeadhunterEntity.class, EntityDataSerializers.BOOLEAN);
-	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(NautilusHeadhunterEntity.class, EntityDataSerializers.STRING);
+	public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(NautilusHeadhunterEntity.class, EntityDataSerializers.BOOLEAN);
+	public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(NautilusHeadhunterEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<Integer> DATA_DRY_TICK = SynchedEntityData.defineId(NautilusHeadhunterEntity.class, EntityDataSerializers.INT);
 	public static final EntityDataAccessor<Integer> DATA_BONUS = SynchedEntityData.defineId(NautilusHeadhunterEntity.class, EntityDataSerializers.INT);
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
@@ -110,8 +110,8 @@ public class NautilusHeadhunterEntity extends Animal implements GeoEntity, Synce
 	@Override
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(SHOOT, false);
-		this.entityData.define(ANIMATION, "undefined");
+		this.entityData.define(DATA_SHOOT, false);
+		this.entityData.define(DATA_ANIMATION, "undefined");
 		this.entityData.define(DATA_DRY_TICK, 0);
 		this.entityData.define(DATA_BONUS, 0);
 	}
@@ -195,17 +195,19 @@ public class NautilusHeadhunterEntity extends Animal implements GeoEntity, Synce
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
-		compound.putInt("DataDRY_TICK", this.entityData.get(DATA_DRY_TICK));
-		compound.putInt("DataBONUS", this.entityData.get(DATA_BONUS));
+		compound.putInt("DryTick", this.entityData.get(DATA_DRY_TICK));
+		compound.putInt("Bonus", this.entityData.get(DATA_BONUS));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
-		if (compound.contains("DataDRY_TICK"))
-			this.entityData.set(DATA_DRY_TICK, compound.getInt("DataDRY_TICK"));
-		if (compound.contains("DataBONUS"))
-			this.entityData.set(DATA_BONUS, compound.getInt("DataBONUS"));
+		if (compound.contains("DryTick")) {
+		    this.entityData.set(DATA_DRY_TICK, compound.getInt("DryTick"));
+		}
+		if (compound.contains("Bonus")) {
+		    this.entityData.set(DATA_BONUS, compound.getInt("Bonus"));
+		}
 	}
 
 	@Override
@@ -383,11 +385,11 @@ public class NautilusHeadhunterEntity extends Animal implements GeoEntity, Synce
 	}
 
 	public String getSyncedAnimation() {
-		return this.entityData.get(ANIMATION);
+		return this.entityData.get(DATA_ANIMATION);
 	}
 
 	public void setAnimation(String animation) {
-		this.entityData.set(ANIMATION, animation);
+		this.entityData.set(DATA_ANIMATION, animation);
 	}
 
 	@Override

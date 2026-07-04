@@ -25,7 +25,7 @@ public class OceanizeRabbitModel extends GeoModel<OceanizeRabbitEntity> {
 
 	@Override
 	public ResourceLocation getTextureResource(OceanizeRabbitEntity entity) {
-		int variant = entity.getEntityData().get(OceanizeRabbitEntity.DATA_variant);
+		int variant = entity.getEntityData().get(OceanizeRabbitEntity.DATA_VARIANT);
 		if (variant == 5) {
 			return BLOODY_TEXTURE;
 		}

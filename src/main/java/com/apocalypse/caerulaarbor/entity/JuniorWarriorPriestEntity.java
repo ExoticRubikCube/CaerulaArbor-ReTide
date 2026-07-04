@@ -16,6 +16,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
@@ -39,12 +40,11 @@ import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
-import net.minecraft.sounds.SoundEvents;
 
 public class JuniorWarriorPriestEntity extends Animal implements GeoEntity, SyncedAnimationEntity {
-    public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(JuniorWarriorPriestEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(JuniorWarriorPriestEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<Integer> DATA_skill_p = SynchedEntityData.defineId(JuniorWarriorPriestEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(JuniorWarriorPriestEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(JuniorWarriorPriestEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> DATA_SKILL_P = SynchedEntityData.defineId(JuniorWarriorPriestEntity.class, EntityDataSerializers.INT);
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private boolean swinging;
     private long lastSwing;
@@ -65,11 +65,10 @@ public class JuniorWarriorPriestEntity extends Animal implements GeoEntity, Sync
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(SHOOT, false);
-        this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(DATA_skill_p, 200);
+        this.entityData.define(DATA_SHOOT, false);
+        this.entityData.define(DATA_ANIMATION, "undefined");
+        this.entityData.define(DATA_SKILL_P, 200);
     }
-
 
     @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket() {
@@ -140,12 +139,12 @@ public class JuniorWarriorPriestEntity extends Animal implements GeoEntity, Sync
         Entity sourceentity = source.getEntity();
         if (sourceentity != null) {
             if (this.isAlive() && sourceentity.isAlive()) {
-                if (distanceTo(sourceentity) <= 2.4 && ((Entity) this instanceof JuniorWarriorPriestEntity _datEntI ? _datEntI.getEntityData().get(DATA_skill_p) : 0) <= 0) {
+                if (distanceTo(sourceentity) <= 2.4 && ((Entity) this instanceof JuniorWarriorPriestEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILL_P) : 0) <= 0) {
                     if (this instanceof JuniorWarriorPriestEntity) {
                         this.setAnimation("animation.warriorpriest.shieldattack");
                     }
                     if ((Entity) this instanceof JuniorWarriorPriestEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_skill_p, 200);
+                        _datEntSetI.getEntityData().set(DATA_SKILL_P, 200);
                     CaerulaArborMod.queueServerWork(15, () -> {
                         if (sourceentity.isAlive()) {
                             ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((sourceentity.getX()), (sourceentity.getY()), (sourceentity.getZ())));
@@ -167,14 +166,15 @@ public class JuniorWarriorPriestEntity extends Animal implements GeoEntity, Sync
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putInt("Dataskill_p", this.entityData.get(DATA_skill_p));
+        compound.putInt("SkillP", this.entityData.get(DATA_SKILL_P));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Dataskill_p"))
-            this.entityData.set(DATA_skill_p, compound.getInt("Dataskill_p"));
+        if (compound.contains("SkillP")) {
+            this.entityData.set(DATA_SKILL_P, compound.getInt("SkillP"));
+        }
 	}
 
     @Override
@@ -182,10 +182,10 @@ public class JuniorWarriorPriestEntity extends Animal implements GeoEntity, Sync
         super.baseTick();
         double sklp1;
         if (this.isAlive()) {
-            sklp1 = (Entity) this instanceof JuniorWarriorPriestEntity _datEntI ? _datEntI.getEntityData().get(DATA_skill_p) : 0;
+            sklp1 = (Entity) this instanceof JuniorWarriorPriestEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILL_P) : 0;
             if (sklp1 > 0) {
                 if ((Entity) this instanceof JuniorWarriorPriestEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_skill_p, (int) (sklp1 - 1));
+                    _datEntSetI.getEntityData().set(DATA_SKILL_P, (int) (sklp1 - 1));
             }
         }
         this.refreshDimensions();
@@ -285,11 +285,11 @@ public class JuniorWarriorPriestEntity extends Animal implements GeoEntity, Sync
     }
 
     public String getSyncedAnimation() {
-        return this.entityData.get(ANIMATION);
+        return this.entityData.get(DATA_ANIMATION);
     }
 
     public void setAnimation(String animation) {
-        this.entityData.set(ANIMATION, animation);
+        this.entityData.set(DATA_ANIMATION, animation);
     }
 
     @Override

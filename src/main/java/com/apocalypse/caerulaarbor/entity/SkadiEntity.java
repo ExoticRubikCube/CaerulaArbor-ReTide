@@ -61,12 +61,12 @@ import java.util.Comparator;
 import java.util.List;
 
 public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEntity {
-    public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(SkadiEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(SkadiEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<Integer> DATA_relax_cooldown = SynchedEntityData.defineId(SkadiEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Integer> DATA_skillp = SynchedEntityData.defineId(SkadiEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Integer> DATA_phase = SynchedEntityData.defineId(SkadiEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Integer> DATA_skillp2 = SynchedEntityData.defineId(SkadiEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(SkadiEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(SkadiEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> DATA_RELAX_COOLDOWN = SynchedEntityData.defineId(SkadiEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_SKILLP = SynchedEntityData.defineId(SkadiEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_PHASE = SynchedEntityData.defineId(SkadiEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_SKILLP_2 = SynchedEntityData.defineId(SkadiEntity.class, EntityDataSerializers.INT);
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private boolean swinging;
     private long lastSwing;
@@ -89,12 +89,12 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(SHOOT, false);
-        this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(DATA_relax_cooldown, 200);
-        this.entityData.define(DATA_skillp, 120);
-        this.entityData.define(DATA_phase, 0);
-        this.entityData.define(DATA_skillp2, 0);
+        this.entityData.define(DATA_SHOOT, false);
+        this.entityData.define(DATA_ANIMATION, "undefined");
+        this.entityData.define(DATA_RELAX_COOLDOWN, 200);
+        this.entityData.define(DATA_SKILLP, 120);
+        this.entityData.define(DATA_PHASE, 0);
+        this.entityData.define(DATA_SKILLP_2, 0);
     }
 
 
@@ -177,11 +177,11 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
                 boolean result;
                 result = hasEffect(CAMobEffects.FAKE_DEATH.get());
                 if (result) {
-                    sklp = (Entity) this instanceof SkadiEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp2) : 0;
+                    sklp = (Entity) this instanceof SkadiEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP_2) : 0;
                     if (sklp <= 0 && this.isAlive()) {
                         if (distanceTo(sourceentity) <= 5) {
                             if ((Entity) this instanceof SkadiEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_skillp2, 120);
+                                _datEntSetI.getEntityData().set(DATA_SKILLP_2, 120);
                             if (this instanceof SkadiEntity) {
                                 this.setAnimation("animation.skadi.skill");
                             }
@@ -244,10 +244,10 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
         if (pHealth <= 0) {
             ResourceKey<net.minecraft.world.damagesource.DamageType> cursedDamage = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "isharmla_cursed"));
             if (this.lastDamageSource == null || !this.lastDamageSource.is(cursedDamage)) {
-                int phase = this.getEntityData().get(DATA_phase);
+                int phase = this.getEntityData().get(DATA_PHASE);
                 if (phase == 0 || phase == 1) {
                     super.setHealth(Math.max(currentHealth, 1.0F));
-                    this.getEntityData().set(DATA_phase, phase + 1);
+                    this.getEntityData().set(DATA_PHASE, phase + 1);
                     this.level().playSound(null, BlockPos.containing(this.getX(), this.getY(), this.getZ()), CASounds.SKADI_TALK.get(), SoundSource.HOSTILE, 2, 1);
 
                     if (!this.level().isClientSide()) {
@@ -303,23 +303,27 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putInt("Datarelax_cooldown", this.entityData.get(DATA_relax_cooldown));
-        compound.putInt("Dataskillp", this.entityData.get(DATA_skillp));
-        compound.putInt("Dataphase", this.entityData.get(DATA_phase));
-        compound.putInt("Dataskillp2", this.entityData.get(DATA_skillp2));
+        compound.putInt("RelaxCooldown", this.entityData.get(DATA_RELAX_COOLDOWN));
+        compound.putInt("Skillp", this.entityData.get(DATA_SKILLP));
+        compound.putInt("Phase", this.entityData.get(DATA_PHASE));
+        compound.putInt("Skillp2", this.entityData.get(DATA_SKILLP_2));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("Datarelax_cooldown"))
-            this.entityData.set(DATA_relax_cooldown, compound.getInt("Datarelax_cooldown"));
-        if (compound.contains("Dataskillp"))
-            this.entityData.set(DATA_skillp, compound.getInt("Dataskillp"));
-        if (compound.contains("Dataphase"))
-            this.entityData.set(DATA_phase, compound.getInt("Dataphase"));
-        if (compound.contains("Dataskillp2"))
-            this.entityData.set(DATA_skillp2, compound.getInt("Dataskillp2"));
+        if (compound.contains("RelaxCooldown")) {
+            this.entityData.set(DATA_RELAX_COOLDOWN, compound.getInt("RelaxCooldown"));
+        }
+        if (compound.contains("Skillp")) {
+            this.entityData.set(DATA_SKILLP, compound.getInt("Skillp"));
+        }
+        if (compound.contains("Phase")) {
+            this.entityData.set(DATA_PHASE, compound.getInt("Phase"));
+        }
+        if (compound.contains("Skillp2")) {
+            this.entityData.set(DATA_SKILLP_2, compound.getInt("Skillp2"));
+        }
 	}
 
     @Override
@@ -334,7 +338,7 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
         double sklp2;
         if (this.isAlive()) {
             if (Math.random() < 0.001) {
-                rlx = (Entity) this instanceof SkadiEntity _datEntI ? _datEntI.getEntityData().get(DATA_relax_cooldown) : 0;
+                rlx = (Entity) this instanceof SkadiEntity _datEntI ? _datEntI.getEntityData().get(DATA_RELAX_COOLDOWN) : 0;
                 if (rlx <= 0) {
                     if (!((Entity) this instanceof Mob _mobEnt2 && _mobEnt2.isAggressive())) {
                         if ((Entity) this instanceof Mob _entity)
@@ -349,8 +353,8 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
             if (rlx > 0) {
                 rlx = rlx - 1;
             }
-            sklp = (Entity) this instanceof SkadiEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp) : 0;
-            sklp2 = (Entity) this instanceof SkadiEntity _datEntI ? _datEntI.getEntityData().get(DATA_skillp2) : 0;
+            sklp = (Entity) this instanceof SkadiEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP) : 0;
+            sklp2 = (Entity) this instanceof SkadiEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP_2) : 0;
             if (sklp <= 0) {
                 if (!(((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == null)) {
                     if ((((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) != null ? distanceTo(((Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null)) : -1) < 3) {
@@ -380,12 +384,12 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
             }
             if (sklp2 > 0) {
                 if ((Entity) this instanceof SkadiEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_skillp2, (int) (sklp2 - 1));
+                    _datEntSetI.getEntityData().set(DATA_SKILLP_2, (int) (sklp2 - 1));
             }
             if ((Entity) this instanceof SkadiEntity _datEntSetI)
-                _datEntSetI.getEntityData().set(DATA_relax_cooldown, (int) rlx);
+                _datEntSetI.getEntityData().set(DATA_RELAX_COOLDOWN, (int) rlx);
             if ((Entity) this instanceof SkadiEntity _datEntSetI)
-                _datEntSetI.getEntityData().set(DATA_skillp, (int) sklp);
+                _datEntSetI.getEntityData().set(DATA_SKILLP, (int) sklp);
             GladiiaEntity.healFromGladiia(world, x, y, z, this);
             if (tickCount % 10 == 0) {
                 {
@@ -534,11 +538,11 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
     }
 
     public String getSyncedAnimation() {
-        return this.entityData.get(ANIMATION);
+        return this.entityData.get(DATA_ANIMATION);
     }
 
     public void setAnimation(String animation) {
-        this.entityData.set(ANIMATION, animation);
+        this.entityData.set(DATA_ANIMATION, animation);
     }
 
     @Override

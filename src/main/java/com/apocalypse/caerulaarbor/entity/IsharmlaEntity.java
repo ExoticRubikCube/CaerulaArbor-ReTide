@@ -55,7 +55,6 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
-import com.apocalypse.caerulaarbor.init.CASounds;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -63,8 +62,8 @@ import java.util.Comparator;
 import java.util.List;
 
 public class IsharmlaEntity extends SeaMonster {
-	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(IsharmlaEntity.class, EntityDataSerializers.BOOLEAN);
-	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(IsharmlaEntity.class, EntityDataSerializers.STRING);
+	public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(IsharmlaEntity.class, EntityDataSerializers.BOOLEAN);
+	public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(IsharmlaEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<Boolean> DATA_IS_MONSTER = SynchedEntityData.defineId(IsharmlaEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<Integer> DATA_SKILLP_1 = SynchedEntityData.defineId(IsharmlaEntity.class, EntityDataSerializers.INT);
 	public static final EntityDataAccessor<Integer> DATA_SKILLP_2 = SynchedEntityData.defineId(IsharmlaEntity.class, EntityDataSerializers.INT);
@@ -96,8 +95,8 @@ public class IsharmlaEntity extends SeaMonster {
 	@Override
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(SHOOT, false);
-		this.entityData.define(ANIMATION, "undefined");
+		this.entityData.define(DATA_SHOOT, false);
+		this.entityData.define(DATA_ANIMATION, "undefined");
 		this.entityData.define(DATA_IS_MONSTER, false);
 		this.entityData.define(DATA_SKILLP_1, 400);
 		this.entityData.define(DATA_SKILLP_2, 240);
@@ -342,33 +341,40 @@ public class IsharmlaEntity extends SeaMonster {
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
-		compound.putBoolean("DataIS_MONSTER", this.entityData.get(DATA_IS_MONSTER));
-		compound.putInt("DataSKILLP_1", this.entityData.get(DATA_SKILLP_1));
-		compound.putInt("DataSKILLP_2", this.entityData.get(DATA_SKILLP_2));
-		compound.putInt("DataDURATION", this.entityData.get(DATA_DURATION));
-		compound.putInt("DataRECORDED_HEALTH", this.entityData.get(DATA_RECORDED_HEALTH));
-		compound.putInt("DataABSORPTION", this.entityData.get(DATA_ABSORPTION));
-		compound.putInt("DataHEAL_P", this.entityData.get(DATA_HEAL_P));
+		compound.putBoolean("IsMonster", this.entityData.get(DATA_IS_MONSTER));
+		compound.putInt("Skillp1", this.entityData.get(DATA_SKILLP_1));
+		compound.putInt("Skillp2", this.entityData.get(DATA_SKILLP_2));
+		compound.putInt("Duration", this.entityData.get(DATA_DURATION));
+		compound.putInt("RecordedHealth", this.entityData.get(DATA_RECORDED_HEALTH));
+		compound.putInt("Absorption", this.entityData.get(DATA_ABSORPTION));
+		compound.putInt("HealP", this.entityData.get(DATA_HEAL_P));
 		compound.putBoolean("IsAngered", IS_ANGERED);
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
-		if (compound.contains("DataIS_MONSTER"))
-			this.entityData.set(DATA_IS_MONSTER, compound.getBoolean("DataIS_MONSTER"));
-		if (compound.contains("DataSKILLP_1"))
-			this.entityData.set(DATA_SKILLP_1, compound.getInt("DataSKILLP_1"));
-		if (compound.contains("DataSKILLP_2"))
-			this.entityData.set(DATA_SKILLP_2, compound.getInt("DataSKILLP_2"));
-		if (compound.contains("DataDURATION"))
-			this.entityData.set(DATA_DURATION, compound.getInt("DataDURATION"));
-		if (compound.contains("DataRECORDED_HEALTH"))
-			this.entityData.set(DATA_RECORDED_HEALTH, compound.getInt("DataRECORDED_HEALTH"));
-		if (compound.contains("DataABSORPTION"))
-			this.entityData.set(DATA_ABSORPTION, compound.getInt("DataABSORPTION"));
-		if (compound.contains("DataHEAL_P"))
-			this.entityData.set(DATA_HEAL_P, compound.getInt("DataHEAL_P"));
+		if (compound.contains("IsMonster")) {
+		    this.entityData.set(DATA_IS_MONSTER, compound.getBoolean("IsMonster"));
+		}
+		if (compound.contains("Skillp1")) {
+		    this.entityData.set(DATA_SKILLP_1, compound.getInt("Skillp1"));
+		}
+		if (compound.contains("Skillp2")) {
+		    this.entityData.set(DATA_SKILLP_2, compound.getInt("Skillp2"));
+		}
+		if (compound.contains("Duration")) {
+		    this.entityData.set(DATA_DURATION, compound.getInt("Duration"));
+		}
+		if (compound.contains("RecordedHealth")) {
+		    this.entityData.set(DATA_RECORDED_HEALTH, compound.getInt("RecordedHealth"));
+		}
+		if (compound.contains("Absorption")) {
+		    this.entityData.set(DATA_ABSORPTION, compound.getInt("Absorption"));
+		}
+		if (compound.contains("HealP")) {
+		    this.entityData.set(DATA_HEAL_P, compound.getInt("HealP"));
+		}
 		if (compound.contains("IsAngered"))
 			this.IS_ANGERED = compound.getBoolean("IS_ANGERED");
 
@@ -766,11 +772,11 @@ public class IsharmlaEntity extends SeaMonster {
 	}
 
 	public String getSyncedAnimation() {
-		return this.entityData.get(ANIMATION);
+		return this.entityData.get(DATA_ANIMATION);
 	}
 
 	public void setAnimation(String animation) {
-		this.entityData.set(ANIMATION, animation);
+		this.entityData.set(DATA_ANIMATION, animation);
 	}
 
 	@Override

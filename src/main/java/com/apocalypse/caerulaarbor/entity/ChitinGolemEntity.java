@@ -59,11 +59,11 @@ import java.util.Comparator;
 import java.util.List;
 
 public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAnimationEntity {
-    public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(ChitinGolemEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(ChitinGolemEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<Integer> DATA_rootX = SynchedEntityData.defineId(ChitinGolemEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Integer> DATA_rootZ = SynchedEntityData.defineId(ChitinGolemEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Boolean> DATA_rooted = SynchedEntityData.defineId(ChitinGolemEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(ChitinGolemEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(ChitinGolemEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> DATA_ROOT_X = SynchedEntityData.defineId(ChitinGolemEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_ROOT_Z = SynchedEntityData.defineId(ChitinGolemEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Boolean> DATA_ROOTED = SynchedEntityData.defineId(ChitinGolemEntity.class, EntityDataSerializers.BOOLEAN);
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private boolean swinging;
     private long lastSwing;
@@ -84,11 +84,11 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(SHOOT, false);
-        this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(DATA_rootX, 0);
-        this.entityData.define(DATA_rootZ, 0);
-        this.entityData.define(DATA_rooted, false);
+        this.entityData.define(DATA_SHOOT, false);
+        this.entityData.define(DATA_ANIMATION, "undefined");
+        this.entityData.define(DATA_ROOT_X, 0);
+        this.entityData.define(DATA_ROOT_Z, 0);
+        this.entityData.define(DATA_ROOTED, false);
     }
 
     @Override
@@ -200,20 +200,23 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putInt("DatarootX", this.entityData.get(DATA_rootX));
-        compound.putInt("DatarootZ", this.entityData.get(DATA_rootZ));
-        compound.putBoolean("Datarooted", this.entityData.get(DATA_rooted));
+        compound.putInt("RootX", this.entityData.get(DATA_ROOT_X));
+        compound.putInt("RootZ", this.entityData.get(DATA_ROOT_Z));
+        compound.putBoolean("Rooted", this.entityData.get(DATA_ROOTED));
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("DatarootX"))
-            this.entityData.set(DATA_rootX, compound.getInt("DatarootX"));
-        if (compound.contains("DatarootZ"))
-            this.entityData.set(DATA_rootZ, compound.getInt("DatarootZ"));
-        if (compound.contains("Datarooted"))
-            this.entityData.set(DATA_rooted, compound.getBoolean("Datarooted"));
+        if (compound.contains("RootX")) {
+            this.entityData.set(DATA_ROOT_X, compound.getInt("RootX"));
+        }
+        if (compound.contains("RootZ")) {
+            this.entityData.set(DATA_ROOT_Z, compound.getInt("RootZ"));
+        }
+        if (compound.contains("Rooted")) {
+            this.entityData.set(DATA_ROOTED, compound.getBoolean("Rooted"));
+        }
     }
 
     @Override
@@ -297,20 +300,20 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
         double dist;
         double dist1;
         if (this.isAlive()) {
-            root = (Entity) this instanceof ChitinGolemEntity _datEntL1 && _datEntL1.getEntityData().get(DATA_rooted);
+            root = (Entity) this instanceof ChitinGolemEntity _datEntL1 && _datEntL1.getEntityData().get(DATA_ROOTED);
             if (!root) {
                 if (!(getDisplayName().getString()).equals(getType().getDescription().getString())) {
                     if ((Entity) this instanceof ChitinGolemEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_rootX, (int) Math.round(x));
+                        _datEntSetI.getEntityData().set(DATA_ROOT_X, (int) Math.round(x));
                     if ((Entity) this instanceof ChitinGolemEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_rootZ, (int) Math.round(z));
+                        _datEntSetI.getEntityData().set(DATA_ROOT_Z, (int) Math.round(z));
                     if ((Entity) this instanceof ChitinGolemEntity _datEntSetL)
-                        _datEntSetL.getEntityData().set(DATA_rooted, true);
+                        _datEntSetL.getEntityData().set(DATA_ROOTED, true);
                     CaerulaArborMod.LOGGER.info(("Chitin Golem " + getDisplayName().getString() + "has recognize x:" + Math.round(x) + " z:" + Math.round(z) + " as base"));
                 }
             } else if (Math.random() < 0.01 && !((Entity) this instanceof Mob _mobEnt9 && _mobEnt9.isAggressive())) {
-                rx = x - ((Entity) this instanceof ChitinGolemEntity _datEntI ? _datEntI.getEntityData().get(DATA_rootX) : 0);
-                rz = z - ((Entity) this instanceof ChitinGolemEntity _datEntI ? _datEntI.getEntityData().get(DATA_rootZ) : 0);
+                rx = x - ((Entity) this instanceof ChitinGolemEntity _datEntI ? _datEntI.getEntityData().get(DATA_ROOT_X) : 0);
+                rz = z - ((Entity) this instanceof ChitinGolemEntity _datEntI ? _datEntI.getEntityData().get(DATA_ROOT_Z) : 0);
                 dist = new Vec3(0, 0, 0).distanceTo(new Vec3(rx, 0, rz));
                 if (dist >= 24) {
                     dist1 = Mth.nextDouble(RandomSource.create(), 4, 16);
@@ -404,11 +407,11 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
     }
 
     public String getSyncedAnimation() {
-        return this.entityData.get(ANIMATION);
+        return this.entityData.get(DATA_ANIMATION);
     }
 
     public void setAnimation(String animation) {
-        this.entityData.set(ANIMATION, animation);
+        this.entityData.set(DATA_ANIMATION, animation);
     }
 
     @Override

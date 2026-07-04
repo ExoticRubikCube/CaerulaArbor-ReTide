@@ -51,8 +51,8 @@ import java.util.Comparator;
 import java.util.List;
 
 public class ThirsterEntity extends SeaMonster {
-    public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(ThirsterEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(ThirsterEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(ThirsterEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(ThirsterEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_DURATION = SynchedEntityData.defineId(ThirsterEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_SKILL_P = SynchedEntityData.defineId(ThirsterEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_INTEGRATION = SynchedEntityData.defineId(ThirsterEntity.class, EntityDataSerializers.INT);
@@ -77,8 +77,8 @@ public class ThirsterEntity extends SeaMonster {
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(SHOOT, false);
-        this.entityData.define(ANIMATION, "undefined");
+        this.entityData.define(DATA_SHOOT, false);
+        this.entityData.define(DATA_ANIMATION, "undefined");
         this.entityData.define(DATA_DURATION, 0);
         this.entityData.define(DATA_SKILL_P, 0);
         this.entityData.define(DATA_INTEGRATION, 0);
@@ -212,23 +212,27 @@ public class ThirsterEntity extends SeaMonster {
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putInt("DataDURATION", this.entityData.get(DATA_DURATION));
-        compound.putInt("DataSKILL_P", this.entityData.get(DATA_SKILL_P));
-        compound.putInt("DataINTEGRATION", this.entityData.get(DATA_INTEGRATION));
-        compound.putInt("DataDIZZY_NUM", this.entityData.get(DATA_DIZZY_NUM));
+        compound.putInt("Duration", this.entityData.get(DATA_DURATION));
+        compound.putInt("SkillP", this.entityData.get(DATA_SKILL_P));
+        compound.putInt("Integration", this.entityData.get(DATA_INTEGRATION));
+        compound.putInt("DizzyNum", this.entityData.get(DATA_DIZZY_NUM));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("DataDURATION"))
-            this.entityData.set(DATA_DURATION, compound.getInt("DataDURATION"));
-        if (compound.contains("DataSKILL_P"))
-            this.entityData.set(DATA_SKILL_P, compound.getInt("DataSKILL_P"));
-        if (compound.contains("DataINTEGRATION"))
-            this.entityData.set(DATA_INTEGRATION, compound.getInt("DataINTEGRATION"));
-        if (compound.contains("DataDIZZY_NUM"))
-            this.entityData.set(DATA_DIZZY_NUM, compound.getInt("DataDIZZY_NUM"));
+        if (compound.contains("Duration")) {
+            this.entityData.set(DATA_DURATION, compound.getInt("Duration"));
+        }
+        if (compound.contains("SkillP")) {
+            this.entityData.set(DATA_SKILL_P, compound.getInt("SkillP"));
+        }
+        if (compound.contains("Integration")) {
+            this.entityData.set(DATA_INTEGRATION, compound.getInt("Integration"));
+        }
+        if (compound.contains("DizzyNum")) {
+            this.entityData.set(DATA_DIZZY_NUM, compound.getInt("DizzyNum"));
+        }
 	}
 
     @Override
@@ -606,11 +610,11 @@ public class ThirsterEntity extends SeaMonster {
     }
 
     public String getSyncedAnimation() {
-        return this.entityData.get(ANIMATION);
+        return this.entityData.get(DATA_ANIMATION);
     }
 
     public void setAnimation(String animation) {
-        this.entityData.set(ANIMATION, animation);
+        this.entityData.set(DATA_ANIMATION, animation);
     }
 
     @Override

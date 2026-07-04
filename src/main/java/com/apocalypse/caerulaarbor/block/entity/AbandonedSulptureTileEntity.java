@@ -44,7 +44,7 @@ public class AbandonedSulptureTileEntity extends RandomizableContainerBlockEntit
 	}
 
 	private PlayState predicate(AnimationState event) {
-		String animationprocedure = ("" + this.getBlockState().getValue(AbandonedSulptureBlock.ANIMATION));
+		String animationprocedure = ("" + this.getBlockState().getValue(AbandonedSulptureBlock.DATA_ANIMATION));
 		if (animationprocedure.equals("0")) {
 			return event.setAndContinue(RawAnimation.begin().thenLoop(animationprocedure));
 		}
@@ -54,7 +54,7 @@ public class AbandonedSulptureTileEntity extends RandomizableContainerBlockEntit
 	String prevAnim = "0";
 
 	private PlayState procedurePredicate(AnimationState event) {
-		String animationprocedure = ("" + this.getBlockState().getValue(AbandonedSulptureBlock.ANIMATION));
+		String animationprocedure = ("" + this.getBlockState().getValue(AbandonedSulptureBlock.DATA_ANIMATION));
 		if (!animationprocedure.equals("0") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!animationprocedure.equals(prevAnim) && !animationprocedure.equals("0"))) {
 			if (!animationprocedure.equals(prevAnim))
 				event.getController().forceAnimationReset();

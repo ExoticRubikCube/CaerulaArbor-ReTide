@@ -60,11 +60,11 @@ import java.util.List;
 
 public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttackMob, RavagerMountRider {
 
-    public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanizedIllusionerEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedIllusionerEntity.class, EntityDataSerializers.STRING);
-    public static final EntityDataAccessor<Integer> DATA_spellP = SynchedEntityData.defineId(OceanizedIllusionerEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Integer> DATA_mirrorP = SynchedEntityData.defineId(OceanizedIllusionerEntity.class, EntityDataSerializers.INT);
-    public static final EntityDataAccessor<Integer> DATA_duration = SynchedEntityData.defineId(OceanizedIllusionerEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(OceanizedIllusionerEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(OceanizedIllusionerEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> DATA_SPELL_P = SynchedEntityData.defineId(OceanizedIllusionerEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_MIRROR_P = SynchedEntityData.defineId(OceanizedIllusionerEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Integer> DATA_DURATION = SynchedEntityData.defineId(OceanizedIllusionerEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
     private long lastSwing;
     public String animationprocedure = "empty";
@@ -86,11 +86,11 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(SHOOT, false);
-        this.entityData.define(ANIMATION, "undefined");
-        this.entityData.define(DATA_spellP, 180);
-        this.entityData.define(DATA_mirrorP, 340);
-        this.entityData.define(DATA_duration, 0);
+        this.entityData.define(DATA_SHOOT, false);
+        this.entityData.define(DATA_ANIMATION, "undefined");
+        this.entityData.define(DATA_SPELL_P, 180);
+        this.entityData.define(DATA_MIRROR_P, 340);
+        this.entityData.define(DATA_DURATION, 0);
     }
 
     @Override
@@ -195,7 +195,7 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
             this.target = null;
             this.seeTime = 0;
             this.attackTime = -1;
-            ((OceanizedIllusionerEntity) rangedAttackMob).entityData.set(SHOOT, false);
+            ((OceanizedIllusionerEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
         }
 
         public boolean requiresUpdateEveryTick() {
@@ -218,10 +218,10 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
             this.mob.getLookControl().setLookAt(this.target, 30.0F, 30.0F);
             if (--this.attackTime == 0) {
                 if (!flag) {
-                    ((OceanizedIllusionerEntity) rangedAttackMob).entityData.set(SHOOT, false);
+                    ((OceanizedIllusionerEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
                     return;
                 }
-                ((OceanizedIllusionerEntity) rangedAttackMob).entityData.set(SHOOT, true);
+                ((OceanizedIllusionerEntity) rangedAttackMob).entityData.set(DATA_SHOOT, true);
                 float f = (float) Math.sqrt(d0) / this.attackRadius;
                 float f1 = Mth.clamp(f, 0.1F, 1.0F);
                 this.rangedAttackMob.performRangedAttack(this.target, f1);
@@ -229,7 +229,7 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
             } else if (this.attackTime < 0) {
                 this.attackTime = Mth.floor(Mth.lerp(Math.sqrt(d0) / (double) this.attackRadius, this.attackIntervalMin, this.attackIntervalMax));
             } else
-                ((OceanizedIllusionerEntity) rangedAttackMob).entityData.set(SHOOT, false);
+                ((OceanizedIllusionerEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
         }
     }
 
@@ -327,20 +327,23 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putInt("DataspellP", this.entityData.get(DATA_spellP));
-        compound.putInt("DatamirrorP", this.entityData.get(DATA_mirrorP));
-        compound.putInt("Dataduration", this.entityData.get(DATA_duration));
+        compound.putInt("SpellP", this.entityData.get(DATA_SPELL_P));
+        compound.putInt("MirrorP", this.entityData.get(DATA_MIRROR_P));
+        compound.putInt("Duration", this.entityData.get(DATA_DURATION));
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("DataspellP"))
-            this.entityData.set(DATA_spellP, compound.getInt("DataspellP"));
-        if (compound.contains("DatamirrorP"))
-            this.entityData.set(DATA_mirrorP, compound.getInt("DatamirrorP"));
-        if (compound.contains("Dataduration"))
-            this.entityData.set(DATA_duration, compound.getInt("Dataduration"));
+        if (compound.contains("SpellP")) {
+            this.entityData.set(DATA_SPELL_P, compound.getInt("SpellP"));
+        }
+        if (compound.contains("MirrorP")) {
+            this.entityData.set(DATA_MIRROR_P, compound.getInt("MirrorP"));
+        }
+        if (compound.contains("Duration")) {
+            this.entityData.set(DATA_DURATION, compound.getInt("Duration"));
+        }
     }
 
     @Override
@@ -357,17 +360,17 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
         if (!this.isAlive()) {
             this.removeEffect(MobEffects.INVISIBILITY);
         } else {
-            sklp1 = (Entity) this instanceof OceanizedIllusionerEntity _datEntI ? _datEntI.getEntityData().get(DATA_spellP) : 0;
-            sklp2 = (Entity) this instanceof OceanizedIllusionerEntity _datEntI ? _datEntI.getEntityData().get(DATA_mirrorP) : 0;
-            dura = (Entity) this instanceof OceanizedIllusionerEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0;
+            sklp1 = (Entity) this instanceof OceanizedIllusionerEntity _datEntI ? _datEntI.getEntityData().get(DATA_SPELL_P) : 0;
+            sklp2 = (Entity) this instanceof OceanizedIllusionerEntity _datEntI ? _datEntI.getEntityData().get(DATA_MIRROR_P) : 0;
+            dura = (Entity) this instanceof OceanizedIllusionerEntity _datEntI ? _datEntI.getEntityData().get(DATA_DURATION) : 0;
             enemy = this.getTarget();
             if (dura > 0) {
                 if ((Entity) this instanceof OceanizedIllusionerEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_duration, (int) (dura - 1));
+                    _datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura - 1));
             }
             if (sklp1 > 0) {
                 if ((Entity) this instanceof OceanizedIllusionerEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_spellP, (int) (sklp1 - 1));
+                    _datEntSetI.getEntityData().set(DATA_SPELL_P, (int) (sklp1 - 1));
                 if (sklp1 == 100) {
                     if (world instanceof Level _level) {
                         _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ILLUSIONER_PREPARE_BLINDNESS, SoundSource.HOSTILE, 1, 1);
@@ -387,9 +390,9 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
                         if (enemy instanceof LivingEntity && !this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(CAMobEffects.DEDUCT_ONE_SANITY.get(), 200, 1));
                         if ((Entity) this instanceof OceanizedIllusionerEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_spellP, 180);
+                            _datEntSetI.getEntityData().set(DATA_SPELL_P, 180);
                         if ((Entity) this instanceof OceanizedIllusionerEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_duration, 15);
+                            _datEntSetI.getEntityData().set(DATA_DURATION, 15);
                         dura = 15;
                     }
                 }
@@ -398,7 +401,7 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
             this.removeEffect(MobEffects.BLINDNESS);
             if (sklp2 > 0) {
                 if ((Entity) this instanceof OceanizedIllusionerEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_mirrorP, (int) (sklp2 - 1));
+                    _datEntSetI.getEntityData().set(DATA_MIRROR_P, (int) (sklp2 - 1));
                 if (sklp2 == 100) {
                     if (world instanceof Level _level) {
                         _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ILLUSIONER_PREPARE_MIRROR, SoundSource.HOSTILE, 1, 1);
@@ -466,9 +469,9 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
                             }
                         });
                         if ((Entity) this instanceof OceanizedIllusionerEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_mirrorP, 340);
+                            _datEntSetI.getEntityData().set(DATA_MIRROR_P, 340);
                         if ((Entity) this instanceof OceanizedIllusionerEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_duration, 20);
+                            _datEntSetI.getEntityData().set(DATA_DURATION, 20);
                     }
                 }
             }
@@ -562,7 +565,7 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
         if (this.swinging && this.lastSwing + 20L <= level().getGameTime()) {
             this.swinging = false;
         }
-        if ((this.swinging || this.entityData.get(SHOOT)) && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+        if ((this.swinging || this.entityData.get(DATA_SHOOT)) && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
             event.getController().forceAnimationReset();
             return event.setAndContinue(RawAnimation.begin().thenPlay("animation.oceanized_illusioner.attack"));
         }
@@ -609,11 +612,11 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
     }
 
     public String getSyncedAnimation() {
-        return this.entityData.get(ANIMATION);
+        return this.entityData.get(DATA_ANIMATION);
     }
 
     public void setAnimation(String animation) {
-        this.entityData.set(ANIMATION, animation);
+        this.entityData.set(DATA_ANIMATION, animation);
     }
 
     @Override
@@ -624,7 +627,7 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
     }
 
     private boolean isIllusionerDurative() {
-        return this.isAlive() && this.getEntityData().get(DATA_duration) <= 0;
+        return this.isAlive() && this.getEntityData().get(DATA_DURATION) <= 0;
     }
 
     @Override

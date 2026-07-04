@@ -39,10 +39,10 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 
 public class GuideAbyssalEntity extends SeaMonster {
-	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(GuideAbyssalEntity.class, EntityDataSerializers.BOOLEAN);
-	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(GuideAbyssalEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<Integer> DATA_delay = SynchedEntityData.defineId(GuideAbyssalEntity.class, EntityDataSerializers.INT);
-	public static final EntityDataAccessor<Integer> DATA_laylimit = SynchedEntityData.defineId(GuideAbyssalEntity.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(GuideAbyssalEntity.class, EntityDataSerializers.BOOLEAN);
+	public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(GuideAbyssalEntity.class, EntityDataSerializers.STRING);
+	public static final EntityDataAccessor<Integer> DATA_DELAY = SynchedEntityData.defineId(GuideAbyssalEntity.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<Integer> DATA_LAYLIMIT = SynchedEntityData.defineId(GuideAbyssalEntity.class, EntityDataSerializers.INT);
 	private boolean swinging;
 	private long lastSwing;
 	public String animationprocedure = "empty";
@@ -61,10 +61,10 @@ public class GuideAbyssalEntity extends SeaMonster {
 	@Override
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(SHOOT, false);
-		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(DATA_delay, 0);
-		this.entityData.define(DATA_laylimit, 64);
+		this.entityData.define(DATA_SHOOT, false);
+		this.entityData.define(DATA_ANIMATION, "undefined");
+		this.entityData.define(DATA_DELAY, 0);
+		this.entityData.define(DATA_LAYLIMIT, 64);
 	}
 
 	@Override
@@ -124,17 +124,19 @@ public class GuideAbyssalEntity extends SeaMonster {
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
-		compound.putInt("Datadelay", this.entityData.get(DATA_delay));
-		compound.putInt("Datalaylimit", this.entityData.get(DATA_laylimit));
+		compound.putInt("Delay", this.entityData.get(DATA_DELAY));
+		compound.putInt("Laylimit", this.entityData.get(DATA_LAYLIMIT));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
-		if (compound.contains("Datadelay"))
-			this.entityData.set(DATA_delay, compound.getInt("Datadelay"));
-		if (compound.contains("Datalaylimit"))
-			this.entityData.set(DATA_laylimit, compound.getInt("Datalaylimit"));
+		if (compound.contains("Delay")) {
+		    this.entityData.set(DATA_DELAY, compound.getInt("Delay"));
+		}
+		if (compound.contains("Laylimit")) {
+		    this.entityData.set(DATA_LAYLIMIT, compound.getInt("Laylimit"));
+		}
 	}
 
 	@Override
@@ -228,11 +230,11 @@ public class GuideAbyssalEntity extends SeaMonster {
 	}
 
 	public String getSyncedAnimation() {
-		return this.entityData.get(ANIMATION);
+		return this.entityData.get(DATA_ANIMATION);
 	}
 
 	public void setAnimation(String animation) {
-		this.entityData.set(ANIMATION, animation);
+		this.entityData.set(DATA_ANIMATION, animation);
 	}
 
 	@Override

@@ -59,9 +59,9 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import java.util.List;
 
 public class ReaperPetEntity extends TamableAnimal implements GeoEntity, SyncedAnimationEntity {
-	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(ReaperPetEntity.class, EntityDataSerializers.BOOLEAN);
-	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(ReaperPetEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<Integer> DATA_state = SynchedEntityData.defineId(ReaperPetEntity.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(ReaperPetEntity.class, EntityDataSerializers.BOOLEAN);
+	public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(ReaperPetEntity.class, EntityDataSerializers.STRING);
+	public static final EntityDataAccessor<Integer> DATA_STATE = SynchedEntityData.defineId(ReaperPetEntity.class, EntityDataSerializers.INT);
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 	private boolean swinging;
 	private long lastSwing;
@@ -81,9 +81,9 @@ public class ReaperPetEntity extends TamableAnimal implements GeoEntity, SyncedA
 	@Override
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(SHOOT, false);
-		this.entityData.define(ANIMATION, "undefined");
-		this.entityData.define(DATA_state, 0);
+		this.entityData.define(DATA_SHOOT, false);
+		this.entityData.define(DATA_ANIMATION, "undefined");
+		this.entityData.define(DATA_STATE, 0);
 	}
 
 	@Override
@@ -189,7 +189,7 @@ public class ReaperPetEntity extends TamableAnimal implements GeoEntity, SyncedA
 
 	@Override
 	public boolean hurt(DamageSource source, float amount) {
-		this.getEntityData().set(DATA_state, 0);
+		this.getEntityData().set(DATA_STATE, 0);
 		if (source.is(DamageTypes.DROWN))
 			return false;
 		return super.hurt(source, amount);
@@ -198,14 +198,15 @@ public class ReaperPetEntity extends TamableAnimal implements GeoEntity, SyncedA
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
-		compound.putInt("Datastate", this.entityData.get(DATA_state));
+		compound.putInt("State", this.entityData.get(DATA_STATE));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
-		if (compound.contains("Datastate"))
-			this.entityData.set(DATA_state, compound.getInt("Datastate"));
+		if (compound.contains("State")) {
+		    this.entityData.set(DATA_STATE, compound.getInt("State"));
+		}
 	}
 
 	@Override
@@ -286,18 +287,18 @@ public class ReaperPetEntity extends TamableAnimal implements GeoEntity, SyncedA
 			} else if (((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == Items.STICK) {
 				if (sourceentity.isShiftKeyDown()) {
 					if ((Entity) this instanceof ReaperPetEntity _datEntSetI)
-						_datEntSetI.getEntityData().set(DATA_state, 2);
+						_datEntSetI.getEntityData().set(DATA_STATE, 2);
 					if ((Entity) sourceentity instanceof Player _player && !_player.level().isClientSide())
 						_player.displayClientMessage(Component.literal((this.getDisplayName().getString() + Component.translatable("item.caerula_arbor.a_second_key.description_2").getString())), true);
 				} else {
-					if (((Entity) this instanceof ReaperPetEntity _datEntI ? _datEntI.getEntityData().get(DATA_state) : 0) == 0) {
+					if (((Entity) this instanceof ReaperPetEntity _datEntI ? _datEntI.getEntityData().get(DATA_STATE) : 0) == 0) {
 						if ((Entity) this instanceof ReaperPetEntity _datEntSetI)
-							_datEntSetI.getEntityData().set(DATA_state, 1);
+							_datEntSetI.getEntityData().set(DATA_STATE, 1);
 						if ((Entity) sourceentity instanceof Player _player && !_player.level().isClientSide())
 							_player.displayClientMessage(Component.literal((this.getDisplayName().getString() + Component.translatable("item.caerula_arbor.a_second_key.description_1").getString())), true);
 					} else {
 						if ((Entity) this instanceof ReaperPetEntity _datEntSetI)
-							_datEntSetI.getEntityData().set(DATA_state, 0);
+							_datEntSetI.getEntityData().set(DATA_STATE, 0);
 						if ((Entity) sourceentity instanceof Player _player && !_player.level().isClientSide())
 							_player.displayClientMessage(Component.literal((this.getDisplayName().getString() + Component.translatable("item.caerula_arbor.a_second_key.description_0").getString())), true);
 					}
@@ -318,7 +319,7 @@ public class ReaperPetEntity extends TamableAnimal implements GeoEntity, SyncedA
 			if (!this.level().isClientSide())
 				this.addEffect(new MobEffectInstance(CAMobEffects.PET_REAP.get(), 100, 0, false, false));
 		}
-		if (((Entity) this instanceof ReaperPetEntity _datEntI ? _datEntI.getEntityData().get(DATA_state) : 0) == 2) {
+		if (((Entity) this instanceof ReaperPetEntity _datEntI ? _datEntI.getEntityData().get(DATA_STATE) : 0) == 2) {
 			if ((Entity) this instanceof Mob _entity)
 				_entity.setTarget(null);
 		}
@@ -423,19 +424,19 @@ public class ReaperPetEntity extends TamableAnimal implements GeoEntity, SyncedA
 	}
 
 	public String getSyncedAnimation() {
-		return this.entityData.get(ANIMATION);
+		return this.entityData.get(DATA_ANIMATION);
 	}
 
 	public void setAnimation(String animation) {
-		this.entityData.set(ANIMATION, animation);
+		this.entityData.set(DATA_ANIMATION, animation);
 	}
 
 	public boolean isFollowable() {
-		return this.entityData.get(DATA_state) == 0;
+		return this.entityData.get(DATA_STATE) == 0;
 	}
 
 	public boolean isMovable() {
-		return this.entityData.get(DATA_state) != 2;
+		return this.entityData.get(DATA_STATE) != 2;
 	}
 
 	@Override

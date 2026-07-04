@@ -82,7 +82,7 @@ public class WitherShootPreEntity extends AbstractArrow implements ItemSupplier 
         if (entity instanceof OceanizedWitherEntity) {
             return;
         }
-        if ((sourceentity instanceof OceanizedWitherEntity _datEntI ? _datEntI.getEntityData().get(OceanizedWitherEntity.DATA_duration) : 0) > 0) {
+        if ((sourceentity instanceof OceanizedWitherEntity _datEntI ? _datEntI.getEntityData().get(OceanizedWitherEntity.DATA_DURATION) : 0) > 0) {
             if (!level().isClientSide())
                 discard();
             return;
@@ -120,7 +120,7 @@ public class WitherShootPreEntity extends AbstractArrow implements ItemSupplier 
             Entity enemy;
             Entity otherOne;
             Entity otherTwo;
-            if ((entity instanceof OceanizedWitherEntity _datEntI ? _datEntI.getEntityData().get(OceanizedWitherEntity.DATA_duration) : 0) > 0) {
+            if ((entity instanceof OceanizedWitherEntity _datEntI ? _datEntI.getEntityData().get(OceanizedWitherEntity.DATA_DURATION) : 0) > 0) {
                 if (!level().isClientSide())
                     discard();
             } else {

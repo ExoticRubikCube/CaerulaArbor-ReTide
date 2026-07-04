@@ -50,8 +50,8 @@ import java.util.Objects;
 
 public class XantisEntity extends TamableAnimal implements GeoEntity, SyncedAnimationEntity {
 
-    public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(XantisEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(XantisEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(XantisEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(XantisEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Boolean> DATA_NIUBI = SynchedEntityData.defineId(XantisEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<Integer> DATA_TAP_TICK = SynchedEntityData.defineId(XantisEntity.class, EntityDataSerializers.INT);
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
@@ -74,8 +74,8 @@ public class XantisEntity extends TamableAnimal implements GeoEntity, SyncedAnim
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
-        this.entityData.define(SHOOT, false);
-        this.entityData.define(ANIMATION, "undefined");
+        this.entityData.define(DATA_SHOOT, false);
+        this.entityData.define(DATA_ANIMATION, "undefined");
         this.entityData.define(DATA_NIUBI, true);
         this.entityData.define(DATA_TAP_TICK, 0);
     }
@@ -177,17 +177,19 @@ public class XantisEntity extends TamableAnimal implements GeoEntity, SyncedAnim
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
-        compound.putBoolean("DataNIUBI", this.entityData.get(DATA_NIUBI));
-        compound.putInt("DataTAP_TICK", this.entityData.get(DATA_TAP_TICK));
+        compound.putBoolean("Niubi", this.entityData.get(DATA_NIUBI));
+        compound.putInt("TapTick", this.entityData.get(DATA_TAP_TICK));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
-        if (compound.contains("DataNIUBI"))
-            this.entityData.set(DATA_NIUBI, compound.getBoolean("DataNIUBI"));
-        if (compound.contains("DataTAP_TICK"))
-            this.entityData.set(DATA_TAP_TICK, compound.getInt("DataTAP_TICK"));
+        if (compound.contains("Niubi")) {
+            this.entityData.set(DATA_NIUBI, compound.getBoolean("Niubi"));
+        }
+        if (compound.contains("TapTick")) {
+            this.entityData.set(DATA_TAP_TICK, compound.getInt("TapTick"));
+        }
 	}
 
     @Override
@@ -412,11 +414,11 @@ public class XantisEntity extends TamableAnimal implements GeoEntity, SyncedAnim
     }
 
     public String getSyncedAnimation() {
-        return this.entityData.get(ANIMATION);
+        return this.entityData.get(DATA_ANIMATION);
     }
 
     public void setAnimation(String animation) {
-        this.entityData.set(ANIMATION, animation);
+        this.entityData.set(DATA_ANIMATION, animation);
     }
 
     @Override

@@ -17,6 +17,7 @@ import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.DamageTypeTags;
@@ -55,8 +56,6 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
-import net.minecraft.sounds.SoundEvents;
-import com.apocalypse.caerulaarbor.init.CASounds;
 
 import javax.annotation.Nullable;
 import java.util.Comparator;
@@ -64,8 +63,8 @@ import java.util.EnumSet;
 import java.util.List;
 
 public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackMob {
-	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(OceanizedEnderinaEntity.class, EntityDataSerializers.BOOLEAN);
-	public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(OceanizedEnderinaEntity.class, EntityDataSerializers.STRING);
+	public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(OceanizedEnderinaEntity.class, EntityDataSerializers.BOOLEAN);
+	public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(OceanizedEnderinaEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<Integer> DATA_REVIVE_TICK = SynchedEntityData.defineId(OceanizedEnderinaEntity.class, EntityDataSerializers.INT);
 	public static final EntityDataAccessor<Integer> DATA_PHASE = SynchedEntityData.defineId(OceanizedEnderinaEntity.class, EntityDataSerializers.INT);
 	public static final EntityDataAccessor<Integer> DATA_SKILL_P = SynchedEntityData.defineId(OceanizedEnderinaEntity.class, EntityDataSerializers.INT);
@@ -107,8 +106,8 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 	@Override
 	protected void defineSynchedData() {
 		super.defineSynchedData();
-		this.entityData.define(SHOOT, false);
-		this.entityData.define(ANIMATION, "undefined");
+		this.entityData.define(DATA_SHOOT, false);
+		this.entityData.define(DATA_ANIMATION, "undefined");
 		this.entityData.define(DATA_REVIVE_TICK, 0);
 		this.entityData.define(DATA_PHASE, 0);
 		this.entityData.define(DATA_SKILL_P, 0);
@@ -214,7 +213,7 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 			this.target = null;
 			this.seeTime = 0;
 			this.attackTime = -1;
-			((OceanizedEnderinaEntity) rangedAttackMob).entityData.set(SHOOT, false);
+			((OceanizedEnderinaEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
 		}
 
 		public boolean requiresUpdateEveryTick() {
@@ -237,10 +236,10 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 			this.mob.getLookControl().setLookAt(this.target, 30.0F, 30.0F);
 			if (--this.attackTime == 0) {
 				if (!flag) {
-					((OceanizedEnderinaEntity) rangedAttackMob).entityData.set(SHOOT, false);
+					((OceanizedEnderinaEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
 					return;
 				}
-				((OceanizedEnderinaEntity) rangedAttackMob).entityData.set(SHOOT, true);
+				((OceanizedEnderinaEntity) rangedAttackMob).entityData.set(DATA_SHOOT, true);
 				float f = (float) Math.sqrt(d0) / this.attackRadius;
 				float f1 = Mth.clamp(f, 0.1F, 1.0F);
 				this.rangedAttackMob.performRangedAttack(this.target, f1);
@@ -248,7 +247,7 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 			} else if (this.attackTime < 0) {
 				this.attackTime = Mth.floor(Mth.lerp(Math.sqrt(d0) / (double) this.attackRadius, this.attackIntervalMin, this.attackIntervalMax));
 			} else
-				((OceanizedEnderinaEntity) rangedAttackMob).entityData.set(SHOOT, false);
+				((OceanizedEnderinaEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
 		}
 	}
 
@@ -394,23 +393,27 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
-		compound.putInt("DataREVIVE_TICK", this.entityData.get(DATA_REVIVE_TICK));
-		compound.putInt("DataPHASE", this.entityData.get(DATA_PHASE));
-		compound.putInt("DataSKILL_P", this.entityData.get(DATA_SKILL_P));
-		compound.putInt("DataDURATION", this.entityData.get(DATA_DURATION));
+		compound.putInt("ReviveTick", this.entityData.get(DATA_REVIVE_TICK));
+		compound.putInt("Phase", this.entityData.get(DATA_PHASE));
+		compound.putInt("SkillP", this.entityData.get(DATA_SKILL_P));
+		compound.putInt("Duration", this.entityData.get(DATA_DURATION));
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag compound) {
 		super.readAdditionalSaveData(compound);
-		if (compound.contains("DataREVIVE_TICK"))
-			this.entityData.set(DATA_REVIVE_TICK, compound.getInt("DataREVIVE_TICK"));
-		if (compound.contains("DataPHASE"))
-			this.entityData.set(DATA_PHASE, compound.getInt("DataPHASE"));
-		if (compound.contains("DataSKILL_P"))
-			this.entityData.set(DATA_SKILL_P, compound.getInt("DataSKILL_P"));
-		if (compound.contains("DataDURATION"))
-			this.entityData.set(DATA_DURATION, compound.getInt("DataDURATION"));
+		if (compound.contains("ReviveTick")) {
+		    this.entityData.set(DATA_REVIVE_TICK, compound.getInt("ReviveTick"));
+		}
+		if (compound.contains("Phase")) {
+		    this.entityData.set(DATA_PHASE, compound.getInt("Phase"));
+		}
+		if (compound.contains("SkillP")) {
+		    this.entityData.set(DATA_SKILL_P, compound.getInt("SkillP"));
+		}
+		if (compound.contains("Duration")) {
+		    this.entityData.set(DATA_DURATION, compound.getInt("Duration"));
+		}
 	}
 
 	@Override
@@ -701,7 +704,7 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 		if (this.swinging && this.lastSwing + 25L <= level().getGameTime()) {
 			this.swinging = false;
 		}
-		if ((this.swinging || this.entityData.get(SHOOT)) && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+		if ((this.swinging || this.entityData.get(DATA_SHOOT)) && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
 			event.getController().forceAnimationReset();
 			return event.setAndContinue(RawAnimation.begin().thenPlay("animation.oceanized_enderina.attack"));
 		}
@@ -752,11 +755,11 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 	}
 
 	public String getSyncedAnimation() {
-		return this.entityData.get(ANIMATION);
+		return this.entityData.get(DATA_ANIMATION);
 	}
 
 	public void setAnimation(String animation) {
-		this.entityData.set(ANIMATION, animation);
+		this.entityData.set(DATA_ANIMATION, animation);
 	}
 
 	public int getDeathTextureTick() {

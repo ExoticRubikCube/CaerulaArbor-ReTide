@@ -62,7 +62,7 @@ import java.util.EnumSet;
 
 public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
     public static final EntityDataAccessor<Boolean> DATA_IS_SHOOTING = SynchedEntityData.defineId(TideBishopEntity.class, EntityDataSerializers.BOOLEAN);
-    public static final EntityDataAccessor<String> ANIMATION = SynchedEntityData.defineId(TideBishopEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(TideBishopEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_SKILL_COOLDOWN = SynchedEntityData.defineId(TideBishopEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
     private long lastSwing;
@@ -84,7 +84,7 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(DATA_IS_SHOOTING, false);
-        this.entityData.define(ANIMATION, "undefined");
+        this.entityData.define(DATA_ANIMATION, "undefined");
         this.entityData.define(DATA_SKILL_COOLDOWN, 160);
     }
 
@@ -295,8 +295,6 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
         super.readAdditionalSaveData(compound);
         if (compound.contains("SkillCooldown"))
             this.entityData.set(DATA_SKILL_COOLDOWN, compound.getInt("SkillCooldown"));
-        else if (compound.contains("Dataskillp"))
-            this.entityData.set(DATA_SKILL_COOLDOWN, compound.getInt("Dataskillp"));
 	}
 
     @Override
@@ -501,11 +499,11 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
     }
 
     public String getSyncedAnimation() {
-        return this.entityData.get(ANIMATION);
+        return this.entityData.get(DATA_ANIMATION);
     }
 
     public void setAnimation(String animation) {
-        this.entityData.set(ANIMATION, animation);
+        this.entityData.set(DATA_ANIMATION, animation);
     }
 
     @Override
