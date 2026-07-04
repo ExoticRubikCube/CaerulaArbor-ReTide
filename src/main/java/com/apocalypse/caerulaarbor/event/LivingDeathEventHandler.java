@@ -291,8 +291,8 @@ public class LivingDeathEventHandler {
             if (world.getLevelData().getGameRules().getBoolean(CAGameRules.NATURAL_EVOLUTION)) {
                 if (!world.getEntitiesOfClass(Player.class, AABB.ofSize(new Vec3(x, y, z), 128, 128, 128), e -> true).isEmpty()) {
                     MapVariablesHandler.addEvoPoint(world, StrategyType.BREED, (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.1);
-                    BreedUpgradeManager.execute(world);
-                    SilenceUpgradeManager.execute(world, (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.1);
+                    BreedUpgradeManager.applyBreedUpgrade(world);
+                    SilenceUpgradeManager.applySilenceUpgrade(world, (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.1);
                 }
             }
         }

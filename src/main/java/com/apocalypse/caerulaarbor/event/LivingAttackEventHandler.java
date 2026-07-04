@@ -355,8 +355,8 @@ public class LivingAttackEventHandler {
         if (sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
             if (world.getLevelData().getGameRules().getBoolean(CAGameRules.NATURAL_EVOLUTION)) {
                 MapVariablesHandler.addEvoPoint(world, StrategyType.GROW, amount * 0.025);
-                GrowUpgradeManager.execute(world);
-                SilenceUpgradeManager.execute(world, amount * 0.025);
+                GrowUpgradeManager.applyGrowthUpgrade(world);
+                SilenceUpgradeManager.applySilenceUpgrade(world, amount * 0.025);
             }
         }
 
@@ -374,8 +374,8 @@ public class LivingAttackEventHandler {
                     && !damagesource.is(TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "bypasses_evolution")))) {
                 MapVariablesHandler.addEvoPoint(world, StrategyType.SUBSISTING,
                         Math.min(amount, entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.025);
-                SubsistingUpgradeManager.execute(world);
-                SilenceUpgradeManager.execute(world, Math.min(amount, entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.025);
+                SubsistingUpgradeManager.applySubsistingUpgrade(world);
+                SilenceUpgradeManager.applySilenceUpgrade(world, Math.min(amount, entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.025);
             }
 
             if (sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {

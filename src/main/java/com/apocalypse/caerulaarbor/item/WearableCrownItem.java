@@ -143,7 +143,6 @@ public class WearableCrownItem extends ArmorItem implements GeoItem, SyncedAnima
 		return this.cache;
 	}
 
-
 	@Override
 	public void setAnimationProcedure(String animation) {
 		this.animationprocedure = animation;

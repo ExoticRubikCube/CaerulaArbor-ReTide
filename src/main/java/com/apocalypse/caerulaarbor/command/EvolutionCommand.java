@@ -40,7 +40,7 @@ public class EvolutionCommand {
 			if (entity != null)
                 entity.getDirection();
 
-			GrowUpgradeManager.execute(world);
+			GrowUpgradeManager.applyGrowthUpgrade(world);
 			return 0;
 		})).then(Commands.argument("lvl", DoubleArgumentType.doubleArg(0, 4)).executes(arguments -> {
 			Level world = arguments.getSource().getUnsidedLevel();
@@ -88,7 +88,7 @@ public class EvolutionCommand {
 			if (entity != null)
                 entity.getDirection();
 
-			BreedUpgradeManager.execute(world);
+			BreedUpgradeManager.applyBreedUpgrade(world);
 			return 0;
 		})).then(Commands.argument("lvl", DoubleArgumentType.doubleArg(0, 4)).executes(arguments -> {
 			Level world = arguments.getSource().getUnsidedLevel();
@@ -136,7 +136,7 @@ public class EvolutionCommand {
 			if (entity != null)
                 entity.getDirection();
 
-			MigrationUpgradeManager.execute(world);
+			MigrationUpgradeManager.applyMigrationUpgrade(world);
 			return 0;
 		})).then(Commands.argument("lvl", DoubleArgumentType.doubleArg(0, 4)).executes(arguments -> {
 			Level world = arguments.getSource().getUnsidedLevel();
@@ -184,7 +184,7 @@ public class EvolutionCommand {
 			if (entity != null)
                 entity.getDirection();
 
-			SubsistingUpgradeManager.execute(world);
+			SubsistingUpgradeManager.applySubsistingUpgrade(world);
 			return 0;
 		})).then(Commands.argument("lvl", DoubleArgumentType.doubleArg(0, 4)).executes(arguments -> {
 			Level world = arguments.getSource().getUnsidedLevel();

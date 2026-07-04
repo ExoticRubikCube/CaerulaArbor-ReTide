@@ -1,7 +1,7 @@
 package com.apocalypse.caerulaarbor.block;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.util.WorldUtils;
+import com.apocalypse.caerulaarbor.manager.SeabornSpawnManager;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
@@ -132,7 +132,7 @@ public abstract class AbstractOvaryBlock extends Block implements SimpleWaterlog
 		double y = pos.getY();
 		double z = pos.getZ();
 		if (blockstate.getValue(OUTPUT) >= 60) {
-			WorldUtils.summonRandomSeaborn(world, getDestroySpawnRate(), x + 0.5, y + 1.5, z + 0.5);
+			SeabornSpawnManager.summonRandomSeaborn(world, getDestroySpawnRate(), x + 0.5, y + 1.5, z + 0.5);
 		}
 		return retval;
 	}

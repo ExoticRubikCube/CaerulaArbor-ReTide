@@ -41,6 +41,7 @@ public class LivingExpDropEventHandler {
 						_level.addFreshEntity(new ExperienceOrb(_level, (x + Mth.nextDouble(RandomSource.create(), -1, 1)), (y + Mth.nextDouble(RandomSource.create(), 0.1, 0.85)), (z + Mth.nextDouble(RandomSource.create(), -1, 1)), 7));
 					exp_left = exp_left - 7;
 				}
+				//TODO 可疑，可能需要更新
 				while (exp_left >= 5) {
 					if (world instanceof ServerLevel _level)
 						_level.addFreshEntity(new ExperienceOrb(_level, (x + Mth.nextDouble(RandomSource.create(), -1, 1)), (y + Mth.nextDouble(RandomSource.create(), 0.1, 0.85)), (z + Mth.nextDouble(RandomSource.create(), -1, 1)), 3));

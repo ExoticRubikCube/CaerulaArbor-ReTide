@@ -6,7 +6,6 @@ import com.apocalypse.caerulaarbor.entity.TribunalHealerEntity;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAGameRules;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
-import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
@@ -95,7 +94,7 @@ public class TransformManager {
 				if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation("forge:bosses")))) {
 					rate = 1;
 				}
-				WorldUtils.summonRandomSeaborn(world, rate, x, y, z);
+				SeabornSpawnManager.summonRandomSeaborn(world, rate, x, y, z);
 				trans = true;
 			}
 			if (trans) {

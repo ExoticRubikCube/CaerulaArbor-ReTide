@@ -85,28 +85,28 @@ public class DictationChapterItem extends Item {
                         _level.playSound(null, BlockPos.containing(x, y, z), CASounds.GROW1.get(), SoundSource.PLAYERS, 1, 1);
                 }
                 MapVariablesHandler.setEvoPoint(world, StrategyType.GROW, p0 + 999999);
-                GrowUpgradeManager.execute(world);
+                GrowUpgradeManager.applyGrowthUpgrade(world);
                 stra = Component.translatable("gui.caerula_arbor.evo_tree.label_sreategy_grow").getString();
             } else if (target == l1) {
                 if (world instanceof Level _level) {
                         _level.playSound(null, BlockPos.containing(x, y, z), CASounds.SUBSISTING1.get(), SoundSource.PLAYERS, 1, 1);
                 }
                 MapVariablesHandler.setEvoPoint(world, StrategyType.SUBSISTING, p1 + 999999);
-                SubsistingUpgradeManager.execute(world);
+                SubsistingUpgradeManager.applySubsistingUpgrade(world);
                 stra = Component.translatable("gui.caerula_arbor.evo_tree.label_strategy_subsisting").getString();
             } else if (target == l2) {
                 if (world instanceof Level _level) {
                         _level.playSound(null, BlockPos.containing(x, y, z), CASounds.BREED1.get(), SoundSource.PLAYERS, 1, 1);
                 }
                 MapVariablesHandler.setEvoPoint(world, StrategyType.BREED, p2 + 999999);
-                BreedUpgradeManager.execute(world);
+                BreedUpgradeManager.applyBreedUpgrade(world);
                 stra = Component.translatable("gui.caerula_arbor.evo_tree.label_strategy_breed").getString();
             } else if (target == l3) {
                 if (world instanceof Level _level) {
                         _level.playSound(null, BlockPos.containing(x, y, z), CASounds.MIGRATION1.get(), SoundSource.PLAYERS, 1, 1);
                 }
                 MapVariablesHandler.setEvoPoint(world, StrategyType.MIGRATION, p3 + 999999);
-                MigrationUpgradeManager.execute(world);
+                MigrationUpgradeManager.applyMigrationUpgrade(world);
                 stra = Component.translatable("gui.caerula_arbor.evo_tree.label_strategy_migration").getString();
             }
             if (world instanceof ServerLevel _level)

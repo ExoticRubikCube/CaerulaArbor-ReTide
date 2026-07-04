@@ -223,6 +223,7 @@ public class CATabs {
 				tabData.accept(CAItems.ARCHIVE_OF_MARTUS.get());
 				tabData.accept(CAItems.ARCHIVE_OF_RAIDER.get());
 			}).build());
+
 	public static final RegistryObject<CreativeModeTab> CAECULA_RELICS = REGISTRY.register("caecula_relics",
 			() -> CreativeModeTab.builder().title(Component.translatable("item_group.caerula_arbor.caecula_relics")).icon(() -> new ItemStack(CAItems.KETTLE.get())).displayItems((parameters, tabData) -> {
 				tabData.accept(CAItems.RELIC_CURSE_EMELIGHT.get());
@@ -274,6 +275,7 @@ public class CATabs {
 				tabData.accept(CAItems.SMELLY_HEMOSTATIC.get());
 				tabData.accept(CAItems.UNRIPE_YEARNING.get());
 			}).withTabsBefore(CAERULA_ITEMS.getId()).build());
+
 	public static final RegistryObject<CreativeModeTab> CAERULA_LIVINGS = REGISTRY.register("caerula_livings",
 			() -> CreativeModeTab.builder().title(Component.translatable("item_group.caerula_arbor.caerula_livings")).icon(() -> new ItemStack(CAItems.BUCKET_FLOATER.get())).displayItems((parameters, tabData) -> {
 				tabData.accept(CAItems.RUN_FISH_SPAWN_EGG.get());
@@ -364,6 +366,7 @@ public class CATabs {
 				tabData.accept(CAItems.TIDUTANT_ROCK_SPIDER_SPAWN_EGG.get());
 				tabData.accept(CAItems.TIDUTANT_EXCRESCENCE_SPAWN_EGG.get());
 			}).withTabsBefore(CAECULA_RELICS.getId()).build());
+
 	public static final RegistryObject<CreativeModeTab> SEA_FOOD = REGISTRY.register("sea_food",
 			() -> CreativeModeTab.builder().title(Component.translatable("item_group.caerula_arbor.sea_food")).icon(() -> new ItemStack(CAItems.BOILED_EGG.get())).displayItems((parameters, tabData) -> {
 				tabData.accept(CAItems.FLUORE_BERRIES.get());
@@ -415,6 +418,7 @@ public class CATabs {
 				tabData.accept(CAItems.NETHERSEA_EGG_CUSTARD.get());
 				tabData.accept(CAItems.NETHERSEA_PRESERVED_EGG.get());
 			}).withTabsBefore(CAERULA_LIVINGS.getId()).build());
+
 	public static final RegistryObject<CreativeModeTab> CAERULA_WEAPONS = REGISTRY.register("caerula_weapons",
 			() -> CreativeModeTab.builder().title(Component.translatable("item_group.caerula_arbor.caerula_weapons")).icon(() -> new ItemStack(CAItems.COMPLEX_CHITIN_SWORD.get())).displayItems((parameters, tabData) -> {
 				tabData.accept(CAItems.SEALEATHER_HELMET.get());

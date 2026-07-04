@@ -3,8 +3,8 @@ package com.apocalypse.caerulaarbor.util;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
 import com.apocalypse.caerulaarbor.init.CABlocks;
-import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAGameRules;
+import com.apocalypse.caerulaarbor.manager.SeabornSpawnManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -19,8 +19,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
@@ -36,77 +34,8 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
-import net.minecraftforge.registries.RegistryObject;
 
 public class WorldUtils {
-	@SuppressWarnings("rawtypes")
-	private static final RegistryObject[] WATER_NORMAL_POOL = {
-		CAEntities.COLLECTOR_PROKARYOTE,
-		CAEntities.FLOATER_PROKARYOTE,
-		CAEntities.DEPOSITER_PROKARYOTE,
-		CAEntities.ACCUMULATOR_PROKARYOTE,
-		CAEntities.FEEDER_PROKARYOTE,
-		CAEntities.BONE_FISH
-	};
-
-	@SuppressWarnings("rawtypes")
-	private static final RegistryObject[] LAND_NORMAL_POOL = {
-		CAEntities.CHISELER_FISH,
-		CAEntities.FLY_FISH,
-		CAEntities.PREDATOR_ABYSSAL,
-		CAEntities.FAKE_OFFSPRING,
-		CAEntities.SLIDER_FISH,
-		CAEntities.RUN_FISH,
-		CAEntities.SHOOTER_FISH,
-		CAEntities.SPLASHER_ABYSSAL
-	};
-
-	@SuppressWarnings("rawtypes")
-	private static final RegistryObject[] OCEANIZED_ANIMAL_POOL = {
-		CAEntities.OCEANIZED_PIG,
-		CAEntities.OCEANIZED_COW,
-		CAEntities.OCEANIZED_SHEEP,
-		CAEntities.OCEANIZED_HORSE,
-		CAEntities.OCEANIZED_WOLF,
-		CAEntities.OCEANIZED_SPIDER,
-		CAEntities.OCEANIZED_VILLAGER,
-		CAEntities.OCEANIZED_WITCH,
-		CAEntities.OCEANIZED_FOX,
-		CAEntities.OCEANIZED_POLAR_BEAR,
-		CAEntities.OCEANIZE_RABBIT,
-		CAEntities.OCEANIZED_CAT,
-		CAEntities.OCEANIZED_CHICKEN
-	};
-
-	@SuppressWarnings("rawtypes")
-	private static final RegistryObject[] WATER_ELITE_POOL = {
-		CAEntities.APOSTLE_PROKARYOTE,
-		CAEntities.NUCLEIC_MALEFICENT
-	};
-
-	@SuppressWarnings("rawtypes")
-	private static final RegistryObject[] LAND_ELITE_POOL = {
-		CAEntities.BASELAYER_ABYSSAL,
-		CAEntities.CRACKER_ABYSSAL,
-		CAEntities.CREEPER_FISH,
-		CAEntities.GUIDE_ABYSSAL,
-		CAEntities.PUNCTURE_FISH,
-		CAEntities.REAPER_FISH,
-		CAEntities.UMBRELLA_ABYSSAL,
-		CAEntities.PREGNANT_FISH,
-		CAEntities.FLEE_FISH,
-		CAEntities.CHEST_FISH
-	};
-
-	@SuppressWarnings("rawtypes")
-	private static final RegistryObject[] OCEANIZED_ELITE_POOL = {
-		CAEntities.OCEANIZED_VINDICATOR,
-		CAEntities.OCEANIZED_EVOKER,
-		CAEntities.OCEANIZED_RAVAGER,
-		CAEntities.OCEANIZED_ENDERMAN,
-		CAEntities.COMPASSION_PRAYER
-	};
-
 	private WorldUtils() {
 		throw new UnsupportedOperationException("Utility class");
 	}
@@ -326,7 +255,7 @@ public class WorldUtils {
 				tz = z + R * Math.cos(T);
 				ty = findValidSpawnY(world, x, y, z, tx, y, tz);
 				if (!Double.isNaN(ty)) {
-					summonRandomSeaborn(world, 0.33, tx, ty, tz);
+					SeabornSpawnManager.summonRandomSeaborn(world, 0.33, tx, ty, tz);
 					if (world instanceof ServerLevel _level)
 						_level.sendParticles(ParticleTypes.CLOUD, tx, (ty + 0.75), tz, 64, 0.75, 0.75, 0.75, 0.1);
 					break;
@@ -394,78 +323,6 @@ public class WorldUtils {
 	}
 
 	//还行，暂时不动代码本身，但是真的需要放在这里吗。。评估有没有更合适的
-	public static void summonRandomSeaborn(LevelAccessor world, double eliteChance, double x, double y, double z) {
-		if (Math.random() < eliteChance) {
-			summonEliteSeaborn(world, x, y, z);
-		} else {
-			if ((world.getFluidState(BlockPos.containing(x, y, z)).createLegacyBlock()).getBlock() == Blocks.WATER) {
-				int rand = Mth.nextInt(RandomSource.create(), 0, WATER_NORMAL_POOL.length - 1);
-				if (world instanceof ServerLevel _level) {
-					Entity entityToSpawn = ((EntityType<?>) WATER_NORMAL_POOL[rand].get()).spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
-					if (entityToSpawn != null) {
-						entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-					}
-				}
-			} else {
-				int rand = Mth.nextInt(RandomSource.create(), 0, 8);
-				if (rand < LAND_NORMAL_POOL.length) {
-					if (world instanceof ServerLevel _level) {
-						Entity entityToSpawn = ((EntityType<?>) LAND_NORMAL_POOL[rand].get()).spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
-						if (entityToSpawn != null) {
-							entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-						}
-					}
-				} else {
-					int rand1 = Mth.nextInt(RandomSource.create(), 0, OCEANIZED_ANIMAL_POOL.length - 1);
-					if (world instanceof ServerLevel _level) {
-						Entity entityToSpawn = ((EntityType<?>) OCEANIZED_ANIMAL_POOL[rand1].get()).spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
-						if (entityToSpawn != null) {
-							entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-						}
-					}
-				}
-			}
-		}
-	}
-
-	public static void summonEliteSeaborn(LevelAccessor world, double x, double y, double z) {
-		if ((world.getFluidState(BlockPos.containing(x, y, z)).createLegacyBlock()).getBlock() == Blocks.WATER) {
-			int rand = Mth.nextInt(RandomSource.create(), 0, WATER_ELITE_POOL.length - 1);
-			if (world instanceof ServerLevel _level) {
-				Entity entityToSpawn = ((EntityType<?>) WATER_ELITE_POOL[rand].get()).spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
-				if (entityToSpawn != null) {
-					entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-				}
-			}
-		} else {
-			int rand = Mth.nextInt(RandomSource.create(), 0, 8);
-			if (Math.random() < 0.04) {
-				rand = 9;
-			}
-			if (rand <= 9) {
-				if (world instanceof ServerLevel _level) {
-					Entity entityToSpawn = ((EntityType<?>) LAND_ELITE_POOL[rand].get()).spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
-					if (entityToSpawn != null) {
-						entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-					}
-				}
-			} else {
-				int rand1 = Mth.nextInt(RandomSource.create(), 0, OCEANIZED_ELITE_POOL.length - 1);
-				if (world instanceof ServerLevel _level) {
-					Entity entityToSpawn = ((EntityType<?>) OCEANIZED_ELITE_POOL[rand1].get()).spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
-					if (entityToSpawn != null) {
-						entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
-					}
-				}
-			}
-		}
-		if (world instanceof ServerLevel _level)
-			_level.sendParticles(ParticleTypes.CLOUD, x, y, z, 32, 1, 1, 1, 0.1);
-		if (world instanceof Level _level) {
-				_level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PHANTOM_SWOOP, SoundSource.NEUTRAL, 1, 1);
-		}
-	}
-
 	/**
 	 * 以给定目标高度为中心，向上与向下搜索可用于生成实体的 Y 坐标。
 	 *

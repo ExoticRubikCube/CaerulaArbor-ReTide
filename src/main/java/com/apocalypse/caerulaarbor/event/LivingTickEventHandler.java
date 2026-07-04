@@ -291,8 +291,8 @@ public class LivingTickEventHandler {
             double pnt = Mth.nextDouble(RandomSource.create(), 0, 0.005);
             MapVariablesHandler.addEvoPoint(world, StrategyType.MIGRATION,
                     pnt * Math.max(MapVariables.get(world).strategy_subsisting + MapVariables.get(world).strategy_grow + MapVariables.get(world).strategy_breed, 1));
-            MigrationUpgradeManager.execute(world);
-            SilenceUpgradeManager.execute(world, pnt);
+            MigrationUpgradeManager.applyMigrationUpgrade(world);
+            SilenceUpgradeManager.applySilenceUpgrade(world, pnt);
         }
     }
 }

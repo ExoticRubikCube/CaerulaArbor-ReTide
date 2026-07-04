@@ -8,6 +8,7 @@ import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.*;
+import com.apocalypse.caerulaarbor.manager.SeabornSpawnManager;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.advancements.Advancement;
@@ -986,7 +987,7 @@ public class EndspeakerEntity extends SeaMonster {
 				if (Double.isNaN(spawnY)) {
 					continue;
 				}
-				WorldUtils.summonRandomSeaborn(world, eliteChance, spawnX, spawnY, spawnZ);
+				SeabornSpawnManager.summonRandomSeaborn(world, eliteChance, spawnX, spawnY, spawnZ);
 				if (world instanceof ServerLevel level) {
 					level.sendParticles(ParticleTypes.CLOUD, spawnX, spawnY + 0.75, spawnZ, 64, 0.75, 0.75, 0.75, 0.1);
 				}

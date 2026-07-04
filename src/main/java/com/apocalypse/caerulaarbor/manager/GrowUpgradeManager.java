@@ -20,7 +20,7 @@ import net.minecraft.world.level.LevelAccessor;
 import java.util.ArrayList;
 
 public class GrowUpgradeManager {
-	public static void execute(LevelAccessor world) {
+	public static void applyGrowthUpgrade(LevelAccessor world) {
 		double stra;
 		String num = "";
 		String prefix = "";

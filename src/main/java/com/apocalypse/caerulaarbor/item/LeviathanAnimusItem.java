@@ -10,6 +10,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -18,7 +19,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.sounds.SoundEvents;
 
 import java.util.List;
 
@@ -69,7 +69,7 @@ public class LeviathanAnimusItem extends Item {
             itemstack.shrink(1);
         } else {
             if (MapVariables.get(world).strategy_silence < 4 && StrategyUtils.canEnableSilence(world)) {
-                SilenceUpgradeManager.execute(world, 99999999);
+                SilenceUpgradeManager.applySilenceUpgrade(world, 99999999);
                 itemstack.shrink(1);
             } else {
                 if ((LevelAccessor) world instanceof Level _level) {

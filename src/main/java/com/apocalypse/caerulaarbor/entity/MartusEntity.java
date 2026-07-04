@@ -4,6 +4,7 @@ import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.*;
+import com.apocalypse.caerulaarbor.manager.SeabornSpawnManager;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -555,7 +556,7 @@ public class MartusEntity extends SeaMonster {
     private void martusTimedSpawn(LevelAccessor world, double x, double y, double z) {
         if (EntityUtils.getSeabornAround(world, x, y, z, this) < (world.getLevelData().getGameRules().getInt(CAGameRules.CLONE_NUMBER_LIMIT))) {
             for (int index0 = 0; index0 < 2; index0++) {
-                WorldUtils.summonRandomSeaborn(world, 0.33, x, y, z);
+                SeabornSpawnManager.summonRandomSeaborn(world, 0.33, x, y, z);
                 if (world instanceof ServerLevel _level)
                     _level.sendParticles(ParticleTypes.CLOUD, x, y, z, 18, 0.6, 0.6, 0.6, 0.16);
             }

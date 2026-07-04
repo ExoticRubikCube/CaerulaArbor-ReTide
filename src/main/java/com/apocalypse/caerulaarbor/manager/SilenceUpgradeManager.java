@@ -22,7 +22,7 @@ import net.minecraft.world.level.LevelAccessor;
 import java.util.ArrayList;
 
 public class SilenceUpgradeManager {
-	public static void execute(LevelAccessor world, double point) {
+	public static void applySilenceUpgrade(LevelAccessor world, double point) {
 		double stra;
 		String num = "";
 		String prefix = "";

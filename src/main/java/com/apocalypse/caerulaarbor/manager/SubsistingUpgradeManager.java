@@ -20,7 +20,7 @@ import net.minecraft.world.level.LevelAccessor;
 import java.util.ArrayList;
 
 public class SubsistingUpgradeManager {
-	public static void execute(LevelAccessor world) {
+	public static void applySubsistingUpgrade(LevelAccessor world) {
 		double stra;
 		String num = "";
 		String prefix = "";
