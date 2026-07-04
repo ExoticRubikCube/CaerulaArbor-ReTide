@@ -34,7 +34,8 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.sounds.SoundEvents;
+import com.apocalypse.caerulaarbor.init.CASounds;
 
 import java.util.Comparator;
 import java.util.List;
@@ -117,7 +118,7 @@ public class LancXiaoItem extends SwordItem {
                                         if ((LevelAccessor) world instanceof ServerLevel _level)
                                             _level.sendParticles(CAParticles.ENDSPEAKER_PARTICLE.get(), tx, (ty + 0.75), tz, 18, 0.75, 0.75, 0.75, 0.15);
                                         if ((LevelAccessor) world instanceof Level _level) {
-                                                _level.playSound(null, BlockPos.containing(tx, ty, tz), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "endspeaker_attack_hit")), SoundSource.PLAYERS, (float) 1.5, 1);
+                                                _level.playSound(null, BlockPos.containing(tx, ty, tz), CASounds.ENDSPEAKER_ATTACK_HIT.get(), SoundSource.PLAYERS, (float) 1.5, 1);
                                         }
                                         entityiterator.hurt(new DamageSource(((LevelAccessor) world).registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "endspeaker_attack"))), entity), (float) (atk * 2));
                                     }
@@ -135,7 +136,7 @@ public class LancXiaoItem extends SwordItem {
             }
             if (count > 0) {
                 if ((LevelAccessor) world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "skill_release")), SoundSource.PLAYERS, (float) 0.75, 1);
+                        _level.playSound(null, BlockPos.containing(x, y, z), CASounds.SKILL_RELEASE.get(), SoundSource.PLAYERS, (float) 0.75, 1);
                 }
                 LivingEntity _entity = (LivingEntity) (Entity) entity;
                 if (!_entity.level().isClientSide())
@@ -210,7 +211,7 @@ public class LancXiaoItem extends SwordItem {
 		double vz = toZ - fromZ;
 		double size = Math.max(Math.min(Math.round(Math.sqrt(vx * vx + vy * vy + vz * vz)), 32), 1);
 		if (world instanceof Level level) {
-			level.playSound(null, BlockPos.containing(fromX, fromY, fromZ), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.enderman.teleport")), SoundSource.HOSTILE, 1, 1);
+			level.playSound(null, BlockPos.containing(fromX, fromY, fromZ), SoundEvents.ENDERMAN_TELEPORT, SoundSource.HOSTILE, 1, 1);
 		}
 		for (int index0 = 0; index0 < (int) size; index0++) {
 			if (world instanceof ServerLevel level) {

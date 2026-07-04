@@ -5,8 +5,8 @@ import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -19,7 +19,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.items.ItemHandlerHelper;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
 public class RocinanteInjectorItem extends Item {
@@ -44,7 +43,7 @@ public class RocinanteInjectorItem extends Item {
 		double targetY = target.getY();
 		double targetZ = target.getZ();
 		stack.shrink(1);
-		level.playSound(null, BlockPos.containing(targetX, targetY, targetZ), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.husk.converted_to_zombie")), SoundSource.NEUTRAL, 2, 1);
+		level.playSound(null, BlockPos.containing(targetX, targetY, targetZ), SoundEvents.HUSK_CONVERTED_TO_ZOMBIE, SoundSource.NEUTRAL, 2, 1);
 		if (level instanceof ServerLevel serverLevel) {
 			serverLevel.sendParticles(ParticleTypes.EXPLOSION_EMITTER, targetX, targetY + 1, targetZ, 32, 1, 1, 1, 1);
 		}

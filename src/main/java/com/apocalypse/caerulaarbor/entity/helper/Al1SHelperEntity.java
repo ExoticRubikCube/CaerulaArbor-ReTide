@@ -1,19 +1,18 @@
 package com.apocalypse.caerulaarbor.entity.helper;
 
-import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CASounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 
@@ -30,7 +29,7 @@ public class Al1SHelperEntity extends LittleHelperEntity {
 	protected InteractionResult handleApocalypseInteract(Player sourceentity) {
 		if (this.level() instanceof ServerLevel serverLevel && sourceentity.isHolding(CAItems.APOCALYPSE.get())) {
 			serverLevel.sendParticles(ParticleTypes.FLAME, this.getX(), this.getY(), this.getZ(), 32, 0.75, 0.75, 0.75, 0.15);
-			this.level().playSound(null, BlockPos.containing(this.getX(), this.getY(), this.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "al1s_spec")), SoundSource.BLOCKS, 3, 1);
+			this.level().playSound(null, BlockPos.containing(this.getX(), this.getY(), this.getZ()), CASounds.AL1S_SPEC.get(), SoundSource.BLOCKS, 3, 1);
 			return InteractionResult.SUCCESS;
 		}
 		return InteractionResult.PASS;
@@ -40,7 +39,7 @@ public class Al1SHelperEntity extends LittleHelperEntity {
 	protected void playPassengerLeftClickSound(Player passenger) {
 		if (!this.level().isClientSide()) {
 			this.level().playSound(null, BlockPos.containing(passenger.getX(), passenger.getY(), passenger.getZ()),
-					ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "al1s_work")), SoundSource.BLOCKS, 3, 1);
+					CASounds.AL1S_WORK.get(), SoundSource.BLOCKS, 3, 1);
 		}
 	}
 
@@ -52,12 +51,12 @@ public class Al1SHelperEntity extends LittleHelperEntity {
 	@Override 
 	protected void playBreakSound(ServerLevel serverLevel) {
 		serverLevel.playSound(null, BlockPos.containing(this.getX(), this.getY(), this.getZ()),
-				ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "al1s_break")), SoundSource.BLOCKS, 3, 1);
+				CASounds.AL1S_BREAK.get(), SoundSource.BLOCKS, 3, 1);
 	}
 
 	@Override
 	@Nullable
-	protected ResourceLocation getCustomDeathSound() {
+        protected SoundEvent getCustomDeathSound() {
 		return null;
 	}
 }

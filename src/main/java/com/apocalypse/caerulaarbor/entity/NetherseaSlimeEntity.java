@@ -10,9 +10,9 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -35,7 +35,6 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.DungeonHooks;
-import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
@@ -89,20 +88,19 @@ public class NetherseaSlimeEntity extends SeaMonster {
 		return MobType.UNDEFINED;
 	}
 
-	//TODO 修改为所有注册.get()而不是forge接口
 	@Override
 	public void playStepSound(BlockPos pos, BlockState blockIn) {
-		this.playSound(ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.slime.jump_small")), 0.15f, 1);
+		this.playSound(SoundEvents.SLIME_JUMP_SMALL, 0.15f, 1);
 	}
 
 	@Override
 	public SoundEvent getHurtSound(DamageSource ds) {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.slime.hurt"));
+		return SoundEvents.SLIME_HURT;
 	}
 
 	@Override
 	public SoundEvent getDeathSound() {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.slime.death"));
+		return SoundEvents.SLIME_DEATH;
 	}
 
 	@Override
@@ -112,7 +110,7 @@ public class NetherseaSlimeEntity extends SeaMonster {
         double y = this.getY();
         double z = this.getZ();
         if (world instanceof Level _level) {
-                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.slime.squish")), SoundSource.HOSTILE, 1, 1);
+                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SLIME_SQUISH, SoundSource.HOSTILE, 1, 1);
         }
         return super.causeFallDamage(l, d, source);
 	}

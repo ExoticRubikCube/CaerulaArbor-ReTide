@@ -43,12 +43,13 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
+import net.minecraft.sounds.SoundEvents;
+import com.apocalypse.caerulaarbor.init.CASounds;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
@@ -239,7 +240,7 @@ public class OceanizedWitherEntity extends AbstractOceanizedWitherEntity impleme
                     level.explode(null, x, y, z, 16, Level.ExplosionInteraction.MOB);
                 }
                 if (world instanceof Level level) {
-                    level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "ocean_wither_spawn")), SoundSource.HOSTILE, 4, 1);
+                    level.playSound(null, BlockPos.containing(x, y, z), CASounds.OCEAN_WITHER_SPAWN.get(), SoundSource.HOSTILE, 4, 1);
                 }
                 if (world instanceof ServerLevel level) {
                     level.sendParticles(ParticleTypes.EXPLOSION, x, y, z, 4, 3, 3, 3, 1);
@@ -291,9 +292,9 @@ public class OceanizedWitherEntity extends AbstractOceanizedWitherEntity impleme
             }
             if (brokeAnyBlock && world instanceof Level level) {
                 if (!level.isClientSide()) {
-                    level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.wither.break_block")), SoundSource.NEUTRAL, 1, 1);
+                    level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.WITHER_BREAK_BLOCK, SoundSource.NEUTRAL, 1, 1);
                 } else {
-                    level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.wither.break_block")), SoundSource.NEUTRAL, 1, 1, false);
+                    level.playLocalSound(x, y, z, SoundEvents.WITHER_BREAK_BLOCK, SoundSource.NEUTRAL, 1, 1, false);
                 }
             }
         }

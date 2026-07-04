@@ -1,13 +1,13 @@
 package com.apocalypse.caerulaarbor.block;
 
-import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.MoistEnderCrystalEntity;
 import com.apocalypse.caerulaarbor.entity.OceanizedEnderinaEntity;
 import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CASounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
@@ -30,7 +30,6 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
 
@@ -100,7 +99,7 @@ public class EnderinaCoreBlock extends Block {
                             ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_booleanProp, true), 3);
                     }
                     if ((LevelAccessor) world instanceof Level _level) {
-                            _level.playSound(null, curPos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.ender_dragon.growl")), SoundSource.BLOCKS, 2, 1);
+                            _level.playSound(null, curPos, SoundEvents.ENDER_DRAGON_GROWL, SoundSource.BLOCKS, 2, 1);
                     }
                 }
             }
@@ -134,7 +133,7 @@ public class EnderinaCoreBlock extends Block {
                     }
                 }
                 if ((LevelAccessor) world instanceof Level _level) {
-                        _level.playSound(null, curPos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "caster_skill")), SoundSource.BLOCKS, 2, 1);
+                        _level.playSound(null, curPos, CASounds.CASTER_SKILL.get(), SoundSource.BLOCKS, 2, 1);
                 }
                 world.destroyBlock(curPos, false);
             } else {

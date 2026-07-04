@@ -3,6 +3,7 @@ package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.client.renderer.item.UninishedBeautyItemRenderer;
+import com.apocalypse.caerulaarbor.init.CASounds;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
@@ -37,7 +38,6 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -212,11 +212,11 @@ public class UninishedBeautyItem extends Item implements GeoItem, SyncedAnimatio
             if (itemstack.getItem() instanceof UninishedBeautyItem)
                 itemstack.getOrCreateTag().putString("geckoAnim", "animation.unfinished_beautuy.attack");
             if (world instanceof Level _level) {
-                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "saw_cut_spect")), SoundSource.PLAYERS, (float) 2.4, 1);
+                _level.playSound(null, BlockPos.containing(x, y, z), CASounds.SAW_CUT_SPECT.get(), SoundSource.PLAYERS, (float) 2.4, 1);
             }
             CaerulaArborMod.queueServerWork(12, () -> {
                 if (world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "saw_spect_1")), SoundSource.PLAYERS, (float) 2.4, 1);
+                    _level.playSound(null, BlockPos.containing(x, y, z), CASounds.SAW_SPECT_1.get(), SoundSource.PLAYERS, (float) 2.4, 1);
                 }
                 new Object() {
                     void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {

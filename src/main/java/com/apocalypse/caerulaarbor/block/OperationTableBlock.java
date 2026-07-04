@@ -1,6 +1,7 @@
 package com.apocalypse.caerulaarbor.block;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import net.minecraft.sounds.SoundEvents;
 
 import com.apocalypse.caerulaarbor.init.CAItems;
 import net.minecraft.advancements.Advancement;
@@ -35,7 +36,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public class OperationTableBlock extends Block {
 	public static final IntegerProperty BLOCKSTATE = IntegerProperty.create("blockstate", 0, 1);
@@ -142,7 +142,7 @@ public class OperationTableBlock extends Block {
                                     }
                                     ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                                     if ((LevelAccessor) world instanceof Level _level) {
-                                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.armor.equip_leather")), SoundSource.BLOCKS, 1, 1);
+                                            _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ARMOR_EQUIP_LEATHER, SoundSource.BLOCKS, 1, 1);
                                     }
                                     result = InteractionResult.SUCCESS;
                                 }
@@ -171,9 +171,9 @@ public class OperationTableBlock extends Block {
                                 }
                                 if ((LevelAccessor) world instanceof Level _level) {
                                     if (!_level.isClientSide()) {
-                                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.zombie.converted_to_drowned")), SoundSource.BLOCKS, 1, 1);
+                                        _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ZOMBIE_CONVERTED_TO_DROWNED, SoundSource.BLOCKS, 1, 1);
                                     } else {
-                                        _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.zombie.converted_to_drowned")), SoundSource.BLOCKS, 1, 1, false);
+                                        _level.playLocalSound(x, y, z, SoundEvents.ZOMBIE_CONVERTED_TO_DROWNED, SoundSource.BLOCKS, 1, 1, false);
                                     }
                                 }
                                 ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);

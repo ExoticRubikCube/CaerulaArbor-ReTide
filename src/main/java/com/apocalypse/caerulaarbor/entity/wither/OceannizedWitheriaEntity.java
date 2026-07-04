@@ -36,12 +36,13 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
+import net.minecraft.sounds.SoundEvents;
+import com.apocalypse.caerulaarbor.init.CASounds;
 
 import javax.annotation.Nullable;
 import java.util.Comparator;
@@ -245,9 +246,9 @@ public class OceannizedWitheriaEntity extends AbstractOceanizedWitherEntity {
         }
         if (once && world instanceof Level level) {
             if (!level.isClientSide()) {
-                level.playSound(null, originPos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.wither.break_block")), SoundSource.NEUTRAL, 1, 1);
+                level.playSound(null, originPos, SoundEvents.WITHER_BREAK_BLOCK, SoundSource.NEUTRAL, 1, 1);
             } else {
-                level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.wither.break_block")), SoundSource.NEUTRAL, 1, 1, false);
+                level.playLocalSound(x, y, z, SoundEvents.WITHER_BREAK_BLOCK, SoundSource.NEUTRAL, 1, 1, false);
             }
         }
     }
@@ -380,9 +381,9 @@ public class OceannizedWitheriaEntity extends AbstractOceanizedWitherEntity {
             }
         }
         if (!world.isClientSide()) {
-            world.playSound(null, BlockPos.containing(this.getX(), this.getY(), this.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "wither_scythe_pre")), SoundSource.HOSTILE, 12, 1);
+            world.playSound(null, BlockPos.containing(this.getX(), this.getY(), this.getZ()), CASounds.WITHER_SCYTHE_PRE.get(), SoundSource.HOSTILE, 12, 1);
         } else {
-            world.playLocalSound(this.getX(), this.getY(), this.getZ(), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "wither_scythe_pre")), SoundSource.HOSTILE, 12, 1, false);
+            world.playLocalSound(this.getX(), this.getY(), this.getZ(), CASounds.WITHER_SCYTHE_PRE.get(), SoundSource.HOSTILE, 12, 1, false);
         }
     }
 

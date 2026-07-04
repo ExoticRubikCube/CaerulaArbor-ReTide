@@ -4,10 +4,7 @@ import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.api.event.SanityEvent;
 import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CAAttributes;
-import com.apocalypse.caerulaarbor.init.CAEntities;
-import com.apocalypse.caerulaarbor.init.CAMobEffects;
-import com.apocalypse.caerulaarbor.init.CAParticles;
+import com.apocalypse.caerulaarbor.init.*;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -44,7 +41,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
@@ -129,8 +125,8 @@ public class ThirsterEntity extends SeaMonster {
         return false;
     }
 
-    public SoundEvent HURT = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "seaborn_generic_hit"));
-    public SoundEvent DIE = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "seaborn_death"));
+    public SoundEvent HURT = CASounds.SEABORN_GENERIC_HIT.get();
+    public SoundEvent DIE = CASounds.SEABORN_DEATH.get();
 
     @Override
     public SoundEvent getHurtSound(DamageSource ds) {
@@ -177,7 +173,7 @@ public class ThirsterEntity extends SeaMonster {
                     }
                 }.timedLoop(0, 5, 1);
                 if (world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "bishopfish_attack")), SoundSource.HOSTILE,
+                    _level.playSound(null, BlockPos.containing(x, y, z), CASounds.BISHOPFISH_ATTACK.get(), SoundSource.HOSTILE,
                             (float) 2.5, 1);
                 }
                 final Vec3 _center = new Vec3(x, y, z);
@@ -509,7 +505,7 @@ public class ThirsterEntity extends SeaMonster {
         }.timedLoop(0, 5, 1);
 
         if (world instanceof Level _level) {
-            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "creeper_fish_explode")), SoundSource.HOSTILE, 3, 1);
+            _level.playSound(null, BlockPos.containing(x, y, z), CASounds.CREEPER_FISH_EXPLODE.get(), SoundSource.HOSTILE, 3, 1);
         }
 
         this.getEntityData().set(DATA_DIZZY_NUM, this.getEntityData().get(DATA_DIZZY_NUM) + 1);

@@ -7,8 +7,8 @@ import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
@@ -29,7 +29,6 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public class TrailPulseBlock extends Block {
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
@@ -163,7 +162,7 @@ public class TrailPulseBlock extends Block {
 		int nurture = blockstate.getValue(NURTR);
 		if (nurture <= 0) {
 			world.destroyBlock(pos, false);
-			world.playSound(null, pos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.break")), SoundSource.BLOCKS, 0.33F, 1.0F);
+			world.playSound(null, pos, SoundEvents.SCULK_VEIN_BREAK, SoundSource.BLOCKS, 0.33F, 1.0F);
 			if (random.nextFloat() < 0.025F) {
 				world.setBlock(pos, random.nextFloat() < 0.012F ? CABlocks.RED_OVARY.get().defaultBlockState() : CABlocks.OCEAN_OVARY.get().defaultBlockState(), 3);
 			}
@@ -171,13 +170,13 @@ public class TrailPulseBlock extends Block {
 		int growAge = blockstate.getValue(GROW_AGE);
 		if (growAge <= 0 && random.nextFloat() < 0.33F) {
 			world.destroyBlock(pos, false);
-			world.playSound(null, pos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.break")), SoundSource.BLOCKS, 0.33F, 1.0F);
+			world.playSound(null, pos, SoundEvents.SCULK_VEIN_BREAK, SoundSource.BLOCKS, 0.33F, 1.0F);
 			if (random.nextFloat() < 0.025F) {
 				world.setBlock(pos, random.nextFloat() < 0.012F ? CABlocks.RED_OVARY.get().defaultBlockState() : CABlocks.OCEAN_OVARY.get().defaultBlockState(), 3);
 			}
 		}
 		if (put) {
-			world.playSound(null, pos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.place")), SoundSource.BLOCKS, 0.33F, 1.0F);
+			world.playSound(null, pos, SoundEvents.SCULK_VEIN_PLACE, SoundSource.BLOCKS, 0.33F, 1.0F);
 			if (nurture > 0) {
 				BlockState currentState = world.getBlockState(pos);
 				if (currentState.hasProperty(NURTR)) {

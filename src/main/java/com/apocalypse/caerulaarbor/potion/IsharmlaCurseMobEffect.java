@@ -20,7 +20,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraftforge.registries.ForgeRegistries;
+import com.apocalypse.caerulaarbor.init.CASounds;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +50,7 @@ public class IsharmlaCurseMobEffect extends MobEffect {
         if (world instanceof ServerLevel _level)
             _level.sendParticles(CAParticles.ISHARMLA_CURSE_PARTICLE.get(), x, (y + 0.8), z, 32, 0.8, 0.8, 0.8, 0.1);
         if (world instanceof Level _level) {
-                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "isharmla_tear_hurt_0")), SoundSource.HOSTILE, 2, 1);
+                _level.playSound(null, BlockPos.containing(x, y, z), CASounds.ISHARMLA_TEAR_HURT_0.get(), SoundSource.HOSTILE, 2, 1);
         }
         t = Mth.nextDouble(RandomSource.create(), 0, 6.283);
         if ((Entity) entity instanceof Mob _entity)

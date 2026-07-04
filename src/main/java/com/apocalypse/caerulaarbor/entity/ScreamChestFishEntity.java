@@ -19,6 +19,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
@@ -42,7 +43,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
-import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
@@ -135,12 +135,12 @@ public class ScreamChestFishEntity extends SeaMonster {
 
     @Override
     public SoundEvent getHurtSound(DamageSource ds) {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.armor_stand.hit"));
+        return SoundEvents.ARMOR_STAND_HIT;
     }
 
     @Override
     public SoundEvent getDeathSound() {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.armor_stand.break"));
+        return SoundEvents.ARMOR_STAND_BREAK;
     }
 
     @Override
@@ -173,7 +173,7 @@ public class ScreamChestFishEntity extends SeaMonster {
         }
         if (this.isShiftKeyDown()) {
             this.setAnimation("animation.scream_chest_fish.open");
-            this.level().playSound(null, BlockPos.containing(this.getX(), this.getY(), this.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.chest.open")), SoundSource.HOSTILE, 1, 1);
+            this.level().playSound(null, BlockPos.containing(this.getX(), this.getY(), this.getZ()), SoundEvents.CHEST_OPEN, SoundSource.HOSTILE, 1, 1);
             this.setShiftKeyDown(false);
             this.getEntityData().set(DATA_release, true);
             this.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
@@ -264,7 +264,7 @@ public class ScreamChestFishEntity extends SeaMonster {
                     t = tickCount;
                     if (scream % 10 == 0) {
                         if (world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_shrieker.shriek")), SoundSource.HOSTILE, 1, 1);
+                            _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SCULK_SHRIEKER_SHRIEK, SoundSource.HOSTILE, 1, 1);
                         }
                     }
                     for (int index0 = 0; index0 < 60; index0++) {

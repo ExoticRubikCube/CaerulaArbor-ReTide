@@ -16,6 +16,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -37,7 +38,6 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
@@ -107,17 +107,17 @@ public class TheAbandonedEntity extends SeaMonster implements PolarMountRider {
 
     @Override
     public SoundEvent getAmbientSound() {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.drowned.ambient_water"));
+        return SoundEvents.DROWNED_AMBIENT_WATER;
     }
 
     @Override
     public SoundEvent getHurtSound(DamageSource ds) {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.drowned.hurt_water"));
+        return SoundEvents.DROWNED_HURT_WATER;
     }
 
     @Override
     public SoundEvent getDeathSound() {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.drowned.death_water"));
+        return SoundEvents.DROWNED_DEATH_WATER;
     }
 
     @Override
@@ -183,7 +183,7 @@ public class TheAbandonedEntity extends SeaMonster implements PolarMountRider {
                         new Object() {
                             void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                                 if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.shulker.shoot")), SoundSource.HOSTILE, 1, 1);
+                                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SHULKER_SHOOT, SoundSource.HOSTILE, 1, 1);
                                 }
                                 {
                                     Entity _shootFrom = TheAbandonedEntity.this;

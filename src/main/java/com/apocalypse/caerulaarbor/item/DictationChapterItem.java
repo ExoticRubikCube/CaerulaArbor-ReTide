@@ -1,11 +1,11 @@
 package com.apocalypse.caerulaarbor.item;
 
-import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler;
 import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler.StrategyType;
 import com.apocalypse.caerulaarbor.init.CABlocks;
 import com.apocalypse.caerulaarbor.init.CAParticles;
+import com.apocalypse.caerulaarbor.init.CASounds;
 import com.apocalypse.caerulaarbor.manager.BreedUpgradeManager;
 import com.apocalypse.caerulaarbor.manager.GrowUpgradeManager;
 import com.apocalypse.caerulaarbor.manager.MigrationUpgradeManager;
@@ -13,7 +13,6 @@ import com.apocalypse.caerulaarbor.manager.SubsistingUpgradeManager;
 import com.apocalypse.caerulaarbor.util.MathUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
@@ -27,7 +26,6 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
 
@@ -84,28 +82,28 @@ public class DictationChapterItem extends Item {
             target = MathUtils.minOfFour(l0, l1, l2, l3);
             if (target == l0) {
                 if (world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "grow1")), SoundSource.PLAYERS, 1, 1);
+                        _level.playSound(null, BlockPos.containing(x, y, z), CASounds.GROW1.get(), SoundSource.PLAYERS, 1, 1);
                 }
                 MapVariablesHandler.setEvoPoint(world, StrategyType.GROW, p0 + 999999);
                 GrowUpgradeManager.execute(world);
                 stra = Component.translatable("gui.caerula_arbor.evo_tree.label_sreategy_grow").getString();
             } else if (target == l1) {
                 if (world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "subsisting1")), SoundSource.PLAYERS, 1, 1);
+                        _level.playSound(null, BlockPos.containing(x, y, z), CASounds.SUBSISTING1.get(), SoundSource.PLAYERS, 1, 1);
                 }
                 MapVariablesHandler.setEvoPoint(world, StrategyType.SUBSISTING, p1 + 999999);
                 SubsistingUpgradeManager.execute(world);
                 stra = Component.translatable("gui.caerula_arbor.evo_tree.label_strategy_subsisting").getString();
             } else if (target == l2) {
                 if (world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "breed1")), SoundSource.PLAYERS, 1, 1);
+                        _level.playSound(null, BlockPos.containing(x, y, z), CASounds.BREED1.get(), SoundSource.PLAYERS, 1, 1);
                 }
                 MapVariablesHandler.setEvoPoint(world, StrategyType.BREED, p2 + 999999);
                 BreedUpgradeManager.execute(world);
                 stra = Component.translatable("gui.caerula_arbor.evo_tree.label_strategy_breed").getString();
             } else if (target == l3) {
                 if (world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "migration1")), SoundSource.PLAYERS, 1, 1);
+                        _level.playSound(null, BlockPos.containing(x, y, z), CASounds.MIGRATION1.get(), SoundSource.PLAYERS, 1, 1);
                 }
                 MapVariablesHandler.setEvoPoint(world, StrategyType.MIGRATION, p3 + 999999);
                 MigrationUpgradeManager.execute(world);

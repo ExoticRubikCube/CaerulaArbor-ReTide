@@ -12,7 +12,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -38,12 +37,12 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
+import net.minecraft.sounds.SoundEvents;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
@@ -197,17 +196,17 @@ public class OceanizedPillagerEntity extends SeaMonster implements RangedAttackM
 
     @Override
     public SoundEvent getAmbientSound() {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.pillager.ambient"));
+        return SoundEvents.PILLAGER_AMBIENT;
     }
 
     @Override
     public SoundEvent getHurtSound(DamageSource ds) {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.pillager.hurt"));
+        return SoundEvents.PILLAGER_HURT;
     }
 
     @Override
     public SoundEvent getDeathSound() {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.pillager.death"));
+        return SoundEvents.PILLAGER_DEATH;
     }
 
     @Override
@@ -260,7 +259,7 @@ public class OceanizedPillagerEntity extends SeaMonster implements RangedAttackM
                                 }
                                 if (((Entity) OceanizedPillagerEntity.this).isAlive()) {
                                     if (world instanceof Level _level) {
-                                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.crossbow.shoot")), SoundSource.HOSTILE, 1, 1);
+                                        _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.CROSSBOW_SHOOT, SoundSource.HOSTILE, 1, 1);
                                     }
                                     Entity _shootFrom = OceanizedPillagerEntity.this;
                                     Level projectileLevel = _shootFrom.level();

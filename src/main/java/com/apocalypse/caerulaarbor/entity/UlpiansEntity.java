@@ -6,6 +6,7 @@ import com.apocalypse.caerulaarbor.entity.base.SyncedAnimationEntity;
 import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CASounds;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
@@ -45,7 +46,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -157,12 +157,12 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
 
     @Override
     public SoundEvent getHurtSound(DamageSource ds) {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "ulpians_hit"));
+        return CASounds.ULPIANS_HIT.get();
     }
 
     @Override
     public SoundEvent getDeathSound() {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "ulpians_die"));
+        return CASounds.ULPIANS_DIE.get();
     }
 
     @Override
@@ -173,13 +173,13 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
         if (!this.level().isClientSide()) {
             this.getEntityData().set(DATA_duration, this.getEntityData().get(DATA_duration) + 30);
             this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
-                    ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "anchor_pre")), SoundSource.HOSTILE, 2.2F, 1);
+                    CASounds.ANCHOR_PRE.get(), SoundSource.HOSTILE, 2.2F, 1);
             CaerulaArborMod.queueServerWork(14, () -> {
                 if (this.isAlive()) {
                     Entity enemy = this.getTarget();
                     double damage = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
                     this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
-                            ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "anchor_hit")), SoundSource.HOSTILE, 2.75F, 1);
+                            CASounds.ANCHOR_ATTACK.get(), SoundSource.HOSTILE, 2.75F, 1);
                     final Vec3 center = new Vec3(this.getX(), this.getY(), this.getZ());
                     List<Entity> foundEntities = this.level().getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(48 / 2d), entity -> true).stream()
                             .sorted(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(center))).toList();
@@ -349,13 +349,13 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                         if ((Entity) this instanceof UlpiansEntity _datEntSetI)
                             _datEntSetI.getEntityData().set(DATA_duration, (int) (dura + 40));
                         if (world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "ulpians_pul_pre")), SoundSource.NEUTRAL, (float) 2.2, 1);
+                            _level.playSound(null, BlockPos.containing(x, y, z), CASounds.ULPIANS_PUL_PRE.get(), SoundSource.NEUTRAL, (float) 2.2, 1);
                         }
                         ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY() + 1.6), (enemy.getZ())));
                         CaerulaArborMod.queueServerWork(13, () -> {
                             if (this.isAlive()) {
                                 if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "ulpians_pull_throw")), SoundSource.NEUTRAL, 3, 1);
+                                    _level.playSound(null, BlockPos.containing(x, y, z), CASounds.ULPIANS_PULL_THROW.get(), SoundSource.NEUTRAL, 3, 1);
                                 }
                             }
                         });
@@ -369,7 +369,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                                 r = 6;
                                 damage = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 2.7;
                                 if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(getX(), getY(), getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "ulpians_pull_hit")), SoundSource.NEUTRAL, 3, 1);
+                                    _level.playSound(null, BlockPos.containing(getX(), getY(), getZ()), CASounds.ULPIANS_PULL_HIT.get(), SoundSource.NEUTRAL, 3, 1);
                                 }
                                 {
                                     final Vec3 _center = new Vec3((getX()), (getY()), (getZ()));
@@ -447,7 +447,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                         CaerulaArborMod.queueServerWork(26, () -> {
                             if (this.isAlive()) {
                                 if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "ulpians_pull_pull")), SoundSource.NEUTRAL, (float) 2.5, 1);
+                                    _level.playSound(null, BlockPos.containing(x, y, z), CASounds.ULPIANS_PULL_PULL.get(), SoundSource.NEUTRAL, (float) 2.5, 1);
                                 }
                             }
                         });
@@ -473,17 +473,17 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                         if ((Entity) this instanceof UlpiansEntity _datEntSetI)
                             _datEntSetI.getEntityData().set(DATA_duration, (int) (dura + 40));
                         if (world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "ulpians_pul_pre")), SoundSource.NEUTRAL, (float) 2.2, 1);
+                            _level.playSound(null, BlockPos.containing(x, y, z), CASounds.ULPIANS_PUL_PRE.get(), SoundSource.NEUTRAL, (float) 2.2, 1);
                         }
                         ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY() + 1.6), (enemy.getZ())));
                         if (!this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 25, 9, false, false));
                         if (world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "ulpians_skill")), SoundSource.NEUTRAL, (float) 2.5, 1);
+                            _level.playSound(null, BlockPos.containing(x, y, z), CASounds.ULPIANS_SKILL.get(), SoundSource.NEUTRAL, (float) 2.5, 1);
                         }
                         CaerulaArborMod.queueServerWork(16, () -> {
                             if (world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "anchor_throw")), SoundSource.NEUTRAL, (float) 2.2, 1);
+                                _level.playSound(null, BlockPos.containing(x, y, z), CASounds.ANCHOR_THROW.get(), SoundSource.NEUTRAL, (float) 2.2, 1);
                             }
                         });
                         CaerulaArborMod.queueServerWork(22, () -> {
@@ -552,7 +552,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                                 if (world instanceof ServerLevel _level)
                                     _level.sendParticles(ParticleTypes.EXPLOSION_EMITTER, noeX, nowY, nowZ, 72, 3, 3, 3, 0.5);
                                 if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(noeX, nowY, nowZ), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "anchor_skill")), SoundSource.PLAYERS, 3, 1);
+                                    _level.playSound(null, BlockPos.containing(noeX, nowY, nowZ), CASounds.ANCHOR_SKILL.get(), SoundSource.PLAYERS, 3, 1);
                                 }
                             }
                         });

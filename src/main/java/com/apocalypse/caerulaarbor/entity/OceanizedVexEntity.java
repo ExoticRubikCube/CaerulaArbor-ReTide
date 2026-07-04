@@ -50,12 +50,12 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
+import net.minecraft.sounds.SoundEvents;
 
 import javax.annotation.Nullable;
 import java.util.Comparator;
@@ -138,17 +138,17 @@ public class OceanizedVexEntity extends SeaMonster {
 
     @Override
     public SoundEvent getAmbientSound() {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.vex.ambient"));
+        return SoundEvents.VEX_AMBIENT;
     }
 
     @Override
     public SoundEvent getHurtSound(DamageSource ds) {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.vex.hurt"));
+        return SoundEvents.VEX_HURT;
     }
 
     @Override
     public SoundEvent getDeathSound() {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.vex.death"));
+        return SoundEvents.VEX_DEATH;
     }
 
     @Override
@@ -369,7 +369,7 @@ public class OceanizedVexEntity extends SeaMonster {
             if (world instanceof ServerLevel _level)
                 _level.sendParticles(ParticleTypes.EXPLOSION, x, (y + 0.4), z, 4, 1, 1, 1, 0.1);
             if (world instanceof Level _level) {
-                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.vex.charge")), SoundSource.NEUTRAL, 3, 1);
+                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.VEX_CHARGE, SoundSource.NEUTRAL, 3, 1);
             }
             sanity = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
             {

@@ -9,9 +9,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -22,7 +22,6 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
 
@@ -92,7 +91,7 @@ public class IncandescentAnimaItem extends Item {
                     if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
                         _player.displayClientMessage(Component.literal(info), true);
                     if ((LevelAccessor) world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.fire.extinguish")), SoundSource.PLAYERS, 3, 1);
+                            _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.FIRE_EXTINGUISH, SoundSource.PLAYERS, 3, 1);
                     }
                     if ((LevelAccessor) world instanceof ServerLevel _level)
                         _level.sendParticles(ParticleTypes.ASH, x, (y + 0.75), z, 32, 0.75, 0.75, 0.75, 0.1);
@@ -131,7 +130,7 @@ public class IncandescentAnimaItem extends Item {
                         if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
                             _player.displayClientMessage(Component.literal(info), true);
                         if ((LevelAccessor) world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.fire.extinguish")), SoundSource.PLAYERS, 3, 1);
+                                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.FIRE_EXTINGUISH, SoundSource.PLAYERS, 3, 1);
                         }
                         if ((LevelAccessor) world instanceof ServerLevel _level)
                             _level.sendParticles(ParticleTypes.ASH, x, (y + 0.75), z, 32, 0.75, 0.75, 0.75, 0.1);
@@ -181,7 +180,7 @@ public class IncandescentAnimaItem extends Item {
                     if (shouldBroadCast) {
                         MapVariablesHandler.setIncandescentUseTick(world, gameTick);
                         if ((LevelAccessor) world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.end_portal.spawn")), SoundSource.PLAYERS, 3, 1);
+                                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.END_PORTAL_SPAWN, SoundSource.PLAYERS, 3, 1);
                         }
                         if ((LevelAccessor) world instanceof ServerLevel _level)
                             _level.sendParticles(ParticleTypes.END_ROD, x, (y + 0.75), z, 32, 0.75, 0.75, 0.75, 0.1);

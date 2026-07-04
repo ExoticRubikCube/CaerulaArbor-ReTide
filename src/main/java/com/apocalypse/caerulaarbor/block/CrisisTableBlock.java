@@ -5,6 +5,7 @@ import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.init.CABlockEntities;
 import com.apocalypse.caerulaarbor.init.CABlocks;
 import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CASounds;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
@@ -47,7 +48,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -153,7 +153,7 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
             double z = pos.getZ();
             if ((blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _getip1 ? blockstate.getValue(_getip1) : -1) == 1) {
                 if ((LevelAccessor) world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "start")), SoundSource.BLOCKS, 1, 1);
+                        _level.playSound(null, BlockPos.containing(x, y, z), CASounds.START.get(), SoundSource.BLOCKS, 1, 1);
                 }
                 {
                     int _value = 2;
@@ -169,7 +169,7 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
             double z = pos.getZ();
             if ((blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _getip1 ? blockstate.getValue(_getip1) : -1) == 1) {
                 if ((LevelAccessor) world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "quit")), SoundSource.BLOCKS, 1, 1);
+                        _level.playSound(null, BlockPos.containing(x, y, z), CASounds.QUIT.get(), SoundSource.BLOCKS, 1, 1);
                 }
                 {
                     int _value = 3;
@@ -210,7 +210,7 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
                         ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
                 }
                 if ((LevelAccessor) world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "start")), SoundSource.BLOCKS, 1, 1);
+                        _level.playSound(null, BlockPos.containing(x, y, z), CASounds.START.get(), SoundSource.BLOCKS, 1, 1);
                 }
                 CaerulaArborMod.queueServerWork(25, () -> {
                     if ((((LevelAccessor) world).getBlockState(BlockPos.containing(x, y, z))).getBlock() == CABlocks.CRISIS_TABLE.get()
@@ -220,7 +220,7 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
                         if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
                             _player.displayClientMessage(Component.literal((Component.translatable("crisis_table.log_0").getString())), false);
                         if ((LevelAccessor) world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "notice")), SoundSource.BLOCKS, 1, 1);
+                                _level.playSound(null, BlockPos.containing(x, y, z), CASounds.NOTICE.get(), SoundSource.BLOCKS, 1, 1);
                         }
                     }
                 });
@@ -232,7 +232,7 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
                         if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
                             _player.displayClientMessage(Component.literal((Component.translatable("crisis_table.log_1").getString())), false);
                         if ((LevelAccessor) world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "notice")), SoundSource.BLOCKS, 1, 1);
+                                _level.playSound(null, BlockPos.containing(x, y, z), CASounds.NOTICE.get(), SoundSource.BLOCKS, 1, 1);
                         }
                     }
                 });
@@ -244,7 +244,7 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
                         if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
                             _player.displayClientMessage(Component.literal((Component.translatable("crisis_table.log_2").getString())), false);
                         if ((LevelAccessor) world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "notice")), SoundSource.BLOCKS, 1, 1);
+                                _level.playSound(null, BlockPos.containing(x, y, z), CASounds.NOTICE.get(), SoundSource.BLOCKS, 1, 1);
                         }
                     }
                 });
@@ -315,7 +315,7 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
                         if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
                             _player.displayClientMessage(Component.literal((Component.translatable("crisis_table.log_3").getString())), false);
                         if ((LevelAccessor) world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "alert")), SoundSource.BLOCKS, 3, 1);
+                                _level.playSound(null, BlockPos.containing(x, y, z), CASounds.ALERT.get(), SoundSource.BLOCKS, 3, 1);
                         }
                     }
                 });
@@ -353,7 +353,7 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
                             ? (((LevelAccessor) world).getBlockState(BlockPos.containing(x, y, z))).getValue(_getip52)
                             : -1) == 1) {
                         if ((LevelAccessor) world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "quit")), SoundSource.BLOCKS, 1, 1);
+                                _level.playSound(null, BlockPos.containing(x, y, z), CASounds.QUIT.get(), SoundSource.BLOCKS, 1, 1);
                         }
                     }
                 });

@@ -35,7 +35,8 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.sounds.SoundEvents;
+import com.apocalypse.caerulaarbor.init.CASounds;
 
 public class InjectorBlock extends Block implements SimpleWaterloggedBlock {
 	public static final IntegerProperty BLOCKSTATE = IntegerProperty.create("blockstate", 0, 1);
@@ -140,7 +141,7 @@ public class InjectorBlock extends Block implements SimpleWaterloggedBlock {
                 if (input.getItem() == CAItems.TARGETED_BASE.get()) {
                     ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                     if ((LevelAccessor) world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.glow_item_frame.add_item")), SoundSource.BLOCKS, 1, 1);
+                            _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.GLOW_ITEM_FRAME_ADD_ITEM, SoundSource.BLOCKS, 1, 1);
                     }
                     {
                         int _value = 1;
@@ -177,7 +178,7 @@ public class InjectorBlock extends Block implements SimpleWaterloggedBlock {
                             ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
                     }
                     if ((LevelAccessor) world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "notice")), SoundSource.BLOCKS, 2, 1);
+                            _level.playSound(null, BlockPos.containing(x, y, z), CASounds.NOTICE.get(), SoundSource.BLOCKS, 2, 1);
                     }
                     if ((LevelAccessor) world instanceof ServerLevel _level) {
                         ItemEntity entityToSpawn = new ItemEntity(_level, ((double) x + 0.5), ((double) y + 1), ((double) z + 0.5), res);

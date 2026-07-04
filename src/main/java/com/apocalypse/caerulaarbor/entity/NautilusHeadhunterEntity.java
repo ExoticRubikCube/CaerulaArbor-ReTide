@@ -13,7 +13,6 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -46,7 +45,6 @@ import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -55,6 +53,7 @@ import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
+import net.minecraft.sounds.SoundEvents;
 
 public class NautilusHeadhunterEntity extends Animal implements GeoEntity, SyncedAnimationEntity {
 	public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(NautilusHeadhunterEntity.class, EntityDataSerializers.BOOLEAN);
@@ -167,22 +166,22 @@ public class NautilusHeadhunterEntity extends Animal implements GeoEntity, Synce
 
 	@Override
 	public SoundEvent getAmbientSound() {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.turtle.ambient_land"));
+		return SoundEvents.TURTLE_AMBIENT_LAND;
 	}
 
 	@Override
 	public void playStepSound(BlockPos pos, BlockState blockIn) {
-		this.playSound(ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.turtle.swim")), 0.15f, 1);
+		this.playSound(SoundEvents.TURTLE_SWIM, 0.15f, 1);
 	}
 
 	@Override
 	public SoundEvent getHurtSound(DamageSource ds) {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.turtle.hurt_baby"));
+		return SoundEvents.TURTLE_HURT_BABY;
 	}
 
 	@Override
 	public SoundEvent getDeathSound() {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.turtle.death_baby"));
+		return SoundEvents.TURTLE_DEATH_BABY;
 	}
 
 	@Override
@@ -254,7 +253,7 @@ public class NautilusHeadhunterEntity extends Animal implements GeoEntity, Synce
                     if (!(vehicle == null) && vehicle.isAlive()) {
                         if (!world.isClientSide()) {
                             if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.dolphin.eat")), SoundSource.HOSTILE, 1, 1);
+                                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.DOLPHIN_EAT, SoundSource.HOSTILE, 1, 1);
                             }
                         }
                         vehicle.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.IN_WALL), this),
@@ -268,7 +267,7 @@ public class NautilusHeadhunterEntity extends Animal implements GeoEntity, Synce
                         if (distanceTo(enemy) <= 2 && !enemy.isVehicle()) {
                             if (!world.isClientSide()) {
                                 if (world instanceof Level _level) {
-                                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.strider.saddle")), SoundSource.HOSTILE, 1, 1);
+                                        _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.STRIDER_SADDLE, SoundSource.HOSTILE, 1, 1);
                                 }
                             }
                             startRiding(enemy);

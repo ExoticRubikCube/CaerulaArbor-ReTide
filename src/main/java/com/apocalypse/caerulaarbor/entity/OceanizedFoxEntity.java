@@ -33,13 +33,13 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
+import net.minecraft.sounds.SoundEvents;
 
 import java.util.Comparator;
 import java.util.List;
@@ -139,17 +139,17 @@ public class OceanizedFoxEntity extends SeaMonster {
 
     @Override
     public SoundEvent getAmbientSound() {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.fox.ambient"));
+        return SoundEvents.FOX_AMBIENT;
     }
 
     @Override
     public SoundEvent getHurtSound(DamageSource ds) {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.fox.hurt"));
+        return SoundEvents.FOX_HURT;
     }
 
     @Override
     public SoundEvent getDeathSound() {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.fox.death"));
+        return SoundEvents.FOX_DEATH;
     }
 
     @Override
@@ -259,7 +259,7 @@ public class OceanizedFoxEntity extends SeaMonster {
                         CaerulaArborMod.queueServerWork(20, () -> {
                             if (this.isAlive() && !(((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == null)) {
                                 if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.fox.teleport")), SoundSource.HOSTILE, 1, 1);
+                                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.FOX_TELEPORT, SoundSource.HOSTILE, 1, 1);
                                 }
                                 {
                                     Entity _ent = this;
@@ -276,7 +276,7 @@ public class OceanizedFoxEntity extends SeaMonster {
                                 Entity enemy1;
                                 double damage;
                                 if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.fox.aggro")), SoundSource.HOSTILE, 2, 1);
+                                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.FOX_AGGRO, SoundSource.HOSTILE, 2, 1);
                                 }
                                 damage = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
                                 enemy1 = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;

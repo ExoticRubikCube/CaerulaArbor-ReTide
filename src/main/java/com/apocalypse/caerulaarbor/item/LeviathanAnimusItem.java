@@ -9,7 +9,6 @@ import com.apocalypse.caerulaarbor.util.StrategyUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -19,7 +18,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.sounds.SoundEvents;
 
 import java.util.List;
 
@@ -61,7 +60,7 @@ public class LeviathanAnimusItem extends Item {
         if (!MapVariables.get(world).silence_enabled) {
             MapVariablesHandler.setSilenceEnabled(world, true);
             if ((LevelAccessor) world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.end_portal.spawn")), SoundSource.PLAYERS, 4, (float) 0.85);
+                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.END_PORTAL_SPAWN, SoundSource.PLAYERS, 4, (float) 0.85);
             }
             if ((LevelAccessor) world instanceof ServerLevel _level)
                 _level.sendParticles(CAParticles.MOIST_BOOM.get(), x, (y + 2), z, 32, 2, 2, 2, 0.33);
@@ -74,7 +73,7 @@ public class LeviathanAnimusItem extends Item {
                 itemstack.shrink(1);
             } else {
                 if ((LevelAccessor) world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.candle.extinguish")), SoundSource.PLAYERS, 2, 1);
+                        _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.CANDLE_EXTINGUISH, SoundSource.PLAYERS, 2, 1);
                 }
                 if ((LevelAccessor) world instanceof ServerLevel _level)
                     _level.sendParticles(ParticleTypes.ASH, x, (y + 2), z, 64, 2, 2, 2, 0.33);

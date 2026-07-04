@@ -53,12 +53,13 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
+import net.minecraft.sounds.SoundEvents;
+import com.apocalypse.caerulaarbor.init.CASounds;
 
 import javax.annotation.Nullable;
 import java.util.Comparator;
@@ -208,17 +209,17 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
 
     @Override
     public SoundEvent getAmbientSound() {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "witch_ambient"));
+        return CASounds.WITCH_AMBIENT.get();
     }
 
     @Override
     public SoundEvent getHurtSound(DamageSource ds) {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "witch_hurt"));
+        return CASounds.WITCH_HURT.get();
     }
 
     @Override
     public SoundEvent getDeathSound() {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "witch_die"));
+        return CASounds.WITCH_DIE.get();
     }
 
     @Override
@@ -235,7 +236,7 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
                         double zz = entityiterator.getZ();
                         double potion;
                         if (world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(xx, yy, zz), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.witch.throw")), SoundSource.HOSTILE, 1, 1);
+                            _level.playSound(null, BlockPos.containing(xx, yy, zz), SoundEvents.WITCH_THROW, SoundSource.HOSTILE, 1, 1);
                         }
                         potion = Mth.nextInt(RandomSource.create(), 0, 4);
                         if (potion == 0) {

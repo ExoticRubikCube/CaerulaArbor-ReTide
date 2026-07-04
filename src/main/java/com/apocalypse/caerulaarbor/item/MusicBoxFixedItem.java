@@ -1,10 +1,10 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.init.CASounds;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -14,7 +14,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
 
@@ -54,7 +53,7 @@ public class MusicBoxFixedItem extends Item {
 		double z = entity.getZ();
         if (entity != null) {
             if ((LevelAccessor) world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "pceanwish")), SoundSource.MUSIC, (float) 2.5, 1);
+                    _level.playSound(null, BlockPos.containing(x, y, z), CASounds.PCEANWISH.get(), SoundSource.MUSIC, (float) 2.5, 1);
             }
             if ((Entity) entity instanceof Player _player)
                 _player.getCooldowns().addCooldown(itemstack.getItem(), 900);

@@ -32,7 +32,7 @@ import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.sounds.SoundEvents;
 
 public class OceanOvaryBlock extends AbstractOvaryBlock {
 
@@ -148,7 +148,7 @@ public class OceanOvaryBlock extends AbstractOvaryBlock {
         if (fed.is(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "fish_food")))) {
             if (blockstate.getValue(BLOCKSTATE) == 1) {
                 world.setBlock(pos, world.getBlockState(pos).setValue(BLOCKSTATE, 0).setValue(OUTPUT, 0), 3);
-                world.playSound(null, pos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.panda.eat")), SoundSource.BLOCKS, 0.95F, 1.0F);
+                world.playSound(null, pos, SoundEvents.PANDA_EAT, SoundSource.BLOCKS, 0.95F, 1.0F);
                 fed.shrink(1);
                 result = InteractionResult.SUCCESS;
             }

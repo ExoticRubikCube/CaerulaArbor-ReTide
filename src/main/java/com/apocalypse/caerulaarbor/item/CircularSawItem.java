@@ -3,6 +3,7 @@ package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.client.renderer.item.CircularSawItemRenderer;
+import com.apocalypse.caerulaarbor.init.CASounds;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.client.Minecraft;
@@ -36,7 +37,6 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -209,7 +209,7 @@ public class CircularSawItem extends Item implements GeoItem, SyncedAnimationIte
                 if (itemstack.getItem() instanceof CircularSawItem)
                     itemstack.getOrCreateTag().putString("geckoAnim", "animation.circular_saw.saw");
                 if (world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "saw_cut")), SoundSource.PLAYERS, 2, 1);
+                        _level.playSound(null, BlockPos.containing(x, y, z), CASounds.SAW_CUT.get(), SoundSource.PLAYERS, 2, 1);
                 }
                 CaerulaArborMod.queueServerWork(7, () -> {
                     new Object() {

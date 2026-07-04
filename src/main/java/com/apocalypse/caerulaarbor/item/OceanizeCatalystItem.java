@@ -24,8 +24,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
+import net.minecraft.sounds.SoundEvents;
 
 public class OceanizeCatalystItem extends Item {
 	private static final TagKey<EntityType<?>> BOSSES = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation("forge:bosses"));
@@ -67,7 +67,7 @@ public class OceanizeCatalystItem extends Item {
 		}
 
 		double damageToHealth = Math.min(target.getHealth() * 0.33, player.getHealth() * 1.5);
-		level.playSound(null, BlockPos.containing(targetX, targetY, targetZ), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.lava.extinguish")), SoundSource.HOSTILE, 1, 1);
+		level.playSound(null, BlockPos.containing(targetX, targetY, targetZ), SoundEvents.LAVA_EXTINGUISH, SoundSource.HOSTILE, 1, 1);
 		target.hurt(new DamageSource(level.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "extractor_damage")))), 0.5F);
 		SIHelper.causeSanityInjury(target, player, 256, SanityEvent.Hurt.Type.ENTITY);
 		target.addEffect(new MobEffectInstance(MobEffects.POISON, 200, 1));

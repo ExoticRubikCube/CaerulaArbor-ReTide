@@ -15,7 +15,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -47,12 +46,12 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
+import net.minecraft.sounds.SoundEvents;
 
 import javax.annotation.Nullable;
 import java.util.Comparator;
@@ -246,17 +245,17 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
 
     @Override
     public SoundEvent getAmbientSound() {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.illusioner.ambient"));
+        return SoundEvents.ILLUSIONER_AMBIENT;
     }
 
     @Override
     public SoundEvent getHurtSound(DamageSource ds) {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.illusioner.hurt"));
+        return SoundEvents.ILLUSIONER_HURT;
     }
 
     @Override
     public SoundEvent getDeathSound() {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.illusioner.death"));
+        return SoundEvents.ILLUSIONER_DEATH;
     }
 
     @Override
@@ -291,7 +290,7 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
                         }
                         if (!world.isClientSide()) {
                             if (world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.illusioner.mirror_move")), SoundSource.HOSTILE, 1, 1);
+                                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ILLUSIONER_MIRROR_MOVE, SoundSource.HOSTILE, 1, 1);
                             }
                         }
                         flag = true;
@@ -371,14 +370,14 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
                     _datEntSetI.getEntityData().set(DATA_spellP, (int) (sklp1 - 1));
                 if (sklp1 == 100) {
                     if (world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.illusioner.prepare_blindness")), SoundSource.HOSTILE, 1, 1);
+                        _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ILLUSIONER_PREPARE_BLINDNESS, SoundSource.HOSTILE, 1, 1);
                     }
                 }
             } else if (dura <= 0) {
                 if (!(enemy == null) && enemy.isAlive()) {
                     if (distanceTo(enemy) <= 12) {
                         if (world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.illusioner.cast_spell")), SoundSource.HOSTILE, 1, 1);
+                            _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ILLUSIONER_CAST_SPELL, SoundSource.HOSTILE, 1, 1);
                         }
                         if (this instanceof OceanizedIllusionerEntity) {
                             this.setAnimation("animation.oceanized_illusioner.cast");
@@ -402,14 +401,14 @@ public class OceanizedIllusionerEntity extends SeaMonster implements RangedAttac
                     _datEntSetI.getEntityData().set(DATA_mirrorP, (int) (sklp2 - 1));
                 if (sklp2 == 100) {
                     if (world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.illusioner.prepare_mirror")), SoundSource.HOSTILE, 1, 1);
+                        _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ILLUSIONER_PREPARE_MIRROR, SoundSource.HOSTILE, 1, 1);
                     }
                 }
             } else if (dura <= 0) {
                 if (!(enemy == null) && enemy.isAlive()) {
                     if (EntityUtils.getIllusionNum(world, x, y, z) < 8 && EntityUtils.getSeabornAround(world, x, y, z, this) < (world.getLevelData().getGameRules().getInt(CAGameRules.CLONE_NUMBER_LIMIT))) {
                         if (world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.illusioner.cast_spell")), SoundSource.HOSTILE, 1, 1);
+                            _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ILLUSIONER_CAST_SPELL, SoundSource.HOSTILE, 1, 1);
                         }
                         if (this instanceof OceanizedIllusionerEntity) {
                             this.setAnimation("animation.oceanized_illusioner.fission");

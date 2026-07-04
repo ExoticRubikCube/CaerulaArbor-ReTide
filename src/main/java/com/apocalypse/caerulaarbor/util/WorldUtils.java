@@ -11,6 +11,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
@@ -35,7 +36,6 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 public class WorldUtils {
@@ -179,7 +179,7 @@ public class WorldUtils {
 				world.setBlock(_bp, _bs, 3);
 			}
 			if (world instanceof Level _level) {
-					_level.playSound(null, BlockPos.containing(px, py, pz), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.fire.extinguish")), SoundSource.BLOCKS, (float) 0.6, 1);
+					_level.playSound(null, BlockPos.containing(px, py, pz), SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, (float) 0.6, 1);
 			}
 		}
 	}
@@ -462,7 +462,7 @@ public class WorldUtils {
 		if (world instanceof ServerLevel _level)
 			_level.sendParticles(ParticleTypes.CLOUD, x, y, z, 32, 1, 1, 1, 0.1);
 		if (world instanceof Level _level) {
-				_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.phantom.swoop")), SoundSource.NEUTRAL, 1, 1);
+				_level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PHANTOM_SWOOP, SoundSource.NEUTRAL, 1, 1);
 		}
 	}
 
@@ -488,7 +488,7 @@ public class WorldUtils {
 	public static double findValidSpawnY(LevelAccessor world, double x, double y, double z, double xx, double yy, double zz) {
 		double validY;
 		if (world instanceof Level level) {
-			level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.azalea.hit")), SoundSource.NEUTRAL, 0, 1);
+			level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.AZALEA_HIT, SoundSource.NEUTRAL, 0, 1);
 		}
 		for (int index0 = 0; index0 < 12; index0++) {
 			validY = yy + index0;
@@ -553,7 +553,7 @@ public class WorldUtils {
 	 */
 	public static boolean isValidHumanoidPlace(LevelAccessor world, double xx, double yy, double zz) {
 		if (world instanceof Level _level &&_level.isClientSide()) {
-			_level.playLocalSound(xx, yy, zz, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.enderman.ambient")), SoundSource.HOSTILE, 0, 1, false);
+			_level.playLocalSound(xx, yy, zz, SoundEvents.ENDERMAN_AMBIENT, SoundSource.HOSTILE, 0, 1, false);
 		}
 		for (int dy = 0; dy <= 2; dy++) {
 			if (world.getBlockFloorHeight(BlockPos.containing(xx, yy + dy, zz)) > 0) {

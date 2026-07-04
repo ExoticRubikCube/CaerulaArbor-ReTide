@@ -5,6 +5,7 @@ import com.apocalypse.caerulaarbor.entity.base.SyncedAnimationEntity;
 import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAParticles;
+import com.apocalypse.caerulaarbor.init.CASounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -38,7 +39,6 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -103,12 +103,12 @@ public class SpecterDollEntity extends Animal implements GeoEntity, SyncedAnimat
 
     @Override
     public SoundEvent getHurtSound(DamageSource ds) {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "specter_hit"));
+        return CASounds.SPECTER_HIT.get();
     }
 
     @Override
     public SoundEvent getDeathSound() {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "specter_doll_die"));
+        return CASounds.SPECTER_DOLL_DIE.get();
     }
 
     @Override
@@ -127,7 +127,7 @@ public class SpecterDollEntity extends Animal implements GeoEntity, SyncedAnimat
         double y = this.getY();
         double z = this.getZ();
         if ((LevelAccessor) world instanceof Level _level) {
-            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "specter_doll_ambient")), SoundSource.NEUTRAL, 3, 1);
+            _level.playSound(null, BlockPos.containing(x, y, z), CASounds.SPECTER_DOLL_AMBIENT.get(), SoundSource.NEUTRAL, 3, 1);
         }
         if ((LevelAccessor) world instanceof ServerLevel _level)
             _level.sendParticles(CAParticles.SPECTER_GLITTER.get(), x, (y + 0.75), z, 64, 0.75, 0.75, 0.75, 0.1);

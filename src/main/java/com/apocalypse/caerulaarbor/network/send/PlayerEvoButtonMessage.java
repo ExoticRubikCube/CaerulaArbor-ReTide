@@ -1,8 +1,8 @@
 package com.apocalypse.caerulaarbor.network.send;
 
-import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
+import com.apocalypse.caerulaarbor.init.CASounds;
 import com.apocalypse.caerulaarbor.menu.PlayerEvoMenu;
 import com.apocalypse.caerulaarbor.util.NodeUtils;
 import com.apocalypse.caerulaarbor.util.PlayerStateUtils;
@@ -10,7 +10,6 @@ import io.netty.buffer.Unpooled;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.MenuProvider;
@@ -22,7 +21,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.HashMap;
 import java.util.function.Supplier;
@@ -373,7 +371,7 @@ public class PlayerEvoButtonMessage {
             }
             if (quantity_cost > 0) {
                 if ((LevelAccessor) world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "tap")), SoundSource.PLAYERS, 2, 1);
+                        _level.playSound(null, BlockPos.containing(x, y, z), CASounds.TAP.get(), SoundSource.PLAYERS, 2, 1);
                 }
                 {
                     double _setval = quantity - quantity_cost;
@@ -399,7 +397,7 @@ public class PlayerEvoButtonMessage {
             }
             if (quality_cost > 0) {
                 if ((LevelAccessor) world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "alert")), SoundSource.PLAYERS, 2, 1);
+                        _level.playSound(null, BlockPos.containing(x, y, z), CASounds.ALERT.get(), SoundSource.PLAYERS, 2, 1);
                 }
                 {
                     double _setval = quality - quality_cost;

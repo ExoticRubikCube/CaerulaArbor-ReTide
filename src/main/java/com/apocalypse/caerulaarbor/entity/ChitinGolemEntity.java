@@ -18,6 +18,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -45,7 +46,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -123,17 +123,17 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
 
     @Override
     public void playStepSound(BlockPos pos, BlockState blockIn) {
-        this.playSound(ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.iron_golem.step")), 0.15f, 1);
+        this.playSound(SoundEvents.IRON_GOLEM_STEP, 0.15f, 1);
     }
 
     @Override
     public SoundEvent getHurtSound(DamageSource ds) {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.iron_golem.hurt"));
+        return SoundEvents.IRON_GOLEM_HURT;
     }
 
     @Override
     public SoundEvent getDeathSound() {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.iron_golem.death"));
+        return SoundEvents.IRON_GOLEM_DEATH;
     }
 
     @Override
@@ -167,7 +167,7 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
                             ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((sourceentity.getX()), (sourceentity.getY()), (sourceentity.getZ())));
                             CaerulaArborMod.queueServerWork(13, () -> {
                                 if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.iron_golem.damage")), SoundSource.HOSTILE, 2, 1);
+                                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.IRON_GOLEM_DAMAGE, SoundSource.HOSTILE, 2, 1);
                                 }
                                 {
                                     final Vec3 _center = new Vec3((x + 2 * getLookAngle().x), (y + 2), (z + 2 * getLookAngle().z));
@@ -243,7 +243,7 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
             LivingEntity _entity = (LivingEntity) entity;
             _entity.setHealth((float) ((entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) + (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.25));
             if ((LevelAccessor) world instanceof Level _level) {
-                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.iron_golem.repair")), SoundSource.PLAYERS, 1, 1);
+                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.IRON_GOLEM_REPAIR, SoundSource.PLAYERS, 1, 1);
             }
             if (!isCreative) {
                 sourceentity.getMainHandItem().shrink(1);
@@ -253,7 +253,7 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
             if (entity instanceof LivingEntity _entity)
                 _entity.setHealth((float) ((entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) + (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5));
             if ((LevelAccessor) world instanceof Level _level) {
-                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.iron_golem.repair")), SoundSource.PLAYERS, 1, 1);
+                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.IRON_GOLEM_REPAIR, SoundSource.PLAYERS, 1, 1);
             }
             if (!isCreative) {
                 ((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
@@ -262,9 +262,9 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
         } else if (mainHand.getItem() == CABlocks.COMPLEX_CHITIN_BLOCK.get().asItem() && mainHand.getCount() >= 3) {
             if ((LevelAccessor) world instanceof Level _level) {
                 if (!_level.isClientSide()) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.smithing_table.use")), SoundSource.PLAYERS, (float) 1.5, 1);
+                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SMITHING_TABLE_USE, SoundSource.PLAYERS, (float) 1.5, 1);
                 } else {
-                    _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.smithing_table.use")), SoundSource.PLAYERS, (float) 1.5, 1, false);
+                    _level.playLocalSound(x, y, z, SoundEvents.SMITHING_TABLE_USE, SoundSource.PLAYERS, (float) 1.5, 1, false);
                 }
             }
             if (!entity.level().isClientSide())

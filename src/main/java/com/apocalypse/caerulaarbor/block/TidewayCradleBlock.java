@@ -6,8 +6,8 @@ import com.apocalypse.caerulaarbor.init.CAItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -35,7 +35,6 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -154,7 +153,7 @@ public class TidewayCradleBlock extends BaseEntityBlock implements SimpleWaterlo
                     }
                 }
                 if ((LevelAccessor) world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.axe.wax_off")), SoundSource.NEUTRAL, 1, 1);
+                        _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.AXE_WAX_OFF, SoundSource.NEUTRAL, 1, 1);
                 }
                 if ((LevelAccessor) world instanceof ServerLevel _level)
                     _level.sendParticles(ParticleTypes.GLOW, ((double) x + 0.5), ((double) y + 0.5), ((double) z + 0.5), 5, 0.75, 0.75, 0.75, 0.1);

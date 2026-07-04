@@ -14,7 +14,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -45,12 +44,12 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
+import net.minecraft.sounds.SoundEvents;
 
 import javax.annotation.Nullable;
 import java.util.EnumSet;
@@ -208,17 +207,17 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
 
     @Override
     public SoundEvent getAmbientSound() {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.evoker.ambient"));
+        return SoundEvents.EVOKER_AMBIENT;
     }
 
     @Override
     public SoundEvent getHurtSound(DamageSource ds) {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.evoker.hurt"));
+        return SoundEvents.EVOKER_HURT;
     }
 
     @Override
     public SoundEvent getDeathSound() {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.evoker.death"));
+        return SoundEvents.EVOKER_DEATH;
     }
 
     @Override
@@ -337,7 +336,7 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
                     _datEntSetI.getEntityData().set(DATA_skillp1, (int) (sklp1 - 1));
                 if (sklp1 == 20) {
                     if (world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.evoker.prepare_attack")), SoundSource.NEUTRAL, 1, 1);
+                        _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.EVOKER_PREPARE_ATTACK, SoundSource.NEUTRAL, 1, 1);
                     }
                 }
             }
@@ -347,7 +346,7 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
                         this.setAnimation("animation.oceanized_evoker.spell");
                     }
                     if (world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.evoker.cast_spell")), SoundSource.NEUTRAL, 1, 1);
+                        _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.EVOKER_CAST_SPELL, SoundSource.NEUTRAL, 1, 1);
                     }
                     if ((Entity) this instanceof OceanizedEvokerEntity _datEntSetI)
                         _datEntSetI.getEntityData().set(DATA_skillp2, 300);
@@ -434,7 +433,7 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
                     _datEntSetI.getEntityData().set(DATA_skillp2, (int) (sklp2 - 1));
                 if (sklp2 == 20) {
                     if (world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.evoker.prepare_summon")), SoundSource.NEUTRAL, 1, 1);
+                        _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.EVOKER_PREPARE_SUMMON, SoundSource.NEUTRAL, 1, 1);
                     }
                 }
             }

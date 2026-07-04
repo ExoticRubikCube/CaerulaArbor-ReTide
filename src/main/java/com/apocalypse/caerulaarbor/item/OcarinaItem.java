@@ -7,7 +7,6 @@ import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
@@ -23,7 +22,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
-import net.minecraftforge.registries.ForgeRegistries;
+import com.apocalypse.caerulaarbor.init.CASounds;
 
 import java.util.List;
 public class OcarinaItem extends Item {
@@ -68,7 +67,7 @@ public class OcarinaItem extends Item {
             double pz;
             double bs;
             if ((LevelAccessor) world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "ocarino")), SoundSource.PLAYERS, 1, 1);
+                    _level.playSound(null, BlockPos.containing(x, y, z), CASounds.OCARINO.get(), SoundSource.PLAYERS, 1, 1);
             }
             if ((Entity) entity instanceof Player _player)
                 _player.getCooldowns().addCooldown(itemstack.getItem(), 200);

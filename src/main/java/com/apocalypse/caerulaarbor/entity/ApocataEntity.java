@@ -1,9 +1,9 @@
 package com.apocalypse.caerulaarbor.entity;
 
-import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SyncedAnimationEntity;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CASounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -12,9 +12,9 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -30,7 +30,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -111,12 +110,12 @@ public class ApocataEntity extends PathfinderMob implements GeoEntity, SyncedAni
 
 	@Override
 	public SoundEvent getHurtSound(DamageSource ds) {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.generic.hurt"));
+		return SoundEvents.GENERIC_HURT;
 	}
 
 	@Override
 	public SoundEvent getDeathSound() {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.generic.death"));
+		return SoundEvents.GENERIC_DEATH;
 	}
 
 	@Override
@@ -132,7 +131,7 @@ public class ApocataEntity extends PathfinderMob implements GeoEntity, SyncedAni
         String name;
         if (!world.isClientSide()) {
             if (world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "apocata_die")), SoundSource.NEUTRAL, 4, (float) 1.5);
+                    _level.playSound(null, BlockPos.containing(x, y, z), CASounds.APOCATA_DIE.get(), SoundSource.NEUTRAL, 4, (float) 1.5);
             }
         }
         name = sourceentity.getDisplayName().getString();
@@ -178,7 +177,7 @@ public class ApocataEntity extends PathfinderMob implements GeoEntity, SyncedAni
 			}
 			if (!((LevelAccessor) world).isClientSide()) {
 				if ((LevelAccessor) world instanceof Level _level) {
-					_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "apocata_interact")), SoundSource.NEUTRAL, 3, (float) 1.5);
+					_level.playSound(null, BlockPos.containing(x, y, z), CASounds.APOCATA_INTERACT.get(), SoundSource.NEUTRAL, 3, (float) 1.5);
 				}
 			}
 			if (entity instanceof ApocataEntity _datEntSetI)

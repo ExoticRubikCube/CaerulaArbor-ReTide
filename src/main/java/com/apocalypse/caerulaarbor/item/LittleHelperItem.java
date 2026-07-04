@@ -5,7 +5,6 @@ import com.apocalypse.caerulaarbor.init.CAEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
@@ -19,7 +18,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraftforge.registries.ForgeRegistries;
+import com.apocalypse.caerulaarbor.init.CASounds;
 
 import java.util.List;
 
@@ -60,7 +59,7 @@ public class LittleHelperItem extends Item {
 		}
 		if (world instanceof Level level) {
 			BlockPos soundPos = BlockPos.containing(x, y, z);
-			level.playSound(null, soundPos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "clean_bot_start")), SoundSource.BLOCKS, 3, 1);
+			level.playSound(null, soundPos, CASounds.CLEAN_BOT_START.get(), SoundSource.BLOCKS, 3, 1);
 			if (!world.isClientSide()) {
 				this.playPlaceSound(level, soundPos);
 			}

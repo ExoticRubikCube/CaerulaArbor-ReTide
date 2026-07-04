@@ -6,8 +6,8 @@ import com.apocalypse.caerulaarbor.init.CABlockEntities;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -34,7 +34,6 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -172,7 +171,7 @@ public class ChestmegaSpawnerBlock extends BaseEntityBlock implements SimpleWate
 		CaerulaArborMod.queueServerWork(15, () -> {
 			world.destroyBlock(pos, false);
 			if (world instanceof Level level) {
-				level.playSound(null, pos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.ender_chest.close")), SoundSource.BLOCKS, 1, 1);
+				level.playSound(null, pos, SoundEvents.ENDER_CHEST_CLOSE, SoundSource.BLOCKS, 1, 1);
 			}
 			if (world instanceof ServerLevel level) {
 				Entity entityToSpawn = CAEntities.MEGA_CHEST.get().spawn(level, BlockPos.containing(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5), MobSpawnType.MOB_SUMMONED);

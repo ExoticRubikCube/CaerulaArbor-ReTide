@@ -1,9 +1,10 @@
 package com.apocalypse.caerulaarbor.entity.warden;
 
-import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CASounds;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
@@ -24,18 +25,18 @@ public class OceanizedWardenisEntity extends AbstractOceanizedWardenEntity {
 	}
 
 	@Override
-	protected String getAmbientSoundId() {
-		return CaerulaArborMod.MODID + ":wardenis_idle";
+        protected SoundEvent getAmbientSoundEvent() {
+                return CASounds.WARDENIS_IDLE.get();
 	}
 
 	@Override
-	protected String getHurtSoundId() {
-		return CaerulaArborMod.MODID + ":wardenis_hurt";
+        protected SoundEvent getHurtSoundEvent() {
+                return CASounds.WARDENIS_HURT.get();
 	}
 
 	@Override
-	protected String getDeathSoundId() {
-		return CaerulaArborMod.MODID + ":wardenis_die";
+        protected SoundEvent getDeathSoundEvent() {
+                return CASounds.WARDENIS_DIE.get();
 	}
 
 	@Override

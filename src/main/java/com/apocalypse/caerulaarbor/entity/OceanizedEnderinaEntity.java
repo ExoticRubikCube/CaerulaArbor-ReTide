@@ -50,12 +50,13 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
+import net.minecraft.sounds.SoundEvents;
+import com.apocalypse.caerulaarbor.init.CASounds;
 
 import javax.annotation.Nullable;
 import java.util.Comparator;
@@ -69,7 +70,7 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 	public static final EntityDataAccessor<Integer> DATA_PHASE = SynchedEntityData.defineId(OceanizedEnderinaEntity.class, EntityDataSerializers.INT);
 	public static final EntityDataAccessor<Integer> DATA_SKILL_P = SynchedEntityData.defineId(OceanizedEnderinaEntity.class, EntityDataSerializers.INT);
 	public static final EntityDataAccessor<Integer> DATA_DURATION = SynchedEntityData.defineId(OceanizedEnderinaEntity.class, EntityDataSerializers.INT);
-	public static SoundEvent PRE = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "caster_pre"));
+	public static SoundEvent PRE = CASounds.CASTER_PRE.get();
 	private boolean swinging;
 	private long lastSwing;
 	public String animationprocedure = "empty";
@@ -261,8 +262,8 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 		return false;
 	}
 
-	public static SoundEvent HURT_SOUND = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "caster_hurt"));
-	public static SoundEvent DIE_SOUND = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "caster_die"));
+	public static SoundEvent HURT_SOUND = CASounds.CASTER_HURT.get();
+	public static SoundEvent DIE_SOUND = CASounds.CASTER_DIE.get();
 
 	@Override
 	public SoundEvent getHurtSound(DamageSource ds) {
@@ -490,7 +491,7 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 					if (!this.level().isClientSide())
 						this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 50, 0, false, false));
 					if (world instanceof Level _level) {
-						_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "caster_skill")), SoundSource.HOSTILE, (float) 2.5, 1);
+						_level.playSound(null, BlockPos.containing(x, y, z), CASounds.CASTER_SKILL.get(), SoundSource.HOSTILE, (float) 2.5, 1);
 					}
 					for (int index0 = 0; index0 < 8; index0++) {
 						CaerulaArborMod.queueServerWork(12 + index0 * 5, () -> {
@@ -595,9 +596,9 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 		}
 		if (once && world instanceof Level level) {
 			if (!level.isClientSide()) {
-				level.playSound(null, originPos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.wither.break_block")), SoundSource.NEUTRAL, 1, 1);
+				level.playSound(null, originPos, SoundEvents.WITHER_BREAK_BLOCK, SoundSource.NEUTRAL, 1, 1);
 			} else {
-				level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.wither.break_block")), SoundSource.NEUTRAL, 1, 1, false);
+				level.playLocalSound(x, y, z, SoundEvents.WITHER_BREAK_BLOCK, SoundSource.NEUTRAL, 1, 1, false);
 			}
 		}
 	}

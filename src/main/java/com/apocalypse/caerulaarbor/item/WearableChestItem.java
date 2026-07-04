@@ -3,8 +3,8 @@ package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.util.RelicUtils;
 import com.google.common.collect.Iterables;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -17,7 +17,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public abstract class WearableChestItem extends ArmorItem {
 	public WearableChestItem(ArmorItem.Type type, Item.Properties properties) {
@@ -39,7 +38,7 @@ public abstract class WearableChestItem extends ArmorItem {
 
 			@Override
 			public SoundEvent getEquipSound() {
-				return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.armor.equip_netherite"));
+				return SoundEvents.ARMOR_EQUIP_NETHERITE;
 			}
 
 			@Override

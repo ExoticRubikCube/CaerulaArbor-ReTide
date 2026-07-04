@@ -6,8 +6,8 @@ import com.apocalypse.caerulaarbor.util.StrategyUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -28,7 +28,6 @@ import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public class SeaTrailInitBlock extends Block implements SimpleWaterloggedBlock, BonemealableBlock {
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
@@ -130,7 +129,7 @@ public class SeaTrailInitBlock extends Block implements SimpleWaterloggedBlock, 
 				nextState = nextState.setValue(SeaTrailGrowingBlock.WATERLOGGED, blockstate.getValue(WATERLOGGED));
 			}
 			world.setBlock(pos, nextState, 3);
-			world.playSound(null, pos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.step")), SoundSource.NEUTRAL, 1.0F, 1.0F);
+			world.playSound(null, pos, SoundEvents.SCULK_VEIN_STEP, SoundSource.NEUTRAL, 1.0F, 1.0F);
 		}
 		world.scheduleTick(pos, this, 20);
 	}

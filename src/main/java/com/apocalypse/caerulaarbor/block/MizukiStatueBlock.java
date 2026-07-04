@@ -6,7 +6,6 @@ import com.apocalypse.caerulaarbor.init.CAItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
@@ -32,7 +31,7 @@ import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.sounds.SoundEvents;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -148,7 +147,7 @@ public class MizukiStatueBlock extends BaseEntityBlock implements SimpleWaterlog
             if ((LevelAccessor) world instanceof ServerLevel _level)
                 _level.sendParticles(ParticleTypes.END_ROD, (x + 0.5), (y + 2), (z + 0.5), 48, 2, 2, 2, 0.15);
             if ((LevelAccessor) world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.end_portal_frame.fill")), SoundSource.BLOCKS, 2, 1);
+                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.END_PORTAL_FRAME_FILL, SoundSource.BLOCKS, 2, 1);
             }
             {
                 int _value = 0;

@@ -1,6 +1,8 @@
 package com.apocalypse.caerulaarbor.entity.warden;
 
 import com.apocalypse.caerulaarbor.init.CAEntities;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.SnowGolem;
@@ -34,18 +36,18 @@ public class OceanizedWardenEntity extends AbstractOceanizedWardenEntity {
 	}
 
 	@Override
-	protected String getAmbientSoundId() {
-		return "entity.warden.ambient";
+        protected SoundEvent getAmbientSoundEvent() {
+                return SoundEvents.WARDEN_AMBIENT;
 	}
 
 	@Override
-	protected String getHurtSoundId() {
-		return "entity.warden.hurt";
+        protected SoundEvent getHurtSoundEvent() {
+                return SoundEvents.WARDEN_HURT;
 	}
 
 	@Override
-	protected String getDeathSoundId() {
-		return "entity.warden.death";
+        protected SoundEvent getDeathSoundEvent() {
+                return SoundEvents.WARDEN_DEATH;
 	}
 
 	@Override

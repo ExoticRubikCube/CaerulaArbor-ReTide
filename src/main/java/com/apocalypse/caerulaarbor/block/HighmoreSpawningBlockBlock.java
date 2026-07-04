@@ -3,14 +3,14 @@ package com.apocalypse.caerulaarbor.block;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.init.CABlockEntities;
-import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CABlocks;
+import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -39,7 +39,6 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -186,7 +185,7 @@ public class HighmoreSpawningBlockBlock extends BaseEntityBlock implements Simpl
                 if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.HIGHMORE_SCYTHE.get()) {
                     ((LevelAccessor) world).setBlock(BlockPos.containing(x, y, z), CABlocks.HIGHMORE_SPAWNBLOCK.get().defaultBlockState(), 3);
                     if ((LevelAccessor) world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.end_portal_frame.fill")), SoundSource.BLOCKS, (float) 1.5, 1);
+                            _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.END_PORTAL_FRAME_FILL, SoundSource.BLOCKS, (float) 1.5, 1);
                     }
                     if ((LevelAccessor) world instanceof ServerLevel _level)
                         _level.sendParticles(ParticleTypes.WAX_ON, ((double) x + 0.5), ((double) y + 0.5), ((double) z + 0.5), 16, 2, 2, 2, 0.15);

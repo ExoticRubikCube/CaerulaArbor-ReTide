@@ -60,12 +60,12 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
+import com.apocalypse.caerulaarbor.init.CASounds;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -172,17 +172,17 @@ public class IzumikEntity extends SeaMonster {
 
     @Override
     public SoundEvent getAmbientSound() {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "izumik_ambient"));
+        return CASounds.IZUMIK_AMBIENT.get();
     }
 
     @Override
     public SoundEvent getHurtSound(DamageSource ds) {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "izumik_hit"));
+        return CASounds.IZUMIK_HIT.get();
     }
 
     @Override
     public SoundEvent getDeathSound() {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "izumik_die"));
+        return CASounds.IZUMIK_DIE.get();
     }
 
     @Override
@@ -198,7 +198,7 @@ public class IzumikEntity extends SeaMonster {
         if (!this.level().isClientSide()) {
             CaerulaArborMod.queueServerWork(7, () -> {
                 this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
-                        ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "izumik_attack")), SoundSource.HOSTILE, 1,
+                        CASounds.IZUMIK_ATTACK.get(), SoundSource.HOSTILE, 1,
                         (float) Mth.nextDouble(RandomSource.create(), 0.85, 0.15));
                 if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 13) {
                     target.hurt(
@@ -439,7 +439,7 @@ public class IzumikEntity extends SeaMonster {
                         double rate;
                         double range;
                         if (world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "izumik_learn")), SoundSource.HOSTILE, (float) 2.5, 1);
+                            _level.playSound(null, BlockPos.containing(x, y, z), CASounds.IZUMIK_LEARN.get(), SoundSource.HOSTILE, (float) 2.5, 1);
                         }
                         rate = 1;
                         range = 16;
@@ -546,7 +546,7 @@ public class IzumikEntity extends SeaMonster {
                                                     : 0) + 1, (this.getMaxHealth()) * 0.05));
                                 double range;
                                 if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "izumik_shock")), SoundSource.HOSTILE, (float) 3.5, 1);
+                                    _level.playSound(null, BlockPos.containing(x, y, z), CASounds.IZUMIK_SHOCK.get(), SoundSource.HOSTILE, (float) 3.5, 1);
                                 }
                                 range = 11;
                                 if (MapVariables.get(world).strategy_grow >= 4) {

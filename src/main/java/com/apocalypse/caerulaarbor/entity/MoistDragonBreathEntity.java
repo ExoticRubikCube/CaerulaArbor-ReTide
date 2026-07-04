@@ -42,7 +42,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -51,6 +50,8 @@ import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
+import net.minecraft.sounds.SoundEvents;
+import com.apocalypse.caerulaarbor.init.CASounds;
 
 import java.util.Comparator;
 import java.util.List;
@@ -90,7 +91,7 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
                 Mth.nextDouble(random, -0.15, 0.15),
                 Mth.nextDouble(random, -0.15, 0.15),
                 Mth.nextDouble(random, -0.15, 0.15)));
-        SoundEvent shootSound = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "caster_cast"));
+        SoundEvent shootSound = CASounds.CASTER_CAST.get();
         level.playSound(owner, BlockPos.containing(x, y, z), shootSound, SoundSource.HOSTILE, 2, Mth.nextFloat(owner.level().getRandom(), 0.9f, 1.1f));
         SynchedEntityData data = dragonBreath.getEntityData();
         data.set(DATA_OWNER, owner.getStringUUID());
@@ -134,12 +135,12 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
 
     @Override
     public SoundEvent getHurtSound(DamageSource ds) {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.generic.hurt"));
+        return SoundEvents.GENERIC_HURT;
     }
 
     @Override
     public SoundEvent getDeathSound() {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.generic.death"));
+        return SoundEvents.GENERIC_DEATH;
     }
 
     @Override
@@ -509,7 +510,7 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
                 }
             }
             if (world instanceof Level _level) {
-                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "caster_explode")), SoundSource.HOSTILE, 3, (float) Mth.nextDouble(RandomSource.create(), 0.9, 1.1));
+                _level.playSound(null, BlockPos.containing(x, y, z), CASounds.CASTER_EXPLODE.get(), SoundSource.HOSTILE, 3, (float) Mth.nextDouble(RandomSource.create(), 0.9, 1.1));
             }
             if (world instanceof ServerLevel _level)
                 _level.sendParticles(ParticleTypes.DRAGON_BREATH, x, (y + 0.25), z, 32, 2, 2, 2, 0.18);

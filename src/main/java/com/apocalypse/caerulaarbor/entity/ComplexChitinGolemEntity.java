@@ -19,6 +19,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.TagKey;
@@ -48,7 +49,6 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -142,12 +142,12 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity, Sy
 
     @Override
     public SoundEvent getHurtSound(DamageSource ds) {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.iron_golem.hurt"));
+        return SoundEvents.IRON_GOLEM_HURT;
     }
 
     @Override
     public SoundEvent getDeathSound() {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.iron_golem.death"));
+        return SoundEvents.IRON_GOLEM_DEATH;
     }
 
     @Override
@@ -243,7 +243,7 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity, Sy
         if (scale > 0) {
             this.setHealth((float) (this.getHealth() + this.getMaxHealth() * scale));
             if ((LevelAccessor) world instanceof Level _level) {
-                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.iron_golem.repair")), SoundSource.PLAYERS, 1, 1);
+                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.IRON_GOLEM_REPAIR, SoundSource.PLAYERS, 1, 1);
             }
             return InteractionResult.SUCCESS;
         }
@@ -315,14 +315,14 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity, Sy
                         CaerulaArborMod.queueServerWork(6, () -> {
                             if (this.isAlive()) {
                                 if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.piston.extend")), SoundSource.NEUTRAL, 2, 1);
+                                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PISTON_EXTEND, SoundSource.NEUTRAL, 2, 1);
                                 }
                             }
                         });
                         CaerulaArborMod.queueServerWork(13, () -> {
                             if (this.isAlive()) {
                                 if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.piston.contract")), SoundSource.NEUTRAL, 2, 1);
+                                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PISTON_CONTRACT, SoundSource.NEUTRAL, 2, 1);
                                 }
                             }
                         });
@@ -361,7 +361,7 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity, Sy
                         CaerulaArborMod.queueServerWork(90, () -> {
                             if (this.isAlive()) {
                                 if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.piston.contract")), SoundSource.NEUTRAL, 2, 1);
+                                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PISTON_CONTRACT, SoundSource.NEUTRAL, 2, 1);
                                 }
                             }
                         });

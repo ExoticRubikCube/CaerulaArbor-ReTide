@@ -15,6 +15,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -38,7 +39,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
@@ -139,12 +139,12 @@ public class ChestFishEntity extends SeaMonster {
 
     @Override
 	public SoundEvent getHurtSound(DamageSource ds) {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.armor_stand.hit"));
+		return SoundEvents.ARMOR_STAND_HIT;
 	}
 
 	@Override
 	public SoundEvent getDeathSound() {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.armor_stand.break"));
+		return SoundEvents.ARMOR_STAND_BREAK;
 	}
 
 	@Override
@@ -322,9 +322,9 @@ public class ChestFishEntity extends SeaMonster {
 		if (this.isShiftKeyDown()) {
 			this.setAnimation("animation.chest_fish.start");
 			if (!world.isClientSide()) {
-				world.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.chest.open")), SoundSource.HOSTILE, 1, 1);
+				world.playSound(null, BlockPos.containing(x, y, z), SoundEvents.CHEST_OPEN, SoundSource.HOSTILE, 1, 1);
 			} else {
-				world.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.chest.open")), SoundSource.HOSTILE, 1, 1, false);
+				world.playLocalSound(x, y, z, SoundEvents.CHEST_OPEN, SoundSource.HOSTILE, 1, 1, false);
 			}
 			this.setShiftKeyDown(false);
 			this.getEntityData().set(DATA_release, true);

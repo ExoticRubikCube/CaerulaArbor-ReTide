@@ -35,7 +35,6 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -44,6 +43,8 @@ import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
+import net.minecraft.sounds.SoundEvents;
+import com.apocalypse.caerulaarbor.init.CASounds;
 
 import javax.annotation.Nullable;
 import java.util.Comparator;
@@ -150,12 +151,12 @@ public class IsharmlaTearEntity extends PathfinderMob implements GeoEntity, Sync
 
     @Override
     public SoundEvent getHurtSound(DamageSource ds) {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_sensor.hit"));
+        return SoundEvents.SCULK_SENSOR_HIT;
     }
 
     @Override
     public SoundEvent getDeathSound() {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_sensor.break"));
+        return SoundEvents.SCULK_SENSOR_BREAK;
     }
 
     @Override
@@ -172,7 +173,7 @@ public class IsharmlaTearEntity extends PathfinderMob implements GeoEntity, Sync
         double y = this.getY();
         double z = this.getZ();
         if ((LevelAccessor) world instanceof Level _level) {
-            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "isharmla_tear_place")), SoundSource.HOSTILE, 2, 1);
+            _level.playSound(null, BlockPos.containing(x, y, z), CASounds.ISHARMLA_TEAR_PLACE.get(), SoundSource.HOSTILE, 2, 1);
         }
         if (this instanceof IsharmlaTearEntity) {
             this.setAnimation("animation.isharmla_tear.start");
@@ -229,11 +230,11 @@ public class IsharmlaTearEntity extends PathfinderMob implements GeoEntity, Sync
                         _datEntSetI.getEntityData().set(DATA_FUNC_COOLDOWN, 60);
                     if (isAttack) {
                         if (world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "isharmla_tear_hurt_1")), SoundSource.HOSTILE, 2, 1);
+                            _level.playSound(null, BlockPos.containing(x, y, z), CASounds.ISHARMLA_TEAR_HURT_1.get(), SoundSource.HOSTILE, 2, 1);
                         }
                     } else {
                         if (world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "isharmla_tear_hurt_0")), SoundSource.HOSTILE, 2, 1);
+                            _level.playSound(null, BlockPos.containing(x, y, z), CASounds.ISHARMLA_TEAR_HURT_0.get(), SoundSource.HOSTILE, 2, 1);
                         }
                     }
                 }

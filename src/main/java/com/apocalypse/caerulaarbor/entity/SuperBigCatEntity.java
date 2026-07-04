@@ -18,6 +18,7 @@ import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
@@ -43,7 +44,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
@@ -116,17 +116,17 @@ public class SuperBigCatEntity extends SeaMonster {
 
     @Override
     public SoundEvent getAmbientSound() {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.ocelot.ambient"));
+        return SoundEvents.OCELOT_AMBIENT;
     }
 
     @Override
     public SoundEvent getHurtSound(DamageSource ds) {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.ocelot.hurt"));
+        return SoundEvents.OCELOT_HURT;
     }
 
     @Override
     public SoundEvent getDeathSound() {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.ocelot.death"));
+        return SoundEvents.OCELOT_DEATH;
     }
 
     @Override
@@ -136,7 +136,7 @@ public class SuperBigCatEntity extends SeaMonster {
         double targetZ = target.getZ();
         if (!this.level().isClientSide()) {
             this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
-                    ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.cat.hiss")), SoundSource.HOSTILE, 1,
+                    SoundEvents.CAT_HISS, SoundSource.HOSTILE, 1,
                     (float) Mth.nextDouble(RandomSource.create(), 0.85, 1.15));
             CaerulaArborMod.queueServerWork(9, () -> {
                 if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 10) {

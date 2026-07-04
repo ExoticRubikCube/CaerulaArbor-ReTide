@@ -44,7 +44,8 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.sounds.SoundEvents;
+import com.apocalypse.caerulaarbor.init.CASounds;
 
 import java.util.Comparator;
 
@@ -188,7 +189,7 @@ public class IsharmlaRemainBlock extends Block {
                                 _entity.addEffect(new MobEffectInstance(CAMobEffects.ISHARMLA_CURSE.get(), 99999, 0));
                             IsharmlaEntity.sendLinkParticlesToEntity(world, x, y, z, skadi);
                             if ((LevelAccessor) world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "isharmla_tear_place")), SoundSource.BLOCKS, 3, 1);
+                                    _level.playSound(null, BlockPos.containing(x, y, z), CASounds.ISHARMLA_TEAR_PLACE.get(), SoundSource.BLOCKS, 3, 1);
                             }
                             ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                             ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).shrink(1);
@@ -222,7 +223,7 @@ public class IsharmlaRemainBlock extends Block {
                     }
                 } else if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.TEAR_ISHARMLA.get()) {
                     if ((LevelAccessor) world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.totem.use")), SoundSource.BLOCKS, 3, 1);
+                            _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TOTEM_USE, SoundSource.BLOCKS, 3, 1);
                     }
                     ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                     if ((LevelAccessor) world instanceof ServerLevel _level)

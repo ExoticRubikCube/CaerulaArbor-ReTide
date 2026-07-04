@@ -6,10 +6,7 @@ import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.entity.base.RangedSanityAttacker;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.entity.bullets.*;
-import com.apocalypse.caerulaarbor.init.CAAttributes;
-import com.apocalypse.caerulaarbor.init.CAEntities;
-import com.apocalypse.caerulaarbor.init.CAItems;
-import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.*;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -24,6 +21,7 @@ import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
@@ -54,7 +52,6 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
@@ -156,12 +153,12 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
 
     @Override
     public SoundEvent getHurtSound(DamageSource ds) {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "seaborn_generic_hit"));
+        return CASounds.SEABORN_GENERIC_HIT.get();
     }
 
     @Override
     public SoundEvent getDeathSound() {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "apocata_die"));
+        return CASounds.APOCATA_DIE.get();
     }
 
     @Override
@@ -174,7 +171,7 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
                 if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 4) {
                     EntityUtils.giveLessArmor(target, 11);
                     this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
-                            ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "puncturefish_attack")), SoundSource.HOSTILE, 3,
+                            CASounds.PUNCTUREFISH_ATTACK.get(), SoundSource.HOSTILE, 3,
                             (float) Mth.nextDouble(RandomSource.create(), 0.9, 1.1));
                     if (target.hurt(
                             new DamageSource(
@@ -246,9 +243,9 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
             if (this.isAlive()) {
                 if ((LevelAccessor) world instanceof Level _level) {
                     if (!_level.isClientSide()) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.anvil.land")), SoundSource.HOSTILE, (float) 2.5, 1);
+                        _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ANVIL_LAND, SoundSource.HOSTILE, (float) 2.5, 1);
                     } else {
-                        _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.anvil.land")), SoundSource.HOSTILE, (float) 2.5, 1, false);
+                        _level.playLocalSound(x, y, z, SoundEvents.ANVIL_LAND, SoundSource.HOSTILE, (float) 2.5, 1, false);
                     }
                 }
             }
@@ -256,21 +253,21 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
         CaerulaArborMod.queueServerWork(60, () -> {
             if (this.isAlive()) {
                 if ((LevelAccessor) world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.slime.jump")), SoundSource.HOSTILE, (float) 2.5, 1);
+                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SLIME_JUMP, SoundSource.HOSTILE, (float) 2.5, 1);
                 }
             }
         });
         CaerulaArborMod.queueServerWork(66, () -> {
             if (this.isAlive()) {
                 if ((LevelAccessor) world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.slime.jump")), SoundSource.HOSTILE, (float) 2.5, 1);
+                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SLIME_JUMP, SoundSource.HOSTILE, (float) 2.5, 1);
                 }
             }
         });
         CaerulaArborMod.queueServerWork(83, () -> {
             if (this.isAlive()) {
                 if ((LevelAccessor) world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.slime_block.place")), SoundSource.HOSTILE, (float) 2.5, 1);
+                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SLIME_BLOCK_PLACE, SoundSource.HOSTILE, (float) 2.5, 1);
                 }
             }
         });
@@ -315,7 +312,7 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
         LivingEntity _livEnt = this;
         if (_livEnt.deathTime == 10) {
             if (world instanceof Level _level) {
-                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.dragon_fireball.explode")), SoundSource.HOSTILE, 2, 1);
+                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.DRAGON_FIREBALL_EXPLODE, SoundSource.HOSTILE, 2, 1);
             }
             Entity entityToSpawn;
             BlockPos pos = BlockPos.containing(x, y, z);
@@ -430,7 +427,7 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
                                 if (world instanceof ServerLevel _level)
                                     _level.sendParticles(ParticleTypes.EXPLOSION, x, (y + 4), z, 3, 0, 0, 0, 0.1);
                                 if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "firstteller_attack")), SoundSource.HOSTILE, (float) 1.5, 1);
+                                    _level.playSound(null, BlockPos.containing(x, y, z), CASounds.FIRSTTELLER_ATTACK.get(), SoundSource.HOSTILE, (float) 1.5, 1);
                                 }
                                 this.distributeBullets(world, x, y, z);
                             }
@@ -440,7 +437,7 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
                                 if (world instanceof ServerLevel _level)
                                     _level.sendParticles(ParticleTypes.EXPLOSION, x, (y + 4), z, 3, 0, 0, 0, 0.1);
                                 if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "firstteller_attack")), SoundSource.HOSTILE, (float) 1.5, 1);
+                                    _level.playSound(null, BlockPos.containing(x, y, z), CASounds.FIRSTTELLER_ATTACK.get(), SoundSource.HOSTILE, (float) 1.5, 1);
                                 }
                                 this.distributeBullets(world, x, y, z);
                             }
@@ -450,7 +447,7 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
                                 if (world instanceof ServerLevel _level)
                                     _level.sendParticles(ParticleTypes.EXPLOSION, x, (y + 4), z, 3, 0, 0, 0, 0.1);
                                 if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "firstteller_attack")), SoundSource.HOSTILE, (float) 1.5, 1);
+                                    _level.playSound(null, BlockPos.containing(x, y, z), CASounds.FIRSTTELLER_ATTACK.get(), SoundSource.HOSTILE, (float) 1.5, 1);
                                 }
                                 this.distributeBullets(world, x, y, z);
                             }
@@ -500,7 +497,7 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
     private void summonRandomChimera(LevelAccessor world, double x, double y, double z) {
         double randomValue = Math.random();
         if (world instanceof Level level) {
-            level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.lingering_potion.throw")), SoundSource.HOSTILE, 3, 1);
+            level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.LINGERING_POTION_THROW, SoundSource.HOSTILE, 3, 1);
         }
         Entity entityToSpawn = null;
         BlockPos pos = BlockPos.containing(x, y + 3, z);

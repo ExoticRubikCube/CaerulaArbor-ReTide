@@ -1,11 +1,10 @@
 package com.apocalypse.caerulaarbor.block;
 
-import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
+import com.apocalypse.caerulaarbor.init.CASounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -32,7 +31,6 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Comparator;
 import java.util.List;
@@ -107,7 +105,7 @@ public class EmergencyAidBuildingBlock extends Block implements SimpleWaterlogge
 		super.neighborChanged(blockstate, world, pos, neighborBlock, fromPos, moving);
 		if (world.getBestNeighborSignal(pos) > 0) {
 			if (!blockstate.getValue(POWERED)) {
-				world.playSound(null, pos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "bell_ring")), SoundSource.BLOCKS, 1.25F, 1);
+				world.playSound(null, pos, CASounds.BELL_RING.get(), SoundSource.BLOCKS, 1.25F, 1);
 			}
 			world.setBlock(pos, world.getBlockState(pos).setValue(POWERED, true), 3);
 		} else {

@@ -4,8 +4,8 @@ package com.apocalypse.caerulaarbor.block;
 import com.apocalypse.caerulaarbor.init.CABlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -24,7 +24,6 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public class DragonBrandBlock extends Block {
 	public DragonBrandBlock() {
@@ -52,7 +51,7 @@ public class DragonBrandBlock extends Block {
                 ((LevelAccessor) world).setBlock(BlockPos.containing(x, y, z), CABlocks.SEA_TRAIL_SOLID.get().defaultBlockState(), 3);
                 ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                 if ((LevelAccessor) world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.bottle.fill_dragonbreath")), SoundSource.BLOCKS, 1, 1);
+                        _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.BOTTLE_FILL_DRAGONBREATH, SoundSource.BLOCKS, 1, 1);
                 }
                 if ((LevelAccessor) world instanceof ServerLevel _level) {
                     ItemEntity entityToSpawn = new ItemEntity(_level, ((double) x + 0.5), ((double) y + 1), ((double) z + 0.5), new ItemStack(Items.DRAGON_BREATH));

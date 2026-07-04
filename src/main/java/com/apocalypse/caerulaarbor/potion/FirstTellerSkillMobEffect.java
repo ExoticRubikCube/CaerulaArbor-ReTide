@@ -10,6 +10,7 @@ import com.apocalypse.caerulaarbor.entity.FirstTellerEntity;
 import com.apocalypse.caerulaarbor.entity.bullets.TellerShotEntity;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CASounds;
 import com.apocalypse.caerulaarbor.util.MathUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
@@ -42,7 +43,6 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.extensions.common.IClientMobEffectExtensions;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -88,7 +88,7 @@ public class FirstTellerSkillMobEffect extends MobEffect {
         }.timedLoop(0, 5, 1);
         if (!(world.getDifficulty() == Difficulty.PEACEFUL)) {
             if (world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "firetteller_skill_attack")), SoundSource.NEUTRAL, 3,
+                    _level.playSound(null, BlockPos.containing(x, y, z), CASounds.FIRETTELLER_SKILL_ATTACK.get(), SoundSource.NEUTRAL, 3,
                             (float) Mth.nextDouble(RandomSource.create(), 0.85, 1.15));
             }
             enemy = world.getEntitiesOfClass(FirstTellerEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).stream().min(new Object() {

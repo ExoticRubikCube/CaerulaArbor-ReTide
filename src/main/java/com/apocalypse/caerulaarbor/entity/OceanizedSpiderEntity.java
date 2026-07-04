@@ -45,12 +45,12 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
+import net.minecraft.sounds.SoundEvents;
 
 import java.util.EnumSet;
 
@@ -183,17 +183,17 @@ public class OceanizedSpiderEntity extends SeaMonster {
 
     @Override
     public SoundEvent getAmbientSound() {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.spider.ambient"));
+        return SoundEvents.SPIDER_AMBIENT;
     }
 
     @Override
     public SoundEvent getHurtSound(DamageSource ds) {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.spider.hurt"));
+        return SoundEvents.SPIDER_HURT;
     }
 
     @Override
     public SoundEvent getDeathSound() {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.spider.death"));
+        return SoundEvents.SPIDER_DEATH;
     }
 
     @Override
@@ -326,14 +326,14 @@ public class OceanizedSpiderEntity extends SeaMonster {
                         if (Math.random() < 0.25) {
                             world.levelEvent(2001, BlockPos.containing(x, y, z), Block.getId(CABlocks.RED_OVARY.get().defaultBlockState()));
                             if (world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.place")), SoundSource.HOSTILE, 1, (float) 0.8);
+                                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SCULK_VEIN_PLACE, SoundSource.HOSTILE, 1, (float) 0.8);
                             }
                             if (world instanceof ServerLevel _level)
                                 FallingBlockEntity.fall(_level, BlockPos.containing(x, y, z), CABlocks.RED_OVARY.get().defaultBlockState());
                         } else {
                             world.levelEvent(2001, BlockPos.containing(x, y, z), Block.getId(CABlocks.OCEAN_OVARY.get().defaultBlockState()));
                             if (world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.place")), SoundSource.HOSTILE, 1, 1);
+                                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SCULK_VEIN_PLACE, SoundSource.HOSTILE, 1, 1);
                             }
                             if (world instanceof ServerLevel _level)
                                 FallingBlockEntity.fall(_level, BlockPos.containing(x, y, z), CABlocks.OCEAN_OVARY.get().defaultBlockState());

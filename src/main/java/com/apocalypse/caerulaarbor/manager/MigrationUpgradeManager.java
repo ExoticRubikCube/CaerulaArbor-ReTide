@@ -15,7 +15,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraftforge.registries.ForgeRegistries;
+import com.apocalypse.caerulaarbor.init.CASounds;
 
 import java.util.ArrayList;
 
@@ -57,12 +57,12 @@ public class MigrationUpgradeManager {
 					for (Entity entityiterator : new ArrayList<>(world.players())) {
 						if (stra >= 3) {
 							if (world instanceof Level _level) {
-									_level.playSound(null, BlockPos.containing(entityiterator.getX(), entityiterator.getY(), entityiterator.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "migration2")),
+									_level.playSound(null, BlockPos.containing(entityiterator.getX(), entityiterator.getY(), entityiterator.getZ()), CASounds.MIGRATION2.get(),
 											SoundSource.NEUTRAL, 4, 1);
 							}
 						} else if (stra > 0) {
 							if (world instanceof Level _level) {
-									_level.playSound(null, BlockPos.containing(entityiterator.getX(), entityiterator.getY(), entityiterator.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "migration1")),
+									_level.playSound(null, BlockPos.containing(entityiterator.getX(), entityiterator.getY(), entityiterator.getZ()), CASounds.MIGRATION1.get(),
 											SoundSource.NEUTRAL, 4, 1);
 							}
 						}

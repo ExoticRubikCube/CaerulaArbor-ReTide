@@ -4,6 +4,7 @@ package com.apocalypse.caerulaarbor.item;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.client.renderer.item.HighmoreScytheItemRenderer;
 import com.apocalypse.caerulaarbor.init.CAEnchantments;
+import com.apocalypse.caerulaarbor.init.CASounds;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.ItemUtils;
 import com.google.common.collect.ImmutableMultimap;
@@ -38,7 +39,6 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -198,7 +198,7 @@ public class HighmoreScytheItem extends Item implements GeoItem, SyncedAnimation
 			}
 			Level level = attacker.level();
 			level.playSound(null, BlockPos.containing(x, y, z),
-					ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "scythe_highmore")),
+					CASounds.SCYTHE_HIGHMORE.get(),
 					SoundSource.PLAYERS, 1.5F, 1.0F);
 			Vec3 center = new Vec3(x, y + 0.5, z);
 			List<Entity> nearbyEntities = level.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(4.0), target -> true).stream()

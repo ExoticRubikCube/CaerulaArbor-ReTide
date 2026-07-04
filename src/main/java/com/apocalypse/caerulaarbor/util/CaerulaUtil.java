@@ -13,6 +13,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
@@ -28,7 +29,6 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 
@@ -167,7 +167,7 @@ public class CaerulaUtil {
 				world.setBlock(pos, toPlace.getBlock().getStateDefinition().getProperty("waterlogged") instanceof BooleanProperty waterloggedProperty ? toPlace.setValue(waterloggedProperty, water) : toPlace, 3);
 				world.levelEvent(2001, pos, Block.getId(CABlocks.SEA_TRAIL_INIT.get().defaultBlockState()));
 				if (world instanceof Level level) {
-					level.playSound(null, pos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.place")), SoundSource.NEUTRAL, 1, 1);
+					level.playSound(null, pos, SoundEvents.SCULK_VEIN_PLACE, SoundSource.NEUTRAL, 1, 1);
 				}
 			}
 		}

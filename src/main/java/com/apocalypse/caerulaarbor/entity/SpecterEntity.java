@@ -5,6 +5,7 @@ import com.apocalypse.caerulaarbor.entity.base.SyncedAnimationEntity;
 import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CASounds;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
@@ -41,7 +42,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -168,12 +168,12 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
 
     @Override
     public SoundEvent getHurtSound(DamageSource ds) {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "specter_hit"));
+        return CASounds.SPECTER_HIT.get();
     }
 
     @Override
     public SoundEvent getDeathSound() {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "specter_die"));
+        return CASounds.SPECTER_DIE.get();
     }
 
     @Override
@@ -185,7 +185,7 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
             this.getEntityData().set(DATA_duration, this.getEntityData().get(DATA_duration) + 30);
             this.getEntityData().set(DATA_skillp1, this.getEntityData().get(DATA_skillp1) + 1);
             this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
-                    ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "specter_attack")), SoundSource.HOSTILE, 2.5F, 1);
+                    CASounds.SPECTER_ATTACK.get(), SoundSource.HOSTILE, 2.5F, 1);
             CaerulaArborMod.queueServerWork(12, () -> {
                 if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 3.5) {
                     target.hurt(
@@ -233,7 +233,7 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
         double y = this.getY();
         double z = this.getZ();
         if ((LevelAccessor) world instanceof Level _level) {
-            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "saw_spect_skill")), SoundSource.NEUTRAL, (float) 2.5, 1);
+            _level.playSound(null, BlockPos.containing(x, y, z), CASounds.SAW_SPECT_SKILL.get(), SoundSource.NEUTRAL, (float) 2.5, 1);
         }
         this.setAnimation("animation.specter.start");
         return super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
@@ -287,7 +287,7 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
                             this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 35, 0, false, false));
                         CaerulaArborMod.queueServerWork(8, () -> {
                             if (world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "saw_heavy")), SoundSource.NEUTRAL, 3, 1);
+                                _level.playSound(null, BlockPos.containing(x, y, z), CASounds.SAW_HEAVY.get(), SoundSource.NEUTRAL, 3, 1);
                             }
                         });
                         CaerulaArborMod.queueServerWork(15, () -> {
@@ -297,7 +297,7 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
                         });
                         CaerulaArborMod.queueServerWork(25, () -> {
                             if (world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "saw_cut_spect")), SoundSource.NEUTRAL, 3, 1);
+                                _level.playSound(null, BlockPos.containing(x, y, z), CASounds.SAW_CUT_SPECT.get(), SoundSource.NEUTRAL, 3, 1);
                             }
                         });
                         CaerulaArborMod.queueServerWork(31, () -> {
@@ -318,10 +318,10 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
                 if (!(enemy == null) && enemy.isAlive()) {
                     if (EntityUtils.getHealthPerc(this) <= 0.5) {
                         if (world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "specter_skill_on")), SoundSource.NEUTRAL, 3, 1);
+                            _level.playSound(null, BlockPos.containing(x, y, z), CASounds.SPECTER_SKILL_ON.get(), SoundSource.NEUTRAL, 3, 1);
                         }
                         if (world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "specter_skill")), SoundSource.NEUTRAL, 3, 1);
+                            _level.playSound(null, BlockPos.containing(x, y, z), CASounds.SPECTER_SKILL.get(), SoundSource.NEUTRAL, 3, 1);
                         }
                         this.getEntityData().set(DATA_skillp2, 1000);
                         if (!this.level().isClientSide())

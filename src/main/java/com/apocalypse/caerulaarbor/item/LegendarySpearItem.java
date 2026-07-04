@@ -12,7 +12,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
@@ -37,7 +36,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -46,6 +44,7 @@ import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
+import net.minecraft.sounds.SoundEvents;
 
 import java.util.Comparator;
 import java.util.List;
@@ -182,7 +181,7 @@ public class LegendarySpearItem extends Item implements GeoItem, SyncedAnimation
                     _player.getCooldowns().addCooldown(itemstack.getItem(), 25);
                 CaerulaArborMod.queueServerWork(10, () -> {
                     if (world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.player.attack.sweep")), SoundSource.NEUTRAL, (float) 3.5, 1);
+                            _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.NEUTRAL, (float) 3.5, 1);
                     }
                     {
                         final Vec3 _center = new Vec3(x, y, z);
@@ -207,7 +206,7 @@ public class LegendarySpearItem extends Item implements GeoItem, SyncedAnimation
                 CaerulaArborMod.queueServerWork(10, () -> {
                     if (((Entity) entity).isAlive()) {
                         if (world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.trident.hit_ground")), SoundSource.NEUTRAL, (float) 3.5, 1);
+                                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TRIDENT_HIT_GROUND, SoundSource.NEUTRAL, (float) 3.5, 1);
                         }
                         if ((sourceentity != null ? entity.distanceTo(sourceentity) : -1) <= 4) {
                             ((Entity) entity).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.TRIDENT), sourceentity),
@@ -224,7 +223,7 @@ public class LegendarySpearItem extends Item implements GeoItem, SyncedAnimation
                 CaerulaArborMod.queueServerWork(10, () -> {
                     if (((Entity) entity).isAlive()) {
                         if (world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.trident.throw")), SoundSource.NEUTRAL, (float) 3.5, 1);
+                                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TRIDENT_THROW, SoundSource.NEUTRAL, (float) 3.5, 1);
                         }
                         if ((sourceentity != null ? entity.distanceTo(sourceentity) : -1) <= 4) {
                             ((Entity) entity).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.TRIDENT), sourceentity),
@@ -242,7 +241,7 @@ public class LegendarySpearItem extends Item implements GeoItem, SyncedAnimation
                 CaerulaArborMod.queueServerWork(10, () -> {
                     if (((Entity) entity).isAlive()) {
                         if (world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.trident.hit")), SoundSource.NEUTRAL, (float) 3.5, 1);
+                                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TRIDENT_HIT, SoundSource.NEUTRAL, (float) 3.5, 1);
                         }
                         if ((sourceentity != null ? entity.distanceTo(sourceentity) : -1) <= 4) {
                             ((Entity) entity).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.TRIDENT), sourceentity),

@@ -6,9 +6,9 @@ import com.apocalypse.caerulaarbor.init.CAItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -38,7 +38,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public class ReaperEggBlock extends Block implements SimpleWaterloggedBlock {
 	public static final IntegerProperty BLOCKSTATE = IntegerProperty.create("blockstate", 0, 2);
@@ -173,7 +172,7 @@ public class ReaperEggBlock extends Block implements SimpleWaterloggedBlock {
                     ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
             }
             if ((LevelAccessor) world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.turtle.egg_crack")), SoundSource.BLOCKS, 1, 1);
+                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TURTLE_EGG_CRACK, SoundSource.BLOCKS, 1, 1);
             }
         }
         if ((blockstate.getBlock().getStateDefinition().getProperty("hatch") instanceof IntegerProperty _getip13 ? blockstate.getValue(_getip13) : -1) >= 2
@@ -186,7 +185,7 @@ public class ReaperEggBlock extends Block implements SimpleWaterloggedBlock {
                 }
             }
             if ((LevelAccessor) world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.turtle.egg_hatch")), SoundSource.BLOCKS, 1, 1);
+                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TURTLE_EGG_HATCH, SoundSource.BLOCKS, 1, 1);
             }
         }
         {

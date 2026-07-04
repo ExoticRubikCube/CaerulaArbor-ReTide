@@ -4,8 +4,8 @@ package com.apocalypse.caerulaarbor.block;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -30,7 +30,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public class BlockChestfishBlock extends Block implements SimpleWaterloggedBlock {
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
@@ -133,9 +132,9 @@ public class BlockChestfishBlock extends Block implements SimpleWaterloggedBlock
 		};
 		world.destroyBlock(pos, false);
 		if (!world.isClientSide()) {
-			world.playSound(null, pos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.chest.locked")), SoundSource.BLOCKS, 1, 1);
+			world.playSound(null, pos, SoundEvents.CHEST_LOCKED, SoundSource.BLOCKS, 1, 1);
 		} else {
-			world.playLocalSound(pos.getX(), pos.getY(), pos.getZ(), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.chest.locked")), SoundSource.BLOCKS, 1, 1, false);
+			world.playLocalSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.CHEST_LOCKED, SoundSource.BLOCKS, 1, 1, false);
 		}
 		if (Math.random() < 0.7) {
 			if (world instanceof ServerLevel _level) {

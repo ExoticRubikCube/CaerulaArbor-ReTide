@@ -11,6 +11,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
@@ -40,7 +41,6 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public class SeaTrailGrownBlock extends Block implements SimpleWaterloggedBlock, BonemealableBlock {
 	public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
@@ -170,11 +170,11 @@ public class SeaTrailGrownBlock extends Block implements SimpleWaterloggedBlock,
 					} else if (targetState.is(BlockTags.LEAVES) && targetState.getBlock() != CABlocks.TRAIL_LEAVE.get()) {
 						world.setBlock(targetPos, CABlocks.TRAIL_LEAVE.get().defaultBlockState(), 3);
 						world.levelEvent(2001, targetPos, getId(CABlocks.SEA_TRAIL_INIT.get().defaultBlockState()));
-						world.playSound(null, pos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.place")), SoundSource.NEUTRAL, 1.0F, 1.0F);
+						world.playSound(null, pos, SoundEvents.SCULK_VEIN_PLACE, SoundSource.NEUTRAL, 1.0F, 1.0F);
 					} else if (WorldUtils.isOrganic(targetState) && targetState.getBlock() != CABlocks.TRAIL_PULSE.get()) {
 						world.setBlock(targetPos, CABlocks.TRAIL_PULSE.get().defaultBlockState(), 3);
 						world.levelEvent(2001, targetPos, getId(CABlocks.TRAIL_PULSE.get().defaultBlockState()));
-						world.playSound(null, pos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.place")), SoundSource.NEUTRAL, 1.0F, 1.0F);
+						world.playSound(null, pos, SoundEvents.SCULK_VEIN_PLACE, SoundSource.NEUTRAL, 1.0F, 1.0F);
 					} else {
 						BlockState blockToPlace = CABlocks.SEA_TRAIL_INIT.get().defaultBlockState().setValue(SeaTrailInitBlock.LONGEVITY, spreadLongevity);
 						boolean watered = false;
@@ -239,7 +239,7 @@ public class SeaTrailGrownBlock extends Block implements SimpleWaterloggedBlock,
 					change = true;
 				}
 				if (change) {
-					world.playSound(null, pos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.break")), SoundSource.BLOCKS, 1.0F, 1.0F);
+					world.playSound(null, pos, SoundEvents.SCULK_VEIN_BREAK, SoundSource.BLOCKS, 1.0F, 1.0F);
 				}
 				float rand = random.nextFloat();
 				BlockState blockToPlace;

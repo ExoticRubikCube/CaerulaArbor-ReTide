@@ -6,6 +6,7 @@ import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.entity.bullets.HighmoreShootEntity;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CASounds;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
@@ -23,6 +24,7 @@ import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
@@ -61,7 +63,6 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
@@ -270,17 +271,17 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
 
     @Override
     public SoundEvent getAmbientSound() {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.axolotl.idle_water"));
+        return SoundEvents.AXOLOTL_IDLE_WATER;
     }
 
     @Override
     public SoundEvent getHurtSound(DamageSource ds) {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "highmore_hit"));
+        return CASounds.HIGHMORE_HIT.get();
     }
 
     @Override
     public SoundEvent getDeathSound() {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "highmore_death"));
+        return CASounds.HIGHMORE_DEATH.get();
     }
 
     @Override
@@ -415,7 +416,7 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
                             this.setAnimation("animation.highmore.skill");
                         }
                         if (world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "highmore_preamble")), SoundSource.HOSTILE, 4, 1);
+                            _level.playSound(null, BlockPos.containing(x, y, z), CASounds.HIGHMORE_PREAMBLE.get(), SoundSource.HOSTILE, 4, 1);
                         }
                         if (lvl == 0) {
                             CaerulaArborMod.queueServerWork(15, () -> {
@@ -819,7 +820,6 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
             }
         }.timedLoop(0, (int) (1 + (entity instanceof HighmoreEntity _datEntI ? _datEntI.getEntityData().get(HighmoreEntity.DATA_phase) : 0)), 3);
     }
-
 
     @Override
     public void setAnimationProcedure(String animation) {

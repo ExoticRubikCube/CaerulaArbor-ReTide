@@ -4,6 +4,7 @@ import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAItems;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CASounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
@@ -33,7 +34,6 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Comparator;
 import java.util.List;
@@ -132,7 +132,7 @@ public class AnchorFlyEntity extends AbstractArrow implements ItemSupplier {
             if (sourceentity instanceof LivingEntity _entity)
                 _entity.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
             if (world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "anchor_skill")), SoundSource.PLAYERS, 3, 1);
+                    _level.playSound(null, BlockPos.containing(x, y, z), CASounds.ANCHOR_SKILL.get(), SoundSource.PLAYERS, 3, 1);
             }
             if (!level().isClientSide())
                 discard();
@@ -191,7 +191,7 @@ public class AnchorFlyEntity extends AbstractArrow implements ItemSupplier {
         if (entity instanceof LivingEntity _entity)
             _entity.removeEffect(MobEffects.DIG_SLOWDOWN);
         if (world instanceof Level _level) {
-                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "anchor_skill")), SoundSource.PLAYERS, 3, 1);
+                _level.playSound(null, BlockPos.containing(x, y, z), CASounds.ANCHOR_SKILL.get(), SoundSource.PLAYERS, 3, 1);
         }
     }
 
@@ -246,7 +246,7 @@ public class AnchorFlyEntity extends AbstractArrow implements ItemSupplier {
                 if (!level().isClientSide())
                     discard();
                 if (world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "anchor_skill")), SoundSource.PLAYERS, (float) 2.5, 1);
+                        _level.playSound(null, BlockPos.containing(x, y, z), CASounds.ANCHOR_SKILL.get(), SoundSource.PLAYERS, (float) 2.5, 1);
                 }
             }
         }
@@ -270,7 +270,7 @@ public class AnchorFlyEntity extends AbstractArrow implements ItemSupplier {
 		entityarrow.setBaseDamage(damage);
 		entityarrow.setKnockback(knockback);
 		world.addFreshEntity(entityarrow);
-		world.playSound(null, entity.getX(), entity.getY(), entity.getZ(), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "anchor_throw")), SoundSource.PLAYERS, 1, 1f / (random.nextFloat() * 0.5f + 1) + (power / 2));
+		world.playSound(null, entity.getX(), entity.getY(), entity.getZ(), CASounds.ANCHOR_THROW.get(), SoundSource.PLAYERS, 1, 1f / (random.nextFloat() * 0.5f + 1) + (power / 2));
 		return entityarrow;
 	}
 
@@ -285,7 +285,7 @@ public class AnchorFlyEntity extends AbstractArrow implements ItemSupplier {
 		entityarrow.setKnockback(0);
 		entityarrow.setCritArrow(false);
 		entity.level().addFreshEntity(entityarrow);
-		entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "anchor_throw")), SoundSource.PLAYERS, 1,
+		entity.level().playSound(null, entity.getX(), entity.getY(), entity.getZ(), CASounds.ANCHOR_THROW.get(), SoundSource.PLAYERS, 1,
 				1f / (RandomSource.create().nextFloat() * 0.5f + 1));
 		return entityarrow;
 	}

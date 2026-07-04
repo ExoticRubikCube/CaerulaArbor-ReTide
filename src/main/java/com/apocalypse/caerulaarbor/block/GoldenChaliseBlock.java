@@ -1,13 +1,12 @@
 package com.apocalypse.caerulaarbor.block;
 
-import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CASounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -36,7 +35,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
 
@@ -178,7 +176,7 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
                         }
                         ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).setCount(0);
                         if ((LevelAccessor) world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "money_in")), SoundSource.BLOCKS, 1, 1);
+                                _level.playSound(null, BlockPos.containing(x, y, z), CASounds.MONEY_IN.get(), SoundSource.BLOCKS, 1, 1);
                         }
                         res = InteractionResult.SUCCESS;
                     } else {
@@ -195,7 +193,7 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
                             _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
                         }
                         if ((LevelAccessor) world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "money_in")), SoundSource.BLOCKS, 1, 1);
+                                _level.playSound(null, BlockPos.containing(x, y, z), CASounds.MONEY_IN.get(), SoundSource.BLOCKS, 1, 1);
                         }
                         res = InteractionResult.SUCCESS;
                     }
@@ -212,7 +210,7 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
                         }
                         ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).setCount(0);
                         if ((LevelAccessor) world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "money_in")), SoundSource.BLOCKS, 1, 1);
+                                _level.playSound(null, BlockPos.containing(x, y, z), CASounds.MONEY_IN.get(), SoundSource.BLOCKS, 1, 1);
                         }
                         res = InteractionResult.SUCCESS;
                     } else {
@@ -229,7 +227,7 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
                             _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
                         }
                         if ((LevelAccessor) world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "money_in")), SoundSource.BLOCKS, 1, 1);
+                                _level.playSound(null, BlockPos.containing(x, y, z), CASounds.MONEY_IN.get(), SoundSource.BLOCKS, 1, 1);
                         }
                         res = InteractionResult.SUCCESS;
                     }
@@ -255,7 +253,7 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
                                     _level.addFreshEntity(entityToSpawn);
                                 }
                                 if ((LevelAccessor) world instanceof Level _level) {
-                                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "money_out")), SoundSource.BLOCKS, 1, 1);
+                                        _level.playSound(null, BlockPos.containing(x, y, z), CASounds.MONEY_OUT.get(), SoundSource.BLOCKS, 1, 1);
                                 }
                                 res = InteractionResult.SUCCESS;
                             } else if (balance >= 1) {
@@ -275,7 +273,7 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
                                     });
                                 }
                                 if ((LevelAccessor) world instanceof Level _level) {
-                                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "money_out")), SoundSource.BLOCKS, 1, 1);
+                                        _level.playSound(null, BlockPos.containing(x, y, z), CASounds.MONEY_OUT.get(), SoundSource.BLOCKS, 1, 1);
                                 }
                                 res = InteractionResult.SUCCESS;
                             }
@@ -294,7 +292,7 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
                                 _level.addFreshEntity(entityToSpawn);
                             }
                             if ((LevelAccessor) world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "money_out")), SoundSource.BLOCKS, 1, 1);
+                                    _level.playSound(null, BlockPos.containing(x, y, z), CASounds.MONEY_OUT.get(), SoundSource.BLOCKS, 1, 1);
                             }
                             res = InteractionResult.SUCCESS;
                         }

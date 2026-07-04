@@ -11,6 +11,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
@@ -37,7 +38,6 @@ import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
@@ -168,7 +168,7 @@ public class ViviparousLilyBlock extends BaseEntityBlock implements SimpleWaterl
 				for (int dz = -1; dz <= 1; dz++) {
 					if (dx != 0 || dz != 0) {
 						world.setBlock(pos.offset(dx, 0, dz), Blocks.AIR.defaultBlockState(), 3);
-						world.playSound(null, pos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.fungus.break")), SoundSource.BLOCKS, 1.0F, 1.0F);
+						world.playSound(null, pos, SoundEvents.FUNGUS_BREAK, SoundSource.BLOCKS, 1.0F, 1.0F);
 					}
 				}
 			}
@@ -184,7 +184,7 @@ public class ViviparousLilyBlock extends BaseEntityBlock implements SimpleWaterl
 			if (entityToSpawn != null) {
 				entityToSpawn.setYRot(world.getRandom().nextFloat() * 360.0F);
 			}
-			world.playSound(null, pos, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.puffer_fish.blow_out")), SoundSource.BLOCKS, 1.0F, 1.0F);
+			world.playSound(null, pos, SoundEvents.PUFFER_FISH_BLOW_OUT, SoundSource.BLOCKS, 1.0F, 1.0F);
 			world.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
 		}
 	}

@@ -48,7 +48,6 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
@@ -242,9 +241,9 @@ public class OceanizedShulkerEntity extends SeaMonster {
                 player.getMainHandItem().shrink(1);
                 if (world instanceof Level _level) {
                     if (!_level.isClientSide()) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.smithing_table.use")), SoundSource.HOSTILE, 1, 1);
+                        _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SMITHING_TABLE_USE, SoundSource.HOSTILE, 1, 1);
                     } else {
-                        _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.smithing_table.use")), SoundSource.HOSTILE, 1, 1, false);
+                        _level.playLocalSound(x, y, z, SoundEvents.SMITHING_TABLE_USE, SoundSource.HOSTILE, 1, 1, false);
                     }
                 }
                 this.setHealth(this.getMaxHealth());
@@ -285,9 +284,9 @@ public class OceanizedShulkerEntity extends SeaMonster {
                 this.setHealth(this.getMaxHealth());
                 if (world instanceof Level _level) {
                     if (!_level.isClientSide()) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.smithing_table.use")), SoundSource.HOSTILE, 1, 1);
+                        _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SMITHING_TABLE_USE, SoundSource.HOSTILE, 1, 1);
                     } else {
-                        _level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.smithing_table.use")), SoundSource.HOSTILE, 1, 1, false);
+                        _level.playLocalSound(x, y, z, SoundEvents.SMITHING_TABLE_USE, SoundSource.HOSTILE, 1, 1, false);
                     }
                 }
                 ths = InteractionResult.SUCCESS;
@@ -378,7 +377,7 @@ public class OceanizedShulkerEntity extends SeaMonster {
                             tDIre = getShulkerDirection(world, x + dx, y + dy, z + dz);
                             if (!(tDIre == null)) {
                                 if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.shulker.teleport")), SoundSource.HOSTILE, 1, 1);
+                                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SHULKER_TELEPORT, SoundSource.HOSTILE, 1, 1);
                                 }
                                 this.teleportTo((x + dx), (y + dy), (z + dz));
                                 if ((Entity) this instanceof OceanizedShulkerEntity _datEntSetS)
@@ -404,7 +403,7 @@ public class OceanizedShulkerEntity extends SeaMonster {
                                 }
                             }
                             if (world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.shulker.open")), SoundSource.HOSTILE, 1, 1);
+                                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SHULKER_OPEN, SoundSource.HOSTILE, 1, 1);
                             }
                         }
                     } else {
@@ -419,7 +418,7 @@ public class OceanizedShulkerEntity extends SeaMonster {
                                 }
                             }
                             if (world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.shulker.close")), SoundSource.HOSTILE, 1, 1);
+                                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SHULKER_CLOSE, SoundSource.HOSTILE, 1, 1);
                             }
                         }
                     }
@@ -515,9 +514,9 @@ public class OceanizedShulkerEntity extends SeaMonster {
         sBullet.getPersistentData().putBoolean("oceanized", true);
         _level.addFreshEntity(sBullet);
         if (!this.level().isClientSide()) {
-            this.level().playSound(null, BlockPos.containing(this.getX(), this.getY(), this.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.shulker.shoot")), SoundSource.HOSTILE, 1, 1);
+            this.level().playSound(null, BlockPos.containing(this.getX(), this.getY(), this.getZ()), SoundEvents.SHULKER_SHOOT, SoundSource.HOSTILE, 1, 1);
         } else {
-            this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.shulker.shoot")), SoundSource.HOSTILE, 1, 1, false);
+            this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), SoundEvents.SHULKER_SHOOT, SoundSource.HOSTILE, 1, 1, false);
         }
     }
 

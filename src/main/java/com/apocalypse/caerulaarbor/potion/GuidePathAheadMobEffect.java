@@ -8,7 +8,7 @@ import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.MathUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
@@ -20,11 +20,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +67,7 @@ public class GuidePathAheadMobEffect extends MobEffect {
                                 }
                                 world.setBlock(BlockPos.containing(x, y, z), placedState, 3);
                                 if (world instanceof Level _level) {
-                                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.step")), SoundSource.NEUTRAL, 2, 1);
+                                        _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SCULK_VEIN_STEP, SoundSource.NEUTRAL, 2, 1);
                                 }
                                 if ((Entity) entity instanceof GuideAbyssalEntity _datEntSetI)
                                     _datEntSetI.getEntityData().set(GuideAbyssalEntity.DATA_laylimit, ((Entity) entity instanceof GuideAbyssalEntity _datEntI ? _datEntI.getEntityData().get(GuideAbyssalEntity.DATA_laylimit) : 0) - 1);
@@ -85,7 +83,7 @@ public class GuidePathAheadMobEffect extends MobEffect {
                                 }
                                 world.setBlock(BlockPos.containing(x, y, z), CABlocks.SEA_TRAIL_INIT.get().defaultBlockState(), 3);
                                 if (world instanceof Level _level) {
-                                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.sculk_vein.step")), SoundSource.NEUTRAL, 2, 1);
+                                        _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SCULK_VEIN_STEP, SoundSource.NEUTRAL, 2, 1);
                                 }
                                 if ((Entity) entity instanceof OceanizedHorseEntity _datEntSetI)
                                     _datEntSetI.getEntityData().set(OceanizedHorseEntity.DATA_lay_limit, ((Entity) entity instanceof OceanizedHorseEntity _datEntI ? _datEntI.getEntityData().get(OceanizedHorseEntity.DATA_lay_limit) : 0) - 1);

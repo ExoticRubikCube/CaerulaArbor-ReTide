@@ -50,12 +50,12 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
+import com.apocalypse.caerulaarbor.init.CASounds;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -78,7 +78,7 @@ public class IsharmlaEntity extends SeaMonster {
 	public String animationprocedure = "empty";
 	private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.YELLOW, ServerBossEvent.BossBarOverlay.NOTCHED_6);
 
-	public static final SoundEvent SKADI_HIT = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "skadi_hit"));
+	public static final SoundEvent SKADI_HIT = CASounds.SKADI_HIT.get();
 
 	public IsharmlaEntity(Level world) {
 		this(CAEntities.ISHARMLA.get(), world);
@@ -176,7 +176,7 @@ public class IsharmlaEntity extends SeaMonster {
 		double targetZ = target.getZ();
 		if (!this.level().isClientSide()) {
 			this.level().playSound(null, BlockPos.containing(this.getX(), this.getY(), this.getZ()),
-					ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "isharmla_attack_pre")), SoundSource.HOSTILE, 2.5F, 1);
+					CASounds.ISHARMLA_ATTACK_PRE.get(), SoundSource.HOSTILE, 2.5F, 1);
 			CaerulaArborMod.queueServerWork(13, () -> {
 				if (this.isAlive() && this.level() instanceof ServerLevel serverLevel) {
 					double sourceX = this.getX();
@@ -191,7 +191,7 @@ public class IsharmlaEntity extends SeaMonster {
 				if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 32) {
 					Entity enemy = this.getTarget();
 					this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
-							ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "isharmla_attack_launch")), SoundSource.HOSTILE, 2.5F, 1);
+							CASounds.ISHARMLA_ATTACK_LAUNCH.get(), SoundSource.HOSTILE, 2.5F, 1);
 					isharmlaDroppedAttack(this.level(), targetX, targetY, targetZ, Mth.nextDouble(RandomSource.create(), 1.5, 3), 1);
 					int count = 0;
 					for (int index = 0; index < 5; index++) {
@@ -255,7 +255,7 @@ public class IsharmlaEntity extends SeaMonster {
 		CaerulaArborMod.queueServerWork(20, () -> {
 			Entity enemy = this.getTarget();
 			double damage = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * rate;
-			level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "isharmla_attack_hit")), SoundSource.HOSTILE, 2,
+			level.playSound(null, BlockPos.containing(x, y, z), CASounds.ISHARMLA_ATTACK_HIT.get(), SoundSource.HOSTILE, 2,
 					(float) Mth.nextDouble(RandomSource.create(), 0.85, 1.1));
 			Vec3 center = new Vec3(x, y, z);
 			List<Entity> entities = level.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate((radius * 2) / 2d), entity -> true).stream()
@@ -322,7 +322,7 @@ public class IsharmlaEntity extends SeaMonster {
 		if (!this.level().isClientSide())
 			this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 60, 9, false, false));
 		if ((LevelAccessor) world instanceof Level _level) {
-			_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "isharmla_to_human")), SoundSource.HOSTILE, 2, 1);
+			_level.playSound(null, BlockPos.containing(x, y, z), CASounds.ISHARMLA_TO_HUMAN.get(), SoundSource.HOSTILE, 2, 1);
 		}
 		for (Entity entityiterator : new ArrayList<>(world.players())) {
 			if ((level().dimension()) == (entityiterator.level().dimension())) {
@@ -539,7 +539,7 @@ public class IsharmlaEntity extends SeaMonster {
 								enemy1 = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
 								d = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
 								if (world instanceof Level _level) {
-									_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "isharmla_tear_hurt_1")), SoundSource.HOSTILE, 3, 1);
+									_level.playSound(null, BlockPos.containing(x, y, z), CASounds.ISHARMLA_TEAR_HURT_1.get(), SoundSource.HOSTILE, 3, 1);
 								}
 								if (!(enemy1 == null)) {
 									if ((enemy1 instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) <= d) {
@@ -573,7 +573,7 @@ public class IsharmlaEntity extends SeaMonster {
 						double count = 0;
 						atk = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
 						if (world instanceof Level _level) {
-							_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "isharmla_heal")), SoundSource.HOSTILE, 3, 1);
+							_level.playSound(null, BlockPos.containing(x, y, z), CASounds.ISHARMLA_HEAL.get(), SoundSource.HOSTILE, 3, 1);
 						}
 						{
 							final Vec3 _center = new Vec3(x, y, z);
@@ -840,7 +840,7 @@ public class IsharmlaEntity extends SeaMonster {
 		double damage = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() * damageRate : 0;
 
 		if (world instanceof Level _level) {
-			_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "isharmla_attack_hit")), SoundSource.HOSTILE, 2, (float) Mth.nextDouble(RandomSource.create(), 0.85, 1.1));
+			_level.playSound(null, BlockPos.containing(x, y, z), CASounds.ISHARMLA_ATTACK_HIT.get(), SoundSource.HOSTILE, 2, (float) Mth.nextDouble(RandomSource.create(), 0.85, 1.1));
 		}
 
 		final Vec3 center = new Vec3(x, y, z);
@@ -875,7 +875,7 @@ public class IsharmlaEntity extends SeaMonster {
 		}
 
 		if (world instanceof Level _level) {
-			_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "isharmla_to_monsterr")), SoundSource.HOSTILE, 3, 1);
+			_level.playSound(null, BlockPos.containing(x, y, z), CASounds.ISHARMLA_TO_MONSTERR.get(), SoundSource.HOSTILE, 3, 1);
 		}
 
 		transformParticleLoop(world, x, y, z, 0, 10, 2, true);
@@ -922,7 +922,7 @@ public class IsharmlaEntity extends SeaMonster {
 		transformParticleLoop(world, x, y, z, 0, 10, 2, false);
 
 		if (world instanceof Level _level) {
-			_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "isharmla_to_human")), SoundSource.HOSTILE, 3, 1);
+			_level.playSound(null, BlockPos.containing(x, y, z), CASounds.ISHARMLA_TO_HUMAN.get(), SoundSource.HOSTILE, 3, 1);
 		}
 
 		double recordedHealth = this.getEntityData().get(DATA_RECORDED_HEALTH);

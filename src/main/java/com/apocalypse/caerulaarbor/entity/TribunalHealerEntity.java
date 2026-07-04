@@ -3,10 +3,7 @@ package com.apocalypse.caerulaarbor.entity;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SyncedAnimationEntity;
 import com.apocalypse.caerulaarbor.entity.bullets.HealBullletEntity;
-import com.apocalypse.caerulaarbor.init.CAAttributes;
-import com.apocalypse.caerulaarbor.init.CAEntities;
-import com.apocalypse.caerulaarbor.init.CAMobEffects;
-import com.apocalypse.caerulaarbor.init.CAParticles;
+import com.apocalypse.caerulaarbor.init.*;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
@@ -19,6 +16,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
@@ -42,7 +40,6 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -221,12 +218,12 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
 
     @Override
     public SoundEvent getHurtSound(DamageSource ds) {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.generic.hurt"));
+        return SoundEvents.GENERIC_HURT;
     }
 
     @Override
     public SoundEvent getDeathSound() {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.generic.death"));
+        return SoundEvents.GENERIC_DEATH;
     }
 
 	@Override
@@ -284,7 +281,7 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
                                             double count1 = 0;
                                             atk1 = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
                                             if (world instanceof Level _level) {
-                                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "medic_strong")), SoundSource.NEUTRAL, 2, 1);
+                                                _level.playSound(null, BlockPos.containing(x, y, z), CASounds.MEDIC_STRONG.get(), SoundSource.NEUTRAL, 2, 1);
                                             }
                                             final Vec3 _center1 = new Vec3(x, y, z);
                                             List<Entity> _entfound1 = world.getEntitiesOfClass(Entity.class, new AABB(_center1, _center1).inflate(18 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center1))).toList();
@@ -336,7 +333,7 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
                             double vz;
                             double dist;
                             if (world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "medic_blast")), SoundSource.PLAYERS, 2, 1);
+                                _level.playSound(null, BlockPos.containing(x, y, z), CASounds.MEDIC_BLAST.get(), SoundSource.PLAYERS, 2, 1);
                             }
                             {
                                 final Vec3 _center = new Vec3((getX()), (getY()), (getZ()));
@@ -376,7 +373,7 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
                             CaerulaArborMod.queueServerWork(7, () -> {
                                 if (this.isAlive()) {
                                     if (world instanceof Level _level) {
-                                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "medic_attack")), SoundSource.PLAYERS, (float) 1.25, 1);
+                                        _level.playSound(null, BlockPos.containing(x, y, z), CASounds.MEDIC_ATTACK.get(), SoundSource.PLAYERS, (float) 1.25, 1);
                                     }
                                     new Object() {
                                         void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {

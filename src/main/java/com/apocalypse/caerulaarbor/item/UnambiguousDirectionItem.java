@@ -1,16 +1,15 @@
 package com.apocalypse.caerulaarbor.item;
 
-import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.bullets.AnchorFlyEntity;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CASounds;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -29,7 +28,6 @@ import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
 
@@ -93,11 +91,11 @@ public class UnambiguousDirectionItem extends Item {
         double z = entity.getZ();
         if (sourceentity.hasEffect(CAMobEffects.PATH_TO_UNCOVER.get())) {
             if (world instanceof Level _level) {
-                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "anchor_skillattack")), SoundSource.PLAYERS, 2, 1);
+                _level.playSound(null, BlockPos.containing(x, y, z), CASounds.ANCHOR_SKILLATTACK.get(), SoundSource.PLAYERS, 2, 1);
             }
         } else {
             if (world instanceof Level _level) {
-                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "anchor_attack")), SoundSource.PLAYERS, 2, 1);
+                _level.playSound(null, BlockPos.containing(x, y, z), CASounds.ANCHOR_ATTACK.get(), SoundSource.PLAYERS, 2, 1);
             }
         }
         return retval;
@@ -117,7 +115,7 @@ public class UnambiguousDirectionItem extends Item {
         double z = entity.getZ();
         if (!(entity instanceof Player _plrCldCheck1 && _plrCldCheck1.getCooldowns().isOnCooldown(itemstack.getItem()))) {
             if ((LevelAccessor) world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "anchor_throw")), SoundSource.PLAYERS, (float) 1.8, 1);
+                    _level.playSound(null, BlockPos.containing(x, y, z), CASounds.ANCHOR_THROW.get(), SoundSource.PLAYERS, (float) 1.8, 1);
             }
             Level projectileLevel = entity.level();
             if (!projectileLevel.isClientSide()) {

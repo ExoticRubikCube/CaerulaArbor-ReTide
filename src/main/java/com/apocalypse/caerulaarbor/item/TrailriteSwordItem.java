@@ -8,8 +8,8 @@ import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -20,7 +20,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
 
@@ -77,7 +76,7 @@ public class TrailriteSwordItem extends SwordItem {
                         if ((Entity) sourceentity instanceof LivingEntity _entity)
                             _entity.setHealth((float) (((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) + absorp));
                         if (world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.amethyst_block.resonate")), SoundSource.PLAYERS, 1, 1);
+                                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.AMETHYST_BLOCK_RESONATE, SoundSource.PLAYERS, 1, 1);
                         }
                         if (world instanceof ServerLevel _level)
                             _level.sendParticles(ParticleTypes.INSTANT_EFFECT, x, (y + 1), z, 32, 2, 2, 2, 0.25);

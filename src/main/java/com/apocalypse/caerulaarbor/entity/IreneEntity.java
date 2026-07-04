@@ -43,7 +43,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -52,6 +51,7 @@ import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
+import com.apocalypse.caerulaarbor.init.CASounds;
 
 import java.util.Comparator;
 import java.util.List;
@@ -177,12 +177,12 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 
 	@Override
 	public SoundEvent getHurtSound(DamageSource ds) {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_hit"));
+		return CASounds.IRENE_HIT.get();
 	}
 
 	@Override
 	public SoundEvent getDeathSound() {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_die"));
+		return CASounds.IRENE_DIE.get();
 	}
 
 	@Override
@@ -197,7 +197,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 			CaerulaArborMod.queueServerWork(6, () -> {
 				if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 3) {
 					this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
-							ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_attack")), SoundSource.NEUTRAL, 2.5F,
+							CASounds.IRENE_ATTACK.get(), SoundSource.NEUTRAL, 2.5F,
 							(float) Mth.nextDouble(RandomSource.create(), 0.9, 1.1));
 					if (target instanceof LivingEntity livingTarget) {
 						livingTarget.addEffect(new MobEffectInstance(CAMobEffects.MUTE.get(), 60, 0, false, false));
@@ -213,7 +213,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 			CaerulaArborMod.queueServerWork(11, () -> {
 				if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 3) {
 					this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
-							ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_attack")), SoundSource.NEUTRAL, 2.5F,
+							CASounds.IRENE_ATTACK.get(), SoundSource.NEUTRAL, 2.5F,
 							(float) Mth.nextDouble(RandomSource.create(), 0.9, 1.1));
 					target.hurt(
 							new DamageSource(
@@ -328,7 +328,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 			}
 			if (!((LevelAccessor) world).isClientSide()) {
 				if ((LevelAccessor) world instanceof Level _level) {
-					_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_interact")), SoundSource.NEUTRAL, 3, 1);
+					_level.playSound(null, BlockPos.containing(x, y, z), CASounds.IRENE_INTERACT.get(), SoundSource.NEUTRAL, 3, 1);
 				}
 			}
 			if (entity instanceof IreneEntity) {
@@ -385,7 +385,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 						CaerulaArborMod.queueServerWork(10, () -> {
 							if (this.isAlive()) {
 								if (world instanceof Level _level) {
-									_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_fly")), SoundSource.NEUTRAL, 3, 1);
+									_level.playSound(null, BlockPos.containing(x, y, z), CASounds.IRENE_FLY.get(), SoundSource.NEUTRAL, 3, 1);
 								}
                                 Entity enemy1 = this.getTarget();
 								if (enemy1 == null)
@@ -399,7 +399,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 										this.applyLaunchPunishBonus(enemy1, (float) (((Entity) this instanceof LivingEntity _livingEntity6 && _livingEntity6.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity6.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * (double) 3)));
 								CaerulaArborMod.queueServerWork(6, () -> {
 									if (world instanceof Level _level) {
-										_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_gun")), SoundSource.NEUTRAL, 3, 1);
+										_level.playSound(null, BlockPos.containing(x, y, z), CASounds.IRENE_GUN.get(), SoundSource.NEUTRAL, 3, 1);
 									}
 									if (world instanceof ServerLevel _level)
 										_level.sendParticles(ParticleTypes.END_ROD, (enemy1.getX()), (enemy1.getY() + 0.75), (enemy1.getZ()), 32, 0.75, 0.75, 0.75, 0.15);
@@ -417,7 +417,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 				if (!this.level().isClientSide())
 					this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 60, 9, false, false));
 				if (world instanceof Level _level) {
-					_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_skill")), SoundSource.NEUTRAL, 3, 1);
+					_level.playSound(null, BlockPos.containing(x, y, z), CASounds.IRENE_SKILL.get(), SoundSource.NEUTRAL, 3, 1);
 				}
 				if ((Entity) this instanceof IreneEntity _datEntSetI)
 					_datEntSetI.getEntityData().set(DATA_skillp2, 0);
@@ -428,7 +428,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 						double damage;
                         damage = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
 						if (world instanceof Level _level) {
-							_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_skill_fly")), SoundSource.NEUTRAL, 3, 1);
+							_level.playSound(null, BlockPos.containing(x, y, z), CASounds.IRENE_SKILL_FLY.get(), SoundSource.NEUTRAL, 3, 1);
 						}
 						final Vec3 _center = new Vec3(x, y, z);
 						List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(14 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
@@ -448,7 +448,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 				CaerulaArborMod.queueServerWork(16, () -> {
 					if (this.isAlive()) {
 						if (world instanceof Level _level) {
-							_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_skill_loop")), SoundSource.NEUTRAL, 2, 1);
+							_level.playSound(null, BlockPos.containing(x, y, z), CASounds.IRENE_SKILL_LOOP.get(), SoundSource.NEUTRAL, 2, 1);
 						}
 					}
 				});
@@ -486,7 +486,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 									entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))), this),
 											this.applyLaunchPunishBonus(entityiterator, (float) (damage * 2.5)));
 									if (world instanceof Level _level) {
-										_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_skill_gun")), SoundSource.NEUTRAL, 3, 1);
+										_level.playSound(null, BlockPos.containing(x, y, z), CASounds.IRENE_SKILL_GUN.get(), SoundSource.NEUTRAL, 3, 1);
 									}
 									if (world instanceof ServerLevel _level)
 										_level.sendParticles(ParticleTypes.END_ROD, (entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()), 72, 2.5, 2.5, 2.5, 0.1);
@@ -498,7 +498,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 				CaerulaArborMod.queueServerWork(59, () -> {
 					if (this.isAlive()) {
 						if (world instanceof Level _level) {
-							_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "irene_reload")), SoundSource.NEUTRAL, 3, 1);
+							_level.playSound(null, BlockPos.containing(x, y, z), CASounds.IRENE_RELOAD.get(), SoundSource.NEUTRAL, 3, 1);
 						}
 					}
 				});

@@ -4,10 +4,7 @@ import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.api.event.SanityEvent;
 import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CAAttributes;
-import com.apocalypse.caerulaarbor.init.CABlocks;
-import com.apocalypse.caerulaarbor.init.CAEntities;
-import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.*;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.client.Minecraft;
@@ -24,6 +21,7 @@ import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
@@ -55,7 +53,6 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
@@ -146,17 +143,17 @@ public class BishopFishEntity extends SeaMonster {
 
     @Override
     public SoundEvent getAmbientSound() {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.elder_guardian.ambient"));
+        return SoundEvents.ELDER_GUARDIAN_AMBIENT;
     }
 
     @Override
     public SoundEvent getHurtSound(DamageSource ds) {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.elder_guardian.hurt"));
+        return SoundEvents.ELDER_GUARDIAN_HURT;
     }
 
     @Override
     public SoundEvent getDeathSound() {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.elder_guardian.death"));
+        return SoundEvents.ELDER_GUARDIAN_DEATH;
     }
 
     @Override
@@ -178,7 +175,7 @@ public class BishopFishEntity extends SeaMonster {
                 if ((Entity) this instanceof BishopFishEntity _datEntSetI)
                     _datEntSetI.getEntityData().set(DATA_duration, ((Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_duration) : 0) + 20);
                 if (world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "bishopfish_flap")), SoundSource.HOSTILE, 3, 1);
+                    _level.playSound(null, BlockPos.containing(x, y, z), CASounds.BISHOPFISH_FLAP.get(), SoundSource.HOSTILE, 3, 1);
                 }
                 new Object() {
                     void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
@@ -291,7 +288,7 @@ public class BishopFishEntity extends SeaMonster {
                         if (world instanceof ServerLevel _level)
                             _level.sendParticles(ParticleTypes.SMOKE, (x + dx), (yfnl + 0.5), (z + dz), 16, 0.5, 0.5, 0.5, 0.2);
                         if (world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x + dx, yfnl, z + dz), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.guardian.flop")), SoundSource.HOSTILE, 1, 1);
+                            _level.playSound(null, BlockPos.containing(x + dx, yfnl, z + dz), SoundEvents.GUARDIAN_FLOP, SoundSource.HOSTILE, 1, 1);
                         }
                     }
                     if (this.hasEffect(CAMobEffects.ANGER_OF_BISHOP.get())) {
@@ -331,7 +328,7 @@ public class BishopFishEntity extends SeaMonster {
         if (!this.level().isClientSide())
             this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 80, 1, false, false));
         if ((LevelAccessor) world instanceof Level _level) {
-            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.warden.emerge")), SoundSource.HOSTILE, 3, 1);
+            _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.WARDEN_EMERGE, SoundSource.HOSTILE, 3, 1);
         }
         this.setAnimation("animation.bishop.start1");
         return retval;
@@ -434,7 +431,7 @@ public class BishopFishEntity extends SeaMonster {
                 if ((Entity) this instanceof BishopFishEntity _datEntSetI)
                     _datEntSetI.getEntityData().set(DATA_duration, (int) (d + 40));
                 if (world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "bishopfish_blast")), SoundSource.HOSTILE, 4, 1);
+                    _level.playSound(null, BlockPos.containing(x, y, z), CASounds.BISHOPFISH_BLAST.get(), SoundSource.HOSTILE, 4, 1);
                 }
                 if (!this.level().isClientSide())
                     this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 40, 0));
@@ -460,7 +457,7 @@ public class BishopFishEntity extends SeaMonster {
                         if (world instanceof ServerLevel _level)
                             _level.sendParticles(ParticleTypes.CLOUD, (x + dx1), (yfnl + 1), (z + dz1), 64, 1, 1, 1, 0.1);
                         if (world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x + dx1, yfnl + 1, z + dz1), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("ambient.underwater.enter")), SoundSource.NEUTRAL, (float) 1.5, 1);
+                            _level.playSound(null, BlockPos.containing(x + dx1, yfnl + 1, z + dz1), SoundEvents.AMBIENT_UNDERWATER_ENTER, SoundSource.NEUTRAL, (float) 1.5, 1);
                         }
                         for (Entity entityiterator : world.getEntities(BishopFishEntity.this, new AABB((x + 18), y, (z + 18), (x - 18), (y + 12), (z - 18)))) {
                             if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {

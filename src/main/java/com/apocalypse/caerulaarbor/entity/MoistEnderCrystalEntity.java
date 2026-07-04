@@ -43,7 +43,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -52,6 +51,8 @@ import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
+import net.minecraft.sounds.SoundEvents;
+import com.apocalypse.caerulaarbor.init.CASounds;
 
 import javax.annotation.Nullable;
 import java.util.Comparator;
@@ -112,12 +113,12 @@ public class MoistEnderCrystalEntity extends PathfinderMob implements GeoEntity,
 
 	@Override
 	public SoundEvent getHurtSound(DamageSource ds) {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.glass.hit"));
+		return SoundEvents.GLASS_HIT;
 	}
 
 	@Override
 	public SoundEvent getDeathSound() {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.glass.break"));
+		return SoundEvents.GLASS_BREAK;
 	}
 
 	@Override
@@ -267,7 +268,7 @@ public class MoistEnderCrystalEntity extends PathfinderMob implements GeoEntity,
 				return;
 			}
 			if (world instanceof Level _level) {
-				_level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "caster_crystal_explode")), SoundSource.NEUTRAL, 3, 1);
+				_level.playSound(null, BlockPos.containing(x, y, z), CASounds.CASTER_CRYSTAL_EXPLODE.get(), SoundSource.NEUTRAL, 3, 1);
 			}
 			if (world instanceof ServerLevel _level)
 				_level.sendParticles(ParticleTypes.EXPLOSION, x, (y + 0.5), z, 4, 0.5, 0.5, 0.5, 0.1);

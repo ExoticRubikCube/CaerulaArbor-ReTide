@@ -339,7 +339,7 @@ public class CAItems {
 	public static final RegistryObject<Item> TIDE_WAND = REGISTRY.register("tide_wand", () -> new TideWandItem());
 	public static final RegistryObject<Item> TRAIL_PLANK_DOOR = doubleBlock(CABlocks.TRAIL_PLANK_DOOR);
 	public static final RegistryObject<Item> TRAIL_MOP = REGISTRY.register("trail_mop", () -> new TrailMopItem());
-	public static final RegistryObject<Item> BLOODY_RECORD = REGISTRY.register("bloody_record", () -> new RecordItem(9, () -> ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "bloody_wolf")), new Item.Properties().stacksTo(1).rarity(Rarity.RARE), 3080));
+	public static final RegistryObject<Item> BLOODY_RECORD = REGISTRY.register("bloody_record", () -> new RecordItem(9, () -> CASounds.BLOODY_WOLF.get(), new Item.Properties().stacksTo(1).rarity(Rarity.RARE), 3080));
 	public static final RegistryObject<Item> SALTSAND = block(CABlocks.SALTSAND);
 	public static final RegistryObject<Item> SKADI_SPAWN_EGG = REGISTRY.register("skadi_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.SKADI, -13289929, -4141862, new Item.Properties()));
 	public static final RegistryObject<Item> SEA_TRAIL_BURNT = block(CABlocks.SEA_TRAIL_BURNT);
@@ -452,7 +452,7 @@ public class CAItems {
 	public static final RegistryObject<Item> GUNMU_SPAWN_EGG = REGISTRY.register("gunmu_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.GUNMU, -1, -1, new Item.Properties()));
 	public static final RegistryObject<Item> NETHERSEA_PUMPKIN_PIE = REGISTRY.register("nethersea_pumpkin_pie", () -> new NetherseaPumpkinPieItem());
 	public static final RegistryObject<Item> NETHERSEA_STEW = REGISTRY.register("nethersea_stew", () -> new NetherseaStewItem());
-	public static final RegistryObject<Item> RECORD_WHISPER = REGISTRY.register("record_whisper", () -> new RecordItem(6, () -> ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "whisper_illusion")), new Item.Properties().stacksTo(1).rarity(Rarity.RARE), 4480));
+	public static final RegistryObject<Item> RECORD_WHISPER = REGISTRY.register("record_whisper", () -> new RecordItem(6, () -> CASounds.WHISPER_ILLUSION.get(), new Item.Properties().stacksTo(1).rarity(Rarity.RARE), 4480));
 	public static final RegistryObject<Item> MOIST_ECHO_SHARD = tooltipItem("moist_echo_shard", () -> new Item(new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.UNCOMMON)),1);
 	public static final RegistryObject<Item> OCEANIZED_WARDEN_SPAWNEGG = REGISTRY.register("oceanized_warden_spawnegg", () -> new OceanizedWardenSpawneggItem());
 	public static final RegistryObject<Item> MUTAGENISIS_CAPSULE = REGISTRY.register("mutagenisis_capsule", () -> new MutagenisisCapsuleItem());
@@ -473,7 +473,7 @@ public class CAItems {
 	public static final RegistryObject<Item> EMERGENCY_AID_BUILDING = block(CABlocks.EMERGENCY_AID_BUILDING);
 	public static final RegistryObject<Item> EMERGENCY_AID_BUILDING_SALVIENTO = block(CABlocks.EMERGENCY_AID_BUILDING_SALVIENTO);
 	public static final RegistryObject<Item> MIZUKI_STATUE = REGISTRY.register(CABlocks.MIZUKI_STATUE.getId().getPath(), () -> new MizukiStatueDisplayItem(CABlocks.MIZUKI_STATUE.get(), new Item.Properties()));
-	public static final RegistryObject<Item> RECORD_ENDOSPORE = REGISTRY.register("record_endospore", () -> new RecordItem(0, () -> ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "endospore")), new Item.Properties().stacksTo(1).rarity(Rarity.RARE), 3940));
+	public static final RegistryObject<Item> RECORD_ENDOSPORE = REGISTRY.register("record_endospore", () -> new RecordItem(0, () -> CASounds.ENDOSPORE.get(), new Item.Properties().stacksTo(1).rarity(Rarity.RARE), 3940));
 	public static final RegistryObject<Item> NUCLEIC_MALEFICENT_SPAWN_EGG = REGISTRY.register("nucleic_maleficent_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.NUCLEIC_MALEFICENT, -15062866, -1, new Item.Properties()));
 	public static final RegistryObject<Item> SHELL_OF_STONECUTTER = REGISTRY.register("shell_of_stonecutter", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)));
 	public static final RegistryObject<Item> POCKET_SEA_DOLL = REGISTRY.register(CABlocks.POCKET_SEA_DOLL.getId().getPath(), () -> new PocketSeaDollDisplayItem(CABlocks.POCKET_SEA_DOLL.get(), new Item.Properties()));
@@ -483,7 +483,7 @@ public class CAItems {
 	public static final RegistryObject<Item> NETHERSEA_SOUL_SAND = block(CABlocks.NETHERSEA_SOUL_SAND);
 	public static final RegistryObject<Item> OCEANIZED_WITHER_SPAWNEGG = REGISTRY.register("oceanized_wither_spawnegg", () -> new OceanziedWitherSpawneggItem());
 	public static final RegistryObject<Item> CAERULA_BOOK_SHELF = block(CABlocks.CAERULA_BOOK_SHELF);
-	public static final RegistryObject<Item> RECORD_PATH_AHEAD = REGISTRY.register("record_path_ahead", () -> new RecordItem(6, () -> ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "only_path_ahead")), new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.RARE), 3040));
+	public static final RegistryObject<Item> RECORD_PATH_AHEAD = REGISTRY.register("record_path_ahead", () -> new RecordItem(6, () -> CASounds.ONLY_PATH_AHEAD.get(), new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.RARE), 3040));
 	public static final RegistryObject<Item> ABANDONED_SULPTURE = REGISTRY.register(CABlocks.ABANDONED_SULPTURE.getId().getPath(),
 			() -> new AbandonedSulptureDisplayItem(CABlocks.ABANDONED_SULPTURE.get(), new Item.Properties()));
 	public static final RegistryObject<Item> NETHERSEA_ICECREAM = REGISTRY.register("nethersea_icecream", () -> new NetherseaIcecreamItem());
@@ -562,11 +562,11 @@ public class CAItems {
 	public static final RegistryObject<Item> CORRUPTED_HEART_SPAWNER = REGISTRY.register("corrupted_heart_spawner", () -> new CorruptedHeartSpawnerItem());
 	public static final RegistryObject<Item> INCANDESCENT_ANIMA = REGISTRY.register("incandescent_anima", () -> new IncandescentAnimaItem());
 	public static final RegistryObject<Item> ISHARMLA_REMAIN = block(CABlocks.ISHARMLA_REMAIN);
-	public static final RegistryObject<Item> RECORD_UNDERTIDES = REGISTRY.register("record_undertides", () -> new RecordItem(0, () -> ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "undertides")), new Item.Properties().stacksTo(1).rarity(Rarity.RARE), 4620));
+	public static final RegistryObject<Item> RECORD_UNDERTIDES = REGISTRY.register("record_undertides", () -> new RecordItem(0, () -> CASounds.UNDERTIDES.get(), new Item.Properties().stacksTo(1).rarity(Rarity.RARE), 4620));
 	public static final RegistryObject<Item> AEGIR_GLASS_DECO = block(CABlocks.AEGIR_GLASS_DECO);
 	public static final RegistryObject<Item> AEGIR_GLASS_BAR = block(CABlocks.AEGIR_GLASS_BAR);
 	public static final RegistryObject<Item> AEGIR_GLASS_ARCH = block(CABlocks.AEGIR_GLASS_ARCH);
-	public static final RegistryObject<Item> RECORD_DEEPNESS = REGISTRY.register("record_deepness", () -> new RecordItem(6, () -> ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "operation_deepness")), new Item.Properties().stacksTo(1).rarity(Rarity.RARE), 4420));
+	public static final RegistryObject<Item> RECORD_DEEPNESS = REGISTRY.register("record_deepness", () -> new RecordItem(6, () -> CASounds.OPERATION_DEEPNESS.get(), new Item.Properties().stacksTo(1).rarity(Rarity.RARE), 4420));
 	public static final RegistryObject<Item> OCEANIZE_RABBIT_SPAWN_EGG = REGISTRY.register("oceanize_rabbit_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.OCEANIZE_RABBIT, -1802567, -4241774, new Item.Properties()));
 	public static final RegistryObject<Item> CHITIN_BOW = REGISTRY.register("chitin_bow", () -> new ChitinBowItem());
 	public static final RegistryObject<Item> CORAL_FEET = REGISTRY.register("coral_feet", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)));
@@ -606,7 +606,7 @@ public class CAItems {
 	public static final RegistryObject<Item> ISHARMLA_TEAR_SPAWN_EGG = REGISTRY.register("isharmla_tear_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.ISHARMLA_TEAR, -3034976, -328990, new Item.Properties()));
 	public static final RegistryObject<Item> MIZUKI_DETERMINATION = tooltipItem("mizuki_determination", () -> new Item(new Item.Properties().stacksTo(16).fireResistant().rarity(Rarity.RARE)),2);
 	public static final RegistryObject<Item> LEVIATHAN_ANIMUS = REGISTRY.register("leviathan_animus", () -> new LeviathanAnimusItem());
-	public static final RegistryObject<Item> RECORD_ISHARMLA = REGISTRY.register("record_isharmla", () -> new RecordItem(4, () -> ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "conquerer")), new Item.Properties().stacksTo(1).rarity(Rarity.RARE), 4020));
+	public static final RegistryObject<Item> RECORD_ISHARMLA = REGISTRY.register("record_isharmla", () -> new RecordItem(4, () -> CASounds.CONQUERER.get(), new Item.Properties().stacksTo(1).rarity(Rarity.RARE), 4020));
 	public static final RegistryObject<Item> TEAR_ISHARMLA = REGISTRY.register("tear_isharmla", () -> new TearIsharmlaItem());
 	public static final RegistryObject<Item> ISHARMLA_SCUTE = REGISTRY.register("isharmla_scute", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON)));
 	public static final RegistryObject<Item> ISHARMLA_BRICK = block(CABlocks.ISHARMLA_BRICK);

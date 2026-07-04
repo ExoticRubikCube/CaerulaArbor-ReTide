@@ -26,6 +26,7 @@ import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
@@ -57,7 +58,6 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
@@ -646,19 +646,19 @@ public class EndspeakerEntity extends SeaMonster {
 
 	@Override
 	public SoundEvent getHurtSound(DamageSource damageSource) {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "seaborn_generic_hit"));
+		return CASounds.SEABORN_GENERIC_HIT.get();
 	}
 
 	@Override
 	public SoundEvent getDeathSound() {
 		if (this.getPhase() == 0) {
-			return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "seaborn_generic_hit"));
+			return CASounds.SEABORN_GENERIC_HIT.get();
 		}else if (this.getPhase() == 1) {
-			return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "seaborn_death"));
+			return CASounds.SEABORN_DEATH.get();
 		}else if (this.getPhase() == 2) {
-			return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "seaborn_death"));
+			return CASounds.SEABORN_DEATH.get();
 		}else if (!this.hasNextPhase()) {
-			return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "seaborn_death"));
+			return CASounds.SEABORN_DEATH.get();
 		}
 		return super.getDeathSound();
 	}
@@ -666,7 +666,7 @@ public class EndspeakerEntity extends SeaMonster {
 	@Override
 	public SoundEvent getAmbientSound() {
 		if (this.getPhase() == 2) {
-			return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.glow_squid.ambient"));
+			return SoundEvents.GLOW_SQUID_AMBIENT;
 		}
 		return super.getAmbientSound();
 	}
@@ -674,7 +674,7 @@ public class EndspeakerEntity extends SeaMonster {
 	@Override
 	public void playStepSound(BlockPos pos, BlockState blockState) {
 		if (this.getPhase() == 1) {
-			this.playSound(ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.silverfish.step")), 0.15F, 1.0F);
+			this.playSound(SoundEvents.SILVERFISH_STEP, 0.15F, 1.0F);
 			return;
 		}
 		super.playStepSound(pos, blockState);
@@ -880,7 +880,7 @@ public class EndspeakerEntity extends SeaMonster {
         targetZ = sacrifice.getZ();
         radius = 1 + nextPhase;
         if (world instanceof Level level) {
-            level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "endspeaker_eat")), SoundSource.HOSTILE, 4, 1);
+            level.playSound(null, BlockPos.containing(x, y, z), CASounds.ENDSPEAKER_EAT.get(), SoundSource.HOSTILE, 4, 1);
         }
         final Vec3 center = new Vec3(targetX, targetY, targetZ);
         List<Entity> affectedEntities = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate((2 * radius) / 2d), candidate -> true).stream()
@@ -1309,9 +1309,9 @@ public class EndspeakerEntity extends SeaMonster {
 		double attackDamage = this.getAttribute(Attributes.ATTACK_DAMAGE).getValue();
 		boolean canAttack = target != null && target.isAlive();
 		if (!this.level().isClientSide()) {
-			this.level().playSound(null, BlockPos.containing(this.getX(), this.getY(), this.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "endspeaker_attack_hit")), SoundSource.HOSTILE, 3.5F, 1);
+			this.level().playSound(null, BlockPos.containing(this.getX(), this.getY(), this.getZ()), CASounds.ENDSPEAKER_ATTACK_HIT.get(), SoundSource.HOSTILE, 3.5F, 1);
 		} else {
-			this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "endspeaker_attack_hit")), SoundSource.HOSTILE, 3.5F, 1, false);
+			this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), CASounds.ENDSPEAKER_ATTACK_HIT.get(), SoundSource.HOSTILE, 3.5F, 1, false);
 		}
 		if (ranged) {
 			this.executePhaseThreeRangedChop(x, y, z, attackDamage, target);

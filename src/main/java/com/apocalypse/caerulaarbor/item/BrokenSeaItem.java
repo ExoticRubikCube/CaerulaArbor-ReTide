@@ -4,6 +4,7 @@ import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.GladiiaEntity;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CASounds;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -32,7 +33,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Comparator;
 import java.util.List;
@@ -77,7 +77,7 @@ public class BrokenSeaItem extends SwordItem {
             if (((Entity) sourceentity instanceof Player _plr ? _plr.getAttackStrengthScale(0) : 0) > 0.9) {
                 if (Math.random() < 0.5 && !(entity instanceof Player)) {
                     if (world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "gladiia_attack_hit")), SoundSource.PLAYERS, 1, 1);
+                            _level.playSound(null, BlockPos.containing(x, y, z), CASounds.GLADIIA_ATTACK_HIT.get(), SoundSource.PLAYERS, 1, 1);
                     }
                     if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
                         _entity.addEffect(new MobEffectInstance(CAMobEffects.HAEMOPHILIA.get(), 260, 1, false, false));
@@ -99,7 +99,7 @@ public class BrokenSeaItem extends SwordItem {
         if (!((Entity) entity instanceof Player _plrCldCheck1 && _plrCldCheck1.getCooldowns().isOnCooldown(itemstack.getItem()))) {
             if (entity.isShiftKeyDown() && ((Entity) entity instanceof Player _plr ? _plr.experienceLevel : 0) >= 5) {
                 if ((LevelAccessor) world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "gladiia_skill_release")), SoundSource.PLAYERS, 2, 1);
+                        _level.playSound(null, BlockPos.containing(x, y, z), CASounds.GLADIIA_SKILL_RELEASE.get(), SoundSource.PLAYERS, 2, 1);
                 }
                 if ((LevelAccessor) world instanceof ServerLevel _level) {
                     Entity entityToSpawn = CAEntities.GLADIIA_WHIRL.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
@@ -149,7 +149,7 @@ public class BrokenSeaItem extends SwordItem {
                 }
                 if (count > 0 && !((LevelAccessor) world).isClientSide()) {
                     if ((LevelAccessor) world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "gladiia_pull_pull")), SoundSource.PLAYERS, 2, 1);
+                            _level.playSound(null, BlockPos.containing(x, y, z), CASounds.GLADIIA_PULL_PULL.get(), SoundSource.PLAYERS, 2, 1);
                     }
                     if (!(new Object() {
                         public boolean checkGamemode(Entity _ent) {

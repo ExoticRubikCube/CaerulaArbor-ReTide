@@ -7,14 +7,15 @@ import com.apocalypse.caerulaarbor.entity.bullets.TellerShotEntity;
 import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CASounds;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
@@ -38,7 +39,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
@@ -193,17 +193,17 @@ public class FirstTellerEntity extends SeaMonster implements RangedAttackMob {
 
 	@Override
 	public SoundEvent getAmbientSound() {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.note_block.imitate.wither_skeleton"));
+		return SoundEvents.NOTE_BLOCK_IMITATE_WITHER_SKELETON.value();
 	}
 
 	@Override
 	public SoundEvent getHurtSound(DamageSource ds) {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.parrot.imitate.evoker"));
+		return SoundEvents.PARROT_IMITATE_EVOKER;
 	}
 
 	@Override
 	public SoundEvent getDeathSound() {
-		return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.chorus_flower.death"));
+		return SoundEvents.CHORUS_FLOWER_DEATH;
 	}
 
 	@Override
@@ -253,7 +253,7 @@ public class FirstTellerEntity extends SeaMonster implements RangedAttackMob {
             if (((Entity) this instanceof FirstTellerEntity _datEntI ? _datEntI.getEntityData().get(DATA_sklp) : 0) >= 400 && !(enemy == null)) {
                 if (distanceTo(enemy) <= 8) {
                     if (world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "firstteller_skill")), SoundSource.HOSTILE, 3, 1);
+                            _level.playSound(null, BlockPos.containing(x, y, z), CASounds.FIRSTTELLER_SKILL.get(), SoundSource.HOSTILE, 3, 1);
                     }
                     if (!this.level().isClientSide())
                         this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 65, 0, false, false));

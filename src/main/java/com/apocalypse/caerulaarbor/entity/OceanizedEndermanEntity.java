@@ -47,7 +47,6 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
@@ -126,17 +125,17 @@ public class OceanizedEndermanEntity extends SeaMonster {
 
     @Override
     public SoundEvent getAmbientSound() {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.enderman.ambient"));
+        return SoundEvents.ENDERMAN_AMBIENT;
     }
 
     @Override
     public SoundEvent getHurtSound(DamageSource ds) {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.enderman.hurt"));
+        return SoundEvents.ENDERMAN_HURT;
     }
 
     @Override
     public SoundEvent getDeathSound() {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.enderman.death"));
+        return SoundEvents.ENDERMAN_DEATH;
     }
 
     @Override
@@ -257,7 +256,7 @@ public class OceanizedEndermanEntity extends SeaMonster {
 
     private static boolean isValidTeleportPlace(LevelAccessor world, double x, double y, double z) {
         if (world instanceof Level level && level.isClientSide()) {
-            level.playLocalSound(x, y, z, ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.enderman.ambient")), SoundSource.HOSTILE, 0, 1, false);
+            level.playLocalSound(x, y, z, SoundEvents.ENDERMAN_AMBIENT, SoundSource.HOSTILE, 0, 1, false);
         }
         for (int dy = 0; dy <= 3; dy++) {
             if (world.getBlockFloorHeight(BlockPos.containing(x, y + dy, z)) > 0) {
@@ -335,7 +334,7 @@ public class OceanizedEndermanEntity extends SeaMonster {
                     if (!this.level().isClientSide())
                         this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 35, 0, false, false));
                     if (world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.enderman.stare")), SoundSource.HOSTILE, 1, 1);
+                        _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ENDERMAN_STARE, SoundSource.HOSTILE, 1, 1);
                     }
                     CaerulaArborMod.queueServerWork(13, () -> {
                         if (this == null)

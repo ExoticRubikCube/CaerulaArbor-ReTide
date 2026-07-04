@@ -5,6 +5,7 @@ import com.apocalypse.caerulaarbor.entity.base.SyncedAnimationEntity;
 import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CASounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
@@ -22,6 +23,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageSource;
@@ -45,7 +47,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -145,12 +146,12 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 
     @Override
     public SoundEvent getHurtSound(DamageSource ds) {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "skadi_hit"));
+        return CASounds.SKADI_HIT.get();
     }
 
     @Override
     public SoundEvent getDeathSound() {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "skadi_died"));
+        return CASounds.SKADI_DIED.get();
     }
 
     @Override
@@ -199,7 +200,7 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
                                         sourceentity.push((getLookAngle().x + 0.33), 0, (getLookAngle().z + 0.33));
                                     }
                                     if (world instanceof Level _level) {
-                                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.dragon_fireball.explode")), SoundSource.HOSTILE, 2, 1);
+                                        _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.DRAGON_FIREBALL_EXPLODE, SoundSource.HOSTILE, 2, 1);
                                     }
                                     double ddd;
                                     ddd = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 2.25;
@@ -247,7 +248,7 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
                 if (phase == 0 || phase == 1) {
                     super.setHealth(Math.max(currentHealth, 1.0F));
                     this.getEntityData().set(DATA_phase, phase + 1);
-                    this.level().playSound(null, BlockPos.containing(this.getX(), this.getY(), this.getZ()), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "skadi_talk")), SoundSource.HOSTILE, 2, 1);
+                    this.level().playSound(null, BlockPos.containing(this.getX(), this.getY(), this.getZ()), CASounds.SKADI_TALK.get(), SoundSource.HOSTILE, 2, 1);
 
                     if (!this.level().isClientSide()) {
                         this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 100, 1, false, false));

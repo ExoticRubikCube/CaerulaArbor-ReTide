@@ -54,7 +54,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -63,6 +62,8 @@ import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
+import net.minecraft.sounds.SoundEvents;
+import com.apocalypse.caerulaarbor.init.CASounds;
 
 import javax.annotation.Nullable;
 import java.util.Comparator;
@@ -187,12 +188,12 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
 
     @Override
     public SoundEvent getHurtSound(DamageSource ds) {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "last_knight_hit"));
+        return CASounds.LAST_KNIGHT_HIT.get();
     }
 
     @Override
     public SoundEvent getDeathSound() {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "last_knight_hit"));
+        return CASounds.LAST_KNIGHT_HIT.get();
     }
 
     @Override
@@ -374,7 +375,7 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
                                                 _player.getCooldowns().addCooldown(_player.getUseItem().getItem(), 100);
                                             }
                                             if (world instanceof Level _level) {
-                                                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("item.shield.break")), SoundSource.HOSTILE, 1, 1);
+                                                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SHIELD_BREAK, SoundSource.HOSTILE, 1, 1);
                                             }
                                         }
                                         CaerulaArborMod.queueServerWork(7, () -> {
@@ -551,7 +552,7 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
         }
         if (!(sourceEntity instanceof LivingEntity living) || !living.hasEffect(CAMobEffects.FROZEN.get())) {
             this.level().playSound(null, BlockPos.containing(sourceEntity.getX(), sourceEntity.getY(), sourceEntity.getZ()),
-                    ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation(CaerulaArborMod.MODID, "last_jnight_freeze")), SoundSource.HOSTILE,
+                    CASounds.LAST_JNIGHT_FREEZE.get(), SoundSource.HOSTILE,
                     4, (float) Mth.nextDouble(RandomSource.create(), 1, 1.15));
         }
         if (sourceEntity instanceof LivingEntity living && !living.level().isClientSide()) {

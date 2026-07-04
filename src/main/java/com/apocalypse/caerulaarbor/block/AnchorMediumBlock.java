@@ -8,6 +8,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
@@ -33,7 +34,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public class AnchorMediumBlock extends Block {
 	public static final IntegerProperty BLOCKSTATE = IntegerProperty.create("blockstate", 0, 1);
@@ -150,7 +150,7 @@ public class AnchorMediumBlock extends Block {
                     }
                 }.getDirection(blockstate))) {
                     if ((LevelAccessor) world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.conduit.activate")), SoundSource.NEUTRAL, 2, 1);
+                            _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.CONDUIT_ACTIVATE, SoundSource.NEUTRAL, 2, 1);
                     }
                     {
                         int _value = 1;
@@ -244,7 +244,7 @@ public class AnchorMediumBlock extends Block {
                         ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_booleanProp, false), 3);
                 }
                 if ((LevelAccessor) world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.conduit.deactivate")), SoundSource.NEUTRAL, 2, 1);
+                        _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.CONDUIT_DEACTIVATE, SoundSource.NEUTRAL, 2, 1);
                 }
             }
             for (int index0 = 0; index0 < 24; index0++) {
@@ -339,7 +339,7 @@ public class AnchorMediumBlock extends Block {
             }.getDirection(blockstate))) {
                 if (blockstate.getBlock().getStateDefinition().getProperty("activated") instanceof BooleanProperty _getbp5 && blockstate.getValue(_getbp5)) {
                     if ((LevelAccessor) world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.conduit.deactivate")), SoundSource.NEUTRAL, 2, 1);
+                            _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.CONDUIT_DEACTIVATE, SoundSource.NEUTRAL, 2, 1);
                     }
                     {
                         int _value = 0;
@@ -401,7 +401,7 @@ public class AnchorMediumBlock extends Block {
                     }
                 }.getDirection(blockstate))) {
                     if ((LevelAccessor) world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.conduit.activate")), SoundSource.NEUTRAL, 2, 1);
+                            _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.CONDUIT_ACTIVATE, SoundSource.NEUTRAL, 2, 1);
                     }
                     {
                         int _value = 1;

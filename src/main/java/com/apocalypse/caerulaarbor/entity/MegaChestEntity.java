@@ -36,12 +36,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
+import net.minecraft.sounds.SoundEvents;
 
 public class MegaChestEntity extends SeaMonster {
     public static final EntityDataAccessor<Boolean> SHOOT = SynchedEntityData.defineId(MegaChestEntity.class, EntityDataSerializers.BOOLEAN);
@@ -129,12 +129,12 @@ public class MegaChestEntity extends SeaMonster {
 
     @Override
     public SoundEvent getHurtSound(DamageSource ds) {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.armor_stand.hit"));
+        return SoundEvents.ARMOR_STAND_HIT;
     }
 
     @Override
     public SoundEvent getDeathSound() {
-        return ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("entity.armor_stand.break"));
+        return SoundEvents.ARMOR_STAND_BREAK;
     }
 
     @Override
@@ -206,7 +206,7 @@ public class MegaChestEntity extends SeaMonster {
                             world.setBlock(_bp, _bs, 3);
                         }
                         if (world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.ender_chest.close")), SoundSource.BLOCKS, 1, 1);
+                            _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ENDER_CHEST_CLOSE, SoundSource.BLOCKS, 1, 1);
                         }
                     }
                 }
@@ -257,7 +257,7 @@ public class MegaChestEntity extends SeaMonster {
             double z = this.getZ();
 
             if (world instanceof Level _level) {
-                _level.playSound(null, BlockPos.containing(x, y, z), ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("block.ender_chest.open")), SoundSource.HOSTILE, 1, 1);
+                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ENDER_CHEST_OPEN, SoundSource.HOSTILE, 1, 1);
             }
 
             this.setShiftKeyDown(false);
