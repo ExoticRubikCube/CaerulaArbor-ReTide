@@ -25,6 +25,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrownPotion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -161,6 +162,7 @@ public class FlamarineStatueEntity extends SeaMonster {
         builder = builder.add(Attributes.FOLLOW_RANGE, 22);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.9);
         builder = builder.add(Attributes.ATTACK_KNOCKBACK, 0.15);
+        builder = builder.add(ForgeMod.ENTITY_GRAVITY.get(), 0);
         builder = builder.add(CAAttributes.GENERAL_DEFENSE.get(), 15);
         builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 80);
         builder = builder.add(CAAttributes.SANITY_RESISTANCE.get(), 50);

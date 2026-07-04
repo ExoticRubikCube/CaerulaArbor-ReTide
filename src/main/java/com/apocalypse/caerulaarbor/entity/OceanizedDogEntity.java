@@ -77,7 +77,6 @@ public class OceanizedDogEntity extends TamableAnimal implements GeoEntity, Sync
         this.entityData.define(DATA_sitting, false);
     }
 
-
     public boolean isNotSitting() {
         return !this.entityData.get(DATA_sitting);
     }
@@ -204,11 +203,9 @@ public class OceanizedDogEntity extends TamableAnimal implements GeoEntity, Sync
                     if (item.isEdible() && this.isFood(itemstack) && this.getHealth() < this.getMaxHealth()) {
                         this.usePlayerItem(sourceentity, hand, itemstack);
                         this.heal((float) item.getFoodProperties().getNutrition());
-                        this.level().isClientSide();
                     } else if (this.isFood(itemstack) && this.getHealth() < this.getMaxHealth()) {
                         this.usePlayerItem(sourceentity, hand, itemstack);
                         this.heal(4);
-                        this.level().isClientSide();
                     } else {
                         super.mobInteract(sourceentity, hand);
                     }

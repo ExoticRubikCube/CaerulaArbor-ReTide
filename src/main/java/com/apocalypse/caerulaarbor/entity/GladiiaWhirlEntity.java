@@ -90,27 +90,12 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity, Sync
 
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-        SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
+        //TODO 应该移动到init 需要查看是否头同类问题
         this.setNoGravity(true);
-        double x = this.getX();
-        double y = this.getY();
-        double z = this.getZ();
-        Entity gladiia;
-        gladiia = world.getEntitiesOfClass(GladiiaEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true).stream().min(new Object() {
-            Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
-                return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
-            }
-        }.compareDistOf(x, y, z)).orElse(null);
-        if (!(gladiia == null)) {
-            if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
-                this.getAttribute(Attributes.ATTACK_DAMAGE)
-                        .setBaseValue((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
-        }
-        if (this.getAttributes().hasAttribute(ForgeMod.ENTITY_GRAVITY.get()))
-            this.getAttribute(ForgeMod.ENTITY_GRAVITY.get()).setBaseValue(0);
-        return retval;
+        return super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
     }
 
+    //TODO 需要清理同类
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
@@ -339,6 +324,7 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity, Sync
         builder = builder.add(Attributes.ATTACK_DAMAGE, 27);
         builder = builder.add(Attributes.FOLLOW_RANGE, 1);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 99);
+        builder = builder.add(ForgeMod.ENTITY_GRAVITY.get(), 0);
         return builder;
     }
 
