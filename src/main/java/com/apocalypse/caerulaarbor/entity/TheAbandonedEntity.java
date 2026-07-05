@@ -165,17 +165,17 @@ public class TheAbandonedEntity extends SeaMonster implements PolarMountRider {
         double y = this.getY();
         double z = this.getZ();
         double sklp;
-        Entity enemy;
+        Entity target;
         sklp = (Entity) this instanceof TheAbandonedEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP) : 0;
         if (sklp > 0) {
             if ((Entity) this instanceof TheAbandonedEntity datEntSetI)
                 datEntSetI.getEntityData().set(DATA_SKILLP, (int) (sklp - 1));
         } else {
-            enemy = this.getTarget();
-            if (!(enemy == null) && enemy.isAlive() && distanceTo(enemy) < 7) {
+            target = this.getTarget();
+            if (!(target == null) && target.isAlive() && distanceTo(target) < 7) {
                 if ((Entity) this instanceof TheAbandonedEntity datEntSetI)
                     datEntSetI.getEntityData().set(DATA_SKILLP, 100);
-                ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY() + enemy.getBbHeight()), (enemy.getZ())));
+                ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((target.getX()), (target.getY() + target.getBbHeight()), (target.getZ())));
                 if (this instanceof TheAbandonedEntity) {
                     this.setAnimation("animation.the_abandoned.shoot");
                 }

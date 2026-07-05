@@ -173,23 +173,21 @@ public class CorrectinalPhalaxVanguardEntity extends Animal implements GeoEntity
         double y = this.getY();
         double z = this.getZ();
         double sklp1;
-        //TODO 批量替换enemy为target
-        Entity enemy;
         if (this.isAlive()) {
             sklp1 = (Entity) this instanceof CorrectinalPhalaxVanguardEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP) : 0;
             if (sklp1 > 0) {
                 if ((Entity) this instanceof CorrectinalPhalaxVanguardEntity datEntSetI)
                     datEntSetI.getEntityData().set(DATA_SKILLP, (int) (sklp1 - 1));
             } else {
-                enemy = this.getTarget();
-                if (!(enemy == null)) {
-                    if (distanceTo(enemy) <= 5 && enemy.isAlive()) {
+                Entity target = this.getTarget();
+                if (!(target == null)) {
+                    if (distanceTo(target) <= 5 && target.isAlive()) {
                         if ((Entity) this instanceof CorrectinalPhalaxVanguardEntity datEntSetI)
                             datEntSetI.getEntityData().set(DATA_SKILLP, 300);
                         if (this instanceof CorrectinalPhalaxVanguardEntity) {
                             this.setAnimation("animation.correctional_phalanx _vanguard.swing");
                         }
-                        ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY()), (enemy.getZ())));
+                        ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((target.getX()), (target.getY()), (target.getZ())));
                         CaerulaArborMod.queueServerWork(11, () -> {
                             if (this.isAlive()) {
                                 vanguardSwing(1.8);
@@ -207,7 +205,6 @@ public class CorrectinalPhalaxVanguardEntity extends Animal implements GeoEntity
         }
         this.refreshDimensions();
     }
-
     @Override
     public EntityDimensions getDimensions(Pose p_33597_) {
         return super.getDimensions(p_33597_).scale((float) 1);
@@ -225,7 +222,6 @@ public class CorrectinalPhalaxVanguardEntity extends Animal implements GeoEntity
         super.aiStep();
         this.updateSwingTime();
     }
-
 
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();

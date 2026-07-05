@@ -232,7 +232,7 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        Entity enemy;
+        Entity target;
         double sklp1;
         double dura;
         double sklp2;
@@ -250,7 +250,7 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
             bullet = (Entity) this instanceof SaintCarmenEntity datEntI ? datEntI.getEntityData().get(DATA_BULLET) : 0;
             reloadP = (Entity) this instanceof SaintCarmenEntity datEntI ? datEntI.getEntityData().get(DATA_RELOAD_P) : 0;
             dura = (Entity) this instanceof SaintCarmenEntity datEntI ? datEntI.getEntityData().get(DATA_DURATION) : 0;
-            enemy = this.getTarget();
+            target = this.getTarget();
             if (dura > 0) {
                 if ((Entity) this instanceof SaintCarmenEntity datEntSetI)
                     datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura - 1));
@@ -263,8 +263,8 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
                 if ((Entity) this instanceof SaintCarmenEntity datEntSetI)
                     datEntSetI.getEntityData().set(DATA_SKILL_P1, (int) (sklp1 - 1));
             } else if (dura <= 0) {
-                if (!(enemy == null) && enemy.isAlive()) {
-                    if (distanceTo(enemy) <= 24) {
+                if (!(target == null) && target.isAlive()) {
+                    if (distanceTo(target) <= 24) {
                         if (this instanceof SaintCarmenEntity) {
                             this.setAnimation("animation.saint_carmen.melee_skill");
                         }
@@ -291,8 +291,8 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
                 if ((Entity) this instanceof SaintCarmenEntity datEntSetI)
                     datEntSetI.getEntityData().set(DATA_SKILL_P2, (int) (sklp2 - 1));
             } else if (dura <= 0 && canShoot) {
-                if (!(enemy == null) && enemy.isAlive()) {
-                    if (distanceTo(enemy) <= 24) {
+                if (!(target == null) && target.isAlive()) {
+                    if (distanceTo(target) <= 24) {
                         if (this instanceof SaintCarmenEntity) {
                             this.setAnimation("animation.saint_carmen.gun_skill");
                         }
@@ -304,7 +304,7 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
                             datEntSetI.getEntityData().set(DATA_SHOOT_P, 50);
                         dura = 50;
                         push((getLookAngle().x * (-1.5)), 0, (getLookAngle().z * (-1.5)));
-                        ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (getY() + 1.8), (enemy.getZ())));
+                        ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((target.getX()), (getY() + 1.8), (target.getZ())));
                         CaerulaArborMod.queueServerWork(12, () -> {
                             if (this.isAlive()) {
                                 shootAbundant(world, x, y, z, 1);
@@ -325,8 +325,8 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
             }
             if (canShoot) {
                 if (dura <= 0) {
-                    if (!(enemy == null) && enemy.isAlive()) {
-                        if (distanceTo(enemy) <= 6) {
+                    if (!(target == null) && target.isAlive()) {
+                        if (distanceTo(target) <= 6) {
                             if (this instanceof SaintCarmenEntity) {
                                 this.setAnimation("animation.saint_carmen.gun");
                             }
@@ -336,7 +336,7 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
                                 datEntSetI.getEntityData().set(DATA_SHOOT_P, 80);
                             if ((Entity) this instanceof SaintCarmenEntity datEntSetI)
                                 datEntSetI.getEntityData().set(DATA_BULLET, (int) (bullet - 1));
-                            ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (getY() + 1.8), (enemy.getZ())));
+                            ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((target.getX()), (getY() + 1.8), (target.getZ())));
                             CaerulaArborMod.queueServerWork(9, () -> {
                                 if (this.isAlive()) {
                                     shoot(world, x, y, z, 2);
@@ -532,28 +532,28 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
     }
 
     private void shoot(LevelAccessor world, double x, double y, double z, double rate) {
-        Entity enemy;
+        Entity target;
         double xx;
         double yy;
         double zz;
         double dama;
-        enemy = this.getTarget();
-        if (enemy == null) {
+        target = this.getTarget();
+        if (target == null) {
             return;
         }
-        if (!enemy.isAlive()) {
+        if (!target.isAlive()) {
             return;
         }
-        if (this.distanceTo(enemy) > 8) {
+        if (this.distanceTo(target) > 8) {
             return;
         }
-        xx = enemy.getX();
-        yy = enemy.getY();
-        zz = enemy.getZ();
+        xx = target.getX();
+        yy = target.getY();
+        zz = target.getZ();
         this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3(xx, (yy + 1.8), zz));
         dama = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
-        this.applyMuteOnHit(enemy);
-        enemy.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "generic_warrior_attack"))), this),
+        this.applyMuteOnHit(target);
+        target.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "generic_warrior_attack"))), this),
                 (float) (dama * rate));
         if (world instanceof Level level) {
             level.playSound(null, BlockPos.containing(x, y, z), CASounds.CARMEN_SHOOT.get(), SoundSource.NEUTRAL, 3, 1);
@@ -571,31 +571,31 @@ public class SaintCarmenEntity extends Animal implements GeoEntity, SyncedAnimat
     }
 
     private void carmenTeleport(LevelAccessor world, double x, double y, double z) {
-        Entity enemy;
+        Entity target;
         double xx;
         double yy;
         double zz;
         double dama;
-        enemy = this.getTarget();
-        if (enemy == null) {
+        target = this.getTarget();
+        if (target == null) {
             return;
         }
-        if (!enemy.isAlive()) {
+        if (!target.isAlive()) {
             return;
         }
-        if (this.distanceTo(enemy) > 24) {
+        if (this.distanceTo(target) > 24) {
             return;
         }
-        xx = enemy.getX();
-        yy = enemy.getY();
-        zz = enemy.getZ();
+        xx = target.getX();
+        yy = target.getY();
+        zz = target.getZ();
         dama = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
         this.teleportTo((xx + Mth.nextDouble(RandomSource.create(), -0.5, 0.5)), yy, (zz + Mth.nextDouble(RandomSource.create(), -0.5, 0.5)));
         if (world instanceof Level level) {
             level.playSound(null, BlockPos.containing(x, y, z), CASounds.CARMEN_MELEE.get(), SoundSource.NEUTRAL, 3, 1);
         }
-        this.applyMuteOnHit(enemy);
-        enemy.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "generic_warrior_attack"))), this),
+        this.applyMuteOnHit(target);
+        target.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "generic_warrior_attack"))), this),
                 (float) (dama * 2));
     }
 

@@ -98,7 +98,7 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity, Sync
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        Entity enemy;
+        Entity target;
         double t;
         double damage;
         double d;
@@ -125,7 +125,7 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity, Sync
                             continue;
                         }
                     }
-                    enemy = entityiterator instanceof Mob mobEnt ? mobEnt.getTarget() : null;
+                    target = entityiterator instanceof Mob mobEnt ? mobEnt.getTarget() : null;
                     if (entityiterator instanceof Player || (entityiterator instanceof TamableAnimal tamEnt && tamEnt.isTame())) {
                         if (new Object() {
                             public boolean checkGamemode(Entity ent) {
@@ -153,12 +153,12 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity, Sync
                         }.checkGamemode(entityiterator)) {
                             continue;
                         }
-                        if (!(enemy instanceof GladiiaEntity)) {
+                        if (!(target instanceof GladiiaEntity)) {
                             continue;
                         }
                     }
                     if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "is_humanside")))) {
-                        if (!(enemy instanceof GladiiaEntity)) {
+                        if (!(target instanceof GladiiaEntity)) {
                             continue;
                         }
                     }
@@ -189,7 +189,7 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity, Sync
                         if (entityiterator instanceof GladiiaWhirlEntity) {
                             continue;
                         }
-                        enemy = entityiterator instanceof Mob mobEnt ? mobEnt.getTarget() : null;
+                        target = entityiterator instanceof Mob mobEnt ? mobEnt.getTarget() : null;
                         if (entityiterator instanceof Player || (entityiterator instanceof TamableAnimal tamEnt && tamEnt.isTame())) {
                             if (new Object() {
                                 public boolean checkGamemode(Entity ent) {
@@ -217,12 +217,12 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity, Sync
                             }.checkGamemode(entityiterator)) {
                                 continue;
                             }
-                            if (!(enemy instanceof GladiiaEntity)) {
+                            if (!(target instanceof GladiiaEntity)) {
                                 continue;
                             }
                         }
                         if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "is_humanside")))) {
-                            if (!(enemy instanceof GladiiaEntity)) {
+                            if (!(target instanceof GladiiaEntity)) {
                                 continue;
                             }
                         }

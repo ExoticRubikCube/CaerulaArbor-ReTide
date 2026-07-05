@@ -301,9 +301,9 @@ public class TideDeathrepellerEntity extends SeaMonster {
                 }
             }
             if (nearbyCount >= 2 || this.getHealth() < this.getMaxHealth() * 0.5) {
-                Entity enemy = this.getTarget();
-                if (enemy != null && this.distanceTo(enemy) <= 4) {
-                    this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3(enemy.getX(), enemy.getY(), enemy.getZ()));
+                Entity target = this.getTarget();
+                if (target != null && this.distanceTo(target) <= 4) {
+                    this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3(target.getX(), target.getY(), target.getZ()));
                     this.setAnimation("empty");
                     if (!this.level().isClientSide()) {
                         this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 50, 0, false, false));

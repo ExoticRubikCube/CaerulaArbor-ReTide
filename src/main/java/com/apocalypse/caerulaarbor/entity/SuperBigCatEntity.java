@@ -153,7 +153,7 @@ public class SuperBigCatEntity extends SeaMonster {
     }
 
     private void superCatRanged(double x, double y, double z) {
-        Entity enemy = this.getTarget();
+        Entity target = this.getTarget();
         double damage;
         Vec3 center = new Vec3(x, y, z);
         List<Entity> entities = this.level().getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(10 / 2d), entity -> true).stream()
@@ -162,7 +162,7 @@ public class SuperBigCatEntity extends SeaMonster {
             if (!(entityIterator instanceof Mob) && !(entityIterator instanceof Player)) {
                 continue;
             }
-            if (entityIterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring"))) && entityIterator != enemy) {
+            if (entityIterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring"))) && entityIterator != target) {
                 continue;
             }
             if (entityIterator == this) {

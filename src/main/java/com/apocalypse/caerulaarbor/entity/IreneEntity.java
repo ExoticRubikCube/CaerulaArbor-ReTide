@@ -304,7 +304,7 @@ protected void dropCustomDeathLoot(DamageSource source, int looting, boolean rec
 		Entity entity = this;
 		Level world = this.level();
 		double tap;
-		Entity enemy;
+                Entity target;
 		if (!entity.isAlive()) {
 			return InteractionResult.PASS;
 		}
@@ -313,8 +313,8 @@ protected void dropCustomDeathLoot(DamageSource source, int looting, boolean rec
 		}
 		tap = entity instanceof IreneEntity datEntI ? datEntI.getEntityData().get(DATA_TAP_TICK) : 0;
 		if (tap <= 0) {
-			enemy = entity instanceof Mob mobEnt ? mobEnt.getTarget() : null;
-			if (!(enemy == null) && enemy.isAlive()) {
+                        target = entity instanceof Mob mobEnt ? mobEnt.getTarget() : null;
+                        if (!(target == null) && target.isAlive()) {
 				return InteractionResult.PASS;
 			}
 			if (!((LevelAccessor) world).isClientSide()) {
@@ -341,7 +341,7 @@ protected void dropCustomDeathLoot(DamageSource source, int looting, boolean rec
 		double x = this.getX();
 		double y = this.getY();
 		double z = this.getZ();
-		Entity enemy;
+		Entity target;
 		double sklp1;
 		double dura;
 		double skillp2;
@@ -354,7 +354,7 @@ protected void dropCustomDeathLoot(DamageSource source, int looting, boolean rec
 			skillp2 = (Entity) this instanceof IreneEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP_2) : 0;
 			dura = (Entity) this instanceof IreneEntity datEntI ? datEntI.getEntityData().get(DATA_DURATION) : 0;
 			tap = (Entity) this instanceof IreneEntity datEntI ? datEntI.getEntityData().get(DATA_TAP_TICK) : 0;
-            enemy = this.getTarget();
+            target = this.getTarget();
 			if (dura > 0) {
 				if ((Entity) this instanceof IreneEntity datEntSetI)
 					datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura - 1));
@@ -364,8 +364,8 @@ protected void dropCustomDeathLoot(DamageSource source, int looting, boolean rec
 					datEntSetI.getEntityData().set(DATA_TAP_TICK, (int) (tap - 1));
 			}
 			if (sklp1 >= 4 && dura <= 0) {
-				if (!(enemy == null) && enemy.isAlive()) {
-					if (distanceTo(enemy) <= 4) {
+				if (!(target == null) && target.isAlive()) {
+					if (distanceTo(target) <= 4) {
 						if (this instanceof IreneEntity) {
 							this.setAnimation("animation.irene.skill_1");
 						}
@@ -401,7 +401,7 @@ protected void dropCustomDeathLoot(DamageSource source, int looting, boolean rec
 						});
 					}
 				}
-			} else if (skillp2 >= 16 && dura <= 0 && enemy != null && enemy.isAlive() && distanceTo(enemy) <= 6) {
+			} else if (skillp2 >= 16 && dura <= 0 && target != null && target.isAlive() && distanceTo(target) <= 6) {
 				if (this instanceof IreneEntity) {
 					this.setAnimation("animation.irene.skill_2");
 				}

@@ -1230,7 +1230,7 @@ public class EndspeakerEntity extends SeaMonster {
 			this.spawnSeabornWave(0.1, 5);
 		}
 		this.tickBestowedAbilities();
-		Entity enemy = this.getTarget();
+		Entity target = this.getTarget();
 		if (this.getDuration() > 0) {
 			this.setDuration(this.getDuration() - 1);
 		}
@@ -1242,7 +1242,7 @@ public class EndspeakerEntity extends SeaMonster {
 			this.setSkillCooldown(this.getSkillCooldown() - 1);
 			return;
 		}
-		if (enemy != null && enemy.isAlive() && this.distanceTo(enemy) <= 4) {
+		if (target != null && target.isAlive() && this.distanceTo(target) <= 4) {
 			this.setAnimation("animation.endspeaker_2.skill");
 			this.setDuration(36);
 			this.setSkillCooldown(170);
@@ -1259,7 +1259,7 @@ public class EndspeakerEntity extends SeaMonster {
 			this.spawnSeabornWave(0.15, 5);
 		}
 		this.tickBestowedAbilities();
-		Entity enemy = this.getTarget();
+		Entity target = this.getTarget();
 		if (this.getDuration() > 0) {
 			this.setDuration(this.getDuration() - 1);
 		}
@@ -1267,7 +1267,7 @@ public class EndspeakerEntity extends SeaMonster {
 			this.setSkillCooldown(this.getSkillCooldown() - 1);
 			return;
 		}
-		if (enemy != null && enemy.isAlive() && this.distanceTo(enemy) <= 24) {
+		if (target != null && target.isAlive() && this.distanceTo(target) <= 24) {
 			this.setAnimation("animation.endspeaker_3.skill");
 			this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 50, 9, false, false));
 			this.setSkillCooldown(280);

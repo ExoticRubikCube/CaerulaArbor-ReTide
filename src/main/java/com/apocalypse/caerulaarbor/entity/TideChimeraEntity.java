@@ -307,7 +307,7 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        Entity enemy;
+        Entity target;
         double sklp1;
         double dura;
         double tap;
@@ -376,7 +376,7 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
             dura = (Entity) this instanceof TideChimeraEntity datEntI ? datEntI.getEntityData().get(DATA_DURATION) : 0;
             tap = (Entity) this instanceof TideChimeraEntity datEntI ? datEntI.getEntityData().get(DATA_SUMMON_P) : 0;
             perc = EntityUtils.getHealthPerc(this);
-            enemy = this.getTarget();
+            target = this.getTarget();
             if (dura > 0) {
                 if ((Entity) this instanceof TideChimeraEntity datEntSetI)
                     datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura - 1));
@@ -417,8 +417,8 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
                 if ((Entity) this instanceof TideChimeraEntity datEntSetI)
                     datEntSetI.getEntityData().set(DATA_SKILL_P, (int) (sklp1 - 1));
             } else if (dura <= 0) {
-                if (!(enemy == null) && enemy.isAlive()) {
-                    if (distanceTo(enemy) <= 8) {
+                if (!(target == null) && target.isAlive()) {
+                    if (distanceTo(target) <= 8) {
                         if (this instanceof TideChimeraEntity) {
                             this.setAnimation("animation.super_apocata.ranged");
                         }

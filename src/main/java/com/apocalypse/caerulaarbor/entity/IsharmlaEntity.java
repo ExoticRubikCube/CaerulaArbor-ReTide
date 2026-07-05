@@ -188,7 +188,7 @@ public class IsharmlaEntity extends SeaMonster {
 			});
 			CaerulaArborMod.queueServerWork(15, () -> {
 				if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 32) {
-					Entity enemy = this.getTarget();
+					Entity target = this.getTarget();
 					this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
 							CASounds.ISHARMLA_ATTACK_LAUNCH.get(), SoundSource.HOSTILE, 2.5F, 1);
 					isharmlaDroppedAttack(this.level(), targetX, targetY, targetZ, Mth.nextDouble(RandomSource.create(), 1.5, 3), 1);
@@ -215,7 +215,7 @@ public class IsharmlaEntity extends SeaMonster {
 									continue;
 								}
 							}
-							if (entityIterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring"))) && entityIterator != enemy) {
+							if (entityIterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring"))) && entityIterator != target) {
 								continue;
 							}
 							if (entityIterator == this) {
@@ -252,7 +252,7 @@ public class IsharmlaEntity extends SeaMonster {
 			});
 		}
 		CaerulaArborMod.queueServerWork(20, () -> {
-			Entity enemy = this.getTarget();
+			Entity target = this.getTarget();
 			double damage = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * rate;
 			level.playSound(null, BlockPos.containing(x, y, z), CASounds.ISHARMLA_ATTACK_HIT.get(), SoundSource.HOSTILE, 2,
 					(float) Mth.nextDouble(RandomSource.create(), 0.85, 1.1));
@@ -260,7 +260,7 @@ public class IsharmlaEntity extends SeaMonster {
 			List<Entity> entities = level.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate((radius * 2) / 2d), entity -> true).stream()
 					.sorted(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(center))).toList();
 			for (Entity entityIterator : entities) {
-				if (entityIterator.getType().is(EntityUtils.OCEAN_OFFSPRING) && entityIterator != enemy) {
+				if (entityIterator.getType().is(EntityUtils.OCEAN_OFFSPRING) && entityIterator != target) {
 					continue;
 				}
 				if (!(entityIterator instanceof LivingEntity)) {
@@ -398,7 +398,7 @@ public class IsharmlaEntity extends SeaMonster {
 		double x = this.getX();
 		double y = this.getY();
 		double z = this.getZ();
-		Entity enemy;
+		Entity target;
 		double sklp1;
 		double sklp2;
 		double dura;
@@ -412,7 +412,7 @@ public class IsharmlaEntity extends SeaMonster {
 			dura = (Entity) this instanceof IsharmlaEntity datEntI ? datEntI.getEntityData().get(DATA_DURATION) : 0;
 			absP = (Entity) this instanceof IsharmlaEntity datEntI ? datEntI.getEntityData().get(DATA_ABSORPTION) : 0;
 			isMonster = (Entity) this instanceof IsharmlaEntity datEntL5 && datEntL5.getEntityData().get(DATA_IS_MONSTER);
-            enemy = this.getTarget();
+            target = this.getTarget();
 			if (dura > 0) {
 				if ((Entity) this instanceof IsharmlaEntity datEntSetI)
 					datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura - 1));
@@ -480,7 +480,7 @@ public class IsharmlaEntity extends SeaMonster {
 				if ((Entity) this instanceof IsharmlaEntity datEntSetI)
 					datEntSetI.getEntityData().set(DATA_ABSORPTION, (int) (absP - 1));
 			}
-			canAttack = !(enemy == null) && enemy.isAlive();
+			canAttack = !(target == null) && target.isAlive();
 			if (isMonster) {
                 double r;
 				double t;
@@ -508,7 +508,7 @@ public class IsharmlaEntity extends SeaMonster {
 						datEntSetI.getEntityData().set(DATA_SKILLP_1, (int) (sklp1 - 1));
 				} else if (dura <= 0) {
 					if (canAttack) {
-						if (distanceTo(enemy) <= 32) {
+						if (distanceTo(target) <= 32) {
 							if (this instanceof IsharmlaEntity) {
 								this.setAnimation("animation.isharmla.tail_monster");
 							}
@@ -528,7 +528,7 @@ public class IsharmlaEntity extends SeaMonster {
 						datEntSetI.getEntityData().set(DATA_SKILLP_2, (int) (sklp2 - 1));
 				} else if (dura <= 0) {
 					if (canAttack) {
-						if (distanceTo(enemy) <= 32) {
+						if (distanceTo(target) <= 32) {
 							if (this instanceof IsharmlaEntity) {
 								this.setAnimation("animation.isharmla.bite_monster");
 							}
@@ -841,7 +841,7 @@ public class IsharmlaEntity extends SeaMonster {
 		double y = this.getY();
 		double z = this.getZ();
 
-		Entity enemy = this.getTarget();
+		Entity target = this.getTarget();
 		double damage = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() * damageRate : 0;
 
 		if (world instanceof Level level) {
@@ -855,7 +855,7 @@ public class IsharmlaEntity extends SeaMonster {
 
 		for (Entity entityiterator : entities) {
 			if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
-				if (!(entityiterator == enemy)) {
+				if (!(entityiterator == target)) {
 					continue;
 				}
 			}

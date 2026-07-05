@@ -209,7 +209,7 @@ public class OceanizedFoxEntity extends SeaMonster {
         double time_stamp;
         double skillp;
         double dura;
-        Entity enemy;
+        Entity target;
         if (this.isAlive()) {
             if (tickCount % 10 == 0) {
                 time_stamp = (Entity) this instanceof OceanizedFoxEntity datEntI ? datEntI.getEntityData().get(DATA_ACTION_TIME) : 0;
@@ -232,8 +232,8 @@ public class OceanizedFoxEntity extends SeaMonster {
                 }
                 setShiftKeyDown(sneak);
             }
-            enemy = this.getTarget();
-            if (!(enemy == null) && enemy.isAlive()) {
+            target = this.getTarget();
+            if (!(target == null) && target.isAlive()) {
                 setShiftKeyDown(false);
                 if ((Entity) this instanceof OceanizedFoxEntity datEntSetL)
                     datEntSetL.getEntityData().set(DATA_SLEEPING, false);
@@ -248,8 +248,8 @@ public class OceanizedFoxEntity extends SeaMonster {
                 if ((Entity) this instanceof OceanizedFoxEntity datEntSetI)
                     datEntSetI.getEntityData().set(DATA_SKILLP, (int) (skillp - 1));
             } else {
-                if (!(enemy == null) && enemy.isAlive()) {
-                    if (distanceTo(enemy) <= 4) {
+                if (!(target == null) && target.isAlive()) {
+                    if (distanceTo(target) <= 4) {
                         if ((Entity) this instanceof OceanizedFoxEntity datEntSetI)
                             datEntSetI.getEntityData().set(DATA_DURATION, 45);
                         if ((Entity) this instanceof OceanizedFoxEntity datEntSetI)

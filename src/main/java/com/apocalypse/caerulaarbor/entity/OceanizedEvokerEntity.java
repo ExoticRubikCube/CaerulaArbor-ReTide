@@ -252,17 +252,17 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        Entity enemy;
+        Entity target;
         double sklp1;
         double sklp2;
         double dist;
         if (this.isAlive()) {
-            enemy = this.getTarget();
+            target = this.getTarget();
             sklp1 = (Entity) this instanceof OceanizedEvokerEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP_1) : 0;
             sklp2 = (Entity) this instanceof OceanizedEvokerEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP_2) : 0;
             if (sklp1 <= 0) {
-                if (!(enemy == null) && enemy.isAlive()) {
-                    dist = Math.round(distanceTo(enemy));
+                if (!(target == null) && target.isAlive()) {
+                    dist = Math.round(distanceTo(target));
                     if (dist <= 35) {
                         if (this instanceof OceanizedEvokerEntity) {
                             this.setAnimation("animation.oceanized_evoker.spell");
@@ -343,7 +343,7 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
                 }
             }
             if (sklp2 <= 0) {
-                if (!(enemy == null) && enemy.isAlive()) {
+                if (!(target == null) && target.isAlive()) {
                     if (this instanceof OceanizedEvokerEntity) {
                         this.setAnimation("animation.oceanized_evoker.spell");
                     }
@@ -454,12 +454,12 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
         double vy;
         double vz;
         double fy;
-        Entity enemy = this.getTarget();
-        if (enemy != null) {
-            dist = Math.round(this.distanceTo(enemy));
-            vx = enemy.getX() - this.getX();
-            vy = enemy.getY() - this.getY();
-            vz = enemy.getZ() - this.getZ();
+        Entity target = this.getTarget();
+        if (target != null) {
+            dist = Math.round(this.distanceTo(target));
+            vx = target.getX() - this.getX();
+            vy = target.getY() - this.getY();
+            vz = target.getZ() - this.getZ();
             vx = this.getX() + vx * (index / dist);
             vy = this.getY() + vy * (index / dist);
             vz = this.getZ() + vz * (index / dist);

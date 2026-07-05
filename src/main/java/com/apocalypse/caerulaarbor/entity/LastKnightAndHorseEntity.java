@@ -278,7 +278,7 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        Entity enemy;
+        Entity target;
         double add;
         double duration;
         double skillp;
@@ -300,8 +300,8 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
                         }
                     }
                 }
-                enemy = this.getTarget();
-                if (!(enemy == null) && enemy.isAlive()) {
+                target = this.getTarget();
+                if (!(target == null) && target.isAlive()) {
                     add = this.getEntityData().get(DATA_ADDITION);
                     if (add < 20) {
                         this.getEntityData().set(DATA_ADDITION, (int) (add + 1));
@@ -321,12 +321,12 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
             if (duration > 0) {
                 this.getEntityData().set(DATA_SKILL_DURATION, (int) (duration - 1));
             }
-            enemy = this.getTarget();
+            target = this.getTarget();
             if (skillp > 0) {
                 this.getEntityData().set(DATA_SKILL_COOLDOWN, (int) (skillp - 1));
             } else {
-                if (!(enemy == null) && enemy.isAlive()) {
-                    if (distanceTo(enemy) < 4) {
+                if (!(target == null) && target.isAlive()) {
+                    if (distanceTo(target) < 4) {
                         this.getEntityData().set(DATA_SKILL_DURATION, 40);
                         this.getEntityData().set(DATA_SKILL_COOLDOWN, 240);
                         if (!this.level().isClientSide())

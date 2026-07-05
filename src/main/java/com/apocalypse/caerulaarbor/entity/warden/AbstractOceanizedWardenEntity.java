@@ -195,7 +195,7 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonster {
 	}
 
 	protected void performRangedAttack(boolean isSonic, double rate, double x, double y, double z) {
-		Entity enemy = this.getTarget();
+		Entity target = this.getTarget();
 		double radius = isSonic ? 4.5 : 3;
 		Vec3 center = new Vec3(x, y, z);
 		List<Entity> nearbyEntities = this.level().getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(radius), entity -> true).stream()
@@ -205,7 +205,7 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonster {
 			if (!(nearbyEntity instanceof Mob) && !(nearbyEntity instanceof Player)) {
 				continue;
 			}
-			if (nearbyEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring"))) && nearbyEntity != enemy) {
+			if (nearbyEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring"))) && nearbyEntity != target) {
 				continue;
 			}
 			if (nearbyEntity == this) {
@@ -437,22 +437,22 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonster {
 			int skillp1 = this.entityData.get(DATA_SKILL_1);
 			int skillp2 = this.entityData.get(DATA_SKILL_2);
 			int duration = this.entityData.get(DATA_DURATION);
-			Entity enemy = this.getTarget();
+			Entity target = this.getTarget();
 			if (duration > 0) {
 				this.entityData.set(DATA_DURATION, duration - 1);
 			}
 
 			if (skillp1 > 0) {
 				this.entityData.set(DATA_SKILL_1, skillp1 - 1);
-			} else if (enemy != null && enemy.isAlive()) {
-				if (!(this.distanceTo(enemy) > 32 || duration > 0)) {
+			} else if (target != null && target.isAlive()) {
+				if (!(this.distanceTo(target) > 32 || duration > 0)) {
 					this.entityData.set(DATA_DURATION, 45);
 					this.setAnimation(this.getAnimationPrefix() + ".sonic");
 					if (!this.level().isClientSide()) {
 						this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 45, 0, false, false));
 						this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 45, 9, false, false));
 					}
-					this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3(enemy.getX(), enemy.getY(), enemy.getZ()));
+					this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3(target.getX(), target.getY(), target.getZ()));
 					if (world instanceof Level level) {
 						level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.WARDEN_SONIC_CHARGE, SoundSource.HOSTILE, 2, 1);
 					}
@@ -470,11 +470,11 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonster {
 
 			if (skillp2 > 0) {
 				this.entityData.set(DATA_SKILL_2, skillp2 - 1);
-			} else if (enemy != null && enemy.isAlive()) {
-				if (!(this.distanceTo(enemy) > 4 || duration > 0)) {
+			} else if (target != null && target.isAlive()) {
+				if (!(this.distanceTo(target) > 4 || duration > 0)) {
 					this.entityData.set(DATA_DURATION, 45);
 					this.setAnimation(this.getAnimationPrefix() + ".combo");
-					this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3(enemy.getX(), enemy.getY(), enemy.getZ()));
+					this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3(target.getX(), target.getY(), target.getZ()));
 					CaerulaArborMod.queueServerWork(12, () -> {
 						Entity target = this.getTarget();
 						if (this.isAlive() && target != null) {
@@ -519,7 +519,7 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonster {
 			} else if (skillp2 < 100) {
 				gap = 20;
 			}
-			if (gap > 0 && enemy != null && enemy.isAlive() && this.tickCount % gap == 0) {
+			if (gap > 0 && target != null && target.isAlive() && this.tickCount % gap == 0) {
 				if (world instanceof Level level) {
 					level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.WARDEN_HEARTBEAT, SoundSource.HOSTILE, 2,
 							Mth.nextInt(RandomSource.create(), (int) 0.9, (int) 1.05));

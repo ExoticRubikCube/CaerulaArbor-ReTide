@@ -212,17 +212,17 @@ public class OceanizeRabbitEntity extends SeaMonster {
     public void baseTick() {
         super.baseTick();
         LevelAccessor world = this.level();
-        Entity enemy;
+        Entity target;
         double sklp1;
         if (!(((Entity) this instanceof OceanizeRabbitEntity datEntI ? datEntI.getEntityData().get(DATA_VARIANT) : 0) < 4.5)) {
             if (this.isAlive()) {
                 sklp1 = (Entity) this instanceof OceanizeRabbitEntity datEntI ? datEntI.getEntityData().get(DATA_SWALLOW_P) : 0;
-                enemy = this.getTarget();
+                target = this.getTarget();
                 if (sklp1 > 0) {
                     if ((Entity) this instanceof OceanizeRabbitEntity datEntSetI)
                         datEntSetI.getEntityData().set(DATA_SWALLOW_P, (int) (sklp1 - 1));
                 } else {
-                    if (!(enemy == null) && enemy.isAlive() && distanceTo(enemy) <= 5) {
+                    if (!(target == null) && target.isAlive() && distanceTo(target) <= 5) {
                         if (this instanceof OceanizeRabbitEntity) {
                             this.setAnimation("animation.oceanized_rabbit.swallow");
                         }

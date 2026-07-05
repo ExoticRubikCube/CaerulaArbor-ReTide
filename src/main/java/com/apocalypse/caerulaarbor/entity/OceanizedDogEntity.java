@@ -258,9 +258,9 @@ public class OceanizedDogEntity extends TamableAnimal implements GeoEntity, Sync
     public void baseTick() {
         super.baseTick();
         Entity owner;
-        Entity enemy;
+        Entity target;
         owner = (Entity) this instanceof TamableAnimal tamEnt ? tamEnt.getOwner() : null;
-        enemy = (Entity) this instanceof Mob mobEnt ? mobEnt.getTarget() : null;
+        target = (Entity) this instanceof Mob mobEnt ? mobEnt.getTarget() : null;
         if ((Entity) this instanceof OceanizedDogEntity datEntL2 && datEntL2.getEntityData().get(DATA_SITTING)) {
             setShiftKeyDown(true);
             if (!((Entity) this instanceof LivingEntity livEnt4 && livEnt4.hasEffect(MobEffects.MOVEMENT_SLOWDOWN))) {
@@ -272,7 +272,7 @@ public class OceanizedDogEntity extends TamableAnimal implements GeoEntity, Sync
         } else {
             setShiftKeyDown(false);
         }
-        if (enemy == owner || (enemy instanceof TamableAnimal tamEnt ? (Entity) tamEnt.getOwner() : null) == owner) {
+        if (target == owner || (target instanceof TamableAnimal tamEnt ? (Entity) tamEnt.getOwner() : null) == owner) {
            this.setTarget(null);
         }
         this.refreshDimensions();

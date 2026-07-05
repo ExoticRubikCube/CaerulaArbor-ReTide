@@ -182,7 +182,7 @@ public class CorrectionalPhalanxyInfantryEntity extends Animal implements GeoEnt
         LevelAccessor world = this.level();
         double sklp1;
         double sklp2;
-        Entity enemy;
+        Entity target;
         if (this.isAlive()) {
             sklp1 = (Entity) this instanceof CorrectionalPhalanxyInfantryEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP_1) : 0;
             sklp2 = (Entity) this instanceof CorrectionalPhalanxyInfantryEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP_2) : 0;
@@ -194,15 +194,15 @@ public class CorrectionalPhalanxyInfantryEntity extends Animal implements GeoEnt
                 if ((Entity) this instanceof CorrectionalPhalanxyInfantryEntity datEntSetI)
                     datEntSetI.getEntityData().set(DATA_SKILLP_2, (int) (sklp2 - 1));
             } else {
-                enemy = this.getTarget();
-                if (!(enemy == null)) {
-                    if (distanceTo(enemy) <= 5 && enemy.isAlive()) {
+                target = this.getTarget();
+                if (!(target == null)) {
+                    if (distanceTo(target) <= 5 && target.isAlive()) {
                         if ((Entity) this instanceof CorrectionalPhalanxyInfantryEntity datEntSetI)
                             datEntSetI.getEntityData().set(DATA_SKILLP_2, 200);
                         if (this instanceof CorrectionalPhalanxyInfantryEntity) {
                             this.setAnimation("animation.correctional_phalanx _infantry.swing");
                         }
-                        ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY()), (enemy.getZ())));
+                        ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((target.getX()), (target.getY()), (target.getZ())));
                         CaerulaArborMod.queueServerWork(16, () -> {
                             if (this.isAlive()) {
                                 final Vec3 center = new Vec3((this.getX() + 2 * getLookAngle().x), (this.getY() + 2 * getLookAngle().y), (this.getZ() + 2 * getLookAngle().z));

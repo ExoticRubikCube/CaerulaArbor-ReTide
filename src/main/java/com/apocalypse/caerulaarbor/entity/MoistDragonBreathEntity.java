@@ -174,7 +174,7 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
         double z = this.getZ();
         String uuid2;
         String uuid1;
-        Entity enemy;
+        Entity target;
         if (tickCount >= 1200) {
             if (!level().isClientSide())
                 discard();
@@ -184,7 +184,7 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
             setAirSupply(20);
             uuid2 = (Entity) this instanceof MoistDragonBreathEntity datEntS ? datEntS.getEntityData().get(DATA_TARGET) : "";
             uuid1 = (Entity) this instanceof MoistDragonBreathEntity datEntS ? datEntS.getEntityData().get(DATA_OWNER) : "";
-            enemy = new Object() {
+            target = new Object() {
                 Entity entityFromStringUUID(String uuid3, Level world) {
                     Entity uuidentity = null;
                     if (world instanceof ServerLevel server) {
@@ -210,12 +210,12 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
             }.entityFromStringUUID(uuid1, (Level) world);
             if (world instanceof ServerLevel level)
                 level.sendParticles(CAParticles.EDERMAN_PTC.get(), x, (y + 0.25), z, 3, 0.1, 0.1, 0.1, 0.1);
-            if (!(enemy == null) && enemy.isAlive()) {
-                ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY() + 0.5), (enemy.getZ())));
+            if (!(target == null) && target.isAlive()) {
+                ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((target.getX()), (target.getY() + 0.5), (target.getZ())));
                 if (tickCount > 20) {
-                    if (distanceTo(enemy) > 0.5) {
+                    if (distanceTo(target) > 0.5) {
                         Vec3 offset = position()
-                                .vectorTo(enemy.position().add(0, 0.25, 0));
+                                .vectorTo(target.position().add(0, 0.25, 0));
                         if (offset.lengthSqr() <= 0.05) {
                             setDeltaMovement(Vec3.ZERO);
                         } else {
@@ -227,10 +227,10 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
                     }
                 }
             } else {
-                enemy = this.getTarget();
-                if (!(enemy == null) && enemy.isAlive()) {
+                target = this.getTarget();
+                if (!(target == null) && target.isAlive()) {
                     if ((Entity) this instanceof MoistDragonBreathEntity datEntSetS)
-                        datEntSetS.getEntityData().set(DATA_TARGET, (enemy.getStringUUID()));
+                        datEntSetS.getEntityData().set(DATA_TARGET, (target.getStringUUID()));
                 } else {
                     dragonBreathExplode(world, x, y, z, this);
                 }
@@ -403,7 +403,7 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
         if (entity == null)
             return;
         Entity owner;
-        Entity enemy;
+        Entity target;
         String uuid;
         String uuid1;
         double d;
@@ -416,7 +416,7 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
         }
         uuid = entity instanceof MoistDragonBreathEntity datEntS ? datEntS.getEntityData().get(MoistDragonBreathEntity.DATA_TARGET) : "";
         uuid1 = entity instanceof MoistDragonBreathEntity datEntS ? datEntS.getEntityData().get(MoistDragonBreathEntity.DATA_OWNER) : "";
-        enemy = new Object() {
+        target = new Object() {
             Entity entityFromStringUUID(String uuid, Level world) {
                 Entity uuidentity = null;
                 if (world instanceof ServerLevel server) {
@@ -461,19 +461,19 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
                         continue;
                     }
                     boolean result = true;
-                    if (enemy == null || owner == null) {
+                    if (target == null || owner == null) {
                         result = false;
                     } else {
                         Entity recentVictim;
                         Entity recentAttacker;
                         if (owner instanceof OceanizedEnderinaEntity) {
                             if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
-                                if (!(entityiterator == enemy)) {
+                                if (!(entityiterator == target)) {
                                     result = false;
                                 }
                             }
                         } else if (!(entityiterator instanceof Monster)) {
-                            if (entityiterator != enemy) {
+                            if (entityiterator != target) {
                                 recentVictim = (owner instanceof LivingEntity livingOwner) ? livingOwner.getLastHurtMob() : null;
                                 recentAttacker = (owner instanceof LivingEntity livingOwner) ? livingOwner.getLastHurtByMob() : null;
                                 if (entityiterator != recentVictim) {

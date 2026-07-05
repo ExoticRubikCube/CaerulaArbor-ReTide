@@ -88,8 +88,6 @@ public class TheLastKnightEntity extends Animal implements GeoEntity, SyncedAnim
         this.entityData.define(DATA_SKILLP, 200);
     }
 
-
-
     @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
@@ -193,6 +191,7 @@ public class TheLastKnightEntity extends Animal implements GeoEntity, SyncedAnim
         if (target.getTicksFrozen() >= 200) {
             damage *= 1.75F;
         }
+        //TODO:为什么没有else?
         if (target.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
             damage *= 1.5F;
         }
@@ -230,7 +229,7 @@ public class TheLastKnightEntity extends Animal implements GeoEntity, SyncedAnim
     @Override
     public void baseTick() {
         super.baseTick();
-        Entity enemy;
+        Entity target;
         boolean shelled = false;
         double spawn = 0;
         double skillp;
@@ -245,13 +244,13 @@ public class TheLastKnightEntity extends Animal implements GeoEntity, SyncedAnim
             }
             setTicksFrozen(0);
             this.removeEffect(CAMobEffects.FROZEN.get());
-            enemy = this.getTarget();
+            target = this.getTarget();
             if (skillp > 0) {
                 if ((Entity) this instanceof TheLastKnightEntity datEntSetI)
                     datEntSetI.getEntityData().set(DATA_SKILLP, (int) (skillp - 1));
             } else {
-                if (!(enemy == null) && enemy.isAlive()) {
-                    if (distanceTo(enemy) < 4) {
+                if (!(target == null) && target.isAlive()) {
+                    if (distanceTo(target) < 4) {
                         if ((Entity) this instanceof TheLastKnightEntity datEntSetI)
                             datEntSetI.getEntityData().set(DATA_DURATION, 90);
                         if ((Entity) this instanceof TheLastKnightEntity datEntSetI)
@@ -454,7 +453,7 @@ public class TheLastKnightEntity extends Animal implements GeoEntity, SyncedAnim
         double z = this.getZ();
 
         double damage = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 2;
-        Entity enemy = this.getTarget();
+        Entity target = this.getTarget();
 
         for (int index0 = 0; index0 < 96; index0++) {
             if (world instanceof ServerLevel level)
@@ -474,7 +473,7 @@ public class TheLastKnightEntity extends Animal implements GeoEntity, SyncedAnim
         for (Entity entityiterator : world.getEntities(this, new AABB((x + 16), (y + 4), (z + 1.5), (x - 16), (y - 2), (z - 1.5)))) {
             if (entityiterator instanceof LivingEntity) {
                 if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "is_humanside")))) {
-                    if (!(entityiterator == enemy)) {
+                    if (!(entityiterator == target)) {
                         continue;
                     }
                 }
@@ -486,7 +485,7 @@ public class TheLastKnightEntity extends Animal implements GeoEntity, SyncedAnim
         for (Entity entityiterator : world.getEntities(this, new AABB((x + 1.5), (y + 4), (z + 16), (x - 1.5), (y - 2), (z - 16)))) {
             if (entityiterator instanceof LivingEntity) {
                 if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "is_humanside")))) {
-                    if (!(entityiterator == enemy)) {
+                    if (!(entityiterator == target)) {
                         continue;
                     }
                 }

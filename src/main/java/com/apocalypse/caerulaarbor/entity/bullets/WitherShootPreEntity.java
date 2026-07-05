@@ -76,7 +76,7 @@ public class WitherShootPreEntity extends AbstractArrow implements ItemSupplier 
         Entity sourceentity = this.getOwner();
         if (sourceentity == null)
             return;
-        Entity enemy;
+        Entity target;
         Entity otherOne;
         Entity otherTwo;
         if (entity instanceof OceanizedWitherEntity) {
@@ -87,21 +87,21 @@ public class WitherShootPreEntity extends AbstractArrow implements ItemSupplier 
                 discard();
             return;
         }
-        enemy = sourceentity instanceof Mob mobEnt ? mobEnt.getTarget() : null;
-        if (enemy == null || !enemy.isAlive()) {
+        target = sourceentity instanceof Mob mobEnt ? mobEnt.getTarget() : null;
+        if (target == null || !target.isAlive()) {
             if (!level().isClientSide())
                 discard();
             return;
         }
-        this.shootWitherToTarget(world, sourceentity, enemy);
-        otherOne = EntityUtils.getNearestEnemy(world, x, y, z, enemy, null, sourceentity);
+        this.shootWitherToTarget(world, sourceentity, target);
+        otherOne = EntityUtils.getNearestEnemy(world, x, y, z, target, null, sourceentity);
         if (otherOne == null || !otherOne.isAlive()) {
-            otherOne = enemy;
+            otherOne = target;
         }
         this.shootWitherToTarget(world, sourceentity, otherOne);
-        otherTwo = EntityUtils.getNearestEnemy(world, x, y, z, enemy, otherOne, sourceentity);
+        otherTwo = EntityUtils.getNearestEnemy(world, x, y, z, target, otherOne, sourceentity);
         if (otherTwo == null || !otherTwo.isAlive()) {
-            otherTwo = enemy;
+            otherTwo = target;
         }
         this.shootWitherToTarget(world, sourceentity, otherTwo);
         if (!level().isClientSide())
@@ -117,27 +117,27 @@ public class WitherShootPreEntity extends AbstractArrow implements ItemSupplier 
         double z = this.getZ();
         Entity entity = this.getOwner();
         if (entity != null && this != null) {
-            Entity enemy;
+            Entity target;
             Entity otherOne;
             Entity otherTwo;
             if ((entity instanceof OceanizedWitherEntity datEntI ? datEntI.getEntityData().get(OceanizedWitherEntity.DATA_DURATION) : 0) > 0) {
                 if (!level().isClientSide())
                     discard();
             } else {
-                enemy = entity instanceof Mob mobEnt ? mobEnt.getTarget() : null;
-                if (enemy == null || !enemy.isAlive()) {
+                target = entity instanceof Mob mobEnt ? mobEnt.getTarget() : null;
+                if (target == null || !target.isAlive()) {
                     if (!level().isClientSide())
                         discard();
                 } else {
-                    this.shootWitherToTarget(world, entity, enemy);
-                    otherOne = EntityUtils.getNearestEnemy(world, x, y, z, enemy, enemy, entity);
+                    this.shootWitherToTarget(world, entity, target);
+                    otherOne = EntityUtils.getNearestEnemy(world, x, y, z, target, target, entity);
                     if (otherOne == null || !otherOne.isAlive()) {
-                        otherOne = enemy;
+                        otherOne = target;
                     }
                     this.shootWitherToTarget(world, entity, otherOne);
-                    otherTwo = EntityUtils.getNearestEnemy(world, x, y, z, enemy, otherOne, entity);
+                    otherTwo = EntityUtils.getNearestEnemy(world, x, y, z, target, otherOne, entity);
                     if (otherTwo == null || !otherTwo.isAlive()) {
-                        otherTwo = enemy;
+                        otherTwo = target;
                     }
                     this.shootWitherToTarget(world, entity, otherTwo);
                     if (!level().isClientSide())
@@ -178,7 +178,7 @@ public class WitherShootPreEntity extends AbstractArrow implements ItemSupplier 
 		return entityarrow;
 	}
 
-	// TODO：当前置凋灵弹 API 重构时，重新审视这个遗留的双参数接口。
+       // TODO：当前置凋灵弹 API 重构时，重新审视这个遗留的双参数接口。
 	public static WitherShootPreEntity shoot(LivingEntity entity, LivingEntity target) {
 		WitherShootPreEntity entityarrow = new WitherShootPreEntity(CAEntities.WITHER_SHOOT_PRE.get(), entity, entity.level());
 		double dx = target.getX() - entity.getX();

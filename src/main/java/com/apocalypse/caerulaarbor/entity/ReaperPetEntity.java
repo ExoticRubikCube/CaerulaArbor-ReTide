@@ -314,7 +314,7 @@ public class ReaperPetEntity extends TamableAnimal implements GeoEntity, SyncedA
 	public void baseTick() {
 		super.baseTick();
 		Entity owner;
-		Entity enemy;
+		Entity target;
 		if ((Entity) this instanceof Mob mobEnt0 && mobEnt0.isAggressive() && !((Entity) this instanceof LivingEntity livEnt1 && livEnt1.hasEffect(CAMobEffects.PET_REAP.get()))) {
 			if (!this.level().isClientSide())
 				this.addEffect(new MobEffectInstance(CAMobEffects.PET_REAP.get(), 100, 0, false, false));
@@ -324,8 +324,8 @@ public class ReaperPetEntity extends TamableAnimal implements GeoEntity, SyncedA
 				entity.setTarget(null);
 		}
 		owner = (Entity) this instanceof TamableAnimal tamEnt ? tamEnt.getOwner() : null;
-		enemy = (Entity) this instanceof Mob mobEnt ? mobEnt.getTarget() : null;
-		if (enemy == owner || (enemy instanceof TamableAnimal tamEnt ? (Entity) tamEnt.getOwner() : null) == owner) {
+		target = (Entity) this instanceof Mob mobEnt ? mobEnt.getTarget() : null;
+		if (target == owner || (target instanceof TamableAnimal tamEnt ? (Entity) tamEnt.getOwner() : null) == owner) {
 			if ((Entity) this instanceof Mob entity)
 				entity.setTarget(null);
 		}

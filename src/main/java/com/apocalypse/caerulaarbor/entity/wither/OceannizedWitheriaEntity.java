@@ -130,14 +130,14 @@ public class OceannizedWitheriaEntity extends AbstractOceanizedWitherEntity {
 
     @Override
     protected void tickSubclassBaseTick(LevelAccessor world, double x, double y, double z) {
-        Entity enemy = null;
+        Entity target = null;
         double skillp;
         double idle = 0;
         skillp = this.entityData.get(DATA_SKILLP);
         if ((this.getDisplayName().getString()).equals(this.getType().getDescription().getString())) {
-            enemy = this.getTarget();
+            target = this.getTarget();
             idle = this.entityData.get(DATA_IDLE_TIME);
-            if (enemy == null || !enemy.isAlive()) {
+            if (target == null || !target.isAlive()) {
                 this.entityData.set(DATA_IDLE_TIME, (int) (idle + 1));
             } else {
                 this.entityData.set(DATA_IDLE_TIME, 0);
@@ -145,7 +145,7 @@ public class OceannizedWitheriaEntity extends AbstractOceanizedWitherEntity {
         }
         if (skillp > 0) {
             this.entityData.set(DATA_SKILLP, (int) (skillp - 1));
-        } else if (enemy != null && enemy.isAlive()) {
+        } else if (target != null && target.isAlive()) {
             this.entityData.set(DATA_DURATION, 65);
             this.entityData.set(DATA_SKILLP, 400);
             if (!this.level().isClientSide()) {
@@ -260,9 +260,9 @@ public class OceannizedWitheriaEntity extends AbstractOceanizedWitherEntity {
     }
 
     private void purchaseEnemy() {
-        Entity enemy = this.getTarget();
-        if (enemy != null && enemy.isAlive() && this.distanceTo(enemy) > 4) {
-            this.teleportTo(enemy.getX(), enemy.getY(), enemy.getZ());
+        Entity target = this.getTarget();
+        if (target != null && target.isAlive() && this.distanceTo(target) > 4) {
+            this.teleportTo(target.getX(), target.getY(), target.getZ());
         }
     }
 

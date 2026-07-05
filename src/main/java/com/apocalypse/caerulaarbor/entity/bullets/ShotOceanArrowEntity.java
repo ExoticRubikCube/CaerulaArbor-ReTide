@@ -87,10 +87,10 @@ public class ShotOceanArrowEntity extends AbstractArrow implements ItemSupplier 
 		super.tick();
         Entity entity = this.getOwner();
         if (entity != null) {
-            Entity enemy;
-            enemy = entity instanceof Mob mobEnt ? mobEnt.getTarget() : null;
-            if (!(enemy == null)) {
-                lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY() + enemy.getBbHeight() * 0.75), (enemy.getZ())));
+            Entity target;
+            target = entity instanceof Mob mobEnt ? mobEnt.getTarget() : null;
+            if (!(target == null)) {
+                lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((target.getX()), (target.getY() + target.getBbHeight() * 0.75), (target.getZ())));
             }
         }
         if (this.inGround)

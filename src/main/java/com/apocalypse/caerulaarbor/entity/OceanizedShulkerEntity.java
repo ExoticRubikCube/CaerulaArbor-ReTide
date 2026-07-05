@@ -337,7 +337,7 @@ public class OceanizedShulkerEntity extends SeaMonster {
         Direction curDire = Direction.NORTH;
         String curDIreName;
         boolean isAttached;
-        Entity enemy;
+        Entity target;
         double peekTime;
         double shootDelay;
         double variant;
@@ -448,10 +448,10 @@ public class OceanizedShulkerEntity extends SeaMonster {
                     datEntSetI.getEntityData().set(DATA_PEEK_TIME, (int) (peekTime - 1));
                 this.removeEffect(CAMobEffects.SHULKER_BUFF.get());
             }
-            enemy = this.getTarget();
+            target = this.getTarget();
             if (shootDelay <= 0) {
-                if (!(enemy == null) && enemy.isAlive()) {
-                    if (distanceTo(enemy) <= 24) {
+                if (!(target == null) && target.isAlive()) {
+                    if (distanceTo(target) <= 24) {
                         if ((Entity) this instanceof OceanizedShulkerEntity datEntSetI)
                             datEntSetI.getEntityData().set(DATA_SHOOT_DELAY, Mth.nextInt(RandomSource.create(), 40, 60));
                         if ((Entity) this instanceof OceanizedShulkerEntity datEntSetI)
@@ -473,9 +473,9 @@ public class OceanizedShulkerEntity extends SeaMonster {
                             if (!this.level().isClientSide())
                                 this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, 9, false, false));
                         }
-                        shootShulkerBullet(enemy);
+                        shootShulkerBullet(target);
                         if (Math.random() < 0.5) {
-                            shootShulkerBullet(enemy);
+                            shootShulkerBullet(target);
                         }
                     }
                 }

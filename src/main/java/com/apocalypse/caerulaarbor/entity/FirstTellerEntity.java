@@ -242,7 +242,7 @@ public class FirstTellerEntity extends SeaMonster implements RangedAttackMob {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        Entity enemy;
+        Entity target;
         if (this.isAlive()) {
             if ((Entity) this instanceof FirstTellerEntity datEntSetI)
                 datEntSetI.getEntityData().set(DATA_SKLP, ((Entity) this instanceof FirstTellerEntity datEntI ? datEntI.getEntityData().get(DATA_SKLP) : 0) + 1);
@@ -250,9 +250,9 @@ public class FirstTellerEntity extends SeaMonster implements RangedAttackMob {
                 if ((Entity) this instanceof FirstTellerEntity datEntSetI)
                     datEntSetI.getEntityData().set(DATA_SKLP, ((Entity) this instanceof FirstTellerEntity datEntI ? datEntI.getEntityData().get(DATA_SKLP) : 0) + 1);
             }
-            enemy = (Entity) this instanceof Mob mobEnt ? mobEnt.getTarget() : null;
-            if (((Entity) this instanceof FirstTellerEntity datEntI ? datEntI.getEntityData().get(DATA_SKLP) : 0) >= 400 && !(enemy == null)) {
-                if (distanceTo(enemy) <= 8) {
+            target = (Entity) this instanceof Mob mobEnt ? mobEnt.getTarget() : null;
+            if (((Entity) this instanceof FirstTellerEntity datEntI ? datEntI.getEntityData().get(DATA_SKLP) : 0) >= 400 && !(target == null)) {
+                if (distanceTo(target) <= 8) {
                     if (world instanceof Level level) {
                             level.playSound(null, BlockPos.containing(x, y, z), CASounds.FIRSTTELLER_SKILL.get(), SoundSource.HOSTILE, 3, 1);
                     }

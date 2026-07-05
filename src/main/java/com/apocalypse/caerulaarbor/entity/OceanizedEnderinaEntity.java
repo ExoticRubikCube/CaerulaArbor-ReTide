@@ -423,7 +423,7 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 		double x = this.getX();
 		double y = this.getY();
 		double z = this.getZ();
-		Entity enemy;
+		Entity target;
 		double dura;
 		double P;
 		double sklp1;
@@ -474,7 +474,7 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 			} else {
 				setShiftKeyDown(false);
 			}
-			enemy = (Entity) this instanceof Mob mobEnt ? mobEnt.getTarget() : null;
+			target = (Entity) this instanceof Mob mobEnt ? mobEnt.getTarget() : null;
 			if (dura > 0) {
 				if ((Entity) this instanceof OceanizedEnderinaEntity datEntSetI)
 					datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura - 1));
@@ -483,7 +483,7 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 				if ((Entity) this instanceof OceanizedEnderinaEntity datEntSetI)
 					datEntSetI.getEntityData().set(DATA_SKILL_P, (int) (sklp1 - 1));
 			} else if (dura <= 0) {
-				if (!(enemy == null) && enemy.isAlive()) {
+				if (!(target == null) && target.isAlive()) {
 					if (this instanceof OceanizedEnderinaEntity) {
 						this.setAnimation("animation.oceanized_enderina.chant");
 					}
@@ -518,7 +518,7 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 				}
 			}
 			if (tickCount % 20 == 10) {
-				if (!(enemy == null) && enemy.isAlive()) {
+				if (!(target == null) && target.isAlive()) {
 					this.witheriaDestroyBlocks();
 				}
 			}

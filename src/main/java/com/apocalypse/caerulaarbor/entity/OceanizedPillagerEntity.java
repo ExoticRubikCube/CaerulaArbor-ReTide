@@ -238,13 +238,13 @@ public class OceanizedPillagerEntity extends SeaMonster implements RangedAttackM
         double y = this.getY();
         double z = this.getZ();
         double sklp;
-        Entity enemy;
+        Entity target;
         if (this.isAlive()) {
             sklp = (Entity) this instanceof OceanizedPillagerEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP) : 0;
             if (sklp <= 0) {
-                enemy = this.getTarget();
-                if (!(enemy == null) && enemy.isAlive()) {
-                    if (this.hasLineOfSight(enemy) && distanceTo(enemy) <= 12) {
+                target = this.getTarget();
+                if (!(target == null) && target.isAlive()) {
+                    if (this.hasLineOfSight(target) && distanceTo(target) <= 12) {
                         if (this instanceof OceanizedPillagerEntity) {
                             this.setAnimation("animation.oceanized_pillager.pour");
                         }

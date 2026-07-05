@@ -142,7 +142,7 @@ public class HealBullletEntity extends AbstractArrow implements ItemSupplier {
 		return entityarrow;
 	}
 
-	// TODO：当治疗弹 API 重构时，重新审视这个遗留的双参数接口。
+       // TODO：当治疗弹 API 重构时，重新审视这个遗留的双参数接口。
 	public static HealBullletEntity shoot(LivingEntity entity, LivingEntity target) {
 		HealBullletEntity entityarrow = new HealBullletEntity(CAEntities.HEAL_BULLLET.get(), entity, entity.level());
 		double dx = target.getX() - entity.getX();

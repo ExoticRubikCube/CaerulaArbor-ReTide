@@ -165,7 +165,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                     CASounds.ANCHOR_PRE.get(), SoundSource.HOSTILE, 2.2F, 1);
             CaerulaArborMod.queueServerWork(14, () -> {
                 if (this.isAlive()) {
-                    Entity enemy = this.getTarget();
+                    Entity target = this.getTarget();
                     double damage = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
                     this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
                             CASounds.ANCHOR_ATTACK.get(), SoundSource.HOSTILE, 2.75F, 1);
@@ -184,7 +184,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                                 continue;
                             }
                         }
-                        if (entityIterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring"))) && entityIterator != enemy) {
+                        if (entityIterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring"))) && entityIterator != target) {
                             continue;
                         }
                         if (entityIterator == this) {
@@ -301,7 +301,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        Entity enemy;
+        Entity target;
         double sklp1;
         double dura;
         double skillp2;
@@ -309,7 +309,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
             sklp1 = (Entity) this instanceof UlpiansEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP_1) : 0;
             skillp2 = (Entity) this instanceof UlpiansEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP_2) : 0;
             dura = (Entity) this instanceof UlpiansEntity datEntI ? datEntI.getEntityData().get(DATA_DURATION) : 0;
-            enemy = (Entity) this instanceof Mob mobEnt ? mobEnt.getTarget() : null;
+            target = (Entity) this instanceof Mob mobEnt ? mobEnt.getTarget() : null;
             if (dura > 0) {
                 if ((Entity) this instanceof UlpiansEntity datEntSetI)
                     datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura - 1));
@@ -318,8 +318,8 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                 if ((Entity) this instanceof UlpiansEntity datEntSetI)
                     datEntSetI.getEntityData().set(DATA_SKILLP_1, (int) (sklp1 - 1));
             } else {
-                if (!(enemy == null) && enemy.isAlive()) {
-                    if (distanceTo(enemy) <= 3.5) {
+                if (!(target == null) && target.isAlive()) {
+                    if (distanceTo(target) <= 3.5) {
                         if (this instanceof UlpiansEntity) {
                             this.setAnimation("animation.ulpians.pull");
                         }
@@ -330,7 +330,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                         if (world instanceof Level level) {
                             level.playSound(null, BlockPos.containing(x, y, z), CASounds.ULPIANS_PUL_PRE.get(), SoundSource.NEUTRAL, (float) 2.2, 1);
                         }
-                        ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY() + 1.6), (enemy.getZ())));
+                        ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((target.getX()), (target.getY() + 1.6), (target.getZ())));
                         CaerulaArborMod.queueServerWork(13, () -> {
                             if (this.isAlive()) {
                                 if (world instanceof Level level) {
@@ -434,8 +434,8 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                 if ((Entity) this instanceof UlpiansEntity datEntSetI)
                     datEntSetI.getEntityData().set(DATA_SKILLP_2, (int) (skillp2 - 1));
             } else {
-                if (!(enemy == null) && enemy.isAlive()) {
-                    if (distanceTo(enemy) <= 24) {
+                if (!(target == null) && target.isAlive()) {
+                    if (distanceTo(target) <= 24) {
                         if (this instanceof UlpiansEntity) {
                             this.setAnimation("animation.ulpians.skill");
                         }
@@ -451,7 +451,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                         if (world instanceof Level level) {
                             level.playSound(null, BlockPos.containing(x, y, z), CASounds.ULPIANS_PUL_PRE.get(), SoundSource.NEUTRAL, (float) 2.2, 1);
                         }
-                        ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY() + 1.6), (enemy.getZ())));
+                        ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((target.getX()), (target.getY() + 1.6), (target.getZ())));
                         if (!this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 25, 9, false, false));
                         if (world instanceof Level level) {

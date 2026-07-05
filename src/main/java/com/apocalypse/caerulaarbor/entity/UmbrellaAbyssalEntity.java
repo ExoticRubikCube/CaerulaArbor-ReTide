@@ -237,9 +237,7 @@ public class UmbrellaAbyssalEntity extends SeaMonster {
 
 	private PlayState movementPredicate(AnimationState<?> event) {
 		if (this.animationprocedure.equals("empty")) {
-			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
-
-			) {
+            if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))) {
 				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.umbrella.move"));
 			}
 			if (this.isDeadOrDying()) {
@@ -269,7 +267,8 @@ public class UmbrellaAbyssalEntity extends SeaMonster {
 		return PlayState.CONTINUE;
 	}
 
-	@Override
+       
+       @Override
 	protected void tickDeath() {
 		++this.deathTime;
 		if (this.deathTime == 20) {
@@ -291,7 +290,6 @@ public class UmbrellaAbyssalEntity extends SeaMonster {
 		data.add(new AnimationController<>(this, "movement", 4, this::movementPredicate));
 		data.add(new AnimationController<>(this, "procedure", 4, this::procedurePredicate));
 	}
-
 
 	@Override
 	public void setAnimationProcedure(String animation) {

@@ -245,10 +245,10 @@ public class OceanizedWitherEntity extends AbstractOceanizedWitherEntity impleme
             }
         }
 
-        Entity enemy = this.getTarget();
+        Entity target = this.getTarget();
         if (skillp > 0) {
             this.entityData.set(DATA_SKILLP, (int) (skillp - 1));
-        } else if (enemy != null && enemy.isAlive()) {
+        } else if (target != null && target.isAlive()) {
             this.entityData.set(DATA_DURATION, 40);
             this.entityData.set(DATA_SKILLP, 300);
             if (!this.level().isClientSide()) {

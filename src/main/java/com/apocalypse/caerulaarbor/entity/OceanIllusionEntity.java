@@ -254,11 +254,11 @@ public class OceanIllusionEntity extends SeaMonster implements RangedAttackMob {
 		double y = this.getY();
 		double z = this.getZ();
 		Entity illusioner;
-		Entity enemy;
+		Entity target;
 		if (this.isAlive()) {
 			if (tickCount % 40 == 20) {
-                enemy = this.getTarget();
-				if (!(enemy == null) && enemy.isAlive()) {
+                target = this.getTarget();
+				if (!(target == null) && target.isAlive()) {
 					finished = true;
 				} else {
 					illusioner = world.getEntitiesOfClass(OceanizedIllusionerEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true).stream().min(new Object() {

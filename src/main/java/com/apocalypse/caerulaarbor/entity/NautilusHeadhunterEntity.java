@@ -233,11 +233,11 @@ public class NautilusHeadhunterEntity extends Animal implements GeoEntity, Synce
         double z = this.getZ();
         double dryTick;
         boolean isMounting;
-        Entity enemy;
+        Entity target;
         Entity vehicle;
         if (this.isAlive()) {
             dryTick = (Entity) this instanceof NautilusHeadhunterEntity datEntI ? datEntI.getEntityData().get(DATA_DRY_TICK) : 0;
-            enemy = this.getTarget();
+            target = this.getTarget();
             isMounting = isPassenger();
             if (isInWaterRainOrBubble() || isMounting) {
                 if ((Entity) this instanceof NautilusHeadhunterEntity datEntSetI)
@@ -265,14 +265,14 @@ public class NautilusHeadhunterEntity extends Animal implements GeoEntity, Synce
                         }
                     }
                 } else {
-                    if (!(enemy == null) && enemy.isAlive() && !(enemy instanceof Player)) {
-                        if (distanceTo(enemy) <= 2 && !enemy.isVehicle()) {
+                    if (!(target == null) && target.isAlive() && !(target instanceof Player)) {
+                        if (distanceTo(target) <= 2 && !target.isVehicle()) {
                             if (!world.isClientSide()) {
                                 if (world instanceof Level level) {
                                         level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.STRIDER_SADDLE, SoundSource.HOSTILE, 1, 1);
                                 }
                             }
-                            startRiding(enemy);
+                            startRiding(target);
                         }
                     }
                 }

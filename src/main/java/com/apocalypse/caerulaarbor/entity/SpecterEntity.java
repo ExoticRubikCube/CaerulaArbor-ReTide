@@ -258,7 +258,7 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        Entity enemy;
+        Entity target;
         double sklp1;
         double dura;
         double skillp2;
@@ -266,13 +266,13 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
             sklp1 = this.getEntityData().get(DATA_SKILLP_1);
             skillp2 = this.getEntityData().get(DATA_SKILLP_2);
             dura = this.getEntityData().get(DATA_DURATION);
-            enemy = this.getTarget();
+            target = this.getTarget();
             if (dura > 0) {
                 this.getEntityData().set(DATA_DURATION, (int) (dura - 1));
             }
             if (sklp1 >= 5) {
-                if (!(enemy == null) && enemy.isAlive()) {
-                    if (distanceTo(enemy) <= 4) {
+                if (!(target == null) && target.isAlive()) {
+                    if (distanceTo(target) <= 4) {
                         this.setAnimation("animation.specter.skill");
                         this.getEntityData().set(DATA_SKILLP_1, 0);
                         this.getEntityData().set(DATA_DURATION, (int) (dura + 45));
@@ -308,7 +308,7 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
                     this.getEntityData().set(DATA_SKILLP_2, (int) (skillp2 - 1));
                 }
             } else {
-                if (!(enemy == null) && enemy.isAlive()) {
+                if (!(target == null) && target.isAlive()) {
                     if (EntityUtils.getHealthPerc(this) <= 0.5) {
                         if (world instanceof Level level) {
                             level.playSound(null, BlockPos.containing(x, y, z), CASounds.SPECTER_SKILL_ON.get(), SoundSource.NEUTRAL, 3, 1);
@@ -482,7 +482,7 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
         double y = this.getY();
         double z = this.getZ();
 
-        Entity enemy = this.getTarget();
+        Entity target = this.getTarget();
         double damage = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
         double range = 4.5;
 
@@ -499,12 +499,12 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
                 continue;
             }
             if (entityiterator instanceof Player || (entityiterator instanceof TamableAnimal tamEnt && tamEnt.isTame())) {
-                if (!(entityiterator == enemy)) {
+                if (!(entityiterator == target)) {
                     continue;
                 }
             }
             if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "is_humanside")))) {
-                if (!(entityiterator == enemy)) {
+                if (!(entityiterator == target)) {
                     continue;
                 }
             }

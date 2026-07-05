@@ -242,7 +242,7 @@ public class ThirsterEntity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        Entity enemy;
+        Entity target;
         double barr;
         double perc;
         double sklp1;
@@ -257,7 +257,7 @@ public class ThirsterEntity extends SeaMonster {
                 if ((Entity) this instanceof ThirsterEntity datEntI) {
                     datEntI.getEntityData().get(DATA_INTEGRATION);
                 }
-                enemy = this.getTarget();
+                target = this.getTarget();
                 barr = this.getAttributes().hasAttribute(CAAttributes.LIVING_BARRIER.get())
                         ? this.getAttribute(CAAttributes.LIVING_BARRIER.get()).getBaseValue()
                         : 0;
@@ -281,7 +281,7 @@ public class ThirsterEntity extends SeaMonster {
                     if ((Entity) this instanceof ThirsterEntity datEntSetI)
                         datEntSetI.getEntityData().set(DATA_SKILL_P, (int) (sklp1 - 1));
                 } else {
-                    if (!(enemy == null) && enemy.isAlive()) {
+                    if (!(target == null) && target.isAlive()) {
                         if ((Entity) this instanceof ThirsterEntity datEntSetI)
                             datEntSetI.getEntityData().set(DATA_SKILL_P, 600);
                         if (this instanceof ThirsterEntity) {

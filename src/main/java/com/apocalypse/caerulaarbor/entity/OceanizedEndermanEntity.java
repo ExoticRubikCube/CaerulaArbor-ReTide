@@ -317,14 +317,14 @@ public class OceanizedEndermanEntity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        Entity enemy;
+        Entity target;
         double sklp;
         double cool;
         if (this.isAlive()) {
             sklp = (Entity) this instanceof OceanizedEndermanEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP) : 0;
             cool = (Entity) this instanceof OceanizedEndermanEntity datEntI ? datEntI.getEntityData().get(DATA_COOLDOWN) : 0;
-            enemy = (Entity) this instanceof Mob mobEnt ? mobEnt.getTarget() : null;
-            if (!(enemy == null)) {
+            target = (Entity) this instanceof Mob mobEnt ? mobEnt.getTarget() : null;
+            if (!(target == null)) {
                 if (sklp <= 0) {
                     if ((Entity) this instanceof OceanizedEndermanEntity datEntSetI)
                         datEntSetI.getEntityData().set(DATA_SKILLP, 300);
@@ -390,11 +390,11 @@ public class OceanizedEndermanEntity extends SeaMonster {
                     if ((Entity) this instanceof OceanizedEndermanEntity datEntSetI)
                         datEntSetI.getEntityData().set(DATA_SKILLP, (int) (sklp - 1));
                 }
-                if (cool <= 0 && enemy.isAlive()) {
-                    if (distanceTo(enemy) >= 8 && !((Entity) this instanceof LivingEntity livEnt13 && livEnt13.hasEffect(CAMobEffects.COOLDOWN_SINAL.get()))) {
+                if (cool <= 0 && target.isAlive()) {
+                    if (distanceTo(target) >= 8 && !((Entity) this instanceof LivingEntity livEnt13 && livEnt13.hasEffect(CAMobEffects.COOLDOWN_SINAL.get()))) {
                         if ((Entity) this instanceof OceanizedEndermanEntity datEntSetI)
                             datEntSetI.getEntityData().set(DATA_COOLDOWN, 100);
-                        this.teleportTo(x, y, z, enemy.getX(), enemy.getY(), enemy.getZ());
+                        this.teleportTo(x, y, z, target.getX(), target.getY(), target.getZ());
                         if (!this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL.get(), 100, 0, false, false));
                     }

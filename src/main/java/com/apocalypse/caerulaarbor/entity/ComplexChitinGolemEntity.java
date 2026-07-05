@@ -252,7 +252,7 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity, Sy
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        Entity enemy;
+        Entity target;
         double sklp1;
         double dura;
         if (this.isAlive()) {
@@ -287,7 +287,7 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity, Sy
             }
             sklp1 = (Entity) this instanceof ComplexChitinGolemEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP) : 0;
             dura = (Entity) this instanceof ComplexChitinGolemEntity datEntI ? datEntI.getEntityData().get(DATA_DURATION) : 0;
-            enemy = this.getTarget();
+            target = this.getTarget();
             if (dura > 0) {
                 if ((Entity) this instanceof ComplexChitinGolemEntity datEntSetI)
                     datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura - 1));
@@ -296,8 +296,8 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity, Sy
                 if ((Entity) this instanceof ComplexChitinGolemEntity datEntSetI)
                     datEntSetI.getEntityData().set(DATA_SKILLP, (int) (sklp1 - 1));
             } else {
-                if (!(enemy == null) && enemy.isAlive()) {
-                    if (distanceTo(enemy) <= 5 && dura < 1) {
+                if (!(target == null) && target.isAlive()) {
+                    if (distanceTo(target) <= 5 && dura < 1) {
                         if ((Entity) this instanceof ComplexChitinGolemEntity datEntSetI)
                             datEntSetI.getEntityData().set(DATA_DURATION, 110);
                         if (this instanceof ComplexChitinGolemEntity) {

@@ -351,12 +351,12 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
     public void baseTick() {
         super.baseTick();
         double sklp;
-        Entity enemy;
+        Entity target;
         if (this.isAlive()) {
             sklp = (Entity) this instanceof OceanziedWitchEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP) : 0;
             if (sklp <= 0) {
-                enemy = this.getTarget();
-                if (!(enemy == null) && enemy.isAlive() && distanceTo(enemy) <= 9) {
+                target = this.getTarget();
+                if (!(target == null) && target.isAlive() && distanceTo(target) <= 9) {
                     if (this instanceof OceanziedWitchEntity) {
                         this.setAnimation("animation.oceanized_witch.throw");
                     }

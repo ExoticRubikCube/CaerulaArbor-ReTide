@@ -186,14 +186,14 @@ public class MegaChestEntity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        Entity enemy;
+        Entity target;
         if (!((Entity) this instanceof MegaChestEntity datEntL0 && datEntL0.getEntityData().get(DATA_RELEASED))) {
             setShiftKeyDown(true);
             if (!this.level().isClientSide())
                 this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, 8, false, false));
         }
-        enemy = this.getTarget();
-        if (enemy == null || !enemy.isAlive()) {
+        target = this.getTarget();
+        if (target == null || !target.isAlive()) {
             if (!world.isClientSide() && this.getNoActionTime() >= 1200) {
                 if (this.isAlive()) {
                     if ((world.getBlockState(BlockPos.containing(x, y, z))).canBeReplaced()) {

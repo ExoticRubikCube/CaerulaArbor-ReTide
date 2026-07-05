@@ -310,7 +310,7 @@ public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMo
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        Entity enemy;
+        Entity target;
         double dura;
         double P;
         double perc;
@@ -355,7 +355,7 @@ public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMo
                 }
             } else {
                 Mob mobEnt = this;
-                enemy = mobEnt.getTarget();
+                target = mobEnt.getTarget();
                 LivingEntity livingEntity19 = this;
                 d = livingEntity19.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity19.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
                 if (tickCount % 20 == 0) {
@@ -364,7 +364,7 @@ public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMo
                         List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(10 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
                         for (Entity entityiterator : entfound) {
                             if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
-                                if (!(entityiterator == enemy)) {
+                                if (!(entityiterator == target)) {
                                     continue;
                                 }
                             }

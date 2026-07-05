@@ -231,14 +231,12 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        Entity call;
-        call = world.getEntitiesOfClass(TideDeathrepellerEntity.class, AABB.ofSize(new Vec3(x, y, z), 96, 96, 96), e -> true).stream().min(new Object() {
+        TideDeathrepellerEntity call = world.getEntitiesOfClass(TideDeathrepellerEntity.class, AABB.ofSize(new Vec3(x, y, z), 96, 96, 96), e -> true).stream().min(new Object() {
             Comparator<Entity> compareDistOf(double x, double y, double z) {
                 return Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z));
             }
         }.compareDistOf(x, y, z)).orElse(null);
-        if (call instanceof Mob entity)
-            entity.getNavigation().moveTo(x, y, z, 0.8);
+        call.getNavigation().moveTo(x, y, z, 0.8);
         if (source.is(DamageTypes.DROWN))
             return false;
         return super.hurt(source, amount);
@@ -418,7 +416,6 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
         this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
     }
 
-
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
         builder = builder.add(Attributes.MOVEMENT_SPEED, 0.3);
@@ -509,7 +506,6 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
         data.add(new AnimationController<>(this, "attacking", 2, this::attackingPredicate));
         data.add(new AnimationController<>(this, "procedure", 2, this::procedurePredicate));
     }
-
 
     @Override
     public void setAnimationProcedure(String animation) {

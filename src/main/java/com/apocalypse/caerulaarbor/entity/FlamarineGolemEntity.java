@@ -279,7 +279,7 @@ public class FlamarineGolemEntity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        Entity enemy;
+        Entity target;
         double sklp1;
         double sklp2;
         double dura;
@@ -294,14 +294,14 @@ public class FlamarineGolemEntity extends SeaMonster {
             sklp1 = (Entity) this instanceof FlamarineGolemEntity datEntI ? datEntI.getEntityData().get(DATA_SKILL_P1) : 0;
             sklp2 = (Entity) this instanceof FlamarineGolemEntity datEntI ? datEntI.getEntityData().get(DATA_SKILL_P2) : 0;
             dura = (Entity) this instanceof FlamarineGolemEntity datEntI ? datEntI.getEntityData().get(DATA_DURATION) : 0;
-            enemy = this.getTarget();
+            target = this.getTarget();
             if (dura > 0) {
                 if ((Entity) this instanceof FlamarineGolemEntity datEntSetI)
                     datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura - 1));
             }
             if (sklp1 <= 0 && dura <= 0) {
-                if (!(enemy == null) && enemy.isAlive()) {
-                    if (distanceTo(enemy) <= 6) {
+                if (!(target == null) && target.isAlive()) {
+                    if (distanceTo(target) <= 6) {
                         if (this instanceof FlamarineGolemEntity) {
                             this.setAnimation("animation.flamarine_golem.heavy");
                         }
@@ -366,8 +366,8 @@ public class FlamarineGolemEntity extends SeaMonster {
                 if ((Entity) this instanceof FlamarineGolemEntity datEntSetI)
                     datEntSetI.getEntityData().set(DATA_SKILL_P2, (int) (sklp2 - 1));
             } else if (dura <= 0) {
-                if (!(enemy == null) && enemy.isAlive()) {
-                    if (distanceTo(enemy) <= 5) {
+                if (!(target == null) && target.isAlive()) {
+                    if (distanceTo(target) <= 5) {
                         if (this instanceof FlamarineGolemEntity) {
                             this.setAnimation("animation.flamarine_golem.combo");
                         }
@@ -391,7 +391,7 @@ public class FlamarineGolemEntity extends SeaMonster {
                 }
             }
             if (tickCount % 20 == 10) {
-                if (!(enemy == null) && enemy.isAlive()) {
+                if (!(target == null) && target.isAlive()) {
                     boolean once = false;
                     double dx;
                     double dy;
@@ -573,18 +573,18 @@ public class FlamarineGolemEntity extends SeaMonster {
     }
 
     private void combo(LevelAccessor world, double x, double y, double z, double dist, double rate) {
-        Entity enemy;
+        Entity target;
         double damage;
-        enemy = this.getTarget();
+        target = this.getTarget();
         damage = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * rate;
         if (world instanceof Level level) {
             level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TRIDENT_HIT, SoundSource.HOSTILE, 1, 1);
         }
-        if (!(enemy == null)) {
-            this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY()), (enemy.getZ())));
-            if (this.distanceTo(enemy) <= dist) {
-                enemy.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "golem_attack"))), this), (float) damage);
-                breakShield(world, x, y, z, enemy, 120);
+        if (!(target == null)) {
+            this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((target.getX()), (target.getY()), (target.getZ())));
+            if (this.distanceTo(target) <= dist) {
+                target.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "golem_attack"))), this), (float) damage);
+                breakShield(world, x, y, z, target, 120);
             }
         }
     }

@@ -265,7 +265,7 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 		double x = this.getX();
 		double y = this.getY();
 		double z = this.getZ();
-		Entity enemy;
+		Entity target;
         double sklp1;
 		double dura;
 		double skillp2;
@@ -273,7 +273,7 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 			sklp1 = (Entity) this instanceof GladiiaEntity datEntI ? datEntI.getEntityData().get(DATA_SKILL_P) : 0;
 			skillp2 = (Entity) this instanceof GladiiaEntity datEntI ? datEntI.getEntityData().get(DATA_SKILL_P2) : 0;
 			dura = (Entity) this instanceof GladiiaEntity datEntI ? datEntI.getEntityData().get(DATA_DURATION) : 0;
-            enemy = this.getTarget();
+            target = this.getTarget();
 			if (dura > 0) {
 				if ((Entity) this instanceof GladiiaEntity datEntSetI)
 					datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura - 1));
@@ -282,8 +282,8 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 				if ((Entity) this instanceof GladiiaEntity datEntSetI)
 					datEntSetI.getEntityData().set(DATA_SKILL_P, (int) (sklp1 - 1));
 			} else {
-				if (!(enemy == null) && enemy.isAlive()) {
-					if (distanceTo(enemy) <= 7.5 && dura <= 0) {
+				if (!(target == null) && target.isAlive()) {
+					if (distanceTo(target) <= 7.5 && dura <= 0) {
 						if (this instanceof GladiiaEntity) {
 							this.setAnimation("animation.gladiia.pull");
 						}
@@ -294,7 +294,7 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 						if (world instanceof Level level) {
 							level.playSound(null, BlockPos.containing(x, y, z), CASounds.GLADIIA_PULL_PRE.get(), SoundSource.NEUTRAL, (float) 2.5, 1);
 						}
-						((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY() + 1.6), (enemy.getZ())));
+						((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((target.getX()), (target.getY() + 1.6), (target.getZ())));
 						CaerulaArborMod.queueServerWork(10, () -> {
 							if (this.isAlive()) {
 								Entity ene = this.getTarget();
@@ -333,8 +333,8 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 				if ((Entity) this instanceof GladiiaEntity datEntSetI)
 					datEntSetI.getEntityData().set(DATA_SKILL_P2, (int) (skillp2 - 1));
 			} else {
-				if (!(enemy == null) && enemy.isAlive()) {
-					if (distanceTo(enemy) <= 21 && dura <= 0) {
+				if (!(target == null) && target.isAlive()) {
+					if (distanceTo(target) <= 21 && dura <= 0) {
 						if (this instanceof GladiiaEntity) {
 							this.setAnimation("animation.gladiia.float");
 						}
@@ -353,15 +353,15 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 						if (world instanceof Level level) {
 							level.playSound(null, BlockPos.containing(x, y, z), CASounds.GLADIIA_SKILL.get(), SoundSource.NEUTRAL, 2, 1);
 						}
-						((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY() + 1.6), (enemy.getZ())));
+						((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((target.getX()), (target.getY() + 1.6), (target.getZ())));
 						if (!this.level().isClientSide())
 							this.addEffect(new MobEffectInstance(CAMobEffects.ADD_ATTACK_PERCLY.get(), 120, 4, false, false));
 						if (!this.level().isClientSide())
 							this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 120, 9, false, false));
-						if (enemy instanceof LivingEntity && !this.level().isClientSide())
+						if (target instanceof LivingEntity && !this.level().isClientSide())
 							this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 120, 3, false, false));
 						if (world instanceof ServerLevel level) {
-							Entity entityToSpawn = CAEntities.GLADIIA_WHIRL.get().spawn(level, BlockPos.containing(enemy.getX(), enemy.getY(), enemy.getZ()), MobSpawnType.MOB_SUMMONED);
+							Entity entityToSpawn = CAEntities.GLADIIA_WHIRL.get().spawn(level, BlockPos.containing(target.getX(), target.getY(), target.getZ()), MobSpawnType.MOB_SUMMONED);
 							if (entityToSpawn != null) {
 								entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
 							}

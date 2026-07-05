@@ -139,10 +139,10 @@ public class SpecterDollEntity extends Animal implements GeoEntity, SyncedAnimat
             this.setHealth((float) (this.getHealth() + this.getMaxHealth() * 0.0005));
             if (tickCount1 > 20 && tickCount1 < 200) {
                 if (tickCount1 % 20 == 0) {
-                    Entity enemy;
+                    Entity target;
                     double damage;
                     double r;
-                    enemy = this.getTarget();
+                    target = this.getTarget();
                     r = 6;
                     damage = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.8;
                     {
@@ -156,12 +156,12 @@ public class SpecterDollEntity extends Animal implements GeoEntity, SyncedAnimat
                                 continue;
                             }
                             if (entityiterator instanceof Player || (entityiterator instanceof TamableAnimal tamEnt && tamEnt.isTame())) {
-                                if (!(entityiterator == enemy)) {
+                                if (!(entityiterator == target)) {
                                     continue;
                                 }
                             }
                             if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "is_humanside")))) {
-                                if (!(entityiterator == enemy)) {
+                                if (!(entityiterator == target)) {
                                     continue;
                                 }
                             }
