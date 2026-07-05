@@ -429,8 +429,8 @@ public class ThirsterEntity extends SeaMonster {
                                 if (distanceTo(entityiterator) < 20) {
                                     entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "trail_damage")))),
                                             (float) num);
-                                    if (entityiterator instanceof LivingEntity target) {
-                                        SIHelper.causeSanityInjury(target, this, num * 25, SanityEvent.Hurt.Type.ENTITY);
+                                    if (entityiterator instanceof LivingEntity livingTarget) {
+                                        SIHelper.causeSanityInjury(livingTarget, this, num * 25, SanityEvent.Hurt.Type.ENTITY);
                                     }
                                 }
                             }
@@ -527,8 +527,8 @@ public class ThirsterEntity extends SeaMonster {
                 continue;
             }
             if (this.distanceTo(entityiterator) < 20) {
-                if (entityiterator instanceof LivingEntity target) {
-                    SIHelper.causeSanityInjury(target, this, 1000, SanityEvent.Hurt.Type.ENTITY);
+                if (entityiterator instanceof LivingEntity livingTarget) {
+                    SIHelper.causeSanityInjury(livingTarget, this, 1000, SanityEvent.Hurt.Type.ENTITY);
                 }
             }
         }

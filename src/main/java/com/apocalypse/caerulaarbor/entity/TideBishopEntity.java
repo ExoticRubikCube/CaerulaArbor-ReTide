@@ -270,7 +270,7 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
         SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if ((LevelAccessor) world instanceof ServerLevel level) {
+        if (world instanceof ServerLevel level) {
             Entity entityToSpawn = CAEntities.TIDE_DEATHREPELLER.get().spawn(level, BlockPos.containing(this.getX() + Mth.nextDouble(RandomSource.create(), -3, 3), this.getY(), this.getZ() + Mth.nextDouble(RandomSource.create(), -3, 3)), MobSpawnType.MOB_SUMMONED);
             if (entityToSpawn != null) {
                 entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);

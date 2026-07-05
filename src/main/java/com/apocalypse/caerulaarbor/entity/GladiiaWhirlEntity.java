@@ -8,7 +8,6 @@ import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -19,19 +18,16 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeMod;
@@ -46,7 +42,6 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.List;
 
@@ -66,6 +61,7 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity, Sync
         super(type, world);
         xpReward = 0;
         setNoAi(true);
+         setNoGravity(true);
         setMaxUpStep(0f);
     }
 
@@ -82,18 +78,8 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity, Sync
     }
 
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-        // TODO：初始化逻辑仍需补充
-        this.setNoGravity(true);
-        return super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-    }
-
-    @Override
     public void baseTick() {
         super.baseTick();
-        //TODO 可疑
-        AttributeInstance maxHealth = this.getAttribute(Attributes.MAX_HEALTH);
-        if (maxHealth != null) maxHealth.setBaseValue(10);
         LevelAccessor world = this.level();
         double x = this.getX();
         double y = this.getY();
