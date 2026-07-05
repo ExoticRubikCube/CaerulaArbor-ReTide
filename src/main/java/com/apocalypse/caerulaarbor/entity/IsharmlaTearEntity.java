@@ -309,7 +309,7 @@ public class IsharmlaTearEntity extends PathfinderMob implements GeoEntity, Sync
         return builder;
     }
 
-    private PlayState movementPredicate(AnimationState event) {
+    private PlayState movementPredicate(AnimationState<?> event) {
         if (this.animationprocedure.equals("empty")) {
             if (this.isDeadOrDying()) {
                 return event.setAndContinue(RawAnimation.begin().thenPlay("animation.isharmla_tear.die"));
@@ -321,7 +321,7 @@ public class IsharmlaTearEntity extends PathfinderMob implements GeoEntity, Sync
 
     String prevAnim = "empty";
 
-    private PlayState procedurePredicate(AnimationState event) {
+    private PlayState procedurePredicate(AnimationState<?> event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
             if (!this.animationprocedure.equals(prevAnim))
                 event.getController().forceAnimationReset();

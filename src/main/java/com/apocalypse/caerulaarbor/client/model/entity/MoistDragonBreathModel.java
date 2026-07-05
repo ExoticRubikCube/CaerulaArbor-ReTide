@@ -29,7 +29,7 @@ public class MoistDragonBreathModel extends GeoModel<MoistDragonBreathEntity> {
 	}
 
 	@Override
-	public void setCustomAnimations(MoistDragonBreathEntity animatable, long instanceId, AnimationState animationState) {
+	public void setCustomAnimations(MoistDragonBreathEntity animatable, long instanceId, AnimationState<MoistDragonBreathEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("Ball");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);

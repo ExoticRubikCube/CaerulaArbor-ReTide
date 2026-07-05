@@ -207,13 +207,7 @@ public class InterphoneItem extends Item {
         Direction direction = context.getClickedFace();
         Entity entity = context.getPlayer();
         ItemStack itemstack = context.getItemInHand();
-        if (direction != null && entity != null) {
-            String log = "";
-            double num = 0;
-            double tX = 0;
-            double tZ = 0;
-            double rand = 0;
-            double tY = 0;
+        if (entity != null) {
             if (!(entity instanceof Player _plrCldCheck1 && _plrCldCheck1.getCooldowns().isOnCooldown(itemstack.getItem()))) {
                 if (!entity.isShiftKeyDown()) {
                     dispatchInquisition(world, entity, itemstack, x + direction.getStepX() + 0.5, y + direction.getStepY(), z + direction.getStepZ() + 0.5);
@@ -229,30 +223,23 @@ public class InterphoneItem extends Item {
 	public boolean hurtEnemy(ItemStack itemstack, LivingEntity entity, LivingEntity sourceentity) {
 		boolean retval = super.hurtEnemy(itemstack, entity, sourceentity);
         LevelAccessor world = entity.level();
-        if (entity != null && sourceentity != null) {
-            String log;
-            double rand = 0;
-            double tX = 0;
-            double tZ = 0;
-            double num = 0;
-            if (!entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "inquisition")))) {
-                {
-                    final Vec3 _center = new Vec3(entity.getX(), entity.getY(), entity.getZ());
-                    List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(32 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                    for (Entity entityiterator : _entfound) {
-                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "inquisition")))) {
-                            if (entityiterator instanceof Mob _entity && (Entity) entity instanceof LivingEntity _ent)
-                                _entity.setTarget(_ent);
-                            num = num + 1;
-                        }
-                    }
-                }
-                log = Component.translatable("interphone.dispatch.attack").getString();
-                log = log.replace("{num}", "" + Math.round(num));
-                log = log.replace("{enemy}", entity.getDisplayName().getString());
-                if ((Entity) sourceentity instanceof Player _player && !_player.level().isClientSide())
-                    _player.displayClientMessage(Component.literal(log), true);
-            }
+        String log;
+        double num = 0;
+        if (!entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "inquisition")))) {
+			final Vec3 _center = new Vec3(entity.getX(), entity.getY(), entity.getZ());
+			List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(32 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+			for (Entity entityiterator : _entfound) {
+				if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "inquisition")))) {
+					if (entityiterator instanceof Mob _entity && (Entity) entity instanceof LivingEntity _ent)
+						_entity.setTarget(_ent);
+					num = num + 1;
+				}
+			}
+            log = Component.translatable("interphone.dispatch.attack").getString();
+            log = log.replace("{num}", "" + Math.round(num));
+            log = log.replace("{enemy}", entity.getDisplayName().getString());
+            if ((Entity) sourceentity instanceof Player _player && !_player.level().isClientSide())
+                _player.displayClientMessage(Component.literal(log), true);
         }
         return retval;
 	}

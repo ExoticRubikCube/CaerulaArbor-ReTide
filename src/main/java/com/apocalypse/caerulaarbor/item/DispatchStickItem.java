@@ -1,8 +1,6 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
-import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -41,34 +39,27 @@ public class DispatchStickItem extends Item {
 
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level world, Player entity, InteractionHand hand) {
-		InteractionResultHolder<ItemStack> ar = super.use(world, entity, hand);
-        {
-            final Vec3 _center = new Vec3(entity.getX(), entity.getY(), entity.getZ());
-            List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(64 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-            for (Entity entityiterator : _entfound) {
-                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
-                    if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                        _entity.addEffect(new MobEffectInstance(CAMobEffects.ANGER_OF_TIDE.get(), 131072, 0, false, true));
-                }
+        final Vec3 _center = new Vec3(entity.getX(), entity.getY(), entity.getZ());
+        List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(64 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+        for (Entity entityiterator : _entfound) {
+            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
+                    _entity.addEffect(new MobEffectInstance(CAMobEffects.ANGER_OF_TIDE.get(), 131072, 0, false, true));
             }
         }
-        return ar;
+        return super.use(world, entity, hand);
 	}
 
 	@Override
 	public boolean hurtEnemy(ItemStack itemstack, LivingEntity entity, LivingEntity sourceentity) {
 		boolean retval = super.hurtEnemy(itemstack, entity, sourceentity);
         LevelAccessor world = entity.level();
-        if (entity != null) {
-            {
-                final Vec3 _center = new Vec3(entity.getX(), entity.getY(), entity.getZ());
-                List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(64 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                for (Entity entityiterator : _entfound) {
-                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring"))) && !(entity == entityiterator)) {
-                        if (entityiterator instanceof Mob _entity && (Entity) entity instanceof LivingEntity _ent)
-                            _entity.setTarget(_ent);
-                    }
-                }
+        final Vec3 _center = new Vec3(entity.getX(), entity.getY(), entity.getZ());
+        List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(64 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
+        for (Entity entityiterator : _entfound) {
+            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring"))) && !(entity == entityiterator)) {
+                if (entityiterator instanceof Mob _entity && (Entity) entity instanceof LivingEntity _ent)
+                    _entity.setTarget(_ent);
             }
         }
         return retval;

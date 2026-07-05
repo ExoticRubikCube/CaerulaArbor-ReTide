@@ -38,7 +38,7 @@ public class OceanizedShulkerModel extends GeoModel<OceanizedShulkerEntity> {
 	}
 
 	@Override
-	public void setCustomAnimations(OceanizedShulkerEntity animatable, long instanceId, AnimationState animationState) {
+	public void setCustomAnimations(OceanizedShulkerEntity animatable, long instanceId, AnimationState<OceanizedShulkerEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("head");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);

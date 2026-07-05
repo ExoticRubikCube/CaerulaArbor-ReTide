@@ -39,7 +39,6 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -132,16 +131,6 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
         this.goalSelector.addGoal(6, new RandomStrollGoal(this, 1));
         this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(8, new FloatGoal(this));
-    }
-
-    @Override
-    public MobType getMobType() {
-        return MobType.UNDEFINED;
-    }
-
-    @Override
-    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
-        return false;
     }
 
     @Override
@@ -401,7 +390,7 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
                         }
                         if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunters")))) {
                             if (!(entityiterator instanceof LivingEntity _livEnt3 && _livEnt3.hasEffect(CAMobEffects.ADD_ATTACK_PERCLY.get()))) {
-                                if (entityiterator instanceof LivingEntity _entity && !this.level().isClientSide())
+                                if (entityiterator instanceof LivingEntity && !this.level().isClientSide())
                                     this.addEffect(new MobEffectInstance(CAMobEffects.ADD_ATTACK_PERCLY.get(), 32768, 0, false, false));
                             }
                         }
@@ -422,11 +411,6 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
         SkadiEntity retval = CAEntities.SKADI.get().create(serverWorld);
         retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null, null);
         return retval;
-    }
-
-    @Override
-    public boolean isFood(ItemStack stack) {
-        return List.of().contains(stack.getItem());
     }
 
     @Override
@@ -473,7 +457,7 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
         return builder;
     }
 
-    private PlayState movementPredicate(AnimationState event) {
+    private PlayState movementPredicate(AnimationState<?> event) {
         if (this.animationprocedure.equals("empty")) {
             if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
 
@@ -491,10 +475,9 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
         return PlayState.STOP;
     }
 
-    private PlayState attackingPredicate(AnimationState event) {
+    private PlayState attackingPredicate(AnimationState<?> event) {
         double d1 = this.getX() - this.xOld;
         double d0 = this.getZ() - this.zOld;
-        float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
             this.swinging = true;
             this.lastSwing = level().getGameTime();
@@ -511,7 +494,7 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 
     String prevAnim = "empty";
 
-    private PlayState procedurePredicate(AnimationState event) {
+    private PlayState procedurePredicate(AnimationState<?> event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
             if (!this.animationprocedure.equals(prevAnim))
                 event.getController().forceAnimationReset();

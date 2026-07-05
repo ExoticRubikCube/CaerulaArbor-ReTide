@@ -8,6 +8,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -25,7 +26,6 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.sounds.SoundEvents;
 
 import java.util.List;
 
@@ -101,12 +101,9 @@ public class OmniKeyItem extends Item {
                             world.setBlock(_pos, _bs.setValue(_booleanProp, false), 3);
                     }
                 });
-                {
-                    ItemStack _ist = itemstack;
-                    if (_ist.hurt(1, RandomSource.create(), null)) {
-                        _ist.shrink(1);
-                        _ist.setDamageValue(0);
-                    }
+                if (itemstack.hurt(1, RandomSource.create(), null)) {
+                    itemstack.shrink(1);
+                    itemstack.setDamageValue(0);
                 }
             }
             return InteractionResult.SUCCESS;

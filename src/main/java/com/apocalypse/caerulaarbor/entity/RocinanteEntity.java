@@ -118,11 +118,6 @@ public class RocinanteEntity extends Animal implements GeoEntity, SyncedAnimatio
     }
 
     @Override
-    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
-        return false;
-    }
-
-    @Override
     public double getPassengersRidingOffset() {
         return super.getPassengersRidingOffset() - 0.5;
     }
@@ -267,7 +262,7 @@ public class RocinanteEntity extends Animal implements GeoEntity, SyncedAnimatio
         return builder;
     }
 
-    private PlayState movementPredicate(AnimationState event) {
+    private PlayState movementPredicate(AnimationState<?> event) {
         if (this.animationprocedure.equals("empty")) {
             if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) && !this.isVehicle()) {
                 return event.setAndContinue(RawAnimation.begin().thenLoop("animation.rocinante.move"));
@@ -285,7 +280,7 @@ public class RocinanteEntity extends Animal implements GeoEntity, SyncedAnimatio
 
     String prevAnim = "empty";
 
-    private PlayState procedurePredicate(AnimationState event) {
+    private PlayState procedurePredicate(AnimationState<?> event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
             if (!this.animationprocedure.equals(prevAnim))
                 event.getController().forceAnimationReset();

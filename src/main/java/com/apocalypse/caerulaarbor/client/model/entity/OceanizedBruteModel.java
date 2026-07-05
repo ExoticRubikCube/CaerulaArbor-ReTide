@@ -29,7 +29,7 @@ public class OceanizedBruteModel extends GeoModel<OceanizedBruteEntity> {
 	}
 
 	@Override
-	public void setCustomAnimations(OceanizedBruteEntity animatable, long instanceId, AnimationState animationState) {
+	public void setCustomAnimations(OceanizedBruteEntity animatable, long instanceId, AnimationState<OceanizedBruteEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("head");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);

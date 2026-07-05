@@ -29,7 +29,7 @@ public class OceanizedVillagerModel extends GeoModel<OceanizedVillagerEntity> {
 	}
 
 	@Override
-	public void setCustomAnimations(OceanizedVillagerEntity animatable, long instanceId, AnimationState animationState) {
+	public void setCustomAnimations(OceanizedVillagerEntity animatable, long instanceId, AnimationState<OceanizedVillagerEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("head");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);

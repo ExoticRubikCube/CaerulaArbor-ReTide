@@ -4,7 +4,6 @@ package com.apocalypse.caerulaarbor.item;
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
-import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
@@ -36,8 +35,7 @@ public class EchoJellyItem extends Item {
 
 	@Override
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
-		ItemStack retval = super.finishUsingItem(itemstack, world, entity);
-		entity.clearFire();
+        entity.clearFire();
 		if (!entity.level().isClientSide()) {
 			entity.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 80, 0));
 			entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_ATTACK_PERCLY.get(), 700, 2));
@@ -49,6 +47,6 @@ public class EchoJellyItem extends Item {
 			capability.player_light = _setval;
 			capability.syncPlayerVariables(entity);
 		});
-		return retval;
+		return super.finishUsingItem(itemstack, world, entity);
 	}
 }

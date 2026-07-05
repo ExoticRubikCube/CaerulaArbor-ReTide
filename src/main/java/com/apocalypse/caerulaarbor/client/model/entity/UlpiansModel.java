@@ -1,7 +1,6 @@
 package com.apocalypse.caerulaarbor.client.model.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.entity.UlpiansEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -28,7 +27,7 @@ public class UlpiansModel extends GeoModel<UlpiansEntity> {
 	}
 
 	@Override
-	public void setCustomAnimations(UlpiansEntity animatable, long instanceId, AnimationState animationState) {
+	public void setCustomAnimations(UlpiansEntity animatable, long instanceId, AnimationState<UlpiansEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("Head");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);

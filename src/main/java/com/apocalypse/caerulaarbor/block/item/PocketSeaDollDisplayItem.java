@@ -22,7 +22,7 @@ public class PocketSeaDollDisplayItem extends BlockItem implements GeoItem {
 		super(block, settings);
 	}
 
-	private PlayState predicate(AnimationState event) {
+	private PlayState predicate(AnimationState<?> event) {
 		return PlayState.CONTINUE;
 	}
 

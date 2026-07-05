@@ -29,7 +29,7 @@ public class JuniorWarriorPriestModel extends GeoModel<JuniorWarriorPriestEntity
 	}
 
 	@Override
-	public void setCustomAnimations(JuniorWarriorPriestEntity animatable, long instanceId, AnimationState animationState) {
+	public void setCustomAnimations(JuniorWarriorPriestEntity animatable, long instanceId, AnimationState<JuniorWarriorPriestEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("Head");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);

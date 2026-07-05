@@ -32,7 +32,6 @@ public class GuardianStareItem extends Item {
 	@Override
 	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
 		super.appendHoverText(itemstack, level, list, flag);
-		Entity entity = itemstack.getEntityRepresentation();
 		String hoverText = ItemUtils.getOneUseItemDescription(itemstack);
         for (String line : hoverText.split("\n")) {
             list.add(Component.literal(line));

@@ -22,7 +22,7 @@ public class TrailriteArmorstandDisplayItem extends BlockItem implements GeoItem
 		super(block, settings);
 	}
 
-	private PlayState predicate(AnimationState event) {
+	private PlayState predicate(AnimationState<?> event) {
 		return PlayState.CONTINUE;
 	}
 

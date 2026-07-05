@@ -177,16 +177,6 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
     }
 
     @Override
-    public MobType getMobType() {
-        return MobType.UNDEFINED;
-    }
-
-    @Override
-    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
-        return false;
-    }
-
-    @Override
     public SoundEvent getHurtSound(DamageSource ds) {
         return CASounds.LAST_KNIGHT_HIT.get();
     }
@@ -305,7 +295,7 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
                     for (Entity entityiterator : _entfound) {
                         if (entityiterator.getTicksFrozen() >= 125 && entityiterator.isAlive()) {
                             entityiterator.setTicksFrozen(200);
-                            if (entityiterator instanceof LivingEntity _entity && !this.level().isClientSide())
+                            if (entityiterator instanceof LivingEntity && !this.level().isClientSide())
                                 this.addEffect(new MobEffectInstance(CAMobEffects.FROZEN.get(), 20, 0, false, false));
                         }
                     }
@@ -376,7 +366,7 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
                                             entityiterator.hurt(
                                                     new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "last_knight_attack"))), this),
                                                     (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 2));
-                                            if (entityiterator instanceof LivingEntity _entity && !this.level().isClientSide())
+                                            if (entityiterator instanceof LivingEntity && !this.level().isClientSide())
                                                 this.addEffect(new MobEffectInstance(CAMobEffects.ROCK_BREAK.get(), 150, 0, false, false));
                                             entityiterator.push(0, (-1), 0);
                                         });
@@ -401,11 +391,6 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
         LastKnightAndHorseEntity retval = CAEntities.LAST_KNIGHT_AND_HORSE.get().create(serverWorld);
         retval.finalizeSpawn(serverWorld, serverWorld.getCurrentDifficultyAt(retval.blockPosition()), MobSpawnType.BREEDING, null, null);
         return retval;
-    }
-
-    @Override
-    public boolean isFood(ItemStack stack) {
-        return List.of().contains(stack.getItem());
     }
 
     @Override
@@ -466,7 +451,7 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
         return builder;
     }
 
-    private PlayState movementPredicate(AnimationState event) {
+    private PlayState movementPredicate(AnimationState<?> event) {
         if (this.animationprocedure.equals("empty")) {
             if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
 
@@ -481,7 +466,7 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
         return PlayState.STOP;
     }
 
-    private PlayState attackingPredicate(AnimationState event) {
+    private PlayState attackingPredicate(AnimationState<?> event) {
         double d1 = this.getX() - this.xOld;
         double d0 = this.getZ() - this.zOld;
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
@@ -500,7 +485,7 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
 
     String prevAnim = "empty";
 
-    private PlayState procedurePredicate(AnimationState event) {
+    private PlayState procedurePredicate(AnimationState<?> event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
             if (!this.animationprocedure.equals(prevAnim))
                 event.getController().forceAnimationReset();

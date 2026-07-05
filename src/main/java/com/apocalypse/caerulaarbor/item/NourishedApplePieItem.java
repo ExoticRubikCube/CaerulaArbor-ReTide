@@ -37,6 +37,7 @@ public class NourishedApplePieItem extends Item {
 	@Override
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
 		ItemStack retval = super.finishUsingItem(itemstack, world, entity);
+		//TODO 修改为使用.effect()
 		if (!entity.level().isClientSide()) {
 			entity.addEffect(new MobEffectInstance(MobEffects.LEVITATION, 30, 0));
 			entity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 800, 2));

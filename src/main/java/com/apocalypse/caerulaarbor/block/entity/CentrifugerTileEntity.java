@@ -43,7 +43,7 @@ public class CentrifugerTileEntity extends RandomizableContainerBlockEntity impl
 		super(CABlockEntities.CENTRIFUGER.get(), pos, state);
 	}
 
-	private PlayState predicate(AnimationState event) {
+	private PlayState predicate(AnimationState<?> event) {
 		String animationprocedure = ("" + this.getBlockState().getValue(CentrifugerBlock.DATA_ANIMATION));
 		if (animationprocedure.equals("0")) {
 			return event.setAndContinue(RawAnimation.begin().thenLoop(animationprocedure));
@@ -53,7 +53,7 @@ public class CentrifugerTileEntity extends RandomizableContainerBlockEntity impl
 
 	String prevAnim = "0";
 
-	private PlayState procedurePredicate(AnimationState event) {
+	private PlayState procedurePredicate(AnimationState<?> event) {
 		String animationprocedure = ("" + this.getBlockState().getValue(CentrifugerBlock.DATA_ANIMATION));
 		if (!animationprocedure.equals("0") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!animationprocedure.equals(prevAnim) && !animationprocedure.equals("0"))) {
 			if (!animationprocedure.equals(prevAnim))

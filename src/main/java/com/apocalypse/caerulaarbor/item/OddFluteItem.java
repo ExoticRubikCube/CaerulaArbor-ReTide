@@ -1,10 +1,10 @@
 
 package com.apocalypse.caerulaarbor.item;
 
-import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
-import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CASounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
@@ -22,7 +22,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import com.apocalypse.caerulaarbor.init.CASounds;
 
 import java.util.List;
 
@@ -61,41 +60,39 @@ public class OddFluteItem extends Item {
 		double x = entity.getX();
 		double y = entity.getY();
 		double z = entity.getZ();
-        if (entity != null) {
-            if (!itemstack.getOrCreateTag().getBoolean("used")) {
-                for (int index0 = 0; index0 < 7; index0++) {
-                    if ((LevelAccessor) world instanceof ServerLevel _level)
-                        _level.addFreshEntity(new ExperienceOrb(_level, (x + Mth.nextDouble(RandomSource.create(), -1, 1)), (y + Mth.nextDouble(RandomSource.create(), 0.6, 0.75)), (z + Mth.nextDouble(RandomSource.create(), -1, 1)), 4));
-                }
-                if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                    _entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_REACH.get(), 300, 0, false, false));
-                {
-                    boolean _setval = true;
-                    ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                        capability.relic_util_FLUTE = _setval;
-                        capability.syncPlayerVariables(entity);
-                    });
-                }
-                itemstack.getOrCreateTag().putBoolean("used", true);
+        if (!itemstack.getOrCreateTag().getBoolean("used")) {
+            for (int index0 = 0; index0 < 7; index0++) {
+                if ((LevelAccessor) world instanceof ServerLevel _level)
+                    _level.addFreshEntity(new ExperienceOrb(_level, (x + Mth.nextDouble(RandomSource.create(), -1, 1)), (y + Mth.nextDouble(RandomSource.create(), 0.6, 0.75)), (z + Mth.nextDouble(RandomSource.create(), -1, 1)), 4));
             }
-            if ((LevelAccessor) world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), CASounds.FLUTESONG.get(), SoundSource.NEUTRAL, 2, 1);
+            if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
+                _entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_REACH.get(), 300, 0, false, false));
+            {
+                boolean _setval = true;
+                ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                    capability.relic_util_FLUTE = _setval;
+                    capability.syncPlayerVariables(entity);
+                });
             }
-            new Object() {
-                void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
-                    if ((LevelAccessor) world instanceof ServerLevel _level)
-                        _level.sendParticles(ParticleTypes.NOTE, x, y, z, 1, 1, 1, 1, 1);
-                    final int tick2 = ticks;
-                    CaerulaArborMod.queueServerWork(tick2, () -> {
-                        if (timedlooptotal > timedloopiterator + 1) {
-                            timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
-                        }
-                    });
-                }
-            }.timedLoop(0, 192, 1);
-            if ((Entity) entity instanceof Player _player)
-                _player.getCooldowns().addCooldown(itemstack.getItem(), 280);
+            itemstack.getOrCreateTag().putBoolean("used", true);
         }
+        if ((LevelAccessor) world instanceof Level _level) {
+                _level.playSound(null, BlockPos.containing(x, y, z), CASounds.FLUTESONG.get(), SoundSource.NEUTRAL, 2, 1);
+        }
+        new Object() {
+            void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
+                if ((LevelAccessor) world instanceof ServerLevel _level)
+                    _level.sendParticles(ParticleTypes.NOTE, x, y, z, 1, 1, 1, 1, 1);
+                final int tick2 = ticks;
+                CaerulaArborMod.queueServerWork(tick2, () -> {
+                    if (timedlooptotal > timedloopiterator + 1) {
+                        timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
+                    }
+                });
+            }
+        }.timedLoop(0, 192, 1);
+        if ((Entity) entity instanceof Player _player)
+            _player.getCooldowns().addCooldown(itemstack.getItem(), 280);
         return retval;
 	}
 }

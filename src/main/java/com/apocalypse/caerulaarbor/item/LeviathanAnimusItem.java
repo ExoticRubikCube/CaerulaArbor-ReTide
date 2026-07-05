@@ -46,9 +46,8 @@ public class LeviathanAnimusItem extends Item {
 
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level world, Player entity, InteractionHand hand) {
-		InteractionResultHolder<ItemStack> ar = super.use(world, entity, hand);
-		entity.startUsingItem(hand);
-		return ar;
+        entity.startUsingItem(hand);
+		return super.use(world, entity, hand);
 	}
 
 	@Override

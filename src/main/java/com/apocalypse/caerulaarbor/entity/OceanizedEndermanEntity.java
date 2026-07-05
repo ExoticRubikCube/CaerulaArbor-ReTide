@@ -205,8 +205,7 @@ public class OceanizedEndermanEntity extends SeaMonster {
                     validY = findValidTeleportY(world, tX, y, tZ);
                     if (!Double.isNaN(validY)) {
                         this.teleportTo(x, y, z, tX, validY, tZ);
-                        if ((Entity) this instanceof LivingEntity _entity)
-                            _entity.setHealth((float) (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) + ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.075));
+                        this.setHealth((float) (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) + ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.075));
                         break;
                     }
                 }
@@ -266,9 +265,9 @@ public class OceanizedEndermanEntity extends SeaMonster {
         return true;
     }
 
-    private boolean teleportTo(double fromX, double fromY, double fromZ, double toX, double toY, double toZ) {
+    private void teleportTo(double fromX, double fromY, double fromZ, double toX, double toY, double toZ) {
         if (!this.isAlive()) {
-            return false;
+            return;
         }
         double vx = toX - fromX;
         double vy = toY - fromY;
@@ -277,7 +276,7 @@ public class OceanizedEndermanEntity extends SeaMonster {
         Vec3 previousPosition = new Vec3(fromX, fromY, fromZ);
         boolean teleported = this.randomTeleport(toX, toY, toZ, true);
         if (!teleported) {
-            return false;
+            return;
         }
         this.level().gameEvent(GameEvent.TELEPORT, previousPosition, GameEvent.Context.of(this));
         if (!this.isSilent()) {
@@ -291,7 +290,6 @@ public class OceanizedEndermanEntity extends SeaMonster {
             }
         }
         this.clearFire();
-        return true;
     }
 
 	@Override
@@ -339,9 +337,6 @@ public class OceanizedEndermanEntity extends SeaMonster {
                         _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ENDERMAN_STARE, SoundSource.HOSTILE, 1, 1);
                     }
                     CaerulaArborMod.queueServerWork(13, () -> {
-                        if (this == null)
-                            return;
-                        double sklp1 = 0;
                         Entity enemy1;
                         enemy1 = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                         if (!(enemy1 == null)) {
@@ -396,7 +391,7 @@ public class OceanizedEndermanEntity extends SeaMonster {
                         _datEntSetI.getEntityData().set(DATA_SKILLP, (int) (sklp - 1));
                 }
                 if (cool <= 0 && enemy.isAlive()) {
-                    if ((enemy != null ? distanceTo(enemy) : -1) >= 8 && !((Entity) this instanceof LivingEntity _livEnt13 && _livEnt13.hasEffect(CAMobEffects.COOLDOWN_SINAL.get()))) {
+                    if (distanceTo(enemy) >= 8 && !((Entity) this instanceof LivingEntity _livEnt13 && _livEnt13.hasEffect(CAMobEffects.COOLDOWN_SINAL.get()))) {
                         if ((Entity) this instanceof OceanizedEndermanEntity _datEntSetI)
                             _datEntSetI.getEntityData().set(DATA_COOLDOWN, 100);
                         this.teleportTo(x, y, z, enemy.getX(), enemy.getY(), enemy.getZ());
@@ -430,7 +425,7 @@ public class OceanizedEndermanEntity extends SeaMonster {
         return builder;
     }
 
-    private PlayState movementPredicate(AnimationState event) {
+    private PlayState movementPredicate(AnimationState<?> event) {
         if (this.animationprocedure.equals("empty")) {
             if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
 
@@ -448,10 +443,7 @@ public class OceanizedEndermanEntity extends SeaMonster {
         return PlayState.STOP;
     }
 
-    private PlayState attackingPredicate(AnimationState event) {
-        double d1 = this.getX() - this.xOld;
-        double d0 = this.getZ() - this.zOld;
-        float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
+    private PlayState attackingPredicate(AnimationState<?> event) {
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
             this.swinging = true;
             this.lastSwing = level().getGameTime();
@@ -468,7 +460,7 @@ public class OceanizedEndermanEntity extends SeaMonster {
 
     String prevAnim = "empty";
 
-    private PlayState procedurePredicate(AnimationState event) {
+    private PlayState procedurePredicate(AnimationState<?> event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
             if (!this.animationprocedure.equals(prevAnim))
                 event.getController().forceAnimationReset();

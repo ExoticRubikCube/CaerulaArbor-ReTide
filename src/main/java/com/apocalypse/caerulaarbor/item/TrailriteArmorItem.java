@@ -120,7 +120,7 @@ public class TrailriteArmorItem extends ArmorItem implements GeoItem, SyncedAnim
         super.setDamage(stack,Math.min(damage,this.getDamage(stack)+1));
     }
 
-	private PlayState predicate(AnimationState event) {
+	private PlayState predicate(AnimationState<?> event) {
 		if (this.animationprocedure.equals("empty")) {
 			event.getController().setAnimation(RawAnimation.begin().thenLoop("animation.trairite_armor.idle"));
 			Entity entity = (Entity) event.getData(DataTickets.ENTITY);
@@ -153,7 +153,7 @@ public class TrailriteArmorItem extends ArmorItem implements GeoItem, SyncedAnim
 
 	String prevAnim = "empty";
 
-	private PlayState procedurePredicate(AnimationState event) {
+	private PlayState procedurePredicate(AnimationState<?> event) {
 		if (!this.animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
 			if (!this.animationprocedure.equals(prevAnim))
 				event.getController().forceAnimationReset();

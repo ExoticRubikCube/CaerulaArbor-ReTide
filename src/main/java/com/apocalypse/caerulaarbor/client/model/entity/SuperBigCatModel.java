@@ -29,7 +29,7 @@ public class SuperBigCatModel extends GeoModel<SuperBigCatEntity> {
 	}
 
 	@Override
-	public void setCustomAnimations(SuperBigCatEntity animatable, long instanceId, AnimationState animationState) {
+	public void setCustomAnimations(SuperBigCatEntity animatable, long instanceId, AnimationState<SuperBigCatEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("head");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);

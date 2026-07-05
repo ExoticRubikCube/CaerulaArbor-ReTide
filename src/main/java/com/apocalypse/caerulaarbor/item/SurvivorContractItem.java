@@ -42,22 +42,20 @@ public class SurvivorContractItem extends Item {
         double y = entity.getY();
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
-        if (entity != null) {
-            if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_SURVIVOR < 0) {
-                if ((LevelAccessor) world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.BEACON_ACTIVATE, SoundSource.NEUTRAL, (float) 3.2, 1);
-                }
-                if ((LevelAccessor) world instanceof ServerLevel _level)
-                    _level.sendParticles(ParticleTypes.GLOW, x, y, z, 72, 1, 1, 1, 1);
-                if (((LevelAccessor) world).isClientSide())
-                    Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);
-                {
-                    double _setval = 0;
-                    ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                        capability.relic_SURVIVOR = _setval;
-                        capability.syncPlayerVariables(entity);
-                    });
-                }
+        if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_SURVIVOR < 0) {
+            if ((LevelAccessor) world instanceof Level _level) {
+                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.BEACON_ACTIVATE, SoundSource.NEUTRAL, (float) 3.2, 1);
+            }
+            if ((LevelAccessor) world instanceof ServerLevel _level)
+                _level.sendParticles(ParticleTypes.GLOW, x, y, z, 72, 1, 1, 1, 1);
+            if (((LevelAccessor) world).isClientSide())
+                Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);
+            {
+                double _setval = 0;
+                ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                    capability.relic_SURVIVOR = _setval;
+                    capability.syncPlayerVariables(entity);
+                });
             }
         }
         return ar;

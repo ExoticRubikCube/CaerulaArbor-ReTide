@@ -48,13 +48,10 @@ public class ArchfiendsBedItem extends Item {
             }
             if ((LevelAccessor) world instanceof ServerLevel _level)
                 _level.sendParticles(ParticleTypes.DRIPPING_LAVA, x, y, z, 72, 1, 1, 1, 1);
-            {
-                boolean _setval = true;
-                ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                    capability.relic_archfi_BED = _setval;
-                    capability.syncPlayerVariables(entity);
-                });
-            }
+            ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                capability.relic_archfi_BED = true;
+                capability.syncPlayerVariables(entity);
+            });
             if (((LevelAccessor) world).isClientSide())
                 Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);
         }

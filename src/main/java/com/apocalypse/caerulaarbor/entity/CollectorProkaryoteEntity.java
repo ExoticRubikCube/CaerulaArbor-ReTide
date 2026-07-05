@@ -120,7 +120,7 @@ public class CollectorProkaryoteEntity extends SeaMonster implements Bucketable 
 				return this.mob.getBbWidth() * this.mob.getBbWidth() + entity.getBbWidth();
 			}
 		});
-		this.targetSelector.addGoal(8, new NearestAttackableTargetGoal(this, Player.class, 10, true, false, target -> EntityUtils.isOceanizedPlayerNearby(this.level(), this.getX(), this.getY(), this.getZ())));
+		this.targetSelector.addGoal(8, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, target -> EntityUtils.isOceanizedPlayerNearby(this.level(), this.getX(), this.getY(), this.getZ())));
 		this.goalSelector.addGoal(9, new RandomSwimmingGoal(this, 1, 40));
 		this.goalSelector.addGoal(10, new RandomLookAroundGoal(this));
 	}
@@ -239,8 +239,6 @@ public class CollectorProkaryoteEntity extends SeaMonster implements Bucketable 
 		this.refreshDimensions();
 	}
 
-	
-
 	@Override
 	public boolean canBreatheUnderwater() {
 		return true;
@@ -276,14 +274,14 @@ public class CollectorProkaryoteEntity extends SeaMonster implements Bucketable 
 		return builder;
 	}
 
-	private PlayState movementPredicate(AnimationState event) {
+	private PlayState movementPredicate(AnimationState<?> event) {
 		if (this.animationprocedure.equals("empty")) {
 			return event.setAndContinue(RawAnimation.begin().thenLoop("animation.collector.idle"));
 		}
 		return PlayState.STOP;
 	}
 
-	private PlayState attackingPredicate(AnimationState event) {
+	private PlayState attackingPredicate(AnimationState<?> event) {
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
@@ -300,7 +298,7 @@ public class CollectorProkaryoteEntity extends SeaMonster implements Bucketable 
 
 	String prevAnim = "empty";
 
-	private PlayState procedurePredicate(AnimationState event) {
+	private PlayState procedurePredicate(AnimationState<?> event) {
 		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
 			if (!this.animationprocedure.equals(prevAnim))
 				event.getController().forceAnimationReset();

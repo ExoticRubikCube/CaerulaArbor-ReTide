@@ -28,8 +28,7 @@ public class GeneSampleSuperbItem extends Item {
 
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level world, Player entity, InteractionHand hand) {
-		InteractionResultHolder<ItemStack> ar = super.use(world, entity, hand);
-		EntityUtils.givePlayerReserve(world, entity.getX(), entity.getY(), entity.getZ(), entity, ar.getObject());
-		return ar;
+        EntityUtils.givePlayerReserve(world, entity.getX(), entity.getY(), entity.getZ(), entity, super.use(world, entity, hand).getObject());
+		return super.use(world, entity, hand);
 	}
 }

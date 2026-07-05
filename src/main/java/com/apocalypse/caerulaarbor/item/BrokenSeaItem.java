@@ -73,15 +73,13 @@ public class BrokenSeaItem extends SwordItem {
         double x = entity.getX();
         double y = entity.getY();
         double z = entity.getZ();
-        if (entity != null && sourceentity != null) {
-            if (((Entity) sourceentity instanceof Player _plr ? _plr.getAttackStrengthScale(0) : 0) > 0.9) {
-                if (Math.random() < 0.5 && !(entity instanceof Player)) {
-                    if (world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), CASounds.GLADIIA_ATTACK_HIT.get(), SoundSource.PLAYERS, 1, 1);
-                    }
-                    if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                        _entity.addEffect(new MobEffectInstance(CAMobEffects.HAEMOPHILIA.get(), 260, 1, false, false));
+        if ((sourceentity instanceof Player _plr ? _plr.getAttackStrengthScale(0) : 0) > 0.9) {
+            if (Math.random() < 0.5 && !(entity instanceof Player)) {
+                if (world instanceof Level _level) {
+                    _level.playSound(null, BlockPos.containing(x, y, z), CASounds.GLADIIA_ATTACK_HIT.get(), SoundSource.PLAYERS, 1, 1);
                 }
+                if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
+                    _entity.addEffect(new MobEffectInstance(CAMobEffects.HAEMOPHILIA.get(), 260, 1, false, false));
             }
         }
         return retval;

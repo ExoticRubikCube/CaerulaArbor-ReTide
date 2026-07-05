@@ -29,7 +29,7 @@ public class OceanizedWolfModel extends GeoModel<OceanizedWolfEntity> {
 	}
 
 	@Override
-	public void setCustomAnimations(OceanizedWolfEntity animatable, long instanceId, AnimationState animationState) {
+	public void setCustomAnimations(OceanizedWolfEntity animatable, long instanceId, AnimationState<OceanizedWolfEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("head");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);

@@ -129,11 +129,6 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
     }
 
     @Override
-    public MobType getMobType() {
-        return MobType.UNDEFINED;
-    }
-
-    @Override
     public SoundEvent getHurtSound(DamageSource ds) {
         return SoundEvents.GENERIC_HURT;
     }
@@ -177,71 +172,67 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if (this != null) {
-            double sklp1 = 0;
-            String uuid2;
-            String uuid1;
-            Entity enemy;
-            Entity owner = null;
-            if (tickCount >= 1200) {
-                if (!level().isClientSide())
-                    discard();
-            }
-            if (this.isAlive()) {
-                clearFire();
-                setAirSupply(20);
-                uuid2 = (Entity) this instanceof MoistDragonBreathEntity _datEntS ? _datEntS.getEntityData().get(DATA_TARGET) : "";
-                uuid1 = (Entity) this instanceof MoistDragonBreathEntity _datEntS ? _datEntS.getEntityData().get(DATA_OWNER) : "";
-                enemy = new Object() {
-                    Entity entityFromStringUUID(String uuid3, Level world) {
-                        Entity _uuidentity = null;
-                        if (world instanceof ServerLevel _server) {
-                            try {
-                                _uuidentity = _server.getEntity(UUID.fromString(uuid3));
-                            } catch (Exception e) {
-                            }
+        String uuid2;
+        String uuid1;
+        Entity enemy;
+        if (tickCount >= 1200) {
+            if (!level().isClientSide())
+                discard();
+        }
+        if (this.isAlive()) {
+            clearFire();
+            setAirSupply(20);
+            uuid2 = (Entity) this instanceof MoistDragonBreathEntity _datEntS ? _datEntS.getEntityData().get(DATA_TARGET) : "";
+            uuid1 = (Entity) this instanceof MoistDragonBreathEntity _datEntS ? _datEntS.getEntityData().get(DATA_OWNER) : "";
+            enemy = new Object() {
+                Entity entityFromStringUUID(String uuid3, Level world) {
+                    Entity _uuidentity = null;
+                    if (world instanceof ServerLevel _server) {
+                        try {
+                            _uuidentity = _server.getEntity(UUID.fromString(uuid3));
+                        } catch (Exception ignored) {
                         }
-                        return _uuidentity;
                     }
-                }.entityFromStringUUID(uuid2, (Level) world);
-                new Object() {
-                    Entity entityFromStringUUID(String uuid3, Level world) {
-                        Entity _uuidentity = null;
-                        if (world instanceof ServerLevel _server) {
-                            try {
-                                _uuidentity = _server.getEntity(UUID.fromString(uuid3));
-                            } catch (Exception e) {
-                            }
+                    return _uuidentity;
+                }
+            }.entityFromStringUUID(uuid2, (Level) world);
+            new Object() {
+                Entity entityFromStringUUID(String uuid3, Level world) {
+                    Entity _uuidentity = null;
+                    if (world instanceof ServerLevel _server) {
+                        try {
+                            _uuidentity = _server.getEntity(UUID.fromString(uuid3));
+                        } catch (Exception ignored) {
                         }
-                        return _uuidentity;
                     }
-                }.entityFromStringUUID(uuid1, (Level) world);
-                if (world instanceof ServerLevel _level)
-                    _level.sendParticles(CAParticles.EDERMAN_PTC.get(), x, (y + 0.25), z, 3, 0.1, 0.1, 0.1, 0.1);
-                if (!(enemy == null) && enemy.isAlive()) {
-                    ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY() + 0.5), (enemy.getZ())));
-                    if (tickCount > 20) {
-                        if (distanceTo(enemy) > 0.5) {
-                            Vec3 offset = position()
-                                    .vectorTo(enemy.position().add(0, 0.25, 0));
-                            if (offset.lengthSqr() <= 0.05) {
-                                setDeltaMovement(Vec3.ZERO);
-                            } else {
-                                offset = offset.normalize().scale(0.4);
-                                setDeltaMovement(offset);
-                            }
+                    return _uuidentity;
+                }
+            }.entityFromStringUUID(uuid1, (Level) world);
+            if (world instanceof ServerLevel _level)
+                _level.sendParticles(CAParticles.EDERMAN_PTC.get(), x, (y + 0.25), z, 3, 0.1, 0.1, 0.1, 0.1);
+            if (!(enemy == null) && enemy.isAlive()) {
+                ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY() + 0.5), (enemy.getZ())));
+                if (tickCount > 20) {
+                    if (distanceTo(enemy) > 0.5) {
+                        Vec3 offset = position()
+                                .vectorTo(enemy.position().add(0, 0.25, 0));
+                        if (offset.lengthSqr() <= 0.05) {
+                            setDeltaMovement(Vec3.ZERO);
                         } else {
-                            dragonBreathExplode(world, x, y, z, this);
+                            offset = offset.normalize().scale(0.4);
+                            setDeltaMovement(offset);
                         }
-                    }
-                } else {
-                    enemy = this.getTarget();
-                    if (!(enemy == null) && enemy.isAlive()) {
-                        if ((Entity) this instanceof MoistDragonBreathEntity _datEntSetS)
-                            _datEntSetS.getEntityData().set(DATA_TARGET, (enemy.getStringUUID()));
                     } else {
                         dragonBreathExplode(world, x, y, z, this);
                     }
+                }
+            } else {
+                enemy = this.getTarget();
+                if (!(enemy == null) && enemy.isAlive()) {
+                    if ((Entity) this instanceof MoistDragonBreathEntity _datEntSetS)
+                        _datEntSetS.getEntityData().set(DATA_TARGET, (enemy.getStringUUID()));
+                } else {
+                    dragonBreathExplode(world, x, y, z, this);
                 }
             }
         }
@@ -296,7 +287,7 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
         return builder;
     }
 
-    private PlayState movementPredicate(AnimationState event) {
+    private PlayState movementPredicate(AnimationState<?> event) {
         if (this.animationprocedure.equals("empty")) {
             return event.setAndContinue(RawAnimation.begin().thenLoop("animation.moist_dragon_breath.idle"));
         }
@@ -305,7 +296,7 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
 
     String prevAnim = "empty";
 
-    private PlayState procedurePredicate(AnimationState event) {
+    private PlayState procedurePredicate(AnimationState<?> event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
             if (!this.animationprocedure.equals(prevAnim))
                 event.getController().forceAnimationReset();
@@ -417,7 +408,6 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
         String uuid1;
         double d;
         double T;
-        double thita = 0;
         if (world.isClientSide()) {
             return;
         }
@@ -432,7 +422,7 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
                 if (world instanceof ServerLevel _server) {
                     try {
                         _uuidentity = _server.getEntity(UUID.fromString(uuid));
-                    } catch (Exception e) {
+                    } catch (Exception ignored) {
                     }
                 }
                 return _uuidentity;
@@ -444,7 +434,7 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
                 if (world instanceof ServerLevel _server) {
                     try {
                         _uuidentity = _server.getEntity(UUID.fromString(uuid));
-                    } catch (Exception e) {
+                    } catch (Exception ignored) {
                     }
                 }
                 return _uuidentity;

@@ -33,7 +33,7 @@ public class OceanizeRabbitModel extends GeoModel<OceanizeRabbitEntity> {
 	}
 
 	@Override
-	public void setCustomAnimations(OceanizeRabbitEntity animatable, long instanceId, AnimationState animationState) {
+	public void setCustomAnimations(OceanizeRabbitEntity animatable, long instanceId, AnimationState<OceanizeRabbitEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("head");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);

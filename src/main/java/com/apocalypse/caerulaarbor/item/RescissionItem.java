@@ -41,8 +41,7 @@ public class RescissionItem extends Item {
 	@Override
 	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
 		super.appendHoverText(itemstack, level, list, flag);
-		Entity entity = itemstack.getEntityRepresentation();
-		String hoverText = ItemUtils.getOneUseItemDescription(itemstack);
+        String hoverText = ItemUtils.getOneUseItemDescription(itemstack);
         for (String line : hoverText.split("\n")) {
             list.add(Component.literal(line));
         }
@@ -91,20 +90,19 @@ public class RescissionItem extends Item {
                             }
                             if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
                                 _player.displayClientMessage(Component.literal((entityiterator.getDisplayName().getString() + Component.translatable("item.caerula_arbor.language_key.description_2").getString())), false);
-                            if (entityiterator instanceof LivingEntity _entity)
-                                _entity.removeEffect(CAMobEffects.UNTAME_CONFIRM.get());
+                            _livEnt11.removeEffect(CAMobEffects.UNTAME_CONFIRM.get());
                             if ((LevelAccessor) world instanceof ServerLevel _level)
                                 _level.sendParticles(ParticleTypes.ASH, (entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()), 72, 1, 1, 1, 0.5);
                             itemstack.shrink(1);
                             if (entityiterator instanceof Wolf) {
                                 CaerulaArborMod.queueServerWork(Mth.nextInt(RandomSource.create(), 40, 80), () -> {
                                     if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
-                                        _player.displayClientMessage(Component.literal(("\u00A7o" + Component.translatable("item.caerula_arbor.language_key.description_3").getString())), false);
+                                        _player.displayClientMessage(Component.literal(("§o" + Component.translatable("item.caerula_arbor.language_key.description_3").getString())), false);
                                 });
                             }
                         } else {
                             if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
-                                _player.displayClientMessage(Component.literal(("\u00A7c" + Component.translatable("item.caerula_arbor.language_key.description_0").getString() + entityiterator.getDisplayName().getString()
+                                _player.displayClientMessage(Component.literal(("§c" + Component.translatable("item.caerula_arbor.language_key.description_0").getString() + entityiterator.getDisplayName().getString()
                                         + Component.translatable("item.caerula_arbor.language_key.description_1").getString())), false);
                             if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
                                 _entity.addEffect(new MobEffectInstance(CAMobEffects.UNTAME_CONFIRM.get(), 300, 0, false, false));

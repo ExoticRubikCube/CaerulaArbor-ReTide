@@ -29,7 +29,7 @@ public class OceanizedWardenModel extends GeoModel<OceanizedWardenEntity> {
 	}
 
 	@Override
-	public void setCustomAnimations(OceanizedWardenEntity animatable, long instanceId, AnimationState animationState) {
+	public void setCustomAnimations(OceanizedWardenEntity animatable, long instanceId, AnimationState<OceanizedWardenEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("head");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);

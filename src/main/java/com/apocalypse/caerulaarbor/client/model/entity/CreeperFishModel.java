@@ -29,7 +29,7 @@ public class CreeperFishModel extends GeoModel<CreeperFishEntity> {
 	}
 
 	@Override
-	public void setCustomAnimations(CreeperFishEntity animatable, long instanceId, AnimationState animationState) {
+	public void setCustomAnimations(CreeperFishEntity animatable, long instanceId, AnimationState<CreeperFishEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("head");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);

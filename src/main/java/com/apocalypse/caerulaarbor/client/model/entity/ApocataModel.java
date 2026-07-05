@@ -29,7 +29,7 @@ public class ApocataModel extends GeoModel<ApocataEntity> {
 	}
 
 	@Override
-	public void setCustomAnimations(ApocataEntity animatable, long instanceId, AnimationState animationState) {
+	public void setCustomAnimations(ApocataEntity animatable, long instanceId, AnimationState<ApocataEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("realHead");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);

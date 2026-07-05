@@ -29,7 +29,7 @@ public class FirstTellerModel extends GeoModel<FirstTellerEntity> {
 	}
 
 	@Override
-	public void setCustomAnimations(FirstTellerEntity animatable, long instanceId, AnimationState animationState) {
+	public void setCustomAnimations(FirstTellerEntity animatable, long instanceId, AnimationState<FirstTellerEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("head");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);

@@ -38,7 +38,6 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -143,16 +142,6 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
             }
         });
         this.goalSelector.addGoal(8, new FloatGoal(this));
-    }
-
-    @Override
-    public MobType getMobType() {
-        return MobType.UNDEFINED;
-    }
-
-    @Override
-    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
-        return false;
     }
 
     @Override
@@ -313,7 +302,6 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
         double y = this.getY();
         double z = this.getZ();
         Entity enemy;
-        double gap = 0;
         double sklp1;
         double dura;
         double skillp2;
@@ -382,9 +370,9 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                                         if (entityiterator == this) {
                                             continue;
                                         }
-                                        d = entityiterator != null ? distanceTo(entityiterator) : -1;
+                                        d = distanceTo(entityiterator);
                                         if (d <= r && (EntityUtils.getEntityCosine(this, entityiterator) > 0.5 || d <= 3)) {
-                                            if (entityiterator instanceof LivingEntity _entity && !this.level().isClientSide())
+                                            if (entityiterator instanceof LivingEntity && !this.level().isClientSide())
                                                 this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 40, 0, false, false));
                                             entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "anchor_smash"))), this),
                                                     (float) damage);
@@ -396,7 +384,6 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                         CaerulaArborMod.queueServerWork(24, () -> {
                             if (this.isAlive()) {
                                 Entity enemy1;
-                                double damage = 0;
                                 double r;
                                 enemy1 = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                                 r = 4.5;
@@ -423,9 +410,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                                         if (entityiterator == this) {
                                             continue;
                                         }
-                                        if ((entityiterator != null ? distanceTo(entityiterator) : -1) <= r && EntityUtils.getEntityCosine(this, entityiterator) > 0.6) {
-                                            if (entityiterator == null || this == null)
-                                                continue;
+                                        if (distanceTo(entityiterator) <= r && EntityUtils.getEntityCosine(this, entityiterator) > 0.6) {
                                             Vec3 offset = position().add(entityiterator.position().reverse());
                                             if (offset.lengthSqr() <= 0.01) continue;
                                             offset = offset.normalize();
@@ -450,7 +435,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                     _datEntSetI.getEntityData().set(DATA_SKILLP_2, (int) (skillp2 - 1));
             } else {
                 if (!(enemy == null) && enemy.isAlive()) {
-                    if ((enemy != null ? distanceTo(enemy) : -1) <= 24) {
+                    if (distanceTo(enemy) <= 24) {
                         if (this instanceof UlpiansEntity) {
                             this.setAnimation("animation.ulpians.skill");
                         }
@@ -493,13 +478,9 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                                 enemy1 = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
                                 damage = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.5;
                                 if (!(enemy1 == null)) {
-                                    {
-                                        Entity _ent = this;
-                                        _ent.teleportTo((enemy1.getX()), (enemy1.getY()), (enemy1.getZ()));
-                                        if (_ent instanceof ServerPlayer _serverPlayer)
-                                            _serverPlayer.connection.teleport((enemy1.getX()), (enemy1.getY()), (enemy1.getZ()), _ent.getYRot(), _ent.getXRot());
-                                    }
-                                    if (enemy1 instanceof LivingEntity _entity && !this.level().isClientSide())
+                                    Entity _ent = this;
+                                    _ent.teleportTo((enemy1.getX()), (enemy1.getY()), (enemy1.getZ()));
+                                    if (enemy1 instanceof LivingEntity && !this.level().isClientSide())
                                         this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 120, 0, false, false));
                                     enemy1.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "anchor_smash"))), this), (float) damage);
                                 }
@@ -568,11 +549,6 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
     }
 
     @Override
-    public boolean isFood(ItemStack stack) {
-        return List.of().contains(stack.getItem());
-    }
-
-    @Override
     public void aiStep() {
         super.aiStep();
         this.updateSwingTime();
@@ -595,7 +571,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
     private boolean isUlpuansDurative() {
         return this.isAlive() && this.getEntityData().get(DATA_DURATION) <= 0;
     }
-    private PlayState movementPredicate(AnimationState event) {
+    private PlayState movementPredicate(AnimationState<?> event) {
         if (this.animationprocedure.equals("empty")) {
             if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
 
@@ -610,7 +586,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
         return PlayState.STOP;
     }
 
-    private PlayState attackingPredicate(AnimationState event) {
+    private PlayState attackingPredicate(AnimationState<?> event) {
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
             this.swinging = true;
             this.lastSwing = level().getGameTime();
@@ -627,7 +603,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
 
     String prevAnim = "empty";
 
-    private PlayState procedurePredicate(AnimationState event) {
+    private PlayState procedurePredicate(AnimationState<?> event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
             if (!this.animationprocedure.equals(prevAnim))
                 event.getController().forceAnimationReset();

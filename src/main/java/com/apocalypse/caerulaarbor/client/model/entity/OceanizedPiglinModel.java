@@ -29,7 +29,7 @@ public class OceanizedPiglinModel extends GeoModel<OceanizedPiglinEntity> {
 	}
 
 	@Override
-	public void setCustomAnimations(OceanizedPiglinEntity animatable, long instanceId, AnimationState animationState) {
+	public void setCustomAnimations(OceanizedPiglinEntity animatable, long instanceId, AnimationState<OceanizedPiglinEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("head");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);

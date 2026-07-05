@@ -82,13 +82,8 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity, Sync
     }
 
     @Override
-    public MobType getMobType() {
-        return MobType.UNDEFINED;
-    }
-
-    @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-        //TODO 应该移动到init 需要查看是否头同类问题
+        //TODO 应该移动到init 需要查看是否存在同类问题
         this.setNoGravity(true);
         return super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
     }
@@ -326,7 +321,7 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity, Sync
         return builder;
     }
 
-    private PlayState movementPredicate(AnimationState event) {
+    private PlayState movementPredicate(AnimationState<?> event) {
         if (this.animationprocedure.equals("empty")) {
             return event.setAndContinue(RawAnimation.begin().thenLoop("animation.gladiia_whirl.idle"));
         }
@@ -335,7 +330,7 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity, Sync
 
     String prevAnim = "empty";
 
-    private PlayState procedurePredicate(AnimationState event) {
+    private PlayState procedurePredicate(AnimationState<?> event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
             if (!this.animationprocedure.equals(prevAnim))
                 event.getController().forceAnimationReset();

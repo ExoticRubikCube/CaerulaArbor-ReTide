@@ -29,7 +29,7 @@ public class SaintCarmenModel extends GeoModel<SaintCarmenEntity> {
 	}
 
 	@Override
-	public void setCustomAnimations(SaintCarmenEntity animatable, long instanceId, AnimationState animationState) {
+	public void setCustomAnimations(SaintCarmenEntity animatable, long instanceId, AnimationState<SaintCarmenEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("Head");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);

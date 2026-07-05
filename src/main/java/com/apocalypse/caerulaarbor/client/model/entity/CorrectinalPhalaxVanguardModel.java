@@ -29,7 +29,7 @@ public class CorrectinalPhalaxVanguardModel extends GeoModel<CorrectinalPhalaxVa
 	}
 
 	@Override
-	public void setCustomAnimations(CorrectinalPhalaxVanguardEntity animatable, long instanceId, AnimationState animationState) {
+	public void setCustomAnimations(CorrectinalPhalaxVanguardEntity animatable, long instanceId, AnimationState<CorrectinalPhalaxVanguardEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("Head");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);

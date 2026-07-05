@@ -29,7 +29,7 @@ public class TribunalHealerModel extends GeoModel<TribunalHealerEntity> {
 	}
 
 	@Override
-	public void setCustomAnimations(TribunalHealerEntity animatable, long instanceId, AnimationState animationState) {
+	public void setCustomAnimations(TribunalHealerEntity animatable, long instanceId, AnimationState<TribunalHealerEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("Head");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);

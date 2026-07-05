@@ -23,7 +23,7 @@ public class AbandonedSulptureDisplayItem extends BlockItem implements GeoItem {
 		super(block, settings);
 	}
 
-	private PlayState predicate(AnimationState event) {
+	private PlayState predicate(AnimationState<?> event) {
 		event.getController().setAnimation(RawAnimation.begin().thenLoop("0"));
 		return PlayState.CONTINUE;
 	}

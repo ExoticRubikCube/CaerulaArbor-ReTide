@@ -195,7 +195,6 @@ public class MartusEntity extends SeaMonster {
 
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-        SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
         LevelAccessor world1 = this.level();
         new Object() {
             void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
@@ -245,7 +244,7 @@ public class MartusEntity extends SeaMonster {
                 });
             }
         }.timedLoop(0, 8, 1);
-        return retval;
+        return super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
     }
 
     @Override
@@ -396,7 +395,7 @@ public class MartusEntity extends SeaMonster {
                                                 : 0) + 25));
                             if (tgt instanceof LivingEntity _entity)
                                 _entity.setHealth((float) ((tgt instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * perc));
-                            if (tgt instanceof LivingEntity _entity && !this.level().isClientSide())
+                            if (tgt instanceof LivingEntity && !this.level().isClientSide())
                                 this.addEffect(new MobEffectInstance(CAMobEffects.GUIDED_EVO.get(), -1, 0));
                         }
                     }
@@ -450,7 +449,7 @@ public class MartusEntity extends SeaMonster {
                                     }
                                     if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))
                                             && !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "bossoffspring")))) {
-                                        if (entityiterator instanceof LivingEntity _entity && !this.level().isClientSide())
+                                        if (entityiterator instanceof LivingEntity && !this.level().isClientSide())
                                             this.addEffect(new MobEffectInstance(CAMobEffects.FAKE_DEATH.get(), 200, 1));
                                         if (entityiterator instanceof LivingEntity _entity && !this.level().isClientSide())
                                             this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 200, 0));
@@ -496,7 +495,7 @@ public class MartusEntity extends SeaMonster {
                             }
                         }
                         if (!(tgt_ent == null) && !(tgt_ent instanceof LivingEntity _livEnt13 && _livEnt13.hasEffect(CAMobEffects.SUB_HAEMO.get()))) {
-                            if (tgt_ent instanceof LivingEntity _entity && !this.level().isClientSide())
+                            if (tgt_ent instanceof LivingEntity && !this.level().isClientSide())
                                 this.addEffect(new MobEffectInstance(CAMobEffects.SUB_HAEMO.get(), 800, 0));
                         }
                     });
@@ -626,7 +625,7 @@ public class MartusEntity extends SeaMonster {
         return builder;
     }
 
-    private PlayState movementPredicate(AnimationState event) {
+    private PlayState movementPredicate(AnimationState<?> event) {
         if (this.animationprocedure.equals("empty")) {
             if (this.isDeadOrDying()) {
                 return event.setAndContinue(RawAnimation.begin().thenPlay("animation.martus.die"));
@@ -636,7 +635,7 @@ public class MartusEntity extends SeaMonster {
         return PlayState.STOP;
     }
 
-    private PlayState attackingPredicate(AnimationState event) {
+    private PlayState attackingPredicate(AnimationState<?> event) {
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
             this.swinging = true;
             this.lastSwing = level().getGameTime();
@@ -653,7 +652,7 @@ public class MartusEntity extends SeaMonster {
 
     String prevAnim = "empty";
 
-    private PlayState procedurePredicate(AnimationState event) {
+    private PlayState procedurePredicate(AnimationState<?> event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
             if (!this.animationprocedure.equals(prevAnim))
                 event.getController().forceAnimationReset();

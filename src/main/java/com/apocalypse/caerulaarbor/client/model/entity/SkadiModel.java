@@ -29,7 +29,7 @@ public class SkadiModel extends GeoModel<SkadiEntity> {
 	}
 
 	@Override
-	public void setCustomAnimations(SkadiEntity animatable, long instanceId, AnimationState animationState) {
+	public void setCustomAnimations(SkadiEntity animatable, long instanceId, AnimationState<SkadiEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("neck");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);

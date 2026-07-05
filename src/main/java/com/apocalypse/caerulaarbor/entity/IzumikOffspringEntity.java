@@ -213,11 +213,11 @@ public class IzumikOffspringEntity extends SeaMonster {
         boolean success = false;
         Entity owner;
         if (tickCount % 5 == 0) {
-            owner = world.getEntitiesOfClass(IzumikEntity.class, AABB.ofSize(new Vec3(x, y, z), 85, 32, 85), e -> true).stream().sorted(new Object() {
+            owner = world.getEntitiesOfClass(IzumikEntity.class, AABB.ofSize(new Vec3(x, y, z), 85, 32, 85), e -> true).stream().min(new Object() {
                 Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
                     return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
                 }
-            }.compareDistOf(x, y, z)).findFirst().orElse(null);
+            }.compareDistOf(x, y, z)).orElse(null);
             if (!(owner == null)) {
                 if (owner.getEntityData().get(IzumikEntity.DATA_PHASE) == 0)
 					this.getNavigation().moveTo((owner.getX()), (owner.getY() + 4), (owner.getZ()), 0.75);
@@ -311,7 +311,7 @@ public class IzumikOffspringEntity extends SeaMonster {
 		return builder;
 	}
 
-	private PlayState movementPredicate(AnimationState event) {
+	private PlayState movementPredicate(AnimationState<?> event) {
 		if (this.animationprocedure.equals("empty")) {
 			if (this.isDeadOrDying()) {
 				return event.setAndContinue(RawAnimation.begin().thenPlay("animation.izumik_offspring.die"));
@@ -323,7 +323,7 @@ public class IzumikOffspringEntity extends SeaMonster {
 
 	String prevAnim = "empty";
 
-	private PlayState procedurePredicate(AnimationState event) {
+	private PlayState procedurePredicate(AnimationState<?> event) {
 		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
 			if (!this.animationprocedure.equals(prevAnim))
 				event.getController().forceAnimationReset();

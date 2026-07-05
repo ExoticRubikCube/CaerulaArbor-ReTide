@@ -49,11 +49,8 @@ public class ComplexChitinBowItem extends BowItem {
     public @NotNull Predicate<ItemStack> getAllSupportedProjectiles() {
         return ALSO_OCEAN_ARROW;
     }
-    
 
-    public static final Predicate<ItemStack> ALSO_OCEAN_ARROW = (itemStack) -> {
-        return ARROW_ONLY.test(itemStack) || itemStack.getItem() == CAItems.OCEAN_ARROW.get();
-    };
+    public static final Predicate<ItemStack> ALSO_OCEAN_ARROW = (itemStack) -> ARROW_ONLY.test(itemStack) || itemStack.getItem() == CAItems.OCEAN_ARROW.get();
 
     private double getRate(Player player){
     	AttributeInstance inst = player.getAttribute(Attributes.ATTACK_DAMAGE);

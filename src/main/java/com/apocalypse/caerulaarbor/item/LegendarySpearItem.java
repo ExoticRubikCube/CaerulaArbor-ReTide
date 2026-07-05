@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -44,7 +45,6 @@ import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
-import net.minecraft.sounds.SoundEvents;
 
 import java.util.Comparator;
 import java.util.List;
@@ -76,7 +76,7 @@ public class LegendarySpearItem extends Item implements GeoItem, SyncedAnimation
 		});
 	}
 
-	private PlayState idlePredicate(AnimationState event) {
+	private PlayState idlePredicate(AnimationState<?> event) {
 		if (this.animationprocedure.equals("empty")) {
 			event.getController().setAnimation(RawAnimation.begin().thenLoop("animation.lengendspear.idle"));
 			return PlayState.CONTINUE;
@@ -86,7 +86,7 @@ public class LegendarySpearItem extends Item implements GeoItem, SyncedAnimation
 
 	String prevAnim = "empty";
 
-	private PlayState procedurePredicate(AnimationState event) {
+	private PlayState procedurePredicate(AnimationState<?> event) {
 		if (!this.animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
 			if (!this.animationprocedure.equals(prevAnim))
 				event.getController().forceAnimationReset();

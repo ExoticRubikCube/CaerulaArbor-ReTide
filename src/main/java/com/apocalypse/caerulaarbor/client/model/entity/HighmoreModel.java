@@ -29,7 +29,7 @@ public class HighmoreModel extends GeoModel<HighmoreEntity> {
 	}
 
 	@Override
-	public void setCustomAnimations(HighmoreEntity animatable, long instanceId, AnimationState animationState) {
+	public void setCustomAnimations(HighmoreEntity animatable, long instanceId, AnimationState<HighmoreEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("core");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);

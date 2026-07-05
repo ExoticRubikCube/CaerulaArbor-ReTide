@@ -27,7 +27,7 @@ public class OceanizedRavagerModel extends GeoModel<OceanizedRavagerEntity> {
 	}
 
 	@Override
-	public void setCustomAnimations(OceanizedRavagerEntity animatable, long instanceId, AnimationState animationState) {
+	public void setCustomAnimations(OceanizedRavagerEntity animatable, long instanceId, AnimationState<OceanizedRavagerEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("outerhead");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);

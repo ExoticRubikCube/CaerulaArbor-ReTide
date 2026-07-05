@@ -29,7 +29,7 @@ public class IsharmlaModel extends GeoModel<IsharmlaEntity> {
 	}
 
 	@Override
-	public void setCustomAnimations(IsharmlaEntity animatable, long instanceId, AnimationState animationState) {
+	public void setCustomAnimations(IsharmlaEntity animatable, long instanceId, AnimationState<IsharmlaEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("realHead");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);

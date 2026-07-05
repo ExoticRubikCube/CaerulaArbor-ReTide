@@ -45,7 +45,7 @@ public class ChestmegaSpawnerTileEntity extends RandomizableContainerBlockEntity
 		super(CABlockEntities.CHESTMEGA_SPAWNER.get(), pos, state);
 	}
 
-	private PlayState predicate(AnimationState event) {
+	private PlayState predicate(AnimationState<?> event) {
 		blockstateNew = this.getBlockState().getValue(ChestmegaSpawnerBlock.BLOCKSTATE);
 		if (blockstateOld != blockstateNew) {
 			event.getController().forceAnimationReset();
@@ -61,7 +61,7 @@ public class ChestmegaSpawnerTileEntity extends RandomizableContainerBlockEntity
 
 	String prevAnim = "0";
 
-	private PlayState procedurePredicate(AnimationState event) {
+	private PlayState procedurePredicate(AnimationState<?> event) {
 		String animationprocedure = ("" + this.getBlockState().getValue(ChestmegaSpawnerBlock.DATA_ANIMATION));
 		if (!animationprocedure.equals("0") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!animationprocedure.equals(prevAnim) && !animationprocedure.equals("0"))) {
 			if (!animationprocedure.equals(prevAnim))

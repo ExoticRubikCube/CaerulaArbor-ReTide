@@ -36,27 +36,22 @@ public class CannedWaterItem extends Item {
 	@Override
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
 		ItemStack resultStack = super.finishUsingItem(itemstack, world, entity);
-		double x = entity.getX();
-		double y = entity.getY();
-		double z = entity.getZ();
-		if (entity != null) {
-			if (!(entity instanceof Player)) {
-				resultStack.shrink(1);
-				ItemStack emptyCan = new ItemStack(CAItems.EMPTY_CAN.get());
-				if (resultStack.isEmpty()) {
-					return emptyCan;
-				}
-			} else if (entity instanceof Player player && !player.getAbilities().instabuild) {
-				resultStack.shrink(1);
-				ItemStack emptyCan = new ItemStack(CAItems.EMPTY_CAN.get());
-				if (resultStack.isEmpty()) {
-					return emptyCan;
-				}
-				if (!player.getInventory().add(emptyCan)) {
-					player.drop(emptyCan, false);
-				}
-			}
-		}
-		return resultStack;
+        if (!(entity instanceof Player)) {
+            resultStack.shrink(1);
+            ItemStack emptyCan = new ItemStack(CAItems.EMPTY_CAN.get());
+            if (resultStack.isEmpty()) {
+                return emptyCan;
+            }
+        } else if (entity instanceof Player player && !player.getAbilities().instabuild) {
+            resultStack.shrink(1);
+            ItemStack emptyCan = new ItemStack(CAItems.EMPTY_CAN.get());
+            if (resultStack.isEmpty()) {
+                return emptyCan;
+            }
+            if (!player.getInventory().add(emptyCan)) {
+                player.drop(emptyCan, false);
+            }
+        }
+        return resultStack;
 	}
 }

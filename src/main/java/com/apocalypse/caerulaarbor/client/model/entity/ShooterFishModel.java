@@ -29,7 +29,7 @@ public class ShooterFishModel extends GeoModel<ShooterFishEntity> {
 	}
 
 	@Override
-	public void setCustomAnimations(ShooterFishEntity animatable, long instanceId, AnimationState animationState) {
+	public void setCustomAnimations(ShooterFishEntity animatable, long instanceId, AnimationState<ShooterFishEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("head");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);

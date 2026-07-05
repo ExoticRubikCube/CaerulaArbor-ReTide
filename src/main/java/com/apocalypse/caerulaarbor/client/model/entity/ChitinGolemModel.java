@@ -42,7 +42,7 @@ public class ChitinGolemModel extends GeoModel<ChitinGolemEntity> {
 	}
 
 	@Override
-	public void setCustomAnimations(ChitinGolemEntity animatable, long instanceId, AnimationState animationState) {
+	public void setCustomAnimations(ChitinGolemEntity animatable, long instanceId, AnimationState<ChitinGolemEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("head");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);

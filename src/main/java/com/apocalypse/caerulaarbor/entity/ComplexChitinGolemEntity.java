@@ -131,16 +131,6 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity, Sy
     }
 
     @Override
-    public MobType getMobType() {
-        return MobType.UNDEFINED;
-    }
-
-    @Override
-    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
-        return false;
-    }
-
-    @Override
     public SoundEvent getHurtSound(DamageSource ds) {
         return SoundEvents.IRON_GOLEM_HURT;
     }
@@ -297,7 +287,7 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity, Sy
             }
             sklp1 = (Entity) this instanceof ComplexChitinGolemEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP) : 0;
             dura = (Entity) this instanceof ComplexChitinGolemEntity _datEntI ? _datEntI.getEntityData().get(DATA_DURATION) : 0;
-            enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+            enemy = this.getTarget();
             if (dura > 0) {
                 if ((Entity) this instanceof ComplexChitinGolemEntity _datEntSetI)
                     _datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura - 1));
@@ -340,9 +330,7 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity, Sy
                         for (int index0 = 0; index0 < 16; index0++) {
                             CaerulaArborMod.queueServerWork(index0 * 3 + 26, () -> {
                                 if (this.isAlive()) {
-                                    Entity enemy1 = null;
                                     double damage;
-                                    double r = 0;
                                     final Vec3 _center = new Vec3((getX()), (getY()), (getZ()));
                                     List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(10 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
                                     for (Entity entityiterator : _entfound) {
@@ -404,7 +392,7 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity, Sy
         return builder;
     }
 
-    private PlayState movementPredicate(AnimationState event) {
+    private PlayState movementPredicate(AnimationState<?> event) {
         if (this.animationprocedure.equals("empty")) {
             if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
 
@@ -422,7 +410,7 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity, Sy
         return PlayState.STOP;
     }
 
-    private PlayState attackingPredicate(AnimationState event) {
+    private PlayState attackingPredicate(AnimationState<?> event) {
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
             this.swinging = true;
             this.lastSwing = level().getGameTime();
@@ -439,7 +427,7 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity, Sy
 
     String prevAnim = "empty";
 
-    private PlayState procedurePredicate(AnimationState event) {
+    private PlayState procedurePredicate(AnimationState<?> event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
             if (!this.animationprocedure.equals(prevAnim))
                 event.getController().forceAnimationReset();

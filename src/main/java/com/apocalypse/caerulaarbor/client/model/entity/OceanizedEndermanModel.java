@@ -29,7 +29,7 @@ public class OceanizedEndermanModel extends GeoModel<OceanizedEndermanEntity> {
 	}
 
 	@Override
-	public void setCustomAnimations(OceanizedEndermanEntity animatable, long instanceId, AnimationState animationState) {
+	public void setCustomAnimations(OceanizedEndermanEntity animatable, long instanceId, AnimationState<OceanizedEndermanEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("head");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);

@@ -29,7 +29,7 @@ public class TideBishopModel extends GeoModel<TideBishopEntity> {
 	}
 
 	@Override
-	public void setCustomAnimations(TideBishopEntity animatable, long instanceId, AnimationState animationState) {
+	public void setCustomAnimations(TideBishopEntity animatable, long instanceId, AnimationState<TideBishopEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("Head");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);

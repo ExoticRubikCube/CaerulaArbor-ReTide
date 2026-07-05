@@ -29,7 +29,7 @@ public class OceanziedWitchModel extends GeoModel<OceanziedWitchEntity> {
 	}
 
 	@Override
-	public void setCustomAnimations(OceanziedWitchEntity animatable, long instanceId, AnimationState animationState) {
+	public void setCustomAnimations(OceanziedWitchEntity animatable, long instanceId, AnimationState<OceanziedWitchEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("head");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);

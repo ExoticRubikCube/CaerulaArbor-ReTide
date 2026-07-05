@@ -22,7 +22,7 @@ public class HighmoreSpawningBlockDisplayItem extends BlockItem implements GeoIt
 		super(block, settings);
 	}
 
-	private PlayState predicate(AnimationState event) {
+	private PlayState predicate(AnimationState<?> event) {
 		return PlayState.CONTINUE;
 	}
 

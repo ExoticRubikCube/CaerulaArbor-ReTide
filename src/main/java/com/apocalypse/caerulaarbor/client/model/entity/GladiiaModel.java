@@ -27,7 +27,7 @@ public class GladiiaModel extends GeoModel<GladiiaEntity> {
 	}
 
 	@Override
-	public void setCustomAnimations(GladiiaEntity animatable, long instanceId, AnimationState animationState) {
+	public void setCustomAnimations(GladiiaEntity animatable, long instanceId, AnimationState<GladiiaEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("Head");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);

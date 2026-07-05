@@ -418,8 +418,7 @@ public class IsharmlaEntity extends SeaMonster {
 					_datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura - 1));
 			}
 			if (absP > 0) {
-				boolean isFullSecond = false;
-				double damage;
+                double damage;
 				double d;
 				double healthBonus = 0;
 				double attackBonus = 0;
@@ -542,7 +541,7 @@ public class IsharmlaEntity extends SeaMonster {
 							CaerulaArborMod.queueServerWork(15, () -> {
 								Entity enemy1;
 								double d;
-								enemy1 = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+								enemy1 =  this.getTarget();
 								d = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
 								if (world instanceof Level _level) {
 									_level.playSound(null, BlockPos.containing(x, y, z), CASounds.ISHARMLA_TEAR_HURT_1.get(), SoundSource.HOSTILE, 3, 1);
@@ -689,7 +688,7 @@ public class IsharmlaEntity extends SeaMonster {
 		return builder;
 	}
 
-	private PlayState movementPredicate(AnimationState event) {
+	private PlayState movementPredicate(AnimationState<?> event) {
 		boolean isM3 = isMonster();
 		if (this.animationprocedure.equals("empty")) {
 			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.05F && event.getLimbSwingAmount() < 0.05F))) {
@@ -705,7 +704,7 @@ public class IsharmlaEntity extends SeaMonster {
 		return PlayState.STOP;
 	}
 
-	private PlayState attackingPredicate(AnimationState event) {
+	private PlayState attackingPredicate(AnimationState<?> event) {
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
@@ -722,7 +721,7 @@ public class IsharmlaEntity extends SeaMonster {
 
 	String prevAnim = "empty";
 
-	private PlayState procedurePredicate(AnimationState event) {
+	private PlayState procedurePredicate(AnimationState<?> event) {
 		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
 			if (!this.animationprocedure.equals(prevAnim))
 				event.getController().forceAnimationReset();

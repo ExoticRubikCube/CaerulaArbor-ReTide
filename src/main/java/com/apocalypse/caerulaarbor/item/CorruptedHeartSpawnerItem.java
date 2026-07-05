@@ -4,7 +4,6 @@ package com.apocalypse.caerulaarbor.item;
 import com.apocalypse.caerulaarbor.entity.SkadiCorruptedEntity;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -29,7 +28,7 @@ public class CorruptedHeartSpawnerItem extends ForgeSpawnEggItem {
 
 	@Override
 	public boolean hurtEnemy(ItemStack itemstack, LivingEntity entity, LivingEntity sourceentity) {
-        if ((Entity) entity instanceof SkadiCorruptedEntity _datEntSetI)
+        if (entity instanceof SkadiCorruptedEntity _datEntSetI)
             _datEntSetI.getEntityData().set(SkadiCorruptedEntity.DATA_DEAL, 999999);
         return true;
 	}

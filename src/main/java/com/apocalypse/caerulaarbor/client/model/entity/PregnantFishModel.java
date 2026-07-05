@@ -29,7 +29,7 @@ public class PregnantFishModel extends GeoModel<PregnantFishEntity> {
 	}
 
 	@Override
-	public void setCustomAnimations(PregnantFishEntity animatable, long instanceId, AnimationState animationState) {
+	public void setCustomAnimations(PregnantFishEntity animatable, long instanceId, AnimationState<PregnantFishEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("head");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);

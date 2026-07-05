@@ -29,7 +29,7 @@ public class OceanizedEvokerModel extends GeoModel<OceanizedEvokerEntity> {
 	}
 
 	@Override
-	public void setCustomAnimations(OceanizedEvokerEntity animatable, long instanceId, AnimationState animationState) {
+	public void setCustomAnimations(OceanizedEvokerEntity animatable, long instanceId, AnimationState<OceanizedEvokerEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("head");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);

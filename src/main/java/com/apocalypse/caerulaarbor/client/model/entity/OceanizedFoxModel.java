@@ -29,7 +29,7 @@ public class OceanizedFoxModel extends GeoModel<OceanizedFoxEntity> {
 	}
 
 	@Override
-	public void setCustomAnimations(OceanizedFoxEntity animatable, long instanceId, AnimationState animationState) {
+	public void setCustomAnimations(OceanizedFoxEntity animatable, long instanceId, AnimationState<OceanizedFoxEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("head");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);

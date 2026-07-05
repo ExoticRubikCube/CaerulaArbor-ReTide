@@ -34,7 +34,6 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
@@ -182,17 +181,7 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 		this.goalSelector.addGoal(8, new FloatGoal(this));
 	}
 
-	@Override
-	public MobType getMobType() {
-		return MobType.UNDEFINED;
-	}
-
-	@Override
-	public boolean removeWhenFarAway(double distanceToClosestPlayer) {
-		return false;
-	}
-
-	@Override
+    @Override
 	public SoundEvent getHurtSound(DamageSource ds) {
 		return CASounds.GLADIIA_HURT.get();
 	}
@@ -221,14 +210,14 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 		return true;
 	}
 
-	private boolean hurtWithHunterAttack(Entity target, float amount) {
+	private void hurtWithHunterAttack(Entity target, float amount) {
 		if (EntityUtils.getSize(target) < EntityUtils.getSize(this) * 2) {
 			amount *= 1.3F;
 		}
 		if (EntityUtils.getHealthPerc(target) < EntityUtils.getHealthPerc(this)) {
 			amount *= 1.5F;
 		}
-		return target.hurt(
+		target.hurt(
 				new DamageSource(
 						this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
 								.getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))),
@@ -277,15 +266,14 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 		double y = this.getY();
 		double z = this.getZ();
 		Entity enemy;
-		double gap = 0;
-		double sklp1;
+        double sklp1;
 		double dura;
 		double skillp2;
 		if (this.isAlive()) {
 			sklp1 = (Entity) this instanceof GladiiaEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILL_P) : 0;
 			skillp2 = (Entity) this instanceof GladiiaEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILL_P2) : 0;
 			dura = (Entity) this instanceof GladiiaEntity _datEntI ? _datEntI.getEntityData().get(DATA_DURATION) : 0;
-			enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+            enemy = this.getTarget();
 			if (dura > 0) {
 				if ((Entity) this instanceof GladiiaEntity _datEntSetI)
 					_datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura - 1));
@@ -331,9 +319,9 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 									if (world instanceof Level _level) {
 										_level.playSound(null, BlockPos.containing(ene.getX(), ene.getY(), ene.getZ()), CASounds.GLADIIA_ATTACK_PRE.get(), SoundSource.NEUTRAL, 3, 1);
 									}
-									if (ene instanceof LivingEntity _entity && !this.level().isClientSide())
+									if (ene instanceof LivingEntity && !this.level().isClientSide())
 										this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 40, 0, false, false));
-									if (EntityUtils.catchNearestEnemy(world, ene.getX(), ene.getY(), ene.getZ(), ene) instanceof LivingEntity _entity && !this.level().isClientSide())
+									if (EntityUtils.catchNearestEnemy(world, ene.getX(), ene.getY(), ene.getZ(), ene) instanceof LivingEntity && !this.level().isClientSide())
 										this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 40, 0, false, false));
 								});
 							}
@@ -370,7 +358,7 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 							this.addEffect(new MobEffectInstance(CAMobEffects.ADD_ATTACK_PERCLY.get(), 120, 4, false, false));
 						if (!this.level().isClientSide())
 							this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 120, 9, false, false));
-						if (enemy instanceof LivingEntity _entity && !this.level().isClientSide())
+						if (enemy instanceof LivingEntity && !this.level().isClientSide())
 							this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 120, 3, false, false));
 						if (world instanceof ServerLevel _level) {
 							Entity entityToSpawn = CAEntities.GLADIIA_WHIRL.get().spawn(_level, BlockPos.containing(enemy.getX(), enemy.getY(), enemy.getZ()), MobSpawnType.MOB_SUMMONED);
@@ -390,8 +378,7 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 								Entity ene = this.getTarget();
 								if (ene == null)
 									return;
-								Entity side = null;
-								double damage;
+                                double damage;
 								double d;
 								if (world instanceof Level _level) {
 									_level.playSound(null, BlockPos.containing(ene.getX(), ene.getY(), ene.getZ()), CASounds.GLADIIA_PULL_PULL.get(), SoundSource.NEUTRAL, 3, 1);
@@ -434,11 +421,6 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 	}
 
 	@Override
-	public boolean isFood(ItemStack stack) {
-		return List.of().contains(stack.getItem());
-	}
-
-	@Override
 	public void aiStep() {
 		super.aiStep();
 		this.updateSwingTime();
@@ -459,7 +441,7 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 		return builder;
 	}
 
-	private PlayState movementPredicate(AnimationState event) {
+	private PlayState movementPredicate(AnimationState<?> event) {
 		if (this.animationprocedure.equals("empty")) {
 			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
 
@@ -477,10 +459,8 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 		return PlayState.STOP;
 	}
 
-	private PlayState attackingPredicate(AnimationState event) {
-		double d1 = this.getX() - this.xOld;
-		double d0 = this.getZ() - this.zOld;
-		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
+	private PlayState attackingPredicate(AnimationState<?> event) {
+        if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
 		}
@@ -496,7 +476,7 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 
 	String prevAnim = "empty";
 
-	private PlayState procedurePredicate(AnimationState event) {
+	private PlayState procedurePredicate(AnimationState<?> event) {
 		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
 			if (!this.animationprocedure.equals(prevAnim))
 				event.getController().forceAnimationReset();

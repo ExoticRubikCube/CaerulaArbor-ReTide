@@ -29,7 +29,7 @@ public class FlamarineGolemModel extends GeoModel<FlamarineGolemEntity> {
 	}
 
 	@Override
-	public void setCustomAnimations(FlamarineGolemEntity animatable, long instanceId, AnimationState animationState) {
+	public void setCustomAnimations(FlamarineGolemEntity animatable, long instanceId, AnimationState<FlamarineGolemEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("realHead");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);

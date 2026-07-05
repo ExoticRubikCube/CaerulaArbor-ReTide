@@ -30,7 +30,7 @@ public class ApostleProkaryoteModel extends GeoModel<ApostleProkaryoteEntity> {
 	}
 
 	@Override
-	public void setCustomAnimations(ApostleProkaryoteEntity animatable, long instanceId, AnimationState animationState) {
+	public void setCustomAnimations(ApostleProkaryoteEntity animatable, long instanceId, AnimationState<ApostleProkaryoteEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("head");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);

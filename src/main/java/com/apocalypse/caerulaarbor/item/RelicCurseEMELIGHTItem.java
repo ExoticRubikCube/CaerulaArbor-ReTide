@@ -41,14 +41,11 @@ public class RelicCurseEMELIGHTItem extends Item {
 	@Override
 	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
 		super.appendHoverText(itemstack, level, list, flag);
-		Entity entity = itemstack.getEntityRepresentation();
-		String hoverText = ItemUtils.getCursedDescription(itemstack);
-		if (hoverText != null) {
-			for (String line : hoverText.split("\n")) {
-				list.add(Component.literal(line));
-			}
-		}
-	}
+        String hoverText = ItemUtils.getCursedDescription(itemstack);
+        for (String line : hoverText.split("\n")) {
+            list.add(Component.literal(line));
+        }
+    }
 
 	@Override
 	public InteractionResult useOn(UseOnContext context) {
@@ -60,7 +57,7 @@ public class RelicCurseEMELIGHTItem extends Item {
         Direction direction = context.getClickedFace();
         Entity entity = context.getPlayer();
         ItemStack itemstack = context.getItemInHand();
-        if (direction == null || entity == null)
+        if (entity == null)
             return InteractionResult.PASS;
         double tX;
         double tY;

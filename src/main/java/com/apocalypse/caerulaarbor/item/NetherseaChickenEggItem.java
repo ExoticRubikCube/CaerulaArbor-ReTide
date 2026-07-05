@@ -8,6 +8,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -23,7 +24,6 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.sounds.SoundEvents;
 
 import java.util.List;
 
@@ -35,14 +35,10 @@ public class NetherseaChickenEggItem extends Item {
 	@Override
 	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
 		super.appendHoverText(itemstack, level, list, flag);
-		Entity entity = itemstack.getEntityRepresentation();
-        double rrr;
-        double ooo;
-        String info = "";
-        rrr = Math.max(itemstack.getOrCreateTag().getDouble("rate") * 0.1, 100);
-        ooo = Math.max(itemstack.getOrCreateTag().getDouble("offset"), 4);
-        String hoverText = Component.translatable("item.caerula_arbor.nethersea_chicken_egg.rate").getString() + new java.text.DecimalFormat("##.##").format(rrr) + "%" + "\n"
-                + Component.translatable("item.caerula_arbor.nethersea_chicken_egg.offset").getString() + new java.text.DecimalFormat("##.##").format(ooo);
+        double rate = Math.max(itemstack.getOrCreateTag().getDouble("rate") * 0.1, 100);
+        double offset = Math.max(itemstack.getOrCreateTag().getDouble("offset"), 4);
+        String hoverText = Component.translatable("item.caerula_arbor.nethersea_chicken_egg.rate").getString() + new java.text.DecimalFormat("##.##").format(rate) + "%" + "\n"
+                + Component.translatable("item.caerula_arbor.nethersea_chicken_egg.offset").getString() + new java.text.DecimalFormat("##.##").format(offset);
         for (String line : hoverText.split("\n")) {
             list.add(Component.literal(line));
         }

@@ -32,7 +32,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
@@ -89,16 +88,6 @@ public class SpecterDollEntity extends Animal implements GeoEntity, SyncedAnimat
     protected void registerGoals() {
         super.registerGoals();
         this.goalSelector.addGoal(1, new FloatGoal(this));
-    }
-
-    @Override
-    public MobType getMobType() {
-        return MobType.UNDEFINED;
-    }
-
-    @Override
-    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
-        return false;
     }
 
     @Override
@@ -221,11 +210,6 @@ public class SpecterDollEntity extends Animal implements GeoEntity, SyncedAnimat
     }
 
     @Override
-    public boolean isFood(ItemStack stack) {
-        return false;
-    }
-
-    @Override
     public void aiStep() {
         super.aiStep();
         this.updateSwingTime();
@@ -268,7 +252,7 @@ public class SpecterDollEntity extends Animal implements GeoEntity, SyncedAnimat
         return builder;
     }
 
-    private PlayState movementPredicate(AnimationState event) {
+    private PlayState movementPredicate(AnimationState<?> event) {
         if (this.animationprocedure.equals("empty")) {
             if (this.isDeadOrDying()) {
                 return event.setAndContinue(RawAnimation.begin().thenPlay("animation.specter_doll.die"));
@@ -280,7 +264,7 @@ public class SpecterDollEntity extends Animal implements GeoEntity, SyncedAnimat
 
     String prevAnim = "empty";
 
-    private PlayState procedurePredicate(AnimationState event) {
+    private PlayState procedurePredicate(AnimationState<?> event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
             if (!this.animationprocedure.equals(prevAnim))
                 event.getController().forceAnimationReset();

@@ -29,7 +29,7 @@ public class OceanIllusionModel extends GeoModel<OceanIllusionEntity> {
 	}
 
 	@Override
-	public void setCustomAnimations(OceanIllusionEntity animatable, long instanceId, AnimationState animationState) {
+	public void setCustomAnimations(OceanIllusionEntity animatable, long instanceId, AnimationState<OceanIllusionEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("Head");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);

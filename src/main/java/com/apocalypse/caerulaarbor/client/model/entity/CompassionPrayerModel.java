@@ -30,7 +30,7 @@ public class CompassionPrayerModel extends GeoModel<CompassionPrayerEntity> {
 	}
 
 	@Override
-	public void setCustomAnimations(CompassionPrayerEntity animatable, long instanceId, AnimationState animationState) {
+	public void setCustomAnimations(CompassionPrayerEntity animatable, long instanceId, AnimationState<CompassionPrayerEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("Head");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);

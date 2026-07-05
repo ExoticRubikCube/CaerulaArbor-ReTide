@@ -1,8 +1,6 @@
 package com.apocalypse.caerulaarbor.item;
 
-import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.init.CASounds;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundSource;
@@ -51,13 +49,11 @@ public class MusicBoxFixedItem extends Item {
 		double x = entity.getX();
 		double y = entity.getY();
 		double z = entity.getZ();
-        if (entity != null) {
-            if ((LevelAccessor) world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), CASounds.PCEANWISH.get(), SoundSource.MUSIC, (float) 2.5, 1);
-            }
-            if ((Entity) entity instanceof Player _player)
-                _player.getCooldowns().addCooldown(itemstack.getItem(), 900);
+        if ((LevelAccessor) world instanceof Level _level) {
+            _level.playSound(null, BlockPos.containing(x, y, z), CASounds.PCEANWISH.get(), SoundSource.MUSIC, (float) 2.5, 1);
         }
+        if ((Entity) entity instanceof Player _player)
+            _player.getCooldowns().addCooldown(itemstack.getItem(), 900);
         return retval;
 	}
 }

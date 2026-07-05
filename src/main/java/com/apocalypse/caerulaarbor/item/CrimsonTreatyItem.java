@@ -42,23 +42,21 @@ public class CrimsonTreatyItem extends Item {
         double y = entity.getY();
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
-        if (entity != null) {
-            if (!(((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_TREATY) {
-                if ((LevelAccessor) world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 2, 1);
-                }
-                if ((LevelAccessor) world instanceof ServerLevel _level)
-                    _level.sendParticles(ParticleTypes.FLAME, x, y, z, 72, 1, 1, 1, 1);
-                {
-                    boolean _setval = true;
-                    ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                        capability.relic_TREATY = _setval;
-                        capability.syncPlayerVariables(entity);
-                    });
-                }
-                if (((LevelAccessor) world).isClientSide())
-                    Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);
+        if (!(((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_TREATY) {
+            if ((LevelAccessor) world instanceof Level _level) {
+                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 2, 1);
             }
+            if ((LevelAccessor) world instanceof ServerLevel _level)
+                _level.sendParticles(ParticleTypes.FLAME, x, y, z, 72, 1, 1, 1, 1);
+            {
+                boolean _setval = true;
+                ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                    capability.relic_TREATY = _setval;
+                    capability.syncPlayerVariables(entity);
+                });
+            }
+            if (((LevelAccessor) world).isClientSide())
+                Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);
         }
         return ar;
 	}

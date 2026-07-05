@@ -29,7 +29,7 @@ public class RocinanteModel extends GeoModel<RocinanteEntity> {
 	}
 
 	@Override
-	public void setCustomAnimations(RocinanteEntity animatable, long instanceId, AnimationState animationState) {
+	public void setCustomAnimations(RocinanteEntity animatable, long instanceId, AnimationState<RocinanteEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("Neck");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);

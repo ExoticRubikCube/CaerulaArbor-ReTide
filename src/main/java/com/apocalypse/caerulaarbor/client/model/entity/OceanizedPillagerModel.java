@@ -29,7 +29,7 @@ public class OceanizedPillagerModel extends GeoModel<OceanizedPillagerEntity> {
 	}
 
 	@Override
-	public void setCustomAnimations(OceanizedPillagerEntity animatable, long instanceId, AnimationState animationState) {
+	public void setCustomAnimations(OceanizedPillagerEntity animatable, long instanceId, AnimationState<OceanizedPillagerEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("neck");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);

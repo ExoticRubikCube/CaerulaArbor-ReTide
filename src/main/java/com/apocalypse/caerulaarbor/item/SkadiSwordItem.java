@@ -2,7 +2,6 @@ package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
-import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -64,11 +63,7 @@ public class SkadiSwordItem extends SwordItem {
         double damage;
         double r;
         Entity enemy;
-        Entity target = null;
         r = 3;
-        if (((Entity) sourceentity instanceof LivingEntity _entity)) {
-            _entity.getLastHurtByMob();
-        }
         enemy = ((Entity) sourceentity instanceof LivingEntity _entity) ? _entity.getLastHurtMob() : null;
         damage = (Entity) sourceentity instanceof LivingEntity _livingEntity2 && _livingEntity2.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity2.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
         {

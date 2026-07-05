@@ -29,7 +29,7 @@ public class OceanizedHorseModel extends GeoModel<OceanizedHorseEntity> {
 	}
 
 	@Override
-	public void setCustomAnimations(OceanizedHorseEntity animatable, long instanceId, AnimationState animationState) {
+	public void setCustomAnimations(OceanizedHorseEntity animatable, long instanceId, AnimationState<OceanizedHorseEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("neck");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);

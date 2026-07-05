@@ -29,7 +29,7 @@ public class TheAbandonedModel extends GeoModel<TheAbandonedEntity> {
 	}
 
 	@Override
-	public void setCustomAnimations(TheAbandonedEntity animatable, long instanceId, AnimationState animationState) {
+	public void setCustomAnimations(TheAbandonedEntity animatable, long instanceId, AnimationState<TheAbandonedEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("realhead");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);

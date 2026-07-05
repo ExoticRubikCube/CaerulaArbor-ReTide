@@ -157,19 +157,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 		});
 		this.goalSelector.addGoal(9, new FloatGoal(this));
 	}
-
-	//TODO 需要处理同类
-	@Override
-	public MobType getMobType() {
-		return MobType.UNDEFINED;
-	}
-
-	@Override
-	public boolean removeWhenFarAway(double distanceToClosestPlayer) {
-		return false;
-	}
-
-	protected void dropCustomDeathLoot(DamageSource source, int looting, boolean recentlyHitIn) {
+protected void dropCustomDeathLoot(DamageSource source, int looting, boolean recentlyHitIn) {
 		super.dropCustomDeathLoot(source, looting, recentlyHitIn);
 		this.spawnAtLocation(new ItemStack(CAItems.TRAIL_POWDER.get()));
 	}
@@ -546,11 +534,6 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 	}
 
 	@Override
-	public boolean isFood(ItemStack stack) {
-        return false;
-	}
-
-	@Override
 	public void aiStep() {
 		super.aiStep();
 		this.updateSwingTime();
@@ -567,7 +550,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 		return builder;
 	}
 
-	private PlayState movementPredicate(AnimationState event) {
+	private PlayState movementPredicate(AnimationState<?> event) {
 		if (this.animationprocedure.equals("empty")) {
 			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) && !this.isAggressive()) {
 				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.irene.move"));
@@ -583,7 +566,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 		return PlayState.STOP;
 	}
 
-	private PlayState attackingPredicate(AnimationState event) {
+	private PlayState attackingPredicate(AnimationState<?> event) {
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
@@ -600,7 +583,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 
 	String prevAnim = "empty";
 
-	private PlayState procedurePredicate(AnimationState event) {
+	private PlayState procedurePredicate(AnimationState<?> event) {
 		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
 			if (!this.animationprocedure.equals(prevAnim))
 				event.getController().forceAnimationReset();

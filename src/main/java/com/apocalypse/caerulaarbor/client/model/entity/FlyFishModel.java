@@ -29,7 +29,7 @@ public class FlyFishModel extends GeoModel<FlyFishEntity> {
 	}
 
 	@Override
-	public void setCustomAnimations(FlyFishEntity animatable, long instanceId, AnimationState animationState) {
+	public void setCustomAnimations(FlyFishEntity animatable, long instanceId, AnimationState<FlyFishEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("body");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);

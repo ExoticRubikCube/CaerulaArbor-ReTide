@@ -37,13 +37,13 @@ public class CaramelSeagrassJuiceItem extends Item {
 
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level world, Player entity, InteractionHand hand) {
-		InteractionResultHolder<ItemStack> ar = super.use(world, entity, hand);
-		entity.startUsingItem(hand);
-		return ar;
+        entity.startUsingItem(hand);
+		return super.use(world, entity, hand);
 	}
 
 	@Override
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
+		//TODO 可以优化的OCEANGLASS_CUP
 		ItemStack resultStack = super.finishUsingItem(itemstack, world, entity);
         if (!entity.level().isClientSide()) {
             entity.addEffect(new MobEffectInstance(MobEffects.SATURATION, 1, 2, false, false));

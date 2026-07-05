@@ -29,7 +29,7 @@ public class SpecterModel extends GeoModel<SpecterEntity> {
 	}
 
 	@Override
-	public void setCustomAnimations(SpecterEntity animatable, long instanceId, AnimationState animationState) {
+	public void setCustomAnimations(SpecterEntity animatable, long instanceId, AnimationState<SpecterEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("Head");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);

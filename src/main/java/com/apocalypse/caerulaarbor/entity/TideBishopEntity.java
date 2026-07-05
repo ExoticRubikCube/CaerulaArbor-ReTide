@@ -239,9 +239,6 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
         }.compareDistOf(x, y, z)).orElse(null);
         if (call instanceof Mob _entity)
             _entity.getNavigation().moveTo(x, y, z, 0.8);
-        if ((Entity) this instanceof LivingEntity _livEnt3 && _livEnt3.hasEffect(CAMobEffects.INVULNERABLE.get())) {
-
-        }
         if (source.is(DamageTypes.DROWN))
             return false;
         return super.hurt(source, amount);
@@ -433,7 +430,7 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
         return builder;
     }
 
-    private PlayState movementPredicate(AnimationState event) {
+    private PlayState movementPredicate(AnimationState<?> event) {
         if (this.animationprocedure.equals("empty")) {
             if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
 
@@ -454,7 +451,7 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
         return PlayState.STOP;
     }
 
-    private PlayState attackingPredicate(AnimationState event) {
+    private PlayState attackingPredicate(AnimationState<?> event) {
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
             this.swinging = true;
             this.lastSwing = level().getGameTime();
@@ -471,7 +468,7 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
 
     String prevAnim = "empty";
 
-    private PlayState procedurePredicate(AnimationState event) {
+    private PlayState procedurePredicate(AnimationState<?> event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
             if (!this.animationprocedure.equals(prevAnim))
                 event.getController().forceAnimationReset();

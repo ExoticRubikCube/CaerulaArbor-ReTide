@@ -35,7 +35,7 @@ public class SkadiCorruptedModel extends GeoModel<SkadiCorruptedEntity> {
 	}
 
 	@Override
-	public void setCustomAnimations(SkadiCorruptedEntity animatable, long instanceId, AnimationState animationState) {
+	public void setCustomAnimations(SkadiCorruptedEntity animatable, long instanceId, AnimationState<SkadiCorruptedEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("Head");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);

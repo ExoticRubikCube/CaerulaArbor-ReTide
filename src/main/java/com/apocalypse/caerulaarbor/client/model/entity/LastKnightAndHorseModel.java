@@ -29,7 +29,7 @@ public class LastKnightAndHorseModel extends GeoModel<LastKnightAndHorseEntity> 
 	}
 
 	@Override
-	public void setCustomAnimations(LastKnightAndHorseEntity animatable, long instanceId, AnimationState animationState) {
+	public void setCustomAnimations(LastKnightAndHorseEntity animatable, long instanceId, AnimationState<LastKnightAndHorseEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("Head2");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);

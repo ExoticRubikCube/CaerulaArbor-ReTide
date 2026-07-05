@@ -29,7 +29,7 @@ public class NucleicMaleficentModel extends GeoModel<NucleicMaleficentEntity> {
 	}
 
 	@Override
-	public void setCustomAnimations(NucleicMaleficentEntity animatable, long instanceId, AnimationState animationState) {
+	public void setCustomAnimations(NucleicMaleficentEntity animatable, long instanceId, AnimationState<NucleicMaleficentEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("head");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);

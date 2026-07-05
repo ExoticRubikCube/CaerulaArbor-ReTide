@@ -1,7 +1,6 @@
 package com.apocalypse.caerulaarbor.client.model.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.apocalypse.caerulaarbor.entity.OceanizedVindicatorEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -28,7 +27,7 @@ public class OceanizedVindicatorModel extends GeoModel<OceanizedVindicatorEntity
 	}
 
 	@Override
-	public void setCustomAnimations(OceanizedVindicatorEntity animatable, long instanceId, AnimationState animationState) {
+	public void setCustomAnimations(OceanizedVindicatorEntity animatable, long instanceId, AnimationState<OceanizedVindicatorEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("head");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);

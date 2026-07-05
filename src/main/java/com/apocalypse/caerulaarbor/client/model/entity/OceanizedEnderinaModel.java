@@ -48,7 +48,7 @@ public class OceanizedEnderinaModel extends GeoModel<OceanizedEnderinaEntity> {
 	}
 
 	@Override
-	public void setCustomAnimations(OceanizedEnderinaEntity animatable, long instanceId, AnimationState animationState) {
+	public void setCustomAnimations(OceanizedEnderinaEntity animatable, long instanceId, AnimationState<OceanizedEnderinaEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("Head");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);

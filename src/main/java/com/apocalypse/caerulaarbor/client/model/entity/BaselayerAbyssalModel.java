@@ -29,7 +29,7 @@ public class BaselayerAbyssalModel extends GeoModel<BaselayerAbyssalEntity> {
 	}
 
 	@Override
-	public void setCustomAnimations(BaselayerAbyssalEntity animatable, long instanceId, AnimationState animationState) {
+	public void setCustomAnimations(BaselayerAbyssalEntity animatable, long instanceId, AnimationState<BaselayerAbyssalEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("head");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);

@@ -29,7 +29,7 @@ public class OceanizedSpiderModel extends GeoModel<OceanizedSpiderEntity> {
 	}
 
 	@Override
-	public void setCustomAnimations(OceanizedSpiderEntity animatable, long instanceId, AnimationState animationState) {
+	public void setCustomAnimations(OceanizedSpiderEntity animatable, long instanceId, AnimationState<OceanizedSpiderEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("head");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);

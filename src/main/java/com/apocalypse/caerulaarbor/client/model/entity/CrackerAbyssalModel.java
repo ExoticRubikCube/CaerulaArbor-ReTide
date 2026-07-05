@@ -29,7 +29,7 @@ public class CrackerAbyssalModel extends GeoModel<CrackerAbyssalEntity> {
 	}
 
 	@Override
-	public void setCustomAnimations(CrackerAbyssalEntity animatable, long instanceId, AnimationState animationState) {
+	public void setCustomAnimations(CrackerAbyssalEntity animatable, long instanceId, AnimationState<CrackerAbyssalEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("head");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);

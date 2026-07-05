@@ -125,7 +125,7 @@ public class ChitinComplexItem extends ArmorItem implements GeoItem, SyncedAnima
 		super.appendHoverText(itemstack, world, list, flag);
 	}
 
-	private PlayState predicate(AnimationState event) {
+	private PlayState predicate(AnimationState<?> event) {
 		if (this.animationprocedure.equals("empty")) {
 			event.getController().setAnimation(RawAnimation.begin().thenLoop("animation.complex_chitin.idle"));
 			Entity entity = (Entity) event.getData(DataTickets.ENTITY);
@@ -139,7 +139,7 @@ public class ChitinComplexItem extends ArmorItem implements GeoItem, SyncedAnima
 
 	String prevAnim = "empty";
 
-	private PlayState procedurePredicate(AnimationState event) {
+	private PlayState procedurePredicate(AnimationState<?> event) {
 		if (!this.animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
 			if (!this.animationprocedure.equals(prevAnim))
 				event.getController().forceAnimationReset();

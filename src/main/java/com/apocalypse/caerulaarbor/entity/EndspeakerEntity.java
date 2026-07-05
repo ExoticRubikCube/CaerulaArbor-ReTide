@@ -259,10 +259,9 @@ public class EndspeakerEntity extends SeaMonster {
 		this.setAttributeBaseValue(Attributes.MAX_HEALTH, maxHealth);
 
 		this.setAttributeBaseValue(Attributes.MOVEMENT_SPEED, switch (this.getPhase()) {
-			case 1 -> 0.16D;
+			case 1, 3 -> 0.16D;
 			case 2 -> 0.18D;
-			case 3 -> 0.16D;
-			default -> 0.15D;
+            default -> 0.15D;
 		});
 
 		this.setAttributeBaseValue(Attributes.ARMOR, switch (this.getPhase()) {

@@ -29,7 +29,7 @@ public class PredatorAbyssalModel extends GeoModel<PredatorAbyssalEntity> {
 	}
 
 	@Override
-	public void setCustomAnimations(PredatorAbyssalEntity animatable, long instanceId, AnimationState animationState) {
+	public void setCustomAnimations(PredatorAbyssalEntity animatable, long instanceId, AnimationState<PredatorAbyssalEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("head");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);

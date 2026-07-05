@@ -26,18 +26,14 @@ public class TrailGoldenAppleItem extends Item {
 
 	@Override
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
-		ItemStack retval = super.finishUsingItem(itemstack, world, entity);
-		double x = entity.getX();
-		double y = entity.getY();
-		double z = entity.getZ();
-		SIHelper.causeSanityInjury(entity, 80, SanityEvent.Hurt.Type.FOOD);
+        SIHelper.causeSanityInjury(entity, 80, SanityEvent.Hurt.Type.FOOD);
 		if (!entity.level().isClientSide()) {
 			entity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 1250, 1));
 			entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 60, 2));
+			if (world instanceof ServerLevel level) {
+				level.sendParticles(ParticleTypes.ELECTRIC_SPARK, entity.getX(), entity.getY() + 0.8, entity.getZ(), 48, 0.5, 1, 0.5, 0.1);
+			}
 		}
-		if (world instanceof ServerLevel level) {
-			level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, y + 0.8, z, 48, 0.5, 1, 0.5, 0.1);
-		}
-		return retval;
+		return super.finishUsingItem(itemstack, world, entity);
 	}
 }

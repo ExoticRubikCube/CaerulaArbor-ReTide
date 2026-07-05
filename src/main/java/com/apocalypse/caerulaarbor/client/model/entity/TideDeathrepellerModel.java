@@ -29,7 +29,7 @@ public class TideDeathrepellerModel extends GeoModel<TideDeathrepellerEntity> {
 	}
 
 	@Override
-	public void setCustomAnimations(TideDeathrepellerEntity animatable, long instanceId, AnimationState animationState) {
+	public void setCustomAnimations(TideDeathrepellerEntity animatable, long instanceId, AnimationState<TideDeathrepellerEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("Head");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);

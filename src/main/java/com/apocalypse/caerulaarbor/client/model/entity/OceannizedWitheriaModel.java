@@ -31,7 +31,7 @@ public class OceannizedWitheriaModel extends GeoModel<OceannizedWitheriaEntity> 
 	}
 
 	@Override
-	public void setCustomAnimations(OceannizedWitheriaEntity animatable, long instanceId, AnimationState animationState) {
+	public void setCustomAnimations(OceannizedWitheriaEntity animatable, long instanceId, AnimationState<OceannizedWitheriaEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("Head");
 		if (head != null) {
 			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);
