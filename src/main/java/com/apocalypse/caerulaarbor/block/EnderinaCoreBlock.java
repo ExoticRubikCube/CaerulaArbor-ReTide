@@ -77,71 +77,71 @@ public class EnderinaCoreBlock extends Block {
         boolean canSummon = false;
         double count = 0;
         BlockPos curPos = BlockPos.containing(x, y, z);
-        if (!(blockstate.getBlock().getStateDefinition().getProperty("can_summon") instanceof BooleanProperty _getbp1 && blockstate.getValue(_getbp1))) {
+        if (!(blockstate.getBlock().getStateDefinition().getProperty("can_summon") instanceof BooleanProperty getbp1 && blockstate.getValue(getbp1))) {
             if(world.getEntitiesOfClass(OceanizedEnderinaEntity.class,
                     AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> e.isAlive()).isEmpty()) {
                 {
-                    final Vec3 _center = new Vec3(x, y, z);
-                    List<MoistEnderCrystalEntity> _entfound = world.getEntitiesOfClass(MoistEnderCrystalEntity.class,
-                            new AABB(_center, _center).inflate(11 / 2d), e -> {
+                    final Vec3 center = new Vec3(x, y, z);
+                    List<MoistEnderCrystalEntity> entfound = world.getEntitiesOfClass(MoistEnderCrystalEntity.class,
+                            new AABB(center, center).inflate(11 / 2d), e -> {
                                 return e.IS_STATIC;
                             });
-                    for (MoistEnderCrystalEntity entityiterator : _entfound) {
+                    for (MoistEnderCrystalEntity entityiterator : entfound) {
                         count++;
                         OceanizedEnderinaEntity.spawnLinkParticles(world, entityiterator.getX(), entityiterator.getY() + 1, entityiterator.getZ(), (double) x + 0.5, (double) y + 1, (double) z + 0.5);
                     }
                 }
                 if (count >= 4) {
                     {
-                        BlockPos _pos = curPos;
-                        BlockState _bs = blockstate;
-                        if (_bs.getBlock().getStateDefinition().getProperty("can_summon") instanceof BooleanProperty _booleanProp)
-                            ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_booleanProp, true), 3);
+                        BlockPos blockPos = curPos;
+                        BlockState bs = blockstate;
+                        if (bs.getBlock().getStateDefinition().getProperty("can_summon") instanceof BooleanProperty booleanProp)
+                            ((LevelAccessor) world).setBlock(pos, bs.setValue(booleanProp, true), 3);
                     }
-                    if ((LevelAccessor) world instanceof Level _level) {
-                            _level.playSound(null, curPos, SoundEvents.ENDER_DRAGON_GROWL, SoundSource.BLOCKS, 2, 1);
+                    if ((LevelAccessor) world instanceof Level level) {
+                            level.playSound(null, curPos, SoundEvents.ENDER_DRAGON_GROWL, SoundSource.BLOCKS, 2, 1);
                     }
                 }
             }
         } else {
             {
-                final Vec3 _center = new Vec3(x, y, z);
-                List<MoistEnderCrystalEntity> _entfound = world.getEntitiesOfClass(MoistEnderCrystalEntity.class,
-                new AABB(_center, _center).inflate(11 / 2d), e -> {return e.IS_STATIC;});
-                for (MoistEnderCrystalEntity entityiterator : _entfound) {
+                final Vec3 center = new Vec3(x, y, z);
+                List<MoistEnderCrystalEntity> entfound = world.getEntitiesOfClass(MoistEnderCrystalEntity.class,
+                new AABB(center, center).inflate(11 / 2d), e -> {return e.IS_STATIC;});
+                for (MoistEnderCrystalEntity entityiterator : entfound) {
                     if (!entityiterator.level().isClientSide())
                         entityiterator.discard();
                     count = count + 1;
-                    if ((LevelAccessor) world instanceof ServerLevel _level)
-                        _level.sendParticles(ParticleTypes.EXPLOSION, (entityiterator.getX()), (entityiterator.getY() + 1), (entityiterator.getZ()), 2, 0.1, 0.1, 0.1, 1);
+                    if ((LevelAccessor) world instanceof ServerLevel level)
+                        level.sendParticles(ParticleTypes.EXPLOSION, (entityiterator.getX()), (entityiterator.getY() + 1), (entityiterator.getZ()), 2, 0.1, 0.1, 0.1, 1);
                     if (count >= 4) {
                         break;
                     }
                 }
             }
             if (count >= 4) {
-                if ((LevelAccessor) world instanceof ServerLevel _level) {
-                    LightningBolt entityToSpawn = EntityType.LIGHTNING_BOLT.create(_level);
+                if ((LevelAccessor) world instanceof ServerLevel level) {
+                    LightningBolt entityToSpawn = EntityType.LIGHTNING_BOLT.create(level);
                     entityToSpawn.moveTo(Vec3.atBottomCenterOf(BlockPos.containing(x, y, z)));
                     entityToSpawn.setVisualOnly(true);
-                    _level.addFreshEntity(entityToSpawn);
+                    level.addFreshEntity(entityToSpawn);
                 }
-                if ((LevelAccessor) world instanceof ServerLevel _level) {
-                    Entity entityToSpawn = CAEntities.OCEANIZED_ENDERINA.get().spawn(_level, BlockPos.containing(x, (double) y + 1, z), MobSpawnType.MOB_SUMMONED);
+                if ((LevelAccessor) world instanceof ServerLevel level) {
+                    Entity entityToSpawn = CAEntities.OCEANIZED_ENDERINA.get().spawn(level, BlockPos.containing(x, (double) y + 1, z), MobSpawnType.MOB_SUMMONED);
                     if (entityToSpawn != null) {
                         entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
                     }
                 }
-                if ((LevelAccessor) world instanceof Level _level) {
-                        _level.playSound(null, curPos, CASounds.CASTER_SKILL.get(), SoundSource.BLOCKS, 2, 1);
+                if ((LevelAccessor) world instanceof Level level) {
+                        level.playSound(null, curPos, CASounds.CASTER_SKILL.get(), SoundSource.BLOCKS, 2, 1);
                 }
                 world.destroyBlock(curPos, false);
             } else {
                 {
-                    BlockPos _pos = curPos;
-                    BlockState _bs = blockstate;
-                    if (_bs.getBlock().getStateDefinition().getProperty("can_summon") instanceof BooleanProperty _booleanProp)
-                        ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_booleanProp, false), 3);
+                    BlockPos blockPos = curPos;
+                    BlockState bs = blockstate;
+                    if (bs.getBlock().getStateDefinition().getProperty("can_summon") instanceof BooleanProperty booleanProp)
+                        ((LevelAccessor) world).setBlock(pos, bs.setValue(booleanProp, false), 3);
                 }
             }
         }

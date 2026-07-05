@@ -47,24 +47,24 @@ public class PiglinDiaryItem extends Item {
         ItemStack itemstack = ar.getObject();
         if (!itemstack.getOrCreateTag().getBoolean("used")) {
             {
-                boolean _setval = true;
+                boolean setval = true;
                 ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                    capability.relic_util_DURIN = _setval;
+                    capability.relic_util_DURIN = setval;
                     capability.syncPlayerVariables(entity);
                 });
             }
-            if ((LevelAccessor) world instanceof Level _level) {
-                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.AMETHYST_BLOCK_RESONATE, SoundSource.NEUTRAL, 2, 1);
+            if ((LevelAccessor) world instanceof Level level) {
+                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.AMETHYST_BLOCK_RESONATE, SoundSource.NEUTRAL, 2, 1);
             }
-            if ((LevelAccessor) world instanceof ServerLevel _level)
-                _level.sendParticles(ParticleTypes.NAUTILUS, x, y, z, 72, 0.75, 1, 0.75, 1);
+            if ((LevelAccessor) world instanceof ServerLevel level)
+                level.sendParticles(ParticleTypes.NAUTILUS, x, y, z, 72, 0.75, 1, 0.75, 1);
             itemstack.getOrCreateTag().putBoolean("used", true);
             if (((LevelAccessor) world).isClientSide())
                 Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);
             {
-                double _setval = (((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_shield + 4;
+                double setval = (((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_shield + 4;
                 ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                    capability.player_shield = _setval;
+                    capability.player_shield = setval;
                     capability.syncPlayerVariables(entity);
                 });
             }

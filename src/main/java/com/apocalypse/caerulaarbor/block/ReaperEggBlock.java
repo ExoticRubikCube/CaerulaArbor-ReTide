@@ -145,55 +145,55 @@ public class ReaperEggBlock extends Block implements SimpleWaterloggedBlock {
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();
-        if (blockstate.getBlock().getStateDefinition().getProperty("waterlogged") instanceof BooleanProperty _getbp1 && blockstate.getValue(_getbp1)) {
+        if (blockstate.getBlock().getStateDefinition().getProperty("waterlogged") instanceof BooleanProperty getbp1 && blockstate.getValue(getbp1)) {
             if (Math.random() < 0.2) {
                 {
-                    int _value = (blockstate.getBlock().getStateDefinition().getProperty("process") instanceof IntegerProperty _getip3 ? blockstate.getValue(_getip3) : -1) + 1;
-                    BlockPos _pos = BlockPos.containing(x, y, z);
-                    BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-                    if (_bs.getBlock().getStateDefinition().getProperty("process") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))
-                        ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
+                    int value = (blockstate.getBlock().getStateDefinition().getProperty("process") instanceof IntegerProperty getip3 ? blockstate.getValue(getip3) : -1) + 1;
+                    BlockPos blockPos = BlockPos.containing(x, y, z);
+                    BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                    if (bs.getBlock().getStateDefinition().getProperty("process") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
+                        ((LevelAccessor) world).setBlock(pos, bs.setValue(integerProp, value), 3);
                 }
             }
         }
-        if ((blockstate.getBlock().getStateDefinition().getProperty("process") instanceof IntegerProperty _getip6 ? blockstate.getValue(_getip6) : -1) >= 10) {
+        if ((blockstate.getBlock().getStateDefinition().getProperty("process") instanceof IntegerProperty getip6 ? blockstate.getValue(getip6) : -1) >= 10) {
             {
-                int _value = (blockstate.getBlock().getStateDefinition().getProperty("hatch") instanceof IntegerProperty _getip8 ? blockstate.getValue(_getip8) : -1) + 1;
-                BlockPos _pos = BlockPos.containing(x, y, z);
-                BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-                if (_bs.getBlock().getStateDefinition().getProperty("hatch") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))
-                    ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
+                int value = (blockstate.getBlock().getStateDefinition().getProperty("hatch") instanceof IntegerProperty getip8 ? blockstate.getValue(getip8) : -1) + 1;
+                BlockPos blockPos = BlockPos.containing(x, y, z);
+                BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                if (bs.getBlock().getStateDefinition().getProperty("hatch") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
+                    ((LevelAccessor) world).setBlock(pos, bs.setValue(integerProp, value), 3);
             }
             {
-                int _value = 0;
-                BlockPos _pos = BlockPos.containing(x, y, z);
-                BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-                if (_bs.getBlock().getStateDefinition().getProperty("process") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))
-                    ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
+                int value = 0;
+                BlockPos blockPos = BlockPos.containing(x, y, z);
+                BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                if (bs.getBlock().getStateDefinition().getProperty("process") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
+                    ((LevelAccessor) world).setBlock(pos, bs.setValue(integerProp, value), 3);
             }
-            if ((LevelAccessor) world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TURTLE_EGG_CRACK, SoundSource.BLOCKS, 1, 1);
+            if ((LevelAccessor) world instanceof Level level) {
+                    level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TURTLE_EGG_CRACK, SoundSource.BLOCKS, 1, 1);
             }
         }
-        if ((blockstate.getBlock().getStateDefinition().getProperty("hatch") instanceof IntegerProperty _getip13 ? blockstate.getValue(_getip13) : -1) >= 2
-                && (blockstate.getBlock().getStateDefinition().getProperty("process") instanceof IntegerProperty _getip15 ? blockstate.getValue(_getip15) : -1) >= 10) {
+        if ((blockstate.getBlock().getStateDefinition().getProperty("hatch") instanceof IntegerProperty getip13 ? blockstate.getValue(getip13) : -1) >= 2
+                && (blockstate.getBlock().getStateDefinition().getProperty("process") instanceof IntegerProperty getip15 ? blockstate.getValue(getip15) : -1) >= 10) {
             world.destroyBlock(BlockPos.containing(x, y, z), false);
-            if ((LevelAccessor) world instanceof ServerLevel _level) {
-                Entity entityToSpawn = CAEntities.REAPER_PET.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+            if ((LevelAccessor) world instanceof ServerLevel level) {
+                Entity entityToSpawn = CAEntities.REAPER_PET.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn != null) {
                     entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
                 }
             }
-            if ((LevelAccessor) world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TURTLE_EGG_HATCH, SoundSource.BLOCKS, 1, 1);
+            if ((LevelAccessor) world instanceof Level level) {
+                    level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TURTLE_EGG_HATCH, SoundSource.BLOCKS, 1, 1);
             }
         }
         {
-            int _value = blockstate.getBlock().getStateDefinition().getProperty("hatch") instanceof IntegerProperty _getip20 ? blockstate.getValue(_getip20) : -1;
-            BlockPos _pos = BlockPos.containing(x, y, z);
-            BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-            if (_bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))
-                ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
+            int value = blockstate.getBlock().getStateDefinition().getProperty("hatch") instanceof IntegerProperty getip20 ? blockstate.getValue(getip20) : -1;
+            BlockPos blockPos = BlockPos.containing(x, y, z);
+            BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+            if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
+                ((LevelAccessor) world).setBlock(pos, bs.setValue(integerProp, value), 3);
         }
         world.scheduleTick(pos, this, 20);
 	}
@@ -210,35 +210,35 @@ public class ReaperEggBlock extends Block implements SimpleWaterloggedBlock {
 		Direction direction = hit.getDirection();
         InteractionResult result = InteractionResult.PASS;
         if (entity != null) {
-            if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.CELL_CLUSTER.get()) {
+            if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.CELL_CLUSTER.get()) {
                 if (new Object() {
-                    public boolean checkGamemode(Entity _ent) {
-                        if (_ent instanceof ServerPlayer _serverPlayer) {
-                            return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                        } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                            return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                    && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                    public boolean checkGamemode(Entity ent) {
+                        if (ent instanceof ServerPlayer serverPlayer) {
+                            return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                        } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                            return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+                                    && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                         }
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
                     {
-                        int _value = (blockstate.getBlock().getStateDefinition().getProperty("hatch") instanceof IntegerProperty _getip4 ? blockstate.getValue(_getip4) : -1) + 1;
-                        BlockPos _pos = BlockPos.containing(x, y, z);
-                        BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-                        if (_bs.getBlock().getStateDefinition().getProperty("hatch") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))
-                            ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
+                        int value = (blockstate.getBlock().getStateDefinition().getProperty("hatch") instanceof IntegerProperty getip4 ? blockstate.getValue(getip4) : -1) + 1;
+                        BlockPos blockPos = BlockPos.containing(x, y, z);
+                        BlockState bs = ((LevelAccessor) world).getBlockState(blockPos);
+                        if (bs.getBlock().getStateDefinition().getProperty("hatch") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
+                            ((LevelAccessor) world).setBlock(blockPos, bs.setValue(integerProp, value), 3);
                     }
-                    ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
+                    ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                 } else {
                     {
-                        int _value = (blockstate.getBlock().getStateDefinition().getProperty("process") instanceof IntegerProperty _getip9 ? blockstate.getValue(_getip9) : -1) + 1;
-                        BlockPos _pos = BlockPos.containing(x, y, z);
-                        BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-                        if (_bs.getBlock().getStateDefinition().getProperty("process") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))
-                            ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
+                        int value = (blockstate.getBlock().getStateDefinition().getProperty("process") instanceof IntegerProperty getip9 ? blockstate.getValue(getip9) : -1) + 1;
+                        BlockPos blockPos = BlockPos.containing(x, y, z);
+                        BlockState bs = ((LevelAccessor) world).getBlockState(blockPos);
+                        if (bs.getBlock().getStateDefinition().getProperty("process") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
+                            ((LevelAccessor) world).setBlock(blockPos, bs.setValue(integerProp, value), 3);
                     }
-                    ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
+                    ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                 }
                 result = InteractionResult.SUCCESS;
             }

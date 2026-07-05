@@ -112,16 +112,16 @@ public class LivingDeathEventHandler {
                 if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_shield > 0) {
                     death_blocked = true;
                     is_shield = true;
-                    double _setval = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_shield - 1;
+                    double setval = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_shield - 1;
                     entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                        capability.player_shield = _setval;
+                        capability.player_shield = setval;
                         capability.syncPlayerVariables(entity);
                     });
                 } else if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_lives > 1) {
                     death_blocked = true;
-                    double _setval = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_lives - 1;
+                    double setval = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_lives - 1;
                     entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                        capability.player_lives = _setval;
+                        capability.player_lives = setval;
                         capability.syncPlayerVariables(entity);
                     });
                 } else {
@@ -132,22 +132,22 @@ public class LivingDeathEventHandler {
                 if (event.isCancelable()) {
                     event.setCanceled(true);
                 }
-                if (entity instanceof ServerPlayer _player) {
-                    Advancement _adv = _player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "another_breath"));
-                    AdvancementProgress _ap = _player.getAdvancements().getOrStartProgress(_adv);
-                    if (!_ap.isDone()) {
-                        for (String criteria : _ap.getRemainingCriteria())
-                            _player.getAdvancements().award(_adv, criteria);
+                if (entity instanceof ServerPlayer player) {
+                    Advancement adv = player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "another_breath"));
+                    AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
+                    if (!ap.isDone()) {
+                        for (String criteria : ap.getRemainingCriteria())
+                            player.getAdvancements().award(adv, criteria);
                     }
                 }
-                if (world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TOTEM_USE, SoundSource.PLAYERS, (float) 0.33, 1);
-                        _level.playSound(null, BlockPos.containing(x, y, z), CASounds.TARGET_DAMAGED.get(), SoundSource.PLAYERS, (float) 0.33, 1);
+                if (world instanceof Level level) {
+                        level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TOTEM_USE, SoundSource.PLAYERS, (float) 0.33, 1);
+                        level.playSound(null, BlockPos.containing(x, y, z), CASounds.TARGET_DAMAGED.get(), SoundSource.PLAYERS, (float) 0.33, 1);
                 }
                 ModCapabilities.getSanityInjury(entity).heal(1000);
                 if (is_shield) {
-                    if (world instanceof ServerLevel _level)
-                        _level.sendParticles(CAParticles.SHIELDLOSS.get(), x, (y + 0.95), z, 72, 0.75, 0.55, 0.75, 0.2);
+                    if (world instanceof ServerLevel level)
+                        level.sendParticles(CAParticles.SHIELDLOSS.get(), x, (y + 0.95), z, 72, 0.75, 0.55, 0.75, 0.2);
                     if (!world.isClientSide()) {
                         entity.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 100, 0));
                         entity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 200, 4));
@@ -155,8 +155,8 @@ public class LivingDeathEventHandler {
                     }
                     entity.setHealth(entity.getMaxHealth());
                 } else {
-                    if (world instanceof ServerLevel _level)
-                        _level.sendParticles(CAParticles.LIFELOSS.get(), x, (y + 0.95), z, 72, 0.75, 0.55, 0.75, 0.2);
+                    if (world instanceof ServerLevel level)
+                        level.sendParticles(CAParticles.LIFELOSS.get(), x, (y + 0.95), z, 72, 0.75, 0.55, 0.75, 0.2);
                     if (!world.isClientSide())
                         entity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 200, 2));
                     entity.setHealth(entity.getMaxHealth() * 0.5f);
@@ -171,9 +171,9 @@ public class LivingDeathEventHandler {
             }
             if (light_cost > 0) {
                 double cur_light = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_light;
-                double _setval = Math.max(0, cur_light - light_cost);
+                double setval = Math.max(0, cur_light - light_cost);
                 entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                    capability.player_light = _setval;
+                    capability.player_light = setval;
                     capability.syncPlayerVariables(entity);
                 });
             }
@@ -185,8 +185,8 @@ public class LivingDeathEventHandler {
         if (entity == null) return;
 
         if (!event.isCanceled()) {
-            if (entity instanceof LivingEntity _livingEntity1 && _livingEntity1.getAttributes().hasAttribute(CAAttributes.LIVING_BARRIER.get()))
-                _livingEntity1.getAttribute(CAAttributes.LIVING_BARRIER.get()).setBaseValue(0);
+            if (entity instanceof LivingEntity livingEntity1 && livingEntity1.getAttributes().hasAttribute(CAAttributes.LIVING_BARRIER.get()))
+                livingEntity1.getAttribute(CAAttributes.LIVING_BARRIER.get()).setBaseValue(0);
             entity.getPersistentData().putDouble("playerEvoHitTime", 0);
         }
     }
@@ -198,7 +198,7 @@ public class LivingDeathEventHandler {
 
         if (damagesource == null || entity == null || sourceentity == null) return;
 
-        if (entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CAMobEffects.INVULNERABLE.get()) && !damagesource.is(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "inv_killer")))) {
+        if (entity instanceof LivingEntity livEnt0 && livEnt0.hasEffect(CAMobEffects.INVULNERABLE.get()) && !damagesource.is(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "inv_killer")))) {
             if (event.isCancelable()) {
                 event.setCanceled(true);
             }
@@ -212,12 +212,12 @@ public class LivingDeathEventHandler {
         if (damagesource == null || sourceentity == null) return;
 
         if (damagesource.is(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "extractor_damage")))) {
-            if (sourceentity instanceof ServerPlayer _player) {
-                Advancement _adv = _player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "little_by_little"));
-                AdvancementProgress _ap = _player.getAdvancements().getOrStartProgress(_adv);
-                if (!_ap.isDone()) {
-                    for (String criteria : _ap.getRemainingCriteria())
-                        _player.getAdvancements().award(_adv, criteria);
+            if (sourceentity instanceof ServerPlayer player) {
+                Advancement adv = player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "little_by_little"));
+                AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
+                if (!ap.isDone()) {
+                    for (String criteria : ap.getRemainingCriteria())
+                        player.getAdvancements().award(adv, criteria);
                 }
             }
         }
@@ -245,27 +245,27 @@ public class LivingDeathEventHandler {
                 r0 = 0.15;
             }
             if (Math.random() < r0) {
-                if (world instanceof ServerLevel _level) {
-                    ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, new ItemStack(CAItems.GENE_SAMPLE_NORMAL.get()));
+                if (world instanceof ServerLevel level) {
+                    ItemEntity entityToSpawn = new ItemEntity(level, x, y, z, new ItemStack(CAItems.GENE_SAMPLE_NORMAL.get()));
                     entityToSpawn.setPickUpDelay(10);
                     entityToSpawn.setUnlimitedLifetime();
-                    _level.addFreshEntity(entityToSpawn);
+                    level.addFreshEntity(entityToSpawn);
                 }
             }
             if (Math.random() < r1) {
-                if (world instanceof ServerLevel _level) {
-                    ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, new ItemStack(CAItems.GENE_SAMPLE_UPGRADED.get()));
+                if (world instanceof ServerLevel level) {
+                    ItemEntity entityToSpawn = new ItemEntity(level, x, y, z, new ItemStack(CAItems.GENE_SAMPLE_UPGRADED.get()));
                     entityToSpawn.setPickUpDelay(10);
                     entityToSpawn.setUnlimitedLifetime();
-                    _level.addFreshEntity(entityToSpawn);
+                    level.addFreshEntity(entityToSpawn);
                 }
             }
             if (Math.random() < r2) {
-                if (world instanceof ServerLevel _level) {
-                    ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, new ItemStack(CAItems.GENE_SAMPLE_SUPERB.get()));
+                if (world instanceof ServerLevel level) {
+                    ItemEntity entityToSpawn = new ItemEntity(level, x, y, z, new ItemStack(CAItems.GENE_SAMPLE_SUPERB.get()));
                     entityToSpawn.setPickUpDelay(10);
                     entityToSpawn.setUnlimitedLifetime();
-                    _level.addFreshEntity(entityToSpawn);
+                    level.addFreshEntity(entityToSpawn);
                 }
             }
         }
@@ -290,9 +290,9 @@ public class LivingDeathEventHandler {
         if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
             if (world.getLevelData().getGameRules().getBoolean(CAGameRules.NATURAL_EVOLUTION)) {
                 if (!world.getEntitiesOfClass(Player.class, AABB.ofSize(new Vec3(x, y, z), 128, 128, 128), e -> true).isEmpty()) {
-                    MapVariablesHandler.addEvoPoint(world, StrategyType.BREED, (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.1);
+                    MapVariablesHandler.addEvoPoint(world, StrategyType.BREED, (entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.1);
                     BreedUpgradeManager.applyBreedUpgrade(world);
-                    SilenceUpgradeManager.applySilenceUpgrade(world, (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.1);
+                    SilenceUpgradeManager.applySilenceUpgrade(world, (entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.1);
                 }
             }
         }
@@ -300,49 +300,49 @@ public class LivingDeathEventHandler {
         if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanelite")))) {
             if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
                 if (Math.random() < 0.1) {
-                    if (world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.AMETHYST_CLUSTER_BREAK, SoundSource.AMBIENT, 1, 1);
+                    if (world instanceof Level level) {
+                            level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.AMETHYST_CLUSTER_BREAK, SoundSource.AMBIENT, 1, 1);
                     }
-                    if (world instanceof ServerLevel _level) {
-                        ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "common_relics"))).getRandomElement(RandomSource.create()).orElseGet(() -> Items.AIR))));
+                    if (world instanceof ServerLevel level) {
+                        ItemEntity entityToSpawn = new ItemEntity(level, x, y, z, new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "common_relics"))).getRandomElement(RandomSource.create()).orElseGet(() -> Items.AIR))));
                         entityToSpawn.setPickUpDelay(10);
                         entityToSpawn.setUnlimitedLifetime();
-                        _level.addFreshEntity(entityToSpawn);
+                        level.addFreshEntity(entityToSpawn);
                     }
                 }
             }
         }
 
-        if ((sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).is(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "self_mendable")))) {
-            ItemStack weapon = (sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).copy();
+        if ((sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).is(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "self_mendable")))) {
+            ItemStack weapon = (sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).copy();
             double dama = weapon.getDamageValue() - Mth.nextInt(RandomSource.create(), 1, 5 + weapon.getEnchantmentLevel(Enchantments.UNBREAKING));
             if (dama <= 0) {
-                (sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).setDamageValue(0);
+                (sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).setDamageValue(0);
             } else {
-                (sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).setDamageValue((int) dama);
+                (sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).setDamageValue((int) dama);
             }
         }
     }
 
     private static void handlePlayerKillRelics(LivingDeathEvent event, LevelAccessor world, double x, double y, double z, Entity entity, Entity sourceentity) {
         if ((sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_cursed_EMELIGHT) {
-            double _setval = (sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_light - Mth.nextDouble(RandomSource.create(), 0.1, 0.2);
+            double setval = (sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_light - Mth.nextDouble(RandomSource.create(), 0.1, 0.2);
             sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                capability.player_light = _setval;
+                capability.player_light = setval;
                 capability.syncPlayerVariables(sourceentity);
             });
         }
         if ((sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_cursed_GLOWBODY) {
-            double _setval = (sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_light - Mth.nextDouble(RandomSource.create(), 0.2, 0.3);
+            double setval = (sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_light - Mth.nextDouble(RandomSource.create(), 0.2, 0.3);
             sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                capability.player_light = _setval;
+                capability.player_light = setval;
                 capability.syncPlayerVariables(sourceentity);
             });
         }
         if ((sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_cursed_RESEARCH) {
-            double _setval = (sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_light - Mth.nextDouble(RandomSource.create(), 0.3, 0.5);
+            double setval = (sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_light - Mth.nextDouble(RandomSource.create(), 0.3, 0.5);
             sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                capability.player_light = _setval;
+                capability.player_light = setval;
                 capability.syncPlayerVariables(sourceentity);
             });
         }
@@ -355,15 +355,15 @@ public class LivingDeathEventHandler {
         if ((sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_king_ARMOR) {
             if (Math.random() < 0.08) {
                 if ((sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_lives > 1) {
-                    double _setval = (sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_lives - 1;
+                    double setval = (sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_lives - 1;
                     sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                        capability.player_lives = _setval;
+                        capability.player_lives = setval;
                         capability.syncPlayerVariables(sourceentity);
                     });
                 }
-                double _setval = (sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_shield + 1;
+                double setval = (sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_shield + 1;
                 sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                    capability.player_shield = _setval;
+                    capability.player_shield = setval;
                     capability.syncPlayerVariables(sourceentity);
                 });
             }
@@ -371,33 +371,33 @@ public class LivingDeathEventHandler {
         if ((sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_king_CRYSTAL) {
             if (Math.random() < 0.1) {
                 if ((sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_lives > 1) {
-                    double _setval = Math.max((sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_lives - 2, 1);
+                    double setval = Math.max((sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_lives - 2, 1);
                     sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                        capability.player_lives = _setval;
+                        capability.player_lives = setval;
                         capability.syncPlayerVariables(sourceentity);
                     });
                 }
-                if (sourceentity instanceof Player _player)
-                    _player.giveExperienceLevels(1);
-                if (world instanceof ServerLevel _level) {
-                    ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, new ItemStack(CAItems.REDSTONE_INGOT.get()));
+                if (sourceentity instanceof Player player)
+                    player.giveExperienceLevels(1);
+                if (world instanceof ServerLevel level) {
+                    ItemEntity entityToSpawn = new ItemEntity(level, x, y, z, new ItemStack(CAItems.REDSTONE_INGOT.get()));
                     entityToSpawn.setPickUpDelay(10);
-                    _level.addFreshEntity(entityToSpawn);
+                    level.addFreshEntity(entityToSpawn);
                 }
             }
         }
         if ((sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_ENGRAVE >= 0
                 && (sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_ENGRAVE < 99) {
-            if (entity instanceof Monster || (entity instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == sourceentity) {
+            if (entity instanceof Monster || (entity instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == sourceentity) {
                 boolean validweapon = false;
-                if ((sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == Items.TRIDENT) {
+                if ((sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == Items.TRIDENT) {
                     validweapon = true;
-                } else if ((sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).is(ItemTags.create(new ResourceLocation("forge:tools/tridents")))) {
+                } else if ((sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).is(ItemTags.create(new ResourceLocation("forge:tools/tridents")))) {
                     validweapon = true;
                 } else if (event.getSource().is(DamageTypes.TRIDENT)) {
                     validweapon = true;
                 } else {
-                    String rname = ForgeRegistries.ITEMS.getKey((sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem()).toString();
+                    String rname = ForgeRegistries.ITEMS.getKey((sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem()).toString();
                     for (String stringiterator : CaerulaConfigsConfiguration.HAND_ENGRAVE.get()) {
                         if (CaerulaUtil.matchesRegistryName(stringiterator, rname)) {
                             validweapon = true;
@@ -406,9 +406,9 @@ public class LivingDeathEventHandler {
                     }
                 }
                 if (validweapon) {
-                    double _setval = (sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_ENGRAVE + 1;
+                    double setval = (sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_ENGRAVE + 1;
                     sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                        capability.relic_hand_ENGRAVE = _setval;
+                        capability.relic_hand_ENGRAVE = setval;
                         capability.syncPlayerVariables(sourceentity);
                     });
                 }
@@ -416,15 +416,15 @@ public class LivingDeathEventHandler {
         }
         if ((sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_SURVIVOR >= 0
                 && (sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_SURVIVOR < 32) {
-            if (entity instanceof Monster || (entity instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == sourceentity) {
+            if (entity instanceof Monster || (entity instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == sourceentity) {
                 if (Math.random() < 0.035 || entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation("forge:bosses")))) {
-                    double _setval = (sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_SURVIVOR + 1;
+                    double setval = (sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_SURVIVOR + 1;
                     sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                        capability.relic_SURVIVOR = _setval;
+                        capability.relic_SURVIVOR = setval;
                         capability.syncPlayerVariables(sourceentity);
                     });
-                    if (world instanceof ServerLevel _level)
-                        _level.sendParticles(ParticleTypes.WAX_ON, x, y, z, 48, 0.7, 1.5, 0.7, 0.2);
+                    if (world instanceof ServerLevel level)
+                        level.sendParticles(ParticleTypes.WAX_ON, x, y, z, 48, 0.7, 1.5, 0.7, 0.2);
                 }
             }
         }
@@ -481,13 +481,13 @@ public class LivingDeathEventHandler {
                 for (int index2 = 0; index2 < 3; index2++) {
                     if ((world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz))).getBlock() == CABlocks.SEA_TRAIL_INIT.get()
                             || (world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz))).getBlock() == CABlocks.SEA_TRAIL_GROWING.get()) {
-                        int _value = ((world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz))).getBlock().getStateDefinition().getProperty("grow_age") instanceof IntegerProperty _getip6
-                                ? (world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz))).getValue(_getip6)
+                        int value = ((world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz))).getBlock().getStateDefinition().getProperty("grow_age") instanceof IntegerProperty getip6
+                                ? (world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz))).getValue(getip6)
                                 : -1) + 4;
-                        BlockPos _pos = BlockPos.containing(x + dx, y + dy, z + dz);
-                        BlockState _bs = world.getBlockState(_pos);
-                        if (_bs.getBlock().getStateDefinition().getProperty("grow_age") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))
-                            world.setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
+                        BlockPos pos = BlockPos.containing(x + dx, y + dy, z + dz);
+                        BlockState bs = world.getBlockState(pos);
+                        if (bs.getBlock().getStateDefinition().getProperty("grow_age") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
+                            world.setBlock(pos, bs.setValue(integerProp, value), 3);
                     }
                     dy = dy + 1;
                 }
@@ -495,7 +495,7 @@ public class LivingDeathEventHandler {
             }
             dx = dx + 1;
         }
-        num = Math.round(Math.sqrt(entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1));
+        num = Math.round(Math.sqrt(entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1));
         light_cost = 1;
         if (num > 8) {
             light_cost = 2;
@@ -515,16 +515,16 @@ public class LivingDeathEventHandler {
                             return;
                         }
                         if ((world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz))).getBlock() == CABlocks.OCEAN_OVARY.get()) {
-                            if (1 == ((world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz))).getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _getip12
-                                    ? (world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz))).getValue(_getip12)
+                            if (1 == ((world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz))).getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip12
+                                    ? (world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz))).getValue(getip12)
                                     : -1)) {
-                                BlockPos _pos = BlockPos.containing(x + dx, y + dy, z + dz);
-                                BlockState _bs = world.getBlockState(_pos);
-                                if (_bs.getBlock().getStateDefinition().getProperty("output") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(0))
-                                    world.setBlock(_pos, _bs.setValue(_integerProp, 0), 3);
-                                _bs = world.getBlockState(_pos);
-                                if (_bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(0))
-                                    world.setBlock(_pos, _bs.setValue(_integerProp, 0), 3);
+                                BlockPos pos = BlockPos.containing(x + dx, y + dy, z + dz);
+                                BlockState bs = world.getBlockState(pos);
+                                if (bs.getBlock().getStateDefinition().getProperty("output") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(0))
+                                    world.setBlock(pos, bs.setValue(integerProp, 0), 3);
+                                bs = world.getBlockState(pos);
+                                if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(0))
+                                    world.setBlock(pos, bs.setValue(integerProp, 0), 3);
                                 light_cost = light_cost - 1;
                             }
                         }
@@ -549,14 +549,14 @@ public class LivingDeathEventHandler {
         if (event.isCanceled()) return;
 
         if (entity instanceof Player && damagesource.is(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanize_damage")))) {
-            if (world instanceof ServerLevel _level) {
-                Entity entityToSpawn = CAEntities.SLIDER_FISH.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+            if (world instanceof ServerLevel level) {
+                Entity entityToSpawn = CAEntities.SLIDER_FISH.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn != null) {
                     entityToSpawn.setDeltaMovement(0, 0.15, 0);
                 }
             }
-            if (world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SCULK_VEIN_PLACE, SoundSource.PLAYERS, (float) 0.75, 1);
+            if (world instanceof Level level) {
+                    level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SCULK_VEIN_PLACE, SoundSource.PLAYERS, (float) 0.75, 1);
             }
             if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization < 2.9) {
                 entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
@@ -578,15 +578,15 @@ public class LivingDeathEventHandler {
         if (event.isCanceled()||entity == null) return;
 
         MartusEntity martus = world.getEntitiesOfClass(MartusEntity.class, AABB.ofSize(new Vec3(x, y, z), 96, 96, 96), e -> true).stream()
-                .sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(x, y, z))).findFirst().orElse(null);
+                .sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z))).findFirst().orElse(null);
 
         if (martus == null) return;
 
         if (entity.getPersistentData().getBoolean("blessed")) {
-            EntityUtils.hurtMartus(world, martus, sourceentity, Math.max(Math.min((entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.25, martus.getMaxHealth() * 0.4),
+            EntityUtils.hurtMartus(world, martus, sourceentity, Math.max(Math.min((entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.25, martus.getMaxHealth() * 0.4),
                     martus.getMaxHealth()) * 0.05, 0);
         } else if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring"))) && martus.getEntityData().get(MartusEntity.DATA_PHASE) >= 1) {
-            EntityUtils.hurtMartus(world, martus, sourceentity, Math.max(Math.min((entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.03, martus.getMaxHealth() * 0.025),
+            EntityUtils.hurtMartus(world, martus, sourceentity, Math.max(Math.min((entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.03, martus.getMaxHealth() * 0.025),
                     martus.getMaxHealth() * 0.018), 0);
         }
     }
@@ -619,17 +619,17 @@ public class LivingDeathEventHandler {
         if (sourceentity == null) return;
         if (event.isCanceled()) return;
 
-        ItemStack helm = (sourceentity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.HEAD) : ItemStack.EMPTY).copy();
-        ItemStack chest = (sourceentity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.CHEST) : ItemStack.EMPTY).copy();
-        ItemStack legg = (sourceentity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.LEGS) : ItemStack.EMPTY).copy();
-        ItemStack boot = (sourceentity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.FEET) : ItemStack.EMPTY).copy();
+        ItemStack helm = (sourceentity instanceof LivingEntity entGetArmor ? entGetArmor.getItemBySlot(EquipmentSlot.HEAD) : ItemStack.EMPTY).copy();
+        ItemStack chest = (sourceentity instanceof LivingEntity entGetArmor ? entGetArmor.getItemBySlot(EquipmentSlot.CHEST) : ItemStack.EMPTY).copy();
+        ItemStack legg = (sourceentity instanceof LivingEntity entGetArmor ? entGetArmor.getItemBySlot(EquipmentSlot.LEGS) : ItemStack.EMPTY).copy();
+        ItemStack boot = (sourceentity instanceof LivingEntity entGetArmor ? entGetArmor.getItemBySlot(EquipmentSlot.FEET) : ItemStack.EMPTY).copy();
 
         if (helm.getItem() == CAItems.TRAILRITE_ARMOR_HELMET.get() && chest.getItem() == CAItems.TRAILRITE_ARMOR_CHESTPLATE.get()
                 && legg.getItem() == CAItems.TRAILRITE_ARMOR_LEGGINGS.get() && boot.getItem() == CAItems.TRAILRITE_ARMOR_BOOTS.get()) {
-            (sourceentity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.HEAD) : ItemStack.EMPTY).setDamageValue(helm.getDamageValue() - 3);
-            (sourceentity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.CHEST) : ItemStack.EMPTY).setDamageValue(chest.getDamageValue() - 3);
-            (sourceentity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.LEGS) : ItemStack.EMPTY).setDamageValue(legg.getDamageValue() - 3);
-            (sourceentity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.FEET) : ItemStack.EMPTY).setDamageValue(boot.getDamageValue() - 3);
+            (sourceentity instanceof LivingEntity entGetArmor ? entGetArmor.getItemBySlot(EquipmentSlot.HEAD) : ItemStack.EMPTY).setDamageValue(helm.getDamageValue() - 3);
+            (sourceentity instanceof LivingEntity entGetArmor ? entGetArmor.getItemBySlot(EquipmentSlot.CHEST) : ItemStack.EMPTY).setDamageValue(chest.getDamageValue() - 3);
+            (sourceentity instanceof LivingEntity entGetArmor ? entGetArmor.getItemBySlot(EquipmentSlot.LEGS) : ItemStack.EMPTY).setDamageValue(legg.getDamageValue() - 3);
+            (sourceentity instanceof LivingEntity entGetArmor ? entGetArmor.getItemBySlot(EquipmentSlot.FEET) : ItemStack.EMPTY).setDamageValue(boot.getDamageValue() - 3);
         }
     }
 

@@ -41,16 +41,16 @@ public class FakeDeathMobEffect extends MobEffect {
         super.addAttributeModifiers(entity, attributeMap, amplifier);
         if (entity == null)
             return;
-        if ((Entity) entity instanceof LivingEntity _entity)
-            _entity.setHealth(1);
+        if ((Entity) entity instanceof LivingEntity livingEntity)
+            livingEntity.setHealth(1);
     }
 
     @Override
     public void applyEffectTick(LivingEntity entity, int amplifier) {
         if (entity == null)
             return;
-        if ((Entity) entity instanceof LivingEntity _entity)
-            _entity.setHealth((float) (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) + ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.025 * ((double) amplifier + 1)));
+        if ((Entity) entity instanceof LivingEntity livingEntity)
+            livingEntity.setHealth((float) (livingEntity.getHealth() + livingEntity.getMaxHealth() * 0.025 * ((double) amplifier + 1)));
     }
 
     @Override

@@ -49,9 +49,8 @@ public class OddFluteItem extends Item {
 
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level world, Player entity, InteractionHand hand) {
-		InteractionResultHolder<ItemStack> ar = super.use(world, entity, hand);
 		entity.startUsingItem(hand);
-		return ar;
+		return super.use(world, entity, hand);
 	}
 
 	@Override
@@ -62,27 +61,27 @@ public class OddFluteItem extends Item {
 		double z = entity.getZ();
         if (!itemstack.getOrCreateTag().getBoolean("used")) {
             for (int index0 = 0; index0 < 7; index0++) {
-                if ((LevelAccessor) world instanceof ServerLevel _level)
-                    _level.addFreshEntity(new ExperienceOrb(_level, (x + Mth.nextDouble(RandomSource.create(), -1, 1)), (y + Mth.nextDouble(RandomSource.create(), 0.6, 0.75)), (z + Mth.nextDouble(RandomSource.create(), -1, 1)), 4));
+                if ((LevelAccessor) world instanceof ServerLevel level)
+                    level.addFreshEntity(new ExperienceOrb(level, (x + Mth.nextDouble(RandomSource.create(), -1, 1)), (y + Mth.nextDouble(RandomSource.create(), 0.6, 0.75)), (z + Mth.nextDouble(RandomSource.create(), -1, 1)), 4));
             }
-            if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                _entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_REACH.get(), 300, 0, false, false));
+            if ((Entity) entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
+                livingEntity.addEffect(new MobEffectInstance(CAMobEffects.ADD_REACH.get(), 300, 0, false, false));
             {
-                boolean _setval = true;
+                boolean setval = true;
                 ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                    capability.relic_util_FLUTE = _setval;
+                    capability.relic_util_FLUTE = setval;
                     capability.syncPlayerVariables(entity);
                 });
             }
             itemstack.getOrCreateTag().putBoolean("used", true);
         }
-        if ((LevelAccessor) world instanceof Level _level) {
-                _level.playSound(null, BlockPos.containing(x, y, z), CASounds.FLUTESONG.get(), SoundSource.NEUTRAL, 2, 1);
+        if ((LevelAccessor) world instanceof Level level) {
+                level.playSound(null, BlockPos.containing(x, y, z), CASounds.FLUTESONG.get(), SoundSource.NEUTRAL, 2, 1);
         }
         new Object() {
             void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
-                if ((LevelAccessor) world instanceof ServerLevel _level)
-                    _level.sendParticles(ParticleTypes.NOTE, x, y, z, 1, 1, 1, 1, 1);
+                if ((LevelAccessor) world instanceof ServerLevel level)
+                    level.sendParticles(ParticleTypes.NOTE, x, y, z, 1, 1, 1, 1, 1);
                 final int tick2 = ticks;
                 CaerulaArborMod.queueServerWork(tick2, () -> {
                     if (timedlooptotal > timedloopiterator + 1) {
@@ -91,8 +90,8 @@ public class OddFluteItem extends Item {
                 });
             }
         }.timedLoop(0, 192, 1);
-        if ((Entity) entity instanceof Player _player)
-            _player.getCooldowns().addCooldown(itemstack.getItem(), 280);
+        if ((Entity) entity instanceof Player player)
+            player.getCooldowns().addCooldown(itemstack.getItem(), 280);
         return retval;
 	}
 }

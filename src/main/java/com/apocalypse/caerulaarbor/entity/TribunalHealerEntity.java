@@ -243,24 +243,24 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
         double sklp1;
         double sklp2;
         if (this.isAlive()) {
-            sklp1 = (Entity) this instanceof TribunalHealerEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP_1) : 0;
-            sklp2 = (Entity) this instanceof TribunalHealerEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP_2) : 0;
+            sklp1 = (Entity) this instanceof TribunalHealerEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP_1) : 0;
+            sklp2 = (Entity) this instanceof TribunalHealerEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP_2) : 0;
             if (sklp1 > 0) {
-                if ((Entity) this instanceof TribunalHealerEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_SKILLP_1, (int) (sklp1 - 1));
+                if ((Entity) this instanceof TribunalHealerEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_SKILLP_1, (int) (sklp1 - 1));
             } else {
                 if (tickCount % 5 == 0) {
                     if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)) {
                         this.getAttribute(Attributes.ATTACK_DAMAGE).getValue();
                     }
                     {
-                        final Vec3 _center = new Vec3(x, y, z);
-                        List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(16 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                        for (Entity entityiterator : _entfound) {
+                        final Vec3 center = new Vec3(x, y, z);
+                        List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(16 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                        for (Entity entityiterator : entfound) {
                             if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "homo_sapiens")))) {
                                 if (!(this == entityiterator)) {
-                                    if ((Entity) this instanceof TribunalHealerEntity _datEntSetI)
-                                        _datEntSetI.getEntityData().set(DATA_SKILLP_1, 100);
+                                    if ((Entity) this instanceof TribunalHealerEntity datEntSetI)
+                                        datEntSetI.getEntityData().set(DATA_SKILLP_1, 100);
                                     if (this instanceof TribunalHealerEntity) {
                                         this.setAnimation("animation.tribunal_healer.concentratedheal");
                                     }
@@ -269,21 +269,21 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
                                             double atk1;
                                             double count1 = 0;
                                             atk1 = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
-                                            if (world instanceof Level _level) {
-                                                _level.playSound(null, BlockPos.containing(x, y, z), CASounds.MEDIC_STRONG.get(), SoundSource.NEUTRAL, 2, 1);
+                                            if (world instanceof Level level) {
+                                                level.playSound(null, BlockPos.containing(x, y, z), CASounds.MEDIC_STRONG.get(), SoundSource.NEUTRAL, 2, 1);
                                             }
-                                            final Vec3 _center1 = new Vec3(x, y, z);
-                                            List<Entity> _entfound1 = world.getEntitiesOfClass(Entity.class, new AABB(_center1, _center1).inflate(18 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center1))).toList();
-                                            for (Entity entityiterator1 : _entfound1) {
+                                            final Vec3 center1 = new Vec3(x, y, z);
+                                            List<Entity> entfound1 = world.getEntitiesOfClass(Entity.class, new AABB(center1, center1).inflate(18 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center1))).toList();
+                                            for (Entity entityiterator1 : entfound1) {
                                                 if (entityiterator1.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "inquisition")))) {
-                                                    if ((entityiterator1 instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < (entityiterator1 instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1)) {
-                                                        if (entityiterator1 instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                                                            _entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 60, 1));
-                                                        if ((entityiterator1 instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < (entityiterator1 instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5) {
-                                                            if ((Entity) this instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                                                                _entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 200, 1));
-                                                            if ((Entity) this instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                                                                _entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 200, 1));
+                                                    if ((entityiterator1 instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) < (entityiterator1 instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1)) {
+                                                        if (entityiterator1 instanceof LivingEntity entity && !entity.level().isClientSide())
+                                                            entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 60, 1));
+                                                        if ((entityiterator1 instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) < (entityiterator1 instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.5) {
+                                                            if ((Entity) this instanceof LivingEntity entity && !entity.level().isClientSide())
+                                                                entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 200, 1));
+                                                            if ((Entity) this instanceof LivingEntity entity && !entity.level().isClientSide())
+                                                                entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 200, 1));
                                                             EntityUtils.healWithParticles(world, entityiterator1, atk1 * 2, 20);
                                                         } else {
                                                             EntityUtils.healWithParticles(world, entityiterator1, atk1 * 2, 0);
@@ -307,12 +307,12 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
                 }
             }
             if (sklp2 > 0) {
-                if ((Entity) this instanceof TribunalHealerEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_SKILLP_2, (int) (sklp2 - 1));
+                if ((Entity) this instanceof TribunalHealerEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_SKILLP_2, (int) (sklp2 - 1));
             } else {
                 if (tickCount % 5 == 0 && hasAggresiveMobAround(world, x, y, z)) {
-                    if ((Entity) this instanceof TribunalHealerEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_SKILLP_2, 240);
+                    if ((Entity) this instanceof TribunalHealerEntity datEntSetI)
+                        datEntSetI.getEntityData().set(DATA_SKILLP_2, 240);
                     if (this instanceof TribunalHealerEntity) {
                         this.setAnimation("animation.tribunal_healer.shockwave");
                     }
@@ -321,17 +321,17 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
                             double vx;
                             double vz;
                             double dist;
-                            if (world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), CASounds.MEDIC_BLAST.get(), SoundSource.PLAYERS, 2, 1);
+                            if (world instanceof Level level) {
+                                level.playSound(null, BlockPos.containing(x, y, z), CASounds.MEDIC_BLAST.get(), SoundSource.PLAYERS, 2, 1);
                             }
                             {
-                                final Vec3 _center = new Vec3((getX()), (getY()), (getZ()));
-                                List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(12 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                                for (Entity entityiterator : _entfound) {
+                                final Vec3 center = new Vec3((getX()), (getY()), (getZ()));
+                                List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(12 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                                for (Entity entityiterator : entfound) {
                                     if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "is_humanside")))) {
                                         continue;
                                     }
-                                    if (entityiterator instanceof TamableAnimal _tamEnt && _tamEnt.isTame()) {
+                                    if (entityiterator instanceof TamableAnimal tamEnt && tamEnt.isTame()) {
                                         continue;
                                     }
                                     if (!(entityiterator instanceof Mob)) {
@@ -348,8 +348,8 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
                                         }
                                         dist = Math.sqrt(vx * vx + vz * vz);
                                         entityiterator.push((0.85 / Math.max(vx, vx / dist)), 0.25, (0.85 / Math.max(vz, vz / dist)));
-                                        if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                                            _entity.addEffect(new MobEffectInstance(CAMobEffects.MUTE.get(), 60, 0, false, false));
+                                        if (entityiterator instanceof LivingEntity entity && !entity.level().isClientSide())
+                                            entity.addEffect(new MobEffectInstance(CAMobEffects.MUTE.get(), 60, 0, false, false));
                                         CaerulaArborMod.queueServerWork(8, () -> {
                                             if (this.isAlive()) {
                                                 entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.INDIRECT_MAGIC), this),
@@ -361,14 +361,14 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
                             }
                             CaerulaArborMod.queueServerWork(7, () -> {
                                 if (this.isAlive()) {
-                                    if (world instanceof Level _level) {
-                                        _level.playSound(null, BlockPos.containing(x, y, z), CASounds.MEDIC_ATTACK.get(), SoundSource.PLAYERS, (float) 1.25, 1);
+                                    if (world instanceof Level level) {
+                                        level.playSound(null, BlockPos.containing(x, y, z), CASounds.MEDIC_ATTACK.get(), SoundSource.PLAYERS, (float) 1.25, 1);
                                     }
                                     new Object() {
                                         void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                                             for (int index0 = 0; index0 < 60; index0++) {
-                                                if (world instanceof ServerLevel _level)
-                                                    _level.sendParticles(CAParticles.PURPLE_FLAME.get(), (getX() + 1 * (timedloopiterator + 1) * Math.sin(Math.toRadians(index0 * 6))), (getY()),
+                                                if (world instanceof ServerLevel level)
+                                                    level.sendParticles(CAParticles.PURPLE_FLAME.get(), (getX() + 1 * (timedloopiterator + 1) * Math.sin(Math.toRadians(index0 * 6))), (getY()),
                                                             (getZ() + 1 * (timedloopiterator + 1) * Math.cos(Math.toRadians(index0 * 6))), 2, 0.1, 0.15, 0.1, 0.1);
                                             }
                                             final int tick2 = ticks;
@@ -409,7 +409,7 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
 
     @Override
     public void performRangedAttack(LivingEntity target, float flval) {
-        // TODO: Revisit this legacy system call when the healing projectile path is cleaned up.
+        // TODO：当治疗弹路径清理完成后，重新审视这个遗留的系统调用。
         HealBullletEntity.shoot(this, target);
     }
 

@@ -1,7 +1,7 @@
 package com.apocalypse.caerulaarbor.init;
 
 /*
- *    MCreator note: This file will be REGENERATED on each build.
+ *    MCreator 注：此文件会在每次构建时重新生成。
  */
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
@@ -150,6 +150,6 @@ public class CABlocks {
 	public static final RegistryObject<Block> ENDERINA_CORE = REGISTRY.register("enderina_core", () -> new EnderinaCoreBlock());
 	public static final RegistryObject<Block> THIRST_CORAL = REGISTRY.register("thirst_coral", () -> new ThirstCoralBlock());
 	public static final RegistryObject<Block> NETHERSEA_SAMPLING = REGISTRY.register("nethersea_sampling", () -> new NetherseaSamplingBlock());
-	// Start of user code block custom blocks
-	// End of user code block custom blocks
+	// 自定义方块用户代码块开始
+	// 自定义方块用户代码块结束
 }

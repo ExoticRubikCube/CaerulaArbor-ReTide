@@ -53,7 +53,7 @@ public class EntityUtils {
 		throw new UnsupportedOperationException("Utility class");
 	}
 
-	//TODO需要下放回实体
+	// TODO: 评估是否迁移到更合适的粒子工具位置
 	public static void spawnLinkParticles(LevelAccessor world, Entity a, Entity b) {
 		if (a == null || b == null || !(world instanceof ServerLevel level))
 			return;
@@ -90,7 +90,7 @@ public class EntityUtils {
 			if (!(entityiterator instanceof LivingEntity)) {
 				continue;
 			}
-			if (entityiterator instanceof Monster || (entityiterator instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == obj) {
+			if (entityiterator instanceof Monster || (entityiterator instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == obj) {
 				d = obj.distanceTo(entityiterator);
 				if (d <= 4) {
 					if (d < minDist) {
@@ -112,9 +112,9 @@ public class EntityUtils {
 		if (snt > 100) {
 			snt = 100;
 		}
-		double _setval = snt;
+		double setval = snt;
 		player.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-			capability.player_light = _setval;
+			capability.player_light = setval;
 			capability.syncPlayerVariables(player);
 		});
 	}
@@ -172,7 +172,7 @@ public class EntityUtils {
 		}
 	}
 
-	//可能需要评估放到哪个util合适
+	// 施加 Nethseabrand 的伤害效果
 	public static void damagedByNethseabrand(LevelAccessor world, Entity entity) {
 		if (entity == null)
 			return;
@@ -184,15 +184,15 @@ public class EntityUtils {
 		ItemStack a2;
 		ItemStack a3;
 		if (entity instanceof LivingEntity) {
-			if (!(entity instanceof LivingEntity _livEnt1 && _livEnt1.hasEffect(CAMobEffects.TRAIL_BUFF.get()))) {
-				if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-					_entity.addEffect(new MobEffectInstance(CAMobEffects.TRAIL_BUFF.get(), 10, 0, false, false));
+			if (!(entity instanceof LivingEntity livEnt1 && livEnt1.hasEffect(CAMobEffects.TRAIL_BUFF.get()))) {
+				if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
+					livingEntity.addEffect(new MobEffectInstance(CAMobEffects.TRAIL_BUFF.get(), 10, 0, false, false));
 			}
 			gap = 20;
-			a0 = (entity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.FEET) : ItemStack.EMPTY).copy();
-			a1 = (entity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.LEGS) : ItemStack.EMPTY).copy();
-			a2 = (entity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.CHEST) : ItemStack.EMPTY).copy();
-			a3 = (entity instanceof LivingEntity _entGetArmor ? _entGetArmor.getItemBySlot(EquipmentSlot.HEAD) : ItemStack.EMPTY).copy();
+			a0 = (entity instanceof LivingEntity entGetArmor ? entGetArmor.getItemBySlot(EquipmentSlot.FEET) : ItemStack.EMPTY).copy();
+			a1 = (entity instanceof LivingEntity entGetArmor ? entGetArmor.getItemBySlot(EquipmentSlot.LEGS) : ItemStack.EMPTY).copy();
+			a2 = (entity instanceof LivingEntity entGetArmor ? entGetArmor.getItemBySlot(EquipmentSlot.CHEST) : ItemStack.EMPTY).copy();
+			a3 = (entity instanceof LivingEntity entGetArmor ? entGetArmor.getItemBySlot(EquipmentSlot.HEAD) : ItemStack.EMPTY).copy();
 			if (a0.getItem() == CAItems.SEALEATHER_BOOTS.get()) {
 				gap = gap + 8;
 			} else if (a0.getItem() == CAItems.SEALEATHER_CHITIN_BOOTS.get()) {
@@ -223,10 +223,10 @@ public class EntityUtils {
 			}
 			if (EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.NETHERSEA_WALKER.get(), a0) != 0) {
 				lvl = a0.getEnchantmentLevel(CAEnchantments.NETHERSEA_WALKER.get());
-				if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-					_entity.addEffect(new MobEffectInstance(CAMobEffects.RUNNING_ON_TRAIL.get(), 30, (int) lvl, false, false));
-				if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-					_entity.addEffect(new MobEffectInstance(MobEffects.JUMP, 5, 0, false, false));
+				if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
+					livingEntity.addEffect(new MobEffectInstance(CAMobEffects.RUNNING_ON_TRAIL.get(), 30, (int) lvl, false, false));
+				if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
+					livingEntity.addEffect(new MobEffectInstance(MobEffects.JUMP, 5, 0, false, false));
 			}
 			if (entity.tickCount % gap == 0 && !entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "immue_to_nethersea_brand")))) {
 				if (entity instanceof Player) {
@@ -240,7 +240,7 @@ public class EntityUtils {
 						return;
 					}
 				}
-				if (!(entity instanceof LivingEntity _livEnt28 && _livEnt28.getMobType() == MobType.UNDEAD)) {
+				if (!(entity instanceof LivingEntity livEnt28 && livEnt28.getMobType() == MobType.UNDEAD)) {
 					entity.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "trail_damage")))), 2);
 				}
 				if (entity instanceof LivingEntity livingEntity) {
@@ -250,7 +250,7 @@ public class EntityUtils {
 		}
 	}
 
-	//同上，需要评估
+	// 同上，需评估
 	public static String getPlayerSurvconta(Entity entity) {
 		if (entity == null)
 			return "";
@@ -262,30 +262,12 @@ public class EntityUtils {
 		if (center == null)
 			return 0;
 		double count = 0;
-		{
-			final Vec3 _center = new Vec3(x, y, z);
-			List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(32 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-			for (Entity entityiterator : _entfound) {
-				if (entityiterator == center) {
-					continue;
-				}
-				if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
-					if (!(entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "bossoffspring")))
-							|| entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanpet"))))) {
-						count = count + 1;
-					}
-				}
+		final Vec3 searchCenter = new Vec3(x, y, z);
+		List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(searchCenter, searchCenter).inflate(32 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(searchCenter))).toList();
+		for (Entity entityiterator : entfound) {
+			if (entityiterator == center) {
+				continue;
 			}
-		}
-		return count;
-	}
-
-	//查看参考文件是怎么做的，很可能需要下放到海嗣的基类
-	public static double getSeabornNum(LevelAccessor world, double x, double y, double z) {
-		double count = 0;
-		final Vec3 _center = new Vec3(x, y, z);
-		List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(32 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-		for (Entity entityiterator : _entfound) {
 			if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
 				if (!(entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "bossoffspring")))
 						|| entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanpet"))))) {
@@ -296,7 +278,23 @@ public class EntityUtils {
 		return count;
 	}
 
-	//解释并评估是否需要放在其他util类
+	// 统计范围内的海嗣数量
+	public static double getSeabornNum(LevelAccessor world, double x, double y, double z) {
+		double count = 0;
+		final Vec3 center = new Vec3(x, y, z);
+		List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(32 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+		for (Entity entityiterator : entfound) {
+			if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+				if (!(entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "bossoffspring")))
+						|| entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanpet"))))) {
+					count = count + 1;
+				}
+			}
+		}
+		return count;
+	}
+
+	// 给玩家发放储备相关物品
 	public static void givePlayerReserve(LevelAccessor world, double x, double y, double z, Entity entity, ItemStack itemstack) {
 		if (entity == null)
 			return;
@@ -305,11 +303,11 @@ public class EntityUtils {
 		double r_a = 0;
 		boolean creative;
 		creative = new Object() {
-			public boolean checkGamemode(Entity _ent) {
-				if (_ent instanceof ServerPlayer _serverPlayer) {
-					return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-				} else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-					return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+			public boolean checkGamemode(Entity ent) {
+				if (ent instanceof ServerPlayer serverPlayer) {
+					return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+				} else if (ent.level().isClientSide() && ent instanceof Player player) {
+					return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
 				}
 				return false;
 			}
@@ -325,44 +323,44 @@ public class EntityUtils {
 			exp = 3;
 		}
 		if (exp > 0) {
-			if ((entity instanceof Player _plr ? _plr.experienceLevel : 0) >= exp || creative) {
+			if ((entity instanceof Player plr ? plr.experienceLevel : 0) >= exp || creative) {
 				{
-					double _setval = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).reserve_quantity + r;
+					double setval = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).reserve_quantity + r;
 					entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-						capability.reserve_quantity = _setval;
+						capability.reserve_quantity = setval;
 						capability.syncPlayerVariables(entity);
 					});
 				}
 				{
-					double _setval = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).reserve_quality + r_a;
+					double setval = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).reserve_quality + r_a;
 					entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-						capability.reserve_quality = _setval;
+						capability.reserve_quality = setval;
 						capability.syncPlayerVariables(entity);
 					});
 				}
 				if (!creative) {
-					if (entity instanceof Player _player)
-						_player.giveExperienceLevels(-((int) exp));
+					if (entity instanceof Player player)
+						player.giveExperienceLevels(-((int) exp));
 				}
-				if (world instanceof Level _level) {
-						_level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 2, 1);
+				if (world instanceof Level level) {
+						level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 2, 1);
 				}
 				itemstack.shrink(1);
 			} else {
-				if (entity instanceof Player _player && !_player.level().isClientSide())
-					_player.displayClientMessage(Component.literal((Component.translatable("item.caerula_arbor.gene_sample.no_exp").getString())), true);
+				if (entity instanceof Player player && !player.level().isClientSide())
+					player.displayClientMessage(Component.literal((Component.translatable("item.caerula_arbor.gene_sample.no_exp").getString())), true);
 			}
 		}
 	}
 
-	//同
+	// 获取玩家的相关记录值
 	public static String getPlayerEnrave(Entity entity) {
 		if (entity == null)
 			return "";
 		return "" + Math.round((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_ENGRAVE);
 	}
 
-	//需要解释，可能需要参考参考文件来处理
+	// 获取最近的敌对目标
 	public static Entity getNearestEnemy(LevelAccessor world, double x, double y, double z, Entity exception0, Entity exception1, Entity obj) {
 		if (exception0 == null || exception1 == null || obj == null)
 			return null;
@@ -389,12 +387,12 @@ public class EntityUtils {
 					continue;
 				}
 				if (new Object() {
-					public boolean checkGamemode(Entity _ent) {
-						if (_ent instanceof ServerPlayer _serverPlayer) {
-							return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-						} else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-							return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-									&& Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+					public boolean checkGamemode(Entity ent) {
+						if (ent instanceof ServerPlayer serverPlayer) {
+							return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+						} else if (ent.level().isClientSide() && ent instanceof Player player) {
+							return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+									&& Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
 						}
 						return false;
 					}
@@ -410,22 +408,22 @@ public class EntityUtils {
 		return enemy;
 	}
 
-	//需要解释
+	// 计算两个实体之间的朝向余弦值
 	public static double getEntityCosine(Entity A, Entity B) {
 		if (A == null || B == null)
 			return 0;
 		return MathUtils.getCosine(B.getX() - A.getX(), B.getZ() - A.getZ(), A.getLookAngle().x, A.getLookAngle().z);
 	}
 
-	//需要下放
+	// 统计附近友方单位数量
 	public static double getFellowAround(LevelAccessor world, double x, double y, double z, Entity entity) {
 		if (entity == null)
 			return 0;
 		double num = 0;
 		{
-			final Vec3 _center = new Vec3(x, y, z);
-			List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(12 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-			for (Entity entityiterator : _entfound) {
+			final Vec3 center = new Vec3(x, y, z);
+			List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(12 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+			for (Entity entityiterator : entfound) {
 				if (entityiterator == entity) {
 					continue;
 				}
@@ -440,9 +438,9 @@ public class EntityUtils {
 	public static double getIllusionNum(LevelAccessor world, double x, double y, double z) {
 		double count = 0;
 		{
-			final Vec3 _center = new Vec3(x, y, z);
-			List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(48 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-			for (Entity entityiterator : _entfound) {
+			final Vec3 center = new Vec3(x, y, z);
+			List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(48 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+			for (Entity entityiterator : entfound) {
 				if (entityiterator instanceof OceanIllusionEntity) {
 					count = count + 1;
 				}
@@ -458,56 +456,56 @@ public class EntityUtils {
 	}
 
 	public static void giveSpearFight(Entity entity) {
-		if (!(entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CAMobEffects.SPEAR_FIGHT.get()))) {
-			if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-				_entity.addEffect(new MobEffectInstance(CAMobEffects.SPEAR_FIGHT.get(), 60, 0, false, false));
+		if (!(entity instanceof LivingEntity livEnt0 && livEnt0.hasEffect(CAMobEffects.SPEAR_FIGHT.get()))) {
+			if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
+				livingEntity.addEffect(new MobEffectInstance(CAMobEffects.SPEAR_FIGHT.get(), 60, 0, false, false));
 		}
 	}
 
 	public static double getSlimeSize(Entity entity) {
 		if (entity == null)
 			return 0;
-		return (entity instanceof NetherseaSlimeEntity _datEntI ? _datEntI.getEntityData().get(NetherseaSlimeEntity.DATA_SIZE) : 0) * 0.5;
+		return (entity instanceof NetherseaSlimeEntity datEntI ? datEntI.getEntityData().get(NetherseaSlimeEntity.DATA_SIZE) : 0) * 0.5;
 	}
 
-	//TODO:可能需要安置到别处
+	// TODO: 护甲削减逻辑仍需进一步评估
 	public static void giveLessArmor(Entity obj, double limit) {
 		if (obj == null)
 			return;
-		if (obj instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CAMobEffects.LESS_ARMOR.get())) {
-			if ((obj instanceof LivingEntity _livEnt && _livEnt.hasEffect(CAMobEffects.LESS_ARMOR.get()) ? _livEnt.getEffect(CAMobEffects.LESS_ARMOR.get()).getAmplifier() : 0) < limit) {
-				if (obj instanceof LivingEntity _entity && !_entity.level().isClientSide())
-					_entity.addEffect(new MobEffectInstance(CAMobEffects.LESS_ARMOR.get(), 300,
-                            (obj instanceof LivingEntity _livEnt && _livEnt.hasEffect(CAMobEffects.LESS_ARMOR.get()) ? _livEnt.getEffect(CAMobEffects.LESS_ARMOR.get()).getAmplifier() : 0) + 1, false, true));
+		if (obj instanceof LivingEntity livEnt0 && livEnt0.hasEffect(CAMobEffects.LESS_ARMOR.get())) {
+			if ((obj instanceof LivingEntity livEnt && livEnt.hasEffect(CAMobEffects.LESS_ARMOR.get()) ? livEnt.getEffect(CAMobEffects.LESS_ARMOR.get()).getAmplifier() : 0) < limit) {
+				if (obj instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
+					livingEntity.addEffect(new MobEffectInstance(CAMobEffects.LESS_ARMOR.get(), 300,
+                            (obj instanceof LivingEntity livEnt && livEnt.hasEffect(CAMobEffects.LESS_ARMOR.get()) ? livEnt.getEffect(CAMobEffects.LESS_ARMOR.get()).getAmplifier() : 0) + 1, false, true));
 			}
 		} else {
-			if (obj instanceof LivingEntity _entity && !_entity.level().isClientSide())
-				_entity.addEffect(new MobEffectInstance(CAMobEffects.LESS_ARMOR.get(), 300, 0, false, true));
+			if (obj instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
+				livingEntity.addEffect(new MobEffectInstance(CAMobEffects.LESS_ARMOR.get(), 300, 0, false, true));
 		}
 	}
 
 	public static void repellerChop(LevelAccessor world, double x, double y, double z, Entity entity, double rate) {
 		if (entity == null)
 			return;
-		if (world instanceof Level _level) {
-				_level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.GUARDIAN_ATTACK, SoundSource.HOSTILE, 2, 1);
+		if (world instanceof Level level) {
+				level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.GUARDIAN_ATTACK, SoundSource.HOSTILE, 2, 1);
 		}
 		{
-			final Vec3 _center = new Vec3((x + 1.8 * entity.getLookAngle().x), (y + 1.5), (z + 1.8 * entity.getLookAngle().z));
-			List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(5 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-			for (Entity entityiterator : _entfound) {
+			final Vec3 center = new Vec3((x + 1.8 * entity.getLookAngle().x), (y + 1.5), (z + 1.8 * entity.getLookAngle().z));
+			List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(5 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+			for (Entity entityiterator : entfound) {
 				if (!(entityiterator instanceof LivingEntity)) {
 					continue;
 				}
 				if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
-					if (!((entity instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == entityiterator)) {
+					if (!((entity instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == entityiterator)) {
 						continue;
 					}
 				}
 				entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "repeller_attack"))), entity),
-						(float) ((entity instanceof LivingEntity _livingEntity7 && _livingEntity7.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity7.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * rate));
-				if (entity instanceof LivingEntity _entity)
-					_entity.setHealth((entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) + 3);
+						(float) ((entity instanceof LivingEntity livingEntity7 && livingEntity7.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity7.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * rate));
+				if (entity instanceof LivingEntity livingEntity)
+					livingEntity.setHealth(livingEntity.getHealth() + 3);
 				for (int index0 = 0; index0 < 2; index0++) {
 					giveLessArmor(entityiterator, 18);
 				}
@@ -518,20 +516,20 @@ public class EntityUtils {
 	public static void gainLessSpeed(Entity entity) {
 		if (entity == null)
 			return;
-		if (!(entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CAMobEffects.ADD_REACH.get()))) {
-			if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-				_entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_REACH.get(), 20, 3, false, false));
+		if (!(entity instanceof LivingEntity livEnt0 && livEnt0.hasEffect(CAMobEffects.ADD_REACH.get()))) {
+			if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
+				livingEntity.addEffect(new MobEffectInstance(CAMobEffects.ADD_REACH.get(), 20, 3, false, false));
 		}
 	}
 
 	public static void giveGuideLay(Entity entity) {
 		if (entity == null)
 			return;
-		if ((entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5) {
-			if (!(entity instanceof LivingEntity _livEnt2 && _livEnt2.hasEffect(CAMobEffects.MUTE.get()))) {
-				if (!(entity instanceof LivingEntity _livEnt3 && _livEnt3.hasEffect(CAMobEffects.GUIDE_PATH_AHEAD.get()))) {
-					if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-						_entity.addEffect(new MobEffectInstance(CAMobEffects.GUIDE_PATH_AHEAD.get(), 20, 0));
+		if ((entity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) < (entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.5) {
+			if (!(entity instanceof LivingEntity livEnt2 && livEnt2.hasEffect(CAMobEffects.MUTE.get()))) {
+				if (!(entity instanceof LivingEntity livEnt3 && livEnt3.hasEffect(CAMobEffects.GUIDE_PATH_AHEAD.get()))) {
+					if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
+						livingEntity.addEffect(new MobEffectInstance(CAMobEffects.GUIDE_PATH_AHEAD.get(), 20, 0));
 				}
 			}
 		}
@@ -552,20 +550,20 @@ public class EntityUtils {
 	public static String getPalsy(Entity entity) {
 		if (entity == null)
 			return "";
-		return "" + Math.round(entity instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(CAAttributes.NUMB.get()) ? _livingEntity0.getAttribute(CAAttributes.NUMB.get()).getBaseValue() : 0);
+		return "" + Math.round(entity instanceof LivingEntity livingEntity0 && livingEntity0.getAttributes().hasAttribute(CAAttributes.NUMB.get()) ? livingEntity0.getAttribute(CAAttributes.NUMB.get()).getBaseValue() : 0);
 	}
 
 	public static String getHealth(Entity entity) {
 		if (entity == null)
 			return "";
-		return (new java.text.DecimalFormat("##.##").format(entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1)) + "/"
-				+ (new java.text.DecimalFormat("##.#").format(entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1));
+		return (new java.text.DecimalFormat("##.##").format(entity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1)) + "/"
+				+ (new java.text.DecimalFormat("##.#").format(entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1));
 	}
 
 	public static double getHealthPerc(Entity entity) {
 		if (entity == null)
 			return 0;
-		return (entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) / (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1);
+		return (entity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) / (entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1);
 	}
 
 	public static String getLight(Entity entity) {
@@ -574,8 +572,8 @@ public class EntityUtils {
 		return "" + Math.round((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_light);
 	}
 
-	public static Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
-		return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
+	public static Comparator<Entity> compareDistOf(double x, double y, double z) {
+		return Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z));
 	}
 
 	public static double getSpeed(Entity e) {
@@ -590,12 +588,12 @@ public class EntityUtils {
 		return entity.getBbWidth() * entity.getBbHeight();
 	}
 
-	//需要解释
+	// 对 Martus 施加伤害逻辑
 	public static void hurtMartus(LevelAccessor world, Entity obj, Entity source, double num, double perc) {
 		if (obj == null)
 			return;
 		double amount;
-		amount = (obj instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * perc + num;
+		amount = (obj instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * perc + num;
 		if (amount > 0) {
 			obj.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "inv_killer"))), source), (float) amount);
 		}
@@ -610,7 +608,7 @@ public class EntityUtils {
 		return at.isAlliedTo(bt);
 	}
 
-	//需要解释
+	// 人类实体标签
 	public static final TagKey<EntityType<?>> HUMAN = TagKey.create(
 			Registries.ENTITY_TYPE,
 			new ResourceLocation(CaerulaArborMod.MODID, "is_humanside")
@@ -621,7 +619,7 @@ public class EntityUtils {
 			new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")
 		);
 
-	//可能需要评估，低优先级
+	// 触发自杀伤害
 	public static void killSelf(LevelAccessor world, Entity entity, Entity immediatesourceentity) {
 		if (entity == null || immediatesourceentity == null)
 			return;
@@ -632,17 +630,17 @@ public class EntityUtils {
 		});
 	}
 
-	//需要解释，特别可疑
+	// 应用先锋增益
 	public static void vanguardBuff(LevelAccessor world, double x, double y, double z, Entity entity) {
 		if (entity == null)
 			return;
 		double less = 0;
 		if (entity.tickCount % 20 == 10) {
-			if (!(entity instanceof LivingEntity _livEnt1 && _livEnt1.hasEffect(CAMobEffects.INFANTRY.get()))) {
+			if (!(entity instanceof LivingEntity livEnt1 && livEnt1.hasEffect(CAMobEffects.INFANTRY.get()))) {
 				{
-					final Vec3 _center = new Vec3(x, y, z);
-					List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(16 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-					for (Entity entityiterator : _entfound) {
+					final Vec3 center = new Vec3(x, y, z);
+					List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(16 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+					for (Entity entityiterator : entfound) {
 						if (entityiterator == entity) {
 							continue;
 						}
@@ -655,19 +653,19 @@ public class EntityUtils {
 					}
 				}
 				if (less > 0) {
-					if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-						_entity.addEffect(new MobEffectInstance(CAMobEffects.INFANTRY.get(), 40, (int) (less - 1)));
+					if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
+						livingEntity.addEffect(new MobEffectInstance(CAMobEffects.INFANTRY.get(), 40, (int) (less - 1)));
 				}
 			}
 		}
 	}
 
-	//TODO 或许可以放入海嗣的基类,参考 参考文件，重命名为合适的名字
+	// TODO: 海化玩家附近判定逻辑仍需复核
 	public static boolean isOceanizedPlayerNearby(LevelAccessor world, double x, double y, double z) {
 		{
-			final Vec3 _center = new Vec3(x, y, z);
-			List<Player> _entfound = world.getEntitiesOfClass(Player.class, new AABB(_center, _center).inflate(72 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-			for (Player entityiterator : _entfound) {
+			final Vec3 center = new Vec3(x, y, z);
+			List<Player> entfound = world.getEntitiesOfClass(Player.class, new AABB(center, center).inflate(72 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+			for (Player entityiterator : entfound) {
 				if ((entityiterator.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization >= 2.9) {
 						return false;
 				}
@@ -676,7 +674,7 @@ public class EntityUtils {
 		return true;
 	}
 
-	//需要解释
+	// 应用环绕运动
 	public static void applyOrbitMotion(Entity another, Entity me) {
 		if (another == null || me == null)
 			return;
@@ -687,7 +685,7 @@ public class EntityUtils {
 		another.setDeltaMovement(delta);
 	}
 
-	//可疑，需要解释并评估怎么处理
+	// 将目标拉向自身
 	public static void pullToward(Entity another, Entity me) {
 		if (another == null || me == null)
 			return;
@@ -698,7 +696,7 @@ public class EntityUtils {
 		another.push(offset.x, offset.y, offset.z);
 	}
 
-	//需要评估
+	// 清除实体当前目标
 	public static void clearTarget(Entity entity) {
 		if (entity instanceof LivingEntity living) {
 			Brain<?> brain = living.getBrain();

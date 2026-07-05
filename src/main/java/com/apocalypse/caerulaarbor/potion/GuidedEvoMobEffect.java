@@ -30,8 +30,8 @@ public class GuidedEvoMobEffect extends MobEffect {
     @Override
     public void addAttributeModifiers(LivingEntity entity, AttributeMap attributeMap, int amplifier) {
         super.addAttributeModifiers(entity, attributeMap, amplifier);
-        if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-            _entity.addEffect(new MobEffectInstance(MobEffects.GLOWING, -1, 0, false, false));
+        if ((Entity) entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
+            livingEntity.addEffect(new MobEffectInstance(MobEffects.GLOWING, -1, 0, false, false));
     }
 
     @Override

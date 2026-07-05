@@ -129,17 +129,17 @@ public class JuniorWarriorPriestEntity extends Animal implements GeoEntity, Sync
         Entity sourceentity = source.getEntity();
         if (sourceentity != null) {
             if (this.isAlive() && sourceentity.isAlive()) {
-                if (distanceTo(sourceentity) <= 2.4 && ((Entity) this instanceof JuniorWarriorPriestEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILL_P) : 0) <= 0) {
+                if (distanceTo(sourceentity) <= 2.4 && ((Entity) this instanceof JuniorWarriorPriestEntity datEntI ? datEntI.getEntityData().get(DATA_SKILL_P) : 0) <= 0) {
                     if (this instanceof JuniorWarriorPriestEntity) {
                         this.setAnimation("animation.warriorpriest.shieldattack");
                     }
-                    if ((Entity) this instanceof JuniorWarriorPriestEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_SKILL_P, 200);
+                    if ((Entity) this instanceof JuniorWarriorPriestEntity datEntSetI)
+                        datEntSetI.getEntityData().set(DATA_SKILL_P, 200);
                     CaerulaArborMod.queueServerWork(15, () -> {
                         if (sourceentity.isAlive()) {
                             ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((sourceentity.getX()), (sourceentity.getY()), (sourceentity.getZ())));
-                            if (world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.EMPTY, SoundSource.HOSTILE, (float) 2.5, 1);
+                            if (world instanceof Level level) {
+                                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.EMPTY, SoundSource.HOSTILE, (float) 2.5, 1);
                             }
                             sourceentity.hurt(
                                     new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "generic_warrior_attack"))), this),
@@ -172,10 +172,10 @@ public class JuniorWarriorPriestEntity extends Animal implements GeoEntity, Sync
         super.baseTick();
         double sklp1;
         if (this.isAlive()) {
-            sklp1 = (Entity) this instanceof JuniorWarriorPriestEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILL_P) : 0;
+            sklp1 = (Entity) this instanceof JuniorWarriorPriestEntity datEntI ? datEntI.getEntityData().get(DATA_SKILL_P) : 0;
             if (sklp1 > 0) {
-                if ((Entity) this instanceof JuniorWarriorPriestEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_SKILL_P, (int) (sklp1 - 1));
+                if ((Entity) this instanceof JuniorWarriorPriestEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_SKILL_P, (int) (sklp1 - 1));
             }
         }
         this.refreshDimensions();

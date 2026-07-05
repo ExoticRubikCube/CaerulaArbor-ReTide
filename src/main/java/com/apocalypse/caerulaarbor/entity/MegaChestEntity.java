@@ -187,7 +187,7 @@ public class MegaChestEntity extends SeaMonster {
         double y = this.getY();
         double z = this.getZ();
         Entity enemy;
-        if (!((Entity) this instanceof MegaChestEntity _datEntL0 && _datEntL0.getEntityData().get(DATA_RELEASED))) {
+        if (!((Entity) this instanceof MegaChestEntity datEntL0 && datEntL0.getEntityData().get(DATA_RELEASED))) {
             setShiftKeyDown(true);
             if (!this.level().isClientSide())
                 this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, 8, false, false));
@@ -200,14 +200,14 @@ public class MegaChestEntity extends SeaMonster {
                         if (!level().isClientSide())
                             discard();
                         {
-                            BlockPos _bp = BlockPos.containing(x, y, z);
-                            BlockState _bs = CABlocks.CHESTMEGA_SPAWNER.get().withPropertiesOf(world.getBlockState(_bp));
-                            if (_bs.getBlock().getStateDefinition().getProperty("facing") instanceof DirectionProperty _directionProperty)
-                                _bs = _bs.setValue(_directionProperty, getDirection());
-                            world.setBlock(_bp, _bs, 3);
+                            BlockPos bp = BlockPos.containing(x, y, z);
+                            BlockState bs = CABlocks.CHESTMEGA_SPAWNER.get().withPropertiesOf(world.getBlockState(bp));
+                            if (bs.getBlock().getStateDefinition().getProperty("facing") instanceof DirectionProperty directionProperty)
+                                bs = bs.setValue(directionProperty, getDirection());
+                            world.setBlock(bp, bs, 3);
                         }
-                        if (world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ENDER_CHEST_CLOSE, SoundSource.BLOCKS, 1, 1);
+                        if (world instanceof Level level) {
+                            level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ENDER_CHEST_CLOSE, SoundSource.BLOCKS, 1, 1);
                         }
                     }
                 }
@@ -257,8 +257,8 @@ public class MegaChestEntity extends SeaMonster {
             double y = this.getY();
             double z = this.getZ();
 
-            if (world instanceof Level _level) {
-                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ENDER_CHEST_OPEN, SoundSource.HOSTILE, 1, 1);
+            if (world instanceof Level level) {
+                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ENDER_CHEST_OPEN, SoundSource.HOSTILE, 1, 1);
             }
 
             this.setShiftKeyDown(false);
@@ -266,8 +266,8 @@ public class MegaChestEntity extends SeaMonster {
 
             this.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
 
-            if (sourceentity instanceof LivingEntity _ent)
-                this.setTarget(_ent);
+            if (sourceentity instanceof LivingEntity ent)
+                this.setTarget(ent);
 
             return InteractionResult.SUCCESS;
         }

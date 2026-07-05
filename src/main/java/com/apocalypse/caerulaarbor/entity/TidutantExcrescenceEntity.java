@@ -114,8 +114,8 @@ public class TidutantExcrescenceEntity extends SeaMonster {
             MobEffect effect = ForgeRegistries.MOB_EFFECTS.getValue(EffectRes);
             if (effect != null) {
                 MobEffectInstance effectInst = new MobEffectInstance(effect, 200, 1);
-                if (sourceentity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                    _entity.addEffect(effectInst);
+                if (sourceentity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
+                    livingEntity.addEffect(effectInst);
             }
         }
         return super.hurt(source, amount);
@@ -207,7 +207,7 @@ public class TidutantExcrescenceEntity extends SeaMonster {
             double y = this.getY();
             double z = this.getZ();
             if (WorldUtils.canGrief(world)) {
-                if (((Entity) this instanceof TidutantExcrescenceEntity _datEntI ? _datEntI.getEntityData().get(DATA_MUTE_TIME) : 0) <= 0) {
+                if (((Entity) this instanceof TidutantExcrescenceEntity datEntI ? datEntI.getEntityData().get(DATA_MUTE_TIME) : 0) <= 0) {
                     if (CABlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing(x, y, z)) && !(world.getBlockFloorHeight(BlockPos.containing(x, y, z)) > 0)) {
                         CaerulaUtil.replaceTrail(world, CABlocks.SEA_TRAIL_INIT.get().defaultBlockState(), (world.getFluidState(BlockPos.containing(x, y, z)).createLegacyBlock()).getBlock() == Blocks.WATER, x, y, z);
                     }

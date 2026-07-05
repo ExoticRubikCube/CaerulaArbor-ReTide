@@ -38,11 +38,11 @@ public class ReefCrackerMobEffect extends MobEffect {
         if (entity == null)
             return;
         double angle = 0;
-        if (world instanceof ServerLevel _level)
-            _level.sendParticles(CAParticles.CRACKER_BUFF_0.get(), x, (y + entity.getBbHeight() * 0.5), z, (int) ((double) amplifier + 1), 0.8, 1.5, 0.8, 0.3);
+        if (world instanceof ServerLevel level)
+            level.sendParticles(CAParticles.CRACKER_BUFF_0.get(), x, (y + entity.getBbHeight() * 0.5), z, (int) ((double) amplifier + 1), 0.8, 1.5, 0.8, 0.3);
         if ((double) amplifier > 6) {
-            if (world instanceof ServerLevel _level)
-                _level.sendParticles(CAParticles.CRACKER_BUFF_1.get(), x, y, z, 3, 1, 0.5, 1, 0.3);
+            if (world instanceof ServerLevel level)
+                level.sendParticles(CAParticles.CRACKER_BUFF_1.get(), x, y, z, 3, 1, 0.5, 1, 0.3);
         }
     }
 
@@ -52,8 +52,8 @@ public class ReefCrackerMobEffect extends MobEffect {
         if (entity == null)
             return;
         if ((double) amplifier >= 2) {
-            if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                _entity.addEffect(new MobEffectInstance(CAMobEffects.REEF_CRACKER.get(), 60, (int) ((double) amplifier - 2), false, false));
+            if ((Entity) entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
+                livingEntity.addEffect(new MobEffectInstance(CAMobEffects.REEF_CRACKER.get(), 60, (int) ((double) amplifier - 2), false, false));
         }
     }
 

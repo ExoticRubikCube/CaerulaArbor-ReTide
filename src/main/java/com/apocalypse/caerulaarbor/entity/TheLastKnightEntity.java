@@ -237,25 +237,25 @@ public class TheLastKnightEntity extends Animal implements GeoEntity, SyncedAnim
         double duration;
         double idle = 0;
         if (this.isAlive()) {
-            skillp = (Entity) this instanceof TheLastKnightEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP) : 0;
-            duration = (Entity) this instanceof TheLastKnightEntity _datEntI ? _datEntI.getEntityData().get(DATA_DURATION) : 0;
+            skillp = (Entity) this instanceof TheLastKnightEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP) : 0;
+            duration = (Entity) this instanceof TheLastKnightEntity datEntI ? datEntI.getEntityData().get(DATA_DURATION) : 0;
             if (duration > 0) {
-                if ((Entity) this instanceof TheLastKnightEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_DURATION, (int) (duration - 1));
+                if ((Entity) this instanceof TheLastKnightEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_DURATION, (int) (duration - 1));
             }
             setTicksFrozen(0);
             this.removeEffect(CAMobEffects.FROZEN.get());
             enemy = this.getTarget();
             if (skillp > 0) {
-                if ((Entity) this instanceof TheLastKnightEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_SKILLP, (int) (skillp - 1));
+                if ((Entity) this instanceof TheLastKnightEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_SKILLP, (int) (skillp - 1));
             } else {
                 if (!(enemy == null) && enemy.isAlive()) {
                     if (distanceTo(enemy) < 4) {
-                        if ((Entity) this instanceof TheLastKnightEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_DURATION, 90);
-                        if ((Entity) this instanceof TheLastKnightEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_SKILLP, 390);
+                        if ((Entity) this instanceof TheLastKnightEntity datEntSetI)
+                            datEntSetI.getEntityData().set(DATA_DURATION, 90);
+                        if ((Entity) this instanceof TheLastKnightEntity datEntSetI)
+                            datEntSetI.getEntityData().set(DATA_SKILLP, 390);
                         if (!this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 30, 0, false, false));
                         if (this instanceof TheLastKnightEntity) {
@@ -395,8 +395,8 @@ public class TheLastKnightEntity extends Animal implements GeoEntity, SyncedAnim
             this.remove(RemovalReason.KILLED);
             this.dropExperience();
             LevelAccessor world = this.level();
-            if (world instanceof ServerLevel _level) {
-                Entity entityToSpawn = CAEntities.LAST_KNIGHT_AND_HORSE.get().spawn(_level, BlockPos.containing(this.getX(), this.getY(), this.getZ()), MobSpawnType.MOB_SUMMONED);
+            if (world instanceof ServerLevel level) {
+                Entity entityToSpawn = CAEntities.LAST_KNIGHT_AND_HORSE.get().spawn(level, BlockPos.containing(this.getX(), this.getY(), this.getZ()), MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn != null) {
                     entityToSpawn.setYRot(getYRot());
                     entityToSpawn.setYBodyRot(getYRot());
@@ -457,18 +457,18 @@ public class TheLastKnightEntity extends Animal implements GeoEntity, SyncedAnim
         Entity enemy = this.getTarget();
 
         for (int index0 = 0; index0 < 96; index0++) {
-            if (world instanceof ServerLevel _level)
-                _level.sendParticles(ParticleTypes.ENCHANTED_HIT, x - 12 + index0 * 0.25, y, (z + 2), 2, 0, 0.5, 0, 0.1);
-            if (world instanceof ServerLevel _level)
-                _level.sendParticles(ParticleTypes.ENCHANTED_HIT, x - 12 + index0 * 0.25, y, (z - 2), 2, 0, 0.5, 0, 0.1);
-            if (world instanceof ServerLevel _level)
-                _level.sendParticles(ParticleTypes.ENCHANTED_HIT, (x + 2), y, z - 12 + index0 * 0.25, 2, 0, 0.5, 0, 0.1);
-            if (world instanceof ServerLevel _level)
-                _level.sendParticles(ParticleTypes.ENCHANTED_HIT, (x - 2), y, z - 12 + index0 * 0.25, 2, 0, 0.5, 0, 0.1);
+            if (world instanceof ServerLevel level)
+                level.sendParticles(ParticleTypes.ENCHANTED_HIT, x - 12 + index0 * 0.25, y, (z + 2), 2, 0, 0.5, 0, 0.1);
+            if (world instanceof ServerLevel level)
+                level.sendParticles(ParticleTypes.ENCHANTED_HIT, x - 12 + index0 * 0.25, y, (z - 2), 2, 0, 0.5, 0, 0.1);
+            if (world instanceof ServerLevel level)
+                level.sendParticles(ParticleTypes.ENCHANTED_HIT, (x + 2), y, z - 12 + index0 * 0.25, 2, 0, 0.5, 0, 0.1);
+            if (world instanceof ServerLevel level)
+                level.sendParticles(ParticleTypes.ENCHANTED_HIT, (x - 2), y, z - 12 + index0 * 0.25, 2, 0, 0.5, 0, 0.1);
         }
 
-        if (world instanceof Level _level) {
-            _level.playSound(null, BlockPos.containing(x, y, z), CASounds.LAST_KNIGHT_ATTACK.get(), SoundSource.HOSTILE, 5, 1);
+        if (world instanceof Level level) {
+            level.playSound(null, BlockPos.containing(x, y, z), CASounds.LAST_KNIGHT_ATTACK.get(), SoundSource.HOSTILE, 5, 1);
         }
 
         for (Entity entityiterator : world.getEntities(this, new AABB((x + 16), (y + 4), (z + 1.5), (x - 16), (y - 2), (z - 1.5)))) {

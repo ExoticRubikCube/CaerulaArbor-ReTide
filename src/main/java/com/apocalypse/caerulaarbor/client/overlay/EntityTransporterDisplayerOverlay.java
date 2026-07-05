@@ -36,7 +36,7 @@ public class EntityTransporterDisplayerOverlay {
         boolean result = false;
         if (entity != null) {
             ItemStack item;
-            item = ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).copy();
+            item = ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).copy();
             if (item.getItem() == CAItems.PERSONNEL_TRANSPORTER.get()) {
                 result = ItemUtils.isFilledwithPersonnel(item);
             }
@@ -49,7 +49,7 @@ public class EntityTransporterDisplayerOverlay {
                 String emptyNameHolder = "apocata";
                 ItemStack transp;
                 String name;
-                transp = ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).copy();
+                transp = ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).copy();
                 if (ItemUtils.isFilledwithPersonnel(transp)) {
                     name = transp.getOrCreateTag().getString("name");
                     if (name.isEmpty() || name.equals(emptyNameHolder)) {

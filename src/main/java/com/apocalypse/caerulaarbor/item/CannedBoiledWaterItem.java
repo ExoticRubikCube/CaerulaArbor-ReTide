@@ -42,9 +42,8 @@ public class CannedBoiledWaterItem extends Item {
 
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level world, Player entity, InteractionHand hand) {
-		InteractionResultHolder<ItemStack> ar = super.use(world, entity, hand);
 		entity.startUsingItem(hand);
-		return ar;
+		return super.use(world, entity, hand);
 	}
 
 	@Override
@@ -83,18 +82,16 @@ public class CannedBoiledWaterItem extends Item {
 	@Override
 	public void inventoryTick(ItemStack itemstack, Level world, Entity entity, int slot, boolean selected) {
 		super.inventoryTick(itemstack, world, entity, slot, selected);
-        if (entity == null)
-            return;
         itemstack.setDamageValue(itemstack.getDamageValue() + 1);
         if (itemstack.getDamageValue() >= 1199) {
-            if (entity instanceof Player _player) {
-                ItemStack _stktoremove = new ItemStack(CAItems.CANNED_BOILED_WATER.get());
-                _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
+            if (entity instanceof Player player) {
+                ItemStack stktoremove = new ItemStack(CAItems.CANNED_BOILED_WATER.get());
+                player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
             }
-            if (entity instanceof Player _player) {
-                ItemStack _setstack = new ItemStack(CAItems.CANNED_WATER.get()).copy();
-                _setstack.setCount(1);
-                ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
+            if (entity instanceof Player player) {
+                ItemStack setstack = new ItemStack(CAItems.CANNED_WATER.get()).copy();
+                setstack.setCount(1);
+                ItemHandlerHelper.giveItemToPlayer(player, setstack);
             }
         }
     }

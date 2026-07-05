@@ -173,7 +173,7 @@ public class ApostleProkaryoteEntity extends SeaMonster {
         boolean found = false;
         double perc;
         if (this.isAlive()) {
-            if (!((Entity) this instanceof ApostleProkaryoteEntity _datEntL1 && _datEntL1.getEntityData().get(DATA_SHELLED))) {
+            if (!((Entity) this instanceof ApostleProkaryoteEntity datEntL1 && datEntL1.getEntityData().get(DATA_SHELLED))) {
                 for (int dx = -2; dx <= 2; dx++) {
                     for (int dy = -2; dy <= 3; dy++) {
                         for (int dz = -2; dz <= 2; dz++) {
@@ -210,14 +210,14 @@ public class ApostleProkaryoteEntity extends SeaMonster {
                                     ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) * 1.4));
                     }
                     this.setHealth((float) (this.getMaxHealth() * perc));
-                    if ((Entity) this instanceof ApostleProkaryoteEntity _datEntSetL)
-                        _datEntSetL.getEntityData().set(DATA_SHELLED, true);
+                    if ((Entity) this instanceof ApostleProkaryoteEntity datEntSetL)
+                        datEntSetL.getEntityData().set(DATA_SHELLED, true);
                     if (this instanceof ApostleProkaryoteEntity) {
                         this.setAnimation("animation.apostle.skill");
                     }
                     CaerulaArborMod.queueServerWork(17, () -> {
-                        if (world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ARMOR_EQUIP_LEATHER, SoundSource.HOSTILE, 1, 1);
+                        if (world instanceof Level level) {
+                                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ARMOR_EQUIP_LEATHER, SoundSource.HOSTILE, 1, 1);
                         }
                     });
                 }
@@ -281,10 +281,7 @@ public class ApostleProkaryoteEntity extends SeaMonster {
 	}
 
 	private PlayState attackingPredicate(AnimationState<?> event) {
-		double d1 = this.getX() - this.xOld;
-		double d0 = this.getZ() - this.zOld;
-		float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
-		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
+        if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
 		}

@@ -2,6 +2,7 @@ package com.apocalypse.caerulaarbor.potion;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.init.CAParticles;
+import com.apocalypse.caerulaarbor.init.CASounds;
 import com.apocalypse.caerulaarbor.util.MathUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
@@ -20,7 +21,6 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import com.apocalypse.caerulaarbor.init.CASounds;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,16 +45,16 @@ public class IsharmlaCurseMobEffect extends MobEffect {
             return;
         double d;
         double t;
-        d = ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.25 * ((double) amplifier + 1);
+        d = ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.25 * ((double) amplifier + 1);
         ((Entity) entity).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "isharmla_cursed")))), (float) d);
-        if (world instanceof ServerLevel _level)
-            _level.sendParticles(CAParticles.ISHARMLA_CURSE_PARTICLE.get(), x, (y + 0.8), z, 32, 0.8, 0.8, 0.8, 0.1);
-        if (world instanceof Level _level) {
-                _level.playSound(null, BlockPos.containing(x, y, z), CASounds.ISHARMLA_TEAR_HURT_0.get(), SoundSource.HOSTILE, 2, 1);
+        if (world instanceof ServerLevel level)
+            level.sendParticles(CAParticles.ISHARMLA_CURSE_PARTICLE.get(), x, (y + 0.8), z, 32, 0.8, 0.8, 0.8, 0.1);
+        if (world instanceof Level level) {
+                level.playSound(null, BlockPos.containing(x, y, z), CASounds.ISHARMLA_TEAR_HURT_0.get(), SoundSource.HOSTILE, 2, 1);
         }
         t = Mth.nextDouble(RandomSource.create(), 0, 6.283);
-        if ((Entity) entity instanceof Mob _entity)
-            _entity.getNavigation().moveTo((x + 2 * Math.sin(t)), y, (z + 2 * Math.cos(t)), 1.5);
+        if ((Entity) entity instanceof Mob mob)
+            mob.getNavigation().moveTo((x + 2 * Math.sin(t)), y, (z + 2 * Math.cos(t)), 1.5);
     }
 
     @Override

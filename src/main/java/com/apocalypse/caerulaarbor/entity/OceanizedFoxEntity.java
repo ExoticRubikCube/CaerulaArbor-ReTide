@@ -155,8 +155,8 @@ public class OceanizedFoxEntity extends SeaMonster {
     @Override
     public boolean hurt(DamageSource source, float amount) {
         setShiftKeyDown(false);
-        if ((Entity) this instanceof OceanizedFoxEntity _datEntSetL)
-            _datEntSetL.getEntityData().set(DATA_SLEEPING, false);
+        if ((Entity) this instanceof OceanizedFoxEntity datEntSetL)
+            datEntSetL.getEntityData().set(DATA_SLEEPING, false);
         if (source.is(DamageTypes.CACTUS))
             return false;
         if (source.is(DamageTypes.SWEET_BERRY_BUSH))
@@ -212,22 +212,22 @@ public class OceanizedFoxEntity extends SeaMonster {
         Entity enemy;
         if (this.isAlive()) {
             if (tickCount % 10 == 0) {
-                time_stamp = (Entity) this instanceof OceanizedFoxEntity _datEntI ? _datEntI.getEntityData().get(DATA_ACTION_TIME) : 0;
-                sneak = (Entity) this instanceof OceanizedFoxEntity _datEntL3 && _datEntL3.getEntityData().get(DATA_SLEEPING);
+                time_stamp = (Entity) this instanceof OceanizedFoxEntity datEntI ? datEntI.getEntityData().get(DATA_ACTION_TIME) : 0;
+                sneak = (Entity) this instanceof OceanizedFoxEntity datEntL3 && datEntL3.getEntityData().get(DATA_SLEEPING);
                 if (time_stamp > 0) {
-                    if ((Entity) this instanceof OceanizedFoxEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_ACTION_TIME, (int) (time_stamp - 1));
+                    if ((Entity) this instanceof OceanizedFoxEntity datEntSetI)
+                        datEntSetI.getEntityData().set(DATA_ACTION_TIME, (int) (time_stamp - 1));
                 } else if (Math.random() < 0.02) {
                     if (sneak) {
-                        if ((Entity) this instanceof OceanizedFoxEntity _datEntSetL)
-                            _datEntSetL.getEntityData().set(DATA_SLEEPING, false);
-                        if ((Entity) this instanceof OceanizedFoxEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_ACTION_TIME, 200);
+                        if ((Entity) this instanceof OceanizedFoxEntity datEntSetL)
+                            datEntSetL.getEntityData().set(DATA_SLEEPING, false);
+                        if ((Entity) this instanceof OceanizedFoxEntity datEntSetI)
+                            datEntSetI.getEntityData().set(DATA_ACTION_TIME, 200);
                     } else if (!this.isAggressive()) {
-                        if ((Entity) this instanceof OceanizedFoxEntity _datEntSetL)
-                            _datEntSetL.getEntityData().set(DATA_SLEEPING, true);
-                        if ((Entity) this instanceof OceanizedFoxEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_ACTION_TIME, 200);
+                        if ((Entity) this instanceof OceanizedFoxEntity datEntSetL)
+                            datEntSetL.getEntityData().set(DATA_SLEEPING, true);
+                        if ((Entity) this instanceof OceanizedFoxEntity datEntSetI)
+                            datEntSetI.getEntityData().set(DATA_ACTION_TIME, 200);
                     }
                 }
                 setShiftKeyDown(sneak);
@@ -235,25 +235,25 @@ public class OceanizedFoxEntity extends SeaMonster {
             enemy = this.getTarget();
             if (!(enemy == null) && enemy.isAlive()) {
                 setShiftKeyDown(false);
-                if ((Entity) this instanceof OceanizedFoxEntity _datEntSetL)
-                    _datEntSetL.getEntityData().set(DATA_SLEEPING, false);
+                if ((Entity) this instanceof OceanizedFoxEntity datEntSetL)
+                    datEntSetL.getEntityData().set(DATA_SLEEPING, false);
             }
-            skillp = (Entity) this instanceof OceanizedFoxEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP) : 0;
-            dura = (Entity) this instanceof OceanizedFoxEntity _datEntI ? _datEntI.getEntityData().get(DATA_DURATION) : 0;
+            skillp = (Entity) this instanceof OceanizedFoxEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP) : 0;
+            dura = (Entity) this instanceof OceanizedFoxEntity datEntI ? datEntI.getEntityData().get(DATA_DURATION) : 0;
             if (dura > 0) {
-                if ((Entity) this instanceof OceanizedFoxEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura - 1));
+                if ((Entity) this instanceof OceanizedFoxEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura - 1));
             }
             if (skillp > 0) {
-                if ((Entity) this instanceof OceanizedFoxEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_SKILLP, (int) (skillp - 1));
+                if ((Entity) this instanceof OceanizedFoxEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_SKILLP, (int) (skillp - 1));
             } else {
                 if (!(enemy == null) && enemy.isAlive()) {
                     if (distanceTo(enemy) <= 4) {
-                        if ((Entity) this instanceof OceanizedFoxEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_DURATION, 45);
-                        if ((Entity) this instanceof OceanizedFoxEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_SKILLP, 200);
+                        if ((Entity) this instanceof OceanizedFoxEntity datEntSetI)
+                            datEntSetI.getEntityData().set(DATA_DURATION, 45);
+                        if ((Entity) this instanceof OceanizedFoxEntity datEntSetI)
+                            datEntSetI.getEntityData().set(DATA_SKILLP, 200);
                         if (this instanceof OceanizedFoxEntity) {
                             this.setAnimation("animation.oceanized_fox.jump");
                         }
@@ -261,17 +261,17 @@ public class OceanizedFoxEntity extends SeaMonster {
                             this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 25, 9, false, false));
                         push((getLookAngle().x * 0.25), 0.25, (getLookAngle().z * 0.25));
                         CaerulaArborMod.queueServerWork(20, () -> {
-                            if (this.isAlive() && !(((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == null)) {
-                                if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.FOX_TELEPORT, SoundSource.HOSTILE, 1, 1);
+                            if (this.isAlive() && !(((Entity) this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == null)) {
+                                if (world instanceof Level level) {
+                                    level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.FOX_TELEPORT, SoundSource.HOSTILE, 1, 1);
                                 }
                                 {
-                                    Entity _ent = this;
-                                    _ent.teleportTo((((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null).getX()), (((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null).getY() + 0.25),
-                                            (((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null).getZ()));
-                                    if (_ent instanceof ServerPlayer _serverPlayer)
-                                        _serverPlayer.connection.teleport((((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null).getX()), (((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null).getY() + 0.25),
-                                                (((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null).getZ()), _ent.getYRot(), _ent.getXRot());
+                                    Entity ent = this;
+                                    ent.teleportTo((((Entity) this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null).getX()), (((Entity) this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null).getY() + 0.25),
+                                            (((Entity) this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null).getZ()));
+                                    if (ent instanceof ServerPlayer serverPlayer)
+                                        serverPlayer.connection.teleport((((Entity) this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null).getX()), (((Entity) this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null).getY() + 0.25),
+                                                (((Entity) this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null).getZ()), ent.getYRot(), ent.getXRot());
                                 }
                             }
                         });
@@ -279,15 +279,15 @@ public class OceanizedFoxEntity extends SeaMonster {
                             if (this.isAlive()) {
                                 Entity enemy1;
                                 double damage;
-                                if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.FOX_AGGRO, SoundSource.HOSTILE, 2, 1);
+                                if (world instanceof Level level) {
+                                    level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.FOX_AGGRO, SoundSource.HOSTILE, 2, 1);
                                 }
                                 damage = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
-                                enemy1 = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+                                enemy1 = (Entity) this instanceof Mob mobEnt ? mobEnt.getTarget() : null;
                                 {
-                                    final Vec3 _center = new Vec3((getX()), (getY()), (getZ()));
-                                    List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(6 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                                    for (Entity entityiterator : _entfound) {
+                                    final Vec3 center = new Vec3((getX()), (getY()), (getZ()));
+                                    List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(6 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                                    for (Entity entityiterator : entfound) {
                                         if (!(entityiterator instanceof LivingEntity)) {
                                             continue;
                                         }
@@ -301,8 +301,8 @@ public class OceanizedFoxEntity extends SeaMonster {
                                         }
                                         if (distanceTo(entityiterator) <= 3) {
                                             entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.MOB_ATTACK), this), (float) (damage * 1.5));
-                                            if ((Entity) this instanceof LivingEntity _entity)
-                                                _entity.setHealth(((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) + 1);
+                                            if ((Entity) this instanceof LivingEntity entity)
+                                                entity.setHealth(((Entity) this instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) + 1);
                                         }
                                     }
                                 }

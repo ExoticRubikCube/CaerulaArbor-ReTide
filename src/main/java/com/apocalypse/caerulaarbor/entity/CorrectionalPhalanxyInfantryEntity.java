@@ -139,10 +139,10 @@ public class CorrectionalPhalanxyInfantryEntity extends Animal implements GeoEnt
         Entity sourceentity = source.getEntity();
         if (sourceentity != null) {
             if (!(sourceentity instanceof Player)) {
-                if (((Entity) this instanceof CorrectionalPhalanxyInfantryEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP_1) : 0) <= 0) {
+                if (((Entity) this instanceof CorrectionalPhalanxyInfantryEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP_1) : 0) <= 0) {
                     if (distanceTo(sourceentity) <= 5 && this.isAlive()) {
-                        if ((Entity) this instanceof CorrectionalPhalanxyInfantryEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_SKILLP_1, 100);
+                        if ((Entity) this instanceof CorrectionalPhalanxyInfantryEntity datEntSetI)
+                            datEntSetI.getEntityData().set(DATA_SKILLP_1, 100);
                         if (this instanceof CorrectionalPhalanxyInfantryEntity) {
                             this.setAnimation("animation.correctional_phalanx _infantry.heavyattack");
                         }
@@ -184,30 +184,30 @@ public class CorrectionalPhalanxyInfantryEntity extends Animal implements GeoEnt
         double sklp2;
         Entity enemy;
         if (this.isAlive()) {
-            sklp1 = (Entity) this instanceof CorrectionalPhalanxyInfantryEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP_1) : 0;
-            sklp2 = (Entity) this instanceof CorrectionalPhalanxyInfantryEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP_2) : 0;
+            sklp1 = (Entity) this instanceof CorrectionalPhalanxyInfantryEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP_1) : 0;
+            sklp2 = (Entity) this instanceof CorrectionalPhalanxyInfantryEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP_2) : 0;
             if (sklp1 > 0) {
-                if ((Entity) this instanceof CorrectionalPhalanxyInfantryEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_SKILLP_1, (int) (sklp1 - 1));
+                if ((Entity) this instanceof CorrectionalPhalanxyInfantryEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_SKILLP_1, (int) (sklp1 - 1));
             }
             if (sklp2 > 0) {
-                if ((Entity) this instanceof CorrectionalPhalanxyInfantryEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_SKILLP_2, (int) (sklp2 - 1));
+                if ((Entity) this instanceof CorrectionalPhalanxyInfantryEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_SKILLP_2, (int) (sklp2 - 1));
             } else {
                 enemy = this.getTarget();
                 if (!(enemy == null)) {
                     if (distanceTo(enemy) <= 5 && enemy.isAlive()) {
-                        if ((Entity) this instanceof CorrectionalPhalanxyInfantryEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_SKILLP_2, 200);
+                        if ((Entity) this instanceof CorrectionalPhalanxyInfantryEntity datEntSetI)
+                            datEntSetI.getEntityData().set(DATA_SKILLP_2, 200);
                         if (this instanceof CorrectionalPhalanxyInfantryEntity) {
                             this.setAnimation("animation.correctional_phalanx _infantry.swing");
                         }
                         ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY()), (enemy.getZ())));
                         CaerulaArborMod.queueServerWork(16, () -> {
                             if (this.isAlive()) {
-                                final Vec3 _center = new Vec3((this.getX() + 2 * getLookAngle().x), (this.getY() + 2 * getLookAngle().y), (this.getZ() + 2 * getLookAngle().z));
-                                List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(6 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                                for (Entity entityiterator : _entfound) {
+                                final Vec3 center = new Vec3((this.getX() + 2 * getLookAngle().x), (this.getY() + 2 * getLookAngle().y), (this.getZ() + 2 * getLookAngle().z));
+                                List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(6 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                                for (Entity entityiterator : entfound) {
                                     if (!(entityiterator instanceof Mob) || entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "inquisition")))) {
                                         if (!(entityiterator == this.getTarget())) {
                                             continue;

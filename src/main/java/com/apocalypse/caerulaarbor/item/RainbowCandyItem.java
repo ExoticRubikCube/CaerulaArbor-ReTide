@@ -54,9 +54,8 @@ public class RainbowCandyItem extends Item {
 			entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 280, 1));
 			entity.addEffect(new MobEffectInstance(MobEffects.HEALTH_BOOST, 560, 1));
 		}
-		boolean _setval = true;
-		entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-			capability.player_util_RAINBOW = _setval;
+        entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+			capability.player_util_RAINBOW = true;
 			capability.syncPlayerVariables(entity);
 		});
 		if (itemstack.isEmpty()) {

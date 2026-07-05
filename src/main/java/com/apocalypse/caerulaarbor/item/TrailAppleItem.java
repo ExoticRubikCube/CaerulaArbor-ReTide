@@ -10,7 +10,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 
 public class TrailAppleItem extends Item {
 	public TrailAppleItem() {
@@ -19,14 +18,13 @@ public class TrailAppleItem extends Item {
 
 	@Override
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
-		ItemStack retval = super.finishUsingItem(itemstack, world, entity);
-		double x = entity.getX();
+        double x = entity.getX();
 		double y = entity.getY();
 		double z = entity.getZ();
 		SIHelper.causeSanityInjury(entity, 75, SanityEvent.Hurt.Type.FOOD);
-		if ((LevelAccessor) world instanceof ServerLevel level) {
+		if (world instanceof ServerLevel level) {
 			level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, y + 0.8, z, 48, 0.5, 1, 0.5, 0.1);
 		}
-		return retval;
+		return super.finishUsingItem(itemstack, world, entity);
 	}
 }

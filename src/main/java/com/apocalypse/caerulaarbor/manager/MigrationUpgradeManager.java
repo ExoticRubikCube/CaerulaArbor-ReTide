@@ -28,12 +28,12 @@ public class MigrationUpgradeManager {
 		if (stra < 4) {
 			if (MapVariables.get(world).evo_point_migration >= Math.pow(stra + 1, 3) * CaerulaConfigsConfiguration.COEFFICIENT.get()) {
 				for (Entity entityiterator : new ArrayList<>(world.players())) {
-					if (entityiterator instanceof ServerPlayer _player) {
-						Advancement _adv = _player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "to_experience_evolution"));
-						AdvancementProgress _ap = _player.getAdvancements().getOrStartProgress(_adv);
-						if (!_ap.isDone()) {
-							for (String criteria : _ap.getRemainingCriteria())
-								_player.getAdvancements().award(_adv, criteria);
+					if (entityiterator instanceof ServerPlayer player) {
+						Advancement adv = player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "to_experience_evolution"));
+						AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
+						if (!ap.isDone()) {
+							for (String criteria : ap.getRemainingCriteria())
+								player.getAdvancements().award(adv, criteria);
 						}
 					}
 				}
@@ -42,27 +42,27 @@ public class MigrationUpgradeManager {
 				MapVariablesHandler.setEvoPoint(world, StrategyType.MIGRATION, 0);
 				if (stra == 1) {
 					num = "I";
-					prefix = "§p";
+					prefix = "鎼俻";
 				} else if (stra == 2) {
 					num = "II";
-					prefix = "§b";
+					prefix = "鎼俠";
 				} else if (stra == 3) {
 					num = "III";
-					prefix = "§9";
+					prefix = "鎼?";
 				} else if (stra == 4) {
 					num = "IV";
-					prefix = "§1";
+					prefix = "鎼?";
 				}
 				if (CaerulaConfigsConfiguration.EVOSOUND.get()) {
 					for (Entity entityiterator : new ArrayList<>(world.players())) {
 						if (stra >= 3) {
-							if (world instanceof Level _level) {
-									_level.playSound(null, BlockPos.containing(entityiterator.getX(), entityiterator.getY(), entityiterator.getZ()), CASounds.MIGRATION2.get(),
+							if (world instanceof Level level) {
+									level.playSound(null, BlockPos.containing(entityiterator.getX(), entityiterator.getY(), entityiterator.getZ()), CASounds.MIGRATION2.get(),
 											SoundSource.NEUTRAL, 4, 1);
 							}
 						} else if (stra > 0) {
-							if (world instanceof Level _level) {
-									_level.playSound(null, BlockPos.containing(entityiterator.getX(), entityiterator.getY(), entityiterator.getZ()), CASounds.MIGRATION1.get(),
+							if (world instanceof Level level) {
+									level.playSound(null, BlockPos.containing(entityiterator.getX(), entityiterator.getY(), entityiterator.getZ()), CASounds.MIGRATION1.get(),
 											SoundSource.NEUTRAL, 4, 1);
 							}
 						}
@@ -73,12 +73,12 @@ public class MigrationUpgradeManager {
 			}
 		} else {
 			for (Entity entityiterator : new ArrayList<>(world.players())) {
-				if (entityiterator instanceof ServerPlayer _player) {
-					Advancement _adv = _player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "to_terminate_evolution"));
-					AdvancementProgress _ap = _player.getAdvancements().getOrStartProgress(_adv);
-					if (!_ap.isDone()) {
-						for (String criteria : _ap.getRemainingCriteria())
-							_player.getAdvancements().award(_adv, criteria);
+				if (entityiterator instanceof ServerPlayer player) {
+					Advancement adv = player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "to_terminate_evolution"));
+					AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
+					if (!ap.isDone()) {
+						for (String criteria : ap.getRemainingCriteria())
+							player.getAdvancements().award(adv, criteria);
 					}
 				}
 			}

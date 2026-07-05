@@ -109,8 +109,8 @@ public class NetherseaSlimeEntity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if (world instanceof Level _level) {
-                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SLIME_SQUISH, SoundSource.HOSTILE, 1, 1);
+        if (world instanceof Level level) {
+                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SLIME_SQUISH, SoundSource.HOSTILE, 1, 1);
         }
         return super.causeFallDamage(l, d, source);
 	}
@@ -144,7 +144,7 @@ public class NetherseaSlimeEntity extends SeaMonster {
 		CompoundTag tag = this.getPersistentData();
 		if(!tag.getBoolean("Resized")){
             double size;
-            size = (Entity) this instanceof NetherseaSlimeEntity _datEntI ? _datEntI.getEntityData().get(DATA_SIZE) : 0;
+            size = (Entity) this instanceof NetherseaSlimeEntity datEntI ? datEntI.getEntityData().get(DATA_SIZE) : 0;
             if (size > 1) {
                 if (this.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
                     this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(
@@ -225,30 +225,30 @@ public class NetherseaSlimeEntity extends SeaMonster {
             double x = this.getX();
             double y = this.getY();
             double z = this.getZ();
-            int size = (Entity) this instanceof NetherseaSlimeEntity _datEntI ? _datEntI.getEntityData().get(DATA_SIZE) : 0;
+            int size = (Entity) this instanceof NetherseaSlimeEntity datEntI ? datEntI.getEntityData().get(DATA_SIZE) : 0;
             if (size > 1) {
                 size = (int) (size * 0.5);
                 Vec3 pos = new Vec3(x, y, z);
-                if (world instanceof ServerLevel _level) {
-                    RandomSource levelRandom = _level.getRandom();
+                if (world instanceof ServerLevel level) {
+                    RandomSource levelRandom = level.getRandom();
                     int t = Mth.nextInt(levelRandom, 2, 4);
                     for (int index0 = 0; index0 < t; index0++) {
                         Vec3 offset = new Vec3(Mth.nextDouble(levelRandom, -1, 1), 0, Mth.nextDouble(levelRandom, -1, 1));
-                        Entity entityToSpawn = CAEntities.NETHERSEA_SLIME.get().create(_level);
+                        Entity entityToSpawn = CAEntities.NETHERSEA_SLIME.get().create(level);
                         if (entityToSpawn instanceof NetherseaSlimeEntity slime){
                             slime.setPos(pos.add(offset));
                             slime.getEntityData().set(DATA_SIZE, size);
                             //SlimeAttrModifyProcedure.execute(slime);
                             slime.setYRot(world.getRandom().nextFloat() * 360F);
-                            _level.addFreshEntity(slime);
+                            level.addFreshEntity(slime);
                         }
                     }
                 }
             } else if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
-                if (world instanceof ServerLevel _level) {
-                    ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, new ItemStack(CAItems.TRAIL_CREAM.get()));
+                if (world instanceof ServerLevel level) {
+                    ItemEntity entityToSpawn = new ItemEntity(level, x, y, z, new ItemStack(CAItems.TRAIL_CREAM.get()));
                     entityToSpawn.setPickUpDelay(10);
-                    _level.addFreshEntity(entityToSpawn);
+                    level.addFreshEntity(entityToSpawn);
                 }
             }
         }
@@ -258,8 +258,8 @@ public class NetherseaSlimeEntity extends SeaMonster {
 	public void push(Entity pEntity){
 		super.push(pEntity);
 		if (pEntity instanceof NetherseaSlimeEntity) return;
-		if (pEntity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-			_entity.addEffect(new MobEffectInstance(CAMobEffects.DEDUCT_ONE_SANITY.get(), 70, 0));
+		if (pEntity instanceof LivingEntity entity && !entity.level().isClientSide())
+			entity.addEffect(new MobEffectInstance(CAMobEffects.DEDUCT_ONE_SANITY.get(), 70, 0));
 	}
 
 	public String getSyncedAnimation() {

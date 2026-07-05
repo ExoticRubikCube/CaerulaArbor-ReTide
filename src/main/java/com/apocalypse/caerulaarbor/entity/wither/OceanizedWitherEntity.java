@@ -190,8 +190,8 @@ public class OceanizedWitherEntity extends AbstractOceanizedWitherEntity impleme
             this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 100, 9, false, false));
         this.setHealth(1);
         setDeltaMovement(new Vec3(0, (-0.75), 0));
-        if ((Entity) this instanceof OceanizedWitherEntity _datEntSetI)
-            _datEntSetI.getEntityData().set(DATA_DURATION, 100);
+        if ((Entity) this instanceof OceanizedWitherEntity datEntSetI)
+            datEntSetI.getEntityData().set(DATA_DURATION, 100);
         return retval;
     }
 
@@ -304,7 +304,7 @@ public class OceanizedWitherEntity extends AbstractOceanizedWitherEntity impleme
 
     @Override
     public void performRangedAttack(LivingEntity target, float flval) {
-        // TODO: Revisit this legacy system call when the pre-shot wither projectile path is cleaned up.
+        // TODO：当前置凋灵弹路径清理完成后，重新审视这个遗留的系统调用。
         WitherShootPreEntity.shoot(this, target);
     }
 

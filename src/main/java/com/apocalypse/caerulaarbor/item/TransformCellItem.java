@@ -4,7 +4,6 @@ package com.apocalypse.caerulaarbor.item;
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
-import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;

@@ -56,8 +56,8 @@ public class FrozenMobEffect extends MobEffect {
             entity.saveWithoutId(dataIndex1);
             dataIndex1.putBoolean("ignited", false);
             entity.load(dataIndex1);
-            if ((Entity) entity instanceof Creeper _creeper)
-                _creeper.setSwellDir(0);
+            if ((Entity) entity instanceof Creeper creeper)
+                creeper.setSwellDir(0);
         }
         if (entity instanceof Blaze) {
             ((Entity) entity).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.FREEZE)), 1);
@@ -67,10 +67,10 @@ public class FrozenMobEffect extends MobEffect {
         }
         dh = entity.getBbHeight() * 0.5;
         dw = entity.getBbWidth() * 0.5;
-        if (world instanceof ServerLevel _level)
-            _level.sendParticles(ParticleTypes.SNOWFLAKE, x, (y + dh), z, 8, dw, dh, dw, 0.05);
-        if (world instanceof ServerLevel _level)
-            _level.sendParticles(ParticleTypes.ITEM_SNOWBALL, x, (y + dh), z, 2, dw, dh, dw, 0.05);
+        if (world instanceof ServerLevel level)
+            level.sendParticles(ParticleTypes.SNOWFLAKE, x, (y + dh), z, 8, dw, dh, dw, 0.05);
+        if (world instanceof ServerLevel level)
+            level.sendParticles(ParticleTypes.ITEM_SNOWBALL, x, (y + dh), z, 2, dw, dh, dw, 0.05);
     }
 
     @Override

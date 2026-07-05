@@ -61,48 +61,48 @@ public class RoyalFateItem extends Item {
         ItemStack itemstack = ar.getObject();
         double lives_left;
         if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_maxlive > 1) {
-            if ((LevelAccessor) world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.WARDEN_DEATH, SoundSource.NEUTRAL, 2, 1);
+            if ((LevelAccessor) world instanceof Level level) {
+                    level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.WARDEN_DEATH, SoundSource.NEUTRAL, 2, 1);
             }
-            if ((LevelAccessor) world instanceof ServerLevel _level)
-                _level.sendParticles(ParticleTypes.END_ROD, x, y, z, 72, 1, 1, 1, 1);
+            if ((LevelAccessor) world instanceof ServerLevel level)
+                level.sendParticles(ParticleTypes.END_ROD, x, y, z, 72, 1, 1, 1, 1);
             if (((LevelAccessor) world).isClientSide())
                 Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);
             lives_left = (((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_maxlive;
             {
-                double _setval = 1;
+                double setval = 1;
                 ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                    capability.player_maxlive = _setval;
+                    capability.player_maxlive = setval;
                     capability.syncPlayerVariables(entity);
                 });
             }
             {
-                double _setval = 1;
+                double setval = 1;
                 ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                    capability.player_lives = _setval;
+                    capability.player_lives = setval;
                     capability.syncPlayerVariables(entity);
                 });
             }
             {
-                double _setval = (((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_shield + lives_left;
+                double setval = (((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_shield + lives_left;
                 ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                    capability.player_shield = _setval;
+                    capability.player_shield = setval;
                     capability.syncPlayerVariables(entity);
                 });
             }
             {
-                double _setval = (((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_shield + 3;
+                double setval = (((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_shield + 3;
                 ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                    capability.player_shield = _setval;
+                    capability.player_shield = setval;
                     capability.syncPlayerVariables(entity);
                 });
             }
             itemstack.shrink(1);
         }
         {
-            boolean _setval = true;
+            boolean setval = true;
             ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                capability.relic_archifi_RYLFATE = _setval;
+                capability.relic_archifi_RYLFATE = setval;
                 capability.syncPlayerVariables(entity);
             });
         }
@@ -124,16 +124,16 @@ public class RoyalFateItem extends Item {
         if (blockstate.getBlock() == Blocks.DEEPSLATE_BRICK_SLAB) {
             world.setBlock(BlockPos.containing(x, y, z), CABlocks.BLOCK_FATE.get().defaultBlockState(), 3);
             {
-                Direction _dir = ((entity.getDirection()).getOpposite());
-                BlockPos _pos = BlockPos.containing(x, y, z);
-                BlockState _bs = world.getBlockState(_pos);
-                Property<?> _property = _bs.getBlock().getStateDefinition().getProperty("facing");
-                if (_property instanceof DirectionProperty _dp && _dp.getPossibleValues().contains(_dir)) {
-                    world.setBlock(_pos, _bs.setValue(_dp, _dir), 3);
+                Direction dir = ((entity.getDirection()).getOpposite());
+                BlockPos pos = BlockPos.containing(x, y, z);
+                BlockState bs = world.getBlockState(pos);
+                Property<?> property = bs.getBlock().getStateDefinition().getProperty("facing");
+                if (property instanceof DirectionProperty dp && dp.getPossibleValues().contains(dir)) {
+                    world.setBlock(pos, bs.setValue(dp, dir), 3);
                 } else {
-                    _property = _bs.getBlock().getStateDefinition().getProperty("axis");
-                    if (_property instanceof EnumProperty _ap && _ap.getPossibleValues().contains(_dir.getAxis()))
-                        world.setBlock(_pos, _bs.setValue(_ap, _dir.getAxis()), 3);
+                    property = bs.getBlock().getStateDefinition().getProperty("axis");
+                    if (property instanceof EnumProperty ap && ap.getPossibleValues().contains(dir.getAxis()))
+                        world.setBlock(pos, bs.setValue(ap, dir.getAxis()), 3);
                 }
             }
             itemstack.shrink(1);

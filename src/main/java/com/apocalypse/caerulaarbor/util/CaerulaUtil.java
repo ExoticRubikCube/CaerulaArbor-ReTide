@@ -38,8 +38,8 @@ public class CaerulaUtil {
 		throw new UnsupportedOperationException("Utility class");
 	}
 
-	// Shared utility methods migrated from procedures.
-	// Life points
+	// 从 Procedure 迁移过来的共享工具方法。
+	// 生命点数
 	public static int getLifePoint(Player player){
 		return (int) player.getCapability(ModCapabilities.PLAYER_VARIABLE, null)
 		.orElse(new PlayerVariable()).player_lives;
@@ -70,7 +70,7 @@ public class CaerulaUtil {
 		if (value < getLifePoint(player)) setLifePoint(player, value);
 	}
 
-	// Shield points
+	// 护盾点数
 	public static int getShieldPoint(Player player){
 		return (int) player.getCapability(ModCapabilities.PLAYER_VARIABLE, null)
 		.orElse(new PlayerVariable()).player_shield;
@@ -84,7 +84,7 @@ public class CaerulaUtil {
 		});
 	}
 
-	// Lights
+	// 光芒值
 	public static double getLights(Player player){
 		return player.getCapability(ModCapabilities.PLAYER_VARIABLE, null)
 		.orElse(new PlayerVariable()).player_light;
@@ -100,7 +100,7 @@ public class CaerulaUtil {
 		EntityUtils.restorePlayerLights(player, value);
 	}
 
-	// Sanity injury
+	// 理智损伤
 	public static void dealSanityInjury(LivingEntity living, double amount){
 		SIHelper.causeSanityInjury(living, amount);
 	}
@@ -108,7 +108,7 @@ public class CaerulaUtil {
 		ModCapabilities.getSanityInjury(living).heal(amount);
 	}
 
-	// Armor erosion
+	// 护甲侵蚀
 	public static void armorErrosion(Entity entity, int amount, int limit){
 		for (int i=0;i<amount;i++){
 			EntityUtils.giveLessArmor(entity, limit);

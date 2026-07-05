@@ -131,35 +131,35 @@ public class HighmoreSpawningBlockBlock extends BaseEntityBlock implements Simpl
         double x = pos.getX();
         double y = pos.getY();
         double z = pos.getZ();
-        if ((blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _getip1 ? blockstate.getValue(_getip1) : -1) == 0) {
+        if ((blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip1 ? blockstate.getValue(getip1) : -1) == 0) {
             {
-                int _value = 1;
-                BlockPos _pos = BlockPos.containing(x, y, z);
-                BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-                if (_bs.getBlock().getStateDefinition().getProperty("animation") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))
-                    ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
+                int value = 1;
+                BlockPos blockPos = BlockPos.containing(x, y, z);
+                BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                if (bs.getBlock().getStateDefinition().getProperty("animation") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
+                    ((LevelAccessor) world).setBlock(pos, bs.setValue(integerProp, value), 3);
             }
             CaerulaArborMod.queueServerWork(40, () -> {
                 if ((((LevelAccessor) world).getBlockState(BlockPos.containing(x, y, z))).getBlock() == CABlocks.HIGHMORE_SPAWNING_BLOCK.get()
-                        && ((((LevelAccessor) world).getBlockState(BlockPos.containing(x, y, z))).getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _getip6
-                                ? (((LevelAccessor) world).getBlockState(BlockPos.containing(x, y, z))).getValue(_getip6)
+                        && ((((LevelAccessor) world).getBlockState(BlockPos.containing(x, y, z))).getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip6
+                                ? (((LevelAccessor) world).getBlockState(BlockPos.containing(x, y, z))).getValue(getip6)
                                 : -1) == 0) {
                     {
-                        int _value = 1;
-                        BlockPos _pos = BlockPos.containing(x, y, z);
-                        BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-                        if (_bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))
-                            ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
+                        int value = 1;
+                        BlockPos blockPos = BlockPos.containing(x, y, z);
+                        BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                        if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
+                            ((LevelAccessor) world).setBlock(pos, bs.setValue(integerProp, value), 3);
                     }
                     {
-                        int _value = 0;
-                        BlockPos _pos = BlockPos.containing(x, y, z);
-                        BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-                        if (_bs.getBlock().getStateDefinition().getProperty("animation") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))
-                            ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
+                        int value = 0;
+                        BlockPos blockPos = BlockPos.containing(x, y, z);
+                        BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                        if (bs.getBlock().getStateDefinition().getProperty("animation") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
+                            ((LevelAccessor) world).setBlock(pos, bs.setValue(integerProp, value), 3);
                     }
-                    if ((LevelAccessor) world instanceof ServerLevel _level) {
-                        Entity entityToSpawn = CAEntities.HIGHMORE.get().spawn(_level, BlockPos.containing(x + 0.5, y + 1, z + 0.5), MobSpawnType.MOB_SUMMONED);
+                    if ((LevelAccessor) world instanceof ServerLevel level) {
+                        Entity entityToSpawn = CAEntities.HIGHMORE.get().spawn(level, BlockPos.containing(x + 0.5, y + 1, z + 0.5), MobSpawnType.MOB_SUMMONED);
                         if (entityToSpawn != null) {
                             entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
                         }
@@ -181,20 +181,20 @@ public class HighmoreSpawningBlockBlock extends BaseEntityBlock implements Simpl
 		Direction direction = hit.getDirection();
         InteractionResult result = InteractionResult.PASS;
         if (entity != null) {
-            if ((blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _getip1 ? blockstate.getValue(_getip1) : -1) == 1) {
-                if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.HIGHMORE_SCYTHE.get()) {
+            if ((blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip1 ? blockstate.getValue(getip1) : -1) == 1) {
+                if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.HIGHMORE_SCYTHE.get()) {
                     ((LevelAccessor) world).setBlock(BlockPos.containing(x, y, z), CABlocks.HIGHMORE_SPAWNBLOCK.get().defaultBlockState(), 3);
-                    if ((LevelAccessor) world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.END_PORTAL_FRAME_FILL, SoundSource.BLOCKS, (float) 1.5, 1);
+                    if ((LevelAccessor) world instanceof Level level) {
+                            level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.END_PORTAL_FRAME_FILL, SoundSource.BLOCKS, (float) 1.5, 1);
                     }
-                    if ((LevelAccessor) world instanceof ServerLevel _level)
-                        _level.sendParticles(ParticleTypes.WAX_ON, ((double) x + 0.5), ((double) y + 0.5), ((double) z + 0.5), 16, 2, 2, 2, 0.15);
+                    if ((LevelAccessor) world instanceof ServerLevel level)
+                        level.sendParticles(ParticleTypes.WAX_ON, ((double) x + 0.5), ((double) y + 0.5), ((double) z + 0.5), 16, 2, 2, 2, 0.15);
                     for (int index0 = 0; index0 < 16; index0++) {
                         {
-                            ItemStack _ist = ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY);
-                            if (_ist.hurt(64, RandomSource.create(), null)) {
-                                _ist.shrink(1);
-                                _ist.setDamageValue(0);
+                            ItemStack ist = ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY);
+                            if (ist.hurt(64, RandomSource.create(), null)) {
+                                ist.shrink(1);
+                                ist.setDamageValue(0);
                             }
                         }
                     }

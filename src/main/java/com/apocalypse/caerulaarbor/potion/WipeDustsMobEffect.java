@@ -45,16 +45,16 @@ public class WipeDustsMobEffect extends MobEffect {
         LevelAccessor world = entity.level();
         if (entity == null)
             return;
-        if ((Entity) entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(MobEffects.REGENERATION) && ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(Items.BRUSH)))) {
+        if ((Entity) entity instanceof LivingEntity livEnt0 && livEnt0.hasEffect(MobEffects.REGENERATION) && ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(Items.BRUSH)))) {
             {
-                final Vec3 _center = new Vec3(entity.getX(), entity.getY(), entity.getZ());
-                List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(10 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                for (Entity entityiterator : _entfound) {
+                final Vec3 center = new Vec3(entity.getX(), entity.getY(), entity.getZ());
+                List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(10 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                for (Entity entityiterator : entfound) {
                     if (entityiterator instanceof Monster) {
                         entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "wipe_magic"))), entity),
-                                (float) (5 * (1 + ((Entity) entity instanceof LivingEntity _livEnt && _livEnt.hasEffect(MobEffects.REGENERATION) ? _livEnt.getEffect(MobEffects.REGENERATION).getAmplifier() : 0))));
-                        if (world instanceof ServerLevel _level)
-                            _level.sendParticles(ParticleTypes.WAX_OFF, (entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()), 48, 0.8, 1, 0.8, 0.1);
+                                (float) (5 * (1 + ((Entity) entity instanceof LivingEntity livEnt && livEnt.hasEffect(MobEffects.REGENERATION) ? livEnt.getEffect(MobEffects.REGENERATION).getAmplifier() : 0))));
+                        if (world instanceof ServerLevel level)
+                            level.sendParticles(ParticleTypes.WAX_OFF, (entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()), 48, 0.8, 1, 0.8, 0.1);
                     }
                 }
             }

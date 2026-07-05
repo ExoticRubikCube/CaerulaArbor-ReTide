@@ -262,19 +262,19 @@ public class MoistEnderCrystalEntity extends PathfinderMob implements GeoEntity,
 			if (world.isClientSide()) {
 				return;
 			}
-			if (world instanceof Level _level) {
-				_level.playSound(null, BlockPos.containing(x, y, z), CASounds.CASTER_CRYSTAL_EXPLODE.get(), SoundSource.NEUTRAL, 3, 1);
+			if (world instanceof Level level) {
+				level.playSound(null, BlockPos.containing(x, y, z), CASounds.CASTER_CRYSTAL_EXPLODE.get(), SoundSource.NEUTRAL, 3, 1);
 			}
-			if (world instanceof ServerLevel _level)
-				_level.sendParticles(ParticleTypes.EXPLOSION, x, (y + 0.5), z, 4, 0.5, 0.5, 0.5, 0.1);
-			if (world instanceof ServerLevel _level)
-				_level.sendParticles(CAParticles.EDERMAN_PTC.get(), x, (y + 0.5), z, 32, 1, 1, 1, 0.18);
+			if (world instanceof ServerLevel level)
+				level.sendParticles(ParticleTypes.EXPLOSION, x, (y + 0.5), z, 4, 0.5, 0.5, 0.5, 0.1);
+			if (world instanceof ServerLevel level)
+				level.sendParticles(CAParticles.EDERMAN_PTC.get(), x, (y + 0.5), z, 32, 1, 1, 1, 0.18);
 			d = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
 			if (d > 0) {
 				{
-					final Vec3 _center = new Vec3(x, y, z);
-					List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(8 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-					for (Entity entityiterator : _entfound) {
+					final Vec3 center = new Vec3(x, y, z);
+					List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(8 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+					for (Entity entityiterator : entfound) {
 						if (!(entityiterator instanceof LivingEntity)) {
 							continue;
 						}
@@ -288,16 +288,16 @@ public class MoistEnderCrystalEntity extends PathfinderMob implements GeoEntity,
 				}
 			}
 			enderina = world.getEntitiesOfClass(OceanizedEnderinaEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).stream().min(new Object() {
-				Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
-					return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
+				Comparator<Entity> compareDistOf(double x, double y, double z) {
+					return Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z));
 				}
 			}.compareDistOf(x, y, z)).orElse(null);
 			if (enderina == null) {
 				return;
 			}
-			if ((enderina instanceof OceanizedEnderinaEntity _datEntI ? _datEntI.getEntityData().get(OceanizedEnderinaEntity.DATA_REVIVE_TICK) : 0) > 0) {
+			if ((enderina instanceof OceanizedEnderinaEntity datEntI ? datEntI.getEntityData().get(OceanizedEnderinaEntity.DATA_REVIVE_TICK) : 0) > 0) {
 				enderina.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hand_of_choker")))),
-						(float) ((enderina instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) * 0.25));
+						(float) ((enderina instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) * 0.25));
 			} else if (enderina instanceof LivingEntity livingEntity) {
 				EntityUtils.heal(livingEntity, (livingEntity.getMaxHealth()) * 0.05);
 				ModCapabilities.getSanityInjury(livingEntity).heal(1000);

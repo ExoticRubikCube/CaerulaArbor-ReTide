@@ -44,38 +44,38 @@ public class AlleySculptureItem extends Item {
         double y = entity.getY();
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
-        if ((LevelAccessor) world instanceof Level _level) {
-            _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ALLAY_AMBIENT_WITH_ITEM, SoundSource.NEUTRAL, (float) 3.5, 1);
+        if ((LevelAccessor) world instanceof Level level) {
+            level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ALLAY_AMBIENT_WITH_ITEM, SoundSource.NEUTRAL, (float) 3.5, 1);
         }
-        if ((LevelAccessor) world instanceof ServerLevel _level)
-            _level.sendParticles(ParticleTypes.RAIN, x, y, z, 72, 1, 1, 1, 0.1);
+        if ((LevelAccessor) world instanceof ServerLevel level)
+            level.sendParticles(ParticleTypes.RAIN, x, y, z, 72, 1, 1, 1, 0.1);
         {
-            boolean _setval = true;
+            boolean setval = true;
             ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                capability.relic_util_ALLEY = _setval;
+                capability.relic_util_ALLEY = setval;
                 capability.syncPlayerVariables(entity);
             });
         }
         {
-            double _setval = (((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_maxlive + 3;
+            double setval = (((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_maxlive + 3;
             ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                capability.player_maxlive = _setval;
+                capability.player_maxlive = setval;
                 capability.syncPlayerVariables(entity);
             });
         }
         {
-            double _setval = (((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_lives + 3;
+            double setval = (((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_lives + 3;
             ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                capability.player_lives = _setval;
+                capability.player_lives = setval;
                 capability.syncPlayerVariables(entity);
             });
         }
         if (((LevelAccessor) world).isClientSide())
             Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);
-        if ((Entity) entity instanceof Player _player) {
-            ItemStack _setstack = new ItemStack(CABlocks.ALLAY_BLOCK.get()).copy();
-            _setstack.setCount(1);
-            ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
+        if ((Entity) entity instanceof Player player) {
+            ItemStack setstack = new ItemStack(CABlocks.ALLAY_BLOCK.get()).copy();
+            setstack.setCount(1);
+            ItemHandlerHelper.giveItemToPlayer(player, setstack);
         }
         itemstack.shrink(1);
         return ar;

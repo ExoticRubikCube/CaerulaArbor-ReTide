@@ -256,51 +256,51 @@ public class ReaperPetEntity extends TamableAnimal implements GeoEntity, SyncedA
 		double y = this.getY();
 		double z = this.getZ();
 		Level world = this.level();
-		if (((Entity) this instanceof TamableAnimal _tamEnt ? (Entity) _tamEnt.getOwner() : null) == sourceentity) {
-			if (((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()
-					&& ((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()) {
-				if ((LevelAccessor) world instanceof ServerLevel _level)
-					_level.sendParticles(ParticleTypes.HEART, x, y, z, 4, 0.8, 0.5, 0.8, 0.3);
+		if (((Entity) this instanceof TamableAnimal tamEnt ? (Entity) tamEnt.getOwner() : null) == sourceentity) {
+			if (((Entity) sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()
+					&& ((Entity) sourceentity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()) {
+				if ((LevelAccessor) world instanceof ServerLevel level)
+					level.sendParticles(ParticleTypes.HEART, x, y, z, 4, 0.8, 0.5, 0.8, 0.3);
 				((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((sourceentity.getX()), (sourceentity.getY()), (sourceentity.getZ())));
-				if ((Entity) this instanceof Mob _entity)
-					_entity.getNavigation().stop();
+				if ((Entity) this instanceof Mob entity)
+					entity.getNavigation().stop();
 				if (this instanceof ReaperPetEntity) {
 					this.setAnimation("animation.reaperpet.interact");
 				}
 				return InteractionResult.SUCCESS;
-			} else if (((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).is(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "fish_food")))) {
-				if ((Entity) this instanceof LivingEntity _entity)
-					_entity.setHealth((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1);
-				((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
-				if ((LevelAccessor) world instanceof Level _level) {
-					_level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.DOLPHIN_EAT, SoundSource.NEUTRAL, 1, 1);
+			} else if (((Entity) sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).is(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "fish_food")))) {
+				if ((Entity) this instanceof LivingEntity entity)
+					entity.setHealth((Entity) this instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1);
+				((Entity) sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
+				if ((LevelAccessor) world instanceof Level level) {
+					level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.DOLPHIN_EAT, SoundSource.NEUTRAL, 1, 1);
 				}
 				return InteractionResult.SUCCESS;
-			} else if (((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).is(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "fish_food")))) {
-				if ((Entity) this instanceof LivingEntity _entity && !this.level().isClientSide())
+			} else if (((Entity) sourceentity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).is(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "fish_food")))) {
+				if ((Entity) this instanceof LivingEntity entity && !this.level().isClientSide())
 					this.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 200, 1));
-				((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).shrink(1);
-				if ((LevelAccessor) world instanceof Level _level) {
-					_level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.DOLPHIN_EAT, SoundSource.NEUTRAL, 1, 1);
+				((Entity) sourceentity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).shrink(1);
+				if ((LevelAccessor) world instanceof Level level) {
+					level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.DOLPHIN_EAT, SoundSource.NEUTRAL, 1, 1);
 				}
 				return InteractionResult.SUCCESS;
-			} else if (((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == Items.STICK) {
+			} else if (((Entity) sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == Items.STICK) {
 				if (sourceentity.isShiftKeyDown()) {
-					if ((Entity) this instanceof ReaperPetEntity _datEntSetI)
-						_datEntSetI.getEntityData().set(DATA_STATE, 2);
-					if ((Entity) sourceentity instanceof Player _player && !_player.level().isClientSide())
-						_player.displayClientMessage(Component.literal((this.getDisplayName().getString() + Component.translatable("item.caerula_arbor.a_second_key.description_2").getString())), true);
+					if ((Entity) this instanceof ReaperPetEntity datEntSetI)
+						datEntSetI.getEntityData().set(DATA_STATE, 2);
+					if ((Entity) sourceentity instanceof Player player && !player.level().isClientSide())
+						player.displayClientMessage(Component.literal((this.getDisplayName().getString() + Component.translatable("item.caerula_arbor.a_second_key.description_2").getString())), true);
 				} else {
-					if (((Entity) this instanceof ReaperPetEntity _datEntI ? _datEntI.getEntityData().get(DATA_STATE) : 0) == 0) {
-						if ((Entity) this instanceof ReaperPetEntity _datEntSetI)
-							_datEntSetI.getEntityData().set(DATA_STATE, 1);
-						if ((Entity) sourceentity instanceof Player _player && !_player.level().isClientSide())
-							_player.displayClientMessage(Component.literal((this.getDisplayName().getString() + Component.translatable("item.caerula_arbor.a_second_key.description_1").getString())), true);
+					if (((Entity) this instanceof ReaperPetEntity datEntI ? datEntI.getEntityData().get(DATA_STATE) : 0) == 0) {
+						if ((Entity) this instanceof ReaperPetEntity datEntSetI)
+							datEntSetI.getEntityData().set(DATA_STATE, 1);
+						if ((Entity) sourceentity instanceof Player player && !player.level().isClientSide())
+							player.displayClientMessage(Component.literal((this.getDisplayName().getString() + Component.translatable("item.caerula_arbor.a_second_key.description_1").getString())), true);
 					} else {
-						if ((Entity) this instanceof ReaperPetEntity _datEntSetI)
-							_datEntSetI.getEntityData().set(DATA_STATE, 0);
-						if ((Entity) sourceentity instanceof Player _player && !_player.level().isClientSide())
-							_player.displayClientMessage(Component.literal((this.getDisplayName().getString() + Component.translatable("item.caerula_arbor.a_second_key.description_0").getString())), true);
+						if ((Entity) this instanceof ReaperPetEntity datEntSetI)
+							datEntSetI.getEntityData().set(DATA_STATE, 0);
+						if ((Entity) sourceentity instanceof Player player && !player.level().isClientSide())
+							player.displayClientMessage(Component.literal((this.getDisplayName().getString() + Component.translatable("item.caerula_arbor.a_second_key.description_0").getString())), true);
 					}
 				}
 				return InteractionResult.SUCCESS;
@@ -315,19 +315,19 @@ public class ReaperPetEntity extends TamableAnimal implements GeoEntity, SyncedA
 		super.baseTick();
 		Entity owner;
 		Entity enemy;
-		if ((Entity) this instanceof Mob _mobEnt0 && _mobEnt0.isAggressive() && !((Entity) this instanceof LivingEntity _livEnt1 && _livEnt1.hasEffect(CAMobEffects.PET_REAP.get()))) {
+		if ((Entity) this instanceof Mob mobEnt0 && mobEnt0.isAggressive() && !((Entity) this instanceof LivingEntity livEnt1 && livEnt1.hasEffect(CAMobEffects.PET_REAP.get()))) {
 			if (!this.level().isClientSide())
 				this.addEffect(new MobEffectInstance(CAMobEffects.PET_REAP.get(), 100, 0, false, false));
 		}
-		if (((Entity) this instanceof ReaperPetEntity _datEntI ? _datEntI.getEntityData().get(DATA_STATE) : 0) == 2) {
-			if ((Entity) this instanceof Mob _entity)
-				_entity.setTarget(null);
+		if (((Entity) this instanceof ReaperPetEntity datEntI ? datEntI.getEntityData().get(DATA_STATE) : 0) == 2) {
+			if ((Entity) this instanceof Mob entity)
+				entity.setTarget(null);
 		}
-		owner = (Entity) this instanceof TamableAnimal _tamEnt ? _tamEnt.getOwner() : null;
-		enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
-		if (enemy == owner || (enemy instanceof TamableAnimal _tamEnt ? (Entity) _tamEnt.getOwner() : null) == owner) {
-			if ((Entity) this instanceof Mob _entity)
-				_entity.setTarget(null);
+		owner = (Entity) this instanceof TamableAnimal tamEnt ? tamEnt.getOwner() : null;
+		enemy = (Entity) this instanceof Mob mobEnt ? mobEnt.getTarget() : null;
+		if (enemy == owner || (enemy instanceof TamableAnimal tamEnt ? (Entity) tamEnt.getOwner() : null) == owner) {
+			if ((Entity) this instanceof Mob entity)
+				entity.setTarget(null);
 		}
 		this.refreshDimensions();
 	}

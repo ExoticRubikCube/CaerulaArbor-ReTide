@@ -141,20 +141,20 @@ public class MizukiStatueBlock extends BaseEntityBlock implements SimpleWaterlog
         double z = pos.getZ();
         if (entity == null)
             return;
-        if ((entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.MIZUKI_DETERMINATION.get()
-                && (blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _getip3 ? blockstate.getValue(_getip3) : -1) == 1) {
-            (entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
-            if ((LevelAccessor) world instanceof ServerLevel _level)
-                _level.sendParticles(ParticleTypes.END_ROD, (x + 0.5), (y + 2), (z + 0.5), 48, 2, 2, 2, 0.15);
-            if ((LevelAccessor) world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.END_PORTAL_FRAME_FILL, SoundSource.BLOCKS, 2, 1);
+        if ((entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.MIZUKI_DETERMINATION.get()
+                && (blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip3 ? blockstate.getValue(getip3) : -1) == 1) {
+            (entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
+            if ((LevelAccessor) world instanceof ServerLevel level)
+                level.sendParticles(ParticleTypes.END_ROD, (x + 0.5), (y + 2), (z + 0.5), 48, 2, 2, 2, 0.15);
+            if ((LevelAccessor) world instanceof Level level) {
+                    level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.END_PORTAL_FRAME_FILL, SoundSource.BLOCKS, 2, 1);
             }
             {
-                int _value = 0;
-                BlockPos _pos = BlockPos.containing(x, y, z);
-                BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-                if (_bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))
-                    ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
+                int value = 0;
+                BlockPos blockPos = BlockPos.containing(x, y, z);
+                BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
+                    ((LevelAccessor) world).setBlock(pos, bs.setValue(integerProp, value), 3);
             }
         }
     }

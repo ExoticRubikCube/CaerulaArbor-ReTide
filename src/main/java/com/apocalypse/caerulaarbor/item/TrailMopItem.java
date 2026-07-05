@@ -59,8 +59,8 @@ public class TrailMopItem extends Item {
         SIHelper.causeSanityInjury(entity, sourceentity, 40, SanityEvent.Hurt.Type.ENTITY);
         new Object() {
             void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
-                if (world instanceof ServerLevel _level)
-                    _level.sendParticles(ParticleTypes.ELECTRIC_SPARK, entity.getX(), (entity.getY() + 0.5 * entity.getBbHeight()), entity.getZ(), 12, 0.86, 1.2, 0.86, 0.1);
+                if (world instanceof ServerLevel level)
+                    level.sendParticles(ParticleTypes.ELECTRIC_SPARK, entity.getX(), (entity.getY() + 0.5 * entity.getBbHeight()), entity.getZ(), 12, 0.86, 1.2, 0.86, 0.1);
                 final int tick2 = ticks;
                 CaerulaArborMod.queueServerWork(tick2, () -> {
                     if (timedlooptotal > timedloopiterator + 1) {
@@ -138,23 +138,23 @@ public class TrailMopItem extends Item {
             rate = 0.33;
         }
         if (rate > 0) {
-            if (world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.BRUSH_GENERIC, SoundSource.PLAYERS, 1, 1);
+            if (world instanceof Level level) {
+                    level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.BRUSH_GENERIC, SoundSource.PLAYERS, 1, 1);
             }
             if (Math.random() < rate) {
                 {
-                    BlockPos _pos = BlockPos.containing(x, y, z);
-                    Block.dropResources(world.getBlockState(_pos), world, BlockPos.containing(x + 0.5, y, z + 0.5), null);
-                    world.destroyBlock(_pos, false);
+                    BlockPos pos = BlockPos.containing(x, y, z);
+                    Block.dropResources(world.getBlockState(pos), world, BlockPos.containing(x + 0.5, y, z + 0.5), null);
+                    world.destroyBlock(pos, false);
                 }
             }
             if (!(new Object() {
-                public boolean checkGamemode(Entity _ent) {
-                    if (_ent instanceof ServerPlayer _serverPlayer) {
-                        return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                    } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                        return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                public boolean checkGamemode(Entity ent) {
+                    if (ent instanceof ServerPlayer serverPlayer) {
+                        return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                    } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                        return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+                                && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                     }
                     return false;
                 }

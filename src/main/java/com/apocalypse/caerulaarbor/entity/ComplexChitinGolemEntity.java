@@ -199,46 +199,46 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity, Sy
         if (sourceentity.getMainHandItem().getItem() == CAItems.OCEAN_CHITIN.get()) {
             scale = 0.15;
             if (!(new Object() {
-                public boolean checkGamemode(Entity _ent) {
-                    if (_ent instanceof ServerPlayer _serverPlayer) {
-                        return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                    } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                        return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                public boolean checkGamemode(Entity ent) {
+                    if (ent instanceof ServerPlayer serverPlayer) {
+                        return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                    } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                        return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+                                && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                     }
                     return false;
                 }
             }.checkGamemode((Entity) sourceentity))) {
-                if ((Entity) sourceentity instanceof Player _player) {
-                    ItemStack _stktoremove = new ItemStack(CAItems.OCEAN_CHITIN.get());
-                    _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
+                if ((Entity) sourceentity instanceof Player player) {
+                    ItemStack stktoremove = new ItemStack(CAItems.OCEAN_CHITIN.get());
+                    player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                 }
             }
         } else {
             if (sourceentity.getMainHandItem().getItem() == CAItems.COMPLEX_CHITIN.get()) {
                 scale = 0.25;
                 if (!(new Object() {
-                    public boolean checkGamemode(Entity _ent) {
-                        if (_ent instanceof ServerPlayer _serverPlayer) {
-                            return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                        } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                            return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                    && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                    public boolean checkGamemode(Entity ent) {
+                        if (ent instanceof ServerPlayer serverPlayer) {
+                            return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                        } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                            return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+                                    && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                         }
                         return false;
                     }
                 }.checkGamemode((Entity) sourceentity))) {
-                    if ((Entity) sourceentity instanceof Player _player) {
-                        ItemStack _stktoremove = new ItemStack(CAItems.COMPLEX_CHITIN.get());
-                        _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
+                    if ((Entity) sourceentity instanceof Player player) {
+                        ItemStack stktoremove = new ItemStack(CAItems.COMPLEX_CHITIN.get());
+                        player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     }
                 }
             }
         }
         if (scale > 0) {
             this.setHealth((float) (this.getHealth() + this.getMaxHealth() * scale));
-            if ((LevelAccessor) world instanceof Level _level) {
-                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.IRON_GOLEM_REPAIR, SoundSource.PLAYERS, 1, 1);
+            if ((LevelAccessor) world instanceof Level level) {
+                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.IRON_GOLEM_REPAIR, SoundSource.PLAYERS, 1, 1);
             }
             return InteractionResult.SUCCESS;
         }
@@ -262,22 +262,22 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity, Sy
             double rz;
             double dist;
             double dist1;
-            root = (Entity) this instanceof ComplexChitinGolemEntity _datEntL0 && _datEntL0.getEntityData().get(DATA_ROOTED);
+            root = (Entity) this instanceof ComplexChitinGolemEntity datEntL0 && datEntL0.getEntityData().get(DATA_ROOTED);
             if (!root) {
                 if (!(getDisplayName().getString()).equals(getType().getDescription().getString())) {
-                    if ((Entity) this instanceof ComplexChitinGolemEntity _datEntSetI1)
-                        _datEntSetI1.getEntityData().set(DATA_ROOT_X, (int) Math.round(x));
-                    if ((Entity) this instanceof ComplexChitinGolemEntity _datEntSetI1)
-                        _datEntSetI1.getEntityData().set(DATA_ROOT_Z, (int) Math.round(z));
-                    if ((Entity) this instanceof ComplexChitinGolemEntity _datEntSetL)
-                        _datEntSetL.getEntityData().set(DATA_ROOTED, true);
+                    if ((Entity) this instanceof ComplexChitinGolemEntity datEntSetI1)
+                        datEntSetI1.getEntityData().set(DATA_ROOT_X, (int) Math.round(x));
+                    if ((Entity) this instanceof ComplexChitinGolemEntity datEntSetI1)
+                        datEntSetI1.getEntityData().set(DATA_ROOT_Z, (int) Math.round(z));
+                    if ((Entity) this instanceof ComplexChitinGolemEntity datEntSetL)
+                        datEntSetL.getEntityData().set(DATA_ROOTED, true);
                     CaerulaArborMod.LOGGER.info(("Complex Chitin Golem " + getDisplayName().getString() + "has recognize x:" + Math.round(x) + " z:" + Math.round(z) + " as base"));
                 }
             } else if (Math.random() < 0.01) {
-                Mob _mobEnt8 = this;
-                if (!_mobEnt8.isAggressive()) {
-                    rx = x - ((Entity) this instanceof ComplexChitinGolemEntity _datEntI1 ? _datEntI1.getEntityData().get(DATA_ROOT_X) : 0);
-                    rz = z - ((Entity) this instanceof ComplexChitinGolemEntity _datEntI1 ? _datEntI1.getEntityData().get(DATA_ROOT_Z) : 0);
+                Mob mobEnt8 = this;
+                if (!mobEnt8.isAggressive()) {
+                    rx = x - ((Entity) this instanceof ComplexChitinGolemEntity datEntI1 ? datEntI1.getEntityData().get(DATA_ROOT_X) : 0);
+                    rz = z - ((Entity) this instanceof ComplexChitinGolemEntity datEntI1 ? datEntI1.getEntityData().get(DATA_ROOT_Z) : 0);
                     dist = new Vec3(0, 0, 0).distanceTo(new Vec3(rx, 0, rz));
                     if (dist >= 24) {
                         dist1 = Mth.nextDouble(RandomSource.create(), 4, 16);
@@ -285,39 +285,39 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity, Sy
                     }
                 }
             }
-            sklp1 = (Entity) this instanceof ComplexChitinGolemEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP) : 0;
-            dura = (Entity) this instanceof ComplexChitinGolemEntity _datEntI ? _datEntI.getEntityData().get(DATA_DURATION) : 0;
+            sklp1 = (Entity) this instanceof ComplexChitinGolemEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP) : 0;
+            dura = (Entity) this instanceof ComplexChitinGolemEntity datEntI ? datEntI.getEntityData().get(DATA_DURATION) : 0;
             enemy = this.getTarget();
             if (dura > 0) {
-                if ((Entity) this instanceof ComplexChitinGolemEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura - 1));
+                if ((Entity) this instanceof ComplexChitinGolemEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura - 1));
             }
             if (sklp1 > 0) {
-                if ((Entity) this instanceof ComplexChitinGolemEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_SKILLP, (int) (sklp1 - 1));
+                if ((Entity) this instanceof ComplexChitinGolemEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_SKILLP, (int) (sklp1 - 1));
             } else {
                 if (!(enemy == null) && enemy.isAlive()) {
                     if (distanceTo(enemy) <= 5 && dura < 1) {
-                        if ((Entity) this instanceof ComplexChitinGolemEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_DURATION, 110);
+                        if ((Entity) this instanceof ComplexChitinGolemEntity datEntSetI)
+                            datEntSetI.getEntityData().set(DATA_DURATION, 110);
                         if (this instanceof ComplexChitinGolemEntity) {
                             this.setAnimation("animation.complex_chitin_golem.spin");
                         }
                         if (!this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 110, 9, false, false));
-                        if ((Entity) this instanceof ComplexChitinGolemEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_SKILLP, 400);
+                        if ((Entity) this instanceof ComplexChitinGolemEntity datEntSetI)
+                            datEntSetI.getEntityData().set(DATA_SKILLP, 400);
                         CaerulaArborMod.queueServerWork(6, () -> {
                             if (this.isAlive()) {
-                                if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PISTON_EXTEND, SoundSource.NEUTRAL, 2, 1);
+                                if (world instanceof Level level) {
+                                    level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PISTON_EXTEND, SoundSource.NEUTRAL, 2, 1);
                                 }
                             }
                         });
                         CaerulaArborMod.queueServerWork(13, () -> {
                             if (this.isAlive()) {
-                                if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PISTON_CONTRACT, SoundSource.NEUTRAL, 2, 1);
+                                if (world instanceof Level level) {
+                                    level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PISTON_CONTRACT, SoundSource.NEUTRAL, 2, 1);
                                 }
                             }
                         });
@@ -331,9 +331,9 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity, Sy
                             CaerulaArborMod.queueServerWork(index0 * 3 + 26, () -> {
                                 if (this.isAlive()) {
                                     double damage;
-                                    final Vec3 _center = new Vec3((getX()), (getY()), (getZ()));
-                                    List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(10 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                                    for (Entity entityiterator : _entfound) {
+                                    final Vec3 center = new Vec3((getX()), (getY()), (getZ()));
+                                    List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(10 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                                    for (Entity entityiterator : entfound) {
                                         if (!(entityiterator instanceof Monster)) {
                                             if (!(entityiterator == this.getTarget())) {
                                                 continue;
@@ -353,8 +353,8 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity, Sy
                         }
                         CaerulaArborMod.queueServerWork(90, () -> {
                             if (this.isAlive()) {
-                                if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PISTON_CONTRACT, SoundSource.NEUTRAL, 2, 1);
+                                if (world instanceof Level level) {
+                                    level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PISTON_CONTRACT, SoundSource.NEUTRAL, 2, 1);
                                 }
                             }
                         });

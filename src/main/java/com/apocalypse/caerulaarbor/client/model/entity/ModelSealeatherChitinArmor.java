@@ -11,9 +11,9 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 
-// Made with Blockbench 4.12.6
-// Exported for Minecraft version 1.17 or later with Mojang mappings
-// Paste this class into your mod and generate all required imports
+// 使用 Blockbench 4.12.6 制作
+// 面向 Minecraft 1.17 及以上版本导出，使用 Mojang 映射
+// 将此类粘贴到你的模组中，并生成所需的全部导入语句
 public class ModelSealeatherChitinArmor<T extends Entity> extends EntityModel<T> {
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(CaerulaArborMod.MODID, "sealeather_chitin_armor"), "main");
 	public final ModelPart Head;

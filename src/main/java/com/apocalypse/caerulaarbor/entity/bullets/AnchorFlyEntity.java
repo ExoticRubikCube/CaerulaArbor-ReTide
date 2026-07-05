@@ -93,21 +93,21 @@ public class AnchorFlyEntity extends AbstractArrow implements ItemSupplier {
             return;
         double perc;
         if (!(entity == sourceentity)) {
-            perc = (sourceentity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) / (sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1);
-            if (sourceentity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                _entity.addEffect(new MobEffectInstance(CAMobEffects.PATH_TO_UNCOVER.get(), 500, 0, false, false));
-            if (sourceentity instanceof LivingEntity _entity)
-                _entity.setHealth((float) ((sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * perc));
-            if (world instanceof ServerLevel _level)
-                _level.sendParticles(ParticleTypes.EXPLOSION_EMITTER, x, y, z, 72, 3, 3, 3, 0.5);
+            perc = (sourceentity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) / (sourceentity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1);
+            if (sourceentity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
+                livingEntity.addEffect(new MobEffectInstance(CAMobEffects.PATH_TO_UNCOVER.get(), 500, 0, false, false));
+            if (sourceentity instanceof LivingEntity livingEntity)
+                livingEntity.setHealth((float) ((sourceentity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * perc));
+            if (world instanceof ServerLevel level)
+                level.sendParticles(ParticleTypes.EXPLOSION_EMITTER, x, y, z, 72, 3, 3, 3, 0.5);
             {
-                final Vec3 _center = new Vec3(x, y, z);
-                List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(12 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                for (Entity entityiterator : _entfound) {
+                final Vec3 center = new Vec3(x, y, z);
+                List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(12 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                for (Entity entityiterator : entfound) {
                     if (entityiterator == sourceentity) {
                         continue;
                     }
-                    if ((entityiterator instanceof TamableAnimal _tamEnt ? (Entity) _tamEnt.getOwner() : null) == sourceentity) {
+                    if ((entityiterator instanceof TamableAnimal tamEnt ? (Entity) tamEnt.getOwner() : null) == sourceentity) {
                         continue;
                     }
                     if (!(entityiterator instanceof Mob)) {
@@ -116,23 +116,23 @@ public class AnchorFlyEntity extends AbstractArrow implements ItemSupplier {
                     if (new Vec3((entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ())).distanceTo(new Vec3(x, y, z)) <= 6) {
                         entityiterator.hurt(
                                 new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "anchor_smash"))), sourceentity),
-                                (float) ((sourceentity instanceof LivingEntity _livingEntity16 && _livingEntity16.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity16.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.5));
-                        if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                            _entity.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 120, 0, false, false));
+                                (float) ((sourceentity instanceof LivingEntity livingEntity16 && livingEntity16.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity16.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.5));
+                        if (entityiterator instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
+                            livingEntity.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 120, 0, false, false));
                     }
                 }
             }
             sourceentity.teleportTo(x, y, z);
-            if (sourceentity instanceof ServerPlayer _serverPlayer)
-                _serverPlayer.connection.teleport(x, y, z, sourceentity.getYRot(), sourceentity.getXRot());
-            if (sourceentity instanceof LivingEntity _entity)
-                _entity.removeEffect(CAMobEffects.DIZZY.get());
-            if (sourceentity instanceof LivingEntity _entity)
-                _entity.removeEffect(MobEffects.DIG_SLOWDOWN);
-            if (sourceentity instanceof LivingEntity _entity)
-                _entity.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
-            if (world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), CASounds.ANCHOR_SKILL.get(), SoundSource.PLAYERS, 3, 1);
+            if (sourceentity instanceof ServerPlayer serverPlayer)
+                serverPlayer.connection.teleport(x, y, z, sourceentity.getYRot(), sourceentity.getXRot());
+            if (sourceentity instanceof LivingEntity livingEntity)
+                livingEntity.removeEffect(CAMobEffects.DIZZY.get());
+            if (sourceentity instanceof LivingEntity livingEntity)
+                livingEntity.removeEffect(MobEffects.DIG_SLOWDOWN);
+            if (sourceentity instanceof LivingEntity livingEntity)
+                livingEntity.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
+            if (world instanceof Level level) {
+                    level.playSound(null, BlockPos.containing(x, y, z), CASounds.ANCHOR_SKILL.get(), SoundSource.PLAYERS, 3, 1);
             }
             if (!level().isClientSide())
                 discard();
@@ -141,7 +141,7 @@ public class AnchorFlyEntity extends AbstractArrow implements ItemSupplier {
 
 	@Override
 	public void onHitBlock(BlockHitResult blockHitResult) {
-		super.onHitBlock(blockHitResult);
+        super.onHitBlock(blockHitResult);
         LevelAccessor world = this.level();
         double x = blockHitResult.getBlockPos().getX();
         double y = blockHitResult.getBlockPos().getY();
@@ -150,21 +150,21 @@ public class AnchorFlyEntity extends AbstractArrow implements ItemSupplier {
         if (entity == null)
             return;
         double perc;
-        perc = (entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) / (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1);
-        if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-            _entity.addEffect(new MobEffectInstance(CAMobEffects.PATH_TO_UNCOVER.get(), 500, 0, false, false));
-        if (entity instanceof LivingEntity _entity)
-            _entity.setHealth((float) ((entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * perc));
-        if (world instanceof ServerLevel _level)
-            _level.sendParticles(ParticleTypes.EXPLOSION_EMITTER, x, y, z, 72, 3, 3, 3, 0.5);
+        perc = (entity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) / (entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1);
+        if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
+            livingEntity.addEffect(new MobEffectInstance(CAMobEffects.PATH_TO_UNCOVER.get(), 500, 0, false, false));
+        if (entity instanceof LivingEntity livingEntity)
+            livingEntity.setHealth((float) (livingEntity.getMaxHealth() * perc));
+        if (world instanceof ServerLevel level)
+            level.sendParticles(ParticleTypes.EXPLOSION_EMITTER, x, y, z, 72, 3, 3, 3, 0.5);
         {
-            final Vec3 _center = new Vec3(x, y, z);
-            List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(12 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-            for (Entity entityiterator : _entfound) {
+            final Vec3 center = new Vec3(x, y, z);
+            List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(12 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+            for (Entity entityiterator : entfound) {
                 if (entityiterator == entity) {
                     continue;
                 }
-                if ((entityiterator instanceof TamableAnimal _tamEnt ? (Entity) _tamEnt.getOwner() : null) == entity) {
+                if ((entityiterator instanceof TamableAnimal tamEnt ? (Entity) tamEnt.getOwner() : null) == entity) {
                     continue;
                 }
                 if (!(entityiterator instanceof Mob)) {
@@ -175,23 +175,22 @@ public class AnchorFlyEntity extends AbstractArrow implements ItemSupplier {
                 }
                 if (new Vec3((entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ())).distanceTo(new Vec3(x, y, z)) <= 6) {
                     entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "anchor_smash"))), entity),
-                            (float) ((entity instanceof LivingEntity _livingEntity15 && _livingEntity15.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity15.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.5));
-                    if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                        _entity.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 120, 0, false, false));
+                            (float) ((entity instanceof LivingEntity livingEntity15 && livingEntity15.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity15.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.5));
+                    if (entityiterator instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
+                        livingEntity.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 120, 0, false, false));
                 }
             }
         }
         entity.teleportTo((getX()), (getY()), (getZ()));
-        if (entity instanceof ServerPlayer _serverPlayer)
-            _serverPlayer.connection.teleport((getX()), (getY()), (getZ()), entity.getYRot(), entity.getXRot());
-        if (entity instanceof LivingEntity _entity)
-            _entity.removeEffect(CAMobEffects.DIZZY.get());
-        if (entity instanceof LivingEntity _entity)
-            _entity.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
-        if (entity instanceof LivingEntity _entity)
-            _entity.removeEffect(MobEffects.DIG_SLOWDOWN);
-        if (world instanceof Level _level) {
-                _level.playSound(null, BlockPos.containing(x, y, z), CASounds.ANCHOR_SKILL.get(), SoundSource.PLAYERS, 3, 1);
+        if (entity instanceof ServerPlayer serverPlayer)
+            serverPlayer.connection.teleport((getX()), (getY()), (getZ()), entity.getYRot(), entity.getXRot());
+        if (entity instanceof LivingEntity living) {
+            living.removeEffect(CAMobEffects.DIZZY.get());
+            living.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
+            living.removeEffect(MobEffects.DIG_SLOWDOWN);
+        }
+        if (world instanceof Level level) {
+                level.playSound(null, BlockPos.containing(x, y, z), CASounds.ANCHOR_SKILL.get(), SoundSource.PLAYERS, 3, 1);
         }
     }
 
@@ -206,21 +205,21 @@ public class AnchorFlyEntity extends AbstractArrow implements ItemSupplier {
         if (entity != null) {
             double perc;
             if (tickCount >= 160) {
-                perc = (entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) / (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1);
-                if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                    _entity.addEffect(new MobEffectInstance(CAMobEffects.PATH_TO_UNCOVER.get(), 500, 0, false, false));
-                if (entity instanceof LivingEntity _entity)
-                    _entity.setHealth((float) ((entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * perc));
-                if (world instanceof ServerLevel _level)
-                    _level.sendParticles(ParticleTypes.EXPLOSION_EMITTER, x, y, z, 72, 3, 3, 3, 0.5);
+                perc = (entity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) / (entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1);
+                if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
+                    livingEntity.addEffect(new MobEffectInstance(CAMobEffects.PATH_TO_UNCOVER.get(), 500, 0, false, false));
+                if (entity instanceof LivingEntity livingEntity)
+                    livingEntity.setHealth((float) (livingEntity.getMaxHealth() * perc));
+                if (world instanceof ServerLevel level)
+                    level.sendParticles(ParticleTypes.EXPLOSION_EMITTER, x, y, z, 72, 3, 3, 3, 0.5);
                 {
-                    final Vec3 _center = new Vec3(x, y, z);
-                    List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(12 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                    for (Entity entityiterator : _entfound) {
+                    final Vec3 center = new Vec3(x, y, z);
+                    List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(12 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                    for (Entity entityiterator : entfound) {
                         if (entityiterator == entity) {
                             continue;
                         }
-                        if ((entityiterator instanceof TamableAnimal _tamEnt ? (Entity) _tamEnt.getOwner() : null) == entity) {
+                        if ((entityiterator instanceof TamableAnimal tamEnt ? (Entity) tamEnt.getOwner() : null) == entity) {
                             continue;
                         }
                         if (!(entityiterator instanceof Mob)) {
@@ -231,22 +230,22 @@ public class AnchorFlyEntity extends AbstractArrow implements ItemSupplier {
                         }
                         if (new Vec3((entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ())).distanceTo(new Vec3(x, y, z)) <= 6) {
                             entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "anchor_smash"))), entity),
-                                    (float) ((entity instanceof LivingEntity _livingEntity16 && _livingEntity16.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity16.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.5));
-                            if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                                _entity.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 120, 0, false, false));
+                                    (float) ((entity instanceof LivingEntity livingEntity16 && livingEntity16.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity16.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.5));
+                            if (entityiterator instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
+                                livingEntity.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 120, 0, false, false));
                         }
                     }
                 }
-                if (entity instanceof LivingEntity _entity)
-                    _entity.removeEffect(CAMobEffects.DIZZY.get());
-                if (entity instanceof LivingEntity _entity)
-                    _entity.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
-                if (entity instanceof LivingEntity _entity)
-                    _entity.removeEffect(MobEffects.DIG_SLOWDOWN);
-                if (!level().isClientSide())
+        if (entity instanceof LivingEntity livingEntity)
+            livingEntity.removeEffect(CAMobEffects.DIZZY.get());
+        if (entity instanceof LivingEntity livingEntity)
+            livingEntity.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
+        if (entity instanceof LivingEntity livingEntity)
+            livingEntity.removeEffect(MobEffects.DIG_SLOWDOWN);
+        if (!level().isClientSide())
                     discard();
-                if (world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), CASounds.ANCHOR_SKILL.get(), SoundSource.PLAYERS, (float) 2.5, 1);
+                if (world instanceof Level level) {
+                        level.playSound(null, BlockPos.containing(x, y, z), CASounds.ANCHOR_SKILL.get(), SoundSource.PLAYERS, (float) 2.5, 1);
                 }
             }
         }

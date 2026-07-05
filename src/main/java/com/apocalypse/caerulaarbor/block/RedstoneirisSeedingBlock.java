@@ -67,15 +67,15 @@ public class RedstoneirisSeedingBlock extends FlowerBlock implements Bonemealabl
 	@Override
 	public void randomTick(BlockState blockstate, ServerLevel world, BlockPos pos, RandomSource random) {
 		if (Math.random() < 0.05) {
-			BlockState _bs = CABlocks.REDSTONE_IRIS.get().defaultBlockState();
-			BlockState _bso = world.getBlockState(pos);
-			for (Map.Entry<Property<?>, Comparable<?>> entry : _bso.getValues().entrySet()) {
-				Property<?> _property = _bs.getBlock().getStateDefinition().getProperty(entry.getKey().getName());
-				if (_property != null) {
-					_bs = copyProperty(_bso, _bs, _property);
+			BlockState bs = CABlocks.REDSTONE_IRIS.get().defaultBlockState();
+			BlockState bso = world.getBlockState(pos);
+			for (Map.Entry<Property<?>, Comparable<?>> entry : bso.getValues().entrySet()) {
+				Property<?> property = bs.getBlock().getStateDefinition().getProperty(entry.getKey().getName());
+				if (property != null) {
+					bs = copyProperty(bso, bs, property);
 				}
 			}
-			world.setBlock(pos, _bs, 3);
+			world.setBlock(pos, bs, 3);
 		}
 	}
 
@@ -99,15 +99,15 @@ public class RedstoneirisSeedingBlock extends FlowerBlock implements Bonemealabl
 	@Override
 	public void performBonemeal(ServerLevel world, RandomSource random, BlockPos pos, BlockState blockstate) {
 		if (Math.random() < 0.05) {
-			BlockState _bs = CABlocks.REDSTONE_IRIS.get().defaultBlockState();
-			BlockState _bso = world.getBlockState(pos);
-			for (Map.Entry<Property<?>, Comparable<?>> entry : _bso.getValues().entrySet()) {
-				Property<?> _property = _bs.getBlock().getStateDefinition().getProperty(entry.getKey().getName());
-				if (_property != null) {
-					_bs = copyProperty(_bso, _bs, _property);
+			BlockState bs = CABlocks.REDSTONE_IRIS.get().defaultBlockState();
+			BlockState bso = world.getBlockState(pos);
+			for (Map.Entry<Property<?>, Comparable<?>> entry : bso.getValues().entrySet()) {
+				Property<?> property = bs.getBlock().getStateDefinition().getProperty(entry.getKey().getName());
+				if (property != null) {
+					bs = copyProperty(bso, bs, property);
 				}
 			}
-			world.setBlock(pos, _bs, 3);
+			world.setBlock(pos, bs, 3);
 		}
 	}
 }

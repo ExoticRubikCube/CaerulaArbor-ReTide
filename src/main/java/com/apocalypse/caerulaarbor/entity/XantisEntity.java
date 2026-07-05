@@ -144,7 +144,7 @@ public class XantisEntity extends TamableAnimal implements GeoEntity, SyncedAnim
         boolean result = false;
         Entity sourceentity = source.getEntity();
         if (sourceentity != null) {
-            result = sourceentity instanceof LivingEntity _entity && _entity.isHolding(CAItems.APOCATA_SWORD.get());
+            result = sourceentity instanceof LivingEntity entity && entity.isHolding(CAItems.APOCATA_SWORD.get());
         }
         if (result) {
             this.setNoNiubi();
@@ -237,8 +237,8 @@ public class XantisEntity extends TamableAnimal implements GeoEntity, SyncedAnim
             isNiubi = this.getEntityData().get(DATA_NIUBI);
             if (isNiubi) {
                 this.getEntityData().set(DATA_NIUBI, false);
-                if ((LevelAccessor) world instanceof ServerLevel _level)
-                    _level.sendParticles(ParticleTypes.LARGE_SMOKE, x, (y + 0.5), z, 32, 0.5, 0.5, 0.5, 0.1);
+                if ((LevelAccessor) world instanceof ServerLevel level)
+                    level.sendParticles(ParticleTypes.LARGE_SMOKE, x, (y + 0.5), z, 32, 0.5, 0.5, 0.5, 0.1);
                 return InteractionResult.SUCCESS;
             }
         }
@@ -257,9 +257,9 @@ public class XantisEntity extends TamableAnimal implements GeoEntity, SyncedAnim
         double tapTick;
         if (tickCount % 40 == 0) {
             {
-                final Vec3 _center = new Vec3(this.getX(), this.getY(), this.getZ());
-                List<Mob> _entfound = world.getEntitiesOfClass(Mob.class, new AABB(_center, _center).inflate(32 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                for (Mob entityiterator : _entfound) {
+                final Vec3 center = new Vec3(this.getX(), this.getY(), this.getZ());
+                List<Mob> entfound = world.getEntitiesOfClass(Mob.class, new AABB(center, center).inflate(32 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                for (Mob entityiterator : entfound) {
                     if (entityiterator instanceof XantisEntity) {
                         continue;
                     }

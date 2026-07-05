@@ -57,8 +57,8 @@ public class TidelinkedShieldItem extends ShieldItem {
 	public void inventoryTick(ItemStack itemstack, Level world, Entity entity, int slot, boolean selected) {
 		super.inventoryTick(itemstack, world, entity, slot, selected);
 		if (selected) {
-            if (entity instanceof LivingEntity _entity)
-                _entity.removeEffect(CAMobEffects.LESS_ARMOR.get());
+            if (entity instanceof LivingEntity living)
+				living.removeEffect(CAMobEffects.LESS_ARMOR.get());
         }
 	}
 }

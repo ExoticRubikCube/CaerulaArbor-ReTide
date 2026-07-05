@@ -214,13 +214,13 @@ public class NautilusHeadhunterEntity extends Animal implements GeoEntity, Synce
 	public void awardKillScore(Entity entity, int score, DamageSource damageSource) {
 		super.awardKillScore(entity, score, damageSource);
         double bonus;
-        bonus = (Entity) this instanceof NautilusHeadhunterEntity _datEntI ? _datEntI.getEntityData().get(DATA_BONUS) : 0;
+        bonus = (Entity) this instanceof NautilusHeadhunterEntity datEntI ? datEntI.getEntityData().get(DATA_BONUS) : 0;
         if (bonus < 10) {
             if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
                 this.getAttribute(Attributes.ATTACK_DAMAGE)
                         .setBaseValue(((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) + 1));
-            if ((Entity) this instanceof NautilusHeadhunterEntity _datEntSetI)
-                _datEntSetI.getEntityData().set(DATA_BONUS, (int) (bonus + 1));
+            if ((Entity) this instanceof NautilusHeadhunterEntity datEntSetI)
+                datEntSetI.getEntityData().set(DATA_BONUS, (int) (bonus + 1));
         }
     }
 
@@ -236,15 +236,15 @@ public class NautilusHeadhunterEntity extends Animal implements GeoEntity, Synce
         Entity enemy;
         Entity vehicle;
         if (this.isAlive()) {
-            dryTick = (Entity) this instanceof NautilusHeadhunterEntity _datEntI ? _datEntI.getEntityData().get(DATA_DRY_TICK) : 0;
+            dryTick = (Entity) this instanceof NautilusHeadhunterEntity datEntI ? datEntI.getEntityData().get(DATA_DRY_TICK) : 0;
             enemy = this.getTarget();
             isMounting = isPassenger();
             if (isInWaterRainOrBubble() || isMounting) {
-                if ((Entity) this instanceof NautilusHeadhunterEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_DRY_TICK, 0);
+                if ((Entity) this instanceof NautilusHeadhunterEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_DRY_TICK, 0);
             } else {
-                if ((Entity) this instanceof NautilusHeadhunterEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_DRY_TICK, (int) (dryTick + 1));
+                if ((Entity) this instanceof NautilusHeadhunterEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_DRY_TICK, (int) (dryTick + 1));
             }
             if (tickCount % 20 == 5) {
                 if (dryTick > 300) {
@@ -254,8 +254,8 @@ public class NautilusHeadhunterEntity extends Animal implements GeoEntity, Synce
                     vehicle = getVehicle();
                     if (!(vehicle == null) && vehicle.isAlive()) {
                         if (!world.isClientSide()) {
-                            if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.DOLPHIN_EAT, SoundSource.HOSTILE, 1, 1);
+                            if (world instanceof Level level) {
+                                    level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.DOLPHIN_EAT, SoundSource.HOSTILE, 1, 1);
                             }
                         }
                         vehicle.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.IN_WALL), this),
@@ -268,8 +268,8 @@ public class NautilusHeadhunterEntity extends Animal implements GeoEntity, Synce
                     if (!(enemy == null) && enemy.isAlive() && !(enemy instanceof Player)) {
                         if (distanceTo(enemy) <= 2 && !enemy.isVehicle()) {
                             if (!world.isClientSide()) {
-                                if (world instanceof Level _level) {
-                                        _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.STRIDER_SADDLE, SoundSource.HOSTILE, 1, 1);
+                                if (world instanceof Level level) {
+                                        level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.STRIDER_SADDLE, SoundSource.HOSTILE, 1, 1);
                                 }
                             }
                             startRiding(enemy);

@@ -198,9 +198,9 @@ public class OceanizedShulkerEntity extends SeaMonster {
 
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-        if (((Entity) this instanceof OceanizedShulkerEntity _datEntI ? _datEntI.getEntityData().get(DATA_VARIANT) : 0) == 0) {
-            if ((Entity) this instanceof OceanizedShulkerEntity _datEntSetI)
-                _datEntSetI.getEntityData().set(DATA_VARIANT, Mth.nextInt(RandomSource.create(), 0, 1));
+        if (((Entity) this instanceof OceanizedShulkerEntity datEntI ? datEntI.getEntityData().get(DATA_VARIANT) : 0) == 0) {
+            if ((Entity) this instanceof OceanizedShulkerEntity datEntSetI)
+                datEntSetI.getEntityData().set(DATA_VARIANT, Mth.nextInt(RandomSource.create(), 0, 1));
         }
         return super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
     }
@@ -213,10 +213,10 @@ public class OceanizedShulkerEntity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if (((Entity) this instanceof OceanizedShulkerEntity _datEntI ? _datEntI.getEntityData().get(DATA_VARIANT) : 0) < 2) {
+        if (((Entity) this instanceof OceanizedShulkerEntity datEntI ? datEntI.getEntityData().get(DATA_VARIANT) : 0) < 2) {
             if (player.getMainHandItem().getItem() == CAItems.COMPLEX_CHITIN.get()) {
-                if ((Entity) this instanceof OceanizedShulkerEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_VARIANT, 2);
+                if ((Entity) this instanceof OceanizedShulkerEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_VARIANT, 2);
                 if (this.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
                     this.getAttribute(Attributes.MAX_HEALTH)
                             .setBaseValue(((this.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? this.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0) * 2));
@@ -239,26 +239,26 @@ public class OceanizedShulkerEntity extends SeaMonster {
                                     ? this.getAttribute(CAAttributes.SANITY_RESISTANCE.get()).getBaseValue()
                                     : 0) + 35));
                 player.getMainHandItem().shrink(1);
-                if (world instanceof Level _level) {
-                    if (!_level.isClientSide()) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SMITHING_TABLE_USE, SoundSource.HOSTILE, 1, 1);
+                if (world instanceof Level level) {
+                    if (!level.isClientSide()) {
+                        level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SMITHING_TABLE_USE, SoundSource.HOSTILE, 1, 1);
                     } else {
-                        _level.playLocalSound(x, y, z, SoundEvents.SMITHING_TABLE_USE, SoundSource.HOSTILE, 1, 1, false);
+                        level.playLocalSound(x, y, z, SoundEvents.SMITHING_TABLE_USE, SoundSource.HOSTILE, 1, 1, false);
                     }
                 }
                 this.setHealth(this.getMaxHealth());
-                if ((Entity) player instanceof ServerPlayer _player) {
-                    Advancement _adv = _player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "construction"));
-                    AdvancementProgress _ap = _player.getAdvancements().getOrStartProgress(_adv);
-                    if (!_ap.isDone()) {
-                        for (String criteria : _ap.getRemainingCriteria())
-                            _player.getAdvancements().award(_adv, criteria);
+                if ((Entity) player instanceof ServerPlayer serverPlayer) {
+                    Advancement adv = serverPlayer.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "construction"));
+                    AdvancementProgress ap = serverPlayer.getAdvancements().getOrStartProgress(adv);
+                    if (!ap.isDone()) {
+                        for (String criteria : ap.getRemainingCriteria())
+                            serverPlayer.getAdvancements().award(adv, criteria);
                     }
                 }
                 ths = InteractionResult.SUCCESS;
             } else if ( player.getMainHandItem().getItem() == Blocks.BEDROCK.asItem()) {
-                if ((Entity) this instanceof OceanizedShulkerEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_VARIANT, 3);
+                if ((Entity) this instanceof OceanizedShulkerEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_VARIANT, 3);
                 if (this.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
                     this.getAttribute(Attributes.MAX_HEALTH)
                             .setBaseValue(((this.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? this.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0) * 18));
@@ -282,11 +282,11 @@ public class OceanizedShulkerEntity extends SeaMonster {
                                     : 0) + 100));
                 player.getMainHandItem().shrink(1);
                 this.setHealth(this.getMaxHealth());
-                if (world instanceof Level _level) {
-                    if (!_level.isClientSide()) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SMITHING_TABLE_USE, SoundSource.HOSTILE, 1, 1);
+                if (world instanceof Level level) {
+                    if (!level.isClientSide()) {
+                        level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SMITHING_TABLE_USE, SoundSource.HOSTILE, 1, 1);
                     } else {
-                        _level.playLocalSound(x, y, z, SoundEvents.SMITHING_TABLE_USE, SoundSource.HOSTILE, 1, 1, false);
+                        level.playLocalSound(x, y, z, SoundEvents.SMITHING_TABLE_USE, SoundSource.HOSTILE, 1, 1, false);
                     }
                 }
                 ths = InteractionResult.SUCCESS;
@@ -344,29 +344,29 @@ public class OceanizedShulkerEntity extends SeaMonster {
         if (this.isAlive()) {
             if (tickCount <= 3) {
                 {
-                    LivingEntity _ent = this;
-                    _ent.setYRot(0);
-                    _ent.setXRot(0);
-                    _ent.setYBodyRot(_ent.getYRot());
-                    _ent.setYHeadRot(_ent.getYRot());
-                    _ent.yRotO = _ent.getYRot();
-                    _ent.xRotO = _ent.getXRot();
-                    _ent.yBodyRotO = _ent.getYRot();
-                    _ent.yHeadRotO = _ent.getYRot();
+                    LivingEntity ent = this;
+                    ent.setYRot(0);
+                    ent.setXRot(0);
+                    ent.setYBodyRot(ent.getYRot());
+                    ent.setYHeadRot(ent.getYRot());
+                    ent.yRotO = ent.getYRot();
+                    ent.xRotO = ent.getXRot();
+                    ent.yBodyRotO = ent.getYRot();
+                    ent.yHeadRotO = ent.getYRot();
                 }
             }
-            variant = (Entity) this instanceof OceanizedShulkerEntity _datEntI ? _datEntI.getEntityData().get(DATA_VARIANT) : 0;
-            curDIreName = (Entity) this instanceof OceanizedShulkerEntity _datEntS ? _datEntS.getEntityData().get(DATA_DIRECTION) : "";
+            variant = (Entity) this instanceof OceanizedShulkerEntity datEntI ? datEntI.getEntityData().get(DATA_VARIANT) : 0;
+            curDIreName = (Entity) this instanceof OceanizedShulkerEntity datEntS ? datEntS.getEntityData().get(DATA_DIRECTION) : "";
             Direction.byName(curDIreName);
-            peekTime = (Entity) this instanceof OceanizedShulkerEntity _datEntI ? _datEntI.getEntityData().get(DATA_PEEK_TIME) : 0;
-            shootDelay = (Entity) this instanceof OceanizedShulkerEntity _datEntI ? _datEntI.getEntityData().get(DATA_SHOOT_DELAY) : 0;
-            isAttached = !((Entity) this instanceof OceanizedShulkerEntity _datEntL11 && _datEntL11.getEntityData().get(DATA_WALKING));
+            peekTime = (Entity) this instanceof OceanizedShulkerEntity datEntI ? datEntI.getEntityData().get(DATA_PEEK_TIME) : 0;
+            shootDelay = (Entity) this instanceof OceanizedShulkerEntity datEntI ? datEntI.getEntityData().get(DATA_SHOOT_DELAY) : 0;
+            isAttached = !((Entity) this instanceof OceanizedShulkerEntity datEntL11 && datEntL11.getEntityData().get(DATA_WALKING));
             if (isAttached) {
                 if (!canStay(world, curDire)) {
                     dire = getShulkerDirection(world);
                     if (!(dire == null)) {
-                        if ((Entity) this instanceof OceanizedShulkerEntity _datEntSetS)
-                            _datEntSetS.getEntityData().set(DATA_DIRECTION, dire.toString());
+                        if ((Entity) this instanceof OceanizedShulkerEntity datEntSetS)
+                            datEntSetS.getEntityData().set(DATA_DIRECTION, dire.toString());
                     } else {
                         double dx;
                         double dy;
@@ -381,12 +381,12 @@ public class OceanizedShulkerEntity extends SeaMonster {
                             }
                             tDIre = getShulkerDirection(world, x + dx, y + dy, z + dz);
                             if (!(tDIre == null)) {
-                                if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SHULKER_TELEPORT, SoundSource.HOSTILE, 1, 1);
+                                if (world instanceof Level level) {
+                                    level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SHULKER_TELEPORT, SoundSource.HOSTILE, 1, 1);
                                 }
                                 this.teleportTo((x + dx), (y + dy), (z + dz));
-                                if ((Entity) this instanceof OceanizedShulkerEntity _datEntSetS)
-                                    _datEntSetS.getEntityData().set(DATA_DIRECTION, tDIre.toString());
+                                if ((Entity) this instanceof OceanizedShulkerEntity datEntSetS)
+                                    datEntSetS.getEntityData().set(DATA_DIRECTION, tDIre.toString());
                                 break;
                             }
                         }
@@ -396,8 +396,8 @@ public class OceanizedShulkerEntity extends SeaMonster {
                 if (!world.isClientSide()) {
                     if (peekTime <= 0) {
                         if (Math.random() < 0.01) {
-                            if ((Entity) this instanceof OceanizedShulkerEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_PEEK_TIME, Mth.nextInt(RandomSource.create(), 60, 160));
+                            if ((Entity) this instanceof OceanizedShulkerEntity datEntSetI)
+                                datEntSetI.getEntityData().set(DATA_PEEK_TIME, Mth.nextInt(RandomSource.create(), 60, 160));
                             if (Math.random() < 0.5) {
                                 if (this instanceof OceanizedShulkerEntity) {
                                     this.setAnimation("animation.oceanized_shulker.open1");
@@ -407,8 +407,8 @@ public class OceanizedShulkerEntity extends SeaMonster {
                                     this.setAnimation("animation.oceanized_shulker.open2");
                                 }
                             }
-                            if (world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SHULKER_OPEN, SoundSource.HOSTILE, 1, 1);
+                            if (world instanceof Level level) {
+                                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SHULKER_OPEN, SoundSource.HOSTILE, 1, 1);
                             }
                         }
                     } else {
@@ -422,15 +422,15 @@ public class OceanizedShulkerEntity extends SeaMonster {
                                     this.setAnimation("animation.oceanized_shulker.close2");
                                 }
                             }
-                            if (world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SHULKER_CLOSE, SoundSource.HOSTILE, 1, 1);
+                            if (world instanceof Level level) {
+                                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SHULKER_CLOSE, SoundSource.HOSTILE, 1, 1);
                             }
                         }
                     }
                 }
             } else {
-                if ((Entity) this instanceof OceanizedShulkerEntity _datEntSetS)
-                    _datEntSetS.getEntityData().set(DATA_DIRECTION, "up");
+                if ((Entity) this instanceof OceanizedShulkerEntity datEntSetS)
+                    datEntSetS.getEntityData().set(DATA_DIRECTION, "up");
             }
             if (peekTime <= 0) {
                 if (variant == 2) {
@@ -444,18 +444,18 @@ public class OceanizedShulkerEntity extends SeaMonster {
                         this.addEffect(new MobEffectInstance(CAMobEffects.SHULKER_BUFF.get(), 5, 0, false, false));
                 }
             } else {
-                if ((Entity) this instanceof OceanizedShulkerEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_PEEK_TIME, (int) (peekTime - 1));
+                if ((Entity) this instanceof OceanizedShulkerEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_PEEK_TIME, (int) (peekTime - 1));
                 this.removeEffect(CAMobEffects.SHULKER_BUFF.get());
             }
             enemy = this.getTarget();
             if (shootDelay <= 0) {
                 if (!(enemy == null) && enemy.isAlive()) {
                     if (distanceTo(enemy) <= 24) {
-                        if ((Entity) this instanceof OceanizedShulkerEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_SHOOT_DELAY, Mth.nextInt(RandomSource.create(), 40, 60));
-                        if ((Entity) this instanceof OceanizedShulkerEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_PEEK_TIME, 20);
+                        if ((Entity) this instanceof OceanizedShulkerEntity datEntSetI)
+                            datEntSetI.getEntityData().set(DATA_SHOOT_DELAY, Mth.nextInt(RandomSource.create(), 40, 60));
+                        if ((Entity) this instanceof OceanizedShulkerEntity datEntSetI)
+                            datEntSetI.getEntityData().set(DATA_PEEK_TIME, 20);
                         if (isAttached) {
                             if (Math.random() < 0.5) {
                                 if (this instanceof OceanizedShulkerEntity) {
@@ -480,8 +480,8 @@ public class OceanizedShulkerEntity extends SeaMonster {
                     }
                 }
             } else {
-                if ((Entity) this instanceof OceanizedShulkerEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_SHOOT_DELAY, (int) (shootDelay - 1));
+                if ((Entity) this instanceof OceanizedShulkerEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_SHOOT_DELAY, (int) (shootDelay - 1));
             }
         }
         this.refreshDimensions();
@@ -511,13 +511,13 @@ public class OceanizedShulkerEntity extends SeaMonster {
     }
 
     public void shootShulkerBullet(Entity target) {
-        if (target == null || !(this.level() instanceof ServerLevel _level))
+        if (target == null || !(this.level() instanceof ServerLevel level))
             return;
         Direction dire = this.getAttachDirection();
         Direction.Axis axis = dire != null ? dire.getAxis() : Direction.Axis.Y;
-        ShulkerBullet sBullet = new ShulkerBullet(_level, this, target, axis);
+        ShulkerBullet sBullet = new ShulkerBullet(level, this, target, axis);
         sBullet.getPersistentData().putBoolean("oceanized", true);
-        _level.addFreshEntity(sBullet);
+        level.addFreshEntity(sBullet);
         if (!this.level().isClientSide()) {
             this.level().playSound(null, BlockPos.containing(this.getX(), this.getY(), this.getZ()), SoundEvents.SHULKER_SHOOT, SoundSource.HOSTILE, 1, 1);
         } else {
@@ -590,20 +590,20 @@ public class OceanizedShulkerEntity extends SeaMonster {
             double z = this.getZ();
             double v;
             if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
-                v = (Entity) this instanceof OceanizedShulkerEntity _datEntI ? _datEntI.getEntityData().get(DATA_VARIANT) : 0;
+                v = (Entity) this instanceof OceanizedShulkerEntity datEntI ? datEntI.getEntityData().get(DATA_VARIANT) : 0;
                 if (v == 2) {
-                    if (world instanceof ServerLevel _level) {
-                        ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, new ItemStack(CAItems.COMPLEX_CHITIN.get()));
+                    if (world instanceof ServerLevel level) {
+                        ItemEntity entityToSpawn = new ItemEntity(level, x, y, z, new ItemStack(CAItems.COMPLEX_CHITIN.get()));
                         entityToSpawn.setPickUpDelay(10);
                         entityToSpawn.setUnlimitedLifetime();
-                        _level.addFreshEntity(entityToSpawn);
+                        level.addFreshEntity(entityToSpawn);
                     }
                 } else if (v == 3) {
-                    if (world instanceof ServerLevel _level) {
-                        ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, new ItemStack(Blocks.BEDROCK));
+                    if (world instanceof ServerLevel level) {
+                        ItemEntity entityToSpawn = new ItemEntity(level, x, y, z, new ItemStack(Blocks.BEDROCK));
                         entityToSpawn.setPickUpDelay(5);
                         entityToSpawn.setUnlimitedLifetime();
-                        _level.addFreshEntity(entityToSpawn);
+                        level.addFreshEntity(entityToSpawn);
                     }
                 }
             }

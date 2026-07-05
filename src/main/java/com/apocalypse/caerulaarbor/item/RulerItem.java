@@ -31,8 +31,8 @@ public class RulerItem extends Item {
         Entity entity = context.getPlayer();
         if (entity == null)
             return InteractionResult.PASS;
-        if (entity instanceof Player _player && !_player.level().isClientSide())
-            _player.displayClientMessage(Component.literal(("light, block:" + world.getBrightness(LightLayer.BLOCK, BlockPos.containing(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ())) + "sky: "
+        if (entity instanceof Player player && !player.level().isClientSide())
+            player.displayClientMessage(Component.literal(("light, block:" + world.getBrightness(LightLayer.BLOCK, BlockPos.containing(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ())) + "sky: "
                     + world.getBrightness(LightLayer.SKY, BlockPos.containing(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ())))), false);
         return InteractionResult.SUCCESS;
     }

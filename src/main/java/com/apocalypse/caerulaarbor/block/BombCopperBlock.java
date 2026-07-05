@@ -74,15 +74,15 @@ public class BombCopperBlock extends Block {
             double dz;
             double dy;
             for (int index0 = 0; index0 < 60; index0++) {
-                if ((LevelAccessor) world instanceof ServerLevel _level)
-                    _level.sendParticles(ParticleTypes.SMALL_FLAME, (x + 0.5 + 24 * Math.sin(Math.toRadians(index0 * 3))), (y + 0.5), (x + 0.5 + 24 * Math.cos(Math.toRadians(index0 * 3))), 4, 0.5, 2, 0.5, 0.1);
+                if ((LevelAccessor) world instanceof ServerLevel level)
+                    level.sendParticles(ParticleTypes.SMALL_FLAME, (x + 0.5 + 24 * Math.sin(Math.toRadians(index0 * 3))), (y + 0.5), (x + 0.5 + 24 * Math.cos(Math.toRadians(index0 * 3))), 4, 0.5, 2, 0.5, 0.1);
             }
-            if ((LevelAccessor) world instanceof ServerLevel _level)
-                _level.sendParticles(ParticleTypes.EXPLOSION, x, y, z, 6, 4, 4, 4, 0.1);
-            if ((LevelAccessor) world instanceof ServerLevel _level)
-                _level.sendParticles(ParticleTypes.EXPLOSION_EMITTER, x, y, z, 64, 4, 4, 4, 0.1);
-            if ((LevelAccessor) world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.DRAGON_FIREBALL_EXPLODE, SoundSource.BLOCKS, (float) 3.2, 1);
+            if ((LevelAccessor) world instanceof ServerLevel level)
+                level.sendParticles(ParticleTypes.EXPLOSION, x, y, z, 6, 4, 4, 4, 0.1);
+            if ((LevelAccessor) world instanceof ServerLevel level)
+                level.sendParticles(ParticleTypes.EXPLOSION_EMITTER, x, y, z, 64, 4, 4, 4, 0.1);
+            if ((LevelAccessor) world instanceof Level level) {
+                    level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.DRAGON_FIREBALL_EXPLODE, SoundSource.BLOCKS, (float) 3.2, 1);
             }
             dx = -24;
             for (int index1 = 0; index1 < 49; index1++) {
@@ -104,14 +104,14 @@ public class BombCopperBlock extends Block {
             }
             ((LevelAccessor) world).setBlock(BlockPos.containing(x, y, z), Blocks.IRON_BLOCK.defaultBlockState(), 3);
             {
-                final Vec3 _center = new Vec3((x + 0.5), (y + 0.5), (z + 0.5));
-                List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(48 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                for (Entity entityiterator : _entfound) {
+                final Vec3 center = new Vec3((x + 0.5), (y + 0.5), (z + 0.5));
+                List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(48 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                for (Entity entityiterator : entfound) {
                     if (new Vec3((x + 0.5), (y + 0.5), (z + 0.5)).distanceTo(new Vec3((entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()))) <= 24) {
                         if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))
                                 && !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanpet")))) {
                             entityiterator.hurt(new DamageSource(((LevelAccessor) world).registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "brand_bomb")))),
-                                    (float) Math.min(48, Math.max((entityiterator instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.1, 8)));
+                                    (float) Math.min(48, Math.max((entityiterator instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.1, 8)));
                         }
                     }
                 }

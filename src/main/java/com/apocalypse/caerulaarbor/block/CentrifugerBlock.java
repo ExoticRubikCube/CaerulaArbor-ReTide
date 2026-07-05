@@ -112,12 +112,12 @@ public class CentrifugerBlock extends BaseEntityBlock implements EntityBlock {
         double x = pos.getX();
         double y = pos.getY();
         double z = pos.getZ();
-        if ((blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _getip1 ? blockstate.getValue(_getip1) : -1) == 1) {
-            if ((LevelAccessor) world instanceof ServerLevel _level) {
-                ItemEntity entityToSpawn = new ItemEntity(_level, (x + 0.5), (y + 0.5), (z + 0.5), new ItemStack(CAItems.TARGETED_BASE.get()));
+        if ((blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip1 ? blockstate.getValue(getip1) : -1) == 1) {
+            if ((LevelAccessor) world instanceof ServerLevel level) {
+                ItemEntity entityToSpawn = new ItemEntity(level, (x + 0.5), (y + 0.5), (z + 0.5), new ItemStack(CAItems.TARGETED_BASE.get()));
                 entityToSpawn.setPickUpDelay(10);
                 entityToSpawn.setUnlimitedLifetime();
-                _level.addFreshEntity(entityToSpawn);
+                level.addFreshEntity(entityToSpawn);
             }
         }
         return retval;
@@ -136,11 +136,11 @@ public class CentrifugerBlock extends BaseEntityBlock implements EntityBlock {
         InteractionResult result = InteractionResult.PASS;
         if (entity != null) {
             ItemStack mainHandItem;
-            mainHandItem = ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).copy();
+            mainHandItem = ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).copy();
             if (mainHandItem.getItem() == CAItems.HUNTER_GENE.get()) {
-                if ((Entity) entity instanceof ServerPlayer _ent) {
-                    BlockPos _bpos = BlockPos.containing(x, y, z);
-                    NetworkHooks.openScreen(_ent, new MenuProvider() {
+                if ((Entity) entity instanceof ServerPlayer ent) {
+                    BlockPos bpos = BlockPos.containing(x, y, z);
+                    NetworkHooks.openScreen(ent, new MenuProvider() {
                         @Override
                         public Component getDisplayName() {
                             return Component.literal("CentrifugerSelect");
@@ -148,9 +148,9 @@ public class CentrifugerBlock extends BaseEntityBlock implements EntityBlock {
 
                         @Override
                         public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
-                            return new CentrifugerSelectMenu(id, inventory, new FriendlyByteBuf(Unpooled.buffer()).writeBlockPos(_bpos));
+                            return new CentrifugerSelectMenu(id, inventory, new FriendlyByteBuf(Unpooled.buffer()).writeBlockPos(bpos));
                         }
-                    }, _bpos);
+                    }, bpos);
                 }
                 result = InteractionResult.SUCCESS;
             }

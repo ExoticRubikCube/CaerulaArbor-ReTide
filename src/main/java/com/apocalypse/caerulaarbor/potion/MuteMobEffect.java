@@ -34,15 +34,15 @@ public class MuteMobEffect extends MobEffect {
 	@Override
 	public void applyEffectTick(LivingEntity entity, int amplifier) {
         LevelAccessor world = entity.level();
-        if (world instanceof ServerLevel _level)
-            _level.sendParticles(CAParticles.MUTENESS.get(), entity.getX(), entity.getY(), entity.getZ(), 2, 1, 1, 1, 0.1);
+        if (world instanceof ServerLevel level)
+            level.sendParticles(CAParticles.MUTENESS.get(), entity.getX(), entity.getY(), entity.getZ(), 2, 1, 1, 1, 0.1);
         if (entity instanceof Creeper) {
             CompoundTag dataIndex2 = new CompoundTag();
             entity.saveWithoutId(dataIndex2);
             dataIndex2.putBoolean("ignited", false);
             entity.load(dataIndex2);
-            if ((Entity) entity instanceof Creeper _creeper)
-                _creeper.setSwellDir(0);
+            if ((Entity) entity instanceof Creeper creeper)
+                creeper.setSwellDir(0);
         }
     }
 

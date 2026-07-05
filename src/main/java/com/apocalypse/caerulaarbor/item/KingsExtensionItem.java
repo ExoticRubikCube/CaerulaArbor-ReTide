@@ -10,6 +10,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -28,7 +29,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.Property;
-import net.minecraft.sounds.SoundEvents;
 
 import java.util.List;
 
@@ -52,15 +52,15 @@ public class KingsExtensionItem extends Item {
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
         if (!(((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_king_EXTENSION) {
-            if ((LevelAccessor) world instanceof Level _level) {
-                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TOTEM_USE, SoundSource.NEUTRAL, 2, 1);
+            if ((LevelAccessor) world instanceof Level level) {
+                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TOTEM_USE, SoundSource.NEUTRAL, 2, 1);
             }
-            if ((LevelAccessor) world instanceof ServerLevel _level)
-                _level.sendParticles(ParticleTypes.ENCHANTED_HIT, x, y, z, 72, 1, 1, 1, 1);
+            if ((LevelAccessor) world instanceof ServerLevel level)
+                level.sendParticles(ParticleTypes.ENCHANTED_HIT, x, y, z, 72, 1, 1, 1, 1);
             {
-                boolean _setval = true;
+                boolean setval = true;
                 ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                    capability.relic_king_EXTENSION = _setval;
+                    capability.relic_king_EXTENSION = setval;
                     capability.syncPlayerVariables(entity);
                 });
             }
@@ -85,16 +85,16 @@ public class KingsExtensionItem extends Item {
         if (blockstate.getBlock() == Blocks.DEEPSLATE_BRICK_SLAB) {
             world.setBlock(BlockPos.containing(x, y, z), CABlocks.BLOCK_EXTENSION.get().defaultBlockState(), 3);
             {
-                Direction _dir = ((entity.getDirection()).getOpposite());
-                BlockPos _pos = BlockPos.containing(x, y, z);
-                BlockState _bs = world.getBlockState(_pos);
-                Property<?> _property = _bs.getBlock().getStateDefinition().getProperty("facing");
-                if (_property instanceof DirectionProperty _dp && _dp.getPossibleValues().contains(_dir)) {
-                    world.setBlock(_pos, _bs.setValue(_dp, _dir), 3);
+                Direction dir = ((entity.getDirection()).getOpposite());
+                BlockPos pos = BlockPos.containing(x, y, z);
+                BlockState bs = world.getBlockState(pos);
+                Property<?> property = bs.getBlock().getStateDefinition().getProperty("facing");
+                if (property instanceof DirectionProperty dp && dp.getPossibleValues().contains(dir)) {
+                    world.setBlock(pos, bs.setValue(dp, dir), 3);
                 } else {
-                    _property = _bs.getBlock().getStateDefinition().getProperty("axis");
-                    if (_property instanceof EnumProperty _ap && _ap.getPossibleValues().contains(_dir.getAxis()))
-                        world.setBlock(_pos, _bs.setValue(_ap, _dir.getAxis()), 3);
+                    property = bs.getBlock().getStateDefinition().getProperty("axis");
+                    if (property instanceof EnumProperty ap && ap.getPossibleValues().contains(dir.getAxis()))
+                        world.setBlock(pos, bs.setValue(ap, dir.getAxis()), 3);
                 }
             }
             itemstack.shrink(1);

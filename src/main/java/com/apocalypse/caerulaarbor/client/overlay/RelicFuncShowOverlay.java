@@ -51,7 +51,7 @@ public class RelicFuncShowOverlay {
 
             boolean result1 = false;
             if (entity != null) {
-                if ((Entity) entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CAMobEffects.TIDE_OF_CHITIN.get())) {
+                if ((Entity) entity instanceof LivingEntity livEnt0 && livEnt0.hasEffect(CAMobEffects.TIDE_OF_CHITIN.get())) {
                     result1 = true;
                 }
             }

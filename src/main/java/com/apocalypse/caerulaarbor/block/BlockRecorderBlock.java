@@ -82,9 +82,9 @@ public class BlockRecorderBlock extends Block {
         InteractionResult result = InteractionResult.SUCCESS;
         if (entity == null) {
             result = InteractionResult.PASS;
-        } else if ((Entity) entity instanceof ServerPlayer _ent) {
-            BlockPos _bpos = BlockPos.containing(x, y, z);
-            NetworkHooks.openScreen(_ent, new MenuProvider() {
+        } else if ((Entity) entity instanceof ServerPlayer ent) {
+            BlockPos bpos = BlockPos.containing(x, y, z);
+            NetworkHooks.openScreen(ent, new MenuProvider() {
                 @Override
                 public Component getDisplayName() {
                     return Component.literal("CaerulaRecordGUI");
@@ -92,9 +92,9 @@ public class BlockRecorderBlock extends Block {
 
                 @Override
                 public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
-                    return new CaerulaRecordGUIMenu(id, inventory, new FriendlyByteBuf(Unpooled.buffer()).writeBlockPos(_bpos));
+                    return new CaerulaRecordGUIMenu(id, inventory, new FriendlyByteBuf(Unpooled.buffer()).writeBlockPos(bpos));
                 }
-            }, _bpos);
+            }, bpos);
         }
         return result;
 	}

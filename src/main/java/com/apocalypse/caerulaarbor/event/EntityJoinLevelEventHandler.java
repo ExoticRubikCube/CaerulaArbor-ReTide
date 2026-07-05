@@ -45,40 +45,40 @@ public class EntityJoinLevelEventHandler {
 
         if (entity == null) return;
 
-        if ((entity instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get())
-                ? _livingEntity0.getAttribute(CAAttributes.SANITY_MODIFIER.get()).getBaseValue()
+        if ((entity instanceof LivingEntity livingEntity0 && livingEntity0.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get())
+                ? livingEntity0.getAttribute(CAAttributes.SANITY_MODIFIER.get()).getBaseValue()
                 : 0) == 1) {
             if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "bossoffspring")))) {
-                if (entity instanceof LivingEntity _livingEntity2 && _livingEntity2.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
-                    _livingEntity2.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.16);
+                if (entity instanceof LivingEntity livingEntity2 && livingEntity2.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
+                    livingEntity2.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.16);
             }
-            if (entity instanceof LivingEntity _livEnt3 && _livEnt3.getMobType() == MobType.UNDEAD) {
-                if (entity instanceof LivingEntity _livingEntity4 && _livingEntity4.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
-                    _livingEntity4.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.5);
+            if (entity instanceof LivingEntity livEnt3 && livEnt3.getMobType() == MobType.UNDEAD) {
+                if (entity instanceof LivingEntity livingEntity4 && livingEntity4.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
+                    livingEntity4.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.5);
             }
             if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "with_low_sanity_modifier")))) {
-                if (entity instanceof LivingEntity _livingEntity6 && _livingEntity6.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
-                    _livingEntity6.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.5);
+                if (entity instanceof LivingEntity livingEntity6 && livingEntity6.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
+                    livingEntity6.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.5);
             }
             if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "with_lower_sanity_modifier")))) {
-                if (entity instanceof LivingEntity _livingEntity8 && _livingEntity8.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
-                    _livingEntity8.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.33);
+                if (entity instanceof LivingEntity livingEntity8 && livingEntity8.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
+                    livingEntity8.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.33);
             }
             if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "with_lowest_sanity_modifier")))) {
-                if (entity instanceof LivingEntity _livingEntity10 && _livingEntity10.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
-                    _livingEntity10.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.25);
+                if (entity instanceof LivingEntity livingEntity10 && livingEntity10.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
+                    livingEntity10.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.25);
             }
             if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "with_lowest_smaller_sanity_modifier")))) {
-                if (entity instanceof LivingEntity _livingEntity12 && _livingEntity12.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
-                    _livingEntity12.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.2);
+                if (entity instanceof LivingEntity livingEntity12 && livingEntity12.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
+                    livingEntity12.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.2);
             }
             if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "with_lowest_smallest_sanity_modifier")))) {
-                if (entity instanceof LivingEntity _livingEntity14 && _livingEntity14.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
-                    _livingEntity14.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.1);
+                if (entity instanceof LivingEntity livingEntity14 && livingEntity14.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
+                    livingEntity14.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.1);
             }
             if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "with_zero_sanity_modifier")))) {
-                if (entity instanceof LivingEntity _livingEntity16 && _livingEntity16.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
-                    _livingEntity16.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0);
+                if (entity instanceof LivingEntity livingEntity16 && livingEntity16.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
+                    livingEntity16.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0);
             }
         }
     }
@@ -91,7 +91,7 @@ public class EntityJoinLevelEventHandler {
         Entity entity = event.getEntity();
 
         if (entity == null) return;
-        if (!(entity instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(CAAttributes.EVOLVED.get()))) return;
+        if (!(entity instanceof LivingEntity livingEntity0 && livingEntity0.getAttributes().hasAttribute(CAAttributes.EVOLVED.get()))) return;
 
         double health_index;
         double attack_index;
@@ -103,11 +103,11 @@ public class EntityJoinLevelEventHandler {
 
         if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
             if (!entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "marinemobs")))) {
-                if (entity instanceof LivingEntity _livingEntity4 && _livingEntity4.getAttributes().hasAttribute(ForgeMod.SWIM_SPEED.get()))
-                    _livingEntity4.getAttribute(ForgeMod.SWIM_SPEED.get())
-                            .setBaseValue(((entity instanceof LivingEntity _livingEntity3 && _livingEntity3.getAttributes().hasAttribute(Attributes.MOVEMENT_SPEED) ? _livingEntity3.getAttribute(Attributes.MOVEMENT_SPEED).getBaseValue() : 0) * 10));
+                if (entity instanceof LivingEntity livingEntity4 && livingEntity4.getAttributes().hasAttribute(ForgeMod.SWIM_SPEED.get()))
+                    livingEntity4.getAttribute(ForgeMod.SWIM_SPEED.get())
+                            .setBaseValue(((entity instanceof LivingEntity livingEntity3 && livingEntity3.getAttributes().hasAttribute(Attributes.MOVEMENT_SPEED) ? livingEntity3.getAttribute(Attributes.MOVEMENT_SPEED).getBaseValue() : 0) * 10));
             }
-            if ((entity instanceof LivingEntity _livingEntity5 && _livingEntity5.getAttributes().hasAttribute(CAAttributes.EVOLVED.get()) ? _livingEntity5.getAttribute(CAAttributes.EVOLVED.get()).getBaseValue() : 0) == 0) {
+            if ((entity instanceof LivingEntity livingEntity5 && livingEntity5.getAttributes().hasAttribute(CAAttributes.EVOLVED.get()) ? livingEntity5.getAttribute(CAAttributes.EVOLVED.get()).getBaseValue() : 0) == 0) {
                 health_index = 1 + 0.3 * MapVariables.get(world).strategy_subsisting;
                 attack_index = 1 + 0.25 * MapVariables.get(world).strategy_grow;
                 armor_index = 1;
@@ -116,17 +116,17 @@ public class EntityJoinLevelEventHandler {
                     n = 1 + 0.01 * n * 2;
                     coef = 1;
                     for (Entity entityiterator : new ArrayList<>(world.players())) {
-                        if (entityiterator instanceof ServerPlayer _plr7 && _plr7.level() instanceof ServerLevel
-                                && _plr7.getAdvancements().getOrStartProgress(_plr7.server.getAdvancements().getAdvancement(new ResourceLocation("minecraft:story/iron_tools"))).isDone()) {
+                        if (entityiterator instanceof ServerPlayer plr7 && plr7.level() instanceof ServerLevel
+                                && plr7.getAdvancements().getOrStartProgress(plr7.server.getAdvancements().getAdvancement(new ResourceLocation("minecraft:story/iron_tools"))).isDone()) {
                             coef_cur = 2;
-                            if (entityiterator instanceof ServerPlayer _plr8 && _plr8.level() instanceof ServerLevel
-                                    && _plr8.getAdvancements().getOrStartProgress(_plr8.server.getAdvancements().getAdvancement(new ResourceLocation("minecraft:story/enter_the_nether"))).isDone()) {
+                            if (entityiterator instanceof ServerPlayer plr8 && plr8.level() instanceof ServerLevel
+                                    && plr8.getAdvancements().getOrStartProgress(plr8.server.getAdvancements().getAdvancement(new ResourceLocation("minecraft:story/enter_the_nether"))).isDone()) {
                                 coef_cur = 3;
-                                if (entityiterator instanceof ServerPlayer _plr9 && _plr9.level() instanceof ServerLevel
-                                        && _plr9.getAdvancements().getOrStartProgress(_plr9.server.getAdvancements().getAdvancement(new ResourceLocation("minecraft:story/enter_the_end"))).isDone()) {
+                                if (entityiterator instanceof ServerPlayer plr9 && plr9.level() instanceof ServerLevel
+                                        && plr9.getAdvancements().getOrStartProgress(plr9.server.getAdvancements().getAdvancement(new ResourceLocation("minecraft:story/enter_the_end"))).isDone()) {
                                     coef_cur = 4;
-                                    if (entityiterator instanceof ServerPlayer _plr10 && _plr10.level() instanceof ServerLevel
-                                            && _plr10.getAdvancements().getOrStartProgress(_plr10.server.getAdvancements().getAdvancement(new ResourceLocation("minecraft:end/find_end_city"))).isDone()) {
+                                    if (entityiterator instanceof ServerPlayer plr10 && plr10.level() instanceof ServerLevel
+                                            && plr10.getAdvancements().getOrStartProgress(plr10.server.getAdvancements().getAdvancement(new ResourceLocation("minecraft:end/find_end_city"))).isDone()) {
                                         coef_cur = 5;
                                     }
                                 }
@@ -144,36 +144,36 @@ public class EntityJoinLevelEventHandler {
                 health_index = Math.max(CaerulaConfigsConfiguration.HEALTH_MULT.get(), 0.1) * health_index;
                 attack_index = Math.max(CaerulaConfigsConfiguration.ATTACK_MULT.get(), 0.1) * attack_index;
                 armor_index = Math.max(CaerulaConfigsConfiguration.ARMOR_MULT.get(), 0.1) * armor_index;
-                percentage = (entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) / (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1);
-                if (entity instanceof LivingEntity _livingEntity18 && _livingEntity18.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
-                    _livingEntity18.getAttribute(Attributes.MAX_HEALTH).setBaseValue(
-                            ((entity instanceof LivingEntity _livingEntity17 && _livingEntity17.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? _livingEntity17.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0) * health_index));
-                if (entity instanceof LivingEntity _entity)
-                    _entity.setHealth(
-                            (float) ((entity instanceof LivingEntity _livingEntity19 && _livingEntity19.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? _livingEntity19.getAttribute(Attributes.MAX_HEALTH).getValue() : 0) * percentage));
-                if (entity instanceof LivingEntity _livingEntity22 && _livingEntity22.getAttributes().hasAttribute(Attributes.ARMOR))
-                    _livingEntity22.getAttribute(Attributes.ARMOR)
-                            .setBaseValue((((entity instanceof LivingEntity _livingEntity21 && _livingEntity21.getAttributes().hasAttribute(Attributes.ARMOR) ? _livingEntity21.getAttribute(Attributes.ARMOR).getBaseValue() : 0)
+                percentage = (entity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) / (entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1);
+                if (entity instanceof LivingEntity livingEntity18 && livingEntity18.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
+                    livingEntity18.getAttribute(Attributes.MAX_HEALTH).setBaseValue(
+                            ((entity instanceof LivingEntity livingEntity17 && livingEntity17.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? livingEntity17.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0) * health_index));
+                if (entity instanceof LivingEntity livingEntity)
+                    livingEntity.setHealth(
+                            (float) ((entity instanceof LivingEntity livingEntity19 && livingEntity19.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? livingEntity19.getAttribute(Attributes.MAX_HEALTH).getValue() : 0) * percentage));
+                if (entity instanceof LivingEntity livingEntity22 && livingEntity22.getAttributes().hasAttribute(Attributes.ARMOR))
+                    livingEntity22.getAttribute(Attributes.ARMOR)
+                            .setBaseValue((((entity instanceof LivingEntity livingEntity21 && livingEntity21.getAttributes().hasAttribute(Attributes.ARMOR) ? livingEntity21.getAttribute(Attributes.ARMOR).getBaseValue() : 0)
                                     + 2 * MapVariables.get(world).strategy_subsisting) * armor_index));
-                if (entity instanceof LivingEntity _livingEntity24 && _livingEntity24.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
-                    _livingEntity24.getAttribute(CAAttributes.GENERAL_DEFENSE.get())
-                            .setBaseValue((((entity instanceof LivingEntity _livingEntity23 && _livingEntity23.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get())
-                                    ? _livingEntity23.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getBaseValue()
+                if (entity instanceof LivingEntity livingEntity24 && livingEntity24.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
+                    livingEntity24.getAttribute(CAAttributes.GENERAL_DEFENSE.get())
+                            .setBaseValue((((entity instanceof LivingEntity livingEntity23 && livingEntity23.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get())
+                                    ? livingEntity23.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getBaseValue()
                                     : 0) + 1 * MapVariables.get(world).strategy_subsisting) * armor_index));
-                if (entity instanceof LivingEntity _livingEntity26 && _livingEntity26.getAttributes().hasAttribute(Attributes.ARMOR_TOUGHNESS))
-                    _livingEntity26.getAttribute(Attributes.ARMOR_TOUGHNESS)
-                            .setBaseValue((((entity instanceof LivingEntity _livingEntity25 && _livingEntity25.getAttributes().hasAttribute(Attributes.ARMOR_TOUGHNESS) ? _livingEntity25.getAttribute(Attributes.ARMOR_TOUGHNESS).getBaseValue() : 0)
+                if (entity instanceof LivingEntity livingEntity26 && livingEntity26.getAttributes().hasAttribute(Attributes.ARMOR_TOUGHNESS))
+                    livingEntity26.getAttribute(Attributes.ARMOR_TOUGHNESS)
+                            .setBaseValue((((entity instanceof LivingEntity livingEntity25 && livingEntity25.getAttributes().hasAttribute(Attributes.ARMOR_TOUGHNESS) ? livingEntity25.getAttribute(Attributes.ARMOR_TOUGHNESS).getBaseValue() : 0)
                                     + 2 * MapVariables.get(world).strategy_subsisting) * armor_index));
-                if (entity instanceof LivingEntity _livingEntity28 && _livingEntity28.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
-                    _livingEntity28.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
-                            ((entity instanceof LivingEntity _livingEntity27 && _livingEntity27.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity27.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) * attack_index));
+                if (entity instanceof LivingEntity livingEntity28 && livingEntity28.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
+                    livingEntity28.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
+                            ((entity instanceof LivingEntity livingEntity27 && livingEntity27.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity27.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) * attack_index));
                 final double finalX = x;
                 final double finalY = y;
                 final double finalZ = z;
                 final Entity finalEntity = entity;
                 final LevelAccessor finalWorld = world;
                 CaerulaArborMod.queueServerWork(10, () -> {
-                    if (!(finalEntity instanceof LivingEntity _livEnt29 && _livEnt29.hasEffect(CAMobEffects.POWER_OF_ANCHOR.get()))) {
+                    if (!(finalEntity instanceof LivingEntity livEnt29 && livEnt29.hasEffect(CAMobEffects.POWER_OF_ANCHOR.get()))) {
                         if (MapVariables.get(finalWorld).strategy_breed > 0) {
                             if (!finalEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "bossoffspring")))
                                     && !finalEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanspawn")))
@@ -203,43 +203,43 @@ public class EntityJoinLevelEventHandler {
                                 }
                             }
                         }
-                        if (finalEntity instanceof LivingEntity _livingEntity41 && _livingEntity41.getAttributes().hasAttribute(CAAttributes.EVOLVED.get()))
-                            _livingEntity41.getAttribute(CAAttributes.EVOLVED.get()).setBaseValue(1);
+                        if (finalEntity instanceof LivingEntity livingEntity41 && livingEntity41.getAttributes().hasAttribute(CAAttributes.EVOLVED.get()))
+                            livingEntity41.getAttribute(CAAttributes.EVOLVED.get()).setBaseValue(1);
                     }
                 });
             }
         }
         if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "golems")))) {
-            if ((entity instanceof LivingEntity _livingEntity44 && _livingEntity44.getAttributes().hasAttribute(CAAttributes.EVOLVED.get())
-                    ? _livingEntity44.getAttribute(CAAttributes.EVOLVED.get()).getBaseValue()
+            if ((entity instanceof LivingEntity livingEntity44 && livingEntity44.getAttributes().hasAttribute(CAAttributes.EVOLVED.get())
+                    ? livingEntity44.getAttribute(CAAttributes.EVOLVED.get()).getBaseValue()
                     : 0) == 0) {
-                percentage = (entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) / (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1);
-                if (entity instanceof LivingEntity _livingEntity48 && _livingEntity48.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
-                    _livingEntity48.getAttribute(Attributes.MAX_HEALTH)
-                            .setBaseValue(((entity instanceof LivingEntity _livingEntity47 && _livingEntity47.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? _livingEntity47.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0)
+                percentage = (entity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) / (entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1);
+                if (entity instanceof LivingEntity livingEntity48 && livingEntity48.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
+                    livingEntity48.getAttribute(Attributes.MAX_HEALTH)
+                            .setBaseValue(((entity instanceof LivingEntity livingEntity47 && livingEntity47.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? livingEntity47.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0)
                                     * (1 + 0.3 * MapVariables.get(world).strategy_subsisting)));
-                if (entity instanceof LivingEntity _entity)
-                    _entity.setHealth(
-                            (float) ((entity instanceof LivingEntity _livingEntity49 && _livingEntity49.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? _livingEntity49.getAttribute(Attributes.MAX_HEALTH).getValue() : 0) * percentage));
-                if (entity instanceof LivingEntity _livingEntity52 && _livingEntity52.getAttributes().hasAttribute(Attributes.ARMOR))
-                    _livingEntity52.getAttribute(Attributes.ARMOR)
-                            .setBaseValue(((entity instanceof LivingEntity _livingEntity51 && _livingEntity51.getAttributes().hasAttribute(Attributes.ARMOR) ? _livingEntity51.getAttribute(Attributes.ARMOR).getBaseValue() : 0)
+                if (entity instanceof LivingEntity livingEntity)
+                    livingEntity.setHealth(
+                            (float) ((entity instanceof LivingEntity livingEntity49 && livingEntity49.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? livingEntity49.getAttribute(Attributes.MAX_HEALTH).getValue() : 0) * percentage));
+                if (entity instanceof LivingEntity livingEntity52 && livingEntity52.getAttributes().hasAttribute(Attributes.ARMOR))
+                    livingEntity52.getAttribute(Attributes.ARMOR)
+                            .setBaseValue(((entity instanceof LivingEntity livingEntity51 && livingEntity51.getAttributes().hasAttribute(Attributes.ARMOR) ? livingEntity51.getAttribute(Attributes.ARMOR).getBaseValue() : 0)
                                     + 2 * MapVariables.get(world).strategy_subsisting));
-                if (entity instanceof LivingEntity _livingEntity54 && _livingEntity54.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
-                    _livingEntity54.getAttribute(CAAttributes.GENERAL_DEFENSE.get())
-                            .setBaseValue(((entity instanceof LivingEntity _livingEntity53 && _livingEntity53.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get())
-                                    ? _livingEntity53.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getBaseValue()
+                if (entity instanceof LivingEntity livingEntity54 && livingEntity54.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
+                    livingEntity54.getAttribute(CAAttributes.GENERAL_DEFENSE.get())
+                            .setBaseValue(((entity instanceof LivingEntity livingEntity53 && livingEntity53.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get())
+                                    ? livingEntity53.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getBaseValue()
                                     : 0) + 2 * MapVariables.get(world).strategy_subsisting));
-                if (entity instanceof LivingEntity _livingEntity56 && _livingEntity56.getAttributes().hasAttribute(Attributes.ARMOR_TOUGHNESS))
-                    _livingEntity56.getAttribute(Attributes.ARMOR_TOUGHNESS)
-                            .setBaseValue(((entity instanceof LivingEntity _livingEntity55 && _livingEntity55.getAttributes().hasAttribute(Attributes.ARMOR_TOUGHNESS) ? _livingEntity55.getAttribute(Attributes.ARMOR_TOUGHNESS).getBaseValue() : 0)
+                if (entity instanceof LivingEntity livingEntity56 && livingEntity56.getAttributes().hasAttribute(Attributes.ARMOR_TOUGHNESS))
+                    livingEntity56.getAttribute(Attributes.ARMOR_TOUGHNESS)
+                            .setBaseValue(((entity instanceof LivingEntity livingEntity55 && livingEntity55.getAttributes().hasAttribute(Attributes.ARMOR_TOUGHNESS) ? livingEntity55.getAttribute(Attributes.ARMOR_TOUGHNESS).getBaseValue() : 0)
                                     + 2 * MapVariables.get(world).strategy_subsisting));
-                if (entity instanceof LivingEntity _livingEntity58 && _livingEntity58.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
-                    _livingEntity58.getAttribute(Attributes.ATTACK_DAMAGE)
-                            .setBaseValue(((entity instanceof LivingEntity _livingEntity57 && _livingEntity57.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity57.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0)
+                if (entity instanceof LivingEntity livingEntity58 && livingEntity58.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
+                    livingEntity58.getAttribute(Attributes.ATTACK_DAMAGE)
+                            .setBaseValue(((entity instanceof LivingEntity livingEntity57 && livingEntity57.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity57.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0)
                                     * (1 + 0.25 * MapVariables.get(world).strategy_grow)));
-                if (entity instanceof LivingEntity _livingEntity59 && _livingEntity59.getAttributes().hasAttribute(CAAttributes.EVOLVED.get()))
-                    _livingEntity59.getAttribute(CAAttributes.EVOLVED.get()).setBaseValue(1);
+                if (entity instanceof LivingEntity livingEntity59 && livingEntity59.getAttributes().hasAttribute(CAAttributes.EVOLVED.get()))
+                    livingEntity59.getAttribute(CAAttributes.EVOLVED.get()).setBaseValue(1);
             }
         }
     }

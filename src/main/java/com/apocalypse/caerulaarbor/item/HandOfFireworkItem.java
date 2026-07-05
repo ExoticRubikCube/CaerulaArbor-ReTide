@@ -43,11 +43,11 @@ public class HandOfFireworkItem extends Item {
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
         if (!(((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_FIREWORK) {
-            if ((LevelAccessor) world instanceof Level _level) {
-                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 2, 1);
+            if ((LevelAccessor) world instanceof Level level) {
+                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 2, 1);
             }
-            if ((LevelAccessor) world instanceof ServerLevel _level)
-                _level.sendParticles(ParticleTypes.CLOUD, x, y, z, 72, 1, 1, 1, 1);
+            if ((LevelAccessor) world instanceof ServerLevel level)
+                level.sendParticles(ParticleTypes.CLOUD, x, y, z, 72, 1, 1, 1, 1);
             ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                 capability.relic_hand_FIREWORK = true;
                 capability.syncPlayerVariables(entity);

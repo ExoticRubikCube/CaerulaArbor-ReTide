@@ -167,36 +167,36 @@ public class AccumulatorProkaryoteEntity extends SeaMonster {
 		super.baseTick();
         LevelAccessor world = this.level();
         if (this.isAlive() && tickCount % 10 == 0) {
-            if (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) <= ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5 && (Entity) this instanceof AccumulatorProkaryoteEntity _datEntL4
-                    && _datEntL4.getEntityData().get(DATA_SPLIT)) {
+            if (((Entity) this instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) <= ((Entity) this instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.5 && (Entity) this instanceof AccumulatorProkaryoteEntity datEntL4
+                    && datEntL4.getEntityData().get(DATA_SPLIT)) {
                 if (this instanceof AccumulatorProkaryoteEntity) {
                     this.setAnimation("animation.accumulator.split");
                 }
-                if ((Entity) this instanceof LivingEntity _entity)
-                    _entity.setHealth((float) (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5));
-                if ((Entity) this instanceof AccumulatorProkaryoteEntity _datEntSetL)
-                    _datEntSetL.getEntityData().set(DATA_SPLIT, false);
-                if (!((Entity) this instanceof LivingEntity _livEnt9 && _livEnt9.hasEffect(CAMobEffects.MUTE.get()))) {
+                if ((Entity) this instanceof LivingEntity entity)
+                    entity.setHealth((float) (((Entity) this instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.5));
+                if ((Entity) this instanceof AccumulatorProkaryoteEntity datEntSetL)
+                    datEntSetL.getEntityData().set(DATA_SPLIT, false);
+                if (!((Entity) this instanceof LivingEntity livEnt9 && livEnt9.hasEffect(CAMobEffects.MUTE.get()))) {
                     CaerulaArborMod.queueServerWork(10, () -> {
                         if (isInWater()) {
-                            if (world instanceof ServerLevel _level) {
-                                Entity entityToSpawn = CAEntities.ACCUMULATOR_CLONE.get().spawn(_level,
+                            if (world instanceof ServerLevel level) {
+                                Entity entityToSpawn = CAEntities.ACCUMULATOR_CLONE.get().spawn(level,
                                         BlockPos.containing(getX() + Mth.nextDouble(RandomSource.create(), -1, 1), getY() + 0.5, getZ() + Mth.nextDouble(RandomSource.create(), -1, 1)), MobSpawnType.MOB_SUMMONED);
                                 if (entityToSpawn != null) {
                                     entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                                 }
                             }
                         } else {
-                            if (world instanceof ServerLevel _level) {
-                                Entity entityToSpawn = CAEntities.DIVICELLULAR_GO.get().spawn(_level,
+                            if (world instanceof ServerLevel level) {
+                                Entity entityToSpawn = CAEntities.DIVICELLULAR_GO.get().spawn(level,
                                         BlockPos.containing(getX() + Mth.nextDouble(RandomSource.create(), -1, 1), getY() + 0.5, getZ() + Mth.nextDouble(RandomSource.create(), -1, 1)), MobSpawnType.MOB_SUMMONED);
                                 if (entityToSpawn != null) {
                                     entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                                 }
                             }
                         }
-                        if (world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(getX(), getY(), getZ()), SoundEvents.PUFFER_FISH_BLOW_OUT, SoundSource.HOSTILE, 2, 1);
+                        if (world instanceof Level level) {
+                            level.playSound(null, BlockPos.containing(getX(), getY(), getZ()), SoundEvents.PUFFER_FISH_BLOW_OUT, SoundSource.HOSTILE, 2, 1);
                         }
                     });
                 }

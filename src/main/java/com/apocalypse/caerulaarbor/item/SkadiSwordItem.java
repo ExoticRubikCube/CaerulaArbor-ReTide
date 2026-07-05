@@ -64,17 +64,17 @@ public class SkadiSwordItem extends SwordItem {
         double r;
         Entity enemy;
         r = 3;
-        enemy = ((Entity) sourceentity instanceof LivingEntity _entity) ? _entity.getLastHurtMob() : null;
-        damage = (Entity) sourceentity instanceof LivingEntity _livingEntity2 && _livingEntity2.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity2.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
+        enemy = ((Entity) sourceentity instanceof LivingEntity livingEntity) ? livingEntity.getLastHurtMob() : null;
+        damage = (Entity) sourceentity instanceof LivingEntity livingEntity2 && livingEntity2.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity2.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
         {
-            final Vec3 _center = new Vec3(entity.getX(), entity.getY(), entity.getZ());
-            List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate((2 * r) / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-            for (Entity entityiterator : _entfound) {
+            final Vec3 center = new Vec3(entity.getX(), entity.getY(), entity.getZ());
+            List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate((2 * r) / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+            for (Entity entityiterator : entfound) {
                 if (!(entityiterator instanceof LivingEntity)) {
                     continue;
                 }
                 if (!(entityiterator instanceof Monster)) {
-                    if (!(((Entity) entity instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == sourceentity)) {
+                    if (!(((Entity) entity instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == sourceentity)) {
                         continue;
                     }
                 }
@@ -83,7 +83,7 @@ public class SkadiSwordItem extends SwordItem {
                         continue;
                     }
                 }
-                if (entityiterator instanceof Player || (entityiterator instanceof TamableAnimal _tamEnt && _tamEnt.isTame())) {
+                if (entityiterator instanceof Player || (entityiterator instanceof TamableAnimal tamEnt && tamEnt.isTame())) {
                     if (!(entityiterator == enemy)) {
                         continue;
                     }
@@ -115,11 +115,11 @@ public class SkadiSwordItem extends SwordItem {
 	public void inventoryTick(ItemStack itemstack, Level world, Entity entity, int slot, boolean selected) {
 		super.inventoryTick(itemstack, world, entity, slot, selected);
 		if (selected && EntityUtils.getHealthPerc(entity) >= 0.5) {
-            if (!(entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CAMobEffects.BOOST_OF_SILENCE.get()))) {
-                if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                    _entity.addEffect(new MobEffectInstance(CAMobEffects.BOOST_OF_SILENCE.get(), 10, 6, false, false));
-                if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                    _entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_REACH.get(), 10, 2, false, false));
+            if (!(entity instanceof LivingEntity livEnt0 && livEnt0.hasEffect(CAMobEffects.BOOST_OF_SILENCE.get()))) {
+                if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
+                    livingEntity.addEffect(new MobEffectInstance(CAMobEffects.BOOST_OF_SILENCE.get(), 10, 6, false, false));
+                if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
+                    livingEntity.addEffect(new MobEffectInstance(CAMobEffects.ADD_REACH.get(), 10, 2, false, false));
             }
         }
 	}

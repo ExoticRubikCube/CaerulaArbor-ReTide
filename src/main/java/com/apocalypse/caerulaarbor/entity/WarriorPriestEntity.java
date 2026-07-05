@@ -144,17 +144,17 @@ public class WarriorPriestEntity extends Animal implements GeoEntity, SyncedAnim
         Entity sourceentity = source.getEntity();
         if (sourceentity != null) {
             if (this.isAlive() && sourceentity.isAlive()) {
-                if (distanceTo(sourceentity) <= 2.5 && ((Entity) this instanceof WarriorPriestEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILL_P) : 0) <= 0) {
+                if (distanceTo(sourceentity) <= 2.5 && ((Entity) this instanceof WarriorPriestEntity datEntI ? datEntI.getEntityData().get(DATA_SKILL_P) : 0) <= 0) {
                     if (this instanceof WarriorPriestEntity) {
                         this.setAnimation("animation.warriorpriest.shieldattack");
                     }
-                    if ((Entity) this instanceof WarriorPriestEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_SKILL_P, 150);
+                    if ((Entity) this instanceof WarriorPriestEntity datEntSetI)
+                        datEntSetI.getEntityData().set(DATA_SKILL_P, 150);
                     CaerulaArborMod.queueServerWork(15, () -> {
                         if (sourceentity.isAlive()) {
                             ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((sourceentity.getX()), (sourceentity.getY()), (sourceentity.getZ())));
-                            if (world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.EMPTY, SoundSource.HOSTILE, (float) 2.5, 1);
+                            if (world instanceof Level level) {
+                                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.EMPTY, SoundSource.HOSTILE, (float) 2.5, 1);
                             }
                             sourceentity.hurt(
                                     new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "generic_warrior_attack"))), this),
@@ -193,30 +193,30 @@ public class WarriorPriestEntity extends Animal implements GeoEntity, SyncedAnim
         double sklp1;
         double skillp;
         if (this.isAlive()) {
-            skillp = (Entity) this instanceof WarriorPriestEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILL_P) : 0;
-            sklp1 = (Entity) this instanceof WarriorPriestEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILL_P1) : 0;
+            skillp = (Entity) this instanceof WarriorPriestEntity datEntI ? datEntI.getEntityData().get(DATA_SKILL_P) : 0;
+            sklp1 = (Entity) this instanceof WarriorPriestEntity datEntI ? datEntI.getEntityData().get(DATA_SKILL_P1) : 0;
             if (skillp > 0) {
-                if ((Entity) this instanceof WarriorPriestEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_SKILL_P, (int) (skillp - 1));
+                if ((Entity) this instanceof WarriorPriestEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_SKILL_P, (int) (skillp - 1));
             }
             if (sklp1 > 0) {
-                if ((Entity) this instanceof WarriorPriestEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_SKILL_P1, (int) (sklp1 - 1));
+                if ((Entity) this instanceof WarriorPriestEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_SKILL_P1, (int) (sklp1 - 1));
             } else {
                 if (this instanceof WarriorPriestEntity) {
                     this.setAnimation("animation.warriorpriest.givebuff");
                 }
-                if ((Entity) this instanceof WarriorPriestEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_SKILL_P1, 400);
+                if ((Entity) this instanceof WarriorPriestEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_SKILL_P1, 400);
                 {
-                    final Vec3 _center = new Vec3(this.getX(), this.getY(), this.getZ());
-                    List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(16 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                    for (Entity entityiterator : _entfound) {
+                    final Vec3 center = new Vec3(this.getX(), this.getY(), this.getZ());
+                    List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(16 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                    for (Entity entityiterator : entfound) {
                         if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "homo_sapiens")))) {
-                            if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                                _entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 400, 0));
-                            if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                                _entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 400, 0));
+                            if (entityiterator instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
+                                livingEntity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 400, 0));
+                            if (entityiterator instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
+                                livingEntity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 400, 0));
                         }
                     }
                 }

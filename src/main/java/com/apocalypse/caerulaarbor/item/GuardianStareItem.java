@@ -47,19 +47,19 @@ public class GuardianStareItem extends Item {
         ItemStack itemstack = ar.getObject();
         if (!itemstack.getOrCreateTag().getBoolean("used")) {
             {
-                boolean _setval = true;
+                boolean setval = true;
                 ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                    capability.relic_util_STARE = _setval;
+                    capability.relic_util_STARE = setval;
                     capability.syncPlayerVariables(entity);
                 });
             }
-            if ((LevelAccessor) world instanceof Level _level) {
-                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 2, 1);
+            if ((LevelAccessor) world instanceof Level level) {
+                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 2, 1);
             }
-            if ((Entity) entity instanceof Player _player)
-                _player.giveExperienceLevels(4);
-            if ((LevelAccessor) world instanceof ServerLevel _level)
-                _level.sendParticles(ParticleTypes.NAUTILUS, x, (y + 0.5), z, 72, 1, 1, 1, 1);
+            if ((Entity) entity instanceof Player player)
+                player.giveExperienceLevels(4);
+            if ((LevelAccessor) world instanceof ServerLevel level)
+                level.sendParticles(ParticleTypes.NAUTILUS, x, (y + 0.5), z, 72, 1, 1, 1, 1);
             itemstack.getOrCreateTag().putBoolean("used", true);
         }
         return ar;
@@ -68,9 +68,8 @@ public class GuardianStareItem extends Item {
 	@Override
 	public void inventoryTick(ItemStack itemstack, Level world, Entity entity, int slot, boolean selected) {
 		super.inventoryTick(itemstack, world, entity, slot, selected);
-        if (entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(MobEffects.DIG_SLOWDOWN)) {
-            if (entity instanceof LivingEntity _entity)
-                _entity.removeEffect(MobEffects.DIG_SLOWDOWN);
+        if (entity instanceof LivingEntity living && living.hasEffect(MobEffects.DIG_SLOWDOWN)) {
+                living.removeEffect(MobEffects.DIG_SLOWDOWN);
         }
     }
 }

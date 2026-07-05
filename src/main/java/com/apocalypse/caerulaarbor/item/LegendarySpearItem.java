@@ -158,11 +158,11 @@ public class LegendarySpearItem extends Item implements GeoItem, SyncedAnimation
         double y = entity.getY();
         double z = entity.getZ();
         if (!(new Object() {
-            public boolean checkGamemode(Entity _ent) {
-                if (_ent instanceof ServerPlayer _serverPlayer) {
-                    return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                    return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+            public boolean checkGamemode(Entity ent) {
+                if (ent instanceof ServerPlayer serverPlayer) {
+                    return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                    return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                 }
                 return false;
             }
@@ -172,26 +172,26 @@ public class LegendarySpearItem extends Item implements GeoItem, SyncedAnimation
                 itemstack.setDamageValue(0);
             }
         }
-        if (!((Entity) sourceentity instanceof Player _plrCldCheck4 && _plrCldCheck4.getCooldowns().isOnCooldown(itemstack.getItem()))
-                && ((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == itemstack.getItem()) {
+        if (!((Entity) sourceentity instanceof Player plrCldCheck4 && plrCldCheck4.getCooldowns().isOnCooldown(itemstack.getItem()))
+                && ((Entity) sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == itemstack.getItem()) {
             if (sourceentity.isShiftKeyDown()) {
                 if (itemstack.getItem() instanceof LegendarySpearItem)
                     itemstack.getOrCreateTag().putString("geckoAnim", "animation.lengendspear.swing2");
-                if ((Entity) sourceentity instanceof Player _player)
-                    _player.getCooldowns().addCooldown(itemstack.getItem(), 25);
+                if ((Entity) sourceentity instanceof Player player)
+                    player.getCooldowns().addCooldown(itemstack.getItem(), 25);
                 CaerulaArborMod.queueServerWork(10, () -> {
-                    if (world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.NEUTRAL, (float) 3.5, 1);
+                    if (world instanceof Level level) {
+                            level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.NEUTRAL, (float) 3.5, 1);
                     }
                     {
-                        final Vec3 _center = new Vec3(x, y, z);
-                        List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(7 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                        for (Entity entityiterator : _entfound) {
+                        final Vec3 center = new Vec3(x, y, z);
+                        List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(7 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                        for (Entity entityiterator : entfound) {
                             if (entityiterator.isAlive() && !(entityiterator == sourceentity)) {
                                 if ((sourceentity != null ? entityiterator.distanceTo(sourceentity) : -1) <= 3) {
                                     entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.TRIDENT), sourceentity),
-                                            (float) (((Entity) sourceentity instanceof LivingEntity _livingEntity17 && _livingEntity17.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)
-                                                    ? _livingEntity17.getAttribute(Attributes.ATTACK_DAMAGE).getValue()
+                                            (float) (((Entity) sourceentity instanceof LivingEntity livingEntity17 && livingEntity17.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)
+                                                    ? livingEntity17.getAttribute(Attributes.ATTACK_DAMAGE).getValue()
                                                     : 0) * (1 + 0.2 * itemstack.getEnchantmentLevel(CAEnchantments.SYNESTHESIA.get()))));
                                 }
                             }
@@ -201,16 +201,16 @@ public class LegendarySpearItem extends Item implements GeoItem, SyncedAnimation
             } else if (sourceentity.getDeltaMovement().y() < -0.1) {
                 if (itemstack.getItem() instanceof LegendarySpearItem)
                     itemstack.getOrCreateTag().putString("geckoAnim", "animation.lengendspear.srike");
-                if ((Entity) sourceentity instanceof Player _player)
-                    _player.getCooldowns().addCooldown(itemstack.getItem(), 25);
+                if ((Entity) sourceentity instanceof Player player)
+                    player.getCooldowns().addCooldown(itemstack.getItem(), 25);
                 CaerulaArborMod.queueServerWork(10, () -> {
                     if (((Entity) entity).isAlive()) {
-                        if (world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TRIDENT_HIT_GROUND, SoundSource.NEUTRAL, (float) 3.5, 1);
+                        if (world instanceof Level level) {
+                                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TRIDENT_HIT_GROUND, SoundSource.NEUTRAL, (float) 3.5, 1);
                         }
                         if ((sourceentity != null ? entity.distanceTo(sourceentity) : -1) <= 4) {
                             ((Entity) entity).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.TRIDENT), sourceentity),
-                                    (float) (((Entity) sourceentity instanceof LivingEntity _livingEntity32 && _livingEntity32.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity32.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
+                                    (float) (((Entity) sourceentity instanceof LivingEntity livingEntity32 && livingEntity32.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity32.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
                                             * (1 + 0.2 * itemstack.getEnchantmentLevel(CAEnchantments.SYNESTHESIA.get()))));
                         }
                     }
@@ -218,16 +218,16 @@ public class LegendarySpearItem extends Item implements GeoItem, SyncedAnimation
             } else if (sourceentity.getDeltaMovement().y() > 0.1) {
                 if (itemstack.getItem() instanceof LegendarySpearItem)
                     itemstack.getOrCreateTag().putString("geckoAnim", "animation.lengendspear.swing");
-                if ((Entity) sourceentity instanceof Player _player)
-                    _player.getCooldowns().addCooldown(itemstack.getItem(), 25);
+                if ((Entity) sourceentity instanceof Player player)
+                    player.getCooldowns().addCooldown(itemstack.getItem(), 25);
                 CaerulaArborMod.queueServerWork(10, () -> {
                     if (((Entity) entity).isAlive()) {
-                        if (world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TRIDENT_THROW, SoundSource.NEUTRAL, (float) 3.5, 1);
+                        if (world instanceof Level level) {
+                                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TRIDENT_THROW, SoundSource.NEUTRAL, (float) 3.5, 1);
                         }
                         if ((sourceentity != null ? entity.distanceTo(sourceentity) : -1) <= 4) {
                             ((Entity) entity).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.TRIDENT), sourceentity),
-                                    (float) (((Entity) sourceentity instanceof LivingEntity _livingEntity46 && _livingEntity46.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity46.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
+                                    (float) (((Entity) sourceentity instanceof LivingEntity livingEntity46 && livingEntity46.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity46.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
                                             * (1 + 0.2 * itemstack.getEnchantmentLevel(CAEnchantments.SYNESTHESIA.get()))));
                             entity.push(0, 0.5, 0);
                         }
@@ -236,16 +236,16 @@ public class LegendarySpearItem extends Item implements GeoItem, SyncedAnimation
             } else {
                 if (itemstack.getItem() instanceof LegendarySpearItem)
                     itemstack.getOrCreateTag().putString("geckoAnim", "animation.lengendspear.stab");
-                if ((Entity) sourceentity instanceof Player _player)
-                    _player.getCooldowns().addCooldown(itemstack.getItem(), 25);
+                if ((Entity) sourceentity instanceof Player player)
+                    player.getCooldowns().addCooldown(itemstack.getItem(), 25);
                 CaerulaArborMod.queueServerWork(10, () -> {
                     if (((Entity) entity).isAlive()) {
-                        if (world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TRIDENT_HIT, SoundSource.NEUTRAL, (float) 3.5, 1);
+                        if (world instanceof Level level) {
+                                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TRIDENT_HIT, SoundSource.NEUTRAL, (float) 3.5, 1);
                         }
                         if ((sourceentity != null ? entity.distanceTo(sourceentity) : -1) <= 4) {
                             ((Entity) entity).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.TRIDENT), sourceentity),
-                                    (float) (((Entity) sourceentity instanceof LivingEntity _livingEntity60 && _livingEntity60.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity60.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
+                                    (float) (((Entity) sourceentity instanceof LivingEntity livingEntity60 && livingEntity60.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity60.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
                                             * (1 + 0.2 * itemstack.getEnchantmentLevel(CAEnchantments.SYNESTHESIA.get()))));
                             entity.push((sourceentity.getLookAngle().x), 0, (sourceentity.getLookAngle().z));
                         }

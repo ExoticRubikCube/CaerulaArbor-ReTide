@@ -41,13 +41,13 @@ public class IzumikSkillbarOverlay {
             double ind = 0;
             double phase;
             ent = world.getEntitiesOfClass(IzumikEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).stream().min(new Object() {
-                Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
-                    return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
+                Comparator<Entity> compareDistOf(double x, double y, double z) {
+                    return Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z));
                 }
             }.compareDistOf(x, y, z)).orElse(null);
             if (!(ent == null)) {
-                phase = ent instanceof IzumikEntity _datEntI ? _datEntI.getEntityData().get(IzumikEntity.DATA_PHASE) : 0;
-                ind = ent instanceof IzumikEntity _datEntI ? _datEntI.getEntityData().get(IzumikEntity.DATA_SKILLP) : 0;
+                phase = ent instanceof IzumikEntity datEntI ? datEntI.getEntityData().get(IzumikEntity.DATA_PHASE) : 0;
+                ind = ent instanceof IzumikEntity datEntI ? datEntI.getEntityData().get(IzumikEntity.DATA_SKILLP) : 0;
                 if (phase == 0) {
                     ind = Math.round(ind * 20);
                 } else if (phase == 1) {

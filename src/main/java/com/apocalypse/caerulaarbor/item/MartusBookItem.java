@@ -134,38 +134,38 @@ public class MartusBookItem extends Item implements GeoItem, SyncedAnimationItem
 
         if (entity != null) {
             boolean isCreative;
-            if (!((Entity) entity instanceof Player _plrCldCheck1) || !_plrCldCheck1.getCooldowns().isOnCooldown(itemstack.getItem())) {
+            if (!((Entity) entity instanceof Player plrCldCheck1) || !plrCldCheck1.getCooldowns().isOnCooldown(itemstack.getItem())) {
                 isCreative = new Object() {
-                    public boolean checkGamemode(Entity _ent) {
-                        if (_ent instanceof ServerPlayer _serverPlayer) {
-                            return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                        } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                            return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                    public boolean checkGamemode(Entity ent) {
+                        if (ent instanceof ServerPlayer serverPlayer) {
+                            return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                        } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                            return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                         }
                         return false;
                     }
                 }.checkGamemode((Entity) entity);
-                if (((Entity) entity instanceof Player _plr ? _plr.experienceLevel : 0) >= 5 || isCreative) {
-                    if ((Entity) entity instanceof Player _player)
-                        _player.getCooldowns().addCooldown(itemstack.getItem(), 1200);
+                if (((Entity) entity instanceof Player plr ? plr.experienceLevel : 0) >= 5 || isCreative) {
+                    if ((Entity) entity instanceof Player player)
+                        player.getCooldowns().addCooldown(itemstack.getItem(), 1200);
                     if (itemstack.getItem() instanceof MartusBookItem)
                         itemstack.getOrCreateTag().putString("geckoAnim", "animation.martus_book.use");
                     if (!isCreative) {
-                        if ((Entity) entity instanceof Player _player)
-                            _player.giveExperienceLevels(-(5));
+                        if ((Entity) entity instanceof Player player)
+                            player.giveExperienceLevels(-(5));
                     }
                     CaerulaArborMod.queueServerWork(10, () -> {
-                        if ((LevelAccessor) world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 2, 1);
+                        if ((LevelAccessor) world instanceof Level level) {
+                                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 2, 1);
                         }
-                        if ((Entity) entity instanceof LivingEntity _entity)
-                            _entity.setHealth((float) Math.max(((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5 + 1, (Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1));
-                        if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                            _entity.addEffect(new MobEffectInstance(CAMobEffects.MARTUS_PROTECTION.get(), 400, 0, false, false));
-                        if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                            _entity.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 40, 9, false, false));
-                        if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                            _entity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 500, 6, false, false));
+                        if ((Entity) entity instanceof LivingEntity livingEntity)
+                            livingEntity.setHealth((float) Math.max(livingEntity.getMaxHealth() * 0.5 + 1, livingEntity.getHealth()));
+                        if ((Entity) entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
+                            livingEntity.addEffect(new MobEffectInstance(CAMobEffects.MARTUS_PROTECTION.get(), 400, 0, false, false));
+                        if ((Entity) entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
+                            livingEntity.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 40, 9, false, false));
+                        if ((Entity) entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
+                            livingEntity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 500, 6, false, false));
                     });
                 }
             }
@@ -182,43 +182,43 @@ public class MartusBookItem extends Item implements GeoItem, SyncedAnimationItem
         if (entity == null)
             return;
         boolean isCreative;
-        if (entity instanceof Player _plrCldCheck1 && _plrCldCheck1.getCooldowns().isOnCooldown(itemstack.getItem())) {
+        if (entity instanceof Player plrCldCheck1 && plrCldCheck1.getCooldowns().isOnCooldown(itemstack.getItem())) {
             return;
         }
         if (!entity.isAlive()) {
             return;
         }
         isCreative = new Object() {
-            public boolean checkGamemode(Entity _ent) {
-                if (_ent instanceof ServerPlayer _serverPlayer) {
-                    return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                    return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+            public boolean checkGamemode(Entity ent) {
+                if (ent instanceof ServerPlayer serverPlayer) {
+                    return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                    return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                 }
                 return false;
             }
         }.checkGamemode(entity);
-        if ((entity instanceof Player _plr ? _plr.experienceLevel : 0) < 5 && !isCreative) {
+        if ((entity instanceof Player plr ? plr.experienceLevel : 0) < 5 && !isCreative) {
             return;
         }
         if (entity.tickCount % 5 == 0) {
-            if ((entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) <= (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5) {
-                if (entity instanceof Player _player)
-                    _player.getCooldowns().addCooldown(itemstack.getItem(), 1200);
-                if ((LevelAccessor) world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 2, 1);
+            if ((entity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) <= (entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.5) {
+                if (entity instanceof Player player)
+                    player.getCooldowns().addCooldown(itemstack.getItem(), 1200);
+                if ((LevelAccessor) world instanceof Level level) {
+                        level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 2, 1);
                 }
-                if (entity instanceof LivingEntity _entity)
-                    _entity.setHealth((float) ((entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5 + 1));
-                if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                    _entity.addEffect(new MobEffectInstance(CAMobEffects.MARTUS_PROTECTION.get(), 400, 0, false, false));
-                if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                    _entity.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 40, 9, false, false));
-                if (entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                    _entity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 500, 5, false, false));
+                if (entity instanceof LivingEntity livingEntity)
+                    livingEntity.setHealth((float) (livingEntity.getMaxHealth() * 0.5 + 1));
+                if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
+                    livingEntity.addEffect(new MobEffectInstance(CAMobEffects.MARTUS_PROTECTION.get(), 400, 0, false, false));
+                if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
+                    livingEntity.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 40, 9, false, false));
+                if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
+                    livingEntity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 500, 5, false, false));
                 if (!isCreative) {
-                    if (entity instanceof Player _player)
-                        _player.giveExperienceLevels(-(5));
+                    if (entity instanceof Player player)
+                        player.giveExperienceLevels(-(5));
                 }
             }
         }

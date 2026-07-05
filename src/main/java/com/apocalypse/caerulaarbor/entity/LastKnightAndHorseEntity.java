@@ -208,14 +208,14 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
         Entity sourceentity = source.getEntity();
         if (sourceentity == null)
             return;
-        if (sourceentity instanceof ServerPlayer _player) {
-            Advancement _adv = _player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "kill_knight_and_horse"));
-            AdvancementProgress _ap;
-            if (_adv != null) {
-                _ap = _player.getAdvancements().getOrStartProgress(_adv);
-                if (!_ap.isDone()) {
-                    for (String criteria : _ap.getRemainingCriteria())
-                        _player.getAdvancements().award(_adv, criteria);
+        if (sourceentity instanceof ServerPlayer player) {
+            Advancement adv = player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "kill_knight_and_horse"));
+            AdvancementProgress ap;
+            if (adv != null) {
+                ap = player.getAdvancements().getOrStartProgress(adv);
+                if (!ap.isDone()) {
+                    for (String criteria : ap.getRemainingCriteria())
+                        player.getAdvancements().award(adv, criteria);
                 }
             }
         }
@@ -266,8 +266,8 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
         LevelAccessor world = this.level();
         if ((this.getHealth()) < (this.getMaxHealth())) {
             this.setHealth((float) ((this.getHealth()) + (this.getMaxHealth()) * 0.03));
-            if (world instanceof ServerLevel _level)
-                _level.sendParticles(ParticleTypes.HAPPY_VILLAGER, this.getX(), (this.getY() + 0.75), this.getZ(), 32, 1, 2, 1, 0.1);
+            if (world instanceof ServerLevel level)
+                level.sendParticles(ParticleTypes.HAPPY_VILLAGER, this.getX(), (this.getY() + 0.75), this.getZ(), 32, 1, 2, 1, 0.1);
         }
     }
 
@@ -290,9 +290,9 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
                 if (!this.level().isClientSide())
                     this.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 20, 0, false, false));
                 if ((this.getHealth()) > (this.getMaxHealth()) * 0.5) {
-                    final Vec3 _center = new Vec3(x, y, z);
-                    List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(48 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                    for (Entity entityiterator : _entfound) {
+                    final Vec3 center = new Vec3(x, y, z);
+                    List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(48 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                    for (Entity entityiterator : entfound) {
                         if (entityiterator.getTicksFrozen() >= 125 && entityiterator.isAlive()) {
                             entityiterator.setTicksFrozen(200);
                             if (entityiterator instanceof LivingEntity && !this.level().isClientSide())
@@ -338,9 +338,9 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
                             damage = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
                             enemy1 = this.getTarget();
                             {
-                                final Vec3 _center = new Vec3((x + 2 * getLookAngle().x), y, (z + 2 * getLookAngle().z));
-                                List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(8 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                                for (Entity entityiterator : _entfound) {
+                                final Vec3 center = new Vec3((x + 2 * getLookAngle().x), y, (z + 2 * getLookAngle().z));
+                                List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(8 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                                for (Entity entityiterator : entfound) {
                                     if (!(entityiterator instanceof LivingEntity)) {
                                         continue;
                                     }
@@ -354,12 +354,12 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
                                         entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "last_knight_attack"))), this),
                                                 (float) (damage * 1.5));
                                         entityiterator.push(0, 0.64, 0);
-                                        if ((entityiterator instanceof LivingEntity _entUseItem12 ? _entUseItem12.getUseItem() : ItemStack.EMPTY).getItem() instanceof ShieldItem) {
-                                            if (entityiterator instanceof Player _player) {
-                                                _player.getCooldowns().addCooldown(_player.getUseItem().getItem(), 100);
+                                        if ((entityiterator instanceof LivingEntity entUseItem12 ? entUseItem12.getUseItem() : ItemStack.EMPTY).getItem() instanceof ShieldItem) {
+                                            if (entityiterator instanceof Player player) {
+                                                player.getCooldowns().addCooldown(player.getUseItem().getItem(), 100);
                                             }
-                                            if (world instanceof Level _level) {
-                                                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SHIELD_BREAK, SoundSource.HOSTILE, 1, 1);
+                                            if (world instanceof Level level) {
+                                                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SHIELD_BREAK, SoundSource.HOSTILE, 1, 1);
                                             }
                                         }
                                         CaerulaArborMod.queueServerWork(7, () -> {

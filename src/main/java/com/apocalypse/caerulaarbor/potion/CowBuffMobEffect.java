@@ -41,9 +41,9 @@ public class CowBuffMobEffect extends MobEffect {
         double x = entity.getX();
         double y = entity.getY();
         double z = entity.getZ();
-        if ((Entity) entity instanceof OceanizedCowEntity _datEntL0 && _datEntL0.getEntityData().get(OceanizedCowEntity.DATA_SKILL) && ((Entity) entity).isAlive()) {
-            if (!((Entity) entity instanceof LivingEntity _livEnt2 && _livEnt2.hasEffect(CAMobEffects.MUTE.get()))
-                    && ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) <= ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5) {
+        if ((Entity) entity instanceof OceanizedCowEntity datEntL0 && datEntL0.getEntityData().get(OceanizedCowEntity.DATA_SKILL) && ((Entity) entity).isAlive()) {
+            if (!((Entity) entity instanceof LivingEntity livEnt2 && livEnt2.hasEffect(CAMobEffects.MUTE.get()))
+                    && ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) <= ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.5) {
                 if (WorldUtils.canGrief(world)) {
                     if (CABlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing(x, y, z)) && !(world.getBlockFloorHeight(BlockPos.containing(x, y, z)) > 0)) {
                         CaerulaUtil.replaceTrail(world, CABlocks.SEA_TRAIL_INIT.get().defaultBlockState(), (world.getFluidState(BlockPos.containing(x, y, z)).createLegacyBlock()).getBlock() == Blocks.WATER, x, y, z);
@@ -58,8 +58,8 @@ public class CowBuffMobEffect extends MobEffect {
                             }
                         }
                     }
-                    if ((Entity) entity instanceof OceanizedCowEntity _datEntSetL)
-                        _datEntSetL.getEntityData().set(OceanizedCowEntity.DATA_SKILL, false);
+                    if ((Entity) entity instanceof OceanizedCowEntity datEntSetL)
+                        datEntSetL.getEntityData().set(OceanizedCowEntity.DATA_SKILL, false);
                 }
             }
         }

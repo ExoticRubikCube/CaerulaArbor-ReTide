@@ -50,7 +50,7 @@ public class EvoTreeButtonMessage {
 
 	public static void handleButtonAction(Player entity, int buttonID, int x, int y, int z) {
 		Level world = entity.level();
-		// security measure to prevent arbitrary chunk generation
+		// 安全措施：防止任意区块生成
 		if (!world.hasChunkAt(new BlockPos(x, y, z)))
 			return;
 		if (buttonID == 0) {

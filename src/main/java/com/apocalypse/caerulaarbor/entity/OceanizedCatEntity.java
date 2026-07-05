@@ -151,8 +151,8 @@ public class OceanizedCatEntity extends SeaMonster {
     @Override
     public boolean hurt(DamageSource source, float amount) {
         setShiftKeyDown(false);
-        if ((Entity) this instanceof OceanizedCatEntity _datEntSetL)
-            _datEntSetL.getEntityData().set(DATA_STATE_SNEAKING, false);
+        if ((Entity) this instanceof OceanizedCatEntity datEntSetL)
+            datEntSetL.getEntityData().set(DATA_STATE_SNEAKING, false);
         if (source.is(DamageTypes.FALL))
             return false;
         if (source.is(DamageTypes.DROWN))
@@ -184,30 +184,30 @@ public class OceanizedCatEntity extends SeaMonster {
         double time_stamp;
         boolean sneak;
         if (this.isAlive() && tickCount % 10 == 0) {
-            time_stamp = (Entity) this instanceof OceanizedCatEntity _datEntI ? _datEntI.getEntityData().get(DATA_ACTION_TIME) : 0;
-            sneak = (Entity) this instanceof OceanizedCatEntity _datEntL3 && _datEntL3.getEntityData().get(DATA_STATE_SNEAKING);
+            time_stamp = (Entity) this instanceof OceanizedCatEntity datEntI ? datEntI.getEntityData().get(DATA_ACTION_TIME) : 0;
+            sneak = (Entity) this instanceof OceanizedCatEntity datEntL3 && datEntL3.getEntityData().get(DATA_STATE_SNEAKING);
             if (time_stamp > 0) {
-                if ((Entity) this instanceof OceanizedCatEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_ACTION_TIME, (int) (time_stamp - 1));
+                if ((Entity) this instanceof OceanizedCatEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_ACTION_TIME, (int) (time_stamp - 1));
             } else if (Math.random() < 0.02) {
                 if (sneak) {
-                    if ((Entity) this instanceof OceanizedCatEntity _datEntSetL)
-                        _datEntSetL.getEntityData().set(DATA_STATE_SNEAKING, false);
-                    if ((Entity) this instanceof OceanizedCatEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_ACTION_TIME, 10);
+                    if ((Entity) this instanceof OceanizedCatEntity datEntSetL)
+                        datEntSetL.getEntityData().set(DATA_STATE_SNEAKING, false);
+                    if ((Entity) this instanceof OceanizedCatEntity datEntSetI)
+                        datEntSetI.getEntityData().set(DATA_ACTION_TIME, 10);
                 } else if (!this.isAggressive()) {
-                    if ((Entity) this instanceof OceanizedCatEntity _datEntSetL)
-                        _datEntSetL.getEntityData().set(DATA_STATE_SNEAKING, true);
-                    if ((Entity) this instanceof OceanizedCatEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_ACTION_TIME, 10);
+                    if ((Entity) this instanceof OceanizedCatEntity datEntSetL)
+                        datEntSetL.getEntityData().set(DATA_STATE_SNEAKING, true);
+                    if ((Entity) this instanceof OceanizedCatEntity datEntSetI)
+                        datEntSetI.getEntityData().set(DATA_ACTION_TIME, 10);
                 }
             }
             setShiftKeyDown(sneak);
         }
         if (this.isAggressive()) {
             setShiftKeyDown(false);
-            if ((Entity) this instanceof OceanizedCatEntity _datEntSetL)
-                _datEntSetL.getEntityData().set(DATA_STATE_SNEAKING, false);
+            if ((Entity) this instanceof OceanizedCatEntity datEntSetL)
+                datEntSetL.getEntityData().set(DATA_STATE_SNEAKING, false);
         }
         this.refreshDimensions();
     }

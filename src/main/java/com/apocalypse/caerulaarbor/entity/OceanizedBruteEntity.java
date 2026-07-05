@@ -171,10 +171,10 @@ public class OceanizedBruteEntity extends SeaMonster {
         if (sourceentity != null) {
             double sklp;
             if (this.isAlive()) {
-                sklp = (Entity) this instanceof OceanizedBruteEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP) : 0;
+                sklp = (Entity) this instanceof OceanizedBruteEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP) : 0;
                 if (sklp >= 0) {
-                    if ((Entity) this instanceof OceanizedBruteEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_SKILLP, (int) (sklp - 1));
+                    if ((Entity) this instanceof OceanizedBruteEntity datEntSetI)
+                        datEntSetI.getEntityData().set(DATA_SKILLP, (int) (sklp - 1));
                 } else {
                     if (distanceTo(sourceentity) <= 5 && !this.hasEffect(CAMobEffects.COOLDOWN_SINAL.get())) {
                         if (this instanceof OceanizedBruteEntity) {
@@ -183,8 +183,8 @@ public class OceanizedBruteEntity extends SeaMonster {
                         if (!this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 40, 1, false, false));
                         ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((sourceentity.getX()), (sourceentity.getY()), (sourceentity.getZ())));
-                        if ((Entity) this instanceof OceanizedBruteEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_SKILLP, 5);
+                        if ((Entity) this instanceof OceanizedBruteEntity datEntSetI)
+                            datEntSetI.getEntityData().set(DATA_SKILLP, 5);
                         if (!this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL.get(), 80, 0, false, false));
                         CaerulaArborMod.queueServerWork(20, () -> {
@@ -192,24 +192,24 @@ public class OceanizedBruteEntity extends SeaMonster {
                                 double sklp1;
                                 sklp1 = Math.max(
                                         Math.min((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 4,
-                                                ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.25),
+                                                ((Entity) this instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.25),
                                         (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1);
                                 if (distanceTo(sourceentity) <= 3) {
                                     if (sourceentity.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "general_seaborn_attack"))), this),
                                             (float) sklp1) && sourceentity instanceof Player player) {
                                         recordHurtPlayer(player);
                                     }
-                                    if (sourceentity instanceof LivingEntity _entity1 && !_entity1.level().isClientSide())
-                                        _entity1.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 120, 0, false, false));
-                                    if (sourceentity instanceof LivingEntity _entity1 && !_entity1.level().isClientSide())
-                                        _entity1.addEffect(new MobEffectInstance(CAMobEffects.ROCK_BREAK.get(), 120, 0, false, false));
+                                    if (sourceentity instanceof LivingEntity entity1 && !entity1.level().isClientSide())
+                                        entity1.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 120, 0, false, false));
+                                    if (sourceentity instanceof LivingEntity entity1 && !entity1.level().isClientSide())
+                                        entity1.addEffect(new MobEffectInstance(CAMobEffects.ROCK_BREAK.get(), 120, 0, false, false));
                                 }
-                                if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SHIELD_BREAK, SoundSource.HOSTILE, 2, 1);
+                                if (world instanceof Level level) {
+                                    level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SHIELD_BREAK, SoundSource.HOSTILE, 2, 1);
                                 }
-                                final Vec3 _center = new Vec3((x + 2 * getLookAngle().x), y, (z + 2 * getLookAngle().z));
-                                List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(6 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                                for (Entity entityiterator : _entfound) {
+                                final Vec3 center = new Vec3((x + 2 * getLookAngle().x), y, (z + 2 * getLookAngle().z));
+                                List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(6 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                                for (Entity entityiterator : entfound) {
                                     if (!(entityiterator instanceof Mob)) {
                                         continue;
                                     }
@@ -220,22 +220,22 @@ public class OceanizedBruteEntity extends SeaMonster {
                                         continue;
                                     }
                                     if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
-                                        if (!(((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == entityiterator)) {
+                                        if (!(((Entity) this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == entityiterator)) {
                                             continue;
                                         }
                                     }
                                     if (distanceTo(entityiterator) <= 3) {
                                         sklp1 = Math.max(
                                                 Math.min((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 3,
-                                                        ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.25),
+                                                        ((Entity) this instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.25),
                                                 (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1);
                                         entityiterator.hurt(
                                                 new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "general_seaborn_attack"))), this),
                                                 (float) sklp1);
-                                        if (entityiterator instanceof LivingEntity _entity1 && !_entity1.level().isClientSide())
-                                            _entity1.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 120, 0, false, false));
-                                        if (entityiterator instanceof LivingEntity _entity1 && !_entity1.level().isClientSide())
-                                            _entity1.addEffect(new MobEffectInstance(CAMobEffects.ROCK_BREAK.get(), 120, 0, false, false));
+                                        if (entityiterator instanceof LivingEntity entity1 && !entity1.level().isClientSide())
+                                            entity1.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 120, 0, false, false));
+                                        if (entityiterator instanceof LivingEntity entity1 && !entity1.level().isClientSide())
+                                            entity1.addEffect(new MobEffectInstance(CAMobEffects.ROCK_BREAK.get(), 120, 0, false, false));
                                     }
                                 }
                             }
@@ -244,11 +244,11 @@ public class OceanizedBruteEntity extends SeaMonster {
                 }
             }
             if (!(sourceentity instanceof OceanizedPiglinEntity)) {
-                final Vec3 _center = new Vec3(x, y, z);
-                List<OceanizedPiglinEntity> _entfound = world.getEntitiesOfClass(OceanizedPiglinEntity.class, new AABB(_center, _center).inflate(32 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                for (OceanizedPiglinEntity entityiterator : _entfound) {
-                    if (sourceentity instanceof LivingEntity _ent) {
-                        entityiterator.setTarget(_ent);
+                final Vec3 center = new Vec3(x, y, z);
+                List<OceanizedPiglinEntity> entfound = world.getEntitiesOfClass(OceanizedPiglinEntity.class, new AABB(center, center).inflate(32 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                for (OceanizedPiglinEntity entityiterator : entfound) {
+                    if (sourceentity instanceof LivingEntity ent) {
+                        entityiterator.setTarget(ent);
                     }
                 }
             }
@@ -279,24 +279,24 @@ public class OceanizedBruteEntity extends SeaMonster {
             return;
         String str;
         String name;
-        if (sourceentity instanceof Player && !(sourceentity instanceof ServerPlayer _plr1 && _plr1.level() instanceof ServerLevel
-                && _plr1.getAdvancements().getOrStartProgress(_plr1.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "kill_brute"))).isDone())) {
+        if (sourceentity instanceof Player && !(sourceentity instanceof ServerPlayer plr1 && plr1.level() instanceof ServerLevel
+                && plr1.getAdvancements().getOrStartProgress(plr1.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "kill_brute"))).isDone())) {
             str = getPersistentData().getString("hurtPlayer");
             name = sourceentity.getDisplayName().getString();
             if (!str.contains(name)) {
-                if (sourceentity instanceof ServerPlayer _player) {
-                    Advancement _adv = _player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "kill_brute"));
-                    AdvancementProgress _ap = _player.getAdvancements().getOrStartProgress(_adv);
-                    if (!_ap.isDone()) {
-                        for (String criteria : _ap.getRemainingCriteria())
-                            _player.getAdvancements().award(_adv, criteria);
+                if (sourceentity instanceof ServerPlayer player) {
+                    Advancement adv = player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "kill_brute"));
+                    AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
+                    if (!ap.isDone()) {
+                        for (String criteria : ap.getRemainingCriteria())
+                            player.getAdvancements().award(adv, criteria);
                     }
                 }
-                if (world instanceof ServerLevel _level) {
-                    ItemEntity entityToSpawn = new ItemEntity(_level, this.getX(), (this.getY() + 0.5), this.getZ(), new ItemStack(CAItems.CRIMSON_TREATY.get()));
+                if (world instanceof ServerLevel level) {
+                    ItemEntity entityToSpawn = new ItemEntity(level, this.getX(), (this.getY() + 0.5), this.getZ(), new ItemStack(CAItems.CRIMSON_TREATY.get()));
                     entityToSpawn.setPickUpDelay(10);
                     entityToSpawn.setUnlimitedLifetime();
-                    _level.addFreshEntity(entityToSpawn);
+                    level.addFreshEntity(entityToSpawn);
                 }
             }
         }
@@ -328,21 +328,20 @@ public class OceanizedBruteEntity extends SeaMonster {
         double y = this.getY();
         double z = this.getZ();
         double ablty;
-        ablty = (Entity) this instanceof OceanizedBruteEntity _datEntI ? _datEntI.getEntityData().get(DATA_ABILITY) : 0;
+        ablty = (Entity) this instanceof OceanizedBruteEntity datEntI ? datEntI.getEntityData().get(DATA_ABILITY) : 0;
         if (ablty < 7) {
             if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
                 this.getAttribute(Attributes.ATTACK_DAMAGE)
                         .setBaseValue(((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) + 4));
-            if ((Entity) this instanceof OceanizedBruteEntity _datEntSetI)
-                _datEntSetI.getEntityData().set(DATA_ABILITY, (int) (ablty + 1));
-            if (world instanceof ServerLevel _level)
-                _level.sendParticles(ParticleTypes.LAVA, x, (y + 0.75), z, 32, 0.75, 0.75, 0.75, 0.1);
+            if ((Entity) this instanceof OceanizedBruteEntity datEntSetI)
+                datEntSetI.getEntityData().set(DATA_ABILITY, (int) (ablty + 1));
+            if (world instanceof ServerLevel level)
+                level.sendParticles(ParticleTypes.LAVA, x, (y + 0.75), z, 32, 0.75, 0.75, 0.75, 0.1);
         }
-        if (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1)) {
-            if ((Entity) this instanceof LivingEntity _entity)
-                _entity.setHealth((float) (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) + ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.1));
-            if (world instanceof ServerLevel _level)
-                _level.sendParticles(ParticleTypes.HAPPY_VILLAGER, x, (y + 0.75), z, 32, 0.75, 0.75, 0.75, 0.1);
+        if (((Entity) this instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) < ((Entity) this instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1)) {
+            this.setHealth((float) (this.getHealth() + this.getMaxHealth() * 0.1));
+            if (world instanceof ServerLevel level)
+                level.sendParticles(ParticleTypes.HAPPY_VILLAGER, x, (y + 0.75), z, 32, 0.75, 0.75, 0.75, 0.1);
         }
     }
 

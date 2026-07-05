@@ -9,7 +9,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -121,21 +120,16 @@ public class EmergencyAidBuildingBlock extends Block implements SimpleWaterlogge
 			double tz;
 			double dist;
 			Vec3 center = new Vec3(pos.getX(), pos.getY(), pos.getZ());
-			List<Entity> nearbyEntities = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(32 / 2d), entity -> true).stream()
+			List<LivingEntity> nearbyEntities = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(32 / 2d), entity -> true).stream()
 					.sorted(Comparator.comparingDouble(entity -> entity.distanceToSqr(center))).toList();
-			for (Entity entity : nearbyEntities) {
-				if (!(entity instanceof LivingEntity)) {
+			for (LivingEntity livingEntity : nearbyEntities) {
+				if (center.distanceTo(new Vec3(livingEntity.getX(), livingEntity.getY(), livingEntity.getZ())) > 16) {
 					continue;
 				}
-				if (center.distanceTo(new Vec3(entity.getX(), entity.getY(), entity.getZ())) > 16) {
-					continue;
-				}
-				if (entity instanceof LivingEntity livingEntity) {
-					if (entity instanceof Player) {
+				if (livingEntity instanceof Player) {
 						ModCapabilities.getSanityInjury(livingEntity).heal(20);
 					} else {
-						ModCapabilities.getSanityInjury(livingEntity).heal(10);
-					}
+					ModCapabilities.getSanityInjury(livingEntity).heal(10);
 				}
 			}
 			for (int index0 = 0; index0 < 120; index0++) {

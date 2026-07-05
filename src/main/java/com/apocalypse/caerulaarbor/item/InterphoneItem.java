@@ -57,7 +57,7 @@ public class InterphoneItem extends Item {
         double y = entity.getY();
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
-        if (!((Entity) entity instanceof Player _plrCldCheck1 && _plrCldCheck1.getCooldowns().isOnCooldown(itemstack.getItem()))) {
+        if (!((Entity) entity instanceof Player plrCldCheck1 && plrCldCheck1.getCooldowns().isOnCooldown(itemstack.getItem()))) {
             if (!entity.isShiftKeyDown()) {
                 dispatchInquisition(world, entity, itemstack, entity.getLookAngle().x * 2 + x, y, entity.getLookAngle().z * 2 + z);
             } else {
@@ -77,48 +77,48 @@ public class InterphoneItem extends Item {
 		double tY;
 		String log;
 		String name;
-		if (!(chief instanceof Player _plrCldCheck1 && _plrCldCheck1.getCooldowns().isOnCooldown(itemstack.getItem()))) {
+		if (!(chief instanceof Player plrCldCheck1 && plrCldCheck1.getCooldowns().isOnCooldown(itemstack.getItem()))) {
 			tX = tx;
 			tY = ty;
 			tZ = tz;
 			name = chief.getDisplayName().getString();
 			{
-				final Vec3 _center = new Vec3(tx, ty, tz);
-				List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(48 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-				for (Entity entityiterator : _entfound) {
+				final Vec3 center = new Vec3(tx, ty, tz);
+				List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(48 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+				for (Entity entityiterator : entfound) {
 					if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "inquisition")))) {
 						num = num + 1;
 						entityiterator.getPersistentData().putString("recentCommander", name);
 						EntityUtils.clearTarget(entityiterator);
-						if (entityiterator instanceof Mob _entity)
-							_entity.getNavigation().moveTo((tx + Mth.nextDouble(RandomSource.create(), -2, 2)), tY, (tz + Mth.nextDouble(RandomSource.create(), -2, 2)), 1);
+						if (entityiterator instanceof Mob mob)
+							mob.getNavigation().moveTo((tx + Mth.nextDouble(RandomSource.create(), -2, 2)), tY, (tz + Mth.nextDouble(RandomSource.create(), -2, 2)), 1);
 					}
 				}
 			}
 			if (num > 0) {
 				if (!(new Object() {
-					public boolean checkGamemode(Entity _ent) {
-						if (_ent instanceof ServerPlayer _serverPlayer) {
-							return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-						} else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-							return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-									&& Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+					public boolean checkGamemode(Entity ent) {
+						if (ent instanceof ServerPlayer serverPlayer) {
+							return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+						} else if (ent.level().isClientSide() && ent instanceof Player player) {
+							return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+									&& Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
 						}
 						return false;
 					}
 				}.checkGamemode(chief))) {
-					if (chief instanceof Player _player)
-						_player.getCooldowns().addCooldown(itemstack.getItem(), 40);
+					if (chief instanceof Player player)
+						player.getCooldowns().addCooldown(itemstack.getItem(), 40);
 				}
 				log = Component.translatable("interphone.dispatch.single").getString();
 				log = log.replace("{num}", "" + Math.round(num));
 				log = log.replace("{x}", "" + Math.round(Math.pow(10, 2) * tX) / Math.pow(10, 2));
 				log = log.replace("{z}", "" + Math.round(Math.pow(10, 2) * tZ) / Math.pow(10, 2));
 				log = log.replace("{y}", "" + Math.round(Math.pow(10, 2) * tY) / Math.pow(10, 2));
-				if (chief instanceof Player _player && !_player.level().isClientSide())
-					_player.displayClientMessage(Component.literal(log), true);
-				if (chief instanceof LivingEntity _entity)
-					_entity.swing(InteractionHand.MAIN_HAND, true);
+				if (chief instanceof Player player && !player.level().isClientSide())
+					player.displayClientMessage(Component.literal(log), true);
+				if (chief instanceof LivingEntity livingEntity)
+					livingEntity.swing(InteractionHand.MAIN_HAND, true);
 			}
 		}
 	}
@@ -134,7 +134,7 @@ public class InterphoneItem extends Item {
 		double dz;
 		String log;
 		String name;
-		if (!(chief instanceof Player _plrCldCheck1 && _plrCldCheck1.getCooldowns().isOnCooldown(itemstack.getItem()))) {
+		if (!(chief instanceof Player plrCldCheck1 && plrCldCheck1.getCooldowns().isOnCooldown(itemstack.getItem()))) {
 			tX = tx;
 			tY = ty;
 			tZ = tz;
@@ -171,28 +171,28 @@ public class InterphoneItem extends Item {
 			}
 			if (num > 0) {
 				if (!(new Object() {
-					public boolean checkGamemode(Entity _ent) {
-						if (_ent instanceof ServerPlayer _serverPlayer) {
-							return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-						} else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-							return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-									&& Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+					public boolean checkGamemode(Entity ent) {
+						if (ent instanceof ServerPlayer serverPlayer) {
+							return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+						} else if (ent.level().isClientSide() && ent instanceof Player player) {
+							return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+									&& Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
 						}
 						return false;
 					}
 				}.checkGamemode(chief))) {
-					if (chief instanceof Player _player)
-						_player.getCooldowns().addCooldown(itemstack.getItem(), 60);
+					if (chief instanceof Player player)
+						player.getCooldowns().addCooldown(itemstack.getItem(), 60);
 				}
 				log = Component.translatable("interphone.dispatch.teleport").getString();
 				log = log.replace("{num}", "" + Math.round(num));
 				log = log.replace("{x}", "" + Math.round(Math.pow(10, 2) * tX) / Math.pow(10, 2));
 				log = log.replace("{z}", "" + Math.round(Math.pow(10, 2) * tZ) / Math.pow(10, 2));
 				log = log.replace("{y}", "" + Math.round(Math.pow(10, 2) * tY) / Math.pow(10, 2));
-				if (chief instanceof Player _player && !_player.level().isClientSide())
-					_player.displayClientMessage(Component.literal(log), true);
-				if (chief instanceof LivingEntity _entity)
-					_entity.swing(InteractionHand.MAIN_HAND, true);
+				if (chief instanceof Player player && !player.level().isClientSide())
+					player.displayClientMessage(Component.literal(log), true);
+				if (chief instanceof LivingEntity livingEntity)
+					livingEntity.swing(InteractionHand.MAIN_HAND, true);
 			}
 		}
 	}
@@ -208,7 +208,7 @@ public class InterphoneItem extends Item {
         Entity entity = context.getPlayer();
         ItemStack itemstack = context.getItemInHand();
         if (entity != null) {
-            if (!(entity instanceof Player _plrCldCheck1 && _plrCldCheck1.getCooldowns().isOnCooldown(itemstack.getItem()))) {
+            if (!(entity instanceof Player plrCldCheck1 && plrCldCheck1.getCooldowns().isOnCooldown(itemstack.getItem()))) {
                 if (!entity.isShiftKeyDown()) {
                     dispatchInquisition(world, entity, itemstack, x + direction.getStepX() + 0.5, y + direction.getStepY(), z + direction.getStepZ() + 0.5);
                 } else {
@@ -226,20 +226,20 @@ public class InterphoneItem extends Item {
         String log;
         double num = 0;
         if (!entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "inquisition")))) {
-			final Vec3 _center = new Vec3(entity.getX(), entity.getY(), entity.getZ());
-			List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(32 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-			for (Entity entityiterator : _entfound) {
+			final Vec3 center = new Vec3(entity.getX(), entity.getY(), entity.getZ());
+			List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(32 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+			for (Entity entityiterator : entfound) {
 				if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "inquisition")))) {
-					if (entityiterator instanceof Mob _entity && (Entity) entity instanceof LivingEntity _ent)
-						_entity.setTarget(_ent);
+					if (entityiterator instanceof Mob mob && (Entity) entity instanceof LivingEntity ent)
+						mob.setTarget(ent);
 					num = num + 1;
 				}
 			}
             log = Component.translatable("interphone.dispatch.attack").getString();
             log = log.replace("{num}", "" + Math.round(num));
             log = log.replace("{enemy}", entity.getDisplayName().getString());
-            if ((Entity) sourceentity instanceof Player _player && !_player.level().isClientSide())
-                _player.displayClientMessage(Component.literal(log), true);
+            if ((Entity) sourceentity instanceof Player player && !player.level().isClientSide())
+                player.displayClientMessage(Component.literal(log), true);
         }
         return retval;
 	}

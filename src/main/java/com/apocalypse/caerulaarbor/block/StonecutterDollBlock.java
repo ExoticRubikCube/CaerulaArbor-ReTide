@@ -132,17 +132,17 @@ public class StonecutterDollBlock extends BaseEntityBlock implements SimpleWater
 		Direction direction = hit.getDirection();
         InteractionResult result = InteractionResult.PASS;
         if (entity != null) {
-            if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()
-                    && ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()) {
-                if ((LevelAccessor) world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TURTLE_DEATH, SoundSource.BLOCKS, 1, 1);
+            if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()
+                    && ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()) {
+                if ((LevelAccessor) world instanceof Level level) {
+                        level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TURTLE_DEATH, SoundSource.BLOCKS, 1, 1);
                 }
                 {
-                    int _value = 1;
-                    BlockPos _pos = BlockPos.containing(x, y, z);
-                    BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-                    if (_bs.getBlock().getStateDefinition().getProperty("animation") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))
-                        ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
+                    int value = 1;
+                    BlockPos blockPos = BlockPos.containing(x, y, z);
+                    BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                    if (bs.getBlock().getStateDefinition().getProperty("animation") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
+                        ((LevelAccessor) world).setBlock(pos, bs.setValue(integerProp, value), 3);
                 }
                 result = InteractionResult.SUCCESS;
             }

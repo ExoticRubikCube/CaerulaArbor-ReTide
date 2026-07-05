@@ -262,22 +262,22 @@ public class FeederProkaryoteEntity extends SeaMonster {
             double rand;
             rand = Math.random();
             if (rand < 0.2) {
-                if (world instanceof ServerLevel _level) {
-                    Entity entityToSpawn = CAEntities.DEPOSITER_PROKARYOTE.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+                if (world instanceof ServerLevel level) {
+                    Entity entityToSpawn = CAEntities.DEPOSITER_PROKARYOTE.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                     if (entityToSpawn != null) {
                         entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                     }
                 }
             } else if (rand < 0.7) {
-                if (world instanceof ServerLevel _level) {
-                    Entity entityToSpawn = CAEntities.ACCUMULATOR_PROKARYOTE.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+                if (world instanceof ServerLevel level) {
+                    Entity entityToSpawn = CAEntities.ACCUMULATOR_PROKARYOTE.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                     if (entityToSpawn != null) {
                         entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                     }
                 }
             } else {
-                if (world instanceof ServerLevel _level) {
-                    Entity entityToSpawn = CAEntities.COLLECTOR_PROKARYOTE.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+                if (world instanceof ServerLevel level) {
+                    Entity entityToSpawn = CAEntities.COLLECTOR_PROKARYOTE.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                     if (entityToSpawn != null) {
                         entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                     }
@@ -287,36 +287,36 @@ public class FeederProkaryoteEntity extends SeaMonster {
                 if (Math.random() <= 0.33) {
                     rand = Math.random();
                     if (rand < 0.35) {
-                        if (world instanceof ServerLevel _level) {
-                            Entity entityToSpawn = CAEntities.APOSTLE_PROKARYOTE.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+                        if (world instanceof ServerLevel level) {
+                            Entity entityToSpawn = CAEntities.APOSTLE_PROKARYOTE.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                             if (entityToSpawn != null) {
                                 entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                             }
                         }
                     } else if (rand < 0.65) {
-                        if (world instanceof ServerLevel _level) {
-                            Entity entityToSpawn = CAEntities.CREEPER_FISH.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+                        if (world instanceof ServerLevel level) {
+                            Entity entityToSpawn = CAEntities.CREEPER_FISH.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                             if (entityToSpawn != null) {
                                 entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                             }
                         }
                     } else if (rand < 0.85) {
-                        if (world instanceof ServerLevel _level) {
-                            Entity entityToSpawn = CAEntities.PUNCTURE_FISH.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+                        if (world instanceof ServerLevel level) {
+                            Entity entityToSpawn = CAEntities.PUNCTURE_FISH.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                             if (entityToSpawn != null) {
                                 entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                             }
                         }
                     } else if (rand < 0.95) {
-                        if (world instanceof ServerLevel _level) {
-                            Entity entityToSpawn = CAEntities.NUCLEIC_MALEFICENT.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+                        if (world instanceof ServerLevel level) {
+                            Entity entityToSpawn = CAEntities.NUCLEIC_MALEFICENT.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                             if (entityToSpawn != null) {
                                 entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                             }
                         }
                     } else {
-                        if (world instanceof ServerLevel _level) {
-                            Entity entityToSpawn = CAEntities.CRACKER_ABYSSAL.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+                        if (world instanceof ServerLevel level) {
+                            Entity entityToSpawn = CAEntities.CRACKER_ABYSSAL.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                             if (entityToSpawn != null) {
                                 entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                             }
@@ -328,36 +328,36 @@ public class FeederProkaryoteEntity extends SeaMonster {
                 if (Math.random() <= 0.001 && EntityUtils.getSeabornAround(world, x, y, z, this) >= 8) {
                     rand = Math.random();
                     if (rand < 0.45) {
-                        if (world instanceof ServerLevel _level) {
-                            Entity entityToSpawn = CAEntities.ROUTE_SHAPER.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+                        if (world instanceof ServerLevel level) {
+                            Entity entityToSpawn = CAEntities.ROUTE_SHAPER.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                             if (entityToSpawn != null) {
                                 entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                             }
                         }
                     } else if (rand < 0.9) {
-                        if (world instanceof ServerLevel _level) {
-                            Entity entityToSpawn = CAEntities.OCEANIZED_RAVAGER.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+                        if (world instanceof ServerLevel level) {
+                            Entity entityToSpawn = CAEntities.OCEANIZED_RAVAGER.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                             if (entityToSpawn != null) {
                                 entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                             }
                         }
                     } else if (rand < 0.97) {
-                        if (world instanceof ServerLevel _level) {
-                            Entity entityToSpawn = CAEntities.OCEANIZED_BRUTE.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+                        if (world instanceof ServerLevel level) {
+                            Entity entityToSpawn = CAEntities.OCEANIZED_BRUTE.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                             if (entityToSpawn != null) {
                                 entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                             }
                         }
                     } else if (rand < 0.99) {
-                        if (world instanceof ServerLevel _level) {
-                            Entity entityToSpawn = CAEntities.OCEANIZED_ENDERMAN.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+                        if (world instanceof ServerLevel level) {
+                            Entity entityToSpawn = CAEntities.OCEANIZED_ENDERMAN.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                             if (entityToSpawn != null) {
                                 entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                             }
                         }
                     } else {
-                        if (world instanceof ServerLevel _level) {
-                            Entity entityToSpawn = CAEntities.SUPER_BIG_CAT.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+                        if (world instanceof ServerLevel level) {
+                            Entity entityToSpawn = CAEntities.SUPER_BIG_CAT.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                             if (entityToSpawn != null) {
                                 entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                             }
@@ -365,8 +365,8 @@ public class FeederProkaryoteEntity extends SeaMonster {
                     }
                 }
             }
-            if (world instanceof ServerLevel _level)
-                _level.sendParticles(ParticleTypes.CLOUD, x, y, z, 32, 1, 1, 1, 0.1);
+            if (world instanceof ServerLevel level)
+                level.sendParticles(ParticleTypes.CLOUD, x, y, z, 32, 1, 1, 1, 0.1);
         }
 	}
 

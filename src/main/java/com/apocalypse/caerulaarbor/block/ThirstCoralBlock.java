@@ -109,21 +109,21 @@ public class ThirstCoralBlock extends Block implements SimpleWaterloggedBlock {
             result = InteractionResult.PASS;
         } else {
             double state = 0;
-            if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.WHIRL_EYE.get()) {
-                if ((LevelAccessor) world instanceof ServerLevel _level) {
-                    Entity entityToSpawn = CAEntities.THIRSTER.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+            if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.WHIRL_EYE.get()) {
+                if ((LevelAccessor) world instanceof ServerLevel level) {
+                    Entity entityToSpawn = CAEntities.THIRSTER.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                     if (entityToSpawn != null) {
                         entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
                     }
                 }
-                ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
-                if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
-                    _player.displayClientMessage(Component.literal((Component.translatable("spawn.thirster").getString())), false);
+                ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
+                if ((Entity) entity instanceof Player player && !player.level().isClientSide())
+                    player.displayClientMessage(Component.literal((Component.translatable("spawn.thirster").getString())), false);
                 world.destroyBlock(BlockPos.containing(x, y, z), false);
-            } else if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()
-                    && ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()) {
-                if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
-                    _player.displayClientMessage(Component.literal((Component.translatable("block.caerula_arbor.thirst_coral.note").getString())), true);
+            } else if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()
+                    && ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()) {
+                if ((Entity) entity instanceof Player player && !player.level().isClientSide())
+                    player.displayClientMessage(Component.literal((Component.translatable("block.caerula_arbor.thirst_coral.note").getString())), true);
             } else {
                 result = InteractionResult.PASS;
             }

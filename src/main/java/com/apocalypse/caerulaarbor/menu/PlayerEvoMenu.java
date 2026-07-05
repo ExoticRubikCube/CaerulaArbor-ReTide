@@ -51,8 +51,6 @@ public class PlayerEvoMenu extends AbstractContainerMenu implements Supplier<Map
 			this.z = pos.getZ();
 			access = ContainerLevelAccess.create(world, pos);
 		}
-        if (entity == null)
-            return;
         entity.getPersistentData().putString("showcasingEvoNode", "");
     }
 
@@ -79,17 +77,14 @@ public class PlayerEvoMenu extends AbstractContainerMenu implements Supplier<Map
 		super.removed(playerIn);
         if (entity == null)
             return;
-        boolean result = false;
-        if (entity != null) {
-            result = NodeUtils.isNodeSet1Terminate(entity) && NodeUtils.isNodeSet2Terminate(entity) && NodeUtils.isNodeSet3Terminate(entity) && NodeUtils.isNodeEunectesAtLeast(entity, 4) && NodeUtils.isNodeLessArmorAtLeast(entity, 4);
-        }
+        boolean result = NodeUtils.isNodeSet1Terminate(entity) && NodeUtils.isNodeSet2Terminate(entity) && NodeUtils.isNodeSet3Terminate(entity) && NodeUtils.isNodeEunectesAtLeast(entity, 4) && NodeUtils.isNodeLessArmorAtLeast(entity, 4);
         if (result) {
-			if ((Entity) entity instanceof ServerPlayer _player) {
-				Advancement _adv = _player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "end_player_evo"));
-				AdvancementProgress _ap = _player.getAdvancements().getOrStartProgress(_adv);
-				if (!_ap.isDone()) {
-					for (String criteria : _ap.getRemainingCriteria())
-						_player.getAdvancements().award(_adv, criteria);
+			if ((Entity) entity instanceof ServerPlayer player) {
+				Advancement adv = player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "end_player_evo"));
+				AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
+				if (!ap.isDone()) {
+					for (String criteria : ap.getRemainingCriteria())
+						player.getAdvancements().award(adv, criteria);
 				}
 			}
 		}

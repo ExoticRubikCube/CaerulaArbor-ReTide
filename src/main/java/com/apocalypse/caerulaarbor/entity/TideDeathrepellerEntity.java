@@ -58,7 +58,6 @@ import java.util.List;
 public class TideDeathrepellerEntity extends SeaMonster {
     public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(TideDeathrepellerEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(TideDeathrepellerEntity.class, EntityDataSerializers.STRING);
-   //TODO NBT的书写风格需要对齐原版
     public static final EntityDataAccessor<Integer> DATA_SKILLP = SynchedEntityData.defineId(TideDeathrepellerEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_DURATION = SynchedEntityData.defineId(TideDeathrepellerEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
@@ -168,19 +167,19 @@ public class TideDeathrepellerEntity extends SeaMonster {
         Entity sourceentity = source.getEntity();
         if (sourceentity != null) {
             double num;
-            if (this.isAlive() && !this.hasEffect(CAMobEffects.COOLDOWN_SINAL.get()) && !((Entity) this instanceof LivingEntity _livEnt2 && _livEnt2.hasEffect(CAMobEffects.FAKE_DEATH.get()))) {
+            if (this.isAlive() && !this.hasEffect(CAMobEffects.COOLDOWN_SINAL.get()) && !((Entity) this instanceof LivingEntity livEnt2 && livEnt2.hasEffect(CAMobEffects.FAKE_DEATH.get()))) {
                     if (distanceTo(sourceentity) <= 6) {
                         num = 0;
                         {
-                            final Vec3 _center = new Vec3(x, y, z);
-                            List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(8 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                            for (Entity entityiterator : _entfound) {
-                                if (!(entityiterator == this) && (entityiterator instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) >= 10) {
+                            final Vec3 center = new Vec3(x, y, z);
+                            List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(8 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                            for (Entity entityiterator : entfound) {
+                                if (!(entityiterator == this) && (entityiterator instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) >= 10) {
                                     num = num + 1;
                                 }
                             }
                         }
-                        if (num >= 2 || ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5) {
+                        if (num >= 2 || ((Entity) this instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) < ((Entity) this instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.5) {
                             if (this instanceof TideDeathrepellerEntity) {
                                 this.setAnimation("animation.deathrepeller.enchantattack");
                             }
@@ -188,14 +187,14 @@ public class TideDeathrepellerEntity extends SeaMonster {
                                 this.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL.get(), 60, 0, false, false));
                             ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((sourceentity.getX()), (sourceentity.getY()), (sourceentity.getZ())));
                             CaerulaArborMod.queueServerWork(12, () -> {
-                                if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.HOSTILE, 2, 1);
+                                if (world instanceof Level level) {
+                                    level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.HOSTILE, 2, 1);
                                 }
                                 {
-                                    final Vec3 _center = new Vec3((x + 1.8 * getLookAngle().x), (y + 1.5), (z + 1.8 * getLookAngle().z));
-                                    List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(5 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                                    for (Entity entityiterator : _entfound) {
-                                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring"))) && ((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == entityiterator
+                                    final Vec3 center = new Vec3((x + 1.8 * getLookAngle().x), (y + 1.5), (z + 1.8 * getLookAngle().z));
+                                    List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(5 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                                    for (Entity entityiterator : entfound) {
+                                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring"))) && ((Entity) this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == entityiterator
                                                 || !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring"))) && (entityiterator instanceof Mob || entityiterator instanceof Player)) {
                                             entityiterator.hurt(
                                                     new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "repeller_attack"))), this),

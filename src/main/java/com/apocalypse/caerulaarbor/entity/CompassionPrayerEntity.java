@@ -92,7 +92,7 @@ public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMo
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this) {
             @Override
             public boolean canUse() {
-                //TODO 需要清理mcr残留
+                //TODO 需要清理mcr残留 :一个更改为 return super.canUse() && hasEffect(CAMobEffects.FAKE_DEATH.get());
                 if (!super.canUse()) return false;
                 return hasEffect(CAMobEffects.FAKE_DEATH.get());
             }
@@ -316,25 +316,25 @@ public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMo
         double perc;
         double d;
         if (this.isAlive()) {
-            dura = (Entity) this instanceof CompassionPrayerEntity _datEntI ? _datEntI.getEntityData().get(DATA_REVIVE_TICK) : 0;
+            dura = (Entity) this instanceof CompassionPrayerEntity datEntI ? datEntI.getEntityData().get(DATA_REVIVE_TICK) : 0;
             if (dura > 0) {
                 if (dura <= 100) {
-                    if ((Entity) this instanceof CompassionPrayerEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_PHASE, 1);
+                    if ((Entity) this instanceof CompassionPrayerEntity datEntSetI)
+                        datEntSetI.getEntityData().set(DATA_PHASE, 1);
                 }
-                if ((Entity) this instanceof CompassionPrayerEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_REVIVE_TICK, (int) (dura - 1));
+                if ((Entity) this instanceof CompassionPrayerEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_REVIVE_TICK, (int) (dura - 1));
                 setShiftKeyDown(true);
             } else {
                 setShiftKeyDown(false);
             }
-            P = (Entity) this instanceof CompassionPrayerEntity _datEntI ? _datEntI.getEntityData().get(DATA_PHASE) : 0;
+            P = (Entity) this instanceof CompassionPrayerEntity datEntI ? datEntI.getEntityData().get(DATA_PHASE) : 0;
             if (P == 0) {
                 if (tickCount % 10 == 0) {
                     {
-                        final Vec3 _center = new Vec3(x, y, z);
-                        List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(32 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                        for (Entity entityiterator : _entfound) {
+                        final Vec3 center = new Vec3(x, y, z);
+                        List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(32 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                        for (Entity entityiterator : entfound) {
                             if (!entityiterator.isAlive()) {
                                 continue;
                             }
@@ -342,27 +342,27 @@ public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMo
                                 continue;
                             }
                             if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
-                                if (!(entityiterator instanceof LivingEntity _livEnt12 && _livEnt12.hasEffect(CAMobEffects.ADD_HEALTH_PERCLY.get()))) {
+                                if (!(entityiterator instanceof LivingEntity livEnt12 && livEnt12.hasEffect(CAMobEffects.ADD_HEALTH_PERCLY.get()))) {
                                     perc = EntityUtils.getHealthPerc(entityiterator);
-                                    if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                                        _entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_HEALTH_PERCLY.get(), 32768, 1, false, false));
-                                    if (entityiterator instanceof LivingEntity _entity)
-                                        _entity.setHealth((float) ((entityiterator instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * perc));
+                                    if (entityiterator instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
+                                        livingEntity.addEffect(new MobEffectInstance(CAMobEffects.ADD_HEALTH_PERCLY.get(), 32768, 1, false, false));
+                                    if (entityiterator instanceof LivingEntity livingEntity)
+                                        livingEntity.setHealth((float) (livingEntity.getMaxHealth() * perc));
                                 }
                             }
                         }
                     }
                 }
             } else {
-                Mob _mobEnt = this;
-                enemy = _mobEnt.getTarget();
-                LivingEntity _livingEntity19 = this;
-                d = _livingEntity19.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity19.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
+                Mob mobEnt = this;
+                enemy = mobEnt.getTarget();
+                LivingEntity livingEntity19 = this;
+                d = livingEntity19.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity19.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
                 if (tickCount % 20 == 0) {
                     {
-                        final Vec3 _center = new Vec3(x, y, z);
-                        List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(10 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                        for (Entity entityiterator : _entfound) {
+                        final Vec3 center = new Vec3(x, y, z);
+                        List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(10 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                        for (Entity entityiterator : entfound) {
                             if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
                                 if (!(entityiterator == enemy)) {
                                     continue;
@@ -386,8 +386,8 @@ public class CompassionPrayerEntity extends SeaMonster implements RangedAttackMo
                 d1 = 5;
                 for (int index0 = 0; index0 < 6; index0++) {
                     angle = Mth.nextDouble(RandomSource.create(), 0, 6.283);
-                    if (world instanceof ServerLevel _level)
-                        _level.sendParticles(ParticleTypes.ELECTRIC_SPARK, (x + d1 * Math.sin(angle)), (y + 0.4), (z + d1 * Math.cos(angle)), 2, 0.1, 0.1, 0.1, 0.1);
+                    if (world instanceof ServerLevel level)
+                        level.sendParticles(ParticleTypes.ELECTRIC_SPARK, (x + d1 * Math.sin(angle)), (y + 0.4), (z + d1 * Math.cos(angle)), 2, 0.1, 0.1, 0.1, 0.1);
                 }
             }
         }

@@ -40,8 +40,8 @@ public class CABlockEntities {
 	public static final RegistryObject<BlockEntityType<TrailriteArmorstandTileEntity>> TRAILRITE_ARMORSTAND = REGISTRY.register("trailrite_armorstand",
 			() -> BlockEntityType.Builder.of(TrailriteArmorstandTileEntity::new, CABlocks.TRAILRITE_ARMORSTAND.get()).build(null));
 
-	// Start of user code block custom block entities
-	// End of user code block custom block entities
+	// 自定义方块实体用户代码块开始
+	// 自定义方块实体用户代码块结束
 	private static RegistryObject<BlockEntityType<?>> register(String registryname, RegistryObject<Block> block, BlockEntityType.BlockEntitySupplier<?> supplier) {
 		return REGISTRY.register(registryname, () -> BlockEntityType.Builder.of(supplier, block.get()).build(null));
 	}

@@ -51,23 +51,21 @@ public class TrailedWoodenSwordItem extends SwordItem {
 	public boolean hurtEnemy(ItemStack itemstack, LivingEntity entity, LivingEntity sourceentity) {
 		boolean retval = super.hurtEnemy(itemstack, entity, sourceentity);
         LevelAccessor world = entity.level();
-        if (entity != null) {
-            double dam;
-            dam = 40 + 8 * itemstack.getEnchantmentLevel(Enchantments.SHARPNESS);
-            SIHelper.causeSanityInjury(entity, sourceentity, dam, SanityEvent.Hurt.Type.ENTITY);
-            new Object() {
-                void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
-                    if (world instanceof ServerLevel _level)
-                        _level.sendParticles(ParticleTypes.ELECTRIC_SPARK, entity.getX(), (entity.getY() + entity.getBbHeight() * 0.5), entity.getZ(), 8, 1.2, 1.5, 1.2, 0.1);
-                    final int tick2 = ticks;
-                    CaerulaArborMod.queueServerWork(tick2, () -> {
-                        if (timedlooptotal > timedloopiterator + 1) {
-                            timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
-                        }
-                    });
-                }
-            }.timedLoop(0, 5, 1);
-        }
+        double dam;
+        dam = 40 + 8 * itemstack.getEnchantmentLevel(Enchantments.SHARPNESS);
+        SIHelper.causeSanityInjury(entity, sourceentity, dam, SanityEvent.Hurt.Type.ENTITY);
+        new Object() {
+            void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
+                if (world instanceof ServerLevel level)
+                    level.sendParticles(ParticleTypes.ELECTRIC_SPARK, entity.getX(), (entity.getY() + entity.getBbHeight() * 0.5), entity.getZ(), 8, 1.2, 1.5, 1.2, 0.1);
+                final int tick2 = ticks;
+                CaerulaArborMod.queueServerWork(tick2, () -> {
+                    if (timedlooptotal > timedloopiterator + 1) {
+                        timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
+                    }
+                });
+            }
+        }.timedLoop(0, 5, 1);
         return retval;
 	}
 

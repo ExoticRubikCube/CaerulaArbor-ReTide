@@ -42,9 +42,9 @@ public class EchoJellyItem extends Item {
 			entity.addEffect(new MobEffectInstance(CAMobEffects.ESSENCE_RESISTANCE.get(), 3600, 1));
 			entity.addEffect(new MobEffectInstance(CAMobEffects.SANITY_HEAL.get(), 1, 2, false, false));
 		}
-		double _setval = Math.min((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_light + 19, 100);
+		double setval = Math.min((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_light + 19, 100);
 		entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-			capability.player_light = _setval;
+			capability.player_light = setval;
 			capability.syncPlayerVariables(entity);
 		});
 		return super.finishUsingItem(itemstack, world, entity);

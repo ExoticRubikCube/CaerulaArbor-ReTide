@@ -41,9 +41,10 @@ public class ApocalypseItem extends Item {
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
 		ItemStack retval = new ItemStack(CAItems.GUNMU_SPAWN_EGG.get());
 		super.finishUsingItem(itemstack, world, entity);
+		//TODO 使用注册而不是forge接口
         ((Entity) entity).hurt(new DamageSource(((LevelAccessor) world).registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "inv_killer")))), 32);
-        if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
-            _player.displayClientMessage(Component.literal("NOOOOOO"), false);
+        if ((Entity) entity instanceof Player player && !player.level().isClientSide())
+            player.displayClientMessage(Component.literal("NOOOOOO"), false);
         if (itemstack.isEmpty()) {
 			return retval;
 		} else {

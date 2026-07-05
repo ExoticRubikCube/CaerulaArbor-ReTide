@@ -2,11 +2,13 @@ package com.apocalypse.caerulaarbor.block;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CASounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionHand;
@@ -35,8 +37,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraft.sounds.SoundEvents;
-import com.apocalypse.caerulaarbor.init.CASounds;
 
 public class InjectorBlock extends Block implements SimpleWaterloggedBlock {
 	public static final IntegerProperty BLOCKSTATE = IntegerProperty.create("blockstate", 0, 1);
@@ -135,25 +135,25 @@ public class InjectorBlock extends Block implements SimpleWaterloggedBlock {
             ItemStack res = ItemStack.EMPTY;
             ItemStack input;
             double stats;
-            input = ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).copy();
-            stats = blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _getip2 ? blockstate.getValue(_getip2) : -1;
+            input = ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).copy();
+            stats = blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip2 ? blockstate.getValue(getip2) : -1;
             if (stats == 0) {
                 if (input.getItem() == CAItems.TARGETED_BASE.get()) {
-                    ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
-                    if ((LevelAccessor) world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.GLOW_ITEM_FRAME_ADD_ITEM, SoundSource.BLOCKS, 1, 1);
+                    ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
+                    if ((LevelAccessor) world instanceof Level level) {
+                            level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.GLOW_ITEM_FRAME_ADD_ITEM, SoundSource.BLOCKS, 1, 1);
                     }
                     {
-                        int _value = 1;
-                        BlockPos _pos = BlockPos.containing(x, y, z);
-                        BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-                        if (_bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))
-                            ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
+                        int value = 1;
+                        BlockPos blockPos = BlockPos.containing(x, y, z);
+                        BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                        if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
+                            ((LevelAccessor) world).setBlock(pos, bs.setValue(integerProp, value), 3);
                     }
                     result = InteractionResult.SUCCESS;
                 } else if (input.is(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "gene")))) {
-                    if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
-                        _player.displayClientMessage(Component.literal((Component.translatable("block.caerula_arbor.injector.note").getString())), true);
+                    if ((Entity) entity instanceof Player player && !player.level().isClientSide())
+                        player.displayClientMessage(Component.literal((Component.translatable("block.caerula_arbor.injector.note").getString())), true);
                 }
             } else if (stats == 1) {
                 if (input.getItem() == CAItems.HUNTER_GENE_SKADI.get()) {
@@ -163,28 +163,28 @@ public class InjectorBlock extends Block implements SimpleWaterloggedBlock {
                 } else if (input.getItem() == CAItems.HUNTER_GENE_GLADIIA.get()) {
                     res = new ItemStack(CAItems.TARGETED_TRANSMITTER_GLADIIA.get()).copy();
                 } else if (input.getItem() == CAItems.TARGETED_BASE.get()) {
-                    if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
-                        _player.displayClientMessage(Component.literal((Component.translatable("block.caerula_arbor.injector.have").getString())), true);
+                    if ((Entity) entity instanceof Player player && !player.level().isClientSide())
+                        player.displayClientMessage(Component.literal((Component.translatable("block.caerula_arbor.injector.have").getString())), true);
                 } else if (input.getItem() == CAItems.HUNTER_GENE_SPECTER.get()) {
                     res = new ItemStack(CAItems.TARGETED_TRANSMITTER_SPECTER.get()).copy();
                 }
                 if (!(res.getItem() == ItemStack.EMPTY.getItem())) {
-                    ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
+                    ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                     {
-                        int _value = 0;
-                        BlockPos _pos = BlockPos.containing(x, y, z);
-                        BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-                        if (_bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))
-                            ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
+                        int value = 0;
+                        BlockPos blockPos = BlockPos.containing(x, y, z);
+                        BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                        if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
+                            ((LevelAccessor) world).setBlock(pos, bs.setValue(integerProp, value), 3);
                     }
-                    if ((LevelAccessor) world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), CASounds.NOTICE.get(), SoundSource.BLOCKS, 2, 1);
+                    if ((LevelAccessor) world instanceof Level level) {
+                            level.playSound(null, BlockPos.containing(x, y, z), CASounds.NOTICE.get(), SoundSource.BLOCKS, 2, 1);
                     }
-                    if ((LevelAccessor) world instanceof ServerLevel _level) {
-                        ItemEntity entityToSpawn = new ItemEntity(_level, ((double) x + 0.5), ((double) y + 1), ((double) z + 0.5), res);
+                    if ((LevelAccessor) world instanceof ServerLevel level) {
+                        ItemEntity entityToSpawn = new ItemEntity(level, ((double) x + 0.5), ((double) y + 1), ((double) z + 0.5), res);
                         entityToSpawn.setPickUpDelay(10);
                         entityToSpawn.setUnlimitedLifetime();
-                        _level.addFreshEntity(entityToSpawn);
+                        level.addFreshEntity(entityToSpawn);
                     }
                     result = InteractionResult.SUCCESS;
                 }

@@ -323,21 +323,21 @@ public class OceanizedSpiderEntity extends SeaMonster {
             double z = this.getZ();
             if (WorldUtils.canGrief(world)) {
                 if ((world.getBlockState(BlockPos.containing(x, y, z))).canBeReplaced()) {
-                    if (((Entity) this instanceof OceanizedSpiderEntity _datEntI ? _datEntI.getEntityData().get(DATA_MUTE_TIME) : 0) <= 0) {
+                    if (((Entity) this instanceof OceanizedSpiderEntity datEntI ? datEntI.getEntityData().get(DATA_MUTE_TIME) : 0) <= 0) {
                         if (Math.random() < 0.25) {
                             world.levelEvent(2001, BlockPos.containing(x, y, z), Block.getId(CABlocks.RED_OVARY.get().defaultBlockState()));
-                            if (world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SCULK_VEIN_PLACE, SoundSource.HOSTILE, 1, (float) 0.8);
+                            if (world instanceof Level level) {
+                                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SCULK_VEIN_PLACE, SoundSource.HOSTILE, 1, (float) 0.8);
                             }
-                            if (world instanceof ServerLevel _level)
-                                FallingBlockEntity.fall(_level, BlockPos.containing(x, y, z), CABlocks.RED_OVARY.get().defaultBlockState());
+                            if (world instanceof ServerLevel level)
+                                FallingBlockEntity.fall(level, BlockPos.containing(x, y, z), CABlocks.RED_OVARY.get().defaultBlockState());
                         } else {
                             world.levelEvent(2001, BlockPos.containing(x, y, z), Block.getId(CABlocks.OCEAN_OVARY.get().defaultBlockState()));
-                            if (world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SCULK_VEIN_PLACE, SoundSource.HOSTILE, 1, 1);
+                            if (world instanceof Level level) {
+                                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SCULK_VEIN_PLACE, SoundSource.HOSTILE, 1, 1);
                             }
-                            if (world instanceof ServerLevel _level)
-                                FallingBlockEntity.fall(_level, BlockPos.containing(x, y, z), CABlocks.OCEAN_OVARY.get().defaultBlockState());
+                            if (world instanceof ServerLevel level)
+                                FallingBlockEntity.fall(level, BlockPos.containing(x, y, z), CABlocks.OCEAN_OVARY.get().defaultBlockState());
                         }
                     }
                 }

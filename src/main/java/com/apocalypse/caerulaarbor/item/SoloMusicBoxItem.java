@@ -48,20 +48,20 @@ public class SoloMusicBoxItem extends Item {
         ItemStack itemstack = ar.getObject();
         if (!itemstack.getOrCreateTag().getBoolean("used")) {
             for (int index0 = 0; index0 < 8; index0++) {
-                if ((LevelAccessor) world instanceof ServerLevel _level)
-                    _level.addFreshEntity(new ExperienceOrb(_level, (x + Mth.nextDouble(RandomSource.create(), -1, 1)), (y + Mth.nextDouble(RandomSource.create(), 0.6, 0.75)), (z + Mth.nextDouble(RandomSource.create(), -1, 1)), 4));
+                if ((LevelAccessor) world instanceof ServerLevel level)
+                    level.addFreshEntity(new ExperienceOrb(level, (x + Mth.nextDouble(RandomSource.create(), -1, 1)), (y + Mth.nextDouble(RandomSource.create(), 0.6, 0.75)), (z + Mth.nextDouble(RandomSource.create(), -1, 1)), 4));
             }
-            boolean _setval = true;
+            boolean setval = true;
             ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                capability.relic_util_MUSICBOX = _setval;
+                capability.relic_util_MUSICBOX = setval;
                 capability.syncPlayerVariables(entity);
             });
             itemstack.getOrCreateTag().putBoolean("used", true);
-            if ((LevelAccessor) world instanceof Level _level) {
-                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 2, 1);
+            if ((LevelAccessor) world instanceof Level level) {
+                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 2, 1);
             }
-            if ((LevelAccessor) world instanceof ServerLevel _level)
-                _level.sendParticles(ParticleTypes.HAPPY_VILLAGER, x, y, z, 72, 1, 1, 1, 1);
+            if ((LevelAccessor) world instanceof ServerLevel level)
+                level.sendParticles(ParticleTypes.HAPPY_VILLAGER, x, y, z, 72, 1, 1, 1, 1);
         }
         return ar;
 	}

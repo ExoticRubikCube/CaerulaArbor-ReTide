@@ -35,24 +35,24 @@ public class EmptyCanItem extends Item {
         ItemStack itemstack = ar.getObject();
         BlockState target = (((LevelAccessor) world).getFluidState(BlockPos.containing(x + entity.getLookAngle().x, y + entity.getLookAngle().y + 1.6, z + entity.getLookAngle().z)).createLegacyBlock());
         if (Blocks.WATER == target.getBlock()) {
-            if ((Entity) entity instanceof Player _player) {
-                ItemStack _setstack = new ItemStack(CAItems.CANNED_WATER.get()).copy();
-                _setstack.setCount(1);
-                ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
+            if ((Entity) entity instanceof Player player) {
+                ItemStack setstack = new ItemStack(CAItems.CANNED_WATER.get()).copy();
+                setstack.setCount(1);
+                ItemHandlerHelper.giveItemToPlayer(player, setstack);
             }
             itemstack.shrink(1);
-            if ((LevelAccessor) world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1, 1);
+            if ((LevelAccessor) world instanceof Level level) {
+                    level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1, 1);
             }
         } else if (Blocks.LAVA == target.getBlock()) {
-            if ((Entity) entity instanceof Player _player) {
-                ItemStack _setstack = new ItemStack(CAItems.CANNED_LAVA.get()).copy();
-                _setstack.setCount(1);
-                ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
+            if ((Entity) entity instanceof Player player) {
+                ItemStack setstack = new ItemStack(CAItems.CANNED_LAVA.get()).copy();
+                setstack.setCount(1);
+                ItemHandlerHelper.giveItemToPlayer(player, setstack);
             }
             itemstack.shrink(1);
-            if ((LevelAccessor) world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1, 1);
+            if ((LevelAccessor) world instanceof Level level) {
+                    level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1, 1);
             }
         }
         return ar;
@@ -74,24 +74,24 @@ public class EmptyCanItem extends Item {
         target = (world.getFluidState(BlockPos.containing(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ())).createLegacyBlock());
         if (Blocks.WATER == target.getBlock()) {
             itemstack.shrink(1);
-            if (entity instanceof Player _player) {
-                ItemStack _setstack = new ItemStack(CAItems.CANNED_WATER.get()).copy();
-                _setstack.setCount(1);
-                ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
+            if (entity instanceof Player player) {
+                ItemStack setstack = new ItemStack(CAItems.CANNED_WATER.get()).copy();
+                setstack.setCount(1);
+                ItemHandlerHelper.giveItemToPlayer(player, setstack);
             }
-            if (world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1, 1);
+            if (world instanceof Level level) {
+                    level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1, 1);
             }
             return InteractionResult.SUCCESS;
         } else if (Blocks.LAVA == target.getBlock()) {
             itemstack.shrink(1);
-            if (entity instanceof Player _player) {
-                ItemStack _setstack = new ItemStack(CAItems.CANNED_LAVA.get()).copy();
-                _setstack.setCount(1);
-                ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
+            if (entity instanceof Player player) {
+                ItemStack setstack = new ItemStack(CAItems.CANNED_LAVA.get()).copy();
+                setstack.setCount(1);
+                ItemHandlerHelper.giveItemToPlayer(player, setstack);
             }
-            if (world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1, 1);
+            if (world instanceof Level level) {
+                    level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1, 1);
             }
             return InteractionResult.SUCCESS;
         }

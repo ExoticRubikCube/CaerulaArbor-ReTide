@@ -195,18 +195,18 @@ public class FlamarineGolemEntity extends SeaMonster {
         if (sourceentity != null) {
             double sklp;
             if (this.isAlive()) {
-                sklp = (Entity) this instanceof FlamarineGolemEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILL_P1) : 0;
+                sklp = (Entity) this instanceof FlamarineGolemEntity datEntI ? datEntI.getEntityData().get(DATA_SKILL_P1) : 0;
                 if (sklp > 0) {
-                    if ((Entity) this instanceof FlamarineGolemEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_SKILL_P1, (int) (sklp - 1));
+                    if ((Entity) this instanceof FlamarineGolemEntity datEntSetI)
+                        datEntSetI.getEntityData().set(DATA_SKILL_P1, (int) (sklp - 1));
                 }
             }
             if (!(sourceentity instanceof FlamarineGolemEntity || sourceentity instanceof FlamarineStatueEntity)) {
-                final Vec3 _center = new Vec3(this.getX(), this.getY(), this.getZ());
-                List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(32 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                for (Entity entityiterator : _entfound) {
-                    if (entityiterator instanceof FlamarineStatueEntity entity && sourceentity instanceof LivingEntity _ent && _ent.canBeSeenAsEnemy())
-                        entity.setTarget(_ent);
+                final Vec3 center = new Vec3(this.getX(), this.getY(), this.getZ());
+                List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(32 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                for (Entity entityiterator : entfound) {
+                    if (entityiterator instanceof FlamarineStatueEntity entity && sourceentity instanceof LivingEntity ent && ent.canBeSeenAsEnemy())
+                        entity.setTarget(ent);
                 }
             }
         }
@@ -241,8 +241,8 @@ public class FlamarineGolemEntity extends SeaMonster {
         if (this instanceof FlamarineGolemEntity) {
             this.setAnimation("animation.flamarine_golem.start");
         }
-        if ((Entity) this instanceof FlamarineGolemEntity _datEntSetI)
-            _datEntSetI.getEntityData().set(DATA_DURATION, 60);
+        if ((Entity) this instanceof FlamarineGolemEntity datEntSetI)
+            datEntSetI.getEntityData().set(DATA_DURATION, 60);
         return retval;
     }
 
@@ -285,19 +285,19 @@ public class FlamarineGolemEntity extends SeaMonster {
         double dura;
         if (this.deathTime == 46) {
             if (!world.isClientSide()) {
-                if (world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TRIDENT_HIT_GROUND, SoundSource.HOSTILE, 2, 1);
+                if (world instanceof Level level) {
+                    level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TRIDENT_HIT_GROUND, SoundSource.HOSTILE, 2, 1);
                 }
             }
         }
         if (this.isAlive()) {
-            sklp1 = (Entity) this instanceof FlamarineGolemEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILL_P1) : 0;
-            sklp2 = (Entity) this instanceof FlamarineGolemEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILL_P2) : 0;
-            dura = (Entity) this instanceof FlamarineGolemEntity _datEntI ? _datEntI.getEntityData().get(DATA_DURATION) : 0;
+            sklp1 = (Entity) this instanceof FlamarineGolemEntity datEntI ? datEntI.getEntityData().get(DATA_SKILL_P1) : 0;
+            sklp2 = (Entity) this instanceof FlamarineGolemEntity datEntI ? datEntI.getEntityData().get(DATA_SKILL_P2) : 0;
+            dura = (Entity) this instanceof FlamarineGolemEntity datEntI ? datEntI.getEntityData().get(DATA_DURATION) : 0;
             enemy = this.getTarget();
             if (dura > 0) {
-                if ((Entity) this instanceof FlamarineGolemEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura - 1));
+                if ((Entity) this instanceof FlamarineGolemEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura - 1));
             }
             if (sklp1 <= 0 && dura <= 0) {
                 if (!(enemy == null) && enemy.isAlive()) {
@@ -305,10 +305,10 @@ public class FlamarineGolemEntity extends SeaMonster {
                         if (this instanceof FlamarineGolemEntity) {
                             this.setAnimation("animation.flamarine_golem.heavy");
                         }
-                        if ((Entity) this instanceof FlamarineGolemEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_SKILL_P1, 11);
-                        if ((Entity) this instanceof FlamarineGolemEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_DURATION, 40);
+                        if ((Entity) this instanceof FlamarineGolemEntity datEntSetI)
+                            datEntSetI.getEntityData().set(DATA_SKILL_P1, 11);
+                        if ((Entity) this instanceof FlamarineGolemEntity datEntSetI)
+                            datEntSetI.getEntityData().set(DATA_DURATION, 40);
                         dura = 40;
                         CaerulaArborMod.queueServerWork(20, () -> {
                             if (this.isAlive()) {
@@ -320,23 +320,23 @@ public class FlamarineGolemEntity extends SeaMonster {
                                 enemy1 = this.getTarget();
                                 r = 6;
                                 damage = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
-                                if (world instanceof Level _level) {
-                                    if (!_level.isClientSide()) {
-                                        _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ANVIL_LAND, SoundSource.HOSTILE, 1, 1);
+                                if (world instanceof Level level) {
+                                    if (!level.isClientSide()) {
+                                        level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ANVIL_LAND, SoundSource.HOSTILE, 1, 1);
                                     } else {
-                                        _level.playLocalSound(x, y, z, SoundEvents.ANVIL_LAND, SoundSource.HOSTILE, 1, 1, false);
+                                        level.playLocalSound(x, y, z, SoundEvents.ANVIL_LAND, SoundSource.HOSTILE, 1, 1, false);
                                     }
                                 }
-                                final Vec3 _center = new Vec3(x, y, z);
-                                List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(12 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                                for (Entity entityiterator : _entfound) {
+                                final Vec3 center = new Vec3(x, y, z);
+                                List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(12 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                                for (Entity entityiterator : entfound) {
                                     if (!(entityiterator instanceof LivingEntity)) {
                                         continue;
                                     }
                                     if (!entityiterator.isAlive()) {
                                         continue;
                                     }
-                                    if (entityiterator instanceof Player || (entityiterator instanceof TamableAnimal _tamEnt && _tamEnt.isTame())) {
+                                    if (entityiterator instanceof Player || (entityiterator instanceof TamableAnimal tamEnt && tamEnt.isTame())) {
                                         if (!(entityiterator == enemy1)) {
                                             continue;
                                         }
@@ -350,7 +350,7 @@ public class FlamarineGolemEntity extends SeaMonster {
                                         continue;
                                     }
                                     if (distanceTo(entityiterator) <= r) {
-                                        h = entityiterator instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1;
+                                        h = entityiterator instanceof LivingEntity livEnt ? livEnt.getHealth() : -1;
                                         d = Math.min(damage * 4.5, Math.max(h * 0.25, damage * 1.5));
                                         entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "golem_attack"))), this),
                                                 (float) d);
@@ -363,18 +363,18 @@ public class FlamarineGolemEntity extends SeaMonster {
                 }
             }
             if (sklp2 > 0) {
-                if ((Entity) this instanceof FlamarineGolemEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_SKILL_P2, (int) (sklp2 - 1));
+                if ((Entity) this instanceof FlamarineGolemEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_SKILL_P2, (int) (sklp2 - 1));
             } else if (dura <= 0) {
                 if (!(enemy == null) && enemy.isAlive()) {
                     if (distanceTo(enemy) <= 5) {
                         if (this instanceof FlamarineGolemEntity) {
                             this.setAnimation("animation.flamarine_golem.combo");
                         }
-                        if ((Entity) this instanceof FlamarineGolemEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_SKILL_P2, 380);
-                        if ((Entity) this instanceof FlamarineGolemEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_DURATION, 60);
+                        if ((Entity) this instanceof FlamarineGolemEntity datEntSetI)
+                            datEntSetI.getEntityData().set(DATA_SKILL_P2, 380);
+                        if ((Entity) this instanceof FlamarineGolemEntity datEntSetI)
+                            datEntSetI.getEntityData().set(DATA_DURATION, 60);
                         if (!this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 30, 9, false, false));
                         CaerulaArborMod.queueServerWork(22, () -> {
@@ -410,12 +410,12 @@ public class FlamarineGolemEntity extends SeaMonster {
                                         hardness = block.getDestroySpeed(world, BlockPos.containing(0, 0, 0));
                                         if (hardness <= 2.5 && hardness >= 0 && world.getBlockFloorHeight(BlockPos.containing(x + dx, y + dy, z + dz)) > 0) {
                                             {
-                                                BlockPos _pos = BlockPos.containing(x + dx, y + dy, z + dz);
-                                                Block.dropResources(world.getBlockState(_pos), world, BlockPos.containing(x, y, z), null);
-                                                world.destroyBlock(_pos, false);
+                                                BlockPos pos = BlockPos.containing(x + dx, y + dy, z + dz);
+                                                Block.dropResources(world.getBlockState(pos), world, BlockPos.containing(x, y, z), null);
+                                                world.destroyBlock(pos, false);
                                             }
-                                            if (world instanceof Level _level)
-                                                _level.updateNeighborsAt(BlockPos.containing(x + dx, y + dy, z + dz), _level.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz)).getBlock());
+                                            if (world instanceof Level level)
+                                                level.updateNeighborsAt(BlockPos.containing(x + dx, y + dy, z + dz), level.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz)).getBlock());
                                             once = true;
                                         }
                                     }
@@ -426,11 +426,11 @@ public class FlamarineGolemEntity extends SeaMonster {
                             dx = dx + 1;
                         }
                         if (once) {
-                            if (world instanceof Level _level) {
-                                if (!_level.isClientSide()) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.WITHER_BREAK_BLOCK, SoundSource.NEUTRAL, 1, 1);
+                            if (world instanceof Level level) {
+                                if (!level.isClientSide()) {
+                                    level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.WITHER_BREAK_BLOCK, SoundSource.NEUTRAL, 1, 1);
                                 } else {
-                                    _level.playLocalSound(x, y, z, SoundEvents.WITHER_BREAK_BLOCK, SoundSource.NEUTRAL, 1, 1, false);
+                                    level.playLocalSound(x, y, z, SoundEvents.WITHER_BREAK_BLOCK, SoundSource.NEUTRAL, 1, 1, false);
                                 }
                             }
                         }
@@ -548,10 +548,10 @@ public class FlamarineGolemEntity extends SeaMonster {
             this.dropExperience();
             LevelAccessor world = this.level();
             if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
-                if (world instanceof ServerLevel _level) {
-                    ItemEntity entityToSpawn = new ItemEntity(_level, this.getX(), (this.getY() + 1), this.getZ(), new ItemStack(CAItems.FLAMARINE_UPGRADE_TEMPLATE.get()));
+                if (world instanceof ServerLevel level) {
+                    ItemEntity entityToSpawn = new ItemEntity(level, this.getX(), (this.getY() + 1), this.getZ(), new ItemStack(CAItems.FLAMARINE_UPGRADE_TEMPLATE.get()));
                     entityToSpawn.setPickUpDelay(5);
-                    _level.addFreshEntity(entityToSpawn);
+                    level.addFreshEntity(entityToSpawn);
                 }
             }
         }
@@ -577,8 +577,8 @@ public class FlamarineGolemEntity extends SeaMonster {
         double damage;
         enemy = this.getTarget();
         damage = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * rate;
-        if (world instanceof Level _level) {
-            _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TRIDENT_HIT, SoundSource.HOSTILE, 1, 1);
+        if (world instanceof Level level) {
+            level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TRIDENT_HIT, SoundSource.HOSTILE, 1, 1);
         }
         if (!(enemy == null)) {
             this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY()), (enemy.getZ())));

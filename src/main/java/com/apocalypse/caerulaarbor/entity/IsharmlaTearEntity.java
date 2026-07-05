@@ -172,8 +172,8 @@ public class IsharmlaTearEntity extends PathfinderMob implements GeoEntity, Sync
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if ((LevelAccessor) world instanceof Level _level) {
-            _level.playSound(null, BlockPos.containing(x, y, z), CASounds.ISHARMLA_TEAR_PLACE.get(), SoundSource.HOSTILE, 2, 1);
+        if ((LevelAccessor) world instanceof Level level) {
+            level.playSound(null, BlockPos.containing(x, y, z), CASounds.ISHARMLA_TEAR_PLACE.get(), SoundSource.HOSTILE, 2, 1);
         }
         if (this instanceof IsharmlaTearEntity) {
             this.setAnimation("animation.isharmla_tear.start");
@@ -205,37 +205,37 @@ public class IsharmlaTearEntity extends PathfinderMob implements GeoEntity, Sync
         double dura;
         boolean isAttack;
         {
-            LivingEntity _ent = this;
-            _ent.setYRot(0);
-            _ent.setXRot(0);
-            _ent.setYBodyRot(_ent.getYRot());
-            _ent.setYHeadRot(_ent.getYRot());
-            _ent.yRotO = _ent.getYRot();
-            _ent.xRotO = _ent.getXRot();
-            _ent.yBodyRotO = _ent.getYRot();
-            _ent.yHeadRotO = _ent.getYRot();
+            LivingEntity ent = this;
+            ent.setYRot(0);
+            ent.setXRot(0);
+            ent.setYBodyRot(ent.getYRot());
+            ent.setYHeadRot(ent.getYRot());
+            ent.yRotO = ent.getYRot();
+            ent.xRotO = ent.getXRot();
+            ent.yBodyRotO = ent.getYRot();
+            ent.yHeadRotO = ent.getYRot();
         }
         setDeltaMovement(new Vec3(0, 0, 0));
         if (this.isAlive()) {
-            dura = (Entity) this instanceof IsharmlaTearEntity _datEntI ? _datEntI.getEntityData().get(DATA_FUNC_COOLDOWN) : 0;
+            dura = (Entity) this instanceof IsharmlaTearEntity datEntI ? datEntI.getEntityData().get(DATA_FUNC_COOLDOWN) : 0;
             if (dura > 0) {
-                if ((Entity) this instanceof IsharmlaTearEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_FUNC_COOLDOWN, (int) (dura - 1));
+                if ((Entity) this instanceof IsharmlaTearEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_FUNC_COOLDOWN, (int) (dura - 1));
             } else {
                 isAttack = this.performHurtAttack();
                 if (isAttack || this.tryConsumeIsharmlaSkillPoint()) {
                     if (this instanceof IsharmlaTearEntity) {
                         this.setAnimation("animation.isharmla_tear.attack");
                     }
-                    if ((Entity) this instanceof IsharmlaTearEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_FUNC_COOLDOWN, 60);
+                    if ((Entity) this instanceof IsharmlaTearEntity datEntSetI)
+                        datEntSetI.getEntityData().set(DATA_FUNC_COOLDOWN, 60);
                     if (isAttack) {
-                        if (world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), CASounds.ISHARMLA_TEAR_HURT_1.get(), SoundSource.HOSTILE, 2, 1);
+                        if (world instanceof Level level) {
+                            level.playSound(null, BlockPos.containing(x, y, z), CASounds.ISHARMLA_TEAR_HURT_1.get(), SoundSource.HOSTILE, 2, 1);
                         }
                     } else {
-                        if (world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), CASounds.ISHARMLA_TEAR_HURT_0.get(), SoundSource.HOSTILE, 2, 1);
+                        if (world instanceof Level level) {
+                            level.playSound(null, BlockPos.containing(x, y, z), CASounds.ISHARMLA_TEAR_HURT_0.get(), SoundSource.HOSTILE, 2, 1);
                         }
                     }
                 }
@@ -272,14 +272,14 @@ public class IsharmlaTearEntity extends PathfinderMob implements GeoEntity, Sync
             return false;
         }
 
-        if (isharmla instanceof IsharmlaEntity _datEntL2 && _datEntL2.getEntityData().get(IsharmlaEntity.DATA_IS_MONSTER)) {
+        if (isharmla instanceof IsharmlaEntity datEntL2 && datEntL2.getEntityData().get(IsharmlaEntity.DATA_IS_MONSTER)) {
             return false;
         }
 
-        double skillP = isharmla instanceof IsharmlaEntity _datEntI ? _datEntI.getEntityData().get(IsharmlaEntity.DATA_SKILLP_1) : 0;
+        double skillP = isharmla instanceof IsharmlaEntity datEntI ? datEntI.getEntityData().get(IsharmlaEntity.DATA_SKILLP_1) : 0;
         if (skillP > 0) {
-            if (isharmla instanceof IsharmlaEntity _datEntSetI)
-                _datEntSetI.getEntityData().set(IsharmlaEntity.DATA_SKILLP_1, (int) Math.max(skillP - 500, 0));
+            if (isharmla instanceof IsharmlaEntity datEntSetI)
+                datEntSetI.getEntityData().set(IsharmlaEntity.DATA_SKILLP_1, (int) Math.max(skillP - 500, 0));
             return true;
         }
         return false;

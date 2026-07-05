@@ -53,38 +53,38 @@ public class MutagenisisCapsuleItem extends Item {
             }
             if (((Entity) entity).isAlive()) {
                 {
-                    double _setval = ocean + 1;
+                    double setval = ocean + 1;
                     ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                        capability.player_oceanization = _setval;
+                        capability.player_oceanization = setval;
                         capability.syncPlayerVariables(entity);
                     });
                 }
             }
             if (ocean + 1 > 2.9) {
-                if ((Entity) entity instanceof ServerPlayer _player) {
-                    Advancement _adv = _player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "they_shall_pay"));
-                    AdvancementProgress _ap = _player.getAdvancements().getOrStartProgress(_adv);
-                    if (!_ap.isDone()) {
-                        for (String criteria : _ap.getRemainingCriteria())
-                            _player.getAdvancements().award(_adv, criteria);
+                if ((Entity) entity instanceof ServerPlayer player) {
+                    Advancement adv = player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "they_shall_pay"));
+                    AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
+                    if (!ap.isDone()) {
+                        for (String criteria : ap.getRemainingCriteria())
+                            player.getAdvancements().award(adv, criteria);
                     }
                 }
             } else {
-                if ((Entity) entity instanceof ServerPlayer _player) {
-                    Advancement _adv = _player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "they_shall_welcome"));
-                    AdvancementProgress _ap = _player.getAdvancements().getOrStartProgress(_adv);
-                    if (!_ap.isDone()) {
-                        for (String criteria : _ap.getRemainingCriteria())
-                            _player.getAdvancements().award(_adv, criteria);
+                if ((Entity) entity instanceof ServerPlayer player) {
+                    Advancement adv = player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "they_shall_welcome"));
+                    AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
+                    if (!ap.isDone()) {
+                        for (String criteria : ap.getRemainingCriteria())
+                            player.getAdvancements().award(adv, criteria);
                     }
                 }
             }
-        } else if ((Entity) entity instanceof ServerPlayer _player) {
-            Advancement _adv = _player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "they_shall_welcome"));
-            AdvancementProgress _ap = _player.getAdvancements().getOrStartProgress(_adv);
-            if (!_ap.isDone()) {
-                for (String criteria : _ap.getRemainingCriteria())
-                    _player.getAdvancements().award(_adv, criteria);
+        } else if ((Entity) entity instanceof ServerPlayer player) {
+            Advancement adv = player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "they_shall_welcome"));
+            AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
+            if (!ap.isDone()) {
+                for (String criteria : ap.getRemainingCriteria())
+                    player.getAdvancements().award(adv, criteria);
             }
         }
         return retval;

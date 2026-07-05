@@ -45,25 +45,25 @@ public class ChitinKnifeItem extends Item {
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
         if (!(((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_legend_CHITIN) {
-            if ((LevelAccessor) world instanceof Level _level) {
-                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.BELL_BLOCK, SoundSource.NEUTRAL, (float) 3.5, 1);
+            if ((LevelAccessor) world instanceof Level level) {
+                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.BELL_BLOCK, SoundSource.NEUTRAL, (float) 3.5, 1);
             }
-            if ((LevelAccessor) world instanceof ServerLevel _level)
-                _level.sendParticles(ParticleTypes.DOLPHIN, x, y, z, 72, 1, 1, 1, 0.1);
+            if ((LevelAccessor) world instanceof ServerLevel level)
+                level.sendParticles(ParticleTypes.DOLPHIN, x, y, z, 72, 1, 1, 1, 0.1);
             {
-                boolean _setval = true;
+                boolean setval = true;
                 ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                    capability.relic_legend_CHITIN = _setval;
+                    capability.relic_legend_CHITIN = setval;
                     capability.syncPlayerVariables(entity);
                 });
             }
             if (((LevelAccessor) world).isClientSide())
                 Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);
-            if ((LevelAccessor) world instanceof ServerLevel _level) {
-                ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, new ItemStack(CAItems.OCEAN_TRIM_TEMPLATE.get()));
+            if ((LevelAccessor) world instanceof ServerLevel level) {
+                ItemEntity entityToSpawn = new ItemEntity(level, x, y, z, new ItemStack(CAItems.OCEAN_TRIM_TEMPLATE.get()));
                 entityToSpawn.setPickUpDelay(5);
                 entityToSpawn.setUnlimitedLifetime();
-                _level.addFreshEntity(entityToSpawn);
+                level.addFreshEntity(entityToSpawn);
             }
         }
         return ar;

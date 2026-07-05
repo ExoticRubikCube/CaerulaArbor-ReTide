@@ -154,11 +154,11 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
         if (sourceentity != null) {
             double sklp;
             if (!new Object() {
-                public boolean checkGamemode(Entity _ent) {
-                    if (_ent instanceof ServerPlayer _serverPlayer) {
-                        return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                    } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                        return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                public boolean checkGamemode(Entity ent) {
+                    if (ent instanceof ServerPlayer serverPlayer) {
+                        return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                    } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                        return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                     }
                     return false;
                 }
@@ -166,11 +166,11 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
                 boolean result;
                 result = hasEffect(CAMobEffects.FAKE_DEATH.get());
                 if (result) {
-                    sklp = (Entity) this instanceof SkadiEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP_2) : 0;
+                    sklp = (Entity) this instanceof SkadiEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP_2) : 0;
                     if (sklp <= 0 && this.isAlive()) {
                         if (distanceTo(sourceentity) <= 5) {
-                            if ((Entity) this instanceof SkadiEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_SKILLP_2, 120);
+                            if ((Entity) this instanceof SkadiEntity datEntSetI)
+                                datEntSetI.getEntityData().set(DATA_SKILLP_2, 120);
                             if (this instanceof SkadiEntity) {
                                 this.setAnimation("animation.skadi.skill");
                             }
@@ -188,15 +188,15 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
                                             this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 100, 0, false, false));
                                         sourceentity.push((getLookAngle().x + 0.33), 0, (getLookAngle().z + 0.33));
                                     }
-                                    if (world instanceof Level _level) {
-                                        _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.DRAGON_FIREBALL_EXPLODE, SoundSource.HOSTILE, 2, 1);
+                                    if (world instanceof Level level) {
+                                        level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.DRAGON_FIREBALL_EXPLODE, SoundSource.HOSTILE, 2, 1);
                                     }
                                     double ddd;
                                     ddd = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 2.25;
                                     {
-                                        final Vec3 _center = new Vec3((x + 2 * getLookAngle().x), y, (z + 2 * getLookAngle().z));
-                                        List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(5 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                                        for (Entity entityiterator : _entfound) {
+                                        final Vec3 center = new Vec3((x + 2 * getLookAngle().x), y, (z + 2 * getLookAngle().z));
+                                        List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(5 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                                        for (Entity entityiterator : entfound) {
                                             if (!(entityiterator instanceof LivingEntity)) {
                                                 continue;
                                             }
@@ -327,11 +327,11 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
         double sklp2;
         if (this.isAlive()) {
             if (Math.random() < 0.001) {
-                rlx = (Entity) this instanceof SkadiEntity _datEntI ? _datEntI.getEntityData().get(DATA_RELAX_COOLDOWN) : 0;
+                rlx = (Entity) this instanceof SkadiEntity datEntI ? datEntI.getEntityData().get(DATA_RELAX_COOLDOWN) : 0;
                 if (rlx <= 0) {
-                    if (!((Entity) this instanceof Mob _mobEnt2 && _mobEnt2.isAggressive())) {
-                        if ((Entity) this instanceof Mob _entity)
-                            _entity.getNavigation().stop();
+                    if (!((Entity) this instanceof Mob mobEnt2 && mobEnt2.isAggressive())) {
+                        if ((Entity) this instanceof Mob entity)
+                            entity.getNavigation().stop();
                         if (this instanceof SkadiEntity) {
                             this.setAnimation("animation.skadi.relax");
                         }
@@ -342,11 +342,11 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
             if (rlx > 0) {
                 rlx = rlx - 1;
             }
-            sklp = (Entity) this instanceof SkadiEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP) : 0;
-            sklp2 = (Entity) this instanceof SkadiEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP_2) : 0;
+            sklp = (Entity) this instanceof SkadiEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP) : 0;
+            sklp2 = (Entity) this instanceof SkadiEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP_2) : 0;
             if (sklp <= 0) {
-                if (!(((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == null)) {
-                    if ((((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) != null ? distanceTo(((Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null)) : -1) < 3) {
+                if (!(((Entity) this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == null)) {
+                    if ((((Entity) this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) != null ? distanceTo(((Entity) this instanceof Mob mobEnt ? mobEnt.getTarget() : null)) : -1) < 3) {
                         if (this instanceof SkadiEntity) {
                             this.setAnimation("animation.skadi.spin");
                         }
@@ -372,24 +372,24 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
                 sklp = sklp - 1;
             }
             if (sklp2 > 0) {
-                if ((Entity) this instanceof SkadiEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_SKILLP_2, (int) (sklp2 - 1));
+                if ((Entity) this instanceof SkadiEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_SKILLP_2, (int) (sklp2 - 1));
             }
-            if ((Entity) this instanceof SkadiEntity _datEntSetI)
-                _datEntSetI.getEntityData().set(DATA_RELAX_COOLDOWN, (int) rlx);
-            if ((Entity) this instanceof SkadiEntity _datEntSetI)
-                _datEntSetI.getEntityData().set(DATA_SKILLP, (int) sklp);
+            if ((Entity) this instanceof SkadiEntity datEntSetI)
+                datEntSetI.getEntityData().set(DATA_RELAX_COOLDOWN, (int) rlx);
+            if ((Entity) this instanceof SkadiEntity datEntSetI)
+                datEntSetI.getEntityData().set(DATA_SKILLP, (int) sklp);
             GladiiaEntity.healFromGladiia(world, x, y, z, this);
             if (tickCount % 10 == 0) {
                 {
-                    final Vec3 _center = new Vec3(x, y, z);
-                    List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(48 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                    for (Entity entityiterator : _entfound) {
+                    final Vec3 center = new Vec3(x, y, z);
+                    List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(48 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                    for (Entity entityiterator : entfound) {
                         if (!entityiterator.isAlive()) {
                             continue;
                         }
                         if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunters")))) {
-                            if (!(entityiterator instanceof LivingEntity _livEnt3 && _livEnt3.hasEffect(CAMobEffects.ADD_ATTACK_PERCLY.get()))) {
+                            if (!(entityiterator instanceof LivingEntity livEnt3 && livEnt3.hasEffect(CAMobEffects.ADD_ATTACK_PERCLY.get()))) {
                                 if (entityiterator instanceof LivingEntity && !this.level().isClientSide())
                                     this.addEffect(new MobEffectInstance(CAMobEffects.ADD_ATTACK_PERCLY.get(), 32768, 0, false, false));
                             }
@@ -427,12 +427,12 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
                 .sorted(Comparator.comparingDouble(e -> e.distanceToSqr(center))).toList();
         for (Entity entity : entities) {
             if (!(entity instanceof Monster)) {
-                if (!(entity == target || (entity instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == this)) {
+                if (!(entity == target || (entity instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == this)) {
                     continue;
                 }
             }
             if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "is_humanside")))) {
-                if (!(entity == target || (entity instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == this)) {
+                if (!(entity == target || (entity instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == this)) {
                     continue;
                 }
             }

@@ -16,9 +16,9 @@ public class AnvilDataSyncdEventHandler {
 		ItemStack output = event.getOutput();
 		if (event.getRight().getItem() == CAItems.KNIGHT_CORPSE.get() && leftItem.getItem() == Items.IRON_SWORD) {
 			{
-				CompoundTag _nbtTag = leftItem.getTag();
-				if (_nbtTag != null)
-					output.setTag(_nbtTag.copy());
+				CompoundTag nbtTag = leftItem.getTag();
+				if (nbtTag != null)
+					output.setTag(nbtTag.copy());
 			}
 		}
 	}

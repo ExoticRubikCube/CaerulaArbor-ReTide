@@ -108,10 +108,10 @@ public class BlockSpearBlock extends Block implements SimpleWaterloggedBlock {
 		double hitY = hit.getLocation().y;
 		double hitZ = hit.getLocation().z;
 		Direction direction = hit.getDirection();
-        if ((LevelAccessor) world instanceof ServerLevel _level) {
-            ItemEntity entityToSpawn = new ItemEntity(_level, ((double) x + 0.5), ((double) y + 0.75), ((double) z + 0.5), new ItemStack(CAItems.KINGS_SPEAR.get()));
+        if ((LevelAccessor) world instanceof ServerLevel level) {
+            ItemEntity entityToSpawn = new ItemEntity(level, ((double) x + 0.5), ((double) y + 0.75), ((double) z + 0.5), new ItemStack(CAItems.KINGS_SPEAR.get()));
             entityToSpawn.setPickUpDelay(10);
-            _level.addFreshEntity(entityToSpawn);
+            level.addFreshEntity(entityToSpawn);
         }
         world.levelEvent(2001, BlockPos.containing(x, y, z), getId(CABlocks.BLOCK_SPEAR.get().defaultBlockState()));
         ((LevelAccessor) world).setBlock(BlockPos.containing(x, y, z), Blocks.DEEPSLATE_BRICK_SLAB.defaultBlockState(), 3);

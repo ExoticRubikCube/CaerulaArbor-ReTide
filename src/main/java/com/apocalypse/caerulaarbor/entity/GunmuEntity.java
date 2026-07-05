@@ -110,7 +110,7 @@ public class GunmuEntity extends Monster {
         if (immediatesourceentity == null || sourceentity == null)
             return false;
         sourceentity.hurt(new DamageSource(((LevelAccessor) world).registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "gunmu_damage")))),
-                sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1);
+                sourceentity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1);
         if (!(sourceentity == immediatesourceentity)) {
             return false;
         }

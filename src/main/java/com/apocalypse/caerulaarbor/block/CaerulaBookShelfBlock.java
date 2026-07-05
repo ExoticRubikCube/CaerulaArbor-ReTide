@@ -93,7 +93,7 @@ public class CaerulaBookShelfBlock extends Block {
         if (entity != null) {
             double num = 0;
             BlockState tgt;
-            if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.WHIRL_EYE.get()) {
+            if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.WHIRL_EYE.get()) {
                 if (world.getEntitiesOfClass(MartusEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).isEmpty()) {
                     for (int index0 = 0; index0 < 3; index0++) {
                         for (int index1 = 0; index1 < 3; index1++) {
@@ -135,11 +135,11 @@ public class CaerulaBookShelfBlock extends Block {
                                 break;
                             }
                         }
-                        if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
-                            _player.displayClientMessage(Component.literal((Component.translatable("spawn.martus").getString())), false);
-                        ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
-                        if ((LevelAccessor) world instanceof ServerLevel _level) {
-                            Entity entityToSpawn = CAEntities.MARTUS.get().spawn(_level, BlockPos.containing((double) x + 0.5, y, (double) z + 0.5), MobSpawnType.MOB_SUMMONED);
+                        if ((Entity) entity instanceof Player player && !player.level().isClientSide())
+                            player.displayClientMessage(Component.literal((Component.translatable("spawn.martus").getString())), false);
+                        ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
+                        if ((LevelAccessor) world instanceof ServerLevel level) {
+                            Entity entityToSpawn = CAEntities.MARTUS.get().spawn(level, BlockPos.containing((double) x + 0.5, y, (double) z + 0.5), MobSpawnType.MOB_SUMMONED);
                             if (entityToSpawn != null) {
                                 entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
                             }

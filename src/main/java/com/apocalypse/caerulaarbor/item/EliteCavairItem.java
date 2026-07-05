@@ -57,26 +57,26 @@ public class EliteCavairItem extends Item {
             entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 800, 1));
         }
         {
-            double _setval = 0;
+            double setval = 0;
             ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                capability.disoclusion = _setval;
+                capability.disoclusion = setval;
                 capability.syncPlayerVariables(entity);
             });
         }
         {
-            double _setval = Math.min((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_light + 10, 100);
+            double setval = Math.min((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_light + 10, 100);
             ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                capability.player_light = _setval;
+                capability.player_light = setval;
                 capability.syncPlayerVariables(entity);
             });
         }
         SIHelper.causeSanityInjury(entity, 45, SanityEvent.Hurt.Type.FOOD);
-        if ((Entity) entity instanceof ServerPlayer _player) {
-            Advancement _adv = _player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "but_i_refuse"));
-            AdvancementProgress _ap = _player.getAdvancements().getOrStartProgress(_adv);
-            if (!_ap.isDone()) {
-                for (String criteria : _ap.getRemainingCriteria())
-                    _player.getAdvancements().award(_adv, criteria);
+        if ((Entity) entity instanceof ServerPlayer player) {
+            Advancement adv = player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "but_i_refuse"));
+            AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
+            if (!ap.isDone()) {
+                for (String criteria : ap.getRemainingCriteria())
+                    player.getAdvancements().award(adv, criteria);
             }
         }
         if (itemstack.isEmpty()) {

@@ -222,8 +222,8 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if ((LevelAccessor) world instanceof Level _level) {
-            _level.playSound(null, BlockPos.containing(x, y, z), CASounds.SAW_SPECT_SKILL.get(), SoundSource.NEUTRAL, (float) 2.5, 1);
+        if ((LevelAccessor) world instanceof Level level) {
+            level.playSound(null, BlockPos.containing(x, y, z), CASounds.SAW_SPECT_SKILL.get(), SoundSource.NEUTRAL, (float) 2.5, 1);
         }
         this.setAnimation("animation.specter.start");
         return super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
@@ -279,8 +279,8 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
                         if (!this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 35, 0, false, false));
                         CaerulaArborMod.queueServerWork(8, () -> {
-                            if (world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), CASounds.SAW_HEAVY.get(), SoundSource.NEUTRAL, 3, 1);
+                            if (world instanceof Level level) {
+                                level.playSound(null, BlockPos.containing(x, y, z), CASounds.SAW_HEAVY.get(), SoundSource.NEUTRAL, 3, 1);
                             }
                         });
                         CaerulaArborMod.queueServerWork(15, () -> {
@@ -289,8 +289,8 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
                             }
                         });
                         CaerulaArborMod.queueServerWork(25, () -> {
-                            if (world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), CASounds.SAW_CUT_SPECT.get(), SoundSource.NEUTRAL, 3, 1);
+                            if (world instanceof Level level) {
+                                level.playSound(null, BlockPos.containing(x, y, z), CASounds.SAW_CUT_SPECT.get(), SoundSource.NEUTRAL, 3, 1);
                             }
                         });
                         CaerulaArborMod.queueServerWork(31, () -> {
@@ -310,11 +310,11 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
             } else {
                 if (!(enemy == null) && enemy.isAlive()) {
                     if (EntityUtils.getHealthPerc(this) <= 0.5) {
-                        if (world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), CASounds.SPECTER_SKILL_ON.get(), SoundSource.NEUTRAL, 3, 1);
+                        if (world instanceof Level level) {
+                            level.playSound(null, BlockPos.containing(x, y, z), CASounds.SPECTER_SKILL_ON.get(), SoundSource.NEUTRAL, 3, 1);
                         }
-                        if (world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), CASounds.SPECTER_SKILL.get(), SoundSource.NEUTRAL, 3, 1);
+                        if (world instanceof Level level) {
+                            level.playSound(null, BlockPos.containing(x, y, z), CASounds.SPECTER_SKILL.get(), SoundSource.NEUTRAL, 3, 1);
                         }
                         this.getEntityData().set(DATA_SKILLP_2, 1000);
                         if (!this.level().isClientSide())
@@ -328,19 +328,19 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
             double perc;
             if (tickCount % 10 == 0) {
                 {
-                    final Vec3 _center = new Vec3(x, y, z);
-                    List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(48 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                    for (Entity entityiterator : _entfound) {
+                    final Vec3 center = new Vec3(x, y, z);
+                    List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(48 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                    for (Entity entityiterator : entfound) {
                         if (!entityiterator.isAlive()) {
                             continue;
                         }
                         if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunters")))) {
-                            if (!(entityiterator instanceof LivingEntity _livEnt3 && _livEnt3.hasEffect(CAMobEffects.ADD_HEALTH_PERCLY.get()))) {
+                            if (!(entityiterator instanceof LivingEntity livEnt3 && livEnt3.hasEffect(CAMobEffects.ADD_HEALTH_PERCLY.get()))) {
                                 perc = EntityUtils.getHealthPerc(entityiterator);
-                                if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                                    _entity.addEffect(new MobEffectInstance(CAMobEffects.ADD_HEALTH_PERCLY.get(), 32768, 0, false, false));
-                                if (entityiterator instanceof LivingEntity _entity)
-                                    _entity.setHealth((float) ((entityiterator instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * perc));
+                                if (entityiterator instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
+                                    livingEntity.addEffect(new MobEffectInstance(CAMobEffects.ADD_HEALTH_PERCLY.get(), 32768, 0, false, false));
+                                if (entityiterator instanceof LivingEntity livingEntity)
+                                    livingEntity.setHealth((float) (livingEntity.getMaxHealth() * perc));
                             }
                         }
                     }
@@ -447,8 +447,8 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
             this.remove(RemovalReason.KILLED);
             this.dropExperience();
             LevelAccessor world = this.level();
-            if (world instanceof ServerLevel _level) {
-                Entity entityToSpawn = CAEntities.SPECTER_DOLL.get().spawn(_level, BlockPos.containing(this.getX(), this.getY(), this.getZ()), MobSpawnType.MOB_SUMMONED);
+            if (world instanceof ServerLevel level) {
+                Entity entityToSpawn = CAEntities.SPECTER_DOLL.get().spawn(level, BlockPos.containing(this.getX(), this.getY(), this.getZ()), MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn != null) {
                     entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                 }
@@ -498,7 +498,7 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
             if (!entityiterator.isAlive()) {
                 continue;
             }
-            if (entityiterator instanceof Player || (entityiterator instanceof TamableAnimal _tamEnt && _tamEnt.isTame())) {
+            if (entityiterator instanceof Player || (entityiterator instanceof TamableAnimal tamEnt && tamEnt.isTame())) {
                 if (!(entityiterator == enemy)) {
                     continue;
                 }

@@ -7,7 +7,6 @@ import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -167,15 +166,9 @@ public class OceanizedRavagerEntity extends SeaMonster {
         return super.hurt(source, amount);
     }
 
-    @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
-        super.addAdditionalSaveData(compound);
-    }
+    
 
-    @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
-        super.readAdditionalSaveData(compound);
-    }
+    
 
     @Override
     public void baseTick() {
@@ -204,11 +197,11 @@ public class OceanizedRavagerEntity extends SeaMonster {
                         }
                     }
                     if (breaked) {
-                        if (world instanceof Level _level) {
-                            if (!_level.isClientSide()) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.WITHER_BREAK_BLOCK, SoundSource.HOSTILE, 1, 1);
+                        if (world instanceof Level level) {
+                            if (!level.isClientSide()) {
+                                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.WITHER_BREAK_BLOCK, SoundSource.HOSTILE, 1, 1);
                             } else {
-                                _level.playLocalSound(x, y, z, SoundEvents.WITHER_BREAK_BLOCK, SoundSource.HOSTILE, 1, 1, false);
+                                level.playLocalSound(x, y, z, SoundEvents.WITHER_BREAK_BLOCK, SoundSource.HOSTILE, 1, 1, false);
                             }
                         }
                     }

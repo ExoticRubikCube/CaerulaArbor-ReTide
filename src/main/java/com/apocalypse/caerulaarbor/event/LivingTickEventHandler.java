@@ -54,15 +54,15 @@ public class LivingTickEventHandler {
 
         if (entity == null || entity.tickCount % 30 != 1) return;
 
-        Entity enemy = entity instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+        Entity enemy = entity instanceof Mob mobEnt ? mobEnt.getTarget() : null;
         if (enemy == null) return;
 
         Entity other = null;
 
         if (enemy instanceof TideDeathrepellerEntity livEnt5 && livEnt5.hasEffect(CAMobEffects.FAKE_DEATH.get())) {
-            other = world.getEntitiesOfClass(TideBishopEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).stream().min(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(x, y, z))).orElse(null);
+            other = world.getEntitiesOfClass(TideBishopEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).stream().min(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z))).orElse(null);
         } else if (enemy instanceof TideBishopEntity livEnt8 && livEnt8.hasEffect(CAMobEffects.FAKE_DEATH.get())) {
-            other = world.getEntitiesOfClass(TideDeathrepellerEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).stream().min(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(x, y, z))).orElse(null);
+            other = world.getEntitiesOfClass(TideDeathrepellerEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).stream().min(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z))).orElse(null);
         } else if (enemy instanceof MartusEntity livEnt11 && livEnt11.hasEffect(CAMobEffects.INVULNERABLE.get())) {
             Entity tgt_ent = null;
             Entity tgt_blessed = null;
@@ -101,9 +101,9 @@ public class LivingTickEventHandler {
                 }
                 other = enemy1;
             } else if (enemy instanceof OceanizedIllusionerEntity) {
-                other = world.getEntitiesOfClass(OceanIllusionEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true).stream().min(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(x, y, z))).orElse(null);
+                other = world.getEntitiesOfClass(OceanIllusionEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true).stream().min(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z))).orElse(null);
             } else if (enemy instanceof OceanizedEnderinaEntity enderina && !enderina.isEnderinaDurative()) {
-                other = world.getEntitiesOfClass(MoistEnderCrystalEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true).stream().min(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(x, y, z))).orElse(null);
+                other = world.getEntitiesOfClass(MoistEnderCrystalEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true).stream().min(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z))).orElse(null);
             }
         }
 
@@ -126,7 +126,7 @@ public class LivingTickEventHandler {
 
         double minDist = 999;
         Entity enemy = null;
-        Entity curEnemy = entity instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+        Entity curEnemy = entity instanceof Mob mobEnt ? mobEnt.getTarget() : null;
 
         if (curEnemy != null && curEnemy.isAlive()) return;
         if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring"))))
@@ -183,20 +183,20 @@ public class LivingTickEventHandler {
     }
 
     private static void handleMobTargeting(LevelAccessor world, double x, double y, double z, Entity entity) {
-        Entity enemy = entity instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+        Entity enemy = entity instanceof Mob mobEnt ? mobEnt.getTarget() : null;
         if (enemy == null || !enemy.isAlive()) {
             if (!entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "is_humanside")))) {
                 if (entity instanceof Monster && entity.tickCount % 40 == 5) {
-                    final Vec3 _center1 = new Vec3(x, y, z);
-                    List<Entity> _entfound1 = world.getEntitiesOfClass(Entity.class, new AABB(_center1, _center1).inflate(48 / 2d), e1 -> true).stream()
-                            .sorted(Comparator.comparingDouble(_entcnd1 -> _entcnd1.distanceToSqr(_center1))).toList();
-                    for (Entity entityiterator1 : _entfound1) {
+                    final Vec3 center1 = new Vec3(x, y, z);
+                    List<Entity> entfound1 = world.getEntitiesOfClass(Entity.class, new AABB(center1, center1).inflate(48 / 2d), e1 -> true).stream()
+                            .sorted(Comparator.comparingDouble(entcnd1 -> entcnd1.distanceToSqr(center1))).toList();
+                    for (Entity entityiterator1 : entfound1) {
                         if (entityiterator1.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunters")))
                                 || entityiterator1.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "inquisition")))
                                 || entityiterator1 instanceof TheLastKnightEntity
                                 || entityiterator1 instanceof LastKnightAndHorseEntity) {
-                            if (entity instanceof Mob _entity1 && entityiterator1 instanceof LivingEntity _ent)
-                                _entity1.setTarget(_ent);
+                            if (entity instanceof Mob entity1 && entityiterator1 instanceof LivingEntity ent)
+                                entity1.setTarget(ent);
                         }
                     }
                 }
@@ -212,7 +212,7 @@ public class LivingTickEventHandler {
             }
         }
 
-        if (entity instanceof LivingEntity _livEnt3 && _livEnt3.hasEffect(CAMobEffects.POWER_OF_ANCHOR.get())) return;
+        if (entity instanceof LivingEntity livEnt3 && livEnt3.hasEffect(CAMobEffects.POWER_OF_ANCHOR.get())) return;
 
         if (MapVariables.get(world).strategy_silence > 0) {
             handleSilenceBuffs(world, x, y, z, entity);
@@ -226,16 +226,16 @@ public class LivingTickEventHandler {
                     _entity.addEffect(new MobEffectInstance(CAMobEffects.BOOST_OF_SILENCE.get(), 9999, (int) (MapVariables.get(world).strategy_silence - 1)));
             }
 
-            if (!(entity instanceof LivingEntity _livEnt6 && _livEnt6.hasEffect(CAMobEffects.STRENGTH_OF_CROWD.get()))) {
+            if (!(entity instanceof LivingEntity livEnt6 && livEnt6.hasEffect(CAMobEffects.STRENGTH_OF_CROWD.get()))) {
                 double amplifi = -1;
                 double range = MapVariables.get(world).strategy_silence >= 4 ? 64 : 32;
                 double maxAmp = MapVariables.get(world).strategy_silence >= 4 ? 29 : 9;
                 int ampStep = MapVariables.get(world).strategy_silence >= 4 ? 2 : 1;
 
-                final Vec3 _center = new Vec3(x, y, z);
-                List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(range / 2d), e -> true).stream()
-                        .sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                for (Entity entityiterator : _entfound) {
+                final Vec3 center = new Vec3(x, y, z);
+                List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(range / 2d), e -> true).stream()
+                        .sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                for (Entity entityiterator : entfound) {
                     if (entityiterator != entity && entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
                         amplifi = amplifi + ampStep;
                     }

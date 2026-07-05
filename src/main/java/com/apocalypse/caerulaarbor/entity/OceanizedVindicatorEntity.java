@@ -6,7 +6,6 @@ import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -116,21 +115,15 @@ public class OceanizedVindicatorEntity extends SeaMonster implements PolarMountR
         return super.hurt(source, amount);
     }
 
-    @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
-        super.addAdditionalSaveData(compound);
-    }
+    
 
-    @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
-        super.readAdditionalSaveData(compound);
-    }
+    
 
     @Override
     public void baseTick() {
         super.baseTick();
         if ((getDisplayName().getString()).equals("Johnny")) {
-            if (!((Entity) this instanceof LivingEntity _livEnt1 && _livEnt1.hasEffect(CAMobEffects.ANGER_OF_TIDE.get()))) {
+            if (!((Entity) this instanceof LivingEntity livEnt1 && livEnt1.hasEffect(CAMobEffects.ANGER_OF_TIDE.get()))) {
                 if (!this.level().isClientSide())
                     this.addEffect(new MobEffectInstance(CAMobEffects.ANGER_OF_TIDE.get(), 20, 0, false, false));
             }

@@ -115,8 +115,8 @@ public class OceanizedVillagerEntity extends SeaMonster implements PolarMountRid
     public void thunderHit(ServerLevel serverWorld, LightningBolt lightningBolt) {
         super.thunderHit(serverWorld, lightningBolt);
         LevelAccessor world = this.level();
-        if (world instanceof ServerLevel _level) {
-            Entity entityToSpawn = CAEntities.OCEANIZED_WITCH.get().spawn(_level, BlockPos.containing(this.getX(), this.getY(), this.getZ()), MobSpawnType.MOB_SUMMONED);
+        if (world instanceof ServerLevel level) {
+            Entity entityToSpawn = CAEntities.OCEANIZED_WITCH.get().spawn(level, BlockPos.containing(this.getX(), this.getY(), this.getZ()), MobSpawnType.MOB_SUMMONED);
             if (entityToSpawn != null) {
                 entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
             }

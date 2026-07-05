@@ -170,8 +170,8 @@ public class OceanizedVexEntity extends SeaMonster {
         if (sourceentity == null)
             return;
         setDeltaMovement(new Vec3(0, 0, 0));
-        if ((Entity) this instanceof OceanizedVexEntity _datEntSetS)
-            _datEntSetS.getEntityData().set(DATA_SAYER, (sourceentity.getStringUUID()));
+        if ((Entity) this instanceof OceanizedVexEntity datEntSetS)
+            datEntSetS.getEntityData().set(DATA_SAYER, (sourceentity.getStringUUID()));
     }
 
     @Override
@@ -206,25 +206,25 @@ public class OceanizedVexEntity extends SeaMonster {
         double sklp1;
         String uuid1;
         if (this.isAlive()) {
-            sklp1 = (Entity) this instanceof OceanizedVexEntity _datEntI ? _datEntI.getEntityData().get(DATA_LEFT_SURVIVAL_TICK) : 0;
+            sklp1 = (Entity) this instanceof OceanizedVexEntity datEntI ? datEntI.getEntityData().get(DATA_LEFT_SURVIVAL_TICK) : 0;
             if (sklp1 <= 0) {
-                ((Entity) this).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.STARVE)), (float) Math.max(0.075 * ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1), 1));
+                ((Entity) this).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.STARVE)), (float) Math.max(0.075 * ((Entity) this instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1), 1));
             } else {
-                if ((Entity) this instanceof OceanizedVexEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_LEFT_SURVIVAL_TICK, (int) (sklp1 - 1));
+                if ((Entity) this instanceof OceanizedVexEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_LEFT_SURVIVAL_TICK, (int) (sklp1 - 1));
             }
         } else {
-            uuid1 = (Entity) this instanceof OceanizedVexEntity _datEntS ? _datEntS.getEntityData().get(DATA_SAYER) : "";
+            uuid1 = (Entity) this instanceof OceanizedVexEntity datEntS ? datEntS.getEntityData().get(DATA_SAYER) : "";
             enemy = new Object() {
                 Entity entityFromStringUUID(String uuid2, Level world) {
-                    Entity _uuidentity = null;
-                    if (world instanceof ServerLevel _server) {
+                    Entity uuidentity = null;
+                    if (world instanceof ServerLevel server) {
                         try {
-                            _uuidentity = _server.getEntity(UUID.fromString(uuid2));
+                            uuidentity = server.getEntity(UUID.fromString(uuid2));
                         } catch (Exception ignored) {
                         }
                     }
-                    return _uuidentity;
+                    return uuidentity;
                 }
             }.entityFromStringUUID(uuid1, world);
             if (!(enemy == null) && enemy.isAlive()) {
@@ -368,16 +368,16 @@ public class OceanizedVexEntity extends SeaMonster {
             double y = this.getY();
             double z = this.getZ();
             double sanity;
-            if (world instanceof ServerLevel _level)
-                _level.sendParticles(ParticleTypes.EXPLOSION, x, (y + 0.4), z, 4, 1, 1, 1, 0.1);
-            if (world instanceof Level _level) {
-                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.VEX_CHARGE, SoundSource.NEUTRAL, 3, 1);
+            if (world instanceof ServerLevel level)
+                level.sendParticles(ParticleTypes.EXPLOSION, x, (y + 0.4), z, 4, 1, 1, 1, 0.1);
+            if (world instanceof Level level) {
+                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.VEX_CHARGE, SoundSource.NEUTRAL, 3, 1);
             }
             sanity = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
             {
-                final Vec3 _center = new Vec3(x, y, z);
-                List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(8 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                for (Entity entityiterator : _entfound) {
+                final Vec3 center = new Vec3(x, y, z);
+                List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(8 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                for (Entity entityiterator : entfound) {
                     if (!(entityiterator instanceof LivingEntity)) {
                         continue;
                     }

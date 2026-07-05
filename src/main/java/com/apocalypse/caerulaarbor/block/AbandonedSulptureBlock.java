@@ -141,9 +141,9 @@ public class AbandonedSulptureBlock extends BaseEntityBlock implements SimpleWat
 
         if (!(Math.random() > 0.33)) {
             {
-                final Vec3 _center = new Vec3(((double) x + 0.5), ((double) y + 1), ((double) z + 0.5));
-                List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(48 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                for (Entity entityiterator : _entfound) {
+                final Vec3 center = new Vec3(((double) x + 0.5), ((double) y + 1), ((double) z + 0.5));
+                List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(48 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                for (Entity entityiterator : entfound) {
                     if (!(entityiterator instanceof LivingEntity)) {
                         continue;
                     }
@@ -152,8 +152,8 @@ public class AbandonedSulptureBlock extends BaseEntityBlock implements SimpleWat
                     }
                     if (new Vec3(((double) x + 0.5), ((double) y + 1), ((double) z + 0.5)).distanceTo(new Vec3((entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()))) < 24) {
                         world.destroyBlock(BlockPos.containing(x, y, z), false);
-                        if ((LevelAccessor) world instanceof ServerLevel _level) {
-                            Entity entityToSpawn = CAEntities.THE_ABANDONED.get().spawn(_level, BlockPos.containing((double) x + 0.5, y, (double) z + 0.5), MobSpawnType.MOB_SUMMONED);
+                        if ((LevelAccessor) world instanceof ServerLevel level) {
+                            Entity entityToSpawn = CAEntities.THE_ABANDONED.get().spawn(level, BlockPos.containing((double) x + 0.5, y, (double) z + 0.5), MobSpawnType.MOB_SUMMONED);
                             if (entityToSpawn != null) {
                                 entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
                             }
@@ -172,8 +172,8 @@ public class AbandonedSulptureBlock extends BaseEntityBlock implements SimpleWat
         double x = pos.getX();
         double y = pos.getY();
         double z = pos.getZ();
-        if ((LevelAccessor) world instanceof ServerLevel _level) {
-            Entity entityToSpawn = CAEntities.THE_ABANDONED.get().spawn(_level, BlockPos.containing(x + 0.5, y, z + 0.5), MobSpawnType.MOB_SUMMONED);
+        if ((LevelAccessor) world instanceof ServerLevel level) {
+            Entity entityToSpawn = CAEntities.THE_ABANDONED.get().spawn(level, BlockPos.containing(x + 0.5, y, z + 0.5), MobSpawnType.MOB_SUMMONED);
             if (entityToSpawn != null) {
                 entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
             }

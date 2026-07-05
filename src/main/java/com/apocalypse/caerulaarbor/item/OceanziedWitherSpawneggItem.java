@@ -45,18 +45,18 @@ public class OceanziedWitherSpawneggItem extends ForgeSpawnEggItem {
         Direction direction = context.getClickedFace();
         Entity entity = context.getPlayer();
         ItemStack itemstack = context.getItemInHand();
-        if (direction == null || entity == null)
+        if (entity == null)
             return InteractionResult.PASS;
         if (entity.isShiftKeyDown()) {
-            if (world instanceof ServerLevel _level) {
-                Entity entityToSpawn = CAEntities.OCEANIZED_WITHERIA.get().spawn(_level, BlockPos.containing(x + direction.getStepX() + 0.5, y + direction.getStepY() + 0.5, z + direction.getStepZ() + 0.5), MobSpawnType.MOB_SUMMONED);
+            if (world instanceof ServerLevel level) {
+                Entity entityToSpawn = CAEntities.OCEANIZED_WITHERIA.get().spawn(level, BlockPos.containing(x + direction.getStepX() + 0.5, y + direction.getStepY() + 0.5, z + direction.getStepZ() + 0.5), MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn != null) {
                     entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                 }
             }
         } else {
-            if (world instanceof ServerLevel _level) {
-                Entity entityToSpawn = CAEntities.OCEANIZED_WITHER.get().spawn(_level, BlockPos.containing(x + direction.getStepX() + 0.5, y + direction.getStepY() + 0.5, z + direction.getStepZ() + 0.5), MobSpawnType.MOB_SUMMONED);
+            if (world instanceof ServerLevel level) {
+                Entity entityToSpawn = CAEntities.OCEANIZED_WITHER.get().spawn(level, BlockPos.containing(x + direction.getStepX() + 0.5, y + direction.getStepY() + 0.5, z + direction.getStepZ() + 0.5), MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn != null) {
                     entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                 }

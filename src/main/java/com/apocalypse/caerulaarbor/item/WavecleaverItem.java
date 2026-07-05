@@ -150,7 +150,7 @@ public class WavecleaverItem extends Item implements GeoItem, SyncedAnimationIte
 		double y = entity.getY();
 		double z = entity.getZ();
 
-        if (!((Entity) entity instanceof Player _plrCldCheck1 && _plrCldCheck1.getCooldowns().isOnCooldown(itemstack.getItem()))) {
+        if (!((Entity) entity instanceof Player plrCldCheck1 && plrCldCheck1.getCooldowns().isOnCooldown(itemstack.getItem()))) {
             if (itemstack.getItem() instanceof WavecleaverItem)
                 itemstack.getOrCreateTag().putString("geckoAnim", "animation.wavelceaver.spin");
             CaerulaArborMod.queueServerWork(5, () -> {
@@ -162,12 +162,12 @@ public class WavecleaverItem extends Item implements GeoItem, SyncedAnimationIte
                                 double yy = entity.getY() + 2 * entity.getLookAngle().y;
                                 double zz = entity.getZ() + 2 * entity.getLookAngle().z;
                                 {
-                                    final Vec3 _center = new Vec3(xx, yy, zz);
-                                    List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(5 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                                    for (Entity entityiterator : _entfound) {
+                                    final Vec3 center = new Vec3(xx, yy, zz);
+                                    List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(5 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                                    for (Entity entityiterator : entfound) {
                                         if (entityiterator == entity) continue;
 
-                                        if (entityiterator instanceof TamableAnimal _tamEnt && _tamEnt.getOwner() == entity)
+                                        if (entityiterator instanceof TamableAnimal tamEnt && tamEnt.getOwner() == entity)
                                             continue;
 
                                         if (!(entityiterator instanceof LivingEntity)) continue;
@@ -191,8 +191,8 @@ public class WavecleaverItem extends Item implements GeoItem, SyncedAnimationIte
                     }.timedLoop(0, 10, 2);
                 }
             });
-            if ((Entity) entity instanceof Player _player)
-                _player.getCooldowns().addCooldown(itemstack.getItem(), 240);
+            if ((Entity) entity instanceof Player player)
+                player.getCooldowns().addCooldown(itemstack.getItem(), 240);
         }
         return ar;
 	}
@@ -201,7 +201,7 @@ public class WavecleaverItem extends Item implements GeoItem, SyncedAnimationIte
 	public void inventoryTick(ItemStack itemstack, Level world, Entity entity, int slot, boolean selected) {
 		super.inventoryTick(itemstack, world, entity, slot, selected);
 		if (selected) {
-            if (!(entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CAMobEffects.ADD_REACH.get()))) {
+            if (!(entity instanceof LivingEntity livEnt0 && livEnt0.hasEffect(CAMobEffects.ADD_REACH.get()))) {
                 if (entity instanceof LivingEntity living && !living.level().isClientSide())
                     living.addEffect(new MobEffectInstance(CAMobEffects.ADD_REACH.get(), 20, 2, false, false));
             }

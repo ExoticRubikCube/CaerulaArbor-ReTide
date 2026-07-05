@@ -64,22 +64,22 @@ public class BombTrailerBlock extends Block {
             BlockState target;
             dx = -10;
             for (int index0 = 0; index0 < 21; index0++) {
-                if ((LevelAccessor) world instanceof ServerLevel _level)
-                    _level.sendParticles(ParticleTypes.SMALL_FLAME, (x + dx), (y + 0.5), (z + 10), 32, 0.5, 2, 0.5, 0.1);
-                if ((LevelAccessor) world instanceof ServerLevel _level)
-                    _level.sendParticles(ParticleTypes.SMALL_FLAME, (x + dx), (y + 0.5), (z - 10), 32, 0.5, 2, 0.5, 0.1);
-                if ((LevelAccessor) world instanceof ServerLevel _level)
-                    _level.sendParticles(ParticleTypes.SMALL_FLAME, (x + 10), (y + 0.5), (z + dx), 32, 0.5, 2, 0.5, 0.1);
-                if ((LevelAccessor) world instanceof ServerLevel _level)
-                    _level.sendParticles(ParticleTypes.SMALL_FLAME, (x - 10), (y + 0.5), (z + dx), 32, 0.5, 2, 0.5, 0.1);
+                if ((LevelAccessor) world instanceof ServerLevel level)
+                    level.sendParticles(ParticleTypes.SMALL_FLAME, (x + dx), (y + 0.5), (z + 10), 32, 0.5, 2, 0.5, 0.1);
+                if ((LevelAccessor) world instanceof ServerLevel level)
+                    level.sendParticles(ParticleTypes.SMALL_FLAME, (x + dx), (y + 0.5), (z - 10), 32, 0.5, 2, 0.5, 0.1);
+                if ((LevelAccessor) world instanceof ServerLevel level)
+                    level.sendParticles(ParticleTypes.SMALL_FLAME, (x + 10), (y + 0.5), (z + dx), 32, 0.5, 2, 0.5, 0.1);
+                if ((LevelAccessor) world instanceof ServerLevel level)
+                    level.sendParticles(ParticleTypes.SMALL_FLAME, (x - 10), (y + 0.5), (z + dx), 32, 0.5, 2, 0.5, 0.1);
                 dx = dx + 1;
             }
-            if ((LevelAccessor) world instanceof ServerLevel _level)
-                _level.sendParticles(ParticleTypes.EXPLOSION, x, y, z, 6, 3, 3, 3, 0.1);
-            if ((LevelAccessor) world instanceof ServerLevel _level)
-                _level.sendParticles(ParticleTypes.EXPLOSION_EMITTER, x, y, z, 128, 3, 3, 3, 0.1);
-            if ((LevelAccessor) world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.DRAGON_FIREBALL_EXPLODE, SoundSource.BLOCKS, (float) 3.2, 1);
+            if ((LevelAccessor) world instanceof ServerLevel level)
+                level.sendParticles(ParticleTypes.EXPLOSION, x, y, z, 6, 3, 3, 3, 0.1);
+            if ((LevelAccessor) world instanceof ServerLevel level)
+                level.sendParticles(ParticleTypes.EXPLOSION_EMITTER, x, y, z, 128, 3, 3, 3, 0.1);
+            if ((LevelAccessor) world instanceof Level level) {
+                    level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.DRAGON_FIREBALL_EXPLODE, SoundSource.BLOCKS, (float) 3.2, 1);
             }
             dx = -10;
             for (int index1 = 0; index1 < 21; index1++) {

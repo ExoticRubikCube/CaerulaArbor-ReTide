@@ -58,13 +58,13 @@ public class CentrifugerSelectScreen extends AbstractContainerScreen<Centrifuger
             String selection;
             selection = entity.getPersistentData().getString("centrifugerSelection");
             if ((selection).equals("skadi")) {
-                result = (LevelAccessor) world instanceof Level _level ? new SkadiEntity(CAEntities.SKADI.get(), _level) : null;
+                result = (LevelAccessor) world instanceof Level level ? new SkadiEntity(CAEntities.SKADI.get(), level) : null;
             } else if ((selection).equals("ulpians")) {
-                result = (LevelAccessor) world instanceof Level _level ? new UlpiansEntity(CAEntities.ULPIANS.get(), _level) : null;
+                result = (LevelAccessor) world instanceof Level level ? new UlpiansEntity(CAEntities.ULPIANS.get(), level) : null;
             } else if ((selection).equals("gladiia")) {
-                result = (LevelAccessor) world instanceof Level _level ? new GladiiaEntity(CAEntities.GLADIIA.get(), _level) : null;
+                result = (LevelAccessor) world instanceof Level level ? new GladiiaEntity(CAEntities.GLADIIA.get(), level) : null;
             } else if ((selection).equals("specter")) {
-                result = (LevelAccessor) world instanceof Level _level ? new SpecterEntity(CAEntities.SPECTER.get(), _level) : null;
+                result = (LevelAccessor) world instanceof Level level ? new SpecterEntity(CAEntities.SPECTER.get(), level) : null;
             } else {
                 result = entity;
             }

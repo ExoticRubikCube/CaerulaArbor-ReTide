@@ -48,7 +48,7 @@ public class AttrShowOverlay {
             String defense = "";
             {
                 double d;
-                d = (Entity) entity instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()) ? _livingEntity0.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getValue() : 0;
+                d = (Entity) entity instanceof LivingEntity livingEntity0 && livingEntity0.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()) ? livingEntity0.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getValue() : 0;
                 if (d > 0) {
                     defense = new java.text.DecimalFormat("##.#").format(d);
                 }
@@ -56,7 +56,7 @@ public class AttrShowOverlay {
             String resis = "";
             if (entity != null) {
                 double d1;
-                d1 = (Entity) entity instanceof LivingEntity _livingEntity1 && _livingEntity1.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()) ? _livingEntity1.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).getValue() : 0;
+                d1 = (Entity) entity instanceof LivingEntity livingEntity1 && livingEntity1.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()) ? livingEntity1.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).getValue() : 0;
                 if (d1 > 0) {
                     resis = new java.text.DecimalFormat("##.#").format(d1);
                 }
@@ -64,7 +64,7 @@ public class AttrShowOverlay {
             String miss = "";
             if (entity != null) {
                 double d;
-                d = (Entity) entity instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(CAAttributes.MISSRATE.get()) ? _livingEntity0.getAttribute(CAAttributes.MISSRATE.get()).getValue() : 0;
+                d = (Entity) entity instanceof LivingEntity livingEntity0 && livingEntity0.getAttributes().hasAttribute(CAAttributes.MISSRATE.get()) ? livingEntity0.getAttribute(CAAttributes.MISSRATE.get()).getValue() : 0;
                 if (d > 0) {
                     miss = new java.text.DecimalFormat("##.#").format(d);
                 }
@@ -72,7 +72,7 @@ public class AttrShowOverlay {
             String barrier = "";
             if (entity != null) {
                 double d;
-                d = (Entity) entity instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(CAAttributes.LIVING_BARRIER.get()) ? _livingEntity0.getAttribute(CAAttributes.LIVING_BARRIER.get()).getBaseValue() : 0;
+                d = (Entity) entity instanceof LivingEntity livingEntity0 && livingEntity0.getAttributes().hasAttribute(CAAttributes.LIVING_BARRIER.get()) ? livingEntity0.getAttribute(CAAttributes.LIVING_BARRIER.get()).getBaseValue() : 0;
                 if (d > 0) {
                     barrier = new java.text.DecimalFormat("##.#").format(d);
                 }
@@ -87,7 +87,7 @@ public class AttrShowOverlay {
                 double result = 0;
                 if (entity != null) {
                     double d;
-                    d = (Entity) entity instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()) ? _livingEntity0.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).getValue() : 0;
+                    d = (Entity) entity instanceof LivingEntity livingEntity0 && livingEntity0.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get()) ? livingEntity0.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).getValue() : 0;
                     result = d * 0.25;
                 }
                 int len = (int) result;
@@ -109,8 +109,8 @@ public class AttrShowOverlay {
                 } else {
                     double d;
                     double h1;
-                    d = (Entity) entity instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(CAAttributes.LIVING_BARRIER.get()) ? _livingEntity0.getAttribute(CAAttributes.LIVING_BARRIER.get()).getBaseValue() : 0;
-                    h1 = (Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1;
+                    d = (Entity) entity instanceof LivingEntity livingEntity0 && livingEntity0.getAttributes().hasAttribute(CAAttributes.LIVING_BARRIER.get()) ? livingEntity0.getAttribute(CAAttributes.LIVING_BARRIER.get()).getBaseValue() : 0;
+                    h1 = (Entity) entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1;
                     if (h1 <= 0) {
                         result = 25;
                     } else {

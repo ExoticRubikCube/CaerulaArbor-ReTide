@@ -53,10 +53,10 @@ public class SplasherAttackMobEffect extends MobEffect {
         double rand;
         double dama;
         num = 0;
-        if ((Entity) entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CAMobEffects.TRAIL_BUFF.get())) {
-            dama = ((Entity) entity instanceof LivingEntity _livingEntity1 && _livingEntity1.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity1.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.5;
+        if ((Entity) entity instanceof LivingEntity livEnt0 && livEnt0.hasEffect(CAMobEffects.TRAIL_BUFF.get())) {
+            dama = ((Entity) entity instanceof LivingEntity livingEntity1 && livingEntity1.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity1.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.5;
             for (Entity entityiterator : world.getEntities(entity, new AABB((x + 48), (y + 6), (z + 48), (x - 48), (y - 6), (z - 48)))) {
-                if ((entityiterator instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) < 5) {
+                if ((entityiterator instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) < 5) {
                     continue;
                 }
                 if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
@@ -66,9 +66,9 @@ public class SplasherAttackMobEffect extends MobEffect {
                     continue;
                 }
                 rand = Mth.nextDouble(RandomSource.create(), 7, 11);
-                if (entityiterator instanceof LivingEntity _livEnt6 && _livEnt6.hasEffect(CAMobEffects.TRAIL_BUFF.get())) {
+                if (entityiterator instanceof LivingEntity livEnt6 && livEnt6.hasEffect(CAMobEffects.TRAIL_BUFF.get())) {
                     if (world instanceof ServerLevel projectileLevel) {
-                        Projectile _entityToSpawn = new Object() {
+                        Projectile entityToSpawn = new Object() {
                             public Projectile getArrow(Level level, Entity shooter, float damage, int knockback) {
                                 AbstractArrow entityToSpawn = new FishSplashEntity(CAEntities.FISH_SPLASH.get(), level);
                                 entityToSpawn.setOwner(shooter);
@@ -79,15 +79,15 @@ public class SplasherAttackMobEffect extends MobEffect {
                                 return entityToSpawn;
                             }
                         }.getArrow(projectileLevel, (Entity) entity, (float) dama, 0);
-                        _entityToSpawn.setPos((entityiterator.getX()), (entityiterator.getY() + rand), (entityiterator.getZ()));
-                        _entityToSpawn.shoot(0, (-1), 0, (float) 1.5, 0);
-                        projectileLevel.addFreshEntity(_entityToSpawn);
+                        entityToSpawn.setPos((entityiterator.getX()), (entityiterator.getY() + rand), (entityiterator.getZ()));
+                        entityToSpawn.shoot(0, (-1), 0, (float) 1.5, 0);
+                        projectileLevel.addFreshEntity(entityToSpawn);
                     }
                     num = num + 1;
                     new Object() {
                         void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
-                            if (world instanceof ServerLevel _level)
-                                _level.sendParticles(CAParticles.SEA_SPLASH.get(), (entityiterator.getX() + ((x - entityiterator.getX()) / 40) * timedloopiterator),
+                            if (world instanceof ServerLevel level)
+                                level.sendParticles(CAParticles.SEA_SPLASH.get(), (entityiterator.getX() + ((x - entityiterator.getX()) / 40) * timedloopiterator),
                                         (entityiterator.getY() + 9 + ((y - (entityiterator.getY() + 9)) / 40) * timedloopiterator), (entityiterator.getZ() + ((z - entityiterator.getZ()) / 40) * timedloopiterator), 1, 0.1, 0.1, 0.1, 0.01);
                             final int tick2 = ticks;
                             CaerulaArborMod.queueServerWork(tick2, () -> {

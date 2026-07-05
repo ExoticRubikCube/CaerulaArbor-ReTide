@@ -70,14 +70,14 @@ public class FirstTellerSkillMobEffect extends MobEffect {
         Entity enemy;
         new Object() {
             void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
-                if (world instanceof ServerLevel _level)
-                    _level.sendParticles(ParticleTypes.ELECTRIC_SPARK, (x + -2.5), y, z, 64, 0.1, 0.2, 2, 0.1);
-                if (world instanceof ServerLevel _level)
-                    _level.sendParticles(ParticleTypes.ELECTRIC_SPARK, (x + 2.5), y, z, 64, 0.1, 0.2, 2, 0.1);
-                if (world instanceof ServerLevel _level)
-                    _level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, y, (z + 2.5), 64, 2, 0.2, 0.1, 0.1);
-                if (world instanceof ServerLevel _level)
-                    _level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, y, (z + -2.5), 64, 2, 0.2, 0.1, 0.1);
+                if (world instanceof ServerLevel level)
+                    level.sendParticles(ParticleTypes.ELECTRIC_SPARK, (x + -2.5), y, z, 64, 0.1, 0.2, 2, 0.1);
+                if (world instanceof ServerLevel level)
+                    level.sendParticles(ParticleTypes.ELECTRIC_SPARK, (x + 2.5), y, z, 64, 0.1, 0.2, 2, 0.1);
+                if (world instanceof ServerLevel level)
+                    level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, y, (z + 2.5), 64, 2, 0.2, 0.1, 0.1);
+                if (world instanceof ServerLevel level)
+                    level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, y, (z + -2.5), 64, 2, 0.2, 0.1, 0.1);
                 final int tick2 = ticks;
                 CaerulaArborMod.queueServerWork(tick2, () -> {
                     if (timedlooptotal > timedloopiterator + 1) {
@@ -87,26 +87,26 @@ public class FirstTellerSkillMobEffect extends MobEffect {
             }
         }.timedLoop(0, 5, 1);
         if (!(world.getDifficulty() == Difficulty.PEACEFUL)) {
-            if (world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), CASounds.FIRETTELLER_SKILL_ATTACK.get(), SoundSource.NEUTRAL, 3,
+            if (world instanceof Level level) {
+                    level.playSound(null, BlockPos.containing(x, y, z), CASounds.FIRETTELLER_SKILL_ATTACK.get(), SoundSource.NEUTRAL, 3,
                             (float) Mth.nextDouble(RandomSource.create(), 0.85, 1.15));
             }
             enemy = world.getEntitiesOfClass(FirstTellerEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).stream().min(new Object() {
-                Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
-                    return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
+                Comparator<Entity> compareDistOf(double x, double y, double z) {
+                    return Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z));
                 }
             }.compareDistOf(x, y, z)).orElse(null);
             if (enemy == null) {
-                if ((Entity) entity instanceof LivingEntity _entity)
-                    _entity.removeEffect(CAMobEffects.FIRST_TELLER_SKILL.get());
+                if ((Entity) entity instanceof LivingEntity livingEntity)
+                    livingEntity.removeEffect(CAMobEffects.FIRST_TELLER_SKILL.get());
                 return;
             }
             if (!enemy.isAlive()) {
-                if ((Entity) entity instanceof LivingEntity _entity)
-                    _entity.removeEffect(CAMobEffects.FIRST_TELLER_SKILL.get());
+                if ((Entity) entity instanceof LivingEntity livingEntity)
+                    livingEntity.removeEffect(CAMobEffects.FIRST_TELLER_SKILL.get());
                 return;
             }
-            ayk = enemy instanceof LivingEntity _livingEntity13 && _livingEntity13.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity13.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
+            ayk = enemy instanceof LivingEntity livingEntity13 && livingEntity13.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity13.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
             for (Entity entityiterator : world.getEntities(entity, new AABB((x + 2.5), (y + 4), (z + 2.5), (x + -2.5), y, (z + -2.5)))) {
                 if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
                     continue;
@@ -122,7 +122,7 @@ public class FirstTellerSkillMobEffect extends MobEffect {
                 SIHelper.causeSanityInjury(livingEntity, ayk * 60, SanityEvent.Hurt.Type.POTION);
             }
             if (world instanceof ServerLevel projectileLevel) {
-                Projectile _entityToSpawn = new Object() {
+                Projectile entityToSpawn = new Object() {
                     public Projectile getArrow(Level level, float damage, int knockback, byte piercing) {
                         AbstractArrow entityToSpawn = new TellerShotEntity(CAEntities.TELLER_SHOT.get(), level);
                         entityToSpawn.setBaseDamage(damage);
@@ -132,9 +132,9 @@ public class FirstTellerSkillMobEffect extends MobEffect {
                         return entityToSpawn;
                     }
                 }.getArrow(projectileLevel, (float) (ayk * 0.6), 0, (byte) 1);
-                _entityToSpawn.setPos(x, (y + 8), z);
-                _entityToSpawn.shoot((Mth.nextDouble(RandomSource.create(), -0.125, 0.125)), (-1), (Mth.nextDouble(RandomSource.create(), -0.125, 0.125)), 1, 5);
-                projectileLevel.addFreshEntity(_entityToSpawn);
+                entityToSpawn.setPos(x, (y + 8), z);
+                entityToSpawn.shoot((Mth.nextDouble(RandomSource.create(), -0.125, 0.125)), (-1), (Mth.nextDouble(RandomSource.create(), -0.125, 0.125)), 1, 5);
+                projectileLevel.addFreshEntity(entityToSpawn);
             }
             ((Entity) entity).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_magic")))), (float) (ayk * 0.6));
             SIHelper.causeSanityInjury(entity, ayk * 60, SanityEvent.Hurt.Type.POTION);

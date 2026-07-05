@@ -247,23 +247,23 @@ public class DepositerProkaryoteEntity extends SeaMonster {
             double y = this.getY();
             double z = this.getZ();
             if ((world.getBlockState(BlockPos.containing(x, y, z))).canBeReplaced()) {
-				BlockPos _bp = BlockPos.containing(x, y, z);
-				BlockState _bs = CABlocks.WHITE_CHITIN_BLOCK.get().withPropertiesOf(world.getBlockState(_bp));
-				if (_bs.getBlock().getStateDefinition().getProperty("waterlogged") instanceof BooleanProperty _waterlogged)
-					_bs = _bs.setValue(_waterlogged, (world.getFluidState(BlockPos.containing(x, y, z)).createLegacyBlock()).getBlock() == Blocks.WATER);
-				world.setBlock(_bp, _bs, 3);
+				BlockPos bp = BlockPos.containing(x, y, z);
+				BlockState bs = CABlocks.WHITE_CHITIN_BLOCK.get().withPropertiesOf(world.getBlockState(bp));
+				if (bs.getBlock().getStateDefinition().getProperty("waterlogged") instanceof BooleanProperty waterlogged)
+					bs = bs.setValue(waterlogged, (world.getFluidState(BlockPos.containing(x, y, z)).createLegacyBlock()).getBlock() == Blocks.WATER);
+				world.setBlock(bp, bs, 3);
                 world.levelEvent(2001, BlockPos.containing(x, y, z), Block.getId(CABlocks.WHITE_CHITIN_BLOCK.get().defaultBlockState()));
             }
             for (Direction directioniterator : Direction.values()) {
                 if (Math.random() < 0.5) {
                     if ((world.getBlockState(BlockPos.containing(x + directioniterator.getStepX(), y + directioniterator.getStepY(), z + directioniterator.getStepZ()))).canBeReplaced()) {
                         {
-                            BlockPos _bp = BlockPos.containing(x + directioniterator.getStepX(), y + directioniterator.getStepY(), z + directioniterator.getStepZ());
-                            BlockState _bs = CABlocks.WHITE_CHITIN_BLOCK.get().withPropertiesOf(world.getBlockState(_bp));
-                            if (_bs.getBlock().getStateDefinition().getProperty("waterlogged") instanceof BooleanProperty _waterlogged)
-                                _bs = _bs.setValue(_waterlogged,
+                            BlockPos bp = BlockPos.containing(x + directioniterator.getStepX(), y + directioniterator.getStepY(), z + directioniterator.getStepZ());
+                            BlockState bs = CABlocks.WHITE_CHITIN_BLOCK.get().withPropertiesOf(world.getBlockState(bp));
+                            if (bs.getBlock().getStateDefinition().getProperty("waterlogged") instanceof BooleanProperty waterlogged)
+                                bs = bs.setValue(waterlogged,
                                         (world.getFluidState(BlockPos.containing(x + directioniterator.getStepX(), y + directioniterator.getStepY(), z + directioniterator.getStepZ())).createLegacyBlock()).getBlock() == Blocks.WATER);
-                            world.setBlock(_bp, _bs, 3);
+                            world.setBlock(bp, bs, 3);
                         }
                         world.levelEvent(2001, BlockPos.containing(x + directioniterator.getStepX(), y + directioniterator.getStepY(), z + directioniterator.getStepZ()), Block.getId(CABlocks.WHITE_CHITIN_BLOCK.get().defaultBlockState()));
                     }

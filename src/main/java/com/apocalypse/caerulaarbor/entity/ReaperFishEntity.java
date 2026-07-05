@@ -151,12 +151,12 @@ public class ReaperFishEntity extends SeaMonster {
                                 if (hardness <= limithard && hardness >= 0 && world.getBlockFloorHeight(BlockPos.containing(x + dx, y + dy, z + dz)) > 0) {
                                     if (Math.random() < 0.75) {
                                         {
-                                            BlockPos _pos = BlockPos.containing(x + dx, y + dy, z + dz);
-                                            Block.dropResources(world.getBlockState(_pos), world, BlockPos.containing(x, y, z), null);
-                                            world.destroyBlock(_pos, false);
+                                            BlockPos pos = BlockPos.containing(x + dx, y + dy, z + dz);
+                                            Block.dropResources(world.getBlockState(pos), world, BlockPos.containing(x, y, z), null);
+                                            world.destroyBlock(pos, false);
                                         }
-                                        if (world instanceof Level _level)
-                                            _level.updateNeighborsAt(BlockPos.containing(x + dx, y + dy, z + dz), _level.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz)).getBlock());
+                                        if (world instanceof Level level)
+                                            level.updateNeighborsAt(BlockPos.containing(x + dx, y + dy, z + dz), level.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz)).getBlock());
                                         once = true;
                                     }
                                 }
@@ -167,11 +167,11 @@ public class ReaperFishEntity extends SeaMonster {
                         dx = dx + 1;
                     }
                     if (once) {
-                        if (world instanceof Level _level) {
-                            if (!_level.isClientSide()) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.WITHER_BREAK_BLOCK, SoundSource.NEUTRAL, 1, 1);
+                        if (world instanceof Level level) {
+                            if (!level.isClientSide()) {
+                                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.WITHER_BREAK_BLOCK, SoundSource.NEUTRAL, 1, 1);
                             } else {
-                                _level.playLocalSound(x, y, z, SoundEvents.WITHER_BREAK_BLOCK, SoundSource.NEUTRAL, 1, 1, false);
+                                level.playLocalSound(x, y, z, SoundEvents.WITHER_BREAK_BLOCK, SoundSource.NEUTRAL, 1, 1, false);
                             }
                         }
                     }
@@ -215,12 +215,12 @@ public class ReaperFishEntity extends SeaMonster {
             if (this.isAggressive() && this.isAlive()) {
                 for (int index0 = 0; index0 < 120; index0++) {
                     angle = Mth.nextDouble(RandomSource.create(), 0, 6.283);
-                    if (world instanceof ServerLevel _level)
-                        _level.sendParticles(ParticleTypes.ELECTRIC_SPARK, (x + 5 * Math.sin(angle)), y, (z + 4 * Math.cos(angle)), 8, 0.1, 0.1, 0.1, 0.2);
+                    if (world instanceof ServerLevel level)
+                        level.sendParticles(ParticleTypes.ELECTRIC_SPARK, (x + 5 * Math.sin(angle)), y, (z + 4 * Math.cos(angle)), 8, 0.1, 0.1, 0.1, 0.2);
                 }
-				final Vec3 _center = new Vec3(x, y, z);
-				List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(10 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-				for (Entity entityiterator : _entfound) {
+				final Vec3 center = new Vec3(x, y, z);
+				List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(10 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+				for (Entity entityiterator : entfound) {
 					if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
 						if (!(entityiterator == this.getTarget())) {
 							continue;
@@ -241,27 +241,27 @@ public class ReaperFishEntity extends SeaMonster {
                         (float) ((this.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? this.getAttribute(Attributes.MAX_HEALTH).getValue() : 0) * 0.01));
             }
         }
-        isCharging = (Entity) this instanceof ReaperFishEntity _datEntL17 && _datEntL17.getEntityData().get(DATA_IS_CHARGING);
-        cTick = (Entity) this instanceof ReaperFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_CHARGE_TICK) : 0;
+        isCharging = (Entity) this instanceof ReaperFishEntity datEntL17 && datEntL17.getEntityData().get(DATA_IS_CHARGING);
+        cTick = (Entity) this instanceof ReaperFishEntity datEntI ? datEntI.getEntityData().get(DATA_CHARGE_TICK) : 0;
         if (cTick > 0) {
-            if ((Entity) this instanceof ReaperFishEntity _datEntSetI)
-                _datEntSetI.getEntityData().set(DATA_CHARGE_TICK, (int) (cTick - 1));
+            if ((Entity) this instanceof ReaperFishEntity datEntSetI)
+                datEntSetI.getEntityData().set(DATA_CHARGE_TICK, (int) (cTick - 1));
         }
         if (this.isAggressive()) {
             if (!isCharging && cTick <= 0) {
-                if ((Entity) this instanceof ReaperFishEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_CHARGE_TICK, 200);
-                if ((Entity) this instanceof ReaperFishEntity _datEntSetL)
-                    _datEntSetL.getEntityData().set(DATA_IS_CHARGING, true);
+                if ((Entity) this instanceof ReaperFishEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_CHARGE_TICK, 200);
+                if ((Entity) this instanceof ReaperFishEntity datEntSetL)
+                    datEntSetL.getEntityData().set(DATA_IS_CHARGING, true);
                 if (!world.isClientSide()) {
-                    if (world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), CASounds.REAPER_ANGRY.get(), SoundSource.HOSTILE, (float) 1.5, 1);
+                    if (world instanceof Level level) {
+                            level.playSound(null, BlockPos.containing(x, y, z), CASounds.REAPER_ANGRY.get(), SoundSource.HOSTILE, (float) 1.5, 1);
                     }
                 }
             }
         } else {
-            if ((Entity) this instanceof ReaperFishEntity _datEntSetL)
-                _datEntSetL.getEntityData().set(DATA_IS_CHARGING, false);
+            if ((Entity) this instanceof ReaperFishEntity datEntSetL)
+                datEntSetL.getEntityData().set(DATA_IS_CHARGING, false);
         }
         this.refreshDimensions();
 	}

@@ -149,8 +149,8 @@ public class CreeperFishEntity extends SeaMonster implements RangedSanityAttacke
 		CreeperFishEntity entity = this;
 		Level world = this.level();
         if (itemstack.getItem() == Items.FLINT_AND_STEEL) {
-            if ((LevelAccessor) world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.CREEPER_PRIMED, SoundSource.HOSTILE, 2, 1);
+            if ((LevelAccessor) world instanceof Level level) {
+                    level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.CREEPER_PRIMED, SoundSource.HOSTILE, 2, 1);
             }
             if (entity instanceof CreeperFishEntity) {
                 entity.setAnimation("animation.explosivefish.jump");

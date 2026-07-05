@@ -80,13 +80,13 @@ public class HighmoreShootEntity extends AbstractArrow implements ItemSupplier {
             return;
         entity.invulnerableTime = 0;
         if (!(sourceentity == entity)) {
-            if ((sourceentity instanceof HighmoreEntity _datEntI ? _datEntI.getEntityData().get(HighmoreEntity.DATA_PHASE) : 0) == 0) {
+            if ((sourceentity instanceof HighmoreEntity datEntI ? datEntI.getEntityData().get(HighmoreEntity.DATA_PHASE) : 0) == 0) {
                 CaerulaArborMod.queueServerWork(3, () -> {
                     new Object() {
                         void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                             entity.hurt(
                                     new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "highmore_attack"))), sourceentity),
-                                    (float) (sourceentity instanceof LivingEntity _livingEntity3 && _livingEntity3.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity3.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
+                                    (float) (sourceentity instanceof LivingEntity livingEntity3 && livingEntity3.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity3.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
                             final int tick2 = ticks;
                             CaerulaArborMod.queueServerWork(tick2, () -> {
                                 if (timedlooptotal > timedloopiterator + 1) {
@@ -96,14 +96,14 @@ public class HighmoreShootEntity extends AbstractArrow implements ItemSupplier {
                         }
                     }.timedLoop(0, 2, 3);
                 });
-            } else if ((sourceentity instanceof HighmoreEntity _datEntI ? _datEntI.getEntityData().get(HighmoreEntity.DATA_PHASE) : 0) == 1) {
+            } else if ((sourceentity instanceof HighmoreEntity datEntI ? datEntI.getEntityData().get(HighmoreEntity.DATA_PHASE) : 0) == 1) {
                 CaerulaArborMod.queueServerWork(3, () -> {
                     new Object() {
                         void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
-                            LivingEntity _livingEntity9 = (LivingEntity) sourceentity;
+                            LivingEntity livingEntity9 = (LivingEntity) sourceentity;
                             entity.hurt(
                                     new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "highmore_attack"))), sourceentity),
-                                    (float) (_livingEntity9.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity9.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
+                                    (float) (livingEntity9.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity9.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
                             final int tick2 = ticks;
                             CaerulaArborMod.queueServerWork(tick2, () -> {
                                 if (timedlooptotal > timedloopiterator + 1) {
@@ -117,10 +117,10 @@ public class HighmoreShootEntity extends AbstractArrow implements ItemSupplier {
                 CaerulaArborMod.queueServerWork(3, () -> {
                     new Object() {
                         void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
-                            LivingEntity _livingEntity14 = (LivingEntity) sourceentity;
+                            LivingEntity livingEntity14 = (LivingEntity) sourceentity;
                             entity.hurt(
                                     new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "highmore_attack"))), sourceentity),
-                                    (float) (_livingEntity14.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity14.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
+                                    (float) (livingEntity14.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity14.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
                             final int tick2 = ticks;
                             CaerulaArborMod.queueServerWork(tick2, () -> {
                                 if (timedlooptotal > timedloopiterator + 1) {
@@ -173,8 +173,8 @@ public class HighmoreShootEntity extends AbstractArrow implements ItemSupplier {
 	}
 
 	/**
-	 * @deprecated Prefer {@link #shoot(LivingEntity, LivingEntity, double)} so callers can pass their own ranged damage scaling.
-	 * This fallback uses the average scaling ratio of current shooters.
+	 * @deprecated 优先使用 {@link #shoot(LivingEntity, LivingEntity, double)}，以便调用方自行传入远程伤害倍率。
+	 * 该回退重载会使用当前射手的平均倍率。
 	 */
 	@Deprecated
 	public static HighmoreShootEntity shoot(LivingEntity entity, LivingEntity target) {

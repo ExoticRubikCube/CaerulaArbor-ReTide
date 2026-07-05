@@ -206,10 +206,10 @@ public class OceanizedChickenEntity extends SeaMonster {
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
         SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if ((Entity) this instanceof OceanizedChickenEntity _datEntSetI)
-            _datEntSetI.getEntityData().set(DATA_GROW_TIME, 10000 - Mth.nextInt(RandomSource.create(), 0, 6000));
-        if ((Entity) this instanceof OceanizedChickenEntity _datEntSetI)
-            _datEntSetI.getEntityData().set(DATA_LAY_COOLDOWN, 1200 + Mth.nextInt(RandomSource.create(), -100, 100));
+        if ((Entity) this instanceof OceanizedChickenEntity datEntSetI)
+            datEntSetI.getEntityData().set(DATA_GROW_TIME, 10000 - Mth.nextInt(RandomSource.create(), 0, 6000));
+        if ((Entity) this instanceof OceanizedChickenEntity datEntSetI)
+            datEntSetI.getEntityData().set(DATA_LAY_COOLDOWN, 1200 + Mth.nextInt(RandomSource.create(), -100, 100));
         return retval;
     }
 
@@ -248,22 +248,22 @@ public class OceanizedChickenEntity extends SeaMonster {
         super.mobInteract(sourceentity, hand);
         Entity entity = this;
         if (new Object() {
-            public boolean checkGamemode(Entity _ent) {
-                if (_ent instanceof ServerPlayer _serverPlayer) {
-                    return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                    return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+            public boolean checkGamemode(Entity ent) {
+                if (ent instanceof ServerPlayer serverPlayer) {
+                    return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                    return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                 }
                 return false;
             }
         }.checkGamemode((Entity) sourceentity)) {
             if (sourceentity.isHolding(CAItems.NETHERSEA_CHICKEN_EGG.get())) {
-                if (entity instanceof OceanizedChickenEntity _datEntL2 && _datEntL2.getEntityData().get(DATA_IS_CHILD)) {
-                    if (entity instanceof OceanizedChickenEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_GROW_TIME, 1);
+                if (entity instanceof OceanizedChickenEntity datEntL2 && datEntL2.getEntityData().get(DATA_IS_CHILD)) {
+                    if (entity instanceof OceanizedChickenEntity datEntSetI)
+                        datEntSetI.getEntityData().set(DATA_GROW_TIME, 1);
                 } else {
-                    if (entity instanceof OceanizedChickenEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_LAY_COOLDOWN, 1);
+                    if (entity instanceof OceanizedChickenEntity datEntSetI)
+                        datEntSetI.getEntityData().set(DATA_LAY_COOLDOWN, 1);
                 }
                 return InteractionResult.SUCCESS;
             }
@@ -278,40 +278,40 @@ public class OceanizedChickenEntity extends SeaMonster {
         double lay;
         double grow;
         boolean is_child;
-        is_child = (Entity) this instanceof OceanizedChickenEntity _datEntL0 && _datEntL0.getEntityData().get(DATA_IS_CHILD);
+        is_child = (Entity) this instanceof OceanizedChickenEntity datEntL0 && datEntL0.getEntityData().get(DATA_IS_CHILD);
         if (is_child) {
-            grow = (Entity) this instanceof OceanizedChickenEntity _datEntI ? _datEntI.getEntityData().get(DATA_GROW_TIME) : 0;
+            grow = (Entity) this instanceof OceanizedChickenEntity datEntI ? datEntI.getEntityData().get(DATA_GROW_TIME) : 0;
             if (grow > 0) {
-                if ((Entity) this instanceof OceanizedChickenEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_GROW_TIME, (int) (grow - 1));
+                if ((Entity) this instanceof OceanizedChickenEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_GROW_TIME, (int) (grow - 1));
             } else {
-                if ((Entity) this instanceof OceanizedChickenEntity _datEntSetL)
-                    _datEntSetL.getEntityData().set(DATA_IS_CHILD, false);
+                if ((Entity) this instanceof OceanizedChickenEntity datEntSetL)
+                    datEntSetL.getEntityData().set(DATA_IS_CHILD, false);
             }
         } else {
-            lay = (Entity) this instanceof OceanizedChickenEntity _datEntI ? _datEntI.getEntityData().get(DATA_LAY_COOLDOWN) : 0;
+            lay = (Entity) this instanceof OceanizedChickenEntity datEntI ? datEntI.getEntityData().get(DATA_LAY_COOLDOWN) : 0;
             if (lay > 0) {
-                if ((Entity) this instanceof OceanizedChickenEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_LAY_COOLDOWN, (int) (lay - 1));
+                if ((Entity) this instanceof OceanizedChickenEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_LAY_COOLDOWN, (int) (lay - 1));
             } else {
-                if ((Entity) this instanceof OceanizedChickenEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_LAY_COOLDOWN, Mth.nextInt(RandomSource.create(), 2400, 4800));
+                if ((Entity) this instanceof OceanizedChickenEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_LAY_COOLDOWN, Mth.nextInt(RandomSource.create(), 2400, 4800));
                 if (this instanceof OceanizedChickenEntity) {
                     this.setAnimation("animation.oceanized_chicken.lay");
                 }
                 CaerulaArborMod.queueServerWork(5, () -> {
-                    if (world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(getX(), getY(), getZ()), SoundEvents.CHICKEN_EGG, SoundSource.NEUTRAL, 1, 1);
+                    if (world instanceof Level level) {
+                        level.playSound(null, BlockPos.containing(getX(), getY(), getZ()), SoundEvents.CHICKEN_EGG, SoundSource.NEUTRAL, 1, 1);
                     }
-                    if (world instanceof ServerLevel _level) {
+                    if (world instanceof ServerLevel level) {
                         ItemStack result;
                         ItemStack egg;
                         double rrr;
                         double ooo;
                         double c;
                         egg = new ItemStack(CAItems.NETHERSEA_CHICKEN_EGG.get()).copy();
-                        rrr = (Entity) this instanceof OceanizedChickenEntity _datEntI ? _datEntI.getEntityData().get(DATA_EGG_RATE) : 0;
-                        ooo = (Entity) this instanceof OceanizedChickenEntity _datEntI ? _datEntI.getEntityData().get(DATA_EGG_OFFSET) : 0;
+                        rrr = (Entity) this instanceof OceanizedChickenEntity datEntI ? datEntI.getEntityData().get(DATA_EGG_RATE) : 0;
+                        ooo = (Entity) this instanceof OceanizedChickenEntity datEntI ? datEntI.getEntityData().get(DATA_EGG_OFFSET) : 0;
                         c = Mth.nextInt(RandomSource.create(), 1, 16);
                         if (c > 9) {
                             if (c <= 12) {
@@ -326,9 +326,9 @@ public class OceanizedChickenEntity extends SeaMonster {
                         egg.getOrCreateTag().putDouble("rate", rrr);
                         egg.getOrCreateTag().putDouble("offset", ooo);
                         result = egg;
-                        ItemEntity entityToSpawn = new ItemEntity(_level, (getX()), (getY()), (getZ()), result);
+                        ItemEntity entityToSpawn = new ItemEntity(level, (getX()), (getY()), (getZ()), result);
                         entityToSpawn.setPickUpDelay(10);
-                        _level.addFreshEntity(entityToSpawn);
+                        level.addFreshEntity(entityToSpawn);
                     }
                 });
             }
@@ -340,7 +340,7 @@ public class OceanizedChickenEntity extends SeaMonster {
     public EntityDimensions getDimensions(Pose p_33597_) {
         Entity entity = this;
         double result = 1;
-        if (entity instanceof OceanizedChickenEntity _datEntL0 && _datEntL0.getEntityData().get(DATA_IS_CHILD)) {
+        if (entity instanceof OceanizedChickenEntity datEntL0 && datEntL0.getEntityData().get(DATA_IS_CHILD)) {
             result = 0.5;
         }
         return super.getDimensions(p_33597_).scale((float) result);

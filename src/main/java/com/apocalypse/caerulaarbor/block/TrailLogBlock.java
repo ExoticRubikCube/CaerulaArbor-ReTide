@@ -123,14 +123,14 @@ public class TrailLogBlock extends Block {
 		int y = pos.getY();
 		int z = pos.getZ();
         InteractionResult result = InteractionResult.PASS;
-        if (entity.getMainHandItem().is(ItemTags.create(new ResourceLocation("minecraft:axes"))) || ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).is(ItemTags.create(new ResourceLocation("minecraft:axes")))) {
+        if (entity.getMainHandItem().is(ItemTags.create(new ResourceLocation("minecraft:axes"))) || ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).is(ItemTags.create(new ResourceLocation("minecraft:axes")))) {
             world.levelEvent(2001, BlockPos.containing(x, y, z), getId(CABlocks.TRAIL_LOG.get().defaultBlockState()));
-            if ((LevelAccessor) world instanceof Level _level) {
-                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1, 1);
+            if ((LevelAccessor) world instanceof Level level) {
+                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1, 1);
             }
-            BlockPos _bp = BlockPos.containing(x, y, z);
-            BlockState _bs = CABlocks.STRIPPED_TRAIL_LOG.get().withPropertiesOf(blockstate);
-            ((LevelAccessor) world).setBlock(_bp, _bs, 3);
+            BlockPos bp = BlockPos.containing(x, y, z);
+            BlockState bs = CABlocks.STRIPPED_TRAIL_LOG.get().withPropertiesOf(blockstate);
+            ((LevelAccessor) world).setBlock(bp, bs, 3);
             result = InteractionResult.SUCCESS;
         }
         return result;

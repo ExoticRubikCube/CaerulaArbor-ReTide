@@ -144,17 +144,17 @@ public class OceanizedCowEntity extends SeaMonster {
         double z = this.getZ();
         Entity entity = this;
         Level world = this.level();
-        if (sourceentity.isHolding(Items.SHEARS) && entity instanceof OceanizedCowEntity _datEntL1 && _datEntL1.getEntityData().get(DATA_SKILL)) {
-            if (entity instanceof OceanizedCowEntity _datEntSetL)
-                _datEntSetL.getEntityData().set(DATA_SKILL, false);
-            if ((LevelAccessor) world instanceof Level _level) {
-                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.MOOSHROOM_SHEAR, SoundSource.PLAYERS, 1, 1);
+        if (sourceentity.isHolding(Items.SHEARS) && entity instanceof OceanizedCowEntity datEntL1 && datEntL1.getEntityData().get(DATA_SKILL)) {
+            if (entity instanceof OceanizedCowEntity datEntSetL)
+                datEntSetL.getEntityData().set(DATA_SKILL, false);
+            if ((LevelAccessor) world instanceof Level level) {
+                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.MOOSHROOM_SHEAR, SoundSource.PLAYERS, 1, 1);
             }
             for (int index0 = 0; index0 < Mth.nextInt(RandomSource.create(), 3, 5); index0++) {
-                if ((LevelAccessor) world instanceof ServerLevel _level) {
-                    ItemEntity entityToSpawn = new ItemEntity(_level, x, (y + 0.65), z, new ItemStack(CABlocks.TRAIL_MUSHROOM.get()));
+                if ((LevelAccessor) world instanceof ServerLevel level) {
+                    ItemEntity entityToSpawn = new ItemEntity(level, x, (y + 0.65), z, new ItemStack(CABlocks.TRAIL_MUSHROOM.get()));
                     entityToSpawn.setPickUpDelay(10);
-                    _level.addFreshEntity(entityToSpawn);
+                    level.addFreshEntity(entityToSpawn);
                 }
             }
             return InteractionResult.SUCCESS;
@@ -166,8 +166,8 @@ public class OceanizedCowEntity extends SeaMonster {
     public void baseTick() {
         super.baseTick();
         LevelAccessor world = this.level();
-        if (!this.hasEffect(CAMobEffects.MUTE.get()) && (Entity) this instanceof OceanizedCowEntity _datEntL1 && _datEntL1.getEntityData().get(DATA_SKILL) && WorldUtils.canGrief(world)) {
-            if (!this.level().isClientSide() && !_datEntL1.hasEffect(CAMobEffects.COW_BUFF.get())) {
+        if (!this.hasEffect(CAMobEffects.MUTE.get()) && (Entity) this instanceof OceanizedCowEntity datEntL1 && datEntL1.getEntityData().get(DATA_SKILL) && WorldUtils.canGrief(world)) {
+            if (!this.level().isClientSide() && !datEntL1.hasEffect(CAMobEffects.COW_BUFF.get())) {
                 this.addEffect(new MobEffectInstance(CAMobEffects.COW_BUFF.get(), 20, 0, false, false));
             }
         }

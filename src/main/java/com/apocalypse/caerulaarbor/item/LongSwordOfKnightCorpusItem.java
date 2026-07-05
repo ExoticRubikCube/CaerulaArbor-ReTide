@@ -83,7 +83,7 @@ public class LongSwordOfKnightCorpusItem extends SwordItem {
 		if (selected) {
             if (entity == null)
                 return;
-            if (!(entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CAMobEffects.ADD_REACH.get()))) {
+            if (!(entity instanceof LivingEntity livEnt0 && livEnt0.hasEffect(CAMobEffects.ADD_REACH.get()))) {
                 if (entity instanceof LivingEntity living && !living.level().isClientSide())
                     living.addEffect(new MobEffectInstance(CAMobEffects.ADD_REACH.get(), 20, 2, false, false));
             }

@@ -1,8 +1,8 @@
 package com.apocalypse.caerulaarbor.recipe;
 
-import com.apocalypse.caerulaarbor.init.CAPotions;
 import com.apocalypse.caerulaarbor.init.CABlocks;
 import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CAPotions;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -22,29 +22,29 @@ public class BrewingRecipeHandler {
 	@SubscribeEvent
 	public static void onCommonSetup(FMLCommonSetupEvent event) {
 		event.enqueueWork(() -> {
-			// Fast Swim
+			// 快速游泳
 			addPotionRecipe(Potions.AWKWARD, CAItems.CORAL_FEET.get(), CAPotions.FAST_SWIM_POTION.get());
 			addPotionRecipe(CAPotions.FAST_SWIM_POTION.get(), Items.REDSTONE, CAPotions.FAST_SWIM_POTION_LONG.get());
 			addPotionRecipe(CAPotions.FAST_SWIM_POTION.get(), Items.GLOWSTONE_DUST, CAPotions.FAST_SWIM_POTION_II.get());
 			addPotionRecipe(CAPotions.FAST_SWIM_POTION_II.get(), CAItems.CELL_CLUSTER.get(), CAPotions.FAST_SWIM_POTION_III.get());
 
-			// Instant Sanity
+			// 瞬间理智
 			addPotionRecipe(Potions.AWKWARD, CABlocks.TRAIL_MUSHROOM.get(), CAPotions.INST_SANITY.get());
 			addPotionRecipe(CAPotions.INST_SANITY.get(), Items.GLOWSTONE_DUST, CAPotions.INST_SANITY_II.get());
 
-			// Sanity Cure
+			// 理智治愈
 			addPotionRecipe(CAPotions.INST_SANITY.get(), CAItems.TRAIL_APPLE.get(), CAPotions.SANITY_CURE.get());
 			addPotionRecipe(CAPotions.SANITY_CURE.get(), Items.GLOWSTONE_DUST, CAPotions.SANITY_CURE_II.get());
 
-			// Sanity Immunity
+			// 理智免疫
 			addPotionRecipe(CAPotions.SANITY_CURE.get(), CAItems.FERMENTED_OCEAN_EYE.get(), CAPotions.SANITY_IMMUE_POTION.get());
 			addPotionRecipe(CAPotions.SANITY_IMMUE_POTION.get(), CAItems.NERVOUS_REGENERATION.get(), CAPotions.LONG_SNT_IMMUE.get());
 
-			// Percentage Regeneration
+			// 百分比再生
 			addPotionRecipe(Potions.AWKWARD, CAItems.TEAR_ISHARMLA.get(), CAPotions.PERCENTAGE_REGENERATION.get());
 			addPotionRecipe(CAPotions.PERCENTAGE_REGENERATION.get(), Items.GLOWSTONE_DUST, CAPotions.PERCENTAGE_REGENERATION_II.get());
 
-			// Make Berry (Item output)
+			// 制作浆果（物品产出）
 			addItemRecipe(Potions.AWKWARD, Items.SWEET_BERRIES, CAItems.CANNED_CHERRY.get());
 		});
 	}

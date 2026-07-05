@@ -82,12 +82,12 @@ public class WitherShootPreEntity extends AbstractArrow implements ItemSupplier 
         if (entity instanceof OceanizedWitherEntity) {
             return;
         }
-        if ((sourceentity instanceof OceanizedWitherEntity _datEntI ? _datEntI.getEntityData().get(OceanizedWitherEntity.DATA_DURATION) : 0) > 0) {
+        if ((sourceentity instanceof OceanizedWitherEntity datEntI ? datEntI.getEntityData().get(OceanizedWitherEntity.DATA_DURATION) : 0) > 0) {
             if (!level().isClientSide())
                 discard();
             return;
         }
-        enemy = sourceentity instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+        enemy = sourceentity instanceof Mob mobEnt ? mobEnt.getTarget() : null;
         if (enemy == null || !enemy.isAlive()) {
             if (!level().isClientSide())
                 discard();
@@ -120,11 +120,11 @@ public class WitherShootPreEntity extends AbstractArrow implements ItemSupplier 
             Entity enemy;
             Entity otherOne;
             Entity otherTwo;
-            if ((entity instanceof OceanizedWitherEntity _datEntI ? _datEntI.getEntityData().get(OceanizedWitherEntity.DATA_DURATION) : 0) > 0) {
+            if ((entity instanceof OceanizedWitherEntity datEntI ? datEntI.getEntityData().get(OceanizedWitherEntity.DATA_DURATION) : 0) > 0) {
                 if (!level().isClientSide())
                     discard();
             } else {
-                enemy = entity instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+                enemy = entity instanceof Mob mobEnt ? mobEnt.getTarget() : null;
                 if (enemy == null || !enemy.isAlive()) {
                     if (!level().isClientSide())
                         discard();
@@ -178,7 +178,7 @@ public class WitherShootPreEntity extends AbstractArrow implements ItemSupplier 
 		return entityarrow;
 	}
 
-	// TODO: Revisit this legacy two-arg system when the pre-shot wither projectile API is refactored.
+	// TODO：当前置凋灵弹 API 重构时，重新审视这个遗留的双参数接口。
 	public static WitherShootPreEntity shoot(LivingEntity entity, LivingEntity target) {
 		WitherShootPreEntity entityarrow = new WitherShootPreEntity(CAEntities.WITHER_SHOOT_PRE.get(), entity, entity.level());
 		double dx = target.getX() - entity.getX();

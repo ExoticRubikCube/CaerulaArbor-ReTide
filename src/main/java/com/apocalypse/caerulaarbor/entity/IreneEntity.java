@@ -228,14 +228,14 @@ protected void dropCustomDeathLoot(DamageSource source, int looting, boolean rec
 			Entity specter;
 			if (!(sourceentity instanceof Player) && !(sourceentity instanceof SpecterEntity)) {
 				specter = world.getEntitiesOfClass(SpecterEntity.class, AABB.ofSize(new Vec3(x, y, z), 32, 32, 32), e -> true).stream().min(new Object() {
-                    Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
-                        return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
+                    Comparator<Entity> compareDistOf(double x, double y, double z) {
+                        return Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z));
                     }
                 }.compareDistOf(x, y, z)).orElse(null);
-				if (specter instanceof Mob _entity) {
-					_entity.getNavigation().moveTo(x, y, z, 1);
-					if (sourceentity instanceof LivingEntity _ent)
-						_entity.setTarget(_ent);
+				if (specter instanceof Mob entity) {
+					entity.getNavigation().moveTo(x, y, z, 1);
+					if (sourceentity instanceof LivingEntity ent)
+						entity.setTarget(ent);
 				}
 			}
 		}
@@ -311,24 +311,24 @@ protected void dropCustomDeathLoot(DamageSource source, int looting, boolean rec
         if (sourceentity.isHolding(CAItems.PERSONNEL_TRANSPORTER.get())) {
 			return InteractionResult.PASS;
 		}
-		tap = entity instanceof IreneEntity _datEntI ? _datEntI.getEntityData().get(DATA_TAP_TICK) : 0;
+		tap = entity instanceof IreneEntity datEntI ? datEntI.getEntityData().get(DATA_TAP_TICK) : 0;
 		if (tap <= 0) {
-			enemy = entity instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+			enemy = entity instanceof Mob mobEnt ? mobEnt.getTarget() : null;
 			if (!(enemy == null) && enemy.isAlive()) {
 				return InteractionResult.PASS;
 			}
 			if (!((LevelAccessor) world).isClientSide()) {
-				if ((LevelAccessor) world instanceof Level _level) {
-					_level.playSound(null, BlockPos.containing(x, y, z), CASounds.IRENE_INTERACT.get(), SoundSource.NEUTRAL, 3, 1);
+				if ((LevelAccessor) world instanceof Level level) {
+					level.playSound(null, BlockPos.containing(x, y, z), CASounds.IRENE_INTERACT.get(), SoundSource.NEUTRAL, 3, 1);
 				}
 			}
 			if (entity instanceof IreneEntity) {
 				((IreneEntity) entity).setAnimation("animation.irene.interact");
 			}
-			if (entity instanceof IreneEntity _datEntSetI)
-				_datEntSetI.getEntityData().set(DATA_TAP_TICK, 35);
-			if (entity instanceof IreneEntity _datEntSetI)
-				_datEntSetI.getEntityData().set(DATA_DURATION, 35);
+			if (entity instanceof IreneEntity datEntSetI)
+				datEntSetI.getEntityData().set(DATA_TAP_TICK, 35);
+			if (entity instanceof IreneEntity datEntSetI)
+				datEntSetI.getEntityData().set(DATA_DURATION, 35);
 			return InteractionResult.SUCCESS;
 		}
 		return InteractionResult.PASS;
@@ -350,18 +350,18 @@ protected void dropCustomDeathLoot(DamageSource source, int looting, boolean rec
 			if (tickCount % 40 == 15) {
 				burnBrandAround(world, x, y, z);
 			}
-			sklp1 = (Entity) this instanceof IreneEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP_1) : 0;
-			skillp2 = (Entity) this instanceof IreneEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP_2) : 0;
-			dura = (Entity) this instanceof IreneEntity _datEntI ? _datEntI.getEntityData().get(DATA_DURATION) : 0;
-			tap = (Entity) this instanceof IreneEntity _datEntI ? _datEntI.getEntityData().get(DATA_TAP_TICK) : 0;
+			sklp1 = (Entity) this instanceof IreneEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP_1) : 0;
+			skillp2 = (Entity) this instanceof IreneEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP_2) : 0;
+			dura = (Entity) this instanceof IreneEntity datEntI ? datEntI.getEntityData().get(DATA_DURATION) : 0;
+			tap = (Entity) this instanceof IreneEntity datEntI ? datEntI.getEntityData().get(DATA_TAP_TICK) : 0;
             enemy = this.getTarget();
 			if (dura > 0) {
-				if ((Entity) this instanceof IreneEntity _datEntSetI)
-					_datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura - 1));
+				if ((Entity) this instanceof IreneEntity datEntSetI)
+					datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura - 1));
 			}
 			if (tap > 0) {
-				if ((Entity) this instanceof IreneEntity _datEntSetI)
-					_datEntSetI.getEntityData().set(DATA_TAP_TICK, (int) (tap - 1));
+				if ((Entity) this instanceof IreneEntity datEntSetI)
+					datEntSetI.getEntityData().set(DATA_TAP_TICK, (int) (tap - 1));
 			}
 			if (sklp1 >= 4 && dura <= 0) {
 				if (!(enemy == null) && enemy.isAlive()) {
@@ -369,33 +369,33 @@ protected void dropCustomDeathLoot(DamageSource source, int looting, boolean rec
 						if (this instanceof IreneEntity) {
 							this.setAnimation("animation.irene.skill_1");
 						}
-						if ((Entity) this instanceof IreneEntity _datEntSetI)
-							_datEntSetI.getEntityData().set(DATA_SKILLP_1, 0);
-						if ((Entity) this instanceof IreneEntity _datEntSetI)
-							_datEntSetI.getEntityData().set(DATA_DURATION, 27);
+						if ((Entity) this instanceof IreneEntity datEntSetI)
+							datEntSetI.getEntityData().set(DATA_SKILLP_1, 0);
+						if ((Entity) this instanceof IreneEntity datEntSetI)
+							datEntSetI.getEntityData().set(DATA_DURATION, 27);
 						CaerulaArborMod.queueServerWork(10, () -> {
 							if (this.isAlive()) {
-								if (world instanceof Level _level) {
-									_level.playSound(null, BlockPos.containing(x, y, z), CASounds.IRENE_FLY.get(), SoundSource.NEUTRAL, 3, 1);
+								if (world instanceof Level level) {
+									level.playSound(null, BlockPos.containing(x, y, z), CASounds.IRENE_FLY.get(), SoundSource.NEUTRAL, 3, 1);
 								}
                                 Entity enemy1 = this.getTarget();
 								if (enemy1 == null)
 									return;
 								enemy1.push(0, 0.4, 0);
-								if (world instanceof ServerLevel _level)
-									_level.sendParticles(ParticleTypes.FIREWORK, (enemy1.getX()), (enemy1.getY() + 1), (enemy1.getZ()), 48, 0.15, 1, 0.15, 0.15);
-								if (enemy1 instanceof LivingEntity _entity && !_entity.level().isClientSide())
-									_entity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, (int) (double) 30, 0));
+								if (world instanceof ServerLevel level)
+									level.sendParticles(ParticleTypes.FIREWORK, (enemy1.getX()), (enemy1.getY() + 1), (enemy1.getZ()), 48, 0.15, 1, 0.15, 0.15);
+								if (enemy1 instanceof LivingEntity entity && !entity.level().isClientSide())
+									entity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, (int) (double) 30, 0));
 								enemy1.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))), this),
-										this.applyLaunchPunishBonus(enemy1, (float) (((Entity) this instanceof LivingEntity _livingEntity6 && _livingEntity6.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity6.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * (double) 3)));
+										this.applyLaunchPunishBonus(enemy1, (float) (((Entity) this instanceof LivingEntity livingEntity6 && livingEntity6.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity6.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * (double) 3)));
 								CaerulaArborMod.queueServerWork(6, () -> {
-									if (world instanceof Level _level) {
-										_level.playSound(null, BlockPos.containing(x, y, z), CASounds.IRENE_GUN.get(), SoundSource.NEUTRAL, 3, 1);
+									if (world instanceof Level level) {
+										level.playSound(null, BlockPos.containing(x, y, z), CASounds.IRENE_GUN.get(), SoundSource.NEUTRAL, 3, 1);
 									}
-									if (world instanceof ServerLevel _level)
-										_level.sendParticles(ParticleTypes.END_ROD, (enemy1.getX()), (enemy1.getY() + 0.75), (enemy1.getZ()), 32, 0.75, 0.75, 0.75, 0.15);
+									if (world instanceof ServerLevel level)
+										level.sendParticles(ParticleTypes.END_ROD, (enemy1.getX()), (enemy1.getY() + 0.75), (enemy1.getZ()), 32, 0.75, 0.75, 0.75, 0.15);
 									enemy1.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))), this),
-											this.applyLaunchPunishBonus(enemy1, (float) (((Entity) this instanceof LivingEntity _livingEntity14 && _livingEntity14.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity14.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 2)));
+											this.applyLaunchPunishBonus(enemy1, (float) (((Entity) this instanceof LivingEntity livingEntity14 && livingEntity14.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity14.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 2)));
 								});
 							}
 						});
@@ -407,29 +407,29 @@ protected void dropCustomDeathLoot(DamageSource source, int looting, boolean rec
 				}
 				if (!this.level().isClientSide())
 					this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 60, 9, false, false));
-				if (world instanceof Level _level) {
-					_level.playSound(null, BlockPos.containing(x, y, z), CASounds.IRENE_SKILL.get(), SoundSource.NEUTRAL, 3, 1);
+				if (world instanceof Level level) {
+					level.playSound(null, BlockPos.containing(x, y, z), CASounds.IRENE_SKILL.get(), SoundSource.NEUTRAL, 3, 1);
 				}
-				if ((Entity) this instanceof IreneEntity _datEntSetI)
-					_datEntSetI.getEntityData().set(DATA_SKILLP_2, 0);
-				if ((Entity) this instanceof IreneEntity _datEntSetI)
-					_datEntSetI.getEntityData().set(DATA_DURATION, 70);
+				if ((Entity) this instanceof IreneEntity datEntSetI)
+					datEntSetI.getEntityData().set(DATA_SKILLP_2, 0);
+				if ((Entity) this instanceof IreneEntity datEntSetI)
+					datEntSetI.getEntityData().set(DATA_DURATION, 70);
 				CaerulaArborMod.queueServerWork(9, () -> {
 					if (this.isAlive()) {
 						double damage;
                         damage = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
-						if (world instanceof Level _level) {
-							_level.playSound(null, BlockPos.containing(x, y, z), CASounds.IRENE_SKILL_FLY.get(), SoundSource.NEUTRAL, 3, 1);
+						if (world instanceof Level level) {
+							level.playSound(null, BlockPos.containing(x, y, z), CASounds.IRENE_SKILL_FLY.get(), SoundSource.NEUTRAL, 3, 1);
 						}
-						final Vec3 _center = new Vec3(x, y, z);
-						List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(14 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-						for (Entity entityiterator : _entfound) {
+						final Vec3 center = new Vec3(x, y, z);
+						List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(14 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+						for (Entity entityiterator : entfound) {
 							if (this.isValidEnemy(entityiterator) && distanceTo(entityiterator) <= 7) {
 								entityiterator.push(0, 0.5, 0);
-								if (world instanceof ServerLevel _level)
-									_level.sendParticles(ParticleTypes.FIREWORK, (entityiterator.getX()), (entityiterator.getY() + 0.75), (entityiterator.getZ()), 48, 0.15, 1, 0.15, 0.15);
-								if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
-									_entity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 80, 0));
+								if (world instanceof ServerLevel level)
+									level.sendParticles(ParticleTypes.FIREWORK, (entityiterator.getX()), (entityiterator.getY() + 0.75), (entityiterator.getZ()), 48, 0.15, 1, 0.15, 0.15);
+								if (entityiterator instanceof LivingEntity entity && !entity.level().isClientSide())
+									entity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 80, 0));
 								entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))), this),
 										this.applyLaunchPunishBonus(entityiterator, (float) (damage * 3)));
 							}
@@ -438,8 +438,8 @@ protected void dropCustomDeathLoot(DamageSource source, int looting, boolean rec
 				});
 				CaerulaArborMod.queueServerWork(16, () -> {
 					if (this.isAlive()) {
-						if (world instanceof Level _level) {
-							_level.playSound(null, BlockPos.containing(x, y, z), CASounds.IRENE_SKILL_LOOP.get(), SoundSource.NEUTRAL, 2, 1);
+						if (world instanceof Level level) {
+							level.playSound(null, BlockPos.containing(x, y, z), CASounds.IRENE_SKILL_LOOP.get(), SoundSource.NEUTRAL, 2, 1);
 						}
 					}
 				});
@@ -470,17 +470,17 @@ protected void dropCustomDeathLoot(DamageSource source, int looting, boolean rec
 							tx = selected.getX();
 							ty = selected.getY();
 							tz = selected.getZ();
-							final Vec3 _center = new Vec3(tx, ty, tz);
-							List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(6 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-							for (Entity entityiterator : _entfound) {
+							final Vec3 center = new Vec3(tx, ty, tz);
+							List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(6 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+							for (Entity entityiterator : entfound) {
 								if (this.isValidEnemy(entityiterator) && selected.distanceTo(entityiterator) <= 3) {
 									entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))), this),
 											this.applyLaunchPunishBonus(entityiterator, (float) (damage * 2.5)));
-									if (world instanceof Level _level) {
-										_level.playSound(null, BlockPos.containing(x, y, z), CASounds.IRENE_SKILL_GUN.get(), SoundSource.NEUTRAL, 3, 1);
+									if (world instanceof Level level) {
+										level.playSound(null, BlockPos.containing(x, y, z), CASounds.IRENE_SKILL_GUN.get(), SoundSource.NEUTRAL, 3, 1);
 									}
-									if (world instanceof ServerLevel _level)
-										_level.sendParticles(ParticleTypes.END_ROD, (entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()), 72, 2.5, 2.5, 2.5, 0.1);
+									if (world instanceof ServerLevel level)
+										level.sendParticles(ParticleTypes.END_ROD, (entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()), 72, 2.5, 2.5, 2.5, 0.1);
 								}
 							}
 						}
@@ -488,8 +488,8 @@ protected void dropCustomDeathLoot(DamageSource source, int looting, boolean rec
 				}
 				CaerulaArborMod.queueServerWork(59, () -> {
 					if (this.isAlive()) {
-						if (world instanceof Level _level) {
-							_level.playSound(null, BlockPos.containing(x, y, z), CASounds.IRENE_RELOAD.get(), SoundSource.NEUTRAL, 3, 1);
+						if (world instanceof Level level) {
+							level.playSound(null, BlockPos.containing(x, y, z), CASounds.IRENE_RELOAD.get(), SoundSource.NEUTRAL, 3, 1);
 						}
 					}
 				});
@@ -499,7 +499,7 @@ protected void dropCustomDeathLoot(DamageSource source, int looting, boolean rec
 		this.refreshDimensions();
 	}
 
-	// TODO: HIGH: IreneEntity 与 SaintCarmenEntity 之后应抽取共同基类承载该逻辑，而不是继续通过静态方法复用。
+	// TODO：高优先级。后续应为 IreneEntity 与 SaintCarmenEntity 抽取共同基类承载该逻辑，而不是继续通过静态方法复用。
 	public static void burnBrandAround(LevelAccessor world, double x, double y, double z) {
 		BlockState toBeBurn;
 		double px;

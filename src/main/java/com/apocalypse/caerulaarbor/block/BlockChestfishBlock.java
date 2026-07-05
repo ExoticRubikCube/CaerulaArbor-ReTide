@@ -137,8 +137,8 @@ public class BlockChestfishBlock extends Block implements SimpleWaterloggedBlock
 			world.playLocalSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.CHEST_LOCKED, SoundSource.BLOCKS, 1, 1, false);
 		}
 		if (Math.random() < 0.7) {
-			if (world instanceof ServerLevel _level) {
-				Entity entityToSpawn = CAEntities.CHEST_FISH.get().spawn(_level, BlockPos.containing(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5), MobSpawnType.MOB_SUMMONED);
+			if (world instanceof ServerLevel level) {
+				Entity entityToSpawn = CAEntities.CHEST_FISH.get().spawn(level, BlockPos.containing(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5), MobSpawnType.MOB_SUMMONED);
 				if (entityToSpawn != null) {
 					entityToSpawn.setYRot(angl);
 					entityToSpawn.setYBodyRot(angl);
@@ -146,8 +146,8 @@ public class BlockChestfishBlock extends Block implements SimpleWaterloggedBlock
 				}
 			}
 		} else if (Math.random() < 0.85) {
-			if (world instanceof ServerLevel _level) {
-				Entity entityToSpawn = CAEntities.SCREAM_CHEST_FISH.get().spawn(_level, BlockPos.containing(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5), MobSpawnType.MOB_SUMMONED);
+			if (world instanceof ServerLevel level) {
+				Entity entityToSpawn = CAEntities.SCREAM_CHEST_FISH.get().spawn(level, BlockPos.containing(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5), MobSpawnType.MOB_SUMMONED);
 				if (entityToSpawn != null) {
 					entityToSpawn.setYRot(angl);
 					entityToSpawn.setYBodyRot(angl);
@@ -155,8 +155,8 @@ public class BlockChestfishBlock extends Block implements SimpleWaterloggedBlock
 				}
 			}
 		} else {
-			if (world instanceof ServerLevel _level) {
-				Entity entityToSpawn = CAEntities.SPIKE_CHEST.get().spawn(_level, BlockPos.containing(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5), MobSpawnType.MOB_SUMMONED);
+			if (world instanceof ServerLevel level) {
+				Entity entityToSpawn = CAEntities.SPIKE_CHEST.get().spawn(level, BlockPos.containing(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5), MobSpawnType.MOB_SUMMONED);
 				if (entityToSpawn != null) {
 					entityToSpawn.setYRot(angl);
 					entityToSpawn.setYBodyRot(angl);

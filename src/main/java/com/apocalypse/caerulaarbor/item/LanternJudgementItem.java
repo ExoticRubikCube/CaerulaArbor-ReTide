@@ -18,6 +18,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
@@ -45,7 +46,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.sounds.SoundEvents;
 
 import java.util.Comparator;
 import java.util.List;
@@ -108,9 +108,8 @@ public class LanternJudgementItem extends Item {
 
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level world, Player entity, InteractionHand hand) {
-		InteractionResultHolder<ItemStack> ar = super.use(world, entity, hand);
 		entity.startUsingItem(hand);
-		return ar;
+		return super.use(world, entity, hand);
 	}
 
 	@Override
@@ -119,65 +118,60 @@ public class LanternJudgementItem extends Item {
 		double x = entity.getX();
 		double y = entity.getY();
 		double z = entity.getZ();
-        if (entity != null) {
-            if ((LevelAccessor) world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.CONDUIT_ACTIVATE, SoundSource.PLAYERS, 1, 1);
-            }
-            new Object() {
-                void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
-                    for (int index0 = 0; index0 < 120; index0++) {
-                        if ((LevelAccessor) world instanceof ServerLevel _level)
-                            _level.sendParticles(CAParticles.PURPLE_FLAME.get(), (x + 2 * (timedloopiterator + 1) * Math.sin(Math.toRadians(index0 * 3))), y,
-                                    (z + 2 * (timedloopiterator + 1) * Math.cos(Math.toRadians(index0 * 3))), 4, 0.15, 0.2, 0.15, 0.1);
-                    }
-                    final int tick2 = ticks;
-                    CaerulaArborMod.queueServerWork(tick2, () -> {
-                        if (timedlooptotal > timedloopiterator + 1) {
-                            timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
-                        }
-                    });
-                }
-            }.timedLoop(0, 9, 1);
-            {
-                final Vec3 _center = new Vec3(x, y, z);
-                List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(36 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                for (Entity entityiterator : _entfound) {
-                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))
-                            && !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanpet"))) && (entityiterator != null ? entity.distanceTo(entityiterator) : -1) <= 18) {
-                        if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                            _entity.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 200, 0, false, false));
-                        if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                            _entity.addEffect(new MobEffectInstance(CAMobEffects.MUTE.get(), 400, 0, false, false));
-                        entityiterator.hurt(new DamageSource(((LevelAccessor) world).registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceankiller_damage"))), entity),
-                                (float) Math.max(((Entity) entity instanceof LivingEntity _livingEntity10 && _livingEntity10.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity10.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.15,
-                                        15));
-                        entityiterator.setSecondsOnFire(5);
-                    }
-                }
-            }
-            if (!(new Object() {
-                public boolean checkGamemode(Entity _ent) {
-                    if (_ent instanceof ServerPlayer _serverPlayer) {
-                        return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                    } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                        return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
-                    }
-                    return false;
-                }
-            }.checkGamemode((Entity) entity))) {
-                {
-                    ItemStack _ist = itemstack;
-                    if (_ist.hurt(10, RandomSource.create(), null)) {
-                        _ist.shrink(1);
-                        _ist.setDamageValue(0);
-                    }
-                }
-                if ((Entity) entity instanceof Player _player)
-                    _player.getCooldowns().addCooldown(itemstack.getItem(), 400);
-            }
-            if ((Entity) entity instanceof LivingEntity _entity)
-                _entity.removeEffect(CAMobEffects.DIZZY.get());
+        if ((LevelAccessor) world instanceof Level level) {
+            level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.CONDUIT_ACTIVATE, SoundSource.PLAYERS, 1, 1);
         }
+        new Object() {
+            void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
+                for (int index0 = 0; index0 < 120; index0++) {
+                    if ((LevelAccessor) world instanceof ServerLevel level)
+                        level.sendParticles(CAParticles.PURPLE_FLAME.get(), (x + 2 * (timedloopiterator + 1) * Math.sin(Math.toRadians(index0 * 3))), y,
+                                (z + 2 * (timedloopiterator + 1) * Math.cos(Math.toRadians(index0 * 3))), 4, 0.15, 0.2, 0.15, 0.1);
+                }
+                final int tick2 = ticks;
+                CaerulaArborMod.queueServerWork(tick2, () -> {
+                    if (timedlooptotal > timedloopiterator + 1) {
+                        timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
+                    }
+                });
+            }
+        }.timedLoop(0, 9, 1);
+        {
+            final Vec3 center = new Vec3(x, y, z);
+            List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(36 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+            for (Entity entityiterator : entfound) {
+                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring"))) && !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanpet"))) && entity.distanceTo(entityiterator) <= 18) {
+                    if (entityiterator instanceof LivingEntity && !entity.level().isClientSide())
+                        entity.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 200, 0, false, false));
+                    if (entityiterator instanceof LivingEntity && !entity.level().isClientSide())
+                        entity.addEffect(new MobEffectInstance(CAMobEffects.MUTE.get(), 400, 0, false, false));
+                    entityiterator.hurt(new DamageSource(((LevelAccessor) world).registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceankiller_damage"))), entity),
+                            (float) Math.max(((Entity) entity instanceof LivingEntity livingEntity10 && livingEntity10.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity10.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.15,
+                                    15));
+                    entityiterator.setSecondsOnFire(5);
+                }
+            }
+        }
+        if (!(new Object() {
+            public boolean checkGamemode(Entity ent) {
+                if (ent instanceof ServerPlayer serverPlayer) {
+                    return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                    return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                }
+                return false;
+            }
+        }.checkGamemode((Entity) entity))) {
+            {
+                if (itemstack.hurt(10, RandomSource.create(), null)) {
+                    itemstack.shrink(1);
+                    itemstack.setDamageValue(0);
+                }
+            }
+            if ((Entity) entity instanceof Player player)
+                player.getCooldowns().addCooldown(itemstack.getItem(), 400);
+        }
+        entity.removeEffect(CAMobEffects.DIZZY.get());
         return retval;
 	}
 
@@ -198,8 +192,8 @@ public class LanternJudgementItem extends Item {
         if (blockstate.getBlock() == CABlocks.SEA_TRAIL_INIT.get() || blockstate.getBlock() == CABlocks.SEA_TRAIL_GROWING.get() || blockstate.getBlock() == CABlocks.SEA_TRAIL_GROWN.get()
                 || blockstate.getBlock() == CABlocks.SEA_TRAIL_STOP.get() || blockstate.getBlock() == CABlocks.SEA_TRAIL_SOLID.get() || blockstate.getBlock() == CABlocks.TRAIL_PULSE.get()) {
             WorldUtils.burndownTrail(world, blockstate, x, y, z);
-            if (world instanceof ServerLevel _level)
-                _level.sendParticles(CAParticles.PURPLE_FLAME.get(), (x + 0.5), (y + 1), (z + 0.5), 48, 0.75, 0.75, 0.75, 0.15);
+            if (world instanceof ServerLevel level)
+                level.sendParticles(CAParticles.PURPLE_FLAME.get(), (x + 0.5), (y + 1), (z + 0.5), 48, 0.75, 0.75, 0.75, 0.15);
             for (Direction directioniterator : Direction.values()) {
                 output = (world.getBlockState(BlockPos.containing(x + directioniterator.getStepX(), y + directioniterator.getStepY(), z + directioniterator.getStepZ())));
                 if (output.getBlock() == CABlocks.SEA_TRAIL_INIT.get() || output.getBlock() == CABlocks.SEA_TRAIL_GROWING.get() || output.getBlock() == CABlocks.SEA_TRAIL_GROWN.get()
@@ -208,21 +202,20 @@ public class LanternJudgementItem extends Item {
                 }
             }
             if (!(new Object() {
-                public boolean checkGamemode(Entity _ent) {
-                    if (_ent instanceof ServerPlayer _serverPlayer) {
-                        return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                    } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                        return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                public boolean checkGamemode(Entity ent) {
+                    if (ent instanceof ServerPlayer serverPlayer) {
+                        return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                    } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                        return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+                                && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                     }
                     return false;
                 }
             }.checkGamemode(entity))) {
                 {
-                    ItemStack _ist = itemstack;
-                    if (_ist.hurt(1, RandomSource.create(), null)) {
-                        _ist.shrink(1);
-                        _ist.setDamageValue(0);
+                    if (itemstack.hurt(1, RandomSource.create(), null)) {
+                        itemstack.shrink(1);
+                        itemstack.setDamageValue(0);
                     }
                 }
             }
@@ -230,28 +223,25 @@ public class LanternJudgementItem extends Item {
         }
         if (blockstate.getBlock() == CABlocks.TRAIL_LEAVE.get()) {
             {
-                BlockPos _pos = BlockPos.containing(x, y, z);
-                Block.dropResources(world.getBlockState(_pos), world, BlockPos.containing(x + 0.5, y + 0.5, z + 0.5), null);
-                world.destroyBlock(_pos, false);
+                BlockPos pos = BlockPos.containing(x, y, z);
+                Block.dropResources(world.getBlockState(pos), world, BlockPos.containing(x + 0.5, y + 0.5, z + 0.5), null);
+                world.destroyBlock(pos, false);
             }
-            if (world instanceof ServerLevel _level)
-                _level.sendParticles(CAParticles.PURPLE_FLAME.get(), (x + 0.5), (y + 1), (z + 0.5), 48, 0.75, 0.75, 0.75, 0.15);
+            if (world instanceof ServerLevel level)
+                level.sendParticles(CAParticles.PURPLE_FLAME.get(), (x + 0.5), (y + 1), (z + 0.5), 48, 0.75, 0.75, 0.75, 0.15);
             for (Direction directioniterator : Direction.values()) {
                 output = (world.getBlockState(BlockPos.containing(x + directioniterator.getStepX(), y + directioniterator.getStepY(), z + directioniterator.getStepZ())));
                 if (output.getBlock() == CABlocks.TRAIL_LEAVE.get()) {
                     {
-                        BlockPos _pos = BlockPos.containing(x + directioniterator.getStepX(), y + directioniterator.getStepY(), z + directioniterator.getStepZ());
-                        Block.dropResources(world.getBlockState(_pos), world, BlockPos.containing(x + directioniterator.getStepX() + 0.5, y + directioniterator.getStepY() + 0.5, z + directioniterator.getStepZ() + 0.5), null);
-                        world.destroyBlock(_pos, false);
+                        BlockPos pos = BlockPos.containing(x + directioniterator.getStepX(), y + directioniterator.getStepY(), z + directioniterator.getStepZ());
+                        Block.dropResources(world.getBlockState(pos), world, BlockPos.containing(x + directioniterator.getStepX() + 0.5, y + directioniterator.getStepY() + 0.5, z + directioniterator.getStepZ() + 0.5), null);
+                        world.destroyBlock(pos, false);
                     }
                 }
             }
-            {
-                ItemStack _ist = itemstack;
-                if (_ist.hurt(1, RandomSource.create(), null)) {
-                    _ist.shrink(1);
-                    _ist.setDamageValue(0);
-                }
+            if (itemstack.hurt(1, RandomSource.create(), null)) {
+                itemstack.shrink(1);
+                itemstack.setDamageValue(0);
             }
             return InteractionResult.SUCCESS;
         }
@@ -261,21 +251,21 @@ public class LanternJudgementItem extends Item {
                 toGive = new ItemStack(CAItems.TRAIL_POWDER.get()).copy();
             }
             world.destroyBlock(BlockPos.containing(x, y, z), false);
-            if (world instanceof ServerLevel _level)
-                _level.sendParticles(CAParticles.PURPLE_FLAME.get(), (x + 0.5), (y + 1), (z + 0.5), 48, 0.75, 0.75, 0.75, 0.15);
-            if (world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 1, 1);
+            if (world instanceof ServerLevel level)
+                level.sendParticles(CAParticles.PURPLE_FLAME.get(), (x + 0.5), (y + 1), (z + 0.5), 48, 0.75, 0.75, 0.75, 0.15);
+            if (world instanceof Level level) {
+                    level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 1, 1);
             }
-            if (world instanceof ServerLevel _level) {
-                ItemEntity entityToSpawn = new ItemEntity(_level, (x + 0.5), (y + 1), (z + 0.5), toGive);
+            if (world instanceof ServerLevel level) {
+                ItemEntity entityToSpawn = new ItemEntity(level, (x + 0.5), (y + 1), (z + 0.5), toGive);
                 entityToSpawn.setPickUpDelay(10);
-                _level.addFreshEntity(entityToSpawn);
+                level.addFreshEntity(entityToSpawn);
             }
             if (Math.random() < 0.5) {
-                if (world instanceof ServerLevel _level) {
-                    ItemEntity entityToSpawn = new ItemEntity(_level, (x + 0.5), (y + 1), (z + 0.5), toGive);
+                if (world instanceof ServerLevel level) {
+                    ItemEntity entityToSpawn = new ItemEntity(level, (x + 0.5), (y + 1), (z + 0.5), toGive);
                     entityToSpawn.setPickUpDelay(10);
-                    _level.addFreshEntity(entityToSpawn);
+                    level.addFreshEntity(entityToSpawn);
                 }
             }
             return InteractionResult.SUCCESS;
@@ -291,20 +281,13 @@ public class LanternJudgementItem extends Item {
 
 	@Override
 	public void inventoryTick(ItemStack itemstack, Level world, Entity entity, int slot, boolean selected) {
-		super.inventoryTick(itemstack, world, entity, slot, selected);
-		if (selected) {
-            if (entity == null)
-                return;
-            if (entity instanceof LivingEntity _entity)
-                _entity.removeEffect(CAMobEffects.FROZEN.get());
-            if (entity instanceof LivingEntity _entity)
-                _entity.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
-            if (entity instanceof LivingEntity _entity)
-                _entity.removeEffect(MobEffects.DIG_SLOWDOWN);
-            if (entity instanceof LivingEntity _entity)
-                _entity.removeEffect(MobEffects.DARKNESS);
-            if (entity instanceof LivingEntity _entity)
-                _entity.removeEffect(MobEffects.BLINDNESS);
+        super.inventoryTick(itemstack, world, entity, slot, selected);
+        if (selected && entity instanceof LivingEntity living) {
+            living.removeEffect(CAMobEffects.FROZEN.get());
+            living.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
+            living.removeEffect(MobEffects.DIG_SLOWDOWN);
+            living.removeEffect(MobEffects.DARKNESS);
+            living.removeEffect(MobEffects.BLINDNESS);
         }
-	}
+    }
 }

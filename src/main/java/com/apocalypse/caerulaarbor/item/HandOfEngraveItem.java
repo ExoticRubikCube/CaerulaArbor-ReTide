@@ -43,17 +43,17 @@ public class HandOfEngraveItem extends Item {
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
         if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_ENGRAVE < 0) {
-            if ((LevelAccessor) world instanceof Level _level) {
-                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 2, 1);
+            if ((LevelAccessor) world instanceof Level level) {
+                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 2, 1);
             }
-            if ((LevelAccessor) world instanceof ServerLevel _level)
-                _level.sendParticles(ParticleTypes.CLOUD, x, y, z, 72, 1, 1, 1, 1);
+            if ((LevelAccessor) world instanceof ServerLevel level)
+                level.sendParticles(ParticleTypes.CLOUD, x, y, z, 72, 1, 1, 1, 1);
             if (((LevelAccessor) world).isClientSide())
                 Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);
             {
-                double _setval = 0;
+                double setval = 0;
                 ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                    capability.relic_hand_ENGRAVE = _setval;
+                    capability.relic_hand_ENGRAVE = setval;
                     capability.syncPlayerVariables(entity);
                 });
             }

@@ -2,10 +2,8 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
-import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -44,11 +42,11 @@ public class HandAnchorItem extends PickaxeItem {
 	}
 
 	@Override
-	public boolean hurtEnemy(ItemStack itemstack, LivingEntity entity, LivingEntity sourceentity) {
-		boolean retval = super.hurtEnemy(itemstack, entity, sourceentity);
+	public boolean hurtEnemy(ItemStack itemstack, LivingEntity living, LivingEntity sourceentity) {
+		boolean retval = super.hurtEnemy(itemstack, living, sourceentity);
         if (Math.random() < 0.15) {
-            if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                _entity.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 40, 0, false, false));
+            if (!living.level().isClientSide())
+				living.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 40, 0, false, false));
         }
         return retval;
 	}

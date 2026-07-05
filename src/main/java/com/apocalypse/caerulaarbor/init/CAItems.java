@@ -1,5 +1,5 @@
 /*
- *    MCreator note: This file will be REGENERATED on each build.
+ *    MCreator 注：此文件会在每次构建时重新生成。
  */
 package com.apocalypse.caerulaarbor.init;
 
@@ -307,7 +307,8 @@ public class CAItems {
 	public static final RegistryObject<Item> CLAW = REGISTRY.register("claw", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(2).saturationMod(0f).build())));
 	public static final RegistryObject<Item> COOKED_CLAW = REGISTRY.register("cooked_claw", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food(new FoodProperties.Builder().nutrition(7).saturationMod(0.5f).meat().effect(() -> new MobEffectInstance(CAMobEffects.ADD_ATTACK_PERCLY.get(), 600, 1), 1.0F).build())));
 	public static final RegistryObject<Item> SEABORN_SOUP = REGISTRY.register("seaborn_soup", () -> new BowlFoodItem(new Item.Properties().stacksTo(1).rarity(Rarity.COMMON).food(new FoodProperties.Builder().nutrition(12).saturationMod(0.75f).effect(() -> new MobEffectInstance(CAMobEffects.SANITY_IMMUE.get(), 400, 0), 1.0F).effect(() -> new MobEffectInstance(MobEffects.REGENERATION, 200, 1), 1.0F).build())));
-	public static final RegistryObject<Item> REPELLER_SHELL = REGISTRY.register("repeller_shell", () -> new RepellerShellItem());
+        public static final RegistryObject<Item> REPELLER_SHELL = REGISTRY.register("repeller_shell",
+                        () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)));
 	public static final RegistryObject<Item> FEEDER_PROKARYOTE_SPAWN_EGG = REGISTRY.register("feeder_prokaryote_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.FEEDER_PROKARYOTE, -12698628, -6754314, new Item.Properties()));
 	public static final RegistryObject<Item> CHEST_FISH_SPAWN_EGG = REGISTRY.register("chest_fish_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.CHEST_FISH, -8882056, -858389, new Item.Properties()));
 	public static final RegistryObject<Item> SPIKE_CHEST_SPAWN_EGG = REGISTRY.register("spike_chest_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.SPIKE_CHEST, -9082259, -533095, new Item.Properties()));

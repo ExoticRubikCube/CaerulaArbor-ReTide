@@ -103,8 +103,6 @@ public class BoneFishEntity extends SeaMonster implements Bucketable {
 		this.entityData.define(DATA_ANIMATION, "undefined");
 	}
 
-
-
     @Override
 	protected PathNavigation createNavigation(Level world) {
 		return new WaterBoundPathNavigation(this, world);

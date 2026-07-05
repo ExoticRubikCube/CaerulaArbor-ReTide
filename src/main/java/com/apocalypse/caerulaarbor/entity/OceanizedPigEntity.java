@@ -137,13 +137,13 @@ public class OceanizedPigEntity extends SeaMonster {
         super.baseTick();
         if (this.isAlive()) {
             if (this.hasEffect(CAMobEffects.MUTE.get())) {
-                if ((Entity) this instanceof OceanizedPigEntity _datEntSetI) {
-                    _datEntSetI.getEntityData().set(DATA_MUTE_TIME,
-                            _datEntSetI.hasEffect(CAMobEffects.MUTE.get()) ? _datEntSetI.getEffect(CAMobEffects.MUTE.get()).getDuration() : 0);
+                if ((Entity) this instanceof OceanizedPigEntity datEntSetI) {
+                    datEntSetI.getEntityData().set(DATA_MUTE_TIME,
+                            datEntSetI.hasEffect(CAMobEffects.MUTE.get()) ? datEntSetI.getEffect(CAMobEffects.MUTE.get()).getDuration() : 0);
                 }
-            } else if (((Entity) this instanceof OceanizedPigEntity _datEntI ? _datEntI.getEntityData().get(DATA_MUTE_TIME) : 0) == 1) {
-                if ((Entity) this instanceof OceanizedPigEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_MUTE_TIME, 0);
+            } else if (((Entity) this instanceof OceanizedPigEntity datEntI ? datEntI.getEntityData().get(DATA_MUTE_TIME) : 0) == 1) {
+                if ((Entity) this instanceof OceanizedPigEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_MUTE_TIME, 0);
             }
         }
         this.refreshDimensions();
@@ -226,7 +226,7 @@ public class OceanizedPigEntity extends SeaMonster {
             double y = this.getY();
             double z = this.getZ();
             if (WorldUtils.canGrief(world)) {
-                if (((Entity) this instanceof OceanizedPigEntity _datEntI ? _datEntI.getEntityData().get(DATA_MUTE_TIME) : 0) <= 0) {
+                if (((Entity) this instanceof OceanizedPigEntity datEntI ? datEntI.getEntityData().get(DATA_MUTE_TIME) : 0) <= 0) {
                     if (CABlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing(x, y, z)) && !(world.getBlockFloorHeight(BlockPos.containing(x, y, z)) > 0)) {
                         CaerulaUtil.replaceTrail(world, CABlocks.SEA_TRAIL_INIT.get().defaultBlockState(), (world.getFluidState(BlockPos.containing(x, y, z)).createLegacyBlock()).getBlock() == Blocks.WATER, x, y, z);
                     }

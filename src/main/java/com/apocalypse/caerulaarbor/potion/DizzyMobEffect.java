@@ -43,8 +43,8 @@ public class DizzyMobEffect extends MobEffect {
         double x = entity.getX();
         double y = entity.getY();
         double z = entity.getZ();
-        if (world instanceof ServerLevel _level)
-            _level.sendParticles(CAParticles.DIZZINESS.get(), x, y, z, 2, 1, 1, 1, 0.1);
+        if (world instanceof ServerLevel level)
+            level.sendParticles(CAParticles.DIZZINESS.get(), x, y, z, 2, 1, 1, 1, 0.1);
         world.addParticle(CAParticles.DIZZINESS.get(), x, y, z, (0.5 - Math.random()), 0.1, (0.5 - Math.random()));
     }
 

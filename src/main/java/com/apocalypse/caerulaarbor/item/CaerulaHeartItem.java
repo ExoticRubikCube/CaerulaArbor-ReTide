@@ -59,48 +59,48 @@ public class CaerulaHeartItem extends Item {
         double z = entity.getZ();
         if (!itemstack.getOrCreateTag().getBoolean("used")) {
             {
-                boolean _setval = true;
+                boolean setval = true;
                 entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                    capability.relic_cursed_HEART = _setval;
+                    capability.relic_cursed_HEART = setval;
                     capability.syncPlayerVariables(entity);
                 });
             }
             {
-                double _setval = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_light - 50;
+                double setval = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_light - 50;
                 entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                    capability.player_light = _setval;
+                    capability.player_light = setval;
                     capability.syncPlayerVariables(entity);
                 });
             }
             if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_light < 0) {
                 {
-                    double _setval = 0;
+                    double setval = 0;
                     entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                        capability.player_light = _setval;
+                        capability.player_light = setval;
                         capability.syncPlayerVariables(entity);
                     });
                 }
             }
             {
-                double _setval = Mth.nextInt(RandomSource.create(), 1, 4);
+                double setval = Mth.nextInt(RandomSource.create(), 1, 4);
                 entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                    capability.disoclusion = _setval;
+                    capability.disoclusion = setval;
                     capability.syncPlayerVariables(entity);
                 });
             }
-            if (entity instanceof ServerPlayer _player) {
-                Advancement _adv = _player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "to_we_many"));
-                AdvancementProgress _ap = _player.getAdvancements().getOrStartProgress(_adv);
-                if (!_ap.isDone()) {
-                    for (String criteria : _ap.getRemainingCriteria())
-                        _player.getAdvancements().award(_adv, criteria);
+            if (entity instanceof ServerPlayer player) {
+                Advancement adv = player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "to_we_many"));
+                AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
+                if (!ap.isDone()) {
+                    for (String criteria : ap.getRemainingCriteria())
+                        player.getAdvancements().award(adv, criteria);
                 }
             }
-            if ((LevelAccessor) world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.AMBIENT_SOUL_SAND_VALLEY_MOOD.value(), SoundSource.NEUTRAL, 2, 1);
+            if ((LevelAccessor) world instanceof Level level) {
+                    level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.AMBIENT_SOUL_SAND_VALLEY_MOOD.value(), SoundSource.NEUTRAL, 2, 1);
             }
-            if ((LevelAccessor) world instanceof ServerLevel _level)
-                _level.sendParticles(ParticleTypes.CRIMSON_SPORE, x, y, z, 99, 1, 1, 1, 1);
+            if ((LevelAccessor) world instanceof ServerLevel level)
+                level.sendParticles(ParticleTypes.CRIMSON_SPORE, x, y, z, 99, 1, 1, 1, 1);
             if (((LevelAccessor) world).isClientSide())
                 Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);
             itemstack.getOrCreateTag().putBoolean("used", true);

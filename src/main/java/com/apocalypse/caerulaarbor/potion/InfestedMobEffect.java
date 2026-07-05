@@ -6,7 +6,6 @@ import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
-import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.MathUtils;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
@@ -15,6 +14,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -30,7 +30,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.sounds.SoundEvents;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,38 +51,38 @@ public class InfestedMobEffect extends MobEffect {
             return;
         double dam;
         if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization < 3) {
-            dam = ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * Mth.nextDouble(RandomSource.create(), 0.1, 0.25) * ((double) amplifier + 1);
-            if ((Entity) entity instanceof LivingEntity _livEnt2 && _livEnt2.hasEffect(CAMobEffects.POWER_OF_ANCHOR.get())) {
+            dam = ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * Mth.nextDouble(RandomSource.create(), 0.1, 0.25) * ((double) amplifier + 1);
+            if ((Entity) entity instanceof LivingEntity livEnt2 && livEnt2.hasEffect(CAMobEffects.POWER_OF_ANCHOR.get())) {
                 dam = dam * 0.1;
             }
             ((Entity) entity).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanize_damage")))), (float) dam);
-            if (!((Entity) entity instanceof LivingEntity _livEnt5 && _livEnt5.hasEffect(CAMobEffects.POWER_OF_ANCHOR.get()))) {
+            if (!((Entity) entity instanceof LivingEntity livEnt5 && livEnt5.hasEffect(CAMobEffects.POWER_OF_ANCHOR.get()))) {
                 if (Math.random() < 0.33) {
                     dam = Mth.nextInt(RandomSource.create(), 0, 7);
                     if (dam == 0) {
-                        if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                            _entity.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 160, (int) (double) amplifier));
+                        if ((Entity) entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
+                            livingEntity.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 160, (int) (double) amplifier));
                     } else if (dam == 1) {
-                        if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                            _entity.addEffect(new MobEffectInstance(MobEffects.POISON, 160, (int) (double) amplifier));
+                        if ((Entity) entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
+                            livingEntity.addEffect(new MobEffectInstance(MobEffects.POISON, 160, (int) (double) amplifier));
                     } else if (dam == 2) {
-                        if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                            _entity.addEffect(new MobEffectInstance(MobEffects.HUNGER, 160, (int) (double) amplifier));
+                        if ((Entity) entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
+                            livingEntity.addEffect(new MobEffectInstance(MobEffects.HUNGER, 160, (int) (double) amplifier));
                     } else if (dam == 3) {
-                        if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                            _entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 160, (int) (double) amplifier));
+                        if ((Entity) entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
+                            livingEntity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 160, (int) (double) amplifier));
                     } else if (dam == 4) {
-                        if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                            _entity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 160, (int) (double) amplifier));
+                        if ((Entity) entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
+                            livingEntity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 160, (int) (double) amplifier));
                     } else if (dam == 5) {
-                        if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                            _entity.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 160, 0));
+                        if ((Entity) entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
+                            livingEntity.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 160, 0));
                     } else if (dam == 6) {
-                        if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                            _entity.addEffect(new MobEffectInstance(CAMobEffects.FROZEN.get(), 160, 0));
+                        if ((Entity) entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
+                            livingEntity.addEffect(new MobEffectInstance(CAMobEffects.FROZEN.get(), 160, 0));
                     } else if (dam == 7) {
-                        if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                            _entity.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 160, 0));
+                        if ((Entity) entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
+                            livingEntity.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 160, 0));
                     }
                 }
             }
@@ -106,40 +105,40 @@ public class InfestedMobEffect extends MobEffect {
                 ampli = 2;
             }
             {
-                double _setval = ampli + 1;
+                double setval = ampli + 1;
                 ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                    capability.player_oceanization = _setval;
+                    capability.player_oceanization = setval;
                     capability.syncPlayerVariables(entity);
                 });
             }
             SIHelper.causeSanityInjury(entity, 750 * ((double) amplifier + 1), SanityEvent.Hurt.Type.POTION);
-            if ((Entity) entity instanceof ServerPlayer _player) {
-                Advancement _adv = _player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "they_shall_welcome"));
-                AdvancementProgress _ap = _player.getAdvancements().getOrStartProgress(_adv);
-                if (!_ap.isDone()) {
-                    for (String criteria : _ap.getRemainingCriteria())
-                        _player.getAdvancements().award(_adv, criteria);
+            if ((Entity) entity instanceof ServerPlayer player) {
+                Advancement adv = player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "they_shall_welcome"));
+                AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
+                if (!ap.isDone()) {
+                    for (String criteria : ap.getRemainingCriteria())
+                        player.getAdvancements().award(adv, criteria);
                 }
             }
             if ((double) amplifier >= 2) {
-                if ((Entity) entity instanceof ServerPlayer _player) {
-                    Advancement _adv = _player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "they_shall_pay"));
-                    AdvancementProgress _ap = _player.getAdvancements().getOrStartProgress(_adv);
-                    if (!_ap.isDone()) {
-                        for (String criteria : _ap.getRemainingCriteria())
-                            _player.getAdvancements().award(_adv, criteria);
+                if ((Entity) entity instanceof ServerPlayer player) {
+                    Advancement adv = player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "they_shall_pay"));
+                    AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
+                    if (!ap.isDone()) {
+                        for (String criteria : ap.getRemainingCriteria())
+                            player.getAdvancements().award(adv, criteria);
                     }
                 }
                 {
-                    double _setval = 0;
+                    double setval = 0;
                     ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                        capability.disoclusion = _setval;
+                        capability.disoclusion = setval;
                         capability.syncPlayerVariables(entity);
                     });
                 }
             }
-            if (world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ZOMBIE_INFECT, SoundSource.PLAYERS, 2, 1);
+            if (world instanceof Level level) {
+                    level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ZOMBIE_INFECT, SoundSource.PLAYERS, 2, 1);
             }
         }
     }

@@ -159,140 +159,140 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
             double amount;
             balance = (((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).plauyer_balance;
             if (balance >= 131072) {
-                if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
-                    _player.displayClientMessage(Component.literal((Component.translatable("block.golden_chalise.inquiry").getString())), true);
+                if ((Entity) entity instanceof Player player && !player.level().isClientSide())
+                    player.displayClientMessage(Component.literal((Component.translatable("block.golden_chalise.inquiry").getString())), true);
                 res = InteractionResult.PASS;
             } else {
-                if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.REDSTONE_INGOT.get()) {
+                if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.REDSTONE_INGOT.get()) {
                     if (direction == Direction.UP) {
-                        amount = ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getCount();
+                        amount = ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getCount();
                         balance = Math.min(balance + amount, 131072);
                         {
-                            double _setval = balance;
+                            double setval = balance;
                             ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                                capability.plauyer_balance = _setval;
+                                capability.plauyer_balance = setval;
                                 capability.syncPlayerVariables(entity);
                             });
                         }
-                        ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).setCount(0);
-                        if ((LevelAccessor) world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), CASounds.MONEY_IN.get(), SoundSource.BLOCKS, 1, 1);
+                        ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).setCount(0);
+                        if ((LevelAccessor) world instanceof Level level) {
+                                level.playSound(null, BlockPos.containing(x, y, z), CASounds.MONEY_IN.get(), SoundSource.BLOCKS, 1, 1);
                         }
                         res = InteractionResult.SUCCESS;
                     } else {
                         balance = balance + 1;
                         {
-                            double _setval = balance;
+                            double setval = balance;
                             ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                                capability.plauyer_balance = _setval;
+                                capability.plauyer_balance = setval;
                                 capability.syncPlayerVariables(entity);
                             });
                         }
-                        if ((Entity) entity instanceof Player _player) {
-                            ItemStack _stktoremove = new ItemStack(CAItems.REDSTONE_INGOT.get());
-                            _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
+                        if ((Entity) entity instanceof Player player) {
+                            ItemStack stktoremove = new ItemStack(CAItems.REDSTONE_INGOT.get());
+                            player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                         }
-                        if ((LevelAccessor) world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), CASounds.MONEY_IN.get(), SoundSource.BLOCKS, 1, 1);
+                        if ((LevelAccessor) world instanceof Level level) {
+                                level.playSound(null, BlockPos.containing(x, y, z), CASounds.MONEY_IN.get(), SoundSource.BLOCKS, 1, 1);
                         }
                         res = InteractionResult.SUCCESS;
                     }
-                } else if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.REDSTONIUM.get()) {
+                } else if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.REDSTONIUM.get()) {
                     if (direction == Direction.UP) {
-                        amount = ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getCount();
+                        amount = ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getCount();
                         balance = Math.min(balance + amount * 9, 131072);
                         {
-                            double _setval = balance;
+                            double setval = balance;
                             ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                                capability.plauyer_balance = _setval;
+                                capability.plauyer_balance = setval;
                                 capability.syncPlayerVariables(entity);
                             });
                         }
-                        ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).setCount(0);
-                        if ((LevelAccessor) world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), CASounds.MONEY_IN.get(), SoundSource.BLOCKS, 1, 1);
+                        ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).setCount(0);
+                        if ((LevelAccessor) world instanceof Level level) {
+                                level.playSound(null, BlockPos.containing(x, y, z), CASounds.MONEY_IN.get(), SoundSource.BLOCKS, 1, 1);
                         }
                         res = InteractionResult.SUCCESS;
                     } else {
                         balance = Math.min(balance + 9, 131072);
                         {
-                            double _setval = balance;
+                            double setval = balance;
                             ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                                capability.plauyer_balance = _setval;
+                                capability.plauyer_balance = setval;
                                 capability.syncPlayerVariables(entity);
                             });
                         }
-                        if ((Entity) entity instanceof Player _player) {
-                            ItemStack _stktoremove = new ItemStack(CAItems.REDSTONIUM.get());
-                            _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
+                        if ((Entity) entity instanceof Player player) {
+                            ItemStack stktoremove = new ItemStack(CAItems.REDSTONIUM.get());
+                            player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                         }
-                        if ((LevelAccessor) world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), CASounds.MONEY_IN.get(), SoundSource.BLOCKS, 1, 1);
+                        if ((LevelAccessor) world instanceof Level level) {
+                                level.playSound(null, BlockPos.containing(x, y, z), CASounds.MONEY_IN.get(), SoundSource.BLOCKS, 1, 1);
                         }
                         res = InteractionResult.SUCCESS;
                     }
-                } else if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == ItemStack.EMPTY.getItem()) {
+                } else if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == ItemStack.EMPTY.getItem()) {
                     if (entity.isShiftKeyDown()) {
                         output = Component.translatable("block.golden_chalise.inquiry").getString() + Math.round(balance) + " /131072";
-                        if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
-                            _player.displayClientMessage(Component.literal(output), true);
+                        if ((Entity) entity instanceof Player player && !player.level().isClientSide())
+                            player.displayClientMessage(Component.literal(output), true);
                     } else {
                         if (direction == Direction.UP) {
                             if (balance >= 9) {
                                 balance = balance - 9;
                                 {
-                                    double _setval = balance;
+                                    double setval = balance;
                                     ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                                        capability.plauyer_balance = _setval;
+                                        capability.plauyer_balance = setval;
                                         capability.syncPlayerVariables(entity);
                                     });
                                 }
-                                if ((LevelAccessor) world instanceof ServerLevel _level) {
-                                    ItemEntity entityToSpawn = new ItemEntity(_level, ((double) x + 0.5), ((double) y + 0.75), ((double) z + 0.5), new ItemStack(CAItems.REDSTONIUM.get()));
+                                if ((LevelAccessor) world instanceof ServerLevel level) {
+                                    ItemEntity entityToSpawn = new ItemEntity(level, ((double) x + 0.5), ((double) y + 0.75), ((double) z + 0.5), new ItemStack(CAItems.REDSTONIUM.get()));
                                     entityToSpawn.setPickUpDelay(10);
-                                    _level.addFreshEntity(entityToSpawn);
+                                    level.addFreshEntity(entityToSpawn);
                                 }
-                                if ((LevelAccessor) world instanceof Level _level) {
-                                        _level.playSound(null, BlockPos.containing(x, y, z), CASounds.MONEY_OUT.get(), SoundSource.BLOCKS, 1, 1);
+                                if ((LevelAccessor) world instanceof Level level) {
+                                        level.playSound(null, BlockPos.containing(x, y, z), CASounds.MONEY_OUT.get(), SoundSource.BLOCKS, 1, 1);
                                 }
                                 res = InteractionResult.SUCCESS;
                             } else if (balance >= 1) {
                                 for (int index0 = 0; index0 < (int) balance; index0++) {
-                                    if ((LevelAccessor) world instanceof ServerLevel _level) {
-                                        ItemEntity entityToSpawn = new ItemEntity(_level, ((double) x + 0.5), ((double) y + 0.75), ((double) z + 0.5), new ItemStack(CAItems.REDSTONE_INGOT.get()));
+                                    if ((LevelAccessor) world instanceof ServerLevel level) {
+                                        ItemEntity entityToSpawn = new ItemEntity(level, ((double) x + 0.5), ((double) y + 0.75), ((double) z + 0.5), new ItemStack(CAItems.REDSTONE_INGOT.get()));
                                         entityToSpawn.setPickUpDelay(10);
-                                        _level.addFreshEntity(entityToSpawn);
+                                        level.addFreshEntity(entityToSpawn);
                                     }
                                 }
                                 balance = 0;
                                 {
-                                    double _setval = balance;
+                                    double setval = balance;
                                     ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                                        capability.plauyer_balance = _setval;
+                                        capability.plauyer_balance = setval;
                                         capability.syncPlayerVariables(entity);
                                     });
                                 }
-                                if ((LevelAccessor) world instanceof Level _level) {
-                                        _level.playSound(null, BlockPos.containing(x, y, z), CASounds.MONEY_OUT.get(), SoundSource.BLOCKS, 1, 1);
+                                if ((LevelAccessor) world instanceof Level level) {
+                                        level.playSound(null, BlockPos.containing(x, y, z), CASounds.MONEY_OUT.get(), SoundSource.BLOCKS, 1, 1);
                                 }
                                 res = InteractionResult.SUCCESS;
                             }
                         } else if (!(direction == Direction.DOWN) && balance >= 1) {
                             balance = balance - 1;
                             {
-                                double _setval = balance;
+                                double setval = balance;
                                 ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                                    capability.plauyer_balance = _setval;
+                                    capability.plauyer_balance = setval;
                                     capability.syncPlayerVariables(entity);
                                 });
                             }
-                            if ((LevelAccessor) world instanceof ServerLevel _level) {
-                                ItemEntity entityToSpawn = new ItemEntity(_level, ((double) x + 0.5), ((double) y + 0.75), ((double) z + 0.5), new ItemStack(CAItems.REDSTONE_INGOT.get()));
+                            if ((LevelAccessor) world instanceof ServerLevel level) {
+                                ItemEntity entityToSpawn = new ItemEntity(level, ((double) x + 0.5), ((double) y + 0.75), ((double) z + 0.5), new ItemStack(CAItems.REDSTONE_INGOT.get()));
                                 entityToSpawn.setPickUpDelay(10);
-                                _level.addFreshEntity(entityToSpawn);
+                                level.addFreshEntity(entityToSpawn);
                             }
-                            if ((LevelAccessor) world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), CASounds.MONEY_OUT.get(), SoundSource.BLOCKS, 1, 1);
+                            if ((LevelAccessor) world instanceof Level level) {
+                                    level.playSound(null, BlockPos.containing(x, y, z), CASounds.MONEY_OUT.get(), SoundSource.BLOCKS, 1, 1);
                             }
                             res = InteractionResult.SUCCESS;
                         }
@@ -300,27 +300,27 @@ public class GoldenChaliseBlock extends Block implements SimpleWaterloggedBlock 
                 }
                 if (balance > 128) {
                     {
-                        int _value = 2;
-                        BlockPos _pos = BlockPos.containing(x, y, z);
-                        BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-                        if (_bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))
-                            ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
+                        int value = 2;
+                        BlockPos blockPos = BlockPos.containing(x, y, z);
+                        BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                        if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
+                            ((LevelAccessor) world).setBlock(pos, bs.setValue(integerProp, value), 3);
                     }
                 } else if (balance > 64) {
                     {
-                        int _value = 1;
-                        BlockPos _pos = BlockPos.containing(x, y, z);
-                        BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-                        if (_bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))
-                            ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
+                        int value = 1;
+                        BlockPos blockPos = BlockPos.containing(x, y, z);
+                        BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                        if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
+                            ((LevelAccessor) world).setBlock(pos, bs.setValue(integerProp, value), 3);
                     }
                 } else {
                     {
-                        int _value = 0;
-                        BlockPos _pos = BlockPos.containing(x, y, z);
-                        BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-                        if (_bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))
-                            ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
+                        int value = 0;
+                        BlockPos blockPos = BlockPos.containing(x, y, z);
+                        BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                        if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
+                            ((LevelAccessor) world).setBlock(pos, bs.setValue(integerProp, value), 3);
                     }
                 }
             }

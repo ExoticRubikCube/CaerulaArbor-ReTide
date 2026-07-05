@@ -164,7 +164,7 @@ public class ChiselerFishEntity extends SeaMonster implements RangedAttackMob, B
 			this.target = null;
 			this.seeTime = 0;
 			this.attackTime = -1;
-			((ChiselerFishEntity) rangedAttackMob).entityData.set(DATA_SHOOT, false);
+			 ((ChiselerFishEntity)rangedAttackMob).entityData.set(DATA_SHOOT, false);
 		}
 
 		public boolean requiresUpdateEveryTick() {

@@ -294,12 +294,12 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
         LevelAccessor world = this.level();
         for (Entity entityiterator : new ArrayList<>(world.players())) {
             if ((level().dimension()) == (entityiterator.level().dimension())) {
-                if (entityiterator instanceof ServerPlayer _player) {
-                    Advancement _adv = _player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "speechless_break"));
-                    AdvancementProgress _ap = _player.getAdvancements().getOrStartProgress(_adv);
-                    if (!_ap.isDone()) {
-                        for (String criteria : _ap.getRemainingCriteria())
-                            _player.getAdvancements().award(_adv, criteria);
+                if (entityiterator instanceof ServerPlayer player) {
+                    Advancement adv = player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "speechless_break"));
+                    AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
+                    if (!ap.isDone()) {
+                        for (String criteria : ap.getRemainingCriteria())
+                            player.getAdvancements().award(adv, criteria);
                     }
                 }
             }
@@ -362,27 +362,27 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
         double lvl = 0;
         double sklp1;
         double sklp2;
-        if (((Entity) this instanceof HighmoreEntity _datEntI ? _datEntI.getEntityData().get(DATA_PHASE) : 0) == 0) {
+        if (((Entity) this instanceof HighmoreEntity datEntI ? datEntI.getEntityData().get(DATA_PHASE) : 0) == 0) {
             range = 7;
-        } else if (((Entity) this instanceof HighmoreEntity _datEntI ? _datEntI.getEntityData().get(DATA_PHASE) : 0) == 1) {
+        } else if (((Entity) this instanceof HighmoreEntity datEntI ? datEntI.getEntityData().get(DATA_PHASE) : 0) == 1) {
             range = 11;
             lvl = 1;
         } else {
             range = 17;
             lvl = 2;
         }
-        sklp1 = (Entity) this instanceof HighmoreEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP_1) : 0;
-        sklp2 = (Entity) this instanceof HighmoreEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP_2) : 0;
+        sklp1 = (Entity) this instanceof HighmoreEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP_1) : 0;
+        sklp2 = (Entity) this instanceof HighmoreEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP_2) : 0;
         if (this.isAlive()) {
             if (!this.hasEffect(CAMobEffects.FAKE_DEATH.get())) {
                 assert Boolean.TRUE; //#dbg:HighmoreRim:marker1
                 for (int index0 = 0; index0 < 120; index0++) {
-                    if (world instanceof ServerLevel _level)
-                        _level.sendParticles(ParticleTypes.DOLPHIN, (x + range * Math.sin(Math.toRadians(3 * index0))), y, (z + range * Math.cos(Math.toRadians(3 * index0))), 6, 0.15, 0.2, 0.15, 0.1);
+                    if (world instanceof ServerLevel level)
+                        level.sendParticles(ParticleTypes.DOLPHIN, (x + range * Math.sin(Math.toRadians(3 * index0))), y, (z + range * Math.cos(Math.toRadians(3 * index0))), 6, 0.15, 0.2, 0.15, 0.1);
                 }
-                final Vec3 _center = new Vec3(x, (y + 1.5), z);
-                List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate((range * 2) / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                for (Entity entityiterator : _entfound) {
+                final Vec3 center = new Vec3(x, (y + 1.5), z);
+                List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate((range * 2) / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                for (Entity entityiterator : entfound) {
                     if (entityiterator == this) {
                         continue;
                     }
@@ -392,12 +392,12 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
                         }
                     }
                     if (new Object() {
-                        public boolean checkGamemode(Entity _ent) {
-                            if (_ent instanceof ServerPlayer _serverPlayer) {
-                                return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                            } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                                return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                        && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                        public boolean checkGamemode(Entity ent) {
+                            if (ent instanceof ServerPlayer serverPlayer) {
+                                return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                            } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                                return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+                                        && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                             }
                             return false;
                         }
@@ -405,7 +405,7 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
                         continue;
                     }
                     if (distanceTo(entityiterator) <= range) {
-                        if (!((Entity) this instanceof LivingEntity _livEnt13 && _livEnt13.hasEffect(CAMobEffects.FADINGSHADOW.get()))) {
+                        if (!((Entity) this instanceof LivingEntity livEnt13 && livEnt13.hasEffect(CAMobEffects.FADINGSHADOW.get()))) {
                             if (entityiterator instanceof LivingEntity && !this.level().isClientSide())
                                 this.addEffect(new MobEffectInstance(CAMobEffects.FADINGSHADOW.get(), 20, (int) lvl, false, false));
                             if (entityiterator instanceof LivingEntity && !this.level().isClientSide())
@@ -413,38 +413,38 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
                         }
                     }
                 }
-                if (sklp1 <= 0 && !((Entity) this instanceof LivingEntity _livEnt17 && _livEnt17.hasEffect(CAMobEffects.COOLDOWN_SINAL.get()))) {
-                    if (!(null == ((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null))) {
+                if (sklp1 <= 0 && !((Entity) this instanceof LivingEntity livEnt17 && livEnt17.hasEffect(CAMobEffects.COOLDOWN_SINAL.get()))) {
+                    if (!(null == ((Entity) this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null))) {
                         if (this instanceof HighmoreEntity) {
                             this.setAnimation("animation.highmore.skill");
                         }
-                        if (world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), CASounds.HIGHMORE_PREAMBLE.get(), SoundSource.HOSTILE, 4, 1);
+                        if (world instanceof Level level) {
+                            level.playSound(null, BlockPos.containing(x, y, z), CASounds.HIGHMORE_PREAMBLE.get(), SoundSource.HOSTILE, 4, 1);
                         }
                         if (lvl == 0) {
                             CaerulaArborMod.queueServerWork(15, () -> {
-                                if (!(null == ((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null))) {
-                                    this.multiShoot(world, x, y, z, (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null, 3);
+                                if (!(null == ((Entity) this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null))) {
+                                    this.multiShoot(world, x, y, z, (Entity) this instanceof Mob mobEnt ? mobEnt.getTarget() : null, 3);
                                 }
                             });
-                            if ((Entity) this instanceof HighmoreEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_SKILLP_1, 200);
+                            if ((Entity) this instanceof HighmoreEntity datEntSetI)
+                                datEntSetI.getEntityData().set(DATA_SKILLP_1, 200);
                         } else {
                             CaerulaArborMod.queueServerWork(15, () -> {
-                                if (!(null == ((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null))) {
-                                    this.multiShoot(world, x, y, z, (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null, 5);
+                                if (!(null == ((Entity) this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null))) {
+                                    this.multiShoot(world, x, y, z, (Entity) this instanceof Mob mobEnt ? mobEnt.getTarget() : null, 5);
                                 }
                             });
-                            if ((Entity) this instanceof HighmoreEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_SKILLP_1, 140);
+                            if ((Entity) this instanceof HighmoreEntity datEntSetI)
+                                datEntSetI.getEntityData().set(DATA_SKILLP_1, 140);
                         }
                     }
                 } else {
-                    if ((Entity) this instanceof HighmoreEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_SKILLP_1, (int) (sklp1 - 1));
+                    if ((Entity) this instanceof HighmoreEntity datEntSetI)
+                        datEntSetI.getEntityData().set(DATA_SKILLP_1, (int) (sklp1 - 1));
                 }
                 if (sklp2 <= 0) {
-                    if (!(null == ((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null))) {
+                    if (!(null == ((Entity) this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null))) {
                         if (this instanceof HighmoreEntity) {
                             this.setAnimation("animation.highmore.charge");
                         }
@@ -460,10 +460,10 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
                                     double rng;
                                     angl = Mth.nextDouble(RandomSource.create(), 0, 6.283);
                                     rng = Mth.nextDouble(RandomSource.create(), 5, 17);
-                                    if (world instanceof ServerLevel _level)
-                                        _level.sendParticles(ParticleTypes.END_ROD, x, (y + 1), z, 72, 2, 2, 2, 0.2);
+                                    if (world instanceof ServerLevel level)
+                                        level.sendParticles(ParticleTypes.END_ROD, x, (y + 1), z, 72, 2, 2, 2, 0.2);
                                     if (world instanceof ServerLevel projectileLevel) {
-                                        Projectile _entityToSpawn = new Object() {
+                                        Projectile entityToSpawn = new Object() {
                                             public Projectile getArrow(Level level, Entity shooter, float damage, int knockback) {
                                                 AbstractArrow entityToSpawn = new HighmoreShootEntity(CAEntities.HIGHMORE_SHOOT.get(), level);
                                                 entityToSpawn.setOwner(shooter);
@@ -473,14 +473,14 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
                                                 return entityToSpawn;
                                             }
                                         }.getArrow(projectileLevel, (Entity) HighmoreEntity.this,
-                                                (float) (((Entity) HighmoreEntity.this instanceof LivingEntity _livingEntity3 && _livingEntity3.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity3.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.5), 0);
-                                        _entityToSpawn.setPos(x, (y + 9), z);
-                                        _entityToSpawn.shoot((rng * Math.sin(angl)), (-9), (rng * Math.cos(angl)), (float) 1.5, 5);
-                                        projectileLevel.addFreshEntity(_entityToSpawn);
+                                                (float) (((Entity) HighmoreEntity.this instanceof LivingEntity livingEntity3 && livingEntity3.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity3.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.5), 0);
+                                        entityToSpawn.setPos(x, (y + 9), z);
+                                        entityToSpawn.shoot((rng * Math.sin(angl)), (-9), (rng * Math.cos(angl)), (float) 1.5, 5);
+                                        projectileLevel.addFreshEntity(entityToSpawn);
                                     }
                                     for (int index0 = 0; index0 < 120; index0++) {
-                                        if (world instanceof ServerLevel _level)
-                                            _level.sendParticles(ParticleTypes.ENCHANTED_HIT, (x + 24 * Math.sin(Math.toRadians(3 * index0))), y, (z + 24 * Math.cos(Math.toRadians(3 * index0))), 3, 0.15, 0.15, 0.15, 0.1);
+                                        if (world instanceof ServerLevel level)
+                                            level.sendParticles(ParticleTypes.ENCHANTED_HIT, (x + 24 * Math.sin(Math.toRadians(3 * index0))), y, (z + 24 * Math.cos(Math.toRadians(3 * index0))), 3, 0.15, 0.15, 0.15, 0.1);
                                     }
                                     final int tick2 = ticks;
                                     CaerulaArborMod.queueServerWork(tick2, () -> {
@@ -495,22 +495,22 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
                             highmoreBlast(world, x, y, z, this);
                         });
                         if (lvl == 0) {
-                            if ((Entity) this instanceof HighmoreEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_SKILLP_2, 680);
+                            if ((Entity) this instanceof HighmoreEntity datEntSetI)
+                                datEntSetI.getEntityData().set(DATA_SKILLP_2, 680);
                         } else if (lvl == 1) {
-                            if ((Entity) this instanceof HighmoreEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_SKILLP_2, 600);
+                            if ((Entity) this instanceof HighmoreEntity datEntSetI)
+                                datEntSetI.getEntityData().set(DATA_SKILLP_2, 600);
                         } else {
-                            if ((Entity) this instanceof HighmoreEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_SKILLP_2, 520);
+                            if ((Entity) this instanceof HighmoreEntity datEntSetI)
+                                datEntSetI.getEntityData().set(DATA_SKILLP_2, 520);
                         }
                     }
                 } else {
-                    if ((Entity) this instanceof HighmoreEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_SKILLP_2, (int) (sklp2 - 1));
-                    if (((Entity) this instanceof HighmoreEntity _datEntI ? _datEntI.getEntityData().get(DATA_PHASE) : 0) >= 2) {
-                        if ((Entity) this instanceof HighmoreEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_SKILLP_2, (int) (sklp2 - 1));
+                    if ((Entity) this instanceof HighmoreEntity datEntSetI)
+                        datEntSetI.getEntityData().set(DATA_SKILLP_2, (int) (sklp2 - 1));
+                    if (((Entity) this instanceof HighmoreEntity datEntI ? datEntI.getEntityData().get(DATA_PHASE) : 0) >= 2) {
+                        if ((Entity) this instanceof HighmoreEntity datEntSetI)
+                            datEntSetI.getEntityData().set(DATA_SKILLP_2, (int) (sklp2 - 1));
                     }
                 }
             }
@@ -639,11 +639,11 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
                 if (!world.isClientSide() && world.getServer() != null) {
                     for (ItemStack itemstackiterator : world.getServer().getLootData().getLootTable(new ResourceLocation(CaerulaArborMod.MODID, "gameplay/highmore_relics"))
                             .getRandomItems(new LootParams.Builder((ServerLevel) world).create(LootContextParamSets.EMPTY))) {
-                        if (world instanceof ServerLevel _level) {
-                            ItemEntity entityToSpawn = new ItemEntity(_level, this.getX(), this.getY(), this.getZ(), itemstackiterator);
+                        if (world instanceof ServerLevel level) {
+                            ItemEntity entityToSpawn = new ItemEntity(level, this.getX(), this.getY(), this.getZ(), itemstackiterator);
                             entityToSpawn.setPickUpDelay(10);
                             entityToSpawn.setUnlimitedLifetime();
-                            _level.addFreshEntity(entityToSpawn);
+                            level.addFreshEntity(entityToSpawn);
                         }
                     }
                 }
@@ -729,7 +729,7 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
         new Object() {
             void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                 if (world instanceof ServerLevel projectileLevel) {
-                    Projectile _entityToSpawn = new Object() {
+                    Projectile entityToSpawn = new Object() {
                         public Projectile getArrow(Level level, Entity shooter, float damage, int knockback) {
                             AbstractArrow entityToSpawn = new HighmoreShootEntity(CAEntities.HIGHMORE_SHOOT.get(), level);
                             entityToSpawn.setOwner(shooter);
@@ -740,9 +740,9 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
                         }
                     }.getArrow(projectileLevel, HighmoreEntity.this,
                             (float) (HighmoreEntity.this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? HighmoreEntity.this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0), 0);
-                    _entityToSpawn.setPos(x, (y + 1.5), z);
-                    _entityToSpawn.shoot((target.getX() - x), ((target.getY() + target.getBbHeight() * 0.5) - (y + 2.5)), (target.getZ() - z), (float) 1.5, 5);
-                    projectileLevel.addFreshEntity(_entityToSpawn);
+                    entityToSpawn.setPos(x, (y + 1.5), z);
+                    entityToSpawn.shoot((target.getX() - x), ((target.getY() + target.getBbHeight() * 0.5) - (y + 2.5)), (target.getZ() - z), (float) 1.5, 5);
+                    projectileLevel.addFreshEntity(entityToSpawn);
                 }
                 final int tick2 = ticks;
                 CaerulaArborMod.queueServerWork(tick2, () -> {
@@ -756,14 +756,14 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
 
     private void highmoreBlast(LevelAccessor world, double x, double y, double z, Entity entity) {
         if (entity != null) {
-            final Vec3 _center = new Vec3(x, y, z);
-            List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(48 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-            for (Entity entityiterator : _entfound) {
+            final Vec3 center = new Vec3(x, y, z);
+            List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(48 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+            for (Entity entityiterator : entfound) {
                 if (entityiterator == entity) {
                     continue;
                 }
                 if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
-                    if (!(entityiterator == (entity instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null))) {
+                    if (!(entityiterator == (entity instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null))) {
                         continue;
                     }
                 }
@@ -775,8 +775,8 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
                         void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                             entityiterator.hurt(
                                     new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "highmore_attack"))), entity),
-                                    (float) ((entity instanceof LivingEntity _livingEntity8 && _livingEntity8.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity8.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
-                                            * (3.5 + (entity instanceof HighmoreEntity _datEntI ? _datEntI.getEntityData().get(HighmoreEntity.DATA_PHASE) : 0))));
+                                    (float) ((entity instanceof LivingEntity livingEntity8 && livingEntity8.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity8.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
+                                            * (3.5 + (entity instanceof HighmoreEntity datEntI ? datEntI.getEntityData().get(HighmoreEntity.DATA_PHASE) : 0))));
                             final int tick2 = ticks;
                             CaerulaArborMod.queueServerWork(tick2, () -> {
                                 if (timedlooptotal > timedloopiterator + 1) {
@@ -784,21 +784,21 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
                                 }
                             });
                         }
-                    }.timedLoop(0, (int) (2 + (entity instanceof HighmoreEntity _datEntI ? _datEntI.getEntityData().get(HighmoreEntity.DATA_PHASE) : 0)), 1);
+                    }.timedLoop(0, (int) (2 + (entity instanceof HighmoreEntity datEntI ? datEntI.getEntityData().get(HighmoreEntity.DATA_PHASE) : 0)), 1);
                     if (entity instanceof LivingEntity && !this.level().isClientSide())
                         this.addEffect(new MobEffectInstance(MobEffects.LEVITATION, 40, 0));
                 }
             }
         }
         for (int index0 = 0; index0 < 120; index0++) {
-            if (world instanceof ServerLevel _level)
-                _level.sendParticles(ParticleTypes.ENCHANTED_HIT, (x + 24 * Math.sin(Math.toRadians(3 * index0))), y, (z + 24 * Math.cos(Math.toRadians(3 * index0))), 6, 0.15, 0.15, 0.15, 0.1);
+            if (world instanceof ServerLevel level)
+                level.sendParticles(ParticleTypes.ENCHANTED_HIT, (x + 24 * Math.sin(Math.toRadians(3 * index0))), y, (z + 24 * Math.cos(Math.toRadians(3 * index0))), 6, 0.15, 0.15, 0.15, 0.1);
         }
         new Object() {
             void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                 for (int index1 = 0; index1 < 12; index1++) {
                     if (world instanceof ServerLevel projectileLevel) {
-                        Projectile _entityToSpawn = new Object() {
+                        Projectile entityToSpawn = new Object() {
                             public Projectile getArrow(Level level, Entity shooter, float damage, int knockback) {
                                 AbstractArrow entityToSpawn = new HighmoreShootEntity(CAEntities.HIGHMORE_SHOOT.get(), level);
                                 entityToSpawn.setOwner(shooter);
@@ -808,10 +808,10 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
                                 return entityToSpawn;
                             }
                         }.getArrow(projectileLevel, entity,
-                                (float) ((entity instanceof LivingEntity _livingEntity17 && _livingEntity17.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity17.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 3.3), 0);
-                        _entityToSpawn.setPos(x, (y + 0.75), z);
-                        _entityToSpawn.shoot(Math.sin(30 * index1), 0, Math.cos(30 * index1), 1, 0);
-                        projectileLevel.addFreshEntity(_entityToSpawn);
+                                (float) ((entity instanceof LivingEntity livingEntity17 && livingEntity17.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity17.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 3.3), 0);
+                        entityToSpawn.setPos(x, (y + 0.75), z);
+                        entityToSpawn.shoot(Math.sin(30 * index1), 0, Math.cos(30 * index1), 1, 0);
+                        projectileLevel.addFreshEntity(entityToSpawn);
                     }
                 }
                 final int tick2 = ticks;
@@ -821,7 +821,7 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
                     }
                 });
             }
-        }.timedLoop(0, (int) (1 + (entity instanceof HighmoreEntity _datEntI ? _datEntI.getEntityData().get(HighmoreEntity.DATA_PHASE) : 0)), 3);
+        }.timedLoop(0, (int) (1 + (entity instanceof HighmoreEntity datEntI ? datEntI.getEntityData().get(HighmoreEntity.DATA_PHASE) : 0)), 3);
     }
 
     @Override

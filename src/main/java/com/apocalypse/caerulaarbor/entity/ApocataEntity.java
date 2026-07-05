@@ -125,16 +125,16 @@ public class ApocataEntity extends PathfinderMob implements GeoEntity, SyncedAni
             return;
         String name;
         if (!world.isClientSide()) {
-            if (world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), CASounds.APOCATA_DIE.get(), SoundSource.NEUTRAL, 4, (float) 1.5);
+            if (world instanceof Level level) {
+                    level.playSound(null, BlockPos.containing(x, y, z), CASounds.APOCATA_DIE.get(), SoundSource.NEUTRAL, 4, (float) 1.5);
             }
         }
         name = sourceentity.getDisplayName().getString();
         if (name.contains("goodsquid") || name.contains("Goodsquid")) {
             if (!level().isClientSide())
                 discard();
-            if (world instanceof ServerLevel _level) {
-                Entity entityToSpawn = CAEntities.TIDE_CHIMERA.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+            if (world instanceof ServerLevel level) {
+                Entity entityToSpawn = CAEntities.TIDE_CHIMERA.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn != null) {
                     entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                 }
@@ -164,7 +164,7 @@ public class ApocataEntity extends PathfinderMob implements GeoEntity, SyncedAni
 		double z = this.getZ();
 		Entity entity = this;
 		Level world = this.level();
-        if ((entity instanceof ApocataEntity _datEntI ? _datEntI.getEntityData().get(DATA_DURATION) : 0) > 0) {
+        if ((entity instanceof ApocataEntity datEntI ? datEntI.getEntityData().get(DATA_DURATION) : 0) > 0) {
             return InteractionResult.PASS;
         }
         if (sourceentity.getMainHandItem().getItem() == Blocks.AIR.asItem() && sourceentity.getOffhandItem().getItem() == Blocks.AIR.asItem()) {
@@ -172,12 +172,12 @@ public class ApocataEntity extends PathfinderMob implements GeoEntity, SyncedAni
 				((ApocataEntity) entity).setAnimation("animation.apocata.tap");
 			}
 			if (!((LevelAccessor) world).isClientSide()) {
-				if ((LevelAccessor) world instanceof Level _level) {
-					_level.playSound(null, BlockPos.containing(x, y, z), CASounds.APOCATA_INTERACT.get(), SoundSource.NEUTRAL, 3, (float) 1.5);
+				if ((LevelAccessor) world instanceof Level level) {
+					level.playSound(null, BlockPos.containing(x, y, z), CASounds.APOCATA_INTERACT.get(), SoundSource.NEUTRAL, 3, (float) 1.5);
 				}
 			}
-			if (entity instanceof ApocataEntity _datEntSetI)
-				_datEntSetI.getEntityData().set(DATA_DURATION, 20);
+			if (entity instanceof ApocataEntity datEntSetI)
+				datEntSetI.getEntityData().set(DATA_DURATION, 20);
 			return InteractionResult.SUCCESS;
 		}
         return InteractionResult.PASS;
@@ -187,10 +187,10 @@ public class ApocataEntity extends PathfinderMob implements GeoEntity, SyncedAni
 	public void baseTick() {
 		super.baseTick();
         double dura;
-        dura = (Entity) this instanceof ApocataEntity _datEntI ? _datEntI.getEntityData().get(DATA_DURATION) : 0;
+        dura = (Entity) this instanceof ApocataEntity datEntI ? datEntI.getEntityData().get(DATA_DURATION) : 0;
         if (dura > 0) {
-            if ((Entity) this instanceof ApocataEntity _datEntSetI)
-                _datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura - 1));
+            if ((Entity) this instanceof ApocataEntity datEntSetI)
+                datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura - 1));
         }
         this.refreshDimensions();
 	}
@@ -262,11 +262,11 @@ public class ApocataEntity extends PathfinderMob implements GeoEntity, SyncedAni
 			this.remove(ApocataEntity.RemovalReason.KILLED);
 			this.dropExperience();
             LevelAccessor world = this.level();
-            if (world instanceof ServerLevel _level) {
-                ItemEntity entityToSpawn = new ItemEntity(_level, this.getX(), this.getY(), this.getZ(), new ItemStack(CAItems.APOCALYPSE.get()));
+            if (world instanceof ServerLevel level) {
+                ItemEntity entityToSpawn = new ItemEntity(level, this.getX(), this.getY(), this.getZ(), new ItemStack(CAItems.APOCALYPSE.get()));
                 entityToSpawn.setPickUpDelay(10);
                 entityToSpawn.setUnlimitedLifetime();
-                _level.addFreshEntity(entityToSpawn);
+                level.addFreshEntity(entityToSpawn);
             }
         }
 	}

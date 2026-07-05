@@ -187,8 +187,8 @@ public class BlockKettleBlock extends Block implements SimpleWaterloggedBlock {
 	}
 
 	@Override
-	public InteractionResult use(BlockState blockstate, Level world, BlockPos pos, Player entity, InteractionHand hand, BlockHitResult hit) {
-		super.use(blockstate, world, pos, entity, hand, hit);
+	public InteractionResult use(BlockState blockstate, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+		super.use(blockstate, world, pos, player, hand, hit);
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();
@@ -198,221 +198,197 @@ public class BlockKettleBlock extends Block implements SimpleWaterloggedBlock {
 		Direction direction = hit.getDirection();
         InteractionResult result = InteractionResult.PASS;
         boolean finished = false;
-        if (entity != null) {
-            if (!(blockstate.getBlock().getStateDefinition().getProperty("watered") instanceof BooleanProperty _getbp1 && blockstate.getValue(_getbp1))) {
-                if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.CANNED_WATER.get()) {
-                    {
-                        BlockPos _pos = BlockPos.containing(x, y, z);
-                        BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-                        if (_bs.getBlock().getStateDefinition().getProperty("watered") instanceof BooleanProperty _booleanProp)
-                            ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_booleanProp, true), 3);
-                    }
-                    if ((Entity) entity instanceof LivingEntity _entity) {
-                        ItemStack _setstack = new ItemStack(CAItems.EMPTY_CAN.get()).copy();
-                        _setstack.setCount(((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getCount());
-                        _entity.setItemInHand(InteractionHand.MAIN_HAND, _setstack);
-                        if (_entity instanceof Player _player)
-                            _player.getInventory().setChanged();
-                    }
-                    if ((LevelAccessor) world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.BUCKET_FILL, SoundSource.NEUTRAL, 1, 1);
-                    }
-                    result = InteractionResult.SUCCESS;
-                    finished = true;
-                } else if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.A_CUP_OF_WATER.get()) {
-                    {
-                        BlockPos _pos = BlockPos.containing(x, y, z);
-                        BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-                        if (_bs.getBlock().getStateDefinition().getProperty("watered") instanceof BooleanProperty _booleanProp)
-                            ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_booleanProp, true), 3);
-                    }
-                    ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
-                    if ((Entity) entity instanceof Player _player) {
-                        ItemStack _setstack = new ItemStack(CAItems.OCEANGLASS_CUP.get()).copy();
-                        _setstack.setCount(1);
-                        ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
-                    }
-                    if ((LevelAccessor) world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.BUCKET_FILL, SoundSource.NEUTRAL, 1, 1);
-                    }
-                    result = InteractionResult.SUCCESS;
-                    finished = true;
+        if (!(blockstate.getBlock().getStateDefinition().getProperty("watered") instanceof BooleanProperty getbp1 && blockstate.getValue(getbp1))) {
+            if (((Entity) player instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.CANNED_WATER.get()) {
+                {
+                    BlockPos blockPos = BlockPos.containing(x, y, z);
+                    BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                    if (bs.getBlock().getStateDefinition().getProperty("watered") instanceof BooleanProperty booleanProp)
+                        ((LevelAccessor) world).setBlock(pos, bs.setValue(booleanProp, true), 3);
                 }
-            } else if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.CANNED_WATER.get()
-                    || ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.A_CUP_OF_WATER.get()) {
-                if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
-                    _player.displayClientMessage(Component.literal((Component.translatable("block.caerula_arbor.kettle.filled").getString())), true);
+                if ((Entity) player instanceof LivingEntity livingEntity) {
+                    ItemStack setstack = new ItemStack(CAItems.EMPTY_CAN.get()).copy();
+                    setstack.setCount(((Entity) player instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getCount());
+                    player.setItemInHand(InteractionHand.MAIN_HAND, setstack);
+                    player.getInventory().setChanged();
+                }
+                if ((LevelAccessor) world instanceof Level level) {
+                    level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.BUCKET_FILL, SoundSource.NEUTRAL, 1, 1);
+                }
+                result = InteractionResult.SUCCESS;
+                finished = true;
+            } else if (((Entity) player instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.A_CUP_OF_WATER.get()) {
+                {
+                    BlockPos blockPos = BlockPos.containing(x, y, z);
+                    BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                    if (bs.getBlock().getStateDefinition().getProperty("watered") instanceof BooleanProperty booleanProp)
+                        ((LevelAccessor) world).setBlock(pos, bs.setValue(booleanProp, true), 3);
+                }
+                ((Entity) player instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
+                ItemStack setstack = new ItemStack(CAItems.OCEANGLASS_CUP.get()).copy();
+                    setstack.setCount(1);
+                    ItemHandlerHelper.giveItemToPlayer(player, setstack);
+                if ((LevelAccessor) world instanceof Level level) {
+                    level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.BUCKET_FILL, SoundSource.NEUTRAL, 1, 1);
+                }
+                result = InteractionResult.SUCCESS;
+                finished = true;
+            }
+        } else if (((Entity) player instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.CANNED_WATER.get()
+                || ((Entity) player instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.A_CUP_OF_WATER.get()) {
+            if (!player.level().isClientSide())
+                player.displayClientMessage(Component.literal((Component.translatable("block.caerula_arbor.kettle.filled").getString())), true);
+        }
+        if (!finished) {
+            if (blockstate.getBlock().getStateDefinition().getProperty("watered") instanceof BooleanProperty getbp25 && blockstate.getValue(getbp25)
+                    && blockstate.getBlock().getStateDefinition().getProperty("boiling") instanceof BooleanProperty getbp27 && blockstate.getValue(getbp27)) {
+                if (((Entity) player instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.EMPTY_CAN.get()
+                        && blockstate.getBlock().getStateDefinition().getProperty("noodled") instanceof BooleanProperty getbp31 && blockstate.getValue(getbp31)) {
+                    {
+                        BlockPos blockPos = BlockPos.containing(x, y, z);
+                        BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                        if (bs.getBlock().getStateDefinition().getProperty("watered") instanceof BooleanProperty booleanProp)
+                            ((LevelAccessor) world).setBlock(pos, bs.setValue(booleanProp, false), 3);
+                    }
+                    {
+                        BlockPos blockPos = BlockPos.containing(x, y, z);
+                        BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                        if (bs.getBlock().getStateDefinition().getProperty("noodled") instanceof BooleanProperty booleanProp)
+                            ((LevelAccessor) world).setBlock(pos, bs.setValue(booleanProp, false), 3);
+                    }
+                    ((Entity) player instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
+                    ItemStack setstack = new ItemStack(CAItems.CANNED_NOODLE.get()).copy();
+                        setstack.setCount(1);
+                        ItemHandlerHelper.giveItemToPlayer(player, setstack);
+                    result = InteractionResult.SUCCESS;
+                    finished = true;
+                } else if (((Entity) player instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.EMPTY_CAN.get()
+                        && !(blockstate.getBlock().getStateDefinition().getProperty("noodled") instanceof BooleanProperty getbp41 && blockstate.getValue(getbp41))) {
+                    {
+                        BlockPos blockPos = BlockPos.containing(x, y, z);
+                        BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                        if (bs.getBlock().getStateDefinition().getProperty("watered") instanceof BooleanProperty booleanProp)
+                            ((LevelAccessor) world).setBlock(pos, bs.setValue(booleanProp, false), 3);
+                    }
+                    ((Entity) player instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
+                    ItemStack setstack = new ItemStack(CAItems.CANNED_BOILED_WATER.get()).copy();
+                        setstack.setCount(1);
+                        ItemHandlerHelper.giveItemToPlayer(player, setstack);
+                    result = InteractionResult.SUCCESS;
+                    finished = true;
+                } else if (((Entity) player instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.INSTANT_NOODLE.get()
+                        && !(blockstate.getBlock().getStateDefinition().getProperty("noodled") instanceof BooleanProperty getbp50 && blockstate.getValue(getbp50))) {
+                    {
+                        BlockPos blockPos = BlockPos.containing(x, y, z);
+                        BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                        if (bs.getBlock().getStateDefinition().getProperty("noodled") instanceof BooleanProperty booleanProp)
+                            ((LevelAccessor) world).setBlock(pos, bs.setValue(booleanProp, true), 3);
+                    }
+                    ((Entity) player instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
+                    if ((LevelAccessor) world instanceof Level level) {
+                        if (!level.isClientSide()) {
+                            level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.REDSTONE_TORCH_BURNOUT, SoundSource.NEUTRAL, 2, 1);
+                        } else {
+                            level.playLocalSound(x, y, z, SoundEvents.REDSTONE_TORCH_BURNOUT, SoundSource.NEUTRAL, 2, 1, false);
+                        }
+                    }
+                    result = InteractionResult.SUCCESS;
+                    finished = true;
+                } else if (((Entity) player instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.INSTANT_NOODLE.get()) {
+                    if (!player.level().isClientSide())
+                        player.displayClientMessage(Component.literal((Component.translatable("block.caerula_arbor.kettle.noodled").getString())), true);
+                }
             }
             if (!finished) {
-                if (blockstate.getBlock().getStateDefinition().getProperty("watered") instanceof BooleanProperty _getbp25 && blockstate.getValue(_getbp25)
-                        && blockstate.getBlock().getStateDefinition().getProperty("boiling") instanceof BooleanProperty _getbp27 && blockstate.getValue(_getbp27)) {
-                    if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.EMPTY_CAN.get()
-                            && blockstate.getBlock().getStateDefinition().getProperty("noodled") instanceof BooleanProperty _getbp31 && blockstate.getValue(_getbp31)) {
-                        {
-                            BlockPos _pos = BlockPos.containing(x, y, z);
-                            BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-                            if (_bs.getBlock().getStateDefinition().getProperty("watered") instanceof BooleanProperty _booleanProp)
-                                ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_booleanProp, false), 3);
-                        }
-                        {
-                            BlockPos _pos = BlockPos.containing(x, y, z);
-                            BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-                            if (_bs.getBlock().getStateDefinition().getProperty("noodled") instanceof BooleanProperty _booleanProp)
-                                ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_booleanProp, false), 3);
-                        }
-                        ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
-                        if ((Entity) entity instanceof Player _player) {
-                            ItemStack _setstack = new ItemStack(CAItems.CANNED_NOODLE.get()).copy();
-                            _setstack.setCount(1);
-                            ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
+                if (blockstate.getBlock().getStateDefinition().getProperty("watered") instanceof BooleanProperty getbp61 && blockstate.getValue(getbp61)
+                        && !(blockstate.getBlock().getStateDefinition().getProperty("boiling") instanceof BooleanProperty getbp63 && blockstate.getValue(getbp63))) {
+                    if (((Entity) player instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.EMPTY_CAN.get()) {
+                        ((Entity) player instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
+                        ItemStack setstack = new ItemStack(CAItems.CANNED_WATER.get()).copy();
+                            setstack.setCount(1);
+                            ItemHandlerHelper.giveItemToPlayer(player, setstack);
+                            BlockPos blockPos = BlockPos.containing(x, y, z);
+                            BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                            if (bs.getBlock().getStateDefinition().getProperty("watered") instanceof BooleanProperty booleanProp)
+                                ((LevelAccessor) world).setBlock(pos, bs.setValue(booleanProp, false), 3);
+                        if ((LevelAccessor) world instanceof Level level) {
+                                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1, 1);
                         }
                         result = InteractionResult.SUCCESS;
                         finished = true;
-                    } else if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.EMPTY_CAN.get()
-                            && !(blockstate.getBlock().getStateDefinition().getProperty("noodled") instanceof BooleanProperty _getbp41 && blockstate.getValue(_getbp41))) {
-                        {
-                            BlockPos _pos = BlockPos.containing(x, y, z);
-                            BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-                            if (_bs.getBlock().getStateDefinition().getProperty("watered") instanceof BooleanProperty _booleanProp)
-                                ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_booleanProp, false), 3);
-                        }
-                        ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
-                        if ((Entity) entity instanceof Player _player) {
-                            ItemStack _setstack = new ItemStack(CAItems.CANNED_BOILED_WATER.get()).copy();
-                            _setstack.setCount(1);
-                            ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
-                        }
-                        result = InteractionResult.SUCCESS;
-                        finished = true;
-                    } else if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.INSTANT_NOODLE.get()
-                            && !(blockstate.getBlock().getStateDefinition().getProperty("noodled") instanceof BooleanProperty _getbp50 && blockstate.getValue(_getbp50))) {
-                        {
-                            BlockPos _pos = BlockPos.containing(x, y, z);
-                            BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-                            if (_bs.getBlock().getStateDefinition().getProperty("noodled") instanceof BooleanProperty _booleanProp)
-                                ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_booleanProp, true), 3);
-                        }
-                        ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
-                        if ((LevelAccessor) world instanceof Level _level) {
-                            if (!_level.isClientSide()) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.REDSTONE_TORCH_BURNOUT, SoundSource.NEUTRAL, 2, 1);
-                            } else {
-                                _level.playLocalSound(x, y, z, SoundEvents.REDSTONE_TORCH_BURNOUT, SoundSource.NEUTRAL, 2, 1, false);
-                            }
+                    } else if (((Entity) player instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.OCEANGLASS_CUP.get()) {
+                        ((Entity) player instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
+                        ItemStack setstack = new ItemStack(CAItems.A_CUP_OF_WATER.get()).copy();
+                            setstack.setCount(1);
+                            ItemHandlerHelper.giveItemToPlayer(player, setstack);
+                        BlockPos blockPos = BlockPos.containing(x, y, z);
+                        BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                        if (bs.getBlock().getStateDefinition().getProperty("watered") instanceof BooleanProperty booleanProp)
+                            ((LevelAccessor) world).setBlock(pos, bs.setValue(booleanProp, false), 3);
+
+                        if ((LevelAccessor) world instanceof Level level) {
+                                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1, 1);
                         }
                         result = InteractionResult.SUCCESS;
                         finished = true;
-                    } else if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.INSTANT_NOODLE.get()) {
-                        if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
-                            _player.displayClientMessage(Component.literal((Component.translatable("block.caerula_arbor.kettle.noodled").getString())), true);
                     }
                 }
                 if (!finished) {
-                    if (blockstate.getBlock().getStateDefinition().getProperty("watered") instanceof BooleanProperty _getbp61 && blockstate.getValue(_getbp61)
-                            && !(blockstate.getBlock().getStateDefinition().getProperty("boiling") instanceof BooleanProperty _getbp63 && blockstate.getValue(_getbp63))) {
-                        if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.EMPTY_CAN.get()) {
-                            ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
-                            if ((Entity) entity instanceof Player _player) {
-                                ItemStack _setstack = new ItemStack(CAItems.CANNED_WATER.get()).copy();
-                                _setstack.setCount(1);
-                                ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
-                            }
+                    if (blockstate.getBlock().getStateDefinition().getProperty("watered") instanceof BooleanProperty getbp81 && blockstate.getValue(getbp81)
+                            && !(blockstate.getBlock().getStateDefinition().getProperty("noodled") instanceof BooleanProperty getbp83 && blockstate.getValue(getbp83))) {
+                        if (((Entity) player instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == Blocks.SPONGE.asItem()) {
+                            ((Entity) player instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                             {
-                                BlockPos _pos = BlockPos.containing(x, y, z);
-                                BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-                                if (_bs.getBlock().getStateDefinition().getProperty("watered") instanceof BooleanProperty _booleanProp)
-                                    ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_booleanProp, false), 3);
+                                BlockPos blockPos = BlockPos.containing(x, y, z);
+                                BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                                if (bs.getBlock().getStateDefinition().getProperty("watered") instanceof BooleanProperty booleanProp)
+                                    ((LevelAccessor) world).setBlock(pos, bs.setValue(booleanProp, false), 3);
                             }
-                            if ((LevelAccessor) world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1, 1);
+                            ItemStack setstack = new ItemStack(Blocks.WET_SPONGE).copy();
+                                setstack.setCount(1);
+                                ItemHandlerHelper.giveItemToPlayer(player, setstack);
+                            if ((LevelAccessor) world instanceof Level level) {
+                                    level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.EMPTY, SoundSource.NEUTRAL, 1, 1);
                             }
                             result = InteractionResult.SUCCESS;
-                            finished = true;
-                        } else if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.OCEANGLASS_CUP.get()) {
-                            ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
-                            if ((Entity) entity instanceof Player _player) {
-                                ItemStack _setstack = new ItemStack(CAItems.A_CUP_OF_WATER.get()).copy();
-                                _setstack.setCount(1);
-                                ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
-                            }
+                        } else if (((Entity) player instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.CANNED_LAVA.get()) {
+                            ((Entity) player instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                             {
-                                BlockPos _pos = BlockPos.containing(x, y, z);
-                                BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-                                if (_bs.getBlock().getStateDefinition().getProperty("watered") instanceof BooleanProperty _booleanProp)
-                                    ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_booleanProp, false), 3);
+                                BlockPos blockPos = BlockPos.containing(x, y, z);
+                                BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                                if (bs.getBlock().getStateDefinition().getProperty("watered") instanceof BooleanProperty booleanProp)
+                                    ((LevelAccessor) world).setBlock(pos, bs.setValue(booleanProp, false), 3);
                             }
-                            if ((LevelAccessor) world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.BOTTLE_FILL, SoundSource.NEUTRAL, 1, 1);
+                            ItemStack setstack = new ItemStack(CAItems.OBISIDIAN_BALL.get()).copy();
+                                setstack.setCount(1);
+                                ItemHandlerHelper.giveItemToPlayer(player, setstack);
+                            ItemStack setstack2 = new ItemStack(CAItems.EMPTY_CAN.get()).copy();
+                                setstack2.setCount(1);
+                                ItemHandlerHelper.giveItemToPlayer(player, setstack2);
+                            if ((LevelAccessor) world instanceof Level level) {
+                                    level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.LAVA_EXTINGUISH, SoundSource.NEUTRAL, 1, 1);
                             }
                             result = InteractionResult.SUCCESS;
-                            finished = true;
-                        }
-                    }
-                    if (!finished) {
-                        if (blockstate.getBlock().getStateDefinition().getProperty("watered") instanceof BooleanProperty _getbp81 && blockstate.getValue(_getbp81)
-                                && !(blockstate.getBlock().getStateDefinition().getProperty("noodled") instanceof BooleanProperty _getbp83 && blockstate.getValue(_getbp83))) {
-                            if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == Blocks.SPONGE.asItem()) {
-                                ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
-                                {
-                                    BlockPos _pos = BlockPos.containing(x, y, z);
-                                    BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-                                    if (_bs.getBlock().getStateDefinition().getProperty("watered") instanceof BooleanProperty _booleanProp)
-                                        ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_booleanProp, false), 3);
-                                }
-                                if ((Entity) entity instanceof Player _player) {
-                                    ItemStack _setstack = new ItemStack(Blocks.WET_SPONGE).copy();
-                                    _setstack.setCount(1);
-                                    ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
-                                }
-                                if ((LevelAccessor) world instanceof Level _level) {
-                                        _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.EMPTY, SoundSource.NEUTRAL, 1, 1);
-                                }
-                                result = InteractionResult.SUCCESS;
-                            } else if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.CANNED_LAVA.get()) {
-                                ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
-                                {
-                                    BlockPos _pos = BlockPos.containing(x, y, z);
-                                    BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-                                    if (_bs.getBlock().getStateDefinition().getProperty("watered") instanceof BooleanProperty _booleanProp)
-                                        ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_booleanProp, false), 3);
-                                }
-                                if ((Entity) entity instanceof Player _player) {
-                                    ItemStack _setstack = new ItemStack(CAItems.OBISIDIAN_BALL.get()).copy();
-                                    _setstack.setCount(1);
-                                    ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
-                                }
-                                if ((Entity) entity instanceof Player _player) {
-                                    ItemStack _setstack = new ItemStack(CAItems.EMPTY_CAN.get()).copy();
-                                    _setstack.setCount(1);
-                                    ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
-                                }
-                                if ((LevelAccessor) world instanceof Level _level) {
-                                        _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.LAVA_EXTINGUISH, SoundSource.NEUTRAL, 1, 1);
-                                }
-                                result = InteractionResult.SUCCESS;
-                            } else if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.REAL_EGG.get()
-                                    && blockstate.getBlock().getStateDefinition().getProperty("boiling") instanceof BooleanProperty _getbp104 && blockstate.getValue(_getbp104)) {
-                                {
-                                    BlockPos _pos = BlockPos.containing(x, y, z);
-                                    BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-                                    if (_bs.getBlock().getStateDefinition().getProperty("watered") instanceof BooleanProperty _booleanProp)
-                                        ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_booleanProp, false), 3);
-                                }
-                                ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
-                                if ((Entity) entity instanceof Player _player) {
-                                    ItemStack _setstack = new ItemStack(CAItems.BOILED_EGG.get()).copy();
-                                    _setstack.setCount(1);
-                                    ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
-                                }
-                                if ((LevelAccessor) world instanceof Level _level) {
-                                    if (!_level.isClientSide()) {
-                                        _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.BREWING_STAND_BREW, SoundSource.NEUTRAL, 2, 1);
-                                    } else {
-                                        _level.playLocalSound(x, y, z, SoundEvents.BREWING_STAND_BREW, SoundSource.NEUTRAL, 2, 1, false);
-                                    }
-                                }
-                                result = InteractionResult.SUCCESS;
+                        } else if (((Entity) player instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.REAL_EGG.get()
+                                && blockstate.getBlock().getStateDefinition().getProperty("boiling") instanceof BooleanProperty getbp104 && blockstate.getValue(getbp104)) {
+                            {
+                                BlockPos blockPos = BlockPos.containing(x, y, z);
+                                BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                                if (bs.getBlock().getStateDefinition().getProperty("watered") instanceof BooleanProperty booleanProp)
+                                    ((LevelAccessor) world).setBlock(pos, bs.setValue(booleanProp, false), 3);
                             }
+                            ((Entity) player instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
+                            ItemStack setstack = new ItemStack(CAItems.BOILED_EGG.get()).copy();
+                            setstack.setCount(1);
+                            ItemHandlerHelper.giveItemToPlayer(player, setstack);
+                            if ((LevelAccessor) world instanceof Level level) {
+                                if (!level.isClientSide()) {
+                                    level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.BREWING_STAND_BREW, SoundSource.NEUTRAL, 2, 1);
+                                } else {
+                                    level.playLocalSound(x, y, z, SoundEvents.BREWING_STAND_BREW, SoundSource.NEUTRAL, 2, 1, false);
+                                }
+                            }
+                            result = InteractionResult.SUCCESS;
                         }
                     }
                 }

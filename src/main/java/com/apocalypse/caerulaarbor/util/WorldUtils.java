@@ -4,10 +4,8 @@ import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
 import com.apocalypse.caerulaarbor.init.CABlocks;
 import com.apocalypse.caerulaarbor.init.CAGameRules;
-import com.apocalypse.caerulaarbor.manager.SeabornSpawnManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -15,8 +13,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
-import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -76,39 +72,39 @@ public class WorldUtils {
 			success = true;
 		} else if (toBeBurn.getBlock() == CABlocks.SEA_TRAIL_GROWN.get() || toBeBurn.getBlock() == CABlocks.SEA_TRAIL_STOP.get()) {
 			output = (new Object() {
-				public BlockState with(BlockState _bs, String _property, int _newValue) {
-					Property<?> _prop = _bs.getBlock().getStateDefinition().getProperty(_property);
-					return _prop instanceof IntegerProperty _ip && _prop.getPossibleValues().contains(_newValue) ? _bs.setValue(_ip, _newValue) : _bs;
+				public BlockState with(BlockState bs, String property, int newValue) {
+					Property<?> prop = bs.getBlock().getStateDefinition().getProperty(property);
+					return prop instanceof IntegerProperty ip && prop.getPossibleValues().contains(newValue) ? bs.setValue(ip, newValue) : bs;
 				}
-			}.with(CABlocks.SEA_TRAIL_BURNT.get().defaultBlockState(), "longevity", toBeBurn.getBlock().getStateDefinition().getProperty("longevity") instanceof IntegerProperty _getip4 ? toBeBurn.getValue(_getip4) : -1));
+			}.with(CABlocks.SEA_TRAIL_BURNT.get().defaultBlockState(), "longevity", toBeBurn.getBlock().getStateDefinition().getProperty("longevity") instanceof IntegerProperty getip4 ? toBeBurn.getValue(getip4) : -1));
 			success = true;
 		} else if (toBeBurn.getBlock() == CABlocks.SEA_TRAIL_SOLID.get() || toBeBurn.getBlock() == CABlocks.TRAIL_PULSE.get()) {
 			output = CABlocks.SEA_TRAIL_BURNT_SOLID.get().defaultBlockState();
 			success = true;
 		}
-		watered = toBeBurn.getBlock().getStateDefinition().getProperty("waterlogged") instanceof BooleanProperty _getbp8 && toBeBurn.getValue(_getbp8);
+		watered = toBeBurn.getBlock().getStateDefinition().getProperty("waterlogged") instanceof BooleanProperty getbp8 && toBeBurn.getValue(getbp8);
 		if (success) {
 			if (output.getBlock() == Blocks.AIR) {
 				if (watered) {
-					BlockPos _bp = BlockPos.containing(px, py, pz);
-					BlockState _bso = world.getBlockState(_bp);
-					BlockState _bs = Blocks.WATER.withPropertiesOf(_bso);
-					world.setBlock(_bp, _bs, 3);
+					BlockPos bp = BlockPos.containing(px, py, pz);
+					BlockState bso = world.getBlockState(bp);
+					BlockState bs = Blocks.WATER.withPropertiesOf(bso);
+					world.setBlock(bp, bs, 3);
 				} else {
 					world.setBlock(BlockPos.containing(px, py, pz), Blocks.AIR.defaultBlockState(), 3);
 				}
 			} else {
-				BlockPos _bp = BlockPos.containing(px, py, pz);
-				BlockState _bso = world.getBlockState(_bp);
-				BlockState _bs = output.getBlock().withPropertiesOf(_bso);
-				if (output.hasProperty(BlockStateProperties.WATERLOGGED) && _bs.hasProperty(BlockStateProperties.WATERLOGGED))
-					_bs = _bs.setValue(BlockStateProperties.WATERLOGGED, output.getValue(BlockStateProperties.WATERLOGGED));
-				if (output.getBlock().getStateDefinition().getProperty("longevity") instanceof IntegerProperty _integerProp && _bs.hasProperty(_integerProp))
-					_bs = _bs.setValue(_integerProp, output.getValue(_integerProp));
-				world.setBlock(_bp, _bs, 3);
+				BlockPos bp = BlockPos.containing(px, py, pz);
+				BlockState bso = world.getBlockState(bp);
+				BlockState bs = output.getBlock().withPropertiesOf(bso);
+				if (output.hasProperty(BlockStateProperties.WATERLOGGED) && bs.hasProperty(BlockStateProperties.WATERLOGGED))
+					bs = bs.setValue(BlockStateProperties.WATERLOGGED, output.getValue(BlockStateProperties.WATERLOGGED));
+				if (output.getBlock().getStateDefinition().getProperty("longevity") instanceof IntegerProperty integerProp && bs.hasProperty(integerProp))
+					bs = bs.setValue(integerProp, output.getValue(integerProp));
+				world.setBlock(bp, bs, 3);
 			}
-			if (world instanceof Level _level) {
-					_level.playSound(null, BlockPos.containing(px, py, pz), SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, (float) 0.6, 1);
+			if (world instanceof Level level) {
+					level.playSound(null, BlockPos.containing(px, py, pz), SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, (float) 0.6, 1);
 			}
 		}
 	}
@@ -173,9 +169,9 @@ public class WorldUtils {
 					if (canBreak) {
 						if (mayDrop) {
 							{
-								BlockPos _pos = BlockPos.containing(px, py, pz);
-								net.minecraft.world.level.block.Block.dropResources(world.getBlockState(_pos), world, BlockPos.containing(px + 0.5, py + 0.5, pz + 0.5), null);
-								world.destroyBlock(_pos, false);
+								BlockPos pos = BlockPos.containing(px, py, pz);
+								net.minecraft.world.level.block.Block.dropResources(world.getBlockState(pos), world, BlockPos.containing(px + 0.5, py + 0.5, pz + 0.5), null);
+								world.destroyBlock(pos, false);
 							}
 						} else {
 							world.destroyBlock(BlockPos.containing(px, py, pz), false);
@@ -203,7 +199,7 @@ public class WorldUtils {
 		return false;
 	}
 
-	//或许放到其他util比较好?可以专门制作一个海嗣util
+	//或许放到其他 util 比较好？可以专门制作一个海嗣 util
 	public static boolean canDangerSeabornSpawn(LevelAccessor world, double x, double y, double z) {
 		if (!world.getBiome(BlockPos.containing(x, y, z)).is(TagKey.create(Registries.BIOME, new ResourceLocation(CaerulaArborMod.MODID, "danger_spawn_biome")))) {
 			return false;
@@ -237,44 +233,17 @@ public class WorldUtils {
 		return false;
 	}
 
-	//TODO:下放
-	public static void corruptedSpawnMobs(LevelAccessor world, double x, double y, double z, double n) {
-		double tx;
-		double ty;
-		double tz;
-		double R;
-		double T;
-		if (EntityUtils.getSeabornNum(world, x, y, z) >= (world.getLevelData().getGameRules().getInt(CAGameRules.CLONE_NUMBER_LIMIT))) {
-			return;
-		}
-		for (int index0 = 0; index0 < (int) n; index0++) {
-			for (int index1 = 0; index1 < 8; index1++) {
-				R = Mth.nextInt(RandomSource.create(), 4, 16);
-				T = Mth.nextDouble(RandomSource.create(), 0, 6.283);
-				tx = x + R * Math.sin(T);
-				tz = z + R * Math.cos(T);
-				ty = findValidSpawnY(world, x, y, z, tx, y, tz);
-				if (!Double.isNaN(ty)) {
-					SeabornSpawnManager.summonRandomSeaborn(world, 0.33, tx, ty, tz);
-					if (world instanceof ServerLevel _level)
-						_level.sendParticles(ParticleTypes.CLOUD, tx, (ty + 0.75), tz, 64, 0.75, 0.75, 0.75, 0.1);
-					break;
-				}
-			}
-		}
-	}
-
-	//可疑，为什么不放在其他util
+	//TODO 可疑，为什么不放在其他util
 	public static void dropRelicRoute(LevelAccessor world, double x, double y, double z) {
 		if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
 			if (!world.isClientSide() && world.getServer() != null) {
 				for (ItemStack itemstackiterator : world.getServer().getLootData().getLootTable(new ResourceLocation(CaerulaArborMod.MODID, "gameplay/relic_route"))
 						.getRandomItems(new LootParams.Builder((ServerLevel) world).create(LootContextParamSets.EMPTY))) {
-					if (world instanceof ServerLevel _level) {
-						ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, itemstackiterator);
+					if (world instanceof ServerLevel level) {
+						ItemEntity entityToSpawn = new ItemEntity(level, x, y, z, itemstackiterator);
 						entityToSpawn.setPickUpDelay(10);
 						entityToSpawn.setUnlimitedLifetime();
-						_level.addFreshEntity(entityToSpawn);
+						level.addFreshEntity(entityToSpawn);
 					}
 				}
 			}
@@ -311,11 +280,11 @@ public class WorldUtils {
 			if (!world.isClientSide() && world.getServer() != null) {
 				for (ItemStack itemstackiterator : world.getServer().getLootData().getLootTable(new ResourceLocation(CaerulaArborMod.MODID, "gameplay/relic_tidebi"))
 						.getRandomItems(new LootParams.Builder((ServerLevel) world).create(LootContextParamSets.EMPTY))) {
-					if (world instanceof ServerLevel _level) {
-						ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, itemstackiterator);
+					if (world instanceof ServerLevel level) {
+						ItemEntity entityToSpawn = new ItemEntity(level, x, y, z, itemstackiterator);
 						entityToSpawn.setPickUpDelay(10);
 						entityToSpawn.setUnlimitedLifetime();
-						_level.addFreshEntity(entityToSpawn);
+						level.addFreshEntity(entityToSpawn);
 					}
 				}
 			}
@@ -409,8 +378,8 @@ public class WorldUtils {
 	 * @return 若该位置可容纳人形单位站立则返回 {@code true}，否则返回 {@code false}
 	 */
 	public static boolean isValidHumanoidPlace(LevelAccessor world, double xx, double yy, double zz) {
-		if (world instanceof Level _level &&_level.isClientSide()) {
-			_level.playLocalSound(xx, yy, zz, SoundEvents.ENDERMAN_AMBIENT, SoundSource.HOSTILE, 0, 1, false);
+		if (world instanceof Level level &&level.isClientSide()) {
+			level.playLocalSound(xx, yy, zz, SoundEvents.ENDERMAN_AMBIENT, SoundSource.HOSTILE, 0, 1, false);
 		}
 		for (int dy = 0; dy <= 2; dy++) {
 			if (world.getBlockFloorHeight(BlockPos.containing(xx, yy + dy, zz)) > 0) {

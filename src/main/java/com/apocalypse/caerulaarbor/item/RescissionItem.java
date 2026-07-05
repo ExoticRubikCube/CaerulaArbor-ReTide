@@ -57,55 +57,55 @@ public class RescissionItem extends Item {
         Entity owner;
         if (!itemstack.getOrCreateTag().getBoolean("used")) {
             {
-                boolean _setval = true;
+                boolean setval = true;
                 ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                    capability.relic_util_RESCISSION = _setval;
+                    capability.relic_util_RESCISSION = setval;
                     capability.syncPlayerVariables(entity);
                 });
             }
-            if ((Entity) entity instanceof Player _player)
-                _player.giveExperienceLevels(2);
-            if ((LevelAccessor) world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 2, 1);
+            if ((Entity) entity instanceof Player player)
+                player.giveExperienceLevels(2);
+            if ((LevelAccessor) world instanceof Level level) {
+                    level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 2, 1);
             }
-            if ((LevelAccessor) world instanceof ServerLevel _level)
-                _level.sendParticles(ParticleTypes.ASH, x, y, z, 72, 1, 1, 1, 1);
+            if ((LevelAccessor) world instanceof ServerLevel level)
+                level.sendParticles(ParticleTypes.ASH, x, y, z, 72, 1, 1, 1, 1);
             itemstack.getOrCreateTag().putBoolean("used", true);
         } else {
             {
-                final Vec3 _center = new Vec3(x, y, z);
-                List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(2 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                for (Entity entityiterator : _entfound) {
+                final Vec3 center = new Vec3(x, y, z);
+                List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(2 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                for (Entity entityiterator : entfound) {
                     if (entityiterator == entity) {
                         continue;
                     }
                     owner = entityiterator;
-                    if (entityiterator instanceof TamableAnimal _tamEnt && _tamEnt.isTame()) {
-                            owner = _tamEnt.getOwner();
+                    if (entityiterator instanceof TamableAnimal tamEnt && tamEnt.isTame()) {
+                            owner = tamEnt.getOwner();
                     }
                     if (owner == entity) {
-                        if (entityiterator instanceof LivingEntity _livEnt11 && _livEnt11.hasEffect(CAMobEffects.UNTAME_CONFIRM.get())) {
-                            if (entityiterator instanceof TamableAnimal _ent) {
-                                _ent.setTame(false);
+                        if (entityiterator instanceof LivingEntity livEnt11 && livEnt11.hasEffect(CAMobEffects.UNTAME_CONFIRM.get())) {
+                            if (entityiterator instanceof TamableAnimal ent) {
+                                ent.setTame(false);
                             }
-                            if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
-                                _player.displayClientMessage(Component.literal((entityiterator.getDisplayName().getString() + Component.translatable("item.caerula_arbor.language_key.description_2").getString())), false);
-                            _livEnt11.removeEffect(CAMobEffects.UNTAME_CONFIRM.get());
-                            if ((LevelAccessor) world instanceof ServerLevel _level)
-                                _level.sendParticles(ParticleTypes.ASH, (entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()), 72, 1, 1, 1, 0.5);
+                            if ((Entity) entity instanceof Player player && !player.level().isClientSide())
+                                player.displayClientMessage(Component.literal((entityiterator.getDisplayName().getString() + Component.translatable("item.caerula_arbor.language_key.description_2").getString())), false);
+                            livEnt11.removeEffect(CAMobEffects.UNTAME_CONFIRM.get());
+                            if ((LevelAccessor) world instanceof ServerLevel level)
+                                level.sendParticles(ParticleTypes.ASH, (entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()), 72, 1, 1, 1, 0.5);
                             itemstack.shrink(1);
                             if (entityiterator instanceof Wolf) {
                                 CaerulaArborMod.queueServerWork(Mth.nextInt(RandomSource.create(), 40, 80), () -> {
-                                    if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
-                                        _player.displayClientMessage(Component.literal(("§o" + Component.translatable("item.caerula_arbor.language_key.description_3").getString())), false);
+                                    if ((Entity) entity instanceof Player player && !player.level().isClientSide())
+                                        player.displayClientMessage(Component.literal(("鎼俹" + Component.translatable("item.caerula_arbor.language_key.description_3").getString())), false);
                                 });
                             }
                         } else {
-                            if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
-                                _player.displayClientMessage(Component.literal(("§c" + Component.translatable("item.caerula_arbor.language_key.description_0").getString() + entityiterator.getDisplayName().getString()
+                            if ((Entity) entity instanceof Player player && !player.level().isClientSide())
+                                player.displayClientMessage(Component.literal(("鎼俢" + Component.translatable("item.caerula_arbor.language_key.description_0").getString() + entityiterator.getDisplayName().getString()
                                         + Component.translatable("item.caerula_arbor.language_key.description_1").getString())), false);
-                            if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                                _entity.addEffect(new MobEffectInstance(CAMobEffects.UNTAME_CONFIRM.get(), 300, 0, false, false));
+                            if (entityiterator instanceof LivingEntity living && !entity.level().isClientSide())
+                                living.addEffect(new MobEffectInstance(CAMobEffects.UNTAME_CONFIRM.get(), 300, 0, false, false));
                         }
                         break;
                     }

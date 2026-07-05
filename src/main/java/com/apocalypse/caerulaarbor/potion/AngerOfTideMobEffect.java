@@ -50,7 +50,7 @@ public class AngerOfTideMobEffect extends MobEffect {
         if (entity instanceof IzumikOffspringEntity) {
             return;
         }
-        curEnemy = (Entity) entity instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+        curEnemy = (Entity) entity instanceof Mob mobEnt ? mobEnt.getTarget() : null;
         if (!(curEnemy == null) && curEnemy.isAlive()) {
             return;
         }
@@ -71,10 +71,10 @@ public class AngerOfTideMobEffect extends MobEffect {
                 if (entityiterator instanceof Player) {
                     continue;
                 }
-                if (entityiterator instanceof LivingEntity _livEnt11 && _livEnt11.isBaby()) {
+                if (entityiterator instanceof LivingEntity livEnt11 && livEnt11.isBaby()) {
                     continue;
                 }
-                if ((Entity) entity instanceof LivingEntity _livEnt12 && _livEnt12.getMobType() == MobType.UNDEAD && entityiterator instanceof LivingEntity _livEnt13 && _livEnt13.getMobType() == MobType.UNDEAD) {
+                if ((Entity) entity instanceof LivingEntity livEnt12 && livEnt12.getMobType() == MobType.UNDEAD && entityiterator instanceof LivingEntity livEnt13 && livEnt13.getMobType() == MobType.UNDEAD) {
                     continue;
                 }
                 if (entityiterator.getPersistentData().getBoolean("seabornForgive")) {
@@ -88,10 +88,8 @@ public class AngerOfTideMobEffect extends MobEffect {
                     enemy = entityiterator;
                 }
             }
-            if (!(enemy == null)) {
-                if ((Entity) entity instanceof Mob _entity && enemy instanceof LivingEntity _ent)
-                    _entity.setTarget(_ent);
-            }
+            if (enemy instanceof LivingEntity ent && entity instanceof Mob mob)
+                mob.setTarget(ent);
         }
     }
 

@@ -77,9 +77,8 @@ public class DragonWandItem extends Item {
 
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level world, Player entity, InteractionHand hand) {
-		InteractionResultHolder<ItemStack> ar = super.use(world, entity, hand);
 		entity.startUsingItem(hand);
-		return ar;
+		return super.use(world, entity, hand);
 	}
 
 	@Override
@@ -101,27 +100,27 @@ public class DragonWandItem extends Item {
             if (EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.SYNESTHESIA.get(), itemstack) != 0) {
                 gap = Math.max(gap - itemstack.getEnchantmentLevel(CAEnchantments.SYNESTHESIA.get()) * 4, 10);
             }
-            if ((entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == CAItems.APOCATA_SWORD.get()) {
+            if ((entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == CAItems.APOCATA_SWORD.get()) {
                 gap = 2;
                 ApocataMode = true;
             }
-            if ((entity instanceof LivingEntity _entUseTicks6 ? _entUseTicks6.getTicksUsingItem() : 0) % gap == 0 && (entity instanceof LivingEntity _entUseTicks7 ? _entUseTicks7.getTicksUsingItem() : 0) > 0) {
+            if ((entity instanceof LivingEntity entUseTicks6 ? entUseTicks6.getTicksUsingItem() : 0) % gap == 0 && (entity instanceof LivingEntity entUseTicks7 ? entUseTicks7.getTicksUsingItem() : 0) > 0) {
                 IsCreative = new Object() {
-                    public boolean checkGamemode(Entity _ent) {
-                        if (_ent instanceof ServerPlayer _serverPlayer) {
-                            return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                        } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                            return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                    && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                    public boolean checkGamemode(Entity ent) {
+                        if (ent instanceof ServerPlayer serverPlayer) {
+                            return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                        } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                            return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+                                    && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                         }
                         return false;
                     }
                 }.checkGamemode(entity) || ApocataMode;
-                if ((entity instanceof Player _plr ? _plr.totalExperience : 0) >= 15 || IsCreative) {
+                if ((entity instanceof Player plr ? plr.totalExperience : 0) >= 15 || IsCreative) {
                     {
-                        final Vec3 _center = new Vec3(x, y, z);
-                        List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(48 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                        for (Entity entityiterator : _entfound) {
+                        final Vec3 center = new Vec3(x, y, z);
+                        List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(48 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                        for (Entity entityiterator : entfound) {
                             if (!(entityiterator instanceof LivingEntity)) {
                                 continue;
                             }
@@ -129,9 +128,9 @@ public class DragonWandItem extends Item {
                                 continue;
                             }
                             if (!(entityiterator instanceof Monster)) {
-                                recentVictim = (entity instanceof LivingEntity _entity) ? _entity.getLastHurtMob() : null;
-                                recentAttacker = (entity instanceof LivingEntity _entity) ? _entity.getLastHurtByMob() : null;
-                                if (!((entityiterator instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == entity || entityiterator == recentVictim || entityiterator == recentAttacker)) {
+                                recentVictim = (entity instanceof LivingEntity living) ? living.getLastHurtMob() : null;
+                                recentAttacker = (entity instanceof LivingEntity living) ? living.getLastHurtByMob() : null;
+                                if (!((entityiterator instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == entity || entityiterator == recentVictim || entityiterator == recentAttacker)) {
                                     continue;
                                 }
                             }
@@ -158,8 +157,8 @@ public class DragonWandItem extends Item {
                         t2 = t1;
                     }
                     if (!((LevelAccessor) world).isClientSide()) {
-                        if ((LevelAccessor) world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), CASounds.CASTER_CAST.get(), SoundSource.PLAYERS, 2,
+                        if ((LevelAccessor) world instanceof Level level) {
+                                level.playSound(null, BlockPos.containing(x, y, z), CASounds.CASTER_CAST.get(), SoundSource.PLAYERS, 2,
                                         (float) Mth.nextDouble(RandomSource.create(), 0.9, 1.1));
                         }
                     }
@@ -174,8 +173,8 @@ public class DragonWandItem extends Item {
                         }
                     }
                     if (!IsCreative) {
-                        if (entity instanceof Player _player)
-                            _player.giveExperiencePoints(-(15));
+                        if (entity instanceof Player player)
+                            player.giveExperiencePoints(-(15));
                     }
                 }
             }

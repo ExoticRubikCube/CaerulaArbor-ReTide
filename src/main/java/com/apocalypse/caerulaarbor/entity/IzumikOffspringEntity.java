@@ -189,8 +189,8 @@ public class IzumikOffspringEntity extends SeaMonster {
                     }
                         if (success) {
                             CaerulaArborMod.LOGGER.info(("offspring at " + x + " " + y + " " + z + " changes"));
-                            if (world instanceof ServerLevel _level)
-                                _level.sendParticles(ParticleTypes.CLOUD, x, (y + 0.75), z, 32, 0.75, 0.75, 0.75, 0.1);
+                            if (world instanceof ServerLevel level)
+                                level.sendParticles(ParticleTypes.CLOUD, x, (y + 0.75), z, 32, 0.75, 0.75, 0.75, 0.1);
                             if (!level().isClientSide())
                                 discard();
                         }
@@ -214,8 +214,8 @@ public class IzumikOffspringEntity extends SeaMonster {
         Entity owner;
         if (tickCount % 5 == 0) {
             owner = world.getEntitiesOfClass(IzumikEntity.class, AABB.ofSize(new Vec3(x, y, z), 85, 32, 85), e -> true).stream().min(new Object() {
-                Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
-                    return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
+                Comparator<Entity> compareDistOf(double x, double y, double z) {
+                    return Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z));
                 }
             }.compareDistOf(x, y, z)).orElse(null);
             if (!(owner == null)) {
@@ -224,9 +224,9 @@ public class IzumikOffspringEntity extends SeaMonster {
             } else {
                 this.getNavigation().stop();
             }
-			final Vec3 _center = new Vec3(x, y, z);
-			List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(4 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-			for (Entity entityiterator : _entfound) {
+			final Vec3 center = new Vec3(x, y, z);
+			List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(4 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+			for (Entity entityiterator : entfound) {
 				if (entityiterator == this) {
 					continue;
 				}
@@ -235,12 +235,12 @@ public class IzumikOffspringEntity extends SeaMonster {
 						continue;
 					} else {
 						if (new Object() {
-							public boolean checkGamemode(Entity _ent) {
-								if (_ent instanceof ServerPlayer _serverPlayer) {
-									return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-								} else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-									return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-											&& Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+							public boolean checkGamemode(Entity ent) {
+								if (ent instanceof ServerPlayer serverPlayer) {
+									return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+								} else if (ent.level().isClientSide() && ent instanceof Player player) {
+									return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+											&& Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
 								}
 								return false;
 							}
@@ -260,8 +260,8 @@ public class IzumikOffspringEntity extends SeaMonster {
 					}
 					if (success) {
 						CaerulaArborMod.LOGGER.info(("offspring at " + x + " " + y + " " + z + " changes"));
-						if (world instanceof ServerLevel _level)
-							_level.sendParticles(ParticleTypes.CLOUD, x, (y + 0.75), z, 32, 0.75, 0.75, 0.75, 0.1);
+						if (world instanceof ServerLevel level)
+							level.sendParticles(ParticleTypes.CLOUD, x, (y + 0.75), z, 32, 0.75, 0.75, 0.75, 0.1);
 						if (!level().isClientSide())
 							discard();
 						break;

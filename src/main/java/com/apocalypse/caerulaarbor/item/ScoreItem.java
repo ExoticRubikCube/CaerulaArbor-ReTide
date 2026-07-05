@@ -41,18 +41,18 @@ public class ScoreItem extends RecordItem {
         double z = entity.getZ();
         ItemStack itemstack = ar.getObject();
         if (!itemstack.getOrCreateTag().getBoolean("used")) {
-            boolean _setval = true;
+            boolean setval = true;
             ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                capability.relic_util_score = _setval;
+                capability.relic_util_score = setval;
                 capability.syncPlayerVariables(entity);
             });
-            if ((Entity) entity instanceof Player _player)
-                _player.giveExperienceLevels(2);
-            if ((LevelAccessor) world instanceof Level _level) {
-                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 2, 1);
+            if ((Entity) entity instanceof Player player)
+                player.giveExperienceLevels(2);
+            if ((LevelAccessor) world instanceof Level level) {
+                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 2, 1);
             }
-            if ((LevelAccessor) world instanceof ServerLevel _level)
-                _level.sendParticles(ParticleTypes.NOTE, x, y, z, 48, 1, 1, 1, 1);
+            if ((LevelAccessor) world instanceof ServerLevel level)
+                level.sendParticles(ParticleTypes.NOTE, x, y, z, 48, 1, 1, 1, 1);
             itemstack.getOrCreateTag().putBoolean("used", true);
         }
         return ar;

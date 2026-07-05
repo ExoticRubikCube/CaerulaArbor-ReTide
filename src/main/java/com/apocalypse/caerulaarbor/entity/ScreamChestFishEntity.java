@@ -192,13 +192,13 @@ public class ScreamChestFishEntity extends SeaMonster {
         Entity sourceentity = source.getEntity();
         if (sourceentity == null)
             return;
-        if (((Entity) this instanceof ScreamChestFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_SCREAM_TICK) : 0) > 0) {
-            if (sourceentity instanceof ServerPlayer _player) {
-                Advancement _adv = _player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "i_scream"));
-                AdvancementProgress _ap = _player.getAdvancements().getOrStartProgress(_adv);
-                if (!_ap.isDone()) {
-                    for (String criteria : _ap.getRemainingCriteria())
-                        _player.getAdvancements().award(_adv, criteria);
+        if (((Entity) this instanceof ScreamChestFishEntity datEntI ? datEntI.getEntityData().get(DATA_SCREAM_TICK) : 0) > 0) {
+            if (sourceentity instanceof ServerPlayer player) {
+                Advancement adv = player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "i_scream"));
+                AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
+                if (!ap.isDone()) {
+                    for (String criteria : ap.getRemainingCriteria())
+                        player.getAdvancements().award(adv, criteria);
                 }
             }
         }
@@ -252,28 +252,28 @@ public class ScreamChestFishEntity extends SeaMonster {
         double d;
         double angle;
         double t;
-        if (!((Entity) this instanceof ScreamChestFishEntity _datEntL0 && _datEntL0.getEntityData().get(DATA_RELEASE))) {
+        if (!((Entity) this instanceof ScreamChestFishEntity datEntL0 && datEntL0.getEntityData().get(DATA_RELEASE))) {
             setShiftKeyDown(true);
             if (!this.level().isClientSide())
                 this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, 8, false, false));
         } else {
             if (this.isAlive()) {
                 setShiftKeyDown(false);
-                scream = (Entity) this instanceof ScreamChestFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_SCREAM_TICK) : 0;
+                scream = (Entity) this instanceof ScreamChestFishEntity datEntI ? datEntI.getEntityData().get(DATA_SCREAM_TICK) : 0;
                 if (scream > 0) {
-                    if ((Entity) this instanceof ScreamChestFishEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_SCREAM_TICK, (int) (scream - 1));
+                    if ((Entity) this instanceof ScreamChestFishEntity datEntSetI)
+                        datEntSetI.getEntityData().set(DATA_SCREAM_TICK, (int) (scream - 1));
                     t = tickCount;
                     if (scream % 10 == 0) {
-                        if (world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SCULK_SHRIEKER_SHRIEK, SoundSource.HOSTILE, 1, 1);
+                        if (world instanceof Level level) {
+                            level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SCULK_SHRIEKER_SHRIEK, SoundSource.HOSTILE, 1, 1);
                         }
                     }
                     for (int index0 = 0; index0 < 60; index0++) {
                         angle = Math.toRadians(index0 * 6 + t * 0.6);
                         d = (t * 0.5) % 5;
-                        if (world instanceof ServerLevel _level)
-                            _level.sendParticles(ParticleTypes.ELECTRIC_SPARK, (x + d * Math.sin(angle)), (y + 0.25), (z + d * Math.cos(angle)), 2, 0.1, 0.1, 0.1, 0.1);
+                        if (world instanceof ServerLevel level)
+                            level.sendParticles(ParticleTypes.ELECTRIC_SPARK, (x + d * Math.sin(angle)), (y + 0.25), (z + d * Math.cos(angle)), 2, 0.1, 0.1, 0.1, 0.1);
                     }
                     for (Entity entityiterator : world.getEntities(this, new AABB((x - 5), (y - 2), (z - 5), (x + 5), (y + 3), (z + 5)))) {
                         if ((entityiterator != null ? distanceTo(entityiterator) : -1) <= 5) {

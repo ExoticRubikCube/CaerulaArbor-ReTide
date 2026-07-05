@@ -39,19 +39,16 @@ public class AromaticCoffeeItem extends Item {
 		if (!entity.level().isClientSide())
 			entity.addEffect(new MobEffectInstance(MobEffects.JUMP, 240, 0));
 		{
-			double _setval = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_shield + 1;
+			double setval = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_shield + 1;
 			entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-				capability.player_shield = _setval;
+				capability.player_shield = setval;
 				capability.syncPlayerVariables(entity);
 			});
 		}
-		{
-			boolean _setval = true;
-			entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-				capability.player_util_AROMATIC = _setval;
-				capability.syncPlayerVariables(entity);
-			});
-		}
+		entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+			capability.player_util_AROMATIC = true;
+			capability.syncPlayerVariables(entity);
+		});
 		return retval;
 	}
 }

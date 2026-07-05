@@ -34,21 +34,21 @@ public class ThermographItem extends Item {
         double def;
         double mgc;
         double snt;
-        def = Math.round(Math.pow(10, 2) * ((Entity) entity instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get())
-                ? _livingEntity0.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getValue()
+        def = Math.round(Math.pow(10, 2) * ((Entity) entity instanceof LivingEntity livingEntity0 && livingEntity0.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get())
+                ? livingEntity0.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getValue()
                 : 0)) / Math.pow(10, 2);
-        mgc = Math.round(Math.pow(10, 2) * ((Entity) entity instanceof LivingEntity _livingEntity2 && _livingEntity2.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())
-                ? _livingEntity2.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).getValue()
+        mgc = Math.round(Math.pow(10, 2) * ((Entity) entity instanceof LivingEntity livingEntity2 && livingEntity2.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())
+                ? livingEntity2.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).getValue()
                 : 0)) / Math.pow(10, 2);
-        snt = Math.round(Math.pow(10, 2) * ((Entity) entity instanceof LivingEntity _livingEntity4 && _livingEntity4.getAttributes().hasAttribute(CAAttributes.SANITY_RESISTANCE.get())
-                ? _livingEntity4.getAttribute(CAAttributes.SANITY_RESISTANCE.get()).getValue()
+        snt = Math.round(Math.pow(10, 2) * ((Entity) entity instanceof LivingEntity livingEntity4 && livingEntity4.getAttributes().hasAttribute(CAAttributes.SANITY_RESISTANCE.get())
+                ? livingEntity4.getAttribute(CAAttributes.SANITY_RESISTANCE.get()).getValue()
                 : 0)) / Math.pow(10, 2);
-        if ((Entity) sourceentity instanceof Player _player && !_player.level().isClientSide())
-            _player.displayClientMessage(Component.literal(("Defense: " + def)), false);
-        if ((Entity) sourceentity instanceof Player _player && !_player.level().isClientSide())
-            _player.displayClientMessage(Component.literal(("Magic Resiatance: " + mgc)), false);
-        if ((Entity) sourceentity instanceof Player _player && !_player.level().isClientSide())
-            _player.displayClientMessage(Component.literal(("Sanity Resistance: " + snt)), false);
+        if ((Entity) sourceentity instanceof Player player && !player.level().isClientSide())
+            player.displayClientMessage(Component.literal(("Defense: " + def)), false);
+        if ((Entity) sourceentity instanceof Player player && !player.level().isClientSide())
+            player.displayClientMessage(Component.literal(("Magic Resiatance: " + mgc)), false);
+        if ((Entity) sourceentity instanceof Player player && !player.level().isClientSide())
+            player.displayClientMessage(Component.literal(("Sanity Resistance: " + snt)), false);
         return retval;
 	}
 }

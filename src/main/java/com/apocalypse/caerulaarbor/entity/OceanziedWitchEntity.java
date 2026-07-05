@@ -223,23 +223,23 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
         LevelAccessor world = this.level();
         if (!this.hasEffect(CAMobEffects.COOLDOWN_SINAL.get())) {
             {
-                final Vec3 _center = new Vec3(this.getX(), this.getY(), this.getZ());
-                List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(16 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                for (Entity entityiterator : _entfound) {
+                final Vec3 center = new Vec3(this.getX(), this.getY(), this.getZ());
+                List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(16 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                for (Entity entityiterator : entfound) {
                     if (Math.random() < 0.33 && entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
                         double xx = entityiterator.getX();
                         double yy = entityiterator.getY() + entityiterator.getBbHeight();
                         double zz = entityiterator.getZ();
                         double potion;
-                        if (world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(xx, yy, zz), SoundEvents.WITCH_THROW, SoundSource.HOSTILE, 1, 1);
+                        if (world instanceof Level level) {
+                            level.playSound(null, BlockPos.containing(xx, yy, zz), SoundEvents.WITCH_THROW, SoundSource.HOSTILE, 1, 1);
                         }
                         potion = Mth.nextInt(RandomSource.create(), 0, 4);
                         if (potion == 0) {
-                            if (entityiterator instanceof LivingEntity _entity1 && !_entity1.level().isClientSide())
-                                _entity1.addEffect(new MobEffectInstance(CAMobEffects.SANITY_HEAL.get(), 1, 2));
+                            if (entityiterator instanceof LivingEntity entity1 && !entity1.level().isClientSide())
+                                entity1.addEffect(new MobEffectInstance(CAMobEffects.SANITY_HEAL.get(), 1, 2));
                             if (world instanceof ServerLevel projectileLevel) {
-                                Projectile _entityToSpawn = new Object() {
+                                Projectile entityToSpawn = new Object() {
                                     public Projectile getPotion(Level level, Entity shooter) {
                                         ThrownPotion entityToSpawn = new ThrownPotion(EntityType.POTION, level);
                                         entityToSpawn.setItem(PotionUtils.setPotion(Items.SPLASH_POTION.getDefaultInstance(), CAPotions.SANITY_CURE.get()));
@@ -247,15 +247,15 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
                                         return entityToSpawn;
                                     }
                                 }.getPotion(projectileLevel, (Entity) this);
-                                _entityToSpawn.setPos(xx, yy, zz);
-                                _entityToSpawn.shoot(0, (-1), 0, 1, 0);
-                                projectileLevel.addFreshEntity(_entityToSpawn);
+                                entityToSpawn.setPos(xx, yy, zz);
+                                entityToSpawn.shoot(0, (-1), 0, 1, 0);
+                                projectileLevel.addFreshEntity(entityToSpawn);
                             }
                         } else if (potion == 1) {
-                            if (entityiterator instanceof LivingEntity _entity1 && !_entity1.level().isClientSide())
-                                _entity1.addEffect(new MobEffectInstance(MobEffects.HEAL, 1, 2));
+                            if (entityiterator instanceof LivingEntity entity1 && !entity1.level().isClientSide())
+                                entity1.addEffect(new MobEffectInstance(MobEffects.HEAL, 1, 2));
                             if (world instanceof ServerLevel projectileLevel) {
-                                Projectile _entityToSpawn = new Object() {
+                                Projectile entityToSpawn = new Object() {
                                     public Projectile getPotion(Level level, Entity shooter) {
                                         ThrownPotion entityToSpawn = new ThrownPotion(EntityType.POTION, level);
                                         entityToSpawn.setItem(PotionUtils.setPotion(Items.SPLASH_POTION.getDefaultInstance(), Potions.HEALING));
@@ -263,15 +263,15 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
                                         return entityToSpawn;
                                     }
                                 }.getPotion(projectileLevel, (Entity) this);
-                                _entityToSpawn.setPos(xx, yy, zz);
-                                _entityToSpawn.shoot(0, (-1), 0, 1, 0);
-                                projectileLevel.addFreshEntity(_entityToSpawn);
+                                entityToSpawn.setPos(xx, yy, zz);
+                                entityToSpawn.shoot(0, (-1), 0, 1, 0);
+                                projectileLevel.addFreshEntity(entityToSpawn);
                             }
                         } else if (potion == 2) {
-                            if (entityiterator instanceof LivingEntity _entity1 && !_entity1.level().isClientSide())
-                                _entity1.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 600, 2));
+                            if (entityiterator instanceof LivingEntity entity1 && !entity1.level().isClientSide())
+                                entity1.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 600, 2));
                             if (world instanceof ServerLevel projectileLevel) {
-                                Projectile _entityToSpawn = new Object() {
+                                Projectile entityToSpawn = new Object() {
                                     public Projectile getPotion(Level level, Entity shooter) {
                                         ThrownPotion entityToSpawn = new ThrownPotion(EntityType.POTION, level);
                                         entityToSpawn.setItem(PotionUtils.setPotion(Items.LINGERING_POTION.getDefaultInstance(), Potions.REGENERATION));
@@ -279,15 +279,15 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
                                         return entityToSpawn;
                                     }
                                 }.getPotion(projectileLevel, (Entity) this);
-                                _entityToSpawn.setPos(xx, yy, zz);
-                                _entityToSpawn.shoot(0, (-1), 0, 1, 0);
-                                projectileLevel.addFreshEntity(_entityToSpawn);
+                                entityToSpawn.setPos(xx, yy, zz);
+                                entityToSpawn.shoot(0, (-1), 0, 1, 0);
+                                projectileLevel.addFreshEntity(entityToSpawn);
                             }
                         } else if (potion == 3) {
-                            if (entityiterator instanceof LivingEntity _entity1 && !_entity1.level().isClientSide())
-                                _entity1.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 600, 0));
+                            if (entityiterator instanceof LivingEntity entity1 && !entity1.level().isClientSide())
+                                entity1.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 600, 0));
                             if (world instanceof ServerLevel projectileLevel) {
-                                Projectile _entityToSpawn = new Object() {
+                                Projectile entityToSpawn = new Object() {
                                     public Projectile getPotion(Level level, Entity shooter) {
                                         ThrownPotion entityToSpawn = new ThrownPotion(EntityType.POTION, level);
                                         entityToSpawn.setItem(PotionUtils.setPotion(Items.SPLASH_POTION.getDefaultInstance(), Potions.FIRE_RESISTANCE));
@@ -295,15 +295,15 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
                                         return entityToSpawn;
                                     }
                                 }.getPotion(projectileLevel, (Entity) this);
-                                _entityToSpawn.setPos(xx, yy, zz);
-                                _entityToSpawn.shoot(0, (-1), 0, 1, 0);
-                                projectileLevel.addFreshEntity(_entityToSpawn);
+                                entityToSpawn.setPos(xx, yy, zz);
+                                entityToSpawn.shoot(0, (-1), 0, 1, 0);
+                                projectileLevel.addFreshEntity(entityToSpawn);
                             }
                         } else if (potion == 4) {
-                            if (entityiterator instanceof LivingEntity _entity1 && !_entity1.level().isClientSide())
-                                _entity1.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 600, 1));
+                            if (entityiterator instanceof LivingEntity entity1 && !entity1.level().isClientSide())
+                                entity1.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 600, 1));
                             if (world instanceof ServerLevel projectileLevel) {
-                                Projectile _entityToSpawn = new Object() {
+                                Projectile entityToSpawn = new Object() {
                                     public Projectile getPotion(Level level, Entity shooter) {
                                         ThrownPotion entityToSpawn = new ThrownPotion(EntityType.POTION, level);
                                         entityToSpawn.setItem(PotionUtils.setPotion(Items.SPLASH_POTION.getDefaultInstance(), Potions.STRENGTH));
@@ -311,17 +311,17 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
                                         return entityToSpawn;
                                     }
                                 }.getPotion(projectileLevel, (Entity) this);
-                                _entityToSpawn.setPos(xx, yy, zz);
-                                _entityToSpawn.shoot(0, (-1), 0, 1, 0);
-                                projectileLevel.addFreshEntity(_entityToSpawn);
+                                entityToSpawn.setPos(xx, yy, zz);
+                                entityToSpawn.shoot(0, (-1), 0, 1, 0);
+                                projectileLevel.addFreshEntity(entityToSpawn);
                             }
                         }
-                        if (entityiterator instanceof LivingEntity _entity)
-                            _entity.removeEffect(MobEffects.POISON);
-                        if (entityiterator instanceof LivingEntity _entity)
-                            _entity.removeEffect(MobEffects.WEAKNESS);
-                        if (entityiterator instanceof LivingEntity _entity)
-                            _entity.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
+                        if (entityiterator instanceof LivingEntity entity)
+                            entity.removeEffect(MobEffects.POISON);
+                        if (entityiterator instanceof LivingEntity entity)
+                            entity.removeEffect(MobEffects.WEAKNESS);
+                        if (entityiterator instanceof LivingEntity entity)
+                            entity.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
                     }
                 }
             }
@@ -353,15 +353,15 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
         double sklp;
         Entity enemy;
         if (this.isAlive()) {
-            sklp = (Entity) this instanceof OceanziedWitchEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP) : 0;
+            sklp = (Entity) this instanceof OceanziedWitchEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP) : 0;
             if (sklp <= 0) {
                 enemy = this.getTarget();
                 if (!(enemy == null) && enemy.isAlive() && distanceTo(enemy) <= 9) {
                     if (this instanceof OceanziedWitchEntity) {
                         this.setAnimation("animation.oceanized_witch.throw");
                     }
-                    if ((Entity) this instanceof OceanziedWitchEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_SKILLP, 250);
+                    if ((Entity) this instanceof OceanziedWitchEntity datEntSetI)
+                        datEntSetI.getEntityData().set(DATA_SKILLP, 250);
                     if (!this.level().isClientSide())
                         this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 60, 0, false, false));
                     CaerulaArborMod.queueServerWork(14, this::shootRandomPotion);
@@ -374,8 +374,8 @@ public class OceanziedWitchEntity extends SeaMonster implements RangedAttackMob,
                     CaerulaArborMod.queueServerWork(41, this::shootRandomPotion);
                 }
             } else {
-                if ((Entity) this instanceof OceanziedWitchEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_SKILLP, (int) (sklp - 1));
+                if ((Entity) this instanceof OceanziedWitchEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_SKILLP, (int) (sklp - 1));
             }
             this.removeEffect(MobEffects.POISON);
             this.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);

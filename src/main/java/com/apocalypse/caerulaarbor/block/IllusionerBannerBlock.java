@@ -153,35 +153,35 @@ public class IllusionerBannerBlock extends BaseEntityBlock implements SimpleWate
         InteractionResult result = InteractionResult.PASS;
         if (entity != null) {
             double state;
-            state = blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _getip1 ? blockstate.getValue(_getip1) : -1;
+            state = blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip1 ? blockstate.getValue(getip1) : -1;
             if (state == 0) {
-                if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.WHIRL_EYE.get()) {
-                    if ((LevelAccessor) world instanceof ServerLevel _level) {
-                        Entity entityToSpawn = CAEntities.OCEANIZED_ILLUSIONER.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+                if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == CAItems.WHIRL_EYE.get()) {
+                    if ((LevelAccessor) world instanceof ServerLevel level) {
+                        Entity entityToSpawn = CAEntities.OCEANIZED_ILLUSIONER.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                         if (entityToSpawn != null) {
                             entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
                         }
                     }
-                    ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
+                    ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                     {
-                        int _value = 1;
-                        BlockPos _pos = BlockPos.containing(x, y, z);
-                        BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-                        if (_bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))
-                            ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
+                        int value = 1;
+                        BlockPos blockPos = BlockPos.containing(x, y, z);
+                        BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                        if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
+                            ((LevelAccessor) world).setBlock(pos, bs.setValue(integerProp, value), 3);
                     }
                     {
-                        int _value = 1;
-                        BlockPos _pos = BlockPos.containing(x, y, z);
-                        BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-                        if (_bs.getBlock().getStateDefinition().getProperty("animation") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))
-                            ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
+                        int value = 1;
+                        BlockPos blockPos = BlockPos.containing(x, y, z);
+                        BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                        if (bs.getBlock().getStateDefinition().getProperty("animation") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
+                            ((LevelAccessor) world).setBlock(pos, bs.setValue(integerProp, value), 3);
                     }
                     result = InteractionResult.SUCCESS;
-                } else if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()
-                        && ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()) {
-                    if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
-                        _player.displayClientMessage(Component.literal((Component.translatable("block.caerula_arbor.illusioner_banner.note").getString())), true);
+                } else if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()
+                        && ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()) {
+                    if ((Entity) entity instanceof Player player && !player.level().isClientSide())
+                        player.displayClientMessage(Component.literal((Component.translatable("block.caerula_arbor.illusioner_banner.note").getString())), true);
                     result = InteractionResult.SUCCESS;
                 }
             }

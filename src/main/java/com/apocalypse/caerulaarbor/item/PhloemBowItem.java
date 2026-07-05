@@ -158,93 +158,93 @@ public class PhloemBowItem extends Item implements GeoItem, SyncedAnimationItem 
         if (entity != null) {
             boolean valid;
             valid = true;
-            if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == itemstack.getItem()) {
-                if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.POWER_ARROWS, ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY)) != 0
-                        && ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).getEnchantmentLevel(Enchantments.POWER_ARROWS) > itemstack.getEnchantmentLevel(CAEnchantments.REFLECTION.get())) {
+            if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == itemstack.getItem()) {
+                if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.POWER_ARROWS, ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY)) != 0
+                        && ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).getEnchantmentLevel(Enchantments.POWER_ARROWS) > itemstack.getEnchantmentLevel(CAEnchantments.REFLECTION.get())) {
                     {
-                        Map<Enchantment, Integer> _enchantments = EnchantmentHelper.getEnchantments(itemstack);
-                        if (_enchantments.containsKey(CAEnchantments.REFLECTION.get())) {
-                            _enchantments.remove(CAEnchantments.REFLECTION.get());
-                            EnchantmentHelper.setEnchantments(_enchantments, itemstack);
+                        Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(itemstack);
+                        if (enchantments.containsKey(CAEnchantments.REFLECTION.get())) {
+                            enchantments.remove(CAEnchantments.REFLECTION.get());
+                            EnchantmentHelper.setEnchantments(enchantments, itemstack);
                         }
                     }
-                    itemstack.enchant(CAEnchantments.REFLECTION.get(), ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).getEnchantmentLevel(Enchantments.POWER_ARROWS));
+                    itemstack.enchant(CAEnchantments.REFLECTION.get(), ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).getEnchantmentLevel(Enchantments.POWER_ARROWS));
                     {
-                        Map<Enchantment, Integer> _enchantments = EnchantmentHelper.getEnchantments(((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY));
-                        if (_enchantments.containsKey(Enchantments.POWER_ARROWS)) {
-                            _enchantments.remove(Enchantments.POWER_ARROWS);
-                            EnchantmentHelper.setEnchantments(_enchantments, ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY));
+                        Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY));
+                        if (enchantments.containsKey(Enchantments.POWER_ARROWS)) {
+                            enchantments.remove(Enchantments.POWER_ARROWS);
+                            EnchantmentHelper.setEnchantments(enchantments, ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY));
                         }
                     }
-                    if ((LevelAccessor) world instanceof ServerLevel _level)
-                        _level.sendParticles(ParticleTypes.ENCHANT, x, y, z, 72, 1.2, 2, 1.2, 0.2);
-                    if ((LevelAccessor) world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 3, 1);
+                    if ((LevelAccessor) world instanceof ServerLevel level)
+                        level.sendParticles(ParticleTypes.ENCHANT, x, y, z, 72, 1.2, 2, 1.2, 0.2);
+                    if ((LevelAccessor) world instanceof Level level) {
+                            level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 3, 1);
                     }
                     valid = false;
-                } else if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY)) != 0
+                } else if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY)) != 0
                         && EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.METABOLISM.get(), itemstack) == 0) {
                     {
-                        Map<Enchantment, Integer> _enchantments = EnchantmentHelper.getEnchantments(itemstack);
-                        if (_enchantments.containsKey(CAEnchantments.METABOLISM.get())) {
-                            _enchantments.remove(CAEnchantments.METABOLISM.get());
-                            EnchantmentHelper.setEnchantments(_enchantments, itemstack);
+                        Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(itemstack);
+                        if (enchantments.containsKey(CAEnchantments.METABOLISM.get())) {
+                            enchantments.remove(CAEnchantments.METABOLISM.get());
+                            EnchantmentHelper.setEnchantments(enchantments, itemstack);
                         }
                     }
                     itemstack.enchant(CAEnchantments.METABOLISM.get(), 1);
                     {
-                        Map<Enchantment, Integer> _enchantments = EnchantmentHelper.getEnchantments(((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY));
-                        if (_enchantments.containsKey(Enchantments.INFINITY_ARROWS)) {
-                            _enchantments.remove(Enchantments.INFINITY_ARROWS);
-                            EnchantmentHelper.setEnchantments(_enchantments, ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY));
+                        Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY));
+                        if (enchantments.containsKey(Enchantments.INFINITY_ARROWS)) {
+                            enchantments.remove(Enchantments.INFINITY_ARROWS);
+                            EnchantmentHelper.setEnchantments(enchantments, ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY));
                         }
                     }
-                    if ((LevelAccessor) world instanceof ServerLevel _level)
-                        _level.sendParticles(ParticleTypes.ENCHANT, x, y, z, 72, 1.2, 2, 1.2, 0.2);
-                    if ((LevelAccessor) world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 3, 1);
+                    if ((LevelAccessor) world instanceof ServerLevel level)
+                        level.sendParticles(ParticleTypes.ENCHANT, x, y, z, 72, 1.2, 2, 1.2, 0.2);
+                    if ((LevelAccessor) world instanceof Level level) {
+                            level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.PLAYERS, 3, 1);
                     }
                     valid = false;
                 }
             }
             if (valid) {
-                if (!((Entity) entity instanceof Player _plrCldCheck32 && _plrCldCheck32.getCooldowns().isOnCooldown(itemstack.getItem()))) {
-                    if (((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CAItems.OCEAN_ARROW.get()))) || new Object() {
-                        public boolean checkGamemode(Entity _ent) {
-                            if (_ent instanceof ServerPlayer _serverPlayer) {
-                                return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                            } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                                return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                        && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                if (!((Entity) entity instanceof Player plrCldCheck32 && plrCldCheck32.getCooldowns().isOnCooldown(itemstack.getItem()))) {
+                    if (((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.OCEAN_ARROW.get()))) || new Object() {
+                        public boolean checkGamemode(Entity ent) {
+                            if (ent instanceof ServerPlayer serverPlayer) {
+                                return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                            } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                                return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+                                        && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                             }
                             return false;
                         }
                     }.checkGamemode((Entity) entity)) {
 						if (entity != null) {
 							CaerulaArborMod.queueServerWork(24, () -> {
-								if ((((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CAItems.OCEAN_ARROW.get()))) || new Object() {
-									public boolean checkGamemode(Entity _ent) {
-										if (_ent instanceof ServerPlayer _serverPlayer) {
-											return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-										} else if (_ent.level().isClientSide() && _ent instanceof Player _player1) {
-											return Minecraft.getInstance().getConnection().getPlayerInfo(_player1.getGameProfile().getId()) != null
-													&& Minecraft.getInstance().getConnection().getPlayerInfo(_player1.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+								if ((((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.OCEAN_ARROW.get()))) || new Object() {
+									public boolean checkGamemode(Entity ent) {
+										if (ent instanceof ServerPlayer serverPlayer) {
+											return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+										} else if (ent.level().isClientSide() && ent instanceof Player player1) {
+											return Minecraft.getInstance().getConnection().getPlayerInfo(player1.getGameProfile().getId()) != null
+													&& Minecraft.getInstance().getConnection().getPlayerInfo(player1.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
 										}
 										return false;
 									}
 								}.checkGamemode((Entity) entity) || EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.METABOLISM.get(), itemstack) != 0)
-										&& (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == itemstack.getItem()
-										|| ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == itemstack.getItem())) {
-									if ((LevelAccessor) world instanceof Level _level1) {
-											_level1.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ARROW_SHOOT, SoundSource.PLAYERS, (float) 1.8, 1);
+										&& (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == itemstack.getItem()
+										|| ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == itemstack.getItem())) {
+									if ((LevelAccessor) world instanceof Level level1) {
+											level1.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ARROW_SHOOT, SoundSource.PLAYERS, (float) 1.8, 1);
 									}
 									if (!(new Object() {
-										public boolean checkGamemode(Entity _ent) {
-											if (_ent instanceof ServerPlayer _serverPlayer) {
-												return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-											} else if (_ent.level().isClientSide() && _ent instanceof Player _player1) {
-												return Minecraft.getInstance().getConnection().getPlayerInfo(_player1.getGameProfile().getId()) != null
-														&& Minecraft.getInstance().getConnection().getPlayerInfo(_player1.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+										public boolean checkGamemode(Entity ent) {
+											if (ent instanceof ServerPlayer serverPlayer) {
+												return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+											} else if (ent.level().isClientSide() && ent instanceof Player player1) {
+												return Minecraft.getInstance().getConnection().getPlayerInfo(player1.getGameProfile().getId()) != null
+														&& Minecraft.getInstance().getConnection().getPlayerInfo(player1.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
 											}
 											return false;
 										}
@@ -258,10 +258,10 @@ public class PhloemBowItem extends Item implements GeoItem, SyncedAnimationItem 
 									}
 									if (EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.METABOLISM.get(), itemstack) != 0) {
 										{
-											Entity _shootFrom = entity;
-											Level projectileLevel = _shootFrom.level();
+											Entity shootFrom = entity;
+											Level projectileLevel = shootFrom.level();
 											if (!projectileLevel.isClientSide()) {
-												Projectile _entityToSpawn = new Object() {
+												Projectile entityToSpawn = new Object() {
 													public Projectile getArrow(Level level, Entity shooter, float damage, int knockback, byte piercing) {
 														AbstractArrow entityToSpawn = new Arrow(EntityType.ARROW, level);
 														entityToSpawn.setOwner(shooter);
@@ -273,32 +273,32 @@ public class PhloemBowItem extends Item implements GeoItem, SyncedAnimationItem 
 														return entityToSpawn;
 													}
 												}.getArrow(projectileLevel, (Entity) entity, (float) (7 + 1.5 * itemstack.getEnchantmentLevel(CAEnchantments.REFLECTION.get())), (int) 0.5, (byte) 1);
-												_entityToSpawn.setPos(_shootFrom.getX(), _shootFrom.getEyeY() - 0.1, _shootFrom.getZ());
-												_entityToSpawn.shoot(_shootFrom.getLookAngle().x, _shootFrom.getLookAngle().y, _shootFrom.getLookAngle().z, (float) (3 + 0.2 * itemstack.getEnchantmentLevel(CAEnchantments.REFLECTION.get())), 0);
-												projectileLevel.addFreshEntity(_entityToSpawn);
+												entityToSpawn.setPos(shootFrom.getX(), shootFrom.getEyeY() - 0.1, shootFrom.getZ());
+												entityToSpawn.shoot(shootFrom.getLookAngle().x, shootFrom.getLookAngle().y, shootFrom.getLookAngle().z, (float) (3 + 0.2 * itemstack.getEnchantmentLevel(CAEnchantments.REFLECTION.get())), 0);
+												projectileLevel.addFreshEntity(entityToSpawn);
 											}
 										}
 									} else {
 										if (!(new Object() {
-											public boolean checkGamemode(Entity _ent) {
-												if (_ent instanceof ServerPlayer _serverPlayer) {
-													return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-												} else if (_ent.level().isClientSide() && _ent instanceof Player _player1) {
-													return Minecraft.getInstance().getConnection().getPlayerInfo(_player1.getGameProfile().getId()) != null
-															&& Minecraft.getInstance().getConnection().getPlayerInfo(_player1.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+											public boolean checkGamemode(Entity ent) {
+												if (ent instanceof ServerPlayer serverPlayer) {
+													return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+												} else if (ent.level().isClientSide() && ent instanceof Player player1) {
+													return Minecraft.getInstance().getConnection().getPlayerInfo(player1.getGameProfile().getId()) != null
+															&& Minecraft.getInstance().getConnection().getPlayerInfo(player1.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
 												}
 												return false;
 											}
 										}.checkGamemode((Entity) entity))) {
-											if ((Entity) entity instanceof Player _player1) {
-												ItemStack _stktoremove = new ItemStack(CAItems.OCEAN_ARROW.get());
-												_player1.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player1.inventoryMenu.getCraftSlots());
+											if ((Entity) entity instanceof Player player1) {
+												ItemStack stktoremove = new ItemStack(CAItems.OCEAN_ARROW.get());
+												player1.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player1.inventoryMenu.getCraftSlots());
 											}
 											{
-												Entity _shootFrom = entity;
-												Level projectileLevel = _shootFrom.level();
+												Entity shootFrom = entity;
+												Level projectileLevel = shootFrom.level();
 												if (!projectileLevel.isClientSide()) {
-													Projectile _entityToSpawn = new Object() {
+													Projectile entityToSpawn = new Object() {
 														public Projectile getArrow(Level level, Entity shooter, float damage, int knockback, byte piercing) {
 															AbstractArrow entityToSpawn = new Arrow(EntityType.ARROW, level);
 															entityToSpawn.setOwner(shooter);
@@ -310,17 +310,17 @@ public class PhloemBowItem extends Item implements GeoItem, SyncedAnimationItem 
 															return entityToSpawn;
 														}
 													}.getArrow(projectileLevel, (Entity) entity, (float) (7 + 1.5 * itemstack.getEnchantmentLevel(CAEnchantments.REFLECTION.get())), (int) 0.5, (byte) 1);
-													_entityToSpawn.setPos(_shootFrom.getX(), _shootFrom.getEyeY() - 0.1, _shootFrom.getZ());
-													_entityToSpawn.shoot(_shootFrom.getLookAngle().x, _shootFrom.getLookAngle().y, _shootFrom.getLookAngle().z, (float) (3 + 0.2 * itemstack.getEnchantmentLevel(CAEnchantments.REFLECTION.get())), 0);
-													projectileLevel.addFreshEntity(_entityToSpawn);
+													entityToSpawn.setPos(shootFrom.getX(), shootFrom.getEyeY() - 0.1, shootFrom.getZ());
+													entityToSpawn.shoot(shootFrom.getLookAngle().x, shootFrom.getLookAngle().y, shootFrom.getLookAngle().z, (float) (3 + 0.2 * itemstack.getEnchantmentLevel(CAEnchantments.REFLECTION.get())), 0);
+													projectileLevel.addFreshEntity(entityToSpawn);
 												}
 											}
 										} else {
 											{
-												Entity _shootFrom = entity;
-												Level projectileLevel = _shootFrom.level();
+												Entity shootFrom = entity;
+												Level projectileLevel = shootFrom.level();
 												if (!projectileLevel.isClientSide()) {
-													Projectile _entityToSpawn = new Object() {
+													Projectile entityToSpawn = new Object() {
 														public Projectile getArrow(Level level, Entity shooter, float damage, int knockback, byte piercing) {
 															AbstractArrow entityToSpawn = new Arrow(EntityType.ARROW, level);
 															entityToSpawn.setOwner(shooter);
@@ -332,30 +332,30 @@ public class PhloemBowItem extends Item implements GeoItem, SyncedAnimationItem 
 															return entityToSpawn;
 														}
 													}.getArrow(projectileLevel, (Entity) entity, (float) (7 + 1.5 * itemstack.getEnchantmentLevel(CAEnchantments.REFLECTION.get())), (int) 0.5, (byte) 1);
-													_entityToSpawn.setPos(_shootFrom.getX(), _shootFrom.getEyeY() - 0.1, _shootFrom.getZ());
-													_entityToSpawn.shoot(_shootFrom.getLookAngle().x, _shootFrom.getLookAngle().y, _shootFrom.getLookAngle().z, (float) (3 + 0.2 * itemstack.getEnchantmentLevel(CAEnchantments.REFLECTION.get())), 0);
-													projectileLevel.addFreshEntity(_entityToSpawn);
+													entityToSpawn.setPos(shootFrom.getX(), shootFrom.getEyeY() - 0.1, shootFrom.getZ());
+													entityToSpawn.shoot(shootFrom.getLookAngle().x, shootFrom.getLookAngle().y, shootFrom.getLookAngle().z, (float) (3 + 0.2 * itemstack.getEnchantmentLevel(CAEnchantments.REFLECTION.get())), 0);
+													projectileLevel.addFreshEntity(entityToSpawn);
 												}
 											}
 										}
 									}
-									if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == itemstack.getItem()) {
-										if ((Entity) entity instanceof LivingEntity _entity)
-											_entity.swing(InteractionHand.MAIN_HAND, true);
+									if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == itemstack.getItem()) {
+										if ((Entity) entity instanceof LivingEntity livingEntity)
+											livingEntity.swing(InteractionHand.MAIN_HAND, true);
 									} else {
-										if ((Entity) entity instanceof LivingEntity _entity)
-											_entity.swing(InteractionHand.OFF_HAND, true);
+										if ((Entity) entity instanceof LivingEntity livingEntity)
+											livingEntity.swing(InteractionHand.OFF_HAND, true);
 									}
 								}
 							});
 						}
 						if (itemstack.getItem() instanceof PhloemBowItem)
                             itemstack.getOrCreateTag().putString("geckoAnim", "animation.bluebow.pull");
-                        if ((LevelAccessor) world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.CROSSBOW_QUICK_CHARGE_1, SoundSource.NEUTRAL, (float) 1.8, 1);
+                        if ((LevelAccessor) world instanceof Level level) {
+                                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.CROSSBOW_QUICK_CHARGE_1, SoundSource.NEUTRAL, (float) 1.8, 1);
                         }
-                        if ((Entity) entity instanceof Player _player)
-                            _player.getCooldowns().addCooldown(itemstack.getItem(), 30);
+                        if ((Entity) entity instanceof Player player)
+                            player.getCooldowns().addCooldown(itemstack.getItem(), 30);
                     }
                 }
             }

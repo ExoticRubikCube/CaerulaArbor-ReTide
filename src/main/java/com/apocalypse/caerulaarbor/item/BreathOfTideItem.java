@@ -47,9 +47,8 @@ public class BreathOfTideItem extends Item {
 
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level world, Player entity, InteractionHand hand) {
-		InteractionResultHolder<ItemStack> ar = super.use(world, entity, hand);
 		entity.startUsingItem(hand);
-		return ar;
+		return super.use(world, entity, hand);
 	}
 
 	@Override
@@ -59,20 +58,20 @@ public class BreathOfTideItem extends Item {
 		double y = entity.getY();
 		double z = entity.getZ();
         if (!world.getBiome(BlockPos.containing(x, y, z)).is(TagKey.create(Registries.BIOME, new ResourceLocation(CaerulaArborMod.MODID, "danger_spawn_biome")))) {
-            if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
-                _player.displayClientMessage(Component.literal((Component.translatable("spawn.last_knight.fail_1").getString())), true);
+            if ((Entity) entity instanceof Player player && !player.level().isClientSide())
+                player.displayClientMessage(Component.literal((Component.translatable("spawn.last_knight.fail_1").getString())), true);
             CaerulaArborMod.queueServerWork(20, () -> {
-                if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
-                    _player.displayClientMessage(Component.literal((Component.translatable("spawn.last_knight.fail_2").getString())), true);
+                if ((Entity) entity instanceof Player player && !player.level().isClientSide())
+                    player.displayClientMessage(Component.literal((Component.translatable("spawn.last_knight.fail_2").getString())), true);
             });
         } else if (EntityUtils.getSeabornNum(world, x, y, z) < 6) {
-            if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
-                _player.displayClientMessage(Component.literal((Component.translatable("spawn.last_knight.fail_3").getString())), true);
+            if ((Entity) entity instanceof Player player && !player.level().isClientSide())
+                player.displayClientMessage(Component.literal((Component.translatable("spawn.last_knight.fail_3").getString())), true);
         } else {
-            if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
-                _player.displayClientMessage(Component.literal((Component.translatable("spawn.last_knight").getString())), false);
-            if ((LevelAccessor) world instanceof ServerLevel _level) {
-                CAEntities.THE_LAST_KNIGHT.get().spawn(_level, BlockPos.containing(x + Mth.nextInt(RandomSource.create(), -5, 5), y + 3, z + Mth.nextInt(RandomSource.create(), -5, 5)), MobSpawnType.MOB_SUMMONED);
+            if ((Entity) entity instanceof Player player && !player.level().isClientSide())
+                player.displayClientMessage(Component.literal((Component.translatable("spawn.last_knight").getString())), false);
+            if ((LevelAccessor) world instanceof ServerLevel level) {
+                CAEntities.THE_LAST_KNIGHT.get().spawn(level, BlockPos.containing(x + Mth.nextInt(RandomSource.create(), -5, 5), y + 3, z + Mth.nextInt(RandomSource.create(), -5, 5)), MobSpawnType.MOB_SUMMONED);
             }
             itemstack.shrink(1);
         }

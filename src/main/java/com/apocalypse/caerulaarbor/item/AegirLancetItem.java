@@ -52,13 +52,13 @@ public class AegirLancetItem extends SwordItem {
         double x = entity.getX();
         double y = entity.getY();
         double z = entity.getZ();
-        if (((Entity) sourceentity instanceof Player _plr ? _plr.getAttackStrengthScale(0) : 0) > 0.95) {
+        if (((Entity) sourceentity instanceof Player plr ? plr.getAttackStrengthScale(0) : 0) > 0.95) {
             if (Math.random() < 0.25 && !(entity instanceof Player)) {
-                if (world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), CASounds.GLADIIA_ATTACK_HIT.get(), SoundSource.PLAYERS, 1, 1);
+                if (world instanceof Level level) {
+                    level.playSound(null, BlockPos.containing(x, y, z), CASounds.GLADIIA_ATTACK_HIT.get(), SoundSource.PLAYERS, 1, 1);
                 }
-                if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                    _entity.addEffect(new MobEffectInstance(CAMobEffects.HAEMOPHILIA.get(), 120, 0, false, false));
+                if (!entity.level().isClientSide())
+					entity.addEffect(new MobEffectInstance(CAMobEffects.HAEMOPHILIA.get(), 120, 0, false, false));
             }
         }
         return retval;
@@ -95,9 +95,7 @@ public class AegirLancetItem extends SwordItem {
 	public void inventoryTick(ItemStack itemstack, Level world, Entity entity, int slot, boolean selected) {
 		super.inventoryTick(itemstack, world, entity, slot, selected);
 		if (selected) {
-            if (entity == null)
-                return;
-            if (!(entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CAMobEffects.ADD_REACH.get()))) {
+            if (!(entity instanceof LivingEntity livEnt0 && livEnt0.hasEffect(CAMobEffects.ADD_REACH.get()))) {
                 if (entity instanceof LivingEntity living && !living.level().isClientSide())
                     living.addEffect(new MobEffectInstance(CAMobEffects.ADD_REACH.get(), 80, 0, false, false));
             }

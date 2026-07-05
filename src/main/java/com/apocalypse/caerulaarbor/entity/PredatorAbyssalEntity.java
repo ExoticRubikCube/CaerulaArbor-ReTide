@@ -143,9 +143,9 @@ public class PredatorAbyssalEntity extends SeaMonster {
             if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE.get()))
                 this.getAttribute(CAAttributes.MISSRATE.get()).setBaseValue(0);
         }
-        if ((Entity) this instanceof LivingEntity _livEnt9 && _livEnt9.hasEffect(CAMobEffects.DIZZY.get()) || (Entity) this instanceof LivingEntity _livEnt10 && _livEnt10.hasEffect(CAMobEffects.FROZEN.get())
-                || (Entity) this instanceof LivingEntity _livEnt11 && _livEnt11.hasEffect(MobEffects.LEVITATION) || (Entity) this instanceof LivingEntity _livEnt12 && _livEnt12.hasEffect(MobEffects.MOVEMENT_SLOWDOWN)
-                || (Entity) this instanceof LivingEntity _livEnt13 && _livEnt13.hasEffect(MobEffects.SLOW_FALLING)) {
+        if ((Entity) this instanceof LivingEntity livEnt9 && livEnt9.hasEffect(CAMobEffects.DIZZY.get()) || (Entity) this instanceof LivingEntity livEnt10 && livEnt10.hasEffect(CAMobEffects.FROZEN.get())
+                || (Entity) this instanceof LivingEntity livEnt11 && livEnt11.hasEffect(MobEffects.LEVITATION) || (Entity) this instanceof LivingEntity livEnt12 && livEnt12.hasEffect(MobEffects.MOVEMENT_SLOWDOWN)
+                || (Entity) this instanceof LivingEntity livEnt13 && livEnt13.hasEffect(MobEffects.SLOW_FALLING)) {
             if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE.get()))
                 this.getAttribute(CAAttributes.MISSRATE.get()).setBaseValue(0);
         }

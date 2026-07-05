@@ -262,8 +262,8 @@ public class OceanIllusionEntity extends SeaMonster implements RangedAttackMob {
 					finished = true;
 				} else {
 					illusioner = world.getEntitiesOfClass(OceanizedIllusionerEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true).stream().min(new Object() {
-                        Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
-                            return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
+                        Comparator<Entity> compareDistOf(double x, double y, double z) {
+                            return Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z));
                         }
                     }.compareDistOf(x, y, z)).orElse(null);
 					if (illusioner == null) {
@@ -378,8 +378,8 @@ public class OceanIllusionEntity extends SeaMonster implements RangedAttackMob {
 	}
 
 	private void illusionSmoke(LevelAccessor world, double x, double y, double z) {
-		if (world instanceof ServerLevel _level)
-			_level.sendParticles(ParticleTypes.LARGE_SMOKE, x, (y + 0.75), z, 16, 0.75, 0.75, 0.75, 0.1);
+		if (world instanceof ServerLevel level)
+			level.sendParticles(ParticleTypes.LARGE_SMOKE, x, (y + 0.75), z, 16, 0.75, 0.75, 0.75, 0.1);
 	}
 
 

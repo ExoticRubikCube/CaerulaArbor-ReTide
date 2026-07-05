@@ -88,7 +88,7 @@ public class ShotOceanArrowEntity extends AbstractArrow implements ItemSupplier 
         Entity entity = this.getOwner();
         if (entity != null) {
             Entity enemy;
-            enemy = entity instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+            enemy = entity instanceof Mob mobEnt ? mobEnt.getTarget() : null;
             if (!(enemy == null)) {
                 lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY() + enemy.getBbHeight() * 0.75), (enemy.getZ())));
             }
@@ -118,8 +118,8 @@ public class ShotOceanArrowEntity extends AbstractArrow implements ItemSupplier 
 	}
 
 	/**
-	 * @deprecated Prefer {@link #shoot(LivingEntity, LivingEntity, double)} so callers can pass their own ranged damage scaling.
-	 * This fallback uses the average scaling ratio of current shooters.
+	 * @deprecated 优先使用 {@link #shoot(LivingEntity, LivingEntity, double)}，以便调用方自行传入远程伤害倍率。
+	 * 该回退重载会使用当前射手的平均倍率。
 	 */
 	@Deprecated
 	public static ShotOceanArrowEntity shoot(LivingEntity entity, LivingEntity target) {

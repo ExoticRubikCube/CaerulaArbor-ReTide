@@ -47,9 +47,8 @@ public class OcarinaItem extends Item {
 
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level world, Player entity, InteractionHand hand) {
-		InteractionResultHolder<ItemStack> ar = super.use(world, entity, hand);
 		entity.startUsingItem(hand);
-		return ar;
+		return super.use(world, entity, hand);
 	}
 
 	@Override
@@ -65,13 +64,13 @@ public class OcarinaItem extends Item {
             double py;
             double pz;
             double bs;
-            if ((LevelAccessor) world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), CASounds.OCARINO.get(), SoundSource.PLAYERS, 1, 1);
+            if ((LevelAccessor) world instanceof Level level) {
+                    level.playSound(null, BlockPos.containing(x, y, z), CASounds.OCARINO.get(), SoundSource.PLAYERS, 1, 1);
             }
-            if ((Entity) entity instanceof Player _player)
-                _player.getCooldowns().addCooldown(itemstack.getItem(), 200);
+            if ((Entity) entity instanceof Player player)
+                player.getCooldowns().addCooldown(itemstack.getItem(), 200);
             if (world.getDifficulty() != Difficulty.PEACEFUL) {
-                if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CAItems.WHIRL_EYE.get()))) {
+                if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.WHIRL_EYE.get()))) {
                     for (int index0 = 0; index0 < 64; index0++) {
                         for (int index1 = 0; index1 < 24; index1++) {
                             for (int index2 = 0; index2 < 64; index2++) {
@@ -79,26 +78,26 @@ public class OcarinaItem extends Item {
                                 py = y + -12 + index1;
                                 pz = z + -32 + index2;
                                 cradle = (((LevelAccessor) world).getBlockState(BlockPos.containing(px, py, pz)));
-                                bs = cradle.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _getip6 ? cradle.getValue(_getip6) : -1;
+                                bs = cradle.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip6 ? cradle.getValue(getip6) : -1;
                                 if (cradle.getBlock() == CABlocks.TIDEWAY_CRADLE.get()) {
                                     if (bs == 0) {
                                         {
-                                            int _value = 1;
-                                            BlockPos _pos = BlockPos.containing(px, py, pz);
-                                            BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-                                            if (_bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))
-                                                ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
+                                            int value = 1;
+                                            BlockPos pos = BlockPos.containing(px, py, pz);
+                                            BlockState blockState = ((LevelAccessor) world).getBlockState(pos);
+                                            if (blockState.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
+                                                ((LevelAccessor) world).setBlock(pos, blockState.setValue(integerProp, value), 3);
                                         }
                                         if (Math.random() < 0.05) {
-                                            if ((LevelAccessor) world instanceof ServerLevel _level) {
-                                                Entity entityToSpawn = CAEntities.LINGERING_PATHSHAPER.get().spawn(_level, BlockPos.containing(px, py + 1, pz), MobSpawnType.MOB_SUMMONED);
+                                            if ((LevelAccessor) world instanceof ServerLevel level) {
+                                                Entity entityToSpawn = CAEntities.LINGERING_PATHSHAPER.get().spawn(level, BlockPos.containing(px, py + 1, pz), MobSpawnType.MOB_SUMMONED);
                                                 if (entityToSpawn != null) {
                                                     entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
                                                 }
                                             }
                                         } else {
-                                            if ((LevelAccessor) world instanceof ServerLevel _level) {
-                                                Entity entityToSpawn = CAEntities.ROUTE_SHAPER.get().spawn(_level, BlockPos.containing(px, py + 1, pz), MobSpawnType.MOB_SUMMONED);
+                                            if ((LevelAccessor) world instanceof ServerLevel level) {
+                                                Entity entityToSpawn = CAEntities.ROUTE_SHAPER.get().spawn(level, BlockPos.containing(px, py + 1, pz), MobSpawnType.MOB_SUMMONED);
                                                 if (entityToSpawn != null) {
                                                     entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
                                                 }
@@ -110,11 +109,11 @@ public class OcarinaItem extends Item {
                                                 itemstack.setDamageValue(0);
                                             }
                                         }
-                                        if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
-                                            _player.displayClientMessage(Component.literal((Component.translatable("item.caerula_arbor.language_key.description_15").getString())), false);
-                                        if ((Entity) entity instanceof Player _player) {
-                                            ItemStack _stktoremove = new ItemStack(CAItems.WHIRL_EYE.get());
-                                            _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
+                                        if ((Entity) entity instanceof Player player && !player.level().isClientSide())
+                                            player.displayClientMessage(Component.literal((Component.translatable("item.caerula_arbor.language_key.description_15").getString())), false);
+                                        if ((Entity) entity instanceof Player player) {
+                                            ItemStack stktoremove = new ItemStack(CAItems.WHIRL_EYE.get());
+                                            player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                                         }
                                         found = true;
                                     }
@@ -126,11 +125,11 @@ public class OcarinaItem extends Item {
                                         }
                                     }
                                     world.destroyBlock(BlockPos.containing(px, py, pz), false);
-                                    if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
-                                        _player.displayClientMessage(Component.literal((Component.translatable("spawn.endspeaker").getString())), false);
-                                    if ((Entity) entity instanceof Player _player) {
-                                        ItemStack _stktoremove = new ItemStack(CAItems.WHIRL_EYE.get());
-                                        _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
+                                    if ((Entity) entity instanceof Player player && !player.level().isClientSide())
+                                        player.displayClientMessage(Component.literal((Component.translatable("spawn.endspeaker").getString())), false);
+                                    if ((Entity) entity instanceof Player player) {
+                                        ItemStack stktoremove = new ItemStack(CAItems.WHIRL_EYE.get());
+                                        player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                                     }
                                     if ((LevelAccessor) world instanceof ServerLevel level) {
                                         EndspeakerEntity.spawnForPhase(level, BlockPos.containing(px, py, pz), MobSpawnType.MOB_SUMMONED, 0);
@@ -138,29 +137,27 @@ public class OcarinaItem extends Item {
                                 } else if (cradle.getBlock() == CABlocks.MIZUKI_STATUE.get()) {
                                     if (bs == 0) {
                                         {
-                                            int _value = 1;
-                                            BlockPos _pos = BlockPos.containing(px, py, pz);
-                                            BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-                                            if (_bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))
-                                                ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
+                                            int value = 1;
+                                            BlockPos pos = BlockPos.containing(px, py, pz);
+                                            BlockState blockState = ((LevelAccessor) world).getBlockState(pos);
+                                            if (blockState.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
+                                                ((LevelAccessor) world).setBlock(pos, blockState.setValue(integerProp, value), 3);
                                         }
-                                        {
-                                            if (itemstack.hurt(1, RandomSource.create(), null)) {
-                                                itemstack.shrink(1);
-                                                itemstack.setDamageValue(0);
-                                            }
+                                        if (itemstack.hurt(1, RandomSource.create(), null)) {
+                                            itemstack.shrink(1);
+                                            itemstack.setDamageValue(0);
                                         }
-                                        if ((LevelAccessor) world instanceof ServerLevel _level) {
-                                            Entity entityToSpawn = CAEntities.IZUMIK.get().spawn(_level, BlockPos.containing(px, py, pz), MobSpawnType.MOB_SUMMONED);
+                                        if ((LevelAccessor) world instanceof ServerLevel level) {
+                                            Entity entityToSpawn = CAEntities.IZUMIK.get().spawn(level, BlockPos.containing(px, py, pz), MobSpawnType.MOB_SUMMONED);
                                             if (entityToSpawn != null) {
                                                 entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
                                             }
                                         }
-                                        if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
-                                            _player.displayClientMessage(Component.literal((Component.translatable("spawn.izumik.init").getString())), false);
-                                        if ((Entity) entity instanceof Player _player) {
-                                            ItemStack _stktoremove = new ItemStack(CAItems.WHIRL_EYE.get());
-                                            _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
+                                        if ((Entity) entity instanceof Player player && !player.level().isClientSide())
+                                            player.displayClientMessage(Component.literal((Component.translatable("spawn.izumik.init").getString())), false);
+                                        if ((Entity) entity instanceof Player player) {
+                                            ItemStack stktoremove = new ItemStack(CAItems.WHIRL_EYE.get());
+                                            player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                                         }
                                         found = true;
                                     }
@@ -172,11 +169,11 @@ public class OcarinaItem extends Item {
                                             itemstack.setDamageValue(0);
                                         }
                                     }
-                                    if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
-                                        _player.displayClientMessage(Component.literal((Component.translatable("spawn.highmore").getString())), false);
-                                    if ((Entity) entity instanceof Player _player) {
-                                        ItemStack _stktoremove = new ItemStack(CAItems.WHIRL_EYE.get());
-                                        _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
+                                    if ((Entity) entity instanceof Player player && !player.level().isClientSide())
+                                        player.displayClientMessage(Component.literal((Component.translatable("spawn.highmore").getString())), false);
+                                    if ((Entity) entity instanceof Player player) {
+                                        ItemStack stktoremove = new ItemStack(CAItems.WHIRL_EYE.get());
+                                        player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                                     }
                                     found = true;
                                 } else if (cradle.getBlock() == CABlocks.TIDE_BISHOP_CORE.get()) {
@@ -191,8 +188,8 @@ public class OcarinaItem extends Item {
                                             }
                                         }
                                     }
-                                    if ((LevelAccessor) world instanceof ServerLevel _level) {
-                                        Entity entityToSpawn = CAEntities.TIDE_BISHOP.get().spawn(_level, BlockPos.containing(px + 0.5, py, pz + 0.5), MobSpawnType.MOB_SUMMONED);
+                                    if ((LevelAccessor) world instanceof ServerLevel level) {
+                                        Entity entityToSpawn = CAEntities.TIDE_BISHOP.get().spawn(level, BlockPos.containing(px + 0.5, py, pz + 0.5), MobSpawnType.MOB_SUMMONED);
                                         if (entityToSpawn != null) {
                                             entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
                                         }
@@ -203,29 +200,29 @@ public class OcarinaItem extends Item {
                                             itemstack.setDamageValue(0);
                                         }
                                     }
-                                    if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
-                                        _player.displayClientMessage(Component.literal((Component.translatable("item.caerula_arbor.language_key.description_16").getString())), false);
-                                    if ((Entity) entity instanceof Player _player) {
-                                        ItemStack _stktoremove = new ItemStack(CAItems.WHIRL_EYE.get());
-                                        _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
+                                    if ((Entity) entity instanceof Player player && !player.level().isClientSide())
+                                        player.displayClientMessage(Component.literal((Component.translatable("item.caerula_arbor.language_key.description_16").getString())), false);
+                                    if ((Entity) entity instanceof Player player) {
+                                        ItemStack stktoremove = new ItemStack(CAItems.WHIRL_EYE.get());
+                                        player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                                     }
                                     world.destroyBlock(BlockPos.containing(px, py, pz), false);
                                     found = true;
                                 } else if (cradle.getBlock() == CABlocks.UNDERTIDE_TABLE.get()) {
-                                    if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
-                                        _player.displayClientMessage(Component.literal((Component.translatable("item.caerula_arbor.a_second_key.description_3").getString())), false);
-                                    if ((Entity) entity instanceof Player _player) {
-                                        ItemStack _stktoremove = new ItemStack(CAItems.WHIRL_EYE.get());
-                                        _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
+                                    if ((Entity) entity instanceof Player player && !player.level().isClientSide())
+                                        player.displayClientMessage(Component.literal((Component.translatable("item.caerula_arbor.a_second_key.description_3").getString())), false);
+                                    if ((Entity) entity instanceof Player player) {
+                                        ItemStack stktoremove = new ItemStack(CAItems.WHIRL_EYE.get());
+                                        player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                                     }
                                     {
-                                        BlockPos _bp = BlockPos.containing(px, py, pz);
-                                        BlockState _bs = CABlocks.UNDERTIDE_SPAWN.get().withPropertiesOf(((LevelAccessor) world).getBlockState(_bp));
-                                        ((LevelAccessor) world).setBlock(_bp, _bs, 3);
+                                        BlockPos bp = BlockPos.containing(px, py, pz);
+                                        BlockState blockState = CABlocks.UNDERTIDE_SPAWN.get().withPropertiesOf(((LevelAccessor) world).getBlockState(bp));
+                                        ((LevelAccessor) world).setBlock(bp, blockState, 3);
                                     }
                                     found = true;
-                                    if ((LevelAccessor) world instanceof ServerLevel _level) {
-                                        Entity entityToSpawn = CAEntities.BISHOP_FISH.get().spawn(_level, BlockPos.containing(px + 0.5, py, pz + 0.5), MobSpawnType.MOB_SUMMONED);
+                                    if ((LevelAccessor) world instanceof ServerLevel level) {
+                                        Entity entityToSpawn = CAEntities.BISHOP_FISH.get().spawn(level, BlockPos.containing(px + 0.5, py, pz + 0.5), MobSpawnType.MOB_SUMMONED);
                                         if (entityToSpawn != null) {
                                             entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
                                         }

@@ -38,9 +38,8 @@ public class MusicBoxFixedItem extends Item {
 
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level world, Player entity, InteractionHand hand) {
-		InteractionResultHolder<ItemStack> ar = super.use(world, entity, hand);
 		entity.startUsingItem(hand);
-		return ar;
+		return super.use(world, entity, hand);
 	}
 
 	@Override
@@ -49,11 +48,11 @@ public class MusicBoxFixedItem extends Item {
 		double x = entity.getX();
 		double y = entity.getY();
 		double z = entity.getZ();
-        if ((LevelAccessor) world instanceof Level _level) {
-            _level.playSound(null, BlockPos.containing(x, y, z), CASounds.PCEANWISH.get(), SoundSource.MUSIC, (float) 2.5, 1);
+        if ((LevelAccessor) world instanceof Level level) {
+            level.playSound(null, BlockPos.containing(x, y, z), CASounds.PCEANWISH.get(), SoundSource.MUSIC, (float) 2.5, 1);
         }
-        if ((Entity) entity instanceof Player _player)
-            _player.getCooldowns().addCooldown(itemstack.getItem(), 900);
+        if ((Entity) entity instanceof Player player)
+            player.getCooldowns().addCooldown(itemstack.getItem(), 900);
         return retval;
 	}
 }

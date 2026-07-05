@@ -52,16 +52,16 @@ public class ImmortalMobEffect extends MobEffect {
             return;
         double ang;
         double phase = 0;
-        if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-            _entity.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 20, 0, false, false));
-        if ((Entity) entity instanceof LivingEntity _entity)
-            _entity.removeEffect(MobEffects.POISON);
-        if ((Entity) entity instanceof LivingEntity _entity)
-            _entity.removeEffect(MobEffects.WITHER);
+        if ((Entity) entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
+            livingEntity.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 20, 0, false, false));
+        if ((Entity) entity instanceof LivingEntity livingEntity)
+            livingEntity.removeEffect(MobEffects.POISON);
+        if ((Entity) entity instanceof LivingEntity livingEntity)
+            livingEntity.removeEffect(MobEffects.WITHER);
         entity.invulnerableTime = 10;
         ang = Mth.nextDouble(RandomSource.create(), 0, 6.283);
-        if (world instanceof ServerLevel _level)
-            _level.sendParticles(CAParticles.IMMORTAL_PTC.get(), (entity.getX() + 1.5 * Math.sin(ang)), (entity.getY() + 1.25), (entity.getZ() + 1.5 * Math.cos(ang)), 1, 0.1, 2, 0.1, 0.2);
+        if (world instanceof ServerLevel level)
+            level.sendParticles(CAParticles.IMMORTAL_PTC.get(), (entity.getX() + 1.5 * Math.sin(ang)), (entity.getY() + 1.25), (entity.getZ() + 1.5 * Math.cos(ang)), 1, 0.1, 2, 0.1, 0.2);
     }
 
     @Override

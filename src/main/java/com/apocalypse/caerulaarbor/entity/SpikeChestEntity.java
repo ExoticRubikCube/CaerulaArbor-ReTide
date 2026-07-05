@@ -107,8 +107,8 @@ public class SpikeChestEntity extends SeaMonster {
 		double y = this.getY();
 		double z = this.getZ();
         Level world = this.level();
-        if ((LevelAccessor) world instanceof Level _level) {
-                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.CHEST_LOCKED, SoundSource.NEUTRAL, 1, 1);
+        if ((LevelAccessor) world instanceof Level level) {
+                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.CHEST_LOCKED, SoundSource.NEUTRAL, 1, 1);
         }
         return InteractionResult.PASS;
     }

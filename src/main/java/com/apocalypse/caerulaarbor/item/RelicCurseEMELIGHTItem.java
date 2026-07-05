@@ -71,35 +71,35 @@ public class RelicCurseEMELIGHTItem extends Item {
         tY = y + direction.getStepY();
         tZ = z + direction.getStepZ();
         wattered = (world.getFluidState(BlockPos.containing(tX, tY, tZ)).createLegacyBlock()).getBlock() == Blocks.WATER;
-        toPlace = (CABlocks.EMERGENCY_LIGHT.get().getStateDefinition().getProperty("waterlogged") instanceof BooleanProperty _withbp8
-                ? CABlocks.EMERGENCY_LIGHT.get().defaultBlockState().setValue(_withbp8, wattered)
+        toPlace = (CABlocks.EMERGENCY_LIGHT.get().getStateDefinition().getProperty("waterlogged") instanceof BooleanProperty withbp8
+                ? CABlocks.EMERGENCY_LIGHT.get().defaultBlockState().setValue(withbp8, wattered)
                 : CABlocks.EMERGENCY_LIGHT.get().defaultBlockState());
         if (CABlocks.EMERGENCY_LIGHT.get().defaultBlockState().canSurvive(world, BlockPos.containing(tX, tY, tZ)) && (world.getBlockState(BlockPos.containing(tX, tY, tZ))).canBeReplaced()) {
             if (direction == Direction.DOWN) {
                 world.setBlock(BlockPos.containing(tX, tY, tZ), (new Object() {
-                    public BlockState with(BlockState _bs, String _property, int _newValue) {
-                        Property<?> _prop = _bs.getBlock().getStateDefinition().getProperty(_property);
-                        return _prop instanceof IntegerProperty _ip && _prop.getPossibleValues().contains(_newValue) ? _bs.setValue(_ip, _newValue) : _bs;
+                    public BlockState with(BlockState bs, String property, int newValue) {
+                        Property<?> prop = bs.getBlock().getStateDefinition().getProperty(property);
+                        return prop instanceof IntegerProperty ip && prop.getPossibleValues().contains(newValue) ? bs.setValue(ip, newValue) : bs;
                     }
                 }.with(toPlace, "blockstate", 2)), 3);
             } else {
                 world.setBlock(BlockPos.containing(tX, tY, tZ), (new Object() {
-                    public BlockState with(BlockState _bs, String _property, int _newValue) {
-                        Property<?> _prop = _bs.getBlock().getStateDefinition().getProperty(_property);
-                        return _prop instanceof IntegerProperty _ip && _prop.getPossibleValues().contains(_newValue) ? _bs.setValue(_ip, _newValue) : _bs;
+                    public BlockState with(BlockState bs, String property, int newValue) {
+                        Property<?> prop = bs.getBlock().getStateDefinition().getProperty(property);
+                        return prop instanceof IntegerProperty ip && prop.getPossibleValues().contains(newValue) ? bs.setValue(ip, newValue) : bs;
                     }
                 }.with(toPlace, "blockstate", 1)), 3);
             }
-            if (world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.LANTERN_PLACE, SoundSource.NEUTRAL, 1, 1);
+            if (world instanceof Level level) {
+                    level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.LANTERN_PLACE, SoundSource.NEUTRAL, 1, 1);
             }
             if (!(new Object() {
-                public boolean checkGamemode(Entity _ent) {
-                    if (_ent instanceof ServerPlayer _serverPlayer) {
-                        return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                    } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                        return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                public boolean checkGamemode(Entity ent) {
+                    if (ent instanceof ServerPlayer serverPlayer) {
+                        return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                    } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                        return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+                                && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                     }
                     return false;
                 }
@@ -120,17 +120,17 @@ public class RelicCurseEMELIGHTItem extends Item {
         if (!itemstack.getOrCreateTag().getBoolean("used")) {
             if (!(entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_cursed_EMELIGHT) {
                 {
-                    boolean _setval = true;
+                    boolean setval = true;
                     entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                        capability.relic_cursed_EMELIGHT = _setval;
+                        capability.relic_cursed_EMELIGHT = setval;
                         capability.syncPlayerVariables(entity);
                     });
                 }
-                if ((LevelAccessor) world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.AMBIENT_SOUL_SAND_VALLEY_MOOD.value(), SoundSource.NEUTRAL, 2, 1);
+                if ((LevelAccessor) world instanceof Level level) {
+                        level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.AMBIENT_SOUL_SAND_VALLEY_MOOD.value(), SoundSource.NEUTRAL, 2, 1);
                 }
-                if ((LevelAccessor) world instanceof ServerLevel _level)
-                    _level.sendParticles(ParticleTypes.CRIMSON_SPORE, x, y, z, 99, 1, 1, 1, 1);
+                if ((LevelAccessor) world instanceof ServerLevel level)
+                    level.sendParticles(ParticleTypes.CRIMSON_SPORE, x, y, z, 99, 1, 1, 1, 1);
                 if (((LevelAccessor) world).isClientSide())
                     Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);
                 itemstack.getOrCreateTag().putBoolean("used", true);

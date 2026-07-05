@@ -28,8 +28,8 @@ public class CaerulaSanityCommand {
 			double y = arguments.getSource().getPosition().y();
 			double z = arguments.getSource().getPosition().z();
 			Entity entity = arguments.getSource().getEntity();
-			if (entity == null && world instanceof ServerLevel _servLevel)
-				entity = FakePlayerFactory.getMinecraft(_servLevel);
+			if (entity == null && world instanceof ServerLevel servLevel)
+				entity = FakePlayerFactory.getMinecraft(servLevel);
 			Direction direction = Direction.DOWN;
 			if (entity != null)
                 entity.getDirection();
@@ -54,9 +54,9 @@ public class CaerulaSanityCommand {
             info = info.replace("{num}",
                     "" + Math.round(Math.pow(10, 1) * (ent instanceof LivingEntity livingEntity ? ModCapabilities.getSanityInjury(livingEntity).getValue() : 0)) / Math.pow(10, 1));
             {
-                final String _success = info;
-                final boolean _informAdmins = true;
-                arguments.getSource().sendSuccess(() -> Component.literal(_success), _informAdmins);
+                final String success = info;
+                final boolean informAdmins = true;
+                arguments.getSource().sendSuccess(() -> Component.literal(success), informAdmins);
             }
             return 0;
 		}))).then(Commands.literal("set").then(Commands.argument("name", EntityArgument.entities()).then(Commands.argument("amount", DoubleArgumentType.doubleArg(-1, 1000)).executes(arguments -> {
@@ -65,8 +65,8 @@ public class CaerulaSanityCommand {
 			double y = arguments.getSource().getPosition().y();
 			double z = arguments.getSource().getPosition().z();
 			Entity entity = arguments.getSource().getEntity();
-			if (entity == null && world instanceof ServerLevel _servLevel)
-				entity = FakePlayerFactory.getMinecraft(_servLevel);
+			if (entity == null && world instanceof ServerLevel servLevel)
+				entity = FakePlayerFactory.getMinecraft(servLevel);
 			Direction direction = Direction.DOWN;
 			if (entity != null)
                 entity.getDirection();
@@ -98,9 +98,9 @@ public class CaerulaSanityCommand {
             info = info.replace("{num}", "" + Math.round(num));
             info = info.replace("{amount}", "" + Math.round(Math.pow(10, 1) * (DoubleArgumentType.getDouble(arguments, "amount"))) / Math.pow(10, 1));
             {
-                final String _success = info;
-                final boolean _informAdmins = true;
-                arguments.getSource().sendSuccess(() -> Component.literal(_success), _informAdmins);
+                final String success = info;
+                final boolean informAdmins = true;
+                arguments.getSource().sendSuccess(() -> Component.literal(success), informAdmins);
             }
             return 0;
 		})))).then(Commands.literal("hurt").then(Commands.argument("name", EntityArgument.entities()).then(Commands.argument("amount", DoubleArgumentType.doubleArg(0, 2147483647)).executes(arguments -> {
@@ -109,8 +109,8 @@ public class CaerulaSanityCommand {
 			double y = arguments.getSource().getPosition().y();
 			double z = arguments.getSource().getPosition().z();
 			Entity entity = arguments.getSource().getEntity();
-			if (entity == null && world instanceof ServerLevel _servLevel)
-				entity = FakePlayerFactory.getMinecraft(_servLevel);
+			if (entity == null && world instanceof ServerLevel servLevel)
+				entity = FakePlayerFactory.getMinecraft(servLevel);
 			Direction direction = Direction.DOWN;
 			if (entity != null)
                 entity.getDirection();
@@ -138,9 +138,9 @@ public class CaerulaSanityCommand {
             info = info.replace("{num}", "" + Math.round(num));
             info = info.replace("{amount}", "" + Math.round(Math.pow(10, 1) * (DoubleArgumentType.getDouble(arguments, "amount"))) / Math.pow(10, 1));
             {
-                final String _success = info;
-                final boolean _informAdmins = true;
-                arguments.getSource().sendSuccess(() -> Component.literal(_success), _informAdmins);
+                final String success = info;
+                final boolean informAdmins = true;
+                arguments.getSource().sendSuccess(() -> Component.literal(success), informAdmins);
             }
             return 0;
 		})))).then(Commands.literal("heal").then(Commands.argument("name", EntityArgument.entities()).then(Commands.argument("amount", DoubleArgumentType.doubleArg(0, 2147483647)).executes(arguments -> {
@@ -149,8 +149,8 @@ public class CaerulaSanityCommand {
 			double y = arguments.getSource().getPosition().y();
 			double z = arguments.getSource().getPosition().z();
 			Entity entity = arguments.getSource().getEntity();
-			if (entity == null && world instanceof ServerLevel _servLevel)
-				entity = FakePlayerFactory.getMinecraft(_servLevel);
+			if (entity == null && world instanceof ServerLevel servLevel)
+				entity = FakePlayerFactory.getMinecraft(servLevel);
 			Direction direction = Direction.DOWN;
 			if (entity != null)
                 entity.getDirection();
@@ -178,9 +178,9 @@ public class CaerulaSanityCommand {
             info = info.replace("{num}", "" + Math.round(num));
             info = info.replace("{amount}", "" + Math.round(Math.pow(10, 1) * (DoubleArgumentType.getDouble(arguments, "amount"))) / Math.pow(10, 1));
             {
-                final String _success = info;
-                final boolean _informAdmins = true;
-                arguments.getSource().sendSuccess(() -> Component.literal(_success), _informAdmins);
+                final String success = info;
+                final boolean informAdmins = true;
+                arguments.getSource().sendSuccess(() -> Component.literal(success), informAdmins);
             }
             return 0;
 		})))));

@@ -37,9 +37,9 @@ public class BowlSeagrassItem extends Item {
 		if (!entity.level().isClientSide())
 			entity.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 200, 0));
 		{
-			boolean _setval = true;
+			boolean setval = true;
 			entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-				capability.relic_util_SEAGRASS = _setval;
+				capability.relic_util_SEAGRASS = setval;
 				capability.syncPlayerVariables(entity);
 			});
 		}

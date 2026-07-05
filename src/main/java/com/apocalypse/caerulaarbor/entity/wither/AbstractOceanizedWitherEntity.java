@@ -400,20 +400,20 @@ public abstract class AbstractOceanizedWitherEntity extends SeaMonster {
             double y = this.getY();
             double z = this.getZ();
             if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
-                if (world instanceof ServerLevel _level) {
-                    ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, new ItemStack(CAItems.MOIST_STAR.get()));
+                if (world instanceof ServerLevel level) {
+                    ItemEntity entityToSpawn = new ItemEntity(level, x, y, z, new ItemStack(CAItems.MOIST_STAR.get()));
                     entityToSpawn.setPickUpDelay(10);
                     entityToSpawn.setUnlimitedLifetime();
-                    _level.addFreshEntity(entityToSpawn);
+                    level.addFreshEntity(entityToSpawn);
                 }
                 for (int index0 = 0; index0 < 64; index0++) {
-                    if (world instanceof ServerLevel _level)
-                        _level.addFreshEntity(new ExperienceOrb(_level, (x + Mth.nextDouble(RandomSource.create(), -1, 1)), y, (z + Mth.nextDouble(RandomSource.create(), -1, 1)), Mth.nextInt(RandomSource.create(), 32, 48)));
+                    if (world instanceof ServerLevel level)
+                        level.addFreshEntity(new ExperienceOrb(level, (x + Mth.nextDouble(RandomSource.create(), -1, 1)), y, (z + Mth.nextDouble(RandomSource.create(), -1, 1)), Mth.nextInt(RandomSource.create(), 32, 48)));
                 }
             }
             if (this instanceof OceanizedWitherEntity) {
-                if (world instanceof ServerLevel _level) {
-                    Entity entityToSpawn = CAEntities.OCEANIZED_WITHERIA.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+                if (world instanceof ServerLevel level) {
+                    Entity entityToSpawn = CAEntities.OCEANIZED_WITHERIA.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                     if (entityToSpawn != null) {
                         entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                     }

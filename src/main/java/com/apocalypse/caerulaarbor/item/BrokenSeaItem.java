@@ -73,13 +73,13 @@ public class BrokenSeaItem extends SwordItem {
         double x = entity.getX();
         double y = entity.getY();
         double z = entity.getZ();
-        if ((sourceentity instanceof Player _plr ? _plr.getAttackStrengthScale(0) : 0) > 0.9) {
+        if ((sourceentity instanceof Player plr ? plr.getAttackStrengthScale(0) : 0) > 0.9) {
             if (Math.random() < 0.5 && !(entity instanceof Player)) {
-                if (world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), CASounds.GLADIIA_ATTACK_HIT.get(), SoundSource.PLAYERS, 1, 1);
+                if (world instanceof Level level) {
+                    level.playSound(null, BlockPos.containing(x, y, z), CASounds.GLADIIA_ATTACK_HIT.get(), SoundSource.PLAYERS, 1, 1);
                 }
-                if ((Entity) entity instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                    _entity.addEffect(new MobEffectInstance(CAMobEffects.HAEMOPHILIA.get(), 260, 1, false, false));
+                if (!entity.level().isClientSide())
+                    entity.addEffect(new MobEffectInstance(CAMobEffects.HAEMOPHILIA.get(), 260, 1, false, false));
             }
         }
         return retval;
@@ -94,74 +94,72 @@ public class BrokenSeaItem extends SwordItem {
         ItemStack itemstack = ar.getObject();
         double damage;
         double count = 0;
-        if (!((Entity) entity instanceof Player _plrCldCheck1 && _plrCldCheck1.getCooldowns().isOnCooldown(itemstack.getItem()))) {
-            if (entity.isShiftKeyDown() && ((Entity) entity instanceof Player _plr ? _plr.experienceLevel : 0) >= 5) {
-                if ((LevelAccessor) world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), CASounds.GLADIIA_SKILL_RELEASE.get(), SoundSource.PLAYERS, 2, 1);
+        if (!((Entity) entity instanceof Player plrCldCheck1 && plrCldCheck1.getCooldowns().isOnCooldown(itemstack.getItem()))) {
+            if (entity.isShiftKeyDown() && ((Entity) entity instanceof Player plr ? plr.experienceLevel : 0) >= 5) {
+                if ((LevelAccessor) world instanceof Level level) {
+                        level.playSound(null, BlockPos.containing(x, y, z), CASounds.GLADIIA_SKILL_RELEASE.get(), SoundSource.PLAYERS, 2, 1);
                 }
-                if ((LevelAccessor) world instanceof ServerLevel _level) {
-                    Entity entityToSpawn = CAEntities.GLADIIA_WHIRL.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+                if ((LevelAccessor) world instanceof ServerLevel level) {
+                    Entity entityToSpawn = CAEntities.GLADIIA_WHIRL.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                     if (entityToSpawn != null) {
                         entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
                     }
                 }
                 if (!(new Object() {
-                    public boolean checkGamemode(Entity _ent) {
-                        if (_ent instanceof ServerPlayer _serverPlayer) {
-                            return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                        } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                            return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                    && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                    public boolean checkGamemode(Entity ent) {
+                        if (ent instanceof ServerPlayer serverPlayer) {
+                            return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                        } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                            return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+                                    && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                         }
                         return false;
                     }
                 }.checkGamemode((Entity) entity))) {
-                    if ((Entity) entity instanceof Player _player)
-                        _player.getCooldowns().addCooldown(itemstack.getItem(), 400);
-                    if ((Entity) entity instanceof Player _player)
-                        _player.giveExperienceLevels(-(5));
+                    if ((Entity) entity instanceof Player player)
+                        player.getCooldowns().addCooldown(itemstack.getItem(), 400);
+                    if ((Entity) entity instanceof Player player)
+                        player.giveExperienceLevels(-(5));
                 }
             } else {
                 damage = entity.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? entity.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
-                {
-                    final Vec3 _center = new Vec3(x, y, z);
-                    List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(12 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                    for (Entity entityiterator : _entfound) {
-                        if (entityiterator instanceof Monster || (entityiterator instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == entity) {
-                            if (entity.distanceTo(entityiterator) <= 6) {
-                                EntityUtils.pullToward(entityiterator, entity);
-                                GladiiaEntity.spawnGladiiaLinkParticles(world, entity, entityiterator);
-                                LivingEntity _entity = (LivingEntity) entityiterator;
-                                if (!_entity.level().isClientSide())
-                                    _entity.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 40, 0, false, false));
-                                entityiterator.hurt(
-                                        new DamageSource(((LevelAccessor) world).registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))), entity),
-                                        (float) (damage * 3));
-                                count = count + 1;
-                            }
+                final Vec3 center = new Vec3(x, y, z);
+                List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(12 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                for (Entity entityiterator : entfound) {
+                    if (entityiterator instanceof Monster || (entityiterator instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == entity) {
+                        if (entity.distanceTo(entityiterator) <= 6) {
+                            EntityUtils.pullToward(entityiterator, entity);
+                            GladiiaEntity.spawnGladiiaLinkParticles(world, entity, entityiterator);
+                            LivingEntity livingEntity = (LivingEntity) entityiterator;
+                            if (!livingEntity.level().isClientSide())
+                                livingEntity.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 40, 0, false, false));
+                            entityiterator.hurt(
+                                    new DamageSource(((LevelAccessor) world).registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))), entity),
+                                    (float) (damage * 3));
+                            count = count + 1;
                         }
-                        if (count >= 6) {
-                            break;
-                        }
+                    }
+                    if (count >= 6) {
+                        break;
                     }
                 }
                 if (count > 0 && !((LevelAccessor) world).isClientSide()) {
-                    if ((LevelAccessor) world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), CASounds.GLADIIA_PULL_PULL.get(), SoundSource.PLAYERS, 2, 1);
+                    if ((LevelAccessor) world instanceof Level level) {
+                            level.playSound(null, BlockPos.containing(x, y, z), CASounds.GLADIIA_PULL_PULL.get(), SoundSource.PLAYERS, 2, 1);
                     }
                     if (!(new Object() {
-                        public boolean checkGamemode(Entity _ent) {
-                            if (_ent instanceof ServerPlayer _serverPlayer) {
-                                return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                            } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                                return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                        && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                        public boolean checkGamemode(Entity ent) {
+                            if (ent instanceof ServerPlayer serverPlayer) {
+                                return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                            } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                                return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+                                        && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                             }
                             return false;
                         }
                     }.checkGamemode((Entity) entity))) {
-                        if ((Entity) entity instanceof Player _player)
-                            _player.getCooldowns().addCooldown(itemstack.getItem(), 140);
+                        if ((Entity) entity instanceof Player player)
+                            player.getCooldowns().addCooldown(itemstack.getItem(), 140);
                     }
                 }
             }

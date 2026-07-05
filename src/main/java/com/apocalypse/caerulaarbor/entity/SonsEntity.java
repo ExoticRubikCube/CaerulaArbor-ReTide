@@ -130,8 +130,8 @@ public class SonsEntity extends SeaMonster {
         Entity owner;
         Entity tgt;
         owner = world.getEntitiesOfClass(BishopFishEntity.class, AABB.ofSize(new Vec3(x, y, z), 96, 96, 96), e -> true).stream().min(new Object() {
-            Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
-                return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
+            Comparator<Entity> compareDistOf(double x, double y, double z) {
+                return Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z));
             }
         }.compareDistOf(x, y, z)).orElse(null);
         if (!(owner == null)) {
@@ -139,16 +139,16 @@ public class SonsEntity extends SeaMonster {
         } else {
             this.getNavigation().stop();
         }
-        if (!((Entity) this instanceof LivingEntity _livEnt7 && _livEnt7.hasEffect(CAMobEffects.COOLDOWN_SINAL.get()))) {
-            tgt = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+        if (!((Entity) this instanceof LivingEntity livEnt7 && livEnt7.hasEffect(CAMobEffects.COOLDOWN_SINAL.get()))) {
+            tgt = (Entity) this instanceof Mob mobEnt ? mobEnt.getTarget() : null;
             if (!(null == tgt)) {
                 if (distanceTo(tgt) <= 3.5) {
                     if (tgt instanceof LivingEntity && !this.level().isClientSide())
                         this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 30, 3, false, false));
                     {
                         tgt.teleportTo((getX() + getLookAngle().x * 0.33), (getY()), (getZ() + getLookAngle().z * 0.33));
-                        if (tgt instanceof ServerPlayer _serverPlayer)
-                            _serverPlayer.connection.teleport((getX() + getLookAngle().x * 0.33), (getY()), (getZ() + getLookAngle().z * 0.33), tgt.getYRot(), tgt.getXRot());
+                        if (tgt instanceof ServerPlayer serverPlayer)
+                            serverPlayer.connection.teleport((getX() + getLookAngle().x * 0.33), (getY()), (getZ() + getLookAngle().z * 0.33), tgt.getYRot(), tgt.getXRot());
                     }
                     tgt.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3(x, y, z));
                     if (this instanceof SonsEntity) {

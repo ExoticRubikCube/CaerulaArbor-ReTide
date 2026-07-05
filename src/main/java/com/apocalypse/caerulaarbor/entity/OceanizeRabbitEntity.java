@@ -138,8 +138,8 @@ public class OceanizeRabbitEntity extends SeaMonster {
                 variant = 3;
             }
             if (variant != 0) {
-                if ((Entity) this instanceof OceanizeRabbitEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_VARIANT, (int) variant);
+                if ((Entity) this instanceof OceanizeRabbitEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_VARIANT, (int) variant);
                 if (variant != 2) {
                     if (this.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
                         this.getAttribute(Attributes.MAX_HEALTH)
@@ -178,12 +178,12 @@ public class OceanizeRabbitEntity extends SeaMonster {
     public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
         super.mobInteract(sourceentity, hand);
         Entity entity = this;
-        if ((entity instanceof OceanizeRabbitEntity _datEntI ? _datEntI.getEntityData().get(DATA_VARIANT) : 0) > 4.5) {
+        if ((entity instanceof OceanizeRabbitEntity datEntI ? datEntI.getEntityData().get(DATA_VARIANT) : 0) > 4.5) {
             return InteractionResult.PASS;
         }
         if (sourceentity.isHolding(CAItems.APOCALYPSE.get())) {
-            if (entity instanceof OceanizeRabbitEntity _datEntSetI)
-                _datEntSetI.getEntityData().set(DATA_VARIANT, 5);
+            if (entity instanceof OceanizeRabbitEntity datEntSetI)
+                datEntSetI.getEntityData().set(DATA_VARIANT, 5);
             LivingEntity livingEntity = (LivingEntity) entity;
             if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
                 this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue((livingEntity.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) * 10);
@@ -214,20 +214,20 @@ public class OceanizeRabbitEntity extends SeaMonster {
         LevelAccessor world = this.level();
         Entity enemy;
         double sklp1;
-        if (!(((Entity) this instanceof OceanizeRabbitEntity _datEntI ? _datEntI.getEntityData().get(DATA_VARIANT) : 0) < 4.5)) {
+        if (!(((Entity) this instanceof OceanizeRabbitEntity datEntI ? datEntI.getEntityData().get(DATA_VARIANT) : 0) < 4.5)) {
             if (this.isAlive()) {
-                sklp1 = (Entity) this instanceof OceanizeRabbitEntity _datEntI ? _datEntI.getEntityData().get(DATA_SWALLOW_P) : 0;
+                sklp1 = (Entity) this instanceof OceanizeRabbitEntity datEntI ? datEntI.getEntityData().get(DATA_SWALLOW_P) : 0;
                 enemy = this.getTarget();
                 if (sklp1 > 0) {
-                    if ((Entity) this instanceof OceanizeRabbitEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_SWALLOW_P, (int) (sklp1 - 1));
+                    if ((Entity) this instanceof OceanizeRabbitEntity datEntSetI)
+                        datEntSetI.getEntityData().set(DATA_SWALLOW_P, (int) (sklp1 - 1));
                 } else {
                     if (!(enemy == null) && enemy.isAlive() && distanceTo(enemy) <= 5) {
                         if (this instanceof OceanizeRabbitEntity) {
                             this.setAnimation("animation.oceanized_rabbit.swallow");
                         }
-                        if ((Entity) this instanceof OceanizeRabbitEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_SWALLOW_P, 200);
+                        if ((Entity) this instanceof OceanizeRabbitEntity datEntSetI)
+                            datEntSetI.getEntityData().set(DATA_SWALLOW_P, 200);
                         if (!this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 15, 9, false, false));
                         CaerulaArborMod.queueServerWork(8, () -> {
@@ -320,7 +320,7 @@ public class OceanizeRabbitEntity extends SeaMonster {
             double vvv;
             ItemStack coral = ItemStack.EMPTY;
             if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
-                vvv = (Entity) this instanceof OceanizeRabbitEntity _datEntI ? _datEntI.getEntityData().get(DATA_VARIANT) : 0;
+                vvv = (Entity) this instanceof OceanizeRabbitEntity datEntI ? datEntI.getEntityData().get(DATA_VARIANT) : 0;
                 if (vvv == 0) {
                     coral = new ItemStack(Blocks.BRAIN_CORAL_FAN).copy();
                 } else if (vvv == 1) {
@@ -334,10 +334,10 @@ public class OceanizeRabbitEntity extends SeaMonster {
                 } else if (vvv == 5) {
                     coral = new ItemStack(CAItems.BLOODY_RECORD.get()).copy();
                 }
-                if (world instanceof ServerLevel _level) {
-                    ItemEntity entityToSpawn = new ItemEntity(_level, this.getX(), this.getY(), this.getZ(), coral);
+                if (world instanceof ServerLevel level) {
+                    ItemEntity entityToSpawn = new ItemEntity(level, this.getX(), this.getY(), this.getZ(), coral);
                     entityToSpawn.setPickUpDelay(10);
-                    _level.addFreshEntity(entityToSpawn);
+                    level.addFreshEntity(entityToSpawn);
                 }
             }
         }

@@ -258,8 +258,8 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
         double dist;
         if (this.isAlive()) {
             enemy = this.getTarget();
-            sklp1 = (Entity) this instanceof OceanizedEvokerEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP_1) : 0;
-            sklp2 = (Entity) this instanceof OceanizedEvokerEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP_2) : 0;
+            sklp1 = (Entity) this instanceof OceanizedEvokerEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP_1) : 0;
+            sklp2 = (Entity) this instanceof OceanizedEvokerEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP_2) : 0;
             if (sklp1 <= 0) {
                 if (!(enemy == null) && enemy.isAlive()) {
                     dist = Math.round(distanceTo(enemy));
@@ -267,8 +267,8 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
                         if (this instanceof OceanizedEvokerEntity) {
                             this.setAnimation("animation.oceanized_evoker.spell");
                         }
-                        if ((Entity) this instanceof OceanizedEvokerEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_SKILLP_1, 100);
+                        if ((Entity) this instanceof OceanizedEvokerEntity datEntSetI)
+                            datEntSetI.getEntityData().set(DATA_SKILLP_1, 100);
                         if (!this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 40, 9, false, false));
                         if (dist > 6) {
@@ -313,8 +313,8 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
                                                 }
                                             }
                                             if (fy <= 114513) {
-                                                if (world instanceof ServerLevel _level) {
-                                                    Entity entityToSpawn = EntityType.EVOKER_FANGS.spawn(_level, BlockPos.containing(tx, fy, tz), MobSpawnType.MOB_SUMMONED);
+                                                if (world instanceof ServerLevel level) {
+                                                    Entity entityToSpawn = EntityType.EVOKER_FANGS.spawn(level, BlockPos.containing(tx, fy, tz), MobSpawnType.MOB_SUMMONED);
                                                     if (entityToSpawn != null) {
                                                         entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                                                     }
@@ -334,11 +334,11 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
                     }
                 }
             } else {
-                if ((Entity) this instanceof OceanizedEvokerEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_SKILLP_1, (int) (sklp1 - 1));
+                if ((Entity) this instanceof OceanizedEvokerEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_SKILLP_1, (int) (sklp1 - 1));
                 if (sklp1 == 20) {
-                    if (world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.EVOKER_PREPARE_ATTACK, SoundSource.NEUTRAL, 1, 1);
+                    if (world instanceof Level level) {
+                        level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.EVOKER_PREPARE_ATTACK, SoundSource.NEUTRAL, 1, 1);
                     }
                 }
             }
@@ -347,11 +347,11 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
                     if (this instanceof OceanizedEvokerEntity) {
                         this.setAnimation("animation.oceanized_evoker.spell");
                     }
-                    if (world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.EVOKER_CAST_SPELL, SoundSource.NEUTRAL, 1, 1);
+                    if (world instanceof Level level) {
+                        level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.EVOKER_CAST_SPELL, SoundSource.NEUTRAL, 1, 1);
                     }
-                    if ((Entity) this instanceof OceanizedEvokerEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_SKILLP_2, 300);
+                    if ((Entity) this instanceof OceanizedEvokerEntity datEntSetI)
+                        datEntSetI.getEntityData().set(DATA_SKILLP_2, 300);
                     if (!this.level().isClientSide())
                         this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 40, 9, false, false));
                     assert Boolean.TRUE; //#dbg:EvokerSkill:evo_skl_2
@@ -374,50 +374,50 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
                                             rd = Mth.nextDouble(RandomSource.create(), 0, 1.025);
                                         }
                                         if (rd < 0.5) {
-                                            if (world instanceof ServerLevel _level) {
-                                                Entity entityToSpawn = CAEntities.OCEANIZED_VEX.get().spawn(_level, BlockPos.containing(tx, y + 1.5, tz), MobSpawnType.MOB_SUMMONED);
+                                            if (world instanceof ServerLevel level) {
+                                                Entity entityToSpawn = CAEntities.OCEANIZED_VEX.get().spawn(level, BlockPos.containing(tx, y + 1.5, tz), MobSpawnType.MOB_SUMMONED);
                                                 if (entityToSpawn != null) {
                                                     entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                                                 }
                                             }
                                         } else if (rd < 0.65) {
-                                            if (world instanceof ServerLevel _level) {
-                                                Entity entityToSpawn = CAEntities.FLY_FISH.get().spawn(_level, BlockPos.containing(tx, y + 1.5, tz), MobSpawnType.MOB_SUMMONED);
+                                            if (world instanceof ServerLevel level) {
+                                                Entity entityToSpawn = CAEntities.FLY_FISH.get().spawn(level, BlockPos.containing(tx, y + 1.5, tz), MobSpawnType.MOB_SUMMONED);
                                                 if (entityToSpawn != null) {
                                                     entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                                                 }
                                             }
                                         } else if (rd < 0.8) {
-                                            if (world instanceof ServerLevel _level) {
-                                                Entity entityToSpawn = CAEntities.OCEANIZED_SPIDER.get().spawn(_level, BlockPos.containing(tx, y + 1.5, tz), MobSpawnType.MOB_SUMMONED);
+                                            if (world instanceof ServerLevel level) {
+                                                Entity entityToSpawn = CAEntities.OCEANIZED_SPIDER.get().spawn(level, BlockPos.containing(tx, y + 1.5, tz), MobSpawnType.MOB_SUMMONED);
                                                 if (entityToSpawn != null) {
                                                     entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                                                 }
                                             }
                                         } else if (rd < 0.95) {
-                                            if (world instanceof ServerLevel _level) {
-                                                Entity entityToSpawn = CAEntities.FLOATER_PROKARYOTE.get().spawn(_level, BlockPos.containing(tx, y + 1.5, tz), MobSpawnType.MOB_SUMMONED);
+                                            if (world instanceof ServerLevel level) {
+                                                Entity entityToSpawn = CAEntities.FLOATER_PROKARYOTE.get().spawn(level, BlockPos.containing(tx, y + 1.5, tz), MobSpawnType.MOB_SUMMONED);
                                                 if (entityToSpawn != null) {
                                                     entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                                                 }
                                             }
                                         } else if (rd < 1) {
-                                            if (world instanceof ServerLevel _level) {
-                                                Entity entityToSpawn = CAEntities.FLEE_FISH.get().spawn(_level, BlockPos.containing(tx, y + 1.5, tz), MobSpawnType.MOB_SUMMONED);
+                                            if (world instanceof ServerLevel level) {
+                                                Entity entityToSpawn = CAEntities.FLEE_FISH.get().spawn(level, BlockPos.containing(tx, y + 1.5, tz), MobSpawnType.MOB_SUMMONED);
                                                 if (entityToSpawn != null) {
                                                     entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                                                 }
                                             }
                                         } else {
-                                            if (world instanceof ServerLevel _level) {
-                                                Entity entityToSpawn = CAEntities.IZUMIK_OFFSPRING.get().spawn(_level, BlockPos.containing(tx, y + 1.5, tz), MobSpawnType.MOB_SUMMONED);
+                                            if (world instanceof ServerLevel level) {
+                                                Entity entityToSpawn = CAEntities.IZUMIK_OFFSPRING.get().spawn(level, BlockPos.containing(tx, y + 1.5, tz), MobSpawnType.MOB_SUMMONED);
                                                 if (entityToSpawn != null) {
                                                     entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                                                 }
                                             }
                                         }
-                                        if (world instanceof ServerLevel _level)
-                                            _level.sendParticles(CAParticles.EDERMAN_PTC.get(), tx, (y + 2), tz, 16, 0.5, 0.5, 0.5, 0.15);
+                                        if (world instanceof ServerLevel level)
+                                            level.sendParticles(CAParticles.EDERMAN_PTC.get(), tx, (y + 2), tz, 16, 0.5, 0.5, 0.5, 0.15);
                                     }
                                 }
                                 final int tick2 = ticks;
@@ -431,11 +431,11 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
                     });
                 }
             } else {
-                if ((Entity) this instanceof OceanizedEvokerEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_SKILLP_2, (int) (sklp2 - 1));
+                if ((Entity) this instanceof OceanizedEvokerEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_SKILLP_2, (int) (sklp2 - 1));
                 if (sklp2 == 20) {
-                    if (world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.EVOKER_PREPARE_SUMMON, SoundSource.NEUTRAL, 1, 1);
+                    if (world instanceof Level level) {
+                        level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.EVOKER_PREPARE_SUMMON, SoundSource.NEUTRAL, 1, 1);
                     }
                 }
             }
@@ -477,8 +477,8 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
                 }
             }
             if (fy <= 114513) {
-                if (world instanceof ServerLevel _level) {
-                    Entity entityToSpawn = EntityType.EVOKER_FANGS.spawn(_level, BlockPos.containing(vx, fy, vz), MobSpawnType.MOB_SUMMONED);
+                if (world instanceof ServerLevel level) {
+                    Entity entityToSpawn = EntityType.EVOKER_FANGS.spawn(level, BlockPos.containing(vx, fy, vz), MobSpawnType.MOB_SUMMONED);
                     if (entityToSpawn != null) {
                         entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                     }

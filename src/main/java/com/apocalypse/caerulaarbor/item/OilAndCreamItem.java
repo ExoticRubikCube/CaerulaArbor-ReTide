@@ -1,10 +1,9 @@
 package com.apocalypse.caerulaarbor.item;
 
-import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
-import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.registries.Registries;
@@ -55,41 +54,39 @@ public class OilAndCreamItem extends Item {
 		double x = entity.getX();
 		double y = entity.getY();
 		double z = entity.getZ();
-        if (entity != null) {
-            {
-                double _setval = 0;
-                ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                    capability.disoclusion = _setval;
-                    capability.syncPlayerVariables(entity);
-                });
-            }
-            {
-                double _setval = Math.max((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_light - 30, 0);
-                ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                    capability.player_light = _setval;
-                    capability.syncPlayerVariables(entity);
-                });
-            }
-            ((Entity) entity).hurt(new DamageSource(((LevelAccessor) world).registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.IN_FIRE)), 12);
-            if (!entity.level().isClientSide()) {
-                entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 2));
-                entity.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 100, 0));
-                entity.addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 200, 1));
-                entity.addEffect(new MobEffectInstance(MobEffects.HUNGER, 1200, 0));
-            }
-            entity.setSecondsOnFire(8);
-            if ((LevelAccessor) world instanceof ServerLevel _level) {
-                ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, new ItemStack(Items.STICK));
-                entityToSpawn.setPickUpDelay(10);
-                _level.addFreshEntity(entityToSpawn);
-            }
-            if ((Entity) entity instanceof ServerPlayer _player) {
-                Advancement _adv = _player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "but_i_refuse"));
-                AdvancementProgress _ap = _player.getAdvancements().getOrStartProgress(_adv);
-                if (!_ap.isDone()) {
-                    for (String criteria : _ap.getRemainingCriteria())
-                        _player.getAdvancements().award(_adv, criteria);
-                }
+        {
+            double setval = 0;
+            ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                capability.disoclusion = setval;
+                capability.syncPlayerVariables(entity);
+            });
+        }
+        {
+            double setval = Math.max((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_light - 30, 0);
+            ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                capability.player_light = setval;
+                capability.syncPlayerVariables(entity);
+            });
+        }
+        ((Entity) entity).hurt(new DamageSource(((LevelAccessor) world).registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.IN_FIRE)), 12);
+        if (!entity.level().isClientSide()) {
+            entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 200, 2));
+            entity.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 100, 0));
+            entity.addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 200, 1));
+            entity.addEffect(new MobEffectInstance(MobEffects.HUNGER, 1200, 0));
+        }
+        entity.setSecondsOnFire(8);
+        if ((LevelAccessor) world instanceof ServerLevel level) {
+            ItemEntity entityToSpawn = new ItemEntity(level, x, y, z, new ItemStack(Items.STICK));
+            entityToSpawn.setPickUpDelay(10);
+            level.addFreshEntity(entityToSpawn);
+        }
+        if ((Entity) entity instanceof ServerPlayer player) {
+            Advancement adv = player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "but_i_refuse"));
+            AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
+            if (!ap.isDone()) {
+                for (String criteria : ap.getRemainingCriteria())
+                    player.getAdvancements().award(adv, criteria);
             }
         }
         if (itemstack.isEmpty()) {

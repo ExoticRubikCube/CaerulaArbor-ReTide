@@ -68,8 +68,8 @@ public class CrisisTableTileEntity extends RandomizableContainerBlockEntity impl
 				event.getController().forceAnimationReset();
 			event.getController().setAnimation(RawAnimation.begin().thenPlay(animationprocedure));
 			if (event.getController().getAnimationState() == AnimationController.State.STOPPED) {
-				if (this.getBlockState().getBlock().getStateDefinition().getProperty("animation") instanceof IntegerProperty _integerProp)
-					level.setBlock(this.getBlockPos(), this.getBlockState().setValue(_integerProp, 0), 3);
+				if (this.getBlockState().getBlock().getStateDefinition().getProperty("animation") instanceof IntegerProperty integerProp)
+					level.setBlock(this.getBlockPos(), this.getBlockState().setValue(integerProp, 0), 3);
 				event.getController().forceAnimationReset();
 			}
 		} else if (animationprocedure.equals("0")) {

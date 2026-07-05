@@ -335,24 +335,24 @@ public class IzumikEntity extends SeaMonster {
     public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
         super.mobInteract(sourceentity, hand);
         Entity entity = this;
-        if ((entity instanceof IzumikEntity _datEntI ? _datEntI.getEntityData().get(DATA_PHASE) : 0) == 0) {
+        if ((entity instanceof IzumikEntity datEntI ? datEntI.getEntityData().get(DATA_PHASE) : 0) == 0) {
             if (new Object() {
-                public boolean checkGamemode(Entity _ent) {
-                    if (_ent instanceof ServerPlayer _serverPlayer) {
-                        return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                    } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                        return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                public boolean checkGamemode(Entity ent) {
+                    if (ent instanceof ServerPlayer serverPlayer) {
+                        return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                    } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                        return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+                                && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                     }
                     return false;
                 }
             }.checkGamemode((Entity) sourceentity)) {
-                if ((Entity) sourceentity instanceof Player _player && !_player.level().isClientSide())
-                    _player.displayClientMessage(Component.literal((Component.translatable("izumik.fastlearn").getString())), false);
-                if ((Entity) sourceentity instanceof Player _player && !_player.level().isClientSide())
-                    _player.displayClientMessage(Component.literal((Component.translatable("izumik.saying").getString())), false);
-                if (entity instanceof IzumikEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_GROWTH_P, 20);
+                if ((Entity) sourceentity instanceof Player player && !player.level().isClientSide())
+                    player.displayClientMessage(Component.literal((Component.translatable("izumik.fastlearn").getString())), false);
+                if ((Entity) sourceentity instanceof Player player && !player.level().isClientSide())
+                    player.displayClientMessage(Component.literal((Component.translatable("izumik.saying").getString())), false);
+                if (entity instanceof IzumikEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_GROWTH_P, 20);
             }
         }
         return InteractionResult.PASS;
@@ -401,17 +401,17 @@ public class IzumikEntity extends SeaMonster {
                 }
                 if (grow < 20) {
                     {
-                        final Vec3 _center = new Vec3(x, y, z);
-                        List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(14 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                        for (Entity entityiterator : _entfound) {
+                        final Vec3 center = new Vec3(x, y, z);
+                        List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(14 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                        for (Entity entityiterator : entfound) {
                             if (entityiterator instanceof IzumikOffspringEntity && distanceTo(entityiterator) <= 7) {
                                 if (!entityiterator.level().isClientSide())
                                     entityiterator.discard();
                                 this.getEntityData().set(DATA_GROWTH_P, (int) (grow + 1));
                                 this.getEntityData().set(DATA_SKILLP, (int) (sklp - 1));
-                                if (world instanceof ServerLevel _level)
-                                    _level.sendParticles(ParticleTypes.CLOUD, (entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()), 32, 0.6, 0.6, 0.6, 0.1);
-                                CaerulaArborMod.LOGGER.info(("Izumik absorb offspr and grow to " + Math.round(grow + 1)));
+                                if (world instanceof ServerLevel level)
+                                    level.sendParticles(ParticleTypes.CLOUD, (entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()), 32, 0.6, 0.6, 0.6, 0.1);
+                                CaerulaArborMod.LOGGER.info("Izumik absorb offspr and grow to " + Math.round(grow + 1));
                                 break;
                             }
                         }
@@ -426,11 +426,11 @@ public class IzumikEntity extends SeaMonster {
                         this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 300, 1, false, false));
                     this.getEntityData().set(DATA_SKILLP, 300);
                     {
-                        final Vec3 _center = new Vec3(x, y, z);
-                        List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(72 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                        for (Entity entityiterator : _entfound) {
-                            if (entityiterator instanceof Player _player && !_player.level().isClientSide())
-                                _player.displayClientMessage(Component.literal((Component.translatable("izumik.saying").getString())), false);
+                        final Vec3 center = new Vec3(x, y, z);
+                        List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(72 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                        for (Entity entityiterator : entfound) {
+                            if (entityiterator instanceof Player player && !player.level().isClientSide())
+                                player.displayClientMessage(Component.literal((Component.translatable("izumik.saying").getString())), false);
                         }
                     }
                 }
@@ -444,8 +444,8 @@ public class IzumikEntity extends SeaMonster {
                     CaerulaArborMod.queueServerWork(25, () -> {
                         double rate;
                         double range;
-                        if (world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), CASounds.IZUMIK_LEARN.get(), SoundSource.HOSTILE, (float) 2.5, 1);
+                        if (world instanceof Level level) {
+                            level.playSound(null, BlockPos.containing(x, y, z), CASounds.IZUMIK_LEARN.get(), SoundSource.HOSTILE, (float) 2.5, 1);
                         }
                         rate = 1;
                         range = 16;
@@ -454,13 +454,13 @@ public class IzumikEntity extends SeaMonster {
                             range = 24;
                         }
                         for (int index0 = 0; index0 < 120; index0++) {
-                            if (world instanceof ServerLevel _level)
-                                _level.sendParticles(ParticleTypes.END_ROD, (x + range * Math.sin(Math.toRadians(index0 * 3))), (y + 0.5), (z + range * Math.cos(Math.toRadians(index0 * 3))), 3, 0.15, 0.5, 0.15, 0.15);
+                            if (world instanceof ServerLevel level)
+                                level.sendParticles(ParticleTypes.END_ROD, (x + range * Math.sin(Math.toRadians(index0 * 3))), (y + 0.5), (z + range * Math.cos(Math.toRadians(index0 * 3))), 3, 0.15, 0.5, 0.15, 0.15);
                         }
                         {
-                            final Vec3 _center = new Vec3(x, y, z);
-                            List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate((2 * range) / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                            for (Entity entityiterator : _entfound) {
+                            final Vec3 center = new Vec3(x, y, z);
+                            List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate((2 * range) / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                            for (Entity entityiterator : entfound) {
                                 if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
                                     if (!(entityiterator == this.getTarget())) {
                                         continue;
@@ -487,11 +487,11 @@ public class IzumikEntity extends SeaMonster {
                         this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 300, 1, false, false));
                     this.getEntityData().set(DATA_SKILLP, 300);
                     {
-                        final Vec3 _center = new Vec3(x, y, z);
-                        List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(72 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                        for (Entity entityiterator : _entfound) {
-                            if (entityiterator instanceof Player _player && !_player.level().isClientSide())
-                                _player.displayClientMessage(Component.literal((Component.translatable("izumik.saying").getString())), false);
+                        final Vec3 center = new Vec3(x, y, z);
+                        List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(72 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                        for (Entity entityiterator : entfound) {
+                            if (entityiterator instanceof Player player && !player.level().isClientSide())
+                                player.displayClientMessage(Component.literal((Component.translatable("izumik.saying").getString())), false);
                         }
                     }
                 }
@@ -514,14 +514,14 @@ public class IzumikEntity extends SeaMonster {
                             }
                         }
                         if (!Double.isNaN(validY)) {
-                            if (world instanceof ServerLevel _level) {
-                                Entity entityToSpawn = CAEntities.IZUMIK_OFFSPRING.get().spawn(_level, BlockPos.containing(tgtX, validY, tgtZ), MobSpawnType.MOB_SUMMONED);
+                            if (world instanceof ServerLevel level) {
+                                Entity entityToSpawn = CAEntities.IZUMIK_OFFSPRING.get().spawn(level, BlockPos.containing(tgtX, validY, tgtZ), MobSpawnType.MOB_SUMMONED);
                                 if (entityToSpawn != null) {
                                     entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                                 }
                             }
-                            if (world instanceof ServerLevel _level)
-                                _level.sendParticles(ParticleTypes.CLOUD, tgtX, validY, tgtZ, 32, 0.5, 0.5, 0.5, 0.15);
+                            if (world instanceof ServerLevel level)
+                                level.sendParticles(ParticleTypes.CLOUD, tgtX, validY, tgtZ, 32, 0.5, 0.5, 0.5, 0.15);
                         }
                     }
                     this.getEntityData().set(DATA_WAVE, (int) (waves - 1));
@@ -551,8 +551,8 @@ public class IzumikEntity extends SeaMonster {
                                                     ? this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getBaseValue()
                                                     : 0) + 1, (this.getMaxHealth()) * 0.05));
                                 double range;
-                                if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), CASounds.IZUMIK_SHOCK.get(), SoundSource.HOSTILE, (float) 3.5, 1);
+                                if (world instanceof Level level) {
+                                    level.playSound(null, BlockPos.containing(x, y, z), CASounds.IZUMIK_SHOCK.get(), SoundSource.HOSTILE, (float) 3.5, 1);
                                 }
                                 range = 11;
                                 if (MapVariables.get(world).strategy_grow >= 4) {
@@ -669,8 +669,8 @@ public class IzumikEntity extends SeaMonster {
         }
 
         for (int index0 = 0; index0 < 120; index0++) {
-            if (world instanceof ServerLevel _level)
-                _level.sendParticles(ParticleTypes.END_ROD, (x + r * Math.sin(Math.toRadians(index0 * 3))), (y + 0.5), (z + r * Math.cos(Math.toRadians(index0 * 3))), 3, 0.15, 0.5, 0.15, 0.15);
+            if (world instanceof ServerLevel level)
+                level.sendParticles(ParticleTypes.END_ROD, (x + r * Math.sin(Math.toRadians(index0 * 3))), (y + 0.5), (z + r * Math.cos(Math.toRadians(index0 * 3))), 3, 0.15, 0.5, 0.15, 0.15);
         }
 
         final Vec3 center = new Vec3(x, y, z);
@@ -688,12 +688,12 @@ public class IzumikEntity extends SeaMonster {
                 continue;
             }
             if (new Object() {
-                public boolean checkGamemode(Entity _ent) {
-                    if (_ent instanceof ServerPlayer _serverPlayer) {
-                        return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                    } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                        return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                public boolean checkGamemode(Entity ent) {
+                    if (ent instanceof ServerPlayer serverPlayer) {
+                        return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                    } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                        return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+                                && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                     }
                     return false;
                 }
@@ -704,11 +704,11 @@ public class IzumikEntity extends SeaMonster {
                 entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "izumik_skill"))), this),
                         (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * rate));
 
-                if (!(entityiterator instanceof LivingEntity _livEnt11 && _livEnt11.hasEffect(CAMobEffects.IZUMIK_SHOCK.get()))) {
+                if (!(entityiterator instanceof LivingEntity livEnt11 && livEnt11.hasEffect(CAMobEffects.IZUMIK_SHOCK.get()))) {
                     if (entityiterator instanceof LivingEntity && !this.level().isClientSide())
                         this.addEffect(new MobEffectInstance(CAMobEffects.IZUMIK_SHOCK.get(), 160, 0, false, false));
                 }
-                if (!(entityiterator instanceof LivingEntity _livEnt13 && _livEnt13.hasEffect(CAMobEffects.DIZZY.get()))) {
+                if (!(entityiterator instanceof LivingEntity livEnt13 && livEnt13.hasEffect(CAMobEffects.DIZZY.get()))) {
                     if (entityiterator instanceof LivingEntity && !this.level().isClientSide())
                         this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 160, 0, false, false));
                 }
@@ -721,16 +721,16 @@ public class IzumikEntity extends SeaMonster {
                 if ((this.getEntityData().get(DATA_PHASE) >= 2)) {
                     if (Math.random() < 0.33) {
                         if (MapVariables.get(world).strategy_grow >= 4) {
-                            if (entityiterator instanceof LivingEntity _livingEntity20 && _livingEntity20.getAttributes().hasAttribute(CAAttributes.NUMB.get()))
-                                _livingEntity20.getAttribute(CAAttributes.NUMB.get())
-                                        .setBaseValue(((entityiterator instanceof LivingEntity _livingEntity19 && _livingEntity19.getAttributes().hasAttribute(CAAttributes.NUMB.get())
-                                                ? _livingEntity19.getAttribute(CAAttributes.NUMB.get()).getBaseValue()
+                            if (entityiterator instanceof LivingEntity livingEntity20 && livingEntity20.getAttributes().hasAttribute(CAAttributes.NUMB.get()))
+                                livingEntity20.getAttribute(CAAttributes.NUMB.get())
+                                        .setBaseValue(((entityiterator instanceof LivingEntity livingEntity19 && livingEntity19.getAttributes().hasAttribute(CAAttributes.NUMB.get())
+                                                ? livingEntity19.getAttribute(CAAttributes.NUMB.get()).getBaseValue()
                                                 : 0) + 2));
                         } else {
-                            if (entityiterator instanceof LivingEntity _livingEntity22 && _livingEntity22.getAttributes().hasAttribute(CAAttributes.NUMB.get()))
-                                _livingEntity22.getAttribute(CAAttributes.NUMB.get())
-                                        .setBaseValue(((entityiterator instanceof LivingEntity _livingEntity21 && _livingEntity21.getAttributes().hasAttribute(CAAttributes.NUMB.get())
-                                                ? _livingEntity21.getAttribute(CAAttributes.NUMB.get()).getBaseValue()
+                            if (entityiterator instanceof LivingEntity livingEntity22 && livingEntity22.getAttributes().hasAttribute(CAAttributes.NUMB.get()))
+                                livingEntity22.getAttribute(CAAttributes.NUMB.get())
+                                        .setBaseValue(((entityiterator instanceof LivingEntity livingEntity21 && livingEntity21.getAttributes().hasAttribute(CAAttributes.NUMB.get())
+                                                ? livingEntity21.getAttribute(CAAttributes.NUMB.get()).getBaseValue()
                                                 : 0) + 1));
                         }
                     }
@@ -811,21 +811,21 @@ public class IzumikEntity extends SeaMonster {
             double z = this.getZ();
             if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
                 if (!world.isClientSide() && world.getServer() != null) {
-                    BlockPos _bpLootTblWorld = BlockPos.containing(x, y, z);
+                    BlockPos bpLootTblWorld = BlockPos.containing(x, y, z);
                     for (ItemStack itemstackiterator : world.getServer().getLootData().getLootTable(new ResourceLocation(CaerulaArborMod.MODID, "gameplay/relic_izumik"))
-                            .getRandomItems(new LootParams.Builder((ServerLevel) world).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(_bpLootTblWorld)).withParameter(LootContextParams.BLOCK_STATE, world.getBlockState(_bpLootTblWorld))
-                                    .withOptionalParameter(LootContextParams.BLOCK_ENTITY, world.getBlockEntity(_bpLootTblWorld)).create(LootContextParamSets.EMPTY))) {
-                        if (world instanceof ServerLevel _level) {
-                            ItemEntity entityToSpawn = new ItemEntity(_level, x, y, z, itemstackiterator);
+                            .getRandomItems(new LootParams.Builder((ServerLevel) world).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(bpLootTblWorld)).withParameter(LootContextParams.BLOCK_STATE, world.getBlockState(bpLootTblWorld))
+                                    .withOptionalParameter(LootContextParams.BLOCK_ENTITY, world.getBlockEntity(bpLootTblWorld)).create(LootContextParamSets.EMPTY))) {
+                        if (world instanceof ServerLevel level) {
+                            ItemEntity entityToSpawn = new ItemEntity(level, x, y, z, itemstackiterator);
                             entityToSpawn.setPickUpDelay(10);
                             entityToSpawn.setUnlimitedLifetime();
-                            _level.addFreshEntity(entityToSpawn);
+                            level.addFreshEntity(entityToSpawn);
                         }
                     }
                 }
                 for (int index0 = 0; index0 < 128; index0++) {
-                    if (world instanceof ServerLevel _level)
-                        _level.addFreshEntity(new ExperienceOrb(_level, (x + Mth.nextDouble(RandomSource.create(), -1, 1)), y, (z + Mth.nextDouble(RandomSource.create(), -1, 1)), Mth.nextInt(RandomSource.create(), 16, 64)));
+                    if (world instanceof ServerLevel level)
+                        level.addFreshEntity(new ExperienceOrb(level, (x + Mth.nextDouble(RandomSource.create(), -1, 1)), y, (z + Mth.nextDouble(RandomSource.create(), -1, 1)), Mth.nextInt(RandomSource.create(), 16, 64)));
                 }
             }
         }

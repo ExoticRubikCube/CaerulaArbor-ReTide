@@ -178,18 +178,18 @@ public class NucleicMaleficentEntity extends SeaMonster {
         double y = this.getY();
         double z = this.getZ();
         double angle;
-        if (this.getTarget() != null && ((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null).isAlive()) {
-            if ((Entity) this instanceof Mob _mobEnt4 && _mobEnt4.isAggressive() && this.isAlive() && tickCount % 20 == 0) {
+        if (this.getTarget() != null && ((Entity) this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null).isAlive()) {
+            if ((Entity) this instanceof Mob mobEnt4 && mobEnt4.isAggressive() && this.isAlive() && tickCount % 20 == 0) {
                 for (int index0 = 0; index0 < 120; index0++) {
                     angle = Mth.nextDouble(RandomSource.create(), 0, 6.283);
-                    if (world instanceof ServerLevel _level)
-                        _level.sendParticles(ParticleTypes.ELECTRIC_SPARK, (x + 5 * Math.sin(angle)), (y + 0.33), (z + 5 * Math.cos(angle)), 3, 0.1, 0.1, 0.1, 0.2);
+                    if (world instanceof ServerLevel level)
+                        level.sendParticles(ParticleTypes.ELECTRIC_SPARK, (x + 5 * Math.sin(angle)), (y + 0.33), (z + 5 * Math.cos(angle)), 3, 0.1, 0.1, 0.1, 0.2);
                 }
                 {
-                    final Vec3 _center = new Vec3(x, y, z);
-                    List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(10 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                    for (Entity entityiterator : _entfound) {
-                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring"))) && !(entityiterator == ((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null))) {
+                    final Vec3 center = new Vec3(x, y, z);
+                    List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(10 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                    for (Entity entityiterator : entfound) {
+                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring"))) && !(entityiterator == ((Entity) this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null))) {
                             continue;
                         }
                         if ((entityiterator != null ? distanceTo(entityiterator) : -1) < 5) {
@@ -223,12 +223,12 @@ public class NucleicMaleficentEntity extends SeaMonster {
                                 hardness = block.getDestroySpeed(world, BlockPos.containing(0, 0, 0));
                                 if (hardness <= 5 && hardness >= 0 && world.getBlockFloorHeight(BlockPos.containing(x + dx, y + dy, z + dz)) > 0 || block.getBlock() == CABlocks.WHITE_CHITIN_BLOCK.get()) {
                                     {
-                                        BlockPos _pos = BlockPos.containing(x + dx, y + dy, z + dz);
-                                        Block.dropResources(world.getBlockState(_pos), world, BlockPos.containing(x, y, z), null);
-                                        world.destroyBlock(_pos, false);
+                                        BlockPos pos = BlockPos.containing(x + dx, y + dy, z + dz);
+                                        Block.dropResources(world.getBlockState(pos), world, BlockPos.containing(x, y, z), null);
+                                        world.destroyBlock(pos, false);
                                     }
-                                    if (world instanceof Level _level)
-                                        _level.updateNeighborsAt(BlockPos.containing(x + dx, y + dy, z + dz), _level.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz)).getBlock());
+                                    if (world instanceof Level level)
+                                        level.updateNeighborsAt(BlockPos.containing(x + dx, y + dy, z + dz), level.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz)).getBlock());
                                     once = true;
                                     if (block.getBlock() == CABlocks.WHITE_CHITIN_BLOCK.get()) {
                                         lose = lose + 0.1;
@@ -249,18 +249,18 @@ public class NucleicMaleficentEntity extends SeaMonster {
                         dx = dx + 1;
                     }
                     if (once) {
-                        if (world instanceof Level _level) {
-                            if (!_level.isClientSide()) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.WITHER_BREAK_BLOCK, SoundSource.NEUTRAL, 1, 1);
+                        if (world instanceof Level level) {
+                            if (!level.isClientSide()) {
+                                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.WITHER_BREAK_BLOCK, SoundSource.NEUTRAL, 1, 1);
                             } else {
-                                _level.playLocalSound(x, y, z, SoundEvents.WITHER_BREAK_BLOCK, SoundSource.NEUTRAL, 1, 1, false);
+                                level.playLocalSound(x, y, z, SoundEvents.WITHER_BREAK_BLOCK, SoundSource.NEUTRAL, 1, 1, false);
                             }
                         }
                         ((Entity) this).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "sanity_break")))),
-                                (float) (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * lose));
+                                (float) (((Entity) this instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * lose));
                     }
                 }
-                if (!_mobEnt4.hasEffect(CAMobEffects.FAST_SWIM.get())) {
+                if (!mobEnt4.hasEffect(CAMobEffects.FAST_SWIM.get())) {
                     if (!this.level().isClientSide())
                         this.addEffect(new MobEffectInstance(CAMobEffects.FAST_SWIM.get(), 20, 2, false, false));
                 }

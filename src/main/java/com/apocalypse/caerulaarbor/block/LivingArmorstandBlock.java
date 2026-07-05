@@ -133,8 +133,8 @@ public class LivingArmorstandBlock extends BaseEntityBlock implements SimpleWate
         if (entity == null)
             return;
         if (entity instanceof Player) {
-            if ((LevelAccessor) world instanceof ServerLevel _level) {
-                Entity entityToSpawn = CAEntities.FLAMARINE_STATUE.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+            if ((LevelAccessor) world instanceof ServerLevel level) {
+                Entity entityToSpawn = CAEntities.FLAMARINE_STATUE.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn != null) {
                     entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
                 }
@@ -164,16 +164,16 @@ public class LivingArmorstandBlock extends BaseEntityBlock implements SimpleWate
 	}
 
 	private void formlivingArmor(LevelAccessor world, double x, double y, double z) {
-		if (world instanceof ServerLevel _level) {
-			Entity entityToSpawn = CAEntities.FLAMARINE_STATUE.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+		if (world instanceof ServerLevel level) {
+			Entity entityToSpawn = CAEntities.FLAMARINE_STATUE.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
 			if (entityToSpawn != null) {
 				entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
 			}
 		}
 		{
-			BlockPos _pos = BlockPos.containing(x, y, z);
-			Block.dropResources(world.getBlockState(_pos), world, BlockPos.containing(x, y, z), null);
-			world.destroyBlock(_pos, false);
+			BlockPos blockPos = BlockPos.containing(x, y, z);
+			Block.dropResources(world.getBlockState(blockPos), world, BlockPos.containing(x, y, z), null);
+			world.destroyBlock(blockPos, false);
 		}
 	}
 }

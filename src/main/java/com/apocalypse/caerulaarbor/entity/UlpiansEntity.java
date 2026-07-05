@@ -264,28 +264,28 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
         LevelAccessor world = this.level();
         double bns;
         double perc;
-        bns = (Entity) this instanceof UlpiansEntity _datEntI ? _datEntI.getEntityData().get(DATA_BONUS) : 0;
+        bns = (Entity) this instanceof UlpiansEntity datEntI ? datEntI.getEntityData().get(DATA_BONUS) : 0;
         if (bns < 10) {
-            if ((Entity) this instanceof UlpiansEntity _datEntSetI)
-                _datEntSetI.getEntityData().set(DATA_BONUS, (int) (bns + 1));
+            if ((Entity) this instanceof UlpiansEntity datEntSetI)
+                datEntSetI.getEntityData().set(DATA_BONUS, (int) (bns + 1));
             {
-                final Vec3 _center = new Vec3(this.getX(), this.getY(), this.getZ());
-                List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(48 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                for (Entity entityiterator : _entfound) {
+                final Vec3 center = new Vec3(this.getX(), this.getY(), this.getZ());
+                List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(48 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                for (Entity entityiterator : entfound) {
                     if (!(entityiterator instanceof LivingEntity)) {
                         continue;
                     }
                     if (entityiterator.isAlive()) {
                         if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunters")))) {
-                            perc = (entityiterator instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) / (entityiterator instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1);
-                            if (entityiterator instanceof LivingEntity _livingEntity8 && _livingEntity8.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
-                                _livingEntity8.getAttribute(Attributes.MAX_HEALTH).setBaseValue(
-                                        ((entityiterator instanceof LivingEntity _livingEntity7 && _livingEntity7.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? _livingEntity7.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0) + 10));
-                            if (entityiterator instanceof LivingEntity _entity)
-                                _entity.setHealth((float) ((entityiterator instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * perc));
-                            if (entityiterator instanceof LivingEntity _livingEntity12 && _livingEntity12.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
-                                _livingEntity12.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
-                                        ((entityiterator instanceof LivingEntity _livingEntity11 && _livingEntity11.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity11.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0)
+                            perc = (entityiterator instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) / (entityiterator instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1);
+                            if (entityiterator instanceof LivingEntity livingEntity8 && livingEntity8.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
+                                livingEntity8.getAttribute(Attributes.MAX_HEALTH).setBaseValue(
+                                        ((entityiterator instanceof LivingEntity livingEntity7 && livingEntity7.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? livingEntity7.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0) + 10));
+                            if (entityiterator instanceof LivingEntity livingEntity)
+                                livingEntity.setHealth((float) ((entityiterator instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * perc));
+                            if (entityiterator instanceof LivingEntity livingEntity12 && livingEntity12.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
+                                livingEntity12.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
+                                        ((entityiterator instanceof LivingEntity livingEntity11 && livingEntity11.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity11.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0)
                                                 + 2));
                         }
                     }
@@ -306,35 +306,35 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
         double dura;
         double skillp2;
         if (this.isAlive()) {
-            sklp1 = (Entity) this instanceof UlpiansEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP_1) : 0;
-            skillp2 = (Entity) this instanceof UlpiansEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP_2) : 0;
-            dura = (Entity) this instanceof UlpiansEntity _datEntI ? _datEntI.getEntityData().get(DATA_DURATION) : 0;
-            enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+            sklp1 = (Entity) this instanceof UlpiansEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP_1) : 0;
+            skillp2 = (Entity) this instanceof UlpiansEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP_2) : 0;
+            dura = (Entity) this instanceof UlpiansEntity datEntI ? datEntI.getEntityData().get(DATA_DURATION) : 0;
+            enemy = (Entity) this instanceof Mob mobEnt ? mobEnt.getTarget() : null;
             if (dura > 0) {
-                if ((Entity) this instanceof UlpiansEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura - 1));
+                if ((Entity) this instanceof UlpiansEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura - 1));
             }
             if (sklp1 > 0) {
-                if ((Entity) this instanceof UlpiansEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_SKILLP_1, (int) (sklp1 - 1));
+                if ((Entity) this instanceof UlpiansEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_SKILLP_1, (int) (sklp1 - 1));
             } else {
                 if (!(enemy == null) && enemy.isAlive()) {
                     if (distanceTo(enemy) <= 3.5) {
                         if (this instanceof UlpiansEntity) {
                             this.setAnimation("animation.ulpians.pull");
                         }
-                        if ((Entity) this instanceof UlpiansEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_SKILLP_1, 120);
-                        if ((Entity) this instanceof UlpiansEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura + 40));
-                        if (world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), CASounds.ULPIANS_PUL_PRE.get(), SoundSource.NEUTRAL, (float) 2.2, 1);
+                        if ((Entity) this instanceof UlpiansEntity datEntSetI)
+                            datEntSetI.getEntityData().set(DATA_SKILLP_1, 120);
+                        if ((Entity) this instanceof UlpiansEntity datEntSetI)
+                            datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura + 40));
+                        if (world instanceof Level level) {
+                            level.playSound(null, BlockPos.containing(x, y, z), CASounds.ULPIANS_PUL_PRE.get(), SoundSource.NEUTRAL, (float) 2.2, 1);
                         }
                         ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY() + 1.6), (enemy.getZ())));
                         CaerulaArborMod.queueServerWork(13, () -> {
                             if (this.isAlive()) {
-                                if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), CASounds.ULPIANS_PULL_THROW.get(), SoundSource.NEUTRAL, 3, 1);
+                                if (world instanceof Level level) {
+                                    level.playSound(null, BlockPos.containing(x, y, z), CASounds.ULPIANS_PULL_THROW.get(), SoundSource.NEUTRAL, 3, 1);
                                 }
                             }
                         });
@@ -344,20 +344,20 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                                 double damage;
                                 double r;
                                 double d;
-                                enemy1 = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+                                enemy1 = (Entity) this instanceof Mob mobEnt ? mobEnt.getTarget() : null;
                                 r = 6;
                                 damage = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 2.7;
-                                if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(getX(), getY(), getZ()), CASounds.ULPIANS_PULL_HIT.get(), SoundSource.NEUTRAL, 3, 1);
+                                if (world instanceof Level level) {
+                                    level.playSound(null, BlockPos.containing(getX(), getY(), getZ()), CASounds.ULPIANS_PULL_HIT.get(), SoundSource.NEUTRAL, 3, 1);
                                 }
                                 {
-                                    final Vec3 _center = new Vec3((getX()), (getY()), (getZ()));
-                                    List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(12 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                                    for (Entity entityiterator : _entfound) {
+                                    final Vec3 center = new Vec3((getX()), (getY()), (getZ()));
+                                    List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(12 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                                    for (Entity entityiterator : entfound) {
                                         if (!(entityiterator instanceof LivingEntity)) {
                                             continue;
                                         }
-                                        if (entityiterator instanceof Player || (entityiterator instanceof TamableAnimal _tamEnt && _tamEnt.isTame())) {
+                                        if (entityiterator instanceof Player || (entityiterator instanceof TamableAnimal tamEnt && tamEnt.isTame())) {
                                             if (!(entityiterator == enemy1)) {
                                                 continue;
                                             }
@@ -385,19 +385,19 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                             if (this.isAlive()) {
                                 Entity enemy1;
                                 double r;
-                                enemy1 = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+                                enemy1 = (Entity) this instanceof Mob mobEnt ? mobEnt.getTarget() : null;
                                 r = 4.5;
                                 {
-                                    final Vec3 _center = new Vec3(x, y, z);
-                                    List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(9 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                                    for (Entity entityiterator : _entfound) {
+                                    final Vec3 center = new Vec3(x, y, z);
+                                    List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(9 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                                    for (Entity entityiterator : entfound) {
                                         if (!(entityiterator instanceof LivingEntity)) {
                                             continue;
                                         }
                                         if (!entityiterator.isAlive()) {
                                             continue;
                                         }
-                                        if (entityiterator instanceof Player || (entityiterator instanceof TamableAnimal _tamEnt && _tamEnt.isTame())) {
+                                        if (entityiterator instanceof Player || (entityiterator instanceof TamableAnimal tamEnt && tamEnt.isTame())) {
                                             if (!(entityiterator == enemy1)) {
                                                 continue;
                                             }
@@ -422,8 +422,8 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                         });
                         CaerulaArborMod.queueServerWork(26, () -> {
                             if (this.isAlive()) {
-                                if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), CASounds.ULPIANS_PULL_PULL.get(), SoundSource.NEUTRAL, (float) 2.5, 1);
+                                if (world instanceof Level level) {
+                                    level.playSound(null, BlockPos.containing(x, y, z), CASounds.ULPIANS_PULL_PULL.get(), SoundSource.NEUTRAL, (float) 2.5, 1);
                                 }
                             }
                         });
@@ -431,8 +431,8 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                 }
             }
             if (skillp2 > 0) {
-                if ((Entity) this instanceof UlpiansEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_SKILLP_2, (int) (skillp2 - 1));
+                if ((Entity) this instanceof UlpiansEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_SKILLP_2, (int) (skillp2 - 1));
             } else {
                 if (!(enemy == null) && enemy.isAlive()) {
                     if (distanceTo(enemy) <= 24) {
@@ -440,26 +440,26 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                             this.setAnimation("animation.ulpians.skill");
                         }
                         if (SpecterEntity.isSpecterAround(world, x, y, z)) {
-                            if ((Entity) this instanceof UlpiansEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_SKILLP_2, 820);
+                            if ((Entity) this instanceof UlpiansEntity datEntSetI)
+                                datEntSetI.getEntityData().set(DATA_SKILLP_2, 820);
                         } else {
-                            if ((Entity) this instanceof UlpiansEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_SKILLP_2, 900);
+                            if ((Entity) this instanceof UlpiansEntity datEntSetI)
+                                datEntSetI.getEntityData().set(DATA_SKILLP_2, 900);
                         }
-                        if ((Entity) this instanceof UlpiansEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura + 40));
-                        if (world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), CASounds.ULPIANS_PUL_PRE.get(), SoundSource.NEUTRAL, (float) 2.2, 1);
+                        if ((Entity) this instanceof UlpiansEntity datEntSetI)
+                            datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura + 40));
+                        if (world instanceof Level level) {
+                            level.playSound(null, BlockPos.containing(x, y, z), CASounds.ULPIANS_PUL_PRE.get(), SoundSource.NEUTRAL, (float) 2.2, 1);
                         }
                         ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY() + 1.6), (enemy.getZ())));
                         if (!this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 25, 9, false, false));
-                        if (world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), CASounds.ULPIANS_SKILL.get(), SoundSource.NEUTRAL, (float) 2.5, 1);
+                        if (world instanceof Level level) {
+                            level.playSound(null, BlockPos.containing(x, y, z), CASounds.ULPIANS_SKILL.get(), SoundSource.NEUTRAL, (float) 2.5, 1);
                         }
                         CaerulaArborMod.queueServerWork(16, () -> {
-                            if (world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), CASounds.ANCHOR_THROW.get(), SoundSource.NEUTRAL, (float) 2.2, 1);
+                            if (world instanceof Level level) {
+                                level.playSound(null, BlockPos.containing(x, y, z), CASounds.ANCHOR_THROW.get(), SoundSource.NEUTRAL, (float) 2.2, 1);
                             }
                         });
                         CaerulaArborMod.queueServerWork(22, () -> {
@@ -470,16 +470,15 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                                 double noeX;
                                 double nowY;
                                 double nowZ;
-                                perc = ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) / ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1);
+                                perc = ((Entity) this instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) / ((Entity) this instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1);
                                 if (!this.level().isClientSide())
                                     this.addEffect(new MobEffectInstance(CAMobEffects.PATH_TO_UNCOVER.get(), 500, 0, false, true));
-                                if ((Entity) this instanceof LivingEntity _entity)
-                                    _entity.setHealth((float) (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * perc));
-                                enemy1 = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+                                this.setHealth((float) (this.getMaxHealth() * perc));
+                                enemy1 = (Entity) this instanceof Mob mobEnt ? mobEnt.getTarget() : null;
                                 damage = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.5;
                                 if (!(enemy1 == null)) {
-                                    Entity _ent = this;
-                                    _ent.teleportTo((enemy1.getX()), (enemy1.getY()), (enemy1.getZ()));
+                                    Entity ent = this;
+                                    ent.teleportTo((enemy1.getX()), (enemy1.getY()), (enemy1.getZ()));
                                     if (enemy1 instanceof LivingEntity && !this.level().isClientSide())
                                         this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 120, 0, false, false));
                                     enemy1.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "anchor_smash"))), this), (float) damage);
@@ -488,13 +487,13 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                                 nowY = getY();
                                 nowZ = getZ();
                                 {
-                                    final Vec3 _center = new Vec3(noeX, nowY, nowZ);
-                                    List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(12 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                                    for (Entity entityiterator : _entfound) {
+                                    final Vec3 center = new Vec3(noeX, nowY, nowZ);
+                                    List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(12 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                                    for (Entity entityiterator : entfound) {
                                         if (!(entityiterator instanceof LivingEntity)) {
                                             continue;
                                         }
-                                        if (entityiterator instanceof Player || (entityiterator instanceof TamableAnimal _tamEnt && _tamEnt.isTame())) {
+                                        if (entityiterator instanceof Player || (entityiterator instanceof TamableAnimal tamEnt && tamEnt.isTame())) {
                                             continue;
                                         }
                                         if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "is_humanside")))) {
@@ -514,17 +513,14 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                                         }
                                     }
                                 }
-                                if ((Entity) this instanceof LivingEntity _entity)
-                                    _entity.removeEffect(CAMobEffects.DIZZY.get());
-                                if ((Entity) this instanceof LivingEntity _entity)
-                                    _entity.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
-                                if ((Entity) this instanceof LivingEntity _entity)
-                                    _entity.removeEffect(MobEffects.DIG_SLOWDOWN);
+                                this.removeEffect(CAMobEffects.DIZZY.get());
+                                this.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
+                                this.removeEffect(MobEffects.DIG_SLOWDOWN);
                                 ModCapabilities.getSanityInjury(this).heal(1000);
-                                if (world instanceof ServerLevel _level)
-                                    _level.sendParticles(ParticleTypes.EXPLOSION_EMITTER, noeX, nowY, nowZ, 72, 3, 3, 3, 0.5);
-                                if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(noeX, nowY, nowZ), CASounds.ANCHOR_SKILL.get(), SoundSource.PLAYERS, 3, 1);
+                                if (world instanceof ServerLevel level)
+                                    level.sendParticles(ParticleTypes.EXPLOSION_EMITTER, noeX, nowY, nowZ, 72, 3, 3, 3, 0.5);
+                                if (world instanceof Level level) {
+                                    level.playSound(null, BlockPos.containing(noeX, nowY, nowZ), CASounds.ANCHOR_SKILL.get(), SoundSource.PLAYERS, 3, 1);
                                 }
                             }
                         });

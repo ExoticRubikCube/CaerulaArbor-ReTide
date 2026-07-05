@@ -43,20 +43,20 @@ public class GoodsquidsServererItem extends Item {
             if (itemstack.getDamageValue() >= 799) {
                 if (Math.random() < 0.2) {
                     if (((LevelAccessor) world).getLevelData().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
-                        if ((LevelAccessor) world instanceof Level _level && !_level.isClientSide())
-                            _level.explode(null, x, y, z, 12, Level.ExplosionInteraction.BLOCK);
+                        if ((LevelAccessor) world instanceof Level level && !level.isClientSide())
+                            level.explode(null, x, y, z, 12, Level.ExplosionInteraction.BLOCK);
                     }
-                    if ((LevelAccessor) world instanceof ServerLevel _level) {
-                        LightningBolt entityToSpawn = EntityType.LIGHTNING_BOLT.create(_level);
+                    if ((LevelAccessor) world instanceof ServerLevel level) {
+                        LightningBolt entityToSpawn = EntityType.LIGHTNING_BOLT.create(level);
                         if (entityToSpawn != null) {
                             entityToSpawn.moveTo(Vec3.atBottomCenterOf(BlockPos.containing(x, y, z)));
-                            _level.addFreshEntity(entityToSpawn);
+                            level.addFreshEntity(entityToSpawn);
                         }
                     }
-                    if ((LevelAccessor) world instanceof ServerLevel _level)
-                        _level.sendParticles(ParticleTypes.EXPLOSION, x, y, z, 6, 4, 4, 4, 0);
-                    if ((LevelAccessor) world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 3, 1);
+                    if ((LevelAccessor) world instanceof ServerLevel level)
+                        level.sendParticles(ParticleTypes.EXPLOSION, x, y, z, 6, 4, 4, 4, 0);
+                    if ((LevelAccessor) world instanceof Level level) {
+                            level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 3, 1);
                     }
                     itemstack.shrink(1);
                 }

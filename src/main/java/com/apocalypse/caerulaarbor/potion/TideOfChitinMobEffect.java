@@ -45,9 +45,9 @@ public class TideOfChitinMobEffect extends MobEffect {
     public void addAttributeModifiers(LivingEntity entity, AttributeMap attributeMap, int amplifier) {
         super.addAttributeModifiers(entity, attributeMap, amplifier);
         {
-            ItemStack _setval = ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY);
+            ItemStack setval = ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY);
             ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                capability.chitin_knife_selected = _setval.copy();
+                capability.chitin_knife_selected = setval.copy();
                 capability.syncPlayerVariables(entity);
             });
         }
@@ -60,18 +60,18 @@ public class TideOfChitinMobEffect extends MobEffect {
         double y = entity.getY();
         double z = entity.getZ();
         double perc;
-        if (!(((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY)
+        if (!(((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY)
                 .getItem() == ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).chitin_knife_selected).getItem())) {
-            if (world instanceof Level _level) {
-                if (_level.isClientSide()) {
-                    _level.playLocalSound(x, y, z, SoundEvents.BEACON_DEACTIVATE, SoundSource.NEUTRAL, (float) 3.2, 1, false);
+            if (world instanceof Level level) {
+                if (level.isClientSide()) {
+                    level.playLocalSound(x, y, z, SoundEvents.BEACON_DEACTIVATE, SoundSource.NEUTRAL, (float) 3.2, 1, false);
                 }
             }
             perc = EntityUtils.getHealthPerc(entity);
-            if ((Entity) entity instanceof LivingEntity _entity)
-                _entity.removeEffect(CAMobEffects.TIDE_OF_CHITIN.get());
-            if ((Entity) entity instanceof LivingEntity _entity)
-                _entity.setHealth((float) (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * perc));
+            if ((Entity) entity instanceof LivingEntity livingEntity)
+                livingEntity.removeEffect(CAMobEffects.TIDE_OF_CHITIN.get());
+            if ((Entity) entity instanceof LivingEntity livingEntity)
+                livingEntity.setHealth((float) (livingEntity.getMaxHealth() * perc));
         }
         if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).kingShowPtc) {
             world.addParticle(CAParticles.KNIFEPTC.get(), (x + Mth.nextDouble(RandomSource.create(), -0.45, 0.45)), (y + Mth.nextDouble(RandomSource.create(), 0, entity.getBbHeight() * 0.8)),

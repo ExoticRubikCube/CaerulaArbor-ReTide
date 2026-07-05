@@ -40,7 +40,7 @@ public class PalsyOverlay {
 		RenderSystem.setShaderColor(1, 1, 1, 1);
         boolean result = false;
         if (entity != null) {
-            result = ((Entity) entity instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(CAAttributes.NUMB.get()) ? _livingEntity0.getAttribute(CAAttributes.NUMB.get()).getBaseValue() : 0) > 0;
+            result = ((Entity) entity instanceof LivingEntity livingEntity0 && livingEntity0.getAttributes().hasAttribute(CAAttributes.NUMB.get()) ? livingEntity0.getAttribute(CAAttributes.NUMB.get()).getBaseValue() : 0) > 0;
         }
         if (result) {
 			event.getGuiGraphics().blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/palsy.png"), w / 2 + 5, h / 2 + -8, 0, 0, 16, 16, 16, 16);

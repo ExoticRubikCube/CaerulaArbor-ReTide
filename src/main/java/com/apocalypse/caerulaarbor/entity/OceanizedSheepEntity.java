@@ -145,22 +145,22 @@ public class OceanizedSheepEntity extends SeaMonster {
 		double z = this.getZ();
 		Entity entity = this;
 		Level world = this.level();
-		if (sourceentity.isHolding(Items.SHEARS) && entity instanceof OceanizedSheepEntity _datEntL1 && _datEntL1.getEntityData().get(DATA_FUR)) {
-			if (entity instanceof OceanizedSheepEntity _datEntSetL)
-				_datEntSetL.getEntityData().set(DATA_FUR, false);
-			if ((LevelAccessor) world instanceof Level _level) {
-				_level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SHEEP_SHEAR, SoundSource.PLAYERS, 1, 1);
+		if (sourceentity.isHolding(Items.SHEARS) && entity instanceof OceanizedSheepEntity datEntL1 && datEntL1.getEntityData().get(DATA_FUR)) {
+			if (entity instanceof OceanizedSheepEntity datEntSetL)
+				datEntSetL.getEntityData().set(DATA_FUR, false);
+			if ((LevelAccessor) world instanceof Level level) {
+				level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SHEEP_SHEAR, SoundSource.PLAYERS, 1, 1);
 			}
-			if ((LevelAccessor) world instanceof ServerLevel _level) {
-				ItemEntity entityToSpawn = new ItemEntity(_level, x, (y + 0.65), z, new ItemStack(Blocks.WHITE_WOOL));
+			if ((LevelAccessor) world instanceof ServerLevel level) {
+				ItemEntity entityToSpawn = new ItemEntity(level, x, (y + 0.65), z, new ItemStack(Blocks.WHITE_WOOL));
 				entityToSpawn.setPickUpDelay(10);
-				_level.addFreshEntity(entityToSpawn);
+				level.addFreshEntity(entityToSpawn);
 			}
 			for (int index0 = 0; index0 < Mth.nextInt(RandomSource.create(), 1, 3); index0++) {
-				if ((LevelAccessor) world instanceof ServerLevel _level) {
-					ItemEntity entityToSpawn = new ItemEntity(_level, x, (y + 0.65), z, new ItemStack(CAItems.SEA_TRAIL_MOR.get()));
+				if ((LevelAccessor) world instanceof ServerLevel level) {
+					ItemEntity entityToSpawn = new ItemEntity(level, x, (y + 0.65), z, new ItemStack(CAItems.SEA_TRAIL_MOR.get()));
 					entityToSpawn.setPickUpDelay(10);
-					_level.addFreshEntity(entityToSpawn);
+					level.addFreshEntity(entityToSpawn);
 				}
 			}
 			SIHelper.causeSanityInjury(sourceentity, this, 64, SanityEvent.Hurt.Type.ENTITY);
@@ -176,16 +176,16 @@ public class OceanizedSheepEntity extends SeaMonster {
 		double x = this.getX();
 		double y = this.getY();
 		double z = this.getZ();
-		if (!((Entity) this instanceof OceanizedSheepEntity _datEntL0 && _datEntL0.getEntityData().get(DATA_FUR))) {
+		if (!((Entity) this instanceof OceanizedSheepEntity datEntL0 && datEntL0.getEntityData().get(DATA_FUR))) {
 			if ((world.getBlockState(BlockPos.containing(x + getLookAngle().x, y, z + getLookAngle().z))).getBlock() == CABlocks.TRAIL_MUSHROOM.get()) {
 				if (this instanceof OceanizedSheepEntity) {
 					this.setAnimation("animation.oceanized_sheep.eat");
 				}
-				if ((Entity) this instanceof OceanizedSheepEntity _datEntSetL)
-					_datEntSetL.getEntityData().set(DATA_FUR, true);
+				if ((Entity) this instanceof OceanizedSheepEntity datEntSetL)
+					datEntSetL.getEntityData().set(DATA_FUR, true);
 				world.setBlock(BlockPos.containing(x + getLookAngle().x, y, z + getLookAngle().z), Blocks.AIR.defaultBlockState(), 3);
 				CaerulaArborMod.queueServerWork(20, () -> {
-					if ((Entity) this instanceof OceanizedSheepEntity _datEntL10 && _datEntL10.getEntityData().get(DATA_FUR)) {
+					if ((Entity) this instanceof OceanizedSheepEntity datEntL10 && datEntL10.getEntityData().get(DATA_FUR)) {
 					}
 				});
 			}

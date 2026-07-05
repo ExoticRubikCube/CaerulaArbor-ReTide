@@ -59,7 +59,7 @@ public class CentrifugerSelectButtonMessage {
 
 	public static void handleButtonAction(Player entity, int buttonID, int x, int y, int z) {
 		Level world = entity.level();
-		// security measure to prevent arbitrary chunk generation
+		// 安全措施：防止任意区块生成
 		if (!world.hasChunkAt(new BlockPos(x, y, z)))
 			return;
 		if (buttonID == 0) {
@@ -86,23 +86,23 @@ public class CentrifugerSelectButtonMessage {
                 };
                 if (!(res.getItem() == ItemStack.EMPTY.getItem())) {
                     entity.getMainHandItem().shrink(1);
-                    if ((Entity) entity instanceof Player _player)
-                        _player.closeContainer();
+                    if ((Entity) entity instanceof Player player)
+                        player.closeContainer();
                     {
-                        int _value = 1;
-                        BlockPos _pos = BlockPos.containing(x, y, z);
-                        BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-                        if (_bs.getBlock().getStateDefinition().getProperty("animation") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))
-                            ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
+                        int value = 1;
+                        BlockPos pos = BlockPos.containing(x, y, z);
+                        BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                        if (bs.getBlock().getStateDefinition().getProperty("animation") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
+                            ((LevelAccessor) world).setBlock(pos, bs.setValue(integerProp, value), 3);
                     }
-                    if ((LevelAccessor) world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), CASounds.NOTICE.get(), SoundSource.BLOCKS, 2, 1);
+                    if ((LevelAccessor) world instanceof Level level) {
+                            level.playSound(null, BlockPos.containing(x, y, z), CASounds.NOTICE.get(), SoundSource.BLOCKS, 2, 1);
                     }
-                    if ((LevelAccessor) world instanceof ServerLevel _level) {
-                        ItemEntity entityToSpawn = new ItemEntity(_level, ((double) x + 0.5), ((double) y + 1), ((double) z + 0.5), res);
+                    if ((LevelAccessor) world instanceof ServerLevel level) {
+                        ItemEntity entityToSpawn = new ItemEntity(level, ((double) x + 0.5), ((double) y + 1), ((double) z + 0.5), res);
                         entityToSpawn.setPickUpDelay(10);
                         entityToSpawn.setUnlimitedLifetime();
-                        _level.addFreshEntity(entityToSpawn);
+                        level.addFreshEntity(entityToSpawn);
                     }
                 }
             }

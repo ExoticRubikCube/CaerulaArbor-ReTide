@@ -6,6 +6,7 @@ import com.apocalypse.caerulaarbor.util.CaerulaUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionHand;
@@ -31,7 +32,6 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.sounds.SoundEvents;
 
 public class NetherseaWoodBlock extends Block {
 	public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.AXIS;
@@ -90,17 +90,17 @@ public class NetherseaWoodBlock extends Block {
 		Direction direction = hit.getDirection();
         InteractionResult result = InteractionResult.PASS;
         if (entity != null) {
-            if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() instanceof AxeItem
-                    || ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).is(ItemTags.create(new ResourceLocation("minecraft:axes")))
-                    || ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).is(ItemTags.create(new ResourceLocation("minecraft:axes")))) {
+            if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() instanceof AxeItem
+                    || ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).is(ItemTags.create(new ResourceLocation("minecraft:axes")))
+                    || ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).is(ItemTags.create(new ResourceLocation("minecraft:axes")))) {
                 world.levelEvent(2001, BlockPos.containing(x, y, z), getId(CABlocks.NETHERSEA_WOOD.get().defaultBlockState()));
-                if ((LevelAccessor) world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1, 1);
+                if ((LevelAccessor) world instanceof Level level) {
+                        level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1, 1);
                 }
                 {
-                    BlockPos _bp = BlockPos.containing(x, y, z);
-                    BlockState _bs = CABlocks.STRIPPED_NETHERSEA_WOOD.get().withPropertiesOf(blockstate);
-                    ((LevelAccessor) world).setBlock(_bp, _bs, 3);
+                    BlockPos bp = BlockPos.containing(x, y, z);
+                    BlockState bs = CABlocks.STRIPPED_NETHERSEA_WOOD.get().withPropertiesOf(blockstate);
+                    ((LevelAccessor) world).setBlock(bp, bs, 3);
                 }
                 result = InteractionResult.SUCCESS;
             }

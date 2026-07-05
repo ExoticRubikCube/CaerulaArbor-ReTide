@@ -38,12 +38,12 @@ public class CorruptedBarOverlay {
         boolean result1 = false;
         Entity corrupted1;
         corrupted1 = world.getEntitiesOfClass(SkadiCorruptedEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e1 -> true).stream().sorted(new Object() {
-            Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
-                return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
+            Comparator<Entity> compareDistOf(double x, double y, double z) {
+                return Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z));
             }
         }.compareDistOf(x, y, z)).findFirst().orElse(null);
         if (corrupted1 != null) {
-            result1 = (corrupted1 instanceof SkadiCorruptedEntity _datEntI1 ? _datEntI1.getEntityData().get(SkadiCorruptedEntity.DATA_PHASE) : 0) < 1.5;
+            result1 = (corrupted1 instanceof SkadiCorruptedEntity datEntI1 ? datEntI1.getEntityData().get(SkadiCorruptedEntity.DATA_PHASE) : 0) < 1.5;
         }
         if (result1) {
 
@@ -53,13 +53,13 @@ public class CorruptedBarOverlay {
             double phase;
             double progress = 0;
             corrupted2 = world.getEntitiesOfClass(SkadiCorruptedEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e1 -> true).stream().sorted(new Object() {
-                Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
-                    return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
+                Comparator<Entity> compareDistOf(double x, double y, double z) {
+                    return Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z));
                 }
             }.compareDistOf(x, y, z)).findFirst().orElse(null);
             if (corrupted2 != null) {
-                convertP = corrupted2 instanceof SkadiCorruptedEntity _datEntI1 ? _datEntI1.getEntityData().get(SkadiCorruptedEntity.DATA_CONVERT_P) : 0;
-                phase = corrupted2 instanceof SkadiCorruptedEntity _datEntI1 ? _datEntI1.getEntityData().get(SkadiCorruptedEntity.DATA_PHASE) : 0;
+                convertP = corrupted2 instanceof SkadiCorruptedEntity datEntI1 ? datEntI1.getEntityData().get(SkadiCorruptedEntity.DATA_CONVERT_P) : 0;
+                phase = corrupted2 instanceof SkadiCorruptedEntity datEntI1 ? datEntI1.getEntityData().get(SkadiCorruptedEntity.DATA_PHASE) : 0;
                 if (phase < 0.5) {
                     progress = (900 - convertP) / (double) 900;
                 } else if (phase < 1.5) {
@@ -73,12 +73,12 @@ public class CorruptedBarOverlay {
             Entity corrupted;
             double P;
             corrupted = world.getEntitiesOfClass(SkadiCorruptedEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true).stream().sorted(new Object() {
-                Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
-                    return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
+                Comparator<Entity> compareDistOf(double x, double y, double z) {
+                    return Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z));
                 }
             }.compareDistOf(x, y, z)).findFirst().orElse(null);
             if (corrupted != null) {
-                P = corrupted instanceof SkadiCorruptedEntity _datEntI ? _datEntI.getEntityData().get(SkadiCorruptedEntity.DATA_PHASE) : 0;
+                P = corrupted instanceof SkadiCorruptedEntity datEntI ? datEntI.getEntityData().get(SkadiCorruptedEntity.DATA_PHASE) : 0;
                 if (!(P < 0.5)) {
                     if (P < 1.5) {
                         result = 1;

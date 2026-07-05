@@ -54,19 +54,19 @@ public class OmniKeyItem extends Item {
         ItemStack itemstack = ar.getObject();
         if (!itemstack.getOrCreateTag().getBoolean("used")) {
             {
-                boolean _setval = true;
+                boolean setval = true;
                 ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                    capability.relic_util_OMNIKEY = _setval;
+                    capability.relic_util_OMNIKEY = setval;
                     capability.syncPlayerVariables(entity);
                 });
             }
-            if ((Entity) entity instanceof Player _player)
-                _player.giveExperienceLevels(3);
-            if ((LevelAccessor) world instanceof Level _level) {
-                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 2, 1);
+            if ((Entity) entity instanceof Player player)
+                player.giveExperienceLevels(3);
+            if ((LevelAccessor) world instanceof Level level) {
+                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 2, 1);
             }
-            if ((LevelAccessor) world instanceof ServerLevel _level)
-                _level.sendParticles(ParticleTypes.HAPPY_VILLAGER, x, y, z, 72, 1, 1, 1, 1);
+            if ((LevelAccessor) world instanceof ServerLevel level)
+                level.sendParticles(ParticleTypes.HAPPY_VILLAGER, x, y, z, 72, 1, 1, 1, 1);
             itemstack.getOrCreateTag().putBoolean("used", true);
         }
         return ar;
@@ -82,23 +82,23 @@ public class OmniKeyItem extends Item {
         BlockState blockstate = context.getLevel().getBlockState(context.getClickedPos());
         ItemStack itemstack = context.getItemInHand();
         if (blockstate.getBlock() == Blocks.IRON_DOOR || blockstate.getBlock() == Blocks.IRON_TRAPDOOR) {
-            if (!(blockstate.getBlock().getStateDefinition().getProperty("open") instanceof BooleanProperty _getbp5 && blockstate.getValue(_getbp5))) {
+            if (!(blockstate.getBlock().getStateDefinition().getProperty("open") instanceof BooleanProperty getbp5 && blockstate.getValue(getbp5))) {
                 {
-                    BlockPos _pos = BlockPos.containing(x, y, z);
-                    BlockState _bs = world.getBlockState(_pos);
-                    if (_bs.getBlock().getStateDefinition().getProperty("open") instanceof BooleanProperty _booleanProp)
-                        world.setBlock(_pos, _bs.setValue(_booleanProp, true), 3);
+                    BlockPos pos = BlockPos.containing(x, y, z);
+                    BlockState bs = world.getBlockState(pos);
+                    if (bs.getBlock().getStateDefinition().getProperty("open") instanceof BooleanProperty booleanProp)
+                        world.setBlock(pos, bs.setValue(booleanProp, true), 3);
                 }
                 world.scheduleTick(BlockPos.containing(x, y, z), world.getBlockState(BlockPos.containing(x, y, z)).getBlock(), 22);
-                if (world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.CHAIN_STEP, SoundSource.NEUTRAL, 1, 1);
+                if (world instanceof Level level) {
+                        level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.CHAIN_STEP, SoundSource.NEUTRAL, 1, 1);
                 }
                 CaerulaArborMod.queueServerWork(20, () -> {
                     {
-                        BlockPos _pos = BlockPos.containing(x, y, z);
-                        BlockState _bs = world.getBlockState(_pos);
-                        if (_bs.getBlock().getStateDefinition().getProperty("open") instanceof BooleanProperty _booleanProp)
-                            world.setBlock(_pos, _bs.setValue(_booleanProp, false), 3);
+                        BlockPos pos = BlockPos.containing(x, y, z);
+                        BlockState bs = world.getBlockState(pos);
+                        if (bs.getBlock().getStateDefinition().getProperty("open") instanceof BooleanProperty booleanProp)
+                            world.setBlock(pos, bs.setValue(booleanProp, false), 3);
                     }
                 });
                 if (itemstack.hurt(1, RandomSource.create(), null)) {

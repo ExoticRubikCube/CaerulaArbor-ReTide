@@ -48,16 +48,16 @@ public class PetReapMobEffect extends MobEffect {
         double y = entity.getY();
         double z = entity.getZ();
         double angle;
-        if ((Entity) entity instanceof Mob _mobEnt0 && _mobEnt0.isAggressive() && ((Entity) entity).isAlive()) {
+        if ((Entity) entity instanceof Mob mobEnt0 && mobEnt0.isAggressive() && ((Entity) entity).isAlive()) {
             for (int index0 = 0; index0 < 120; index0++) {
                 angle = Mth.nextDouble(RandomSource.create(), 0, 6.283);
-                if (world instanceof ServerLevel _level)
-                    _level.sendParticles(ParticleTypes.ELECTRIC_SPARK, (x + 2.5 * Math.sin(angle)), y, (z + 2.5 * Math.cos(angle)), 8, 0.1, 0.1, 0.1, 0.2);
+                if (world instanceof ServerLevel level)
+                    level.sendParticles(ParticleTypes.ELECTRIC_SPARK, (x + 2.5 * Math.sin(angle)), y, (z + 2.5 * Math.cos(angle)), 8, 0.1, 0.1, 0.1, 0.2);
             }
             {
-                final Vec3 _center = new Vec3(x, y, z);
-                List<LivingEntity> _entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(_center, _center).inflate(5 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                for (LivingEntity entityiterator : _entfound) {
+                final Vec3 center = new Vec3(x, y, z);
+                List<LivingEntity> entfound = world.getEntitiesOfClass(LivingEntity.class, new AABB(center, center).inflate(5 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                for (LivingEntity entityiterator : entfound) {
                     if (entityiterator instanceof Monster) {
                         if (!(entityiterator == entity)) {
                             SIHelper.causeSanityInjury(entityiterator,
@@ -66,7 +66,7 @@ public class PetReapMobEffect extends MobEffect {
                                     SanityEvent.Hurt.Type.ENTITY);
                         }
                     }
-                    if (((Entity) entity instanceof TamableAnimal _tamEnt ? (Entity) _tamEnt.getOwner() : null) == entityiterator && !entity.level().isClientSide())
+                    if (((Entity) entity instanceof TamableAnimal tamEnt ? (Entity) tamEnt.getOwner() : null) == entityiterator && !entity.level().isClientSide())
                         entity.addEffect(new MobEffectInstance(MobEffects.HEAL, 1, 0));
                 }
             }

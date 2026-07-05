@@ -1,11 +1,10 @@
 package com.apocalypse.caerulaarbor.init;
 
 /*
- *    MCreator note: This file will be REGENERATED on each build.
+ *    MCreator 注：此文件会在每次构建时重新生成。
  */
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
 import com.google.common.base.Suppliers;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.Holder;
@@ -47,7 +46,7 @@ public class CABiomes {
 			DimensionType dimensionType = levelStem.type().value();
 			if (dimensionType == dimensionTypeRegistry.getOrThrow(BuiltinDimensionTypes.OVERWORLD)) {
 				ChunkGenerator chunkGenerator = levelStem.generator();
-				// Inject biomes to biome source
+				// 向生物群系源注入生物群系
 				if (chunkGenerator.getBiomeSource() instanceof MultiNoiseBiomeSource noiseSource) {
 					List<Pair<Climate.ParameterPoint, Holder<Biome>>> parameters = new ArrayList<>(noiseSource.parameters().values());
 					addParameterPoint(parameters, new Pair<>(new Climate.ParameterPoint(Climate.Parameter.span(0.25f, 0.55f), Climate.Parameter.span(0.1f, 0.45f), Climate.Parameter.span(-0.3f, 0.2f), Climate.Parameter.span(-0.75f, 0.5f),
@@ -58,7 +57,7 @@ public class CABiomes {
 					chunkGenerator.featuresPerStep = Suppliers
 							.memoize(() -> FeatureSorter.buildFeaturesPerStep(List.copyOf(chunkGenerator.biomeSource.possibleBiomes()), biome -> chunkGenerator.generationSettingsGetter.apply(biome).features(), true));
 				}
-				// Inject surface rules
+				// 注入地表规则
 				if (chunkGenerator instanceof NoiseBasedChunkGenerator noiseGenerator) {
 					NoiseGeneratorSettings noiseGeneratorSettings = noiseGenerator.settings.value();
 					SurfaceRules.RuleSource currentRuleSource = noiseGeneratorSettings.surfaceRule();

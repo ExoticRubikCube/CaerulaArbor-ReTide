@@ -40,9 +40,8 @@ public class CoinOfTradeItem extends Item {
 
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level world, Player entity, InteractionHand hand) {
-		InteractionResultHolder<ItemStack> ar = super.use(world, entity, hand);
 		entity.startUsingItem(hand);
-		return ar;
+		return super.use(world, entity, hand);
 	}
 
 	@Override
@@ -57,9 +56,9 @@ public class CoinOfTradeItem extends Item {
 				}
 			}
 			if (entity instanceof Player player) {
-				ItemStack _setstack = togive.copy();
-				_setstack.setCount(1);
-				ItemHandlerHelper.giveItemToPlayer(player, _setstack);
+				ItemStack setstack = togive.copy();
+				setstack.setCount(1);
+				ItemHandlerHelper.giveItemToPlayer(player, setstack);
 			}
 			entity.getOffhandItem().shrink(1);
 			entity.getMainHandItem().shrink(1);

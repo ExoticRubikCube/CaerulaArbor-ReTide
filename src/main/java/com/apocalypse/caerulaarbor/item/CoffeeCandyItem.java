@@ -41,9 +41,9 @@ public class CoffeeCandyItem extends Item {
 		if (!entity.level().isClientSide())
 			entity.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED, 240, 1));
 		{
-			boolean _setval = true;
+			boolean setval = true;
 			entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-				capability.relic_util_COFFEE = _setval;
+				capability.relic_util_COFFEE = setval;
 				capability.syncPlayerVariables(entity);
 			});
 		}

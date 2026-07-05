@@ -360,9 +360,9 @@ public class OceannizedWitheriaEntity extends AbstractOceanizedWitherEntity {
         Level world = this.level();
         double damage;
         Entity target = this.getTarget();
-        final Vec3 _center = new Vec3(this.getX(), this.getY(), this.getZ());
-        List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(8 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-        for (Entity entityiterator : _entfound) {
+        final Vec3 center = new Vec3(this.getX(), this.getY(), this.getZ());
+        List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(8 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+        for (Entity entityiterator : entfound) {
             if (!(entityiterator instanceof LivingEntity)) {
                 continue;
             }
@@ -376,8 +376,8 @@ public class OceannizedWitheriaEntity extends AbstractOceanizedWitherEntity {
             }
             if (this.distanceTo(entityiterator) <= 4 && (EntityUtils.getEntityCosine(this, entityiterator) >= cosine || entityiterator == target)) {
                 damage = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * rate;
-                if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                    _entity.addEffect(new MobEffectInstance(MobEffects.WITHER, 80, 0));
+                if (entityiterator instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
+                    livingEntity.addEffect(new MobEffectInstance(MobEffects.WITHER, 80, 0));
                 this.dealOceanWitherAttack((LivingEntity) entityiterator, (float) damage);
             }
         }

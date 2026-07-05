@@ -92,15 +92,15 @@ public class HealBullletEntity extends AbstractArrow implements ItemSupplier {
                     double count = 0;
                     double curH = 0;
                     double maxH = 0;
-                    atk = entity instanceof LivingEntity _livingEntity0 && _livingEntity0.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity0.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
+                    atk = entity instanceof LivingEntity livingEntity0 && livingEntity0.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity0.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
                     {
-                        final Vec3 _center = new Vec3(x, y, z);
-                        List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(12 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                        for (Entity entityiterator : _entfound) {
+                        final Vec3 center = new Vec3(x, y, z);
+                        List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(12 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                        for (Entity entityiterator : entfound) {
                             if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "homo_sapiens")))) {
-                                if ((entityiterator instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < (entityiterator instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1)) {
-                                    if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                                        _entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 40, 1));
+                                if ((entityiterator instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) < (entityiterator instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1)) {
+                                    if (entityiterator instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
+                                        livingEntity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 40, 1));
                                     com.apocalypse.caerulaarbor.util.EntityUtils.healWithParticles(world, entityiterator, atk, 0);
                                     if (!(entityiterator == entity)) {
                                         count = count + 1;
@@ -112,8 +112,8 @@ public class HealBullletEntity extends AbstractArrow implements ItemSupplier {
                             }
                         }
                     }
-                    if (world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), CASounds.MEDIC_NORMAL.get(), SoundSource.HOSTILE, (float) 1.8,
+                    if (world instanceof Level level) {
+                            level.playSound(null, BlockPos.containing(x, y, z), CASounds.MEDIC_NORMAL.get(), SoundSource.HOSTILE, (float) 1.8,
                                     (float) Mth.nextDouble(RandomSource.create(), 0.8, 1.2));
                     }
                 }
@@ -142,7 +142,7 @@ public class HealBullletEntity extends AbstractArrow implements ItemSupplier {
 		return entityarrow;
 	}
 
-	// TODO: Revisit this legacy two-arg system when the healing projectile API is refactored.
+	// TODO：当治疗弹 API 重构时，重新审视这个遗留的双参数接口。
 	public static HealBullletEntity shoot(LivingEntity entity, LivingEntity target) {
 		HealBullletEntity entityarrow = new HealBullletEntity(CAEntities.HEAL_BULLLET.get(), entity, entity.level());
 		double dx = target.getX() - entity.getX();

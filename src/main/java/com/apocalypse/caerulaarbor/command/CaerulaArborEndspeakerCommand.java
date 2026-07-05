@@ -29,8 +29,8 @@ public class CaerulaArborEndspeakerCommand {
 			double y = arguments.getSource().getPosition().y();
 			double z = arguments.getSource().getPosition().z();
 			Entity entity = arguments.getSource().getEntity();
-			if (entity == null && world instanceof ServerLevel _servLevel)
-				entity = FakePlayerFactory.getMinecraft(_servLevel);
+			if (entity == null && world instanceof ServerLevel servLevel)
+				entity = FakePlayerFactory.getMinecraft(servLevel);
 			Direction direction = Direction.DOWN;
 			if (entity != null)
                 entity.getDirection();
@@ -51,12 +51,12 @@ public class CaerulaArborEndspeakerCommand {
                 for (int index1 = 0; index1 < 3; index1++) {
                     res_line_3 = res_line_3.replace("{a" + (index1 + 4) + "}", "" + EndspeakerEntity.hasAbility(world, index1 + 3));
                 }
-                if (entity instanceof Player _player && !_player.level().isClientSide())
-                    _player.displayClientMessage(Component.literal(res_line_1), false);
-                if (entity instanceof Player _player && !_player.level().isClientSide())
-                    _player.displayClientMessage(Component.literal(res_line_2), false);
-                if (entity instanceof Player _player && !_player.level().isClientSide())
-                    _player.displayClientMessage(Component.literal(res_line_3), false);
+                if (entity instanceof Player player && !player.level().isClientSide())
+                    player.displayClientMessage(Component.literal(res_line_1), false);
+                if (entity instanceof Player player && !player.level().isClientSide())
+                    player.displayClientMessage(Component.literal(res_line_2), false);
+                if (entity instanceof Player player && !player.level().isClientSide())
+                    player.displayClientMessage(Component.literal(res_line_3), false);
             }
             return 0;
 		})).then(Commands.literal("bestow").then(Commands.literal("all").executes(arguments -> {
@@ -65,8 +65,8 @@ public class CaerulaArborEndspeakerCommand {
 			double y = arguments.getSource().getPosition().y();
 			double z = arguments.getSource().getPosition().z();
 			Entity entity = arguments.getSource().getEntity();
-			if (entity == null && world instanceof ServerLevel _servLevel)
-				entity = FakePlayerFactory.getMinecraft(_servLevel);
+			if (entity == null && world instanceof ServerLevel servLevel)
+				entity = FakePlayerFactory.getMinecraft(servLevel);
 			Direction direction = Direction.DOWN;
 			if (entity != null)
                 entity.getDirection();
@@ -78,9 +78,9 @@ public class CaerulaArborEndspeakerCommand {
             }
             info = Component.translatable("command.endspeaker.bestow.all").getString();
             {
-                final String _success = info;
-                final boolean _informAdmins = true;
-                arguments.getSource().sendSuccess(() -> Component.literal(_success), _informAdmins);
+                final String success = info;
+                final boolean informAdmins = true;
+                arguments.getSource().sendSuccess(() -> Component.literal(success), informAdmins);
             }
             return 0;
 		})).then(Commands.argument("index", DoubleArgumentType.doubleArg(1, 6)).executes(arguments -> {
@@ -89,8 +89,8 @@ public class CaerulaArborEndspeakerCommand {
 			double y = arguments.getSource().getPosition().y();
 			double z = arguments.getSource().getPosition().z();
 			Entity entity = arguments.getSource().getEntity();
-			if (entity == null && world instanceof ServerLevel _servLevel)
-				entity = FakePlayerFactory.getMinecraft(_servLevel);
+			if (entity == null && world instanceof ServerLevel servLevel)
+				entity = FakePlayerFactory.getMinecraft(servLevel);
 			Direction direction = Direction.DOWN;
 			if (entity != null)
                 entity.getDirection();
@@ -102,9 +102,9 @@ public class CaerulaArborEndspeakerCommand {
             info = Component.translatable("command.endspeaker.bestow.one").getString();
             info = info.replace("{index}", "" + Math.round(ind));
             {
-                final String _success = info;
-                final boolean _informAdmins = true;
-                arguments.getSource().sendSuccess(() -> Component.literal(_success), _informAdmins);
+                final String success = info;
+                final boolean informAdmins = true;
+                arguments.getSource().sendSuccess(() -> Component.literal(success), informAdmins);
             }
             return 0;
 		}))).then(Commands.literal("revoke").then(Commands.literal("all").executes(arguments -> {
@@ -113,8 +113,8 @@ public class CaerulaArborEndspeakerCommand {
 			double y = arguments.getSource().getPosition().y();
 			double z = arguments.getSource().getPosition().z();
 			Entity entity = arguments.getSource().getEntity();
-			if (entity == null && world instanceof ServerLevel _servLevel)
-				entity = FakePlayerFactory.getMinecraft(_servLevel);
+			if (entity == null && world instanceof ServerLevel servLevel)
+				entity = FakePlayerFactory.getMinecraft(servLevel);
 			Direction direction = Direction.DOWN;
 			if (entity != null)
                 entity.getDirection();
@@ -126,9 +126,9 @@ public class CaerulaArborEndspeakerCommand {
             }
             info = Component.translatable("command.endspeaker.revoke.all").getString();
             {
-                final String _success = info;
-                final boolean _informAdmins = true;
-                arguments.getSource().sendSuccess(() -> Component.literal(_success), _informAdmins);
+                final String success = info;
+                final boolean informAdmins = true;
+                arguments.getSource().sendSuccess(() -> Component.literal(success), informAdmins);
             }
             return 0;
 		})).then(Commands.argument("index", DoubleArgumentType.doubleArg(1, 6)).executes(arguments -> {
@@ -137,8 +137,8 @@ public class CaerulaArborEndspeakerCommand {
 			double y = arguments.getSource().getPosition().y();
 			double z = arguments.getSource().getPosition().z();
 			Entity entity = arguments.getSource().getEntity();
-			if (entity == null && world instanceof ServerLevel _servLevel)
-				entity = FakePlayerFactory.getMinecraft(_servLevel);
+			if (entity == null && world instanceof ServerLevel servLevel)
+				entity = FakePlayerFactory.getMinecraft(servLevel);
 			Direction direction = Direction.DOWN;
 			if (entity != null)
                 entity.getDirection();
@@ -150,9 +150,9 @@ public class CaerulaArborEndspeakerCommand {
             info = Component.translatable("command.endspeaker.revoke.one").getString();
             info = info.replace("{index}", "" + Math.round(ind));
             {
-                final String _success = info;
-                final boolean _informAdmins = true;
-                arguments.getSource().sendSuccess(() -> Component.literal(_success), _informAdmins);
+                final String success = info;
+                final boolean informAdmins = true;
+                arguments.getSource().sendSuccess(() -> Component.literal(success), informAdmins);
             }
             return 0;
 		}))).then(Commands.literal("can_summon").then(Commands.argument("can", BoolArgumentType.bool()).executes(arguments -> {
@@ -161,8 +161,8 @@ public class CaerulaArborEndspeakerCommand {
 			double y = arguments.getSource().getPosition().y();
 			double z = arguments.getSource().getPosition().z();
 			Entity entity = arguments.getSource().getEntity();
-			if (entity == null && world instanceof ServerLevel _servLevel)
-				entity = FakePlayerFactory.getMinecraft(_servLevel);
+			if (entity == null && world instanceof ServerLevel servLevel)
+				entity = FakePlayerFactory.getMinecraft(servLevel);
 			Direction direction = Direction.DOWN;
 			if (entity != null)
                 entity.getDirection();
@@ -177,9 +177,9 @@ public class CaerulaArborEndspeakerCommand {
                 info = Component.translatable("command.endspeaker.summon.false").getString();
             }
             {
-                final String _success = info;
-                final boolean _informAdmins = true;
-                arguments.getSource().sendSuccess(() -> Component.literal(_success), _informAdmins);
+                final String success = info;
+                final boolean informAdmins = true;
+                arguments.getSource().sendSuccess(() -> Component.literal(success), informAdmins);
             }
             return 0;
 		}))));

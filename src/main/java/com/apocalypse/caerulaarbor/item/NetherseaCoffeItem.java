@@ -1,10 +1,10 @@
 
 package com.apocalypse.caerulaarbor.item;
 
-import com.apocalypse.caerulaarbor.init.CAItems;
-import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.api.event.SanityEvent;
 import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
+import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -40,9 +40,8 @@ public class NetherseaCoffeItem extends Item {
 
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level world, Player entity, InteractionHand hand) {
-		InteractionResultHolder<ItemStack> ar = super.use(world, entity, hand);
-		entity.startUsingItem(hand);
-		return ar;
+        entity.startUsingItem(hand);
+		return super.use(world, entity, hand);
 	}
 
 	@Override

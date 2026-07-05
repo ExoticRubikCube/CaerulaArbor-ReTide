@@ -90,12 +90,12 @@ public class AbandonedShootEntity extends AbstractArrow implements ItemSupplier 
         if (sourceentity == null)
             return;
         entity.invulnerableTime = 0;
-        if (world instanceof ServerLevel _level)
-            _level.sendParticles(ParticleTypes.ENCHANTED_HIT, x, y, z, 32, 4, 4, 4, 0.15);
+        if (world instanceof ServerLevel level)
+            level.sendParticles(ParticleTypes.ENCHANTED_HIT, x, y, z, 32, 4, 4, 4, 0.15);
         {
-            final Vec3 _center = new Vec3(x, y, z);
-            List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(8 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-            for (Entity entityiterator : _entfound) {
+            final Vec3 center = new Vec3(x, y, z);
+            List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(8 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+            for (Entity entityiterator : entfound) {
                 if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
                     continue;
                 }
@@ -103,7 +103,7 @@ public class AbandonedShootEntity extends AbstractArrow implements ItemSupplier 
                     continue;
                 }
                 entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_magic")))),
-                        (float) ((sourceentity instanceof LivingEntity _livingEntity4 && _livingEntity4.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity4.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.25));
+                        (float) ((sourceentity instanceof LivingEntity livingEntity4 && livingEntity4.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity4.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.25));
             }
         }
         if (!level().isClientSide())
@@ -120,12 +120,12 @@ public class AbandonedShootEntity extends AbstractArrow implements ItemSupplier 
         Entity entity = this.getOwner();
         if (entity == null)
             return;
-        if (world instanceof ServerLevel _level)
-            _level.sendParticles(ParticleTypes.ENCHANTED_HIT, (x + 0.5), (y + 0.5), (z + 0.5), 32, 4, 4, 4, 0.15);
+        if (world instanceof ServerLevel level)
+            level.sendParticles(ParticleTypes.ENCHANTED_HIT, (x + 0.5), (y + 0.5), (z + 0.5), 32, 4, 4, 4, 0.15);
         {
-            final Vec3 _center = new Vec3((x + 0.5), (y + 0.5), (z + 0.5));
-            List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(8 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-            for (Entity entityiterator : _entfound) {
+            final Vec3 center = new Vec3((x + 0.5), (y + 0.5), (z + 0.5));
+            List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(8 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+            for (Entity entityiterator : entfound) {
                 if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
                     continue;
                 }
@@ -133,7 +133,7 @@ public class AbandonedShootEntity extends AbstractArrow implements ItemSupplier 
                     continue;
                 }
                 entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_magic")))),
-                        (float) ((entity instanceof LivingEntity _livingEntity3 && _livingEntity3.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity3.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.25));
+                        (float) ((entity instanceof LivingEntity livingEntity3 && livingEntity3.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity3.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.25));
             }
         }
     }

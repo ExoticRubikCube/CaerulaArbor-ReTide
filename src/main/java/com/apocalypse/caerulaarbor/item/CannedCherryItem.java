@@ -45,9 +45,9 @@ public class CannedCherryItem extends Item {
 		if (!entity.level().isClientSide())
 			entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_BOOST, 240, 1));
 		{
-			boolean _setval = true;
+			boolean setval = true;
 			entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-				capability.relic_util_BERRIES = _setval;
+				capability.relic_util_BERRIES = setval;
 				capability.syncPlayerVariables(entity);
 			});
 		}
@@ -76,20 +76,20 @@ public class CannedCherryItem extends Item {
             return InteractionResult.PASS;
         if (CABlocks.BERRY_CAN.get().defaultBlockState().canSurvive(world, BlockPos.containing(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ()))) {
             world.setBlock(BlockPos.containing(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ()), CABlocks.BERRY_CAN.get().defaultBlockState(), 3);
-            if (world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.GLASS_PLACE, SoundSource.BLOCKS, 1, 1);
+            if (world instanceof Level level) {
+                    level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.GLASS_PLACE, SoundSource.BLOCKS, 1, 1);
             }
             {
-                Direction _dir = ((entity.getDirection()).getOpposite());
-                BlockPos _pos = BlockPos.containing(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ());
-                BlockState _bs = world.getBlockState(_pos);
-                Property<?> _property = _bs.getBlock().getStateDefinition().getProperty("facing");
-                if (_property instanceof DirectionProperty _dp && _dp.getPossibleValues().contains(_dir)) {
-                    world.setBlock(_pos, _bs.setValue(_dp, _dir), 3);
+                Direction dir = ((entity.getDirection()).getOpposite());
+                BlockPos pos = BlockPos.containing(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ());
+                BlockState bs = world.getBlockState(pos);
+                Property<?> property = bs.getBlock().getStateDefinition().getProperty("facing");
+                if (property instanceof DirectionProperty dp && dp.getPossibleValues().contains(dir)) {
+                    world.setBlock(pos, bs.setValue(dp, dir), 3);
                 } else {
-                    _property = _bs.getBlock().getStateDefinition().getProperty("axis");
-                    if (_property instanceof EnumProperty _ap && _ap.getPossibleValues().contains(_dir.getAxis()))
-                        world.setBlock(_pos, _bs.setValue(_ap, _dir.getAxis()), 3);
+                    property = bs.getBlock().getStateDefinition().getProperty("axis");
+                    if (property instanceof EnumProperty ap && ap.getPossibleValues().contains(dir.getAxis()))
+                        world.setBlock(pos, bs.setValue(ap, dir.getAxis()), 3);
                 }
             }
             itemstack.shrink(1);

@@ -139,10 +139,10 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
                 if (!this.hasEffect(CAMobEffects.COOLDOWN_SINAL.get())) {
                     num = 0;
                     {
-                        final Vec3 _center = new Vec3(x, y, z);
-                        List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(8 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                        for (Entity entityiterator : _entfound) {
-                            if (!(entityiterator == this) && (entityiterator instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) >= 10) {
+                        final Vec3 center = new Vec3(x, y, z);
+                        List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(8 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                        for (Entity entityiterator : entfound) {
+                            if (!(entityiterator == this) && (entityiterator instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) >= 10) {
                                 num = num + 1;
                             }
                         }
@@ -156,13 +156,13 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
                                 this.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL.get(), 60, 0, false, false));
                             ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((sourceentity.getX()), (sourceentity.getY()), (sourceentity.getZ())));
                             CaerulaArborMod.queueServerWork(13, () -> {
-                                if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.IRON_GOLEM_DAMAGE, SoundSource.HOSTILE, 2, 1);
+                                if (world instanceof Level level) {
+                                    level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.IRON_GOLEM_DAMAGE, SoundSource.HOSTILE, 2, 1);
                                 }
                                 {
-                                    final Vec3 _center = new Vec3((x + 2 * getLookAngle().x), (y + 2), (z + 2 * getLookAngle().z));
-                                    List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(4.5 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                                    for (Entity entityiterator : _entfound) {
+                                    final Vec3 center = new Vec3((x + 2 * getLookAngle().x), (y + 2), (z + 2 * getLookAngle().z));
+                                    List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(4.5 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                                    for (Entity entityiterator : entfound) {
                                         if (entityiterator instanceof Monster) {
                                             entityiterator.hurt(
                                                     new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "golem_attack"))), this),
@@ -210,8 +210,8 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
     }
 
     @Override
-    public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
-        super.mobInteract(sourceentity, hand);
+    public InteractionResult mobInteract(Player player, InteractionHand hand) {
+        super.mobInteract(player, hand);
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
@@ -220,50 +220,50 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
         ItemStack mainHand;
         boolean isLowHealth;
         boolean isCreative;
-        mainHand = sourceentity.getMainHandItem().copy();
-        isLowHealth = (entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1);
+        mainHand = player.getMainHandItem().copy();
+        isLowHealth = (entity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) < (entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1);
         isCreative = new Object() {
-            public boolean checkGamemode(Entity _ent) {
-                if (_ent instanceof ServerPlayer _serverPlayer) {
-                    return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                    return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+            public boolean checkGamemode(Entity ent) {
+                if (ent instanceof ServerPlayer serverPlayer) {
+                    return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                    return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                 }
                 return false;
             }
-        }.checkGamemode((Entity) sourceentity);
+        }.checkGamemode((Entity) player);
         if (mainHand.getItem() == CAItems.OCEAN_CHITIN.get() && isLowHealth) {
-            LivingEntity _entity = (LivingEntity) entity;
-            _entity.setHealth((float) ((entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) + (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.25));
-            if ((LevelAccessor) world instanceof Level _level) {
-                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.IRON_GOLEM_REPAIR, SoundSource.PLAYERS, 1, 1);
+            LivingEntity living = (LivingEntity) entity;
+            living.setHealth((float) (living.getHealth() + living.getMaxHealth() * 0.25));
+            if ((LevelAccessor) world instanceof Level level) {
+                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.IRON_GOLEM_REPAIR, SoundSource.PLAYERS, 1, 1);
             }
             if (!isCreative) {
-                sourceentity.getMainHandItem().shrink(1);
+                player.getMainHandItem().shrink(1);
             }
             return InteractionResult.SUCCESS;
         } else if (mainHand.getItem() == CAItems.CHITIN_INGOT.get() && isLowHealth) {
-            if (entity instanceof LivingEntity _entity)
-                _entity.setHealth((float) ((entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) + (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5));
-            if ((LevelAccessor) world instanceof Level _level) {
-                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.IRON_GOLEM_REPAIR, SoundSource.PLAYERS, 1, 1);
+            if (entity instanceof LivingEntity livingEntity)
+                livingEntity.setHealth((float) (livingEntity.getHealth() + livingEntity.getMaxHealth() * 0.5));
+            if ((LevelAccessor) world instanceof Level level) {
+                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.IRON_GOLEM_REPAIR, SoundSource.PLAYERS, 1, 1);
             }
             if (!isCreative) {
-                ((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
+                player.getMainHandItem().shrink(1);
             }
             return InteractionResult.SUCCESS;
         } else if (mainHand.getItem() == CABlocks.COMPLEX_CHITIN_BLOCK.get().asItem() && mainHand.getCount() >= 3) {
-            if ((LevelAccessor) world instanceof Level _level) {
-                if (!_level.isClientSide()) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SMITHING_TABLE_USE, SoundSource.PLAYERS, (float) 1.5, 1);
+            if ((LevelAccessor) world instanceof Level level) {
+                if (!level.isClientSide()) {
+                    level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SMITHING_TABLE_USE, SoundSource.PLAYERS, (float) 1.5, 1);
                 } else {
-                    _level.playLocalSound(x, y, z, SoundEvents.SMITHING_TABLE_USE, SoundSource.PLAYERS, (float) 1.5, 1, false);
+                    level.playLocalSound(x, y, z, SoundEvents.SMITHING_TABLE_USE, SoundSource.PLAYERS, (float) 1.5, 1, false);
                 }
             }
             if (!entity.level().isClientSide())
                 entity.discard();
-            if ((LevelAccessor) world instanceof ServerLevel _level) {
-                Entity entityToSpawn = CAEntities.COMPLEX_CHITIN_GOLEM.get().spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+            if ((LevelAccessor) world instanceof ServerLevel level) {
+                Entity entityToSpawn = CAEntities.COMPLEX_CHITIN_GOLEM.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn != null) {
                     entityToSpawn.setYRot(entity.getYRot());
                     entityToSpawn.setYBodyRot(entity.getYRot());
@@ -272,7 +272,7 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
                 }
             }
             if (!isCreative) {
-                sourceentity.getMainHandItem().shrink(3);
+                player.getMainHandItem().shrink(3);
             }
             return InteractionResult.SUCCESS;
         }
@@ -290,20 +290,20 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
         double dist;
         double dist1;
         if (this.isAlive()) {
-            root = (Entity) this instanceof ChitinGolemEntity _datEntL1 && _datEntL1.getEntityData().get(DATA_ROOTED);
+            root = (Entity) this instanceof ChitinGolemEntity datEntL1 && datEntL1.getEntityData().get(DATA_ROOTED);
             if (!root) {
                 if (!(getDisplayName().getString()).equals(getType().getDescription().getString())) {
-                    if ((Entity) this instanceof ChitinGolemEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_ROOT_X, (int) Math.round(x));
-                    if ((Entity) this instanceof ChitinGolemEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_ROOT_Z, (int) Math.round(z));
-                    if ((Entity) this instanceof ChitinGolemEntity _datEntSetL)
-                        _datEntSetL.getEntityData().set(DATA_ROOTED, true);
+                    if ((Entity) this instanceof ChitinGolemEntity datEntSetI)
+                        datEntSetI.getEntityData().set(DATA_ROOT_X, (int) Math.round(x));
+                    if ((Entity) this instanceof ChitinGolemEntity datEntSetI)
+                        datEntSetI.getEntityData().set(DATA_ROOT_Z, (int) Math.round(z));
+                    if ((Entity) this instanceof ChitinGolemEntity datEntSetL)
+                        datEntSetL.getEntityData().set(DATA_ROOTED, true);
                     CaerulaArborMod.LOGGER.info(("Chitin Golem " + getDisplayName().getString() + "has recognize x:" + Math.round(x) + " z:" + Math.round(z) + " as base"));
                 }
-            } else if (Math.random() < 0.01 && !((Entity) this instanceof Mob _mobEnt9 && _mobEnt9.isAggressive())) {
-                rx = x - ((Entity) this instanceof ChitinGolemEntity _datEntI ? _datEntI.getEntityData().get(DATA_ROOT_X) : 0);
-                rz = z - ((Entity) this instanceof ChitinGolemEntity _datEntI ? _datEntI.getEntityData().get(DATA_ROOT_Z) : 0);
+            } else if (Math.random() < 0.01 && !((Entity) this instanceof Mob mobEnt9 && mobEnt9.isAggressive())) {
+                rx = x - ((Entity) this instanceof ChitinGolemEntity datEntI ? datEntI.getEntityData().get(DATA_ROOT_X) : 0);
+                rz = z - ((Entity) this instanceof ChitinGolemEntity datEntI ? datEntI.getEntityData().get(DATA_ROOT_Z) : 0);
                 dist = new Vec3(0, 0, 0).distanceTo(new Vec3(rx, 0, rz));
                 if (dist >= 24) {
                     dist1 = Mth.nextDouble(RandomSource.create(), 4, 16);

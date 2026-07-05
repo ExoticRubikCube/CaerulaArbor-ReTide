@@ -128,9 +128,9 @@ public class FakeOffspringEntity extends SeaMonster {
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
         SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if ((Entity) this instanceof FakeOffspringEntity _datEntSetI) {
-            _datEntSetI.getEntityData().set(DATA_DX, Mth.nextInt(RandomSource.create(), -50, 50));
-            _datEntSetI.getEntityData().set(DATA_DZ, Mth.nextInt(RandomSource.create(), -50, 50));
+        if ((Entity) this instanceof FakeOffspringEntity datEntSetI) {
+            datEntSetI.getEntityData().set(DATA_DX, Mth.nextInt(RandomSource.create(), -50, 50));
+            datEntSetI.getEntityData().set(DATA_DZ, Mth.nextInt(RandomSource.create(), -50, 50));
         }
         return retval;
     }
@@ -164,9 +164,9 @@ public class FakeOffspringEntity extends SeaMonster {
             obj = this.getTarget();
             if (!(obj == null)) {
                 if (distanceTo(obj) <= 4) {
-                    Entity _ent = this;
-                    _ent.teleportTo((obj.getX() + obj.getBbWidth() * ((Entity) this instanceof FakeOffspringEntity _datEntI ? _datEntI.getEntityData().get(DATA_DX) : 0) * 0.01), (obj.getY()),
-                            (obj.getZ() + obj.getBbWidth() * ((Entity) this instanceof FakeOffspringEntity _datEntI ? _datEntI.getEntityData().get(DATA_DZ) : 0) * 0.01));
+                    Entity ent = this;
+                    ent.teleportTo((obj.getX() + obj.getBbWidth() * ((Entity) this instanceof FakeOffspringEntity datEntI ? datEntI.getEntityData().get(DATA_DX) : 0) * 0.01), (obj.getY()),
+                            (obj.getZ() + obj.getBbWidth() * ((Entity) this instanceof FakeOffspringEntity datEntI ? datEntI.getEntityData().get(DATA_DZ) : 0) * 0.01));
                 }
             }
         }
@@ -266,10 +266,10 @@ public class FakeOffspringEntity extends SeaMonster {
             this.dropExperience();
             LevelAccessor world = this.level();
             if (Math.random() < 0.2) {
-                if (world instanceof ServerLevel _level) {
-                    ItemEntity entityToSpawn = new ItemEntity(_level, this.getX(), this.getY(), this.getZ(), new ItemStack(CAItems.FAKE_EGG.get()));
+                if (world instanceof ServerLevel level) {
+                    ItemEntity entityToSpawn = new ItemEntity(level, this.getX(), this.getY(), this.getZ(), new ItemStack(CAItems.FAKE_EGG.get()));
                     entityToSpawn.setPickUpDelay(10);
-                    _level.addFreshEntity(entityToSpawn);
+                    level.addFreshEntity(entityToSpawn);
                 }
             }
         }

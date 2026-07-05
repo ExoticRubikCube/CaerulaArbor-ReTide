@@ -39,7 +39,7 @@ public class FrozenSurfaceOverlay {
 		RenderSystem.setShaderColor(1, 1, 1, 1);
         boolean result = false;
         if (entity != null) {
-            result = (Entity) entity instanceof LivingEntity _livEnt0 && _livEnt0.hasEffect(CAMobEffects.FROZEN.get());
+            result = (Entity) entity instanceof LivingEntity livEnt0 && livEnt0.hasEffect(CAMobEffects.FROZEN.get());
         }
         if (result) {
 			event.getGuiGraphics().blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/frozensurface.png"), 0, 0, 0, 0, w, h, w, h);

@@ -37,9 +37,9 @@ public class CaerulaRecorderItem extends Item {
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level world, Player entity, InteractionHand hand) {
 		InteractionResultHolder<ItemStack> ar = super.use(world, entity, hand);
-        if ((Entity) entity instanceof ServerPlayer _ent) {
-            BlockPos _bpos = BlockPos.containing(entity.getX(), entity.getY(), entity.getZ());
-            NetworkHooks.openScreen(_ent, new MenuProvider() {
+        if ((Entity) entity instanceof ServerPlayer ent) {
+            BlockPos bpos = BlockPos.containing(entity.getX(), entity.getY(), entity.getZ());
+            NetworkHooks.openScreen(ent, new MenuProvider() {
                 @Override
                 public Component getDisplayName() {
                     return Component.literal("CaerulaRecordGUI");
@@ -47,9 +47,9 @@ public class CaerulaRecorderItem extends Item {
 
                 @Override
                 public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
-                    return new CaerulaRecordGUIMenu(id, inventory, new FriendlyByteBuf(Unpooled.buffer()).writeBlockPos(_bpos));
+                    return new CaerulaRecordGUIMenu(id, inventory, new FriendlyByteBuf(Unpooled.buffer()).writeBlockPos(bpos));
                 }
-            }, _bpos);
+            }, bpos);
         }
         return ar;
 	}

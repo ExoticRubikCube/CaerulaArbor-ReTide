@@ -240,7 +240,7 @@ public class OceanizedPillagerEntity extends SeaMonster implements RangedAttackM
         double sklp;
         Entity enemy;
         if (this.isAlive()) {
-            sklp = (Entity) this instanceof OceanizedPillagerEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP) : 0;
+            sklp = (Entity) this instanceof OceanizedPillagerEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP) : 0;
             if (sklp <= 0) {
                 enemy = this.getTarget();
                 if (!(enemy == null) && enemy.isAlive()) {
@@ -248,25 +248,25 @@ public class OceanizedPillagerEntity extends SeaMonster implements RangedAttackM
                         if (this instanceof OceanizedPillagerEntity) {
                             this.setAnimation("animation.oceanized_pillager.pour");
                         }
-                        if ((Entity) this instanceof OceanizedPillagerEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_SKILLP, 300);
+                        if ((Entity) this instanceof OceanizedPillagerEntity datEntSetI)
+                            datEntSetI.getEntityData().set(DATA_SKILLP, 300);
                         new Object() {
                             void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                                 if (OceanizedPillagerEntity.this.getTarget() != null) {
                                     ((Entity) OceanizedPillagerEntity.this).lookAt(EntityAnchorArgument.Anchor.EYES,
-                                            new Vec3((((Entity) OceanizedPillagerEntity.this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null).getX()),
-                                                    (((Entity) OceanizedPillagerEntity.this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null).getY() + ((Entity) OceanizedPillagerEntity.this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null).getBbHeight()),
-                                                    (((Entity) OceanizedPillagerEntity.this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null).getZ())));
+                                            new Vec3((((Entity) OceanizedPillagerEntity.this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null).getX()),
+                                                    (((Entity) OceanizedPillagerEntity.this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null).getY() + ((Entity) OceanizedPillagerEntity.this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null).getBbHeight()),
+                                                    (((Entity) OceanizedPillagerEntity.this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null).getZ())));
                                 }
                                 if (((Entity) OceanizedPillagerEntity.this).isAlive()) {
-                                    if (world instanceof Level _level) {
-                                        _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.CROSSBOW_SHOOT, SoundSource.HOSTILE, 1, 1);
+                                    if (world instanceof Level level) {
+                                        level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.CROSSBOW_SHOOT, SoundSource.HOSTILE, 1, 1);
                                     }
-                                    Entity _shootFrom = OceanizedPillagerEntity.this;
-                                    Level projectileLevel = _shootFrom.level();
+                                    Entity shootFrom = OceanizedPillagerEntity.this;
+                                    Level projectileLevel = shootFrom.level();
                                     if (!projectileLevel.isClientSide()) {
-                                        LivingEntity _livingEntity22 = OceanizedPillagerEntity.this;
-                                        Projectile _entityToSpawn = new Object() {
+                                        LivingEntity livingEntity22 = OceanizedPillagerEntity.this;
+                                        Projectile entityToSpawn = new Object() {
                                             public Projectile getArrow(Level level, Entity shooter, float damage, int knockback, byte piercing) {
                                                 AbstractArrow entityToSpawn = new ShotOceanArrowEntity(CAEntities.SHOT_OCEAN_ARROW.get(), level);
                                                 entityToSpawn.setOwner(shooter);
@@ -278,13 +278,13 @@ public class OceanizedPillagerEntity extends SeaMonster implements RangedAttackM
                                                 return entityToSpawn;
                                             }
                                         }.getArrow(projectileLevel, (Entity) OceanizedPillagerEntity.this,
-                                                (float) (_livingEntity22.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)
-                                                        ? _livingEntity22.getAttribute(Attributes.ATTACK_DAMAGE).getValue()
+                                                (float) (livingEntity22.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)
+                                                        ? livingEntity22.getAttribute(Attributes.ATTACK_DAMAGE).getValue()
                                                         : 0),
                                                 0, (byte) 1);
-                                        _entityToSpawn.setPos(_shootFrom.getX(), _shootFrom.getEyeY() - 0.1, _shootFrom.getZ());
-                                        _entityToSpawn.shoot(_shootFrom.getLookAngle().x, _shootFrom.getLookAngle().y, _shootFrom.getLookAngle().z, 2, 5);
-                                        projectileLevel.addFreshEntity(_entityToSpawn);
+                                        entityToSpawn.setPos(shootFrom.getX(), shootFrom.getEyeY() - 0.1, shootFrom.getZ());
+                                        entityToSpawn.shoot(shootFrom.getLookAngle().x, shootFrom.getLookAngle().y, shootFrom.getLookAngle().z, 2, 5);
+                                        projectileLevel.addFreshEntity(entityToSpawn);
                                     }
                                 }
                                 final int tick2 = ticks;
@@ -298,8 +298,8 @@ public class OceanizedPillagerEntity extends SeaMonster implements RangedAttackM
                     }
                 }
             } else {
-                if ((Entity) this instanceof OceanizedPillagerEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_SKILLP, (int) (sklp - 1));
+                if ((Entity) this instanceof OceanizedPillagerEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_SKILLP, (int) (sklp - 1));
             }
         }
         this.refreshDimensions();

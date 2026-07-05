@@ -72,10 +72,11 @@ public class SliderFishEntity extends SeaMonster implements Bucketable {
 	@Override
 	protected void registerGoals() {
 		super.registerGoals();
+		//TODO 1是何意味
 		this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.15, true) {
 			@Override
 			protected double getAttackReachSqr(LivingEntity entity) {
-				return 1;
+				return 0;
 			}
 		});
 		this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, target -> EntityUtils.isOceanizedPlayerNearby(this.level(), this.getX(), this.getY(), this.getZ())));

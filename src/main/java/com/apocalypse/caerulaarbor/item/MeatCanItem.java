@@ -42,9 +42,9 @@ public class MeatCanItem extends Item {
 		if (!entity.level().isClientSide())
 			entity.addEffect(new MobEffectInstance(MobEffects.HEAL, 1, 0));
 		if (!(entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_util_MEATCAN) {
-			boolean _setval = true;
+			boolean setval = true;
 			entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-				capability.relic_util_MEATCAN = _setval;
+				capability.relic_util_MEATCAN = setval;
 				capability.syncPlayerVariables(entity);
 			});
 		}

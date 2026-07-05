@@ -162,18 +162,18 @@ public class UninishedBeautyItem extends Item implements GeoItem, SyncedAnimatio
         BlockState tgt;
         if (blockstate.is(BlockTags.create(new ResourceLocation("minecraft:mineable/axe")))) {
             {
-                BlockPos _pos = BlockPos.containing(x, y, z);
-                Block.dropResources(world.getBlockState(_pos), world, BlockPos.containing(x + 0.5, y, z + 0.5), null);
-                world.destroyBlock(_pos, false);
+                BlockPos pos = BlockPos.containing(x, y, z);
+                Block.dropResources(world.getBlockState(pos), world, BlockPos.containing(x + 0.5, y, z + 0.5), null);
+                world.destroyBlock(pos, false);
             }
             if (entity.isShiftKeyDown()) {
                 for (int index0 = 0; index0 < 32; index0++) {
                     tgt = (world.getBlockState(BlockPos.containing(x, y + index0 + 1, z)));
                     if (tgt.is(BlockTags.create(new ResourceLocation("minecraft:mineable/axe")))) {
                         {
-                            BlockPos _pos = BlockPos.containing(x, y + index0 + 1, z);
-                            Block.dropResources(world.getBlockState(_pos), world, BlockPos.containing(x + 0.5, y + index0 + 1, z + 0.5), null);
-                            world.destroyBlock(_pos, false);
+                            BlockPos pos = BlockPos.containing(x, y + index0 + 1, z);
+                            Block.dropResources(world.getBlockState(pos), world, BlockPos.containing(x + 0.5, y + index0 + 1, z + 0.5), null);
+                            world.destroyBlock(pos, false);
                         }
                     } else {
                         break;
@@ -181,12 +181,12 @@ public class UninishedBeautyItem extends Item implements GeoItem, SyncedAnimatio
                 }
             }
             if (!(new Object() {
-                public boolean checkGamemode(Entity _ent) {
-                    if (_ent instanceof ServerPlayer _serverPlayer) {
-                        return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                    } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                        return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                public boolean checkGamemode(Entity ent) {
+                    if (ent instanceof ServerPlayer serverPlayer) {
+                        return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                    } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                        return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+                                && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                     }
                     return false;
                 }
@@ -208,32 +208,32 @@ public class UninishedBeautyItem extends Item implements GeoItem, SyncedAnimatio
         double x = entity.getX();
         double y = entity.getY();
         double z = entity.getZ();
-        if (((Entity) sourceentity instanceof Player _plr ? _plr.getAttackStrengthScale(0) : 0) >= 0.95) {
+        if (((Entity) sourceentity instanceof Player plr ? plr.getAttackStrengthScale(0) : 0) >= 0.95) {
             if (itemstack.getItem() instanceof UninishedBeautyItem)
                 itemstack.getOrCreateTag().putString("geckoAnim", "animation.unfinished_beautuy.attack");
-            if (world instanceof Level _level) {
-                _level.playSound(null, BlockPos.containing(x, y, z), CASounds.SAW_CUT_SPECT.get(), SoundSource.PLAYERS, (float) 2.4, 1);
+            if (world instanceof Level level) {
+                level.playSound(null, BlockPos.containing(x, y, z), CASounds.SAW_CUT_SPECT.get(), SoundSource.PLAYERS, (float) 2.4, 1);
             }
             CaerulaArborMod.queueServerWork(12, () -> {
-                if (world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), CASounds.SAW_SPECT_1.get(), SoundSource.PLAYERS, (float) 2.4, 1);
+                if (world instanceof Level level) {
+                    level.playSound(null, BlockPos.containing(x, y, z), CASounds.SAW_SPECT_1.get(), SoundSource.PLAYERS, (float) 2.4, 1);
                 }
                 new Object() {
                     void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                         if (entity.distanceTo(sourceentity) <= 5 && ((Entity) entity).isAlive() && ((Entity) sourceentity).isAlive()) {
-                            if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) / ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) >= ((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1)
-                                    / ((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1)) {
+                            if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) / ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) >= ((Entity) sourceentity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1)
+                                    / ((Entity) sourceentity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1)) {
                                 ((Entity) entity).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "saw_cut"))), sourceentity),
-                                        (float) (((Entity) sourceentity instanceof LivingEntity _livingEntity12 && _livingEntity12.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity12.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
+                                        (float) (((Entity) sourceentity instanceof LivingEntity livingEntity12 && livingEntity12.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity12.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
                                                 * 1));
-                                if (((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < ((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1)) {
-                                    if ((Entity) sourceentity instanceof LivingEntity _entity)
-                                        _entity.setHealth((float) Math.min(((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) + ((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.025,
-                                                (Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1));
+                                if (((Entity) sourceentity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) < ((Entity) sourceentity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1)) {
+                                    if ((Entity) sourceentity instanceof LivingEntity livingSourceEntity)
+                                        livingSourceEntity.setHealth((float) Math.min(livingSourceEntity.getHealth() + livingSourceEntity.getMaxHealth() * 0.025,
+                                                livingSourceEntity.getMaxHealth()));
                                 }
                             } else {
                                 ((Entity) entity).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "saw_cut"))), sourceentity),
-                                        (float) (((Entity) sourceentity instanceof LivingEntity _livingEntity21 && _livingEntity21.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity21.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
+                                        (float) (((Entity) sourceentity instanceof LivingEntity livingEntity21 && livingEntity21.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity21.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
                                                 * 0.5));
                             }
                         }

@@ -51,8 +51,8 @@ public class IzumikShockMobEffect extends MobEffect {
         double dama;
         if (((Entity) entity).isAlive()) {
             izumik = world.getEntitiesOfClass(IzumikEntity.class, AABB.ofSize(new Vec3(x, y, z), 27, 27, 27), e -> true).stream().sorted(new Object() {
-                Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
-                    return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
+                Comparator<Entity> compareDistOf(double x, double y, double z) {
+                    return Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z));
                 }
             }.compareDistOf(x, y, z)).findFirst().orElse(null);
             dama = 12;
@@ -60,15 +60,15 @@ public class IzumikShockMobEffect extends MobEffect {
                 dama = izumik.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? izumik.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
             }
             ((Entity) entity).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "izumik_skill")))), (float) (dama * 0.12));
-            if (world instanceof ServerLevel _level)
-                _level.sendParticles(ParticleTypes.END_ROD, x, (y + 0.75), z, 24, 0.75, 0.75, 0.75, 0.1);
+            if (world instanceof ServerLevel level)
+                level.sendParticles(ParticleTypes.END_ROD, x, (y + 0.75), z, 24, 0.75, 0.75, 0.75, 0.1);
             if (Math.random() < 0.33) {
-                if ((Entity) entity instanceof LivingEntity _livingEntity8 && _livingEntity8.getAttributes().hasAttribute(CAAttributes.NUMB.get()))
-                    _livingEntity8.getAttribute(CAAttributes.NUMB.get()).setBaseValue(
-                            (((Entity) entity instanceof LivingEntity _livingEntity7 && _livingEntity7.getAttributes().hasAttribute(CAAttributes.NUMB.get()) ? _livingEntity7.getAttribute(CAAttributes.NUMB.get()).getBaseValue() : 0)
+                if ((Entity) entity instanceof LivingEntity livingEntity8 && livingEntity8.getAttributes().hasAttribute(CAAttributes.NUMB.get()))
+                    livingEntity8.getAttribute(CAAttributes.NUMB.get()).setBaseValue(
+                            (((Entity) entity instanceof LivingEntity livingEntity7 && livingEntity7.getAttributes().hasAttribute(CAAttributes.NUMB.get()) ? livingEntity7.getAttribute(CAAttributes.NUMB.get()).getBaseValue() : 0)
                                     + 1));
-                if (world instanceof ServerLevel _level)
-                    _level.sendParticles(ParticleTypes.FIREWORK, x, (y + 0.75), z, 24, 0.75, 0.75, 0.75, 0.1);
+                if (world instanceof ServerLevel level)
+                    level.sendParticles(ParticleTypes.FIREWORK, x, (y + 0.75), z, 24, 0.75, 0.75, 0.75, 0.1);
             }
         }
     }

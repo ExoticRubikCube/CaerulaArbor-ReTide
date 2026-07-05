@@ -204,15 +204,14 @@ public class ChestFishEntity extends SeaMonster {
 		double x = this.getX();
 		double y = this.getY();
 		double z = this.getZ();
-		Entity entity = this;
-		Level world = this.level();
+        Level world = this.level();
 		return this.startChest(world, x, y, z, sourceentity);
 	}
 
 	@Override
 	public void baseTick() {
 		super.baseTick();
-        if (!((Entity) this instanceof ChestFishEntity _datEntL0 && _datEntL0.getEntityData().get(DATA_RELEASE))) {
+        if (!((Entity) this instanceof ChestFishEntity datEntL0 && datEntL0.getEntityData().get(DATA_RELEASE))) {
             setShiftKeyDown(true);
             if (!this.level().isClientSide())
                 this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, 8, false, false));
@@ -259,8 +258,6 @@ public class ChestFishEntity extends SeaMonster {
 	}
 
 	private PlayState attackingPredicate(AnimationState<?> event) {
-		double d1 = this.getX() - this.xOld;
-		double d0 = this.getZ() - this.zOld;
 		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
@@ -329,8 +326,8 @@ public class ChestFishEntity extends SeaMonster {
 			this.setShiftKeyDown(false);
 			this.getEntityData().set(DATA_RELEASE, true);
 			this.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
-			if (sourceentity instanceof LivingEntity _ent)
-				this.setTarget(_ent);
+			if (sourceentity instanceof LivingEntity ent)
+				this.setTarget(ent);
 			return InteractionResult.SUCCESS;
 		}
 		return InteractionResult.PASS;

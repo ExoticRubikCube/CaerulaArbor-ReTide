@@ -153,40 +153,40 @@ public class CaramelCakeBlock extends Block implements SimpleWaterloggedBlock {
         InteractionResult result = InteractionResult.SUCCESS;
         if (entity == null) {
             result = InteractionResult.PASS;
-        } else if (((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()
-                && ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()) {
-            if ((blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _getip2 ? blockstate.getValue(_getip2) : -1) < 3) {
+        } else if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()
+                && ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()) {
+            if ((blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip2 ? blockstate.getValue(getip2) : -1) < 3) {
                 {
-                    int _value = (blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _getip4 ? blockstate.getValue(_getip4) : -1) + 1;
-                    BlockPos _pos = BlockPos.containing(x, y, z);
-                    BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-                    if (_bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))
-                        ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
+                    int value = (blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip4 ? blockstate.getValue(getip4) : -1) + 1;
+                    BlockPos blockPos = BlockPos.containing(x, y, z);
+                    BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                    if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
+                        ((LevelAccessor) world).setBlock(pos, bs.setValue(integerProp, value), 3);
                 }
             } else {
                 ((LevelAccessor) world).setBlock(BlockPos.containing(x, y, z), Blocks.AIR.defaultBlockState(), 3);
             }
-            if ((Entity) entity instanceof Player _player) {
-                ItemStack _setstack = new ItemStack(CAItems.CARAMEL_CAKE_PIECE.get()).copy();
-                _setstack.setCount(1);
-                ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
+            if ((Entity) entity instanceof Player player) {
+                ItemStack setstack = new ItemStack(CAItems.CARAMEL_CAKE_PIECE.get()).copy();
+                setstack.setCount(1);
+                ItemHandlerHelper.giveItemToPlayer(player, setstack);
             }
-        } else if ((((Entity) entity instanceof LivingEntity _entity) ? _entity.getMainHandItem() : ItemStack.EMPTY).getItem() instanceof SwordItem
-                || ((Entity) entity instanceof LivingEntity _entity ? _entity.getOffhandItem() : ItemStack.EMPTY).getItem() instanceof SwordItem
-                || (((Entity) entity instanceof LivingEntity _entity) ? _entity.getMainHandItem() : ItemStack.EMPTY).getItem() instanceof AxeItem
-                || ((Entity) entity instanceof LivingEntity _entity ? _entity.getOffhandItem() : ItemStack.EMPTY).getItem() instanceof AxeItem
-                || ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).is(ItemTags.create(new ResourceLocation("forge:tools/knives")))
-                || ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).is(ItemTags.create(new ResourceLocation("forge:tools/knives")))) {
-            for (int index0 = 0; index0 < (4 - (blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _getip13 ? blockstate.getValue(_getip13) : -1)); index0++) {
-                if ((LevelAccessor) world instanceof ServerLevel _level) {
-                    ItemEntity entityToSpawn = new ItemEntity(_level, ((double) x + 0.5), ((double) y + 0.5), ((double) z + 0.5), new ItemStack(CAItems.CARAMEL_CAKE_PIECE.get()));
+        } else if ((((Entity) entity instanceof LivingEntity livingEntity) ? livingEntity.getMainHandItem() : ItemStack.EMPTY).getItem() instanceof SwordItem
+                || ((Entity) entity instanceof LivingEntity livingEntity ? livingEntity.getOffhandItem() : ItemStack.EMPTY).getItem() instanceof SwordItem
+                || (((Entity) entity instanceof LivingEntity livingEntity) ? livingEntity.getMainHandItem() : ItemStack.EMPTY).getItem() instanceof AxeItem
+                || ((Entity) entity instanceof LivingEntity livingEntity ? livingEntity.getOffhandItem() : ItemStack.EMPTY).getItem() instanceof AxeItem
+                || ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).is(ItemTags.create(new ResourceLocation("forge:tools/knives")))
+                || ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).is(ItemTags.create(new ResourceLocation("forge:tools/knives")))) {
+            for (int index0 = 0; index0 < (4 - (blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip13 ? blockstate.getValue(getip13) : -1)); index0++) {
+                if ((LevelAccessor) world instanceof ServerLevel level) {
+                    ItemEntity entityToSpawn = new ItemEntity(level, ((double) x + 0.5), ((double) y + 0.5), ((double) z + 0.5), new ItemStack(CAItems.CARAMEL_CAKE_PIECE.get()));
                     entityToSpawn.setPickUpDelay(10);
-                    _level.addFreshEntity(entityToSpawn);
+                    level.addFreshEntity(entityToSpawn);
                 }
             }
             world.destroyBlock(BlockPos.containing(x, y, z), false);
-            if ((LevelAccessor) world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SHEEP_SHEAR, SoundSource.NEUTRAL, 1, 1);
+            if ((LevelAccessor) world instanceof Level level) {
+                    level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SHEEP_SHEAR, SoundSource.NEUTRAL, 1, 1);
             }
         } else {
             result = InteractionResult.PASS;

@@ -210,27 +210,27 @@ public class MartusEntity extends SeaMonster {
                     ty = MartusEntity.this.getY() + Mth.nextDouble(RandomSource.create(), 4, 9);
                     tz = MartusEntity.this.getZ() + d * Math.sin(r);
                     if ((world1.getBlockState(BlockPos.containing(tx, ty, tz))).canBeReplaced()) {
-                        if (world1 instanceof ServerLevel _level)
-                            FallingBlockEntity.fall(_level, BlockPos.containing(tx, ty, tz), (new Object() {
-                                public BlockState with(BlockState _bs, Direction newValue) {
-                                    Property<?> _prop = _bs.getBlock().getStateDefinition().getProperty("facing");
-                                    if (_prop instanceof DirectionProperty _dp && _dp.getPossibleValues().contains(newValue))
-                                        return _bs.setValue(_dp, newValue);
-                                    _prop = _bs.getBlock().getStateDefinition().getProperty("axis");
-                                    return _prop instanceof EnumProperty _ep && _ep.getPossibleValues().contains(newValue.getAxis()) ? _bs.setValue(_ep, newValue.getAxis()) : _bs;
+                        if (world1 instanceof ServerLevel level)
+                            FallingBlockEntity.fall(level, BlockPos.containing(tx, ty, tz), (new Object() {
+                                public BlockState with(BlockState bs, Direction newValue) {
+                                    Property<?> prop = bs.getBlock().getStateDefinition().getProperty("facing");
+                                    if (prop instanceof DirectionProperty dp && dp.getPossibleValues().contains(newValue))
+                                        return bs.setValue(dp, newValue);
+                                    prop = bs.getBlock().getStateDefinition().getProperty("axis");
+                                    return prop instanceof EnumProperty ep && ep.getPossibleValues().contains(newValue.getAxis()) ? bs.setValue(ep, newValue.getAxis()) : bs;
                                 }
                             }.with(CABlocks.ABANDONED_SULPTURE.get().defaultBlockState(), new Object() {
                                 public Direction getValue() {
-                                    Direction _dir = Direction.NORTH;
-                                    int _num = Mth.nextInt(RandomSource.create(), 1, 4);
-                                    if (_num == 1) {
-                                        _dir = Direction.EAST;
-                                    } else if (_num == 2) {
-                                        _dir = Direction.SOUTH;
-                                    } else if (_num == 3) {
-                                        _dir = Direction.WEST;
+                                    Direction dir = Direction.NORTH;
+                                    int num = Mth.nextInt(RandomSource.create(), 1, 4);
+                                    if (num == 1) {
+                                        dir = Direction.EAST;
+                                    } else if (num == 2) {
+                                        dir = Direction.SOUTH;
+                                    } else if (num == 3) {
+                                        dir = Direction.WEST;
                                     }
-                                    return _dir;
+                                    return dir;
                                 }
                             }.getValue())));
                         break;
@@ -282,9 +282,9 @@ public class MartusEntity extends SeaMonster {
         double phase;
         double perc;
         if (this.isAlive()) {
-            sklp1 = (Entity) this instanceof MartusEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP_1) : 0;
-            sklp2 = (Entity) this instanceof MartusEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP_2) : 0;
-            phase = (Entity) this instanceof MartusEntity _datEntI ? _datEntI.getEntityData().get(DATA_PHASE) : 0;
+            sklp1 = (Entity) this instanceof MartusEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP_1) : 0;
+            sklp2 = (Entity) this instanceof MartusEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP_2) : 0;
+            phase = (Entity) this instanceof MartusEntity datEntI ? datEntI.getEntityData().get(DATA_PHASE) : 0;
             if (tickCount % 12 == 0) {
                 double num = 0;
                 double limit;
@@ -293,9 +293,9 @@ public class MartusEntity extends SeaMonster {
                     limit = 3;
                 }
                 {
-                    final Vec3 _center = new Vec3(x, y, z);
-                    List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(96 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                    for (Entity entityiterator : _entfound) {
+                    final Vec3 center = new Vec3(x, y, z);
+                    List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(96 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                    for (Entity entityiterator : entfound) {
                         if (!(entityiterator instanceof Mob livEnt1)) {
                             continue;
                         }
@@ -332,11 +332,11 @@ public class MartusEntity extends SeaMonster {
                         this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 10000, 9, false, false));
                 }
                 if (sklp1 > 0) {
-                    if ((Entity) this instanceof MartusEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_SKILLP_1, (int) (sklp1 - 1));
+                    if ((Entity) this instanceof MartusEntity datEntSetI)
+                        datEntSetI.getEntityData().set(DATA_SKILLP_1, (int) (sklp1 - 1));
                     if (MapVariables.get(world).strategy_subsisting > 3) {
-                        if ((Entity) this instanceof MartusEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_SKILLP_1, (int) (sklp1 - 1));
+                        if ((Entity) this instanceof MartusEntity datEntSetI)
+                            datEntSetI.getEntityData().set(DATA_SKILLP_1, (int) (sklp1 - 1));
                     }
                 } else {
                     if (tickCount % 10 == 0) {
@@ -374,27 +374,27 @@ public class MartusEntity extends SeaMonster {
                         result = tgt_ent;
                         tgt = result;
                         if (!(tgt == null) && tgt.isAlive() && !tgt.getPersistentData().getBoolean("blessed")) {
-                            if ((Entity) this instanceof MartusEntity _datEntSetI)
-                                _datEntSetI.getEntityData().set(DATA_SKILLP_1, 400);
+                            if ((Entity) this instanceof MartusEntity datEntSetI)
+                                datEntSetI.getEntityData().set(DATA_SKILLP_1, 400);
                             if (this instanceof MartusEntity) {
                                 this.setAnimation("animation.martus.buff");
                             }
                             tgt.getPersistentData().putBoolean("blessed", true);
-                            perc = (tgt instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) / (tgt instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1);
-                            if (tgt instanceof LivingEntity _livingEntity22 && _livingEntity22.getAttributes().hasAttribute(Attributes.MAX_HEALTH)) {
-                                _livingEntity22.getAttribute(Attributes.MAX_HEALTH)
-                                        .setBaseValue((_livingEntity22.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? _livingEntity22.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0) * 2.5);
+                            perc = (tgt instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) / (tgt instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1);
+                            if (tgt instanceof LivingEntity livingEntity22 && livingEntity22.getAttributes().hasAttribute(Attributes.MAX_HEALTH)) {
+                                livingEntity22.getAttribute(Attributes.MAX_HEALTH)
+                                        .setBaseValue((livingEntity22.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? livingEntity22.getAttribute(Attributes.MAX_HEALTH).getBaseValue() : 0) * 2.5);
                             }
-                            if (tgt instanceof LivingEntity _livingEntity24 && _livingEntity24.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
-                                _livingEntity24.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
-                                        ((tgt instanceof LivingEntity _livingEntity23 && _livingEntity23.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity23.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) * 2.5));
-                            if (tgt instanceof LivingEntity _livingEntity26 && _livingEntity26.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get()))
-                                _livingEntity26.getAttribute(CAAttributes.SANITY_RATE.get())
-                                        .setBaseValue(((tgt instanceof LivingEntity _livingEntity25 && _livingEntity25.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get())
-                                                ? _livingEntity25.getAttribute(CAAttributes.SANITY_RATE.get()).getBaseValue()
+                            if (tgt instanceof LivingEntity livingEntity24 && livingEntity24.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE))
+                                livingEntity24.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
+                                        ((tgt instanceof LivingEntity livingEntity23 && livingEntity23.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity23.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) * 2.5));
+                            if (tgt instanceof LivingEntity livingEntity26 && livingEntity26.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get()))
+                                livingEntity26.getAttribute(CAAttributes.SANITY_RATE.get())
+                                        .setBaseValue(((tgt instanceof LivingEntity livingEntity25 && livingEntity25.getAttributes().hasAttribute(CAAttributes.SANITY_RATE.get())
+                                                ? livingEntity25.getAttribute(CAAttributes.SANITY_RATE.get()).getBaseValue()
                                                 : 0) + 25));
-                            if (tgt instanceof LivingEntity _entity)
-                                _entity.setHealth((float) ((tgt instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * perc));
+                            if (tgt instanceof LivingEntity entity)
+                                entity.setHealth((float) ((tgt instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * perc));
                             if (tgt instanceof LivingEntity && !this.level().isClientSide())
                                 this.addEffect(new MobEffectInstance(CAMobEffects.GUIDED_EVO.get(), -1, 0));
                         }
@@ -404,8 +404,8 @@ public class MartusEntity extends SeaMonster {
                     martusTimedSpawn(world, x, y, z);
                 }
             } else {
-                if (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) > ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.33) {
-                    if (!((Entity) this instanceof LivingEntity _livEnt33 && _livEnt33.hasEffect(CAMobEffects.INVULNERABLE.get()))) {
+                if (((Entity) this instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) > ((Entity) this instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.33) {
+                    if (!((Entity) this instanceof LivingEntity livEnt33 && livEnt33.hasEffect(CAMobEffects.INVULNERABLE.get()))) {
                         if (!this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 20, 9, false, false));
                     }
@@ -414,18 +414,18 @@ public class MartusEntity extends SeaMonster {
                     }
                 }
                 if (sklp1 > 0) {
-                    if ((Entity) this instanceof MartusEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_SKILLP_1, (int) (sklp1 - 1));
+                    if ((Entity) this instanceof MartusEntity datEntSetI)
+                        datEntSetI.getEntityData().set(DATA_SKILLP_1, (int) (sklp1 - 1));
                 } else {
                     if (tickCount % 10 == 0 && EntityUtils.getSeabornAround(world, x, y, z, this) > 0) {
-                        if ((Entity) this instanceof MartusEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_SKILLP_1, 1000);
+                        if ((Entity) this instanceof MartusEntity datEntSetI)
+                            datEntSetI.getEntityData().set(DATA_SKILLP_1, 1000);
                         if (this instanceof MartusEntity) {
                             this.setAnimation("animation.martus.cure");
                         }
                         new Object() {
                             void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
-                                if (((Entity) MartusEntity.this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) > ((Entity) MartusEntity.this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.02) {
+                                if (((Entity) MartusEntity.this instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) > ((Entity) MartusEntity.this instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.02) {
                                     EntityUtils.hurtMartus(world, MartusEntity.this, null, 0, 0.02);
                                 }
                                 final int tick2 = ticks;
@@ -438,9 +438,9 @@ public class MartusEntity extends SeaMonster {
                         }.timedLoop(0, 10, 20);
                         CaerulaArborMod.queueServerWork(10, () -> {
                             {
-                                final Vec3 _center = new Vec3(x, y, z);
-                                List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(64 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                                for (Entity entityiterator : _entfound) {
+                                final Vec3 center = new Vec3(x, y, z);
+                                List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(64 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                                for (Entity entityiterator : entfound) {
                                     if (!(entityiterator instanceof Mob)) {
                                         continue;
                                     }
@@ -451,22 +451,22 @@ public class MartusEntity extends SeaMonster {
                                             && !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "bossoffspring")))) {
                                         if (entityiterator instanceof LivingEntity && !this.level().isClientSide())
                                             this.addEffect(new MobEffectInstance(CAMobEffects.FAKE_DEATH.get(), 200, 1));
-                                        if (entityiterator instanceof LivingEntity _entity && !this.level().isClientSide())
+                                        if (entityiterator instanceof LivingEntity entity && !this.level().isClientSide())
                                             this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 200, 0));
                                     }
-                                    if (world instanceof ServerLevel _level)
-                                        _level.sendParticles(ParticleTypes.DOLPHIN, (entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()), 32, 0.85, 0.85, 0.85, 0.1);
+                                    if (world instanceof ServerLevel level)
+                                        level.sendParticles(ParticleTypes.DOLPHIN, (entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()), 32, 0.85, 0.85, 0.85, 0.1);
                                 }
                             }
                         });
                     }
                 }
                 if (sklp2 > 0) {
-                    if ((Entity) this instanceof MartusEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_SKILLP_2, (int) (sklp2 - 1));
+                    if ((Entity) this instanceof MartusEntity datEntSetI)
+                        datEntSetI.getEntityData().set(DATA_SKILLP_2, (int) (sklp2 - 1));
                 } else {
-                    if ((Entity) this instanceof MartusEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_SKILLP_2, 600);
+                    if ((Entity) this instanceof MartusEntity datEntSetI)
+                        datEntSetI.getEntityData().set(DATA_SKILLP_2, 600);
                     if (this instanceof MartusEntity) {
                         this.setAnimation("animation.martus.reject");
                     }
@@ -474,10 +474,10 @@ public class MartusEntity extends SeaMonster {
                         Entity tgt_ent;
                         double max_h = 0;
                         tgt_ent = this.getTarget();
-                        if (tgt_ent == null || tgt_ent instanceof LivingEntity _livEnt2 && _livEnt2.hasEffect(CAMobEffects.SUB_HAEMO.get())) {
-                            tgt_ent = ((Entity) this instanceof LivingEntity _entity) ? _entity.getLastHurtByMob() : null;
+                        if (tgt_ent == null || tgt_ent instanceof LivingEntity livEnt2 && livEnt2.hasEffect(CAMobEffects.SUB_HAEMO.get())) {
+                            tgt_ent = ((Entity) this instanceof LivingEntity entity) ? entity.getLastHurtByMob() : null;
                         }
-                        if (tgt_ent == null || tgt_ent instanceof LivingEntity _livEnt5 && _livEnt5.hasEffect(CAMobEffects.SUB_HAEMO.get())) {
+                        if (tgt_ent == null || tgt_ent instanceof LivingEntity livEnt5 && livEnt5.hasEffect(CAMobEffects.SUB_HAEMO.get())) {
                             for (Entity entityiterator : world.getEntities(this, new AABB((x + 32), (y + 32), (z + 32), (x - 32), (y - 32), (z - 32)))) {
                                 if (!(entityiterator instanceof Mob)) {
                                     continue;
@@ -485,16 +485,16 @@ public class MartusEntity extends SeaMonster {
                                 if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
                                     continue;
                                 }
-                                if (entityiterator instanceof LivingEntity _livEnt8 && _livEnt8.hasEffect(CAMobEffects.SUB_HAEMO.get())) {
+                                if (entityiterator instanceof LivingEntity livEnt8 && livEnt8.hasEffect(CAMobEffects.SUB_HAEMO.get())) {
                                     continue;
                                 }
-                                if ((entityiterator instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) > max_h) {
-                                    max_h = entityiterator instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1;
+                                if ((entityiterator instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) > max_h) {
+                                    max_h = entityiterator instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1;
                                     tgt_ent = entityiterator;
                                 }
                             }
                         }
-                        if (!(tgt_ent == null) && !(tgt_ent instanceof LivingEntity _livEnt13 && _livEnt13.hasEffect(CAMobEffects.SUB_HAEMO.get()))) {
+                        if (!(tgt_ent == null) && !(tgt_ent instanceof LivingEntity livEnt13 && livEnt13.hasEffect(CAMobEffects.SUB_HAEMO.get()))) {
                             if (tgt_ent instanceof LivingEntity && !this.level().isClientSide())
                                 this.addEffect(new MobEffectInstance(CAMobEffects.SUB_HAEMO.get(), 800, 0));
                         }
@@ -556,8 +556,8 @@ public class MartusEntity extends SeaMonster {
         if (EntityUtils.getSeabornAround(world, x, y, z, this) < (world.getLevelData().getGameRules().getInt(CAGameRules.CLONE_NUMBER_LIMIT))) {
             for (int index0 = 0; index0 < 2; index0++) {
                 SeabornSpawnManager.summonRandomSeaborn(world, 0.33, x, y, z);
-                if (world instanceof ServerLevel _level)
-                    _level.sendParticles(ParticleTypes.CLOUD, x, y, z, 18, 0.6, 0.6, 0.6, 0.16);
+                if (world instanceof ServerLevel level)
+                    level.sendParticles(ParticleTypes.CLOUD, x, y, z, 18, 0.6, 0.6, 0.6, 0.16);
             }
         }
     }

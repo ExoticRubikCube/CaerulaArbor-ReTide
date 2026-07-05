@@ -40,12 +40,12 @@ public class BishopSkillBarOverlay {
             Entity ent;
             double ind = 0;
             ent = world.getEntitiesOfClass(BishopFishEntity.class, AABB.ofSize(new Vec3(x, y, z), 64, 64, 64), e -> true).stream().min(new Object() {
-                Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
-                    return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
+                Comparator<Entity> compareDistOf(double x, double y, double z) {
+                    return Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z));
                 }
             }.compareDistOf(x, y, z)).orElse(null);
             if (!(ent == null)) {
-                ind = Math.round((float) (ent instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(BishopFishEntity.DATA_ENDP) : 0) / 24);
+                ind = Math.round((float) (ent instanceof BishopFishEntity datEntI ? datEntI.getEntityData().get(BishopFishEntity.DATA_ENDP) : 0) / 24);
             }
             if (ind > 100) {
                 ind = 100;

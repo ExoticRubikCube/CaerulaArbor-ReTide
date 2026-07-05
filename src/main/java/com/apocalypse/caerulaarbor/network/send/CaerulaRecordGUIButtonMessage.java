@@ -64,15 +64,15 @@ public class CaerulaRecordGUIButtonMessage {
 	public static void handleButtonAction(Player entity, int buttonID, int x, int y, int z) {
 		Level world = entity.level();
 		HashMap guistate = CaerulaRecordGUIMenu.guistate;
-		// security measure to prevent arbitrary chunk generation
+		// 安全措施：防止任意区块生成
 		if (!world.hasChunkAt(new BlockPos(x, y, z)))
 			return;
 		if (buttonID == 0) {
 
             {
-                boolean _setval = !(((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).show_stats;
+                boolean setval = !(((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).show_stats;
                 ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                    capability.show_stats = _setval;
+                    capability.show_stats = setval;
                     capability.syncPlayerVariables(entity);
                 });
             }
@@ -80,18 +80,18 @@ public class CaerulaRecordGUIButtonMessage {
 		if (buttonID == 1) {
 
             {
-                boolean _setval = !(((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).kingShowPtc;
+                boolean setval = !(((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).kingShowPtc;
                 ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                    capability.kingShowPtc = _setval;
+                    capability.kingShowPtc = setval;
                     capability.syncPlayerVariables(entity);
                 });
             }
         }
 		if (buttonID == 2) {
 
-            if ((Entity) entity instanceof ServerPlayer _ent) {
-                BlockPos _bpos = BlockPos.containing(x, y, z);
-                NetworkHooks.openScreen(_ent, new MenuProvider() {
+            if ((Entity) entity instanceof ServerPlayer ent) {
+                BlockPos bpos = BlockPos.containing(x, y, z);
+                NetworkHooks.openScreen(ent, new MenuProvider() {
                     @Override
                     public Component getDisplayName() {
                         return Component.literal("RelicShowcase");
@@ -99,16 +99,16 @@ public class CaerulaRecordGUIButtonMessage {
 
                     @Override
                     public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
-                        return new RelicShowcaseMenu(id, inventory, new FriendlyByteBuf(Unpooled.buffer()).writeBlockPos(_bpos));
+                        return new RelicShowcaseMenu(id, inventory, new FriendlyByteBuf(Unpooled.buffer()).writeBlockPos(bpos));
                     }
-                }, _bpos);
+                }, bpos);
             }
         }
 		if (buttonID == 3) {
 
-            if ((Entity) entity instanceof ServerPlayer _ent) {
-                BlockPos _bpos = BlockPos.containing(x, y, z);
-                NetworkHooks.openScreen(_ent, new MenuProvider() {
+            if ((Entity) entity instanceof ServerPlayer ent) {
+                BlockPos bpos = BlockPos.containing(x, y, z);
+                NetworkHooks.openScreen(ent, new MenuProvider() {
                     @Override
                     public Component getDisplayName() {
                         return Component.literal("PlayerEvo");
@@ -116,9 +116,9 @@ public class CaerulaRecordGUIButtonMessage {
 
                     @Override
                     public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
-                        return new PlayerEvoMenu(id, inventory, new FriendlyByteBuf(Unpooled.buffer()).writeBlockPos(_bpos));
+                        return new PlayerEvoMenu(id, inventory, new FriendlyByteBuf(Unpooled.buffer()).writeBlockPos(bpos));
                     }
-                }, _bpos);
+                }, bpos);
             }
         }
 	}

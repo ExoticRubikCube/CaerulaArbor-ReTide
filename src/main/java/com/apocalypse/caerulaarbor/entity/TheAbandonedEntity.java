@@ -166,15 +166,15 @@ public class TheAbandonedEntity extends SeaMonster implements PolarMountRider {
         double z = this.getZ();
         double sklp;
         Entity enemy;
-        sklp = (Entity) this instanceof TheAbandonedEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP) : 0;
+        sklp = (Entity) this instanceof TheAbandonedEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP) : 0;
         if (sklp > 0) {
-            if ((Entity) this instanceof TheAbandonedEntity _datEntSetI)
-                _datEntSetI.getEntityData().set(DATA_SKILLP, (int) (sklp - 1));
+            if ((Entity) this instanceof TheAbandonedEntity datEntSetI)
+                datEntSetI.getEntityData().set(DATA_SKILLP, (int) (sklp - 1));
         } else {
             enemy = this.getTarget();
             if (!(enemy == null) && enemy.isAlive() && distanceTo(enemy) < 7) {
-                if ((Entity) this instanceof TheAbandonedEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_SKILLP, 100);
+                if ((Entity) this instanceof TheAbandonedEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_SKILLP, 100);
                 ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY() + enemy.getBbHeight()), (enemy.getZ())));
                 if (this instanceof TheAbandonedEntity) {
                     this.setAnimation("animation.the_abandoned.shoot");
@@ -183,15 +183,15 @@ public class TheAbandonedEntity extends SeaMonster implements PolarMountRider {
                     if (this.isAlive()) {
                         new Object() {
                             void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
-                                if (world instanceof Level _level) {
-                                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SHULKER_SHOOT, SoundSource.HOSTILE, 1, 1);
+                                if (world instanceof Level level) {
+                                    level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SHULKER_SHOOT, SoundSource.HOSTILE, 1, 1);
                                 }
                                 {
-                                    Entity _shootFrom = TheAbandonedEntity.this;
-                                    Level projectileLevel = _shootFrom.level();
+                                    Entity shootFrom = TheAbandonedEntity.this;
+                                    Level projectileLevel = shootFrom.level();
                                     if (!projectileLevel.isClientSide()) {
-                                        LivingEntity _livingEntity15 = TheAbandonedEntity.this;
-                                        Projectile _entityToSpawn = new Object() {
+                                        LivingEntity livingEntity15 = TheAbandonedEntity.this;
+                                        Projectile entityToSpawn = new Object() {
                                             public Projectile getArrow(Level level, Entity shooter, float damage, int knockback) {
                                                 AbstractArrow entityToSpawn = new AbandonedShootEntity(CAEntities.ABANDONED_SHOOT.get(), level);
                                                 entityToSpawn.setOwner(shooter);
@@ -201,13 +201,13 @@ public class TheAbandonedEntity extends SeaMonster implements PolarMountRider {
                                                 return entityToSpawn;
                                             }
                                         }.getArrow(projectileLevel, (Entity) TheAbandonedEntity.this,
-                                                (float) ((_livingEntity15.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)
-                                                        ? _livingEntity15.getAttribute(Attributes.ATTACK_DAMAGE).getValue()
+                                                (float) ((livingEntity15.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)
+                                                        ? livingEntity15.getAttribute(Attributes.ATTACK_DAMAGE).getValue()
                                                         : 0) * 0.85),
                                                 0);
-                                        _entityToSpawn.setPos(_shootFrom.getX(), _shootFrom.getEyeY() - 0.1, _shootFrom.getZ());
-                                        _entityToSpawn.shoot(_shootFrom.getLookAngle().x, _shootFrom.getLookAngle().y, _shootFrom.getLookAngle().z, (float) 1.25, 2);
-                                        projectileLevel.addFreshEntity(_entityToSpawn);
+                                        entityToSpawn.setPos(shootFrom.getX(), shootFrom.getEyeY() - 0.1, shootFrom.getZ());
+                                        entityToSpawn.shoot(shootFrom.getLookAngle().x, shootFrom.getLookAngle().y, shootFrom.getLookAngle().z, (float) 1.25, 2);
+                                        projectileLevel.addFreshEntity(entityToSpawn);
                                     }
                                 }
                                 final int tick2 = ticks;

@@ -50,8 +50,8 @@ public class EndspeakerSpawneggItem extends ForgeSpawnEggItem {
             phase = item.getOrCreateTag().getDouble("phase");
             if (entity.isShiftKeyDown()) {
                 item.getOrCreateTag().putDouble("phase", ((phase + 1) % 4));
-                if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
-                    _player.displayClientMessage(Component.literal(((Component.translatable("item.caerula_arbor.endspeaker_spawnegg.use").getString()).replace("{p}", "" + Math.round(item.getOrCreateTag().getDouble("phase") + 1)))), true);
+                if ((Entity) entity instanceof Player player && !player.level().isClientSide())
+                    player.displayClientMessage(Component.literal(((Component.translatable("item.caerula_arbor.endspeaker_spawnegg.use").getString()).replace("{p}", "" + Math.round(item.getOrCreateTag().getDouble("phase") + 1)))), true);
             } else {
                 if (!((((LevelAccessor) world).getFluidState(BlockPos.containing(x, y, z)).createLegacyBlock()).getBlock() == Blocks.AIR)) {
                     tgtX = x + 0.5;

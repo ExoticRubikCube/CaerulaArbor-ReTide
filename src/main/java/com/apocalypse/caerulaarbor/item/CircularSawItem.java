@@ -155,18 +155,18 @@ public class CircularSawItem extends Item implements GeoItem, SyncedAnimationIte
         BlockState tgt;
         if (blockstate.is(BlockTags.create(new ResourceLocation("minecraft:mineable/axe")))) {
             {
-                BlockPos _pos = BlockPos.containing(x, y, z);
-                Block.dropResources(world.getBlockState(_pos), world, BlockPos.containing(x + 0.5, y, z + 0.5), null);
-                world.destroyBlock(_pos, false);
+                BlockPos pos = BlockPos.containing(x, y, z);
+                Block.dropResources(world.getBlockState(pos), world, BlockPos.containing(x + 0.5, y, z + 0.5), null);
+                world.destroyBlock(pos, false);
             }
             if (entity.isShiftKeyDown()) {
                 for (int index0 = 0; index0 < 16; index0++) {
                     tgt = (world.getBlockState(BlockPos.containing(x, y + index0 + 1, z)));
                     if (tgt.is(BlockTags.create(new ResourceLocation("minecraft:mineable/axe")))) {
                         {
-                            BlockPos _pos = BlockPos.containing(x, y + index0 + 1, z);
-                            Block.dropResources(world.getBlockState(_pos), world, BlockPos.containing(x + 0.5, y + index0 + 1, z + 0.5), null);
-                            world.destroyBlock(_pos, false);
+                            BlockPos pos = BlockPos.containing(x, y + index0 + 1, z);
+                            Block.dropResources(world.getBlockState(pos), world, BlockPos.containing(x + 0.5, y + index0 + 1, z + 0.5), null);
+                            world.destroyBlock(pos, false);
                         }
                     } else {
                         break;
@@ -174,21 +174,21 @@ public class CircularSawItem extends Item implements GeoItem, SyncedAnimationIte
                 }
             }
             if (!(new Object() {
-                public boolean checkGamemode(Entity _ent) {
-                    if (_ent instanceof ServerPlayer _serverPlayer) {
-                        return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                    } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                        return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                public boolean checkGamemode(Entity ent) {
+                    if (ent instanceof ServerPlayer serverPlayer) {
+                        return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                    } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                        return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+                                && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                     }
                     return false;
                 }
             }.checkGamemode(entity))) {
                 {
-                    ItemStack _ist = itemstack;
-                    if (_ist.hurt(1, RandomSource.create(), null)) {
-                        _ist.shrink(1);
-                        _ist.setDamageValue(0);
+                    ItemStack ist = itemstack;
+                    if (ist.hurt(1, RandomSource.create(), null)) {
+                        ist.shrink(1);
+                        ist.setDamageValue(0);
                     }
                 }
             }
@@ -205,18 +205,18 @@ public class CircularSawItem extends Item implements GeoItem, SyncedAnimationIte
         double y = entity.getY();
         double z = entity.getZ();
         if (entity != null && sourceentity != null) {
-            if (((Entity) sourceentity instanceof Player _plr ? _plr.getAttackStrengthScale(0) : 0) >= 0.95) {
+            if (((Entity) sourceentity instanceof Player plr ? plr.getAttackStrengthScale(0) : 0) >= 0.95) {
                 if (itemstack.getItem() instanceof CircularSawItem)
                     itemstack.getOrCreateTag().putString("geckoAnim", "animation.circular_saw.saw");
-                if (world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), CASounds.SAW_CUT.get(), SoundSource.PLAYERS, 2, 1);
+                if (world instanceof Level level) {
+                        level.playSound(null, BlockPos.containing(x, y, z), CASounds.SAW_CUT.get(), SoundSource.PLAYERS, 2, 1);
                 }
                 CaerulaArborMod.queueServerWork(7, () -> {
                     new Object() {
                         void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                             if ((sourceentity != null ? entity.distanceTo(sourceentity) : -1) <= 3.5) {
                                 ((Entity) entity).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "saw_cut"))), sourceentity),
-                                        (float) (((Entity) sourceentity instanceof LivingEntity _livingEntity5 && _livingEntity5.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity5.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
+                                        (float) (((Entity) sourceentity instanceof LivingEntity livingEntity5 && livingEntity5.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity5.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
                                                 * 0.35));
                             }
                             final int tick2 = ticks;
@@ -230,20 +230,20 @@ public class CircularSawItem extends Item implements GeoItem, SyncedAnimationIte
                 });
             }
             if (!(new Object() {
-                public boolean checkGamemode(Entity _ent) {
-                    if (_ent instanceof ServerPlayer _serverPlayer) {
-                        return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                    } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                        return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                public boolean checkGamemode(Entity ent) {
+                    if (ent instanceof ServerPlayer serverPlayer) {
+                        return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                    } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                        return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                     }
                     return false;
                 }
             }.checkGamemode((Entity) entity))) {
                 {
-                    ItemStack _ist = itemstack;
-                    if (_ist.hurt(1, RandomSource.create(), null)) {
-                        _ist.shrink(1);
-                        _ist.setDamageValue(0);
+                    ItemStack ist = itemstack;
+                    if (ist.hurt(1, RandomSource.create(), null)) {
+                        ist.shrink(1);
+                        ist.setDamageValue(0);
                     }
                 }
             }

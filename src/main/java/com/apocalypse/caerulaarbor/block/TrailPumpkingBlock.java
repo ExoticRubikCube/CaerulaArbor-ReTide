@@ -82,8 +82,8 @@ public class TrailPumpkingBlock extends Block {
                 world.destroyBlock(BlockPos.containing(x, y - 1, z - 1), false);
                 world.destroyBlock(BlockPos.containing(x, y - 1, z + 1), false);
             }
-            if ((LevelAccessor) world instanceof ServerLevel _level) {
-                Entity entityToSpawn = CAEntities.CHITIN_GOLEM.get().spawn(_level, BlockPos.containing(x + 0.5, y - 2, z + 0.5), MobSpawnType.MOB_SUMMONED);
+            if ((LevelAccessor) world instanceof ServerLevel level) {
+                Entity entityToSpawn = CAEntities.CHITIN_GOLEM.get().spawn(level, BlockPos.containing(x + 0.5, y - 2, z + 0.5), MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn != null) {
                     entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
                 }
@@ -112,8 +112,8 @@ public class TrailPumpkingBlock extends Block {
                 world.destroyBlock(BlockPos.containing(x, y - 1, z - 1), false);
                 world.destroyBlock(BlockPos.containing(x, y - 1, z + 1), false);
             }
-            if ((LevelAccessor) world instanceof ServerLevel _level) {
-                Entity entityToSpawn = CAEntities.COMPLEX_CHITIN_GOLEM.get().spawn(_level, BlockPos.containing(x + 0.5, y - 2, z + 0.5), MobSpawnType.MOB_SUMMONED);
+            if ((LevelAccessor) world instanceof ServerLevel level) {
+                Entity entityToSpawn = CAEntities.COMPLEX_CHITIN_GOLEM.get().spawn(level, BlockPos.containing(x + 0.5, y - 2, z + 0.5), MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn != null) {
                     entityToSpawn.setYRot(((LevelAccessor) world).getRandom().nextFloat() * 360F);
                 }

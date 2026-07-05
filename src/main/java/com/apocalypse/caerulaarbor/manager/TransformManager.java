@@ -74,8 +74,8 @@ public class TransformManager {
 		if (entity instanceof Player ||getEntityTypeId(entity).contains("touhou_little_maid:maid")) {
 			return false;
 		}
-		if (!(entity instanceof LivingEntity _livEnt2 && _livEnt2.getMobType() == MobType.UNDEAD || entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "cannot_transform"))))
-				&& world.getLevelData().getGameRules().getBoolean(CAGameRules.OCEANIZATION_MODE) && !(entity instanceof LivingEntity _livEnt5 && _livEnt5.isBaby())) {
+		if (!(entity instanceof LivingEntity livEnt2 && livEnt2.getMobType() == MobType.UNDEAD || entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "cannot_transform"))))
+				&& world.getLevelData().getGameRules().getBoolean(CAGameRules.OCEANIZATION_MODE) && !(entity instanceof LivingEntity livEnt5 && livEnt5.isBaby())) {
 			if (EntityUtils.getSeabornAround(world, x, y, z, entity) > Math.min((world.getLevelData().getGameRules().getInt(CAGameRules.CLONE_NUMBER_LIMIT)), CaerulaConfigsConfiguration.CLONE_NUM.get()) * 2) {
 				return false;
 			}
@@ -85,10 +85,10 @@ public class TransformManager {
 			} else if (Math.random() < 0.25) {
 				rate = 0.15;
 				h = CaerulaConfigsConfiguration.OCEANIZE_HEALTH.get();
-				if ((entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) < h) {
+				if ((entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) < h) {
 					rate = 0;
 				}
-				if ((entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) > h * 4) {
+				if ((entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) > h * 4) {
 					rate = 0.75;
 				}
 				if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation("forge:bosses")))) {
@@ -105,8 +105,8 @@ public class TransformManager {
 						level.playLocalSound(x, y, z, SoundEvents.ZOMBIE_CONVERTED_TO_DROWNED, SoundSource.HOSTILE, 1, 1, false);
 					}
 				}
-				if (world instanceof ServerLevel _level)
-					_level.sendParticles(ParticleTypes.EXPLOSION, x, (y + 0.2), z, 2, 0.1, 0.1, 0.1, 0.15);
+				if (world instanceof ServerLevel level)
+					level.sendParticles(ParticleTypes.EXPLOSION, x, (y + 0.2), z, 2, 0.1, 0.1, 0.1, 0.15);
 			}
 		}
 		return trans;

@@ -5,6 +5,7 @@ import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.init.CAItems;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.init.CAParticles;
+import com.apocalypse.caerulaarbor.init.CASounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -12,6 +13,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -34,8 +36,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraft.sounds.SoundEvents;
-import com.apocalypse.caerulaarbor.init.CASounds;
 
 import java.util.Comparator;
 import java.util.List;
@@ -87,12 +87,12 @@ public class LancXiaoItem extends SwordItem {
         if (isLancXiaoReady(itemstack)) {
             for (int index0 = 0; index0 < 9; index0++) {
                 {
-                    final Vec3 _center = new Vec3(x, y, z);
-                    List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(32 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                    for (Entity entityiterator : _entfound) {
-                        if (entityiterator instanceof Monster || (entityiterator instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == entity) {
-                            LivingEntity _livEnt3 = (LivingEntity) entityiterator;
-                            if (_livEnt3.hasEffect(CAMobEffects.INVULNERABLE.get())) {
+                    final Vec3 center = new Vec3(x, y, z);
+                    List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(32 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                    for (Entity entityiterator : entfound) {
+                        if (entityiterator instanceof Monster || (entityiterator instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == entity) {
+                            LivingEntity livEnt3 = (LivingEntity) entityiterator;
+                            if (livEnt3.hasEffect(CAMobEffects.INVULNERABLE.get())) {
                                 continue;
                             }
                             if (!entityiterator.isAlive()) {
@@ -111,14 +111,14 @@ public class LancXiaoItem extends SwordItem {
                                         ty = entityiterator.getY();
                                         tz = entityiterator.getZ() + Mth.nextDouble(RandomSource.create(), -0.25, 0.25);
                                         spawnTeleportLinkParticles(world, entity.getX(), entity.getY(), entity.getZ(), tx, ty, tz);
-                                        Entity _ent = entity;
-                                        _ent.teleportTo(tx, ty, tz);
-                                        if (_ent instanceof ServerPlayer _serverPlayer)
-                                            _serverPlayer.connection.teleport(tx, ty, tz, _ent.getYRot(), _ent.getXRot());
-                                        if ((LevelAccessor) world instanceof ServerLevel _level)
-                                            _level.sendParticles(CAParticles.ENDSPEAKER_PARTICLE.get(), tx, (ty + 0.75), tz, 18, 0.75, 0.75, 0.75, 0.15);
-                                        if ((LevelAccessor) world instanceof Level _level) {
-                                                _level.playSound(null, BlockPos.containing(tx, ty, tz), CASounds.ENDSPEAKER_ATTACK_HIT.get(), SoundSource.PLAYERS, (float) 1.5, 1);
+                                        Entity ent = entity;
+                                        ent.teleportTo(tx, ty, tz);
+                                        if (ent instanceof ServerPlayer serverPlayer)
+                                            serverPlayer.connection.teleport(tx, ty, tz, ent.getYRot(), ent.getXRot());
+                                        if ((LevelAccessor) world instanceof ServerLevel level)
+                                            level.sendParticles(CAParticles.ENDSPEAKER_PARTICLE.get(), tx, (ty + 0.75), tz, 18, 0.75, 0.75, 0.75, 0.15);
+                                        if ((LevelAccessor) world instanceof Level level) {
+                                                level.playSound(null, BlockPos.containing(tx, ty, tz), CASounds.ENDSPEAKER_ATTACK_HIT.get(), SoundSource.PLAYERS, (float) 1.5, 1);
                                         }
                                         entityiterator.hurt(new DamageSource(((LevelAccessor) world).registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "endspeaker_attack"))), entity), (float) (atk * 2));
                                     }
@@ -135,19 +135,18 @@ public class LancXiaoItem extends SwordItem {
                 }
             }
             if (count > 0) {
-                if ((LevelAccessor) world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), CASounds.SKILL_RELEASE.get(), SoundSource.PLAYERS, (float) 0.75, 1);
+                if ((LevelAccessor) world instanceof Level level) {
+                        level.playSound(null, BlockPos.containing(x, y, z), CASounds.SKILL_RELEASE.get(), SoundSource.PLAYERS, (float) 0.75, 1);
                 }
-                LivingEntity _entity = (LivingEntity) (Entity) entity;
-                if (!_entity.level().isClientSide())
-                    _entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 20, 2, false, false));
+                if (!entity.level().isClientSide())
+                    entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 20, 2, false, false));
                 CaerulaArborMod.queueServerWork((int) ((count + 2) * 2), () -> {
                     spawnTeleportLinkParticles(world, entity.getX(), entity.getY(), entity.getZ(), x, y, z);
                     {
-                        Entity _ent = entity;
-                        _ent.teleportTo(x, y, z);
-                        if (_ent instanceof ServerPlayer _serverPlayer)
-                            _serverPlayer.connection.teleport(x, y, z, _ent.getYRot(), _ent.getXRot());
+                        Entity ent = entity;
+                        ent.teleportTo(x, y, z);
+                        if (ent instanceof ServerPlayer serverPlayer)
+                            serverPlayer.connection.teleport(x, y, z, ent.getYRot(), ent.getXRot());
                     }
                 });
                 itemstack.getOrCreateTag().putDouble("sklp", 6);

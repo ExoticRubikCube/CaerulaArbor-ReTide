@@ -95,8 +95,8 @@ public class SeabornSpawnManager {
 		} else {
 			if ((world.getFluidState(BlockPos.containing(x, y, z)).createLegacyBlock()).getBlock() == Blocks.WATER) {
 				int rand = Mth.nextInt(RandomSource.create(), 0, WATER_NORMAL_POOL.length - 1);
-				if (world instanceof ServerLevel _level) {
-					Entity entityToSpawn = ((EntityType<?>) WATER_NORMAL_POOL[rand].get()).spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+				if (world instanceof ServerLevel level) {
+					Entity entityToSpawn = ((EntityType<?>) WATER_NORMAL_POOL[rand].get()).spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
 					if (entityToSpawn != null) {
 						entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
 					}
@@ -104,16 +104,16 @@ public class SeabornSpawnManager {
 			} else {
 				int rand = Mth.nextInt(RandomSource.create(), 0, 8);
 				if (rand < LAND_NORMAL_POOL.length) {
-					if (world instanceof ServerLevel _level) {
-						Entity entityToSpawn = ((EntityType<?>) LAND_NORMAL_POOL[rand].get()).spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+					if (world instanceof ServerLevel level) {
+						Entity entityToSpawn = ((EntityType<?>) LAND_NORMAL_POOL[rand].get()).spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
 						if (entityToSpawn != null) {
 							entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
 						}
 					}
 				} else {
 					int rand1 = Mth.nextInt(RandomSource.create(), 0, OCEANIZED_ANIMAL_POOL.length - 1);
-					if (world instanceof ServerLevel _level) {
-						Entity entityToSpawn = ((EntityType<?>) OCEANIZED_ANIMAL_POOL[rand1].get()).spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+					if (world instanceof ServerLevel level) {
+						Entity entityToSpawn = ((EntityType<?>) OCEANIZED_ANIMAL_POOL[rand1].get()).spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
 						if (entityToSpawn != null) {
 							entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
 						}
@@ -126,8 +126,8 @@ public class SeabornSpawnManager {
 	public static void summonEliteSeaborn(LevelAccessor world, double x, double y, double z) {
 		if ((world.getFluidState(BlockPos.containing(x, y, z)).createLegacyBlock()).getBlock() == Blocks.WATER) {
 			int rand = Mth.nextInt(RandomSource.create(), 0, WATER_ELITE_POOL.length - 1);
-			if (world instanceof ServerLevel _level) {
-				Entity entityToSpawn = ((EntityType<?>) WATER_ELITE_POOL[rand].get()).spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+			if (world instanceof ServerLevel level) {
+				Entity entityToSpawn = ((EntityType<?>) WATER_ELITE_POOL[rand].get()).spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
 				if (entityToSpawn != null) {
 					entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
 				}
@@ -138,27 +138,27 @@ public class SeabornSpawnManager {
 				rand = 9;
 			}
 			if (rand <= 9) {
-				if (world instanceof ServerLevel _level) {
-					Entity entityToSpawn = ((EntityType<?>) LAND_ELITE_POOL[rand].get()).spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+				if (world instanceof ServerLevel level) {
+					Entity entityToSpawn = ((EntityType<?>) LAND_ELITE_POOL[rand].get()).spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
 					if (entityToSpawn != null) {
 						entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
 					}
 				}
 			} else {
 				int rand1 = Mth.nextInt(RandomSource.create(), 0, OCEANIZED_ELITE_POOL.length - 1);
-				if (world instanceof ServerLevel _level) {
-					Entity entityToSpawn = ((EntityType<?>) OCEANIZED_ELITE_POOL[rand1].get()).spawn(_level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+				if (world instanceof ServerLevel level) {
+					Entity entityToSpawn = ((EntityType<?>) OCEANIZED_ELITE_POOL[rand1].get()).spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
 					if (entityToSpawn != null) {
 						entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
 					}
 				}
 			}
 		}
-		if (world instanceof ServerLevel _level) {
-			_level.sendParticles(ParticleTypes.CLOUD, x, y, z, 32, 1, 1, 1, 0.1);
+		if (world instanceof ServerLevel level) {
+			level.sendParticles(ParticleTypes.CLOUD, x, y, z, 32, 1, 1, 1, 0.1);
 		}
-		if (world instanceof Level _level) {
-			_level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PHANTOM_SWOOP, SoundSource.NEUTRAL, 1, 1);
+		if (world instanceof Level level) {
+			level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PHANTOM_SWOOP, SoundSource.NEUTRAL, 1, 1);
 		}
 	}
 }

@@ -83,25 +83,15 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity, Sync
 
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-        //TODO 应该移动到init 需要查看是否存在同类问题
+        // TODO：初始化逻辑仍需补充
         this.setNoGravity(true);
         return super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-    }
-
-    //TODO 需要清理同类
-    @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
-        super.addAdditionalSaveData(compound);
-    }
-
-    @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
-        super.readAdditionalSaveData(compound);
     }
 
     @Override
     public void baseTick() {
         super.baseTick();
+        //TODO 可疑
         AttributeInstance maxHealth = this.getAttribute(Attributes.MAX_HEALTH);
         if (maxHealth != null) maxHealth.setBaseValue(10);
         LevelAccessor world = this.level();
@@ -120,9 +110,9 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity, Sync
         if (!(t >= 111)) {
             damage = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.9;
             {
-                final Vec3 _center = new Vec3(x, y, z);
-                List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(18 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                for (Entity entityiterator : _entfound) {
+                final Vec3 center = new Vec3(x, y, z);
+                List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(18 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                for (Entity entityiterator : entfound) {
                     d = entityiterator != null ? distanceTo(entityiterator) : -1;
                     if (entityiterator instanceof GladiiaEntity) {
                         continue;
@@ -135,15 +125,15 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity, Sync
                             continue;
                         }
                     }
-                    enemy = entityiterator instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
-                    if (entityiterator instanceof Player || (entityiterator instanceof TamableAnimal _tamEnt && _tamEnt.isTame())) {
+                    enemy = entityiterator instanceof Mob mobEnt ? mobEnt.getTarget() : null;
+                    if (entityiterator instanceof Player || (entityiterator instanceof TamableAnimal tamEnt && tamEnt.isTame())) {
                         if (new Object() {
-                            public boolean checkGamemode(Entity _ent) {
-                                if (_ent instanceof ServerPlayer _serverPlayer) {
-                                    return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                                } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                                    return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                            && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                            public boolean checkGamemode(Entity ent) {
+                                if (ent instanceof ServerPlayer serverPlayer) {
+                                    return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                                } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                                    return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+                                            && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                                 }
                                 return false;
                             }
@@ -151,12 +141,12 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity, Sync
                             continue;
                         }
                         if (new Object() {
-                            public boolean checkGamemode(Entity _ent) {
-                                if (_ent instanceof ServerPlayer _serverPlayer) {
-                                    return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.SPECTATOR;
-                                } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                                    return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                            && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.SPECTATOR;
+                            public boolean checkGamemode(Entity ent) {
+                                if (ent instanceof ServerPlayer serverPlayer) {
+                                    return serverPlayer.gameMode.getGameModeForPlayer() == GameType.SPECTATOR;
+                                } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                                    return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+                                            && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.SPECTATOR;
                                 }
                                 return false;
                             }
@@ -179,14 +169,14 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity, Sync
             }
             if (t % 20 == 11) {
                 if (!world.isClientSide()) {
-                    if (world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), CASounds.GLADIIA_SKILL_RIM.get(), SoundSource.NEUTRAL, 3, 1);
+                    if (world instanceof Level level) {
+                        level.playSound(null, BlockPos.containing(x, y, z), CASounds.GLADIIA_SKILL_RIM.get(), SoundSource.NEUTRAL, 3, 1);
                     }
                 }
                 {
-                    final Vec3 _center = new Vec3(x, y, z);
-                    List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(24 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                    for (Entity entityiterator : _entfound) {
+                    final Vec3 center = new Vec3(x, y, z);
+                    List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(24 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                    for (Entity entityiterator : entfound) {
                         d = entityiterator != null ? distanceTo(entityiterator) : -1;
                         if (!(entityiterator instanceof LivingEntity)) {
                             if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "no_join_whirl")))) {
@@ -199,15 +189,15 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity, Sync
                         if (entityiterator instanceof GladiiaWhirlEntity) {
                             continue;
                         }
-                        enemy = entityiterator instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
-                        if (entityiterator instanceof Player || (entityiterator instanceof TamableAnimal _tamEnt && _tamEnt.isTame())) {
+                        enemy = entityiterator instanceof Mob mobEnt ? mobEnt.getTarget() : null;
+                        if (entityiterator instanceof Player || (entityiterator instanceof TamableAnimal tamEnt && tamEnt.isTame())) {
                             if (new Object() {
-                                public boolean checkGamemode(Entity _ent) {
-                                    if (_ent instanceof ServerPlayer _serverPlayer) {
-                                        return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                                    } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                                        return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                                && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                                public boolean checkGamemode(Entity ent) {
+                                    if (ent instanceof ServerPlayer serverPlayer) {
+                                        return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                                    } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                                        return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+                                                && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                                     }
                                     return false;
                                 }
@@ -215,12 +205,12 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity, Sync
                                 continue;
                             }
                             if (new Object() {
-                                public boolean checkGamemode(Entity _ent) {
-                                    if (_ent instanceof ServerPlayer _serverPlayer) {
-                                        return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.SPECTATOR;
-                                    } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                                        return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                                && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.SPECTATOR;
+                                public boolean checkGamemode(Entity ent) {
+                                    if (ent instanceof ServerPlayer serverPlayer) {
+                                        return serverPlayer.gameMode.getGameModeForPlayer() == GameType.SPECTATOR;
+                                    } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                                        return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+                                                && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.SPECTATOR;
                                     }
                                     return false;
                                 }
@@ -240,8 +230,8 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity, Sync
                             if (entityiterator instanceof LivingEntity) {
                                 entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "gladiia_magic")))),
                                         (float) damage);
-                                if (entityiterator instanceof LivingEntity _entity && !_entity.level().isClientSide())
-                                    _entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, 1, false, false));
+                                if (entityiterator instanceof LivingEntity entity && !entity.level().isClientSide())
+                                    entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20, 1, false, false));
                             }
                             if (d >= 3) {
                                 EntityUtils.pullToward(entityiterator, this);

@@ -133,18 +133,18 @@ public class OceanizedHorseEntity extends SeaMonster {
         super.baseTick();
         LevelAccessor world = this.level();
         Entity rider;
-        if (WorldUtils.canGrief(world) && ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) * 0.5) {
-            if (!((Entity) this instanceof LivingEntity _livEnt2 && _livEnt2.hasEffect(CAMobEffects.MUTE.get()))) {
-                if (!((Entity) this instanceof LivingEntity _livEnt3 && _livEnt3.hasEffect(CAMobEffects.GUIDE_PATH_AHEAD.get()))) {
+        if (WorldUtils.canGrief(world) && ((Entity) this instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) < ((Entity) this instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.5) {
+            if (!((Entity) this instanceof LivingEntity livEnt2 && livEnt2.hasEffect(CAMobEffects.MUTE.get()))) {
+                if (!((Entity) this instanceof LivingEntity livEnt3 && livEnt3.hasEffect(CAMobEffects.GUIDE_PATH_AHEAD.get()))) {
                     if (!this.level().isClientSide())
                         this.addEffect(new MobEffectInstance(CAMobEffects.GUIDE_PATH_AHEAD.get(), 20, 0));
                 }
             }
         }
-        if ((tickCount - ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getLastHurtMobTimestamp() : 0)) % 10 == 0) {
+        if ((tickCount - ((Entity) this instanceof LivingEntity livEnt ? livEnt.getLastHurtMobTimestamp() : 0)) % 10 == 0) {
             rider = getFirstPassenger();
             if (!(rider == null) && rider.isAlive()) {
-                if (rider instanceof LivingEntity _entity && !this.level().isClientSide())
+                if (rider instanceof LivingEntity entity && !this.level().isClientSide())
                     this.addEffect(new MobEffectInstance(CAMobEffects.ADD_ATTACK_PERCLY.get(), 40, 1, false, true));
             }
         }

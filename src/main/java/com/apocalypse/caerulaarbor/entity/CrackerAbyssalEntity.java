@@ -175,10 +175,10 @@ public class CrackerAbyssalEntity extends SeaMonster implements PolarMountRider 
             if (this.isAlive() && !this.hasEffect(CAMobEffects.COOLDOWN_SINAL.get())) {
 				num = 0;
 				{
-					final Vec3 _center = new Vec3(x, y, z);
-					List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(6 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-					for (Entity entityiterator : _entfound) {
-						if (!(entityiterator == this) && (entityiterator instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1) >= 10) {
+					final Vec3 center = new Vec3(x, y, z);
+					List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(6 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+					for (Entity entityiterator : entfound) {
+						if (!(entityiterator == this) && (entityiterator instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) >= 10) {
 							num = num + 1;
 						}
 					}
@@ -190,13 +190,13 @@ public class CrackerAbyssalEntity extends SeaMonster implements PolarMountRider 
 					if (!this.level().isClientSide())
 						this.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL.get(), 40, 0, false, false));
 					CaerulaArborMod.queueServerWork(10, () -> {
-						if (world instanceof Level _level) {
-							_level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.HOSTILE, 2, 1);
+						if (world instanceof Level level) {
+							level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.HOSTILE, 2, 1);
 						}
-						final Vec3 _center = new Vec3(x, y, z);
-						List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(6 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-						for (Entity entityiterator : _entfound) {
-							if ((!entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring"))) || ((Entity) this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null) == entityiterator)
+						final Vec3 center = new Vec3(x, y, z);
+						List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(6 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+						for (Entity entityiterator : entfound) {
+							if ((!entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring"))) || ((Entity) this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == entityiterator)
 									&& (entityiterator instanceof Mob || entityiterator instanceof Player)) {
 								if (distanceTo(entityiterator) <= 3) {
 									entityiterator.hurt(new DamageSource(
@@ -228,8 +228,8 @@ public class CrackerAbyssalEntity extends SeaMonster implements PolarMountRider 
                 if (!this.level().isClientSide())
                     this.addEffect(new MobEffectInstance(MobEffects.INVISIBILITY, 20, 0));
             }
-            if (world instanceof ServerLevel _level)
-                _level.sendParticles(ParticleTypes.SMOKE, x, (y + 1), z, 4, 0.4, 2, 0.4, 0.01);
+            if (world instanceof ServerLevel level)
+                level.sendParticles(ParticleTypes.SMOKE, x, (y + 1), z, 4, 0.4, 2, 0.4, 0.01);
         }
         this.refreshDimensions();
 	}

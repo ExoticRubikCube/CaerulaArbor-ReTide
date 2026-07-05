@@ -134,29 +134,29 @@ public class TidewayCradleBlock extends BaseEntityBlock implements SimpleWaterlo
         InteractionResult result = InteractionResult.PASS;
         if (entity != null) {
             ItemStack axe;
-            axe = ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).copy();
-            if (axe.getItem() == CAItems.PATH_INAUGURATOR.get() && (blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _getip3 ? blockstate.getValue(_getip3) : -1) == 1) {
+            axe = ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).copy();
+            if (axe.getItem() == CAItems.PATH_INAUGURATOR.get() && (blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip3 ? blockstate.getValue(getip3) : -1) == 1) {
                 {
-                    int _value = 0;
-                    BlockPos _pos = BlockPos.containing(x, y, z);
-                    BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-                    if (_bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))
-                        ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
+                    int value = 0;
+                    BlockPos blockPos = BlockPos.containing(x, y, z);
+                    BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                    if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
+                        ((LevelAccessor) world).setBlock(pos, bs.setValue(integerProp, value), 3);
                 }
                 for (int index0 = 0; index0 < 16; index0++) {
                     {
-                        ItemStack _ist = ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY);
-                        if (_ist.hurt(256, RandomSource.create(), null)) {
-                            _ist.shrink(1);
-                            _ist.setDamageValue(0);
+                        ItemStack ist = ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY);
+                        if (ist.hurt(256, RandomSource.create(), null)) {
+                            ist.shrink(1);
+                            ist.setDamageValue(0);
                         }
                     }
                 }
-                if ((LevelAccessor) world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.AXE_WAX_OFF, SoundSource.NEUTRAL, 1, 1);
+                if ((LevelAccessor) world instanceof Level level) {
+                        level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.AXE_WAX_OFF, SoundSource.NEUTRAL, 1, 1);
                 }
-                if ((LevelAccessor) world instanceof ServerLevel _level)
-                    _level.sendParticles(ParticleTypes.GLOW, ((double) x + 0.5), ((double) y + 0.5), ((double) z + 0.5), 5, 0.75, 0.75, 0.75, 0.1);
+                if ((LevelAccessor) world instanceof ServerLevel level)
+                    level.sendParticles(ParticleTypes.GLOW, ((double) x + 0.5), ((double) y + 0.5), ((double) z + 0.5), 5, 0.75, 0.75, 0.75, 0.1);
                 result = InteractionResult.SUCCESS;
             }
         }

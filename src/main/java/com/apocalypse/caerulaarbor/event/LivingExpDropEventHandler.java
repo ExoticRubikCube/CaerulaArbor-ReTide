@@ -32,13 +32,13 @@ public class LivingExpDropEventHandler {
 			if ((sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_lives <= 1) {
 				exp_left = originalexperience;
 				while (exp_left >= 11) {
-					if (world instanceof ServerLevel _level)
-						_level.addFreshEntity(new ExperienceOrb(_level, (x + Mth.nextDouble(RandomSource.create(), -1, 1)), (y + Mth.nextDouble(RandomSource.create(), 0.1, 0.85)), (z + Mth.nextDouble(RandomSource.create(), -1, 1)), 11));
+					if (world instanceof ServerLevel level)
+						level.addFreshEntity(new ExperienceOrb(level, (x + Mth.nextDouble(RandomSource.create(), -1, 1)), (y + Mth.nextDouble(RandomSource.create(), 0.1, 0.85)), (z + Mth.nextDouble(RandomSource.create(), -1, 1)), 11));
 					exp_left = exp_left - 11;
 				}
 				while (exp_left >= 5) {
-					if (world instanceof ServerLevel _level)
-						_level.addFreshEntity(new ExperienceOrb(_level, (x + Mth.nextDouble(RandomSource.create(), -1, 1)), (y + Mth.nextDouble(RandomSource.create(), 0.1, 0.85)), (z + Mth.nextDouble(RandomSource.create(), -1, 1)), 7));
+					if (world instanceof ServerLevel level)
+						level.addFreshEntity(new ExperienceOrb(level, (x + Mth.nextDouble(RandomSource.create(), -1, 1)), (y + Mth.nextDouble(RandomSource.create(), 0.1, 0.85)), (z + Mth.nextDouble(RandomSource.create(), -1, 1)), 7));
 					exp_left = exp_left - 7;
 				}
 				//TODO 可疑，可能需要更新
@@ -48,8 +48,8 @@ public class LivingExpDropEventHandler {
 					exp_left = exp_left - 3;
 				}
 				while (exp_left >= 1) {
-					if (world instanceof ServerLevel _level)
-						_level.addFreshEntity(new ExperienceOrb(_level, (x + Mth.nextDouble(RandomSource.create(), -1, 1)), (y + Mth.nextDouble(RandomSource.create(), 0.1, 0.85)), (z + Mth.nextDouble(RandomSource.create(), -1, 1)), 1));
+					if (world instanceof ServerLevel level)
+						level.addFreshEntity(new ExperienceOrb(level, (x + Mth.nextDouble(RandomSource.create(), -1, 1)), (y + Mth.nextDouble(RandomSource.create(), 0.1, 0.85)), (z + Mth.nextDouble(RandomSource.create(), -1, 1)), 1));
 					exp_left = exp_left - 1;
 				}
 			}

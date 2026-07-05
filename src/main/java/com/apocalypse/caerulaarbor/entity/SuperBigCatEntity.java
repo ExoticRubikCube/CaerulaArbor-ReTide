@@ -185,11 +185,11 @@ public class SuperBigCatEntity extends SeaMonster {
         if (sourceentity != null) {
             if (!(sourceentity instanceof OceanizedCatEntity)) {
                 {
-                    final Vec3 _center = new Vec3(this.getX(), this.getY(), this.getZ());
-                    List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(32 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                    for (Entity entityiterator : _entfound) {
-                        if (entityiterator instanceof OceanizedCatEntity entity && sourceentity instanceof LivingEntity _ent)
-                            entity.setTarget(_ent);
+                    final Vec3 center = new Vec3(this.getX(), this.getY(), this.getZ());
+                    List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(32 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                    for (Entity entityiterator : entfound) {
+                        if (entityiterator instanceof OceanizedCatEntity entity && sourceentity instanceof LivingEntity ent)
+                            entity.setTarget(ent);
                     }
                 }
             }
@@ -215,8 +215,8 @@ public class SuperBigCatEntity extends SeaMonster {
                 t = Mth.nextInt(RandomSource.create(), 2, 4);
                 for (int index0 = 0; index0 < (int) t; index0++) {
                     angl = Mth.nextDouble(RandomSource.create(), 0, 6.283);
-                    if (world instanceof ServerLevel _level) {
-                        Entity entityToSpawn = CAEntities.OCEANIZED_CAT.get().spawn(_level, BlockPos.containing(x + 4 * Math.sin(angl), y + 1, z + 4 * Math.cos(angl)), MobSpawnType.MOB_SUMMONED);
+                    if (world instanceof ServerLevel level) {
+                        Entity entityToSpawn = CAEntities.OCEANIZED_CAT.get().spawn(level, BlockPos.containing(x + 4 * Math.sin(angl), y + 1, z + 4 * Math.cos(angl)), MobSpawnType.MOB_SUMMONED);
                         if (entityToSpawn != null) {
                             entityToSpawn.setYRot(getYRot());
                             entityToSpawn.setYBodyRot(getYRot());
@@ -345,8 +345,8 @@ public class SuperBigCatEntity extends SeaMonster {
                 zzz = z + t * Math.cos(angl);
                 yyy = WorldUtils.findValidSpawnY(world, x, y, z, xxx, y + 1, zzz);
                 if (!Double.isNaN(yyy)) {
-                    if (world instanceof ServerLevel _level) {
-                        Entity entityToSpawn = CAEntities.OCEANIZED_CAT.get().spawn(_level, BlockPos.containing(xxx, yyy, zzz), MobSpawnType.MOB_SUMMONED);
+                    if (world instanceof ServerLevel level) {
+                        Entity entityToSpawn = CAEntities.OCEANIZED_CAT.get().spawn(level, BlockPos.containing(xxx, yyy, zzz), MobSpawnType.MOB_SUMMONED);
                         if (entityToSpawn != null) {
                             entityToSpawn.setYRot(getYRot());
                             entityToSpawn.setYBodyRot(getYRot());

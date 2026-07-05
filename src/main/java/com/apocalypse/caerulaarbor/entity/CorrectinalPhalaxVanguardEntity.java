@@ -78,9 +78,9 @@ public class CorrectinalPhalaxVanguardEntity extends Animal implements GeoEntity
         double y = this.getY();
         double z = this.getZ();
         LevelAccessor world = this.level();
-        final Vec3 _center = new Vec3((x + 2 * this.getLookAngle().x), (y + 2 * this.getLookAngle().y), (z + 2 * this.getLookAngle().z));
-        List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, AABB.ofSize(_center, 7, 7, 7), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-        for (Entity entityiterator : _entfound) {
+        final Vec3 center = new Vec3((x + 2 * this.getLookAngle().x), (y + 2 * this.getLookAngle().y), (z + 2 * this.getLookAngle().z));
+        List<Entity> entfound = world.getEntitiesOfClass(Entity.class, AABB.ofSize(center, 7, 7, 7), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+        for (Entity entityiterator : entfound) {
             if (!(entityiterator instanceof Mob) || entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation("caerula_arbor:inquisition")))) {
                 if (!(entityiterator == this.getTarget())) {
                     continue;
@@ -176,16 +176,16 @@ public class CorrectinalPhalaxVanguardEntity extends Animal implements GeoEntity
         //TODO 批量替换enemy为target
         Entity enemy;
         if (this.isAlive()) {
-            sklp1 = (Entity) this instanceof CorrectinalPhalaxVanguardEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILLP) : 0;
+            sklp1 = (Entity) this instanceof CorrectinalPhalaxVanguardEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP) : 0;
             if (sklp1 > 0) {
-                if ((Entity) this instanceof CorrectinalPhalaxVanguardEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_SKILLP, (int) (sklp1 - 1));
+                if ((Entity) this instanceof CorrectinalPhalaxVanguardEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_SKILLP, (int) (sklp1 - 1));
             } else {
                 enemy = this.getTarget();
                 if (!(enemy == null)) {
                     if (distanceTo(enemy) <= 5 && enemy.isAlive()) {
-                        if ((Entity) this instanceof CorrectinalPhalaxVanguardEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_SKILLP, 300);
+                        if ((Entity) this instanceof CorrectinalPhalaxVanguardEntity datEntSetI)
+                            datEntSetI.getEntityData().set(DATA_SKILLP, 300);
                         if (this instanceof CorrectinalPhalaxVanguardEntity) {
                             this.setAnimation("animation.correctional_phalanx _vanguard.swing");
                         }

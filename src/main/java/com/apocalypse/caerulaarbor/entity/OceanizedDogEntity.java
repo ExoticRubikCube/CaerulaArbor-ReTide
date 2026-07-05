@@ -165,8 +165,8 @@ public class OceanizedDogEntity extends TamableAnimal implements GeoEntity, Sync
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        if ((Entity) this instanceof OceanizedDogEntity _datEntSetL)
-            _datEntSetL.getEntityData().set(DATA_SITTING, false);
+        if ((Entity) this instanceof OceanizedDogEntity datEntSetL)
+            datEntSetL.getEntityData().set(DATA_SITTING, false);
         if (source.is(DamageTypes.DROWN))
             return false;
         return super.hurt(source, amount);
@@ -231,22 +231,22 @@ public class OceanizedDogEntity extends TamableAnimal implements GeoEntity, Sync
         double z = this.getZ();
         Entity entity = this;
         Level world = this.level();
-        if ((entity instanceof TamableAnimal _tamEnt ? (Entity) _tamEnt.getOwner() : null) == sourceentity) {
-            if (((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()
-                    && ((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()) {
-                if (entity instanceof OceanizedDogEntity _datEntSetL)
-                    _datEntSetL.getEntityData().set(DATA_SITTING, (!(entity instanceof OceanizedDogEntity _datEntL3 && _datEntL3.getEntityData().get(DATA_SITTING))));
+        if ((entity instanceof TamableAnimal tamEnt ? (Entity) tamEnt.getOwner() : null) == sourceentity) {
+            if (((Entity) sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()
+                    && ((Entity) sourceentity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()) {
+                if (entity instanceof OceanizedDogEntity datEntSetL)
+                    datEntSetL.getEntityData().set(DATA_SITTING, (!(entity instanceof OceanizedDogEntity datEntL3 && datEntL3.getEntityData().get(DATA_SITTING))));
                 return InteractionResult.SUCCESS;
-            } else if (((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).getItem().isEdible()) {
-                if ((entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) < (entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1)) {
-                    if (entity instanceof LivingEntity _entity)
-                        _entity.setHealth(entity instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1);
-                    if ((LevelAccessor) world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.FOX_EAT, SoundSource.PLAYERS, 1, 1);
+            } else if (((Entity) sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem().isEdible()) {
+                if ((entity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) < (entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1)) {
+                    LivingEntity livingEntity = (LivingEntity) entity;
+                    livingEntity.setHealth(livingEntity.getMaxHealth());
+                    if ((LevelAccessor) world instanceof Level level) {
+                        level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.FOX_EAT, SoundSource.PLAYERS, 1, 1);
                     }
-                    if ((LevelAccessor) world instanceof ServerLevel _level)
-                        _level.sendParticles(ParticleTypes.HAPPY_VILLAGER, x, y, z, 8, 0.6, 0.6, 0.6, 0.1);
-                    ((Entity) sourceentity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
+                    if ((LevelAccessor) world instanceof ServerLevel level)
+                        level.sendParticles(ParticleTypes.HAPPY_VILLAGER, x, y, z, 8, 0.6, 0.6, 0.6, 0.1);
+                    ((Entity) sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                     return InteractionResult.SUCCESS;
                 }
             }
@@ -259,20 +259,20 @@ public class OceanizedDogEntity extends TamableAnimal implements GeoEntity, Sync
         super.baseTick();
         Entity owner;
         Entity enemy;
-        owner = (Entity) this instanceof TamableAnimal _tamEnt ? _tamEnt.getOwner() : null;
-        enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
-        if ((Entity) this instanceof OceanizedDogEntity _datEntL2 && _datEntL2.getEntityData().get(DATA_SITTING)) {
+        owner = (Entity) this instanceof TamableAnimal tamEnt ? tamEnt.getOwner() : null;
+        enemy = (Entity) this instanceof Mob mobEnt ? mobEnt.getTarget() : null;
+        if ((Entity) this instanceof OceanizedDogEntity datEntL2 && datEntL2.getEntityData().get(DATA_SITTING)) {
             setShiftKeyDown(true);
-            if (!((Entity) this instanceof LivingEntity _livEnt4 && _livEnt4.hasEffect(MobEffects.MOVEMENT_SLOWDOWN))) {
+            if (!((Entity) this instanceof LivingEntity livEnt4 && livEnt4.hasEffect(MobEffects.MOVEMENT_SLOWDOWN))) {
                 if (!this.level().isClientSide())
                     this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 5, 9, false, false));
             }
-            if ((Entity) this instanceof Mob _entity)
-                _entity.setTarget(null);
+            if ((Entity) this instanceof Mob mob)
+                mob.setTarget(null);
         } else {
             setShiftKeyDown(false);
         }
-        if (enemy == owner || (enemy instanceof TamableAnimal _tamEnt ? (Entity) _tamEnt.getOwner() : null) == owner) {
+        if (enemy == owner || (enemy instanceof TamableAnimal tamEnt ? (Entity) tamEnt.getOwner() : null) == owner) {
            this.setTarget(null);
         }
         this.refreshDimensions();

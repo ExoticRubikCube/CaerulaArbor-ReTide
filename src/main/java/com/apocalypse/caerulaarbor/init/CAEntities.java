@@ -1,5 +1,5 @@
 /*
- *    MCreator note: This file will be REGENERATED on each build.
+ *    MCreator 注：此文件会在每次构建时重新生成。
  */
 package com.apocalypse.caerulaarbor.init;
 
@@ -509,8 +509,8 @@ public class CAEntities {
 
 					.sized(1f, 1f));
 
-	// Start of user code block custom entities
-	// End of user code block custom entities
+	// 自定义实体用户代码块开始
+	// 自定义实体用户代码块结束
 	private static <T extends Entity> RegistryObject<EntityType<T>> register(String registryname, EntityType.Builder<T> entityTypeBuilder) {
 		return REGISTRY.register(registryname, () -> entityTypeBuilder.build(registryname));
 	}

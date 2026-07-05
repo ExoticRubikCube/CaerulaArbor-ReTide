@@ -49,9 +49,8 @@ public class IncandescentAnimaItem extends Item {
 
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level world, Player entity, InteractionHand hand) {
-		InteractionResultHolder<ItemStack> ar = super.use(world, entity, hand);
 		entity.startUsingItem(hand);
-		return ar;
+		return super.use(world, entity, hand);
 	}
 
 	@Override
@@ -77,24 +76,24 @@ public class IncandescentAnimaItem extends Item {
             gameTick = ((LevelAccessor) world).getLevelData().getGameTime();
             if (useTick > 0 && gameTick - useTick < 24000) {
                 if (!(new Object() {
-                    public boolean checkGamemode(Entity _ent) {
-                        if (_ent instanceof ServerPlayer _serverPlayer) {
-                            return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                        } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                            return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                    && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                    public boolean checkGamemode(Entity ent) {
+                        if (ent instanceof ServerPlayer serverPlayer) {
+                            return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                        } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                            return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+                                    && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                         }
                         return false;
                     }
                 }.checkGamemode((Entity) entity))) {
                     info = Component.translatable("item.caerula_arbor.incandescent_anima.cooldown").getString();
-                    if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
-                        _player.displayClientMessage(Component.literal(info), true);
-                    if ((LevelAccessor) world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.FIRE_EXTINGUISH, SoundSource.PLAYERS, 3, 1);
+                    if ((Entity) entity instanceof Player player && !player.level().isClientSide())
+                        player.displayClientMessage(Component.literal(info), true);
+                    if ((LevelAccessor) world instanceof Level level) {
+                            level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.FIRE_EXTINGUISH, SoundSource.PLAYERS, 3, 1);
                     }
-                    if ((LevelAccessor) world instanceof ServerLevel _level)
-                        _level.sendParticles(ParticleTypes.ASH, x, (y + 0.75), z, 32, 0.75, 0.75, 0.75, 0.1);
+                    if ((LevelAccessor) world instanceof ServerLevel level)
+                        level.sendParticles(ParticleTypes.ASH, x, (y + 0.75), z, 32, 0.75, 0.75, 0.75, 0.1);
                     finished = true;
                 }
             }
@@ -127,13 +126,13 @@ public class IncandescentAnimaItem extends Item {
                     maxium_lvl = Math.max(Math.max(lvl1, lvl2), Math.max(lvl3, lvl4));
                     if (maxium_lvl == 0) {
                         info = Component.translatable("item.caerula_arbor.incandescent_anima.fail").getString();
-                        if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
-                            _player.displayClientMessage(Component.literal(info), true);
-                        if ((LevelAccessor) world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.FIRE_EXTINGUISH, SoundSource.PLAYERS, 3, 1);
+                        if ((Entity) entity instanceof Player player && !player.level().isClientSide())
+                            player.displayClientMessage(Component.literal(info), true);
+                        if ((LevelAccessor) world instanceof Level level) {
+                                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.FIRE_EXTINGUISH, SoundSource.PLAYERS, 3, 1);
                         }
-                        if ((LevelAccessor) world instanceof ServerLevel _level)
-                            _level.sendParticles(ParticleTypes.ASH, x, (y + 0.75), z, 32, 0.75, 0.75, 0.75, 0.1);
+                        if ((LevelAccessor) world instanceof ServerLevel level)
+                            level.sendParticles(ParticleTypes.ASH, x, (y + 0.75), z, 32, 0.75, 0.75, 0.75, 0.1);
                         finished = true;
                     } else {
                         info_raw = Component.translatable("item.caerula_arbor.incandescent_anima.use").getString();
@@ -179,11 +178,11 @@ public class IncandescentAnimaItem extends Item {
                 if (!finished) {
                     if (shouldBroadCast) {
                         MapVariablesHandler.setIncandescentUseTick(world, gameTick);
-                        if ((LevelAccessor) world instanceof Level _level) {
-                                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.END_PORTAL_SPAWN, SoundSource.PLAYERS, 3, 1);
+                        if ((LevelAccessor) world instanceof Level level) {
+                                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.END_PORTAL_SPAWN, SoundSource.PLAYERS, 3, 1);
                         }
-                        if ((LevelAccessor) world instanceof ServerLevel _level)
-                            _level.sendParticles(ParticleTypes.END_ROD, x, (y + 0.75), z, 32, 0.75, 0.75, 0.75, 0.1);
+                        if ((LevelAccessor) world instanceof ServerLevel level)
+                            level.sendParticles(ParticleTypes.END_ROD, x, (y + 0.75), z, 32, 0.75, 0.75, 0.75, 0.1);
                         itemstack.shrink(1);
                     }
                 }

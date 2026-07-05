@@ -1,8 +1,6 @@
 package com.apocalypse.caerulaarbor.block;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import net.minecraft.sounds.SoundEvents;
-
 import com.apocalypse.caerulaarbor.init.CAItems;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
@@ -12,6 +10,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -125,8 +124,8 @@ public class OperationTableBlock extends Block {
             String res = "";
             ItemStack item;
             ItemStack output;
-            stats = blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _getip1 ? blockstate.getValue(_getip1) : -1;
-            item = ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).copy();
+            stats = blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip1 ? blockstate.getValue(getip1) : -1;
+            item = ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).copy();
             if (!(Math.abs((double) x - hitX) > 1)) {
                 if (!(Math.abs((double) y - hitY) > 1)) {
                     if (!(Math.abs((double) z - hitZ) > 1)) {
@@ -134,21 +133,21 @@ public class OperationTableBlock extends Block {
                             if (item.getItem() == CAItems.PERSONNEL_TRANSPORTER.get()) {
                                 if ((item.getOrCreateTag().getString("name")).equals("caerula_arbor:the_abandoned")) {
                                     {
-                                        int _value = 1;
-                                        BlockPos _pos = BlockPos.containing(x, y, z);
-                                        BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-                                        if (_bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))
-                                            ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
+                                        int value = 1;
+                                        BlockPos blockPos = BlockPos.containing(x, y, z);
+                                        BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                                        if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
+                                            ((LevelAccessor) world).setBlock(pos, bs.setValue(integerProp, value), 3);
                                     }
-                                    ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
-                                    if ((LevelAccessor) world instanceof Level _level) {
-                                            _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ARMOR_EQUIP_LEATHER, SoundSource.BLOCKS, 1, 1);
+                                    ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
+                                    if ((LevelAccessor) world instanceof Level level) {
+                                            level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ARMOR_EQUIP_LEATHER, SoundSource.BLOCKS, 1, 1);
                                     }
                                     result = InteractionResult.SUCCESS;
                                 }
                             } else {
-                                if ((Entity) entity instanceof Player _player && !_player.level().isClientSide())
-                                    _player.displayClientMessage(Component.literal((Component.translatable("block.caerula_arbor.operation_table.misuse").getString())), true);
+                                if ((Entity) entity instanceof Player player && !player.level().isClientSide())
+                                    player.displayClientMessage(Component.literal((Component.translatable("block.caerula_arbor.operation_table.misuse").getString())), true);
                             }
                         } else if (stats == 1) {
                             if (item.getItem() == CAItems.OPERATION_KIT_SKADI.get()) {
@@ -161,37 +160,37 @@ public class OperationTableBlock extends Block {
                                 res = "caerula_arbor:specter";
                             }
                             if (!(res).isEmpty()) {
-                                if ((Entity) entity instanceof ServerPlayer _player) {
-                                    Advancement _adv = _player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "to_slain_the_sea"));
-                                    AdvancementProgress _ap = _player.getAdvancements().getOrStartProgress(_adv);
-                                    if (!_ap.isDone()) {
-                                        for (String criteria : _ap.getRemainingCriteria())
-                                            _player.getAdvancements().award(_adv, criteria);
+                                if ((Entity) entity instanceof ServerPlayer player) {
+                                    Advancement adv = player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "to_slain_the_sea"));
+                                    AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
+                                    if (!ap.isDone()) {
+                                        for (String criteria : ap.getRemainingCriteria())
+                                            player.getAdvancements().award(adv, criteria);
                                     }
                                 }
-                                if ((LevelAccessor) world instanceof Level _level) {
-                                    if (!_level.isClientSide()) {
-                                        _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ZOMBIE_CONVERTED_TO_DROWNED, SoundSource.BLOCKS, 1, 1);
+                                if ((LevelAccessor) world instanceof Level level) {
+                                    if (!level.isClientSide()) {
+                                        level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ZOMBIE_CONVERTED_TO_DROWNED, SoundSource.BLOCKS, 1, 1);
                                     } else {
-                                        _level.playLocalSound(x, y, z, SoundEvents.ZOMBIE_CONVERTED_TO_DROWNED, SoundSource.BLOCKS, 1, 1, false);
+                                        level.playLocalSound(x, y, z, SoundEvents.ZOMBIE_CONVERTED_TO_DROWNED, SoundSource.BLOCKS, 1, 1, false);
                                     }
                                 }
-                                ((Entity) entity instanceof LivingEntity _livEnt ? _livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
+                                ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                                 output = new ItemStack(CAItems.PERSONNEL_TRANSPORTER.get()).copy();
                                 output.getOrCreateTag().putString("name", res);
                                 output.getOrCreateTag().putDouble("perc", 0.5);
                                 {
-                                    int _value = 0;
-                                    BlockPos _pos = BlockPos.containing(x, y, z);
-                                    BlockState _bs = ((LevelAccessor) world).getBlockState(_pos);
-                                    if (_bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty _integerProp && _integerProp.getPossibleValues().contains(_value))
-                                        ((LevelAccessor) world).setBlock(_pos, _bs.setValue(_integerProp, _value), 3);
+                                    int value = 0;
+                                    BlockPos blockPos = BlockPos.containing(x, y, z);
+                                    BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                                    if (bs.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
+                                        ((LevelAccessor) world).setBlock(pos, bs.setValue(integerProp, value), 3);
                                 }
-                                if ((LevelAccessor) world instanceof ServerLevel _level) {
-                                    ItemEntity entityToSpawn = new ItemEntity(_level, ((double) x + 0.5), ((double) y + 1), ((double) z + 0.5), output);
+                                if ((LevelAccessor) world instanceof ServerLevel level) {
+                                    ItemEntity entityToSpawn = new ItemEntity(level, ((double) x + 0.5), ((double) y + 1), ((double) z + 0.5), output);
                                     entityToSpawn.setPickUpDelay(10);
                                     entityToSpawn.setUnlimitedLifetime();
-                                    _level.addFreshEntity(entityToSpawn);
+                                    level.addFreshEntity(entityToSpawn);
                                 }
                             }
                         }

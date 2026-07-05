@@ -96,8 +96,8 @@ public class ThrowablePotionEntity extends AbstractArrow implements ItemSupplier
 	}
 
 	/**
-	 * @deprecated Prefer {@link #shoot(LivingEntity, LivingEntity, double)} so callers can pass their own ranged damage scaling.
-	 * This fallback uses the average scaling ratio of current shooters.
+	 * @deprecated 优先使用 {@link #shoot(LivingEntity, LivingEntity, double)}，以便调用方自行传入远程伤害倍率。
+	 * 该回退重载会使用当前射手的平均倍率。
 	 */
 	@Deprecated
 	public static ThrowablePotionEntity shoot(LivingEntity entity, LivingEntity target) {

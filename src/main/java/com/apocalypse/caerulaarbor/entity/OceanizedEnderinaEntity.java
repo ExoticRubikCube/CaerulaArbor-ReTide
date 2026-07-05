@@ -431,26 +431,26 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 		double deadTime;
 		deadTime = this.deathTime;
 		if (this.isAlive()) {
-			sklp1 = (Entity) this instanceof OceanizedEnderinaEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILL_P) : 0;
-			dura = (Entity) this instanceof OceanizedEnderinaEntity _datEntI ? _datEntI.getEntityData().get(DATA_DURATION) : 0;
-			rev = (Entity) this instanceof OceanizedEnderinaEntity _datEntI ? _datEntI.getEntityData().get(DATA_REVIVE_TICK) : 0;
+			sklp1 = (Entity) this instanceof OceanizedEnderinaEntity datEntI ? datEntI.getEntityData().get(DATA_SKILL_P) : 0;
+			dura = (Entity) this instanceof OceanizedEnderinaEntity datEntI ? datEntI.getEntityData().get(DATA_DURATION) : 0;
+			rev = (Entity) this instanceof OceanizedEnderinaEntity datEntI ? datEntI.getEntityData().get(DATA_REVIVE_TICK) : 0;
 			if (tickCount % 100 == 0) {
 				if (WorldUtils.hasNoSolidGroundWithin20Below(world, x, y, z)) {
 					push(0, (-0.35), 0);
 				}
 			}
-			P = (Entity) this instanceof OceanizedEnderinaEntity _datEntI ? _datEntI.getEntityData().get(DATA_PHASE) : 0;
+			P = (Entity) this instanceof OceanizedEnderinaEntity datEntI ? datEntI.getEntityData().get(DATA_PHASE) : 0;
 			if (rev > 0) {
-				if ((Entity) this instanceof OceanizedEnderinaEntity _datEntSetI)
-					_datEntSetI.getEntityData().set(DATA_REVIVE_TICK, (int) (dura - 1));
+				if ((Entity) this instanceof OceanizedEnderinaEntity datEntSetI)
+					datEntSetI.getEntityData().set(DATA_REVIVE_TICK, (int) (dura - 1));
 				setShiftKeyDown(true);
 				setDeltaMovement(new Vec3(0, 0, 0));
 				if (tickCount % 10 == 0) {
 					this.swallowNearbyCrystals();
 				}
-				if (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) >= ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1)) {
-					if ((Entity) this instanceof OceanizedEnderinaEntity _datEntSetI)
-						_datEntSetI.getEntityData().set(DATA_REVIVE_TICK, 0);
+				if (((Entity) this instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) >= ((Entity) this instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1)) {
+					if ((Entity) this instanceof OceanizedEnderinaEntity datEntSetI)
+						datEntSetI.getEntityData().set(DATA_REVIVE_TICK, 0);
 				}
 				if (Math.random() < 0.033) {
 					MoistDragonBreathEntity.dragonBreathRain(world, x, y, z, this);
@@ -459,58 +459,58 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 					if (Math.random() < 0.033) {
 						MoistDragonBreathEntity.dragonBreathRain(world, x, y, z, this);
 					}
-					if (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) >= ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1)) {
-						if ((Entity) this instanceof OceanizedEnderinaEntity _datEntSetI)
-							_datEntSetI.getEntityData().set(DATA_REVIVE_TICK, 0);
+					if (((Entity) this instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) >= ((Entity) this instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1)) {
+						if ((Entity) this instanceof OceanizedEnderinaEntity datEntSetI)
+							datEntSetI.getEntityData().set(DATA_REVIVE_TICK, 0);
 					}
 					if (rev < 100) {
 					}
 				} else {
-					if (((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) >= ((Entity) this instanceof LivingEntity _livEnt ? _livEnt.getMaxHealth() : -1)) {
-						if ((Entity) this instanceof OceanizedEnderinaEntity _datEntSetI)
-							_datEntSetI.getEntityData().set(DATA_REVIVE_TICK, 0);
+					if (((Entity) this instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) >= ((Entity) this instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1)) {
+						if ((Entity) this instanceof OceanizedEnderinaEntity datEntSetI)
+							datEntSetI.getEntityData().set(DATA_REVIVE_TICK, 0);
 					}
 				}
 			} else {
 				setShiftKeyDown(false);
 			}
-			enemy = (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null;
+			enemy = (Entity) this instanceof Mob mobEnt ? mobEnt.getTarget() : null;
 			if (dura > 0) {
-				if ((Entity) this instanceof OceanizedEnderinaEntity _datEntSetI)
-					_datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura - 1));
+				if ((Entity) this instanceof OceanizedEnderinaEntity datEntSetI)
+					datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura - 1));
 			}
 			if (sklp1 > 0) {
-				if ((Entity) this instanceof OceanizedEnderinaEntity _datEntSetI)
-					_datEntSetI.getEntityData().set(DATA_SKILL_P, (int) (sklp1 - 1));
+				if ((Entity) this instanceof OceanizedEnderinaEntity datEntSetI)
+					datEntSetI.getEntityData().set(DATA_SKILL_P, (int) (sklp1 - 1));
 			} else if (dura <= 0) {
 				if (!(enemy == null) && enemy.isAlive()) {
 					if (this instanceof OceanizedEnderinaEntity) {
 						this.setAnimation("animation.oceanized_enderina.chant");
 					}
-					if ((Entity) this instanceof OceanizedEnderinaEntity _datEntSetI)
-						_datEntSetI.getEntityData().set(DATA_SKILL_P, 370);
-					if ((Entity) this instanceof OceanizedEnderinaEntity _datEntSetI)
-						_datEntSetI.getEntityData().set(DATA_DURATION, 70);
+					if ((Entity) this instanceof OceanizedEnderinaEntity datEntSetI)
+						datEntSetI.getEntityData().set(DATA_SKILL_P, 370);
+					if ((Entity) this instanceof OceanizedEnderinaEntity datEntSetI)
+						datEntSetI.getEntityData().set(DATA_DURATION, 70);
 					if (!this.level().isClientSide())
 						this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 50, 0, false, false));
-					if (world instanceof Level _level) {
-						_level.playSound(null, BlockPos.containing(x, y, z), CASounds.CASTER_SKILL.get(), SoundSource.HOSTILE, (float) 2.5, 1);
+					if (world instanceof Level level) {
+						level.playSound(null, BlockPos.containing(x, y, z), CASounds.CASTER_SKILL.get(), SoundSource.HOSTILE, (float) 2.5, 1);
 					}
 					for (int index0 = 0; index0 < 8; index0++) {
 						CaerulaArborMod.queueServerWork(12 + index0 * 5, () -> {
 							if (this.isAlive()) {
-								MoistDragonBreathEntity.spawn(world, getX(), getY() + 3, getZ(), this, (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null, Mth.nextInt(RandomSource.create(), 0, 1));
+								MoistDragonBreathEntity.spawn(world, getX(), getY() + 3, getZ(), this, (Entity) this instanceof Mob mobEnt ? mobEnt.getTarget() : null, Mth.nextInt(RandomSource.create(), 0, 1));
 							}
 						});
 						if (P > 0.5) {
 							CaerulaArborMod.queueServerWork(14 + index0 * 5, () -> {
 								if (this.isAlive()) {
-									MoistDragonBreathEntity.spawn(world, getX(), getY() + 3, getZ(), this, (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null, Mth.nextInt(RandomSource.create(), 0, 1));
+									MoistDragonBreathEntity.spawn(world, getX(), getY() + 3, getZ(), this, (Entity) this instanceof Mob mobEnt ? mobEnt.getTarget() : null, Mth.nextInt(RandomSource.create(), 0, 1));
 								}
 							});
 							CaerulaArborMod.queueServerWork(15 + index0 * 5, () -> {
 								if (this.isAlive()) {
-									MoistDragonBreathEntity.spawn(world, getX(), getY() + 3, getZ(), this, (Entity) this instanceof Mob _mobEnt ? _mobEnt.getTarget() : null, Mth.nextInt(RandomSource.create(), 0, 1));
+									MoistDragonBreathEntity.spawn(world, getX(), getY() + 3, getZ(), this, (Entity) this instanceof Mob mobEnt ? mobEnt.getTarget() : null, Mth.nextInt(RandomSource.create(), 0, 1));
 								}
 							});
 						}
@@ -528,10 +528,10 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 				}
 			}
 			if (tickCount % 20 == 0) {
-				final Vec3 _center = new Vec3(x, y, z);
-				List<MoistEnderCrystalEntity> _entfound = world.getEntitiesOfClass(MoistEnderCrystalEntity.class,
-						new AABB(_center, _center).inflate(16), e -> !e.IS_STATIC);
-				for (Entity entityiterator : _entfound) {
+				final Vec3 center = new Vec3(x, y, z);
+				List<MoistEnderCrystalEntity> entfound = world.getEntitiesOfClass(MoistEnderCrystalEntity.class,
+						new AABB(center, center).inflate(16), e -> !e.IS_STATIC);
+				for (Entity entityiterator : entfound) {
 					if (entityiterator == null || this == null)
 						continue;
 					Entity illusioner;
@@ -540,12 +540,12 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 					if (illusioner == null) {
 						continue;
 					}
-					if ((illusioner instanceof OceanizedEnderinaEntity _datEntI ? _datEntI.getEntityData().get(DATA_REVIVE_TICK) : 0) <= 0) {
+					if ((illusioner instanceof OceanizedEnderinaEntity datEntI ? datEntI.getEntityData().get(DATA_REVIVE_TICK) : 0) <= 0) {
 						crytsalToEnderina(entityiterator, illusioner);
 						EntityUtils.heal(this, this.getMaxHealth() * 0.01);
 					} else {
-						if (entityiterator instanceof Mob _entity)
-							_entity.getNavigation().moveTo((illusioner.getX()), (illusioner.getY()), (illusioner.getZ()), 0.5);
+						if (entityiterator instanceof Mob entity)
+							entity.getNavigation().moveTo((illusioner.getX()), (illusioner.getY()), (illusioner.getZ()), 0.5);
 					}
 					if (illusioner == null)
 						continue;
@@ -741,14 +741,14 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 			double y = this.getY();
 			double z = this.getZ();
 			if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
-				if (world instanceof ServerLevel _level) {
-					ItemEntity entityToSpawn = new ItemEntity(_level, x, (y + 1), z, new ItemStack(CAItems.MOIST_DRAGON_HEART.get()));
+				if (world instanceof ServerLevel level) {
+					ItemEntity entityToSpawn = new ItemEntity(level, x, (y + 1), z, new ItemStack(CAItems.MOIST_DRAGON_HEART.get()));
 					entityToSpawn.setPickUpDelay(5);
-					_level.addFreshEntity(entityToSpawn);
+					level.addFreshEntity(entityToSpawn);
 				}
 				for (int index0 = 0; index0 < 64; index0++) {
-					if (world instanceof ServerLevel _level)
-						_level.addFreshEntity(new ExperienceOrb(_level, (x + Mth.nextDouble(RandomSource.create(), -1, 1)), y, (z + Mth.nextDouble(RandomSource.create(), -1, 1)), Mth.nextInt(RandomSource.create(), 48, 96)));
+					if (world instanceof ServerLevel level)
+						level.addFreshEntity(new ExperienceOrb(level, (x + Mth.nextDouble(RandomSource.create(), -1, 1)), y, (z + Mth.nextDouble(RandomSource.create(), -1, 1)), Mth.nextInt(RandomSource.create(), 48, 96)));
 				}
 			}
 		}
@@ -811,23 +811,23 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 		double tx;
 		double tz;
 		double result;
-		final Vec3 _center = new Vec3(x, y, z);
-		List<MoistEnderCrystalEntity> _entfound = world.getEntitiesOfClass(MoistEnderCrystalEntity.class,
-				new AABB(_center, _center).inflate(32 / 2d), MoistEnderCrystalEntity::isAlive);
-		result = _entfound.size();
+		final Vec3 center = new Vec3(x, y, z);
+		List<MoistEnderCrystalEntity> entfound = world.getEntitiesOfClass(MoistEnderCrystalEntity.class,
+				new AABB(center, center).inflate(32 / 2d), MoistEnderCrystalEntity::isAlive);
+		result = entfound.size();
 		if (result < 12) {
 			r = Mth.nextDouble(RandomSource.create(), 0, 6.283);
 			d = Mth.nextDouble(RandomSource.create(), 7, 12);
 			tx = x + d * Math.cos(r);
 			tz = z + d * Math.sin(r);
-			if (world instanceof ServerLevel _level) {
-				Entity entityToSpawn = CAEntities.MOIST_ENDER_CRYSTAL.get().spawn(_level, BlockPos.containing(tx, y, tz), MobSpawnType.MOB_SUMMONED);
+			if (world instanceof ServerLevel level) {
+				Entity entityToSpawn = CAEntities.MOIST_ENDER_CRYSTAL.get().spawn(level, BlockPos.containing(tx, y, tz), MobSpawnType.MOB_SUMMONED);
 				if (entityToSpawn != null) {
 					entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
 				}
 			}
-			if (world instanceof ServerLevel _level)
-				_level.sendParticles(ParticleTypes.EXPLOSION, tx, (y + 1), tz, 1, 0, 0, 0, 0.1);
+			if (world instanceof ServerLevel level)
+				level.sendParticles(ParticleTypes.EXPLOSION, tx, (y + 1), tz, 1, 0, 0, 0, 0.1);
 		}
 	}
 

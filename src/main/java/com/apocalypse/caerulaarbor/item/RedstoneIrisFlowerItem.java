@@ -12,7 +12,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -46,9 +45,8 @@ public class RedstoneIrisFlowerItem extends Item {
 
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level world, Player entity, InteractionHand hand) {
-		InteractionResultHolder<ItemStack> ar = super.use(world, entity, hand);
 		entity.startUsingItem(hand);
-		return ar;
+		return super.use(world, entity, hand);
 	}
 
 	@Override
@@ -58,21 +56,18 @@ public class RedstoneIrisFlowerItem extends Item {
 		double y = entity.getY();
 		double z = entity.getZ();
         for (int index0 = 0; index0 < 16; index0++) {
-            if ((LevelAccessor) world instanceof ServerLevel _level)
-                _level.addFreshEntity(new ExperienceOrb(_level, (x + Mth.nextDouble(RandomSource.create(), -1, 1)), (y + Mth.nextDouble(RandomSource.create(), 0.6, 0.75)), (z + Mth.nextDouble(RandomSource.create(), -1, 1)), 4));
+            if ((LevelAccessor) world instanceof ServerLevel level)
+                level.addFreshEntity(new ExperienceOrb(level, (x + Mth.nextDouble(RandomSource.create(), -1, 1)), (y + Mth.nextDouble(RandomSource.create(), 0.6, 0.75)), (z + Mth.nextDouble(RandomSource.create(), -1, 1)), 4));
         }
-        {
-            boolean _setval = true;
-            ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                capability.relic_util_IRIS = _setval;
-                capability.syncPlayerVariables(entity);
-            });
+        entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+			capability.relic_util_IRIS = true;
+			capability.syncPlayerVariables(entity);
+		});
+        if ((LevelAccessor) world instanceof Level level) {
+                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 2, 1);
         }
-        if ((LevelAccessor) world instanceof Level _level) {
-                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_LEVELUP, SoundSource.NEUTRAL, 2, 1);
-        }
-        if ((LevelAccessor) world instanceof ServerLevel _level)
-            _level.sendParticles(ParticleTypes.HAPPY_VILLAGER, x, y, z, 72, 1, 1, 1, 1);
+        if ((LevelAccessor) world instanceof ServerLevel level)
+            level.sendParticles(ParticleTypes.HAPPY_VILLAGER, x, y, z, 72, 1, 1, 1, 1);
         itemstack.shrink(1);
         return retval;
 	}

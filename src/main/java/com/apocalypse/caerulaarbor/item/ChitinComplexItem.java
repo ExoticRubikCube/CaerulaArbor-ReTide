@@ -128,7 +128,7 @@ public class ChitinComplexItem extends ArmorItem implements GeoItem, SyncedAnima
 	private PlayState predicate(AnimationState<?> event) {
 		if (this.animationprocedure.equals("empty")) {
 			event.getController().setAnimation(RawAnimation.begin().thenLoop("animation.complex_chitin.idle"));
-			Entity entity = (Entity) event.getData(DataTickets.ENTITY);
+			Entity entity = event.getData(DataTickets.ENTITY);
 			if (entity instanceof ArmorStand) {
 				return PlayState.CONTINUE;
 			}

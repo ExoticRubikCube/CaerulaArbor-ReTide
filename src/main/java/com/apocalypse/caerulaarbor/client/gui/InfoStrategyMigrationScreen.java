@@ -49,7 +49,7 @@ public class InfoStrategyMigrationScreen extends AbstractContainerScreen<InfoStr
 	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
 		this.renderBackground(guiGraphics);
 		super.render(guiGraphics, mouseX, mouseY, partialTicks);
-        if (((Entity) ((LevelAccessor) world instanceof Level _level ? new ReaperFishEntity(CAEntities.REAPER_FISH.get(), _level) : null)) instanceof LivingEntity livingEntity) {
+        if (((Entity) ((LevelAccessor) world instanceof Level level ? new ReaperFishEntity(CAEntities.REAPER_FISH.get(), level) : null)) instanceof LivingEntity livingEntity) {
 			InventoryScreen.renderEntityInInventoryFollowsAngle(guiGraphics, this.leftPos + 29, this.topPos + 96, 20, 0f + (float) Math.atan((this.leftPos + 29 - mouseX) / 40.0), (float) Math.atan((this.topPos + 47 - mouseY) / 40.0), livingEntity);
 		}
 		this.renderTooltip(guiGraphics, mouseX, mouseY);

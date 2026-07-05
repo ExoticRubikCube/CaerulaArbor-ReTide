@@ -99,7 +99,7 @@ public class WearableCrownItem extends ArmorItem implements GeoItem, SyncedAnima
 	private PlayState predicate(AnimationState<?> event) {
 		if (this.animationprocedure.equals("empty")) {
 			event.getController().setAnimation(RawAnimation.begin().thenLoop("animation.crown.idle"));
-			Entity entity = (Entity) event.getData(DataTickets.ENTITY);
+			Entity entity = event.getData(DataTickets.ENTITY);
 			if (entity instanceof ArmorStand) {
 				return PlayState.CONTINUE;
 			}
@@ -119,7 +119,7 @@ public class WearableCrownItem extends ArmorItem implements GeoItem, SyncedAnima
 				this.animationprocedure = "empty";
 				event.getController().forceAnimationReset();
 			}
-			Entity entity = (Entity) event.getData(DataTickets.ENTITY);
+			Entity entity = event.getData(DataTickets.ENTITY);
 			if (entity instanceof ArmorStand) {
 				return PlayState.CONTINUE;
 			}

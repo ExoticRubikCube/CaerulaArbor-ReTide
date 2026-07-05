@@ -144,23 +144,23 @@ public class UmbrellaAbyssalEntity extends SeaMonster {
         for (int index0 = 0; index0 < 8; index0++) {
             angle = Mth.nextDouble(RandomSource.create(), 0, 6.283);
             d = Mth.nextDouble(RandomSource.create(), 1.6, 2.2);
-            if (world instanceof ServerLevel _level)
-                _level.sendParticles(CAParticles.SEA_RIPPLE.get(), (x + d * Math.sin(angle)), (y + 0.4), (z + d * Math.cos(angle)), 0, (float) Math.sin(angle), 0.0, (float) Math.cos(angle), 0.09);
+            if (world instanceof ServerLevel level)
+                level.sendParticles(CAParticles.SEA_RIPPLE.get(), (x + d * Math.sin(angle)), (y + 0.4), (z + d * Math.cos(angle)), 0, (float) Math.sin(angle), 0.0, (float) Math.cos(angle), 0.09);
             angle = Mth.nextDouble(RandomSource.create(), 0, 6.283);
             d = Mth.nextDouble(RandomSource.create(), 1.9, 2.5);
-            if (world instanceof ServerLevel _level)
-                _level.sendParticles(CAParticles.SEA_RIPPLE.get(), (x + d * Math.sin(angle)), (y + 0.4), (z + d * Math.cos(angle)), 0, (float) Math.sin(angle), 0.0, (float) Math.cos(angle), 0.11);
+            if (world instanceof ServerLevel level)
+                level.sendParticles(CAParticles.SEA_RIPPLE.get(), (x + d * Math.sin(angle)), (y + 0.4), (z + d * Math.cos(angle)), 0, (float) Math.sin(angle), 0.0, (float) Math.cos(angle), 0.11);
         }
         if (MapVariables.get(world).strategy_grow >= 3) {
             for (int index1 = 0; index1 < 14; index1++) {
                 angle = Mth.nextDouble(RandomSource.create(), 0, 6.283);
                 d = Mth.nextDouble(RandomSource.create(), 3.6, 4.3);
-                if (world instanceof ServerLevel _level)
-                    _level.sendParticles(CAParticles.SEA_RIPPLE.get(), (x + d * Math.sin(angle)), (y + 0.4), (z + d * Math.cos(angle)), 0, (float) Math.sin(angle), 0.0, (float) Math.cos(angle), 0.12);
+                if (world instanceof ServerLevel level)
+                    level.sendParticles(CAParticles.SEA_RIPPLE.get(), (x + d * Math.sin(angle)), (y + 0.4), (z + d * Math.cos(angle)), 0, (float) Math.sin(angle), 0.0, (float) Math.cos(angle), 0.12);
                 angle = Mth.nextDouble(RandomSource.create(), 0, 6.283);
                 d = Mth.nextDouble(RandomSource.create(), 4.0, 4.7);
-                if (world instanceof ServerLevel _level)
-                    _level.sendParticles(CAParticles.SEA_RIPPLE.get(), (x + d * Math.sin(angle)), (y + 0.4), (z + d * Math.cos(angle)), 0, (float) Math.sin(angle), 0.0, (float) Math.cos(angle), 0.14);
+                if (world instanceof ServerLevel level)
+                    level.sendParticles(CAParticles.SEA_RIPPLE.get(), (x + d * Math.sin(angle)), (y + 0.4), (z + d * Math.cos(angle)), 0, (float) Math.sin(angle), 0.0, (float) Math.cos(angle), 0.14);
             }
         }
         if (tickCount % 20 == 0) {

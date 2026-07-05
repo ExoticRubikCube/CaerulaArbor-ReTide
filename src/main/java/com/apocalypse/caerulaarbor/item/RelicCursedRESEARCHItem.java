@@ -43,16 +43,16 @@ public class RelicCursedRESEARCHItem extends Item {
         double z = entity.getZ();
         if (!itemstack.getOrCreateTag().getBoolean("used")) {
             if (!(entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_cursed_RESEARCH) {
-                boolean _setval = true;
+                boolean setval = true;
                 entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                    capability.relic_cursed_RESEARCH = _setval;
+                    capability.relic_cursed_RESEARCH = setval;
                     capability.syncPlayerVariables(entity);
                 });
-                if ((LevelAccessor) world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.AMBIENT_SOUL_SAND_VALLEY_MOOD.value(), SoundSource.NEUTRAL, 2, 1);
+                if ((LevelAccessor) world instanceof Level level) {
+                        level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.AMBIENT_SOUL_SAND_VALLEY_MOOD.value(), SoundSource.NEUTRAL, 2, 1);
                 }
-                if ((LevelAccessor) world instanceof ServerLevel _level)
-                    _level.sendParticles(ParticleTypes.CRIMSON_SPORE, x, y, z, 99, 1, 1, 1, 1);
+                if ((LevelAccessor) world instanceof ServerLevel level)
+                    level.sendParticles(ParticleTypes.CRIMSON_SPORE, x, y, z, 99, 1, 1, 1, 1);
                 if (((LevelAccessor) world).isClientSide())
                     Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);
                 itemstack.getOrCreateTag().putBoolean("used", true);

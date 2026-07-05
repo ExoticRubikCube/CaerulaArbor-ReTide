@@ -168,20 +168,20 @@ public class BishopFishEntity extends SeaMonster {
         double dz;
         double yfnl;
         if (this.isAlive()) {
-            if (((Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKLP) : 0) <= 0) {
+            if (((Entity) this instanceof BishopFishEntity datEntI ? datEntI.getEntityData().get(DATA_SKLP) : 0) <= 0) {
                 if (this instanceof BishopFishEntity) {
                     this.setAnimation("animation.bishop.skill");
                 }
-                if ((Entity) this instanceof BishopFishEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_DURATION, ((Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_DURATION) : 0) + 20);
-                if (world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), CASounds.BISHOPFISH_FLAP.get(), SoundSource.HOSTILE, 3, 1);
+                if ((Entity) this instanceof BishopFishEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_DURATION, ((Entity) this instanceof BishopFishEntity datEntI ? datEntI.getEntityData().get(DATA_DURATION) : 0) + 20);
+                if (world instanceof Level level) {
+                    level.playSound(null, BlockPos.containing(x, y, z), CASounds.BISHOPFISH_FLAP.get(), SoundSource.HOSTILE, 3, 1);
                 }
                 new Object() {
                     void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                         for (int index0 = 0; index0 < 180; index0++) {
-                            if (world instanceof ServerLevel _level)
-                                _level.sendParticles(ParticleTypes.ELECTRIC_SPARK, (x + timedloopiterator * 2 * Math.sin(Math.toRadians(2 * index0))), (y + 0.5), (z + timedloopiterator * 2 * Math.cos(Math.toRadians(2 * index0))), 16, 0.15, 0.5, 0.15,
+                            if (world instanceof ServerLevel level)
+                                level.sendParticles(ParticleTypes.ELECTRIC_SPARK, (x + timedloopiterator * 2 * Math.sin(Math.toRadians(2 * index0))), (y + 0.5), (z + timedloopiterator * 2 * Math.cos(Math.toRadians(2 * index0))), 16, 0.15, 0.5, 0.15,
                                         0.1);
                         }
                         final int tick2 = ticks;
@@ -199,12 +199,12 @@ public class BishopFishEntity extends SeaMonster {
                         }
                     }
                     if (new Object() {
-                        public boolean checkGamemode(Entity _ent) {
-                            if (_ent instanceof ServerPlayer _serverPlayer) {
-                                return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                            } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                                return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                        && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                        public boolean checkGamemode(Entity ent) {
+                            if (ent instanceof ServerPlayer serverPlayer) {
+                                return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                            } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                                return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+                                        && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                             }
                             return false;
                         }
@@ -244,24 +244,24 @@ public class BishopFishEntity extends SeaMonster {
                                             * 1.5,
                                     SanityEvent.Hurt.Type.ENTITY);
                         }
-                        if (entityiterator instanceof LivingEntity _entity && !this.level().isClientSide())
+                        if (entityiterator instanceof LivingEntity && !this.level().isClientSide())
                             this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 60, 0, false, false));
                     }
                 }
                 if (this.hasEffect(CAMobEffects.ANGER_OF_BISHOP.get())) {
                     if ((this.hasEffect(CAMobEffects.ANGER_OF_BISHOP.get()) ? this.getEffect(CAMobEffects.ANGER_OF_BISHOP.get()).getAmplifier() : 0) >= 1) {
-                        if ((Entity) this instanceof BishopFishEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_SKLP, 100);
+                        if ((Entity) this instanceof BishopFishEntity datEntSetI)
+                            datEntSetI.getEntityData().set(DATA_SKLP, 100);
                     } else {
-                        if ((Entity) this instanceof BishopFishEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_SKLP, 300);
+                        if ((Entity) this instanceof BishopFishEntity datEntSetI)
+                            datEntSetI.getEntityData().set(DATA_SKLP, 300);
                     }
                 } else {
-                    if ((Entity) this instanceof BishopFishEntity _datEntSetI)
-                        _datEntSetI.getEntityData().set(DATA_SKLP, 500);
+                    if ((Entity) this instanceof BishopFishEntity datEntSetI)
+                        datEntSetI.getEntityData().set(DATA_SKLP, 500);
                 }
             }
-            if (((Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_SUMMONP) : 0) <= 0) {
+            if (((Entity) this instanceof BishopFishEntity datEntI ? datEntI.getEntityData().get(DATA_SUMMONP) : 0) <= 0) {
                 for (Entity entityiterator : world.getEntities(this, new AABB((x - 32), (y - 16), (z - 32), (x + 32), (y + 16), (z + 32)))) {
                     if (entityiterator instanceof SonsEntity) {
                         if (distanceTo(entityiterator) <= 6) {
@@ -279,24 +279,24 @@ public class BishopFishEntity extends SeaMonster {
                         if (yfnl > y + 3) {
                             yfnl = y + 3;
                         }
-                        if (world instanceof ServerLevel _level) {
-                            Entity entityToSpawn = CAEntities.SONS.get().spawn(_level, BlockPos.containing(x + dx, yfnl, z + dz), MobSpawnType.MOB_SUMMONED);
+                        if (world instanceof ServerLevel level) {
+                            Entity entityToSpawn = CAEntities.SONS.get().spawn(level, BlockPos.containing(x + dx, yfnl, z + dz), MobSpawnType.MOB_SUMMONED);
                             if (entityToSpawn != null) {
                                 entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                             }
                         }
-                        if (world instanceof ServerLevel _level)
-                            _level.sendParticles(ParticleTypes.SMOKE, (x + dx), (yfnl + 0.5), (z + dz), 16, 0.5, 0.5, 0.5, 0.2);
-                        if (world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x + dx, yfnl, z + dz), SoundEvents.GUARDIAN_FLOP, SoundSource.HOSTILE, 1, 1);
+                        if (world instanceof ServerLevel level)
+                            level.sendParticles(ParticleTypes.SMOKE, (x + dx), (yfnl + 0.5), (z + dz), 16, 0.5, 0.5, 0.5, 0.2);
+                        if (world instanceof Level level) {
+                            level.playSound(null, BlockPos.containing(x + dx, yfnl, z + dz), SoundEvents.GUARDIAN_FLOP, SoundSource.HOSTILE, 1, 1);
                         }
                     }
                     if (this.hasEffect(CAMobEffects.ANGER_OF_BISHOP.get())) {
-                        if ((Entity) this instanceof BishopFishEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_SUMMONP, 360);
+                        if ((Entity) this instanceof BishopFishEntity datEntSetI)
+                            datEntSetI.getEntityData().set(DATA_SUMMONP, 360);
                     } else {
-                        if ((Entity) this instanceof BishopFishEntity _datEntSetI)
-                            _datEntSetI.getEntityData().set(DATA_SUMMONP, 600);
+                        if ((Entity) this instanceof BishopFishEntity datEntSetI)
+                            datEntSetI.getEntityData().set(DATA_SUMMONP, 600);
                     }
                 }
             }
@@ -318,17 +318,17 @@ public class BishopFishEntity extends SeaMonster {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        if ((Entity) this instanceof BishopFishEntity _datEntSetI)
-            _datEntSetI.getEntityData().set(DATA_LOCX, (int) Math.round(x));
-        if ((Entity) this instanceof BishopFishEntity _datEntSetI)
-            _datEntSetI.getEntityData().set(DATA_LOCY, (int) Math.round(y));
-        if ((Entity) this instanceof BishopFishEntity _datEntSetI)
-            _datEntSetI.getEntityData().set(DATA_LOCZ, (int) Math.round(z));
+        if ((Entity) this instanceof BishopFishEntity datEntSetI)
+            datEntSetI.getEntityData().set(DATA_LOCX, (int) Math.round(x));
+        if ((Entity) this instanceof BishopFishEntity datEntSetI)
+            datEntSetI.getEntityData().set(DATA_LOCY, (int) Math.round(y));
+        if ((Entity) this instanceof BishopFishEntity datEntSetI)
+            datEntSetI.getEntityData().set(DATA_LOCZ, (int) Math.round(z));
         setNoGravity(true);
         if (!this.level().isClientSide())
             this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 80, 1, false, false));
-        if ((LevelAccessor) world instanceof Level _level) {
-            _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.WARDEN_EMERGE, SoundSource.HOSTILE, 3, 1);
+        if ((LevelAccessor) world instanceof Level level) {
+            level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.WARDEN_EMERGE, SoundSource.HOSTILE, 3, 1);
         }
         this.setAnimation("animation.bishop.start1");
         return retval;
@@ -393,36 +393,36 @@ public class BishopFishEntity extends SeaMonster {
                 }
             }
         }
-        skl = (Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKLP) : 0;
-        smm = (Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_SUMMONP) : 0;
-        end = (Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_ENDP) : 0;
-        d = (Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_DURATION) : 0;
+        skl = (Entity) this instanceof BishopFishEntity datEntI ? datEntI.getEntityData().get(DATA_SKLP) : 0;
+        smm = (Entity) this instanceof BishopFishEntity datEntI ? datEntI.getEntityData().get(DATA_SUMMONP) : 0;
+        end = (Entity) this instanceof BishopFishEntity datEntI ? datEntI.getEntityData().get(DATA_ENDP) : 0;
+        d = (Entity) this instanceof BishopFishEntity datEntI ? datEntI.getEntityData().get(DATA_DURATION) : 0;
         if (d > 0) {
-            if ((Entity) this instanceof BishopFishEntity _datEntSetI)
-                _datEntSetI.getEntityData().set(DATA_DURATION, (int) (d - 1));
+            if ((Entity) this instanceof BishopFishEntity datEntSetI)
+                datEntSetI.getEntityData().set(DATA_DURATION, (int) (d - 1));
         }
         if (skl > 0) {
-            if ((Entity) this instanceof BishopFishEntity _datEntSetI)
-                _datEntSetI.getEntityData().set(DATA_SKLP, (int) (skl - 1));
+            if ((Entity) this instanceof BishopFishEntity datEntSetI)
+                datEntSetI.getEntityData().set(DATA_SKLP, (int) (skl - 1));
         }
         if (smm > 0) {
-            if ((Entity) this instanceof BishopFishEntity _datEntSetI)
-                _datEntSetI.getEntityData().set(DATA_SUMMONP, (int) (smm - 1));
+            if ((Entity) this instanceof BishopFishEntity datEntSetI)
+                datEntSetI.getEntityData().set(DATA_SUMMONP, (int) (smm - 1));
         }
         if (end <= 0) {
             if (EntityUtils.getSeabornAround(world, x, y, z, this) < 32) {
                 if (this instanceof BishopFishEntity) {
                     this.setAnimation("animation.bishop.blast");
                 }
-                if ((Entity) this instanceof BishopFishEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_DURATION, (int) (d + 40));
-                if (world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), CASounds.BISHOPFISH_BLAST.get(), SoundSource.HOSTILE, 4, 1);
+                if ((Entity) this instanceof BishopFishEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_DURATION, (int) (d + 40));
+                if (world instanceof Level level) {
+                    level.playSound(null, BlockPos.containing(x, y, z), CASounds.BISHOPFISH_BLAST.get(), SoundSource.HOSTILE, 4, 1);
                 }
                 if (!this.level().isClientSide())
                     this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 40, 0));
-                if ((Entity) this instanceof BishopFishEntity _datEntSetI)
-                    _datEntSetI.getEntityData().set(DATA_ENDP, 2400);
+                if ((Entity) this instanceof BishopFishEntity datEntSetI)
+                    datEntSetI.getEntityData().set(DATA_ENDP, 2400);
                 new Object() {
                     void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                         double dx1;
@@ -438,16 +438,16 @@ public class BishopFishEntity extends SeaMonster {
                             yfnl = y + 3;
                         }
                         SeabornSpawnManager.summonRandomSeaborn(world, 0.75, x + dx1, yfnl, z + dz1);
-                        if (world instanceof ServerLevel _level)
-                            FallingBlockEntity.fall(_level, BlockPos.containing(x + dx1, yfnl + 6, z + dz1), CABlocks.SEA_TRAIL_GROWN.get().defaultBlockState());
-                        if (world instanceof ServerLevel _level)
-                            _level.sendParticles(ParticleTypes.CLOUD, (x + dx1), (yfnl + 1), (z + dz1), 64, 1, 1, 1, 0.1);
-                        if (world instanceof Level _level) {
-                            _level.playSound(null, BlockPos.containing(x + dx1, yfnl + 1, z + dz1), SoundEvents.AMBIENT_UNDERWATER_ENTER, SoundSource.NEUTRAL, (float) 1.5, 1);
+                        if (world instanceof ServerLevel level)
+                            FallingBlockEntity.fall(level, BlockPos.containing(x + dx1, yfnl + 6, z + dz1), CABlocks.SEA_TRAIL_GROWN.get().defaultBlockState());
+                        if (world instanceof ServerLevel level)
+                            level.sendParticles(ParticleTypes.CLOUD, (x + dx1), (yfnl + 1), (z + dz1), 64, 1, 1, 1, 0.1);
+                        if (world instanceof Level level) {
+                            level.playSound(null, BlockPos.containing(x + dx1, yfnl + 1, z + dz1), SoundEvents.AMBIENT_UNDERWATER_ENTER, SoundSource.NEUTRAL, (float) 1.5, 1);
                         }
                         for (Entity entityiterator : world.getEntities(BishopFishEntity.this, new AABB((x + 18), y, (z + 18), (x - 18), (y + 12), (z - 18)))) {
                             if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
-                                if (!(entityiterator == ((Entity) BishopFishEntity.this instanceof Mob _mobEnt ? (Entity) _mobEnt.getTarget() : null))) {
+                                if (!(entityiterator == ((Entity) BishopFishEntity.this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null))) {
                                     continue;
                                 }
                             }
@@ -457,7 +457,7 @@ public class BishopFishEntity extends SeaMonster {
                             if (distanceTo(entityiterator) <= 20) {
                                 entityiterator.hurt(
                                         new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_magic"))), BishopFishEntity.this),
-                                        (float) (((Entity) BishopFishEntity.this instanceof LivingEntity _livingEntity25 && _livingEntity25.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity25.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 3));
+                                        (float) (((Entity) BishopFishEntity.this instanceof LivingEntity livingEntity25 && livingEntity25.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity25.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 3));
                             }
                         }
                         final int tick2 = ticks;
@@ -470,20 +470,20 @@ public class BishopFishEntity extends SeaMonster {
                 }.timedLoop(0, 16, 5);
             }
         } else {
-            if ((Entity) this instanceof BishopFishEntity _datEntSetI)
-                _datEntSetI.getEntityData().set(DATA_ENDP, (int) (end - 1));
+            if ((Entity) this instanceof BishopFishEntity datEntSetI)
+                datEntSetI.getEntityData().set(DATA_ENDP, (int) (end - 1));
         }
-        if (tickCount % 10 == 0 && new Vec3(x, y, z).distanceTo(new Vec3(((Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_LOCX) : 0),
-                ((Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_LOCY) : 0), ((Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_LOCZ) : 0))) >= 3) {
+        if (tickCount % 10 == 0 && new Vec3(x, y, z).distanceTo(new Vec3(((Entity) this instanceof BishopFishEntity datEntI ? datEntI.getEntityData().get(DATA_LOCX) : 0),
+                ((Entity) this instanceof BishopFishEntity datEntI ? datEntI.getEntityData().get(DATA_LOCY) : 0), ((Entity) this instanceof BishopFishEntity datEntI ? datEntI.getEntityData().get(DATA_LOCZ) : 0))) >= 3) {
             setDeltaMovement(new Vec3(0, 0, 0));
             {
-                Entity _ent = this;
-                _ent.teleportTo(((Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_LOCX) : 0),
-                        ((Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_LOCY) : 0), ((Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_LOCZ) : 0));
-                if (_ent instanceof ServerPlayer _serverPlayer)
-                    _serverPlayer.connection.teleport(((Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_LOCX) : 0),
-                            ((Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_LOCY) : 0), ((Entity) this instanceof BishopFishEntity _datEntI ? _datEntI.getEntityData().get(DATA_LOCZ) : 0),
-                            _ent.getYRot(), _ent.getXRot());
+                Entity ent = this;
+                ent.teleportTo(((Entity) this instanceof BishopFishEntity datEntI ? datEntI.getEntityData().get(DATA_LOCX) : 0),
+                        ((Entity) this instanceof BishopFishEntity datEntI ? datEntI.getEntityData().get(DATA_LOCY) : 0), ((Entity) this instanceof BishopFishEntity datEntI ? datEntI.getEntityData().get(DATA_LOCZ) : 0));
+                if (ent instanceof ServerPlayer serverPlayer)
+                    serverPlayer.connection.teleport(((Entity) this instanceof BishopFishEntity datEntI ? datEntI.getEntityData().get(DATA_LOCX) : 0),
+                            ((Entity) this instanceof BishopFishEntity datEntI ? datEntI.getEntityData().get(DATA_LOCY) : 0), ((Entity) this instanceof BishopFishEntity datEntI ? datEntI.getEntityData().get(DATA_LOCZ) : 0),
+                            ent.getYRot(), ent.getXRot());
             }
         }
         for (Entity entityiterator : world.getEntities(this, new AABB((x - 6), (y - 6), (z - 6), (x + 6), (y + 6), (z + 6)))) {
@@ -608,11 +608,11 @@ public class BishopFishEntity extends SeaMonster {
                 if (!world.isClientSide() && world.getServer() != null) {
                     for (ItemStack itemstackiterator : world.getServer().getLootData().getLootTable(new ResourceLocation(CaerulaArborMod.MODID, "gameplay/relic_bishop"))
                             .getRandomItems(new LootParams.Builder((ServerLevel) world).create(LootContextParamSets.EMPTY))) {
-                        if (world instanceof ServerLevel _level) {
-                            ItemEntity entityToSpawn = new ItemEntity(_level, this.getX(), this.getY(), this.getZ(), itemstackiterator);
+                        if (world instanceof ServerLevel level) {
+                            ItemEntity entityToSpawn = new ItemEntity(level, this.getX(), this.getY(), this.getZ(), itemstackiterator);
                             entityToSpawn.setPickUpDelay(10);
                             entityToSpawn.setUnlimitedLifetime();
-                            _level.addFreshEntity(entityToSpawn);
+                            level.addFreshEntity(entityToSpawn);
                         }
                     }
                 }

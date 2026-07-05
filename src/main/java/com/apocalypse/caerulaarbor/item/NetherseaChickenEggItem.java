@@ -58,23 +58,23 @@ public class NetherseaChickenEggItem extends Item {
             return InteractionResult.SUCCESS;
         if (world.isClientSide()) return InteractionResult.SUCCESS;
         if (Math.random() < 0.75) {
-            if (world instanceof Level _level) {
-                    _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SNIFFER_EGG_CRACK, SoundSource.PLAYERS, 1, 1);
+            if (world instanceof Level level) {
+                    level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SNIFFER_EGG_CRACK, SoundSource.PLAYERS, 1, 1);
             }
             return InteractionResult.FAIL;
         }
         int count = (int) (1 + Math.pow(1.45 * Math.random(), 2));
         double rrr = Math.max(1, itemstack.getOrCreateTag().getDouble("rate") * 0.001);
         double ooo = Math.max(4, itemstack.getOrCreateTag().getDouble("offset"));
-        if (world instanceof Level _level) {
-                _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SNIFFER_EGG_HATCH, SoundSource.PLAYERS, 1, 1);
+        if (world instanceof Level level) {
+                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.SNIFFER_EGG_HATCH, SoundSource.PLAYERS, 1, 1);
         }
         itemstack.shrink(1);
         BlockPos pos = BlockPos.containing(x + direction.getStepX(), y + direction.getStepY(), z + direction.getStepZ());
         for (int index0 = 0; index0 < count; index0++) {
             double fr = rrr + Mth.nextDouble(RandomSource.create(), -1 / ooo, ooo * 0.05);
-            if (world instanceof ServerLevel _level) {
-                Entity entityToSpawn = CAEntities.OCEANIZED_CHICKEN.get().spawn(_level, pos, MobSpawnType.MOB_SUMMONED);
+            if (world instanceof ServerLevel level) {
+                Entity entityToSpawn = CAEntities.OCEANIZED_CHICKEN.get().spawn(level, pos, MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn instanceof OceanizedChickenEntity chicken) {
                     chicken.setYRot(world.getRandom().nextFloat() * 360F);
                     AttributeInstance max_h = chicken.getAttribute(Attributes.MAX_HEALTH);

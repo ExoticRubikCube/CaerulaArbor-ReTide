@@ -18,14 +18,13 @@ public class TrailCakePieceItem extends Item {
 
 	@Override
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
-		ItemStack retval = super.finishUsingItem(itemstack, world, entity);
-		double x = entity.getX();
+        double x = entity.getX();
 		double y = entity.getY();
 		double z = entity.getZ();
 		SIHelper.causeSanityInjury(entity, 150, SanityEvent.Hurt.Type.FOOD);
 		if (world instanceof ServerLevel level) {
 			level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, y + 0.7, z, 32, 0.5, 1.5, 0.5, 1);
 		}
-		return retval;
+		return super.finishUsingItem(itemstack, world, entity);
 	}
 }

@@ -65,7 +65,7 @@ public class DisconcentrationEventHandler {
                 player.addEffect(new MobEffectInstance(CAMobEffects.FLESHDEFORMITY.get(), 999, 1, false, false));
             }
         } else if (player.hasEffect(CAMobEffects.FLESHDEFORMITY.get())) {
-            // TODO: 待向原作者确认。待移植文件这里移除的是 HAEMOPHILIA，而不是 FLESHDEFORMITY，当前先保留原行为。
+            // TODO：待向原作者确认。待移植文件这里移除的是 HAEMOPHILIA，而不是 FLESHDEFORMITY，当前先保留原行为。
             player.removeEffect(CAMobEffects.HAEMOPHILIA.get());
         }
     }

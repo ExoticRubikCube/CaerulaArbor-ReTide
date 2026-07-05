@@ -43,9 +43,9 @@ public class LivingDamageEventHandler {
 
         if (entity instanceof Player) {
             double light_cost = Math.min(amount * 0.0025, 0.25);
-            double _setval = Math.max((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_light - light_cost, 0);
+            double setval = Math.max((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_light - light_cost, 0);
             entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                capability.player_light = _setval;
+                capability.player_light = setval;
                 capability.syncPlayerVariables(entity);
             });
         }
@@ -78,8 +78,8 @@ public class LivingDamageEventHandler {
         if (sanityRate > 0) {
             new Object() {
                 void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
-                    if (world instanceof ServerLevel _level)
-                        _level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, (y + entity.getBbHeight() * 0.5), z,
+                    if (world instanceof ServerLevel level)
+                        level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, (y + entity.getBbHeight() * 0.5), z,
                                 (int) Math.min(sanityRate, 16),
                                 1.2, 1.5, 1.2, 0.1);
                     final int tick2 = ticks;
@@ -140,13 +140,13 @@ public class LivingDamageEventHandler {
             double z = entity.getZ();
             double amount = event.getAmount();
 
-            double h = (entity instanceof LivingEntity _livEnt ? _livEnt.getHealth() : -1) - amount;
+            double h = (entity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) - amount;
             double d = Math.min((attacker.getAttributes().hasAttribute(net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_DAMAGE) ? attacker.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_DAMAGE).getValue() : 0) * rate, h - 1);
 
             if (d > 0) {
                 entity.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hand_of_choker"))), attacker), (float) d);
-                if (world instanceof ServerLevel _level)
-                    _level.sendParticles(ParticleTypes.GLOW_SQUID_INK, x, (y + 0.75), z, 3, 0.75, 0.75, 0.75, 0.1);
+                if (world instanceof ServerLevel level)
+                    level.sendParticles(ParticleTypes.GLOW_SQUID_INK, x, (y + 0.75), z, 3, 0.75, 0.75, 0.75, 0.1);
             }
         }
     }

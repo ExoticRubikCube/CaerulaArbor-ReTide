@@ -55,16 +55,16 @@ public class CarmenTreatyItem extends Item {
             tx = x + 0.5 + direction.getStepX();
             ty = y + direction.getStepY();
             tz = z + 0.5 + direction.getStepZ();
-            if (world instanceof ServerLevel _level)
-                _level.sendParticles(CAParticles.PURPLE_FLAME.get(), tx, (ty + 0.64), tz, 48, 0.64, 0.64, 0.64, 0.1);
-            if (world instanceof ServerLevel _level) {
-                Entity entityToSpawn = CAEntities.SAINT_CARMEN.get().spawn(_level, BlockPos.containing(tx, ty, tz), MobSpawnType.MOB_SUMMONED);
+            if (world instanceof ServerLevel level)
+                level.sendParticles(CAParticles.PURPLE_FLAME.get(), tx, (ty + 0.64), tz, 48, 0.64, 0.64, 0.64, 0.1);
+            if (world instanceof ServerLevel level) {
+                Entity entityToSpawn = CAEntities.SAINT_CARMEN.get().spawn(level, BlockPos.containing(tx, ty, tz), MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn != null) {
                     entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                 }
             }
-            if (entity instanceof Player _player && !_player.level().isClientSide())
-                _player.displayClientMessage(Component.literal((Component.translatable("spawn.saint_carmen").getString())), true);
+            if (entity instanceof Player player && !player.level().isClientSide())
+                player.displayClientMessage(Component.literal((Component.translatable("spawn.saint_carmen").getString())), true);
             itemstack.shrink(1);
             return InteractionResult.SUCCESS;
         }

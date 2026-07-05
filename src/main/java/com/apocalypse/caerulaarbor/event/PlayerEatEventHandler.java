@@ -59,9 +59,9 @@ public class PlayerEatEventHandler {
 					currentLives = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_lives;
 					if (currentLives < maxLives) {
 						{
-							double _setval = Math.min(currentLives + lifeGain, maxLives);
+							double setval = Math.min(currentLives + lifeGain, maxLives);
 							entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-								capability.player_lives = _setval;
+								capability.player_lives = setval;
 								capability.syncPlayerVariables(entity);
 							});
 						}
@@ -96,11 +96,11 @@ public class PlayerEatEventHandler {
 					maximumLightGain = 0;
 				}
 				{
-					double _setval = Math.min(100,
+					double setval = Math.min(100,
 							(entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_light
 									+ Mth.nextInt(RandomSource.create(), (int) minimumLightGain, (int) maximumLightGain));
 					entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-						capability.player_light = _setval;
+						capability.player_light = setval;
 						capability.syncPlayerVariables(entity);
 					});
 				}

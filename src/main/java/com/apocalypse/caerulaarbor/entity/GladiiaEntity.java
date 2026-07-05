@@ -270,29 +270,29 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 		double dura;
 		double skillp2;
 		if (this.isAlive()) {
-			sklp1 = (Entity) this instanceof GladiiaEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILL_P) : 0;
-			skillp2 = (Entity) this instanceof GladiiaEntity _datEntI ? _datEntI.getEntityData().get(DATA_SKILL_P2) : 0;
-			dura = (Entity) this instanceof GladiiaEntity _datEntI ? _datEntI.getEntityData().get(DATA_DURATION) : 0;
+			sklp1 = (Entity) this instanceof GladiiaEntity datEntI ? datEntI.getEntityData().get(DATA_SKILL_P) : 0;
+			skillp2 = (Entity) this instanceof GladiiaEntity datEntI ? datEntI.getEntityData().get(DATA_SKILL_P2) : 0;
+			dura = (Entity) this instanceof GladiiaEntity datEntI ? datEntI.getEntityData().get(DATA_DURATION) : 0;
             enemy = this.getTarget();
 			if (dura > 0) {
-				if ((Entity) this instanceof GladiiaEntity _datEntSetI)
-					_datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura - 1));
+				if ((Entity) this instanceof GladiiaEntity datEntSetI)
+					datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura - 1));
 			}
 			if (sklp1 > 0) {
-				if ((Entity) this instanceof GladiiaEntity _datEntSetI)
-					_datEntSetI.getEntityData().set(DATA_SKILL_P, (int) (sklp1 - 1));
+				if ((Entity) this instanceof GladiiaEntity datEntSetI)
+					datEntSetI.getEntityData().set(DATA_SKILL_P, (int) (sklp1 - 1));
 			} else {
 				if (!(enemy == null) && enemy.isAlive()) {
 					if (distanceTo(enemy) <= 7.5 && dura <= 0) {
 						if (this instanceof GladiiaEntity) {
 							this.setAnimation("animation.gladiia.pull");
 						}
-						if ((Entity) this instanceof GladiiaEntity _datEntSetI)
-							_datEntSetI.getEntityData().set(DATA_SKILL_P, 160);
-						if ((Entity) this instanceof GladiiaEntity _datEntSetI)
-							_datEntSetI.getEntityData().set(DATA_DURATION, 30);
-						if (world instanceof Level _level) {
-							_level.playSound(null, BlockPos.containing(x, y, z), CASounds.GLADIIA_PULL_PRE.get(), SoundSource.NEUTRAL, (float) 2.5, 1);
+						if ((Entity) this instanceof GladiiaEntity datEntSetI)
+							datEntSetI.getEntityData().set(DATA_SKILL_P, 160);
+						if ((Entity) this instanceof GladiiaEntity datEntSetI)
+							datEntSetI.getEntityData().set(DATA_DURATION, 30);
+						if (world instanceof Level level) {
+							level.playSound(null, BlockPos.containing(x, y, z), CASounds.GLADIIA_PULL_PRE.get(), SoundSource.NEUTRAL, (float) 2.5, 1);
 						}
 						((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY() + 1.6), (enemy.getZ())));
 						CaerulaArborMod.queueServerWork(10, () -> {
@@ -302,8 +302,8 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 									return;
 								Entity side;
 								double damage;
-								if (world instanceof Level _level) {
-									_level.playSound(null, BlockPos.containing(ene.getX(), ene.getY(), ene.getZ()), CASounds.GLADIIA_PULL_PULL.get(), SoundSource.NEUTRAL, 3, 1);
+								if (world instanceof Level level) {
+									level.playSound(null, BlockPos.containing(ene.getX(), ene.getY(), ene.getZ()), CASounds.GLADIIA_PULL_PULL.get(), SoundSource.NEUTRAL, 3, 1);
 								}
 								EntityUtils.pullToward(ene, this);
 								GladiiaEntity.spawnGladiiaLinkParticles(world, this, ene);
@@ -316,8 +316,8 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 									this.hurtWithHunterAttack(side, (float) (damage * 3));
 								}
 								CaerulaArborMod.queueServerWork(10, () -> {
-									if (world instanceof Level _level) {
-										_level.playSound(null, BlockPos.containing(ene.getX(), ene.getY(), ene.getZ()), CASounds.GLADIIA_ATTACK_PRE.get(), SoundSource.NEUTRAL, 3, 1);
+									if (world instanceof Level level) {
+										level.playSound(null, BlockPos.containing(ene.getX(), ene.getY(), ene.getZ()), CASounds.GLADIIA_ATTACK_PRE.get(), SoundSource.NEUTRAL, 3, 1);
 									}
 									if (ene instanceof LivingEntity && !this.level().isClientSide())
 										this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 40, 0, false, false));
@@ -330,8 +330,8 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 				}
 			}
 			if (skillp2 > 0) {
-				if ((Entity) this instanceof GladiiaEntity _datEntSetI)
-					_datEntSetI.getEntityData().set(DATA_SKILL_P2, (int) (skillp2 - 1));
+				if ((Entity) this instanceof GladiiaEntity datEntSetI)
+					datEntSetI.getEntityData().set(DATA_SKILL_P2, (int) (skillp2 - 1));
 			} else {
 				if (!(enemy == null) && enemy.isAlive()) {
 					if (distanceTo(enemy) <= 21 && dura <= 0) {
@@ -339,19 +339,19 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 							this.setAnimation("animation.gladiia.float");
 						}
 						if (SpecterEntity.isSpecterAround(world, x, y, z)) {
-							if ((Entity) this instanceof GladiiaEntity _datEntSetI)
-								_datEntSetI.getEntityData().set(DATA_SKILL_P2, 400);
+							if ((Entity) this instanceof GladiiaEntity datEntSetI)
+								datEntSetI.getEntityData().set(DATA_SKILL_P2, 400);
 						} else {
-							if ((Entity) this instanceof GladiiaEntity _datEntSetI)
-								_datEntSetI.getEntityData().set(DATA_SKILL_P2, 500);
+							if ((Entity) this instanceof GladiiaEntity datEntSetI)
+								datEntSetI.getEntityData().set(DATA_SKILL_P2, 500);
 						}
-						if ((Entity) this instanceof GladiiaEntity _datEntSetI)
-							_datEntSetI.getEntityData().set(DATA_DURATION, 120);
-						if (world instanceof Level _level) {
-							_level.playSound(null, BlockPos.containing(x, y, z), CASounds.GLADIIA_SKILL_RELEASE.get(), SoundSource.NEUTRAL, 3, 1);
+						if ((Entity) this instanceof GladiiaEntity datEntSetI)
+							datEntSetI.getEntityData().set(DATA_DURATION, 120);
+						if (world instanceof Level level) {
+							level.playSound(null, BlockPos.containing(x, y, z), CASounds.GLADIIA_SKILL_RELEASE.get(), SoundSource.NEUTRAL, 3, 1);
 						}
-						if (world instanceof Level _level) {
-							_level.playSound(null, BlockPos.containing(x, y, z), CASounds.GLADIIA_SKILL.get(), SoundSource.NEUTRAL, 2, 1);
+						if (world instanceof Level level) {
+							level.playSound(null, BlockPos.containing(x, y, z), CASounds.GLADIIA_SKILL.get(), SoundSource.NEUTRAL, 2, 1);
 						}
 						((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY() + 1.6), (enemy.getZ())));
 						if (!this.level().isClientSide())
@@ -360,16 +360,16 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 							this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 120, 9, false, false));
 						if (enemy instanceof LivingEntity && !this.level().isClientSide())
 							this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 120, 3, false, false));
-						if (world instanceof ServerLevel _level) {
-							Entity entityToSpawn = CAEntities.GLADIIA_WHIRL.get().spawn(_level, BlockPos.containing(enemy.getX(), enemy.getY(), enemy.getZ()), MobSpawnType.MOB_SUMMONED);
+						if (world instanceof ServerLevel level) {
+							Entity entityToSpawn = CAEntities.GLADIIA_WHIRL.get().spawn(level, BlockPos.containing(enemy.getX(), enemy.getY(), enemy.getZ()), MobSpawnType.MOB_SUMMONED);
 							if (entityToSpawn != null) {
 								entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
 							}
 						}
 						CaerulaArborMod.queueServerWork(111, () -> {
 							if (this.isAlive()) {
-								if (world instanceof Level _level) {
-									_level.playSound(null, BlockPos.containing(x, y, z), CASounds.GLADIIA_PULL_PRE.get(), SoundSource.NEUTRAL, (float) 2.5, 1);
+								if (world instanceof Level level) {
+									level.playSound(null, BlockPos.containing(x, y, z), CASounds.GLADIIA_PULL_PRE.get(), SoundSource.NEUTRAL, (float) 2.5, 1);
 								}
 							}
 						});
@@ -380,18 +380,18 @@ public class GladiiaEntity extends Animal implements GeoEntity, SyncedAnimationE
 									return;
                                 double damage;
 								double d;
-								if (world instanceof Level _level) {
-									_level.playSound(null, BlockPos.containing(ene.getX(), ene.getY(), ene.getZ()), CASounds.GLADIIA_PULL_PULL.get(), SoundSource.NEUTRAL, 3, 1);
+								if (world instanceof Level level) {
+									level.playSound(null, BlockPos.containing(ene.getX(), ene.getY(), ene.getZ()), CASounds.GLADIIA_PULL_PULL.get(), SoundSource.NEUTRAL, 3, 1);
 								}
 								damage = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
 								{
-									final Vec3 _center = new Vec3((ene.getX()), (ene.getY()), (ene.getZ()));
-									List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(8 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-									for (Entity entityiterator : _entfound) {
+									final Vec3 center = new Vec3((ene.getX()), (ene.getY()), (ene.getZ()));
+									List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(8 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+									for (Entity entityiterator : entfound) {
 										if (!(entityiterator instanceof LivingEntity)) {
 											continue;
 										}
-										if (entityiterator instanceof Monster || (entityiterator instanceof Mob _mobEnt1 ? (Entity) _mobEnt1.getTarget() : null) == this) {
+										if (entityiterator instanceof Monster || (entityiterator instanceof Mob mobEnt1 ? (Entity) mobEnt1.getTarget() : null) == this) {
 											d = ene.distanceTo(entityiterator);
 											if (d <= 4) {
 												EntityUtils.pullToward(entityiterator, this);

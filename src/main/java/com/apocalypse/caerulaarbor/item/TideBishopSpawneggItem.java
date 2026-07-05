@@ -28,9 +28,8 @@ public class TideBishopSpawneggItem extends ForgeSpawnEggItem {
 
 	@Override
 	public boolean hurtEnemy(ItemStack itemstack, LivingEntity entity, LivingEntity sourceentity) {
-        if (entity instanceof TideDeathrepellerEntity) {
-            if (!entity.level().isClientSide())
-                entity.discard();
+        if (!entity.level().isClientSide() && entity instanceof TideDeathrepellerEntity) {
+            entity.discard();
         }
         return true;
 	}

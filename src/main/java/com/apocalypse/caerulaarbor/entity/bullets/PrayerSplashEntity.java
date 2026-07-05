@@ -99,12 +99,12 @@ public class PrayerSplashEntity extends AbstractArrow implements ItemSupplier {
                 if (!level().isClientSide())
                     discard();
             }
-            if ((entity instanceof CompassionPrayerEntity _datEntI ? _datEntI.getEntityData().get(CompassionPrayerEntity.DATA_PHASE) : 0) <= 0) {
-                atk = entity instanceof LivingEntity _livingEntity7 && _livingEntity7.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? _livingEntity7.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
+            if ((entity instanceof CompassionPrayerEntity datEntI ? datEntI.getEntityData().get(CompassionPrayerEntity.DATA_PHASE) : 0) <= 0) {
+                atk = entity instanceof LivingEntity livingEntity7 && livingEntity7.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity7.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
                 {
-                    final Vec3 _center = new Vec3(x, y, z);
-                    List<Entity> _entfound = world.getEntitiesOfClass(Entity.class, new AABB(_center, _center).inflate(12 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_center))).toList();
-                    for (Entity entityiterator : _entfound) {
+                    final Vec3 center = new Vec3(x, y, z);
+                    List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(12 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                    for (Entity entityiterator : entfound) {
                         if (entity == entityiterator) {
                             continue;
                         }
@@ -112,8 +112,8 @@ public class PrayerSplashEntity extends AbstractArrow implements ItemSupplier {
 							if (entityiterator instanceof LivingEntity livingEntity && livingEntity.getHealth() < livingEntity.getMaxHealth()) {
 								if (entityiterator.isAlive()) {
 									EntityUtils.heal(livingEntity, atk);
-                                    if (world instanceof ServerLevel _level)
-                                        _level.sendParticles(CAParticles.SEA_SPLASH.get(), (entityiterator.getX()), (entityiterator.getY() + 1), (entityiterator.getZ()), 24, 1, 1, 1, 0.1);
+                                    if (world instanceof ServerLevel level)
+                                        level.sendParticles(CAParticles.SEA_SPLASH.get(), (entityiterator.getX()), (entityiterator.getY() + 1), (entityiterator.getZ()), 24, 1, 1, 1, 0.1);
                                     count = count + 1;
                                     if (count >= 3) {
                                         break;
@@ -154,8 +154,8 @@ public class PrayerSplashEntity extends AbstractArrow implements ItemSupplier {
 	}
 
 	/**
-	 * @deprecated Prefer {@link #shoot(LivingEntity, LivingEntity, double)} so callers can pass their own ranged damage scaling.
-	 * This fallback uses the average scaling ratio of current shooters.
+	 * @deprecated 优先使用 {@link #shoot(LivingEntity, LivingEntity, double)}，以便调用方自行传入远程伤害倍率。
+	 * 该回退重载会使用当前射手的平均倍率。
 	 */
 	@Deprecated
 	public static PrayerSplashEntity shoot(LivingEntity entity, LivingEntity target) {

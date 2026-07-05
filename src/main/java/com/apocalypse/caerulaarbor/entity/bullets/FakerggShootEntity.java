@@ -77,8 +77,8 @@ public class FakerggShootEntity extends AbstractArrow implements ItemSupplier {
         if (sourceentity == null)
             return;
         if (!(entity == sourceentity)) {
-            if (world instanceof ServerLevel _level) {
-                Entity entityToSpawn = CAEntities.FAKE_OFFSPRING.get().spawn(_level, BlockPos.containing(this.getX() + Mth.nextDouble(RandomSource.create(), -0.5, 0.5), this.getY(), this.getZ() + Mth.nextDouble(RandomSource.create(), -0.5, 0.5)),
+            if (world instanceof ServerLevel level) {
+                Entity entityToSpawn = CAEntities.FAKE_OFFSPRING.get().spawn(level, BlockPos.containing(this.getX() + Mth.nextDouble(RandomSource.create(), -0.5, 0.5), this.getY(), this.getZ() + Mth.nextDouble(RandomSource.create(), -0.5, 0.5)),
                         MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn != null) {
                     entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
@@ -96,8 +96,8 @@ public class FakerggShootEntity extends AbstractArrow implements ItemSupplier {
         double x = blockHitResult.getBlockPos().getX();
         double y = blockHitResult.getBlockPos().getY();
         double z = blockHitResult.getBlockPos().getZ();
-        if (world instanceof ServerLevel _level) {
-            Entity entityToSpawn = CAEntities.FAKE_OFFSPRING.get().spawn(_level, BlockPos.containing(x + Mth.nextDouble(RandomSource.create(), 0, 1), y + 1, z + Mth.nextDouble(RandomSource.create(), 0, 1)), MobSpawnType.MOB_SUMMONED);
+        if (world instanceof ServerLevel level) {
+            Entity entityToSpawn = CAEntities.FAKE_OFFSPRING.get().spawn(level, BlockPos.containing(x + Mth.nextDouble(RandomSource.create(), 0, 1), y + 1, z + Mth.nextDouble(RandomSource.create(), 0, 1)), MobSpawnType.MOB_SUMMONED);
             if (entityToSpawn != null) {
                 entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
             }
@@ -134,8 +134,8 @@ public class FakerggShootEntity extends AbstractArrow implements ItemSupplier {
 	}
 
 	/**
-	 * @deprecated Prefer {@link #shoot(LivingEntity, LivingEntity, double)} so callers can pass their own ranged damage scaling.
-	 * This fallback uses the average scaling ratio of current shooters.
+	 * @deprecated 优先使用 {@link #shoot(LivingEntity, LivingEntity, double)}，以便调用方自行传入远程伤害倍率。
+	 * 该回退重载会使用当前射手的平均倍率。
 	 */
 	@Deprecated
 	public static FakerggShootEntity shoot(LivingEntity entity, LivingEntity target) {

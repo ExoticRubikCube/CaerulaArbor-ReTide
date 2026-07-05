@@ -48,12 +48,12 @@ public class TulipMedcineItem extends Item {
 		double x = entity.getX();
 		double y = entity.getY();
 		double z = entity.getZ();
-        if ((LevelAccessor) world instanceof ServerLevel _level)
-            _level.sendParticles(ParticleTypes.CLOUD, x, (y + 0.75), z, 32, 0.75, 0.75, 0.75, 0.15);
+        if ((LevelAccessor) world instanceof ServerLevel level)
+            level.sendParticles(ParticleTypes.CLOUD, x, (y + 0.75), z, 32, 0.75, 0.75, 0.75, 0.15);
         {
-            double _setval = 0;
+            double setval = 0;
             ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                capability.disoclusion = _setval;
+                capability.disoclusion = setval;
                 capability.syncPlayerVariables(entity);
             });
         }
@@ -63,12 +63,12 @@ public class TulipMedcineItem extends Item {
             entity.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 600, 1));
             entity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 600, 2));
         }
-        if (entity instanceof ServerPlayer _player) {
-            Advancement _adv = _player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "but_i_refuse"));
-            AdvancementProgress _ap = _player.getAdvancements().getOrStartProgress(_adv);
-            if (!_ap.isDone()) {
-                for (String criteria : _ap.getRemainingCriteria())
-                    _player.getAdvancements().award(_adv, criteria);
+        if (entity instanceof ServerPlayer player) {
+            Advancement adv = player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "but_i_refuse"));
+            AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
+            if (!ap.isDone()) {
+                for (String criteria : ap.getRemainingCriteria())
+                    player.getAdvancements().award(adv, criteria);
             }
         }
         if (itemstack.isEmpty()) {

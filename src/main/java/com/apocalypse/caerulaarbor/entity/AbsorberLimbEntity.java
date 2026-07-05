@@ -102,20 +102,20 @@ public class AbsorberLimbEntity extends SeaMonster {
 		double z = this.getZ();
 		Entity thirster;
 		thirster = world.getEntitiesOfClass(ThirsterEntity.class, AABB.ofSize(new Vec3(x, y, z), 48, 48, 48), e -> true).stream().min(new Object() {
-			Comparator<Entity> compareDistOf(double _x, double _y, double _z) {
-				return Comparator.comparingDouble(_entcnd -> _entcnd.distanceToSqr(_x, _y, _z));
+			Comparator<Entity> compareDistOf(double x, double y, double z) {
+				return Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z));
 			}
 		}.compareDistOf(x, y, z)).orElse(null);
 		if (!(thirster == null)) {
-			if (thirster instanceof LivingEntity _livingEntity3 && _livingEntity3.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
-				_livingEntity3.getAttribute(CAAttributes.GENERAL_DEFENSE.get())
-						.setBaseValue(Math.max((thirster instanceof LivingEntity _livingEntity2 && _livingEntity2.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get())
-								? _livingEntity2.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getBaseValue()
+			if (thirster instanceof LivingEntity livingEntity3 && livingEntity3.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get()))
+				livingEntity3.getAttribute(CAAttributes.GENERAL_DEFENSE.get())
+						.setBaseValue(Math.max((thirster instanceof LivingEntity livingEntity2 && livingEntity2.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get())
+								? livingEntity2.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getBaseValue()
 								: 0) - 1, 0));
-			if (thirster instanceof LivingEntity _livingEntity5 && _livingEntity5.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())) {
-				_livingEntity5.getAttribute(CAAttributes.MAGIC_RESISTANCE.get())
-						.setBaseValue(Math.max((_livingEntity5.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())
-								? _livingEntity5.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).getBaseValue()
+			if (thirster instanceof LivingEntity livingEntity5 && livingEntity5.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())) {
+				livingEntity5.getAttribute(CAAttributes.MAGIC_RESISTANCE.get())
+						.setBaseValue(Math.max((livingEntity5.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())
+								? livingEntity5.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).getBaseValue()
 								: 0) - 5, 0));
 			}
 		}

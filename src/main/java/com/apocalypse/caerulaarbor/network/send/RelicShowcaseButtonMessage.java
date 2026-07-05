@@ -71,14 +71,14 @@ public class RelicShowcaseButtonMessage {
 
 	public static void handleButtonAction(Player entity, int buttonID, int x, int y, int z) {
 		Level world = entity.level();
-		// security measure to prevent arbitrary chunk generation
+		// 安全措施：防止任意区块生成
 		if (!world.hasChunkAt(new BlockPos(x, y, z)))
 			return;
 		if (buttonID == 0) {
 
-            if ((Entity) entity instanceof ServerPlayer _ent) {
-                BlockPos _bpos = BlockPos.containing(x, y, z);
-                NetworkHooks.openScreen(_ent, new MenuProvider() {
+            if ((Entity) entity instanceof ServerPlayer ent) {
+                BlockPos bpos = BlockPos.containing(x, y, z);
+                NetworkHooks.openScreen(ent, new MenuProvider() {
                     @Override
                     public Component getDisplayName() {
                         return Component.literal("CaerulaRecordGUI");
@@ -86,19 +86,19 @@ public class RelicShowcaseButtonMessage {
 
                     @Override
                     public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
-                        return new CaerulaRecordGUIMenu(id, inventory, new FriendlyByteBuf(Unpooled.buffer()).writeBlockPos(_bpos));
+                        return new CaerulaRecordGUIMenu(id, inventory, new FriendlyByteBuf(Unpooled.buffer()).writeBlockPos(bpos));
                     }
-                }, _bpos);
+                }, bpos);
             }
         }
 		if (buttonID == 1) {
 
             ItemStack togive = ItemStack.EMPTY;
-            if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
+            if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
                 if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_king_CROWN) {
-                    if ((Entity) entity instanceof Player _player) {
-                        ItemStack _stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
-                        _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
+                    if ((Entity) entity instanceof Player player) {
+                        ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
+                        player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     }
                     for (int index0 = 0; index0 < 64; index0++) {
                         togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElseGet(() -> Items.AIR))).copy();
@@ -106,36 +106,36 @@ public class RelicShowcaseButtonMessage {
                             break;
                         }
                     }
-                    if ((Entity) entity instanceof Player _player) {
-                        ItemStack _setstack = togive.copy();
-                        _setstack.setCount(1);
-                        ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
+                    if ((Entity) entity instanceof Player player) {
+                        ItemStack setstack = togive.copy();
+                        setstack.setCount(1);
+                        ItemHandlerHelper.giveItemToPlayer(player, setstack);
                     }
                     {
-                        boolean _setval = false;
+                        boolean setval = false;
                         ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                            capability.relic_king_CROWN = _setval;
+                            capability.relic_king_CROWN = setval;
                             capability.syncPlayerVariables(entity);
                         });
                     }
                 }
             } else {
                 if (new Object() {
-                    public boolean checkGamemode(Entity _ent) {
-                        if (_ent instanceof ServerPlayer _serverPlayer) {
-                            return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                        } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                            return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                    && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                    public boolean checkGamemode(Entity ent) {
+                        if (ent instanceof ServerPlayer serverPlayer) {
+                            return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                        } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                            return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+                                    && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                         }
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
                     if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_king_CROWN) {
                         {
-                            boolean _setval = false;
+                            boolean setval = false;
                             ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                                capability.relic_king_CROWN = _setval;
+                                capability.relic_king_CROWN = setval;
                                 capability.syncPlayerVariables(entity);
                             });
                         }
@@ -146,11 +146,11 @@ public class RelicShowcaseButtonMessage {
 		if (buttonID == 2) {
 
             ItemStack togive = ItemStack.EMPTY;
-            if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
+            if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
                 if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_king_SPEAR) {
-                    if ((Entity) entity instanceof Player _player) {
-                        ItemStack _stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
-                        _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
+                    if ((Entity) entity instanceof Player player) {
+                        ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
+                        player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     }
                     for (int index0 = 0; index0 < 64; index0++) {
                         togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElseGet(() -> Items.AIR))).copy();
@@ -158,36 +158,36 @@ public class RelicShowcaseButtonMessage {
                             break;
                         }
                     }
-                    if ((Entity) entity instanceof Player _player) {
-                        ItemStack _setstack = togive.copy();
-                        _setstack.setCount(1);
-                        ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
+                    if ((Entity) entity instanceof Player player) {
+                        ItemStack setstack = togive.copy();
+                        setstack.setCount(1);
+                        ItemHandlerHelper.giveItemToPlayer(player, setstack);
                     }
                     {
-                        boolean _setval = false;
+                        boolean setval = false;
                         ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                            capability.relic_king_SPEAR = _setval;
+                            capability.relic_king_SPEAR = setval;
                             capability.syncPlayerVariables(entity);
                         });
                     }
                 }
             } else {
                 if (new Object() {
-                    public boolean checkGamemode(Entity _ent) {
-                        if (_ent instanceof ServerPlayer _serverPlayer) {
-                            return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                        } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                            return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                    && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                    public boolean checkGamemode(Entity ent) {
+                        if (ent instanceof ServerPlayer serverPlayer) {
+                            return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                        } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                            return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+                                    && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                         }
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
                     if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_king_SPEAR) {
                         {
-                            boolean _setval = false;
+                            boolean setval = false;
                             ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                                capability.relic_king_SPEAR = _setval;
+                                capability.relic_king_SPEAR = setval;
                                 capability.syncPlayerVariables(entity);
                             });
                         }
@@ -199,11 +199,11 @@ public class RelicShowcaseButtonMessage {
 
             double lives_left = 0;
             ItemStack togive = ItemStack.EMPTY;
-            if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
+            if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
                 if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_king_ARMOR) {
-                    if ((Entity) entity instanceof Player _player) {
-                        ItemStack _stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
-                        _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
+                    if ((Entity) entity instanceof Player player) {
+                        ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
+                        player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     }
                     for (int index0 = 0; index0 < 64; index0++) {
                         togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElseGet(() -> Items.AIR))).copy();
@@ -211,36 +211,36 @@ public class RelicShowcaseButtonMessage {
                             break;
                         }
                     }
-                    if ((Entity) entity instanceof Player _player) {
-                        ItemStack _setstack = togive.copy();
-                        _setstack.setCount(1);
-                        ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
+                    if ((Entity) entity instanceof Player player) {
+                        ItemStack setstack = togive.copy();
+                        setstack.setCount(1);
+                        ItemHandlerHelper.giveItemToPlayer(player, setstack);
                     }
                     {
-                        boolean _setval = false;
+                        boolean setval = false;
                         ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                            capability.relic_king_ARMOR = _setval;
+                            capability.relic_king_ARMOR = setval;
                             capability.syncPlayerVariables(entity);
                         });
                     }
                 }
             } else {
                 if (new Object() {
-                    public boolean checkGamemode(Entity _ent) {
-                        if (_ent instanceof ServerPlayer _serverPlayer) {
-                            return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                        } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                            return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                    && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                    public boolean checkGamemode(Entity ent) {
+                        if (ent instanceof ServerPlayer serverPlayer) {
+                            return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                        } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                            return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+                                    && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                         }
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
                     if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_king_ARMOR) {
                         {
-                            boolean _setval = false;
+                            boolean setval = false;
                             ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                                capability.relic_king_ARMOR = _setval;
+                                capability.relic_king_ARMOR = setval;
                                 capability.syncPlayerVariables(entity);
                             });
                         }
@@ -251,11 +251,11 @@ public class RelicShowcaseButtonMessage {
 		if (buttonID == 4) {
 
             ItemStack togive = ItemStack.EMPTY;
-            if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
+            if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
                 if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_king_EXTENSION) {
-                    if ((Entity) entity instanceof Player _player) {
-                        ItemStack _stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
-                        _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
+                    if ((Entity) entity instanceof Player player) {
+                        ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
+                        player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     }
                     for (int index0 = 0; index0 < 64; index0++) {
                         togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElseGet(() -> Items.AIR))).copy();
@@ -263,36 +263,36 @@ public class RelicShowcaseButtonMessage {
                             break;
                         }
                     }
-                    if ((Entity) entity instanceof Player _player) {
-                        ItemStack _setstack = togive.copy();
-                        _setstack.setCount(1);
-                        ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
+                    if ((Entity) entity instanceof Player player) {
+                        ItemStack setstack = togive.copy();
+                        setstack.setCount(1);
+                        ItemHandlerHelper.giveItemToPlayer(player, setstack);
                     }
                     {
-                        boolean _setval = false;
+                        boolean setval = false;
                         ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                            capability.relic_king_EXTENSION = _setval;
+                            capability.relic_king_EXTENSION = setval;
                             capability.syncPlayerVariables(entity);
                         });
                     }
                 }
             } else {
                 if (new Object() {
-                    public boolean checkGamemode(Entity _ent) {
-                        if (_ent instanceof ServerPlayer _serverPlayer) {
-                            return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                        } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                            return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                    && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                    public boolean checkGamemode(Entity ent) {
+                        if (ent instanceof ServerPlayer serverPlayer) {
+                            return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                        } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                            return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+                                    && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                         }
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
                     if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_king_EXTENSION) {
                         {
-                            boolean _setval = false;
+                            boolean setval = false;
                             ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                                capability.relic_king_EXTENSION = _setval;
+                                capability.relic_king_EXTENSION = setval;
                                 capability.syncPlayerVariables(entity);
                             });
                         }
@@ -303,11 +303,11 @@ public class RelicShowcaseButtonMessage {
 		if (buttonID == 5) {
 
             ItemStack togive = ItemStack.EMPTY;
-            if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
+            if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
                 if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_king_CRYSTAL) {
-                    if ((Entity) entity instanceof Player _player) {
-                        ItemStack _stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
-                        _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
+                    if ((Entity) entity instanceof Player player) {
+                        ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
+                        player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     }
                     for (int index0 = 0; index0 < 64; index0++) {
                         togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElseGet(() -> Items.AIR))).copy();
@@ -315,36 +315,36 @@ public class RelicShowcaseButtonMessage {
                             break;
                         }
                     }
-                    if ((Entity) entity instanceof Player _player) {
-                        ItemStack _setstack = togive.copy();
-                        _setstack.setCount(1);
-                        ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
+                    if ((Entity) entity instanceof Player player) {
+                        ItemStack setstack = togive.copy();
+                        setstack.setCount(1);
+                        ItemHandlerHelper.giveItemToPlayer(player, setstack);
                     }
                     {
-                        boolean _setval = false;
+                        boolean setval = false;
                         ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                            capability.relic_king_CRYSTAL = _setval;
+                            capability.relic_king_CRYSTAL = setval;
                             capability.syncPlayerVariables(entity);
                         });
                     }
                 }
             } else {
                 if (new Object() {
-                    public boolean checkGamemode(Entity _ent) {
-                        if (_ent instanceof ServerPlayer _serverPlayer) {
-                            return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                        } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                            return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                    && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                    public boolean checkGamemode(Entity ent) {
+                        if (ent instanceof ServerPlayer serverPlayer) {
+                            return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                        } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                            return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+                                    && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                         }
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
                     if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_king_CRYSTAL) {
                         {
-                            boolean _setval = false;
+                            boolean setval = false;
                             ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                                capability.relic_king_CRYSTAL = _setval;
+                                capability.relic_king_CRYSTAL = setval;
                                 capability.syncPlayerVariables(entity);
                             });
                         }
@@ -355,11 +355,11 @@ public class RelicShowcaseButtonMessage {
 		if (buttonID == 6) {
 
             ItemStack togive = ItemStack.EMPTY;
-            if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
+            if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
                 if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_archfi_ARTIFACT) {
-                    if ((Entity) entity instanceof Player _player) {
-                        ItemStack _stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
-                        _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
+                    if ((Entity) entity instanceof Player player) {
+                        ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
+                        player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     }
                     for (int index0 = 0; index0 < 64; index0++) {
                         togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElseGet(() -> Items.AIR))).copy();
@@ -367,36 +367,36 @@ public class RelicShowcaseButtonMessage {
                             break;
                         }
                     }
-                    if ((Entity) entity instanceof Player _player) {
-                        ItemStack _setstack = togive.copy();
-                        _setstack.setCount(1);
-                        ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
+                    if ((Entity) entity instanceof Player player) {
+                        ItemStack setstack = togive.copy();
+                        setstack.setCount(1);
+                        ItemHandlerHelper.giveItemToPlayer(player, setstack);
                     }
                     {
-                        boolean _setval = false;
+                        boolean setval = false;
                         ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                            capability.relic_archfi_ARTIFACT = _setval;
+                            capability.relic_archfi_ARTIFACT = setval;
                             capability.syncPlayerVariables(entity);
                         });
                     }
                 }
             } else {
                 if (new Object() {
-                    public boolean checkGamemode(Entity _ent) {
-                        if (_ent instanceof ServerPlayer _serverPlayer) {
-                            return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                        } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                            return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                    && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                    public boolean checkGamemode(Entity ent) {
+                        if (ent instanceof ServerPlayer serverPlayer) {
+                            return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                        } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                            return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+                                    && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                         }
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
                     if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_archfi_ARTIFACT) {
                         {
-                            boolean _setval = false;
+                            boolean setval = false;
                             ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                                capability.relic_archfi_ARTIFACT = _setval;
+                                capability.relic_archfi_ARTIFACT = setval;
                                 capability.syncPlayerVariables(entity);
                             });
                         }
@@ -407,11 +407,11 @@ public class RelicShowcaseButtonMessage {
 		if (buttonID == 7) {
 
             ItemStack togive = ItemStack.EMPTY;
-            if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
+            if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
                 if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_archfi_FLAG) {
-                    if ((Entity) entity instanceof Player _player) {
-                        ItemStack _stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
-                        _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
+                    if ((Entity) entity instanceof Player player) {
+                        ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
+                        player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     }
                     for (int index0 = 0; index0 < 64; index0++) {
                         togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElseGet(() -> Items.AIR))).copy();
@@ -419,36 +419,36 @@ public class RelicShowcaseButtonMessage {
                             break;
                         }
                     }
-                    if ((Entity) entity instanceof Player _player) {
-                        ItemStack _setstack = togive.copy();
-                        _setstack.setCount(1);
-                        ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
+                    if ((Entity) entity instanceof Player player) {
+                        ItemStack setstack = togive.copy();
+                        setstack.setCount(1);
+                        ItemHandlerHelper.giveItemToPlayer(player, setstack);
                     }
                     {
-                        boolean _setval = false;
+                        boolean setval = false;
                         ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                            capability.relic_archfi_FLAG = _setval;
+                            capability.relic_archfi_FLAG = setval;
                             capability.syncPlayerVariables(entity);
                         });
                     }
                 }
             } else {
                 if (new Object() {
-                    public boolean checkGamemode(Entity _ent) {
-                        if (_ent instanceof ServerPlayer _serverPlayer) {
-                            return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                        } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                            return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                    && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                    public boolean checkGamemode(Entity ent) {
+                        if (ent instanceof ServerPlayer serverPlayer) {
+                            return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                        } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                            return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+                                    && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                         }
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
                     if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_archfi_FLAG) {
                         {
-                            boolean _setval = false;
+                            boolean setval = false;
                             ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                                capability.relic_archfi_FLAG = _setval;
+                                capability.relic_archfi_FLAG = setval;
                                 capability.syncPlayerVariables(entity);
                             });
                         }
@@ -459,18 +459,18 @@ public class RelicShowcaseButtonMessage {
 		if (buttonID == 8) {
 
             ItemStack togive = ItemStack.EMPTY;
-            if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
+            if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
                 if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_archfi_BED) {
                     {
-                        boolean _setval = false;
+                        boolean setval = false;
                         ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                            capability.relic_archfi_BED = _setval;
+                            capability.relic_archfi_BED = setval;
                             capability.syncPlayerVariables(entity);
                         });
                     }
-                    if ((Entity) entity instanceof Player _player) {
-                        ItemStack _stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
-                        _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
+                    if ((Entity) entity instanceof Player player) {
+                        ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
+                        player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     }
                     for (int index0 = 0; index0 < 64; index0++) {
                         togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElseGet(() -> Items.AIR))).copy();
@@ -478,29 +478,29 @@ public class RelicShowcaseButtonMessage {
                             break;
                         }
                     }
-                    if ((Entity) entity instanceof Player _player) {
-                        ItemStack _setstack = togive.copy();
-                        _setstack.setCount(1);
-                        ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
+                    if ((Entity) entity instanceof Player player) {
+                        ItemStack setstack = togive.copy();
+                        setstack.setCount(1);
+                        ItemHandlerHelper.giveItemToPlayer(player, setstack);
                     }
                 }
             } else {
                 if (new Object() {
-                    public boolean checkGamemode(Entity _ent) {
-                        if (_ent instanceof ServerPlayer _serverPlayer) {
-                            return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                        } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                            return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                    && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                    public boolean checkGamemode(Entity ent) {
+                        if (ent instanceof ServerPlayer serverPlayer) {
+                            return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                        } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                            return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+                                    && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                         }
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
                     if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_archfi_BED) {
                         {
-                            boolean _setval = false;
+                            boolean setval = false;
                             ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                                capability.relic_archfi_BED = _setval;
+                                capability.relic_archfi_BED = setval;
                                 capability.syncPlayerVariables(entity);
                             });
                         }
@@ -511,11 +511,11 @@ public class RelicShowcaseButtonMessage {
 		if (buttonID == 10) {
 
             ItemStack togive = ItemStack.EMPTY;
-            if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
+            if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
                 if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_THORNS) {
-                    if ((Entity) entity instanceof Player _player) {
-                        ItemStack _stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
-                        _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
+                    if ((Entity) entity instanceof Player player) {
+                        ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
+                        player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     }
                     for (int index0 = 0; index0 < 64; index0++) {
                         togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElseGet(() -> Items.AIR))).copy();
@@ -523,36 +523,36 @@ public class RelicShowcaseButtonMessage {
                             break;
                         }
                     }
-                    if ((Entity) entity instanceof Player _player) {
-                        ItemStack _setstack = togive.copy();
-                        _setstack.setCount(1);
-                        ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
+                    if ((Entity) entity instanceof Player player) {
+                        ItemStack setstack = togive.copy();
+                        setstack.setCount(1);
+                        ItemHandlerHelper.giveItemToPlayer(player, setstack);
                     }
                     {
-                        boolean _setval = false;
+                        boolean setval = false;
                         ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                            capability.relic_hand_THORNS = _setval;
+                            capability.relic_hand_THORNS = setval;
                             capability.syncPlayerVariables(entity);
                         });
                     }
                 }
             } else {
                 if (new Object() {
-                    public boolean checkGamemode(Entity _ent) {
-                        if (_ent instanceof ServerPlayer _serverPlayer) {
-                            return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                        } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                            return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                    && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                    public boolean checkGamemode(Entity ent) {
+                        if (ent instanceof ServerPlayer serverPlayer) {
+                            return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                        } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                            return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+                                    && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                         }
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
                     if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_THORNS) {
                         {
-                            boolean _setval = false;
+                            boolean setval = false;
                             ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                                capability.relic_hand_THORNS = _setval;
+                                capability.relic_hand_THORNS = setval;
                                 capability.syncPlayerVariables(entity);
                             });
                         }
@@ -563,11 +563,11 @@ public class RelicShowcaseButtonMessage {
 		if (buttonID == 11) {
 
             ItemStack togive = ItemStack.EMPTY;
-            if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
+            if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
                 if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_STRANGLE) {
-                    if ((Entity) entity instanceof Player _player) {
-                        ItemStack _stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
-                        _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
+                    if ((Entity) entity instanceof Player player) {
+                        ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
+                        player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     }
                     for (int index0 = 0; index0 < 64; index0++) {
                         togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElseGet(() -> Items.AIR))).copy();
@@ -575,36 +575,36 @@ public class RelicShowcaseButtonMessage {
                             break;
                         }
                     }
-                    if ((Entity) entity instanceof Player _player) {
-                        ItemStack _setstack = togive.copy();
-                        _setstack.setCount(1);
-                        ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
+                    if ((Entity) entity instanceof Player player) {
+                        ItemStack setstack = togive.copy();
+                        setstack.setCount(1);
+                        ItemHandlerHelper.giveItemToPlayer(player, setstack);
                     }
                     {
-                        boolean _setval = false;
+                        boolean setval = false;
                         ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                            capability.relic_hand_STRANGLE = _setval;
+                            capability.relic_hand_STRANGLE = setval;
                             capability.syncPlayerVariables(entity);
                         });
                     }
                 }
             } else {
                 if (new Object() {
-                    public boolean checkGamemode(Entity _ent) {
-                        if (_ent instanceof ServerPlayer _serverPlayer) {
-                            return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                        } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                            return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                    && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                    public boolean checkGamemode(Entity ent) {
+                        if (ent instanceof ServerPlayer serverPlayer) {
+                            return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                        } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                            return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+                                    && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                         }
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
                     if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_STRANGLE) {
                         {
-                            boolean _setval = false;
+                            boolean setval = false;
                             ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                                capability.relic_hand_STRANGLE = _setval;
+                                capability.relic_hand_STRANGLE = setval;
                                 capability.syncPlayerVariables(entity);
                             });
                         }
@@ -615,11 +615,11 @@ public class RelicShowcaseButtonMessage {
 		if (buttonID == 12) {
 
             ItemStack togive = ItemStack.EMPTY;
-            if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
+            if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
                 if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_FERTILITY) {
-                    if ((Entity) entity instanceof Player _player) {
-                        ItemStack _stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
-                        _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
+                    if ((Entity) entity instanceof Player player) {
+                        ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
+                        player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     }
                     for (int index0 = 0; index0 < 64; index0++) {
                         togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElseGet(() -> Items.AIR))).copy();
@@ -627,36 +627,36 @@ public class RelicShowcaseButtonMessage {
                             break;
                         }
                     }
-                    if ((Entity) entity instanceof Player _player) {
-                        ItemStack _setstack = togive.copy();
-                        _setstack.setCount(1);
-                        ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
+                    if ((Entity) entity instanceof Player player) {
+                        ItemStack setstack = togive.copy();
+                        setstack.setCount(1);
+                        ItemHandlerHelper.giveItemToPlayer(player, setstack);
                     }
                     {
-                        boolean _setval = false;
+                        boolean setval = false;
                         ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                            capability.relic_hand_FERTILITY = _setval;
+                            capability.relic_hand_FERTILITY = setval;
                             capability.syncPlayerVariables(entity);
                         });
                     }
                 }
             } else {
                 if (new Object() {
-                    public boolean checkGamemode(Entity _ent) {
-                        if (_ent instanceof ServerPlayer _serverPlayer) {
-                            return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                        } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                            return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                    && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                    public boolean checkGamemode(Entity ent) {
+                        if (ent instanceof ServerPlayer serverPlayer) {
+                            return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                        } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                            return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+                                    && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                         }
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
                     if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_FERTILITY) {
                         {
-                            boolean _setval = false;
+                            boolean setval = false;
                             ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                                capability.relic_hand_FERTILITY = _setval;
+                                capability.relic_hand_FERTILITY = setval;
                                 capability.syncPlayerVariables(entity);
                             });
                         }
@@ -667,11 +667,11 @@ public class RelicShowcaseButtonMessage {
 		if (buttonID == 13) {
 
             ItemStack togive = ItemStack.EMPTY;
-            if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
+            if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
                 if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_BARREN) {
-                    if ((Entity) entity instanceof Player _player) {
-                        ItemStack _stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
-                        _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
+                    if ((Entity) entity instanceof Player player) {
+                        ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
+                        player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     }
                     for (int index0 = 0; index0 < 64; index0++) {
                         togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElseGet(() -> Items.AIR))).copy();
@@ -679,36 +679,36 @@ public class RelicShowcaseButtonMessage {
                             break;
                         }
                     }
-                    if ((Entity) entity instanceof Player _player) {
-                        ItemStack _setstack = togive.copy();
-                        _setstack.setCount(1);
-                        ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
+                    if ((Entity) entity instanceof Player player) {
+                        ItemStack setstack = togive.copy();
+                        setstack.setCount(1);
+                        ItemHandlerHelper.giveItemToPlayer(player, setstack);
                     }
                     {
-                        boolean _setval = false;
+                        boolean setval = false;
                         ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                            capability.relic_hand_BARREN = _setval;
+                            capability.relic_hand_BARREN = setval;
                             capability.syncPlayerVariables(entity);
                         });
                     }
                 }
             } else {
                 if (new Object() {
-                    public boolean checkGamemode(Entity _ent) {
-                        if (_ent instanceof ServerPlayer _serverPlayer) {
-                            return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                        } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                            return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                    && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                    public boolean checkGamemode(Entity ent) {
+                        if (ent instanceof ServerPlayer serverPlayer) {
+                            return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                        } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                            return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+                                    && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                         }
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
                     if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_BARREN) {
                         {
-                            boolean _setval = false;
+                            boolean setval = false;
                             ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                                capability.relic_hand_BARREN = _setval;
+                                capability.relic_hand_BARREN = setval;
                                 capability.syncPlayerVariables(entity);
                             });
                         }
@@ -719,11 +719,11 @@ public class RelicShowcaseButtonMessage {
 		if (buttonID == 14) {
 
             ItemStack togive = ItemStack.EMPTY;
-            if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
+            if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
                 if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_SWIPE) {
-                    if ((Entity) entity instanceof Player _player) {
-                        ItemStack _stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
-                        _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
+                    if ((Entity) entity instanceof Player player) {
+                        ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
+                        player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     }
                     for (int index0 = 0; index0 < 64; index0++) {
                         togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElseGet(() -> Items.AIR))).copy();
@@ -731,36 +731,36 @@ public class RelicShowcaseButtonMessage {
                             break;
                         }
                     }
-                    if ((Entity) entity instanceof Player _player) {
-                        ItemStack _setstack = togive.copy();
-                        _setstack.setCount(1);
-                        ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
+                    if ((Entity) entity instanceof Player player) {
+                        ItemStack setstack = togive.copy();
+                        setstack.setCount(1);
+                        ItemHandlerHelper.giveItemToPlayer(player, setstack);
                     }
                     {
-                        boolean _setval = false;
+                        boolean setval = false;
                         ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                            capability.relic_hand_SWIPE = _setval;
+                            capability.relic_hand_SWIPE = setval;
                             capability.syncPlayerVariables(entity);
                         });
                     }
                 }
             } else {
                 if (new Object() {
-                    public boolean checkGamemode(Entity _ent) {
-                        if (_ent instanceof ServerPlayer _serverPlayer) {
-                            return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                        } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                            return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                    && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                    public boolean checkGamemode(Entity ent) {
+                        if (ent instanceof ServerPlayer serverPlayer) {
+                            return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                        } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                            return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+                                    && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                         }
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
                     if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_SWIPE) {
                         {
-                            boolean _setval = false;
+                            boolean setval = false;
                             ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                                capability.relic_hand_SWIPE = _setval;
+                                capability.relic_hand_SWIPE = setval;
                                 capability.syncPlayerVariables(entity);
                             });
                         }
@@ -771,18 +771,18 @@ public class RelicShowcaseButtonMessage {
 		if (buttonID == 15) {
 
             ItemStack togive = ItemStack.EMPTY;
-            if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
+            if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
                 if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_ENGRAVE >= 0) {
                     {
-                        double _setval = -1;
+                        double setval = -1;
                         ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                            capability.relic_hand_ENGRAVE = _setval;
+                            capability.relic_hand_ENGRAVE = setval;
                             capability.syncPlayerVariables(entity);
                         });
                     }
-                    if ((Entity) entity instanceof Player _player) {
-                        ItemStack _stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
-                        _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
+                    if ((Entity) entity instanceof Player player) {
+                        ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
+                        player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     }
                     for (int index0 = 0; index0 < 64; index0++) {
                         togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElseGet(() -> Items.AIR))).copy();
@@ -790,29 +790,29 @@ public class RelicShowcaseButtonMessage {
                             break;
                         }
                     }
-                    if ((Entity) entity instanceof Player _player) {
-                        ItemStack _setstack = togive.copy();
-                        _setstack.setCount(1);
-                        ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
+                    if ((Entity) entity instanceof Player player) {
+                        ItemStack setstack = togive.copy();
+                        setstack.setCount(1);
+                        ItemHandlerHelper.giveItemToPlayer(player, setstack);
                     }
                 }
             } else {
                 if (new Object() {
-                    public boolean checkGamemode(Entity _ent) {
-                        if (_ent instanceof ServerPlayer _serverPlayer) {
-                            return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                        } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                            return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                    && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                    public boolean checkGamemode(Entity ent) {
+                        if (ent instanceof ServerPlayer serverPlayer) {
+                            return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                        } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                            return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+                                    && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                         }
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
                     if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_ENGRAVE >= 0) {
                         {
-                            double _setval = -1;
+                            double setval = -1;
                             ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                                capability.relic_hand_ENGRAVE = _setval;
+                                capability.relic_hand_ENGRAVE = setval;
                                 capability.syncPlayerVariables(entity);
                             });
                         }
@@ -823,18 +823,18 @@ public class RelicShowcaseButtonMessage {
 		if (buttonID == 16) {
 
             ItemStack togive = ItemStack.EMPTY;
-            if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
+            if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
                 if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_FIREWORK) {
                     {
-                        boolean _setval = false;
+                        boolean setval = false;
                         ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                            capability.relic_hand_FIREWORK = _setval;
+                            capability.relic_hand_FIREWORK = setval;
                             capability.syncPlayerVariables(entity);
                         });
                     }
-                    if ((Entity) entity instanceof Player _player) {
-                        ItemStack _stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
-                        _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
+                    if ((Entity) entity instanceof Player player) {
+                        ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
+                        player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     }
                     for (int index0 = 0; index0 < 64; index0++) {
                         togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElseGet(() -> Items.AIR))).copy();
@@ -842,29 +842,29 @@ public class RelicShowcaseButtonMessage {
                             break;
                         }
                     }
-                    if ((Entity) entity instanceof Player _player) {
-                        ItemStack _setstack = togive.copy();
-                        _setstack.setCount(1);
-                        ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
+                    if ((Entity) entity instanceof Player player) {
+                        ItemStack setstack = togive.copy();
+                        setstack.setCount(1);
+                        ItemHandlerHelper.giveItemToPlayer(player, setstack);
                     }
                 }
             } else {
                 if (new Object() {
-                    public boolean checkGamemode(Entity _ent) {
-                        if (_ent instanceof ServerPlayer _serverPlayer) {
-                            return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                        } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                            return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                    && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                    public boolean checkGamemode(Entity ent) {
+                        if (ent instanceof ServerPlayer serverPlayer) {
+                            return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                        } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                            return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+                                    && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                         }
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
                     if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_FIREWORK) {
                         {
-                            boolean _setval = false;
+                            boolean setval = false;
                             ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                                capability.relic_hand_FIREWORK = _setval;
+                                capability.relic_hand_FIREWORK = setval;
                                 capability.syncPlayerVariables(entity);
                             });
                         }
@@ -875,18 +875,18 @@ public class RelicShowcaseButtonMessage {
 		if (buttonID == 17) {
 
             ItemStack togive = ItemStack.EMPTY;
-            if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
+            if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
                 if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_TREATY) {
                     {
-                        boolean _setval = false;
+                        boolean setval = false;
                         ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                            capability.relic_TREATY = _setval;
+                            capability.relic_TREATY = setval;
                             capability.syncPlayerVariables(entity);
                         });
                     }
-                    if ((Entity) entity instanceof Player _player) {
-                        ItemStack _stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
-                        _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
+                    if ((Entity) entity instanceof Player player) {
+                        ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
+                        player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     }
                     for (int index0 = 0; index0 < 64; index0++) {
                         togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElseGet(() -> Items.AIR))).copy();
@@ -894,29 +894,29 @@ public class RelicShowcaseButtonMessage {
                             break;
                         }
                     }
-                    if ((Entity) entity instanceof Player _player) {
-                        ItemStack _setstack = togive.copy();
-                        _setstack.setCount(1);
-                        ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
+                    if ((Entity) entity instanceof Player player) {
+                        ItemStack setstack = togive.copy();
+                        setstack.setCount(1);
+                        ItemHandlerHelper.giveItemToPlayer(player, setstack);
                     }
                 }
             } else {
                 if (new Object() {
-                    public boolean checkGamemode(Entity _ent) {
-                        if (_ent instanceof ServerPlayer _serverPlayer) {
-                            return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                        } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                            return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                    && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                    public boolean checkGamemode(Entity ent) {
+                        if (ent instanceof ServerPlayer serverPlayer) {
+                            return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                        } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                            return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+                                    && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                         }
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
                     if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_TREATY) {
                         {
-                            boolean _setval = false;
+                            boolean setval = false;
                             ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                                capability.relic_TREATY = _setval;
+                                capability.relic_TREATY = setval;
                                 capability.syncPlayerVariables(entity);
                             });
                         }
@@ -927,18 +927,18 @@ public class RelicShowcaseButtonMessage {
 		if (buttonID == 18) {
 
             ItemStack togive = ItemStack.EMPTY;
-            if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
+            if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
                 if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_SURVIVOR >= 0) {
                     {
-                        double _setval = -1;
+                        double setval = -1;
                         ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                            capability.relic_SURVIVOR = _setval;
+                            capability.relic_SURVIVOR = setval;
                             capability.syncPlayerVariables(entity);
                         });
                     }
-                    if ((Entity) entity instanceof Player _player) {
-                        ItemStack _stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
-                        _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
+                    if ((Entity) entity instanceof Player player) {
+                        ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
+                        player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     }
                     for (int index0 = 0; index0 < 64; index0++) {
                         togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElseGet(() -> Items.AIR))).copy();
@@ -946,29 +946,29 @@ public class RelicShowcaseButtonMessage {
                             break;
                         }
                     }
-                    if ((Entity) entity instanceof Player _player) {
-                        ItemStack _setstack = togive.copy();
-                        _setstack.setCount(1);
-                        ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
+                    if ((Entity) entity instanceof Player player) {
+                        ItemStack setstack = togive.copy();
+                        setstack.setCount(1);
+                        ItemHandlerHelper.giveItemToPlayer(player, setstack);
                     }
                 }
             } else {
                 if (new Object() {
-                    public boolean checkGamemode(Entity _ent) {
-                        if (_ent instanceof ServerPlayer _serverPlayer) {
-                            return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                        } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                            return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                    && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                    public boolean checkGamemode(Entity ent) {
+                        if (ent instanceof ServerPlayer serverPlayer) {
+                            return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                        } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                            return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+                                    && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                         }
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
                     if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_SURVIVOR >= 0) {
                         {
-                            double _setval = -1;
+                            double setval = -1;
                             ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                                capability.relic_SURVIVOR = _setval;
+                                capability.relic_SURVIVOR = setval;
                                 capability.syncPlayerVariables(entity);
                             });
                         }
@@ -979,18 +979,18 @@ public class RelicShowcaseButtonMessage {
 		if (buttonID == 19) {
 
             ItemStack togive = ItemStack.EMPTY;
-            if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
+            if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
                 if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_cursed_EMELIGHT) {
                     {
-                        boolean _setval = false;
+                        boolean setval = false;
                         ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                            capability.relic_cursed_EMELIGHT = _setval;
+                            capability.relic_cursed_EMELIGHT = setval;
                             capability.syncPlayerVariables(entity);
                         });
                     }
-                    if ((Entity) entity instanceof Player _player) {
-                        ItemStack _stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
-                        _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
+                    if ((Entity) entity instanceof Player player) {
+                        ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
+                        player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     }
                     for (int index0 = 0; index0 < 64; index0++) {
                         togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElseGet(() -> Items.AIR))).copy();
@@ -998,29 +998,29 @@ public class RelicShowcaseButtonMessage {
                             break;
                         }
                     }
-                    if ((Entity) entity instanceof Player _player) {
-                        ItemStack _setstack = togive.copy();
-                        _setstack.setCount(1);
-                        ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
+                    if ((Entity) entity instanceof Player player) {
+                        ItemStack setstack = togive.copy();
+                        setstack.setCount(1);
+                        ItemHandlerHelper.giveItemToPlayer(player, setstack);
                     }
                 }
             } else {
                 if (new Object() {
-                    public boolean checkGamemode(Entity _ent) {
-                        if (_ent instanceof ServerPlayer _serverPlayer) {
-                            return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                        } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                            return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                    && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                    public boolean checkGamemode(Entity ent) {
+                        if (ent instanceof ServerPlayer serverPlayer) {
+                            return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                        } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                            return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+                                    && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                         }
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
                     if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_cursed_EMELIGHT) {
                         {
-                            boolean _setval = false;
+                            boolean setval = false;
                             ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                                capability.relic_cursed_EMELIGHT = _setval;
+                                capability.relic_cursed_EMELIGHT = setval;
                                 capability.syncPlayerVariables(entity);
                             });
                         }
@@ -1031,11 +1031,11 @@ public class RelicShowcaseButtonMessage {
 		if (buttonID == 20) {
 
             ItemStack togive = ItemStack.EMPTY;
-            if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
+            if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
                 if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_cursed_GLOWBODY) {
-                    if ((Entity) entity instanceof Player _player) {
-                        ItemStack _stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
-                        _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
+                    if ((Entity) entity instanceof Player player) {
+                        ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
+                        player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     }
                     for (int index0 = 0; index0 < 64; index0++) {
                         togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElseGet(() -> Items.AIR))).copy();
@@ -1043,36 +1043,36 @@ public class RelicShowcaseButtonMessage {
                             break;
                         }
                     }
-                    if ((Entity) entity instanceof Player _player) {
-                        ItemStack _setstack = togive.copy();
-                        _setstack.setCount(1);
-                        ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
+                    if ((Entity) entity instanceof Player player) {
+                        ItemStack setstack = togive.copy();
+                        setstack.setCount(1);
+                        ItemHandlerHelper.giveItemToPlayer(player, setstack);
                     }
                     {
-                        boolean _setval = false;
+                        boolean setval = false;
                         ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                            capability.relic_cursed_GLOWBODY = _setval;
+                            capability.relic_cursed_GLOWBODY = setval;
                             capability.syncPlayerVariables(entity);
                         });
                     }
                 }
             } else {
                 if (new Object() {
-                    public boolean checkGamemode(Entity _ent) {
-                        if (_ent instanceof ServerPlayer _serverPlayer) {
-                            return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                        } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                            return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                    && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                    public boolean checkGamemode(Entity ent) {
+                        if (ent instanceof ServerPlayer serverPlayer) {
+                            return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                        } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                            return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+                                    && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                         }
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
                     if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_cursed_GLOWBODY) {
                         {
-                            boolean _setval = false;
+                            boolean setval = false;
                             ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                                capability.relic_cursed_GLOWBODY = _setval;
+                                capability.relic_cursed_GLOWBODY = setval;
                                 capability.syncPlayerVariables(entity);
                             });
                         }
@@ -1083,11 +1083,11 @@ public class RelicShowcaseButtonMessage {
 		if (buttonID == 21) {
 
             ItemStack togive = ItemStack.EMPTY;
-            if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
+            if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
                 if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_cursed_RESEARCH) {
-                    if ((Entity) entity instanceof Player _player) {
-                        ItemStack _stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
-                        _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
+                    if ((Entity) entity instanceof Player player) {
+                        ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
+                        player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     }
                     for (int index0 = 0; index0 < 64; index0++) {
                         togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElseGet(() -> Items.AIR))).copy();
@@ -1095,36 +1095,36 @@ public class RelicShowcaseButtonMessage {
                             break;
                         }
                     }
-                    if ((Entity) entity instanceof Player _player) {
-                        ItemStack _setstack = togive.copy();
-                        _setstack.setCount(1);
-                        ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
+                    if ((Entity) entity instanceof Player player) {
+                        ItemStack setstack = togive.copy();
+                        setstack.setCount(1);
+                        ItemHandlerHelper.giveItemToPlayer(player, setstack);
                     }
                     {
-                        boolean _setval = false;
+                        boolean setval = false;
                         ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                            capability.relic_cursed_RESEARCH = _setval;
+                            capability.relic_cursed_RESEARCH = setval;
                             capability.syncPlayerVariables(entity);
                         });
                     }
                 }
             } else {
                 if (new Object() {
-                    public boolean checkGamemode(Entity _ent) {
-                        if (_ent instanceof ServerPlayer _serverPlayer) {
-                            return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                        } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                            return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                    && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                    public boolean checkGamemode(Entity ent) {
+                        if (ent instanceof ServerPlayer serverPlayer) {
+                            return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                        } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                            return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+                                    && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                         }
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
                     if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_cursed_RESEARCH) {
                         {
-                            boolean _setval = false;
+                            boolean setval = false;
                             ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                                capability.relic_cursed_RESEARCH = _setval;
+                                capability.relic_cursed_RESEARCH = setval;
                                 capability.syncPlayerVariables(entity);
                             });
                         }
@@ -1135,18 +1135,18 @@ public class RelicShowcaseButtonMessage {
 		if (buttonID == 35) {
 
             ItemStack togive = ItemStack.EMPTY;
-            if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
+            if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
                 if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_SWORD) {
                     {
-                        boolean _setval = false;
+                        boolean setval = false;
                         ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                            capability.relic_hand_SWORD = _setval;
+                            capability.relic_hand_SWORD = setval;
                             capability.syncPlayerVariables(entity);
                         });
                     }
-                    if ((Entity) entity instanceof Player _player) {
-                        ItemStack _stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
-                        _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
+                    if ((Entity) entity instanceof Player player) {
+                        ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
+                        player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     }
                     for (int index0 = 0; index0 < 64; index0++) {
                         togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElseGet(() -> Items.AIR))).copy();
@@ -1154,29 +1154,29 @@ public class RelicShowcaseButtonMessage {
                             break;
                         }
                     }
-                    if ((Entity) entity instanceof Player _player) {
-                        ItemStack _setstack = togive.copy();
-                        _setstack.setCount(1);
-                        ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
+                    if ((Entity) entity instanceof Player player) {
+                        ItemStack setstack = togive.copy();
+                        setstack.setCount(1);
+                        ItemHandlerHelper.giveItemToPlayer(player, setstack);
                     }
                 }
             } else {
                 if (new Object() {
-                    public boolean checkGamemode(Entity _ent) {
-                        if (_ent instanceof ServerPlayer _serverPlayer) {
-                            return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                        } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                            return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                    && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                    public boolean checkGamemode(Entity ent) {
+                        if (ent instanceof ServerPlayer serverPlayer) {
+                            return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                        } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                            return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+                                    && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                         }
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
                     if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_SWORD) {
                         {
-                            boolean _setval = false;
+                            boolean setval = false;
                             ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                                capability.relic_hand_SWORD = _setval;
+                                capability.relic_hand_SWORD = setval;
                                 capability.syncPlayerVariables(entity);
                             });
                         }
@@ -1187,18 +1187,18 @@ public class RelicShowcaseButtonMessage {
 		if (buttonID == 36) {
 
             ItemStack togive = ItemStack.EMPTY;
-            if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
+            if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
                 if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_legend_CHITIN) {
                     {
-                        boolean _setval = false;
+                        boolean setval = false;
                         ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                            capability.relic_legend_CHITIN = _setval;
+                            capability.relic_legend_CHITIN = setval;
                             capability.syncPlayerVariables(entity);
                         });
                     }
-                    if ((Entity) entity instanceof Player _player) {
-                        ItemStack _stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
-                        _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
+                    if ((Entity) entity instanceof Player player) {
+                        ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
+                        player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     }
                     for (int index0 = 0; index0 < 64; index0++) {
                         togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElseGet(() -> Items.AIR))).copy();
@@ -1206,29 +1206,29 @@ public class RelicShowcaseButtonMessage {
                             break;
                         }
                     }
-                    if ((Entity) entity instanceof Player _player) {
-                        ItemStack _setstack = togive.copy();
-                        _setstack.setCount(1);
-                        ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
+                    if ((Entity) entity instanceof Player player) {
+                        ItemStack setstack = togive.copy();
+                        setstack.setCount(1);
+                        ItemHandlerHelper.giveItemToPlayer(player, setstack);
                     }
                 }
             } else {
                 if (new Object() {
-                    public boolean checkGamemode(Entity _ent) {
-                        if (_ent instanceof ServerPlayer _serverPlayer) {
-                            return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                        } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                            return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                    && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                    public boolean checkGamemode(Entity ent) {
+                        if (ent instanceof ServerPlayer serverPlayer) {
+                            return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                        } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                            return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+                                    && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                         }
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
                     if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_legend_CHITIN) {
                         {
-                            boolean _setval = false;
+                            boolean setval = false;
                             ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                                capability.relic_legend_CHITIN = _setval;
+                                capability.relic_legend_CHITIN = setval;
                                 capability.syncPlayerVariables(entity);
                             });
                         }
@@ -1239,11 +1239,11 @@ public class RelicShowcaseButtonMessage {
 		if (buttonID == 37) {
 
             ItemStack togive = ItemStack.EMPTY;
-            if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
+            if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
                 if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_SPEED) {
-                    if ((Entity) entity instanceof Player _player) {
-                        ItemStack _stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
-                        _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
+                    if ((Entity) entity instanceof Player player) {
+                        ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
+                        player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     }
                     for (int index0 = 0; index0 < 64; index0++) {
                         togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElseGet(() -> Items.AIR))).copy();
@@ -1251,36 +1251,36 @@ public class RelicShowcaseButtonMessage {
                             break;
                         }
                     }
-                    if ((Entity) entity instanceof Player _player) {
-                        ItemStack _setstack = togive.copy();
-                        _setstack.setCount(1);
-                        ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
+                    if ((Entity) entity instanceof Player player) {
+                        ItemStack setstack = togive.copy();
+                        setstack.setCount(1);
+                        ItemHandlerHelper.giveItemToPlayer(player, setstack);
                     }
                     {
-                        boolean _setval = false;
+                        boolean setval = false;
                         ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                            capability.relic_hand_SPEED = _setval;
+                            capability.relic_hand_SPEED = setval;
                             capability.syncPlayerVariables(entity);
                         });
                     }
                 }
             } else {
                 if (new Object() {
-                    public boolean checkGamemode(Entity _ent) {
-                        if (_ent instanceof ServerPlayer _serverPlayer) {
-                            return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                        } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                            return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                    && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                    public boolean checkGamemode(Entity ent) {
+                        if (ent instanceof ServerPlayer serverPlayer) {
+                            return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                        } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                            return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+                                    && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                         }
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
                     if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_SPEED) {
                         {
-                            boolean _setval = false;
+                            boolean setval = false;
                             ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                                capability.relic_hand_SPEED = _setval;
+                                capability.relic_hand_SPEED = setval;
                                 capability.syncPlayerVariables(entity);
                             });
                         }
@@ -1291,18 +1291,18 @@ public class RelicShowcaseButtonMessage {
 		if (buttonID == 38) {
 
             ItemStack togive = ItemStack.EMPTY;
-            if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
+            if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
                 if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_HEMOST) {
                     {
-                        boolean _setval = false;
+                        boolean setval = false;
                         ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                            capability.relic_HEMOST = _setval;
+                            capability.relic_HEMOST = setval;
                             capability.syncPlayerVariables(entity);
                         });
                     }
-                    if ((Entity) entity instanceof Player _player) {
-                        ItemStack _stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
-                        _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
+                    if ((Entity) entity instanceof Player player) {
+                        ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
+                        player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     }
                     for (int index0 = 0; index0 < 64; index0++) {
                         togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElseGet(() -> Items.AIR))).copy();
@@ -1310,29 +1310,29 @@ public class RelicShowcaseButtonMessage {
                             break;
                         }
                     }
-                    if ((Entity) entity instanceof Player _player) {
-                        ItemStack _setstack = togive.copy();
-                        _setstack.setCount(1);
-                        ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
+                    if ((Entity) entity instanceof Player player) {
+                        ItemStack setstack = togive.copy();
+                        setstack.setCount(1);
+                        ItemHandlerHelper.giveItemToPlayer(player, setstack);
                     }
                 }
             } else {
                 if (new Object() {
-                    public boolean checkGamemode(Entity _ent) {
-                        if (_ent instanceof ServerPlayer _serverPlayer) {
-                            return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                        } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                            return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                    && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                    public boolean checkGamemode(Entity ent) {
+                        if (ent instanceof ServerPlayer serverPlayer) {
+                            return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                        } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                            return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+                                    && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                         }
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
                     if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_HEMOST) {
                         {
-                            boolean _setval = false;
+                            boolean setval = false;
                             ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                                capability.relic_HEMOST = _setval;
+                                capability.relic_HEMOST = setval;
                                 capability.syncPlayerVariables(entity);
                             });
                         }
@@ -1343,18 +1343,18 @@ public class RelicShowcaseButtonMessage {
 		if (buttonID == 39) {
 
             ItemStack togive = ItemStack.EMPTY;
-            if ((Entity) entity instanceof Player _playerHasItem && _playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
+            if ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(CAItems.COIN_OF_TRADE.get()))) {
                 if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_YEARNING) {
                     {
-                        boolean _setval = false;
+                        boolean setval = false;
                         ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                            capability.relic_YEARNING = _setval;
+                            capability.relic_YEARNING = setval;
                             capability.syncPlayerVariables(entity);
                         });
                     }
-                    if ((Entity) entity instanceof Player _player) {
-                        ItemStack _stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
-                        _player.getInventory().clearOrCountMatchingItems(p -> _stktoremove.getItem() == p.getItem(), 1, _player.inventoryMenu.getCraftSlots());
+                    if ((Entity) entity instanceof Player player) {
+                        ItemStack stktoremove = new ItemStack(CAItems.COIN_OF_TRADE.get());
+                        player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                     }
                     for (int index0 = 0; index0 < 64; index0++) {
                         togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElseGet(() -> Items.AIR))).copy();
@@ -1362,29 +1362,29 @@ public class RelicShowcaseButtonMessage {
                             break;
                         }
                     }
-                    if ((Entity) entity instanceof Player _player) {
-                        ItemStack _setstack = togive.copy();
-                        _setstack.setCount(1);
-                        ItemHandlerHelper.giveItemToPlayer(_player, _setstack);
+                    if ((Entity) entity instanceof Player player) {
+                        ItemStack setstack = togive.copy();
+                        setstack.setCount(1);
+                        ItemHandlerHelper.giveItemToPlayer(player, setstack);
                     }
                 }
             } else {
                 if (new Object() {
-                    public boolean checkGamemode(Entity _ent) {
-                        if (_ent instanceof ServerPlayer _serverPlayer) {
-                            return _serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
-                        } else if (_ent.level().isClientSide() && _ent instanceof Player _player) {
-                            return Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()) != null
-                                    && Minecraft.getInstance().getConnection().getPlayerInfo(_player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                    public boolean checkGamemode(Entity ent) {
+                        if (ent instanceof ServerPlayer serverPlayer) {
+                            return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
+                        } else if (ent.level().isClientSide() && ent instanceof Player player) {
+                            return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
+                                    && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
                         }
                         return false;
                     }
                 }.checkGamemode((Entity) entity)) {
                     if ((((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_YEARNING) {
                         {
-                            boolean _setval = false;
+                            boolean setval = false;
                             ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                                capability.relic_YEARNING = _setval;
+                                capability.relic_YEARNING = setval;
                                 capability.syncPlayerVariables(entity);
                             });
                         }

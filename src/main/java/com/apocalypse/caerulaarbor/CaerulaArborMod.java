@@ -24,8 +24,8 @@ public class CaerulaArborMod {
 	public static final String MODID = "caerula_arbor";
 
 	public CaerulaArborMod() {
-		// Start of user code block mod constructor
-		// End of user code block mod constructor
+		// 模组构造器用户代码块开始
+		// 模组构造器用户代码块结束
 		MinecraftForge.EVENT_BUS.register(this);
 		IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
 		CASounds.REGISTRY.register(bus);
@@ -44,12 +44,12 @@ public class CaerulaArborMod {
 		CAMenus.REGISTRY.register(bus);
 		CAAttributes.REGISTRY.register(bus);
 		bus.addListener(this::onCommonSetup);
-		// Start of user code block mod init
-		// End of user code block mod init
+		// 模组初始化用户代码块开始
+		// 模组初始化用户代码块结束
 	}
 
-	// Start of user code block mod methods
-	// End of user code block mod methods
+	// 模组方法用户代码块开始
+	// 模组方法用户代码块结束
 	private void onCommonSetup(final FMLCommonSetupEvent event) {
 		CANetwork.register();
 		CACompostableItems.addComposterItems(event);

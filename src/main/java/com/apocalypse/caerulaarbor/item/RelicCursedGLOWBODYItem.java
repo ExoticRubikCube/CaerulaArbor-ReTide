@@ -44,8 +44,7 @@ public class RelicCursedGLOWBODYItem extends Item {
 	@Override
 	public void appendHoverText(ItemStack itemstack, Level level, List<Component> list, TooltipFlag flag) {
 		super.appendHoverText(itemstack, level, list, flag);
-		Entity entity = itemstack.getEntityRepresentation();
-		String hoverText = ItemUtils.getCursedDescription(itemstack);
+        String hoverText = ItemUtils.getCursedDescription(itemstack);
         for (String line : hoverText.split("\n")) {
             list.add(Component.literal(line));
         }
@@ -53,9 +52,8 @@ public class RelicCursedGLOWBODYItem extends Item {
 
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level world, Player entity, InteractionHand hand) {
-		InteractionResultHolder<ItemStack> ar = super.use(world, entity, hand);
 		entity.startUsingItem(hand);
-		return ar;
+		return super.use(world, entity, hand);
 	}
 
 	@Override
@@ -82,15 +80,15 @@ public class RelicCursedGLOWBODYItem extends Item {
         double z = entity.getZ();
         if (!itemstack.getOrCreateTag().getBoolean("used")) {
             if (!(entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_cursed_GLOWBODY) {
-                if ((LevelAccessor) world instanceof Level _level) {
-                        _level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.AMBIENT_SOUL_SAND_VALLEY_MOOD.value(), SoundSource.NEUTRAL, 2, 1);
+                if ((LevelAccessor) world instanceof Level level) {
+                        level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.AMBIENT_SOUL_SAND_VALLEY_MOOD.value(), SoundSource.NEUTRAL, 2, 1);
                 }
-                if ((LevelAccessor) world instanceof ServerLevel _level)
-                    _level.sendParticles(ParticleTypes.CRIMSON_SPORE, x, y, z, 99, 1, 1, 1, 1);
+                if ((LevelAccessor) world instanceof ServerLevel level)
+                    level.sendParticles(ParticleTypes.CRIMSON_SPORE, x, y, z, 99, 1, 1, 1, 1);
                 {
-                    boolean _setval = true;
+                    boolean setval = true;
                     entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                        capability.relic_cursed_GLOWBODY = _setval;
+                        capability.relic_cursed_GLOWBODY = setval;
                         capability.syncPlayerVariables(entity);
                     });
                 }
