@@ -621,6 +621,7 @@ public class MartusEntity extends SeaMonster {
         builder = builder.add(ForgeMod.SWIM_SPEED.get(), 0.5);
         builder = builder.add(CAAttributes.GENERAL_DEFENSE.get(), 16384);
         builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 100);
+        builder = builder.add(CAAttributes.MAX_SANITY.get(), 2000);
         return builder;
     }
 

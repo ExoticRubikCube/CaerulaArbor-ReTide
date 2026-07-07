@@ -1,6 +1,6 @@
-package com.apocalypse.caerulaarbor.block.entity;
+package com.apocalypse.caerulaarbor.block.blockentity;
 
-import com.apocalypse.caerulaarbor.block.CentrifugerBlock;
+import com.apocalypse.caerulaarbor.block.HighmoreSpawnblockBlock;
 import com.apocalypse.caerulaarbor.init.CABlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -34,17 +34,25 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import javax.annotation.Nullable;
 import java.util.stream.IntStream;
 
-public class CentrifugerTileEntity extends RandomizableContainerBlockEntity implements GeoBlockEntity, WorldlyContainer {
+public class HighmoreSpawnblockTileEntity extends RandomizableContainerBlockEntity implements GeoBlockEntity, WorldlyContainer {
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 	private NonNullList<ItemStack> stacks = NonNullList.withSize(0, ItemStack.EMPTY);
 	private final LazyOptional<? extends IItemHandler>[] handlers = SidedInvWrapper.create(this, Direction.values());
+	public int blockstateNew = this.getBlockState().getValue(HighmoreSpawnblockBlock.BLOCKSTATE);
+	private int blockstateOld = this.getBlockState().getValue(HighmoreSpawnblockBlock.BLOCKSTATE);
 
-	public CentrifugerTileEntity(BlockPos pos, BlockState state) {
-		super(CABlockEntities.CENTRIFUGER.get(), pos, state);
+	public HighmoreSpawnblockTileEntity(BlockPos pos, BlockState state) {
+		super(CABlockEntities.HIGHMORE_SPAWNBLOCK.get(), pos, state);
 	}
 
 	private PlayState predicate(AnimationState<?> event) {
-		String animationprocedure = ("" + this.getBlockState().getValue(CentrifugerBlock.DATA_ANIMATION));
+		blockstateNew = this.getBlockState().getValue(HighmoreSpawnblockBlock.BLOCKSTATE);
+		if (blockstateOld != blockstateNew) {
+			event.getController().forceAnimationReset();
+			blockstateOld = blockstateNew;
+			return PlayState.STOP;
+		}
+		String animationprocedure = ("" + this.getBlockState().getValue(HighmoreSpawnblockBlock.DATA_ANIMATION));
 		if (animationprocedure.equals("0")) {
 			return event.setAndContinue(RawAnimation.begin().thenLoop(animationprocedure));
 		}
@@ -54,7 +62,7 @@ public class CentrifugerTileEntity extends RandomizableContainerBlockEntity impl
 	String prevAnim = "0";
 
 	private PlayState procedurePredicate(AnimationState<?> event) {
-		String animationprocedure = ("" + this.getBlockState().getValue(CentrifugerBlock.DATA_ANIMATION));
+		String animationprocedure = ("" + this.getBlockState().getValue(HighmoreSpawnblockBlock.DATA_ANIMATION));
 		if (!animationprocedure.equals("0") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!animationprocedure.equals(prevAnim) && !animationprocedure.equals("0"))) {
 			if (!animationprocedure.equals(prevAnim))
 				event.getController().forceAnimationReset();
@@ -74,8 +82,8 @@ public class CentrifugerTileEntity extends RandomizableContainerBlockEntity impl
 
 	@Override
 	public void registerControllers(AnimatableManager.ControllerRegistrar data) {
-		data.add(new AnimationController<CentrifugerTileEntity>(this, "controller", 0, this::predicate));
-		data.add(new AnimationController<CentrifugerTileEntity>(this, "procedurecontroller", 0, this::procedurePredicate));
+		data.add(new AnimationController<HighmoreSpawnblockTileEntity>(this, "controller", 0, this::predicate));
+		data.add(new AnimationController<HighmoreSpawnblockTileEntity>(this, "procedurecontroller", 0, this::procedurePredicate));
 	}
 
 	@Override
@@ -124,7 +132,7 @@ public class CentrifugerTileEntity extends RandomizableContainerBlockEntity impl
 
 	@Override
 	public Component getDefaultName() {
-		return Component.literal("centrifuger");
+		return Component.literal("highmore_spawnblock");
 	}
 
 	@Override
@@ -139,7 +147,7 @@ public class CentrifugerTileEntity extends RandomizableContainerBlockEntity impl
 
 	@Override
 	public Component getDisplayName() {
-		return Component.literal("Aegir Centrifuger");
+		return Component.literal("Highmore Spawnblock");
 	}
 
 	@Override

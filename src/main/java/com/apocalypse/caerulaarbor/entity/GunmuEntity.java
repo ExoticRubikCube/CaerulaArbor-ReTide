@@ -1,6 +1,7 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
+import com.apocalypse.caerulaarbor.capability.sanity.SanityInjuryCapability;
 import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CADamageTypes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
@@ -180,7 +181,8 @@ public class GunmuEntity extends Monster {
             this.removeAllEffects();
             if (this.getAttributes().hasAttribute(CAAttributes.NUMB.get()))
                 this.getAttribute(CAAttributes.NUMB.get()).setBaseValue(0);
-            ModCapabilities.getSanityInjury(this).heal(1000);
+            SanityInjuryCapability sanityInjury = ModCapabilities.getSanityInjury(this);
+            sanityInjury.heal(sanityInjury.getMaxValue());
         }
     }
 

@@ -1,4 +1,4 @@
-package com.apocalypse.caerulaarbor.block.entity;
+package com.apocalypse.caerulaarbor.block.blockentity;
 
 import com.apocalypse.caerulaarbor.block.LivingArmorstandBlock;
 import com.apocalypse.caerulaarbor.init.CABlockEntities;

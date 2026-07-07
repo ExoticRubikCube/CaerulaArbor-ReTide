@@ -369,6 +369,7 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
         builder = builder.add(Attributes.ATTACK_DAMAGE, 34);
         builder = builder.add(Attributes.FOLLOW_RANGE, 32);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.85);
+        builder = builder.add(CAAttributes.MAX_SANITY.get(), 2000);
         return builder;
     }
 

@@ -334,6 +334,7 @@ public class TheLastKnightEntity extends Animal implements GeoEntity, SyncedAnim
         builder = builder.add(Attributes.ATTACK_DAMAGE, 20);
         builder = builder.add(Attributes.FOLLOW_RANGE, 36);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
+        builder = builder.add(CAAttributes.MAX_SANITY.get(), 2000);
         return builder;
     }
 

@@ -1,6 +1,6 @@
-package com.apocalypse.caerulaarbor.block.entity;
+package com.apocalypse.caerulaarbor.block.blockentity;
 
-import com.apocalypse.caerulaarbor.block.TrailriteArmorstandBlock;
+import com.apocalypse.caerulaarbor.block.StonecutterDollBlock;
 import com.apocalypse.caerulaarbor.init.CABlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -34,17 +34,17 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import javax.annotation.Nullable;
 import java.util.stream.IntStream;
 
-public class TrailriteArmorstandTileEntity extends RandomizableContainerBlockEntity implements GeoBlockEntity, WorldlyContainer {
+public class StonecutterDollTileEntity extends RandomizableContainerBlockEntity implements GeoBlockEntity, WorldlyContainer {
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 	private NonNullList<ItemStack> stacks = NonNullList.withSize(0, ItemStack.EMPTY);
 	private final LazyOptional<? extends IItemHandler>[] handlers = SidedInvWrapper.create(this, Direction.values());
 
-	public TrailriteArmorstandTileEntity(BlockPos pos, BlockState state) {
-		super(CABlockEntities.TRAILRITE_ARMORSTAND.get(), pos, state);
+	public StonecutterDollTileEntity(BlockPos pos, BlockState state) {
+		super(CABlockEntities.STONECUTTER_DOLL.get(), pos, state);
 	}
 
 	private PlayState predicate(AnimationState<?> event) {
-		String animationprocedure = ("" + this.getBlockState().getValue(TrailriteArmorstandBlock.DATA_ANIMATION));
+		String animationprocedure = ("" + this.getBlockState().getValue(StonecutterDollBlock.DATA_ANIMATION));
 		if (animationprocedure.equals("0")) {
 			return event.setAndContinue(RawAnimation.begin().thenLoop(animationprocedure));
 		}
@@ -54,7 +54,7 @@ public class TrailriteArmorstandTileEntity extends RandomizableContainerBlockEnt
 	String prevAnim = "0";
 
 	private PlayState procedurePredicate(AnimationState<?> event) {
-		String animationprocedure = ("" + this.getBlockState().getValue(TrailriteArmorstandBlock.DATA_ANIMATION));
+		String animationprocedure = ("" + this.getBlockState().getValue(StonecutterDollBlock.DATA_ANIMATION));
 		if (!animationprocedure.equals("0") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!animationprocedure.equals(prevAnim) && !animationprocedure.equals("0"))) {
 			if (!animationprocedure.equals(prevAnim))
 				event.getController().forceAnimationReset();
@@ -74,8 +74,8 @@ public class TrailriteArmorstandTileEntity extends RandomizableContainerBlockEnt
 
 	@Override
 	public void registerControllers(AnimatableManager.ControllerRegistrar data) {
-		data.add(new AnimationController<TrailriteArmorstandTileEntity>(this, "controller", 0, this::predicate));
-		data.add(new AnimationController<TrailriteArmorstandTileEntity>(this, "procedurecontroller", 0, this::procedurePredicate));
+		data.add(new AnimationController<StonecutterDollTileEntity>(this, "controller", 0, this::predicate));
+		data.add(new AnimationController<StonecutterDollTileEntity>(this, "procedurecontroller", 0, this::procedurePredicate));
 	}
 
 	@Override
@@ -124,7 +124,7 @@ public class TrailriteArmorstandTileEntity extends RandomizableContainerBlockEnt
 
 	@Override
 	public Component getDefaultName() {
-		return Component.literal("trailrite_armorstand");
+		return Component.literal("stonecutter_doll");
 	}
 
 	@Override
@@ -139,7 +139,7 @@ public class TrailriteArmorstandTileEntity extends RandomizableContainerBlockEnt
 
 	@Override
 	public Component getDisplayName() {
-		return Component.literal("Trailrite Armorstand");
+		return Component.literal("Stonecutter Doll");
 	}
 
 	@Override

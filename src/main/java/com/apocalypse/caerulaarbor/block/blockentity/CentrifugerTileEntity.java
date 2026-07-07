@@ -1,6 +1,6 @@
-package com.apocalypse.caerulaarbor.block.entity;
+package com.apocalypse.caerulaarbor.block.blockentity;
 
-import com.apocalypse.caerulaarbor.block.HugeLilyBlock;
+import com.apocalypse.caerulaarbor.block.CentrifugerBlock;
 import com.apocalypse.caerulaarbor.init.CABlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -34,17 +34,17 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import javax.annotation.Nullable;
 import java.util.stream.IntStream;
 
-public class HugeLilyTileEntity extends RandomizableContainerBlockEntity implements GeoBlockEntity, WorldlyContainer {
+public class CentrifugerTileEntity extends RandomizableContainerBlockEntity implements GeoBlockEntity, WorldlyContainer {
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 	private NonNullList<ItemStack> stacks = NonNullList.withSize(0, ItemStack.EMPTY);
 	private final LazyOptional<? extends IItemHandler>[] handlers = SidedInvWrapper.create(this, Direction.values());
 
-	public HugeLilyTileEntity(BlockPos pos, BlockState state) {
-		super(CABlockEntities.HUGE_LILY.get(), pos, state);
+	public CentrifugerTileEntity(BlockPos pos, BlockState state) {
+		super(CABlockEntities.CENTRIFUGER.get(), pos, state);
 	}
 
 	private PlayState predicate(AnimationState<?> event) {
-		String animationprocedure = ("" + this.getBlockState().getValue(HugeLilyBlock.DATA_ANIMATION));
+		String animationprocedure = ("" + this.getBlockState().getValue(CentrifugerBlock.DATA_ANIMATION));
 		if (animationprocedure.equals("0")) {
 			return event.setAndContinue(RawAnimation.begin().thenLoop(animationprocedure));
 		}
@@ -54,7 +54,7 @@ public class HugeLilyTileEntity extends RandomizableContainerBlockEntity impleme
 	String prevAnim = "0";
 
 	private PlayState procedurePredicate(AnimationState<?> event) {
-		String animationprocedure = ("" + this.getBlockState().getValue(HugeLilyBlock.DATA_ANIMATION));
+		String animationprocedure = ("" + this.getBlockState().getValue(CentrifugerBlock.DATA_ANIMATION));
 		if (!animationprocedure.equals("0") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!animationprocedure.equals(prevAnim) && !animationprocedure.equals("0"))) {
 			if (!animationprocedure.equals(prevAnim))
 				event.getController().forceAnimationReset();
@@ -74,8 +74,8 @@ public class HugeLilyTileEntity extends RandomizableContainerBlockEntity impleme
 
 	@Override
 	public void registerControllers(AnimatableManager.ControllerRegistrar data) {
-		data.add(new AnimationController<HugeLilyTileEntity>(this, "controller", 0, this::predicate));
-		data.add(new AnimationController<HugeLilyTileEntity>(this, "procedurecontroller", 0, this::procedurePredicate));
+		data.add(new AnimationController<CentrifugerTileEntity>(this, "controller", 0, this::predicate));
+		data.add(new AnimationController<CentrifugerTileEntity>(this, "procedurecontroller", 0, this::procedurePredicate));
 	}
 
 	@Override
@@ -124,7 +124,7 @@ public class HugeLilyTileEntity extends RandomizableContainerBlockEntity impleme
 
 	@Override
 	public Component getDefaultName() {
-		return Component.literal("huge_lily");
+		return Component.literal("centrifuger");
 	}
 
 	@Override
@@ -139,7 +139,7 @@ public class HugeLilyTileEntity extends RandomizableContainerBlockEntity impleme
 
 	@Override
 	public Component getDisplayName() {
-		return Component.literal("Viviparous Lily");
+		return Component.literal("Aegir Centrifuger");
 	}
 
 	@Override

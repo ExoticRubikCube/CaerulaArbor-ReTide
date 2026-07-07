@@ -2,7 +2,7 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
-import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.capability.sanity.SanityInjuryCapability;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffects;
@@ -30,7 +30,8 @@ public class NervousRegenerationItem extends Item {
 	@Override
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
 		ItemStack retval = super.finishUsingItem(itemstack, world, entity);
-		ModCapabilities.getSanityInjury(entity).heal(1000);
+		SanityInjuryCapability sanityInjury = ModCapabilities.getSanityInjury(entity);
+		sanityInjury.heal(sanityInjury.getMaxValue());
 		entity.removeEffect(CAMobEffects.DIZZY.get());
 		entity.removeEffect(MobEffects.BLINDNESS);
 		entity.removeEffect(MobEffects.DARKNESS);

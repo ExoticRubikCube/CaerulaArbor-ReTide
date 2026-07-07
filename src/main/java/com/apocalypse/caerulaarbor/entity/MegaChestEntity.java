@@ -283,6 +283,7 @@ public class MegaChestEntity extends SeaMonster {
         builder = builder.add(Attributes.ATTACK_DAMAGE, 23);
         builder = builder.add(Attributes.FOLLOW_RANGE, 18);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 1);
+        builder = builder.add(CAAttributes.MAX_SANITY.get(), 2000);
         return builder;
     }
 

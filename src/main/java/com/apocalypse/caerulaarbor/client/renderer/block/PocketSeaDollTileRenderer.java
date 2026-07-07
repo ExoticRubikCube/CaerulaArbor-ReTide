@@ -1,6 +1,6 @@
 package com.apocalypse.caerulaarbor.client.renderer.block;
 
-import com.apocalypse.caerulaarbor.block.entity.PocketSeaDollTileEntity;
+import com.apocalypse.caerulaarbor.block.blockentity.PocketSeaDollTileEntity;
 import com.apocalypse.caerulaarbor.client.model.block.PocketSeaDollBlockModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;

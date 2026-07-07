@@ -266,6 +266,7 @@ public class SuperBigCatEntity extends SeaMonster {
         builder = builder.add(Attributes.ATTACK_DAMAGE, 16);
         builder = builder.add(Attributes.FOLLOW_RANGE, 24);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
+        builder = builder.add(CAAttributes.MAX_SANITY.get(), 2000);
         return builder;
     }
 

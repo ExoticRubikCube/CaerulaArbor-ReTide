@@ -32,21 +32,21 @@ public class ModCapabilities {
 
     public static PlayerVariable getPlayerVariables(Entity entity) {
         return entity.getCapability(PLAYER_VARIABLE, null).orElseGet(() -> {
-            CaerulaArborMod.LOGGER.warn("Failed to get capability {} for entity {}", PLAYER_VARIABLE, entity);
+            CaerulaArborMod.LOGGER.warn("Failed to get capability {} for blockentity {}", PLAYER_VARIABLE, entity);
             return new PlayerVariable();
         });
     }
 
     public static SanityInjuryCapability getSanityInjury(LivingEntity entity) {
         return entity.getCapability(SANITY_INJURY, null).orElseGet(() -> {
-            CaerulaArborMod.LOGGER.warn("Failed to get capability {} for entity {}", SANITY_INJURY, entity);
+            CaerulaArborMod.LOGGER.warn("Failed to get capability {} for blockentity {}", SANITY_INJURY, entity);
             return new SanityInjuryCapability(entity);
         });
     }
 
     public static ApoptosisInjuryCapability getApoptosisInjury(LivingEntity entity) {
         return entity.getCapability(APOPTOSIS_INJURY, null).orElseGet(() -> {
-            CaerulaArborMod.LOGGER.warn("Failed to get capability {} for entity {}", APOPTOSIS_INJURY, entity);
+            CaerulaArborMod.LOGGER.warn("Failed to get capability {} for blockentity {}", APOPTOSIS_INJURY, entity);
             return new ApoptosisInjuryCapability(entity);
         });
     }

@@ -2,6 +2,7 @@ package com.apocalypse.caerulaarbor.client.overlay;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
+import com.apocalypse.caerulaarbor.capability.sanity.SanityInjuryCapability;
 import com.apocalypse.caerulaarbor.init.CAConfigs;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
@@ -23,8 +24,10 @@ public class SanityShowOverlay {
 		int h = event.getWindow().getGuiScaledHeight();
 		Player entity = Minecraft.getInstance().player;
 		if (entity != null) {
-			double sanity = ModCapabilities.getSanityInjury(entity).getValue();
-			if (sanity >= 1000) {
+			SanityInjuryCapability sanityCapability = ModCapabilities.getSanityInjury(entity);
+			double sanity = sanityCapability.getValue();
+			double maxSanity = sanityCapability.getMaxValue();
+			if (sanity >= maxSanity) {
 				return;
 			}
 			int dx = getOverlayOffsetX();
@@ -33,11 +36,11 @@ public class SanityShowOverlay {
 				event.getGuiGraphics().blit(BAR, w / 2 + 93 + dx, h - 12 + dy, 
 				0, 4, 62, 8, 62, 12);
 				event.getGuiGraphics().blit(BAR, w / 2 + 93 + dx + 10, h - 12 + dy + 3,
-				0, 0, (int) (50 * sanity / 1000), 4, 62, 12);
+				0, 0, (int) (50 * sanity / maxSanity), 4, 62, 12);
 
 			} else {
 				event.getGuiGraphics().blit(SANITY, w / 2 + 92 + dx, h - 19 + dy, 
-				Math.max(0, Math.min((int) Math.ceil(sanity / 50) * 16, 304)), 0, 16, 16, 320, 16);
+				Math.max(0, Math.min((int) Math.ceil(sanity / maxSanity * 20.0) * 16, 304)), 0, 16, 16, 320, 16);
 			}
 		}
 	}

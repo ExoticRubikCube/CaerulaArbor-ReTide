@@ -1,7 +1,7 @@
 package com.apocalypse.caerulaarbor.client.model.block;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.block.entity.CentrifugerTileEntity;
+import com.apocalypse.caerulaarbor.block.blockentity.CentrifugerTileEntity;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.GeoModel;
 

@@ -1,8 +1,7 @@
 package com.apocalypse.caerulaarbor.client.model.block;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
-import com.apocalypse.caerulaarbor.block.entity.SwarmcallerDollTileEntity;
+import com.apocalypse.caerulaarbor.block.blockentity.SwarmcallerDollTileEntity;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.GeoModel;
 

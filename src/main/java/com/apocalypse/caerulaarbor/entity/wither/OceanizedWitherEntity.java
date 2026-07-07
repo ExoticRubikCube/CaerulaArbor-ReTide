@@ -335,6 +335,7 @@ public class OceanizedWitherEntity extends AbstractOceanizedWitherEntity impleme
         builder = builder.add(CAAttributes.SANITY_MODIFIER.get(), 0.01);
         builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 65);
         builder = builder.add(CAAttributes.GENERAL_DEFENSE.get(), 5);
+        builder = builder.add(CAAttributes.MAX_SANITY.get(), 2000);
         return builder;
     }
 

@@ -1,6 +1,6 @@
 package com.apocalypse.caerulaarbor.client.renderer.block;
 
-import com.apocalypse.caerulaarbor.block.entity.HighmoreSpawningBlockTileEntity;
+import com.apocalypse.caerulaarbor.block.blockentity.HighmoreSpawningBlockTileEntity;
 import com.apocalypse.caerulaarbor.client.model.block.HighmoreSpawningBlockBlockModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;

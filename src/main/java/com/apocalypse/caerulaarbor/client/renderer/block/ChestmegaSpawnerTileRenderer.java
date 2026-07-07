@@ -1,6 +1,6 @@
 package com.apocalypse.caerulaarbor.client.renderer.block;
 
-import com.apocalypse.caerulaarbor.block.entity.ChestmegaSpawnerTileEntity;
+import com.apocalypse.caerulaarbor.block.blockentity.ChestmegaSpawnerTileEntity;
 import com.apocalypse.caerulaarbor.client.model.block.ChestmegaSpawnerBlockModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;

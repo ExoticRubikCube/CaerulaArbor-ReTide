@@ -1,6 +1,6 @@
-package com.apocalypse.caerulaarbor.block.entity;
+package com.apocalypse.caerulaarbor.block.blockentity;
 
-import com.apocalypse.caerulaarbor.block.TidewayCradleBlock;
+import com.apocalypse.caerulaarbor.block.ChestmegaSpawnerBlock;
 import com.apocalypse.caerulaarbor.init.CABlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -34,25 +34,25 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import javax.annotation.Nullable;
 import java.util.stream.IntStream;
 
-public class TidewayCradleTileEntity extends RandomizableContainerBlockEntity implements GeoBlockEntity, WorldlyContainer {
+public class ChestmegaSpawnerTileEntity extends RandomizableContainerBlockEntity implements GeoBlockEntity, WorldlyContainer {
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 	private NonNullList<ItemStack> stacks = NonNullList.withSize(0, ItemStack.EMPTY);
 	private final LazyOptional<? extends IItemHandler>[] handlers = SidedInvWrapper.create(this, Direction.values());
-	public int blockstateNew = this.getBlockState().getValue(TidewayCradleBlock.BLOCKSTATE);
-	private int blockstateOld = this.getBlockState().getValue(TidewayCradleBlock.BLOCKSTATE);
+	public int blockstateNew = this.getBlockState().getValue(ChestmegaSpawnerBlock.BLOCKSTATE);
+	private int blockstateOld = this.getBlockState().getValue(ChestmegaSpawnerBlock.BLOCKSTATE);
 
-	public TidewayCradleTileEntity(BlockPos pos, BlockState state) {
-		super(CABlockEntities.TIDEWAY_CRADLE.get(), pos, state);
+	public ChestmegaSpawnerTileEntity(BlockPos pos, BlockState state) {
+		super(CABlockEntities.CHESTMEGA_SPAWNER.get(), pos, state);
 	}
 
 	private PlayState predicate(AnimationState<?> event) {
-		blockstateNew = this.getBlockState().getValue(TidewayCradleBlock.BLOCKSTATE);
+		blockstateNew = this.getBlockState().getValue(ChestmegaSpawnerBlock.BLOCKSTATE);
 		if (blockstateOld != blockstateNew) {
 			event.getController().forceAnimationReset();
 			blockstateOld = blockstateNew;
 			return PlayState.STOP;
 		}
-		String animationprocedure = ("" + this.getBlockState().getValue(TidewayCradleBlock.DATA_ANIMATION));
+		String animationprocedure = ("" + this.getBlockState().getValue(ChestmegaSpawnerBlock.DATA_ANIMATION));
 		if (animationprocedure.equals("0")) {
 			return event.setAndContinue(RawAnimation.begin().thenLoop(animationprocedure));
 		}
@@ -62,7 +62,7 @@ public class TidewayCradleTileEntity extends RandomizableContainerBlockEntity im
 	String prevAnim = "0";
 
 	private PlayState procedurePredicate(AnimationState<?> event) {
-		String animationprocedure = ("" + this.getBlockState().getValue(TidewayCradleBlock.DATA_ANIMATION));
+		String animationprocedure = ("" + this.getBlockState().getValue(ChestmegaSpawnerBlock.DATA_ANIMATION));
 		if (!animationprocedure.equals("0") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!animationprocedure.equals(prevAnim) && !animationprocedure.equals("0"))) {
 			if (!animationprocedure.equals(prevAnim))
 				event.getController().forceAnimationReset();
@@ -82,8 +82,8 @@ public class TidewayCradleTileEntity extends RandomizableContainerBlockEntity im
 
 	@Override
 	public void registerControllers(AnimatableManager.ControllerRegistrar data) {
-		data.add(new AnimationController<TidewayCradleTileEntity>(this, "controller", 0, this::predicate));
-		data.add(new AnimationController<TidewayCradleTileEntity>(this, "procedurecontroller", 0, this::procedurePredicate));
+		data.add(new AnimationController<ChestmegaSpawnerTileEntity>(this, "controller", 0, this::predicate));
+		data.add(new AnimationController<ChestmegaSpawnerTileEntity>(this, "procedurecontroller", 0, this::procedurePredicate));
 	}
 
 	@Override
@@ -132,7 +132,7 @@ public class TidewayCradleTileEntity extends RandomizableContainerBlockEntity im
 
 	@Override
 	public Component getDefaultName() {
-		return Component.literal("tideway_cradle");
+		return Component.literal("chestmega_spawner");
 	}
 
 	@Override
@@ -147,7 +147,7 @@ public class TidewayCradleTileEntity extends RandomizableContainerBlockEntity im
 
 	@Override
 	public Component getDisplayName() {
-		return Component.literal("Tideway Cradle");
+		return Component.literal("Chestmega Spawner");
 	}
 
 	@Override

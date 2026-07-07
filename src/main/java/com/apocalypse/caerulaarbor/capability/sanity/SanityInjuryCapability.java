@@ -3,8 +3,8 @@ package com.apocalypse.caerulaarbor.capability.sanity;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.api.event.SanityEvent;
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
-import com.apocalypse.caerulaarbor.init.CAConfigs;
 import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAConfigs;
 import com.apocalypse.caerulaarbor.init.CADamageTypes;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import net.minecraft.nbt.CompoundTag;
@@ -22,6 +22,7 @@ import java.util.Optional;
 
 public class SanityInjuryCapability implements ISanityInjuryCapability {
     public static final ResourceLocation ID = new ResourceLocation(CaerulaArborMod.MODID, "sanity_injury");
+    private static final double DEFAULT_MAX_SANITY = 1000.0;
 
     private final LivingEntity owner;
     private double value;
@@ -29,12 +30,8 @@ public class SanityInjuryCapability implements ISanityInjuryCapability {
     private boolean locked;
 
     public SanityInjuryCapability(LivingEntity owner) {
-        this(owner, 1000);
-    }
-
-    public SanityInjuryCapability(LivingEntity owner, double value) {
         this.owner = owner;
-        this.value = Math.max(0, Math.min(1000, value));
+        this.value = getMaxValue();
         this.recovering = false;
         this.locked = false;
     }
@@ -44,20 +41,24 @@ public class SanityInjuryCapability implements ISanityInjuryCapability {
         if (locked || recovering || damage <= 0) {
             return false;
         }
-        double sanityResistance = Optional.ofNullable(owner.getAttribute(CAAttributes.SANITY_RESISTANCE.get()))
-                .map(AttributeInstance::getValue)
-                .orElse(0D);
-        damage *= 1 - sanityResistance / 100;
-        if (damage <= 0) {
-            return false;
+
+        if (!(owner instanceof Player player) || (!player.isCreative() && !player.isSpectator())) {
+            double sanityResistance = Optional.ofNullable(owner.getAttribute(CAAttributes.SANITY_RESISTANCE.get()))
+                    .map(AttributeInstance::getValue)
+                    .orElse(0D);
+            damage *= 1 - sanityResistance / 100;
+            if (damage <= 0) {
+                return false;
+            }
+            value -= damage;
+            if (value <= 0) {
+                sanityBreak();
+                value = 0;
+                recovering = true;
+            }
+            return true;
         }
-        value -= damage;
-        if (value <= 0) {
-            sanityBreak();
-            value = 0;
-            recovering = true;
-        }
-        return true;
+        return false;
     }
 
     @Override
@@ -67,7 +68,7 @@ public class SanityInjuryCapability implements ISanityInjuryCapability {
         }
         SanityEvent.Heal event = new SanityEvent.Heal(owner, amount);
         if (!MinecraftForge.EVENT_BUS.post(event)) {
-            value = Math.min(value + event.getAmount(), 1000);
+            value = Math.min(value + event.getAmount(), getMaxValue());
         }
     }
 
@@ -75,10 +76,11 @@ public class SanityInjuryCapability implements ISanityInjuryCapability {
     public void tick() {
         if (recovering) {
             boolean fast = owner.hasEffect(CAMobEffects.ESSENCE_RESISTANCE.get());
-            double step = 1000.0 / (fast ? 100.0 : 200.0);
-            value = Math.min(1000.0, value + step);
-            if (value >= 1000.0) {
-                value = 1000.0;
+            double maxValue = getMaxValue();
+            double step = maxValue / (fast ? 100.0 : 200.0);
+            value = Math.min(maxValue, value + step);
+            if (value >= maxValue) {
+                value = maxValue;
                 recovering = false;
                 ModCapabilities.getApoptosisInjury(owner).unlock();
             }
@@ -86,11 +88,18 @@ public class SanityInjuryCapability implements ISanityInjuryCapability {
     }
 
     public double getValue() {
+        value = Math.min(value, getMaxValue());
         return value;
     }
 
+    public double getMaxValue() {
+        return Math.max(1.0, Optional.ofNullable(owner.getAttribute(CAAttributes.MAX_SANITY.get()))
+                .map(AttributeInstance::getValue)
+                .orElse(DEFAULT_MAX_SANITY));
+    }
+
     public void lockToMax() {
-        value = 1000;
+        value = getMaxValue();
         locked = true;
     }
 
@@ -148,7 +157,7 @@ public class SanityInjuryCapability implements ISanityInjuryCapability {
 
     @Override
     public void deserializeNBT(CompoundTag nbt) {
-        value = nbt.getDouble("SanityInjury");
+        value = Math.max(0, Math.min(getMaxValue(), nbt.getDouble("SanityInjury")));
         recovering = nbt.getBoolean("SanityRecovering");
         locked = nbt.getBoolean("SanityLocked");
     }

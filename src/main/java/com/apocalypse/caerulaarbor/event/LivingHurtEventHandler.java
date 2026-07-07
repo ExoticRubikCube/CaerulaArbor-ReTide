@@ -6,7 +6,6 @@ import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
-import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
 import com.apocalypse.caerulaarbor.entity.*;
 import com.apocalypse.caerulaarbor.init.*;
 import com.apocalypse.caerulaarbor.util.*;
@@ -414,7 +413,7 @@ public class LivingHurtEventHandler {
                 valid = true;
             } else {
                 regName = ForgeRegistries.ENTITY_TYPES.getKey(sourceentity.getType()).toString();
-                for (String stringiterator : CAConfigsConfiguration.CRIMSON_TREATY.get()) {
+                for (String stringiterator : CAConfigs.CRIMSON_TREATY.get()) {
                     if (CaerulaUtil.matchesRegistryName(stringiterator, regName)) {
                         valid = true;
                         break;

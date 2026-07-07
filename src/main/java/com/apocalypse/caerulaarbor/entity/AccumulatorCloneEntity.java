@@ -101,7 +101,6 @@ public class AccumulatorCloneEntity extends SeaMonster {
 		this.entityData.define(DATA_ANIMATION, "undefined");
 	}
 
-
     @Override
 	protected PathNavigation createNavigation(Level world) {
 		return new WaterBoundPathNavigation(this, world);

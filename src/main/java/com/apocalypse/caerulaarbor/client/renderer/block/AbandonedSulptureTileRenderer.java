@@ -1,6 +1,6 @@
 package com.apocalypse.caerulaarbor.client.renderer.block;
 
-import com.apocalypse.caerulaarbor.block.entity.AbandonedSulptureTileEntity;
+import com.apocalypse.caerulaarbor.block.blockentity.AbandonedSulptureTileEntity;
 import com.apocalypse.caerulaarbor.client.model.block.AbandonedSulptureBlockModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;

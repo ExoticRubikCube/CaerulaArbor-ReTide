@@ -133,8 +133,10 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 			guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/light_extinguish.png"), this.leftPos + 36, this.topPos + -37, 0, 0, 64, 32, 64, 32);
 		}
 
+		double sanity = ModCapabilities.getSanityInjury(entity).getValue();
+		double maxSanity = ModCapabilities.getSanityInjury(entity).getMaxValue();
 		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/sanity.png"), this.leftPos + 106, this.topPos + 43,
-				Mth.clamp((int) (ModCapabilities.getSanityInjury(entity).getValue() / 50) * 16, 0, 304), 0, 16, 16, 320, 16);
+				Mth.clamp((int) Math.ceil(sanity / maxSanity * 20.0) * 16, 0, 304), 0, 16, 16, 320, 16);
 
 		if (RelicUtils.hasDisoNeuro(entity)) {
 			guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/disoclution_neuro.png"), this.leftPos + 101, this.topPos + 90, 0, 0, 64, 64, 64, 64);
@@ -210,7 +212,7 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 			guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.caerula_record_gui.label_disconcentration"), 101, 147, -3368449, false);
 		if (RelicUtils.hasDisoBlood(entity))
 			guiGraphics.drawString(this.font, Component.translatable("gui.caerula_arbor.caerula_record_gui.label_haemophilia"), 101, 147, -3368449, false);
-		String sanity = "" + Math.round(ModCapabilities.getSanityInjury(entity).getValue());
+		String sanity = Math.round(ModCapabilities.getSanityInjury(entity).getValue()) + "/" + Math.round(ModCapabilities.getSanityInjury(entity).getMaxValue());
 		guiGraphics.drawString(this.font,
 
 				sanity, 124, 50, -16737895, false);
@@ -272,4 +274,3 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 		this.addRenderableWidget(imagebutton_nurture_gene_set);
 	}
 }
-

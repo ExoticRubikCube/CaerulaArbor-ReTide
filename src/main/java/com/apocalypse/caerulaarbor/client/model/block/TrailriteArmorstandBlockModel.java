@@ -1,12 +1,9 @@
 package com.apocalypse.caerulaarbor.client.model.block;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
-import software.bernie.geckolib.model.GeoModel;
-
+import com.apocalypse.caerulaarbor.block.blockentity.TrailriteArmorstandTileEntity;
 import net.minecraft.resources.ResourceLocation;
-
-import com.apocalypse.caerulaarbor.block.entity.TrailriteArmorstandTileEntity;
+import software.bernie.geckolib.model.GeoModel;
 
 public class TrailriteArmorstandBlockModel extends GeoModel<TrailriteArmorstandTileEntity> {
 	@Override

@@ -1,8 +1,7 @@
 package com.apocalypse.caerulaarbor.client.model.block;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-
-import com.apocalypse.caerulaarbor.block.entity.PocketSeaDollTileEntity;
+import com.apocalypse.caerulaarbor.block.blockentity.PocketSeaDollTileEntity;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.GeoModel;
 

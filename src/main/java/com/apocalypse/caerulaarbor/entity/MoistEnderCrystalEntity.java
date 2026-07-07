@@ -2,6 +2,7 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
+import com.apocalypse.caerulaarbor.capability.sanity.SanityInjuryCapability;
 import com.apocalypse.caerulaarbor.entity.base.SyncedAnimationEntity;
 import com.apocalypse.caerulaarbor.init.*;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
@@ -295,7 +296,8 @@ public class MoistEnderCrystalEntity extends PathfinderMob implements GeoEntity,
 						(float) ((enderina instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) * 0.25));
 			} else if (enderina instanceof LivingEntity livingEntity) {
 				EntityUtils.heal(livingEntity, (livingEntity.getMaxHealth()) * 0.05);
-				ModCapabilities.getSanityInjury(livingEntity).heal(1000);
+				SanityInjuryCapability sanityInjury = ModCapabilities.getSanityInjury(livingEntity);
+				sanityInjury.heal(sanityInjury.getMaxValue());
 			}
 		}
 	}

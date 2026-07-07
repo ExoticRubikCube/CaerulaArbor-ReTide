@@ -391,6 +391,7 @@ public class TideDeathrepellerEntity extends SeaMonster {
         builder = builder.add(Attributes.ATTACK_DAMAGE, 8);
         builder = builder.add(Attributes.FOLLOW_RANGE, 16);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.65);
+        builder = builder.add(CAAttributes.MAX_SANITY.get(), 2000);
         return builder;
     }
 

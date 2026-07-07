@@ -738,6 +738,7 @@ public class IzumikEntity extends SeaMonster {
         builder = builder.add(CAAttributes.GENERAL_DEFENSE.get(), 10);
         builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 50);
         builder = builder.add(CAAttributes.SANITY_MODIFIER.get(), 0.01);
+        builder = builder.add(CAAttributes.MAX_SANITY.get(), 2000);
         return builder;
     }
 

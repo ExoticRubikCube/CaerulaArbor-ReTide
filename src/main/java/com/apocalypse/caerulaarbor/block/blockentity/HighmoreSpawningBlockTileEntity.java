@@ -1,6 +1,6 @@
-package com.apocalypse.caerulaarbor.block.entity;
+package com.apocalypse.caerulaarbor.block.blockentity;
 
-import com.apocalypse.caerulaarbor.block.StonecutterDollBlock;
+import com.apocalypse.caerulaarbor.block.HighmoreSpawningBlockBlock;
 import com.apocalypse.caerulaarbor.init.CABlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -34,17 +34,25 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import javax.annotation.Nullable;
 import java.util.stream.IntStream;
 
-public class StonecutterDollTileEntity extends RandomizableContainerBlockEntity implements GeoBlockEntity, WorldlyContainer {
+public class HighmoreSpawningBlockTileEntity extends RandomizableContainerBlockEntity implements GeoBlockEntity, WorldlyContainer {
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 	private NonNullList<ItemStack> stacks = NonNullList.withSize(0, ItemStack.EMPTY);
 	private final LazyOptional<? extends IItemHandler>[] handlers = SidedInvWrapper.create(this, Direction.values());
+	public int blockstateNew = this.getBlockState().getValue(HighmoreSpawningBlockBlock.BLOCKSTATE);
+	private int blockstateOld = this.getBlockState().getValue(HighmoreSpawningBlockBlock.BLOCKSTATE);
 
-	public StonecutterDollTileEntity(BlockPos pos, BlockState state) {
-		super(CABlockEntities.STONECUTTER_DOLL.get(), pos, state);
+	public HighmoreSpawningBlockTileEntity(BlockPos pos, BlockState state) {
+		super(CABlockEntities.HIGHMORE_SPAWNING_BLOCK.get(), pos, state);
 	}
 
 	private PlayState predicate(AnimationState<?> event) {
-		String animationprocedure = ("" + this.getBlockState().getValue(StonecutterDollBlock.DATA_ANIMATION));
+		blockstateNew = this.getBlockState().getValue(HighmoreSpawningBlockBlock.BLOCKSTATE);
+		if (blockstateOld != blockstateNew) {
+			event.getController().forceAnimationReset();
+			blockstateOld = blockstateNew;
+			return PlayState.STOP;
+		}
+		String animationprocedure = ("" + this.getBlockState().getValue(HighmoreSpawningBlockBlock.DATA_ANIMATION));
 		if (animationprocedure.equals("0")) {
 			return event.setAndContinue(RawAnimation.begin().thenLoop(animationprocedure));
 		}
@@ -54,7 +62,7 @@ public class StonecutterDollTileEntity extends RandomizableContainerBlockEntity 
 	String prevAnim = "0";
 
 	private PlayState procedurePredicate(AnimationState<?> event) {
-		String animationprocedure = ("" + this.getBlockState().getValue(StonecutterDollBlock.DATA_ANIMATION));
+		String animationprocedure = ("" + this.getBlockState().getValue(HighmoreSpawningBlockBlock.DATA_ANIMATION));
 		if (!animationprocedure.equals("0") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!animationprocedure.equals(prevAnim) && !animationprocedure.equals("0"))) {
 			if (!animationprocedure.equals(prevAnim))
 				event.getController().forceAnimationReset();
@@ -74,8 +82,8 @@ public class StonecutterDollTileEntity extends RandomizableContainerBlockEntity 
 
 	@Override
 	public void registerControllers(AnimatableManager.ControllerRegistrar data) {
-		data.add(new AnimationController<StonecutterDollTileEntity>(this, "controller", 0, this::predicate));
-		data.add(new AnimationController<StonecutterDollTileEntity>(this, "procedurecontroller", 0, this::procedurePredicate));
+		data.add(new AnimationController<HighmoreSpawningBlockTileEntity>(this, "controller", 0, this::predicate));
+		data.add(new AnimationController<HighmoreSpawningBlockTileEntity>(this, "procedurecontroller", 0, this::procedurePredicate));
 	}
 
 	@Override
@@ -124,7 +132,7 @@ public class StonecutterDollTileEntity extends RandomizableContainerBlockEntity 
 
 	@Override
 	public Component getDefaultName() {
-		return Component.literal("stonecutter_doll");
+		return Component.literal("highmore_spawning_block");
 	}
 
 	@Override
@@ -139,7 +147,7 @@ public class StonecutterDollTileEntity extends RandomizableContainerBlockEntity 
 
 	@Override
 	public Component getDisplayName() {
-		return Component.literal("Stonecutter Doll");
+		return Component.literal("Highmore Spawnblock");
 	}
 
 	@Override

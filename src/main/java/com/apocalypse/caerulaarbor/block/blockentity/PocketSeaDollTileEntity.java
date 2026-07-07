@@ -1,6 +1,6 @@
-package com.apocalypse.caerulaarbor.block.entity;
+package com.apocalypse.caerulaarbor.block.blockentity;
 
-import com.apocalypse.caerulaarbor.block.HighmoreSpawnblockBlock;
+import com.apocalypse.caerulaarbor.block.PocketSeaDollBlock;
 import com.apocalypse.caerulaarbor.init.CABlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -34,25 +34,17 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import javax.annotation.Nullable;
 import java.util.stream.IntStream;
 
-public class HighmoreSpawnblockTileEntity extends RandomizableContainerBlockEntity implements GeoBlockEntity, WorldlyContainer {
+public class PocketSeaDollTileEntity extends RandomizableContainerBlockEntity implements GeoBlockEntity, WorldlyContainer {
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 	private NonNullList<ItemStack> stacks = NonNullList.withSize(0, ItemStack.EMPTY);
 	private final LazyOptional<? extends IItemHandler>[] handlers = SidedInvWrapper.create(this, Direction.values());
-	public int blockstateNew = this.getBlockState().getValue(HighmoreSpawnblockBlock.BLOCKSTATE);
-	private int blockstateOld = this.getBlockState().getValue(HighmoreSpawnblockBlock.BLOCKSTATE);
 
-	public HighmoreSpawnblockTileEntity(BlockPos pos, BlockState state) {
-		super(CABlockEntities.HIGHMORE_SPAWNBLOCK.get(), pos, state);
+	public PocketSeaDollTileEntity(BlockPos pos, BlockState state) {
+		super(CABlockEntities.POCKET_SEA_DOLL.get(), pos, state);
 	}
 
 	private PlayState predicate(AnimationState<?> event) {
-		blockstateNew = this.getBlockState().getValue(HighmoreSpawnblockBlock.BLOCKSTATE);
-		if (blockstateOld != blockstateNew) {
-			event.getController().forceAnimationReset();
-			blockstateOld = blockstateNew;
-			return PlayState.STOP;
-		}
-		String animationprocedure = ("" + this.getBlockState().getValue(HighmoreSpawnblockBlock.DATA_ANIMATION));
+		String animationprocedure = ("" + this.getBlockState().getValue(PocketSeaDollBlock.DATA_ANIMATION));
 		if (animationprocedure.equals("0")) {
 			return event.setAndContinue(RawAnimation.begin().thenLoop(animationprocedure));
 		}
@@ -62,7 +54,7 @@ public class HighmoreSpawnblockTileEntity extends RandomizableContainerBlockEnti
 	String prevAnim = "0";
 
 	private PlayState procedurePredicate(AnimationState<?> event) {
-		String animationprocedure = ("" + this.getBlockState().getValue(HighmoreSpawnblockBlock.DATA_ANIMATION));
+		String animationprocedure = ("" + this.getBlockState().getValue(PocketSeaDollBlock.DATA_ANIMATION));
 		if (!animationprocedure.equals("0") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!animationprocedure.equals(prevAnim) && !animationprocedure.equals("0"))) {
 			if (!animationprocedure.equals(prevAnim))
 				event.getController().forceAnimationReset();
@@ -82,8 +74,8 @@ public class HighmoreSpawnblockTileEntity extends RandomizableContainerBlockEnti
 
 	@Override
 	public void registerControllers(AnimatableManager.ControllerRegistrar data) {
-		data.add(new AnimationController<HighmoreSpawnblockTileEntity>(this, "controller", 0, this::predicate));
-		data.add(new AnimationController<HighmoreSpawnblockTileEntity>(this, "procedurecontroller", 0, this::procedurePredicate));
+		data.add(new AnimationController<PocketSeaDollTileEntity>(this, "controller", 0, this::predicate));
+		data.add(new AnimationController<PocketSeaDollTileEntity>(this, "procedurecontroller", 0, this::procedurePredicate));
 	}
 
 	@Override
@@ -132,7 +124,7 @@ public class HighmoreSpawnblockTileEntity extends RandomizableContainerBlockEnti
 
 	@Override
 	public Component getDefaultName() {
-		return Component.literal("highmore_spawnblock");
+		return Component.literal("pocket_sea_doll");
 	}
 
 	@Override
@@ -147,7 +139,7 @@ public class HighmoreSpawnblockTileEntity extends RandomizableContainerBlockEnti
 
 	@Override
 	public Component getDisplayName() {
-		return Component.literal("Highmore Spawnblock");
+		return Component.literal("Pocket Sea Doll");
 	}
 
 	@Override

@@ -1,6 +1,6 @@
-package com.apocalypse.caerulaarbor.block.entity;
+package com.apocalypse.caerulaarbor.block.blockentity;
 
-import com.apocalypse.caerulaarbor.block.AbandonedSulptureBlock;
+import com.apocalypse.caerulaarbor.block.CrisisTableBlock;
 import com.apocalypse.caerulaarbor.init.CABlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -34,17 +34,25 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import javax.annotation.Nullable;
 import java.util.stream.IntStream;
 
-public class AbandonedSulptureTileEntity extends RandomizableContainerBlockEntity implements GeoBlockEntity, WorldlyContainer {
+public class CrisisTableTileEntity extends RandomizableContainerBlockEntity implements GeoBlockEntity, WorldlyContainer {
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 	private NonNullList<ItemStack> stacks = NonNullList.withSize(0, ItemStack.EMPTY);
 	private final LazyOptional<? extends IItemHandler>[] handlers = SidedInvWrapper.create(this, Direction.values());
+	public int blockstateNew = this.getBlockState().getValue(CrisisTableBlock.BLOCKSTATE);
+	private int blockstateOld = this.getBlockState().getValue(CrisisTableBlock.BLOCKSTATE);
 
-	public AbandonedSulptureTileEntity(BlockPos pos, BlockState state) {
-		super(CABlockEntities.ABANDONED_SULPTURE.get(), pos, state);
+	public CrisisTableTileEntity(BlockPos pos, BlockState state) {
+		super(CABlockEntities.CRISIS_TABLE.get(), pos, state);
 	}
 
 	private PlayState predicate(AnimationState<?> event) {
-		String animationprocedure = ("" + this.getBlockState().getValue(AbandonedSulptureBlock.DATA_ANIMATION));
+		blockstateNew = this.getBlockState().getValue(CrisisTableBlock.BLOCKSTATE);
+		if (blockstateOld != blockstateNew) {
+			event.getController().forceAnimationReset();
+			blockstateOld = blockstateNew;
+			return PlayState.STOP;
+		}
+		String animationprocedure = ("" + this.getBlockState().getValue(CrisisTableBlock.DATA_ANIMATION));
 		if (animationprocedure.equals("0")) {
 			return event.setAndContinue(RawAnimation.begin().thenLoop(animationprocedure));
 		}
@@ -54,7 +62,7 @@ public class AbandonedSulptureTileEntity extends RandomizableContainerBlockEntit
 	String prevAnim = "0";
 
 	private PlayState procedurePredicate(AnimationState<?> event) {
-		String animationprocedure = ("" + this.getBlockState().getValue(AbandonedSulptureBlock.DATA_ANIMATION));
+		String animationprocedure = ("" + this.getBlockState().getValue(CrisisTableBlock.DATA_ANIMATION));
 		if (!animationprocedure.equals("0") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!animationprocedure.equals(prevAnim) && !animationprocedure.equals("0"))) {
 			if (!animationprocedure.equals(prevAnim))
 				event.getController().forceAnimationReset();
@@ -74,8 +82,8 @@ public class AbandonedSulptureTileEntity extends RandomizableContainerBlockEntit
 
 	@Override
 	public void registerControllers(AnimatableManager.ControllerRegistrar data) {
-		data.add(new AnimationController<AbandonedSulptureTileEntity>(this, "controller", 0, this::predicate));
-		data.add(new AnimationController<AbandonedSulptureTileEntity>(this, "procedurecontroller", 0, this::procedurePredicate));
+		data.add(new AnimationController<CrisisTableTileEntity>(this, "controller", 0, this::predicate));
+		data.add(new AnimationController<CrisisTableTileEntity>(this, "procedurecontroller", 0, this::procedurePredicate));
 	}
 
 	@Override
@@ -124,7 +132,7 @@ public class AbandonedSulptureTileEntity extends RandomizableContainerBlockEntit
 
 	@Override
 	public Component getDefaultName() {
-		return Component.literal("abandoned_sulpture");
+		return Component.literal("crisis_table");
 	}
 
 	@Override
@@ -139,7 +147,7 @@ public class AbandonedSulptureTileEntity extends RandomizableContainerBlockEntit
 
 	@Override
 	public Component getDisplayName() {
-		return Component.literal("Abandoned Sulpture");
+		return Component.literal("Crisis Table");
 	}
 
 	@Override

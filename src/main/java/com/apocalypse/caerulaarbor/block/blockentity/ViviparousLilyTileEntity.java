@@ -1,6 +1,6 @@
-package com.apocalypse.caerulaarbor.block.entity;
+package com.apocalypse.caerulaarbor.block.blockentity;
 
-import com.apocalypse.caerulaarbor.block.MizukiStatueBlock;
+import com.apocalypse.caerulaarbor.block.ViviparousLilyBlock;
 import com.apocalypse.caerulaarbor.init.CABlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -34,25 +34,17 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import javax.annotation.Nullable;
 import java.util.stream.IntStream;
 
-public class MizukiStatueTileEntity extends RandomizableContainerBlockEntity implements GeoBlockEntity, WorldlyContainer {
+public class ViviparousLilyTileEntity extends RandomizableContainerBlockEntity implements GeoBlockEntity, WorldlyContainer {
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 	private NonNullList<ItemStack> stacks = NonNullList.withSize(0, ItemStack.EMPTY);
 	private final LazyOptional<? extends IItemHandler>[] handlers = SidedInvWrapper.create(this, Direction.values());
-	public int blockstateNew = this.getBlockState().getValue(MizukiStatueBlock.BLOCKSTATE);
-	private int blockstateOld = this.getBlockState().getValue(MizukiStatueBlock.BLOCKSTATE);
 
-	public MizukiStatueTileEntity(BlockPos pos, BlockState state) {
-		super(CABlockEntities.MIZUKI_STATUE.get(), pos, state);
+	public ViviparousLilyTileEntity(BlockPos pos, BlockState state) {
+		super(CABlockEntities.VIVIPAROUS_LILY.get(), pos, state);
 	}
 
 	private PlayState predicate(AnimationState<?> event) {
-		blockstateNew = this.getBlockState().getValue(MizukiStatueBlock.BLOCKSTATE);
-		if (blockstateOld != blockstateNew) {
-			event.getController().forceAnimationReset();
-			blockstateOld = blockstateNew;
-			return PlayState.STOP;
-		}
-		String animationprocedure = ("" + this.getBlockState().getValue(MizukiStatueBlock.DATA_ANIMATION));
+		String animationprocedure = ("" + this.getBlockState().getValue(ViviparousLilyBlock.DATA_ANIMATION));
 		if (animationprocedure.equals("0")) {
 			return event.setAndContinue(RawAnimation.begin().thenLoop(animationprocedure));
 		}
@@ -62,7 +54,7 @@ public class MizukiStatueTileEntity extends RandomizableContainerBlockEntity imp
 	String prevAnim = "0";
 
 	private PlayState procedurePredicate(AnimationState<?> event) {
-		String animationprocedure = ("" + this.getBlockState().getValue(MizukiStatueBlock.DATA_ANIMATION));
+		String animationprocedure = ("" + this.getBlockState().getValue(ViviparousLilyBlock.DATA_ANIMATION));
 		if (!animationprocedure.equals("0") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!animationprocedure.equals(prevAnim) && !animationprocedure.equals("0"))) {
 			if (!animationprocedure.equals(prevAnim))
 				event.getController().forceAnimationReset();
@@ -82,8 +74,8 @@ public class MizukiStatueTileEntity extends RandomizableContainerBlockEntity imp
 
 	@Override
 	public void registerControllers(AnimatableManager.ControllerRegistrar data) {
-		data.add(new AnimationController<MizukiStatueTileEntity>(this, "controller", 0, this::predicate));
-		data.add(new AnimationController<MizukiStatueTileEntity>(this, "procedurecontroller", 0, this::procedurePredicate));
+		data.add(new AnimationController<ViviparousLilyTileEntity>(this, "controller", 0, this::predicate));
+		data.add(new AnimationController<ViviparousLilyTileEntity>(this, "procedurecontroller", 0, this::procedurePredicate));
 	}
 
 	@Override
@@ -132,7 +124,7 @@ public class MizukiStatueTileEntity extends RandomizableContainerBlockEntity imp
 
 	@Override
 	public Component getDefaultName() {
-		return Component.literal("mizuki_statue");
+		return Component.literal("viviparous_lily");
 	}
 
 	@Override
@@ -147,7 +139,7 @@ public class MizukiStatueTileEntity extends RandomizableContainerBlockEntity imp
 
 	@Override
 	public Component getDisplayName() {
-		return Component.literal("End Of Childhood");
+		return Component.literal("Viviparous Lily");
 	}
 
 	@Override

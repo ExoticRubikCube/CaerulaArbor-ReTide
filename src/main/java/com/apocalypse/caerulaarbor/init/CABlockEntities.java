@@ -2,7 +2,7 @@ package com.apocalypse.caerulaarbor.init;
 
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.block.entity.*;
+import com.apocalypse.caerulaarbor.block.blockentity.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.DeferredRegister;

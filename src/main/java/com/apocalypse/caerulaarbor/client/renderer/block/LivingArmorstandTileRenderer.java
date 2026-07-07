@@ -1,6 +1,6 @@
 package com.apocalypse.caerulaarbor.client.renderer.block;
 
-import com.apocalypse.caerulaarbor.block.entity.LivingArmorstandTileEntity;
+import com.apocalypse.caerulaarbor.block.blockentity.LivingArmorstandTileEntity;
 import com.apocalypse.caerulaarbor.client.model.block.LivingArmorstandBlockModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;

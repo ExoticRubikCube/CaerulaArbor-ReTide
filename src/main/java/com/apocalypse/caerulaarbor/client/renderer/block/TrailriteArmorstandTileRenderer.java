@@ -1,6 +1,6 @@
 package com.apocalypse.caerulaarbor.client.renderer.block;
 
-import com.apocalypse.caerulaarbor.block.entity.TrailriteArmorstandTileEntity;
+import com.apocalypse.caerulaarbor.block.blockentity.TrailriteArmorstandTileEntity;
 import com.apocalypse.caerulaarbor.client.model.block.TrailriteArmorstandBlockModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;

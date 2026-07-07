@@ -1,6 +1,6 @@
-package com.apocalypse.caerulaarbor.block.entity;
+package com.apocalypse.caerulaarbor.block.blockentity;
 
-import com.apocalypse.caerulaarbor.block.HighmoreSpawningBlockBlock;
+import com.apocalypse.caerulaarbor.block.SwarmcallerDollBlock;
 import com.apocalypse.caerulaarbor.init.CABlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -34,25 +34,17 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import javax.annotation.Nullable;
 import java.util.stream.IntStream;
 
-public class HighmoreSpawningBlockTileEntity extends RandomizableContainerBlockEntity implements GeoBlockEntity, WorldlyContainer {
+public class SwarmcallerDollTileEntity extends RandomizableContainerBlockEntity implements GeoBlockEntity, WorldlyContainer {
 	private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 	private NonNullList<ItemStack> stacks = NonNullList.withSize(0, ItemStack.EMPTY);
 	private final LazyOptional<? extends IItemHandler>[] handlers = SidedInvWrapper.create(this, Direction.values());
-	public int blockstateNew = this.getBlockState().getValue(HighmoreSpawningBlockBlock.BLOCKSTATE);
-	private int blockstateOld = this.getBlockState().getValue(HighmoreSpawningBlockBlock.BLOCKSTATE);
 
-	public HighmoreSpawningBlockTileEntity(BlockPos pos, BlockState state) {
-		super(CABlockEntities.HIGHMORE_SPAWNING_BLOCK.get(), pos, state);
+	public SwarmcallerDollTileEntity(BlockPos pos, BlockState state) {
+		super(CABlockEntities.SWARMCALLER_DOLL.get(), pos, state);
 	}
 
 	private PlayState predicate(AnimationState<?> event) {
-		blockstateNew = this.getBlockState().getValue(HighmoreSpawningBlockBlock.BLOCKSTATE);
-		if (blockstateOld != blockstateNew) {
-			event.getController().forceAnimationReset();
-			blockstateOld = blockstateNew;
-			return PlayState.STOP;
-		}
-		String animationprocedure = ("" + this.getBlockState().getValue(HighmoreSpawningBlockBlock.DATA_ANIMATION));
+		String animationprocedure = ("" + this.getBlockState().getValue(SwarmcallerDollBlock.DATA_ANIMATION));
 		if (animationprocedure.equals("0")) {
 			return event.setAndContinue(RawAnimation.begin().thenLoop(animationprocedure));
 		}
@@ -62,7 +54,7 @@ public class HighmoreSpawningBlockTileEntity extends RandomizableContainerBlockE
 	String prevAnim = "0";
 
 	private PlayState procedurePredicate(AnimationState<?> event) {
-		String animationprocedure = ("" + this.getBlockState().getValue(HighmoreSpawningBlockBlock.DATA_ANIMATION));
+		String animationprocedure = ("" + this.getBlockState().getValue(SwarmcallerDollBlock.DATA_ANIMATION));
 		if (!animationprocedure.equals("0") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!animationprocedure.equals(prevAnim) && !animationprocedure.equals("0"))) {
 			if (!animationprocedure.equals(prevAnim))
 				event.getController().forceAnimationReset();
@@ -82,8 +74,8 @@ public class HighmoreSpawningBlockTileEntity extends RandomizableContainerBlockE
 
 	@Override
 	public void registerControllers(AnimatableManager.ControllerRegistrar data) {
-		data.add(new AnimationController<HighmoreSpawningBlockTileEntity>(this, "controller", 0, this::predicate));
-		data.add(new AnimationController<HighmoreSpawningBlockTileEntity>(this, "procedurecontroller", 0, this::procedurePredicate));
+		data.add(new AnimationController<SwarmcallerDollTileEntity>(this, "controller", 0, this::predicate));
+		data.add(new AnimationController<SwarmcallerDollTileEntity>(this, "procedurecontroller", 0, this::procedurePredicate));
 	}
 
 	@Override
@@ -132,7 +124,7 @@ public class HighmoreSpawningBlockTileEntity extends RandomizableContainerBlockE
 
 	@Override
 	public Component getDefaultName() {
-		return Component.literal("highmore_spawning_block");
+		return Component.literal("swarmcaller_doll");
 	}
 
 	@Override
@@ -147,7 +139,7 @@ public class HighmoreSpawningBlockTileEntity extends RandomizableContainerBlockE
 
 	@Override
 	public Component getDisplayName() {
-		return Component.literal("Highmore Spawnblock");
+		return Component.literal("Swarmcaller Doll");
 	}
 
 	@Override

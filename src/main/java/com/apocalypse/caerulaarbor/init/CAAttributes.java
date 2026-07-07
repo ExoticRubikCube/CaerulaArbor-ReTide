@@ -23,10 +23,10 @@ import java.util.stream.Stream;
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class CAAttributes {
 	public static final DeferredRegister<Attribute> REGISTRY = DeferredRegister.create(ForgeRegistries.ATTRIBUTES, CaerulaArborMod.MODID);
+	public static final RegistryObject<Attribute> MAX_SANITY = REGISTRY.register("max_sanity", () -> new RangedAttribute("attribute.caerula_arbor.max_sanity", 1000, 1, 100000).setSyncable(true));
 	public static final RegistryObject<Attribute> SANITY_MODIFIER = REGISTRY.register("sanity_modifier", () -> new RangedAttribute("attribute.caerula_arbor.sanity_modifier", 1, 0, 999).setSyncable(true));
 	public static final RegistryObject<Attribute> SANITY_RATE = REGISTRY.register("sanity_rate", () -> new RangedAttribute("attribute.caerula_arbor.sanity_rate", 0, 0, 999).setSyncable(true));
-	public static final RegistryObject<Attribute> SANITY_INJURY_DAMAGE = REGISTRY.register("sanity_injury_damage",
-			() -> new RangedAttribute("attribute.caerula_arbor.sanity_injury_damage", 0, 0, Integer.MAX_VALUE).setSyncable(true));
+	public static final RegistryObject<Attribute> SANITY_INJURY_DAMAGE = REGISTRY.register("sanity_injury_damage", () -> new RangedAttribute("attribute.caerula_arbor.sanity_injury_damage", 0, 0, Integer.MAX_VALUE).setSyncable(true));
 	public static final RegistryObject<Attribute> EVOLVED = REGISTRY.register("evolved", () -> new RangedAttribute("attribute.caerula_arbor.evolved", 0, 0, 1).setSyncable(true));
 	public static final RegistryObject<Attribute> SUMMONABLE = REGISTRY.register("summonable", () -> new RangedAttribute("attribute.caerula_arbor.summonable", 1, 0, 1).setSyncable(true));
 	public static final RegistryObject<Attribute> MISSRATE = REGISTRY.register("missrate", () -> new RangedAttribute("attribute.caerula_arbor.missrate", 0, 0, 100).setSyncable(true));
@@ -38,6 +38,7 @@ public class CAAttributes {
 
 	@SubscribeEvent
 	public static void addAttributes(EntityAttributeModificationEvent event) {
+		event.getTypes().forEach(entity -> event.add(entity, MAX_SANITY.get()));
 		event.getTypes().forEach(entity -> event.add(entity, SANITY_MODIFIER.get()));
 		event.getTypes().forEach(entity -> event.add(entity, SANITY_RATE.get()));
 		event.getTypes().forEach(entity -> event.add(entity, SANITY_INJURY_DAMAGE.get()));
@@ -106,6 +107,7 @@ public class CAAttributes {
 		public static void playerClone(PlayerEvent.Clone event) {
 			Player oldPlayer = event.getOriginal();
 			Player newPlayer = event.getEntity();
+			newPlayer.getAttribute(MAX_SANITY.get()).setBaseValue(oldPlayer.getAttribute(MAX_SANITY.get()).getBaseValue());
 			newPlayer.getAttribute(SANITY_MODIFIER.get()).setBaseValue(oldPlayer.getAttribute(SANITY_MODIFIER.get()).getBaseValue());
 			newPlayer.getAttribute(SANITY_RATE.get()).setBaseValue(oldPlayer.getAttribute(SANITY_RATE.get()).getBaseValue());
 			newPlayer.getAttribute(SANITY_INJURY_DAMAGE.get()).setBaseValue(oldPlayer.getAttribute(SANITY_INJURY_DAMAGE.get()).getBaseValue());

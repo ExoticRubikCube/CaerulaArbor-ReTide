@@ -1,6 +1,6 @@
 package com.apocalypse.caerulaarbor.client.renderer.block;
 
-import com.apocalypse.caerulaarbor.block.entity.HugeLilyTileEntity;
+import com.apocalypse.caerulaarbor.block.blockentity.HugeLilyTileEntity;
 import com.apocalypse.caerulaarbor.client.model.block.HugeLilyBlockModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;

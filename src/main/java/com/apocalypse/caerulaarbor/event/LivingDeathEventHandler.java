@@ -6,7 +6,7 @@ import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler;
 import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler.StrategyType;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
-import com.apocalypse.caerulaarbor.init.CAConfigs;
+import com.apocalypse.caerulaarbor.capability.sanity.SanityInjuryCapability;
 import com.apocalypse.caerulaarbor.entity.MartusEntity;
 import com.apocalypse.caerulaarbor.entity.SkadiEntity;
 import com.apocalypse.caerulaarbor.init.*;
@@ -143,7 +143,8 @@ public class LivingDeathEventHandler {
                         level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TOTEM_USE, SoundSource.PLAYERS, (float) 0.33, 1);
                         level.playSound(null, BlockPos.containing(x, y, z), CASounds.TARGET_DAMAGED.get(), SoundSource.PLAYERS, (float) 0.33, 1);
                 }
-                ModCapabilities.getSanityInjury(entity).heal(1000);
+                SanityInjuryCapability sanityInjury = ModCapabilities.getSanityInjury(entity);
+                sanityInjury.heal(sanityInjury.getMaxValue());
                 if (is_shield) {
                     if (world instanceof ServerLevel level)
                         level.sendParticles(CAParticles.SHIELDLOSS.get(), x, (y + 0.95), z, 72, 0.75, 0.55, 0.75, 0.2);

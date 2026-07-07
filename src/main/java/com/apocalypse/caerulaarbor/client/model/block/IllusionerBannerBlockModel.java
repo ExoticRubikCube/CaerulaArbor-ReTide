@@ -1,7 +1,7 @@
 package com.apocalypse.caerulaarbor.client.model.block;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.block.entity.IllusionerBannerTileEntity;
+import com.apocalypse.caerulaarbor.block.blockentity.IllusionerBannerTileEntity;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.GeoModel;
 

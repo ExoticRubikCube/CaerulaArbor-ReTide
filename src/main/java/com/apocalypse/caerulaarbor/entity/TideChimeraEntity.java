@@ -582,6 +582,7 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
         builder = builder.add(CAAttributes.SANITY_RATE.get(), 4);
         builder = builder.add(CAAttributes.MISSRATE.get(), 50);
         builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 45);
+        builder = builder.add(CAAttributes.MAX_SANITY.get(), 2000);
         return builder;
     }
 

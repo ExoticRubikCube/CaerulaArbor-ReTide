@@ -1,6 +1,6 @@
 package com.apocalypse.caerulaarbor.client.renderer.block;
 
-import com.apocalypse.caerulaarbor.block.entity.MizukiStatueTileEntity;
+import com.apocalypse.caerulaarbor.block.blockentity.MizukiStatueTileEntity;
 import com.apocalypse.caerulaarbor.client.model.block.MizukiStatueBlockModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;

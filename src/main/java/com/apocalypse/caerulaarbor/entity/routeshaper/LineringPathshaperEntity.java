@@ -40,6 +40,7 @@ public class LineringPathshaperEntity extends AbstractPathshaperEntity {
 		builder = builder.add(Attributes.FOLLOW_RANGE, 48);
 		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 1);
 		builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 24);
+		builder = builder.add(CAAttributes.MAX_SANITY.get(), 2000);
 		return builder;
 	}
 }

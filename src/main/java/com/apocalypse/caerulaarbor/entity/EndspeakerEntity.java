@@ -5,7 +5,6 @@ import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
-import com.apocalypse.caerulaarbor.init.CAConfigs;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.*;
 import com.apocalypse.caerulaarbor.manager.SeabornSpawnManager;
@@ -126,7 +125,8 @@ public class EndspeakerEntity extends SeaMonster {
 				.add(Attributes.ARMOR, 0.0)
 				.add(Attributes.ATTACK_DAMAGE, 1.0)
 				.add(Attributes.FOLLOW_RANGE, 16.0)
-				.add(Attributes.KNOCKBACK_RESISTANCE, 0.0);
+				.add(Attributes.KNOCKBACK_RESISTANCE, 0.0)
+				.add(CAAttributes.MAX_SANITY.get(), 2000.0);
 	}
 
 	protected int getFloatGoalPriority() {

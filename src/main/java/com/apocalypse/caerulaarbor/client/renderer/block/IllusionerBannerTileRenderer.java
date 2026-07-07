@@ -1,6 +1,6 @@
 package com.apocalypse.caerulaarbor.client.renderer.block;
 
-import com.apocalypse.caerulaarbor.block.entity.IllusionerBannerTileEntity;
+import com.apocalypse.caerulaarbor.block.blockentity.IllusionerBannerTileEntity;
 import com.apocalypse.caerulaarbor.client.model.block.IllusionerBannerBlockModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;

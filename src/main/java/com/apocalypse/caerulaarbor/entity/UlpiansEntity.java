@@ -2,6 +2,7 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
+import com.apocalypse.caerulaarbor.capability.sanity.SanityInjuryCapability;
 import com.apocalypse.caerulaarbor.entity.base.SyncedAnimationEntity;
 import com.apocalypse.caerulaarbor.init.*;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
@@ -506,7 +507,8 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                                 this.removeEffect(CAMobEffects.DIZZY.get());
                                 this.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
                                 this.removeEffect(MobEffects.DIG_SLOWDOWN);
-                                ModCapabilities.getSanityInjury(this).heal(1000);
+                                SanityInjuryCapability sanityInjury = ModCapabilities.getSanityInjury(this);
+                                sanityInjury.heal(sanityInjury.getMaxValue());
                                 if (world instanceof ServerLevel level)
                                     level.sendParticles(ParticleTypes.EXPLOSION_EMITTER, noeX, nowY, nowZ, 72, 3, 3, 3, 0.5);
                                 if (world instanceof Level level) {
@@ -551,6 +553,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
         builder = builder.add(Attributes.ATTACK_DAMAGE, 55);
         builder = builder.add(Attributes.FOLLOW_RANGE, 32);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 5);
+        builder = builder.add(CAAttributes.MAX_SANITY.get(), 2000);
         return builder;
     }
 

@@ -546,6 +546,7 @@ public class BishopFishEntity extends SeaMonster {
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
         builder = builder.add(CAAttributes.SANITY_RATE.get(), 10);
         builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 24);
+        builder = builder.add(CAAttributes.MAX_SANITY.get(), 2000);
         return builder;
     }
 
