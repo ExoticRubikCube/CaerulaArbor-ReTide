@@ -562,7 +562,6 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonster {
 		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
 		builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 75);
 		builder = builder.add(CAAttributes.SANITY_MODIFIER.get(), 0.01);
-		builder = builder.add(CAAttributes.MAX_SANITY.get(), 2000);
 		return builder;
 	}
 

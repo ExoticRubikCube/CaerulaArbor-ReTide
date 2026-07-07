@@ -381,7 +381,6 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity, Sy
         builder = builder.add(Attributes.ATTACK_DAMAGE, 28);
         builder = builder.add(Attributes.FOLLOW_RANGE, 20);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
-        builder = builder.add(CAAttributes.MAX_SANITY.get(), 2000);
         return builder;
     }
 

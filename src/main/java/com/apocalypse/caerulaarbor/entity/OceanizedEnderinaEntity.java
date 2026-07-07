@@ -677,7 +677,6 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 		builder = builder.add(CAAttributes.GENERAL_DEFENSE.get(), 4);
 		builder = builder.add(CAAttributes.SANITY_MODIFIER.get(), 0.0125);
 		builder = builder.add(CAAttributes.SANITY_RESISTANCE.get(), 75);
-		builder = builder.add(CAAttributes.MAX_SANITY.get(), 2000);
 		return builder;
 	}
 

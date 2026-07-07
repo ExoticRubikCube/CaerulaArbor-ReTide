@@ -332,7 +332,6 @@ public class ChitinGolemEntity extends IronGolem implements GeoEntity, SyncedAni
         builder = builder.add(CAAttributes.SANITY_MODIFIER.get(), 0.05);
         builder = builder.add(CAAttributes.SANITY_RATE.get(), 10);
         builder = builder.add(CAAttributes.MISSRATE.get(), 33);
-        builder = builder.add(CAAttributes.MAX_SANITY.get(), 2000);
         return builder;
     }
 

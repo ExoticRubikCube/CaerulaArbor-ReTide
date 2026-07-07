@@ -472,7 +472,6 @@ public class FlamarineGolemEntity extends SeaMonster {
         builder = builder.add(Attributes.ATTACK_DAMAGE, 19);
         builder = builder.add(Attributes.FOLLOW_RANGE, 32);
         builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
-        builder = builder.add(CAAttributes.MAX_SANITY.get(), 2000);
         return builder;
     }
 
