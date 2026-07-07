@@ -465,13 +465,13 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
             vz = this.getZ() + vz * (index / dist);
             fy = 114514;
             for (int dy = 0; dy <= 3; dy++) {
-                BlockState target = world.getBlockState(BlockPos.containing(vx, vy + dy, vz));
-                if (target.canBeReplaced() && world.getBlockFloorHeight(BlockPos.containing(vx, vy + dy - 1, vz)) > 0) {
+                BlockState blockState = world.getBlockState(BlockPos.containing(vx, vy + dy, vz));
+                if (blockState.canBeReplaced() && world.getBlockFloorHeight(BlockPos.containing(vx, vy + dy - 1, vz)) > 0) {
                     fy = vy + dy;
                     break;
                 }
-                target = world.getBlockState(BlockPos.containing(vx, vy - dy, vz));
-                if (target.canBeReplaced() && world.getBlockFloorHeight(BlockPos.containing(vx, vy - dy - 1, vz)) > 0) {
+                blockState = world.getBlockState(BlockPos.containing(vx, vy - dy, vz));
+                if (blockState.canBeReplaced() && world.getBlockFloorHeight(BlockPos.containing(vx, vy - dy - 1, vz)) > 0) {
                     fy = vy - dy;
                     break;
                 }

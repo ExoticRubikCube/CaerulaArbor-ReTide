@@ -3,16 +3,15 @@ package com.apocalypse.caerulaarbor.entity.base;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.api.event.SanityEvent;
 import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
+import com.apocalypse.caerulaarbor.init.CADamageTypes;
 import com.apocalypse.caerulaarbor.init.CASounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -56,7 +55,7 @@ public interface RangedSanityAttacker {
 				if (!(entity instanceof LivingEntity)) {
 					continue;
 				}
-				entity.hurt(new DamageSource(level.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_magic")))),
+				entity.hurt(CADamageTypes.source(level, CADamageTypes.OCEAN_MAGIC),
 						(float) attackDamage);
 				if (center instanceof LivingEntity attacker && entity instanceof LivingEntity target) {
 					SIHelper.causeSanityInjury(target, attacker, attackDamage * 150, SanityEvent.Hurt.Type.ENTITY);

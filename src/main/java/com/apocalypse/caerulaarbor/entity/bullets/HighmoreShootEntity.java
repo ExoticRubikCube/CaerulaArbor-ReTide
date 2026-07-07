@@ -2,17 +2,14 @@ package com.apocalypse.caerulaarbor.entity.bullets;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.HighmoreEntity;
+import com.apocalypse.caerulaarbor.init.CADamageTypes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAParticles;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -84,9 +81,7 @@ public class HighmoreShootEntity extends AbstractArrow implements ItemSupplier {
                 CaerulaArborMod.queueServerWork(3, () -> {
                     new Object() {
                         void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
-                            entity.hurt(
-                                    new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "highmore_attack"))), sourceentity),
-                                    (float) (sourceentity instanceof LivingEntity livingEntity3 && livingEntity3.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity3.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
+                            entity.hurt(CADamageTypes.source(world, CADamageTypes.HIGHMORE_ATTACK, sourceentity), (float) (sourceentity instanceof LivingEntity livingEntity3 && livingEntity3.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity3.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
                             final int tick2 = ticks;
                             CaerulaArborMod.queueServerWork(tick2, () -> {
                                 if (timedlooptotal > timedloopiterator + 1) {
@@ -101,9 +96,7 @@ public class HighmoreShootEntity extends AbstractArrow implements ItemSupplier {
                     new Object() {
                         void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                             LivingEntity livingEntity9 = (LivingEntity) sourceentity;
-                            entity.hurt(
-                                    new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "highmore_attack"))), sourceentity),
-                                    (float) (livingEntity9.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity9.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
+                            entity.hurt(CADamageTypes.source(world, CADamageTypes.HIGHMORE_ATTACK, sourceentity), (float) (livingEntity9.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity9.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
                             final int tick2 = ticks;
                             CaerulaArborMod.queueServerWork(tick2, () -> {
                                 if (timedlooptotal > timedloopiterator + 1) {
@@ -118,9 +111,7 @@ public class HighmoreShootEntity extends AbstractArrow implements ItemSupplier {
                     new Object() {
                         void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                             LivingEntity livingEntity14 = (LivingEntity) sourceentity;
-                            entity.hurt(
-                                    new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "highmore_attack"))), sourceentity),
-                                    (float) (livingEntity14.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity14.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
+                            entity.hurt(CADamageTypes.source(world, CADamageTypes.HIGHMORE_ATTACK, sourceentity), (float) (livingEntity14.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity14.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
                             final int tick2 = ticks;
                             CaerulaArborMod.queueServerWork(tick2, () -> {
                                 if (timedlooptotal > timedloopiterator + 1) {

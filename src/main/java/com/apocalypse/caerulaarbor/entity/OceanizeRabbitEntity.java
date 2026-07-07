@@ -7,7 +7,6 @@ import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAItems;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -234,7 +233,7 @@ public class OceanizeRabbitEntity extends SeaMonster {
                             if (this.isAlive()) {
                                 if (this.getTarget() != null) {
                                     if (((Entity) this.getTarget()).isAlive()) {
-                                        ((Entity) this.getTarget()).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.OUTSIDE_BORDER), this),
+                                        ((Entity) this.getTarget()).hurt(this.damageSources().outOfBorder(),
                                                 (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 7.99));
                                     }
                                 }

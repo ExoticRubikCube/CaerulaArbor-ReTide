@@ -12,7 +12,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
@@ -152,11 +151,7 @@ public class CrackerAbyssalEntity extends SeaMonster implements PolarMountRider 
 			CaerulaArborMod.queueServerWork(12, () -> {
 				if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 3) {
 					target.hurt(
-							new DamageSource(
-									this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
-											.getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "general_seaborn_attack"))),
-									this),
-							(float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
+							CADamageTypes.source(this.level(), CADamageTypes.GENERAL_SEABORN_ATTACK, this), (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
 				}
 			});
 		}
@@ -199,9 +194,7 @@ public class CrackerAbyssalEntity extends SeaMonster implements PolarMountRider 
 							if ((!entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring"))) || ((Entity) this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == entityiterator)
 									&& (entityiterator instanceof Mob || entityiterator instanceof Player)) {
 								if (distanceTo(entityiterator) <= 3) {
-									entityiterator.hurt(new DamageSource(
-													world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "general_seaborn_attack"))), this),
-											(float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)
+									entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.GENERAL_SEABORN_ATTACK, this), (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)
 													? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()
 													: 0) * 1.5));
 								}

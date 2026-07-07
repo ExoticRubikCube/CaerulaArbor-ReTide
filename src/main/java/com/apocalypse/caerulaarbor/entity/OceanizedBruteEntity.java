@@ -13,7 +13,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
@@ -147,11 +146,7 @@ public class OceanizedBruteEntity extends SeaMonster {
             CaerulaArborMod.queueServerWork(10, () -> {
                 if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 2.6) {
                     boolean damaged = target.hurt(
-                            new DamageSource(
-                                    this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
-                                            .getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "general_seaborn_attack"))),
-                                    this),
-                            (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
+                            CADamageTypes.source(this.level(), CADamageTypes.GENERAL_SEABORN_ATTACK, this), (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
                     if (damaged && target instanceof Player player) {
                         recordHurtPlayer(player);
                     }
@@ -195,8 +190,7 @@ public class OceanizedBruteEntity extends SeaMonster {
                                                 ((Entity) this instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.25),
                                         (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1);
                                 if (distanceTo(sourceentity) <= 3) {
-                                    if (sourceentity.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "general_seaborn_attack"))), this),
-                                            (float) sklp1) && sourceentity instanceof Player player) {
+                                    if (sourceentity.hurt(CADamageTypes.source(world, CADamageTypes.GENERAL_SEABORN_ATTACK, this), (float) sklp1) && sourceentity instanceof Player player) {
                                         recordHurtPlayer(player);
                                     }
                                     if (sourceentity instanceof LivingEntity entity1 && !entity1.level().isClientSide())
@@ -230,8 +224,7 @@ public class OceanizedBruteEntity extends SeaMonster {
                                                         ((Entity) this instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.25),
                                                 (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1);
                                         entityiterator.hurt(
-                                                new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "general_seaborn_attack"))), this),
-                                                (float) sklp1);
+                                                CADamageTypes.source(world, CADamageTypes.GENERAL_SEABORN_ATTACK, this), (float) sklp1);
                                         if (entityiterator instanceof LivingEntity entity1 && !entity1.level().isClientSide())
                                             entity1.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 120, 0, false, false));
                                         if (entityiterator instanceof LivingEntity entity1 && !entity1.level().isClientSide())

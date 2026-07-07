@@ -14,7 +14,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
@@ -188,7 +187,6 @@ public class IsharmlaEntity extends SeaMonster {
 			});
 			CaerulaArborMod.queueServerWork(15, () -> {
 				if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 32) {
-					Entity target = this.getTarget();
 					this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
 							CASounds.ISHARMLA_ATTACK_LAUNCH.get(), SoundSource.HOSTILE, 2.5F, 1);
 					isharmlaDroppedAttack(this.level(), targetX, targetY, targetZ, Mth.nextDouble(RandomSource.create(), 1.5, 3), 1);
@@ -268,9 +266,7 @@ public class IsharmlaEntity extends SeaMonster {
 				}
 				if (center.distanceTo(new Vec3(entityIterator.getX(), entityIterator.getY(), entityIterator.getZ())) <= radius) {
 					entityIterator.hurt(
-							new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
-									.getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "isharmla_attack"))), this),
-							(float) damage);
+							CADamageTypes.source(world, CADamageTypes.ISHARMLA_ATTACK, this), (float) damage);
 				}
 			}
 		});
@@ -462,7 +458,7 @@ public class IsharmlaEntity extends SeaMonster {
 										EntityUtils.pullToward(entityiterator, this);
 									}
 								}
-								entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceankiller_damage")))),
+								entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.OCEANKILLER_DAMAGE),
 										(float) damage);
 								healthBonus = healthBonus + itrHealth;
 								attackBonus = attackBonus + itrAttack;
@@ -548,11 +544,9 @@ public class IsharmlaEntity extends SeaMonster {
 								}
 								if (!(enemy1 == null)) {
 									if ((enemy1 instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) <= d) {
-										enemy1.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "isharmla_attack"))), this),
-												(float) (d * 16));
+                                                                                enemy1.hurt(CADamageTypes.source(world, CADamageTypes.ISHARMLA_ATTACK, this), (float) (d * 16));
 									} else {
-										enemy1.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "isharmla_attack"))), this),
-												(float) (d * 3.5));
+										enemy1.hurt(CADamageTypes.source(world, CADamageTypes.ISHARMLA_ATTACK, this), (float) (d * 3.5));
 									}
 								}
 							});
@@ -863,8 +857,7 @@ public class IsharmlaEntity extends SeaMonster {
 				continue;
 			}
 			if (center.distanceTo(entityiterator.position()) <= radius) {
-				entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "isharmla_attack"))), this),
-						(float) damage);
+				entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.ISHARMLA_ATTACK, this), (float) damage);
 			}
 		}
 	}
@@ -908,7 +901,7 @@ public class IsharmlaEntity extends SeaMonster {
 
 		for (Entity entityiterator : nearbyEntities) {
 			if (entityiterator instanceof IsharmlaTearEntity) {
-				entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceankiller_damage")))),
+				entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.OCEANKILLER_DAMAGE),
 						114514);
 			}
 		}

@@ -3,10 +3,7 @@ package com.apocalypse.caerulaarbor.entity;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CAAttributes;
-import com.apocalypse.caerulaarbor.init.CAEntities;
-import com.apocalypse.caerulaarbor.init.CAMobEffects;
-import com.apocalypse.caerulaarbor.init.CASounds;
+import com.apocalypse.caerulaarbor.init.*;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.advancements.Advancement;
@@ -20,7 +17,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
@@ -35,7 +31,6 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -202,22 +197,14 @@ public class IzumikEntity extends SeaMonster {
                         (float) Mth.nextDouble(RandomSource.create(), 0.85, 0.15));
                 if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 13) {
                     target.hurt(
-                            new DamageSource(
-                                    this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
-                                            .getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "izumik_normal_attack"))),
-                                    this),
-                            (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
+                            CADamageTypes.source(this.level(), CADamageTypes.IZUMIK_NORMAL_ATTACK, this), (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
                     if (this.getEntityData().get(DATA_PHASE) >= 1) {
                         float oceanMagicDamage = (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0);
                         if (MapVariables.get(this.level()).strategy_grow >= 4) {
                             oceanMagicDamage *= 1.5F;
                         }
                         target.hurt(
-                                new DamageSource(
-                                        this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
-                                                .getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_magic"))),
-                                        this),
-                                oceanMagicDamage);
+                                CADamageTypes.source(this.level(), CADamageTypes.OCEAN_MAGIC, this), oceanMagicDamage);
                         if (this.getEntityData().get(DATA_PHASE) >= 2 && Math.random() < 0.15 && target instanceof LivingEntity livingTarget
                                 && livingTarget.getAttributes().hasAttribute(CAAttributes.NUMB.get())) {
                             livingTarget.getAttribute(CAAttributes.NUMB.get())
@@ -470,7 +457,7 @@ public class IzumikEntity extends SeaMonster {
                                     continue;
                                 }
                                 if (distanceTo(entityiterator) <= range) {
-                                    entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "izumik_skill")))),
+                                    entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.IZUMIK_SKILL),
                                             (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * rate));
                                 }
                             }
@@ -701,8 +688,7 @@ public class IzumikEntity extends SeaMonster {
                 continue;
             }
             if (this.distanceTo(entityiterator) <= r) {
-                entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "izumik_skill"))), this),
-                        (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * rate));
+                entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.IZUMIK_SKILL, this), (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * rate));
 
                 if (!(entityiterator instanceof LivingEntity livEnt11 && livEnt11.hasEffect(CAMobEffects.IZUMIK_SHOCK.get()))) {
                     if (entityiterator instanceof LivingEntity && !this.level().isClientSide())
@@ -846,16 +832,11 @@ public class IzumikEntity extends SeaMonster {
         data.add(new AnimationController<>(this, "procedure", 0, this::procedurePredicate));
     }
 
-    public ResourceKey<DamageType> oceankiller = ResourceKey.create(Registries.DAMAGE_TYPE,
-            new ResourceLocation(CaerulaArborMod.MODID, "oceankiller_damage"));
-
     @Override
     public void remove(RemovalReason pReason) {
         if (this.level().getDifficulty() != Difficulty.PEACEFUL && pReason == RemovalReason.DISCARDED) {
             this.hurt(
-                    new DamageSource(
-                            this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(oceankiller)
-                    ),
+                    CADamageTypes.source(this.level(), CADamageTypes.OCEANKILLER_DAMAGE),
                     20
             );
             return;

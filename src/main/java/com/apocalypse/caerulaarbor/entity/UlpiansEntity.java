@@ -3,10 +3,7 @@ package com.apocalypse.caerulaarbor.entity;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.entity.base.SyncedAnimationEntity;
-import com.apocalypse.caerulaarbor.init.CAAttributes;
-import com.apocalypse.caerulaarbor.init.CAEntities;
-import com.apocalypse.caerulaarbor.init.CAMobEffects;
-import com.apocalypse.caerulaarbor.init.CASounds;
+import com.apocalypse.caerulaarbor.init.*;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
@@ -18,7 +15,6 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -165,7 +161,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                     CASounds.ANCHOR_PRE.get(), SoundSource.HOSTILE, 2.2F, 1);
             CaerulaArborMod.queueServerWork(14, () -> {
                 if (this.isAlive()) {
-                    Entity target = this.getTarget();
+                    Entity currentTarget = this.getTarget();
                     double damage = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
                     this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
                             CASounds.ANCHOR_ATTACK.get(), SoundSource.HOSTILE, 2.75F, 1);
@@ -184,7 +180,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                                 continue;
                             }
                         }
-                        if (entityIterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring"))) && entityIterator != target) {
+                        if (entityIterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring"))) && entityIterator != currentTarget) {
                             continue;
                         }
                         if (entityIterator == this) {
@@ -192,11 +188,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                         }
                         if (this.distanceTo(entityIterator) <= 24) {
                             entityIterator.hurt(
-                                    new DamageSource(
-                                            this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
-                                                    .getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))),
-                                            this),
-                                    (float) damage);
+                                    CADamageTypes.source(this.level(), CADamageTypes.HUNTER_ATTACK, this), (float) damage);
                             Vec3 pushVec = this.position().vectorTo(entityIterator.position());
                             if (pushVec.lengthSqr() < 0.0001) {
                                 pushVec = new Vec3(0, 0, 1);
@@ -374,8 +366,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                                         if (d <= r && (EntityUtils.getEntityCosine(this, entityiterator) > 0.5 || d <= 3)) {
                                             if (entityiterator instanceof LivingEntity && !this.level().isClientSide())
                                                 this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 40, 0, false, false));
-                                            entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "anchor_smash"))), this),
-                                                    (float) damage);
+                                            entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.ANCHOR_SMASH, this), (float) damage);
                                         }
                                     }
                                 }
@@ -481,7 +472,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                                     ent.teleportTo((enemy1.getX()), (enemy1.getY()), (enemy1.getZ()));
                                     if (enemy1 instanceof LivingEntity && !this.level().isClientSide())
                                         this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 120, 0, false, false));
-                                    enemy1.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "anchor_smash"))), this), (float) damage);
+                                    enemy1.hurt(CADamageTypes.source(world, CADamageTypes.ANCHOR_SMASH, this), (float) damage);
                                 }
                                 noeX = getX();
                                 nowY = getY();
@@ -508,8 +499,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                                         if ((entityiterator != null ? distanceTo(entityiterator) : -1) <= 6) {
                                             if (entityiterator instanceof LivingEntity && !this.level().isClientSide())
                                                 this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 120, 0, false, false));
-                                            entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "anchor_smash"))), this),
-                                                    (float) damage);
+                                            entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.ANCHOR_SMASH, this), (float) damage);
                                         }
                                     }
                                 }

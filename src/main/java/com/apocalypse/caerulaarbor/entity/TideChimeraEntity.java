@@ -15,7 +15,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
@@ -174,11 +173,7 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
                             CASounds.PUNCTUREFISH_ATTACK.get(), SoundSource.HOSTILE, 3,
                             (float) Mth.nextDouble(RandomSource.create(), 0.9, 1.1));
                     if (target.hurt(
-                            new DamageSource(
-                                    this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
-                                            .getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "general_seaborn_attack"))),
-                                    this),
-                            (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0))) {
+                            CADamageTypes.source(this.level(), CADamageTypes.GENERAL_SEABORN_ATTACK, this), (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0))) {
                         int amplifier = this.hasEffect(CAMobEffects.REEF_CRACKER.get()) ? this.getEffect(CAMobEffects.REEF_CRACKER.get()).getAmplifier() : -1;
                         int nextAmplifier = amplifier < 0 ? 0 : Math.min(amplifier + 1, 31);
                         this.addEffect(new MobEffectInstance(CAMobEffects.REEF_CRACKER.get(), 100, nextAmplifier, false, false));
@@ -489,7 +484,7 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
                             continue;
                         }
                         SIHelper.causeSanityInjury((LivingEntity) entityiterator, this, daam * 4, SanityEvent.Hurt.Type.ENTITY);
-                        entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_magic")))),
+                        entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.OCEAN_MAGIC),
                                 (float) (daam * 0.5));
                     }
                 }

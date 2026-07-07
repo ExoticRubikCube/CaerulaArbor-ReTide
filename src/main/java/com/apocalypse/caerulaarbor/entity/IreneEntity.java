@@ -14,7 +14,6 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
@@ -157,7 +156,9 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 		});
 		this.goalSelector.addGoal(9, new FloatGoal(this));
 	}
-protected void dropCustomDeathLoot(DamageSource source, int looting, boolean recentlyHitIn) {
+
+	@Override
+	protected void dropCustomDeathLoot(DamageSource source, int looting, boolean recentlyHitIn) {
 		super.dropCustomDeathLoot(source, looting, recentlyHitIn);
 		this.spawnAtLocation(new ItemStack(CAItems.TRAIL_POWDER.get()));
 	}
@@ -190,11 +191,7 @@ protected void dropCustomDeathLoot(DamageSource source, int looting, boolean rec
 						livingTarget.addEffect(new MobEffectInstance(CAMobEffects.MUTE.get(), 60, 0, false, false));
 					}
 					target.hurt(
-							new DamageSource(
-									this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
-											.getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "generic_warrior_attack"))),
-									this),
-							this.applyLaunchPunishBonus(target, attackDamage));
+							CADamageTypes.source(this.level(), CADamageTypes.GENERIC_WARRIOR_ATTACK, this), this.applyLaunchPunishBonus(target, attackDamage));
 				}
 			});
 			CaerulaArborMod.queueServerWork(11, () -> {
@@ -203,11 +200,7 @@ protected void dropCustomDeathLoot(DamageSource source, int looting, boolean rec
 							CASounds.IRENE_ATTACK.get(), SoundSource.NEUTRAL, 2.5F,
 							(float) Mth.nextDouble(RandomSource.create(), 0.9, 1.1));
 					target.hurt(
-							new DamageSource(
-									this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
-											.getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "generic_warrior_attack"))),
-									this),
-							this.applyLaunchPunishBonus(target, attackDamage));
+							CADamageTypes.source(this.level(), CADamageTypes.GENERIC_WARRIOR_ATTACK, this), this.applyLaunchPunishBonus(target, attackDamage));
 				}
 			});
 		}
@@ -386,16 +379,14 @@ protected void dropCustomDeathLoot(DamageSource source, int looting, boolean rec
 									level.sendParticles(ParticleTypes.FIREWORK, (enemy1.getX()), (enemy1.getY() + 1), (enemy1.getZ()), 48, 0.15, 1, 0.15, 0.15);
 								if (enemy1 instanceof LivingEntity entity && !entity.level().isClientSide())
 									entity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, (int) (double) 30, 0));
-								enemy1.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))), this),
-										this.applyLaunchPunishBonus(enemy1, (float) (((Entity) this instanceof LivingEntity livingEntity6 && livingEntity6.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity6.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * (double) 3)));
+								enemy1.hurt(CADamageTypes.source(world, CADamageTypes.HUNTER_ATTACK, this), this.applyLaunchPunishBonus(enemy1, (float) (((Entity) this instanceof LivingEntity livingEntity6 && livingEntity6.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity6.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * (double) 3)));
 								CaerulaArborMod.queueServerWork(6, () -> {
 									if (world instanceof Level level) {
 										level.playSound(null, BlockPos.containing(x, y, z), CASounds.IRENE_GUN.get(), SoundSource.NEUTRAL, 3, 1);
 									}
 									if (world instanceof ServerLevel level)
 										level.sendParticles(ParticleTypes.END_ROD, (enemy1.getX()), (enemy1.getY() + 0.75), (enemy1.getZ()), 32, 0.75, 0.75, 0.75, 0.15);
-									enemy1.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))), this),
-											this.applyLaunchPunishBonus(enemy1, (float) (((Entity) this instanceof LivingEntity livingEntity14 && livingEntity14.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity14.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 2)));
+									enemy1.hurt(CADamageTypes.source(world, CADamageTypes.HUNTER_ATTACK, this), this.applyLaunchPunishBonus(enemy1, (float) (((Entity) this instanceof LivingEntity livingEntity14 && livingEntity14.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity14.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 2)));
 								});
 							}
 						});
@@ -430,8 +421,7 @@ protected void dropCustomDeathLoot(DamageSource source, int looting, boolean rec
 									level.sendParticles(ParticleTypes.FIREWORK, (entityiterator.getX()), (entityiterator.getY() + 0.75), (entityiterator.getZ()), 48, 0.15, 1, 0.15, 0.15);
 								if (entityiterator instanceof LivingEntity entity && !entity.level().isClientSide())
 									entity.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 80, 0));
-								entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))), this),
-										this.applyLaunchPunishBonus(entityiterator, (float) (damage * 3)));
+								entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.HUNTER_ATTACK, this), this.applyLaunchPunishBonus(entityiterator, (float) (damage * 3)));
 							}
 						}
 					}
@@ -474,8 +464,7 @@ protected void dropCustomDeathLoot(DamageSource source, int looting, boolean rec
 							List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(6 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
 							for (Entity entityiterator : entfound) {
 								if (this.isValidEnemy(entityiterator) && selected.distanceTo(entityiterator) <= 3) {
-									entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))), this),
-											this.applyLaunchPunishBonus(entityiterator, (float) (damage * 2.5)));
+									entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.HUNTER_ATTACK, this), this.applyLaunchPunishBonus(entityiterator, (float) (damage * 2.5)));
 									if (world instanceof Level level) {
 										level.playSound(null, BlockPos.containing(x, y, z), CASounds.IRENE_SKILL_GUN.get(), SoundSource.NEUTRAL, 3, 1);
 									}

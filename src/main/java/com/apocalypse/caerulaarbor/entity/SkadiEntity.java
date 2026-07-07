@@ -2,10 +2,7 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SyncedAnimationEntity;
-import com.apocalypse.caerulaarbor.init.CAAttributes;
-import com.apocalypse.caerulaarbor.init.CAEntities;
-import com.apocalypse.caerulaarbor.init.CAMobEffects;
-import com.apocalypse.caerulaarbor.init.CASounds;
+import com.apocalypse.caerulaarbor.init.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
@@ -181,8 +178,7 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
                                 if (this.isAlive()) {
                                     if (distanceTo(sourceentity) <= 5) {
                                         sourceentity.hurt(
-                                                new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))), this),
-                                                (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
+                                                CADamageTypes.source(world, CADamageTypes.HUNTER_ATTACK, this), (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
                                                         * 2.5));
                                         if (sourceentity instanceof LivingEntity && !this.level().isClientSide())
                                             this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 100, 0, false, false));
@@ -207,8 +203,7 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
                                                 continue;
                                             }
                                             if (distanceTo(entityiterator) <= 3) {
-                                                entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))), this),
-                                                        (float) ddd);
+                                                entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.HUNTER_ATTACK, this), (float) ddd);
                                                 if (entityiterator instanceof LivingEntity && !this.level().isClientSide())
                                                     this.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 100, 0, false, false));
                                                 entityiterator.push((getLookAngle().x + 0.33), 0, (getLookAngle().z + 0.33));
@@ -231,7 +226,7 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
     public void setHealth(float pHealth) {
         float currentHealth = this.getHealth();
         if (pHealth <= 0) {
-            ResourceKey<net.minecraft.world.damagesource.DamageType> cursedDamage = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "isharmla_cursed"));
+            ResourceKey<net.minecraft.world.damagesource.DamageType> cursedDamage = CADamageTypes.ISHARMLA_CURSED;
             if (this.lastDamageSource == null || !this.lastDamageSource.is(cursedDamage)) {
                 int phase = this.getEntityData().get(DATA_PHASE);
                 if (phase == 0 || phase == 1) {
@@ -267,7 +262,7 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 
     @Override
     public void die(DamageSource source) {
-        ResourceKey<net.minecraft.world.damagesource.DamageType> cursedDamage = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "isharmla_cursed"));
+        ResourceKey<net.minecraft.world.damagesource.DamageType> cursedDamage = CADamageTypes.ISHARMLA_CURSED;
         if (source.is(cursedDamage)) {
             for (Entity nearbyPlayer : this.level().players()) {
                 if (this.distanceTo(nearbyPlayer) < 32 && nearbyPlayer instanceof Player player && !player.level().isClientSide()) {
@@ -437,8 +432,7 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
                 }
             }
             if (this.distanceTo(entity) < 3.5) {
-                entity.hurt(new DamageSource(this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
-                        .getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))), this), (float) damage);
+                entity.hurt(CADamageTypes.source(this.level(), CADamageTypes.HUNTER_ATTACK, this), (float) damage);
             }
         }
     }

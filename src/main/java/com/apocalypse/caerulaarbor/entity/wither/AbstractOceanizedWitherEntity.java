@@ -6,13 +6,10 @@ import com.apocalypse.caerulaarbor.init.*;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -172,11 +169,7 @@ public abstract class AbstractOceanizedWitherEntity extends SeaMonster {
             return;
         }
         livingTarget.hurt(
-                new DamageSource(
-                        this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_magic"))),
-                        directSource,
-                        this
-                ),
+                CADamageTypes.source(this.level(), CADamageTypes.OCEAN_MAGIC, directSource, this),
                 this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE) : 0
         );
         livingTarget.invulnerableTime = 0;
@@ -188,10 +181,7 @@ public abstract class AbstractOceanizedWitherEntity extends SeaMonster {
         }
         this.applyOceanMagicFollowup(target, this);
         target.hurt(
-                new DamageSource(
-                        this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_wither"))),
-                        this
-                ),
+                CADamageTypes.source(this.level(), CADamageTypes.OCEAN_WITHER, this),
                 damage
         );
     }

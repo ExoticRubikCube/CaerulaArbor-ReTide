@@ -6,7 +6,7 @@ import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler;
 import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler.StrategyType;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
-import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
+import com.apocalypse.caerulaarbor.init.CAConfigs;
 import com.apocalypse.caerulaarbor.entity.*;
 import com.apocalypse.caerulaarbor.entity.bullets.HighmoreShootEntity;
 import com.apocalypse.caerulaarbor.init.*;
@@ -20,12 +20,12 @@ import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageSource;
@@ -78,7 +78,7 @@ public class LivingAttackEventHandler {
         DamageSource damagesource = event.getSource();
         Entity entity = event.getEntity();
 
-        if (damagesource == null || entity == null || damagesource.is(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "inv_killer")))) return;
+        if (damagesource == null || entity == null || damagesource.is(CADamageTypes.INV_KILLER)) return;
 
         if (entity instanceof LivingEntity livEnt1 && livEnt1.hasEffect(CAMobEffects.INVULNERABLE.get())) {
             event.setCanceled(true);
@@ -127,7 +127,7 @@ public class LivingAttackEventHandler {
                 : 0;
 
         if (missRate > 0) {
-            if (!damagesource.is(TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "bypass_miss")))) {
+            if (!damagesource.is(CADamageTags.BYPASS_MISS)) {
                 if (!(entity instanceof LivingEntity livEnt3 && livEnt3.hasEffect(CAMobEffects.MUTE.get()))) {
                     if (Math.random() * 100 < missRate) {
                         if (world instanceof ServerLevel level)
@@ -154,7 +154,7 @@ public class LivingAttackEventHandler {
         if (damagesource == null || entity == null || sourceentity == null) return;
 
         if (entity instanceof LivingEntity livEnt0 && livEnt0.hasEffect(CAMobEffects.MARTUS_PROTECTION.get())) {
-            if (damagesource.is(TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation("minecraft:is_projectile"))) && sourceentity.distanceTo(entity) > 2 && amount <= (entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 2) {
+            if (damagesource.is(DamageTypeTags.IS_PROJECTILE) && sourceentity.distanceTo(entity) > 2 && amount <= (entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 2) {
                 event.setCanceled(true);
             } else if (entity.distanceTo(sourceentity) > 3) {
                 if (Math.random() < 0.5) {
@@ -234,7 +234,7 @@ public class LivingAttackEventHandler {
         if (entity instanceof HighmoreEntity livEnt1) {
             if (livEnt1.hasEffect(CAMobEffects.COOLDOWN_SINAL.get())) return;
 
-            if (!(damagesource.is(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hand_spike"))) || damagesource.is(DamageTypes.THORNS) || sourceentity instanceof HighmoreEntity)) {
+            if (!(damagesource.is(CADamageTypes.HAND_SPIKE) || damagesource.is(DamageTypes.THORNS) || sourceentity instanceof HighmoreEntity)) {
                 if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
                     livingEntity.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL.get(), 100, 0, false, false));
 
@@ -315,7 +315,7 @@ public class LivingAttackEventHandler {
                 && !entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "skip_migration")))) {
             if (MapVariables.get(world).strategy_migration > 0) {
                 if (!(sourceentity instanceof Player player && player.getAbilities().instabuild)
-                        && !damagesource.is(TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "bypasses_migration")))) {
+                        && !damagesource.is(CADamageTags.BYPASSES_MIGRATION)) {
                     for (Entity entityiterator : world.getEntities(entity,
                             new AABB((x - (8 + MapVariables.get(world).strategy_migration * 16)), (y - 16), (z - (8 + MapVariables.get(world).strategy_migration * 16)),
                                     (x + 8 + MapVariables.get(world).strategy_migration * 24), (y + 16), (z + 8 + MapVariables.get(world).strategy_migration * 24)))) {
@@ -371,7 +371,7 @@ public class LivingAttackEventHandler {
             }
 
             if (world.getLevelData().getGameRules().getBoolean(CAGameRules.NATURAL_EVOLUTION)
-                    && !damagesource.is(TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "bypasses_evolution")))) {
+                    && !damagesource.is(CADamageTags.BYPASSES_EVOLUTION)) {
                 MapVariablesHandler.addEvoPoint(world, StrategyType.SUBSISTING,
                         Math.min(amount, entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.025);
                 SubsistingUpgradeManager.applySubsistingUpgrade(world);
@@ -397,7 +397,7 @@ public class LivingAttackEventHandler {
             EntityUtils.giveLessArmor(entity, 2);
         }
         if (sourceentity instanceof ChitinGolemEntity || sourceentity instanceof ComplexChitinGolemEntity) {
-            if (entity.getBbWidth() * entity.getBbHeight() <= 6 && !damagesource.is(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "golem_attack")))) {
+            if (entity.getBbWidth() * entity.getBbHeight() <= 6 && !damagesource.is(CADamageTypes.GOLEM_ATTACK)) {
                 entity.push(0, 0.5, 0);
             }
         }
@@ -409,7 +409,7 @@ public class LivingAttackEventHandler {
 
         if (entity instanceof SpikeChestEntity) {
             if (entity.isAlive()) {
-                sourceentity.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "chest_spike")))),
+                sourceentity.hurt(CADamageTypes.source(world, CADamageTypes.CHEST_SPIKE),
                         (float) (amount * 0.33));
             }
         }
@@ -455,7 +455,7 @@ public class LivingAttackEventHandler {
                 } else if (mainHandItem.getItem() instanceof CrossbowItem) {
                     validItem = true;
                 } else {
-                    for (String stringiterator : CaerulaConfigsConfiguration.HAND_STRANGLE.get()) {
+                    for (String stringiterator : CAConfigs.HAND_STRANGLE.get()) {
                         if (CaerulaUtil.matchesRegistryName(stringiterator, rname)) {
                             validItem = true;
                             break;
@@ -464,8 +464,7 @@ public class LivingAttackEventHandler {
                 }
                 if (validItem && (entity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) < (entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.25) {
                     if (entity.isAlive()) {
-                        entity.hurt(
-                                new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hand_of_choker"))), sourceentity),
+                        entity.hurt(CADamageTypes.source(world, CADamageTypes.HAND_OF_CHOKER, sourceentity),
                                 (entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 99);
                         if (world instanceof ServerLevel level)
                             level.sendParticles(ParticleTypes.GLOW_SQUID_INK, (entity.getX()), (entity.getY()), (entity.getZ()), 128, 1, 1, 1, 0.33);
@@ -487,7 +486,7 @@ public class LivingAttackEventHandler {
                 } else if (mainHandItem.is(ItemTags.create(new ResourceLocation("forge:tools/bows")))) {
                     validItem = true;
                 } else {
-                    for (String stringiterator : CaerulaConfigsConfiguration.HAND_FIREWORK.get()) {
+                    for (String stringiterator : CAConfigs.HAND_FIREWORK.get()) {
                         if (CaerulaUtil.matchesRegistryName(stringiterator, rname)) {
                             validItem = true;
                             break;
@@ -509,8 +508,7 @@ public class LivingAttackEventHandler {
                         for (Entity entityiterator : entfound) {
                             if (((ForgeRegistries.ENTITY_TYPES.getKey(entityiterator.getType()).toString()).equals(ForgeRegistries.ENTITY_TYPES.getKey(entity.getType()).toString()) || entityiterator instanceof Monster)
                                     && !(entityiterator == sourceentity)) {
-                                entityiterator.hurt(
-                                        new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hand_firework"))), sourceentity),
+                                entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.HAND_FIREWORK, sourceentity),
                                         (float) (amount * 3));
                             }
                         }

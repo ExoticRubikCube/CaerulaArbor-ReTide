@@ -25,7 +25,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.levelgen.Heightmap;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -99,17 +98,10 @@ public class SpikeChestEntity extends SeaMonster {
 		return retval;
 	}
 
-
 	@Override
 	public InteractionResult mobInteract(Player sourceentity, InteractionHand hand) {
         super.mobInteract(sourceentity, hand);
-		double x = this.getX();
-		double y = this.getY();
-		double z = this.getZ();
-        Level world = this.level();
-        if ((LevelAccessor) world instanceof Level level) {
-                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.CHEST_LOCKED, SoundSource.NEUTRAL, 1, 1);
-        }
+        this.level().playSound(null, BlockPos.containing(this.getX(), this.getY(), this.getZ()), SoundEvents.CHEST_LOCKED, SoundSource.NEUTRAL, 1, 1);
         return InteractionResult.PASS;
     }
 
@@ -118,8 +110,6 @@ public class SpikeChestEntity extends SeaMonster {
 		super.baseTick();
 		this.refreshDimensions();
 	}
-
-	
 
 	public static void registerSpawnPlacements() {
 		SpawnPlacements.register(CAEntities.SPIKE_CHEST.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,

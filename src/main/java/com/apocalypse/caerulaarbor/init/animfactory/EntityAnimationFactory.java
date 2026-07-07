@@ -1,4 +1,4 @@
-package com.apocalypse.caerulaarbor.init;
+package com.apocalypse.caerulaarbor.init.animfactory;
 
 import com.apocalypse.caerulaarbor.entity.base.SyncedAnimationEntity;
 import net.minecraftforge.event.entity.living.LivingEvent;

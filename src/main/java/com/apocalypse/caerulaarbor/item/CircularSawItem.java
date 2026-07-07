@@ -3,22 +3,20 @@ package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.client.renderer.item.CircularSawItemRenderer;
+import com.apocalypse.caerulaarbor.init.CADamageTypes;
 import com.apocalypse.caerulaarbor.init.CASounds;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -215,8 +213,7 @@ public class CircularSawItem extends Item implements GeoItem, SyncedAnimationIte
                     new Object() {
                         void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                             if ((sourceentity != null ? entity.distanceTo(sourceentity) : -1) <= 3.5) {
-                                ((Entity) entity).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "saw_cut"))), sourceentity),
-                                        (float) (((Entity) sourceentity instanceof LivingEntity livingEntity5 && livingEntity5.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity5.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
+                                ((Entity) entity).hurt(CADamageTypes.source(world, CADamageTypes.SAW_CUT, sourceentity), (float) (((Entity) sourceentity instanceof LivingEntity livingEntity5 && livingEntity5.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity5.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
                                                 * 0.35));
                             }
                             final int tick2 = ticks;

@@ -37,9 +37,7 @@ public class CATrades {
 			event.getTrades().get(1).add(new BasicItemListing(new ItemStack(CAItems.REDSTONE_INGOT.get(), 8), new ItemStack(Blocks.SEAGRASS), new ItemStack(CAItems.BOWL_SEAGRASS.get()), 4, 8, 0.03f));
 			event.getTrades().get(1).add(new BasicItemListing(new ItemStack(CAItems.REDSTONE_INGOT.get(), 12), new ItemStack(Items.FERMENTED_SPIDER_EYE, 6), new ItemStack(CAItems.SMELLY_HEMOSTATIC.get()), 3, 24, 0.04f));
 			event.getTrades().get(5).add(new BasicItemListing(new ItemStack(CAItems.REDSTONE_INGOT.get(), 32), new ItemStack(Items.NETHERITE_CHESTPLATE), new ItemStack(CAItems.UNRIPE_YEARNING.get()), 1, 36, 0.04f));
-			event.getTrades().get(4).add(new BasicItemListing(new ItemStack(CAItems.REDSTONE_INGOT.get(), 24),
-
-					new ItemStack(Items.EMERALD), 16, 3, 0.02f));
+			event.getTrades().get(4).add(new BasicItemListing(new ItemStack(CAItems.REDSTONE_INGOT.get(), 24), new ItemStack(Items.EMERALD), 16, 3, 0.02f));
 		}
 	}
 }

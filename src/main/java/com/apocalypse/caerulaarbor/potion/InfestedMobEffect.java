@@ -5,20 +5,18 @@ import com.apocalypse.caerulaarbor.api.event.SanityEvent;
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
+import com.apocalypse.caerulaarbor.init.CADamageTypes;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.MathUtils;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -55,7 +53,7 @@ public class InfestedMobEffect extends MobEffect {
             if ((Entity) entity instanceof LivingEntity livEnt2 && livEnt2.hasEffect(CAMobEffects.POWER_OF_ANCHOR.get())) {
                 dam = dam * 0.1;
             }
-            ((Entity) entity).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanize_damage")))), (float) dam);
+            ((Entity) entity).hurt(CADamageTypes.source(world, CADamageTypes.OCEANIZE_DAMAGE), (float) dam);
             if (!((Entity) entity instanceof LivingEntity livEnt5 && livEnt5.hasEffect(CAMobEffects.POWER_OF_ANCHOR.get()))) {
                 if (Math.random() < 0.33) {
                     dam = Mth.nextInt(RandomSource.create(), 0, 7);

@@ -12,7 +12,6 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
@@ -182,7 +181,7 @@ public class TheLastKnightEntity extends Animal implements GeoEntity, SyncedAnim
     @Override
     public boolean doHurtTarget(Entity target) {
         float attackDamage = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? (float) this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
-        return target.hurt(new DamageSource(this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.MOB_ATTACK), this),
+        return target.hurt(this.damageSources().mobAttack(this),
                 this.applyFrozenExecutionBonus(target, attackDamage));
     }
 
@@ -477,8 +476,7 @@ public class TheLastKnightEntity extends Animal implements GeoEntity, SyncedAnim
                         continue;
                     }
                 }
-                entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "last_knight_attack"))), this),
-                        this.applyFrozenExecutionBonus(entityiterator, (float) damage));
+                entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.LAST_KNIGHT_ATTACK, this), this.applyFrozenExecutionBonus(entityiterator, (float) damage));
             }
         }
 
@@ -489,7 +487,7 @@ public class TheLastKnightEntity extends Animal implements GeoEntity, SyncedAnim
                         continue;
                     }
                 }
-                entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "last_knight_attack")))),
+                entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.LAST_KNIGHT_ATTACK),
                         this.applyFrozenExecutionBonus(entityiterator, (float) damage));
             }
         }

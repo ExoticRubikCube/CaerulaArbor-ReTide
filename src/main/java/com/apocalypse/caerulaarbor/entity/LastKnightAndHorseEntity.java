@@ -2,10 +2,7 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SyncedAnimationEntity;
-import com.apocalypse.caerulaarbor.init.CAAttributes;
-import com.apocalypse.caerulaarbor.init.CAEntities;
-import com.apocalypse.caerulaarbor.init.CAMobEffects;
-import com.apocalypse.caerulaarbor.init.CASounds;
+import com.apocalypse.caerulaarbor.init.*;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
@@ -18,7 +15,6 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
@@ -351,8 +347,7 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
                                         continue;
                                     }
                                     if (distanceTo(entityiterator) <= 4) {
-                                        entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "last_knight_attack"))), this),
-                                                (float) (damage * 1.5));
+                                        entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.LAST_KNIGHT_ATTACK, this), (float) (damage * 1.5));
                                         entityiterator.push(0, 0.64, 0);
                                         if ((entityiterator instanceof LivingEntity entUseItem12 ? entUseItem12.getUseItem() : ItemStack.EMPTY).getItem() instanceof ShieldItem) {
                                             if (entityiterator instanceof Player player) {
@@ -364,8 +359,7 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
                                         }
                                         CaerulaArborMod.queueServerWork(7, () -> {
                                             entityiterator.hurt(
-                                                    new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "last_knight_attack"))), this),
-                                                    (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 2));
+                                                    CADamageTypes.source(world, CADamageTypes.LAST_KNIGHT_ATTACK, this), (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 2));
                                             if (entityiterator instanceof LivingEntity && !this.level().isClientSide())
                                                 this.addEffect(new MobEffectInstance(CAMobEffects.ROCK_BREAK.get(), 150, 0, false, false));
                                             entityiterator.push(0, (-1), 0);

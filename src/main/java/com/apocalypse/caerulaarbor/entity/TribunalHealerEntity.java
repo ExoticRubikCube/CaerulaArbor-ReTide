@@ -21,7 +21,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
@@ -352,7 +351,7 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
                                             entity.addEffect(new MobEffectInstance(CAMobEffects.MUTE.get(), 60, 0, false, false));
                                         CaerulaArborMod.queueServerWork(8, () -> {
                                             if (this.isAlive()) {
-                                                entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.INDIRECT_MAGIC), this),
+                                                entityiterator.hurt(this.damageSources().indirectMagic(this, null),
                                                         (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 2));
                                             }
                                         });

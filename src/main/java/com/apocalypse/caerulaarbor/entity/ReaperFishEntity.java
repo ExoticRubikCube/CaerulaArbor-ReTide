@@ -237,7 +237,7 @@ public class ReaperFishEntity extends SeaMonster {
 						}
 					}
 				}
-                ((Entity) this).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.DRY_OUT)),
+                ((Entity) this).hurt(this.damageSources().dryOut(),
                         (float) ((this.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? this.getAttribute(Attributes.MAX_HEALTH).getValue() : 0) * 0.01));
             }
         }

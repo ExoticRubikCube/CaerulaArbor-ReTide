@@ -11,15 +11,12 @@ import com.google.common.collect.Multimap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -189,7 +186,7 @@ public class LegendarySpearItem extends Item implements GeoItem, SyncedAnimation
                         for (Entity entityiterator : entfound) {
                             if (entityiterator.isAlive() && !(entityiterator == sourceentity)) {
                                 if ((sourceentity != null ? entityiterator.distanceTo(sourceentity) : -1) <= 3) {
-                                    entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.TRIDENT), sourceentity),
+                                    entityiterator.hurt(sourceentity.damageSources().trident(sourceentity, sourceentity),
                                             (float) (((Entity) sourceentity instanceof LivingEntity livingEntity17 && livingEntity17.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)
                                                     ? livingEntity17.getAttribute(Attributes.ATTACK_DAMAGE).getValue()
                                                     : 0) * (1 + 0.2 * itemstack.getEnchantmentLevel(CAEnchantments.SYNESTHESIA.get()))));
@@ -209,7 +206,7 @@ public class LegendarySpearItem extends Item implements GeoItem, SyncedAnimation
                                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TRIDENT_HIT_GROUND, SoundSource.NEUTRAL, (float) 3.5, 1);
                         }
                         if ((sourceentity != null ? entity.distanceTo(sourceentity) : -1) <= 4) {
-                            ((Entity) entity).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.TRIDENT), sourceentity),
+                            ((Entity) entity).hurt(sourceentity.damageSources().trident(sourceentity, sourceentity),
                                     (float) (((Entity) sourceentity instanceof LivingEntity livingEntity32 && livingEntity32.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity32.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
                                             * (1 + 0.2 * itemstack.getEnchantmentLevel(CAEnchantments.SYNESTHESIA.get()))));
                         }
@@ -226,7 +223,7 @@ public class LegendarySpearItem extends Item implements GeoItem, SyncedAnimation
                                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TRIDENT_THROW, SoundSource.NEUTRAL, (float) 3.5, 1);
                         }
                         if ((sourceentity != null ? entity.distanceTo(sourceentity) : -1) <= 4) {
-                            ((Entity) entity).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.TRIDENT), sourceentity),
+                            ((Entity) entity).hurt(sourceentity.damageSources().trident(sourceentity, sourceentity),
                                     (float) (((Entity) sourceentity instanceof LivingEntity livingEntity46 && livingEntity46.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity46.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
                                             * (1 + 0.2 * itemstack.getEnchantmentLevel(CAEnchantments.SYNESTHESIA.get()))));
                             entity.push(0, 0.5, 0);
@@ -244,7 +241,7 @@ public class LegendarySpearItem extends Item implements GeoItem, SyncedAnimation
                                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.TRIDENT_HIT, SoundSource.NEUTRAL, (float) 3.5, 1);
                         }
                         if ((sourceentity != null ? entity.distanceTo(sourceentity) : -1) <= 4) {
-                            ((Entity) entity).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.TRIDENT), sourceentity),
+                            ((Entity) entity).hurt(sourceentity.damageSources().trident(sourceentity, sourceentity),
                                     (float) (((Entity) sourceentity instanceof LivingEntity livingEntity60 && livingEntity60.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity60.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
                                             * (1 + 0.2 * itemstack.getEnchantmentLevel(CAEnchantments.SYNESTHESIA.get()))));
                             entity.push((sourceentity.getLookAngle().x), 0, (sourceentity.getLookAngle().z));

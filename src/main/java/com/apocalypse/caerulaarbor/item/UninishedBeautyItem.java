@@ -3,6 +3,7 @@ package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.client.renderer.item.UninishedBeautyItemRenderer;
+import com.apocalypse.caerulaarbor.init.CADamageTypes;
 import com.apocalypse.caerulaarbor.init.CASounds;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.google.common.collect.ImmutableMultimap;
@@ -10,16 +11,13 @@ import com.google.common.collect.Multimap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -223,8 +221,7 @@ public class UninishedBeautyItem extends Item implements GeoItem, SyncedAnimatio
                         if (entity.distanceTo(sourceentity) <= 5 && ((Entity) entity).isAlive() && ((Entity) sourceentity).isAlive()) {
                             if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) / ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) >= ((Entity) sourceentity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1)
                                     / ((Entity) sourceentity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1)) {
-                                ((Entity) entity).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "saw_cut"))), sourceentity),
-                                        (float) (((Entity) sourceentity instanceof LivingEntity livingEntity12 && livingEntity12.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity12.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
+                                ((Entity) entity).hurt(CADamageTypes.source(world, CADamageTypes.SAW_CUT, sourceentity), (float) (((Entity) sourceentity instanceof LivingEntity livingEntity12 && livingEntity12.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity12.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
                                                 * 1));
                                 if (((Entity) sourceentity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) < ((Entity) sourceentity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1)) {
                                     if ((Entity) sourceentity instanceof LivingEntity livingSourceEntity)
@@ -232,8 +229,7 @@ public class UninishedBeautyItem extends Item implements GeoItem, SyncedAnimatio
                                                 livingSourceEntity.getMaxHealth()));
                                 }
                             } else {
-                                ((Entity) entity).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "saw_cut"))), sourceentity),
-                                        (float) (((Entity) sourceentity instanceof LivingEntity livingEntity21 && livingEntity21.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity21.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
+                                ((Entity) entity).hurt(CADamageTypes.source(world, CADamageTypes.SAW_CUT, sourceentity), (float) (((Entity) sourceentity instanceof LivingEntity livingEntity21 && livingEntity21.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity21.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0)
                                                 * 0.5));
                             }
                         }
