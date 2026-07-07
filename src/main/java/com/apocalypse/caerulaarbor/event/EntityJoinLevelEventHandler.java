@@ -2,8 +2,8 @@ package com.apocalypse.caerulaarbor.event;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.map.MapVariables;
-import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
 import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAConfigs;
 import com.apocalypse.caerulaarbor.init.CAGameRules;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
@@ -141,9 +141,9 @@ public class EntityJoinLevelEventHandler {
                     attack_index = n * attack_index;
                     armor_index = n * armor_index;
                 }
-                health_index = Math.max(CaerulaConfigsConfiguration.HEALTH_MULT.get(), 0.1) * health_index;
-                attack_index = Math.max(CaerulaConfigsConfiguration.ATTACK_MULT.get(), 0.1) * attack_index;
-                armor_index = Math.max(CaerulaConfigsConfiguration.ARMOR_MULT.get(), 0.1) * armor_index;
+                health_index = Math.max(CAConfigs.HEALTH_MULT.get(), 0.1) * health_index;
+                attack_index = Math.max(CAConfigs.ATTACK_MULT.get(), 0.1) * attack_index;
+                armor_index = Math.max(CAConfigs.ARMOR_MULT.get(), 0.1) * armor_index;
                 percentage = (entity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) / (entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1);
                 if (entity instanceof LivingEntity livingEntity18 && livingEntity18.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
                     livingEntity18.getAttribute(Attributes.MAX_HEALTH).setBaseValue(

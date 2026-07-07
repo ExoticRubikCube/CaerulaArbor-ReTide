@@ -2,7 +2,7 @@ package com.apocalypse.caerulaarbor.client.overlay;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
-import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
+import com.apocalypse.caerulaarbor.init.CAConfigs;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
@@ -29,7 +29,7 @@ public class SanityShowOverlay {
 			}
 			int dx = getOverlayOffsetX();
 			int dy = getOverlayOffsetY();
-			if (CaerulaConfigsConfiguration.SANITY_BAR_STYLE.get()){
+			if (CAConfigs.SANITY_BAR_STYLE.get()){
 				event.getGuiGraphics().blit(BAR, w / 2 + 93 + dx, h - 12 + dy, 
 				0, 4, 62, 8, 62, 12);
 				event.getGuiGraphics().blit(BAR, w / 2 + 93 + dx + 10, h - 12 + dy + 3,
@@ -43,10 +43,10 @@ public class SanityShowOverlay {
 	}
 
 	private static int getOverlayOffsetX() {
-		return Math.toIntExact(Math.round(CaerulaConfigsConfiguration.X_OFFSET.get()));
+		return Math.toIntExact(Math.round(CAConfigs.X_OFFSET.get()));
 	}
 
 	private static int getOverlayOffsetY() {
-		return Math.toIntExact(Math.round(CaerulaConfigsConfiguration.Y_OFFSET.get()));
+		return Math.toIntExact(Math.round(CAConfigs.Y_OFFSET.get()));
 	}
 }

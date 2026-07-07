@@ -1,10 +1,10 @@
-package com.apocalypse.caerulaarbor.config;
+package com.apocalypse.caerulaarbor.init;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 
 import java.util.List;
 
-public class CaerulaConfigsConfiguration {
+public class CAConfigs {
 	public static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
 	public static final ForgeConfigSpec SPEC;
 

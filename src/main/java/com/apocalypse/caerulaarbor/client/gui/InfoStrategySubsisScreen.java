@@ -2,8 +2,8 @@ package com.apocalypse.caerulaarbor.client.gui;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.map.MapVariables;
-import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
 import com.apocalypse.caerulaarbor.entity.GuideAbyssalEntity;
+import com.apocalypse.caerulaarbor.init.CAConfigs;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CANetwork;
 import com.apocalypse.caerulaarbor.menu.InfoStrategySubsisMenu;
@@ -58,7 +58,7 @@ public class InfoStrategySubsisScreen extends AbstractContainerScreen<InfoStrate
             double rate = 0;
             if (!(MapVariables.get(world).strategy_subsisting >= 4)) {
                 result = Math.round(MapVariables.get(world).evo_point_subsisting) + "\u00A7b/"
-                        + Math.round(Math.pow(MapVariables.get(world).strategy_subsisting + 1, 3) * CaerulaConfigsConfiguration.COEFFICIENT.get());
+                        + Math.round(Math.pow(MapVariables.get(world).strategy_subsisting + 1, 3) * CAConfigs.COEFFICIENT.get());
             }
             guiGraphics.renderTooltip(font, Component.literal(result), mouseX, mouseY);
         }
@@ -77,7 +77,7 @@ public class InfoStrategySubsisScreen extends AbstractContainerScreen<InfoStrate
         double result = 18;
         double rate;
         if (!(MapVariables.get(world).strategy_subsisting >= 4)) {
-            rate = MapVariables.get(world).evo_point_subsisting / (Math.pow(MapVariables.get(world).strategy_subsisting + 1, 3) * CaerulaConfigsConfiguration.COEFFICIENT.get());
+            rate = MapVariables.get(world).evo_point_subsisting / (Math.pow(MapVariables.get(world).strategy_subsisting + 1, 3) * CAConfigs.COEFFICIENT.get());
             if (rate > 1) {
                 rate = 1;
             }

@@ -4,7 +4,7 @@ import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler;
 import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler.StrategyType;
-import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
+import com.apocalypse.caerulaarbor.init.CAConfigs;
 import com.apocalypse.caerulaarbor.init.CASounds;
 import com.apocalypse.caerulaarbor.util.StrategyUtils;
 import net.minecraft.advancements.Advancement;
@@ -42,7 +42,7 @@ public class SilenceUpgradeManager {
 				}
 			}
 			if (stra < 4) {
-				if (MapVariables.get(world).evo_point_silence >= Math.pow(stra + 1, 3) * CaerulaConfigsConfiguration.COEFFICIENT.get() * 8) {
+				if (MapVariables.get(world).evo_point_silence >= Math.pow(stra + 1, 3) * CAConfigs.COEFFICIENT.get() * 8) {
 					MapVariablesHandler.setStrategyLevel(world, StrategyType.SILENCE, stra + 1);
 					stra = MapVariables.get(world).strategy_silence;
 					MapVariablesHandler.setEvoPoint(world, StrategyType.SILENCE, 0);
@@ -59,7 +59,7 @@ public class SilenceUpgradeManager {
 						num = "IV";
 						prefix = "鎼?";
 					}
-					if (CaerulaConfigsConfiguration.EVOSOUND.get()) {
+					if (CAConfigs.EVOSOUND.get()) {
 						for (Entity entityiterator : new ArrayList<>(world.players())) {
 							if (stra == 1) {
 								if (world instanceof Level level) {

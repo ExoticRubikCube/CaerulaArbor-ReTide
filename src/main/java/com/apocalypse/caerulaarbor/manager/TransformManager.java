@@ -1,8 +1,8 @@
 package com.apocalypse.caerulaarbor.manager;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
 import com.apocalypse.caerulaarbor.entity.TribunalHealerEntity;
+import com.apocalypse.caerulaarbor.init.CAConfigs;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAGameRules;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
@@ -76,7 +76,7 @@ public class TransformManager {
 		}
 		if (!(entity instanceof LivingEntity livEnt2 && livEnt2.getMobType() == MobType.UNDEAD || entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "cannot_transform"))))
 				&& world.getLevelData().getGameRules().getBoolean(CAGameRules.OCEANIZATION_MODE) && !(entity instanceof LivingEntity livEnt5 && livEnt5.isBaby())) {
-			if (EntityUtils.getSeabornAround(world, x, y, z, entity) > Math.min((world.getLevelData().getGameRules().getInt(CAGameRules.CLONE_NUMBER_LIMIT)), CaerulaConfigsConfiguration.CLONE_NUM.get()) * 2) {
+			if (EntityUtils.getSeabornAround(world, x, y, z, entity) > Math.min((world.getLevelData().getGameRules().getInt(CAGameRules.CLONE_NUMBER_LIMIT)), CAConfigs.CLONE_NUM.get()) * 2) {
 				return false;
 			}
 			TransformAttemptResult standardTransformResult = tryStandardTransformRules(world, x, y, z, entity);
@@ -84,7 +84,7 @@ public class TransformManager {
 				trans = standardTransformResult == TransformAttemptResult.SUCCESS;
 			} else if (Math.random() < 0.25) {
 				rate = 0.15;
-				h = CaerulaConfigsConfiguration.OCEANIZE_HEALTH.get();
+				h = CAConfigs.OCEANIZE_HEALTH.get();
 				if ((entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) < h) {
 					rate = 0;
 				}

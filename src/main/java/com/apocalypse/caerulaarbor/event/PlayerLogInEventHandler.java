@@ -1,7 +1,7 @@
 package com.apocalypse.caerulaarbor.event;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
+import com.apocalypse.caerulaarbor.init.CAConfigs;
 import com.apocalypse.caerulaarbor.init.CAGameRules;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
@@ -23,7 +23,7 @@ public class PlayerLogInEventHandler {
 		ResourceLocation relicBanNoticeId = new ResourceLocation(CaerulaArborMod.MODID, "ban_relic_notice");
 		ResourceLocation surgingWavesNoticeId = new ResourceLocation(CaerulaArborMod.MODID, "surging_waves_notice");
 
-		if (CaerulaConfigsConfiguration.RELIC_BAN.get()) {
+		if (CAConfigs.RELIC_BAN.get()) {
 			Advancement relicBanNoticeAdvancement = serverPlayer.server.getAdvancements().getAdvancement(relicBanNoticeId);
 			if (relicBanNoticeAdvancement != null) {
 				AdvancementProgress relicBanNoticeProgress = serverPlayer.getAdvancements().getOrStartProgress(relicBanNoticeAdvancement);

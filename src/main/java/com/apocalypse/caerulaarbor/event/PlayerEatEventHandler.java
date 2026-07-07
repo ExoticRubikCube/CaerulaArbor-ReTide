@@ -3,7 +3,7 @@ package com.apocalypse.caerulaarbor.event;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
-import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
+import com.apocalypse.caerulaarbor.init.CAConfigs;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -71,7 +71,7 @@ public class PlayerEatEventHandler {
 				}
 			}
 		}
-		for (String configuredLightFood : CaerulaConfigsConfiguration.LIGHTS_FOOD.get()) {
+		for (String configuredLightFood : CAConfigs.LIGHTS_FOOD.get()) {
 			separatorIndex = configuredLightFood.indexOf(", ");
 			if (separatorIndex < 0) {
 				CaerulaArborMod.LOGGER.warn("Wrong lights food config for item" + configuredLightFood);
