@@ -116,13 +116,14 @@ public class SanityInjuryCapability implements ISanityInjuryCapability {
 
         owner.addEffect(new MobEffectInstance(CAMobEffects.UNDER_BREAK.get(), 200, 0, false, false, true));
         if (owner instanceof Player player) {
-            int dizzyDuration = 200;
-            MobEffectInstance essenceResistance = player.getEffect(CAMobEffects.ESSENCE_RESISTANCE.get());
-            if (essenceResistance != null) {
-                int level = Math.min(5, essenceResistance.getAmplifier() + 1);
-                dizzyDuration = Math.max(1, (int) Math.ceil(dizzyDuration * (1.0 - level * 0.10)));
-            }
-            player.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), dizzyDuration, 0, false, false));
+            //TODO 抵抗效果已通过Mixin适配所有debuff，此处重复
+//            int dizzyDuration = 200;
+//            MobEffectInstance essenceResistance = player.getEffect(CAMobEffects.ESSENCE_RESISTANCE.get());
+//            if (essenceResistance != null) {
+//                int level = Math.min(5, essenceResistance.getAmplifier() + 1);
+//                dizzyDuration = Math.max(1, (int) Math.ceil(dizzyDuration * (1.0 - level * 0.10)));
+//            }
+            player.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 200, 0, false, false));
             player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 200, 0, false, true));
             player.hurt(sanityBreakDamage, baseDamage);
         } else {
