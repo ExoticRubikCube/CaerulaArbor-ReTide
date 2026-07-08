@@ -14,7 +14,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
@@ -339,8 +338,7 @@ public class ThirsterEntity extends SeaMonster {
                                         if (world instanceof ServerLevel level)
                                             level.sendParticles(CAParticles.MOIST_BOOM.get(), (entityiterator.getX()), (entityiterator.getY() + 0.75), (entityiterator.getZ()), 8, 0.75, 0.75, 0.75, 0.1);
                                         CaerulaArborMod.queueServerWork(15, () -> {
-                                            entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_magic"))), this),
-                                                    (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
+                                            entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.OCEAN_MAGIC, this), (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
                                         });
                                         if (num <= 0) {
                                             break;
@@ -427,10 +425,10 @@ public class ThirsterEntity extends SeaMonster {
                                     }
                                 }
                                 if (distanceTo(entityiterator) < 20) {
-                                    entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "trail_damage")))),
+                                    entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.TRAIL_DAMAGE),
                                             (float) num);
-                                    if (entityiterator instanceof LivingEntity target) {
-                                        SIHelper.causeSanityInjury(target, this, num * 25, SanityEvent.Hurt.Type.ENTITY);
+                                    if (entityiterator instanceof LivingEntity livingTarget) {
+                                        SIHelper.causeSanityInjury(livingTarget, this, num * 25, SanityEvent.Hurt.Type.ENTITY);
                                     }
                                 }
                             }
@@ -527,8 +525,8 @@ public class ThirsterEntity extends SeaMonster {
                 continue;
             }
             if (this.distanceTo(entityiterator) < 20) {
-                if (entityiterator instanceof LivingEntity target) {
-                    SIHelper.causeSanityInjury(target, this, 1000, SanityEvent.Hurt.Type.ENTITY);
+                if (entityiterator instanceof LivingEntity livingTarget) {
+                    SIHelper.causeSanityInjury(livingTarget, this, 1000, SanityEvent.Hurt.Type.ENTITY);
                 }
             }
         }

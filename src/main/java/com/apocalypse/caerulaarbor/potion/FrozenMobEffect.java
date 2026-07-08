@@ -3,11 +3,8 @@ package com.apocalypse.caerulaarbor.potion;
 
 import com.apocalypse.caerulaarbor.util.MathUtils;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.Entity;
@@ -60,10 +57,10 @@ public class FrozenMobEffect extends MobEffect {
                 creeper.setSwellDir(0);
         }
         if (entity instanceof Blaze) {
-            ((Entity) entity).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.FREEZE)), 1);
+            ((Entity) entity).hurt(entity.level().damageSources().freeze(), 1);
         }
         if (entity instanceof MagmaCube) {
-            ((Entity) entity).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.FREEZE)), 1);
+            ((Entity) entity).hurt(entity.level().damageSources().freeze(), 1);
         }
         dh = entity.getBbHeight() * 0.5;
         dw = entity.getBbWidth() * 0.5;

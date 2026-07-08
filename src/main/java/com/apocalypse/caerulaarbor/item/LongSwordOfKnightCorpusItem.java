@@ -2,14 +2,13 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.init.CADamageTypes;
 import com.apocalypse.caerulaarbor.init.CAItems;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -97,7 +96,7 @@ public class LongSwordOfKnightCorpusItem extends SwordItem {
 			float baseDamage = sourceentity.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? (float) sourceentity.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
 			float bonusDamage = this.applyDamageBonus(entity, baseDamage) - baseDamage;
 			if (bonusDamage > 0) {
-				entity.hurt(new DamageSource(sourceentity.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.PLAYER_ATTACK), sourceentity), bonusDamage);
+				entity.hurt(CADamageTypes.playerAttack(sourceentity.level(), sourceentity), bonusDamage);
 			}
 		}
 		return retval;

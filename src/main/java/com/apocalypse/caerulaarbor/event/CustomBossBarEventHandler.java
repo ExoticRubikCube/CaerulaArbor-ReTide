@@ -1,7 +1,7 @@
 package com.apocalypse.caerulaarbor.event;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
+import com.apocalypse.caerulaarbor.init.CAConfigs;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -88,7 +88,7 @@ public class CustomBossBarEventHandler {
 	@OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void customBossBar(CustomizeGuiOverlayEvent.BossEventProgress event){
-    	if(!CaerulaConfigsConfiguration.BOSSBAR.get()) return;
+    	if(!CAConfigs.BOSSBAR.get()) return;
     	if(event.isCanceled()) return;
         LerpingBossEvent bossEvent = event.getBossEvent();
         BossBarRenderContext context = getContext(bossEvent);

@@ -78,7 +78,6 @@ public class SpecterDollEntity extends Animal implements GeoEntity, SyncedAnimat
         this.entityData.define(DATA_ANIMATION, "undefined");
     }
 
-
     @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
@@ -172,7 +171,7 @@ public class SpecterDollEntity extends Animal implements GeoEntity, SyncedAnimat
                             result = Math.abs(getX() - entityiterator.getX()) + Math.abs(getZ() - entityiterator.getZ());
                             if (result <= r) {
                                 invulnerableTime = 0;
-                                entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.MAGIC), this), (float) damage);
+                                entityiterator.hurt(this.damageSources().magic(), (float) damage);
                                 if (!this.level().isClientSide())
                                     this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 30, 2));
                             }

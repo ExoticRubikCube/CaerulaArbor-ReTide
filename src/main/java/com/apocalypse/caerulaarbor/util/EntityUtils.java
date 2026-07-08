@@ -7,23 +7,18 @@ import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.entity.NetherseaSlimeEntity;
 import com.apocalypse.caerulaarbor.entity.OceanIllusionEntity;
-import com.apocalypse.caerulaarbor.init.CAAttributes;
-import com.apocalypse.caerulaarbor.init.CAEnchantments;
-import com.apocalypse.caerulaarbor.init.CAItems;
-import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
@@ -241,7 +236,7 @@ public class EntityUtils {
 					}
 				}
 				if (!(entity instanceof LivingEntity livEnt28 && livEnt28.getMobType() == MobType.UNDEAD)) {
-					entity.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "trail_damage")))), 2);
+					entity.hurt(CADamageTypes.source(world, CADamageTypes.TRAIL_DAMAGE), 2);
 				}
 				if (entity instanceof LivingEntity livingEntity) {
 					SIHelper.causeSanityInjury(livingEntity, 20);
@@ -502,8 +497,7 @@ public class EntityUtils {
 						continue;
 					}
 				}
-				entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "repeller_attack"))), entity),
-						(float) ((entity instanceof LivingEntity livingEntity7 && livingEntity7.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity7.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * rate));
+				entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.REPELLER_ATTACK, entity), (float) ((entity instanceof LivingEntity livingEntity7 && livingEntity7.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity7.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * rate));
 				if (entity instanceof LivingEntity livingEntity)
 					livingEntity.setHealth(livingEntity.getHealth() + 3);
 				for (int index0 = 0; index0 < 2; index0++) {
@@ -595,7 +589,7 @@ public class EntityUtils {
 		double amount;
 		amount = (obj instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * perc + num;
 		if (amount > 0) {
-			obj.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "inv_killer"))), source), (float) amount);
+			obj.hurt(CADamageTypes.source(obj.level(), CADamageTypes.INV_KILLER, source), (float) amount);
 		}
 	}
 

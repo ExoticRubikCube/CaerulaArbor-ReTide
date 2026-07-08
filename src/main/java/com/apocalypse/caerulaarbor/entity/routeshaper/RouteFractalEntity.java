@@ -1,13 +1,10 @@
 package com.apocalypse.caerulaarbor.entity.routeshaper;
 
 import com.apocalypse.caerulaarbor.init.CAEntities;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -57,7 +54,7 @@ public class RouteFractalEntity extends AbstractFractalEntity {
         double timel;
         timel =  this.getEntityData().get(DATA_TIME_LEFT);
         if (timel <= 0) {
-            this.hurt(new DamageSource((this.level()).registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.STARVE)), 10000);
+            this.hurt(this.damageSources().starve(), 10000);
         }
         this.getEntityData().set(DATA_TIME_LEFT, (int) (timel - 1));
         this.refreshDimensions();

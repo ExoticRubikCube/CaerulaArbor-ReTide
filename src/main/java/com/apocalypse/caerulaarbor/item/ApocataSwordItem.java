@@ -1,12 +1,8 @@
 package com.apocalypse.caerulaarbor.item;
 
-import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.init.CADamageTypes;
 import com.apocalypse.caerulaarbor.init.CAItems;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.LivingEntity;
@@ -69,8 +65,7 @@ public class ApocataSwordItem extends SwordItem {
 						continue;
 					}
 					if (target != entity) {
-						target.hurt(new DamageSource(player.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(
-								ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "inv_killer")))), 114514);
+						target.hurt(CADamageTypes.source(player.level(), CADamageTypes.INV_KILLER), 114514);
 					}
 				}
 			}

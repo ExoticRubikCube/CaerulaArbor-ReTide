@@ -5,14 +5,12 @@ import com.apocalypse.caerulaarbor.api.event.SanityEvent;
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
+import com.apocalypse.caerulaarbor.init.CADamageTypes;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -46,7 +44,7 @@ public class MutagenisisCapsuleItem extends Item {
         ocean = (((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization;
         if (ocean < 2.9) {
             SIHelper.causeSanityInjury(entity, (ocean + 1) * 40, SanityEvent.Hurt.Type.FOOD);
-            ((Entity) entity).hurt(new DamageSource(((LevelAccessor) world).registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanize_damage")))), (float) (3 * (ocean + 1)));
+            ((Entity) entity).hurt(CADamageTypes.source((LevelAccessor) world, CADamageTypes.OCEANIZE_DAMAGE), (float) (3 * (ocean + 1)));
             if (!entity.level().isClientSide()) {
                 entity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 2400, (int) ocean));
                 entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 400, (int) ocean));

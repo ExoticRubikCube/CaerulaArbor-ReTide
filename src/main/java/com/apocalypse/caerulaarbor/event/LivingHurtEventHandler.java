@@ -58,10 +58,10 @@ import java.util.List;
 @Mod.EventBusSubscriber
 public class LivingHurtEventHandler {
 
-    public static final TagKey<DamageType> B_PROTECTION = TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "bypass_protection"));
-    public static final TagKey<DamageType> IS_MAGIC = TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "is_magic"));
-    public static final TagKey<DamageType> B_DEFENSE = TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "bypass_defense"));
-    public static final ResourceKey<DamageType> NETHERSEA_DAMAGE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "trail_damage"));
+    public static final TagKey<DamageType> B_PROTECTION = CADamageTags.BYPASS_PROTECTION;
+    public static final TagKey<DamageType> IS_MAGIC = CADamageTags.IS_MAGIC;
+    public static final TagKey<DamageType> B_DEFENSE = CADamageTags.BYPASS_DEFENSE;
+    public static final ResourceKey<DamageType> NETHERSEA_DAMAGE = CADamageTypes.TRAIL_DAMAGE;
 
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void onEntityHurt(LivingHurtEvent event) {
@@ -181,7 +181,7 @@ public class LivingHurtEventHandler {
         double gap = entity.tickCount - (entity instanceof LivingEntity livEnt ? livEnt.getLastHurtByMobTimestamp() : 0);
         double ratie = 1;
 
-        if (damagesource.is(TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation("minecraft:bypasses_invulnerability")))) return;
+        if (damagesource.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) return;
 
         if (entity instanceof FlamarineStatueEntity || entity instanceof FlamarineGolemEntity) {
             if (gap < 10) {
@@ -245,7 +245,7 @@ public class LivingHurtEventHandler {
 
         if (helm.getItem() == CAItems.TRAILRITE_ARMOR_HELMET.get() && chest.getItem() == CAItems.TRAILRITE_ARMOR_CHESTPLATE.get()
                 && legg.getItem() == CAItems.TRAILRITE_ARMOR_LEGGINGS.get() && boot.getItem() == CAItems.TRAILRITE_ARMOR_BOOTS.get()) {
-            if (!damagesource.is(TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation("minecraft:bypasses_invulnerability")))) {
+            if (!damagesource.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
                 double gap = entity.tickCount - (entity instanceof LivingEntity livEnt ? livEnt.getLastHurtByMobTimestamp() : 0);
                 double maxH = entity instanceof LivingEntity livingEntity18 && livingEntity18.getAttributes().hasAttribute(Attributes.MAX_HEALTH) ? livingEntity18.getAttribute(Attributes.MAX_HEALTH).getValue() : 0;
                 if (gap < 10) {
@@ -311,7 +311,7 @@ public class LivingHurtEventHandler {
 
         if (damagesource == null || entity == null) return;
         if (event.isCanceled()) return;
-        if (damagesource.is(TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "never_trigger_boss_protection")))) return;
+        if (damagesource.is(CADamageTags.NEVER_TRIGGER_BOSS_PROTECTION)) return;
 
         if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "bossoffspring")))) {
             if (entity.tickCount - (entity instanceof LivingEntity livEnt ? livEnt.getLastHurtByMobTimestamp() : 0) < 5) {
@@ -414,7 +414,7 @@ public class LivingHurtEventHandler {
                 valid = true;
             } else {
                 regName = ForgeRegistries.ENTITY_TYPES.getKey(sourceentity.getType()).toString();
-                for (String stringiterator : CaerulaConfigsConfiguration.CRIMSON_TREATY.get()) {
+                for (String stringiterator : CAConfigsConfiguration.CRIMSON_TREATY.get()) {
                     if (CaerulaUtil.matchesRegistryName(stringiterator, regName)) {
                         valid = true;
                         break;
@@ -447,9 +447,9 @@ public class LivingHurtEventHandler {
 
         if (MapVariables.get(world).strategy_grow >= 3) {
             if (sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))
-                    && !damagesource.is(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_magic")))) {
+                    && !damagesource.is(CADamageTypes.OCEAN_MAGIC)) {
                 if (entity.isAlive() && sourceentity.isAlive()) {
-                    entity.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_magic")))),
+                    entity.hurt(CADamageTypes.source(world, CADamageTypes.OCEAN_MAGIC),
                             (float) (amount * 0.2 * (MapVariables.get(world).strategy_grow - 2)));
                 }
             }
@@ -471,8 +471,7 @@ public class LivingHurtEventHandler {
             ItemStack item_temp = (sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).copy();
             if (item_temp.getItem() instanceof HoeItem || item_temp.is(ItemTags.create(new ResourceLocation("minecraft:hoes")))) {
                 if ((sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_FERTILITY) {
-                    entity.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hand_of_choker"))), sourceentity),
-                            (float) ((entity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) * 0.075));
+                    entity.hurt(CADamageTypes.source(world, CADamageTypes.HAND_OF_CHOKER, sourceentity), (float) ((entity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) * 0.075));
                     if (world instanceof ServerLevel level)
                         level.sendParticles(ParticleTypes.SQUID_INK, x, y, z, 8, 0.75, 0.9, 0.75, 0.1);
                 }
@@ -504,15 +503,13 @@ public class LivingHurtEventHandler {
             if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_THORNS) {
                 if (!entity.isShiftKeyDown() && sourceentity.isAlive() && entity.isAlive()) {
                     if (!(sourceentity instanceof Player)) {
-                        if (!damagesource.is(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hand_spike"))) && !damagesource.is(DamageTypes.THORNS)
-                                && !damagesource.is(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "gunmu_damage"))) && !(entity == sourceentity)) {
+                        if (!damagesource.is(CADamageTypes.HAND_SPIKE) && !damagesource.is(DamageTypes.THORNS)
+                                && !damagesource.is(CADamageTypes.GUNMU_DAMAGE) && !(entity == sourceentity)) {
                             CaerulaArborMod.queueServerWork(2, () -> {
                                 if (!(sourceentity instanceof TamableAnimal tamIsTamedBy && entity instanceof LivingEntity livEnt && tamIsTamedBy.isOwnedBy(livEnt))) {
                                     if (world instanceof ServerLevel level)
                                         level.sendParticles(ParticleTypes.SMOKE, (sourceentity.getX()), (sourceentity.getY()), (sourceentity.getZ()), 72, 0.85, 1, 0.85, 0.2);
-                                    sourceentity.hurt(
-                                            new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hand_spike"))), entity),
-                                            entity instanceof LivingEntity livEnt ? livEnt.getArmorValue() : 0);
+                                    sourceentity.hurt(CADamageTypes.source(world, CADamageTypes.HAND_SPIKE, entity), entity instanceof LivingEntity livEnt ? livEnt.getArmorValue() : 0);
                                 }
                             });
                         }
@@ -533,7 +530,7 @@ public class LivingHurtEventHandler {
 
         if (damagesource == null || entity == null) return;
 
-        if (damagesource.is(TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation("minecraft:bypasses_invulnerability")))) return;
+        if (damagesource.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) return;
 
         if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunters")))) {
             double factor = 1;
@@ -707,7 +704,7 @@ public class LivingHurtEventHandler {
             if (eee != null && eee.isAlive()) {
                 Entity boat = entity.getVehicle();
                 if (boat instanceof Boat) {
-                    boat.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "general_seaborn_attack")))), 20);
+                    boat.hurt(CADamageTypes.source(world, CADamageTypes.GENERAL_SEABORN_ATTACK), 20);
                 }
             }
         }

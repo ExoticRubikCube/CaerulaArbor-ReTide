@@ -1,14 +1,13 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.init.CADamageTypes;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -95,8 +94,7 @@ public class SkadiSwordItem extends SwordItem {
                     continue;
                 }
                 if (entity.distanceTo(entityiterator) <= r) {
-                    entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunter_attack"))), sourceentity),
-                            (float) damage);
+                    entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.HUNTER_ATTACK, sourceentity), (float) damage);
                 }
             }
         }

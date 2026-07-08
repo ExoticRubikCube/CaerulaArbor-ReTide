@@ -14,7 +14,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
@@ -57,7 +56,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class OceanizedEndermanEntity extends SeaMonster {
-    private static final TagKey<DamageType> BYPASSES_ENDERMAN = TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "bypasses_enderman"));
+    private static final TagKey<DamageType> BYPASSES_ENDERMAN = CADamageTags.BYPASSES_ENDERMAN;
     public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(OceanizedEndermanEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(OceanizedEndermanEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_SKILLP = SynchedEntityData.defineId(OceanizedEndermanEntity.class, EntityDataSerializers.INT);
@@ -144,11 +143,7 @@ public class OceanizedEndermanEntity extends SeaMonster {
             CaerulaArborMod.queueServerWork(9, () -> {
                 if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 2.5) {
                     target.hurt(
-                            new DamageSource(
-                                    this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
-                                            .getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "general_seaborn_attack"))),
-                                    this),
-                            (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
+                            CADamageTypes.source(this.level(), CADamageTypes.GENERAL_SEABORN_ATTACK, this), (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
                 }
             });
         }
@@ -226,8 +221,7 @@ public class OceanizedEndermanEntity extends SeaMonster {
                         this.setTarget(target);
                     }
                     sourceentity.hurt(
-                            new DamageSource(this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_magic"))), this),
-                            (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.75));
+                            CADamageTypes.source(this.level(), CADamageTypes.OCEAN_MAGIC, this), (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.75));
                 }
             }
         }
@@ -367,8 +361,7 @@ public class OceanizedEndermanEntity extends SeaMonster {
                                                     continue;
                                                 }
                                             }
-                                            entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_magic"))), OceanizedEndermanEntity.this),
-                                                    (float) (((Entity) OceanizedEndermanEntity.this instanceof LivingEntity livingEntity10 && livingEntity10.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity10.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.9));
+                                            entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.OCEAN_MAGIC, OceanizedEndermanEntity.this), (float) (((Entity) OceanizedEndermanEntity.this instanceof LivingEntity livingEntity10 && livingEntity10.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity10.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.9));
                                             if (WorldUtils.canGrief(world)) {
                                                 if ((world.getBlockState(BlockPos.containing(tgtX, tgtY, tgtZ))).canBeReplaced() && CABlocks.SEA_TRAIL_INIT.get().defaultBlockState().canSurvive(world, BlockPos.containing(tgtX, tgtY, tgtZ))) {
                                                     world.setBlock(BlockPos.containing(tgtX, tgtY, tgtZ), CABlocks.SEA_TRAIL_INIT.get().defaultBlockState(), 3);

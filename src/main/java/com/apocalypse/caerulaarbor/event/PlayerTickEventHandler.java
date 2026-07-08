@@ -4,8 +4,9 @@ import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
-import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
+import com.apocalypse.caerulaarbor.init.CAConfigs;
 import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CADamageTypes;
 import com.apocalypse.caerulaarbor.init.CAEnchantments;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
@@ -14,14 +15,11 @@ import com.apocalypse.caerulaarbor.util.PlayerStateUtils;
 import com.apocalypse.caerulaarbor.util.RelicUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -105,7 +103,7 @@ public class PlayerTickEventHandler {
 
     private static void handleBanRelicFunc(Player entity) {
         if (entity == null) return;
-        if (!CaerulaConfigsConfiguration.RELIC_BAN.get()) return;
+        if (!CAConfigs.RELIC_BAN.get()) return;
 
         ItemStack mainHandItem = (entity.getMainHandItem()).copy();
         if (mainHandItem.is(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "relic_advanced")))) {
@@ -170,8 +168,7 @@ public class PlayerTickEventHandler {
                 List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(16 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
                 for (Entity entityiterator : entfound) {
                     if (entityiterator instanceof net.minecraft.world.entity.monster.Monster && entity.distanceTo(entityiterator) < 8) {
-                        entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "wipe_magic"))), entity),
-                                (float) (5 * (1 + (entity.hasEffect(MobEffects.REGENERATION) ? entity.getEffect(MobEffects.REGENERATION).getAmplifier() : 0))));
+                        entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.WIPE_MAGIC, entity), (float) (5 * (1 + (entity.hasEffect(MobEffects.REGENERATION) ? entity.getEffect(MobEffects.REGENERATION).getAmplifier() : 0))));
                         if (world instanceof ServerLevel level)
                             level.sendParticles(ParticleTypes.WAX_OFF, (entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()), 12, 0.8, 1, 0.8, 0.1);
                     }

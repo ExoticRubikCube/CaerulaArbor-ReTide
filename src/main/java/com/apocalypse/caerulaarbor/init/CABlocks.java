@@ -150,6 +150,4 @@ public class CABlocks {
 	public static final RegistryObject<Block> ENDERINA_CORE = REGISTRY.register("enderina_core", () -> new EnderinaCoreBlock());
 	public static final RegistryObject<Block> THIRST_CORAL = REGISTRY.register("thirst_coral", () -> new ThirstCoralBlock());
 	public static final RegistryObject<Block> NETHERSEA_SAMPLING = REGISTRY.register("nethersea_sampling", () -> new NetherseaSamplingBlock());
-	// 自定义方块用户代码块开始
-	// 自定义方块用户代码块结束
 }

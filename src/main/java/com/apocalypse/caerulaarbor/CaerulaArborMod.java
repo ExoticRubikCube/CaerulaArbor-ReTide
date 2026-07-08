@@ -1,11 +1,14 @@
 package com.apocalypse.caerulaarbor;
 
+import com.apocalypse.caerulaarbor.init.CAConfigs;
 import com.apocalypse.caerulaarbor.init.*;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.util.thread.SidedThreadGroups;
@@ -24,8 +27,7 @@ public class CaerulaArborMod {
 	public static final String MODID = "caerula_arbor";
 
 	public CaerulaArborMod() {
-		// 模组构造器用户代码块开始
-		// 模组构造器用户代码块结束
+		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CAConfigs.SPEC, "caerular_configs.toml");
 		MinecraftForge.EVENT_BUS.register(this);
 		IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
 		CASounds.REGISTRY.register(bus);
@@ -44,12 +46,8 @@ public class CaerulaArborMod {
 		CAMenus.REGISTRY.register(bus);
 		CAAttributes.REGISTRY.register(bus);
 		bus.addListener(this::onCommonSetup);
-		// 模组初始化用户代码块开始
-		// 模组初始化用户代码块结束
 	}
 
-	// 模组方法用户代码块开始
-	// 模组方法用户代码块结束
 	private void onCommonSetup(final FMLCommonSetupEvent event) {
 		CANetwork.register();
 		CACompostableItems.addComposterItems(event);

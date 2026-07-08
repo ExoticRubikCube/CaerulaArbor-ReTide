@@ -1,20 +1,19 @@
 package com.apocalypse.caerulaarbor.entity.bullets;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.init.CADamageTypes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAParticles;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -102,7 +101,7 @@ public class AbandonedShootEntity extends AbstractArrow implements ItemSupplier 
                 if (!(entityiterator instanceof LivingEntity)) {
                     continue;
                 }
-                entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_magic")))),
+                entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.OCEAN_MAGIC),
                         (float) ((sourceentity instanceof LivingEntity livingEntity4 && livingEntity4.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity4.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.25));
             }
         }
@@ -132,7 +131,7 @@ public class AbandonedShootEntity extends AbstractArrow implements ItemSupplier 
                 if (!(entityiterator instanceof LivingEntity)) {
                     continue;
                 }
-                entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_magic")))),
+                entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.OCEAN_MAGIC),
                         (float) ((entity instanceof LivingEntity livingEntity3 && livingEntity3.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity3.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.25));
             }
         }

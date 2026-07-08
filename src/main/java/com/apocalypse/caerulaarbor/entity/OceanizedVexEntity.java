@@ -4,6 +4,7 @@ import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.api.event.SanityEvent;
 import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
+import com.apocalypse.caerulaarbor.init.CADamageTypes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
@@ -15,7 +16,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
@@ -170,13 +170,12 @@ public class OceanizedVexEntity extends SeaMonster {
         if (sourceentity == null)
             return;
         setDeltaMovement(new Vec3(0, 0, 0));
-        if ((Entity) this instanceof OceanizedVexEntity datEntSetS)
-            datEntSetS.getEntityData().set(DATA_SAYER, (sourceentity.getStringUUID()));
+        this.entityData.set(DATA_SAYER, sourceentity.getStringUUID());
     }
 
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-        this.getEntityData().set(DATA_LEFT_SURVIVAL_TICK, 600 + Mth.nextInt(RandomSource.create(), 0, 1800));
+        this.entityData.set(DATA_LEFT_SURVIVAL_TICK, 600 + Mth.nextInt(RandomSource.create(), 0, 1800));
         return super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
     }
 
@@ -202,35 +201,27 @@ public class OceanizedVexEntity extends SeaMonster {
     public void baseTick() {
         super.baseTick();
         Level world = this.level();
-        Entity enemy;
-        double sklp1;
-        String uuid1;
+        int survivalTicks;
         if (this.isAlive()) {
-            sklp1 = (Entity) this instanceof OceanizedVexEntity datEntI ? datEntI.getEntityData().get(DATA_LEFT_SURVIVAL_TICK) : 0;
-            if (sklp1 <= 0) {
-                ((Entity) this).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.STARVE)), (float) Math.max(0.075 * ((Entity) this instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1), 1));
+            survivalTicks = this.entityData.get(DATA_LEFT_SURVIVAL_TICK);
+            if (survivalTicks <= 0) {
+                this.hurt(world.damageSources().starve(), (float) Math.max(0.075 * this.getMaxHealth(), 1));
             } else {
-                if ((Entity) this instanceof OceanizedVexEntity datEntSetI)
-                    datEntSetI.getEntityData().set(DATA_LEFT_SURVIVAL_TICK, (int) (sklp1 - 1));
+                this.entityData.set(DATA_LEFT_SURVIVAL_TICK, survivalTicks - 1);
             }
         } else {
-            uuid1 = (Entity) this instanceof OceanizedVexEntity datEntS ? datEntS.getEntityData().get(DATA_SAYER) : "";
-            enemy = new Object() {
-                Entity entityFromStringUUID(String uuid2, Level world) {
-                    Entity uuidentity = null;
-                    if (world instanceof ServerLevel server) {
-                        try {
-                            uuidentity = server.getEntity(UUID.fromString(uuid2));
-                        } catch (Exception ignored) {
-                        }
-                    }
-                    return uuidentity;
+            String uuid = this.entityData.get(DATA_SAYER);
+            Entity enemy = null;
+            if (world instanceof ServerLevel server) {
+                try {
+                    enemy = server.getEntity(UUID.fromString(uuid));
+                } catch (Exception ignored) {
                 }
-            }.entityFromStringUUID(uuid1, world);
-            if (!(enemy == null) && enemy.isAlive()) {
-                ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((enemy.getX()), (enemy.getY()), (enemy.getZ())));
-                Vec3 offset = enemy.position().add(0, 1, 0).add(position().reverse());
-                if (!(offset.lengthSqr() <= 9)) {
+            }
+            if (enemy != null && enemy.isAlive()) {
+                this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3(enemy.getX(), enemy.getY(), enemy.getZ()));
+                Vec3 offset = enemy.position().add(0, 1, 0).subtract(this.position());
+                if (offset.lengthSqr() > 9) {
                     offset = offset.normalize().scale(0.5);
                     setDeltaMovement(offset);
                 }
@@ -307,9 +298,7 @@ public class OceanizedVexEntity extends SeaMonster {
 
     private PlayState movementPredicate(AnimationState<?> event) {
         if (this.animationprocedure.equals("empty")) {
-            if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
-
-                    && !this.isAggressive()) {
+            if ((event.isMoving() || Math.abs(event.getLimbSwingAmount()) >= 0.15F) && !this.isAggressive()) {
                 return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanized_vex.fly"));
             }
             if (this.isDeadOrDying()) {
@@ -373,7 +362,7 @@ public class OceanizedVexEntity extends SeaMonster {
             if (world instanceof Level level) {
                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.VEX_CHARGE, SoundSource.NEUTRAL, 3, 1);
             }
-            sanity = this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
+            sanity = this.getAttributeValue(Attributes.ATTACK_DAMAGE);
             {
                 final Vec3 center = new Vec3(x, y, z);
                 List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(8 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
@@ -385,8 +374,7 @@ public class OceanizedVexEntity extends SeaMonster {
                         continue;
                     }
                     if (distanceTo(entityiterator) <= 4) {
-                        entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_magic"))), this),
-                                (float) (sanity * 3));
+                        entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.OCEAN_MAGIC, this), (float) (sanity * 3));
                         if (entityiterator instanceof LivingEntity target) {
                             SIHelper.causeSanityInjury(target, this, sanity * 20, SanityEvent.Hurt.Type.ENTITY);
                         }

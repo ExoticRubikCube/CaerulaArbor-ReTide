@@ -15,7 +15,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
@@ -232,7 +231,7 @@ public class BishopFishEntity extends SeaMonster {
                             dz = 1;
                         }
                         entityiterator.push((1.5 / dx), 0.25, (1.5 / dz));
-                        entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_magic")))),
+                        entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.OCEAN_MAGIC),
                                 (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.5));
                         if (entityiterator instanceof LivingEntity target) {
                             SIHelper.causeSanityInjury(target,
@@ -265,7 +264,7 @@ public class BishopFishEntity extends SeaMonster {
                 for (Entity entityiterator : world.getEntities(this, new AABB((x - 32), (y - 16), (z - 32), (x + 32), (y + 16), (z + 32)))) {
                     if (entityiterator instanceof SonsEntity) {
                         if (distanceTo(entityiterator) <= 6) {
-                            entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.FELL_OUT_OF_WORLD)), 99999);
+                            entityiterator.hurt(entityiterator.level().damageSources().fellOutOfWorld(), 99999);
                         } else {
                             rate = rate + 1;
                         }
@@ -456,8 +455,7 @@ public class BishopFishEntity extends SeaMonster {
                             }
                             if (distanceTo(entityiterator) <= 20) {
                                 entityiterator.hurt(
-                                        new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_magic"))), BishopFishEntity.this),
-                                        (float) (((Entity) BishopFishEntity.this instanceof LivingEntity livingEntity25 && livingEntity25.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity25.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 3));
+                                        CADamageTypes.source(world, CADamageTypes.OCEAN_MAGIC, BishopFishEntity.this), (float) (((Entity) BishopFishEntity.this instanceof LivingEntity livingEntity25 && livingEntity25.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity25.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 3));
                             }
                         }
                         final int tick2 = ticks;
@@ -489,7 +487,7 @@ public class BishopFishEntity extends SeaMonster {
         for (Entity entityiterator : world.getEntities(this, new AABB((x - 6), (y - 6), (z - 6), (x + 6), (y + 6), (z + 6)))) {
             if (entityiterator instanceof SonsEntity) {
                 if (distanceTo(entityiterator) <= 6) {
-                    entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.FELL_OUT_OF_WORLD)), 99999);
+                    entityiterator.hurt(entityiterator.level().damageSources().fellOutOfWorld(), 99999);
                 }
             }
         }

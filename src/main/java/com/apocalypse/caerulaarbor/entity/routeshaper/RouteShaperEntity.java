@@ -2,10 +2,8 @@ package com.apocalypse.caerulaarbor.entity.routeshaper;
 
 import com.apocalypse.caerulaarbor.init.CAAttributes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
@@ -49,7 +47,7 @@ public class RouteShaperEntity extends AbstractPathshaperEntity {
 			List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(64 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
 			for (Entity entityiterator : entfound) {
 				if (entityiterator instanceof RouteFractalEntity) {
-					entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.FELL_OUT_OF_WORLD)), 999999);
+					entityiterator.hurt(entityiterator.level().damageSources().fellOutOfWorld(), 999999);
 				}
 			}
 		}

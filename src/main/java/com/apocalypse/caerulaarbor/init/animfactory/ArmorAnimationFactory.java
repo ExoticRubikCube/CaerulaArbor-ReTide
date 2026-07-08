@@ -1,4 +1,4 @@
-package com.apocalypse.caerulaarbor.init;
+package com.apocalypse.caerulaarbor.init.animfactory;
 
 import com.apocalypse.caerulaarbor.item.SyncedAnimationItem;
 import net.minecraft.world.entity.EquipmentSlot;

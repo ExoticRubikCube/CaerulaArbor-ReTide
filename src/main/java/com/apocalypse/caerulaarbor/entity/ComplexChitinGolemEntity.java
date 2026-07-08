@@ -2,27 +2,20 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SyncedAnimationEntity;
-import com.apocalypse.caerulaarbor.init.CAAttributes;
-import com.apocalypse.caerulaarbor.init.CAEntities;
-import com.apocalypse.caerulaarbor.init.CAItems;
-import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.DamageTypeTags;
-import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -149,7 +142,7 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity, Sy
         if (source.is(DamageTypes.DROWN))
             return false;
         if (!source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)
-                && !source.is(TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "bypass_protection")))) {
+                && !source.is(CADamageTags.BYPASS_PROTECTION)) {
             amount = Math.min(amount, this.getMaxHealth() * 0.1F);
         }
         return super.hurt(source, amount);
@@ -344,8 +337,7 @@ public class ComplexChitinGolemEntity extends IronGolem implements GeoEntity, Sy
                                         }
                                         if (entityiterator != null && distanceTo(entityiterator) <= 5) {
                                             damage = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.75;
-                                            entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "golem_attack"))), this),
-                                                    (float) damage);
+                                            entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.GOLEM_ATTACK, this), (float) damage);
                                         }
                                     }
                                 }

@@ -2,10 +2,7 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SyncedAnimationEntity;
-import com.apocalypse.caerulaarbor.init.CAAttributes;
-import com.apocalypse.caerulaarbor.init.CAEntities;
-import com.apocalypse.caerulaarbor.init.CAMobEffects;
-import com.apocalypse.caerulaarbor.init.CASounds;
+import com.apocalypse.caerulaarbor.init.*;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
@@ -15,7 +12,6 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
@@ -179,31 +175,19 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
             CaerulaArborMod.queueServerWork(12, () -> {
                 if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 3.5) {
                     target.hurt(
-                            new DamageSource(
-                                    this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
-                                            .getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "saw_cut"))),
-                                    this),
-                            (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.45));
+                            CADamageTypes.source(this.level(), CADamageTypes.SAW_CUT, this), (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.45));
                 }
             });
             CaerulaArborMod.queueServerWork(15, () -> {
                 if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 3.5) {
                     target.hurt(
-                            new DamageSource(
-                                    this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
-                                            .getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "saw_cut"))),
-                                    this),
-                            (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.5));
+                            CADamageTypes.source(this.level(), CADamageTypes.SAW_CUT, this), (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.5));
                 }
             });
             CaerulaArborMod.queueServerWork(18, () -> {
                 if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 3.5) {
                     target.hurt(
-                            new DamageSource(
-                                    this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
-                                            .getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "saw_cut"))),
-                                    this),
-                            (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.45));
+                            CADamageTypes.source(this.level(), CADamageTypes.SAW_CUT, this), (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 0.45));
                 }
             });
         }
@@ -512,8 +496,7 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
                 continue;
             }
             if (this.distanceTo(entityiterator) <= range) {
-                entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "saw_cut"))), this),
-                        (float) (damage * rate));
+                entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.SAW_CUT, this), (float) (damage * rate));
             }
         }
     }

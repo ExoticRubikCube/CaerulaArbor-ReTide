@@ -3,6 +3,7 @@ package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.client.renderer.item.HighmoreScytheItemRenderer;
+import com.apocalypse.caerulaarbor.init.CADamageTypes;
 import com.apocalypse.caerulaarbor.init.CAEnchantments;
 import com.apocalypse.caerulaarbor.init.CASounds;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
@@ -11,15 +12,11 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -215,8 +212,7 @@ public class HighmoreScytheItem extends Item implements GeoItem, SyncedAnimation
 					continue;
 				}
 				nearbyEntity.hurt(
-						new DamageSource(level.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(
-								ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "highmore_attack"))), attacker),
+						CADamageTypes.source(level, CADamageTypes.HIGHMORE_ATTACK, attacker),
 						(float) (attacker.getAttributeValue(Attributes.ATTACK_DAMAGE) * (1.5F + 0.2F * itemstack.getEnchantmentLevel(CAEnchantments.SYNESTHESIA.get()))));
 				EntityUtils.giveLessArmor(nearbyEntity, 15);
 			}

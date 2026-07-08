@@ -1,8 +1,8 @@
 package com.apocalypse.caerulaarbor.client.overlay;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
 import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CAConfigs;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
@@ -42,8 +42,8 @@ public class AttrShowOverlay {
 		RenderSystem.setShaderColor(1, 1, 1, 1);
 		Font font = Minecraft.getInstance().font;
 
-		int dx = CaerulaConfigsConfiguration.X_OFFSET_ATTR.get().intValue();
-		int dy = CaerulaConfigsConfiguration.Y_OFFSET_ATTR.get().intValue();
+		int dx = CAConfigs.X_OFFSET_ATTR.get().intValue();
+		int dy = CAConfigs.Y_OFFSET_ATTR.get().intValue();
 		if (entity.isAlive()) {
             String defense = "";
             {

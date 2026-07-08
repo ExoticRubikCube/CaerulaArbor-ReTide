@@ -1,12 +1,8 @@
 package com.apocalypse.caerulaarbor.item;
 
-import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.init.CADamageTypes;
 import com.apocalypse.caerulaarbor.init.CAItems;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -16,7 +12,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.List;
@@ -41,8 +36,7 @@ public class ApocalypseItem extends Item {
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
 		ItemStack retval = new ItemStack(CAItems.GUNMU_SPAWN_EGG.get());
 		super.finishUsingItem(itemstack, world, entity);
-		//TODO 使用注册而不是forge接口
-        ((Entity) entity).hurt(new DamageSource(((LevelAccessor) world).registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "inv_killer")))), 32);
+        ((Entity) entity).hurt(CADamageTypes.source(world, CADamageTypes.INV_KILLER), 32);
         if ((Entity) entity instanceof Player player && !player.level().isClientSide())
             player.displayClientMessage(Component.literal("NOOOOOO"), false);
         if (itemstack.isEmpty()) {

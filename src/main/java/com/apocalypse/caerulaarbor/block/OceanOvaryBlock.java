@@ -2,7 +2,7 @@ package com.apocalypse.caerulaarbor.block;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.map.MapVariables;
-import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
+import com.apocalypse.caerulaarbor.init.CAConfigs;
 import com.apocalypse.caerulaarbor.init.CAGameRules;
 import com.apocalypse.caerulaarbor.manager.SeabornSpawnManager;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
@@ -111,7 +111,7 @@ public class OceanOvaryBlock extends AbstractOvaryBlock {
 				}
 				int output = blockstate.getValue(OUTPUT);
 				if (random.nextFloat() < output * 0.005F) {
-					double cloneLimit = Math.min(CaerulaConfigsConfiguration.CLONE_NUM.get(), world.getGameRules().getInt(CAGameRules.CLONE_NUMBER_LIMIT));
+					double cloneLimit = Math.min(CAConfigs.CLONE_NUM.get(), world.getGameRules().getInt(CAGameRules.CLONE_NUMBER_LIMIT));
 					if (EntityUtils.getSeabornNum(world, pos.getX(), pos.getY(), pos.getZ()) >= cloneLimit) {
 						finished = true;
 					} else {

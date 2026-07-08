@@ -2,10 +2,7 @@
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.init.CABlocks;
-import com.apocalypse.caerulaarbor.init.CAItems;
-import com.apocalypse.caerulaarbor.init.CAMobEffects;
-import com.apocalypse.caerulaarbor.init.CAParticles;
+import com.apocalypse.caerulaarbor.init.*;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
@@ -14,7 +11,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -26,7 +22,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -145,8 +140,7 @@ public class LanternJudgementItem extends Item {
                         entity.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 200, 0, false, false));
                     if (entityiterator instanceof LivingEntity && !entity.level().isClientSide())
                         entity.addEffect(new MobEffectInstance(CAMobEffects.MUTE.get(), 400, 0, false, false));
-                    entityiterator.hurt(new DamageSource(((LevelAccessor) world).registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceankiller_damage"))), entity),
-                            (float) Math.max(((Entity) entity instanceof LivingEntity livingEntity10 && livingEntity10.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity10.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.15,
+                    entityiterator.hurt(CADamageTypes.source((LevelAccessor) world, CADamageTypes.OCEANKILLER_DAMAGE, entity), (float) Math.max(((Entity) entity instanceof LivingEntity livingEntity10 && livingEntity10.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity10.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.15,
                                     15));
                     entityiterator.setSecondsOnFire(5);
                 }

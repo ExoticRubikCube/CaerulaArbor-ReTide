@@ -2,16 +2,14 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
+import com.apocalypse.caerulaarbor.init.CADamageTypes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -148,11 +146,7 @@ public class OceanizedRavagerEntity extends SeaMonster {
             CaerulaArborMod.queueServerWork(11, () -> {
                 if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 3.8) {
                     target.hurt(
-                            new DamageSource(
-                                    this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
-                                            .getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "general_seaborn_attack"))),
-                                    this),
-                            (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
+                            CADamageTypes.source(this.level(), CADamageTypes.GENERAL_SEABORN_ATTACK, this), (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
                 }
             });
         }

@@ -2,7 +2,7 @@ package com.apocalypse.caerulaarbor.client.gui;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.map.MapVariables;
-import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
+import com.apocalypse.caerulaarbor.init.CAConfigs;
 import com.apocalypse.caerulaarbor.init.CANetwork;
 import com.apocalypse.caerulaarbor.menu.InfoStrategyAllMenu;
 import com.apocalypse.caerulaarbor.network.send.InfoStrategyNavigationButtonMessage;
@@ -55,7 +55,7 @@ public class InfoStrategyAllScreen extends AbstractContainerScreen<InfoStrategyA
                 double rate = 0;
                 if (!(MapVariables.get(world).strategy_silence >= 4)) {
                     result = Math.round(MapVariables.get(world).evo_point_silence) + "\u00A7c/"
-                            + Math.round(Math.pow(MapVariables.get(world).strategy_silence + 1, 3) * CaerulaConfigsConfiguration.COEFFICIENT.get() * 8);
+                            + Math.round(Math.pow(MapVariables.get(world).strategy_silence + 1, 3) * CAConfigs.COEFFICIENT.get() * 8);
                 }
                 guiGraphics.renderTooltip(font, Component.literal(result), mouseX, mouseY);
             }

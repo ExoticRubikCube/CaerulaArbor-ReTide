@@ -4,6 +4,7 @@ import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.api.event.SanityEvent;
 import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.entity.base.SyncedAnimationEntity;
+import com.apocalypse.caerulaarbor.init.CADamageTypes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.init.CAParticles;
 import com.apocalypse.caerulaarbor.init.CASounds;
@@ -17,7 +18,6 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
@@ -489,13 +489,13 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
                     if (result) {
                         if (entity.distanceTo(entityiterator) <= 2.5) {
                             entityiterator.hurt(
-                                    new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ocean_magic"))), entity, owner),
+                                    CADamageTypes.source(world, CADamageTypes.OCEAN_MAGIC, entity, owner),
                                     (float) d);
-                            if (entityiterator instanceof LivingEntity target) {
+                            if (entityiterator instanceof LivingEntity livingTarget) {
                                 if (owner instanceof LivingEntity attacker) {
-                                    SIHelper.causeSanityInjury(target, attacker, d * 20, SanityEvent.Hurt.Type.ENTITY);
+                                    SIHelper.causeSanityInjury(livingTarget, attacker, d * 20, SanityEvent.Hurt.Type.ENTITY);
                                 } else {
-                                    SIHelper.causeSanityInjury(target, d * 20, SanityEvent.Hurt.Type.ENTITY);
+                                    SIHelper.causeSanityInjury(livingTarget, d * 20, SanityEvent.Hurt.Type.ENTITY);
                                 }
                             }
                         }

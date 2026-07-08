@@ -3,12 +3,11 @@ package com.apocalypse.caerulaarbor.capability.sanity;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.api.event.SanityEvent;
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
-import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
+import com.apocalypse.caerulaarbor.init.CAConfigs;
 import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CADamageTypes;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
@@ -110,9 +109,8 @@ public class SanityInjuryCapability implements ISanityInjuryCapability {
             return;
         }
 
-        float baseDamage = CaerulaConfigsConfiguration.SANITY_BREAK.get().floatValue();
-        DamageSource sanityBreakDamage = new DamageSource(owner.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
-                .getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "sanity_break"))));
+        float baseDamage = CAConfigs.SANITY_BREAK.get().floatValue();
+        DamageSource sanityBreakDamage = CADamageTypes.source(owner.level(), CADamageTypes.SANITY_BREAK);
 
         owner.addEffect(new MobEffectInstance(CAMobEffects.UNDER_BREAK.get(), 200, 0, false, false, true));
         if (owner instanceof Player player) {

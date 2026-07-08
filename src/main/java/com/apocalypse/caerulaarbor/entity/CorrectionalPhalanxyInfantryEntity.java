@@ -2,6 +2,7 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SyncedAnimationEntity;
+import com.apocalypse.caerulaarbor.init.CADamageTypes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.registries.Registries;
@@ -11,7 +12,6 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
@@ -122,11 +122,7 @@ public class CorrectionalPhalanxyInfantryEntity extends Animal implements GeoEnt
             CaerulaArborMod.queueServerWork(10, () -> {
                 if (this.isAlive() && target.isAlive()) {
                     target.hurt(
-                            new DamageSource(
-                                    this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
-                                            .getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "generic_warrior_attack"))),
-                                    this),
-                            (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
+                            CADamageTypes.source(this.level(), CADamageTypes.GENERIC_WARRIOR_ATTACK, this), (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
                 }
             });
         }
@@ -147,7 +143,7 @@ public class CorrectionalPhalanxyInfantryEntity extends Animal implements GeoEnt
                             this.setAnimation("animation.correctional_phalanx _infantry.heavyattack");
                         }
                         CaerulaArborMod.queueServerWork(20, () -> {
-                            sourceentity.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "generic_warrior_attack")))),
+                            sourceentity.hurt(CADamageTypes.source(world, CADamageTypes.GENERIC_WARRIOR_ATTACK),
                                     (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 2));
                             sourceentity.push((getLookAngle().x * 0.64), 0, (getLookAngle().z * 0.64));
                         });
@@ -213,7 +209,7 @@ public class CorrectionalPhalanxyInfantryEntity extends Animal implements GeoEnt
                                             continue;
                                         }
                                     }
-                                    entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "generic_warrior_attack")))),
+                                    entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.GENERIC_WARRIOR_ATTACK),
                                             (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.5));
                                 }
                             }

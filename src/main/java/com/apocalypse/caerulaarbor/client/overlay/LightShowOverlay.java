@@ -3,7 +3,7 @@ package com.apocalypse.caerulaarbor.client.overlay;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
-import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
+import com.apocalypse.caerulaarbor.init.CAConfigs;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.PlayerStateUtils;
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -50,9 +50,9 @@ public class LightShowOverlay {
             result1 = ((Entity) entity).isAlive() && (((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).show_stats;
         }
         if (result1) {
-			boolean isNeat = CaerulaConfigsConfiguration.LIGHTS_NEAT_STYLE.get();
-			int lightDx = CaerulaConfigsConfiguration.X_OFFSET_LIGHT.get().intValue();
-			int lightDy = CaerulaConfigsConfiguration.Y_OFFSET_LIGHT.get().intValue();
+			boolean isNeat = CAConfigs.LIGHTS_NEAT_STYLE.get();
+			int lightDx = CAConfigs.X_OFFSET_LIGHT.get().intValue();
+			int lightDy = CAConfigs.Y_OFFSET_LIGHT.get().intValue();
 			if (PlayerStateUtils.isLightCeased(entity)) {
 				if (isNeat){
 					event.getGuiGraphics().blit(NEAT,
@@ -90,8 +90,8 @@ public class LightShowOverlay {
 				}
 			}
 
-			int lifeDx = CaerulaConfigsConfiguration.X_OFFSET_LIFE.get().intValue();
-			int lifeDy = CaerulaConfigsConfiguration.Y_OFFSET_LIFE.get().intValue() - 16;
+			int lifeDx = CAConfigs.X_OFFSET_LIFE.get().intValue();
+			int lifeDy = CAConfigs.Y_OFFSET_LIFE.get().intValue() - 16;
 
 			event.getGuiGraphics().blit(LIFE_POINT, 
 				6 + lifeDx, h - 24 + lifeDy, 0, 0, 24, 16, 24, 16);

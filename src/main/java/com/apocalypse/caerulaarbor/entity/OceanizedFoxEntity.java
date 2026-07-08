@@ -300,7 +300,7 @@ public class OceanizedFoxEntity extends SeaMonster {
                                             continue;
                                         }
                                         if (distanceTo(entityiterator) <= 3) {
-                                            entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.MOB_ATTACK), this), (float) (damage * 1.5));
+                                            entityiterator.hurt(this.damageSources().mobAttack(this), (float) (damage * 1.5));
                                             if ((Entity) this instanceof LivingEntity entity)
                                                 entity.setHealth(((Entity) this instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) + 1);
                                         }

@@ -4,7 +4,7 @@ import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler;
 import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler.StrategyType;
-import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
+import com.apocalypse.caerulaarbor.init.CAConfigs;
 import com.apocalypse.caerulaarbor.init.CASounds;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
@@ -26,7 +26,7 @@ public class SubsistingUpgradeManager {
 		String prefix = "";
 		stra = MapVariables.get(world).strategy_subsisting;
 		if (stra < 4) {
-			if (MapVariables.get(world).evo_point_subsisting >= Math.pow(stra + 1, 3) * CaerulaConfigsConfiguration.COEFFICIENT.get()) {
+			if (MapVariables.get(world).evo_point_subsisting >= Math.pow(stra + 1, 3) * CAConfigs.COEFFICIENT.get()) {
 				for (Entity entityiterator : new ArrayList<>(world.players())) {
 					if (entityiterator instanceof ServerPlayer player) {
 						Advancement adv = player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "to_experience_evolution"));
@@ -53,7 +53,7 @@ public class SubsistingUpgradeManager {
 					num = "IV";
 					prefix = "鎼?";
 				}
-				if (CaerulaConfigsConfiguration.EVOSOUND.get()) {
+				if (CAConfigs.EVOSOUND.get()) {
 					for (Entity entityiterator : new ArrayList<>(world.players())) {
 						if (stra >= 3) {
 							if (world instanceof Level level) {

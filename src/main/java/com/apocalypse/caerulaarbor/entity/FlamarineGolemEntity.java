@@ -2,10 +2,7 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CAAttributes;
-import com.apocalypse.caerulaarbor.init.CAEntities;
-import com.apocalypse.caerulaarbor.init.CAItems;
-import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.*;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
@@ -15,7 +12,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
@@ -176,11 +172,7 @@ public class FlamarineGolemEntity extends SeaMonster {
             CaerulaArborMod.queueServerWork(20, () -> {
                 if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 5.75) {
                     target.hurt(
-                            new DamageSource(
-                                    this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
-                                            .getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "golem_attack"))),
-                                    this),
-                            (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
+                            CADamageTypes.source(this.level(), CADamageTypes.GOLEM_ATTACK, this), (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
                     breakShield(this.level(), targetX, targetY, targetZ, target, 120);
                 }
             });
@@ -352,8 +344,7 @@ public class FlamarineGolemEntity extends SeaMonster {
                                     if (distanceTo(entityiterator) <= r) {
                                         h = entityiterator instanceof LivingEntity livEnt ? livEnt.getHealth() : -1;
                                         d = Math.min(damage * 4.5, Math.max(h * 0.25, damage * 1.5));
-                                        entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "golem_attack"))), this),
-                                                (float) d);
+                                        entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.GOLEM_ATTACK, this), (float) d);
                                         breakShield(world, x, y, z, entityiterator, 120);
                                     }
                                 }
@@ -583,7 +574,7 @@ public class FlamarineGolemEntity extends SeaMonster {
         if (!(target == null)) {
             this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((target.getX()), (target.getY()), (target.getZ())));
             if (this.distanceTo(target) <= dist) {
-                target.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "golem_attack"))), this), (float) damage);
+                target.hurt(CADamageTypes.source(world, CADamageTypes.GOLEM_ATTACK, this), (float) damage);
                 breakShield(world, x, y, z, target, 120);
             }
         }

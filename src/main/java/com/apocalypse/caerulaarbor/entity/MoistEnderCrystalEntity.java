@@ -3,10 +3,7 @@ package com.apocalypse.caerulaarbor.entity;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.entity.base.SyncedAnimationEntity;
-import com.apocalypse.caerulaarbor.init.CAEntities;
-import com.apocalypse.caerulaarbor.init.CAItems;
-import com.apocalypse.caerulaarbor.init.CAParticles;
-import com.apocalypse.caerulaarbor.init.CASounds;
+import com.apocalypse.caerulaarbor.init.*;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -17,7 +14,6 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
@@ -28,7 +24,6 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -282,7 +277,7 @@ public class MoistEnderCrystalEntity extends PathfinderMob implements GeoEntity,
 							continue;
 						}
 						if (distanceTo(entityiterator) <= 4) {
-							entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.EXPLOSION), this), (float) d);
+							entityiterator.hurt(this.damageSources().explosion(this, null), (float) d);
 						}
 					}
 				}
@@ -296,7 +291,7 @@ public class MoistEnderCrystalEntity extends PathfinderMob implements GeoEntity,
 				return;
 			}
 			if ((enderina instanceof OceanizedEnderinaEntity datEntI ? datEntI.getEntityData().get(OceanizedEnderinaEntity.DATA_REVIVE_TICK) : 0) > 0) {
-				enderina.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hand_of_choker")))),
+				enderina.hurt(CADamageTypes.source(world, CADamageTypes.HAND_OF_CHOKER),
 						(float) ((enderina instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) * 0.25));
 			} else if (enderina instanceof LivingEntity livingEntity) {
 				EntityUtils.heal(livingEntity, (livingEntity.getMaxHealth()) * 0.05);

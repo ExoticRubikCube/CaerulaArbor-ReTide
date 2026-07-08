@@ -2,7 +2,7 @@
 package com.apocalypse.caerulaarbor.block;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
+import com.apocalypse.caerulaarbor.init.CAConfigs;
 import com.apocalypse.caerulaarbor.init.CAItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -161,7 +161,7 @@ public class BlockKettleBlock extends Block implements SimpleWaterloggedBlock {
 				valid = true;
 			}
 		} else {
-			for (String blockId : CaerulaConfigsConfiguration.BOIL_WATER.get()) {
+			for (String blockId : CAConfigs.BOIL_WATER.get()) {
 				if (ForgeRegistries.BLOCKS.getKey(lower.getBlock()).toString().equals(blockId)) {
 					if (ForgeRegistries.BLOCKS.getKey(lower.getBlock()).toString().equals("create:blaze_burner")) {
 						if (!(lower.getBlock().getStateDefinition().getProperty("blaze") instanceof EnumProperty<?> blazeProperty

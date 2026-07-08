@@ -11,7 +11,6 @@ import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -270,7 +269,7 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
         SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
-        if ((LevelAccessor) world instanceof ServerLevel level) {
+        if (world instanceof ServerLevel level) {
             Entity entityToSpawn = CAEntities.TIDE_DEATHREPELLER.get().spawn(level, BlockPos.containing(this.getX() + Mth.nextDouble(RandomSource.create(), -3, 3), this.getY(), this.getZ() + Mth.nextDouble(RandomSource.create(), -3, 3)), MobSpawnType.MOB_SUMMONED);
             if (entityToSpawn != null) {
                 entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
@@ -314,7 +313,7 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
             if (!keepup) {
                 this.setAnimation("animation.tidebishop.die");
                 this.removeAllEffects();
-                this.hurt(new DamageSource(this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.FELL_OUT_OF_WORLD)), 114514);
+                this.hurt(this.level().damageSources().fellOutOfWorld(), 114514);
             }
             return;
         }

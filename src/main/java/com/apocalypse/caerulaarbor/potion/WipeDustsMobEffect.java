@@ -1,15 +1,11 @@
 package com.apocalypse.caerulaarbor.potion;
 
-import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.init.CADamageTypes;
 import com.apocalypse.caerulaarbor.util.MathUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -51,8 +47,7 @@ public class WipeDustsMobEffect extends MobEffect {
                 List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(10 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
                 for (Entity entityiterator : entfound) {
                     if (entityiterator instanceof Monster) {
-                        entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "wipe_magic"))), entity),
-                                (float) (5 * (1 + ((Entity) entity instanceof LivingEntity livEnt && livEnt.hasEffect(MobEffects.REGENERATION) ? livEnt.getEffect(MobEffects.REGENERATION).getAmplifier() : 0))));
+                        entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.WIPE_MAGIC, entity), (float) (5 * (1 + ((Entity) entity instanceof LivingEntity livEnt && livEnt.hasEffect(MobEffects.REGENERATION) ? livEnt.getEffect(MobEffects.REGENERATION).getAmplifier() : 0))));
                         if (world instanceof ServerLevel level)
                             level.sendParticles(ParticleTypes.WAX_OFF, (entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ()), 48, 0.8, 1, 0.8, 0.1);
                     }

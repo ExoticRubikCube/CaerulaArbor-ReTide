@@ -5,7 +5,7 @@ import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
-import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
+import com.apocalypse.caerulaarbor.init.CAConfigs;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.init.*;
 import com.apocalypse.caerulaarbor.manager.SeabornSpawnManager;
@@ -21,7 +21,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
@@ -721,10 +720,7 @@ public class EndspeakerEntity extends SeaMonster {
 			amount *= 1.5F;
 		}
 		boolean damaged = target.hurt(
-				new DamageSource(this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
-						.getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "endspeaker_attack"))), this),
-				amount
-		);
+				CADamageTypes.source(this.level(), CADamageTypes.ENDSPEAKER_ATTACK, this), amount);
 		if (damaged && this.hasAbility(5) && !this.level().isClientSide()) {
 			int amplifier = this.hasEffect(CAMobEffects.REEF_CRACKER.get()) ? this.getEffect(CAMobEffects.REEF_CRACKER.get()).getAmplifier() : -1;
 			int nextAmplifier = amplifier < 0 ? 0 : Math.min(amplifier + 1, 11);
@@ -897,15 +893,13 @@ public class EndspeakerEntity extends SeaMonster {
                 continue;
             }
             if (sacrifice.distanceTo(candidate) < radius) {
-                candidate.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
-                        .getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceankiller_damage")))),
-                        (float) (CaerulaConfigsConfiguration.SANITY_BREAK.get() * 6));
+                candidate.hurt(CADamageTypes.source(world, CADamageTypes.OCEANKILLER_DAMAGE),
+                        (float) (CAConfigs.SANITY_BREAK.get() * 6));
             }
         }
         if (!(sacrifice instanceof Player)) {
             if (sacrifice.isAlive()) {
-                sacrifice.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
-                        .getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceankiller_damage")))), 114514);
+                sacrifice.hurt(CADamageTypes.source(world, CADamageTypes.OCEANKILLER_DAMAGE), 114514);
             }
             if (sacrifice.isAlive() && !sacrifice.level().isClientSide()) {
                 sacrifice.discard();

@@ -15,7 +15,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
@@ -194,11 +193,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
 						}
 						if (this.distanceTo(entityIterator) <= 3) {
 							entityIterator.hurt(
-									new DamageSource(
-											this.level().registryAccess().registryOrThrow(Registries.DAMAGE_TYPE)
-													.getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "general_seaborn_attack"))),
-											this),
-									(float) damage);
+									CADamageTypes.source(this.level(), CADamageTypes.GENERAL_SEABORN_ATTACK, this), (float) damage);
 							Vec3 pushVec = this.position().vectorTo(entityIterator.position());
 							if (pushVec.lengthSqr() < 0.0001) {
 								pushVec = new Vec3(0, 0, 1);
@@ -470,7 +465,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
 								continue;
 							}
 							if (distanceTo(entityiterator) <= 12) {
-								entityiterator.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "sanity_break")))),
+								entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.SANITY_BREAK),
 										(float) (ddd * 1.1));
 							}
 						}
@@ -480,7 +475,7 @@ public class SkadiCorruptedEntity extends SeaMonster {
 						if ((Entity) this instanceof LivingEntity entity)
 							entity.setHealth((float) (((Entity) this instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) - dama));
 					} else {
-						((Entity) this).hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceankiller_damage")))), 99999);
+						((Entity) this).hurt(CADamageTypes.source(world, CADamageTypes.OCEANKILLER_DAMAGE), 99999);
 					}
 				}
                 double ang;

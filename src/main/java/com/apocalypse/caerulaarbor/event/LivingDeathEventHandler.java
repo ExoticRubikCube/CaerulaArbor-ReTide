@@ -6,7 +6,7 @@ import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler;
 import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler.StrategyType;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
-import com.apocalypse.caerulaarbor.config.CaerulaConfigsConfiguration;
+import com.apocalypse.caerulaarbor.init.CAConfigs;
 import com.apocalypse.caerulaarbor.entity.MartusEntity;
 import com.apocalypse.caerulaarbor.entity.SkadiEntity;
 import com.apocalypse.caerulaarbor.init.*;
@@ -20,7 +20,6 @@ import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -60,7 +59,7 @@ import java.util.Comparator;
 @Mod.EventBusSubscriber
 public class LivingDeathEventHandler {
 
-    public static final TagKey<DamageType> BYPASS = TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "bypass_protection"));
+    public static final TagKey<DamageType> BYPASS = CADamageTags.BYPASS_PROTECTION;
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onEntityDeath(LivingDeathEvent event) {
@@ -160,9 +159,9 @@ public class LivingDeathEventHandler {
                     if (!world.isClientSide())
                         entity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 200, 2));
                     entity.setHealth(entity.getMaxHealth() * 0.5f);
-                    if (damagesource.is(TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "rare")))) {
+                    if (damagesource.is(CADamageTags.RARE)) {
                         light_cost = 15;
-                    } else if (damagesource.is(TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "horror")))) {
+                    } else if (damagesource.is(CADamageTags.HORROR)) {
                         light_cost = 10;
                     } else {
                         light_cost = 5;
@@ -198,7 +197,7 @@ public class LivingDeathEventHandler {
 
         if (damagesource == null || entity == null || sourceentity == null) return;
 
-        if (entity instanceof LivingEntity livEnt0 && livEnt0.hasEffect(CAMobEffects.INVULNERABLE.get()) && !damagesource.is(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "inv_killer")))) {
+        if (entity instanceof LivingEntity livEnt0 && livEnt0.hasEffect(CAMobEffects.INVULNERABLE.get()) && !damagesource.is(CADamageTypes.INV_KILLER)) {
             if (event.isCancelable()) {
                 event.setCanceled(true);
             }
@@ -211,7 +210,7 @@ public class LivingDeathEventHandler {
 
         if (damagesource == null || sourceentity == null) return;
 
-        if (damagesource.is(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "extractor_damage")))) {
+        if (damagesource.is(CADamageTypes.EXTRACTOR_DAMAGE)) {
             if (sourceentity instanceof ServerPlayer player) {
                 Advancement adv = player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "little_by_little"));
                 AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
@@ -398,7 +397,7 @@ public class LivingDeathEventHandler {
                     validweapon = true;
                 } else {
                     String rname = ForgeRegistries.ITEMS.getKey((sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).getItem()).toString();
-                    for (String stringiterator : CaerulaConfigsConfiguration.HAND_ENGRAVE.get()) {
+                    for (String stringiterator : CAConfigs.HAND_ENGRAVE.get()) {
                         if (CaerulaUtil.matchesRegistryName(stringiterator, rname)) {
                             validweapon = true;
                             break;
@@ -442,7 +441,7 @@ public class LivingDeathEventHandler {
         if (event.isCanceled()) return;
         if (entity instanceof SkadiEntity) return;
 
-        if (damagesource.is(TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "can_trigger_oceanization")))) {
+        if (damagesource.is(CADamageTags.CAN_TRIGGER_OCEANIZATION)) {
             if (TransformManager.transformToSeaborn(world, x, y, z, entity)) {
                 if (event.isCancelable()) {
                     event.setCanceled(true);
@@ -548,7 +547,7 @@ public class LivingDeathEventHandler {
         if (damagesource == null || entity == null) return;
         if (event.isCanceled()) return;
 
-        if (entity instanceof Player && damagesource.is(ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanize_damage")))) {
+        if (entity instanceof Player && damagesource.is(CADamageTypes.OCEANIZE_DAMAGE)) {
             if (world instanceof ServerLevel level) {
                 Entity entityToSpawn = CAEntities.SLIDER_FISH.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                 if (entityToSpawn != null) {

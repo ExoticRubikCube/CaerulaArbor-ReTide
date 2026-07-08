@@ -6,12 +6,10 @@ import com.apocalypse.caerulaarbor.init.*;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -23,7 +21,6 @@ import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -375,16 +372,7 @@ public class OceanizedWitherEntity extends AbstractOceanizedWitherEntity impleme
     public void remove(RemovalReason pReason) {
         if (this.level().getDifficulty() != Difficulty.PEACEFUL && pReason == RemovalReason.DISCARDED) {
             this.hurt(
-                    new DamageSource(
-                            this.level().registryAccess().
-                                    registryOrThrow(Registries.DAMAGE_TYPE).
-                                    getHolderOrThrow(
-                                            ResourceKey.create(
-                                                    Registries.DAMAGE_TYPE,
-                                                    new ResourceLocation(CaerulaArborMod.MODID, "oceankiller_damage")
-                                            )
-                                    )
-                    ),
+                    CADamageTypes.source(this.level(), CADamageTypes.OCEANKILLER_DAMAGE),
                     20
             );
             return;

@@ -3,10 +3,10 @@ package com.apocalypse.caerulaarbor.entity;
 import com.apocalypse.caerulaarbor.api.event.SanityEvent;
 import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.entity.base.SyncedAnimationEntity;
+import com.apocalypse.caerulaarbor.init.CADamageTypes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -248,7 +248,7 @@ public class NautilusHeadhunterEntity extends Animal implements GeoEntity, Synce
             }
             if (tickCount % 20 == 5) {
                 if (dryTick > 300) {
-                    this.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.DRY_OUT)), (float) (this.getMaxHealth() * 0.05));
+                    this.hurt(this.damageSources().dryOut(), (float) (this.getMaxHealth() * 0.05));
                 }
                 if (isMounting) {
                     vehicle = getVehicle();
@@ -258,10 +258,10 @@ public class NautilusHeadhunterEntity extends Animal implements GeoEntity, Synce
                                     level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.DOLPHIN_EAT, SoundSource.HOSTILE, 1, 1);
                             }
                         }
-                        vehicle.hurt(new DamageSource(world.registryAccess().registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(DamageTypes.IN_WALL), this),
+                        vehicle.hurt(CADamageTypes.source(this.level(), DamageTypes.IN_WALL, this),
                                 (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
-                        if (vehicle instanceof LivingEntity target) {
-                            SIHelper.causeSanityInjury(target, this, 50, SanityEvent.Hurt.Type.ENTITY);
+                        if (vehicle instanceof LivingEntity livingTarget) {
+                            SIHelper.causeSanityInjury(livingTarget, this, 50, SanityEvent.Hurt.Type.ENTITY);
                         }
                     }
                 } else {
