@@ -135,7 +135,7 @@ public class CaerulaRecordGUIScreen extends AbstractContainerScreen<CaerulaRecor
 
 		double sanity = ModCapabilities.getSanityInjury(entity).getValue();
 		double maxSanity = ModCapabilities.getSanityInjury(entity).getMaxValue();
-		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/sanity.png"), this.leftPos + 106, this.topPos + 43,
+		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/ep/sanity.png"), this.leftPos + 106, this.topPos + 43,
 				Mth.clamp((int) Math.ceil(sanity / maxSanity * 20.0) * 16, 0, 304), 0, 16, 16, 320, 16);
 
 		if (RelicUtils.hasDisoNeuro(entity)) {

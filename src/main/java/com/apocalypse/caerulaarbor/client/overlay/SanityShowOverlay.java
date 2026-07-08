@@ -15,8 +15,8 @@ import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber({Dist.CLIENT})
 public class SanityShowOverlay {
-	public static final ResourceLocation SANITY = new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/sanity.png");
-	public static final ResourceLocation BAR = new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/sanity_player_bar.png");
+	public static final ResourceLocation SANITY = new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/ep/sanity.png");
+	public static final ResourceLocation BAR = new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/ep/sanity_player_bar.png");
 	
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public static void eventHandler(RenderGuiEvent.Pre event) {

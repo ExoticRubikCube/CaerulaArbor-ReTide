@@ -17,8 +17,8 @@ import snownee.jade.overlay.OverlayRenderer;
 public class CASanityElement extends Element {
     private final String text;
     private final float process;
-    private static final ResourceLocation SANITY_ICON = new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/sanity_icon.png");
-    private static final ResourceLocation SANITY_BAR = new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/sanity_bar.png");
+    private static final ResourceLocation SANITY_ICON = new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/ep/sanity_icon.png");
+    private static final ResourceLocation SANITY_BAR = new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/ep/sanity_bar.png");
 
     public CASanityElement(double value, double max) {
         if (!PluginConfig.INSTANCE.get(Identifiers.MC_ENTITY_HEALTH_SHOW_FRACTIONS)) {
