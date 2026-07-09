@@ -119,7 +119,7 @@ public class CaerulaUtil {
 		if (entity == null) {
 			return;
 		}
-		ItemStack mainhand = (entity instanceof LivingEntity living ? living.getMainHandItem() : ItemStack.EMPTY).copy();
+		ItemStack mainhand = (entity instanceof LivingEntity living ? living.getMainHandItem() : ItemStack.EMPTY);
 		if (mainhand.is(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "nethersea_protective")))) {
 			return;
 		}
@@ -135,7 +135,7 @@ public class CaerulaUtil {
 		if (entity == null) {
 			return;
 		}
-		ItemStack mainhand = (entity instanceof LivingEntity living ? living.getMainHandItem() : ItemStack.EMPTY).copy();
+		ItemStack mainhand = (entity instanceof LivingEntity living ? living.getMainHandItem() : ItemStack.EMPTY);
 		if (mainhand.is(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "nethersea_protective")))) {
 			return;
 		}
