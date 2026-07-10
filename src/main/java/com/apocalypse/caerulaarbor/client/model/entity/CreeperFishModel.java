@@ -15,12 +15,12 @@ public class CreeperFishModel extends GeoModel<CreeperFishEntity> {
 
 	@Override
 	public ResourceLocation getAnimationResource(CreeperFishEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/explosivefish.animation.json");
+		return new ResourceLocation(CaerulaArborMod.MODID, "animations/creeperfish.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(CreeperFishEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/explosivefish.geo.json");
+		return new ResourceLocation(CaerulaArborMod.MODID, "geo/creeperfish.geo.json");
 	}
 
 	@Override

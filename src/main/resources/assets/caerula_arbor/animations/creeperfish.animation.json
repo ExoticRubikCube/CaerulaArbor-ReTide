@@ -1,7 +1,7 @@
 {
 	"format_version": "1.8.0",
 	"animations": {
-		"animation.explosivefish.idle": {
+		"animation.creeperfish.idle": {
 			"loop": true,
 			"animation_length": 3,
 			"bones": {
@@ -221,7 +221,7 @@
 				}
 			}
 		},
-		"animation.explosivefish.move": {
+		"animation.creeperfish.move": {
 			"loop": true,
 			"animation_length": 1,
 			"bones": {
@@ -478,7 +478,7 @@
 				}
 			}
 		},
-		"animation.explosivefish.die": {
+		"animation.creeperfish.die": {
 			"loop": "hold_on_last_frame",
 			"animation_length": 1,
 			"bones": {
@@ -692,7 +692,7 @@
 				}
 			}
 		},
-		"animation.explosivefish.attack": {
+		"animation.creeperfish.attack": {
 			"animation_length": 0.95,
 			"bones": {
 				"stem": {
@@ -799,7 +799,7 @@
 				}
 			}
 		},
-		"animation.explosivefish.jump": {
+		"animation.creeperfish.jump": {
 			"animation_length": 1.7083,
 			"bones": {
 				"stem": {
