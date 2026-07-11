@@ -12,6 +12,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.network.NetworkEvent;
 
+import java.util.Objects;
 import java.util.function.Supplier;
 
 @Mod.EventBusSubscriber(value = {Dist.CLIENT})
@@ -27,18 +28,28 @@ public class PlayerLeftClickEventHandler {
         executeHelperLeftClick(event.getEntity());
     }
 
+    public static void executeHelperLeftClick(Entity entity) {
+        if (entity instanceof Player player && player.isPassenger() && player.getVehicle() instanceof LittleHelperEntity helper) {
+            helper.handlePassengerLeftClick(player);
+        }
+    }
+
     @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
     public static class HelperLeftClickMessage {
-        public HelperLeftClickMessage() {}
+        public HelperLeftClickMessage() {
+        }
 
-        public HelperLeftClickMessage(FriendlyByteBuf buffer) {}
+        public HelperLeftClickMessage(FriendlyByteBuf buffer) {
+        }
 
-        public static void buffer(HelperLeftClickMessage message, FriendlyByteBuf buffer) {}
+        public static void buffer(HelperLeftClickMessage message, FriendlyByteBuf buffer) {
+        }
 
         public static void handler(HelperLeftClickMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
             NetworkEvent.Context context = contextSupplier.get();
             context.enqueueWork(() -> {
-                if (!context.getSender().level().hasChunkAt(context.getSender().blockPosition())) return;
+                if (!Objects.requireNonNull(context.getSender()).level().hasChunkAt(context.getSender().blockPosition()))
+                    return;
                 executeHelperLeftClick(context.getSender());
             });
             context.setPacketHandled(true);
@@ -47,12 +58,6 @@ public class PlayerLeftClickEventHandler {
         @SubscribeEvent
         public static void registerMessage(FMLCommonSetupEvent event) {
             CANetwork.addNetworkMessage(HelperLeftClickMessage.class, HelperLeftClickMessage::buffer, HelperLeftClickMessage::new, HelperLeftClickMessage::handler);
-        }
-    }
-
-    public static void executeHelperLeftClick(Entity entity) {
-        if (entity instanceof Player player && player.isPassenger() && player.getVehicle() instanceof LittleHelperEntity helper) {
-            helper.handlePassengerLeftClick(player);
         }
     }
 

@@ -26,7 +26,15 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -37,7 +45,12 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.SnowGolem;
-import net.minecraft.world.entity.monster.*;
+import net.minecraft.world.entity.monster.Illusioner;
+import net.minecraft.world.entity.monster.Pillager;
+import net.minecraft.world.entity.monster.RangedAttackMob;
+import net.minecraft.world.entity.monster.Vindicator;
+import net.minecraft.world.entity.monster.Witch;
+import net.minecraft.world.entity.monster.ZombifiedPiglin;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.npc.Villager;
@@ -49,6 +62,7 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
@@ -58,15 +72,17 @@ import software.bernie.geckolib.core.object.PlayState;
 import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.EnumSet;
+import java.util.Objects;
 
 public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
     public static final EntityDataAccessor<Boolean> DATA_IS_SHOOTING = SynchedEntityData.defineId(TideBishopEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(TideBishopEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_SKILL_COOLDOWN = SynchedEntityData.defineId(TideBishopEntity.class, EntityDataSerializers.INT);
+    private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.GREEN, ServerBossEvent.BossBarOverlay.NOTCHED_6);
+    public String animationprocedure = "empty";
+    String prevAnim = "empty";
     private boolean swinging;
     private long lastSwing;
-    public String animationprocedure = "empty";
-    private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.GREEN, ServerBossEvent.BossBarOverlay.NOTCHED_6);
 
     public TideBishopEntity(Level world) {
         this(CAEntities.TIDE_BISHOP.get(), world);
@@ -77,6 +93,18 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
         xpReward = 32;
         setNoAi(false);
         setMaxUpStep(0.6f);
+    }
+
+    public static AttributeSupplier.Builder createAttributes() {
+        AttributeSupplier.Builder builder = Mob.createMobAttributes();
+        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.3);
+        builder = builder.add(Attributes.MAX_HEALTH, 160);
+        builder = builder.add(Attributes.ARMOR, 6);
+        builder = builder.add(Attributes.ATTACK_DAMAGE, 9);
+        builder = builder.add(Attributes.FOLLOW_RANGE, 16);
+        builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.5);
+        builder = builder.add(CAAttributes.MAX_SANITY.get(), 2000);
+        return builder;
     }
 
     @Override
@@ -113,99 +141,8 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
         });
     }
 
-    public class RangedAttackGoal extends Goal {
-        private final Mob mob;
-        private final RangedAttackMob rangedAttackMob;
-        @Nullable
-        private LivingEntity target;
-        private int attackTime = -1;
-        private final double speedModifier;
-        private int seeTime;
-        private final int attackIntervalMin;
-        private final int attackIntervalMax;
-        private final float attackRadius;
-        private final float attackRadiusSqr;
-
-        public RangedAttackGoal(RangedAttackMob p_25768_, double p_25769_, int p_25770_, float p_25771_) {
-            this(p_25768_, p_25769_, p_25770_, p_25770_, p_25771_);
-        }
-
-        public RangedAttackGoal(RangedAttackMob p_25773_, double p_25774_, int p_25775_, int p_25776_, float p_25777_) {
-            if (!(p_25773_ instanceof LivingEntity)) {
-                throw new IllegalArgumentException("ArrowAttackGoal requires Mob implements RangedAttackMob");
-            } else {
-                this.rangedAttackMob = p_25773_;
-                this.mob = (Mob) p_25773_;
-                this.speedModifier = p_25774_;
-                this.attackIntervalMin = p_25775_;
-                this.attackIntervalMax = p_25776_;
-                this.attackRadius = p_25777_;
-                this.attackRadiusSqr = p_25777_ * p_25777_;
-                this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
-            }
-        }
-
-        public boolean canUse() {
-            LivingEntity livingentity = this.mob.getTarget();
-            if (livingentity != null && livingentity.isAlive()) {
-                this.target = livingentity;
-                return true;
-            } else {
-                return false;
-            }
-        }
-
-        public boolean canContinueToUse() {
-            return this.canUse() || this.target.isAlive() && !this.mob.getNavigation().isDone();
-        }
-
-        public void stop() {
-            this.target = null;
-            this.seeTime = 0;
-            this.attackTime = -1;
-            ((TideBishopEntity) rangedAttackMob).entityData.set(DATA_IS_SHOOTING, false);
-        }
-
-        public boolean requiresUpdateEveryTick() {
-            return true;
-        }
-
-        public void tick() {
-            double d0 = 0;
-            if (this.target != null) {
-                d0 = this.mob.distanceToSqr(this.target.getX(), this.target.getY(), this.target.getZ());
-            }
-            boolean flag = this.mob.getSensing().hasLineOfSight(this.target);
-            if (flag) {
-                ++this.seeTime;
-            } else {
-                this.seeTime = 0;
-            }
-            if (!(d0 > (double) this.attackRadiusSqr) && this.seeTime >= 5) {
-                this.mob.getNavigation().stop();
-            } else {
-                this.mob.getNavigation().moveTo(this.target, this.speedModifier);
-            }
-            this.mob.getLookControl().setLookAt(this.target, 30.0F, 30.0F);
-            if (--this.attackTime == 0) {
-                if (!flag) {
-                    ((TideBishopEntity) rangedAttackMob).entityData.set(DATA_IS_SHOOTING, false);
-                    return;
-                }
-                ((TideBishopEntity) rangedAttackMob).entityData.set(DATA_IS_SHOOTING, true);
-                float f = (float) Math.sqrt(d0) / this.attackRadius;
-                float f1 = Mth.clamp(f, 0.1F, 1.0F);
-                this.rangedAttackMob.performRangedAttack(this.target, f1);
-                this.attackTime = Mth.floor(f * (float) (this.attackIntervalMax - this.attackIntervalMin) + (float) this.attackIntervalMin);
-            } else if (this.attackTime < 0) {
-                this.attackTime = Mth.floor(Mth.lerp(Math.sqrt(d0) / (double) this.attackRadius, this.attackIntervalMin, this.attackIntervalMax));
-            } else
-                ((TideBishopEntity) rangedAttackMob).entityData.set(DATA_IS_SHOOTING, false);
-        }
-    }
-
     @Override
-    public MobType getMobType() {
+    public @NotNull MobType getMobType() {
         return MobType.UNDEFINED;
     }
 
@@ -215,12 +152,12 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
     }
 
     @Override
-    public SoundEvent getHurtSound(DamageSource ds) {
+    public @NotNull SoundEvent getHurtSound(@NotNull DamageSource ds) {
         return SoundEvents.EVOKER_HURT;
     }
 
     @Override
-    public SoundEvent getDeathSound() {
+    public @NotNull SoundEvent getDeathSound() {
         return SoundEvents.EVOKER_DEATH;
     }
 
@@ -230,12 +167,11 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        TideDeathrepellerEntity call = world.getEntitiesOfClass(TideDeathrepellerEntity.class, AABB.ofSize(new Vec3(x, y, z), 96, 96, 96), e -> true).stream().min(new Object() {
+        world.getEntitiesOfClass(TideDeathrepellerEntity.class, AABB.ofSize(new Vec3(x, y, z), 96, 96, 96), e -> true).stream().min(new Object() {
             Comparator<Entity> compareDistOf(double x, double y, double z) {
                 return Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(x, y, z));
             }
-        }.compareDistOf(x, y, z)).orElse(null);
-        call.getNavigation().moveTo(x, y, z, 0.8);
+        }.compareDistOf(x, y, z)).ifPresent(call -> call.getNavigation().moveTo(x, y, z, 0.8));
         if (source.is(DamageTypes.DROWN))
             return false;
         return super.hurt(source, amount);
@@ -267,7 +203,7 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
     }
 
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
+    public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor world, @NotNull DifficultyInstance difficulty, @NotNull MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
         SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
         if (world instanceof ServerLevel level) {
             Entity entityToSpawn = CAEntities.TIDE_DEATHREPELLER.get().spawn(level, BlockPos.containing(this.getX() + Mth.nextDouble(RandomSource.create(), -3, 3), this.getY(), this.getZ() + Mth.nextDouble(RandomSource.create(), -3, 3)), MobSpawnType.MOB_SUMMONED);
@@ -278,18 +214,18 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
         return retval;
     }
 
-	@Override
-	public void addAdditionalSaveData(CompoundTag compound) {
+    @Override
+    public void addAdditionalSaveData(@NotNull CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("SkillCooldown", this.entityData.get(DATA_SKILL_COOLDOWN));
-	}
+    }
 
-	@Override
-	public void readAdditionalSaveData(CompoundTag compound) {
+    @Override
+    public void readAdditionalSaveData(@NotNull CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         if (compound.contains("SkillCooldown"))
             this.entityData.set(DATA_SKILL_COOLDOWN, compound.getInt("SkillCooldown"));
-	}
+    }
 
     @Override
     public void baseTick() {
@@ -340,7 +276,7 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
                                     entityToSpawn.setCritArrow(true);
                                     return entityToSpawn;
                                 }
-                            }.getArrow(projectileLevel, this, (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0), 0, (byte) 1);
+                            }.getArrow(projectileLevel, this, (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? Objects.requireNonNull(this.getAttribute(Attributes.ATTACK_DAMAGE)).getValue() : 0), 0, (byte) 1);
                             projectile.setPos(this.getX(), this.getEyeY() - 0.1, this.getZ());
                             projectile.shoot(this.getLookAngle().x, this.getLookAngle().y, this.getLookAngle().z, 1.5F, 0);
                             projectileLevel.addFreshEntity(projectile);
@@ -370,25 +306,25 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
             EntityUtils.spawnLinkParticles(this.level(), this, nearest);
             if (MapVariables.get(this.level()).strategy_silence >= 3) {
                 if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE.get())) {
-                    this.getAttribute(CAAttributes.MISSRATE.get()).setBaseValue(30);
+                    Objects.requireNonNull(this.getAttribute(CAAttributes.MISSRATE.get())).setBaseValue(30);
                 }
             } else if (MapVariables.get(this.level()).strategy_subsisting >= 4) {
                 if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE.get())) {
-                    this.getAttribute(CAAttributes.MISSRATE.get()).setBaseValue(15);
+                    Objects.requireNonNull(this.getAttribute(CAAttributes.MISSRATE.get())).setBaseValue(15);
                 }
             }
         } else if (this.getAttributes().hasAttribute(CAAttributes.MISSRATE.get())) {
-            this.getAttribute(CAAttributes.MISSRATE.get()).setBaseValue(0);
+            Objects.requireNonNull(this.getAttribute(CAAttributes.MISSRATE.get())).setBaseValue(0);
         }
     }
 
     @Override
-    public EntityDimensions getDimensions(Pose p_33597_) {
+    public @NotNull EntityDimensions getDimensions(@NotNull Pose p_33597_) {
         return super.getDimensions(p_33597_).scale((float) 1.5);
     }
 
     @Override
-    public void performRangedAttack(LivingEntity target, float flval) {
+    public void performRangedAttack(@NotNull LivingEntity target, float flval) {
         TellerShotEntity.shoot(this, target, (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttributeValue(Attributes.ATTACK_DAMAGE) : 0) * (4.0 / 9.0));
     }
 
@@ -398,13 +334,13 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
     }
 
     @Override
-    public void startSeenByPlayer(ServerPlayer player) {
+    public void startSeenByPlayer(@NotNull ServerPlayer player) {
         super.startSeenByPlayer(player);
         this.bossInfo.addPlayer(player);
     }
 
     @Override
-    public void stopSeenByPlayer(ServerPlayer player) {
+    public void stopSeenByPlayer(@NotNull ServerPlayer player) {
         super.stopSeenByPlayer(player);
         this.bossInfo.removePlayer(player);
     }
@@ -413,18 +349,6 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
     public void customServerAiStep() {
         super.customServerAiStep();
         this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
-    }
-
-    public static AttributeSupplier.Builder createAttributes() {
-        AttributeSupplier.Builder builder = Mob.createMobAttributes();
-        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.3);
-        builder = builder.add(Attributes.MAX_HEALTH, 160);
-        builder = builder.add(Attributes.ARMOR, 6);
-        builder = builder.add(Attributes.ATTACK_DAMAGE, 9);
-        builder = builder.add(Attributes.FOLLOW_RANGE, 16);
-        builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.5);
-        builder = builder.add(CAAttributes.MAX_SANITY.get(), 2000);
-        return builder;
     }
 
     private PlayState movementPredicate(AnimationState<?> event) {
@@ -462,8 +386,6 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
         }
         return PlayState.CONTINUE;
     }
-
-    String prevAnim = "empty";
 
     private PlayState procedurePredicate(AnimationState<?> event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
@@ -510,5 +432,96 @@ public class TideBishopEntity extends SeaMonster implements RangedAttackMob {
     @Override
     public void setAnimationProcedure(String animation) {
         this.animationprocedure = animation;
+    }
+
+    public class RangedAttackGoal extends Goal {
+        private final Mob mob;
+        private final RangedAttackMob rangedAttackMob;
+        private final double speedModifier;
+        private final int attackIntervalMin;
+        private final int attackIntervalMax;
+        private final float attackRadius;
+        private final float attackRadiusSqr;
+        @Nullable
+        private LivingEntity target;
+        private int attackTime = -1;
+        private int seeTime;
+
+        public RangedAttackGoal(RangedAttackMob p_25768_, double p_25769_, int p_25770_, float p_25771_) {
+            this(p_25768_, p_25769_, p_25770_, p_25770_, p_25771_);
+        }
+
+        public RangedAttackGoal(RangedAttackMob p_25773_, double p_25774_, int p_25775_, int p_25776_, float p_25777_) {
+            if (!(p_25773_ instanceof LivingEntity)) {
+                throw new IllegalArgumentException("ArrowAttackGoal requires Mob implements RangedAttackMob");
+            } else {
+                this.rangedAttackMob = p_25773_;
+                this.mob = (Mob) p_25773_;
+                this.speedModifier = p_25774_;
+                this.attackIntervalMin = p_25775_;
+                this.attackIntervalMax = p_25776_;
+                this.attackRadius = p_25777_;
+                this.attackRadiusSqr = p_25777_ * p_25777_;
+                this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
+            }
+        }
+
+        public boolean canUse() {
+            LivingEntity livingentity = this.mob.getTarget();
+            if (livingentity != null && livingentity.isAlive()) {
+                this.target = livingentity;
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        public boolean canContinueToUse() {
+            return this.canUse() || Objects.requireNonNull(this.target).isAlive() && !this.mob.getNavigation().isDone();
+        }
+
+        public void stop() {
+            this.target = null;
+            this.seeTime = 0;
+            this.attackTime = -1;
+            ((TideBishopEntity) rangedAttackMob).entityData.set(DATA_IS_SHOOTING, false);
+        }
+
+        public boolean requiresUpdateEveryTick() {
+            return true;
+        }
+
+        public void tick() {
+            double d0 = 0;
+            if (this.target != null) {
+                d0 = this.mob.distanceToSqr(this.target.getX(), this.target.getY(), this.target.getZ());
+            }
+            boolean flag = this.mob.getSensing().hasLineOfSight(this.target);
+            if (flag) {
+                ++this.seeTime;
+            } else {
+                this.seeTime = 0;
+            }
+            if (!(d0 > (double) this.attackRadiusSqr) && this.seeTime >= 5) {
+                this.mob.getNavigation().stop();
+            } else {
+                this.mob.getNavigation().moveTo(this.target, this.speedModifier);
+            }
+            this.mob.getLookControl().setLookAt(this.target, 30.0F, 30.0F);
+            if (--this.attackTime == 0) {
+                if (!flag) {
+                    ((TideBishopEntity) rangedAttackMob).entityData.set(DATA_IS_SHOOTING, false);
+                    return;
+                }
+                ((TideBishopEntity) rangedAttackMob).entityData.set(DATA_IS_SHOOTING, true);
+                float f = (float) Math.sqrt(d0) / this.attackRadius;
+                float f1 = Mth.clamp(f, 0.1F, 1.0F);
+                this.rangedAttackMob.performRangedAttack(this.target, f1);
+                this.attackTime = Mth.floor(f * (float) (this.attackIntervalMax - this.attackIntervalMin) + (float) this.attackIntervalMin);
+            } else if (this.attackTime < 0) {
+                this.attackTime = Mth.floor(Mth.lerp(Math.sqrt(d0) / (double) this.attackRadius, this.attackIntervalMin, this.attackIntervalMax));
+            } else
+                ((TideBishopEntity) rangedAttackMob).entityData.set(DATA_IS_SHOOTING, false);
+        }
     }
 }

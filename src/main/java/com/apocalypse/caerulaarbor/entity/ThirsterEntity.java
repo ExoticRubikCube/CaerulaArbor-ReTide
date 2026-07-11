@@ -4,7 +4,12 @@ import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.api.event.SanityEvent;
 import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.*;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CADamageTypes;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CAParticles;
+import com.apocalypse.caerulaarbor.init.CASounds;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
@@ -26,7 +31,13 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -40,6 +51,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
@@ -48,6 +60,7 @@ import software.bernie.geckolib.core.object.PlayState;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 public class ThirsterEntity extends SeaMonster {
     public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(ThirsterEntity.class, EntityDataSerializers.BOOLEAN);
@@ -56,10 +69,13 @@ public class ThirsterEntity extends SeaMonster {
     public static final EntityDataAccessor<Integer> DATA_SKILL_P = SynchedEntityData.defineId(ThirsterEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_INTEGRATION = SynchedEntityData.defineId(ThirsterEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_DIZZY_NUM = SynchedEntityData.defineId(ThirsterEntity.class, EntityDataSerializers.INT);
+    private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.PROGRESS);
+    public String animationprocedure = "empty";
+    public SoundEvent HURT = CASounds.SEABORN_GENERIC_HIT.get();
+    public SoundEvent DIE = CASounds.SEABORN_DEATH.get();
+    String prevAnim = "empty";
     private boolean swinging;
     private long lastSwing;
-    public String animationprocedure = "empty";
-    private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.PROGRESS);
 
     public ThirsterEntity(Level world) {
         this(CAEntities.THIRSTER.get(), world);
@@ -71,6 +87,21 @@ public class ThirsterEntity extends SeaMonster {
         setNoAi(false);
         setMaxUpStep(1.25f);
         setPersistenceRequired();
+    }
+
+    public static AttributeSupplier.Builder createAttributes() {
+        AttributeSupplier.Builder builder = Mob.createMobAttributes();
+        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.2);
+        builder = builder.add(Attributes.MAX_HEALTH, 340);
+        builder = builder.add(Attributes.ARMOR, 15);
+        builder = builder.add(Attributes.ATTACK_DAMAGE, 5);
+        builder = builder.add(Attributes.FOLLOW_RANGE, 36);
+        builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 1);
+        builder = builder.add(CAAttributes.GENERAL_DEFENSE.get(), 10);
+        builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 95);
+        builder = builder.add(CAAttributes.SANITY_RATE.get(), 50);
+        builder = builder.add(CAAttributes.MAX_SANITY.get(), 2000);
+        return builder;
     }
 
     @Override
@@ -90,7 +121,7 @@ public class ThirsterEntity extends SeaMonster {
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.1, false) {
             @Override
-            protected double getAttackReachSqr(LivingEntity entity) {
+            protected double getAttackReachSqr(@NotNull LivingEntity entity) {
                 return 4;
             }
         });
@@ -124,16 +155,13 @@ public class ThirsterEntity extends SeaMonster {
         return false;
     }
 
-    public SoundEvent HURT = CASounds.SEABORN_GENERIC_HIT.get();
-    public SoundEvent DIE = CASounds.SEABORN_DEATH.get();
-
     @Override
-    public SoundEvent getHurtSound(DamageSource ds) {
+    public @NotNull SoundEvent getHurtSound(@NotNull DamageSource ds) {
         return HURT;
     }
 
     @Override
-    public SoundEvent getDeathSound() {
+    public @NotNull SoundEvent getDeathSound() {
         return DIE;
     }
 
@@ -202,23 +230,23 @@ public class ThirsterEntity extends SeaMonster {
                 this.getEntityData().set(DATA_INTEGRATION, 0);
                 this.getEntityData().set(DATA_DURATION, 400);
                 if (this.getAttributes().hasAttribute(CAAttributes.LIVING_BARRIER.get()))
-                    this.getAttribute(CAAttributes.LIVING_BARRIER.get()).setBaseValue((maxHealth - healthBeforeDamage));
+                    Objects.requireNonNull(this.getAttribute(CAAttributes.LIVING_BARRIER.get())).setBaseValue((maxHealth - healthBeforeDamage));
             }
         }
         return damaged;
     }
 
-	@Override
-	public void addAdditionalSaveData(CompoundTag compound) {
+    @Override
+    public void addAdditionalSaveData(@NotNull CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("Duration", this.entityData.get(DATA_DURATION));
         compound.putInt("SkillP", this.entityData.get(DATA_SKILL_P));
         compound.putInt("Integration", this.entityData.get(DATA_INTEGRATION));
         compound.putInt("DizzyNum", this.entityData.get(DATA_DIZZY_NUM));
-	}
+    }
 
-	@Override
-	public void readAdditionalSaveData(CompoundTag compound) {
+    @Override
+    public void readAdditionalSaveData(@NotNull CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         if (compound.contains("Duration")) {
             this.entityData.set(DATA_DURATION, compound.getInt("Duration"));
@@ -232,7 +260,7 @@ public class ThirsterEntity extends SeaMonster {
         if (compound.contains("DizzyNum")) {
             this.entityData.set(DATA_DIZZY_NUM, compound.getInt("DizzyNum"));
         }
-	}
+    }
 
     @Override
     public void baseTick() {
@@ -258,7 +286,7 @@ public class ThirsterEntity extends SeaMonster {
                 }
                 target = this.getTarget();
                 barr = this.getAttributes().hasAttribute(CAAttributes.LIVING_BARRIER.get())
-                        ? this.getAttribute(CAAttributes.LIVING_BARRIER.get()).getBaseValue()
+                        ? Objects.requireNonNull(this.getAttribute(CAAttributes.LIVING_BARRIER.get())).getBaseValue()
                         : 0;
                 if (dura > 0) {
                     if ((Entity) this instanceof ThirsterEntity datEntSetI)
@@ -272,7 +300,7 @@ public class ThirsterEntity extends SeaMonster {
                 } else {
                     if (barr > 0) {
                         if (this.getAttributes().hasAttribute(CAAttributes.LIVING_BARRIER.get()))
-                            this.getAttribute(CAAttributes.LIVING_BARRIER.get()).setBaseValue(0);
+                            Objects.requireNonNull(this.getAttribute(CAAttributes.LIVING_BARRIER.get())).setBaseValue(0);
                         this.performSanityAttack();
                     }
                 }
@@ -312,8 +340,8 @@ public class ThirsterEntity extends SeaMonster {
                                                 if (ent instanceof ServerPlayer serverPlayer) {
                                                     return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
                                                 } else if (ent.level().isClientSide() && ent instanceof Player player) {
-                                                    return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
-                                                            && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                                                    return Objects.requireNonNull(Minecraft.getInstance().getConnection()).getPlayerInfo(player.getGameProfile().getId()) != null
+                                                            && Objects.requireNonNull(Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId())).getGameMode() == GameType.CREATIVE;
                                                 }
                                                 return false;
                                             }
@@ -322,8 +350,8 @@ public class ThirsterEntity extends SeaMonster {
                                                 if (ent instanceof ServerPlayer serverPlayer) {
                                                     return serverPlayer.gameMode.getGameModeForPlayer() == GameType.SPECTATOR;
                                                 } else if (ent.level().isClientSide() && ent instanceof Player player) {
-                                                    return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
-                                                            && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.SPECTATOR;
+                                                    return Objects.requireNonNull(Minecraft.getInstance().getConnection()).getPlayerInfo(player.getGameProfile().getId()) != null
+                                                            && Objects.requireNonNull(Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId())).getGameMode() == GameType.SPECTATOR;
                                                 }
                                                 return false;
                                             }
@@ -338,7 +366,7 @@ public class ThirsterEntity extends SeaMonster {
                                         if (world instanceof ServerLevel level)
                                             level.sendParticles(CAParticles.MOIST_BOOM.get(), (entityiterator.getX()), (entityiterator.getY() + 0.75), (entityiterator.getZ()), 8, 0.75, 0.75, 0.75, 0.1);
                                         CaerulaArborMod.queueServerWork(15, () -> {
-                                            entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.OCEAN_MAGIC, this), (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
+                                            entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.OCEAN_MAGIC, this), (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? Objects.requireNonNull(this.getAttribute(Attributes.ATTACK_DAMAGE)).getValue() : 0));
                                         });
                                         if (num <= 0) {
                                             break;
@@ -405,8 +433,8 @@ public class ThirsterEntity extends SeaMonster {
                                             if (ent instanceof ServerPlayer serverPlayer) {
                                                 return serverPlayer.gameMode.getGameModeForPlayer() == GameType.CREATIVE;
                                             } else if (ent.level().isClientSide() && ent instanceof Player player) {
-                                                return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
-                                                        && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.CREATIVE;
+                                                return Objects.requireNonNull(Minecraft.getInstance().getConnection()).getPlayerInfo(player.getGameProfile().getId()) != null
+                                                        && Objects.requireNonNull(Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId())).getGameMode() == GameType.CREATIVE;
                                             }
                                             return false;
                                         }
@@ -415,8 +443,8 @@ public class ThirsterEntity extends SeaMonster {
                                             if (ent instanceof ServerPlayer serverPlayer) {
                                                 return serverPlayer.gameMode.getGameModeForPlayer() == GameType.SPECTATOR;
                                             } else if (ent.level().isClientSide() && ent instanceof Player player) {
-                                                return Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()) != null
-                                                        && Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId()).getGameMode() == GameType.SPECTATOR;
+                                                return Objects.requireNonNull(Minecraft.getInstance().getConnection()).getPlayerInfo(player.getGameProfile().getId()) != null
+                                                        && Objects.requireNonNull(Minecraft.getInstance().getConnection().getPlayerInfo(player.getGameProfile().getId())).getGameMode() == GameType.SPECTATOR;
                                             }
                                             return false;
                                         }
@@ -455,8 +483,8 @@ public class ThirsterEntity extends SeaMonster {
     }
 
     @Override
-    public EntityDimensions getDimensions(Pose p_33597_) {
-        return super.getDimensions(p_33597_).scale((float) 1.2);
+    public @NotNull EntityDimensions getDimensions(@NotNull Pose pose) {
+        return super.getDimensions(pose).scale((float) 1.2);
     }
 
     @Override
@@ -465,13 +493,13 @@ public class ThirsterEntity extends SeaMonster {
     }
 
     @Override
-    public void startSeenByPlayer(ServerPlayer player) {
+    public void startSeenByPlayer(@NotNull ServerPlayer player) {
         super.startSeenByPlayer(player);
         this.bossInfo.addPlayer(player);
     }
 
     @Override
-    public void stopSeenByPlayer(ServerPlayer player) {
+    public void stopSeenByPlayer(@NotNull ServerPlayer player) {
         super.stopSeenByPlayer(player);
         this.bossInfo.removePlayer(player);
     }
@@ -482,29 +510,11 @@ public class ThirsterEntity extends SeaMonster {
         this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
     }
 
-
     private void performSanityAttack() {
         LevelAccessor world = this.level();
         double x = this.getX();
         double y = this.getY();
-        double z = this.getZ();
-
-        new Object() {
-            void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
-                double d = timedloopiterator * 4;
-                for (int index0 = 0; index0 < 120; index0++) {
-                    double angle = index0 * 3;
-                    if (world instanceof ServerLevel level)
-                        level.sendParticles(ParticleTypes.ELECTRIC_SPARK, (x + d * Math.sin(angle)), (y + 0.5), (z + d * Math.cos(angle)), 2, 0.1, 0.1, 0.1, 0.1);
-                }
-                final int tick2 = ticks;
-                CaerulaArborMod.queueServerWork(tick2, () -> {
-                    if (timedlooptotal > timedloopiterator + 1) {
-                        timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
-                    }
-                });
-            }
-        }.timedLoop(0, 5, 1);
+        double z = getZ(world, x, y);
 
         if (world instanceof Level level) {
             level.playSound(null, BlockPos.containing(x, y, z), CASounds.CREEPER_FISH_EXPLODE.get(), SoundSource.HOSTILE, 3, 1);
@@ -532,19 +542,26 @@ public class ThirsterEntity extends SeaMonster {
         }
     }
 
-    public static AttributeSupplier.Builder createAttributes() {
-        AttributeSupplier.Builder builder = Mob.createMobAttributes();
-        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.2);
-        builder = builder.add(Attributes.MAX_HEALTH, 340);
-        builder = builder.add(Attributes.ARMOR, 15);
-        builder = builder.add(Attributes.ATTACK_DAMAGE, 5);
-        builder = builder.add(Attributes.FOLLOW_RANGE, 36);
-        builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 1);
-        builder = builder.add(CAAttributes.GENERAL_DEFENSE.get(), 10);
-        builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 95);
-        builder = builder.add(CAAttributes.SANITY_RATE.get(), 50);
-        builder = builder.add(CAAttributes.MAX_SANITY.get(), 2000);
-        return builder;
+    private double getZ(LevelAccessor world, double x, double y) {
+        double z = this.getZ();
+
+        new Object() {
+            void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
+                double d = timedloopiterator * 4;
+                for (int index0 = 0; index0 < 120; index0++) {
+                    double angle = index0 * 3;
+                    if (world instanceof ServerLevel level)
+                        level.sendParticles(ParticleTypes.ELECTRIC_SPARK, (x + d * Math.sin(angle)), (y + 0.5), (z + d * Math.cos(angle)), 2, 0.1, 0.1, 0.1, 0.1);
+                }
+                final int tick2 = ticks;
+                CaerulaArborMod.queueServerWork(tick2, () -> {
+                    if (timedlooptotal > timedloopiterator + 1) {
+                        timedLoop(timedloopiterator + 1, timedlooptotal, tick2);
+                    }
+                });
+            }
+        }.timedLoop(0, 5, 1);
+        return z;
     }
 
     private PlayState movementPredicate(AnimationState<?> event) {
@@ -579,8 +596,6 @@ public class ThirsterEntity extends SeaMonster {
         }
         return PlayState.CONTINUE;
     }
-
-    String prevAnim = "empty";
 
     private PlayState procedurePredicate(AnimationState<?> event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {

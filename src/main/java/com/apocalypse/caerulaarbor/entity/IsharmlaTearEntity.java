@@ -2,7 +2,11 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SyncedAnimationEntity;
-import com.apocalypse.caerulaarbor.init.*;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CADamageTypes;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CASounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
@@ -33,6 +37,7 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
+import org.jetbrains.annotations.NotNull;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -51,9 +56,10 @@ public class IsharmlaTearEntity extends PathfinderMob implements GeoEntity, Sync
     public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(IsharmlaTearEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_FUNC_COOLDOWN = SynchedEntityData.defineId(IsharmlaTearEntity.class, EntityDataSerializers.INT);
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+    public String animationprocedure = "empty";
+    String prevAnim = "empty";
     private boolean swinging;
     private long lastSwing;
-    public String animationprocedure = "empty";
 
     public IsharmlaTearEntity(Level world) {
         this(CAEntities.ISHARMLA_TEAR.get(), world);
@@ -67,6 +73,19 @@ public class IsharmlaTearEntity extends PathfinderMob implements GeoEntity, Sync
         setPersistenceRequired();
     }
 
+    public static AttributeSupplier.Builder createAttributes() {
+        AttributeSupplier.Builder builder = Mob.createMobAttributes();
+        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.3);
+        builder = builder.add(Attributes.MAX_HEALTH, 60);
+        builder = builder.add(Attributes.ARMOR, 8);
+        builder = builder.add(Attributes.ATTACK_DAMAGE, 5);
+        builder = builder.add(Attributes.FOLLOW_RANGE, 16);
+        builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
+        builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 60);
+        builder = builder.add(CAAttributes.GENERAL_DEFENSE.get(), 6);
+        return builder;
+    }
+
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
@@ -75,21 +94,13 @@ public class IsharmlaTearEntity extends PathfinderMob implements GeoEntity, Sync
         this.entityData.define(DATA_FUNC_COOLDOWN, 85);
     }
 
-
-
     @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
+    public @NotNull Packet<ClientGamePacketListener> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
     @Override
-    protected void registerGoals() {
-        super.registerGoals();
-
-    }
-
-    @Override
-    public MobType getMobType() {
+    public @NotNull MobType getMobType() {
         return MobType.WATER;
     }
 
@@ -139,13 +150,13 @@ public class IsharmlaTearEntity extends PathfinderMob implements GeoEntity, Sync
         return false;
     }
 
-    protected void dropCustomDeathLoot(DamageSource source, int looting, boolean recentlyHitIn) {
+    protected void dropCustomDeathLoot(@NotNull DamageSource source, int looting, boolean recentlyHitIn) {
         super.dropCustomDeathLoot(source, looting, recentlyHitIn);
         this.spawnAtLocation(new ItemStack(CAItems.TEAR_ISHARMLA.get()));
     }
 
     @Override
-    public SoundEvent getHurtSound(DamageSource ds) {
+    public SoundEvent getHurtSound(@NotNull DamageSource ds) {
         return SoundEvents.SCULK_SENSOR_HIT;
     }
 
@@ -162,7 +173,7 @@ public class IsharmlaTearEntity extends PathfinderMob implements GeoEntity, Sync
     }
 
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
+    public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor world, @NotNull DifficultyInstance difficulty, @NotNull MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
         SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
         double x = this.getX();
         double y = this.getY();
@@ -177,13 +188,13 @@ public class IsharmlaTearEntity extends PathfinderMob implements GeoEntity, Sync
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
+    public void addAdditionalSaveData(@NotNull CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("FuncCooldown", this.entityData.get(DATA_FUNC_COOLDOWN));
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
+    public void readAdditionalSaveData(@NotNull CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         if (compound.contains("FuncCooldown")) {
             this.entityData.set(DATA_FUNC_COOLDOWN, compound.getInt("FuncCooldown"));
@@ -240,7 +251,7 @@ public class IsharmlaTearEntity extends PathfinderMob implements GeoEntity, Sync
     }
 
     @Override
-    public EntityDimensions getDimensions(Pose p_33597_) {
+    public @NotNull EntityDimensions getDimensions(@NotNull Pose p_33597_) {
         return super.getDimensions(p_33597_).scale((float) 1);
     }
 
@@ -250,7 +261,7 @@ public class IsharmlaTearEntity extends PathfinderMob implements GeoEntity, Sync
     }
 
     @Override
-    protected void doPush(Entity entityIn) {
+    protected void doPush(@NotNull Entity entityIn) {
     }
 
     private boolean tryConsumeIsharmlaSkillPoint() {
@@ -290,20 +301,6 @@ public class IsharmlaTearEntity extends PathfinderMob implements GeoEntity, Sync
         this.updateSwingTime();
     }
 
-
-    public static AttributeSupplier.Builder createAttributes() {
-        AttributeSupplier.Builder builder = Mob.createMobAttributes();
-        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.3);
-        builder = builder.add(Attributes.MAX_HEALTH, 60);
-        builder = builder.add(Attributes.ARMOR, 8);
-        builder = builder.add(Attributes.ATTACK_DAMAGE, 5);
-        builder = builder.add(Attributes.FOLLOW_RANGE, 16);
-        builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
-        builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 60);
-        builder = builder.add(CAAttributes.GENERAL_DEFENSE.get(), 6);
-        return builder;
-    }
-
     private PlayState movementPredicate(AnimationState<?> event) {
         if (this.animationprocedure.equals("empty")) {
             if (this.isDeadOrDying()) {
@@ -313,8 +310,6 @@ public class IsharmlaTearEntity extends PathfinderMob implements GeoEntity, Sync
         }
         return PlayState.STOP;
     }
-
-    String prevAnim = "empty";
 
     private PlayState procedurePredicate(AnimationState<?> event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {

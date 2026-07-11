@@ -1,7 +1,7 @@
 package com.apocalypse.caerulaarbor.datagen;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.datagen.tags.CaeDamageTypeTags;
+import com.apocalypse.caerulaarbor.datagen.tags.CADamageTypeTags;
 import com.apocalypse.caerulaarbor.util.DatagenUtils;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
@@ -26,7 +26,7 @@ public class DamageTypeTagsProvider extends TagsProvider<DamageType> {
 
     @Override
     protected void addTags(HolderLookup.@NotNull Provider pProvider) {
-        addDamagesToTag(CaeDamageTypeTags.BYPASSES_DEFENSE,
+        addDamagesToTag(CADamageTypeTags.BYPASSES_DEFENSE,
                 DamageTypes.OCEANIZE_DAMAGE,
                 DamageTypes.SANITY_BREAK,
                 DamageTypes.INV_KILLER,
@@ -44,12 +44,12 @@ public class DamageTypeTagsProvider extends TagsProvider<DamageType> {
                 DatagenUtils.MinecraftDamageTypes.SONIC_BOOM,
                 DatagenUtils.MinecraftDamageTypes.WITHER
         );
-        addTagsToTag(CaeDamageTypeTags.BYPASSES_DEFENSE,
+        addTagsToTag(CADamageTypeTags.BYPASSES_DEFENSE,
                 DamageTypeTags.BYPASSES_ARMOR,
                 DatagenUtils.ForgeDamageTypes.IS_MAGIC
         );
 
-        addDamagesToTag(CaeDamageTypeTags.BYPASSES_MISS,
+        addDamagesToTag(CADamageTypeTags.BYPASSES_MISS,
                 DamageTypes.HAND_SPIKE,
                 DamageTypes.OCEANIZE_DAMAGE,
                 DamageTypes.SANITY_BREAK,
@@ -65,8 +65,41 @@ public class DamageTypeTagsProvider extends TagsProvider<DamageType> {
                 DamageTypes.IMMORTAL_PUNISHMENT,
                 DamageTypes.ISHARMLA_CURSED
         );
-        addTagsToTag(CaeDamageTypeTags.BYPASSES_MISS,
+        addTagsToTag(CADamageTypeTags.BYPASSES_MISS,
                 DamageTypeTags.BYPASSES_EFFECTS
+        );
+
+        addDamagesToTag(CADamageTypeTags.BYPASSES_PROTECTION,
+                DamageTypes.INV_KILLER,
+                DamageTypes.ISHARMLA_CURSED,
+                DatagenUtils.MinecraftDamageTypes.GENERIC_KILL,
+                DatagenUtils.MinecraftDamageTypes.FELL_OUT_OF_WORLD,
+                DatagenUtils.MinecraftDamageTypes.OUTSIDE_BORDER
+        );
+
+        addDamagesToTag(CADamageTypeTags.BYPASSES_ENDERMAN,
+                DamageTypes.HAND_SPIKE,
+                DamageTypes.GUNMU_DAMAGE,
+                DamageTypes.OCEANKILLER_DAMAGE,
+                DamageTypes.BRAND_BOMB,
+                DamageTypes.WIPE_MAGIC,
+                DamageTypes.WARDEN_SONIC,
+                DamageTypes.HAND_OF_CHOKER,
+                DamageTypes.OCEAN_WITHER,
+                DamageTypes.ISHARMLA_ATTACK,
+                DamageTypes.ISHARMLA_CURSED,
+                DatagenUtils.MinecraftDamageTypes.EXPLOSION,
+                DatagenUtils.MinecraftDamageTypes.PLAYER_EXPLOSION,
+                DatagenUtils.MinecraftDamageTypes.IN_FIRE,
+                DatagenUtils.MinecraftDamageTypes.ON_FIRE,
+                DatagenUtils.MinecraftDamageTypes.LAVA,
+                DatagenUtils.MinecraftDamageTypes.FALL,
+                DatagenUtils.MinecraftDamageTypes.FALLING_BLOCK,
+                DatagenUtils.MinecraftDamageTypes.WITHER,
+                DatagenUtils.MinecraftDamageTypes.INDIRECT_MAGIC
+        );
+        addTagsToTag(CADamageTypeTags.BYPASSES_ENDERMAN,
+                CADamageTypeTags.BYPASSES_PROTECTION
         );
     }
 

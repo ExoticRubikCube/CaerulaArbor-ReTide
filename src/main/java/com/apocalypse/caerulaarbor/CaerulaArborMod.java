@@ -27,6 +27,8 @@ public class CaerulaArborMod {
     private static final Collection<AbstractMap.SimpleEntry<Runnable, Integer>> workQueue = new ConcurrentLinkedQueue<>();
 
     public CaerulaArborMod(FMLJavaModLoadingContext context) {
+        CALootModifier.init(context);
+        
         context.registerConfig(ModConfig.Type.COMMON, CAConfigs.SPEC, "caerular_configs.toml");
         MinecraftForge.EVENT_BUS.register(this);
         IEventBus bus = context.getModEventBus();
