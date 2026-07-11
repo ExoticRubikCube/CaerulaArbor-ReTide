@@ -1,10 +1,9 @@
 package com.apocalypse.caerulaarbor.datagen;
 
+import com.apocalypse.caerulaarbor.init.CALootModifier;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
 import net.minecraftforge.common.loot.LootTableIdCondition;
 
 public class GlobalLootModifierProvider extends net.minecraftforge.common.data.GlobalLootModifierProvider {
@@ -12,18 +11,44 @@ public class GlobalLootModifierProvider extends net.minecraftforge.common.data.G
         super(output, modid);
     }
 
-    @Override
-    protected void start() {
-        this.add(
-                "lootable_woodland_mansion",
-                LootTableModifier.build(
-                        new LootItemCondition[]{
-                                LootTableIdCondition.builder(ResourceLocation.withDefaultNamespace("chests/spawn_bonus_chest")).build(),
-                                LootItemRandomChanceCondition.randomChance(0.10f).build() // 10% 概率
-                        },
-                        ItemStack.EMPTY
-                )
+    private static CALootModifier.CaerulaArborModLootTableModifier appendLootTable(String targetLootTable, String appendedLootTable) {
+        return new CALootModifier.CaerulaArborModLootTableModifier(
+                new LootItemCondition[]{
+                        LootTableIdCondition.builder(resLoc(targetLootTable)).build()
+                },
+                resLoc(appendedLootTable)
         );
     }
 
+    private static ResourceLocation resLoc(String id) {
+        var separator = id.indexOf(':');
+        if (separator >= 0) {
+            return ResourceLocation.fromNamespaceAndPath(id.substring(0, separator), id.substring(separator + 1));
+        }
+        return ResourceLocation.withDefaultNamespace(id);
+    }
+
+    @Override
+    protected void start() {
+        add("get_hot_kettle", appendLootTable(
+                "chests/spawn_bonus_chest",
+                "caerula_arbor:chests/spawn_bonus_appendix"
+        ));
+        add("template_spawn", appendLootTable(
+                "chests/shipwreck_supply",
+                "caerula_arbor:chests/shipwreck_map"
+        ));
+        add("template_spawn_1", appendLootTable(
+                "chests/shipwreck_treasure",
+                "caerula_arbor:chests/shipwreck_map"
+        ));
+        add("template_spawn_2", appendLootTable(
+                "chests/underwater_ruin_big",
+                "caerula_arbor:chests/shipwreck_map"
+        ));
+        add("template_spawn_3", appendLootTable(
+                "chests/underwater_ruin_small",
+                "caerula_arbor:chests/shipwreck_map"
+        ));
+    }
 }

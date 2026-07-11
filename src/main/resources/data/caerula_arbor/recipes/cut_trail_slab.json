@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "count": 2,
-  "ingredient": {
-    "item": "caerula_arbor:trail_brick"
-  },
-  "result": "caerula_arbor:trail_slab"
-}

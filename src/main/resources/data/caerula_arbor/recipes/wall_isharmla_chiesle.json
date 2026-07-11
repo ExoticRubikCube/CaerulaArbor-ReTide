@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "count": 1,
-  "ingredient": {
-    "item": "caerula_arbor:isharmla_brick_chiesled"
-  },
-  "result": "caerula_arbor:isharmla_wall_chiesled"
-}
