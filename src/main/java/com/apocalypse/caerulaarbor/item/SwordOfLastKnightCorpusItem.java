@@ -87,7 +87,7 @@ public class SwordOfLastKnightCorpusItem extends SwordItem {
 
 	public float applyDamageBonus(Entity target, float baseDamage) {
 		float damage = baseDamage;
-		if (target.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+		if (target.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
 			damage *= 1.5F;
 		}
 		return damage;

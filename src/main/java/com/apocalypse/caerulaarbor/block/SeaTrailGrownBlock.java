@@ -47,9 +47,9 @@ public class SeaTrailGrownBlock extends Block implements SimpleWaterloggedBlock,
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 	public static final IntegerProperty GROW_AGE = IntegerProperty.create("grow_age", 0, 64);
 	public static final IntegerProperty LONGEVITY = IntegerProperty.create("longevity", 0, 16);
-	private static final TagKey<Block> CANNOT_COVER = BlockTags.create(new ResourceLocation(CaerulaArborMod.MODID, "cannot_cover"));
-	private static final TagKey<Block> ERRODABLE = BlockTags.create(new ResourceLocation(CaerulaArborMod.MODID, "errodable"));
-	private static final TagKey<Block> FORGE_STONE = BlockTags.create(new ResourceLocation("forge:stone"));
+	private static final TagKey<Block> CANNOT_COVER = BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "cannot_cover"));
+	private static final TagKey<Block> ERRODABLE = BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "errodable"));
+	private static final TagKey<Block> FORGE_STONE = BlockTags.create(ResourceLocation.parse("forge:stone"));
 
 	public SeaTrailGrownBlock() {
 		super(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLUE).sound(SoundType.SCULK_VEIN).strength(4f, 8f).lightLevel(s -> 4).requiresCorrectToolForDrops().friction(0.4f).speedFactor(0.7f).jumpFactor(0.875f).noOcclusion()

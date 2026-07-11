@@ -11,16 +11,16 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class NucleicMaleficentModel extends GeoModel<NucleicMaleficentEntity> {
-	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/nucleic_maleficent.png");
+	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/nucleic_maleficent.png");
 
 	@Override
 	public ResourceLocation getAnimationResource(NucleicMaleficentEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/nucleic_maleficent.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/nucleic_maleficent.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(NucleicMaleficentEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/nucleic_maleficent.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/nucleic_maleficent.geo.json");
 	}
 
 	@Override

@@ -28,6 +28,6 @@ public interface CADamageTags {
     TagKey<DamageType> CAN_TRIGGER_OCEANIZATION = create("can_trigger_oceanization");
 
     private static TagKey<DamageType> create(String name) {
-        return TagKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, name));
+        return TagKey.create(Registries.DAMAGE_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, name));
     }
 }

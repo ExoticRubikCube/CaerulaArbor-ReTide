@@ -21,7 +21,7 @@ import net.minecraftforge.common.MinecraftForge;
 import java.util.Optional;
 
 public class SanityInjuryCapability implements ISanityInjuryCapability {
-    public static final ResourceLocation ID = new ResourceLocation(CaerulaArborMod.MODID, "sanity_injury");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "sanity_injury");
     private static final double DEFAULT_MAX_SANITY = 1000.0;
 
     private final LivingEntity owner;

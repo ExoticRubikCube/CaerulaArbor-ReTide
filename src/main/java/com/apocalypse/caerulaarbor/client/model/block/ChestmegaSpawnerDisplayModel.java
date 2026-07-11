@@ -8,16 +8,16 @@ import software.bernie.geckolib.model.GeoModel;
 public class ChestmegaSpawnerDisplayModel extends GeoModel<ChestmegaSpawnerDisplayItem> {
 	@Override
 	public ResourceLocation getAnimationResource(ChestmegaSpawnerDisplayItem animatable) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/chestmega_block.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/chestmega_block.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(ChestmegaSpawnerDisplayItem animatable) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/chestmega_block.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/chestmega_block.geo.json");
 	}
 
 	@Override
 	public ResourceLocation getTextureResource(ChestmegaSpawnerDisplayItem entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/block/megachest.png");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/block/megachest.png");
 	}
 }

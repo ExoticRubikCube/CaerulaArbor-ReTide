@@ -467,7 +467,7 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
                         Entity recentVictim;
                         Entity recentAttacker;
                         if (owner instanceof OceanizedEnderinaEntity) {
-                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
                                 if (!(entityiterator == target)) {
                                     result = false;
                                 }

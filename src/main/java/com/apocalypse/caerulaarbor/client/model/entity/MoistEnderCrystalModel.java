@@ -6,16 +6,16 @@ import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.GeoModel;
 
 public class MoistEnderCrystalModel extends GeoModel<MoistEnderCrystalEntity> {
-	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/moist_crystal.png");
+	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/moist_crystal.png");
 
 	@Override
 	public ResourceLocation getAnimationResource(MoistEnderCrystalEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/moist_crystal.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/moist_crystal.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(MoistEnderCrystalEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/moist_crystal.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/moist_crystal.geo.json");
 	}
 
 	@Override

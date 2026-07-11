@@ -170,8 +170,8 @@ public class LivingAttackEventHandler {
 
         if (entity == null || sourceentity == null) return;
 
-        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "inquisition")))
-                && sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "inquisition")))) {
+        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "inquisition")))
+                && sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "inquisition")))) {
             event.setCanceled(true);
         }
     }
@@ -201,7 +201,7 @@ public class LivingAttackEventHandler {
     private static void preventInquisitionDamage(LivingAttackEvent event, Entity entity, Entity sourceentity) {
         if (entity == null || sourceentity == null) return;
 
-        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "inquisition"))) && sourceentity instanceof Player entity1) {
+        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "inquisition"))) && sourceentity instanceof Player entity1) {
             if ((entity.getPersistentData().getString("recentCommander")).equals(sourceentity.getDisplayName().getString())) {
                 event.setCanceled(true);
             }
@@ -214,15 +214,15 @@ public class LivingAttackEventHandler {
     private static void preventHumanSideFriendlyFire(LivingAttackEvent event, Entity entity, Entity sourceentity) {
         if (entity == null || sourceentity == null) return;
 
-        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "is_humanside")))) {
-            if (sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "is_humanside")))
+        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside")))) {
+            if (sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside")))
                     && !(sourceentity == (entity instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null))) {
                 event.setCanceled(true);
             }
         }
     }
 
-    // TODO：Highmore 反击逻辑仍需复核，可能需要下放
+    // TODO锛欻ighmore 鍙嶅嚮閫昏緫浠嶉渶澶嶆牳锛屽彲鑳介渶瑕佷笅鏀?
     private static void handleHighmoreCounter(LivingAttackEvent event) {
         LevelAccessor world = event.getEntity().level();
         DamageSource damagesource = event.getSource();
@@ -276,7 +276,7 @@ public class LivingAttackEventHandler {
         projectileLevel.addFreshEntity(entityToSpawn);
     }
 
-    // TODO：Tidutant 破甲逻辑仍需复核
+    // TODO锛歍idutant 鐮寸敳閫昏緫浠嶉渶澶嶆牳
     private static void handleTidutantArmorBreak(LivingAttackEvent event) {
         Entity entity = event.getEntity();
         Entity sourceentity = event.getSource().getEntity();
@@ -309,20 +309,20 @@ public class LivingAttackEventHandler {
     }
 
     private static void handleMobHitMigration(LivingAttackEvent event, LevelAccessor world, double x, double y, double z, DamageSource damagesource, Entity entity, Entity sourceentity, double amount) {
-        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))
-                && !sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))
-                && !entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanpet")))
-                && !entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "skip_migration")))) {
+        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))
+                && !sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))
+                && !entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanpet")))
+                && !entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "skip_migration")))) {
             if (MapVariables.get(world).strategy_migration > 0) {
                 if (!(sourceentity instanceof Player player && player.getAbilities().instabuild)
                         && !damagesource.is(CADamageTags.BYPASSES_MIGRATION)) {
                     for (Entity entityiterator : world.getEntities(entity,
                             new AABB((x - (8 + MapVariables.get(world).strategy_migration * 16)), (y - 16), (z - (8 + MapVariables.get(world).strategy_migration * 16)),
                                     (x + 8 + MapVariables.get(world).strategy_migration * 24), (y + 16), (z + 8 + MapVariables.get(world).strategy_migration * 24)))) {
-                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))
-                                && !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanpet")))) {
+                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))
+                                && !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanpet")))) {
                             if (entityiterator == sourceentity) continue;
-                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "ignore_migration")))) continue;
+                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "ignore_migration")))) continue;
                             if (entityiterator instanceof Mob mob)
                                 mob.getNavigation().moveTo(x, y, z, 0.5);
                             if (entityiterator instanceof Mob mob && sourceentity instanceof LivingEntity livingEntity)
@@ -334,12 +334,12 @@ public class LivingAttackEventHandler {
         }
 
         if (entity instanceof Player && (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization >= 3) {
-            if (MapVariables.get(world).strategy_migration > 0 && !sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+            if (MapVariables.get(world).strategy_migration > 0 && !sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
                 for (Entity entityiterator : world.getEntities(entity,
                         new AABB((x - (8 + MapVariables.get(world).strategy_migration * 24)), (y - 16), (z - (8 + MapVariables.get(world).strategy_migration * 24)),
                                 (x + 8 + MapVariables.get(world).strategy_migration * 24), (y + 16), (z + 8 + MapVariables.get(world).strategy_migration * 24)))) {
-                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))
-                            && !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanpet")))) {
+                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))
+                            && !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanpet")))) {
                         if (entityiterator == sourceentity) continue;
                         if (entityiterator instanceof Mob mob)
                             mob.getNavigation().moveTo(x, y, z, 0.8);
@@ -352,7 +352,7 @@ public class LivingAttackEventHandler {
     }
 
     private static void handleMobHitEvolution(LivingAttackEvent event, LevelAccessor world, double x, double y, double z, DamageSource damagesource, Entity entity, Entity sourceentity, double amount) {
-        if (sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+        if (sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
             if (world.getLevelData().getGameRules().getBoolean(CAGameRules.NATURAL_EVOLUTION)) {
                 MapVariablesHandler.addEvoPoint(world, StrategyType.GROW, amount * 0.025);
                 GrowUpgradeManager.applyGrowthUpgrade(world);
@@ -360,9 +360,9 @@ public class LivingAttackEventHandler {
             }
         }
 
-        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
             if (sourceentity instanceof ServerPlayer player) {
-                Advancement adv = player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "encounter_from_the_ocean"));
+                Advancement adv = player.server.getAdvancements().getAdvancement(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "encounter_from_the_ocean"));
                 AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
                 if (!ap.isDone()) {
                     for (String criteria : ap.getRemainingCriteria())
@@ -378,7 +378,7 @@ public class LivingAttackEventHandler {
                 SilenceUpgradeManager.applySilenceUpgrade(world, Math.min(amount, entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.025);
             }
 
-            if (sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+            if (sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
                 if (!(entity == (sourceentity instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null))) {
                     event.setCanceled(true);
                 }
@@ -450,7 +450,7 @@ public class LivingAttackEventHandler {
 
             if ((sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_STRANGLE) {
                 validItem = false;
-                if (mainHandItem.is(ItemTags.create(new ResourceLocation("forge:tools/crossbows")))) {
+                if (mainHandItem.is(ItemTags.create(ResourceLocation.parse("forge:tools/crossbows")))) {
                     validItem = true;
                 } else if (mainHandItem.getItem() instanceof CrossbowItem) {
                     validItem = true;
@@ -483,7 +483,7 @@ public class LivingAttackEventHandler {
                     validItem = true;
                 } else if (mainHandItem.getItem() == CAItems.PHLOEM_BOW.get()) {
                     validItem = true;
-                } else if (mainHandItem.is(ItemTags.create(new ResourceLocation("forge:tools/bows")))) {
+                } else if (mainHandItem.is(ItemTags.create(ResourceLocation.parse("forge:tools/bows")))) {
                     validItem = true;
                 } else {
                     for (String stringiterator : CAConfigs.HAND_FIREWORK.get()) {

@@ -120,7 +120,7 @@ public class CaerulaUtil {
 			return;
 		}
 		ItemStack mainhand = (entity instanceof LivingEntity living ? living.getMainHandItem() : ItemStack.EMPTY);
-		if (mainhand.is(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "nethersea_protective")))) {
+		if (mainhand.is(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "nethersea_protective")))) {
 			return;
 		}
 		if (entity instanceof LivingEntity livingEntity && (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization < 3) {
@@ -136,7 +136,7 @@ public class CaerulaUtil {
 			return;
 		}
 		ItemStack mainhand = (entity instanceof LivingEntity living ? living.getMainHandItem() : ItemStack.EMPTY);
-		if (mainhand.is(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "nethersea_protective")))) {
+		if (mainhand.is(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "nethersea_protective")))) {
 			return;
 		}
 		if (entity instanceof LivingEntity livingEntity && (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization < 2.85) {
@@ -153,7 +153,7 @@ public class CaerulaUtil {
 			if (world.getBlockState(pos).getDestroySpeed(world, BlockPos.ZERO) >= 0) {
 				for (Entity player : new ArrayList<>(world.players())) {
 					if (player instanceof ServerPlayer serverPlayer) {
-						Advancement advancement = serverPlayer.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "start_of_calamity"));
+						Advancement advancement = serverPlayer.server.getAdvancements().getAdvancement(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "start_of_calamity"));
 						AdvancementProgress progress = serverPlayer.getAdvancements().getOrStartProgress(advancement);
 						if (!progress.isDone()) {
 							for (String criteria : progress.getRemainingCriteria()) {
@@ -196,6 +196,6 @@ public class CaerulaUtil {
 	}
 
 	public static class Tags{
-		public static final TagKey<EntityType<?>> SEABORNS = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring"));
+		public static final TagKey<EntityType<?>> SEABORNS = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"));
 	}
 }

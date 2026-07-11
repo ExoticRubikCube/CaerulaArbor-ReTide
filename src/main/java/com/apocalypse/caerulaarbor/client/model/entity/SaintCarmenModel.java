@@ -11,16 +11,16 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class SaintCarmenModel extends GeoModel<SaintCarmenEntity> {
-	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/saint_carmen.png");
+	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/saint_carmen.png");
 
 	@Override
 	public ResourceLocation getAnimationResource(SaintCarmenEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/saint_carmen.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/saint_carmen.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(SaintCarmenEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/saint_carmen.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/saint_carmen.geo.json");
 	}
 
 	@Override

@@ -2,7 +2,12 @@ package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.*;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CADamageTypes;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CASounds;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
@@ -24,17 +29,31 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.OpenDoorGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.SnowGolem;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.monster.*;
+import net.minecraft.world.entity.monster.Illusioner;
+import net.minecraft.world.entity.monster.Pillager;
+import net.minecraft.world.entity.monster.Vindicator;
+import net.minecraft.world.entity.monster.Witch;
+import net.minecraft.world.entity.monster.WitherSkeleton;
+import net.minecraft.world.entity.monster.ZombifiedPiglin;
 import net.minecraft.world.entity.monster.hoglin.Hoglin;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.monster.piglin.PiglinBrute;
@@ -60,10 +79,11 @@ public class OceanizedBruteEntity extends SeaMonster {
     public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(OceanizedBruteEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_ABILITY = SynchedEntityData.defineId(OceanizedBruteEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_SKILLP = SynchedEntityData.defineId(OceanizedBruteEntity.class, EntityDataSerializers.INT);
+    private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.YELLOW, ServerBossEvent.BossBarOverlay.PROGRESS);
+    public String animationprocedure = "empty";
+    String prevAnim = "empty";
     private boolean swinging;
     private long lastSwing;
-    public String animationprocedure = "empty";
-    private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.YELLOW, ServerBossEvent.BossBarOverlay.PROGRESS);
 
     public OceanizedBruteEntity(Level world) {
         this(CAEntities.OCEANIZED_BRUTE.get(), world);
@@ -75,6 +95,19 @@ public class OceanizedBruteEntity extends SeaMonster {
         setNoAi(false);
         setMaxUpStep(1f);
         setPersistenceRequired();
+    }
+
+    public static AttributeSupplier.Builder createAttributes() {
+        AttributeSupplier.Builder builder = Mob.createMobAttributes();
+        builder = builder.add(CAAttributes.SANITY_RATE.get(), 7);
+        builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 20);
+        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.25);
+        builder = builder.add(Attributes.MAX_HEALTH, 115);
+        builder = builder.add(Attributes.ARMOR, 5);
+        builder = builder.add(Attributes.ATTACK_DAMAGE, 16);
+        builder = builder.add(Attributes.FOLLOW_RANGE, 24);
+        builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.45);
+        return builder;
     }
 
     @Override
@@ -146,7 +179,7 @@ public class OceanizedBruteEntity extends SeaMonster {
             CaerulaArborMod.queueServerWork(10, () -> {
                 if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 2.6) {
                     boolean damaged = target.hurt(
-                            CADamageTypes.source(this.level(), CADamageTypes.GENERAL_SEABORN_ATTACK, this), (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
+                            CADamageTypes.source(this.level(), CADamageTypes.GENERIC_SEABORN_ATTACK, this), (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
                     if (damaged && target instanceof Player player) {
                         recordHurtPlayer(player);
                     }
@@ -190,7 +223,7 @@ public class OceanizedBruteEntity extends SeaMonster {
                                                 ((Entity) this instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.25),
                                         (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1);
                                 if (distanceTo(sourceentity) <= 3) {
-                                    if (sourceentity.hurt(CADamageTypes.source(world, CADamageTypes.GENERAL_SEABORN_ATTACK, this), (float) sklp1) && sourceentity instanceof Player player) {
+                                    if (sourceentity.hurt(CADamageTypes.source(world, CADamageTypes.GENERIC_SEABORN_ATTACK, this), (float) sklp1) && sourceentity instanceof Player player) {
                                         recordHurtPlayer(player);
                                     }
                                     if (sourceentity instanceof LivingEntity entity1 && !entity1.level().isClientSide())
@@ -213,7 +246,7 @@ public class OceanizedBruteEntity extends SeaMonster {
                                     if (entityiterator == this) {
                                         continue;
                                     }
-                                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
                                         if (!(((Entity) this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == entityiterator)) {
                                             continue;
                                         }
@@ -224,7 +257,7 @@ public class OceanizedBruteEntity extends SeaMonster {
                                                         ((Entity) this instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.25),
                                                 (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1);
                                         entityiterator.hurt(
-                                                CADamageTypes.source(world, CADamageTypes.GENERAL_SEABORN_ATTACK, this), (float) sklp1);
+                                                CADamageTypes.source(world, CADamageTypes.GENERIC_SEABORN_ATTACK, this), (float) sklp1);
                                         if (entityiterator instanceof LivingEntity entity1 && !entity1.level().isClientSide())
                                             entity1.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 120, 0, false, false));
                                         if (entityiterator instanceof LivingEntity entity1 && !entity1.level().isClientSide())
@@ -273,12 +306,12 @@ public class OceanizedBruteEntity extends SeaMonster {
         String str;
         String name;
         if (sourceentity instanceof Player && !(sourceentity instanceof ServerPlayer plr1 && plr1.level() instanceof ServerLevel
-                && plr1.getAdvancements().getOrStartProgress(plr1.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "kill_brute"))).isDone())) {
+                && plr1.getAdvancements().getOrStartProgress(plr1.server.getAdvancements().getAdvancement(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "kill_brute"))).isDone())) {
             str = getPersistentData().getString("hurtPlayer");
             name = sourceentity.getDisplayName().getString();
             if (!str.contains(name)) {
                 if (sourceentity instanceof ServerPlayer player) {
-                    Advancement adv = player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "kill_brute"));
+                    Advancement adv = player.server.getAdvancements().getAdvancement(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "kill_brute"));
                     AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
                     if (!ap.isDone()) {
                         for (String criteria : ap.getRemainingCriteria())
@@ -295,15 +328,15 @@ public class OceanizedBruteEntity extends SeaMonster {
         }
     }
 
-	@Override
-	public void addAdditionalSaveData(CompoundTag compound) {
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("Ability", this.entityData.get(DATA_ABILITY));
         compound.putInt("Skillp", this.entityData.get(DATA_SKILLP));
-	}
+    }
 
-	@Override
-	public void readAdditionalSaveData(CompoundTag compound) {
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         if (compound.contains("Ability")) {
             this.entityData.set(DATA_ABILITY, compound.getInt("Ability"));
@@ -311,7 +344,7 @@ public class OceanizedBruteEntity extends SeaMonster {
         if (compound.contains("Skillp")) {
             this.entityData.set(DATA_SKILLP, compound.getInt("Skillp"));
         }
-	}
+    }
 
     @Override
     public void awardKillScore(Entity entity, int score, DamageSource damageSource) {
@@ -372,20 +405,6 @@ public class OceanizedBruteEntity extends SeaMonster {
         this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
     }
 
-
-    public static AttributeSupplier.Builder createAttributes() {
-        AttributeSupplier.Builder builder = Mob.createMobAttributes();
-        builder = builder.add(CAAttributes.SANITY_RATE.get(), 7);
-        builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 20);
-        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.25);
-        builder = builder.add(Attributes.MAX_HEALTH, 115);
-        builder = builder.add(Attributes.ARMOR, 5);
-        builder = builder.add(Attributes.ATTACK_DAMAGE, 16);
-        builder = builder.add(Attributes.FOLLOW_RANGE, 24);
-        builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.45);
-        return builder;
-    }
-
     private PlayState movementPredicate(AnimationState<?> event) {
         if (this.animationprocedure.equals("empty")) {
             if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
@@ -415,8 +434,6 @@ public class OceanizedBruteEntity extends SeaMonster {
         }
         return PlayState.CONTINUE;
     }
-
-    String prevAnim = "empty";
 
     private PlayState procedurePredicate(AnimationState<?> event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {

@@ -13,7 +13,7 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 public class HighmoreLayer extends GeoRenderLayer<HighmoreEntity> {
-	private static final ResourceLocation LAYER = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/highmorelit.png");
+	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/highmorelit.png");
 
 	public HighmoreLayer(GeoRenderer<HighmoreEntity> entityRenderer) {
 		super(entityRenderer);

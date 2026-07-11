@@ -773,7 +773,7 @@ public class EndspeakerEntity extends SeaMonster {
 					continue;
 				}
 				if (entity instanceof ServerPlayer player) {
-					Advancement advancement = player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "silent_interruption"));
+					Advancement advancement = player.server.getAdvancements().getAdvancement(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "silent_interruption"));
 					AdvancementProgress progress = player.getAdvancements().getOrStartProgress(advancement);
 					if (!progress.isDone()) {
 						for (String criteria : progress.getRemainingCriteria()) {
@@ -823,7 +823,7 @@ public class EndspeakerEntity extends SeaMonster {
 				if (!(candidate instanceof Monster || candidate instanceof Player)) {
 					continue;
 				}
-				if (candidate.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "endspeaker_edible")))) {
+				if (candidate.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "endspeaker_edible")))) {
 					if (candidate instanceof BaselayerAbyssalEntity && hasAbility(world, 0)) {
 						continue;
 					} else if (candidate instanceof PredatorAbyssalEntity && hasAbility(world, 1)) {
@@ -886,7 +886,7 @@ public class EndspeakerEntity extends SeaMonster {
             if (!(candidate instanceof LivingEntity)) {
                 continue;
             }
-            if (candidate.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffpsring"))) && candidate instanceof Player) {
+            if (candidate.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffpsring"))) && candidate instanceof Player) {
                 continue;
             }
             if ((this.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization > 2) {
@@ -1314,7 +1314,7 @@ public class EndspeakerEntity extends SeaMonster {
 			if (!(nearbyEntity instanceof LivingEntity livingTarget)) {
 				continue;
 			}
-			if (nearbyEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+			if (nearbyEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
 				if (nearbyEntity != target) {
 					continue;
 				}
@@ -1368,7 +1368,7 @@ public class EndspeakerEntity extends SeaMonster {
 			if (!(nearbyEntity instanceof LivingEntity)) {
 				continue;
 			}
-			if (nearbyEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+			if (nearbyEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
 				if (nearbyEntity != target) {
 					continue;
 				}

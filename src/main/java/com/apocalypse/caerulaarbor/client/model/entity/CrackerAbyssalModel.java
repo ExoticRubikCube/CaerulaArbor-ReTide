@@ -11,16 +11,16 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class CrackerAbyssalModel extends GeoModel<CrackerAbyssalEntity> {
-	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/reefbreaker.png");
+	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/reefbreaker.png");
 
 	@Override
 	public ResourceLocation getAnimationResource(CrackerAbyssalEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/nethersea_reefbreaker.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/nethersea_reefbreaker.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(CrackerAbyssalEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/nethersea_reefbreaker.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/nethersea_reefbreaker.geo.json");
 	}
 
 	@Override

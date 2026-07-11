@@ -13,17 +13,17 @@ import software.bernie.geckolib.model.data.EntityModelData;
 public class UlpiansModel extends GeoModel<UlpiansEntity> {
 	@Override
 	public ResourceLocation getAnimationResource(UlpiansEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/ulpians.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/ulpians.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(UlpiansEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/ulpians.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/ulpians.geo.json");
 	}
 
 	@Override
 	public ResourceLocation getTextureResource(UlpiansEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/hunter_ulpians.png");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/hunter_ulpians.png");
 	}
 
 	@Override

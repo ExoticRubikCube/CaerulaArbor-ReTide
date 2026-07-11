@@ -13,7 +13,7 @@ import snownee.jade.api.config.IPluginConfig;
 public enum CASanityProvider implements IEntityComponentProvider {
     INSTANCE;
 
-    public static final ResourceLocation UID = new ResourceLocation(CaerulaArborMod.MODID, "sanity_provider");
+    public static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "sanity_provider");
 
     @Override
     public void appendTooltip(ITooltip iTooltip, EntityAccessor entityAccessor, IPluginConfig iPluginConfig) {

@@ -162,7 +162,7 @@ public class UmbrellaAbyssalEntity extends SeaMonster {
         if (tickCount % 20 == 0) {
             for (Entity entityiterator : world.getEntities(this, new AABB((x - 4), (y - 1.5), (z - 4), (x + 4), (y + 2), (z + 4)))) {
                 if ((entityiterator != null ? distanceTo(entityiterator) : -1) <= 4) {
-                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
                         if (entityiterator != this.getTarget()) {
                             continue;
                         }
@@ -185,7 +185,7 @@ public class UmbrellaAbyssalEntity extends SeaMonster {
             if (MapVariables.get(world).strategy_grow >= 3) {
                 for (Entity entityiterator : world.getEntities(this, new AABB((x - 7), (y - 1.75), (z - 7), (x + 7), (y + 3), (z + 7)))) {
                     if ((entityiterator != null ? distanceTo(entityiterator) : -1) <= 7) {
-                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
                             if (entityiterator !=  this.getTarget()) {
                                 continue;
                             }

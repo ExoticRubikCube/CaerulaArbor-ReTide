@@ -12,17 +12,17 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class OceannizedWitheriaModel extends GeoModel<OceannizedWitheriaEntity> {
-	private static final ResourceLocation DEFAULT_TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/oceanized_witheria.png");
-	private static final ResourceLocation SHELLED_TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/oceanized_witheria_anger.png");
+	private static final ResourceLocation DEFAULT_TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/oceanized_witheria.png");
+	private static final ResourceLocation SHELLED_TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/oceanized_witheria_anger.png");
 
 	@Override
 	public ResourceLocation getAnimationResource(OceannizedWitheriaEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/oceanzied_witheria.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/oceanzied_witheria.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(OceannizedWitheriaEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/oceanzied_witheria.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/oceanzied_witheria.geo.json");
 	}
 
 	@Override

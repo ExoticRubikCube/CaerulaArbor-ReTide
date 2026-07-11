@@ -11,16 +11,16 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class OceanizeRabbitModel extends GeoModel<OceanizeRabbitEntity> {
-	private static final ResourceLocation BLOODY_TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/oceanized_rabbit_bloody.png");
+	private static final ResourceLocation BLOODY_TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/oceanized_rabbit_bloody.png");
 
 	@Override
 	public ResourceLocation getAnimationResource(OceanizeRabbitEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/oceanized_rabbit.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/oceanized_rabbit.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(OceanizeRabbitEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/oceanized_rabbit.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/oceanized_rabbit.geo.json");
 	}
 
 	@Override
@@ -29,7 +29,7 @@ public class OceanizeRabbitModel extends GeoModel<OceanizeRabbitEntity> {
 		if (variant == 5) {
 			return BLOODY_TEXTURE;
 		}
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/oceanized_rabbit_" + variant + ".png");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/oceanized_rabbit_" + variant + ".png");
 	}
 
 	@Override

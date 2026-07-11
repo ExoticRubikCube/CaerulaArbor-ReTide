@@ -6,16 +6,16 @@ import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.GeoModel;
 
 public class NetherseaSlimeModel extends GeoModel<NetherseaSlimeEntity> {
-	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/nethersea_slime.png");
+	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/nethersea_slime.png");
 
 	@Override
 	public ResourceLocation getAnimationResource(NetherseaSlimeEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/nethersea_slime.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/nethersea_slime.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(NetherseaSlimeEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/nethersea_slime.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/nethersea_slime.geo.json");
 	}
 
 	@Override

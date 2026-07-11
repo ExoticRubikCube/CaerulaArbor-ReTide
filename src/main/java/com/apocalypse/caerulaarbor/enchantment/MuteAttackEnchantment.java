@@ -10,7 +10,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.resources.ResourceLocation;
 
 public class MuteAttackEnchantment extends Enchantment {
-	private static final EnchantmentCategory ENCHANTMENT_CATEGORY = EnchantmentCategory.create("caerula_arbor_mute_attack", item -> Ingredient.of(ItemTags.create(new ResourceLocation("minecraft:tools"))).test(new ItemStack(item)));
+	private static final EnchantmentCategory ENCHANTMENT_CATEGORY = EnchantmentCategory.create("caerula_arbor_mute_attack", item -> Ingredient.of(ItemTags.create(ResourceLocation.parse("minecraft:tools"))).test(new ItemStack(item)));
 
 	public MuteAttackEnchantment() {
 		super(Enchantment.Rarity.RARE, ENCHANTMENT_CATEGORY, EquipmentSlot.values());

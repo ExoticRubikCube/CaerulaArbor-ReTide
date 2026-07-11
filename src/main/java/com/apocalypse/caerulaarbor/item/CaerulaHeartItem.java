@@ -89,7 +89,7 @@ public class CaerulaHeartItem extends Item {
                 });
             }
             if (entity instanceof ServerPlayer player) {
-                Advancement adv = player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "to_we_many"));
+                Advancement adv = player.server.getAdvancements().getAdvancement(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "to_we_many"));
                 AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
                 if (!ap.isDone()) {
                     for (String criteria : ap.getRemainingCriteria())

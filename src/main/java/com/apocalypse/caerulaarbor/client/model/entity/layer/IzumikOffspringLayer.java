@@ -13,7 +13,7 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 public class IzumikOffspringLayer extends GeoRenderLayer<IzumikOffspringEntity> {
-	private static final ResourceLocation LAYER = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/izumik_offspr_lit.png");
+	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/izumik_offspr_lit.png");
 
 	public IzumikOffspringLayer(GeoRenderer<IzumikOffspringEntity> entityRenderer) {
 		super(entityRenderer);

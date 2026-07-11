@@ -205,7 +205,7 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
         if (sourceentity == null)
             return;
         if (sourceentity instanceof ServerPlayer player) {
-            Advancement adv = player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "kill_knight_and_horse"));
+            Advancement adv = player.server.getAdvancements().getAdvancement(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "kill_knight_and_horse"));
             AdvancementProgress ap;
             if (adv != null) {
                 ap = player.getAdvancements().getOrStartProgress(adv);
@@ -343,7 +343,7 @@ public class LastKnightAndHorseEntity extends Animal implements GeoEntity, Synce
                                     if (entityiterator == this) {
                                         continue;
                                     }
-                                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "is_humanside"))) && !(entityiterator == enemy1)) {
+                                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside"))) && !(entityiterator == enemy1)) {
                                         continue;
                                     }
                                     if (distanceTo(entityiterator) <= 4) {

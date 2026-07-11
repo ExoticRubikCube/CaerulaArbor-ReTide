@@ -11,16 +11,16 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class CreeperFishModel extends GeoModel<CreeperFishEntity> {
-	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/creeperfish.png");
+	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/creeperfish.png");
 
 	@Override
 	public ResourceLocation getAnimationResource(CreeperFishEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/creeperfish.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/creeperfish.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(CreeperFishEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/creeperfish.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/creeperfish.geo.json");
 	}
 
 	@Override

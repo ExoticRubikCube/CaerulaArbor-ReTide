@@ -15,7 +15,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
 public class FleefishBulletRenderer extends EntityRenderer<FleefishBulletEntity> {
-	private static final ResourceLocation texture = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/fleefishbullet.png");
+	private static final ResourceLocation texture = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/fleefishbullet.png");
 	private final ModelFleefishBullet model;
 
 	public FleefishBulletRenderer(EntityRendererProvider.Context context) {

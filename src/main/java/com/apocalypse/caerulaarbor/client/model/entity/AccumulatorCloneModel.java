@@ -6,16 +6,16 @@ import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.GeoModel;
 
 public class AccumulatorCloneModel extends GeoModel<AccumulatorCloneEntity> {
-	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/accumulator.png");
+	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/accumulator.png");
 
 	@Override
 	public ResourceLocation getAnimationResource(AccumulatorCloneEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/accumulator.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/accumulator.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(AccumulatorCloneEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/accumulator.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/accumulator.geo.json");
 	}
 
 	@Override

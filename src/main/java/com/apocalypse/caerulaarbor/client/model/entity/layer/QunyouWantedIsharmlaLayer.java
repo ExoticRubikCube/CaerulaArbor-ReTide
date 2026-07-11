@@ -14,7 +14,7 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 public class QunyouWantedIsharmlaLayer extends GeoRenderLayer<QunyouWantedIsharmlaEntity> {
-	private static final ResourceLocation LAYER = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/isharmla_lit.png");
+	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/isharmla_lit.png");
 
 	public QunyouWantedIsharmlaLayer(GeoRenderer<QunyouWantedIsharmlaEntity> entityRenderer) {
 		super(entityRenderer);

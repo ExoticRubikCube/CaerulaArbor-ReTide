@@ -8,16 +8,16 @@ import software.bernie.geckolib.model.GeoModel;
 public class CircularSawItemModel extends GeoModel<CircularSawItem> {
 	@Override
 	public ResourceLocation getAnimationResource(CircularSawItem animatable) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/circular_saw.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/circular_saw.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(CircularSawItem animatable) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/circular_saw.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/circular_saw.geo.json");
 	}
 
 	@Override
 	public ResourceLocation getTextureResource(CircularSawItem animatable) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/item/saw.png");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/item/saw.png");
 	}
 }

@@ -13,7 +13,7 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 public class OceanizedEndermanLayer extends GeoRenderLayer<OceanizedEndermanEntity> {
-	private static final ResourceLocation LAYER = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/enderman_lit.png");
+	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/enderman_lit.png");
 
 	public OceanizedEndermanLayer(GeoRenderer<OceanizedEndermanEntity> entityRenderer) {
 		super(entityRenderer);

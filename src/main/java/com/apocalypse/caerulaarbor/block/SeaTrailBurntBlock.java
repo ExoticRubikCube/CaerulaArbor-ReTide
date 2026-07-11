@@ -37,7 +37,7 @@ public class SeaTrailBurntBlock extends Block implements SimpleWaterloggedBlock,
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 	public static final IntegerProperty GROW_AGE = IntegerProperty.create("grow_age", 0, 64);
 	public static final IntegerProperty LONGEVITY = IntegerProperty.create("longevity", 0, 16);
-	private static final TagKey<Block> TRAIL_TAG = BlockTags.create(new ResourceLocation(CaerulaArborMod.MODID, "trail"));
+	private static final TagKey<Block> TRAIL_TAG = BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "trail"));
 
 	public SeaTrailBurntBlock() {
 		super(BlockBehaviour.Properties.of().sound(SoundType.SNOW).strength(1f).speedFactor(0.9f).jumpFactor(0.9f).noOcclusion().pushReaction(PushReaction.DESTROY).isRedstoneConductor((bs, br, bp) -> false));

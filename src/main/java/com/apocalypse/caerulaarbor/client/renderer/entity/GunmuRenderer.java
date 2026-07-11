@@ -17,7 +17,7 @@ public class GunmuRenderer extends HumanoidMobRenderer<GunmuEntity, HumanoidMode
 
 	@Override
 	public ResourceLocation getTextureLocation(GunmuEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/white.png");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/white.png");
 	}
 
 	@Override

@@ -42,7 +42,7 @@ public class TrailedStoneSwordItem extends SwordItem {
 			}
 
 			public Ingredient getRepairIngredient() {
-				return Ingredient.of(ItemTags.create(new ResourceLocation("forge:stone")));
+				return Ingredient.of(ItemTags.create(ResourceLocation.parse("forge:stone")));
 			}
 		}, 3, -2.4f, new Item.Properties());
 	}

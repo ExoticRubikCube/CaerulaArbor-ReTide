@@ -13,7 +13,7 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 public class OceanizedCowLayer extends GeoRenderLayer<OceanizedCowEntity> {
-	private static final ResourceLocation LAYER = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/cow_lit.png");
+	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/cow_lit.png");
 
 	public OceanizedCowLayer(GeoRenderer<OceanizedCowEntity> entityRenderer) {
 		super(entityRenderer);

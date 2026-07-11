@@ -13,7 +13,7 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 public class CorrectionalPhalanxyInfantryLayer extends GeoRenderLayer<CorrectionalPhalanxyInfantryEntity> {
-	private static final ResourceLocation LAYER = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/vanguard_lit.png");
+	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/vanguard_lit.png");
 
 	public CorrectionalPhalanxyInfantryLayer(GeoRenderer<CorrectionalPhalanxyInfantryEntity> entityRenderer) {
 		super(entityRenderer);

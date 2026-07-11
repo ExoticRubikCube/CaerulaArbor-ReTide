@@ -222,7 +222,7 @@ public class OceannizedWitheriaEntity extends AbstractOceanizedWitherEntity {
                 for (int index2 = 0; index2 < 2; index2++) {
                     BlockPos blockPos = BlockPos.containing(x + dx, y + dy, z + dz);
                     BlockState block = world.getBlockState(blockPos);
-                    if (!block.is(BlockTags.create(new ResourceLocation("minecraft:wither_immnue")))) {
+                    if (!block.is(BlockTags.create(ResourceLocation.parse("minecraft:wither_immnue")))) {
                         double hardness = block.getDestroySpeed(world, BlockPos.containing(0, 0, 0));
                         if (hardness <= 7.5 && hardness >= 0 && world.getBlockFloorHeight(blockPos) > 0) {
                             Block.dropResources(world.getBlockState(blockPos), world, originPos, null);

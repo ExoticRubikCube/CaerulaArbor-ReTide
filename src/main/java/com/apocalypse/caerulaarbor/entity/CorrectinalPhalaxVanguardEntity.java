@@ -81,7 +81,7 @@ public class CorrectinalPhalaxVanguardEntity extends Animal implements GeoEntity
         final Vec3 center = new Vec3((x + 2 * this.getLookAngle().x), (y + 2 * this.getLookAngle().y), (z + 2 * this.getLookAngle().z));
         List<Entity> entfound = world.getEntitiesOfClass(Entity.class, AABB.ofSize(center, 7, 7, 7), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
         for (Entity entityiterator : entfound) {
-            if (!(entityiterator instanceof Mob) || entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation("caerula_arbor:inquisition")))) {
+            if (!(entityiterator instanceof Mob) || entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.parse("caerula_arbor:inquisition")))) {
                 if (!(entityiterator == this.getTarget())) {
                     continue;
                 }

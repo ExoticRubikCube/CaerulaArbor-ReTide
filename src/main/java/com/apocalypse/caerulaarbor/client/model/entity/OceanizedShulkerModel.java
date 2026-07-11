@@ -12,19 +12,19 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class OceanizedShulkerModel extends GeoModel<OceanizedShulkerEntity> {
-	private static final ResourceLocation DEFAULT_TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/oceanized_shulker.png");
-	private static final ResourceLocation WHITE_TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/oceanized_shulker_white.png");
-	private static final ResourceLocation COMPLEX_TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/oceanized_shulker_complex.png");
-	private static final ResourceLocation BEDROCK_TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/oceanized_shulker_bedrock.png");
+	private static final ResourceLocation DEFAULT_TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/oceanized_shulker.png");
+	private static final ResourceLocation WHITE_TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/oceanized_shulker_white.png");
+	private static final ResourceLocation COMPLEX_TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/oceanized_shulker_complex.png");
+	private static final ResourceLocation BEDROCK_TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/oceanized_shulker_bedrock.png");
 
 	@Override
 	public ResourceLocation getAnimationResource(OceanizedShulkerEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/oceanized_shulker.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/oceanized_shulker.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(OceanizedShulkerEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/oceanized_shulker.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/oceanized_shulker.geo.json");
 	}
 
 	@Override

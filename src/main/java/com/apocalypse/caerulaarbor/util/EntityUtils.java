@@ -223,7 +223,7 @@ public class EntityUtils {
 				if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
 					livingEntity.addEffect(new MobEffectInstance(MobEffects.JUMP, 5, 0, false, false));
 			}
-			if (entity.tickCount % gap == 0 && !entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "immue_to_nethersea_brand")))) {
+			if (entity.tickCount % gap == 0 && !entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "immue_to_nethersea_brand")))) {
 				if (entity instanceof Player) {
 					if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.DEPTH_STRIDER, a0) != 0) {
 						lvl1 = a0.getEnchantmentLevel(Enchantments.DEPTH_STRIDER);
@@ -263,9 +263,9 @@ public class EntityUtils {
 			if (entityiterator == center) {
 				continue;
 			}
-			if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
-				if (!(entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "bossoffspring")))
-						|| entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanpet"))))) {
+			if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
+				if (!(entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "bossoffspring")))
+						|| entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanpet"))))) {
 					count = count + 1;
 				}
 			}
@@ -279,9 +279,9 @@ public class EntityUtils {
 		final Vec3 center = new Vec3(x, y, z);
 		List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(32 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
 		for (Entity entityiterator : entfound) {
-			if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
-				if (!(entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "bossoffspring")))
-						|| entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanpet"))))) {
+			if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
+				if (!(entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "bossoffspring")))
+						|| entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanpet"))))) {
 					count = count + 1;
 				}
 			}
@@ -367,7 +367,7 @@ public class EntityUtils {
 			if (!(entityiterator instanceof LivingEntity)) {
 				continue;
 			}
-			if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+			if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
 				continue;
 			}
 			d = obj.distanceTo(entityiterator);
@@ -378,7 +378,7 @@ public class EntityUtils {
 				if (entityiterator == exception1) {
 					continue;
 				}
-				if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "sea_friend")))) {
+				if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "sea_friend")))) {
 					continue;
 				}
 				if (new Object() {
@@ -492,7 +492,7 @@ public class EntityUtils {
 				if (!(entityiterator instanceof LivingEntity)) {
 					continue;
 				}
-				if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+				if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
 					if (!((entity instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == entityiterator)) {
 						continue;
 					}
@@ -605,12 +605,12 @@ public class EntityUtils {
 	// 人类实体标签
 	public static final TagKey<EntityType<?>> HUMAN = TagKey.create(
 			Registries.ENTITY_TYPE,
-			new ResourceLocation(CaerulaArborMod.MODID, "is_humanside")
+			ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside")
 		);
 
 	public static final TagKey<EntityType<?>> OCEAN_OFFSPRING = TagKey.create(
 			Registries.ENTITY_TYPE,
-			new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")
+			ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")
 		);
 
 	// 触发自杀伤害
@@ -638,7 +638,7 @@ public class EntityUtils {
 						if (entityiterator == entity) {
 							continue;
 						}
-						if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "phalax")))) {
+						if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "phalax")))) {
 							less = less + 1;
 						}
 						if (less >= 10) {

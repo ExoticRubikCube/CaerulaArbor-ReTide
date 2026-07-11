@@ -11,16 +11,16 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class OceanizedWolfModel extends GeoModel<OceanizedWolfEntity> {
-	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/oceanized_wolf.png");
+	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/oceanized_wolf.png");
 
 	@Override
 	public ResourceLocation getAnimationResource(OceanizedWolfEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/oceanized_wolf.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/oceanized_wolf.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(OceanizedWolfEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/oceanized_wolf.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/oceanized_wolf.geo.json");
 	}
 
 	@Override

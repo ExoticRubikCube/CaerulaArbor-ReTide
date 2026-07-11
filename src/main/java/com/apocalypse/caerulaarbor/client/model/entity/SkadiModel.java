@@ -11,16 +11,16 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class SkadiModel extends GeoModel<SkadiEntity> {
-	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/hunter_skadi.png");
+	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/hunter_skadi.png");
 
 	@Override
 	public ResourceLocation getAnimationResource(SkadiEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/skadi.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/skadi.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(SkadiEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/skadi.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/skadi.geo.json");
 	}
 
 	@Override

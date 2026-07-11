@@ -60,7 +60,7 @@ public class MutagenisisCapsuleItem extends Item {
             }
             if (ocean + 1 > 2.9) {
                 if ((Entity) entity instanceof ServerPlayer player) {
-                    Advancement adv = player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "they_shall_pay"));
+                    Advancement adv = player.server.getAdvancements().getAdvancement(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "they_shall_pay"));
                     AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
                     if (!ap.isDone()) {
                         for (String criteria : ap.getRemainingCriteria())
@@ -69,7 +69,7 @@ public class MutagenisisCapsuleItem extends Item {
                 }
             } else {
                 if ((Entity) entity instanceof ServerPlayer player) {
-                    Advancement adv = player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "they_shall_welcome"));
+                    Advancement adv = player.server.getAdvancements().getAdvancement(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "they_shall_welcome"));
                     AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
                     if (!ap.isDone()) {
                         for (String criteria : ap.getRemainingCriteria())
@@ -78,7 +78,7 @@ public class MutagenisisCapsuleItem extends Item {
                 }
             }
         } else if ((Entity) entity instanceof ServerPlayer player) {
-            Advancement adv = player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "they_shall_welcome"));
+            Advancement adv = player.server.getAdvancements().getAdvancement(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "they_shall_welcome"));
             AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
             if (!ap.isDone()) {
                 for (String criteria : ap.getRemainingCriteria())

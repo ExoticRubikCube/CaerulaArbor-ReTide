@@ -16,7 +16,7 @@ import snownee.jade.api.config.IPluginConfig;
 public enum CAHotKettleProvider implements IBlockComponentProvider {
     INSTANCE;
 
-    public static final ResourceLocation UID = new ResourceLocation(CaerulaArborMod.MODID, "hot_kettle");
+    public static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "hot_kettle");
 
     @Override
     public void appendTooltip(ITooltip iTooltip, BlockAccessor blockAccessor, IPluginConfig iPluginConfig) {

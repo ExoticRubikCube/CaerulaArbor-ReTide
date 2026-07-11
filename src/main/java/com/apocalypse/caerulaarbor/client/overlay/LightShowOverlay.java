@@ -21,15 +21,15 @@ import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber({Dist.CLIENT})
 public class LightShowOverlay {
-	public static final ResourceLocation EXTINGUISH = new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/light_extinguish.png");
-	public static final ResourceLocation DIM = new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/light_dim.png");
-	public static final ResourceLocation WAVING = new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/light_waving.png");
-	public static final ResourceLocation BRIGHT = new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/light.png");
+	public static final ResourceLocation EXTINGUISH = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/light_extinguish.png");
+	public static final ResourceLocation DIM = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/light_dim.png");
+	public static final ResourceLocation WAVING = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/light_waving.png");
+	public static final ResourceLocation BRIGHT = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/light.png");
 
-	public static final ResourceLocation LIFE_POINT = new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/target_health.png");
-	public static final ResourceLocation SHIELD_POINT = new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/target_shield.png");
+	public static final ResourceLocation LIFE_POINT = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/target_health.png");
+	public static final ResourceLocation SHIELD_POINT = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/target_shield.png");
 
-	public static final ResourceLocation NEAT = new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/lights_neat.png");
+	public static final ResourceLocation NEAT = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/lights_neat.png");
 
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)

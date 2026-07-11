@@ -9,16 +9,16 @@ import software.bernie.geckolib.model.GeoModel;
 public class TidewayCradleDisplayModel extends GeoModel<TidewayCradleDisplayItem> {
 	@Override
 	public ResourceLocation getAnimationResource(TidewayCradleDisplayItem animatable) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/tideway_cradle.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/tideway_cradle.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(TidewayCradleDisplayItem animatable) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/tideway_cradle.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/tideway_cradle.geo.json");
 	}
 
 	@Override
 	public ResourceLocation getTextureResource(TidewayCradleDisplayItem entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/block/tideway_cradle.png");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/block/tideway_cradle.png");
 	}
 }

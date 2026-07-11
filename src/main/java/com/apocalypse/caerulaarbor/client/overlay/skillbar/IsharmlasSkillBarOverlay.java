@@ -21,7 +21,7 @@ import java.util.Comparator;
 @Mod.EventBusSubscriber({Dist.CLIENT})
 public class IsharmlasSkillBarOverlay {
 
-	public static final ResourceLocation BAR = new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/isharmla_bar.png");
+	public static final ResourceLocation BAR = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/isharmla_bar.png");
 
 	@SubscribeEvent(priority = EventPriority.NORMAL)
 	public static void eventHandler(RenderGuiEvent.Pre event) {

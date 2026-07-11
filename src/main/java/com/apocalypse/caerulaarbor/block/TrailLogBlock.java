@@ -41,7 +41,7 @@ public class TrailLogBlock extends Block {
 	public static final EnumProperty<Direction.Axis> AXIS = BlockStateProperties.AXIS;
 	public static final IntegerProperty GROW_AGE = IntegerProperty.create("grow_age", 0, 64);
 	public static final IntegerProperty LONGEVITY = IntegerProperty.create("longevity", 0, 16);
-	private static final TagKey<Block> CANNOT_COVER = BlockTags.create(new ResourceLocation(CaerulaArborMod.MODID, "cannot_cover"));
+	private static final TagKey<Block> CANNOT_COVER = BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "cannot_cover"));
 
 	public TrailLogBlock() {
 		super(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLUE).sound(SoundType.WOOD).strength(3f, 5f).speedFactor(0.9f));
@@ -123,7 +123,7 @@ public class TrailLogBlock extends Block {
 		int y = pos.getY();
 		int z = pos.getZ();
         InteractionResult result = InteractionResult.PASS;
-        if (entity.getMainHandItem().is(ItemTags.create(new ResourceLocation("minecraft:axes"))) || ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).is(ItemTags.create(new ResourceLocation("minecraft:axes")))) {
+        if (entity.getMainHandItem().is(ItemTags.create(ResourceLocation.parse("minecraft:axes"))) || ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).is(ItemTags.create(ResourceLocation.parse("minecraft:axes")))) {
             world.levelEvent(2001, BlockPos.containing(x, y, z), getId(CABlocks.TRAIL_LOG.get().defaultBlockState()));
             if ((LevelAccessor) world instanceof Level level) {
                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1, 1);

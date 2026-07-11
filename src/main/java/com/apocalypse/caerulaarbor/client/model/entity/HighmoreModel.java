@@ -11,16 +11,16 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class HighmoreModel extends GeoModel<HighmoreEntity> {
-	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/highmore.png");
+	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/highmore.png");
 
 	@Override
 	public ResourceLocation getAnimationResource(HighmoreEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/highmore.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/highmore.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(HighmoreEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/highmore.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/highmore.geo.json");
 	}
 
 	@Override

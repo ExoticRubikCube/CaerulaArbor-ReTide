@@ -110,7 +110,7 @@ public class TidutantExcrescenceEntity extends SeaMonster {
     public boolean hurt(DamageSource source, float amount) {
         Entity sourceentity = source.getEntity();
         if (sourceentity != null) {
-            ResourceLocation EffectRes = new ResourceLocation("bobsoriginiumdream", "distortion");
+            ResourceLocation EffectRes = ResourceLocation.fromNamespaceAndPath("bobsoriginiumdream", "distortion");
             MobEffect effect = ForgeRegistries.MOB_EFFECTS.getValue(EffectRes);
             if (effect != null) {
                 MobEffectInstance effectInst = new MobEffectInstance(effect, 200, 1);

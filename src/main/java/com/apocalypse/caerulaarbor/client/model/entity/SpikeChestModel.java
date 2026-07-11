@@ -6,16 +6,16 @@ import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.GeoModel;
 
 public class SpikeChestModel extends GeoModel<SpikeChestEntity> {
-	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/chest_spike.png");
+	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/chest_spike.png");
 
 	@Override
 	public ResourceLocation getAnimationResource(SpikeChestEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/spike_chest.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/spike_chest.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(SpikeChestEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/spike_chest.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/spike_chest.geo.json");
 	}
 
 	@Override

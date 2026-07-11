@@ -162,7 +162,7 @@ public class SuperBigCatEntity extends SeaMonster {
             if (!(entityIterator instanceof Mob) && !(entityIterator instanceof Player)) {
                 continue;
             }
-            if (entityIterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring"))) && entityIterator != target) {
+            if (entityIterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"))) && entityIterator != target) {
                 continue;
             }
             if (entityIterator == this) {

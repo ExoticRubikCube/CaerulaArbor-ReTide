@@ -49,7 +49,7 @@ public interface RangedSanityAttacker {
 			Vec3 centerPos = new Vec3(x, y + 1.5, z);
 			List<Entity> nearbyEntities = level.getEntitiesOfClass(Entity.class, new AABB(centerPos, centerPos).inflate(8 / 2d), entity -> true).stream().sorted(Comparator.comparingDouble(entity -> entity.distanceToSqr(centerPos))).toList();
 			for (Entity entity : nearbyEntities) {
-				if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+				if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
 					continue;
 				}
 				if (!(entity instanceof LivingEntity)) {

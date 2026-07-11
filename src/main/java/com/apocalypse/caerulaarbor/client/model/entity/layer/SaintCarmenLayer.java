@@ -14,7 +14,7 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 public class SaintCarmenLayer extends GeoRenderLayer<SaintCarmenEntity> {
-	private static final ResourceLocation LAYER = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/carmen_lit.png");
+	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/carmen_lit.png");
 
 	public SaintCarmenLayer(GeoRenderer<SaintCarmenEntity> entityRenderer) {
 		super(entityRenderer);

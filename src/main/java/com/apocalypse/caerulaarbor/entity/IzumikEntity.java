@@ -448,7 +448,7 @@ public class IzumikEntity extends SeaMonster {
                             final Vec3 center = new Vec3(x, y, z);
                             List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate((2 * range) / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
                             for (Entity entityiterator : entfound) {
-                                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
                                     if (!(entityiterator == this.getTarget())) {
                                         continue;
                                     }
@@ -633,7 +633,7 @@ public class IzumikEntity extends SeaMonster {
     private void awardBoilingSeaAdvancement() {
         for (Entity playerEntity : new ArrayList<>(this.level().players())) {
             if (this.level().dimension() == playerEntity.level().dimension() && playerEntity instanceof ServerPlayer serverPlayer) {
-                Advancement advancement = serverPlayer.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "boiling_sea"));
+                Advancement advancement = serverPlayer.server.getAdvancements().getAdvancement(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "boiling_sea"));
                 AdvancementProgress advancementProgress = serverPlayer.getAdvancements().getOrStartProgress(advancement);
                 if (!advancementProgress.isDone()) {
                     for (String criteria : advancementProgress.getRemainingCriteria()) {
@@ -666,7 +666,7 @@ public class IzumikEntity extends SeaMonster {
                 .toList();
 
         for (Entity entityiterator : nearbyEntities) {
-            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
                 if (!(entityiterator == this.getTarget())) {
                     continue;
                 }
@@ -799,7 +799,7 @@ public class IzumikEntity extends SeaMonster {
             if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
                 if (!world.isClientSide() && world.getServer() != null) {
                     BlockPos bpLootTblWorld = BlockPos.containing(x, y, z);
-                    for (ItemStack itemstackiterator : world.getServer().getLootData().getLootTable(new ResourceLocation(CaerulaArborMod.MODID, "gameplay/relic_izumik"))
+                    for (ItemStack itemstackiterator : world.getServer().getLootData().getLootTable(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "gameplay/relic_izumik"))
                             .getRandomItems(new LootParams.Builder((ServerLevel) world).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(bpLootTblWorld)).withParameter(LootContextParams.BLOCK_STATE, world.getBlockState(bpLootTblWorld))
                                     .withOptionalParameter(LootContextParams.BLOCK_ENTITY, world.getBlockEntity(bpLootTblWorld)).create(LootContextParamSets.EMPTY))) {
                         if (world instanceof ServerLevel level) {

@@ -191,7 +191,7 @@ public class TheLastKnightEntity extends Animal implements GeoEntity, SyncedAnim
             damage *= 1.75F;
         }
         //TODO:为什么没有else?
-        if (target.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+        if (target.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
             damage *= 1.5F;
         }
         return damage;
@@ -471,7 +471,7 @@ public class TheLastKnightEntity extends Animal implements GeoEntity, SyncedAnim
 
         for (Entity entityiterator : world.getEntities(this, new AABB((x + 16), (y + 4), (z + 1.5), (x - 16), (y - 2), (z - 1.5)))) {
             if (entityiterator instanceof LivingEntity) {
-                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "is_humanside")))) {
+                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside")))) {
                     if (!(entityiterator == target)) {
                         continue;
                     }
@@ -482,7 +482,7 @@ public class TheLastKnightEntity extends Animal implements GeoEntity, SyncedAnim
 
         for (Entity entityiterator : world.getEntities(this, new AABB((x + 1.5), (y + 4), (z + 16), (x - 1.5), (y - 2), (z - 16)))) {
             if (entityiterator instanceof LivingEntity) {
-                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "is_humanside")))) {
+                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside")))) {
                     if (!(entityiterator == target)) {
                         continue;
                     }

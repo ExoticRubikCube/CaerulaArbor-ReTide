@@ -1,10 +1,10 @@
 package com.apocalypse.caerulaarbor.entity;
 
-import com.apocalypse.caerulaarbor.init.CADamageTypes;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.PolarMountRider;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
 import com.apocalypse.caerulaarbor.entity.bullets.AbandonedShootEntity;
+import com.apocalypse.caerulaarbor.init.CADamageTypes;
 import com.apocalypse.caerulaarbor.init.CAEntities;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
@@ -13,14 +13,18 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -29,7 +33,11 @@ import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.monster.*;
+import net.minecraft.world.entity.monster.Illusioner;
+import net.minecraft.world.entity.monster.Pillager;
+import net.minecraft.world.entity.monster.Vindicator;
+import net.minecraft.world.entity.monster.Witch;
+import net.minecraft.world.entity.monster.ZombifiedPiglin;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.player.Player;
@@ -48,9 +56,10 @@ public class TheAbandonedEntity extends SeaMonster implements PolarMountRider {
     public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(TheAbandonedEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(TheAbandonedEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_SKILLP = SynchedEntityData.defineId(TheAbandonedEntity.class, EntityDataSerializers.INT);
+    public String animationprocedure = "empty";
+    String prevAnim = "empty";
     private boolean swinging;
     private long lastSwing;
-    public String animationprocedure = "empty";
 
     public TheAbandonedEntity(Level world) {
         this(CAEntities.THE_ABANDONED.get(), world);
@@ -62,6 +71,18 @@ public class TheAbandonedEntity extends SeaMonster implements PolarMountRider {
         setNoAi(false);
         setMaxUpStep(1f);
         setPersistenceRequired();
+    }
+
+    public static AttributeSupplier.Builder createAttributes() {
+        AttributeSupplier.Builder builder = Mob.createMobAttributes();
+        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.15);
+        builder = builder.add(Attributes.MAX_HEALTH, 76);
+        builder = builder.add(Attributes.ARMOR, 0);
+        builder = builder.add(Attributes.ATTACK_DAMAGE, 7);
+        builder = builder.add(Attributes.FOLLOW_RANGE, 24);
+        builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.5);
+        builder = builder.add(Attributes.ATTACK_KNOCKBACK, 0.25);
+        return builder;
     }
 
     @Override
@@ -125,7 +146,7 @@ public class TheAbandonedEntity extends SeaMonster implements PolarMountRider {
         if (!this.level().isClientSide()) {
             CaerulaArborMod.queueServerWork(10, () -> {
                 if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 3) {
-                    target.hurt(CADamageTypes.source(this.level(), CADamageTypes.GENERAL_SEABORN_ATTACK, this), (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
+                    target.hurt(CADamageTypes.source(this.level(), CADamageTypes.GENERIC_SEABORN_ATTACK, this), (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
                 }
             });
         }
@@ -139,19 +160,19 @@ public class TheAbandonedEntity extends SeaMonster implements PolarMountRider {
         return super.hurt(source, amount);
     }
 
-	@Override
-	public void addAdditionalSaveData(CompoundTag compound) {
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("Skillp", this.entityData.get(DATA_SKILLP));
-	}
+    }
 
-	@Override
-	public void readAdditionalSaveData(CompoundTag compound) {
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         if (compound.contains("Skillp")) {
             this.entityData.set(DATA_SKILLP, compound.getInt("Skillp"));
         }
-	}
+    }
 
     @Override
     public void baseTick() {
@@ -226,19 +247,6 @@ public class TheAbandonedEntity extends SeaMonster implements PolarMountRider {
         return super.getDimensions(p_33597_).scale((float) 1);
     }
 
-
-    public static AttributeSupplier.Builder createAttributes() {
-        AttributeSupplier.Builder builder = Mob.createMobAttributes();
-        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.15);
-        builder = builder.add(Attributes.MAX_HEALTH, 76);
-        builder = builder.add(Attributes.ARMOR, 0);
-        builder = builder.add(Attributes.ATTACK_DAMAGE, 7);
-        builder = builder.add(Attributes.FOLLOW_RANGE, 24);
-        builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.5);
-        builder = builder.add(Attributes.ATTACK_KNOCKBACK, 0.25);
-        return builder;
-    }
-
     private PlayState movementPredicate(AnimationState<?> event) {
         if (this.animationprocedure.equals("empty")) {
             if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
@@ -268,8 +276,6 @@ public class TheAbandonedEntity extends SeaMonster implements PolarMountRider {
         }
         return PlayState.CONTINUE;
     }
-
-    String prevAnim = "empty";
 
     private PlayState procedurePredicate(AnimationState<?> event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {

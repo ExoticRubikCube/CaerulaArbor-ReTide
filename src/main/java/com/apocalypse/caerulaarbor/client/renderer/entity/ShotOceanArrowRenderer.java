@@ -15,7 +15,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
 public class ShotOceanArrowRenderer extends EntityRenderer<ShotOceanArrowEntity> {
-	private static final ResourceLocation texture = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/oceanarrow_model.png");
+	private static final ResourceLocation texture = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/oceanarrow_model.png");
 	private final ModelOceanArrow model;
 
 	public ShotOceanArrowRenderer(EntityRendererProvider.Context context) {

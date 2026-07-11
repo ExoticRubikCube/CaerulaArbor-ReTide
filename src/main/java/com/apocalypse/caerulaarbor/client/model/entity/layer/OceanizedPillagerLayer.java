@@ -13,7 +13,7 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 public class OceanizedPillagerLayer extends GeoRenderLayer<OceanizedPillagerEntity> {
-	private static final ResourceLocation LAYER = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/pillager_lit.png");
+	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/pillager_lit.png");
 
 	public OceanizedPillagerLayer(GeoRenderer<OceanizedPillagerEntity> entityRenderer) {
 		super(entityRenderer);

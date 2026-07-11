@@ -15,7 +15,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
 public class AnchorFlyRenderer extends EntityRenderer<AnchorFlyEntity> {
-	private static final ResourceLocation texture = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/weapon_anchor_fly.png");
+	private static final ResourceLocation texture = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/weapon_anchor_fly.png");
 	private final ModelAnchorFly model;
 
 	public AnchorFlyRenderer(EntityRendererProvider.Context context) {

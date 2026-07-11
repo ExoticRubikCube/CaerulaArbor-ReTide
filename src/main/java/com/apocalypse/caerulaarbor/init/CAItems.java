@@ -1,5 +1,5 @@
 /*
- *    MCreator 注：此文件会在每次构建时重新生成。
+ *    MCreator 娉細姝ゆ枃浠朵細鍦ㄦ瘡娆℃瀯寤烘椂閲嶆柊鐢熸垚銆?
  */
 package com.apocalypse.caerulaarbor.init;
 
@@ -655,7 +655,7 @@ public class CAItems {
 	public static final RegistryObject<Item> ARCHIVE_OF_RAIDER = REGISTRY.register("archive_of_raider", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON)));
 
 	private static <T extends Item> RegistryObject<T> tooltipItem(String name, Supplier<T> factory, int tooltipCount) {
-		TOOLTIP_COUNTS.put(new ResourceLocation(CaerulaArborMod.MODID, name), tooltipCount);
+		TOOLTIP_COUNTS.put(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, name), tooltipCount);
 		return REGISTRY.register(name, factory);
 	}
 
@@ -670,19 +670,19 @@ public class CAItems {
 	@SubscribeEvent
 	public static void clientLoad(FMLClientSetupEvent event) {
 		event.enqueueWork(() -> {
-			ItemProperties.register(MUSIC_BOX_FIXED.get(), new ResourceLocation(CaerulaArborMod.MODID, "music_box_fixed_playing"),
+			ItemProperties.register(MUSIC_BOX_FIXED.get(), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "music_box_fixed_playing"),
 					(itemStackToRender, clientWorld, living, itemEntityId) -> living instanceof Player player
 							&& player.getCooldowns().isOnCooldown(itemStackToRender.getItem()) ? 1.0F : 0.0F);
-			ItemProperties.register(CHITIN_SHIELD.get(), new ResourceLocation("blocking"), ItemProperties.getProperty(Items.SHIELD, new ResourceLocation("blocking")));
-			ItemProperties.register(COMPLEX_CHITIN_SHIELD.get(), new ResourceLocation("blocking"), ItemProperties.getProperty(Items.SHIELD, new ResourceLocation("blocking")));
-			ItemProperties.register(TIDELINKED_SHIELD.get(), new ResourceLocation("blocking"), ItemProperties.getProperty(Items.SHIELD, new ResourceLocation("blocking")));
-			ItemProperties.register(CHITIN_BOW.get(), new ResourceLocation(CaerulaArborMod.MODID, "chitin_bow_pulling"),
+			ItemProperties.register(CHITIN_SHIELD.get(), ResourceLocation.parse("blocking"), ItemProperties.getProperty(Items.SHIELD, ResourceLocation.parse("blocking")));
+			ItemProperties.register(COMPLEX_CHITIN_SHIELD.get(), ResourceLocation.parse("blocking"), ItemProperties.getProperty(Items.SHIELD, ResourceLocation.parse("blocking")));
+			ItemProperties.register(TIDELINKED_SHIELD.get(), ResourceLocation.parse("blocking"), ItemProperties.getProperty(Items.SHIELD, ResourceLocation.parse("blocking")));
+			ItemProperties.register(CHITIN_BOW.get(), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "chitin_bow_pulling"),
 					(itemStackToRender, clientWorld, living, itemEntityId) -> living != null && living.isUsingItem()
 							&& living.getUseItem().is(itemStackToRender.getItem()) ? living.getTicksUsingItem() : 0.0F);
-			ItemProperties.register(COMPLEX_CHITIN_BOW.get(), new ResourceLocation(CaerulaArborMod.MODID, "complex_chitin_bow_pulling"),
+			ItemProperties.register(COMPLEX_CHITIN_BOW.get(), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "complex_chitin_bow_pulling"),
 					(itemStackToRender, clientWorld, living, itemEntityId) -> living != null && living.isUsingItem()
 							&& living.getUseItem().is(itemStackToRender.getItem()) ? living.getTicksUsingItem() : 0.0F);
-			ItemProperties.register(TRAILRITE_BOW.get(), new ResourceLocation(CaerulaArborMod.MODID, "trailrite_bow_pulling"),
+			ItemProperties.register(TRAILRITE_BOW.get(), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "trailrite_bow_pulling"),
 					(itemStackToRender, clientWorld, living, itemEntityId) -> living != null && living.isUsingItem()
 							&& living.getUseItem().is(itemStackToRender.getItem()) ? living.getTicksUsingItem() : 0.0F);
 		});

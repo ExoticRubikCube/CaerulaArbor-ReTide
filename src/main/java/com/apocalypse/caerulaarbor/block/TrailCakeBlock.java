@@ -175,8 +175,8 @@ public class TrailCakeBlock extends Block implements SimpleWaterloggedBlock {
                 || ((Entity) entity instanceof LivingEntity livingEntity ? livingEntity.getOffhandItem() : ItemStack.EMPTY).getItem() instanceof SwordItem
                 || (((Entity) entity instanceof LivingEntity livingEntity) ? livingEntity.getMainHandItem() : ItemStack.EMPTY).getItem() instanceof AxeItem
                 || ((Entity) entity instanceof LivingEntity livingEntity ? livingEntity.getOffhandItem() : ItemStack.EMPTY).getItem() instanceof AxeItem
-                || ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).is(ItemTags.create(new ResourceLocation("forge:tools/knives")))
-                || ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).is(ItemTags.create(new ResourceLocation("forge:tools/knives")))) {
+                || ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).is(ItemTags.create(ResourceLocation.parse("forge:tools/knives")))
+                || ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).is(ItemTags.create(ResourceLocation.parse("forge:tools/knives")))) {
             for (int index0 = 0; index0 < (4 - (blockstate.getBlock().getStateDefinition().getProperty("blockstate") instanceof IntegerProperty getip13 ? blockstate.getValue(getip13) : -1)); index0++) {
                 if ((LevelAccessor) world instanceof ServerLevel level) {
                     ItemEntity entityToSpawn = new ItemEntity(level, ((double) x + 0.5), ((double) y + 0.5), ((double) z + 0.5), new ItemStack(CAItems.TRAIL_CAKE_PIECE.get()));

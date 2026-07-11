@@ -16,7 +16,7 @@ import java.util.Objects;
 
 public class NetherseaWalkerEnchantment extends Enchantment {
 	private static final EnchantmentCategory ENCHANTMENT_CATEGORY = EnchantmentCategory.create("caerula_arbor_nethersea_walker",
-			item -> Ingredient.of(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "enchantable/nethersea_walker"))).test(new ItemStack(item)));
+			item -> Ingredient.of(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "enchantable/nethersea_walker"))).test(new ItemStack(item)));
 
 	public NetherseaWalkerEnchantment() {
 		super(Enchantment.Rarity.COMMON, ENCHANTMENT_CATEGORY, new EquipmentSlot[]{EquipmentSlot.FEET});

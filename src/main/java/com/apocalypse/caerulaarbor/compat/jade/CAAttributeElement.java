@@ -20,8 +20,8 @@ public class CAAttributeElement extends Element {
     private final boolean showDefense;
     private final boolean showResistance;
 
-    private static final ResourceLocation DEFENSE_ICON = new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/defense.png");
-    private static final ResourceLocation MAGIC_ICON = new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/magic_resistance.png");
+    private static final ResourceLocation DEFENSE_ICON = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/defense.png");
+    private static final ResourceLocation MAGIC_ICON = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/magic_resistance.png");
 
     public CAAttributeElement(double defense, double resistance) {
         if (!PluginConfig.INSTANCE.get(Identifiers.MC_ENTITY_HEALTH_SHOW_FRACTIONS)) {

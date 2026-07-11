@@ -4,7 +4,13 @@ import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.api.event.SanityEvent;
 import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.*;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CABlocks;
+import com.apocalypse.caerulaarbor.init.CADamageTags;
+import com.apocalypse.caerulaarbor.init.CADamageTypes;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CAParticles;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
@@ -26,7 +32,14 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.MobType;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -37,7 +50,12 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.SnowGolem;
-import net.minecraft.world.entity.monster.*;
+import net.minecraft.world.entity.monster.Endermite;
+import net.minecraft.world.entity.monster.Illusioner;
+import net.minecraft.world.entity.monster.Pillager;
+import net.minecraft.world.entity.monster.Vindicator;
+import net.minecraft.world.entity.monster.Witch;
+import net.minecraft.world.entity.monster.ZombifiedPiglin;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.npc.Villager;
@@ -56,14 +74,15 @@ import java.util.Comparator;
 import java.util.List;
 
 public class OceanizedEndermanEntity extends SeaMonster {
-    private static final TagKey<DamageType> BYPASSES_ENDERMAN = CADamageTags.BYPASSES_ENDERMAN;
     public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(OceanizedEndermanEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(OceanizedEndermanEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_SKILLP = SynchedEntityData.defineId(OceanizedEndermanEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_COOLDOWN = SynchedEntityData.defineId(OceanizedEndermanEntity.class, EntityDataSerializers.INT);
+    private static final TagKey<DamageType> BYPASSES_ENDERMAN = CADamageTags.BYPASSES_ENDERMAN;
+    public String animationprocedure = "empty";
+    String prevAnim = "empty";
     private boolean swinging;
     private long lastSwing;
-    public String animationprocedure = "empty";
 
     public OceanizedEndermanEntity(Level world) {
         this(CAEntities.OCEANIZED_ENDERMAN.get(), world);
@@ -75,6 +94,45 @@ public class OceanizedEndermanEntity extends SeaMonster {
         setNoAi(false);
         setMaxUpStep(1f);
         setPersistenceRequired();
+    }
+
+    private static double findValidTeleportY(LevelAccessor world, double x, double y, double z) {
+        double validY;
+        for (int index0 = 0; index0 < 12; index0++) {
+            validY = y + index0;
+            if (isValidTeleportPlace(world, x, validY, z)) {
+                return validY;
+            }
+            validY = y - index0 - 1;
+            if (isValidTeleportPlace(world, x, validY, z)) {
+                return validY;
+            }
+        }
+        return Double.NaN;
+    }
+
+    private static boolean isValidTeleportPlace(LevelAccessor world, double x, double y, double z) {
+        if (world instanceof Level level && level.isClientSide()) {
+            level.playLocalSound(x, y, z, SoundEvents.ENDERMAN_AMBIENT, SoundSource.HOSTILE, 0, 1, false);
+        }
+        for (int dy = 0; dy <= 3; dy++) {
+            if (world.getBlockFloorHeight(BlockPos.containing(x, y + dy, z)) > 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static AttributeSupplier.Builder createAttributes() {
+        AttributeSupplier.Builder builder = Mob.createMobAttributes();
+        builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 40);
+        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.3);
+        builder = builder.add(Attributes.MAX_HEALTH, 95);
+        builder = builder.add(Attributes.ARMOR, 0);
+        builder = builder.add(Attributes.ATTACK_DAMAGE, 14);
+        builder = builder.add(Attributes.FOLLOW_RANGE, 32);
+        builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.45);
+        return builder;
     }
 
     @Override
@@ -143,7 +201,7 @@ public class OceanizedEndermanEntity extends SeaMonster {
             CaerulaArborMod.queueServerWork(9, () -> {
                 if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 2.5) {
                     target.hurt(
-                            CADamageTypes.source(this.level(), CADamageTypes.GENERAL_SEABORN_ATTACK, this), (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
+                            CADamageTypes.source(this.level(), CADamageTypes.GENERIC_SEABORN_ATTACK, this), (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
                 }
             });
         }
@@ -211,7 +269,7 @@ public class OceanizedEndermanEntity extends SeaMonster {
             double sy = sourceentity.getY();
             double sz = sourceentity.getZ();
             if (isValidTeleportPlace(world, sx, sy, sz)) {
-                if (!sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring"))) || this.getTarget() == sourceentity) {
+                if (!sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"))) || this.getTarget() == sourceentity) {
                     this.teleportTo(x, y, z, sx, sy, sz);
                     if (sourceentity instanceof LivingEntity target) {
                         SIHelper.causeSanityInjury(target,
@@ -230,33 +288,6 @@ public class OceanizedEndermanEntity extends SeaMonster {
         if (source.is(DamageTypes.DROWN))
             return false;
         return super.hurt(source, amount);
-    }
-
-    private static double findValidTeleportY(LevelAccessor world, double x, double y, double z) {
-        double validY;
-        for (int index0 = 0; index0 < 12; index0++) {
-            validY = y + index0;
-            if (isValidTeleportPlace(world, x, validY, z)) {
-                return validY;
-            }
-            validY = y - index0 - 1;
-            if (isValidTeleportPlace(world, x, validY, z)) {
-                return validY;
-            }
-        }
-        return Double.NaN;
-    }
-
-    private static boolean isValidTeleportPlace(LevelAccessor world, double x, double y, double z) {
-        if (world instanceof Level level && level.isClientSide()) {
-            level.playLocalSound(x, y, z, SoundEvents.ENDERMAN_AMBIENT, SoundSource.HOSTILE, 0, 1, false);
-        }
-        for (int dy = 0; dy <= 3; dy++) {
-            if (world.getBlockFloorHeight(BlockPos.containing(x, y + dy, z)) > 0) {
-                return false;
-            }
-        }
-        return true;
     }
 
     private void teleportTo(double fromX, double fromY, double fromZ, double toX, double toY, double toZ) {
@@ -286,15 +317,15 @@ public class OceanizedEndermanEntity extends SeaMonster {
         this.clearFire();
     }
 
-	@Override
-	public void addAdditionalSaveData(CompoundTag compound) {
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("Skillp", this.entityData.get(DATA_SKILLP));
         compound.putInt("Cooldown", this.entityData.get(DATA_COOLDOWN));
-	}
+    }
 
-	@Override
-	public void readAdditionalSaveData(CompoundTag compound) {
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         if (compound.contains("Skillp")) {
             this.entityData.set(DATA_SKILLP, compound.getInt("Skillp"));
@@ -302,7 +333,7 @@ public class OceanizedEndermanEntity extends SeaMonster {
         if (compound.contains("Cooldown")) {
             this.entityData.set(DATA_COOLDOWN, compound.getInt("Cooldown"));
         }
-	}
+    }
 
     @Override
     public void baseTick() {
@@ -356,7 +387,7 @@ public class OceanizedEndermanEntity extends SeaMonster {
                                             if (!(entityiterator instanceof Mob)) {
                                                 continue;
                                             }
-                                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
                                                 if (!(((Entity) OceanizedEndermanEntity.this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == entityiterator)) {
                                                     continue;
                                                 }
@@ -405,19 +436,6 @@ public class OceanizedEndermanEntity extends SeaMonster {
         return super.getDimensions(p_33597_).scale((float) 1);
     }
 
-
-    public static AttributeSupplier.Builder createAttributes() {
-        AttributeSupplier.Builder builder = Mob.createMobAttributes();
-        builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 40);
-        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.3);
-        builder = builder.add(Attributes.MAX_HEALTH, 95);
-        builder = builder.add(Attributes.ARMOR, 0);
-        builder = builder.add(Attributes.ATTACK_DAMAGE, 14);
-        builder = builder.add(Attributes.FOLLOW_RANGE, 32);
-        builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.45);
-        return builder;
-    }
-
     private PlayState movementPredicate(AnimationState<?> event) {
         if (this.animationprocedure.equals("empty")) {
             if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
@@ -450,8 +468,6 @@ public class OceanizedEndermanEntity extends SeaMonster {
         }
         return PlayState.CONTINUE;
     }
-
-    String prevAnim = "empty";
 
     private PlayState procedurePredicate(AnimationState<?> event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {

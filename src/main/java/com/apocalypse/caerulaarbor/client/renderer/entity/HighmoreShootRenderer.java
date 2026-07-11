@@ -15,7 +15,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
 public class HighmoreShootRenderer extends EntityRenderer<HighmoreShootEntity> {
-	private static final ResourceLocation texture = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/highmore_spell.png");
+	private static final ResourceLocation texture = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/highmore_spell.png");
 	private final ModelHighmoreShoot model;
 
 	public HighmoreShootRenderer(EntityRendererProvider.Context context) {

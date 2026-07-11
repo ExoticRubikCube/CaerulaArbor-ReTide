@@ -20,8 +20,8 @@ public class PlayerLogInEventHandler {
 		if (!(event.getEntity() instanceof ServerPlayer serverPlayer))
 			return;
 
-		ResourceLocation relicBanNoticeId = new ResourceLocation(CaerulaArborMod.MODID, "ban_relic_notice");
-		ResourceLocation surgingWavesNoticeId = new ResourceLocation(CaerulaArborMod.MODID, "surging_waves_notice");
+		ResourceLocation relicBanNoticeId = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "ban_relic_notice");
+		ResourceLocation surgingWavesNoticeId = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "surging_waves_notice");
 
 		if (CAConfigs.RELIC_BAN.get()) {
 			Advancement relicBanNoticeAdvancement = serverPlayer.server.getAdvancements().getAdvancement(relicBanNoticeId);

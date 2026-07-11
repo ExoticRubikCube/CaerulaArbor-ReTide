@@ -11,16 +11,16 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class SpecterModel extends GeoModel<SpecterEntity> {
-	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/hunter_specter.png");
+	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/hunter_specter.png");
 
 	@Override
 	public ResourceLocation getAnimationResource(SpecterEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/specter.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/specter.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(SpecterEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/specter.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/specter.geo.json");
 	}
 
 	@Override

@@ -15,8 +15,8 @@ public class CAHotKettleElement extends Element {
     public final ItemStack item;
 
     public static final Vec2 SIZE = new Vec2(16, 16);
-    public static final ResourceLocation KETTLE = new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/kettle_icon.png");
-    public static final ResourceLocation RESULTS = new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/kettle_res.png");
+    public static final ResourceLocation KETTLE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/kettle_icon.png");
+    public static final ResourceLocation RESULTS = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/kettle_res.png");
 
     public CAHotKettleElement(boolean watered, boolean noodled, boolean boiling, ItemStack item) {
         this.noodled = noodled;

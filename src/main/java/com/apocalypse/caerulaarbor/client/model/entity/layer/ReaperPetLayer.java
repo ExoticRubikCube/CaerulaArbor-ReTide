@@ -14,7 +14,7 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 public class ReaperPetLayer extends GeoRenderLayer<ReaperPetEntity> {
-	private static final ResourceLocation LAYER = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/fishpetlit.png");
+	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/fishpetlit.png");
 
 	public ReaperPetLayer(GeoRenderer<ReaperPetEntity> entityRenderer) {
 		super(entityRenderer);

@@ -17,7 +17,7 @@ import java.util.List;
 public class CAJeiInformation implements IModPlugin {
 	@Override
 	public ResourceLocation getPluginUid() {
-		return new ResourceLocation(CaerulaArborMod.MODID, "information");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "information");
 	}
 
 	@Override

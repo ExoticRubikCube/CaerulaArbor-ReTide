@@ -14,7 +14,7 @@ import net.minecraftforge.network.PacketDistributor;
 
 public class PlayerVariable implements INBTSerializable<CompoundTag> {
 
-    public static final ResourceLocation ID = new ResourceLocation(CaerulaArborMod.MODID, "player_variables");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "player_variables");
 
     public double player_light = 100.0;
     public double player_lives = 6.0;

@@ -213,7 +213,7 @@ public class IsharmlaEntity extends SeaMonster {
 									continue;
 								}
 							}
-							if (entityIterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring"))) && entityIterator != target) {
+							if (entityIterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"))) && entityIterator != target) {
 								continue;
 							}
 							if (entityIterator == this) {
@@ -322,7 +322,7 @@ public class IsharmlaEntity extends SeaMonster {
 		for (Entity entityiterator : new ArrayList<>(world.players())) {
 			if ((level().dimension()) == (entityiterator.level().dimension())) {
 				if (entityiterator instanceof ServerPlayer player) {
-					Advancement adv = player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "we_many_orienting"));
+					Advancement adv = player.server.getAdvancements().getAdvancement(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "we_many_orienting"));
 					AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
 					if (!ap.isDone()) {
 						for (String criteria : ap.getRemainingCriteria())
@@ -448,8 +448,8 @@ public class IsharmlaEntity extends SeaMonster {
 						d = distanceTo(entityiterator);
 						if (d <= 32) {
 							EntityUtils.applyOrbitMotion(entityiterator, this);
-							if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))
-									&& !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "bossoffspring")))) {
+							if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))
+									&& !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "bossoffspring")))) {
 								itrHealth = (entityiterator instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.01;
 								itrAttack = (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() : 0) * 0.01;
 								if (Math.random() < 0.25) {
@@ -578,7 +578,7 @@ public class IsharmlaEntity extends SeaMonster {
 							final Vec3 center = new Vec3(x, y, z);
 							List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(16 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
 							for (Entity entityiterator : entfound) {
-								if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+								if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
 									if (entityiterator instanceof LivingEntity livingEntity && livingEntity.getHealth() < livingEntity.getMaxHealth()) {
 										EntityUtils.heal(livingEntity, atk);
 										if (world instanceof ServerLevel level)
@@ -744,7 +744,7 @@ public class IsharmlaEntity extends SeaMonster {
 			if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
 				if (!world.isClientSide() && world.getServer() != null) {
 					BlockPos bpLootTblWorld = BlockPos.containing(x, y, z);
-					for (ItemStack itemstackiterator : world.getServer().getLootData().getLootTable(new ResourceLocation(CaerulaArborMod.MODID, "gameplay/relic_isharmla"))
+					for (ItemStack itemstackiterator : world.getServer().getLootData().getLootTable(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "gameplay/relic_isharmla"))
 							.getRandomItems(new LootParams.Builder((ServerLevel) world).withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(bpLootTblWorld)).withParameter(LootContextParams.BLOCK_STATE, world.getBlockState(bpLootTblWorld))
 									.withOptionalParameter(LootContextParams.BLOCK_ENTITY, world.getBlockEntity(bpLootTblWorld)).create(LootContextParamSets.EMPTY))) {
 						if (world instanceof ServerLevel level) {
@@ -849,7 +849,7 @@ public class IsharmlaEntity extends SeaMonster {
 				.toList();
 
 		for (Entity entityiterator : entities) {
-			if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+			if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
 				if (!(entityiterator == target)) {
 					continue;
 				}

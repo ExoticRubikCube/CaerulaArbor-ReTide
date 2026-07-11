@@ -14,7 +14,7 @@ import java.util.Objects;
 
 public class MagicToleranceEnchantment extends Enchantment {
 	private static final EnchantmentCategory ENCHANTMENT_CATEGORY = EnchantmentCategory.create("caerula_arbor_magic_tolerance",
-			item -> Ingredient.of(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "enchantable/sanity_defend"))).test(new ItemStack(item)));
+			item -> Ingredient.of(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "enchantable/sanity_defend"))).test(new ItemStack(item)));
 
 	public MagicToleranceEnchantment() {
 		super(Enchantment.Rarity.COMMON, ENCHANTMENT_CATEGORY, new EquipmentSlot[]{EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET});

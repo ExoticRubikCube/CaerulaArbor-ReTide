@@ -11,16 +11,16 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class FakeOffspringModel extends GeoModel<FakeOffspringEntity> {
-	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/fakepffspr.png");
+	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/fakepffspr.png");
 
 	@Override
 	public ResourceLocation getAnimationResource(FakeOffspringEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/fakeegg.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/fakeegg.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(FakeOffspringEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/fakeegg.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/fakeegg.geo.json");
 	}
 
 	@Override

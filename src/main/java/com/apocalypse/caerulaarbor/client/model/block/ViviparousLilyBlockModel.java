@@ -8,16 +8,16 @@ import software.bernie.geckolib.model.GeoModel;
 public class ViviparousLilyBlockModel extends GeoModel<ViviparousLilyTileEntity> {
 	@Override
 	public ResourceLocation getAnimationResource(ViviparousLilyTileEntity animatable) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/viviparous_lily.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/viviparous_lily.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(ViviparousLilyTileEntity animatable) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/viviparous_lily.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/viviparous_lily.geo.json");
 	}
 
 	@Override
 	public ResourceLocation getTextureResource(ViviparousLilyTileEntity animatable) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/block/vivi_lily.png");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/block/vivi_lily.png");
 	}
 }

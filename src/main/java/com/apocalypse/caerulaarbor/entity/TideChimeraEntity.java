@@ -5,8 +5,18 @@ import com.apocalypse.caerulaarbor.api.event.SanityEvent;
 import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.entity.base.RangedSanityAttacker;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.entity.bullets.*;
-import com.apocalypse.caerulaarbor.init.*;
+import com.apocalypse.caerulaarbor.entity.bullets.AbandonedShootEntity;
+import com.apocalypse.caerulaarbor.entity.bullets.FakerggShootEntity;
+import com.apocalypse.caerulaarbor.entity.bullets.FishShootEntity;
+import com.apocalypse.caerulaarbor.entity.bullets.FishSplashEntity;
+import com.apocalypse.caerulaarbor.entity.bullets.FleefishBulletEntity;
+import com.apocalypse.caerulaarbor.entity.bullets.TellerShotEntity;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CADamageTypes;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CASounds;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -30,7 +40,14 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -69,10 +86,11 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
     public static final EntityDataAccessor<Integer> DATA_SUMMON_P = SynchedEntityData.defineId(TideChimeraEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_SKILL_P = SynchedEntityData.defineId(TideChimeraEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_DEAL = SynchedEntityData.defineId(TideChimeraEntity.class, EntityDataSerializers.INT);
+    private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.NOTCHED_12);
+    public String animationprocedure = "empty";
+    String prevAnim = "empty";
     private boolean swinging;
     private long lastSwing;
-    public String animationprocedure = "empty";
-    private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.BLUE, ServerBossEvent.BossBarOverlay.NOTCHED_12);
 
     public TideChimeraEntity(Level world) {
         this(CAEntities.TIDE_CHIMERA.get(), world);
@@ -84,6 +102,20 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
         setNoAi(false);
         setMaxUpStep(1.5f);
         setPersistenceRequired();
+    }
+
+    public static AttributeSupplier.Builder createAttributes() {
+        AttributeSupplier.Builder builder = Mob.createMobAttributes();
+        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.18);
+        builder = builder.add(Attributes.MAX_HEALTH, 300);
+        builder = builder.add(Attributes.ARMOR, 8);
+        builder = builder.add(Attributes.ATTACK_DAMAGE, 19);
+        builder = builder.add(Attributes.FOLLOW_RANGE, 48);
+        builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
+        builder = builder.add(CAAttributes.SANITY_RATE.get(), 4);
+        builder = builder.add(CAAttributes.MISSRATE.get(), 50);
+        builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 45);
+        return builder;
     }
 
     @Override
@@ -173,7 +205,7 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
                             CASounds.PUNCTUREFISH_ATTACK.get(), SoundSource.HOSTILE, 3,
                             (float) Mth.nextDouble(RandomSource.create(), 0.9, 1.1));
                     if (target.hurt(
-                            CADamageTypes.source(this.level(), CADamageTypes.GENERAL_SEABORN_ATTACK, this), (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0))) {
+                            CADamageTypes.source(this.level(), CADamageTypes.GENERIC_SEABORN_ATTACK, this), (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0))) {
                         int amplifier = this.hasEffect(CAMobEffects.REEF_CRACKER.get()) ? this.getEffect(CAMobEffects.REEF_CRACKER.get()).getAmplifier() : -1;
                         int nextAmplifier = amplifier < 0 ? 0 : Math.min(amplifier + 1, 31);
                         this.addEffect(new MobEffectInstance(CAMobEffects.REEF_CRACKER.get(), 100, nextAmplifier, false, false));
@@ -190,7 +222,7 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
         Entity sourceentity = source.getEntity();
         if (sourceentity != null) {
             if (!(sourceentity instanceof Player) && !(sourceentity instanceof ApocataEntity)) {
-                if (!sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                if (!sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
                     {
                         final Vec3 center = new Vec3(this.getX(), this.getY(), this.getZ());
                         List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(32 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
@@ -198,7 +230,7 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
                             if (entityiterator == this) {
                                 continue;
                             }
-                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
                                 if (entityiterator instanceof Mob entity && sourceentity instanceof LivingEntity ent)
                                     entity.setTarget(ent);
                             }
@@ -269,17 +301,17 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
         return super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
     }
 
-	@Override
-	public void addAdditionalSaveData(CompoundTag compound) {
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putInt("Duration", this.entityData.get(DATA_DURATION));
         compound.putInt("SummonP", this.entityData.get(DATA_SUMMON_P));
         compound.putInt("SkillP", this.entityData.get(DATA_SKILL_P));
         compound.putInt("Deal", this.entityData.get(DATA_DEAL));
-	}
+    }
 
-	@Override
-	public void readAdditionalSaveData(CompoundTag compound) {
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
         if (compound.contains("Duration")) {
             this.entityData.set(DATA_DURATION, compound.getInt("Duration"));
@@ -293,7 +325,7 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
         if (compound.contains("Deal")) {
             this.entityData.set(DATA_DEAL, compound.getInt("Deal"));
         }
-	}
+    }
 
     @Override
     public void baseTick() {
@@ -475,7 +507,7 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
                 }
                 for (Entity entityiterator : world.getEntities(this, new AABB((x - 6.5), (y - 2), (z - 6.5), (x + 6.5), (y + 5), (z + 6.5)))) {
                     if ((entityiterator != null ? distanceTo(entityiterator) : -1) <= 6.5) {
-                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
                             if (!(entityiterator == this.getTarget())) {
                                 continue;
                             }
@@ -570,21 +602,6 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
         this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
     }
 
-
-    public static AttributeSupplier.Builder createAttributes() {
-        AttributeSupplier.Builder builder = Mob.createMobAttributes();
-        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.18);
-        builder = builder.add(Attributes.MAX_HEALTH, 300);
-        builder = builder.add(Attributes.ARMOR, 8);
-        builder = builder.add(Attributes.ATTACK_DAMAGE, 19);
-        builder = builder.add(Attributes.FOLLOW_RANGE, 48);
-        builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 10);
-        builder = builder.add(CAAttributes.SANITY_RATE.get(), 4);
-        builder = builder.add(CAAttributes.MISSRATE.get(), 50);
-        builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 45);
-        return builder;
-    }
-
     private PlayState movementPredicate(AnimationState<?> event) {
         if (this.animationprocedure.equals("empty")) {
             if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
@@ -614,8 +631,6 @@ public class TideChimeraEntity extends SeaMonster implements RangedSanityAttacke
         }
         return PlayState.CONTINUE;
     }
-
-    String prevAnim = "empty";
 
     private PlayState procedurePredicate(AnimationState<?> event) {
         if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {

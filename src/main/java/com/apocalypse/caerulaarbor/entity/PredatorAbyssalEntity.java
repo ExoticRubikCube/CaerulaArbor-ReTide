@@ -129,7 +129,7 @@ public class PredatorAbyssalEntity extends SeaMonster {
 	public void baseTick() {
 		super.baseTick();
         LevelAccessor world = this.level();
-        if (tickCount % 20 == 0 && (world.getBlockState(BlockPos.containing(this.getX(), this.getY(), this.getZ()))).is(BlockTags.create(new ResourceLocation(CaerulaArborMod.MODID, "sea_trail")))) {
+        if (tickCount % 20 == 0 && (world.getBlockState(BlockPos.containing(this.getX(), this.getY(), this.getZ()))).is(BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "sea_trail")))) {
             if (!this.level().isClientSide())
                 this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 40, 1));
         }

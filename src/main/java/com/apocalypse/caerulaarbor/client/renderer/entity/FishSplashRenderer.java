@@ -15,7 +15,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
 public class FishSplashRenderer extends EntityRenderer<FishSplashEntity> {
-	private static final ResourceLocation texture = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/splashbullet.png");
+	private static final ResourceLocation texture = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/splashbullet.png");
 	private final ModelBulletProjectile model;
 
 	public FishSplashRenderer(EntityRendererProvider.Context context) {

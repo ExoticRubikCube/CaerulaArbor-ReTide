@@ -42,7 +42,7 @@ public class FrozenSurfaceOverlay {
             result = (Entity) entity instanceof LivingEntity livEnt0 && livEnt0.hasEffect(CAMobEffects.FROZEN.get());
         }
         if (result) {
-			event.getGuiGraphics().blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/frozensurface.png"), 0, 0, 0, 0, w, h, w, h);
+			event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/frozensurface.png"), 0, 0, 0, 0, w, h, w, h);
 		}
 		RenderSystem.depthMask(true);
 		RenderSystem.defaultBlendFunc();

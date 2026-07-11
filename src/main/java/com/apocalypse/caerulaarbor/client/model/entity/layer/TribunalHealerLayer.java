@@ -14,7 +14,7 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 public class TribunalHealerLayer extends GeoRenderLayer<TribunalHealerEntity> {
-	private static final ResourceLocation LAYER = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/healer_lit.png");
+	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/healer_lit.png");
 
 	public TribunalHealerLayer(GeoRenderer<TribunalHealerEntity> entityRenderer) {
 		super(entityRenderer);

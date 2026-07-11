@@ -8,16 +8,16 @@ import software.bernie.geckolib.model.GeoModel;
 public class KnightIronModel extends GeoModel<KnightIronItem> {
 	@Override
 	public ResourceLocation getAnimationResource(KnightIronItem object) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/knight_armor.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/knight_armor.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(KnightIronItem object) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/knight_armor.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/knight_armor.geo.json");
 	}
 
 	@Override
 	public ResourceLocation getTextureResource(KnightIronItem object) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/item/knight_armor.png");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/item/knight_armor.png");
 	}
 }

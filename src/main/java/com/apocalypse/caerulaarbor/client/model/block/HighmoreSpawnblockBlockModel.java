@@ -10,23 +10,23 @@ public class HighmoreSpawnblockBlockModel extends GeoModel<HighmoreSpawnblockTil
 	public ResourceLocation getAnimationResource(HighmoreSpawnblockTileEntity animatable) {
 		final int blockstate = animatable.blockstateNew;
 		if (blockstate == 1)
-			return new ResourceLocation(CaerulaArborMod.MODID, "animations/highmore_spawnblock.animation.json");
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/highmore_spawnblock.animation.json");
+			return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/highmore_spawnblock.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/highmore_spawnblock.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(HighmoreSpawnblockTileEntity animatable) {
 		final int blockstate = animatable.blockstateNew;
 		if (blockstate == 1)
-			return new ResourceLocation(CaerulaArborMod.MODID, "geo/highmore_spawnblock.geo.json");
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/highmore_spawnblock.geo.json");
+			return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/highmore_spawnblock.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/highmore_spawnblock.geo.json");
 	}
 
 	@Override
 	public ResourceLocation getTextureResource(HighmoreSpawnblockTileEntity animatable) {
 		final int blockstate = animatable.blockstateNew;
 		if (blockstate == 1)
-			return new ResourceLocation(CaerulaArborMod.MODID, "textures/block/highmore_spawnblock.png");
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/block/highmore_spawnblock.png");
+			return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/block/highmore_spawnblock.png");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/block/highmore_spawnblock.png");
 	}
 }

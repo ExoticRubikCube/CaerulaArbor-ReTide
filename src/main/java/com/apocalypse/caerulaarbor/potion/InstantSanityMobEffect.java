@@ -39,7 +39,7 @@ public class InstantSanityMobEffect extends MobEffect {
     public void applyInstantenousEffect(Entity source, Entity indirectSource, LivingEntity entity, int amplifier, double health) {
         if (entity == null)
             return;
-        if (!entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "immue_to_inst_sanity")))) {
+        if (!entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "immue_to_inst_sanity")))) {
             SIHelper.causeSanityInjury(entity, 125 * ((double) amplifier + 1), SanityEvent.Hurt.Type.POTION);
         }
     }

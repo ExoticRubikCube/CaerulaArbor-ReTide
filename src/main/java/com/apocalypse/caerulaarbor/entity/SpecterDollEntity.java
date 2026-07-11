@@ -159,7 +159,7 @@ public class SpecterDollEntity extends Animal implements GeoEntity, SyncedAnimat
                                     continue;
                                 }
                             }
-                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "is_humanside")))) {
+                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside")))) {
                                 if (!(entityiterator == target)) {
                                     continue;
                                 }

@@ -52,7 +52,7 @@ public class HighmoreSkillBarOverlay {
             } else if (ind < 0) {
                 ind = 0;
             }
-            event.getGuiGraphics().blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/highmore_skill_bar.png"), 8, h / 2 + -41, Mth.clamp((int) ind * 4, 0, 340), 0, 4, 87, 344, 87);
+            event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/highmore_skill_bar.png"), 8, h / 2 + -41, Mth.clamp((int) ind * 4, 0, 340), 0, 4, 87, 344, 87);
 
 		}
 	}

@@ -13,7 +13,7 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 public class IsharmlaTearLayer extends GeoRenderLayer<IsharmlaTearEntity> {
-	private static final ResourceLocation LAYER = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/isharmla_tear_lit.png");
+	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/isharmla_tear_lit.png");
 
 	public IsharmlaTearLayer(GeoRenderer<IsharmlaTearEntity> entityRenderer) {
 		super(entityRenderer);

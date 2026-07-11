@@ -158,7 +158,7 @@ public class UninishedBeautyItem extends Item implements GeoItem, SyncedAnimatio
         if (entity == null)
             return InteractionResult.PASS;
         BlockState tgt;
-        if (blockstate.is(BlockTags.create(new ResourceLocation("minecraft:mineable/axe")))) {
+        if (blockstate.is(BlockTags.create(ResourceLocation.parse("minecraft:mineable/axe")))) {
             {
                 BlockPos pos = BlockPos.containing(x, y, z);
                 Block.dropResources(world.getBlockState(pos), world, BlockPos.containing(x + 0.5, y, z + 0.5), null);
@@ -167,7 +167,7 @@ public class UninishedBeautyItem extends Item implements GeoItem, SyncedAnimatio
             if (entity.isShiftKeyDown()) {
                 for (int index0 = 0; index0 < 32; index0++) {
                     tgt = (world.getBlockState(BlockPos.containing(x, y + index0 + 1, z)));
-                    if (tgt.is(BlockTags.create(new ResourceLocation("minecraft:mineable/axe")))) {
+                    if (tgt.is(BlockTags.create(ResourceLocation.parse("minecraft:mineable/axe")))) {
                         {
                             BlockPos pos = BlockPos.containing(x, y + index0 + 1, z);
                             Block.dropResources(world.getBlockState(pos), world, BlockPos.containing(x + 0.5, y + index0 + 1, z + 0.5), null);

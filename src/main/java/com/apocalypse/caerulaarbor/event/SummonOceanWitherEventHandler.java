@@ -64,7 +64,7 @@ public class SummonOceanWitherEventHandler {
 					}
 				}
 				if (summonedOceanWither && entity instanceof ServerPlayer player) {
-					Advancement advancement = player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "tranquil_heights"));
+					Advancement advancement = player.server.getAdvancements().getAdvancement(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "tranquil_heights"));
 					AdvancementProgress advancementProgress = player.getAdvancements().getOrStartProgress(advancement);
 					if (!advancementProgress.isDone()) {
 						for (String criteria : advancementProgress.getRemainingCriteria())

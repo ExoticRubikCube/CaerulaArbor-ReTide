@@ -13,7 +13,7 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 public class OceanizedWardenisLayer extends GeoRenderLayer<OceanizedWardenisEntity> {
-	private static final ResourceLocation LAYER = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/wardenis_lit.png");
+	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/wardenis_lit.png");
 
 	public OceanizedWardenisLayer(GeoRenderer<OceanizedWardenisEntity> entityRenderer) {
 		super(entityRenderer);

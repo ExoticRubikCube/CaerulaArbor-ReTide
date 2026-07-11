@@ -29,7 +29,7 @@ public class PlayerAttackEventHandler {
 		}
 
 		ItemStack mainHandItem = attacker.getMainHandItem().copy();
-		if (!(mainHandItem.getItem() instanceof AxeItem) && !mainHandItem.is(ItemTags.create(new ResourceLocation("minecraft:axes")))) {
+		if (!(mainHandItem.getItem() instanceof AxeItem) && !mainHandItem.is(ItemTags.create(ResourceLocation.parse("minecraft:axes")))) {
 			return;
 		}
 

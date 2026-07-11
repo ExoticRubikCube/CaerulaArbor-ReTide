@@ -13,7 +13,7 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 public class GladiiaLayer extends GeoRenderLayer<GladiiaEntity> {
-	private static final ResourceLocation LAYER = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/gladiia_lit.png");
+	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/gladiia_lit.png");
 
 	public GladiiaLayer(GeoRenderer<GladiiaEntity> entityRenderer) {
 		super(entityRenderer);

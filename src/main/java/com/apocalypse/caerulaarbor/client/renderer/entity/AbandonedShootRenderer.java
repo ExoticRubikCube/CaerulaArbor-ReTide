@@ -15,7 +15,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
 public class AbandonedShootRenderer extends EntityRenderer<AbandonedShootEntity> {
-	private static final ResourceLocation texture = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/splashbullet.png");
+	private static final ResourceLocation texture = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/splashbullet.png");
 	private final ModelBulletProjectile model;
 
 	public AbandonedShootRenderer(EntityRendererProvider.Context context) {

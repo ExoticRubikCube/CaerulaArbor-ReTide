@@ -181,7 +181,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                                 continue;
                             }
                         }
-                        if (entityIterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring"))) && entityIterator != currentTarget) {
+                        if (entityIterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"))) && entityIterator != currentTarget) {
                             continue;
                         }
                         if (entityIterator == this) {
@@ -269,7 +269,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                         continue;
                     }
                     if (entityiterator.isAlive()) {
-                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunters")))) {
+                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "hunters")))) {
                             perc = (entityiterator instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) / (entityiterator instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1);
                             if (entityiterator instanceof LivingEntity livingEntity8 && livingEntity8.getAttributes().hasAttribute(Attributes.MAX_HEALTH))
                                 livingEntity8.getAttribute(Attributes.MAX_HEALTH).setBaseValue(
@@ -355,7 +355,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                                                 continue;
                                             }
                                         }
-                                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "is_humanside")))) {
+                                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside")))) {
                                             if (!(entityiterator == enemy1)) {
                                                 continue;
                                             }
@@ -394,7 +394,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                                                 continue;
                                             }
                                         }
-                                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "is_humanside")))) {
+                                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside")))) {
                                             if (!(entityiterator == enemy1)) {
                                                 continue;
                                             }
@@ -488,7 +488,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                                         if (entityiterator instanceof Player || (entityiterator instanceof TamableAnimal tamEnt && tamEnt.isTame())) {
                                             continue;
                                         }
-                                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "is_humanside")))) {
+                                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside")))) {
                                             continue;
                                         }
                                         if (entityiterator == this) {

@@ -11,20 +11,20 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class OceanizedEnderinaModel extends GeoModel<OceanizedEnderinaEntity> {
-	private static final ResourceLocation DEFAULT_TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/oceanized_enderina.png");
-	private static final ResourceLocation NOISE_TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/oceanized_enderina_noise.png");
-	private static final ResourceLocation DEATH_1_TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/oceanized_enderina_1.png");
-	private static final ResourceLocation DEATH_2_TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/oceanized_enderina_2.png");
-	private static final ResourceLocation DEATH_3_TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/oceanized_enderina_3.png");
+	private static final ResourceLocation DEFAULT_TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/oceanized_enderina.png");
+	private static final ResourceLocation NOISE_TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/oceanized_enderina_noise.png");
+	private static final ResourceLocation DEATH_1_TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/oceanized_enderina_1.png");
+	private static final ResourceLocation DEATH_2_TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/oceanized_enderina_2.png");
+	private static final ResourceLocation DEATH_3_TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/oceanized_enderina_3.png");
 
 	@Override
 	public ResourceLocation getAnimationResource(OceanizedEnderinaEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/oceanized_enderina.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/oceanized_enderina.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(OceanizedEnderinaEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/oceanized_enderina.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/oceanized_enderina.geo.json");
 	}
 
 	@Override

@@ -12,11 +12,11 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 public class SkadiCorruptedLayer extends GeoRenderLayer<SkadiCorruptedEntity> {
-	private static final ResourceLocation LAYER = new ResourceLocation(
+	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(
 		"caerula_arbor", "textures/entities/skadi_corrupted_lit_0.png");
-	private static final ResourceLocation LAYER_1 = new ResourceLocation(
+	private static final ResourceLocation LAYER_1 = ResourceLocation.fromNamespaceAndPath(
 		"caerula_arbor", "textures/entities/skadi_corrupted_lit_1.png");
-	private static final ResourceLocation LAYER_2 = new ResourceLocation(
+	private static final ResourceLocation LAYER_2 = ResourceLocation.fromNamespaceAndPath(
 		"caerula_arbor", "textures/entities/skadi_corrupted_lit.png");
 
 

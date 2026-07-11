@@ -150,7 +150,7 @@ public class MegaChestEntity extends SeaMonster {
     public void die(DamageSource source) {
         super.die(source);
         if (source.getEntity() instanceof ServerPlayer player) {
-            Advancement advancement = player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "costly_treasures"));
+            Advancement advancement = player.server.getAdvancements().getAdvancement(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "costly_treasures"));
             AdvancementProgress progress = player.getAdvancements().getOrStartProgress(advancement);
             if (!progress.isDone()) {
                 for (String criteria : progress.getRemainingCriteria())

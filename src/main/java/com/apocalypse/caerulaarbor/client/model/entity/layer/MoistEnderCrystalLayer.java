@@ -13,7 +13,7 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 public class MoistEnderCrystalLayer extends GeoRenderLayer<MoistEnderCrystalEntity> {
-	private static final ResourceLocation LAYER = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/crystal_lit.png");
+	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/crystal_lit.png");
 
 	public MoistEnderCrystalLayer(GeoRenderer<MoistEnderCrystalEntity> entityRenderer) {
 		super(entityRenderer);

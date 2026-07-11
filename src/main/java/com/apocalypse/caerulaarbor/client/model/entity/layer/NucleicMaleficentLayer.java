@@ -14,7 +14,7 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 public class NucleicMaleficentLayer extends GeoRenderLayer<NucleicMaleficentEntity> {
-	private static final ResourceLocation LAYER = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/maleficent_lit.png");
+	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/maleficent_lit.png");
 
 	public NucleicMaleficentLayer(GeoRenderer<NucleicMaleficentEntity> entityRenderer) {
 		super(entityRenderer);

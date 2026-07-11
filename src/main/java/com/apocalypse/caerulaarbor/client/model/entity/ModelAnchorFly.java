@@ -15,7 +15,7 @@ import net.minecraft.world.entity.Entity;
 // 面向 Minecraft 1.17 及以上版本导出，使用 Mojang 映射
 // 将此类粘贴到你的模组中，并生成所需的全部导入语句
 public class ModelAnchorFly<T extends Entity> extends EntityModel<T> {
-	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(CaerulaArborMod.MODID, "anchor_fly"), "main");
+	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "anchor_fly"), "main");
 	public final ModelPart group;
 	public final ModelPart group2;
 

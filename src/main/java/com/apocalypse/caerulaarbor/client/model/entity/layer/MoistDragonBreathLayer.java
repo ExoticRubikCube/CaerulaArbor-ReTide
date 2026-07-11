@@ -13,7 +13,7 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 public class MoistDragonBreathLayer extends GeoRenderLayer<MoistDragonBreathEntity> {
-	private static final ResourceLocation LAYER = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/dragon_ball_lit.png");
+	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/dragon_ball_lit.png");
 
 	public MoistDragonBreathLayer(GeoRenderer<MoistDragonBreathEntity> entityRenderer) {
 		super(entityRenderer);

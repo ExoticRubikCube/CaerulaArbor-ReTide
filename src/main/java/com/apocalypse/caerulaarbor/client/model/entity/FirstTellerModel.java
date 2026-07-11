@@ -11,16 +11,16 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class FirstTellerModel extends GeoModel<FirstTellerEntity> {
-	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/firstlit.png");
+	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/firstlit.png");
 
 	@Override
 	public ResourceLocation getAnimationResource(FirstTellerEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/firstspeak.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/firstspeak.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(FirstTellerEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/firstspeak.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/firstspeak.geo.json");
 	}
 
 	@Override

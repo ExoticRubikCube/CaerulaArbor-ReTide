@@ -13,17 +13,17 @@ import software.bernie.geckolib.model.data.EntityModelData;
 public class MartusModel extends GeoModel<MartusEntity> {
 	@Override
 	public ResourceLocation getAnimationResource(MartusEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/martus.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/martus.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(MartusEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/martus.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/martus.geo.json");
 	}
 
 	@Override
 	public ResourceLocation getTextureResource(MartusEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/martus.png");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/martus.png");
 	}
 
 	@Override

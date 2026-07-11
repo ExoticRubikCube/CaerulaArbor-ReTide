@@ -333,7 +333,7 @@ public class FlamarineGolemEntity extends SeaMonster {
                                             continue;
                                         }
                                     }
-                                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "is_humanside")))) {
+                                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside")))) {
                                         if (!(entityiterator == enemy1)) {
                                             continue;
                                         }
@@ -397,7 +397,7 @@ public class FlamarineGolemEntity extends SeaMonster {
                                 dy = 0;
                                 for (int index2 = 0; index2 < 4; index2++) {
                                     block = (world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz)));
-                                    if (block.is(BlockTags.create(new ResourceLocation(CaerulaArborMod.MODID, "flamarine_destroyable")))) {
+                                    if (block.is(BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "flamarine_destroyable")))) {
                                         hardness = block.getDestroySpeed(world, BlockPos.containing(0, 0, 0));
                                         if (hardness <= 2.5 && hardness >= 0 && world.getBlockFloorHeight(BlockPos.containing(x + dx, y + dy, z + dz)) > 0) {
                                             {

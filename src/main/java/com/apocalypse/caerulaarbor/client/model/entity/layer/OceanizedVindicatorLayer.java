@@ -14,7 +14,7 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 public class OceanizedVindicatorLayer extends GeoRenderLayer<OceanizedVindicatorEntity> {
-	private static final ResourceLocation LAYER = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/ocean_vindic.png");
+	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/ocean_vindic.png");
 
 	public OceanizedVindicatorLayer(GeoRenderer<OceanizedVindicatorEntity> entityRenderer) {
 		super(entityRenderer);

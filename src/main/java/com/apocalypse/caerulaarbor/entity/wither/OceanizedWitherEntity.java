@@ -266,7 +266,7 @@ public class OceanizedWitherEntity extends AbstractOceanizedWitherEntity impleme
                     double dy = 0;
                     for (int yIndex = 0; yIndex < 4; yIndex++) {
                         BlockState block = world.getBlockState(BlockPos.containing(x + dx, y + dy, z + dz));
-                        if (!block.is(BlockTags.create(new ResourceLocation("minecraft:wither_immnue")))) {
+                        if (!block.is(BlockTags.create(ResourceLocation.parse("minecraft:wither_immnue")))) {
                             double hardness = block.getDestroySpeed(world, BlockPos.containing(0, 0, 0));
                             if (hardness <= 7.5 && hardness >= 0 && world.getBlockFloorHeight(BlockPos.containing(x + dx, y + dy, z + dz)) > 0) {
                                 BlockPos blockPos = BlockPos.containing(x + dx, y + dy, z + dz);
@@ -301,7 +301,7 @@ public class OceanizedWitherEntity extends AbstractOceanizedWitherEntity impleme
 
     @Override
     public void performRangedAttack(LivingEntity target, float flval) {
-        // TODO：当前置凋灵弹路径清理完成后，重新审视这个遗留的系统调用。
+        // TODO锛氬綋鍓嶇疆鍑嬬伒寮硅矾寰勬竻鐞嗗畬鎴愬悗锛岄噸鏂板瑙嗚繖涓仐鐣欑殑绯荤粺璋冪敤銆?
         WitherShootPreEntity.shoot(this, target);
     }
 

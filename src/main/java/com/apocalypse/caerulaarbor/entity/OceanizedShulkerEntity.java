@@ -248,7 +248,7 @@ public class OceanizedShulkerEntity extends SeaMonster {
                 }
                 this.setHealth(this.getMaxHealth());
                 if ((Entity) player instanceof ServerPlayer serverPlayer) {
-                    Advancement adv = serverPlayer.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "construction"));
+                    Advancement adv = serverPlayer.server.getAdvancements().getAdvancement(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "construction"));
                     AdvancementProgress ap = serverPlayer.getAdvancements().getOrStartProgress(adv);
                     if (!ap.isDone()) {
                         for (String criteria : ap.getRemainingCriteria())

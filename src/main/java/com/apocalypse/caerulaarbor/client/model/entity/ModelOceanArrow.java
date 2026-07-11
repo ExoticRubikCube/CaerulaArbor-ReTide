@@ -15,7 +15,7 @@ import net.minecraft.world.entity.Entity;
 // 面向 Minecraft 1.17 及以上版本导出，使用 Mojang 映射
 // 将此类粘贴到你的模组中，并生成所需的全部导入语句
 public class ModelOceanArrow<T extends Entity> extends EntityModel<T> {
-	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(CaerulaArborMod.MODID, "ocean_arrow"), "main");
+	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "ocean_arrow"), "main");
 	public final ModelPart arrow;
 
 	public ModelOceanArrow(ModelPart root) {

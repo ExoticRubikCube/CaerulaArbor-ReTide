@@ -48,9 +48,9 @@ public class CoinOfTradeItem extends Item {
 	public ItemStack finishUsingItem(ItemStack itemstack, Level world, LivingEntity entity) {
 		ItemStack retval = super.finishUsingItem(itemstack, world, entity);
 		ItemStack togive = ItemStack.EMPTY;
-		if (entity.getOffhandItem().is(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "relic_generic"))) && entity.getMainHandItem().getItem() == itemstack.getItem()) {
+		if (entity.getOffhandItem().is(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))) && entity.getMainHandItem().getItem() == itemstack.getItem()) {
 			for (int index0 = 0; index0 < 64; index0++) {
-				togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElseGet(() -> Items.AIR))).copy();
+				togive = new ItemStack((ForgeRegistries.ITEMS.tags().getTag(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_generic"))).getRandomElement(RandomSource.create()).orElseGet(() -> Items.AIR))).copy();
 				if (!(togive.getItem() == ItemStack.EMPTY.getItem())) {
 					break;
 				}
