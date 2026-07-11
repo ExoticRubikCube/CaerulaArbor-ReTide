@@ -83,7 +83,7 @@ public class CentrifugerSelectScreen extends AbstractContainerScreen<Centrifuger
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
 
-		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/centrifuger_select_bg.png"), this.leftPos, this.topPos, 0, 0, 194, 130, 194, 130);
+		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/centrifuger_select_bg.png"), this.leftPos, this.topPos, 0, 0, 194, 130, 194, 130);
 
 		RenderSystem.disableBlend();
 	}
@@ -105,7 +105,7 @@ public class CentrifugerSelectScreen extends AbstractContainerScreen<Centrifuger
 	@Override
 	public void init() {
 		super.init();
-		imagebutton_cent_button_skadi_0 = new ImageButton(this.leftPos + 36, this.topPos + 40, 26, 18, 0, 0, 18, new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_cent_button_skadi_0.png"), 26, 36, e -> {
+		imagebutton_cent_button_skadi_0 = new ImageButton(this.leftPos + 36, this.topPos + 40, 26, 18, 0, 0, 18, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_cent_button_skadi_0.png"), 26, 36, e -> {
 			if (true) {
 				CANetwork.PACKET_HANDLER.sendToServer(new CentrifugerSelectButtonMessage(0, x, y, z));
 				CentrifugerSelectButtonMessage.handleButtonAction(entity, 0, x, y, z);
@@ -113,7 +113,7 @@ public class CentrifugerSelectScreen extends AbstractContainerScreen<Centrifuger
 		});
 		guistate.put("button:imagebutton_cent_button_skadi_0", imagebutton_cent_button_skadi_0);
 		this.addRenderableWidget(imagebutton_cent_button_skadi_0);
-		imagebutton_cent_button_ulpians_0 = new ImageButton(this.leftPos + 68, this.topPos + 40, 26, 18, 0, 0, 18, new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_cent_button_ulpians_0.png"), 26, 36, e -> {
+		imagebutton_cent_button_ulpians_0 = new ImageButton(this.leftPos + 68, this.topPos + 40, 26, 18, 0, 0, 18, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_cent_button_ulpians_0.png"), 26, 36, e -> {
 			if (true) {
 				CANetwork.PACKET_HANDLER.sendToServer(new CentrifugerSelectButtonMessage(1, x, y, z));
 				CentrifugerSelectButtonMessage.handleButtonAction(entity, 1, x, y, z);
@@ -121,7 +121,7 @@ public class CentrifugerSelectScreen extends AbstractContainerScreen<Centrifuger
 		});
 		guistate.put("button:imagebutton_cent_button_ulpians_0", imagebutton_cent_button_ulpians_0);
 		this.addRenderableWidget(imagebutton_cent_button_ulpians_0);
-		imagebutton_cent_button_gladiia_0 = new ImageButton(this.leftPos + 36, this.topPos + 72, 26, 18, 0, 0, 18, new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_cent_button_gladiia_0.png"), 26, 36, e -> {
+		imagebutton_cent_button_gladiia_0 = new ImageButton(this.leftPos + 36, this.topPos + 72, 26, 18, 0, 0, 18, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_cent_button_gladiia_0.png"), 26, 36, e -> {
 			if (true) {
 				CANetwork.PACKET_HANDLER.sendToServer(new CentrifugerSelectButtonMessage(2, x, y, z));
 				CentrifugerSelectButtonMessage.handleButtonAction(entity, 2, x, y, z);
@@ -129,7 +129,7 @@ public class CentrifugerSelectScreen extends AbstractContainerScreen<Centrifuger
 		});
 		guistate.put("button:imagebutton_cent_button_gladiia_0", imagebutton_cent_button_gladiia_0);
 		this.addRenderableWidget(imagebutton_cent_button_gladiia_0);
-		imagebutton_cent_button_done_0 = new ImageButton(this.leftPos + 116, this.topPos + 104, 26, 18, 0, 0, 18, new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_cent_button_done_0.png"), 26, 36, e -> {
+		imagebutton_cent_button_done_0 = new ImageButton(this.leftPos + 116, this.topPos + 104, 26, 18, 0, 0, 18, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_cent_button_done_0.png"), 26, 36, e -> {
 			if (true) {
 				CANetwork.PACKET_HANDLER.sendToServer(new CentrifugerSelectButtonMessage(3, x, y, z));
 				CentrifugerSelectButtonMessage.handleButtonAction(entity, 3, x, y, z);
@@ -137,7 +137,7 @@ public class CentrifugerSelectScreen extends AbstractContainerScreen<Centrifuger
 		});
 		guistate.put("button:imagebutton_cent_button_done_0", imagebutton_cent_button_done_0);
 		this.addRenderableWidget(imagebutton_cent_button_done_0);
-		imagebutton_cen_button_specter_0 = new ImageButton(this.leftPos + 68, this.topPos + 72, 26, 18, 0, 0, 18, new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_cen_button_specter_0.png"), 26, 36, e -> {
+		imagebutton_cen_button_specter_0 = new ImageButton(this.leftPos + 68, this.topPos + 72, 26, 18, 0, 0, 18, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_cen_button_specter_0.png"), 26, 36, e -> {
 			if (true) {
 				CANetwork.PACKET_HANDLER.sendToServer(new CentrifugerSelectButtonMessage(4, x, y, z));
 				CentrifugerSelectButtonMessage.handleButtonAction(entity, 4, x, y, z);

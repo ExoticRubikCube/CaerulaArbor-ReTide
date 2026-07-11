@@ -112,7 +112,7 @@ public class DisconcentrationEventHandler {
             return;
         }
 
-        if (!sourceEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+        if (!sourceEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
             return;
         }
 
@@ -156,7 +156,7 @@ public class DisconcentrationEventHandler {
         }
 
         if (player instanceof ServerPlayer serverPlayer) {
-            Advancement advancement = serverPlayer.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "to_we_many"));
+            Advancement advancement = serverPlayer.server.getAdvancements().getAdvancement(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "to_we_many"));
             AdvancementProgress advancementProgress = serverPlayer.getAdvancements().getOrStartProgress(advancement);
             if (!advancementProgress.isDone()) {
                 for (String criteria : advancementProgress.getRemainingCriteria()) {

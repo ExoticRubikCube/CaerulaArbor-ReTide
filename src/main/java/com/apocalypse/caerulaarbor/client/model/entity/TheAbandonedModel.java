@@ -11,16 +11,16 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class TheAbandonedModel extends GeoModel<TheAbandonedEntity> {
-	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/theabandoned_texture.png");
+	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/theabandoned_texture.png");
 
 	@Override
 	public ResourceLocation getAnimationResource(TheAbandonedEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/the_abandoned.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/the_abandoned.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(TheAbandonedEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/the_abandoned.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/the_abandoned.geo.json");
 	}
 
 	@Override

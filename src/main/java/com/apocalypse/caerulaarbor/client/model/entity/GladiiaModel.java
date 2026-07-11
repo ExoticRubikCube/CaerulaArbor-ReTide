@@ -13,17 +13,17 @@ import software.bernie.geckolib.model.data.EntityModelData;
 public class GladiiaModel extends GeoModel<GladiiaEntity> {
 	@Override
 	public ResourceLocation getAnimationResource(GladiiaEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/gladiia.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/gladiia.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(GladiiaEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/gladiia.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/gladiia.geo.json");
 	}
 
 	@Override
 	public ResourceLocation getTextureResource(GladiiaEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/hunter_gladiia.png");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/hunter_gladiia.png");
 	}
 
 	@Override

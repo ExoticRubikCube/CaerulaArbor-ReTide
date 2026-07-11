@@ -15,7 +15,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
 public class CarmenBulletRenderer extends EntityRenderer<CarmenBulletEntity> {
-	private static final ResourceLocation texture = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/carmen_bullet.png");
+	private static final ResourceLocation texture = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/carmen_bullet.png");
 	private final ModelBulletProjectile model;
 
 	public CarmenBulletRenderer(EntityRendererProvider.Context context) {

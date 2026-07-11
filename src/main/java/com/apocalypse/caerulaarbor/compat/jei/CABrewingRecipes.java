@@ -24,7 +24,7 @@ import java.util.List;
 public class CABrewingRecipes implements IModPlugin {
 	@Override
 	public ResourceLocation getPluginUid() {
-		return new ResourceLocation(CaerulaArborMod.MODID, "brewing_recipes");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "brewing_recipes");
 	}
 
 	@Override

@@ -27,8 +27,8 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
 public class OceanizeCatalystItem extends Item {
-	private static final TagKey<EntityType<?>> BOSSES = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation("forge:bosses"));
-	private static final TagKey<EntityType<?>> CANNOT_TRANSFORM = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "cannot_transform"));
+	private static final TagKey<EntityType<?>> BOSSES = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.parse("forge:bosses"));
+	private static final TagKey<EntityType<?>> CANNOT_TRANSFORM = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "cannot_transform"));
 
 	public OceanizeCatalystItem() {
 		super(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON));

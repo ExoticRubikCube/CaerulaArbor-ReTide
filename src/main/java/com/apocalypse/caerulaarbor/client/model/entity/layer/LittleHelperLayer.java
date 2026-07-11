@@ -13,7 +13,7 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 public class LittleHelperLayer extends GeoRenderLayer<LittleHelperEntity> {
-	private static final ResourceLocation LAYER = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/little_helper_lit.png");
+	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/little_helper_lit.png");
 
 	public LittleHelperLayer(GeoRenderer<LittleHelperEntity> entityRenderer) {
 		super(entityRenderer);

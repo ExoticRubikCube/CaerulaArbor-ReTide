@@ -9,16 +9,16 @@ import software.bernie.geckolib.model.GeoModel;
 public class WavecleaverItemModel extends GeoModel<WavecleaverItem> {
 	@Override
 	public ResourceLocation getAnimationResource(WavecleaverItem animatable) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/wavelceaver.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/wavelceaver.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(WavecleaverItem animatable) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/wavelceaver.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/wavelceaver.geo.json");
 	}
 
 	@Override
 	public ResourceLocation getTextureResource(WavecleaverItem animatable) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/item/weavecleaver.png");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/item/weavecleaver.png");
 	}
 }

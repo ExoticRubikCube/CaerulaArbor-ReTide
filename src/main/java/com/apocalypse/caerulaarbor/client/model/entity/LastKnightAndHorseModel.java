@@ -11,16 +11,16 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class LastKnightAndHorseModel extends GeoModel<LastKnightAndHorseEntity> {
-	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/knight_amd_horse.png");
+	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/knight_amd_horse.png");
 
 	@Override
 	public ResourceLocation getAnimationResource(LastKnightAndHorseEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/last_knight_horse.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/last_knight_horse.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(LastKnightAndHorseEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/last_knight_horse.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/last_knight_horse.geo.json");
 	}
 
 	@Override

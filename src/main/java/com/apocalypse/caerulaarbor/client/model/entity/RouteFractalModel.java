@@ -8,17 +8,17 @@ import software.bernie.geckolib.model.GeoModel;
 public class RouteFractalModel extends GeoModel<RouteFractalEntity> {
 	@Override
 	public ResourceLocation getAnimationResource(RouteFractalEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/routeshaper.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/routeshaper.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(RouteFractalEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/routeshaper.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/routeshaper.geo.json");
 	}
 
 	@Override
 	public ResourceLocation getTextureResource(RouteFractalEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/blackroute.png");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/blackroute.png");
 	}
 
 }

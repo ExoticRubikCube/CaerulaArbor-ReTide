@@ -37,15 +37,15 @@ public class WorldUtils {
 	}
 
 	/**
-	 * 按当前海嗣痕迹方块的生长规则提高其 {@code grow_age}。
+	 * 鎸夊綋鍓嶆捣鍡ｇ棔杩规柟鍧楃殑鐢熼暱瑙勫垯鎻愰珮鍏?{@code grow_age}銆?
 	 *
-	 * <p>该方法会直接读取目标位置上的方块状态；若该方块不存在 {@code grow_age}
-	 * 整型属性，则不执行任何操作。当前实现仅在年龄小于 {@code 30} 时生效，
-	 * 并尝试将其一次性增加 {@code 8}。只有当增加后的值仍属于该属性允许的取值范围时，
-	 * 才会真正写回世界。
+	 * <p>璇ユ柟娉曚細鐩存帴璇诲彇鐩爣浣嶇疆涓婄殑鏂瑰潡鐘舵€侊紱鑻ヨ鏂瑰潡涓嶅瓨鍦?{@code grow_age}
+	 * 鏁村瀷灞炴€э紝鍒欎笉鎵ц浠讳綍鎿嶄綔銆傚綋鍓嶅疄鐜颁粎鍦ㄥ勾榫勫皬浜?{@code 30} 鏃剁敓鏁堬紝
+	 * 骞跺皾璇曞皢鍏朵竴娆℃€у鍔?{@code 8}銆傚彧鏈夊綋澧炲姞鍚庣殑鍊间粛灞炰簬璇ュ睘鎬у厑璁哥殑鍙栧€艰寖鍥存椂锛?
+	 * 鎵嶄細鐪熸鍐欏洖涓栫晫銆?
 	 *
-	 * @param world 世界
-	 * @param pos 目标方块位置
+	 * @param world 涓栫晫
+	 * @param pos 鐩爣鏂瑰潡浣嶇疆
 	 */
 	public static void addGrowAge(LevelAccessor world, BlockPos pos) {
 		BlockState state = world.getBlockState(pos);
@@ -62,7 +62,7 @@ public class WorldUtils {
 		}
 	}
 
-	//可疑
+	//鍙枒
 	public static void burndownTrail(LevelAccessor world, BlockState toBeBurn, double px, double py, double pz) {
 		BlockState output = Blocks.AIR.defaultBlockState();
 		boolean success = false;
@@ -109,33 +109,33 @@ public class WorldUtils {
 		}
 	}
 
-	//下放或使用基类或接口
+	//涓嬫斁鎴栦娇鐢ㄥ熀绫绘垨鎺ュ彛
 	public static boolean canLilyExist(LevelAccessor world, double x, double y, double z) {
 		return world.getBlockState(BlockPos.containing(x, y - 1, z)).isFaceSturdy(world, BlockPos.containing(x, y - 1, z), Direction.UP);
 	}
 
 	/**
-	 * 判断目标位置是否允许放置海嗣痕迹方块。
+	 * 鍒ゆ柇鐩爣浣嶇疆鏄惁鍏佽鏀剧疆娴峰棧鐥曡抗鏂瑰潡銆?
 	 *
-	 * <p>该方法检查目标位置正下方的方块：它的上表面必须能够承托方块，
-	 * 或者被显式标记进 {@code trail_existable} 标签；同时该支撑方块不能是
-	 * {@code SEA_TRAIL_SOLID}，以避免在实心海嗣痕迹上继续叠放普通痕迹。
+	 * <p>璇ユ柟娉曟鏌ョ洰鏍囦綅缃涓嬫柟鐨勬柟鍧楋細瀹冪殑涓婅〃闈㈠繀椤昏兘澶熸壙鎵樻柟鍧楋紝
+	 * 鎴栬€呰鏄惧紡鏍囪杩?{@code trail_existable} 鏍囩锛涘悓鏃惰鏀拺鏂瑰潡涓嶈兘鏄?
+	 * {@code SEA_TRAIL_SOLID}锛屼互閬垮厤鍦ㄥ疄蹇冩捣鍡ｇ棔杩逛笂缁х画鍙犳斁鏅€氱棔杩广€?
 	 *
-	 * @param world 世界
-	 * @param x 目标 X 坐标
-	 * @param y 目标 Y 坐标
-	 * @param z 目标 Z 坐标
-	 * @return 若当前位置允许放置海嗣痕迹，则返回 {@code true}
+	 * @param world 涓栫晫
+	 * @param x 鐩爣 X 鍧愭爣
+	 * @param y 鐩爣 Y 鍧愭爣
+	 * @param z 鐩爣 Z 鍧愭爣
+	 * @return 鑻ュ綋鍓嶄綅缃厑璁告斁缃捣鍡ｇ棔杩癸紝鍒欒繑鍥?{@code true}
 	 */
 	public static boolean canPutTrail(LevelAccessor world, double x, double y, double z) {
 		BlockPos belowPos = BlockPos.containing(x, y - 1, z);
 		BlockState belowState = world.getBlockState(belowPos);
 		return (belowState.isFaceSturdy(world, belowPos, Direction.UP)
-				|| belowState.is(BlockTags.create(new ResourceLocation(CaerulaArborMod.MODID, "trail_existable"))))
+				|| belowState.is(BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "trail_existable"))))
 				&& belowState.getBlock() != CABlocks.SEA_TRAIL_SOLID.get();
 	}
 
-	//可疑
+	//鍙枒
 	public static void clearNetherseaAround(LevelAccessor world, double x, double y, double z, Entity entity) {
 		if (entity == null)
 			return;
@@ -157,7 +157,7 @@ public class WorldUtils {
 					target = world.getBlockState(BlockPos.containing(px, py, pz));
 					canBreak = false;
 					mayDrop = false;
-					if (target.is(BlockTags.create(new ResourceLocation(CaerulaArborMod.MODID, "trail")))) {
+					if (target.is(BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "trail")))) {
 						canBreak = true;
 					} else if (target.getBlock() == CABlocks.OCEAN_OVARY.get()) {
 						canBreak = true;
@@ -182,9 +182,9 @@ public class WorldUtils {
 		}
 	}
 
-	//可以安排到那个BaseSeaborn
+	//鍙互瀹夋帓鍒伴偅涓狟aseSeaborn
 	public static boolean canCommonSeabornSpawn(LevelAccessor world, double x, double y, double z) {
-		if (!world.getBiome(BlockPos.containing(x, y, z)).is(TagKey.create(Registries.BIOME, new ResourceLocation(CaerulaArborMod.MODID, "common_spawn_biome")))) {
+		if (!world.getBiome(BlockPos.containing(x, y, z)).is(TagKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "common_spawn_biome")))) {
 			return false;
 		}
 		if (Math.random() * 100 < (world.getLevelData().getGameRules().getInt(CAGameRules.SEABORN_SPAWN_RATE))) {
@@ -199,9 +199,9 @@ public class WorldUtils {
 		return false;
 	}
 
-	//或许放到其他 util 比较好？可以专门制作一个海嗣 util
+	//鎴栬鏀惧埌鍏朵粬 util 姣旇緝濂斤紵鍙互涓撻棬鍒朵綔涓€涓捣鍡?util
 	public static boolean canDangerSeabornSpawn(LevelAccessor world, double x, double y, double z) {
-		if (!world.getBiome(BlockPos.containing(x, y, z)).is(TagKey.create(Registries.BIOME, new ResourceLocation(CaerulaArborMod.MODID, "danger_spawn_biome")))) {
+		if (!world.getBiome(BlockPos.containing(x, y, z)).is(TagKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "danger_spawn_biome")))) {
 			return false;
 		}
 		if (Math.random() * 100 < (world.getLevelData().getGameRules().getInt(CAGameRules.SEABORN_SPAWN_RATE))) {
@@ -216,9 +216,9 @@ public class WorldUtils {
 		return false;
 	}
 
-	//可疑
+	//鍙枒
 	public static boolean canRareSeabornSpawn(LevelAccessor world, double x, double y, double z) {
-		if (!world.getBiome(BlockPos.containing(x, y, z)).is(TagKey.create(Registries.BIOME, new ResourceLocation(CaerulaArborMod.MODID, "rare_spawn_biome")))) {
+		if (!world.getBiome(BlockPos.containing(x, y, z)).is(TagKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "rare_spawn_biome")))) {
 			return false;
 		}
 		if (Math.random() * 100 < (world.getLevelData().getGameRules().getInt(CAGameRules.SEABORN_SPAWN_RATE))) {
@@ -233,11 +233,11 @@ public class WorldUtils {
 		return false;
 	}
 
-	//TODO 可疑，为什么不放在其他util
+	//TODO 鍙枒锛屼负浠€涔堜笉鏀惧湪鍏朵粬util
 	public static void dropRelicRoute(LevelAccessor world, double x, double y, double z) {
 		if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
 			if (!world.isClientSide() && world.getServer() != null) {
-				for (ItemStack itemstackiterator : world.getServer().getLootData().getLootTable(new ResourceLocation(CaerulaArborMod.MODID, "gameplay/relic_route"))
+				for (ItemStack itemstackiterator : world.getServer().getLootData().getLootTable(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "gameplay/relic_route"))
 						.getRandomItems(new LootParams.Builder((ServerLevel) world).create(LootContextParamSets.EMPTY))) {
 					if (world instanceof ServerLevel level) {
 						ItemEntity entityToSpawn = new ItemEntity(level, x, y, z, itemstackiterator);
@@ -251,16 +251,16 @@ public class WorldUtils {
 	}
 
 	/**
-	 * 判断目标位置下方 20 格内是否不存在可作为地面的实心方块。
+	 * 鍒ゆ柇鐩爣浣嶇疆涓嬫柟 20 鏍煎唴鏄惁涓嶅瓨鍦ㄥ彲浣滀负鍦伴潰鐨勫疄蹇冩柟鍧椼€?
 	 *
-	 * <p>该方法会将空气和液体都视为“未接地”，因此可用于悬浮单位检测自己是否长期位于
-	 * 深坑、水柱或其他无实心支撑的空间上方。
+	 * <p>璇ユ柟娉曚細灏嗙┖姘斿拰娑蹭綋閮借涓衡€滄湭鎺ュ湴鈥濓紝鍥犳鍙敤浜庢偓娴崟浣嶆娴嬭嚜宸辨槸鍚﹂暱鏈熶綅浜?
+	 * 娣卞潙銆佹按鏌辨垨鍏朵粬鏃犲疄蹇冩敮鎾戠殑绌洪棿涓婃柟銆?
 	 *
-	 * @param world 世界
-	 * @param x 目标 X 坐标
-	 * @param y 目标 Y 坐标
-	 * @param z 目标 Z 坐标
-	 * @return 若下方 20 格内都没有实心地面，则返回 {@code true}
+	 * @param world 涓栫晫
+	 * @param x 鐩爣 X 鍧愭爣
+	 * @param y 鐩爣 Y 鍧愭爣
+	 * @param z 鐩爣 Z 鍧愭爣
+	 * @return 鑻ヤ笅鏂?20 鏍煎唴閮芥病鏈夊疄蹇冨湴闈紝鍒欒繑鍥?{@code true}
 	 */
 	public static boolean hasNoSolidGroundWithin20Below(LevelAccessor world, double x, double y, double z) {
 		if (y < -32) {
@@ -274,11 +274,11 @@ public class WorldUtils {
 		return true;
 	}
 
-	//TODO:或许可以下放
+	//TODO:鎴栬鍙互涓嬫斁
 	public static void dropRelicTidebi(LevelAccessor world, double x, double y, double z) {
 		if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
 			if (!world.isClientSide() && world.getServer() != null) {
-				for (ItemStack itemstackiterator : world.getServer().getLootData().getLootTable(new ResourceLocation(CaerulaArborMod.MODID, "gameplay/relic_tidebi"))
+				for (ItemStack itemstackiterator : world.getServer().getLootData().getLootTable(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "gameplay/relic_tidebi"))
 						.getRandomItems(new LootParams.Builder((ServerLevel) world).create(LootContextParamSets.EMPTY))) {
 					if (world instanceof ServerLevel level) {
 						ItemEntity entityToSpawn = new ItemEntity(level, x, y, z, itemstackiterator);
@@ -291,25 +291,25 @@ public class WorldUtils {
 		}
 	}
 
-	//还行，暂时不动代码本身，但是真的需要放在这里吗。。评估有没有更合适的
+	//杩樿锛屾殏鏃朵笉鍔ㄤ唬鐮佹湰韬紝浣嗘槸鐪熺殑闇€瑕佹斁鍦ㄨ繖閲屽悧銆傘€傝瘎浼版湁娌℃湁鏇村悎閫傜殑
 	/**
-	 * 以给定目标高度为中心，向上与向下搜索可用于生成实体的 Y 坐标。
+	 * 浠ョ粰瀹氱洰鏍囬珮搴︿负涓績锛屽悜涓婁笌鍚戜笅鎼滅储鍙敤浜庣敓鎴愬疄浣撶殑 Y 鍧愭爣銆?
 	 *
-	 * <p>这个方法适用于需要落在开阔空间内的普通生成逻辑。它会在搜索前于参考坐标
-	 * {@code (x, y, z)} 播放一次方块音效，并在 {@code (xx, yy, zz)} 附近的 12 格范围内
-	 * 交替检查上下高度，返回首个未被地板高度判定阻挡的位置。
+	 * <p>杩欎釜鏂规硶閫傜敤浜庨渶瑕佽惤鍦ㄥ紑闃旂┖闂村唴鐨勬櫘閫氱敓鎴愰€昏緫銆傚畠浼氬湪鎼滅储鍓嶄簬鍙傝€冨潗鏍?
+	 * {@code (x, y, z)} 鎾斁涓€娆℃柟鍧楅煶鏁堬紝骞跺湪 {@code (xx, yy, zz)} 闄勮繎鐨?12 鏍艰寖鍥村唴
+	 * 浜ゆ浛妫€鏌ヤ笂涓嬮珮搴︼紝杩斿洖棣栦釜鏈鍦版澘楂樺害鍒ゅ畾闃绘尅鐨勪綅缃€?
 	 *
-	 * <p>与 {@link #findFirstEmptyYAbove(LevelAccessor, double, double, double)} 不同，
-	 * 这里关注的是“可落位的生成高度”，而不是单纯寻找空方块。
+	 * <p>涓?{@link #findFirstEmptyYAbove(LevelAccessor, double, double, double)} 涓嶅悓锛?
+	 * 杩欓噷鍏虫敞鐨勬槸鈥滃彲钀戒綅鐨勭敓鎴愰珮搴︹€濓紝鑰屼笉鏄崟绾鎵剧┖鏂瑰潡銆?
 	 *
-	 * @param world 世界
-	 * @param x 触发音效的参考 X 坐标
-	 * @param y 触发音效的参考 Y 坐标
-	 * @param z 触发音效的参考 Z 坐标
-	 * @param xx 目标生成点 X 坐标
-	 * @param yy 目标生成点起始 Y 坐标
-	 * @param zz 目标生成点 Z 坐标
-	 * @return 找到的可生成 Y；若 12 格内未找到，则返回 {@link Double#NaN}
+	 * @param world 涓栫晫
+	 * @param x 瑙﹀彂闊虫晥鐨勫弬鑰?X 鍧愭爣
+	 * @param y 瑙﹀彂闊虫晥鐨勫弬鑰?Y 鍧愭爣
+	 * @param z 瑙﹀彂闊虫晥鐨勫弬鑰?Z 鍧愭爣
+	 * @param xx 鐩爣鐢熸垚鐐?X 鍧愭爣
+	 * @param yy 鐩爣鐢熸垚鐐硅捣濮?Y 鍧愭爣
+	 * @param zz 鐩爣鐢熸垚鐐?Z 鍧愭爣
+	 * @return 鎵惧埌鐨勫彲鐢熸垚 Y锛涜嫢 12 鏍煎唴鏈壘鍒帮紝鍒欒繑鍥?{@link Double#NaN}
 	 */
 	public static double findValidSpawnY(LevelAccessor world, double x, double y, double z, double xx, double yy, double zz) {
 		double validY;
@@ -330,17 +330,17 @@ public class WorldUtils {
 	}
 
 	/**
-	 * 自给定高度起向上搜索首个可用的空方块 Y 坐标。
+	 * 鑷粰瀹氶珮搴﹁捣鍚戜笂鎼滅储棣栦釜鍙敤鐨勭┖鏂瑰潡 Y 鍧愭爣銆?
 	 *
-	 * <p>这个方法适用于泪滴、肢体等悬空生成物。它只要求目标方块本身为空，
-	 * 不像 {@link #findValidSpawnY(LevelAccessor, double, double, double, double, double, double)}
-	 * 那样还会校验脚下是否存在可站立表面。
+	 * <p>杩欎釜鏂规硶閫傜敤浜庢唱婊淬€佽偄浣撶瓑鎮┖鐢熸垚鐗┿€傚畠鍙姹傜洰鏍囨柟鍧楁湰韬负绌猴紝
+	 * 涓嶅儚 {@link #findValidSpawnY(LevelAccessor, double, double, double, double, double, double)}
+	 * 閭ｆ牱杩樹細鏍￠獙鑴氫笅鏄惁瀛樺湪鍙珯绔嬭〃闈€?
 	 *
-	 * @param world 世界
-	 * @param x 目标 X 坐标
-	 * @param startY 搜索起始 Y 坐标
-	 * @param z 目标 Z 坐标
-	 * @return 找到的首个空方块 Y；若 12 格内未找到，则返回 {@link Double#NaN}
+	 * @param world 涓栫晫
+	 * @param x 鐩爣 X 鍧愭爣
+	 * @param startY 鎼滅储璧峰 Y 鍧愭爣
+	 * @param z 鐩爣 Z 鍧愭爣
+	 * @return 鎵惧埌鐨勯涓┖鏂瑰潡 Y锛涜嫢 12 鏍煎唴鏈壘鍒帮紝鍒欒繑鍥?{@link Double#NaN}
 	 */
 	public static double findFirstEmptyYAbove(LevelAccessor world, double x, double startY, double z) {
 		double validY;
@@ -353,29 +353,29 @@ public class WorldUtils {
 		return Double.NaN;
 	}
 
-	//需要评估然后添加文档注释解释作用
+	//闇€瑕佽瘎浼扮劧鍚庢坊鍔犳枃妗ｆ敞閲婅В閲婁綔鐢?
 	public static boolean isOrganic(BlockState block) {
 		if (block.getBlock() == CABlocks.TRAIL_PULSE.get() || block.getBlock() == CABlocks.TRAIL_LOG.get() || block.getBlock() == CABlocks.TRAIL_LEAVE.get()
 				|| block.getBlock() == CABlocks.STRIPPED_TRAIL_LOG.get()) {
 			return false;
 		}
-		if (block.is(BlockTags.create(new ResourceLocation("forge:phayrilesh"))) || block.is(BlockTags.create(new ResourceLocation("spore:fungal_blocks")))) {
+		if (block.is(BlockTags.create(ResourceLocation.parse("forge:phayrilesh"))) || block.is(BlockTags.create(ResourceLocation.parse("spore:fungal_blocks")))) {
 			return Math.random() < 0.33;
 		}
-		return block.is(BlockTags.create(new ResourceLocation(CaerulaArborMod.MODID, "organic")));
+		return block.is(BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "organic")));
 	}
 
 	/**
-	 * 判断指定位置是否具备人形单位可用的落点空间。
+	 * 鍒ゆ柇鎸囧畾浣嶇疆鏄惁鍏峰浜哄舰鍗曚綅鍙敤鐨勮惤鐐圭┖闂淬€?
 	 * <p>
-	 * 该方法会检查目标坐标向上 3 格内是否存在会占用站立空间的地形。
-	 * 若在客户端调用，还会在该位置播放一次末影人环境音，用于配合相关传送或生成表现。
+	 * 璇ユ柟娉曚細妫€鏌ョ洰鏍囧潗鏍囧悜涓?3 鏍煎唴鏄惁瀛樺湪浼氬崰鐢ㄧ珯绔嬬┖闂寸殑鍦板舰銆?
+	 * 鑻ュ湪瀹㈡埛绔皟鐢紝杩樹細鍦ㄨ浣嶇疆鎾斁涓€娆℃湯褰变汉鐜闊筹紝鐢ㄤ簬閰嶅悎鐩稿叧浼犻€佹垨鐢熸垚琛ㄧ幇銆?
 	 *
-	 * @param world 世界访问器
-	 * @param xx 目标 X 坐标
-	 * @param yy 目标 Y 坐标
-	 * @param zz 目标 Z 坐标
-	 * @return 若该位置可容纳人形单位站立则返回 {@code true}，否则返回 {@code false}
+	 * @param world 涓栫晫璁块棶鍣?
+	 * @param xx 鐩爣 X 鍧愭爣
+	 * @param yy 鐩爣 Y 鍧愭爣
+	 * @param zz 鐩爣 Z 鍧愭爣
+	 * @return 鑻ヨ浣嶇疆鍙绾充汉褰㈠崟浣嶇珯绔嬪垯杩斿洖 {@code true}锛屽惁鍒欒繑鍥?{@code false}
 	 */
 	public static boolean isValidHumanoidPlace(LevelAccessor world, double xx, double yy, double zz) {
 		if (world instanceof Level level &&level.isClientSide()) {
@@ -389,7 +389,7 @@ public class WorldUtils {
 		return true;
 	}
 
-	//需要注释解释
+	//闇€瑕佹敞閲婅В閲?
 	public static boolean canGrief(LevelAccessor world) {
 		if (world.isClientSide()) {
 			return false;
@@ -400,9 +400,9 @@ public class WorldUtils {
 		return false;
 	}
 
-	//需要注释解释，或许可以移动到别的util
+	//闇€瑕佹敞閲婅В閲婏紝鎴栬鍙互绉诲姩鍒板埆鐨剈til
 	public static boolean canSpawnUnderwaterSeaborn(LevelAccessor world, double x, double y, double z) {
-		if (!world.getBiome(BlockPos.containing(x, y, z)).is(TagKey.create(Registries.BIOME, new ResourceLocation(CaerulaArborMod.MODID, "underwater_spawn_biome")))) {
+		if (!world.getBiome(BlockPos.containing(x, y, z)).is(TagKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "underwater_spawn_biome")))) {
 			return false;
 		}
 		if (Math.random() * 100 < (world.getLevelData().getGameRules().getInt(CAGameRules.SEABORN_SPAWN_RATE))) {
@@ -411,9 +411,9 @@ public class WorldUtils {
 		return false;
 	}
 
-	//同上
+	//鍚屼笂
 	public static boolean canSpawnMarineSeaborn(LevelAccessor world, double x, double y, double z) {
-		if (!world.getBiome(BlockPos.containing(x, y, z)).is(TagKey.create(Registries.BIOME, new ResourceLocation(CaerulaArborMod.MODID, "marine_spawn_biome")))) {
+		if (!world.getBiome(BlockPos.containing(x, y, z)).is(TagKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "marine_spawn_biome")))) {
 			return false;
 		}
 		if (Math.random() * 100 < (world.getLevelData().getGameRules().getInt(CAGameRules.SEABORN_SPAWN_RATE))) {

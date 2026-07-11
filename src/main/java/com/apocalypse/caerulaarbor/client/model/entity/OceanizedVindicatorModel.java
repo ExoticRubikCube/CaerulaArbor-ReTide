@@ -13,17 +13,17 @@ import software.bernie.geckolib.model.data.EntityModelData;
 public class OceanizedVindicatorModel extends GeoModel<OceanizedVindicatorEntity> {
 	@Override
 	public ResourceLocation getAnimationResource(OceanizedVindicatorEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/ocean_vindic.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/ocean_vindic.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(OceanizedVindicatorEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/ocean_vindic.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/ocean_vindic.geo.json");
 	}
 
 	@Override
 	public ResourceLocation getTextureResource(OceanizedVindicatorEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/oceanvindic_lit.png");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/oceanvindic_lit.png");
 	}
 
 	@Override

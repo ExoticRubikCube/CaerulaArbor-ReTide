@@ -32,7 +32,7 @@ public class SilenceUpgradeManager {
 			if (stra > 0) {
 				for (Entity entityiterator : new ArrayList<>(world.players())) {
 					if (entityiterator instanceof ServerPlayer player) {
-						Advancement adv = player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "she_coming"));
+						Advancement adv = player.server.getAdvancements().getAdvancement(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "she_coming"));
 						AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
 						if (!ap.isDone()) {
 							for (String criteria : ap.getRemainingCriteria())
@@ -99,7 +99,7 @@ public class SilenceUpgradeManager {
 				MapVariablesHandler.setEvoPoint(world, StrategyType.SILENCE, 0);
 				for (Entity entityiterator : new ArrayList<>(world.players())) {
 					if (entityiterator instanceof ServerPlayer player) {
-						Advancement adv = player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "hymn_of_land"));
+						Advancement adv = player.server.getAdvancements().getAdvancement(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "hymn_of_land"));
 						AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
 						if (!ap.isDone()) {
 							for (String criteria : ap.getRemainingCriteria())

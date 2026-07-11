@@ -6,16 +6,16 @@ import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.GeoModel;
 
 public class LittleHelperModel extends GeoModel<LittleHelperEntity> {
-	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/little_helper.png");
+	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/little_helper.png");
 
 	@Override
 	public ResourceLocation getAnimationResource(LittleHelperEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/little_helper.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/little_helper.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(LittleHelperEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/little_helper.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/little_helper.geo.json");
 	}
 
 	@Override

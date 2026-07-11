@@ -14,7 +14,7 @@ import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 public class CrackerAbyssalRenderer extends GeoEntityRenderer<CrackerAbyssalEntity> {
-	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/reefbreaker.png");
+	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/reefbreaker.png");
 
 	public CrackerAbyssalRenderer(EntityRendererProvider.Context renderManager) {
 		super(renderManager, new CrackerAbyssalModel());

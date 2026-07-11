@@ -11,16 +11,16 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class CorrectionalPhalanxyInfantryModel extends GeoModel<CorrectionalPhalanxyInfantryEntity> {
-	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/correctionalphalanx_infantry_shield.png");
+	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/correctionalphalanx_infantry_shield.png");
 
 	@Override
 	public ResourceLocation getAnimationResource(CorrectionalPhalanxyInfantryEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/correctional_phalanx__infantry.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/correctional_phalanx__infantry.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(CorrectionalPhalanxyInfantryEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/correctional_phalanx__infantry.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/correctional_phalanx__infantry.geo.json");
 	}
 
 	@Override

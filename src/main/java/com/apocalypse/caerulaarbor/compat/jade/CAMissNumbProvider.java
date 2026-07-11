@@ -15,7 +15,7 @@ import snownee.jade.api.config.IPluginConfig;
 public enum CAMissNumbProvider implements IEntityComponentProvider {
     INSTANCE;
 
-    public static final ResourceLocation UID = new ResourceLocation(CaerulaArborMod.MODID, "miss_numb_provider");
+    public static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "miss_numb_provider");
 
     @Override
     public void appendTooltip(ITooltip iTooltip, EntityAccessor entityAccessor, IPluginConfig iPluginConfig) {

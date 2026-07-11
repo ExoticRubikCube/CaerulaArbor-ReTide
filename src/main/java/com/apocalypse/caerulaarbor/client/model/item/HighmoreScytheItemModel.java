@@ -8,16 +8,16 @@ import software.bernie.geckolib.model.GeoModel;
 public class HighmoreScytheItemModel extends GeoModel<HighmoreScytheItem> {
 	@Override
 	public ResourceLocation getAnimationResource(HighmoreScytheItem animatable) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/highmorescythe.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/highmorescythe.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(HighmoreScytheItem animatable) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/highmorescythe.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/highmorescythe.geo.json");
 	}
 
 	@Override
 	public ResourceLocation getTextureResource(HighmoreScytheItem animatable) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/item/highmore_scythe_bladed.png");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/item/highmore_scythe_bladed.png");
 	}
 }

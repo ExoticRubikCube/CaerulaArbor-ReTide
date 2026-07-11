@@ -135,7 +135,7 @@ public class LanternJudgementItem extends Item {
             final Vec3 center = new Vec3(x, y, z);
             List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(36 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
             for (Entity entityiterator : entfound) {
-                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring"))) && !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanpet"))) && entity.distanceTo(entityiterator) <= 18) {
+                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"))) && !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanpet"))) && entity.distanceTo(entityiterator) <= 18) {
                     if (entityiterator instanceof LivingEntity && !entity.level().isClientSide())
                         entity.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 200, 0, false, false));
                     if (entityiterator instanceof LivingEntity && !entity.level().isClientSide())
@@ -239,7 +239,7 @@ public class LanternJudgementItem extends Item {
             }
             return InteractionResult.SUCCESS;
         }
-        if (blockstate.is(BlockTags.create(new ResourceLocation("minecraft:logs")))) {
+        if (blockstate.is(BlockTags.create(ResourceLocation.parse("minecraft:logs")))) {
             toGive = new ItemStack(Items.CHARCOAL).copy();
             if (blockstate.getBlock() == CABlocks.TRAIL_LOG.get() || blockstate.getBlock() == CABlocks.STRIPPED_TRAIL_LOG.get()) {
                 toGive = new ItemStack(CAItems.TRAIL_POWDER.get()).copy();

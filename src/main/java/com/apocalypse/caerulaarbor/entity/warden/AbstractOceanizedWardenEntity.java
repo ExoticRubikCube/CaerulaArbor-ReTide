@@ -205,7 +205,7 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonster {
 			if (!(nearbyEntity instanceof Mob) && !(nearbyEntity instanceof Player)) {
 				continue;
 			}
-			if (nearbyEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring"))) && nearbyEntity != target) {
+			if (nearbyEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"))) && nearbyEntity != target) {
 				continue;
 			}
 			if (nearbyEntity == this) {
@@ -361,7 +361,7 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonster {
 				if (!(nearbyEntity instanceof Mob) && !(nearbyEntity instanceof Player)) {
 					continue;
 				}
-				if (nearbyEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+				if (nearbyEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
 					continue;
 				}
 				if (nearbyEntity == this) {
@@ -420,7 +420,7 @@ public abstract class AbstractOceanizedWardenEntity extends SeaMonster {
 					if (nearbyEntity instanceof Player player && player.isCreative() || nearbyEntity instanceof Player player1 && player1.isSpectator()) {
 						continue;
 					}
-					if (nearbyEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+					if (nearbyEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
 						continue;
 					}
 					if (!(nearbyEntity instanceof LivingEntity livingEntity && livingEntity.hasEffect(MobEffects.DARKNESS))) {

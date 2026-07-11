@@ -196,7 +196,7 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
                                             if (!(entityiterator instanceof LivingEntity)) {
                                                 continue;
                                             }
-                                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "is_humanside")))) {
+                                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside")))) {
                                                 continue;
                                             }
                                             if (!(entityiterator == sourceentity)) {
@@ -383,7 +383,7 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
                         if (!entityiterator.isAlive()) {
                             continue;
                         }
-                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunters")))) {
+                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "hunters")))) {
                             if (!(entityiterator instanceof LivingEntity livEnt3 && livEnt3.hasEffect(CAMobEffects.ADD_ATTACK_PERCLY.get()))) {
                                 if (entityiterator instanceof LivingEntity && !this.level().isClientSide())
                                     this.addEffect(new MobEffectInstance(CAMobEffects.ADD_ATTACK_PERCLY.get(), 32768, 0, false, false));
@@ -426,7 +426,7 @@ public class SkadiEntity extends Animal implements GeoEntity, SyncedAnimationEnt
                     continue;
                 }
             }
-            if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "is_humanside")))) {
+            if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside")))) {
                 if (!(entity == target || (entity instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == this)) {
                     continue;
                 }

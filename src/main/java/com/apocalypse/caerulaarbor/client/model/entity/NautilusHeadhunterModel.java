@@ -6,16 +6,16 @@ import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.GeoModel;
 
 public class NautilusHeadhunterModel extends GeoModel<NautilusHeadhunterEntity> {
-	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/nautilus_headhunter.png");
+	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/nautilus_headhunter.png");
 
 	@Override
 	public ResourceLocation getAnimationResource(NautilusHeadhunterEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/nultilus_headhunter.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/nultilus_headhunter.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(NautilusHeadhunterEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/nultilus_headhunter.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/nultilus_headhunter.geo.json");
 	}
 
 	@Override

@@ -9,16 +9,16 @@ import software.bernie.geckolib.model.GeoModel;
 public class UninishedBeautyItemModel extends GeoModel<UninishedBeautyItem> {
 	@Override
 	public ResourceLocation getAnimationResource(UninishedBeautyItem animatable) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/unfinished_beautuy.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/unfinished_beautuy.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(UninishedBeautyItem animatable) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/unfinished_beautuy.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/unfinished_beautuy.geo.json");
 	}
 
 	@Override
 	public ResourceLocation getTextureResource(UninishedBeautyItem animatable) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/item/undone_beauty.png");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/item/undone_beauty.png");
 	}
 }

@@ -210,7 +210,7 @@ public class WarriorPriestEntity extends Animal implements GeoEntity, SyncedAnim
                     final Vec3 center = new Vec3(this.getX(), this.getY(), this.getZ());
                     List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(16 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
                     for (Entity entityiterator : entfound) {
-                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "homo_sapiens")))) {
+                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "homo_sapiens")))) {
                             if (entityiterator instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
                                 livingEntity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 400, 0));
                             if (entityiterator instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())

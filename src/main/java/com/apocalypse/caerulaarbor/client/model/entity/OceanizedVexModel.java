@@ -11,17 +11,17 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class OceanizedVexModel extends GeoModel<OceanizedVexEntity> {
-	private static final ResourceLocation NORMAL_TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/oceanized_vex.png");
-	private static final ResourceLocation CHARGING_TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/oceanized_vex_charging.png");
+	private static final ResourceLocation NORMAL_TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/oceanized_vex.png");
+	private static final ResourceLocation CHARGING_TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/oceanized_vex_charging.png");
 
 	@Override
 	public ResourceLocation getAnimationResource(OceanizedVexEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/oceanized_vex.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/oceanized_vex.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(OceanizedVexEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/oceanized_vex.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/oceanized_vex.geo.json");
 	}
 
 	@Override

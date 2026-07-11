@@ -14,7 +14,7 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 public class TheLastKnightLayer extends GeoRenderLayer<TheLastKnightEntity> {
-	private static final ResourceLocation LAYER = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/last_knight_lit_0.png");
+	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/last_knight_lit_0.png");
 
 	public TheLastKnightLayer(GeoRenderer<TheLastKnightEntity> entityRenderer) {
 		super(entityRenderer);

@@ -6,16 +6,16 @@ import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.GeoModel;
 
 public class PunctureFishModel extends GeoModel<PunctureFishEntity> {
-	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/puncturefish.png");
+	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/puncturefish.png");
 
 	@Override
 	public ResourceLocation getAnimationResource(PunctureFishEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/puncturefish.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/puncturefish.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(PunctureFishEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/puncturefish.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/puncturefish.geo.json");
 	}
 
 	@Override

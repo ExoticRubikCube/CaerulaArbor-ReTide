@@ -77,7 +77,7 @@ public class SkadiSwordItem extends SwordItem {
                         continue;
                     }
                 }
-                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "is_humanside")))) {
+                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside")))) {
                     if (!(entityiterator == enemy)) {
                         continue;
                     }

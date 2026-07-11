@@ -9,16 +9,16 @@ import software.bernie.geckolib.model.GeoModel;
 public class WearableCrownModel extends GeoModel<WearableCrownItem> {
 	@Override
 	public ResourceLocation getAnimationResource(WearableCrownItem object) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/crown.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/crown.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(WearableCrownItem object) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/crown.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/crown.geo.json");
 	}
 
 	@Override
 	public ResourceLocation getTextureResource(WearableCrownItem object) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/item/crown.png");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/item/crown.png");
 	}
 }

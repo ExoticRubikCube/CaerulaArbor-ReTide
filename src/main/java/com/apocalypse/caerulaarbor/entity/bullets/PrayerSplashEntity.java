@@ -108,7 +108,7 @@ public class PrayerSplashEntity extends AbstractArrow implements ItemSupplier {
                         if (entity == entityiterator) {
                             continue;
                         }
-						if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+						if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
 							if (entityiterator instanceof LivingEntity livingEntity && livingEntity.getHealth() < livingEntity.getMaxHealth()) {
 								if (entityiterator.isAlive()) {
 									EntityUtils.heal(livingEntity, atk);

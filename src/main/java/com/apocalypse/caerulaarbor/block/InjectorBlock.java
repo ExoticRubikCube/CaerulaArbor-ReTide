@@ -151,7 +151,7 @@ public class InjectorBlock extends Block implements SimpleWaterloggedBlock {
                             ((LevelAccessor) world).setBlock(pos, bs.setValue(integerProp, value), 3);
                     }
                     result = InteractionResult.SUCCESS;
-                } else if (input.is(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "gene")))) {
+                } else if (input.is(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "gene")))) {
                     if ((Entity) entity instanceof Player player && !player.level().isClientSide())
                         player.displayClientMessage(Component.literal((Component.translatable("block.caerula_arbor.injector.note").getString())), true);
                 }

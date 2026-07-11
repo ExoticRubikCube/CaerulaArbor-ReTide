@@ -11,16 +11,16 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class IreneModel extends GeoModel<IreneEntity> {
-	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/irene.png");
+	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/irene.png");
 
 	@Override
 	public ResourceLocation getAnimationResource(IreneEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/irene.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/irene.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(IreneEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/irene.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/irene.geo.json");
 	}
 
 	@Override

@@ -88,7 +88,7 @@ public class BombTrailerBlock extends Block {
                     dy = -2;
                     for (int index3 = 0; index3 < 5; index3++) {
                         target = (((LevelAccessor) world).getBlockState(BlockPos.containing(x + dx, y + dy, z + dz)));
-                        if (target.is(BlockTags.create(new ResourceLocation(CaerulaArborMod.MODID, "blow_up")))) {
+                        if (target.is(BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "blow_up")))) {
                             world.destroyBlock(BlockPos.containing(x + dx, y + dy, z + dz), false);
                         }
                         dy = dy + 1;

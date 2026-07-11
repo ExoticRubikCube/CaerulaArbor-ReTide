@@ -6,16 +6,16 @@ import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.GeoModel;
 
 public class ReaperPetModel extends GeoModel<ReaperPetEntity> {
-	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/fishpet.png");
+	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/fishpet.png");
 
 	@Override
 	public ResourceLocation getAnimationResource(ReaperPetEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/reaperpet.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/reaperpet.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(ReaperPetEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/reaperpet.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/reaperpet.geo.json");
 	}
 
 	@Override

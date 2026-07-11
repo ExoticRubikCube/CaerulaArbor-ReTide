@@ -3,7 +3,12 @@ package com.apocalypse.caerulaarbor.entity;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.entity.base.PolarMountRider;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.*;
+import com.apocalypse.caerulaarbor.init.CAAttributes;
+import com.apocalypse.caerulaarbor.init.CABlocks;
+import com.apocalypse.caerulaarbor.init.CADamageTypes;
+import com.apocalypse.caerulaarbor.init.CAEntities;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.CASounds;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -24,15 +29,27 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.BreakDoorGoal;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.RandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.SnowGolem;
-import net.minecraft.world.entity.monster.*;
+import net.minecraft.world.entity.monster.Illusioner;
+import net.minecraft.world.entity.monster.Pillager;
+import net.minecraft.world.entity.monster.Vindicator;
+import net.minecraft.world.entity.monster.Witch;
+import net.minecraft.world.entity.monster.ZombifiedPiglin;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.npc.Villager;
@@ -53,113 +70,135 @@ import java.util.Comparator;
 import java.util.List;
 
 public class CrackerAbyssalEntity extends SeaMonster implements PolarMountRider {
-	public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(CrackerAbyssalEntity.class, EntityDataSerializers.BOOLEAN);
-	public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(CrackerAbyssalEntity.class, EntityDataSerializers.STRING);
-	private boolean swinging;
-	private long lastSwing;
-	public String animationprocedure = "empty";
+    public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(CrackerAbyssalEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(CrackerAbyssalEntity.class, EntityDataSerializers.STRING);
+    public String animationprocedure = "empty";
+    String prevAnim = "empty";
+    private boolean swinging;
+    private long lastSwing;
 
-	public CrackerAbyssalEntity(Level world) {
-		this(CAEntities.CRACKER_ABYSSAL.get(), world);
-	}
+    public CrackerAbyssalEntity(Level world) {
+        this(CAEntities.CRACKER_ABYSSAL.get(), world);
+    }
 
-	public CrackerAbyssalEntity(EntityType<CrackerAbyssalEntity> type, Level world) {
-		super(type, world);
-		xpReward = 0;
-		setNoAi(false);
-		setMaxUpStep(1.5f);
-	}
+    public CrackerAbyssalEntity(EntityType<CrackerAbyssalEntity> type, Level world) {
+        super(type, world);
+        xpReward = 0;
+        setNoAi(false);
+        setMaxUpStep(1.5f);
+    }
 
-	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(DATA_SHOOT, false);
-		this.entityData.define(DATA_ANIMATION, "undefined");
-	}
+    public static void registerSpawnPlacements() {
+        SpawnPlacements.register(CAEntities.CRACKER_ABYSSAL.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
+            int x = pos.getX();
+            int y = pos.getY();
+            int z = pos.getZ();
+            return WorldUtils.canDangerSeabornSpawn(world, x, y, z);
+        });
+    }
 
-	@Override
-	protected void registerGoals() {
-		super.registerGoals();
-		this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-		this.goalSelector.addGoal(2, new BreakDoorGoal(this, e -> true) {
-			@Override
-			public boolean canUse() {
-				Level world = CrackerAbyssalEntity.this.level();
-				return super.canUse() && WorldUtils.canGrief(world);
-			}
-
-			@Override
-			public boolean canContinueToUse() {
-				Level world = CrackerAbyssalEntity.this.level();
-				return super.canContinueToUse() && WorldUtils.canGrief(world);
-			}
-		});
-		this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1, true) {
-			@Override
-			protected double getAttackReachSqr(LivingEntity entity) {
-				return 6.25;
-			}
-		});
-		this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, IronGolem.class, true, false));
-		this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, SnowGolem.class, true, false));
-		this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, Villager.class, true, false));
-		this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, Illusioner.class, true, false));
-		this.targetSelector.addGoal(8, new NearestAttackableTargetGoal<>(this, Pillager.class, true, false));
-		this.targetSelector.addGoal(9, new NearestAttackableTargetGoal<>(this, Vindicator.class, true, false));
-		this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, Witch.class, true, false));
-		this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
-		this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
-		this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
-		this.targetSelector.addGoal(14, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, target -> EntityUtils.isOceanizedPlayerNearby(this.level(), this.getX(), this.getY(), this.getZ())));
-		this.goalSelector.addGoal(16, new RandomStrollGoal(this, 0.8));
-		this.goalSelector.addGoal(17, new RandomLookAroundGoal(this));
-		this.goalSelector.addGoal(18, new FloatGoal(this));
-	}
+    public static AttributeSupplier.Builder createAttributes() {
+        AttributeSupplier.Builder builder = Mob.createMobAttributes();
+        builder = builder.add(Attributes.MOVEMENT_SPEED, 0.27);
+        builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 18);
+        builder = builder.add(Attributes.MAX_HEALTH, 85);
+        builder = builder.add(Attributes.ARMOR, 10);
+        builder = builder.add(Attributes.ATTACK_DAMAGE, 13);
+        builder = builder.add(Attributes.FOLLOW_RANGE, 32);
+        builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.85);
+        return builder;
+    }
 
     @Override
-	public SoundEvent getAmbientSound() {
-		return SoundEvents.PARROT_IMITATE_SILVERFISH;
-	}
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(DATA_SHOOT, false);
+        this.entityData.define(DATA_ANIMATION, "undefined");
+    }
 
-	@Override
-	public void playStepSound(BlockPos pos, BlockState blockIn) {
-		this.playSound(SoundEvents.SILVERFISH_STEP, 0.15f, 1);
-	}
+    @Override
+    protected void registerGoals() {
+        super.registerGoals();
+        this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
+        this.goalSelector.addGoal(2, new BreakDoorGoal(this, e -> true) {
+            @Override
+            public boolean canUse() {
+                Level world = CrackerAbyssalEntity.this.level();
+                return super.canUse() && WorldUtils.canGrief(world);
+            }
 
-	@Override
-	public SoundEvent getHurtSound(DamageSource ds) {
-		return CASounds.SEABORN_GENERIC_HIT.get();
-	}
+            @Override
+            public boolean canContinueToUse() {
+                Level world = CrackerAbyssalEntity.this.level();
+                return super.canContinueToUse() && WorldUtils.canGrief(world);
+            }
+        });
+        this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1, true) {
+            @Override
+            protected double getAttackReachSqr(LivingEntity entity) {
+                return 6.25;
+            }
+        });
+        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, IronGolem.class, true, false));
+        this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, SnowGolem.class, true, false));
+        this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, Villager.class, true, false));
+        this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, Illusioner.class, true, false));
+        this.targetSelector.addGoal(8, new NearestAttackableTargetGoal<>(this, Pillager.class, true, false));
+        this.targetSelector.addGoal(9, new NearestAttackableTargetGoal<>(this, Vindicator.class, true, false));
+        this.targetSelector.addGoal(10, new NearestAttackableTargetGoal<>(this, Witch.class, true, false));
+        this.targetSelector.addGoal(11, new NearestAttackableTargetGoal<>(this, Piglin.class, true, false));
+        this.targetSelector.addGoal(12, new NearestAttackableTargetGoal<>(this, PiglinBrute.class, true, false));
+        this.targetSelector.addGoal(13, new NearestAttackableTargetGoal<>(this, ZombifiedPiglin.class, true, false));
+        this.targetSelector.addGoal(14, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, target -> EntityUtils.isOceanizedPlayerNearby(this.level(), this.getX(), this.getY(), this.getZ())));
+        this.goalSelector.addGoal(16, new RandomStrollGoal(this, 0.8));
+        this.goalSelector.addGoal(17, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(18, new FloatGoal(this));
+    }
 
-	@Override
-	public SoundEvent getDeathSound() {
-		return SoundEvents.PHANTOM_DEATH;
-	}
+    @Override
+    public SoundEvent getAmbientSound() {
+        return SoundEvents.PARROT_IMITATE_SILVERFISH;
+    }
 
-	@Override
-	public boolean doHurtTarget(Entity target) {
-		double targetX = target.getX();
-		double targetY = target.getY();
-		double targetZ = target.getZ();
-		if (!this.level().isClientSide()) {
-			this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
-					CASounds.REEFBREAKER_ATTACK.get(), SoundSource.HOSTILE, 10,
-					(float) Mth.nextDouble(RandomSource.create(), 0.85, 1.15));
-			double amplifier = this.hasEffect(CAMobEffects.REEF_CRACKER.get()) ? this.getEffect(CAMobEffects.REEF_CRACKER.get()).getAmplifier() : -1;
-			int nextAmplifier = amplifier < 0 ? 0 : Math.min((int)amplifier + 1, 14);
-			this.addEffect(new MobEffectInstance(CAMobEffects.REEF_CRACKER.get(), 120, nextAmplifier, false, false));
-			CaerulaArborMod.queueServerWork(12, () -> {
-				if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 3) {
-					target.hurt(
-							CADamageTypes.source(this.level(), CADamageTypes.GENERAL_SEABORN_ATTACK, this), (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
-				}
-			});
-		}
-		return true;
-	}
+    @Override
+    public void playStepSound(BlockPos pos, BlockState blockIn) {
+        this.playSound(SoundEvents.SILVERFISH_STEP, 0.15f, 1);
+    }
 
-	@Override
-	public boolean hurt(DamageSource source, float amount) {
+    @Override
+    public SoundEvent getHurtSound(DamageSource ds) {
+        return CASounds.SEABORN_GENERIC_HIT.get();
+    }
+
+    @Override
+    public SoundEvent getDeathSound() {
+        return SoundEvents.PHANTOM_DEATH;
+    }
+
+    @Override
+    public boolean doHurtTarget(Entity target) {
+        double targetX = target.getX();
+        double targetY = target.getY();
+        double targetZ = target.getZ();
+        if (!this.level().isClientSide()) {
+            this.level().playSound(null, BlockPos.containing(targetX, targetY, targetZ),
+                    CASounds.REEFBREAKER_ATTACK.get(), SoundSource.HOSTILE, 10,
+                    (float) Mth.nextDouble(RandomSource.create(), 0.85, 1.15));
+            double amplifier = this.hasEffect(CAMobEffects.REEF_CRACKER.get()) ? this.getEffect(CAMobEffects.REEF_CRACKER.get()).getAmplifier() : -1;
+            int nextAmplifier = amplifier < 0 ? 0 : Math.min((int) amplifier + 1, 14);
+            this.addEffect(new MobEffectInstance(CAMobEffects.REEF_CRACKER.get(), 120, nextAmplifier, false, false));
+            CaerulaArborMod.queueServerWork(12, () -> {
+                if (this.isAlive() && target.isAlive() && this.distanceTo(target) <= 3) {
+                    target.hurt(
+                            CADamageTypes.source(this.level(), CADamageTypes.GENERIC_SEABORN_ATTACK, this), (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
+                }
+            });
+        }
+        return true;
+    }
+
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
         LevelAccessor world = this.level();
         double x = this.getX();
         double y = this.getY();
@@ -168,50 +207,50 @@ public class CrackerAbyssalEntity extends SeaMonster implements PolarMountRider 
         if (sourceentity != null) {
             double num;
             if (this.isAlive() && !this.hasEffect(CAMobEffects.COOLDOWN_SINAL.get())) {
-				num = 0;
-				{
-					final Vec3 center = new Vec3(x, y, z);
-					List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(6 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
-					for (Entity entityiterator : entfound) {
-						if (!(entityiterator == this) && (entityiterator instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) >= 10) {
-							num = num + 1;
-						}
-					}
-				}
-				if (num >= 2 && distanceTo(sourceentity) <= 4) {
-					if (this instanceof CrackerAbyssalEntity) {
-						this.setAnimation("animation.nethersea_reefbreaker.spin");
-					}
-					if (!this.level().isClientSide())
-						this.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL.get(), 40, 0, false, false));
-					CaerulaArborMod.queueServerWork(10, () -> {
-						if (world instanceof Level level) {
-							level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.HOSTILE, 2, 1);
-						}
-						final Vec3 center = new Vec3(x, y, z);
-						List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(6 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
-						for (Entity entityiterator : entfound) {
-							if ((!entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring"))) || ((Entity) this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == entityiterator)
-									&& (entityiterator instanceof Mob || entityiterator instanceof Player)) {
-								if (distanceTo(entityiterator) <= 3) {
-									entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.GENERAL_SEABORN_ATTACK, this), (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)
-													? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()
-													: 0) * 1.5));
-								}
-							}
-						}
-					});
-				}
-			}
+                num = 0;
+                {
+                    final Vec3 center = new Vec3(x, y, z);
+                    List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(6 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                    for (Entity entityiterator : entfound) {
+                        if (!(entityiterator == this) && (entityiterator instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) >= 10) {
+                            num = num + 1;
+                        }
+                    }
+                }
+                if (num >= 2 && distanceTo(sourceentity) <= 4) {
+                    if (this instanceof CrackerAbyssalEntity) {
+                        this.setAnimation("animation.nethersea_reefbreaker.spin");
+                    }
+                    if (!this.level().isClientSide())
+                        this.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL.get(), 40, 0, false, false));
+                    CaerulaArborMod.queueServerWork(10, () -> {
+                        if (world instanceof Level level) {
+                            level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.PLAYER_ATTACK_SWEEP, SoundSource.HOSTILE, 2, 1);
+                        }
+                        final Vec3 center = new Vec3(x, y, z);
+                        List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(6 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+                        for (Entity entityiterator : entfound) {
+                            if ((!entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"))) || ((Entity) this instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) == entityiterator)
+                                    && (entityiterator instanceof Mob || entityiterator instanceof Player)) {
+                                if (distanceTo(entityiterator) <= 3) {
+                                    entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.GENERIC_SEABORN_ATTACK, this), (float) ((this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)
+                                            ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue()
+                                            : 0) * 1.5));
+                                }
+                            }
+                        }
+                    });
+                }
+            }
         }
         if (source.is(DamageTypes.DROWN))
-			return false;
-		return super.hurt(source, amount);
-	}
+            return false;
+        return super.hurt(source, amount);
+    }
 
-	@Override
-	public void baseTick() {
-		super.baseTick();
+    @Override
+    public void baseTick() {
+        super.baseTick();
         LevelAccessor world = this.level();
         double x = this.getX();
         double y = this.getY();
@@ -225,108 +264,83 @@ public class CrackerAbyssalEntity extends SeaMonster implements PolarMountRider 
                 level.sendParticles(ParticleTypes.SMOKE, x, (y + 1), z, 4, 0.4, 2, 0.4, 0.01);
         }
         this.refreshDimensions();
-	}
+    }
 
-	
+    private PlayState movementPredicate(AnimationState<?> event) {
+        if (this.animationprocedure.equals("empty")) {
+            if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
 
-	public static void registerSpawnPlacements() {
-		SpawnPlacements.register(CAEntities.CRACKER_ABYSSAL.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
-			int x = pos.getX();
-			int y = pos.getY();
-			int z = pos.getZ();
-			return WorldUtils.canDangerSeabornSpawn(world, x, y, z);
-		});
-	}
+            ) {
+                return event.setAndContinue(RawAnimation.begin().thenLoop("animation.nethersea_reefbreaker.move"));
+            }
+            if (this.isDeadOrDying()) {
+                return event.setAndContinue(RawAnimation.begin().thenPlay("animation.nethersea_reefbreaker.die"));
+            }
+            return event.setAndContinue(RawAnimation.begin().thenLoop("animation.nethersea_reefbreaker.idle"));
+        }
+        return PlayState.STOP;
+    }
 
-	public static AttributeSupplier.Builder createAttributes() {
-		AttributeSupplier.Builder builder = Mob.createMobAttributes();
-		builder = builder.add(Attributes.MOVEMENT_SPEED, 0.27);
-		builder = builder.add(CAAttributes.MAGIC_RESISTANCE.get(), 18);
-		builder = builder.add(Attributes.MAX_HEALTH, 85);
-		builder = builder.add(Attributes.ARMOR, 10);
-		builder = builder.add(Attributes.ATTACK_DAMAGE, 13);
-		builder = builder.add(Attributes.FOLLOW_RANGE, 32);
-		builder = builder.add(Attributes.KNOCKBACK_RESISTANCE, 0.85);
-		return builder;
-	}
+    private PlayState attackingPredicate(AnimationState<?> event) {
+        if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
+            this.swinging = true;
+            this.lastSwing = level().getGameTime();
+        }
+        if (this.swinging && this.lastSwing + 19L <= level().getGameTime()) {
+            this.swinging = false;
+        }
+        if (this.swinging && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+            event.getController().forceAnimationReset();
+            return event.setAndContinue(RawAnimation.begin().thenPlay("animation.nethersea_reefbreaker.attack"));
+        }
+        return PlayState.CONTINUE;
+    }
 
-	private PlayState movementPredicate(AnimationState<?> event) {
-		if (this.animationprocedure.equals("empty")) {
-			if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
+    private PlayState procedurePredicate(AnimationState<?> event) {
+        if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
+            if (!this.animationprocedure.equals(prevAnim))
+                event.getController().forceAnimationReset();
+            event.getController().setAnimation(RawAnimation.begin().thenPlay(this.animationprocedure));
+            if (event.getController().getAnimationState() == AnimationController.State.STOPPED) {
+                this.animationprocedure = "empty";
+                event.getController().forceAnimationReset();
+            }
+        } else if (animationprocedure.equals("empty")) {
+            prevAnim = "empty";
+            return PlayState.STOP;
+        }
+        prevAnim = this.animationprocedure;
+        return PlayState.CONTINUE;
+    }
 
-			) {
-				return event.setAndContinue(RawAnimation.begin().thenLoop("animation.nethersea_reefbreaker.move"));
-			}
-			if (this.isDeadOrDying()) {
-				return event.setAndContinue(RawAnimation.begin().thenPlay("animation.nethersea_reefbreaker.die"));
-			}
-			return event.setAndContinue(RawAnimation.begin().thenLoop("animation.nethersea_reefbreaker.idle"));
-		}
-		return PlayState.STOP;
-	}
+    @Override
+    protected void tickDeath() {
+        ++this.deathTime;
+        if (this.deathTime == 20) {
+            this.remove(CrackerAbyssalEntity.RemovalReason.KILLED);
+            this.dropExperience();
+        }
+    }
 
-	private PlayState attackingPredicate(AnimationState<?> event) {
-		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
-			this.swinging = true;
-			this.lastSwing = level().getGameTime();
-		}
-		if (this.swinging && this.lastSwing + 19L <= level().getGameTime()) {
-			this.swinging = false;
-		}
-		if (this.swinging && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
-			event.getController().forceAnimationReset();
-			return event.setAndContinue(RawAnimation.begin().thenPlay("animation.nethersea_reefbreaker.attack"));
-		}
-		return PlayState.CONTINUE;
-	}
+    public String getSyncedAnimation() {
+        return this.entityData.get(DATA_ANIMATION);
+    }
 
-	String prevAnim = "empty";
+    public void setAnimation(String animation) {
+        this.entityData.set(DATA_ANIMATION, animation);
+    }
 
-	private PlayState procedurePredicate(AnimationState<?> event) {
-		if (!animationprocedure.equals("empty") && event.getController().getAnimationState() == AnimationController.State.STOPPED || (!this.animationprocedure.equals(prevAnim) && !this.animationprocedure.equals("empty"))) {
-			if (!this.animationprocedure.equals(prevAnim))
-				event.getController().forceAnimationReset();
-			event.getController().setAnimation(RawAnimation.begin().thenPlay(this.animationprocedure));
-			if (event.getController().getAnimationState() == AnimationController.State.STOPPED) {
-				this.animationprocedure = "empty";
-				event.getController().forceAnimationReset();
-			}
-		} else if (animationprocedure.equals("empty")) {
-			prevAnim = "empty";
-			return PlayState.STOP;
-		}
-		prevAnim = this.animationprocedure;
-		return PlayState.CONTINUE;
-	}
-
-	@Override
-	protected void tickDeath() {
-		++this.deathTime;
-		if (this.deathTime == 20) {
-			this.remove(CrackerAbyssalEntity.RemovalReason.KILLED);
-			this.dropExperience();
-		}
-	}
-
-	public String getSyncedAnimation() {
-		return this.entityData.get(DATA_ANIMATION);
-	}
-
-	public void setAnimation(String animation) {
-		this.entityData.set(DATA_ANIMATION, animation);
-	}
-
-	@Override
-	public void registerControllers(AnimatableManager.ControllerRegistrar data) {
-		data.add(new AnimationController<>(this, "movement", 0, this::movementPredicate));
-		data.add(new AnimationController<>(this, "attacking", 0, this::attackingPredicate));
-		data.add(new AnimationController<>(this, "procedure", 0, this::procedurePredicate));
-	}
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar data) {
+        data.add(new AnimationController<>(this, "movement", 0, this::movementPredicate));
+        data.add(new AnimationController<>(this, "attacking", 0, this::attackingPredicate));
+        data.add(new AnimationController<>(this, "procedure", 0, this::procedurePredicate));
+    }
 
 
-	@Override
-	public void setAnimationProcedure(String animation) {
-		this.animationprocedure = animation;
-	}
+    @Override
+    public void setAnimationProcedure(String animation) {
+        this.animationprocedure = animation;
+    }
 }
 

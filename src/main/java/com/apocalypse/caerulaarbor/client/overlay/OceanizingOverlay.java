@@ -23,11 +23,11 @@ public class OceanizingOverlay {
 		if (player.hasEffect(CAMobEffects.INFESTED.get())) {
 			int amplifier = player.getEffect(CAMobEffects.INFESTED.get()).getAmplifier();
 			if (amplifier == 0) {
-				texture = new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/transforming0.png");
+				texture = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/transforming0.png");
 			} else if (amplifier == 1) {
-				texture = new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/transforming1.png");
+				texture = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/transforming1.png");
 			} else if (amplifier > 1) {
-				texture = new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/transforming3.png");
+				texture = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/transforming3.png");
 			}
 		}
 		if (texture != null) {

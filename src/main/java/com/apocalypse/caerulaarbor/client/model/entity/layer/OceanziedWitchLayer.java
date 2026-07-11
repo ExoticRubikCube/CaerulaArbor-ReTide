@@ -14,7 +14,7 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 public class OceanziedWitchLayer extends GeoRenderLayer<OceanziedWitchEntity> {
-	private static final ResourceLocation LAYER = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/witch_lit.png");
+	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/witch_lit.png");
 
 	public OceanziedWitchLayer(GeoRenderer<OceanziedWitchEntity> entityRenderer) {
 		super(entityRenderer);

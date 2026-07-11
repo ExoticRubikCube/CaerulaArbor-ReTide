@@ -14,7 +14,7 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 public class PregnantFishLayer extends GeoRenderLayer<PregnantFishEntity> {
-	private static final ResourceLocation LAYER = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/pregnantlit.png");
+	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/pregnantlit.png");
 
 	public PregnantFishLayer(GeoRenderer<PregnantFishEntity> entityRenderer) {
 		super(entityRenderer);

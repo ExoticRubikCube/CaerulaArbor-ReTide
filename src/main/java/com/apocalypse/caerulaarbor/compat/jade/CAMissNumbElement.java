@@ -17,8 +17,8 @@ public class CAMissNumbElement extends Element {
     private final int style;
     private final boolean showMiss;
 
-    private static final ResourceLocation MISS_ICON = new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/miss.png");
-    private static final ResourceLocation NUMB_ICON = new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/numb.png");
+    private static final ResourceLocation MISS_ICON = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/miss.png");
+    private static final ResourceLocation NUMB_ICON = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/numb.png");
 
     public CAMissNumbElement(int miss, int numb) {
         this.miss = "" + miss;

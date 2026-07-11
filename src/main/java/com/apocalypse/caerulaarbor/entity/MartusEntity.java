@@ -352,7 +352,7 @@ public class MartusEntity extends SeaMonster {
                             if (!(entityiterator instanceof Mob livEnt1)) {
                                 continue;
                             }
-                            if (!entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                            if (!entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
                                 continue;
                             }
                             if (entityiterator instanceof MartusEntity) {
@@ -446,8 +446,8 @@ public class MartusEntity extends SeaMonster {
                                     if (!entityiterator.isAlive()) {
                                         continue;
                                     }
-                                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))
-                                            && !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "bossoffspring")))) {
+                                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))
+                                            && !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "bossoffspring")))) {
                                         if (entityiterator instanceof LivingEntity && !this.level().isClientSide())
                                             this.addEffect(new MobEffectInstance(CAMobEffects.FAKE_DEATH.get(), 200, 1));
                                         if (entityiterator instanceof LivingEntity entity && !this.level().isClientSide())
@@ -481,7 +481,7 @@ public class MartusEntity extends SeaMonster {
                                 if (!(entityiterator instanceof Mob)) {
                                     continue;
                                 }
-                                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
                                     continue;
                                 }
                                 if (entityiterator instanceof LivingEntity livEnt8 && livEnt8.hasEffect(CAMobEffects.SUB_HAEMO.get())) {

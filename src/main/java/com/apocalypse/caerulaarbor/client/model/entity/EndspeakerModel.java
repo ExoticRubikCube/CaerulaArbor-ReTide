@@ -13,12 +13,12 @@ import software.bernie.geckolib.model.data.EntityModelData;
 public class EndspeakerModel<T extends EndspeakerEntity> extends GeoModel<T> {
 	@Override
 	public ResourceLocation getAnimationResource(T entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/endspeaker_" + entity.getPhase() + ".animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/endspeaker_" + entity.getPhase() + ".animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(T entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/endspeaker_" + entity.getPhase() + ".geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/endspeaker_" + entity.getPhase() + ".geo.json");
 	}
 
 	@Override
@@ -27,7 +27,7 @@ public class EndspeakerModel<T extends EndspeakerEntity> extends GeoModel<T> {
 		if (entity.getPhase() == 3 && entity.getHealth() < entity.getMaxHealth() * 0.4F) {
 			textureName = "endspeaker_3_broken";
 		}
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/" + textureName + ".png");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/" + textureName + ".png");
 	}
 
 	@Override

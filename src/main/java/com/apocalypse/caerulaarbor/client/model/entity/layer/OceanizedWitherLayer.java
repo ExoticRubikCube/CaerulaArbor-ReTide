@@ -13,7 +13,7 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 public class OceanizedWitherLayer extends GeoRenderLayer<OceanizedWitherEntity> {
-	private static final ResourceLocation LAYER = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/wither_lit.png");
+	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/wither_lit.png");
 
 	public OceanizedWitherLayer(GeoRenderer<OceanizedWitherEntity> entityRenderer) {
 		super(entityRenderer);

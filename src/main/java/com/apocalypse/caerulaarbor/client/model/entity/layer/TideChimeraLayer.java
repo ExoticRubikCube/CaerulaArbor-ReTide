@@ -14,7 +14,7 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 public class TideChimeraLayer extends GeoRenderLayer<TideChimeraEntity> {
-	private static final ResourceLocation LAYER = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/genral_seaborn_lit.png");
+	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/genral_seaborn_lit.png");
 
 	public TideChimeraLayer(GeoRenderer<TideChimeraEntity> entityRenderer) {
 		super(entityRenderer);

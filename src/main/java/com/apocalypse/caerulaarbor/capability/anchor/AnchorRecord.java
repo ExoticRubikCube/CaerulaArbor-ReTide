@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AnchorRecord {
-    public static final ResourceLocation ID = new ResourceLocation(CaerulaArborMod.MODID, "anchor_record");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "anchor_record");
 
     private final Long2ObjectMap<List<BlockPos>> section2anchorPosMap = new Long2ObjectOpenHashMap<>();
 

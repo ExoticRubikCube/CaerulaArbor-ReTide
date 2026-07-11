@@ -11,16 +11,16 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class FlyFishModel extends GeoModel<FlyFishEntity> {
-	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/flyfish.png");
+	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/flyfish.png");
 
 	@Override
 	public ResourceLocation getAnimationResource(FlyFishEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/flyfish.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/flyfish.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(FlyFishEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/flyfish.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/flyfish.geo.json");
 	}
 
 	@Override

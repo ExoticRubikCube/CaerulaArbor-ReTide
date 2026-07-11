@@ -9,16 +9,16 @@ import software.bernie.geckolib.model.GeoModel;
 public class PhloemBowItemModel extends GeoModel<PhloemBowItem> {
 	@Override
 	public ResourceLocation getAnimationResource(PhloemBowItem animatable) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/pholemnbow.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/pholemnbow.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(PhloemBowItem animatable) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/pholemnbow.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/pholemnbow.geo.json");
 	}
 
 	@Override
 	public ResourceLocation getTextureResource(PhloemBowItem animatable) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/item/combinedarrow.png");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/item/combinedarrow.png");
 	}
 }

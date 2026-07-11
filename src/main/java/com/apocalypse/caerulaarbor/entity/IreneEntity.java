@@ -239,7 +239,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 		float damage = baseDamage;
 		if (target instanceof LivingEntity livingTarget && livingTarget.hasEffect(MobEffects.SLOW_FALLING)) {
 			damage *= 1.2F;
-			if (target.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+			if (target.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
 				damage *= 1.2F;
 				if (!livingTarget.level().isClientSide()) {
 					livingTarget.addEffect(new MobEffectInstance(CAMobEffects.ROCK_BREAK.get(), 80, 1));
@@ -256,7 +256,7 @@ public class IreneEntity extends Animal implements GeoEntity, SyncedAnimationEnt
 			Entity currentTarget = this.getTarget();
 			boolean isPlayer = enemy instanceof Player;
 			boolean isTamed = enemy instanceof TamableAnimal tamable && tamable.isTame();
-			boolean isHumanSide = enemy.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "is_humanside")));
+			boolean isHumanSide = enemy.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside")));
 			return !(isPlayer || isTamed || isHumanSide) || enemy == currentTarget;
 		}
 		return false;

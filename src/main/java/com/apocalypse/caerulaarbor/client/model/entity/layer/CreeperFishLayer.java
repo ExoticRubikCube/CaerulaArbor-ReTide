@@ -13,7 +13,7 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 public class CreeperFishLayer extends GeoRenderLayer<CreeperFishEntity> {
-	private static final ResourceLocation LAYER = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/creeperlit.png");
+	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/creeperlit.png");
 
 	public CreeperFishLayer(GeoRenderer<CreeperFishEntity> entityRenderer) {
 		super(entityRenderer);

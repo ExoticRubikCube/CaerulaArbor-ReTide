@@ -13,7 +13,7 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 public class AccumulatorCloneLayer extends GeoRenderLayer<AccumulatorCloneEntity> {
-	private static final ResourceLocation LAYER = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/accmulit.png");
+	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/accmulit.png");
 
 	public AccumulatorCloneLayer(GeoRenderer<AccumulatorCloneEntity> entityRenderer) {
 		super(entityRenderer);

@@ -11,16 +11,16 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class AbsorberLimbModel extends GeoModel<AbsorberLimbEntity> {
-	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/absorber_limb.png");
+	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/absorber_limb.png");
 
 	@Override
 	public ResourceLocation getAnimationResource(AbsorberLimbEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/absorber_limb.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/absorber_limb.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(AbsorberLimbEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/absorber_limb.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/absorber_limb.geo.json");
 	}
 
 	@Override

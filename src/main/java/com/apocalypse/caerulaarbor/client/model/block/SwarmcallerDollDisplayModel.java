@@ -11,16 +11,16 @@ import com.apocalypse.caerulaarbor.block.item.SwarmcallerDollDisplayItem;
 public class SwarmcallerDollDisplayModel extends GeoModel<SwarmcallerDollDisplayItem> {
 	@Override
 	public ResourceLocation getAnimationResource(SwarmcallerDollDisplayItem animatable) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/umbrella_block.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/umbrella_block.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(SwarmcallerDollDisplayItem animatable) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/umbrella_block.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/umbrella_block.geo.json");
 	}
 
 	@Override
 	public ResourceLocation getTextureResource(SwarmcallerDollDisplayItem entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/block/umbrella.png");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/block/umbrella.png");
 	}
 }

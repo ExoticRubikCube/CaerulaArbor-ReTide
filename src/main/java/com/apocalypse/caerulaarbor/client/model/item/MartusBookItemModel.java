@@ -8,16 +8,16 @@ import software.bernie.geckolib.model.GeoModel;
 public class MartusBookItemModel extends GeoModel<MartusBookItem> {
 	@Override
 	public ResourceLocation getAnimationResource(MartusBookItem animatable) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/martus_book.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/martus_book.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(MartusBookItem animatable) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/martus_book.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/martus_book.geo.json");
 	}
 
 	@Override
 	public ResourceLocation getTextureResource(MartusBookItem animatable) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/item/martus_book.png");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/item/martus_book.png");
 	}
 }

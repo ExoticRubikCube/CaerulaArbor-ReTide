@@ -301,9 +301,9 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 		if (sourceEntity != null) {
 			if ((sourceEntity instanceof LivingEntity livingEntity ? livingEntity.getOffhandItem() : ItemStack.EMPTY).getItem() == CAItems.ENDERINA_SPAWNER.get()) {
 				canEnterSecondPhase = true;
-			} else if (!sourceEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))
+			} else if (!sourceEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))
 					&& (!(sourceEntity instanceof TamableAnimal tamableAnimal) || !tamableAnimal.isTame())) {
-				canEnterSecondPhase = !(sourceEntity instanceof Player || sourceEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "is_humanside"))));
+				canEnterSecondPhase = !(sourceEntity instanceof Player || sourceEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside"))));
 			}
 		}
 		if (this.getPhase() == 0 && !this.isReviving() && canEnterSecondPhase) {
@@ -340,9 +340,9 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 		if (sourceEntity != null) {
 			if ((sourceEntity instanceof LivingEntity livingEntity ? livingEntity.getOffhandItem() : ItemStack.EMPTY).getItem() == CAItems.ENDERINA_SPAWNER.get()) {
 				canEnterSecondPhase = true;
-			} else if (!sourceEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))
+			} else if (!sourceEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))
 					&& (!(sourceEntity instanceof TamableAnimal tamableAnimal) || !tamableAnimal.isTame())) {
-				canEnterSecondPhase = !(sourceEntity instanceof Player || sourceEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "is_humanside"))));
+				canEnterSecondPhase = !(sourceEntity instanceof Player || sourceEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside"))));
 			}
 		}
 		if (pHealth <= 0 && this.getPhase() == 0 && !this.isReviving() && canEnterSecondPhase) {
@@ -580,7 +580,7 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 				for (int index2 = 0; index2 < 2; index2++) {
 					BlockPos blockPos = BlockPos.containing(x + dx, y + dy, z + dz);
 					BlockState block = world.getBlockState(blockPos);
-					if (!block.is(BlockTags.create(new ResourceLocation("minecraft:wither_immnue")))) {
+					if (!block.is(BlockTags.create(ResourceLocation.parse("minecraft:wither_immnue")))) {
 						double hardness = block.getDestroySpeed(world, BlockPos.containing(0, 0, 0));
 						if (hardness <= 7.5 && hardness >= 0 && world.getBlockFloorHeight(blockPos) > 0) {
 							Block.dropResources(world.getBlockState(blockPos), world, originPos, null);

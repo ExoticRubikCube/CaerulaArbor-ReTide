@@ -11,16 +11,16 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class PredatorAbyssalModel extends GeoModel<PredatorAbyssalEntity> {
-	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/predator.png");
+	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/predator.png");
 
 	@Override
 	public ResourceLocation getAnimationResource(PredatorAbyssalEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/predator.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/predator.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(PredatorAbyssalEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/predator.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/predator.geo.json");
 	}
 
 	@Override

@@ -1,10 +1,8 @@
 package com.apocalypse.caerulaarbor.init;
 
-import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -21,46 +19,46 @@ import javax.annotation.Nullable;
  * 应使用 {@link CADamageTags} 配合 {@link DamageSource#is}，而不是调用这里的工厂方法。
  */
 public class CADamageTypes {
-    public static final ResourceKey<DamageType> ANCHOR_SMASH = create("anchor_smash");
-    public static final ResourceKey<DamageType> AXE_CLEAVE = create("axe_cleave");
-    public static final ResourceKey<DamageType> BOIL_WATER = create("boil_water");
-    public static final ResourceKey<DamageType> BRAND_BOMB = create("brand_bomb");
-    public static final ResourceKey<DamageType> CHEST_ATTACK = create("chest_attack");
-    public static final ResourceKey<DamageType> CHEST_SPIKE = create("chest_spike");
-    public static final ResourceKey<DamageType> CLEAVER_MIX = create("cleaver_mix");
-    public static final ResourceKey<DamageType> ENDSPEAKER_ATTACK = create("endspeaker_attack");
-    public static final ResourceKey<DamageType> EXTRACTOR_DAMAGE = create("extractor_damage");
-    public static final ResourceKey<DamageType> GENERAL_SEABORN_ATTACK = create("general_seaborn_attack");
-    public static final ResourceKey<DamageType> GENERIC_WARRIOR_ATTACK = create("generic_warrior_attack");
-    public static final ResourceKey<DamageType> GLADIIA_MAGIC = create("gladiia_magic");
-    public static final ResourceKey<DamageType> GOLEM_ATTACK = create("golem_attack");
-    public static final ResourceKey<DamageType> GUNMU_DAMAGE = create("gunmu_damage");
-    public static final ResourceKey<DamageType> HAND_FIREWORK = create("hand_firework");
-    public static final ResourceKey<DamageType> HAND_OF_CHOKER = create("hand_of_choker");
-    public static final ResourceKey<DamageType> HAND_SPIKE = create("hand_spike");
-    public static final ResourceKey<DamageType> HIGHMORE_ATTACK = create("highmore_attack");
-    public static final ResourceKey<DamageType> HUNTER_ATTACK = create("hunter_attack");
-    public static final ResourceKey<DamageType> IMMORTAL_PUNISHMENT = create("immortal_punishment");
-    public static final ResourceKey<DamageType> INV_KILLER = create("inv_killer");
-    public static final ResourceKey<DamageType> ISHARMLA_ATTACK = create("isharmla_attack");
-    public static final ResourceKey<DamageType> ISHARMLA_CURSED = create("isharmla_cursed");
-    public static final ResourceKey<DamageType> IZUMIK_NORMAL_ATTACK = create("izumik_normal_attack");
-    public static final ResourceKey<DamageType> IZUMIK_SKILL = create("izumik_skill");
-    public static final ResourceKey<DamageType> LAST_KNIGHT_ATTACK = create("last_knight_attack");
-    public static final ResourceKey<DamageType> OCEANIZE_DAMAGE = create("oceanize_damage");
-    public static final ResourceKey<DamageType> OCEANKILLER_DAMAGE = create("oceankiller_damage");
-    public static final ResourceKey<DamageType> OCEAN_COUNTER = create("ocean_counter");
-    public static final ResourceKey<DamageType> OCEAN_MAGIC = create("ocean_magic");
-    public static final ResourceKey<DamageType> OCEAN_WITHER = create("ocean_wither");
-    public static final ResourceKey<DamageType> PUNCTURE_ATTACK = create("puncture_attack");
-    public static final ResourceKey<DamageType> REPELLER_ATTACK = create("repeller_attack");
-    public static final ResourceKey<DamageType> SANITY_BREAK = create("sanity_break");
-    public static final ResourceKey<DamageType> SAW_CUT = create("saw_cut");
-    public static final ResourceKey<DamageType> SUPER_CAT_ATTACK = create("super_cat_attack");
-    public static final ResourceKey<DamageType> TRAIL_DAMAGE = create("trail_damage");
-    public static final ResourceKey<DamageType> WARDEN_ATTACK = create("warden_attack");
-    public static final ResourceKey<DamageType> WARDEN_SONIC = create("warden_sonic");
-    public static final ResourceKey<DamageType> WIPE_MAGIC = create("wipe_magic");
+    public static final ResourceKey<DamageType> ANCHOR_SMASH = com.apocalypse.caerulaarbor.datagen.DamageTypes.ANCHOR_SMASH;
+    public static final ResourceKey<DamageType> AXE_CLEAVE = com.apocalypse.caerulaarbor.datagen.DamageTypes.AXE_CLEAVE;
+    public static final ResourceKey<DamageType> BOIL_WATER = com.apocalypse.caerulaarbor.datagen.DamageTypes.BOIL_WATER;
+    public static final ResourceKey<DamageType> BRAND_BOMB = com.apocalypse.caerulaarbor.datagen.DamageTypes.BRAND_BOMB;
+    public static final ResourceKey<DamageType> CHEST_ATTACK = com.apocalypse.caerulaarbor.datagen.DamageTypes.CHEST_ATTACK;
+    public static final ResourceKey<DamageType> CHEST_SPIKE = com.apocalypse.caerulaarbor.datagen.DamageTypes.CHEST_SPIKE;
+    public static final ResourceKey<DamageType> CLEAVER_MIX = com.apocalypse.caerulaarbor.datagen.DamageTypes.CLEAVER_MIX;
+    public static final ResourceKey<DamageType> ENDSPEAKER_ATTACK = com.apocalypse.caerulaarbor.datagen.DamageTypes.ENDSPEAKER_ATTACK;
+    public static final ResourceKey<DamageType> EXTRACTOR_DAMAGE = com.apocalypse.caerulaarbor.datagen.DamageTypes.EXTRACTOR_DAMAGE;
+    public static final ResourceKey<DamageType> GENERIC_SEABORN_ATTACK = com.apocalypse.caerulaarbor.datagen.DamageTypes.GENERIC_SEABORN_ATTACK;
+    public static final ResourceKey<DamageType> GENERIC_WARRIOR_ATTACK = com.apocalypse.caerulaarbor.datagen.DamageTypes.GENERIC_WARRIOR_ATTACK;
+    public static final ResourceKey<DamageType> GLADIIA_MAGIC = com.apocalypse.caerulaarbor.datagen.DamageTypes.GLADIIA_MAGIC;
+    public static final ResourceKey<DamageType> GOLEM_ATTACK = com.apocalypse.caerulaarbor.datagen.DamageTypes.GOLEM_ATTACK;
+    public static final ResourceKey<DamageType> GUNMU_DAMAGE = com.apocalypse.caerulaarbor.datagen.DamageTypes.GUNMU_DAMAGE;
+    public static final ResourceKey<DamageType> HAND_FIREWORK = com.apocalypse.caerulaarbor.datagen.DamageTypes.HAND_FIREWORK;
+    public static final ResourceKey<DamageType> HAND_OF_CHOKER = com.apocalypse.caerulaarbor.datagen.DamageTypes.HAND_OF_CHOKER;
+    public static final ResourceKey<DamageType> HAND_SPIKE = com.apocalypse.caerulaarbor.datagen.DamageTypes.HAND_SPIKE;
+    public static final ResourceKey<DamageType> HIGHMORE_ATTACK = com.apocalypse.caerulaarbor.datagen.DamageTypes.HIGHMORE_ATTACK;
+    public static final ResourceKey<DamageType> HUNTER_ATTACK = com.apocalypse.caerulaarbor.datagen.DamageTypes.HUNTER_ATTACK;
+    public static final ResourceKey<DamageType> IMMORTAL_PUNISHMENT = com.apocalypse.caerulaarbor.datagen.DamageTypes.IMMORTAL_PUNISHMENT;
+    public static final ResourceKey<DamageType> INV_KILLER = com.apocalypse.caerulaarbor.datagen.DamageTypes.INV_KILLER;
+    public static final ResourceKey<DamageType> ISHARMLA_ATTACK = com.apocalypse.caerulaarbor.datagen.DamageTypes.ISHARMLA_ATTACK;
+    public static final ResourceKey<DamageType> ISHARMLA_CURSED = com.apocalypse.caerulaarbor.datagen.DamageTypes.ISHARMLA_CURSED;
+    public static final ResourceKey<DamageType> IZUMIK_NORMAL_ATTACK = com.apocalypse.caerulaarbor.datagen.DamageTypes.IZUMIK_NORMAL_ATTACK;
+    public static final ResourceKey<DamageType> IZUMIK_SKILL = com.apocalypse.caerulaarbor.datagen.DamageTypes.IZUMIK_SKILL;
+    public static final ResourceKey<DamageType> LAST_KNIGHT_ATTACK = com.apocalypse.caerulaarbor.datagen.DamageTypes.LAST_KNIGHT_ATTACK;
+    public static final ResourceKey<DamageType> OCEANIZE_DAMAGE = com.apocalypse.caerulaarbor.datagen.DamageTypes.OCEANIZE_DAMAGE;
+    public static final ResourceKey<DamageType> OCEANKILLER_DAMAGE = com.apocalypse.caerulaarbor.datagen.DamageTypes.OCEANKILLER_DAMAGE;
+    public static final ResourceKey<DamageType> OCEAN_COUNTER = com.apocalypse.caerulaarbor.datagen.DamageTypes.OCEAN_COUNTER;
+    public static final ResourceKey<DamageType> OCEAN_MAGIC = com.apocalypse.caerulaarbor.datagen.DamageTypes.OCEAN_MAGIC;
+    public static final ResourceKey<DamageType> OCEAN_WITHER = com.apocalypse.caerulaarbor.datagen.DamageTypes.OCEAN_WITHER;
+    public static final ResourceKey<DamageType> PUNCTURE_ATTACK = com.apocalypse.caerulaarbor.datagen.DamageTypes.PUNCTURE_ATTACK;
+    public static final ResourceKey<DamageType> REPELLER_ATTACK = com.apocalypse.caerulaarbor.datagen.DamageTypes.REPELLER_ATTACK;
+    public static final ResourceKey<DamageType> SANITY_BREAK = com.apocalypse.caerulaarbor.datagen.DamageTypes.SANITY_BREAK;
+    public static final ResourceKey<DamageType> SAW_CUT = com.apocalypse.caerulaarbor.datagen.DamageTypes.SAW_CUT;
+    public static final ResourceKey<DamageType> SUPER_CAT_ATTACK = com.apocalypse.caerulaarbor.datagen.DamageTypes.SUPER_CAT_ATTACK;
+    public static final ResourceKey<DamageType> TRAIL_DAMAGE = com.apocalypse.caerulaarbor.datagen.DamageTypes.TRAIL_DAMAGE;
+    public static final ResourceKey<DamageType> WARDEN_ATTACK = com.apocalypse.caerulaarbor.datagen.DamageTypes.WARDEN_ATTACK;
+    public static final ResourceKey<DamageType> WARDEN_SONIC = com.apocalypse.caerulaarbor.datagen.DamageTypes.WARDEN_SONIC;
+    public static final ResourceKey<DamageType> WIPE_MAGIC = com.apocalypse.caerulaarbor.datagen.DamageTypes.WIPE_MAGIC;
 
     private CADamageTypes() {
     }
@@ -102,7 +100,4 @@ public class CADamageTypes {
         return source(level, WARDEN_SONIC, attacker);
     }
 
-    public static ResourceKey<DamageType> create(String name) {
-        return ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(CaerulaArborMod.MODID, name));
-    }
 }

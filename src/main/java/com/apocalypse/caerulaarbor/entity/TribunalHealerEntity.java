@@ -256,7 +256,7 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
                         final Vec3 center = new Vec3(x, y, z);
                         List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(16 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
                         for (Entity entityiterator : entfound) {
-                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "homo_sapiens")))) {
+                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "homo_sapiens")))) {
                                 if (!(this == entityiterator)) {
                                     if ((Entity) this instanceof TribunalHealerEntity datEntSetI)
                                         datEntSetI.getEntityData().set(DATA_SKILLP_1, 100);
@@ -274,7 +274,7 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
                                             final Vec3 center1 = new Vec3(x, y, z);
                                             List<Entity> entfound1 = world.getEntitiesOfClass(Entity.class, new AABB(center1, center1).inflate(18 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center1))).toList();
                                             for (Entity entityiterator1 : entfound1) {
-                                                if (entityiterator1.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "inquisition")))) {
+                                                if (entityiterator1.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "inquisition")))) {
                                                     if ((entityiterator1 instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) < (entityiterator1 instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1)) {
                                                         if (entityiterator1 instanceof LivingEntity entity && !entity.level().isClientSide())
                                                             entity.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 60, 1));
@@ -327,7 +327,7 @@ public class TribunalHealerEntity extends Animal implements RangedAttackMob, Geo
                                 final Vec3 center = new Vec3((getX()), (getY()), (getZ()));
                                 List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(12 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
                                 for (Entity entityiterator : entfound) {
-                                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "is_humanside")))) {
+                                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside")))) {
                                         continue;
                                     }
                                     if (entityiterator instanceof TamableAnimal tamEnt && tamEnt.isTame()) {

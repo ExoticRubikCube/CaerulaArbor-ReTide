@@ -15,7 +15,7 @@ import java.util.List;
 
 public class OceanosprKillerEnchantment extends Enchantment {
 	private static final EnchantmentCategory ENCHANTMENT_CATEGORY = EnchantmentCategory.create("caerula_arbor_oceanospr_killer",
-			item -> Ingredient.of(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "enchantable/seaborn_killer"))).test(new ItemStack(item)));
+			item -> Ingredient.of(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "enchantable/seaborn_killer"))).test(new ItemStack(item)));
 
 	public OceanosprKillerEnchantment() {
 		super(Enchantment.Rarity.UNCOMMON, ENCHANTMENT_CATEGORY, EquipmentSlot.values());

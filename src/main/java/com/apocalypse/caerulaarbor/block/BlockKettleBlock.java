@@ -152,7 +152,7 @@ public class BlockKettleBlock extends Block implements SimpleWaterloggedBlock {
 	private void setBoiling(LevelAccessor world, BlockPos pos) {
 		boolean valid = false;
 		BlockState lower = world.getBlockState(pos.below());
-		if (lower.is(BlockTags.create(new ResourceLocation(CaerulaArborMod.MODID, "heat")))) {
+		if (lower.is(BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "heat")))) {
 			if (lower.getBlock() == Blocks.CAMPFIRE || lower.getBlock() == Blocks.SOUL_CAMPFIRE) {
 				valid = lower.getBlock().getStateDefinition().getProperty("lit") instanceof BooleanProperty litProperty && lower.getValue(litProperty);
 			} else if (lower.getBlock() == Blocks.SMOKER) {

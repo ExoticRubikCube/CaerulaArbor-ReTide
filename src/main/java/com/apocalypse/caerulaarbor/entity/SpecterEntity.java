@@ -318,7 +318,7 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
                         if (!entityiterator.isAlive()) {
                             continue;
                         }
-                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "hunters")))) {
+                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "hunters")))) {
                             if (!(entityiterator instanceof LivingEntity livEnt3 && livEnt3.hasEffect(CAMobEffects.ADD_HEALTH_PERCLY.get()))) {
                                 perc = EntityUtils.getHealthPerc(entityiterator);
                                 if (entityiterator instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
@@ -487,7 +487,7 @@ public class SpecterEntity extends Animal implements GeoEntity, SyncedAnimationE
                     continue;
                 }
             }
-            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "is_humanside")))) {
+            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside")))) {
                 if (!(entityiterator == target)) {
                     continue;
                 }

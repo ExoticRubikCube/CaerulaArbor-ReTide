@@ -15,7 +15,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
 public class FakerggShootRenderer extends EntityRenderer<FakerggShootEntity> {
-	private static final ResourceLocation texture = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/fakebullet.png");
+	private static final ResourceLocation texture = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/fakebullet.png");
 	private final ModelFakerggShoot model;
 
 	public FakerggShootRenderer(EntityRendererProvider.Context context) {

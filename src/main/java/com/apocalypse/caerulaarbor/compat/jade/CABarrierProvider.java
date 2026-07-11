@@ -15,7 +15,7 @@ import snownee.jade.api.config.IPluginConfig;
 public enum CABarrierProvider implements IEntityComponentProvider {
     INSTANCE;
 
-    public static final ResourceLocation UID = new ResourceLocation(CaerulaArborMod.MODID, "barrier_provider");
+    public static final ResourceLocation UID = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "barrier_provider");
 
     @Override
     public void appendTooltip(ITooltip iTooltip, EntityAccessor entityAccessor, IPluginConfig iPluginConfig) {

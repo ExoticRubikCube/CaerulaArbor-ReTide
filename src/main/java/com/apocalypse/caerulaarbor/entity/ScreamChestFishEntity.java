@@ -194,7 +194,7 @@ public class ScreamChestFishEntity extends SeaMonster {
             return;
         if (((Entity) this instanceof ScreamChestFishEntity datEntI ? datEntI.getEntityData().get(DATA_SCREAM_TICK) : 0) > 0) {
             if (sourceentity instanceof ServerPlayer player) {
-                Advancement adv = player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "i_scream"));
+                Advancement adv = player.server.getAdvancements().getAdvancement(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "i_scream"));
                 AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
                 if (!ap.isDone()) {
                     for (String criteria : ap.getRemainingCriteria())
@@ -277,7 +277,7 @@ public class ScreamChestFishEntity extends SeaMonster {
                     }
                     for (Entity entityiterator : world.getEntities(this, new AABB((x - 5), (y - 2), (z - 5), (x + 5), (y + 3), (z + 5)))) {
                         if ((entityiterator != null ? distanceTo(entityiterator) : -1) <= 5) {
-                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
                                 if (!(entityiterator == this.getTarget())) {
                                     continue;
                                 }

@@ -8,17 +8,17 @@ import software.bernie.geckolib.model.GeoModel;
 public class BishopFishModel extends GeoModel<BishopFishEntity> {
 	@Override
 	public ResourceLocation getAnimationResource(BishopFishEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/bishop.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/bishop.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(BishopFishEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/bishop.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/bishop.geo.json");
 	}
 
 	@Override
 	public ResourceLocation getTextureResource(BishopFishEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/bishop.png");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/bishop.png");
 	}
 
 }

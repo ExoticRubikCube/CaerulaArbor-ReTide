@@ -75,9 +75,9 @@ public class InfoStrategyAllScreen extends AbstractContainerScreen<InfoStrategyA
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
 
-		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/wetplayer.png"), this.leftPos, this.topPos, 0, 0, 200, 120, 200, 120);
+		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/wetplayer.png"), this.leftPos, this.topPos, 0, 0, 200, 120, 200, 120);
 
-		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/silence.png"), this.leftPos + -15, this.topPos + -17, Mth.clamp((int) StrategyUtils.getStraSilence(world) * 29, 0, 116), 0, 29, 33, 145, 33);
+		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/silence.png"), this.leftPos + -15, this.topPos + -17, Mth.clamp((int) StrategyUtils.getStraSilence(world) * 29, 0, 116), 0, 29, 33, 145, 33);
 
 		RenderSystem.disableBlend();
 	}
@@ -107,7 +107,7 @@ public class InfoStrategyAllScreen extends AbstractContainerScreen<InfoStrategyA
 		}, this.font);
 		guistate.put("button:button_evolution_tree", button_evolution_tree);
 		this.addRenderableWidget(button_evolution_tree);
-		imagebutton_breed_lit = new ImageButton(this.leftPos + 100, this.topPos + 29, 32, 32, 0, 0, 32, new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_breed_lit.png"), 32, 64, e -> {
+		imagebutton_breed_lit = new ImageButton(this.leftPos + 100, this.topPos + 29, 32, 32, 0, 0, 32, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_breed_lit.png"), 32, 64, e -> {
 			if (true) {
 				CANetwork.PACKET_HANDLER.sendToServer(new InfoStrategyNavigationButtonMessage(1, x, y, z));
 				InfoStrategyNavigationButtonMessage.handleButtonAction(entity, 1, x, y, z);
@@ -115,7 +115,7 @@ public class InfoStrategyAllScreen extends AbstractContainerScreen<InfoStrategyA
 		});
 		guistate.put("button:imagebutton_breed_lit", imagebutton_breed_lit);
 		this.addRenderableWidget(imagebutton_breed_lit);
-		imagebutton_grow_lit = new ImageButton(this.leftPos + 30, this.topPos + 29, 32, 32, 0, 0, 32, new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_grow_lit.png"), 32, 64, e -> {
+		imagebutton_grow_lit = new ImageButton(this.leftPos + 30, this.topPos + 29, 32, 32, 0, 0, 32, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_grow_lit.png"), 32, 64, e -> {
 			if (true) {
 				CANetwork.PACKET_HANDLER.sendToServer(new InfoStrategyNavigationButtonMessage(2, x, y, z));
 				InfoStrategyNavigationButtonMessage.handleButtonAction(entity, 2, x, y, z);
@@ -123,7 +123,7 @@ public class InfoStrategyAllScreen extends AbstractContainerScreen<InfoStrategyA
 		});
 		guistate.put("button:imagebutton_grow_lit", imagebutton_grow_lit);
 		this.addRenderableWidget(imagebutton_grow_lit);
-		imagebutton_mig_lit = new ImageButton(this.leftPos + 138, this.topPos + 29, 32, 32, 0, 0, 32, new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_mig_lit.png"), 32, 64, e -> {
+		imagebutton_mig_lit = new ImageButton(this.leftPos + 138, this.topPos + 29, 32, 32, 0, 0, 32, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_mig_lit.png"), 32, 64, e -> {
 			if (true) {
 				CANetwork.PACKET_HANDLER.sendToServer(new InfoStrategyNavigationButtonMessage(3, x, y, z));
 				InfoStrategyNavigationButtonMessage.handleButtonAction(entity, 3, x, y, z);
@@ -131,7 +131,7 @@ public class InfoStrategyAllScreen extends AbstractContainerScreen<InfoStrategyA
 		});
 		guistate.put("button:imagebutton_mig_lit", imagebutton_mig_lit);
 		this.addRenderableWidget(imagebutton_mig_lit);
-		imagebutton_subs_lit = new ImageButton(this.leftPos + 67, this.topPos + 30, 32, 32, 0, 0, 32, new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_subs_lit.png"), 32, 64, e -> {
+		imagebutton_subs_lit = new ImageButton(this.leftPos + 67, this.topPos + 30, 32, 32, 0, 0, 32, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/atlas/imagebutton_subs_lit.png"), 32, 64, e -> {
 			if (true) {
 				CANetwork.PACKET_HANDLER.sendToServer(new InfoStrategyNavigationButtonMessage(4, x, y, z));
 				InfoStrategyNavigationButtonMessage.handleButtonAction(entity, 4, x, y, z);

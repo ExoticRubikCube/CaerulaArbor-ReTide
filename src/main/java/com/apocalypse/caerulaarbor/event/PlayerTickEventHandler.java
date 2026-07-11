@@ -106,11 +106,11 @@ public class PlayerTickEventHandler {
         if (!CAConfigs.RELIC_BAN.get()) return;
 
         ItemStack mainHandItem = (entity.getMainHandItem()).copy();
-        if (mainHandItem.is(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "relic_advanced")))) {
+        if (mainHandItem.is(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_advanced")))) {
             entity.getMainHandItem().setCount(0);
         }
         mainHandItem = (entity.getOffhandItem()).copy();
-        if (mainHandItem.is(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "relic_advanced")))) {
+        if (mainHandItem.is(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "relic_advanced")))) {
             entity.getOffhandItem().setCount(0);
         }
 
@@ -186,7 +186,7 @@ public class PlayerTickEventHandler {
         double y = entity.getY();
         double z = entity.getZ();
 
-        if (!world.getBlockState(BlockPos.containing(x, y - 0.5, z)).is(BlockTags.create(new ResourceLocation(CaerulaArborMod.MODID, "nethersea_walker_functions")))) return;
+        if (!world.getBlockState(BlockPos.containing(x, y - 0.5, z)).is(BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "nethersea_walker_functions")))) return;
 
         ItemStack boots = (entity.getItemBySlot(EquipmentSlot.FEET)).copy();
         if (EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.NETHERSEA_WALKER.get(), boots) != 0) {
@@ -363,7 +363,7 @@ public class PlayerTickEventHandler {
     private static void handleHandSpeed(Player entity, LevelAccessor world, double x, double y, double z) {
         ItemStack mainHandItem = (entity.getMainHandItem()).copy();
         if ((entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_SPEED) {
-            if (mainHandItem.getItem() instanceof PickaxeItem || mainHandItem.is(ItemTags.create(new ResourceLocation("minecraft:pickaxes")))) {
+            if (mainHandItem.getItem() instanceof PickaxeItem || mainHandItem.is(ItemTags.create(ResourceLocation.parse("minecraft:pickaxes")))) {
                 boolean valid = true;
                 final Vec3 center = new Vec3(x, y, z);
                 List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(8 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();

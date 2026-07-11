@@ -13,7 +13,7 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 public class ComplexChitinGolemLayer extends GeoRenderLayer<ComplexChitinGolemEntity> {
-	private static final ResourceLocation LAYER = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/complex_chitin_golem_lit.png");
+	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/complex_chitin_golem_lit.png");
 
 	public ComplexChitinGolemLayer(GeoRenderer<ComplexChitinGolemEntity> entityRenderer) {
 		super(entityRenderer);

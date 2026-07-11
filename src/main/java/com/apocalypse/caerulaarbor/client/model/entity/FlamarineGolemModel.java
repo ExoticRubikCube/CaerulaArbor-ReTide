@@ -11,16 +11,16 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class FlamarineGolemModel extends GeoModel<FlamarineGolemEntity> {
-	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/flamarine_golem.png");
+	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/flamarine_golem.png");
 
 	@Override
 	public ResourceLocation getAnimationResource(FlamarineGolemEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/flamarine_golem.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/flamarine_golem.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(FlamarineGolemEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/flamarine_golem.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/flamarine_golem.geo.json");
 	}
 
 	@Override

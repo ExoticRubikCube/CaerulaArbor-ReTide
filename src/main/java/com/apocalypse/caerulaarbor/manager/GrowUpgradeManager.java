@@ -29,7 +29,7 @@ public class GrowUpgradeManager {
 			if (MapVariables.get(world).evo_point_grow >= Math.pow(stra + 1, 3) * CAConfigs.COEFFICIENT.get()) {
 				for (Entity entityiterator : new ArrayList<>(world.players())) {
 					if (entityiterator instanceof ServerPlayer player) {
-						Advancement adv = player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "to_experience_evolution"));
+						Advancement adv = player.server.getAdvancements().getAdvancement(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "to_experience_evolution"));
 						AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
 						if (!ap.isDone()) {
 							for (String criteria : ap.getRemainingCriteria())
@@ -74,7 +74,7 @@ public class GrowUpgradeManager {
 		} else {
 			for (Entity entityiterator : new ArrayList<>(world.players())) {
 				if (entityiterator instanceof ServerPlayer player) {
-					Advancement adv = player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "to_terminate_evolution"));
+					Advancement adv = player.server.getAdvancements().getAdvancement(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "to_terminate_evolution"));
 					AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
 					if (!ap.isDone()) {
 						for (String criteria : ap.getRemainingCriteria())

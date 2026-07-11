@@ -30,6 +30,7 @@ java {
     toolchain.languageVersion = JavaLanguageVersion.of(17)
 }
 
+println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
 minecraft {
     mappings channel: 'parchment', version: '2023.09.03-1.20.1'
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
@@ -39,9 +40,10 @@ minecraft {
         configureEach {
             // 开发环境的JVM参数:使用JBR热重载增强,并补充较稳妥的G1GC优化配置
             //TODO 需要评估优化配置是否会合适
+            //G1GC只适合小堆（heap < 6g），超过反而增加STW时间，均衡收益为3~6G
             jvmArgs = [
-                    "-Xms2G",
-                    "-Xmx4G",
+                    "-Xms3072M",
+                    "-Xmx6144M",
                     "-XX:+UseG1GC",
                     "-XX:+ParallelRefProcEnabled",
                     "-XX:MaxGCPauseMillis=100",
@@ -144,7 +146,7 @@ processResources {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.20.1-47.2.0'
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.20.1:4.4.9')
@@ -189,7 +191,7 @@ dependencies {
 mixin {
     add sourceSets.main, "mixins.${mod_id}.refmap.json"
     config "mixins.${mod_id}.json"
-    
+
     debug.verbose = true
     debug.export = true
     dumpTargetOnFailure = true
@@ -241,5 +243,23 @@ idea {
     module {
         downloadSources = true
         downloadJavadoc = true
+    }
+}
+
+tasks.register('debugGradleEnv') {
+    doLast {
+        println "=== Gradle Environment Debug Info ==="
+        println "Gradle version: ${gradle.gradleVersion}"
+        println "Gradle home: ${gradle.gradleHomeDir}"
+        println "Project name: ${project.name}"
+        println "Project dir: ${project.projectDir}"
+        println "Project Root dir: ${rootProject.projectDir}"
+        println "Project Parent dir: ${rootProject.projectDir.parentFile}"
+        println "Local Maven dir: ${rootProject.projectDir.parentFile}/maven-repo"
+        println "Java version: ${System.getProperty('java.version')}"
+        println "JVM version: ${System.getProperty 'java.vm.version'}(${System.getProperty 'java.vendor'})"
+        println "Java home: ${System.getProperty('java.home')}"
+        println "OS: ${System.getProperty('os.name')} ${System.getProperty('os.version')}"
+        println "OS Arch: ${System.getProperty 'os.arch'}"
     }
 }

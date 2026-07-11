@@ -8,16 +8,16 @@ import software.bernie.geckolib.model.GeoModel;
 public class StonecutterDollBlockModel extends GeoModel<StonecutterDollTileEntity> {
 	@Override
 	public ResourceLocation getAnimationResource(StonecutterDollTileEntity animatable) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/chiseler_block.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/chiseler_block.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(StonecutterDollTileEntity animatable) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/chiseler_block.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/chiseler_block.geo.json");
 	}
 
 	@Override
 	public ResourceLocation getTextureResource(StonecutterDollTileEntity animatable) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/block/chieslerfish.png");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/block/chieslerfish.png");
 	}
 }

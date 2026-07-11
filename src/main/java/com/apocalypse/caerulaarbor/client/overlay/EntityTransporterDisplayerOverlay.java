@@ -55,7 +55,7 @@ public class EntityTransporterDisplayerOverlay {
                     if (name.isEmpty() || name.equals(emptyNameHolder)) {
                         result1 = entity;
                     } else {
-                        ResourceLocation location = new ResourceLocation(name);
+                        ResourceLocation location = ResourceLocation.parse(name);
                         EntityType<?> type = ForgeRegistries.ENTITY_TYPES.getValue(location);
                         if (type == null) {
                             result1 = entity;

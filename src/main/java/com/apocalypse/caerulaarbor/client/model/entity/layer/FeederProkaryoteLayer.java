@@ -14,7 +14,7 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 public class FeederProkaryoteLayer extends GeoRenderLayer<FeederProkaryoteEntity> {
-	private static final ResourceLocation LAYER = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/feederlit.png");
+	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/feederlit.png");
 
 	public FeederProkaryoteLayer(GeoRenderer<FeederProkaryoteEntity> entityRenderer) {
 		super(entityRenderer);

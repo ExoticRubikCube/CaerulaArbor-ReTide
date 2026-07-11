@@ -14,7 +14,7 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 public class NautilusHeadhunterLayer extends GeoRenderLayer<NautilusHeadhunterEntity> {
-	private static final ResourceLocation LAYER = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/nautilus_lit.png");
+	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/nautilus_lit.png");
 
 	public NautilusHeadhunterLayer(GeoRenderer<NautilusHeadhunterEntity> entityRenderer) {
 		super(entityRenderer);

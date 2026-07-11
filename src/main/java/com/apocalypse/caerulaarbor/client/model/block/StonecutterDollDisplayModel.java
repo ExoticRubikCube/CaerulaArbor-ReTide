@@ -11,16 +11,16 @@ import com.apocalypse.caerulaarbor.block.item.StonecutterDollDisplayItem;
 public class StonecutterDollDisplayModel extends GeoModel<StonecutterDollDisplayItem> {
 	@Override
 	public ResourceLocation getAnimationResource(StonecutterDollDisplayItem animatable) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/chiseler_block.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/chiseler_block.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(StonecutterDollDisplayItem animatable) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/chiseler_block.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/chiseler_block.geo.json");
 	}
 
 	@Override
 	public ResourceLocation getTextureResource(StonecutterDollDisplayItem entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/block/chieslerfish.png");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/block/chieslerfish.png");
 	}
 }

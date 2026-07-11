@@ -70,9 +70,9 @@ public class InfoStrategyBreedScreen extends AbstractContainerScreen<InfoStrateg
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
 
-		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/sidebar.png"), this.leftPos + -3, this.topPos + -3, 0, 0, 262, 174, 262, 174);
+		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/sidebar.png"), this.leftPos + -3, this.topPos + -3, 0, 0, 262, 174, 262, 174);
 
-		guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/bg_breed.png"), this.leftPos, this.topPos, Mth.clamp((int) StrategyUtils.getStraBreed(world) * 256, 0, 1024), 0, 256, 168, 1280, 168);
+		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/bg_breed.png"), this.leftPos, this.topPos, Mth.clamp((int) StrategyUtils.getStraBreed(world) * 256, 0, 1024), 0, 256, 168, 1280, 168);
 
         double result = 18;
         double rate;
@@ -83,7 +83,7 @@ public class InfoStrategyBreedScreen extends AbstractContainerScreen<InfoStrateg
             }
             result = Math.round(18 * rate);
         }
-        guiGraphics.blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/barevo.png"), this.leftPos + 244, this.topPos + 20, Mth.clamp((int) result * 8, 0, 144), 0, 8, 72, 152, 72);
+        guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/barevo.png"), this.leftPos + 244, this.topPos + 20, Mth.clamp((int) result * 8, 0, 144), 0, 8, 72, 152, 72);
 
 		RenderSystem.disableBlend();
 	}

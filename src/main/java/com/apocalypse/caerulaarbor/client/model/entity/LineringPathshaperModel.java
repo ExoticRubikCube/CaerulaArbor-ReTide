@@ -8,17 +8,17 @@ import software.bernie.geckolib.model.GeoModel;
 public class LineringPathshaperModel extends GeoModel<LineringPathshaperEntity> {
 	@Override
 	public ResourceLocation getAnimationResource(LineringPathshaperEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/routeshaper.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/routeshaper.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(LineringPathshaperEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/routeshaper.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/routeshaper.geo.json");
 	}
 
 	@Override
 	public ResourceLocation getTextureResource(LineringPathshaperEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/lingering_pathshaper.png");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/lingering_pathshaper.png");
 	}
 
 }

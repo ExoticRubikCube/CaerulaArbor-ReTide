@@ -48,7 +48,7 @@ public class EntityJoinLevelEventHandler {
         if ((entity instanceof LivingEntity livingEntity0 && livingEntity0.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get())
                 ? livingEntity0.getAttribute(CAAttributes.SANITY_MODIFIER.get()).getBaseValue()
                 : 0) == 1) {
-            if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "bossoffspring")))) {
+            if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "bossoffspring")))) {
                 if (entity instanceof LivingEntity livingEntity2 && livingEntity2.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
                     livingEntity2.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.16);
             }
@@ -56,27 +56,27 @@ public class EntityJoinLevelEventHandler {
                 if (entity instanceof LivingEntity livingEntity4 && livingEntity4.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
                     livingEntity4.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.5);
             }
-            if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "with_low_sanity_modifier")))) {
+            if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "with_low_sanity_modifier")))) {
                 if (entity instanceof LivingEntity livingEntity6 && livingEntity6.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
                     livingEntity6.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.5);
             }
-            if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "with_lower_sanity_modifier")))) {
+            if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "with_lower_sanity_modifier")))) {
                 if (entity instanceof LivingEntity livingEntity8 && livingEntity8.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
                     livingEntity8.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.33);
             }
-            if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "with_lowest_sanity_modifier")))) {
+            if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "with_lowest_sanity_modifier")))) {
                 if (entity instanceof LivingEntity livingEntity10 && livingEntity10.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
                     livingEntity10.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.25);
             }
-            if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "with_lowest_smaller_sanity_modifier")))) {
+            if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "with_lowest_smaller_sanity_modifier")))) {
                 if (entity instanceof LivingEntity livingEntity12 && livingEntity12.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
                     livingEntity12.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.2);
             }
-            if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "with_lowest_smallest_sanity_modifier")))) {
+            if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "with_lowest_smallest_sanity_modifier")))) {
                 if (entity instanceof LivingEntity livingEntity14 && livingEntity14.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
                     livingEntity14.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0.1);
             }
-            if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "with_zero_sanity_modifier")))) {
+            if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "with_zero_sanity_modifier")))) {
                 if (entity instanceof LivingEntity livingEntity16 && livingEntity16.getAttributes().hasAttribute(CAAttributes.SANITY_MODIFIER.get()))
                     livingEntity16.getAttribute(CAAttributes.SANITY_MODIFIER.get()).setBaseValue(0);
             }
@@ -101,8 +101,8 @@ public class EntityJoinLevelEventHandler {
         double coef_cur = 1;
         double percentage;
 
-        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
-            if (!entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "marinemobs")))) {
+        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
+            if (!entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "marinemobs")))) {
                 if (entity instanceof LivingEntity livingEntity4 && livingEntity4.getAttributes().hasAttribute(ForgeMod.SWIM_SPEED.get()))
                     livingEntity4.getAttribute(ForgeMod.SWIM_SPEED.get())
                             .setBaseValue(((entity instanceof LivingEntity livingEntity3 && livingEntity3.getAttributes().hasAttribute(Attributes.MOVEMENT_SPEED) ? livingEntity3.getAttribute(Attributes.MOVEMENT_SPEED).getBaseValue() : 0) * 10));
@@ -117,16 +117,16 @@ public class EntityJoinLevelEventHandler {
                     coef = 1;
                     for (Entity entityiterator : new ArrayList<>(world.players())) {
                         if (entityiterator instanceof ServerPlayer plr7 && plr7.level() instanceof ServerLevel
-                                && plr7.getAdvancements().getOrStartProgress(plr7.server.getAdvancements().getAdvancement(new ResourceLocation("minecraft:story/iron_tools"))).isDone()) {
+                                && plr7.getAdvancements().getOrStartProgress(plr7.server.getAdvancements().getAdvancement(ResourceLocation.parse("minecraft:story/iron_tools"))).isDone()) {
                             coef_cur = 2;
                             if (entityiterator instanceof ServerPlayer plr8 && plr8.level() instanceof ServerLevel
-                                    && plr8.getAdvancements().getOrStartProgress(plr8.server.getAdvancements().getAdvancement(new ResourceLocation("minecraft:story/enter_the_nether"))).isDone()) {
+                                    && plr8.getAdvancements().getOrStartProgress(plr8.server.getAdvancements().getAdvancement(ResourceLocation.parse("minecraft:story/enter_the_nether"))).isDone()) {
                                 coef_cur = 3;
                                 if (entityiterator instanceof ServerPlayer plr9 && plr9.level() instanceof ServerLevel
-                                        && plr9.getAdvancements().getOrStartProgress(plr9.server.getAdvancements().getAdvancement(new ResourceLocation("minecraft:story/enter_the_end"))).isDone()) {
+                                        && plr9.getAdvancements().getOrStartProgress(plr9.server.getAdvancements().getAdvancement(ResourceLocation.parse("minecraft:story/enter_the_end"))).isDone()) {
                                     coef_cur = 4;
                                     if (entityiterator instanceof ServerPlayer plr10 && plr10.level() instanceof ServerLevel
-                                            && plr10.getAdvancements().getOrStartProgress(plr10.server.getAdvancements().getAdvancement(new ResourceLocation("minecraft:end/find_end_city"))).isDone()) {
+                                            && plr10.getAdvancements().getOrStartProgress(plr10.server.getAdvancements().getAdvancement(ResourceLocation.parse("minecraft:end/find_end_city"))).isDone()) {
                                         coef_cur = 5;
                                     }
                                 }
@@ -175,9 +175,9 @@ public class EntityJoinLevelEventHandler {
                 CaerulaArborMod.queueServerWork(10, () -> {
                     if (!(finalEntity instanceof LivingEntity livEnt29 && livEnt29.hasEffect(CAMobEffects.POWER_OF_ANCHOR.get()))) {
                         if (MapVariables.get(finalWorld).strategy_breed > 0) {
-                            if (!finalEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "bossoffspring")))
-                                    && !finalEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanspawn")))
-                                    && !finalEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanpet")))) {
+                            if (!finalEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "bossoffspring")))
+                                    && !finalEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanspawn")))
+                                    && !finalEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanpet")))) {
                                 if (EntityUtils.getFellowAround(finalWorld, finalX, finalY, finalZ, finalEntity) < 5) {
                                     if (Math.random() < 0.05 + 0.05 * MapVariables.get(finalWorld).strategy_breed) {
                                         if (!finalEntity.level().isClientSide() && finalEntity.getServer() != null) {
@@ -209,7 +209,7 @@ public class EntityJoinLevelEventHandler {
                 });
             }
         }
-        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "golems")))) {
+        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "golems")))) {
             if ((entity instanceof LivingEntity livingEntity44 && livingEntity44.getAttributes().hasAttribute(CAAttributes.EVOLVED.get())
                     ? livingEntity44.getAttribute(CAAttributes.EVOLVED.get()).getBaseValue()
                     : 0) == 0) {

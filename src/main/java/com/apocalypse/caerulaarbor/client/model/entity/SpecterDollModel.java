@@ -6,16 +6,16 @@ import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.GeoModel;
 
 public class SpecterDollModel extends GeoModel<SpecterDollEntity> {
-	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/specter_doll.png");
+	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/specter_doll.png");
 
 	@Override
 	public ResourceLocation getAnimationResource(SpecterDollEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/specter_doll.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/specter_doll.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(SpecterDollEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/specter_doll.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/specter_doll.geo.json");
 	}
 
 	@Override

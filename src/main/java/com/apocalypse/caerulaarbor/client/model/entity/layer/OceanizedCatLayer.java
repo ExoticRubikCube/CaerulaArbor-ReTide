@@ -14,7 +14,7 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 public class OceanizedCatLayer extends GeoRenderLayer<OceanizedCatEntity> {
-	private static final ResourceLocation LAYER = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/cat_lit.png");
+	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/cat_lit.png");
 
 	public OceanizedCatLayer(GeoRenderer<OceanizedCatEntity> entityRenderer) {
 		super(entityRenderer);

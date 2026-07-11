@@ -11,16 +11,16 @@ import com.apocalypse.caerulaarbor.block.item.ViviparousLilyDisplayItem;
 public class ViviparousLilyDisplayModel extends GeoModel<ViviparousLilyDisplayItem> {
 	@Override
 	public ResourceLocation getAnimationResource(ViviparousLilyDisplayItem animatable) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/viviparous_lily.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/viviparous_lily.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(ViviparousLilyDisplayItem animatable) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/viviparous_lily.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/viviparous_lily.geo.json");
 	}
 
 	@Override
 	public ResourceLocation getTextureResource(ViviparousLilyDisplayItem entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/block/vivi_lily.png");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/block/vivi_lily.png");
 	}
 }

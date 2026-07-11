@@ -13,7 +13,7 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 public class BishopFishLayer extends GeoRenderLayer<BishopFishEntity> {
-	private static final ResourceLocation LAYER = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/bishoplit.png");
+	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/bishoplit.png");
 
 	public BishopFishLayer(GeoRenderer<BishopFishEntity> entityRenderer) {
 		super(entityRenderer);

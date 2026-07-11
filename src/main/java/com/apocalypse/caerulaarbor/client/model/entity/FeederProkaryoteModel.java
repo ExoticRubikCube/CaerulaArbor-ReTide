@@ -6,16 +6,16 @@ import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.GeoModel;
 
 public class FeederProkaryoteModel extends GeoModel<FeederProkaryoteEntity> {
-	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/feeder.png");
+	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/feeder.png");
 
 	@Override
 	public ResourceLocation getAnimationResource(FeederProkaryoteEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/feeder.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/feeder.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(FeederProkaryoteEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/feeder.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/feeder.geo.json");
 	}
 
 	@Override

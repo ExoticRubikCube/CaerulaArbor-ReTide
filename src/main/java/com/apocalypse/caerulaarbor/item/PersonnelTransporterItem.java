@@ -38,7 +38,7 @@ public class PersonnelTransporterItem extends Item {
 		super(new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.UNCOMMON));
 	}
 
-	public static final TagKey<EntityType<?>> HOMO_SAPIENS = TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "portable"));
+	public static final TagKey<EntityType<?>> HOMO_SAPIENS = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "portable"));
     public static final String emptyNameHolder = "apocata";
     public static final String TAG_NAME = "name";
     public static final String TAG_PERC = "perc";
@@ -113,7 +113,7 @@ public class PersonnelTransporterItem extends Item {
         if(!tag.contains(TAG_NAME)) return null;
         String name = tag.getString(TAG_NAME);
         if (name.isEmpty() || name.equals(emptyNameHolder))return null;
-        ResourceLocation location = new ResourceLocation(name);
+        ResourceLocation location = ResourceLocation.parse(name);
         return ForgeRegistries.ENTITY_TYPES.getValue(location);
     }
 

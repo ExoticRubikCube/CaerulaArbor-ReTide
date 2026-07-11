@@ -11,19 +11,19 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class ChitinGolemModel extends GeoModel<ChitinGolemEntity> {
-	private static final ResourceLocation HEALTHY_TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/chitin_golem_0.png");
-	private static final ResourceLocation DAMAGED_TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/chitin_golem_1.png");
-	private static final ResourceLocation HEAVY_DAMAGED_TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/chitin_golem_2.png");
-	private static final ResourceLocation CRITICAL_TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/chitin_golem_3.png");
+	private static final ResourceLocation HEALTHY_TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/chitin_golem_0.png");
+	private static final ResourceLocation DAMAGED_TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/chitin_golem_1.png");
+	private static final ResourceLocation HEAVY_DAMAGED_TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/chitin_golem_2.png");
+	private static final ResourceLocation CRITICAL_TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/chitin_golem_3.png");
 
 	@Override
 	public ResourceLocation getAnimationResource(ChitinGolemEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/chitgolem.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/chitgolem.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(ChitinGolemEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/chitgolem.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/chitgolem.geo.json");
 	}
 
 	@Override

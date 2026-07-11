@@ -326,7 +326,7 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
                         if ((Entity) entity instanceof Player player && !player.level().isClientSide())
                             player.displayClientMessage(Component.literal((Component.translatable("crisis_table.log_4").getString())), false);
                         if ((Entity) entity instanceof ServerPlayer player) {
-                            Advancement adv = player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "operation_deepness"));
+                            Advancement adv = player.server.getAdvancements().getAdvancement(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "operation_deepness"));
                             AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
                             if (!ap.isDone()) {
                                 for (String criteria : ap.getRemainingCriteria())
@@ -338,8 +338,8 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
                         final Vec3 center = new Vec3(x, y, z);
                         List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(12 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
                         for (Entity entityiterator : entfound) {
-                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))
-                                    && !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanpet")))) {
+                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))
+                                    && !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanpet")))) {
                                 if (entityiterator instanceof Mob mob)
                                     mob.setTarget(mob);
                             }

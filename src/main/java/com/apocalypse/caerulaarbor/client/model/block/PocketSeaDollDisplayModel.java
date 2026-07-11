@@ -9,16 +9,16 @@ import software.bernie.geckolib.model.GeoModel;
 public class PocketSeaDollDisplayModel extends GeoModel<PocketSeaDollDisplayItem> {
 	@Override
 	public ResourceLocation getAnimationResource(PocketSeaDollDisplayItem animatable) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/creeper_fish_block.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/creeper_fish_block.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(PocketSeaDollDisplayItem animatable) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/creeper_fish_block.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/creeper_fish_block.geo.json");
 	}
 
 	@Override
 	public ResourceLocation getTextureResource(PocketSeaDollDisplayItem entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/block/creeperfish.png");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/block/creeperfish.png");
 	}
 }

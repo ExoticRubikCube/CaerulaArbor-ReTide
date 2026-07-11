@@ -13,7 +13,7 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 public class OceanizedIllusionerLayer extends GeoRenderLayer<OceanizedIllusionerEntity> {
-	private static final ResourceLocation LAYER = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/illusioner_lit.png");
+	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/illusioner_lit.png");
 
 	public OceanizedIllusionerLayer(GeoRenderer<OceanizedIllusionerEntity> entityRenderer) {
 		super(entityRenderer);

@@ -194,7 +194,7 @@ public class IsharmlaRemainBlock extends Block {
                             ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
                             ((Entity) entity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).shrink(1);
                             if ((Entity) entity instanceof ServerPlayer player) {
-                                Advancement adv = player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "unlock_calamity"));
+                                Advancement adv = player.server.getAdvancements().getAdvancement(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "unlock_calamity"));
                                 AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
                                 if (!ap.isDone()) {
                                     for (String criteria : ap.getRemainingCriteria())

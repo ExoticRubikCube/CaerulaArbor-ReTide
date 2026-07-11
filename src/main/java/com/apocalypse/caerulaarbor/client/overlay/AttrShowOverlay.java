@@ -21,12 +21,12 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber({Dist.CLIENT})
 public class AttrShowOverlay {
 
-	public static ResourceLocation MISS = new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/miss.png");
-	public static ResourceLocation BARRIER = new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/living_barrier.png");
-	public static ResourceLocation RESIS = new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/magic_resistance.png");
-	public static ResourceLocation DEFENSE = new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/defense.png");
-	public static ResourceLocation RESIS_BAR = new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/magic_resistance_bar.png");
-	public static ResourceLocation BARRIER_BAR = new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/living_barrier_bar.png");
+	public static ResourceLocation MISS = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/miss.png");
+	public static ResourceLocation BARRIER = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/living_barrier.png");
+	public static ResourceLocation RESIS = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/magic_resistance.png");
+	public static ResourceLocation DEFENSE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/defense.png");
+	public static ResourceLocation RESIS_BAR = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/magic_resistance_bar.png");
+	public static ResourceLocation BARRIER_BAR = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/living_barrier_bar.png");
 	
 	@SubscribeEvent(priority = EventPriority.NORMAL)
 	public static void eventHandler(RenderGuiEvent.Pre event) {

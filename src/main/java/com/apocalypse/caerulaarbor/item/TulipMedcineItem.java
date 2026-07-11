@@ -64,7 +64,7 @@ public class TulipMedcineItem extends Item {
             entity.addEffect(new MobEffectInstance(MobEffects.ABSORPTION, 600, 2));
         }
         if (entity instanceof ServerPlayer player) {
-            Advancement adv = player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "but_i_refuse"));
+            Advancement adv = player.server.getAdvancements().getAdvancement(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "but_i_refuse"));
             AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
             if (!ap.isDone()) {
                 for (String criteria : ap.getRemainingCriteria())

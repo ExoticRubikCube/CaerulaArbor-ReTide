@@ -292,7 +292,7 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
         for (Entity entityiterator : new ArrayList<>(world.players())) {
             if ((level().dimension()) == (entityiterator.level().dimension())) {
                 if (entityiterator instanceof ServerPlayer player) {
-                    Advancement adv = player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "speechless_break"));
+                    Advancement adv = player.server.getAdvancements().getAdvancement(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "speechless_break"));
                     AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
                     if (!ap.isDone()) {
                         for (String criteria : ap.getRemainingCriteria())
@@ -309,7 +309,7 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
     public void awardPreciousDaysAdvancement() {
         for (Entity playerEntity : new ArrayList<>(this.level().players())) {
             if (this.level().dimension() == playerEntity.level().dimension() && playerEntity instanceof ServerPlayer serverPlayer) {
-                Advancement advancement = serverPlayer.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "precious_days"));
+                Advancement advancement = serverPlayer.server.getAdvancements().getAdvancement(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "precious_days"));
                 AdvancementProgress advancementProgress = serverPlayer.getAdvancements().getOrStartProgress(advancement);
                 if (!advancementProgress.isDone()) {
                     for (String criteria : advancementProgress.getRemainingCriteria()) {
@@ -383,7 +383,7 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
                     if (entityiterator == this) {
                         continue;
                     }
-                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
                         if (entityiterator != this.getTarget()) {
                             continue;
                         }
@@ -635,7 +635,7 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
             LevelAccessor world = this.level();
             if (world.getLevelData().getGameRules().getBoolean(GameRules.RULE_DOMOBLOOT)) {
                 if (!world.isClientSide() && world.getServer() != null) {
-                    for (ItemStack itemstackiterator : world.getServer().getLootData().getLootTable(new ResourceLocation(CaerulaArborMod.MODID, "gameplay/highmore_relics"))
+                    for (ItemStack itemstackiterator : world.getServer().getLootData().getLootTable(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "gameplay/highmore_relics"))
                             .getRandomItems(new LootParams.Builder((ServerLevel) world).create(LootContextParamSets.EMPTY))) {
                         if (world instanceof ServerLevel level) {
                             ItemEntity entityToSpawn = new ItemEntity(level, this.getX(), this.getY(), this.getZ(), itemstackiterator);
@@ -748,7 +748,7 @@ public class HighmoreEntity extends SeaMonster implements RangedAttackMob {
                 if (entityiterator == entity) {
                     continue;
                 }
-                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
                     if (!(entityiterator == (entity instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null))) {
                         continue;
                     }

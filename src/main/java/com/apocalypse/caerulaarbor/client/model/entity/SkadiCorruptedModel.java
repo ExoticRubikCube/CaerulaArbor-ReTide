@@ -11,18 +11,18 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class SkadiCorruptedModel extends GeoModel<SkadiCorruptedEntity> {
-	private static final ResourceLocation PHASE_0_TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/skadi_corrupted_0.png");
-	private static final ResourceLocation PHASE_1_TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/skadi_corrupted_1.png");
-	private static final ResourceLocation PHASE_2_TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/skadi_corrupted.png");
+	private static final ResourceLocation PHASE_0_TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/skadi_corrupted_0.png");
+	private static final ResourceLocation PHASE_1_TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/skadi_corrupted_1.png");
+	private static final ResourceLocation PHASE_2_TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/skadi_corrupted.png");
 
 	@Override
 	public ResourceLocation getAnimationResource(SkadiCorruptedEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/skadi_corrupted.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/skadi_corrupted.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(SkadiCorruptedEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/skadi_corrupted.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/skadi_corrupted.geo.json");
 	}
 
 	@Override

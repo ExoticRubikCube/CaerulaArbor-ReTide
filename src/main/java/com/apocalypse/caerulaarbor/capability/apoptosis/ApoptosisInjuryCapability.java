@@ -8,7 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 
 public class ApoptosisInjuryCapability implements IApoptosisInjuryCapability {
-    public static final ResourceLocation ID = new ResourceLocation(CaerulaArborMod.MODID, "apoptosis_injury");
+    public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "apoptosis_injury");
 
     private final LivingEntity owner;
     private double value;

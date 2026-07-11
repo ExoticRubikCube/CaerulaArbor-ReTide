@@ -268,7 +268,7 @@ public class ReaperPetEntity extends TamableAnimal implements GeoEntity, SyncedA
 					this.setAnimation("animation.reaperpet.interact");
 				}
 				return InteractionResult.SUCCESS;
-			} else if (((Entity) sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).is(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "fish_food")))) {
+			} else if (((Entity) sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).is(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "fish_food")))) {
 				if ((Entity) this instanceof LivingEntity entity)
 					entity.setHealth((Entity) this instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1);
 				((Entity) sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).shrink(1);
@@ -276,7 +276,7 @@ public class ReaperPetEntity extends TamableAnimal implements GeoEntity, SyncedA
 					level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.DOLPHIN_EAT, SoundSource.NEUTRAL, 1, 1);
 				}
 				return InteractionResult.SUCCESS;
-			} else if (((Entity) sourceentity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).is(ItemTags.create(new ResourceLocation(CaerulaArborMod.MODID, "fish_food")))) {
+			} else if (((Entity) sourceentity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).is(ItemTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "fish_food")))) {
 				if ((Entity) this instanceof LivingEntity entity && !this.level().isClientSide())
 					this.addEffect(new MobEffectInstance(MobEffects.REGENERATION, 200, 1));
 				((Entity) sourceentity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).shrink(1);

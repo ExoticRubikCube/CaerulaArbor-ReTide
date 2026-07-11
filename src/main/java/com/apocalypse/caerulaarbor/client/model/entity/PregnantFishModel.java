@@ -11,16 +11,16 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class PregnantFishModel extends GeoModel<PregnantFishEntity> {
-	private static final ResourceLocation TEXTURE = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/pergnantfish.png");
+	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/pergnantfish.png");
 
 	@Override
 	public ResourceLocation getAnimationResource(PregnantFishEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/pregnant.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/pregnant.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(PregnantFishEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/pregnant.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/pregnant.geo.json");
 	}
 
 	@Override

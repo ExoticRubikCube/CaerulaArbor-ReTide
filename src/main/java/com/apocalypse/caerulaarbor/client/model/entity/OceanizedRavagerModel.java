@@ -13,17 +13,17 @@ import software.bernie.geckolib.model.data.EntityModelData;
 public class OceanizedRavagerModel extends GeoModel<OceanizedRavagerEntity> {
 	@Override
 	public ResourceLocation getAnimationResource(OceanizedRavagerEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/oceanized_ravager.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/oceanized_ravager.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(OceanizedRavagerEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/oceanized_ravager.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/oceanized_ravager.geo.json");
 	}
 
 	@Override
 	public ResourceLocation getTextureResource(OceanizedRavagerEntity entity) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/oceanized_ravager.png");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/oceanized_ravager.png");
 	}
 
 	@Override

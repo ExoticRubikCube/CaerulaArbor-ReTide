@@ -86,7 +86,7 @@ public class InterphoneItem extends Item {
 				final Vec3 center = new Vec3(tx, ty, tz);
 				List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(48 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
 				for (Entity entityiterator : entfound) {
-					if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "inquisition")))) {
+					if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "inquisition")))) {
 						num = num + 1;
 						entityiterator.getPersistentData().putString("recentCommander", name);
 						EntityUtils.clearTarget(entityiterator);
@@ -147,7 +147,7 @@ public class InterphoneItem extends Item {
 					if (entityiterator.level().dimension() != chief.level().dimension()) {
 						continue;
 					}
-					if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "inquisition")))) {
+					if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "inquisition")))) {
 						for (int index0 = 0; index0 < 8; index0++) {
 							dx = Mth.nextDouble(RandomSource.create(), -2, 2);
 							dz = Mth.nextDouble(RandomSource.create(), -2, 2);
@@ -225,11 +225,11 @@ public class InterphoneItem extends Item {
         LevelAccessor world = entity.level();
         String log;
         double num = 0;
-        if (!entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "inquisition")))) {
+        if (!entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "inquisition")))) {
 			final Vec3 center = new Vec3(entity.getX(), entity.getY(), entity.getZ());
 			List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(32 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
 			for (Entity entityiterator : entfound) {
-				if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "inquisition")))) {
+				if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "inquisition")))) {
 					if (entityiterator instanceof Mob mob && (Entity) entity instanceof LivingEntity ent)
 						mob.setTarget(ent);
 					num = num + 1;

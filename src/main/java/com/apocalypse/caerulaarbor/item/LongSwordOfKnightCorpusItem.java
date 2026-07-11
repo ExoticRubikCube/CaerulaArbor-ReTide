@@ -104,7 +104,7 @@ public class LongSwordOfKnightCorpusItem extends SwordItem {
 
 	public float applyDamageBonus(Entity target, float baseDamage) {
 		float damage = baseDamage;
-		if (target.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "oceanoffspring")))) {
+		if (target.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
 			damage *= 1.5F;
 		}
 		if (target instanceof LivingEntity livingTarget && livingTarget.getHealth() < livingTarget.getMaxHealth() * 0.33F) {

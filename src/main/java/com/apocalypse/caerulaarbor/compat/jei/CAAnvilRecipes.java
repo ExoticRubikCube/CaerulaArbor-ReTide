@@ -20,7 +20,7 @@ import java.util.List;
 public class CAAnvilRecipes implements IModPlugin {
 	@Override
 	public ResourceLocation getPluginUid() {
-		return new ResourceLocation(CaerulaArborMod.MODID, "anvil_recipes");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "anvil_recipes");
 	}
 
 	@Override

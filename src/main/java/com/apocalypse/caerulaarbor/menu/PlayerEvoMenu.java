@@ -80,7 +80,7 @@ public class PlayerEvoMenu extends AbstractContainerMenu implements Supplier<Map
         boolean result = NodeUtils.isNodeSet1Terminate(entity) && NodeUtils.isNodeSet2Terminate(entity) && NodeUtils.isNodeSet3Terminate(entity) && NodeUtils.isNodeEunectesAtLeast(entity, 4) && NodeUtils.isNodeLessArmorAtLeast(entity, 4);
         if (result) {
 			if ((Entity) entity instanceof ServerPlayer player) {
-				Advancement adv = player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "end_player_evo"));
+				Advancement adv = player.server.getAdvancements().getAdvancement(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "end_player_evo"));
 				AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
 				if (!ap.isDone()) {
 					for (String criteria : ap.getRemainingCriteria())

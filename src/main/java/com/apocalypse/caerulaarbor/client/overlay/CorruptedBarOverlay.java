@@ -67,7 +67,7 @@ public class CorruptedBarOverlay {
                 }
                 result2 = Math.max(0, Math.min(Math.round(50 * progress), 50));
             }
-            event.getGuiGraphics().blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/corrupted_bar_inner.png"), 28, h / 2 + -42, Mth.clamp((int) result2 * 2, 0, 100), 0, 2, 88, 102, 88);
+            event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/corrupted_bar_inner.png"), 28, h / 2 + -42, Mth.clamp((int) result2 * 2, 0, 100), 0, 2, 88, 102, 88);
 
             double result = 0;
             Entity corrupted;
@@ -85,7 +85,7 @@ public class CorruptedBarOverlay {
                     }
                 }
             }
-            event.getGuiGraphics().blit(new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/corrupted_bar.png"), 25, h / 2 + -48, 0, Mth.clamp((int) result * 99, 0, 99), 8, 99, 8, 198);
+            event.getGuiGraphics().blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/corrupted_bar.png"), 25, h / 2 + -48, 0, Mth.clamp((int) result * 99, 0, 99), 8, 99, 8, 198);
 
 		}
 	}

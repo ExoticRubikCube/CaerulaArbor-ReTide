@@ -8,16 +8,16 @@ import software.bernie.geckolib.model.GeoModel;
 public class TrailriteArmorstandBlockModel extends GeoModel<TrailriteArmorstandTileEntity> {
 	@Override
 	public ResourceLocation getAnimationResource(TrailriteArmorstandTileEntity animatable) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "animations/trairite_armorstand.animation.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "animations/trairite_armorstand.animation.json");
 	}
 
 	@Override
 	public ResourceLocation getModelResource(TrailriteArmorstandTileEntity animatable) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "geo/trairite_armorstand.geo.json");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "geo/trairite_armorstand.geo.json");
 	}
 
 	@Override
 	public ResourceLocation getTextureResource(TrailriteArmorstandTileEntity animatable) {
-		return new ResourceLocation(CaerulaArborMod.MODID, "textures/block/trailrte_armorstand.png");
+		return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/block/trailrte_armorstand.png");
 	}
 }

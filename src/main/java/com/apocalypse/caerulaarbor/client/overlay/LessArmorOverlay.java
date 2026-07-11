@@ -23,11 +23,11 @@ public class LessArmorOverlay {
 		if (player.hasEffect(CAMobEffects.LESS_ARMOR.get())) {
 			int amplifier = player.getEffect(CAMobEffects.LESS_ARMOR.get()).getAmplifier();
 			if (amplifier <= 4) {
-				texture = new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/low_armor_ui.png");
+				texture = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/low_armor_ui.png");
 			} else if (amplifier <= 9) {
-				texture = new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/less_armor_ui.png");
+				texture = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/less_armor_ui.png");
 			} else {
-				texture = new ResourceLocation(CaerulaArborMod.MODID, "textures/overlay/least_armor_ui.png");
+				texture = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/least_armor_ui.png");
 			}
 		}
 		if (texture != null) {

@@ -107,7 +107,7 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity, Sync
                         continue;
                     }
                     if (!(entityiterator instanceof LivingEntity)) {
-                        if (entityiterator != null && entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "no_join_whirl")))) {
+                        if (entityiterator != null && entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "no_join_whirl")))) {
                             continue;
                         }
                     }
@@ -143,7 +143,7 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity, Sync
                             continue;
                         }
                     }
-                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "is_humanside")))) {
+                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside")))) {
                         if (!(target instanceof GladiiaEntity)) {
                             continue;
                         }
@@ -165,7 +165,7 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity, Sync
                     for (Entity entityiterator : entfound) {
                         d = entityiterator != null ? distanceTo(entityiterator) : -1;
                         if (!(entityiterator instanceof LivingEntity)) {
-                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "no_join_whirl")))) {
+                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "no_join_whirl")))) {
                                 continue;
                             }
                         }
@@ -207,7 +207,7 @@ public class GladiiaWhirlEntity extends PathfinderMob implements GeoEntity, Sync
                                 continue;
                             }
                         }
-                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, new ResourceLocation(CaerulaArborMod.MODID, "is_humanside")))) {
+                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside")))) {
                             if (!(target instanceof GladiiaEntity)) {
                                 continue;
                             }

@@ -115,7 +115,7 @@ public abstract class AbstractOvaryBlock extends Block implements SimpleWaterlog
 	private void grantOvaryAdvancement(LevelAccessor world) {
 		for (Entity entityiterator : new ArrayList<>(world.players())) {
 			if (entityiterator instanceof ServerPlayer player) {
-				Advancement adv = player.server.getAdvancements().getAdvancement(new ResourceLocation(CaerulaArborMod.MODID, "extension_of_calamity"));
+				Advancement adv = player.server.getAdvancements().getAdvancement(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "extension_of_calamity"));
 				AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
 				if (!ap.isDone()) {
 					for (String criteria : ap.getRemainingCriteria())

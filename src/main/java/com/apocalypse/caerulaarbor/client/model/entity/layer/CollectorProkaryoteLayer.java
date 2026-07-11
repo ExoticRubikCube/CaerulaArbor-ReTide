@@ -13,7 +13,7 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 public class CollectorProkaryoteLayer extends GeoRenderLayer<CollectorProkaryoteEntity> {
-	private static final ResourceLocation LAYER = new ResourceLocation(CaerulaArborMod.MODID, "textures/entities/collectorlit.png");
+	private static final ResourceLocation LAYER = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/collectorlit.png");
 
 	public CollectorProkaryoteLayer(GeoRenderer<CollectorProkaryoteEntity> entityRenderer) {
 		super(entityRenderer);
