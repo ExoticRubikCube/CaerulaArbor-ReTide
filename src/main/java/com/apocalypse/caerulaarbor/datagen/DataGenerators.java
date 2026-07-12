@@ -36,11 +36,22 @@ public class DataGenerators {
                 existingFileHelper
         ));
 
+        // tags
+        TagsProvider.addProviders(generator, event.includeServer(), output, lookupProvider, existingFileHelper);
+
         // loot tables
         generator.addProvider(event.includeServer(), LootTableProviders.create(output));
 
+        // global loot modifiers
+        generator.addProvider(event.includeServer(), new GlobalLootModifierProvider(
+                output,
+                CaerulaArborMod.MODID
+        ));
+
+        // biome modifiers
+        generator.addProvider(event.includeServer(), new BiomeModifiersProvider(output));
+
         // recipes
-        //generator.addProvider(event.includeServer(), new RecipeProvider(output));
-        //TODO : repice provider
+        generator.addProvider(event.includeServer(), new RecipesProvider(output));
     }
 }

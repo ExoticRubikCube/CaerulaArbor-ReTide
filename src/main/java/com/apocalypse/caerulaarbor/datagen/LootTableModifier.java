@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
+@Deprecated
 public class LootTableModifier extends LootModifier {
     public static final Supplier<Codec<LootTableModifier>> CODEC = Suppliers.memoize(
             () -> RecordCodecBuilder.create(inst ->
@@ -57,7 +58,7 @@ public class LootTableModifier extends LootModifier {
     @Override
     protected @NotNull ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
         if (lootTable != null) {
-            //TODO :  loottable
+            //GiveUpTODO :  loottable
         } else {
             generatedLoot.add(itemStack);
         }
