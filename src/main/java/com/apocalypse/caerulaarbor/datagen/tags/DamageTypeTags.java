@@ -6,7 +6,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageType;
 
-public interface CADamageTypeTags {
+public interface DamageTypeTags {
     TagKey<DamageType> BYPASSES_DEFENSE = create("bypasses_defense");
     TagKey<DamageType> BYPASSES_MISS = create("bypasses_miss");
     TagKey<DamageType> BYPASSES_PROTECTION = create("bypasses_protection");
