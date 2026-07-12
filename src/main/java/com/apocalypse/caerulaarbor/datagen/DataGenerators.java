@@ -1,6 +1,7 @@
 package com.apocalypse.caerulaarbor.datagen;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.datagen.tags.TagsProvider;
 import net.minecraftforge.common.data.ForgeAdvancementProvider;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -19,6 +20,8 @@ public class DataGenerators {
         var existingFileHelper = event.getExistingFileHelper();
 
         // datapack registry things
+        // attention: worldgen is not real provider
+        // it is a work part of this provider
         generator.addProvider(event.includeServer(), datapackProvider);
 
         // advancements
@@ -27,13 +30,6 @@ public class DataGenerators {
                 lookupProvider,
                 existingFileHelper,
                 List.of(new AdvancementProvider())
-        ));
-
-        // damage type tags
-        generator.addProvider(event.includeServer(), new DamageTypeTagsProvider(
-                output,
-                lookupProvider,
-                existingFileHelper
         ));
 
         // tags

@@ -6,6 +6,9 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageType;
 
 public class DatagenUtils {
+    public static interface MinecraftDamageTypeTags extends net.minecraft.tags.DamageTypeTags {
+    }
+
     public static class MinecraftDamageTypes implements net.minecraft.world.damagesource.DamageTypes {
     }
 
