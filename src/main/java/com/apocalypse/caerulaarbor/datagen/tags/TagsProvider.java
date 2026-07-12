@@ -45,7 +45,12 @@ public final class TagsProvider {
         private static ResourceLocation entryLocation(String id) {
             int separator = id.indexOf(':');
             if (separator >= 0) {
-                return ResourceLocation.fromNamespaceAndPath(id.substring(0, separator), id.substring(separator + 1));
+                String namespace = id.substring(0, separator);
+                String path = id.substring(separator + 1);
+                if ("minecraft".equals(namespace)) {
+                    return ResourceLocation.withDefaultNamespace(path);
+                }
+                return ResourceLocation.fromNamespaceAndPath(namespace, path);
             }
             return ResourceLocation.withDefaultNamespace(id);
         }

@@ -7,7 +7,9 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 
-public class WorldgenProvider {
+public final class WorldgenProvider {
+    private WorldgenProvider() {
+    }
 
     public static void init(RegistrySetBuilder builder) {
         builder.add(Registries.CONFIGURED_FEATURE, ConfiguredFeatureProvider::bootstrap)
