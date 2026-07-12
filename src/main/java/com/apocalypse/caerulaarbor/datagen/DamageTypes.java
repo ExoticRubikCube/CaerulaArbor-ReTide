@@ -10,6 +10,9 @@ import net.minecraft.world.damagesource.DamageType;
 
 import java.util.ArrayList;
 
+/**
+ * 本模组自定义 DamageType 的注册表数据定义
+ */
 public class DamageTypes {
     public static ArrayList<ResKeyAndType> DamageResKeysAndTypes = new ArrayList<>();
     public static final ResourceKey<DamageType> ANCHOR_SMASH = create(
@@ -312,12 +315,23 @@ public class DamageTypes {
         return resourceKey;
     }
 
+    /**
+     * 向 damage_type 注册表写入所有自定义伤害类型
+     *
+     * @param context Mojang 提供的注册表 bootstrap 上下文
+     */
     public static void bootstrap(BootstapContext<DamageType> context) {
         for (var resKeyAndTypes : DamageResKeysAndTypes) {
             context.register(resKeyAndTypes.key(), resKeyAndTypes.type());
         }
     }
 
+    /**
+     * 伤害类型的注册 key 与数据对象组合
+     *
+     * @param key  注册表 key
+     * @param type 伤害类型数据
+     */
     public record ResKeyAndType(ResourceKey<DamageType> key, DamageType type) {
     }
 }

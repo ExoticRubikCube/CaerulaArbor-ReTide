@@ -16,6 +16,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
+/**
+ * 生成 structure template pool 注册表数据
+ */
 public final class TemplatePoolProvider {
     private static final Holder<StructureProcessorList> EMPTY_PROCESSORS = Holder.direct(new StructureProcessorList(List.of()));
 
@@ -24,6 +27,11 @@ public final class TemplatePoolProvider {
     private TemplatePoolProvider() {
     }
 
+    /**
+     * 注册本模组结构使用的模板池
+     *
+     * @param context Mojang 提供的注册表 bootstrap 上下文
+     */
     public static void bootstrap(BootstapContext<StructureTemplatePool> context) {
         HolderGetter<StructureTemplatePool> pools = context.lookup(Registries.TEMPLATE_POOL);
         blockGetter = context.lookup(Registries.BLOCK);

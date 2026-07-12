@@ -10,6 +10,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * 生成实体类型标签数据
+ */
 public class EntityTypeTagsProvider extends TagsProvider.RegistryTagsProvider<EntityType<?>> {
     public EntityTypeTagsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider,
                                   @Nullable ExistingFileHelper existingFileHelper) {
@@ -47,5 +50,10 @@ public class EntityTypeTagsProvider extends TagsProvider.RegistryTagsProvider<En
         addValues("with_lowest_smaller_sanity_modifier", "#forge:bosses", "#caerula_arbor:hunters");
         addValues("with_lowest_smallest_sanity_modifier", "iron_golem", "caerula_arbor:chitin_golem", "caerula_arbor:the_last_knight", "caerula_arbor:last_knight_and_horse", "caerula_arbor:complex_chitin_golem", "caerula_arbor:flamarine_statue", "caerula_arbor:flamarine_golem");
         addValues("with_zero_sanity_modifier", "caerula_arbor:gunmu", "caerula_arbor:al_1_s_helper", "caerula_arbor:little_helper", "caerula_arbor:izumik", "caerula_arbor:qunyou_wanted_isharmla", "caerula_arbor:isharmla_tear");
+
+        addForgeValues("bosses", "#caerula_arbor:bossoffspring", "caerula_arbor:chitin_golem", "caerula_arbor:complex_chitin_golem", "caerula_arbor:the_last_knight", "caerula_arbor:last_knight_and_horse", "#caerula_arbor:hunters", "caerula_arbor:flamarine_golem");
+        addForgeValues("nether_mobs", "blaze", "ghast", "magma_cube", "piglin", "piglin_brute", "wither", "wither_skeleton", "zoglin", "zombified_piglin", "caerula_arbor:oceanized_brute", "caerula_arbor:oceanized_piglin", "caerula_arbor:oceanized_wither", "caerula_arbor:oceanized_witheria");
+
+        addMinecraftValues("powder_snow_walkable_mobs", "caerula_arbor:the_last_knight", "caerula_arbor:mega_chest", "caerula_arbor:last_knight_and_horse", "caerula_arbor:oceanized_fox", "caerula_arbor:oceanized_polar_bear");
     }
 }

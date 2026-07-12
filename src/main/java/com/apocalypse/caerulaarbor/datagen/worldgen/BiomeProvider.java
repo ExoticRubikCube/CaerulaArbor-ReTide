@@ -20,10 +20,18 @@ import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.carver.ConfiguredWorldCarver;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 
+/**
+ * 生成 biome 注册表数据
+ */
 public class BiomeProvider {
     private BiomeProvider() {
     }
 
+    /**
+     * 注册本模组的生物群系
+     *
+     * @param context Mojang 提供的注册表 bootstrap 上下文
+     */
     public static void bootstrap(BootstapContext<Biome> context) {
         HolderGetter<PlacedFeature> placedFeatures = context.lookup(Registries.PLACED_FEATURE);
         HolderGetter<ConfiguredWorldCarver<?>> carvers = context.lookup(Registries.CONFIGURED_CARVER);

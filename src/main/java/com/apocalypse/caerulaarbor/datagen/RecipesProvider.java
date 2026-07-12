@@ -13,8 +13,16 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
+/**
+ * 生成本模组配方数据。
+ */
 public class RecipesProvider extends RecipeProvider {
 
+    /**
+     * 创建配方 provider。
+     *
+     * @param output datagen 输出位置
+     */
     public RecipesProvider(PackOutput output) {
         super(output);
     }
@@ -143,6 +151,11 @@ public class RecipesProvider extends RecipeProvider {
         return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, path);
     }
 
+    /**
+     * 写出全部配方定义。
+     *
+     * @param writer 配方输出回调
+     */
     @Override
     protected void buildRecipes(@NotNull Consumer<FinishedRecipe> writer) {
         shaped(

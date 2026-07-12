@@ -8,10 +8,18 @@ import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadType;
 
+/**
+ * 生成 structure_set 注册表数据
+ */
 public final class StructureSetProvider {
     private StructureSetProvider() {
     }
 
+    /**
+     * 注册本模组结构的放置集合
+     *
+     * @param context Mojang 提供的注册表 bootstrap 上下文
+     */
     public static void bootstrap(BootstapContext<StructureSet> context) {
         HolderGetter<Structure> structures = context.lookup(Registries.STRUCTURE);
         register(context, structures, "abyssal_lab", "caerula_arbor:abyssal_lab", 1, 56, 28, 983379551);

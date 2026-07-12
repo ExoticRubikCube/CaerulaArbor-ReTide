@@ -7,10 +7,18 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 
+/**
+ * worldgen 注册表数据入口，只负责把各子 provider 挂到外部 RegistrySetBuilder
+ */
 public final class WorldgenProvider {
     private WorldgenProvider() {
     }
 
+    /**
+     * 注册所有 worldgen bootstrap
+     *
+     * @param builder 来自 RegistryDataProvider 的共享构建器
+     */
     public static void init(RegistrySetBuilder builder) {
         builder.add(Registries.CONFIGURED_FEATURE, ConfiguredFeatureProvider::bootstrap)
                 .add(Registries.PLACED_FEATURE, PlacedFeatureProvider::bootstrap)

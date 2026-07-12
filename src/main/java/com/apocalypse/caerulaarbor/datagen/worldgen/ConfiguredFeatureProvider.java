@@ -33,12 +33,20 @@ import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 
 import java.util.List;
 
+/**
+ * 生成 configured_feature 注册表数据
+ */
 public final class ConfiguredFeatureProvider {
     private static HolderGetter<Block> blockGetter;
 
     private ConfiguredFeatureProvider() {
     }
 
+    /**
+     * 注册 configured feature
+     *
+     * @param context Mojang 提供的注册表 bootstrap 上下文
+     */
     public static void bootstrap(BootstapContext<ConfiguredFeature<?, ?>> context) {
         blockGetter = context.lookup(Registries.BLOCK);
         register(context, "branded_land_tree", new ConfiguredFeature<>(Feature.TREE, brandedLandTree()));

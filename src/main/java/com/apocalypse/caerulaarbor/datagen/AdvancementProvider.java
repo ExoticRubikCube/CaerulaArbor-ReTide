@@ -23,6 +23,9 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.function.Consumer;
 
+/**
+ * 生成本模组的进度数据
+ */
 @SuppressWarnings("SameParameterValue")
 public class AdvancementProvider implements ForgeAdvancementProvider.AdvancementGenerator {
 
@@ -33,7 +36,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
                 item(icon),
                 Component.translatable(title),
                 Component.translatable(description),
-                background == null ? null : rl(background),
+                background == null ? null : resLoc(background),
                 frame,
                 showToast,
                 announceToChat,
@@ -97,7 +100,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
     }
 
     private static Criterion criterion(String trigger, JsonObject conditions) {
-        return new Criterion(new JsonCriterionTriggerInstance(rl(trigger), conditions));
+        return new Criterion(new JsonCriterionTriggerInstance(resLoc(trigger), conditions));
     }
 
     private static AdvancementRewards.Builder recipeRewards(String... recipes) {
@@ -116,10 +119,10 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
         var builder = new AdvancementRewards.Builder();
         builder.addExperience(experience);
         for (var lootTable : lootTables) {
-            builder.addLootTable(rl(lootTable));
+            builder.addLootTable(resLoc(lootTable));
         }
         for (var recipe : recipes) {
-            builder.addRecipe(rl(recipe));
+            builder.addRecipe(resLoc(recipe));
         }
         return builder;
     }
@@ -129,7 +132,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
     }
 
     private static ItemStack item(String id) {
-        var item = ForgeRegistries.ITEMS.getValue(rl(id));
+        var item = ForgeRegistries.ITEMS.getValue(resLoc(id));
         return new ItemStack(Objects.requireNonNull(item, "Missing advancement icon item: " + id));
     }
 
@@ -137,7 +140,7 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
         return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, path);
     }
 
-    private static ResourceLocation rl(String id) {
+    private static ResourceLocation resLoc(String id) {
         var separator = id.indexOf(':');
         if (separator >= 0) {
             return ResourceLocation.fromNamespaceAndPath(id.substring(0, separator), id.substring(separator + 1));
@@ -145,6 +148,13 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
         return ResourceLocation.fromNamespaceAndPath(ResourceLocation.DEFAULT_NAMESPACE, id);
     }
 
+    /**
+     * 写出全部进度定义
+     *
+     * @param registries         注册表查询 provider
+     * @param saver              进度输出回调
+     * @param existingFileHelper 已有资源检查器
+     */
     @Override
     public void generate(HolderLookup.@NotNull Provider registries, @NotNull Consumer<Advancement> saver, @NotNull ExistingFileHelper existingFileHelper) {
         advancements.clear();

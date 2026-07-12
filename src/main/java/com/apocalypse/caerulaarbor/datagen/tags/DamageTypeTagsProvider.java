@@ -8,6 +8,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -17,6 +18,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.concurrent.CompletableFuture;
 
 
+/**
+ * 生成伤害类型标签数据，覆盖本模组、minecraft、forge 和兼容模组命名空间
+ */
 public class DamageTypeTagsProvider extends TagsProvider<DamageType> {
 
     protected DamageTypeTagsProvider(PackOutput pOutput, CompletableFuture<HolderLookup.Provider> future, @Nullable ExistingFileHelper existingFileHelper) {
@@ -175,6 +179,11 @@ public class DamageTypeTagsProvider extends TagsProvider<DamageType> {
                 net.minecraft.tags.DamageTypeTags.BYPASSES_ARMOR,
                 DatagenUtils.ForgeDamageTypes.IS_MAGIC
         );
+        addDamagesToTag(DatagenUtils.ForgeDamageTypes.IS_MAGIC,
+                DamageTypes.GLADIIA_MAGIC,
+                DamageTypes.OCEAN_MAGIC,
+                DamageTypes.WIPE_MAGIC
+        );
 
         addDamagesToTag(DamageTypeTags.NEVER_TRIGGER_BOSS_PROTECTION,
                 DamageTypes.ANCHOR_SMASH,
@@ -215,6 +224,45 @@ public class DamageTypeTagsProvider extends TagsProvider<DamageType> {
                 DatagenUtils.MinecraftDamageTypes.FELL_OUT_OF_WORLD,
                 DamageTypes.GUNMU_DAMAGE
         );
+
+        addValuesToTag("minecraft", "always_hurts_ender_dragons", "caerula_arbor:hand_firework", "caerula_arbor:highmore_attack", "caerula_arbor:hunter_attack", "caerula_arbor:izumik_normal_attack", "caerula_arbor:izumik_skill", "caerula_arbor:ocean_magic", "caerula_arbor:repeller_attack", "caerula_arbor:sanity_break", "caerula_arbor:wipe_magic");
+        addValuesToTag("minecraft", "bypasses_armor", "caerula_arbor:sanity_break", "caerula_arbor:oceanize_damage", "caerula_arbor:oceankiller_damage", "caerula_arbor:ocean_magic", "caerula_arbor:wipe_magic", "caerula_arbor:trail_damage", "caerula_arbor:izumik_skill", "caerula_arbor:izumik_normal_attack", "caerula_arbor:inv_killer", "caerula_arbor:hand_of_choker", "caerula_arbor:gunmu_damage", "caerula_arbor:warden_sonic", "caerula_arbor:super_cat_attack", "caerula_arbor:ocean_wither", "caerula_arbor:immortal_punishment", "caerula_arbor:isharmla_cursed", "caerula_arbor:isharmla_attack");
+        addValuesToTag("minecraft", "bypasses_cooldown", "caerula_arbor:oceankiller_damage", "caerula_arbor:repeller_attack", "caerula_arbor:sanity_break", "caerula_arbor:hand_spike", "caerula_arbor:axe_cleave", "caerula_arbor:ocean_magic", "caerula_arbor:cleaver_mix", "caerula_arbor:highmore_attack", "caerula_arbor:hand_firework", "caerula_arbor:hunter_attack", "caerula_arbor:generic_seaborn_attack", "caerula_arbor:brand_bomb", "caerula_arbor:saw_cut", "caerula_arbor:izumik_normal_attack", "caerula_arbor:izumik_skill", "caerula_arbor:ocean_counter", "caerula_arbor:generic_warrior_attack", "caerula_arbor:inv_killer", "caerula_arbor:hand_of_choker", "caerula_arbor:gunmu_damage", "caerula_arbor:warden_attack", "caerula_arbor:warden_sonic", "caerula_arbor:super_cat_attack", "caerula_arbor:golem_attack", "caerula_arbor:ocean_wither", "caerula_arbor:last_knight_attack", "caerula_arbor:puncture_attack", "caerula_arbor:endspeaker_attack", "caerula_arbor:immortal_punishment", "caerula_arbor:isharmla_cursed", "caerula_arbor:isharmla_attack", "caerula_arbor:wipe_magic");
+        addValuesToTag("minecraft", "bypasses_effects", "caerula_arbor:sanity_break", "caerula_arbor:inv_killer", "caerula_arbor:gunmu_damage", "caerula_arbor:hand_of_choker", "caerula_arbor:immortal_punishment", "caerula_arbor:isharmla_cursed", "caerula_arbor:isharmla_attack", "caerula_arbor:oceankiller_damage");
+        addValuesToTag("minecraft", "bypasses_enchantments", "caerula_arbor:sanity_break", "caerula_arbor:inv_killer", "caerula_arbor:gunmu_damage", "caerula_arbor:hand_of_choker", "caerula_arbor:immortal_punishment", "caerula_arbor:isharmla_cursed", "caerula_arbor:isharmla_attack");
+        addValuesToTag("minecraft", "bypasses_invulnerability", "caerula_arbor:inv_killer", "caerula_arbor:sanity_break", "caerula_arbor:hand_of_choker", "caerula_arbor:immortal_punishment", "caerula_arbor:isharmla_cursed");
+        addValuesToTag("minecraft", "bypasses_shield", "caerula_arbor:sanity_break", "caerula_arbor:izumik_skill", "caerula_arbor:inv_killer", "caerula_arbor:hand_of_choker", "caerula_arbor:gunmu_damage", "caerula_arbor:warden_attack", "caerula_arbor:warden_sonic", "caerula_arbor:ocean_wither", "caerula_arbor:immortal_punishment", "caerula_arbor:isharmla_cursed", "caerula_arbor:isharmla_attack");
+        addValuesToTag("minecraft", "is_explosion", "caerula_arbor:brand_bomb");
+        addValuesToTag("minecraft", "is_projectile", "caerula_arbor:highmore_attack", "caerula_arbor:hand_firework", "caerula_arbor:puncture_attack");
+        addValuesToTag("cataclysm", "bypasses_hurt_time", "caerula_arbor:cleaver_mix", "caerula_arbor:hand_firework", "caerula_arbor:hand_spike", "caerula_arbor:highmore_attack", "caerula_arbor:hunter_attack", "caerula_arbor:izumik_normal_attack", "caerula_arbor:izumik_skill", "caerula_arbor:ocean_magic", "caerula_arbor:repeller_attack", "caerula_arbor:sanity_break", "caerula_arbor:wipe_magic", "caerula_arbor:inv_killer", "caerula_arbor:gunmu_damage", "caerula_arbor:warden_sonic", "caerula_arbor:super_cat_attack", "caerula_arbor:hand_of_choker", "caerula_arbor:endspeaker_attack", "caerula_arbor:isharmla_cursed", "caerula_arbor:isharmla_attack");
+    }
+
+    private void addValuesToTag(String namespace, String tagPath, String... values) {
+        var targetTag = TagKey.create(Registries.DAMAGE_TYPE, location(namespace, tagPath));
+        for (var value : values) {
+            if (value.startsWith("#")) {
+                tag(targetTag).addTag(TagKey.create(Registries.DAMAGE_TYPE, entryLocation(value.substring(1))));
+            } else {
+                tag(targetTag).add(ResourceKey.create(Registries.DAMAGE_TYPE, entryLocation(value)));
+            }
+        }
+    }
+
+    private static ResourceLocation entryLocation(String id) {
+        int separator = id.indexOf(':');
+        if (separator >= 0) {
+            String namespace = id.substring(0, separator);
+            String path = id.substring(separator + 1);
+            return location(namespace, path);
+        }
+        return ResourceLocation.withDefaultNamespace(id);
+    }
+
+    private static ResourceLocation location(String namespace, String path) {
+        if ("minecraft".equals(namespace)) {
+            return ResourceLocation.withDefaultNamespace(path);
+        }
+        return ResourceLocation.fromNamespaceAndPath(namespace, path);
     }
 
     @SafeVarargs

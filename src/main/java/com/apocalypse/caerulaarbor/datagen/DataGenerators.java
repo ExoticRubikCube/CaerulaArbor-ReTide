@@ -9,8 +9,16 @@ import net.minecraftforge.fml.common.Mod;
 
 import java.util.List;
 
+/**
+ * 数据生成器总入口，负责在 GatherDataEvent 中注册所有服务端 datagen provider
+ */
 @Mod.EventBusSubscriber(modid = CaerulaArborMod.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class DataGenerators {
+    /**
+     * 注册全部数据生成任务
+     *
+     * @param event Forge 提供的数据生成事件
+     */
     @SubscribeEvent
     public static void gatherData(GatherDataEvent event) {
         var generator = event.getGenerator();

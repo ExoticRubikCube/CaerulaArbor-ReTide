@@ -16,14 +16,28 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * 生成 Forge biome modifier 数据
+ */
 public class BiomeModifiersProvider implements DataProvider {
 
     private final PackOutput output;
 
+    /**
+     * 创建 biome modifier provider
+     *
+     * @param output datagen 输出位置
+     */
     public BiomeModifiersProvider(PackOutput output) {
         this.output = output;
     }
 
+    /**
+     * 写出所有 biome modifier JSON
+     *
+     * @param cache datagen 缓存输出
+     * @return 所有写文件任务的组合 future
+     */
     @Override
     public @NotNull CompletableFuture<?> run(@NotNull CachedOutput cache) {
         Map<String, JsonObject> modifiers = new LinkedHashMap<>();
@@ -122,6 +136,9 @@ public class BiomeModifiersProvider implements DataProvider {
         return array;
     }
 
+    /**
+     * 返回 provider 在 datagen 日志中的显示名称
+     */
     @Override
     public @NotNull String getName() {
         return "Biome Modifiers: " + CaerulaArborMod.MODID;
