@@ -60,6 +60,7 @@ public final class StructureSetProvider {
         register(context, structures, "watchtower", "caerula_arbor:watchtower", 1, 46, 16, 1358541846);
     }
 
+    @SuppressWarnings("SameParameterValue")
     private static void register(BootstapContext<StructureSet> context, HolderGetter<Structure> structures, String name, String structure, int weight, int spacing, int separation, int salt) {
         context.register(WorldgenProvider.modKey(Registries.STRUCTURE_SET, name), new StructureSet(java.util.List.of(new StructureSet.StructureSelectionEntry(structures.getOrThrow(WorldgenProvider.key(Registries.STRUCTURE, structure)), weight)), new RandomSpreadStructurePlacement(spacing, separation, RandomSpreadType.LINEAR, salt)));
     }

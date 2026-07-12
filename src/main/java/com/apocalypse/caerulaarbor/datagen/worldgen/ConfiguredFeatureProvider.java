@@ -1,10 +1,11 @@
 package com.apocalypse.caerulaarbor.datagen.worldgen;
 
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.Vec3i;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.util.valueproviders.UniformInt;
@@ -33,10 +34,13 @@ import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import java.util.List;
 
 public final class ConfiguredFeatureProvider {
+    private static HolderGetter<Block> blockGetter;
+
     private ConfiguredFeatureProvider() {
     }
 
     public static void bootstrap(BootstapContext<ConfiguredFeature<?, ?>> context) {
+        blockGetter = context.lookup(Registries.BLOCK);
         register(context, "branded_land_tree", new ConfiguredFeature<>(Feature.TREE, brandedLandTree()));
         register(context, "burnt_trails", new ConfiguredFeature<>(Feature.RANDOM_SELECTOR, burntTrails()));
         register(context, "iris_distribute", randomPatch(2, 2, 2, block("caerula_arbor:redstoneiris_seeding"), BlockPredicate.allOf(
@@ -117,6 +121,6 @@ public final class ConfiguredFeatureProvider {
     }
 
     private static Block block(String id) {
-        return BuiltInRegistries.BLOCK.get(WorldgenProvider.location(id));
+        return blockGetter.getOrThrow(ResourceKey.create(Registries.BLOCK, WorldgenProvider.location(id))).value();
     }
 }

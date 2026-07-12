@@ -20,8 +20,7 @@ public class DataGenerators {
         var existingFileHelper = event.getExistingFileHelper();
 
         // datapack registry things
-        // attention: worldgen is not real provider
-        // it is a work part of this provider
+        // worldgen is built into the single registry datapack provider
         generator.addProvider(event.includeServer(), datapackProvider);
 
         // advancements
