@@ -2,11 +2,16 @@ package com.apocalypse.caerulaarbor.util;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.damagesource.DamageTypes;
 
 public class DatagenUtils {
-    public static class MinecraftDamageTypes implements net.minecraft.world.damagesource.DamageTypes {
+    public static interface MinecraftDamageTypeTags extends DamageTypeTags {
+    }
+
+    public static class MinecraftDamageTypes implements DamageTypes {
     }
 
     public static class ForgeDamageTypes {

@@ -54,12 +54,12 @@ minecraft {
             ]
 
             property 'forge.logging.markers', 'REGISTRIES'
-            property 'forge.logging.console.level', 'info'
-            property 'mixin.debug', 'true'
-            property 'mixin.debug.verbose', 'true'
-            property 'mixin.debug.export', 'true'
-            property 'mixin.dumpTargetOnFailure', 'true'
-            property 'mixin.checks.interfaces', 'true'
+            property 'forge.logging.console.level', 'debug'
+            //property 'mixin.debug', 'true'
+            //property 'mixin.debug.verbose', 'true'
+            //property 'mixin.debug.export', 'true'
+            //property 'mixin.dumpTargetOnFailure', 'true'
+            //property 'mixin.checks.interfaces', 'true'
             property 'mixin.hotSwap', 'true'
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
@@ -183,20 +183,22 @@ dependencies {
     implementation fg.deobf("curse.maven:superb-warfare-1218165:6982132")
 
     // 开发环境调试
-    runtimeOnly fg.deobf("curse.maven:spark-361579:4738952")
-    runtimeOnly fg.deobf("curse.maven:mmmmmmmmmmmm-225738:6860192")
-    runtimeOnly fg.deobf("curse.maven:selene-499980:8261419") //测试假人前置
+    // runtimeOnly fg.deobf("curse.maven:spark-361579:4738952")
+    // runtimeOnly fg.deobf("curse.maven:mmmmmmmmmmmm-225738:6860192")
+    // runtimeOnly fg.deobf("curse.maven:selene-499980:8261419") //测试假人前置
 }
 
 mixin {
     add sourceSets.main, "mixins.${mod_id}.refmap.json"
     config "mixins.${mod_id}.json"
 
+    /*
     debug.verbose = true
     debug.export = true
     dumpTargetOnFailure = true
 
     quiet
+     */
 }
 
 tasks.named('processResources', ProcessResources).configure {

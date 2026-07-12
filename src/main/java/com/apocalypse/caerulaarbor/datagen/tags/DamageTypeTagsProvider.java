@@ -1,14 +1,13 @@
-package com.apocalypse.caerulaarbor.datagen;
+package com.apocalypse.caerulaarbor.datagen.tags;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.datagen.tags.CADamageTypeTags;
+import com.apocalypse.caerulaarbor.datagen.DamageTypes;
 import com.apocalypse.caerulaarbor.util.DatagenUtils;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraftforge.common.data.ExistingFileHelper;
@@ -26,7 +25,7 @@ public class DamageTypeTagsProvider extends TagsProvider<DamageType> {
 
     @Override
     protected void addTags(HolderLookup.@NotNull Provider pProvider) {
-        addDamagesToTag(CADamageTypeTags.BYPASSES_DEFENSE,
+        addDamagesToTag(DamageTypeTags.BYPASSES_DEFENSE,
                 DamageTypes.OCEANIZE_DAMAGE,
                 DamageTypes.SANITY_BREAK,
                 DamageTypes.INV_KILLER,
@@ -44,12 +43,12 @@ public class DamageTypeTagsProvider extends TagsProvider<DamageType> {
                 DatagenUtils.MinecraftDamageTypes.SONIC_BOOM,
                 DatagenUtils.MinecraftDamageTypes.WITHER
         );
-        addTagsToTag(CADamageTypeTags.BYPASSES_DEFENSE,
-                DamageTypeTags.BYPASSES_ARMOR,
+        addTagsToTag(DamageTypeTags.BYPASSES_DEFENSE,
+                net.minecraft.tags.DamageTypeTags.BYPASSES_ARMOR,
                 DatagenUtils.ForgeDamageTypes.IS_MAGIC
         );
 
-        addDamagesToTag(CADamageTypeTags.BYPASSES_MISS,
+        addDamagesToTag(DamageTypeTags.BYPASSES_MISS,
                 DamageTypes.HAND_SPIKE,
                 DamageTypes.OCEANIZE_DAMAGE,
                 DamageTypes.SANITY_BREAK,
@@ -70,11 +69,11 @@ public class DamageTypeTagsProvider extends TagsProvider<DamageType> {
                 DamageTypes.IMMORTAL_PUNISHMENT,
                 DamageTypes.ISHARMLA_CURSED
         );
-        addTagsToTag(CADamageTypeTags.BYPASSES_MISS,
-                DamageTypeTags.BYPASSES_EFFECTS
+        addTagsToTag(DamageTypeTags.BYPASSES_MISS,
+                DatagenUtils.MinecraftDamageTypeTags.BYPASSES_EFFECTS
         );
 
-        addDamagesToTag(CADamageTypeTags.BYPASSES_PROTECTION,
+        addDamagesToTag(DamageTypeTags.BYPASSES_PROTECTION,
                 DamageTypes.INV_KILLER,
                 DamageTypes.ISHARMLA_CURSED,
                 DatagenUtils.MinecraftDamageTypes.GENERIC_KILL,
@@ -82,7 +81,7 @@ public class DamageTypeTagsProvider extends TagsProvider<DamageType> {
                 DatagenUtils.MinecraftDamageTypes.OUTSIDE_BORDER
         );
 
-        addDamagesToTag(CADamageTypeTags.BYPASSES_ENDERMAN,
+        addDamagesToTag(DamageTypeTags.BYPASSES_ENDERMAN,
                 DamageTypes.HAND_SPIKE,
                 DamageTypes.GUNMU_DAMAGE,
                 DamageTypes.OCEANKILLER_DAMAGE,
@@ -103,11 +102,11 @@ public class DamageTypeTagsProvider extends TagsProvider<DamageType> {
                 DatagenUtils.MinecraftDamageTypes.WITHER,
                 DatagenUtils.MinecraftDamageTypes.INDIRECT_MAGIC
         );
-        addTagsToTag(CADamageTypeTags.BYPASSES_ENDERMAN,
-                CADamageTypeTags.BYPASSES_PROTECTION
+        addTagsToTag(DamageTypeTags.BYPASSES_ENDERMAN,
+                DamageTypeTags.BYPASSES_PROTECTION
         );
 
-        addDamagesToTag(CADamageTypeTags.BYPASSES_EVOLUTION,
+        addDamagesToTag(DamageTypeTags.BYPASSES_EVOLUTION,
                 DamageTypes.HAND_OF_CHOKER,
                 DamageTypes.INV_KILLER,
                 DatagenUtils.MinecraftDamageTypes.GENERIC_KILL,
@@ -126,7 +125,7 @@ public class DamageTypeTagsProvider extends TagsProvider<DamageType> {
                 DamageTypes.ISHARMLA_CURSED
         );
 
-        addDamagesToTag(CADamageTypeTags.BYPASSES_MIGRATION,
+        addDamagesToTag(DamageTypeTags.BYPASSES_MIGRATION,
                 DamageTypes.HAND_OF_CHOKER,
                 DamageTypes.HAND_SPIKE,
                 DamageTypes.EXTRACTOR_DAMAGE,
@@ -136,7 +135,7 @@ public class DamageTypeTagsProvider extends TagsProvider<DamageType> {
                 DamageTypes.ISHARMLA_CURSED
         );
 
-        addDamagesToTag(CADamageTypeTags.CAN_TRIGGER_OCEANIZTION,
+        addDamagesToTag(DamageTypeTags.CAN_TRIGGER_OCEANIZTION,
                 DamageTypes.OCEAN_COUNTER,
                 DamageTypes.OCEAN_MAGIC,
                 DamageTypes.OCEAN_WITHER,
@@ -145,7 +144,7 @@ public class DamageTypeTagsProvider extends TagsProvider<DamageType> {
                 DamageTypes.ISHARMLA_CURSED
         );
 
-        addDamagesToTag(CADamageTypeTags.HORROR,
+        addDamagesToTag(DamageTypeTags.HORROR,
                 DatagenUtils.MinecraftDamageTypes.WITHER,
                 DatagenUtils.MinecraftDamageTypes.WITHER_SKULL,
                 DatagenUtils.MinecraftDamageTypes.EXPLOSION,
@@ -164,7 +163,7 @@ public class DamageTypeTagsProvider extends TagsProvider<DamageType> {
                 DamageTypes.GOLEM_ATTACK
         );
 
-        addDamagesToTag(CADamageTypeTags.IS_MAGIC,
+        addDamagesToTag(DamageTypeTags.IS_MAGIC,
                 DatagenUtils.MinecraftDamageTypes.INDIRECT_MAGIC,
                 DatagenUtils.MinecraftDamageTypes.MAGIC,
                 DamageTypes.IZUMIK_NORMAL_ATTACK,
@@ -172,12 +171,12 @@ public class DamageTypeTagsProvider extends TagsProvider<DamageType> {
                 DamageTypes.HAND_OF_CHOKER,
                 DamageTypes.SUPER_CAT_ATTACK
         );
-        addTagsToTag(CADamageTypeTags.IS_MAGIC,
-                DamageTypeTags.BYPASSES_ARMOR,
+        addTagsToTag(DamageTypeTags.IS_MAGIC,
+                net.minecraft.tags.DamageTypeTags.BYPASSES_ARMOR,
                 DatagenUtils.ForgeDamageTypes.IS_MAGIC
         );
 
-        addDamagesToTag(CADamageTypeTags.NEVER_TRIGGER_BOSS_PROTECTION,
+        addDamagesToTag(DamageTypeTags.NEVER_TRIGGER_BOSS_PROTECTION,
                 DamageTypes.ANCHOR_SMASH,
                 DamageTypes.AXE_CLEAVE,
                 DamageTypes.BRAND_BOMB,
@@ -203,13 +202,13 @@ public class DamageTypeTagsProvider extends TagsProvider<DamageType> {
                 DamageTypes.SAW_CUT
         );
 
-        addDamagesToTag(CADamageTypeTags.NO_BEAT_BACK,
+        addDamagesToTag(DamageTypeTags.NO_BEAT_BACK,
                 DatagenUtils.MinecraftDamageTypes.THORNS,
                 DamageTypes.HAND_SPIKE,
                 DamageTypes.WIPE_MAGIC
         );
 
-        addDamagesToTag(CADamageTypeTags.RARE,
+        addDamagesToTag(DamageTypeTags.RARE,
                 DatagenUtils.MinecraftDamageTypes.LIGHTNING_BOLT,
                 DatagenUtils.MinecraftDamageTypes.OUTSIDE_BORDER,
                 DatagenUtils.MinecraftDamageTypes.CRAMMING,

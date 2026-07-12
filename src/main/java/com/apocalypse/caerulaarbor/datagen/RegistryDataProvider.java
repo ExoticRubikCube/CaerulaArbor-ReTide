@@ -19,5 +19,6 @@ public class RegistryDataProvider extends DatapackBuiltinEntriesProvider {
 
     public RegistryDataProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> provider) {
         super(output, provider, BUILDER, Set.of("minecraft", CaerulaArborMod.MODID));
+        //WorldgenProvider.init(BUILDER);
     }
 }
