@@ -11,7 +11,7 @@ import net.minecraft.world.damagesource.DamageType;
 import java.util.ArrayList;
 
 /**
- * 本模组自定义 DamageType 的注册表数据定义
+ * 自定义 DamageType 的注册表数据定义
  */
 public class DamageTypes {
     public static ArrayList<ResKeyAndType> DamageResKeysAndTypes = new ArrayList<>();

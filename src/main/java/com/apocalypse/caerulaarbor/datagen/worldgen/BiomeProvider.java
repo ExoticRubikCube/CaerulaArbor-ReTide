@@ -28,7 +28,7 @@ public class BiomeProvider {
     }
 
     /**
-     * 注册本模组的生物群系
+     * 注册生物群系
      *
      * @param context Mojang 提供的注册表 bootstrap 上下文
      */
@@ -39,6 +39,14 @@ public class BiomeProvider {
         context.register(WorldgenProvider.modKey(Registries.BIOME, "branded_land"), brandedLand(placedFeatures, carvers, soundEvents));
     }
 
+    /**
+     * 构建 branded_land 生物群系
+     *
+     * @param placedFeatures placed feature 查询器
+     * @param carvers        carver 查询器
+     * @param soundEvents    音效查询器
+     * @return 生物群系定义
+     */
     private static Biome brandedLand(HolderGetter<PlacedFeature> placedFeatures, HolderGetter<ConfiguredWorldCarver<?>> carvers, HolderGetter<SoundEvent> soundEvents) {
         return new Biome.BiomeBuilder()
                 .hasPrecipitation(true)
@@ -58,6 +66,13 @@ public class BiomeProvider {
                 .build();
     }
 
+    /**
+     * 构建 branded_land 的地形生成设置
+     *
+     * @param placedFeatures placed feature 查询器
+     * @param carvers        carver 查询器
+     * @return 生物群系生成设置
+     */
     private static BiomeGenerationSettings generationSettings(HolderGetter<PlacedFeature> placedFeatures, HolderGetter<ConfiguredWorldCarver<?>> carvers) {
         var generation = new BiomeGenerationSettings.Builder(placedFeatures, carvers);
         generation.addCarver(GenerationStep.Carving.AIR, Carvers.CAVE);
@@ -73,6 +88,11 @@ public class BiomeProvider {
         return generation.build();
     }
 
+    /**
+     * 添加矿物与地下装饰 feature
+     *
+     * @param generation 生物群系生成设置 builder
+     */
     private static void addOreFeatures(BiomeGenerationSettings.Builder generation) {
         generation.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, OrePlacements.ORE_COAL_UPPER);
         generation.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, OrePlacements.ORE_COAL_LOWER);
@@ -92,6 +112,11 @@ public class BiomeProvider {
         generation.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, CavePlacements.UNDERWATER_MAGMA);
     }
 
+    /**
+     * 添加植被 feature
+     *
+     * @param generation 生物群系生成设置 builder
+     */
     private static void addVegetationFeatures(BiomeGenerationSettings.Builder generation) {
         generation.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, placedFeature("branded_land_tree"));
         generation.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, VegetationPlacements.PATCH_TALL_GRASS);
@@ -101,15 +126,33 @@ public class BiomeProvider {
         generation.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, VegetationPlacements.PATCH_GRASS_FOREST);
     }
 
+    /**
+     * 创建 placed feature 的资源 key
+     *
+     * @param name placed feature 路径
+     * @return placed feature key
+     */
     @SuppressWarnings("SameParameterValue")
     private static ResourceKey<PlacedFeature> placedFeature(String name) {
         return WorldgenProvider.modKey(Registries.PLACED_FEATURE, name);
     }
 
+    /**
+     * 查询 shallow_sea 背景音乐音效
+     *
+     * @param soundEvents 音效查询器
+     * @return 音效 holder
+     */
     private static Holder<SoundEvent> shallowSea(HolderGetter<SoundEvent> soundEvents) {
         return soundEvents.getOrThrow(WorldgenProvider.modKey(Registries.SOUND_EVENT, "shallow_sea"));
     }
 
+    /**
+     * 将 #RRGGBB 或 #AARRGGBB 转为 ARGB 整数
+     *
+     * @param hex 颜色字符串
+     * @return ARGB 整数
+     */
     private static int rgb(String hex) {
         if (!hex.startsWith("#") || (hex.length() != 7 && hex.length() != 9)) {
             throw new IllegalArgumentException("hex need #RRGGBB or #AARRGGBB");

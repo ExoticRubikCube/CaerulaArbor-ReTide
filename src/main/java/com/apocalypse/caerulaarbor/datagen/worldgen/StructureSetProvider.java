@@ -16,7 +16,7 @@ public final class StructureSetProvider {
     }
 
     /**
-     * 注册本模组结构的放置集合
+     * 注册结构放置集合
      *
      * @param context Mojang 提供的注册表 bootstrap 上下文
      */

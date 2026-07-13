@@ -64,6 +64,11 @@ public final class ConfiguredFeatureProvider {
         register(context, "trail_mushroom", randomPatch(64, 7, 3, block("caerula_arbor:trail_mushroom"), BlockPredicate.matchesBlocks(Blocks.AIR)));
     }
 
+    /**
+     * 构建 branded_land_tree 的树配置
+     *
+     * @return 树配置
+     */
     private static TreeConfiguration brandedLandTree() {
         return new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(Blocks.OAK_LOG),
@@ -74,6 +79,11 @@ public final class ConfiguredFeatureProvider {
         ).dirt(BlockStateProvider.simple(Blocks.DIRT)).ignoreVines().build();
     }
 
+    /**
+     * 构建 nethersea_tree 的树配置
+     *
+     * @return 树配置
+     */
     private static TreeConfiguration netherseaTree() {
         return new TreeConfiguration.TreeConfigurationBuilder(
                 BlockStateProvider.simple(block("caerula_arbor:trail_log")),
@@ -100,6 +110,11 @@ public final class ConfiguredFeatureProvider {
         ).dirt(BlockStateProvider.simple(Blocks.DIRT)).ignoreVines().build();
     }
 
+    /**
+     * 构建 burnt_trails 的随机选择配置
+     *
+     * @return 随机 feature 配置
+     */
     private static RandomFeatureConfiguration burntTrails() {
         var disk = Holder.direct(new PlacedFeature(Holder.direct(new ConfiguredFeature<>(Feature.DISK, new DiskConfiguration(
                 RuleBasedBlockStateProvider.simple(BlockStateProvider.simple(block("caerula_arbor:sea_trail_burnt_solid"))),
@@ -117,6 +132,16 @@ public final class ConfiguredFeatureProvider {
         ), noop);
     }
 
+    /**
+     * 构建随机斑块 feature
+     *
+     * @param tries     尝试次数
+     * @param xzSpread  水平扩散范围
+     * @param ySpread   垂直扩散范围
+     * @param block     放置方块
+     * @param predicate 放置条件
+     * @return configured feature
+     */
     private static ConfiguredFeature<RandomPatchConfiguration, Feature<RandomPatchConfiguration>> randomPatch(int tries, int xzSpread, int ySpread, Block block, BlockPredicate predicate) {
         var placed = Holder.direct(new PlacedFeature(Holder.direct(new ConfiguredFeature<>(Feature.SIMPLE_BLOCK,
                 new SimpleBlockConfiguration(BlockStateProvider.simple(block))
@@ -124,10 +149,23 @@ public final class ConfiguredFeatureProvider {
         return new ConfiguredFeature<>(Feature.RANDOM_PATCH, new RandomPatchConfiguration(tries, xzSpread, ySpread, placed));
     }
 
+    /**
+     * 注册 configured feature
+     *
+     * @param context 注册表 bootstrap 上下文
+     * @param name    注册路径
+     * @param feature configured feature
+     */
     private static void register(BootstapContext<ConfiguredFeature<?, ?>> context, String name, ConfiguredFeature<?, ?> feature) {
         context.register(WorldgenProvider.modKey(Registries.CONFIGURED_FEATURE, name), feature);
     }
 
+    /**
+     * 从注册表查询方块
+     *
+     * @param id 方块 ID
+     * @return 方块实例
+     */
     private static Block block(String id) {
         return blockGetter.getOrThrow(ResourceKey.create(Registries.BLOCK, WorldgenProvider.location(id))).value();
     }

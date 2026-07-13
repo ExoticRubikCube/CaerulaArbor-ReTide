@@ -73,6 +73,15 @@ public class PlacedFeatureProvider {
         ));
     }
 
+    /**
+     * 注册 placed feature 并绑定 configured feature 与 placement modifier
+     *
+     * @param context            注册表 bootstrap 上下文
+     * @param configuredFeatures configured feature 查询器
+     * @param name               placed feature 注册路径
+     * @param configuredFeature  configured feature ID
+     * @param modifiers          放置修饰器列表
+     */
     private static void register(BootstapContext<PlacedFeature> context, HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures, String name, String configuredFeature, List<PlacementModifier> modifiers) {
         context.register(WorldgenProvider.modKey(Registries.PLACED_FEATURE, name), new PlacedFeature(
                 configuredFeatures.getOrThrow(WorldgenProvider.key(Registries.CONFIGURED_FEATURE, configuredFeature)),

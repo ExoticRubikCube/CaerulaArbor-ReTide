@@ -14,12 +14,12 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.Consumer;
 
 /**
- * 生成本模组配方数据。
+ * 生成配方数据
  */
 public class RecipesProvider extends RecipeProvider {
 
     /**
-     * 创建配方 provider。
+     * 创建配方 provider
      *
      * @param output datagen 输出位置
      */
@@ -152,7 +152,7 @@ public class RecipesProvider extends RecipeProvider {
     }
 
     /**
-     * 写出全部配方定义。
+     * 写出全部配方定义
      *
      * @param writer 配方输出回调
      */

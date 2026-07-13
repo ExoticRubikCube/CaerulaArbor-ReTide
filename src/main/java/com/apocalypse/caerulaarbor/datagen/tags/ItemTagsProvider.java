@@ -1,19 +1,104 @@
 package com.apocalypse.caerulaarbor.datagen.tags;
 
+import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.init.CAItems;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * 生成物品标签数据，包括本模组、forge 和 minecraft 命名空间
+ * 生成物品标签数据，包括 caerula_arbor、forge 和 minecraft 命名空间
  */
 public class ItemTagsProvider extends TagsProvider.RegistryTagsProvider<Item> {
+    private static final TagKey<Item> ANIMUS = caItemTag("animus");
+    private static final TagKey<Item> ANY_CORAL = caItemTag("any_coral");
+    private static final TagKey<Item> ARCHFIEND_RELICS = caItemTag("archfiend_relics");
+    private static final TagKey<Item> COMMON_RELICS = caItemTag("common_relics");
+    private static final TagKey<Item> CREAM_SWORD = caItemTag("cream_sword");
+    private static final TagKey<Item> CURSED = caItemTag("cursed");
+    private static final TagKey<Item> ENCHANTABLE_NETHERSEA_WALKER = caItemTag("enchantable/nethersea_walker");
+    private static final TagKey<Item> ENCHANTABLE_SANITY = caItemTag("enchantable/sanity");
+    private static final TagKey<Item> ENCHANTABLE_SANITY_DEFEND = caItemTag("enchantable/sanity_defend");
+    private static final TagKey<Item> ENCHANTABLE_SEABORN_KILLER = caItemTag("enchantable/seaborn_killer");
+    private static final TagKey<Item> ENDSPEAKER_CHAPTER = caItemTag("endspeaker_chapter");
+    private static final TagKey<Item> FISH_FOOD = caItemTag("fish_food");
+    private static final TagKey<Item> GENE = caItemTag("gene");
+    private static final TagKey<Item> HAND_RELICS = caItemTag("hand_relics");
+    private static final TagKey<Item> KING_RELICS = caItemTag("king_relics");
+    private static final TagKey<Item> KNIGHT_EQUIPMENT = caItemTag("knight_equipment");
+    private static final TagKey<Item> MOIST_ITEM = caItemTag("moist_item");
+    private static final TagKey<Item> NETHERSEA_LOGS = caItemTag("nethersea_logs");
+    private static final TagKey<Item> NETHERSEA_PROTECTIVE = caItemTag("nethersea_protective");
+    private static final TagKey<Item> RELIC_ADVANCED = caItemTag("relic_advanced");
+    private static final TagKey<Item> RELIC_GENERIC = caItemTag("relic_generic");
+    private static final TagKey<Item> SEABORN_LOOTS = caItemTag("seaborn_loots");
+    private static final TagKey<Item> SELF_MENDABLE = caItemTag("self_mendable");
+
+    private static final TagKey<Item> FORGE_ARMOR_BOOTS = forgeItemTag("armor/boots");
+    private static final TagKey<Item> FORGE_ARMOR_CHESTPLATES = forgeItemTag("armor/chestplates");
+    private static final TagKey<Item> FORGE_ARMOR_HELMETS = forgeItemTag("armor/helmets");
+    private static final TagKey<Item> FORGE_ARMOR_LEGGINGS = forgeItemTag("armor/leggings");
+    private static final TagKey<Item> FORGE_ARMORS = forgeItemTag("armors");
+    private static final TagKey<Item> FORGE_FENCES = forgeItemTag("fences");
+    private static final TagKey<Item> FORGE_FENCES_WOODEN = forgeItemTag("fences/wooden");
+    private static final TagKey<Item> FORGE_INGOTS = forgeItemTag("ingots");
+    private static final TagKey<Item> FORGE_MEATS = forgeItemTag("meats");
+    private static final TagKey<Item> FORGE_STORAGE_BLOCKS = forgeItemTag("storage_blocks");
+    private static final TagKey<Item> FORGE_STORAGE_BLOCKS_COMPLEX_CHITIN = forgeItemTag("storage_blocks/complex_chitin");
+    private static final TagKey<Item> FORGE_STORAGE_BLOCKS_HETEROPIC = forgeItemTag("storage_blocks/heteropic");
+    private static final TagKey<Item> FORGE_STORAGE_BLOCKS_OCEAN_CHITIN = forgeItemTag("storage_blocks/ocean_chitin");
+    private static final TagKey<Item> FORGE_STORAGE_BLOCKS_OCEAN_CRYSTAL = forgeItemTag("storage_blocks/ocean_crystal");
+    private static final TagKey<Item> FORGE_STORAGE_BLOCKS_TRAILRITE = forgeItemTag("storage_blocks/trailrite");
+    private static final TagKey<Item> FORGE_TOOLS_BOWS = forgeItemTag("tools/bows");
+    private static final TagKey<Item> FORGE_TOOLS_CROSSBOWS = forgeItemTag("tools/crossbows");
+    private static final TagKey<Item> FORGE_TOOLS_HOES = forgeItemTag("tools/hoes");
+
+    private static final TagKey<Item> MINECRAFT_AXES = minecraftItemTag("axes");
+    private static final TagKey<Item> MINECRAFT_BASE_STONE_OVERWORLD = minecraftItemTag("base_stone_overworld");
+    private static final TagKey<Item> MINECRAFT_BOOKSHELF_BOOKS = minecraftItemTag("bookshelf_books");
+    private static final TagKey<Item> MINECRAFT_BUTTONS = minecraftItemTag("buttons");
+    private static final TagKey<Item> MINECRAFT_ENCHANTABLE_SHARP_WEAPON = minecraftItemTag("enchantable/sharp_weapon");
+    private static final TagKey<Item> MINECRAFT_ENCHANTABLE_SWORD = minecraftItemTag("enchantable/sword");
+    private static final TagKey<Item> MINECRAFT_ENCHANTABLE_WEAPON = minecraftItemTag("enchantable/weapon");
+    private static final TagKey<Item> MINECRAFT_FENCES = minecraftItemTag("fences");
+    private static final TagKey<Item> MINECRAFT_FLOWERS = minecraftItemTag("flowers");
+    private static final TagKey<Item> MINECRAFT_FOX_FOOD = minecraftItemTag("fox_food");
+    private static final TagKey<Item> MINECRAFT_FRUITS = minecraftItemTag("fruits");
+    private static final TagKey<Item> MINECRAFT_HOES = minecraftItemTag("hoes");
+    private static final TagKey<Item> MINECRAFT_LOGS = minecraftItemTag("logs");
+    private static final TagKey<Item> MINECRAFT_MEAT = minecraftItemTag("meat");
+    private static final TagKey<Item> MINECRAFT_MUSIC_DISCS = minecraftItemTag("music_discs");
+    private static final TagKey<Item> MINECRAFT_PICKAXES = minecraftItemTag("pickaxes");
+    private static final TagKey<Item> MINECRAFT_PIGLIN_LOVED = minecraftItemTag("piglin_loved");
+    private static final TagKey<Item> MINECRAFT_PLANKS = minecraftItemTag("planks");
+    private static final TagKey<Item> MINECRAFT_SAL_VIENTO_DECO = minecraftItemTag("sal_viento_deco");
+    private static final TagKey<Item> MINECRAFT_SHOVELS = minecraftItemTag("shovels");
+    private static final TagKey<Item> MINECRAFT_SMALL_FLOWERS = minecraftItemTag("small_flowers");
+    private static final TagKey<Item> MINECRAFT_STONE_BUTTONS = minecraftItemTag("stone_buttons");
+    private static final TagKey<Item> MINECRAFT_SWORDS = minecraftItemTag("swords");
+    private static final TagKey<Item> MINECRAFT_TOOLS = minecraftItemTag("tools");
+    private static final TagKey<Item> MINECRAFT_TRIM_TEMPLATES = minecraftItemTag("trim_templates");
+    private static final TagKey<Item> MINECRAFT_TRIMMABLE_ARMOR = minecraftItemTag("trimmable_armor");
+    private static final TagKey<Item> MINECRAFT_TULIP = minecraftItemTag("tulip");
+    private static final TagKey<Item> MINECRAFT_WOODEN_BUTTONS = minecraftItemTag("wooden_buttons");
+    private static final TagKey<Item> MINECRAFT_WOODEN_FENCES = minecraftItemTag("wooden_fences");
+    private static final TagKey<Item> MINECRAFT_WOODEN_PRESSURE_PLATES = minecraftItemTag("wooden_pressure_plates");
+    private static final TagKey<Item> MINECRAFT_WOODEN_SLABS = minecraftItemTag("wooden_slabs");
+    private static final TagKey<Item> MINECRAFT_WOODEN_STAIRS = minecraftItemTag("wooden_stairs");
+
     public ItemTagsProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider,
                             @Nullable ExistingFileHelper existingFileHelper) {
         super(output, Registries.ITEM, lookupProvider, existingFileHelper);
@@ -21,79 +106,121 @@ public class ItemTagsProvider extends TagsProvider.RegistryTagsProvider<Item> {
 
     @Override
     protected void addTags(HolderLookup.@NotNull Provider provider) {
-        addValues("animus", "caerula_arbor:caerula_heart", "caerula_arbor:incandescent_anima", "caerula_arbor:leviathan_animus", "caerula_arbor:moist_dragon_heart");
-        addValues("any_coral", "minecraft:dead_tube_coral_block", "minecraft:dead_brain_coral_block", "minecraft:dead_bubble_coral_block", "minecraft:dead_fire_coral_block", "minecraft:dead_horn_coral_block", "minecraft:tube_coral_block", "minecraft:brain_coral_block", "minecraft:bubble_coral_block", "minecraft:fire_coral_block", "minecraft:horn_coral_block", "minecraft:dead_tube_coral", "minecraft:dead_brain_coral", "minecraft:dead_bubble_coral", "minecraft:dead_fire_coral", "minecraft:dead_horn_coral", "minecraft:tube_coral", "minecraft:brain_coral", "minecraft:bubble_coral", "minecraft:fire_coral", "minecraft:horn_coral", "minecraft:dead_tube_coral_fan", "minecraft:dead_brain_coral_fan", "minecraft:dead_bubble_coral_fan", "minecraft:dead_fire_coral_fan", "minecraft:dead_horn_coral_fan", "minecraft:tube_coral_fan", "minecraft:brain_coral_fan", "minecraft:bubble_coral_fan", "minecraft:fire_coral_fan", "minecraft:horn_coral_fan");
-        addValues("archfiend_relics", "caerula_arbor:archfiends_artifact", "caerula_arbor:archfiends_flag", "caerula_arbor:archfiends_bed", "caerula_arbor:royal_fate");
-        addValues("common_relics", "caerula_arbor:aromatic_coffee", "caerula_arbor:solo_music_box", "caerula_arbor:redstone_iris_flower", "caerula_arbor:odd_flute", "caerula_arbor:voyage_of_gold", "caerula_arbor:piglin_diary", "caerula_arbor:toponym_textology", "caerula_arbor:kettle", "caerula_arbor:allay_sculpture", "caerula_arbor:bat_bed", "caerula_arbor:omni_key", "caerula_arbor:score", "caerula_arbor:rescission", "caerula_arbor:smelly_hemostatic");
-        addValues("cream_sword", "caerula_arbor:trailed_wooden_sword", "caerula_arbor:trailed_stone_sword", "caerula_arbor:trailed_iron_sword", "caerula_arbor:trailed_diamond_sword", "caerula_arbor:trailed_netherite_sword", "caerula_arbor:trailed_golden_sword");
-        addValues("cursed", "caerula_arbor:relic_curse_emelight", "caerula_arbor:relic_cursed_glowbody", "caerula_arbor:relic_cursed_research", "caerula_arbor:caerula_heart");
-        addValues("enchantable/nethersea_walker", "#forge:armor/boots");
-        addValues("enchantable/sanity", "#minecraft:enchantable/weapon", "#minecraft:swords", "#minecraft:axes");
-        addValues("enchantable/sanity_defend", "#minecraft:trimmable_armor", "#forge:armors", "#forge:armor/leggings", "#forge:armor/boots", "#forge:armor/helmets", "#forge:armor/chestplates");
-        addValues("enchantable/seaborn_killer", "#minecraft:axes", "#minecraft:swords", "caerula_arbor:unambiguous_direction", "caerula_arbor:unfinished_beauty", "caerula_arbor:wavecleaver", "#minecraft:enchantable/weapon");
-        addValues("endspeaker_chapter", "caerula_arbor:dictationless_chapter", "caerula_arbor:dictation_chapter");
-        addValues("fish_food", "caerula_arbor:sea_trail_mor", "caerula_arbor:ocean_fibre", "caerula_arbor:cooked_mor", "caerula_arbor:broken_cell_cluster", "caerula_arbor:cell_cluster", "caerula_arbor:caramel_mor", "caerula_arbor:ocean_peduncle", "caerula_arbor:elite_peduncle", "caerula_arbor:cooked_fibre", "caerula_arbor:cooked_broken_cell_cluster", "caerula_arbor:cooked_cell_cluster", "caerula_arbor:cooked_peduncle", "caerula_arbor:fake_egg", "caerula_arbor:real_egg", "caerula_arbor:cooked_fakeegg", "caerula_arbor:collector_meat", "caerula_arbor:cooked_collector", "caerula_arbor:claw", "caerula_arbor:cooked_claw");
-        addValues("gene", "caerula_arbor:dna_reaper", "caerula_arbor:hunter_gene", "caerula_arbor:dna_horse", "caerula_arbor:rocinante_injector", "caerula_arbor:hunter_gene_skadi", "caerula_arbor:hunter_gene_ulpians", "caerula_arbor:hunter_gene_gladiia", "caerula_arbor:hunter_gene_specter", "caerula_arbor:nurture_gene_set", "caerula_arbor:gene_sample_normal", "caerula_arbor:gene_sample_upgraded", "caerula_arbor:gene_sample_superb");
-        addValues("hand_relics", "caerula_arbor:hand_of_thorns", "caerula_arbor:hand_of_strangle", "caerula_arbor:hand_of_fertiliy", "caerula_arbor:hand_of_speed", "caerula_arbor:hand_of_barren", "caerula_arbor:hand_of_spotless", "caerula_arbor:hand_of_firework", "caerula_arbor:hand_of_engrave", "caerula_arbor:hand_sword");
-        addValues("king_relics", "caerula_arbor:relic_crown", "caerula_arbor:kings_armour", "caerula_arbor:kings_spear", "caerula_arbor:kings_extension", "caerula_arbor:kings_crystal");
-        addValues("knight_equipment", "caerula_arbor:iron_sword_of_knight_corpus", "caerula_arbor:long_sword_of_knight_corpus", "caerula_arbor:knight_iron_helmet", "caerula_arbor:knight_iron_chestplate", "caerula_arbor:knight_iron_leggings", "caerula_arbor:knight_iron_boots");
-        addValues("moist_item", "caerula_arbor:moist_echo_shard", "caerula_arbor:moist_star", "caerula_arbor:water_logged_pearl", "caerula_arbor:moist_crystal_item", "caerula_arbor:moist_dragon_heart");
-        addValues("nethersea_logs", "caerula_arbor:nethersea_wood", "caerula_arbor:stripped_nethersea_wood", "caerula_arbor:trail_log", "caerula_arbor:stripped_trail_log");
-        addValues("nethersea_protective", "caerula_arbor:trailrite_axe", "caerula_arbor:trailrite_sword", "caerula_arbor:trailrite_pickaxe", "caerula_arbor:trailrite_hoe", "caerula_arbor:trailrite_shovel", "caerula_arbor:trail_mop");
-        addValues("relic_advanced", "#caerula_arbor:king_relics", "#caerula_arbor:archfiend_relics", "caerula_arbor:survivor_contract", "caerula_arbor:chitin_knife", "caerula_arbor:unripe_yearning", "caerula_arbor:crimson_treaty", "#caerula_arbor:hand_relics");
-        addValues("relic_generic", "#caerula_arbor:hand_relics", "#caerula_arbor:archfiend_relics", "#caerula_arbor:king_relics", "caerula_arbor:survivor_contract", "caerula_arbor:crimson_treaty", "caerula_arbor:bowl_seagrass", "caerula_arbor:golden_storm", "caerula_arbor:coffee_candy", "caerula_arbor:canned_cherry", "caerula_arbor:rainbow_candy", "caerula_arbor:aromatic_coffee", "caerula_arbor:solo_music_box", "caerula_arbor:redstone_iris_flower", "caerula_arbor:odd_flute", "caerula_arbor:voyage_of_gold", "caerula_arbor:piglin_diary", "caerula_arbor:toponym_textology", "caerula_arbor:kettle", "caerula_arbor:chitin_knife", "caerula_arbor:allay_sculpture", "caerula_arbor:bat_bed", "caerula_arbor:proof_of_longevity", "caerula_arbor:omni_key", "caerula_arbor:score", "caerula_arbor:rescission", "caerula_arbor:guardian_stare", "caerula_arbor:unripe_yearning", "caerula_arbor:meat_can", "caerula_arbor:smelly_hemostatic");
-        addValues("seaborn_loots", "caerula_arbor:ocean_phloem", "caerula_arbor:ocean_fibre", "caerula_arbor:ocean_eye", "caerula_arbor:ocean_crystal", "caerula_arbor:ocean_cutin", "caerula_arbor:ocean_chitin", "#caerula_arbor:fish_food", "#caerula_arbor:moist_item", "caerula_arbor:heteropic_piece", "caerula_arbor:broken_ocean_cell", "caerula_arbor:broken_cell_cluster", "caerula_arbor:ocean_cell", "caerula_arbor:cell_cluster");
-        addValues("self_mendable", "caerula_arbor:complex_chitin_sword", "caerula_arbor:complex_chitin_pickaxe", "caerula_arbor:complex_chitin_axe", "caerula_arbor:complex_chitin_shovel", "caerula_arbor:complex_chitin_hoe", "caerula_arbor:legendary_spear", "caerula_arbor:trailed_wooden_sword", "caerula_arbor:trailed_stone_sword", "caerula_arbor:trailed_iron_sword", "caerula_arbor:trailed_diamond_sword", "caerula_arbor:trailed_netherite_sword", "caerula_arbor:trailed_golden_sword", "caerula_arbor:phloem_bow", "caerula_arbor:trailrite_axe", "caerula_arbor:trailrite_sword", "caerula_arbor:path_inaugurator", "caerula_arbor:complex_chitin_bow");
-        addForgeValues("armor/boots", "caerula_arbor:chitin_armor_boots", "caerula_arbor:sealeather_boots", "caerula_arbor:complexchitin_armor_boots", "minecraft:leather_boots", "minecraft:chainmail_boots", "minecraft:iron_boots", "minecraft:golden_boots", "minecraft:diamond_boots", "minecraft:netherite_boots", "caerula_arbor:trailrite_armor_boots", "caerula_arbor:sealeather_chitin_boots", "caerula_arbor:knight_iron_boots");
-        addForgeValues("armor/chestplates", "caerula_arbor:chitin_armor_chestplate", "caerula_arbor:sealeather_chestplate", "caerula_arbor:complexchitin_armor_chestplate", "caerula_arbor:wearable_chest_chestplate", "minecraft:leather_chestplate", "minecraft:chainmail_chestplate", "minecraft:iron_chestplate", "minecraft:golden_chestplate", "minecraft:diamond_chestplate", "minecraft:netherite_chestplate", "caerula_arbor:sealeather_chitin_chestplate", "caerula_arbor:trailrite_armor_chestplate", "caerula_arbor:knight_iron_chestplate");
-        addForgeValues("armor/helmets", "caerula_arbor:chitin_armor_helmet", "caerula_arbor:sealeather_helmet", "caerula_arbor:complexchitin_armor_helmet", "caerula_arbor:wearable_crown_helmet", "minecraft:leather_helmet", "minecraft:chainmail_helmet", "minecraft:turtle_helmet", "minecraft:iron_helmet", "minecraft:golden_helmet", "minecraft:diamond_helmet", "minecraft:netherite_helmet", "caerula_arbor:sealeather_chitin_helmet", "caerula_arbor:trailrite_armor_helmet", "caerula_arbor:knight_iron_helmet");
-        addForgeValues("armor/leggings", "caerula_arbor:chitin_armor_leggings", "caerula_arbor:sealeather_leggings", "caerula_arbor:complexchitin_armor_leggings", "minecraft:leather_leggings", "minecraft:chainmail_leggings", "minecraft:iron_leggings", "minecraft:golden_leggings", "minecraft:diamond_leggings", "minecraft:netherite_leggings", "caerula_arbor:sealeather_chitin_leggings", "caerula_arbor:trailrite_armor_leggings", "caerula_arbor:knight_iron_leggings");
-        addForgeValues("armors", "caerula_arbor:chitin_armor_helmet", "caerula_arbor:chitin_armor_chestplate", "caerula_arbor:chitin_armor_leggings", "caerula_arbor:chitin_armor_boots", "caerula_arbor:sealeather_helmet", "caerula_arbor:sealeather_chestplate", "caerula_arbor:sealeather_leggings", "caerula_arbor:sealeather_boots", "caerula_arbor:complexchitin_armor_helmet", "caerula_arbor:complexchitin_armor_chestplate", "caerula_arbor:complexchitin_armor_leggings", "caerula_arbor:complexchitin_armor_boots", "minecraft:diamond_helmet", "minecraft:diamond_chestplate", "minecraft:diamond_leggings", "minecraft:diamond_boots", "minecraft:leather_helmet", "minecraft:leather_chestplate", "minecraft:leather_leggings", "minecraft:leather_boots", "minecraft:chainmail_helmet", "minecraft:chainmail_chestplate", "minecraft:chainmail_leggings", "minecraft:chainmail_boots", "minecraft:iron_helmet", "minecraft:iron_chestplate", "minecraft:iron_leggings", "minecraft:iron_boots", "minecraft:netherite_helmet", "minecraft:netherite_chestplate", "minecraft:netherite_leggings", "minecraft:netherite_boots", "#forge:armor/leggings", "#forge:armor/chestplates", "#forge:armor/boots", "#forge:armor/helmets", "caerula_arbor:trailrite_armor_helmet", "caerula_arbor:trailrite_armor_chestplate", "caerula_arbor:trailrite_armor_leggings", "caerula_arbor:trailrite_armor_boots", "caerula_arbor:knight_iron_helmet", "caerula_arbor:knight_iron_chestplate", "caerula_arbor:knight_iron_leggings", "caerula_arbor:knight_iron_boots");
-        addForgeValues("fences", "caerula_arbor:trail_planks_fence");
-        addForgeValues("fences/wooden", "caerula_arbor:trail_planks_fence");
-        addForgeValues("ingots", "caerula_arbor:redstone_ingot", "caerula_arbor:trailrite");
-        addForgeValues("meats", "caerula_arbor:ocean_fibre", "caerula_arbor:cooked_fibre", "caerula_arbor:ocean_peduncle", "caerula_arbor:elite_peduncle", "caerula_arbor:cooked_peduncle", "caerula_arbor:collector_meat", "caerula_arbor:cooked_collector", "#minecraft:meat");
-        addForgeValues("storage_blocks", "caerula_arbor:chitin_block", "caerula_arbor:ocean_crystal_block", "caerula_arbor:complex_chitin_block", "caerula_arbor:trailrite_block", "caerula_arbor:heteropic_block");
-        addForgeValues("storage_blocks/complex_chitin", "caerula_arbor:complex_chitin_block");
-        addForgeValues("storage_blocks/heteropic", "caerula_arbor:heteropic_block");
-        addForgeValues("storage_blocks/ocean_chitin", "caerula_arbor:chitin_block");
-        addForgeValues("storage_blocks/ocean_crystal", "caerula_arbor:ocean_crystal_block");
-        addForgeValues("storage_blocks/trailrite", "caerula_arbor:trailrite_block");
-        addForgeValues("tools/bows", "caerula_arbor:phloem_bow", "caerula_arbor:tide_wand", "caerula_arbor:chitin_bow", "caerula_arbor:tidelinked_wand", "caerula_arbor:dragon_wand", "caerula_arbor:complex_chitin_bow", "caerula_arbor:trailrite_bow");
-        addForgeValues("tools/crossbows", "caerula_arbor:dragon_wand");
-        addForgeValues("tools/hoes", "caerula_arbor:chitin_hoe", "caerula_arbor:hoe_ocean_crystal", "caerula_arbor:complex_chitin_hoe", "caerula_arbor:path_inaugurator", "caerula_arbor:trailrite_hoe", "minecraft:wooden_hoe", "minecraft:stone_hoe", "minecraft:iron_hoe", "minecraft:golden_hoe", "minecraft:diamond_hoe", "minecraft:netherite_hoe");
+        addItemsToTag(ANIMUS, CAItems.CAERULA_HEART, CAItems.INCANDESCENT_ANIMA, CAItems.LEVIATHAN_ANIMUS, CAItems.MOIST_DRAGON_HEART);
+        addItemsToTag(ANY_CORAL, Items.DEAD_TUBE_CORAL_BLOCK, Items.DEAD_BRAIN_CORAL_BLOCK, Items.DEAD_BUBBLE_CORAL_BLOCK, Items.DEAD_FIRE_CORAL_BLOCK, Items.DEAD_HORN_CORAL_BLOCK, Items.TUBE_CORAL_BLOCK, Items.BRAIN_CORAL_BLOCK, Items.BUBBLE_CORAL_BLOCK, Items.FIRE_CORAL_BLOCK, Items.HORN_CORAL_BLOCK, Items.DEAD_TUBE_CORAL, Items.DEAD_BRAIN_CORAL, Items.DEAD_BUBBLE_CORAL, Items.DEAD_FIRE_CORAL, Items.DEAD_HORN_CORAL, Items.TUBE_CORAL, Items.BRAIN_CORAL, Items.BUBBLE_CORAL, Items.FIRE_CORAL, Items.HORN_CORAL, Items.DEAD_TUBE_CORAL_FAN, Items.DEAD_BRAIN_CORAL_FAN, Items.DEAD_BUBBLE_CORAL_FAN, Items.DEAD_FIRE_CORAL_FAN, Items.DEAD_HORN_CORAL_FAN, Items.TUBE_CORAL_FAN, Items.BRAIN_CORAL_FAN, Items.BUBBLE_CORAL_FAN, Items.FIRE_CORAL_FAN, Items.HORN_CORAL_FAN);
+        addItemsToTag(ARCHFIEND_RELICS, CAItems.ARCHFIENDS_ARTIFACT, CAItems.ARCHFIENDS_FLAG, CAItems.ARCHFIENDS_BED, CAItems.ROYAL_FATE);
+        addItemsToTag(COMMON_RELICS, CAItems.AROMATIC_COFFEE, CAItems.SOLO_MUSIC_BOX, CAItems.REDSTONE_IRIS_FLOWER, CAItems.ODD_FLUTE, CAItems.VOYAGE_OF_GOLD, CAItems.PIGLIN_DIARY, CAItems.TOPONYM_TEXTOLOGY, CAItems.KETTLE, CAItems.ALLAY_SCULPTURE, CAItems.BAT_BED, CAItems.OMNI_KEY, CAItems.SCORE, CAItems.RESCISSION, CAItems.SMELLY_HEMOSTATIC);
+        addItemsToTag(CREAM_SWORD, CAItems.TRAILED_WOODEN_SWORD, CAItems.TRAILED_STONE_SWORD, CAItems.TRAILED_IRON_SWORD, CAItems.TRAILED_DIAMOND_SWORD, CAItems.TRAILED_NETHERITE_SWORD, CAItems.TRAILED_GOLDEN_SWORD);
+        addItemsToTag(CURSED, CAItems.RELIC_CURSE_EMELIGHT, CAItems.RELIC_CURSED_GLOWBODY, CAItems.RELIC_CURSED_RESEARCH, CAItems.CAERULA_HEART);
+        addTagsToTag(ENCHANTABLE_NETHERSEA_WALKER, FORGE_ARMOR_BOOTS);
+        addTagsToTag(ENCHANTABLE_SANITY, MINECRAFT_ENCHANTABLE_WEAPON, MINECRAFT_SWORDS, MINECRAFT_AXES);
+        addTagsToTag(ENCHANTABLE_SANITY_DEFEND, MINECRAFT_TRIMMABLE_ARMOR, FORGE_ARMORS, FORGE_ARMOR_LEGGINGS, FORGE_ARMOR_BOOTS, FORGE_ARMOR_HELMETS, FORGE_ARMOR_CHESTPLATES);
+        addItemsToTag(ENCHANTABLE_SEABORN_KILLER, CAItems.UNAMBIGUOUS_DIRECTION, CAItems.UNFINISHED_BEAUTY, CAItems.WAVECLEAVER);
+        addTagsToTag(ENCHANTABLE_SEABORN_KILLER, MINECRAFT_AXES, MINECRAFT_SWORDS, MINECRAFT_ENCHANTABLE_WEAPON);
+        addItemsToTag(ENDSPEAKER_CHAPTER, CAItems.DICTATIONLESS_CHAPTER, CAItems.DICTATION_CHAPTER);
+        addItemsToTag(FISH_FOOD, CAItems.SEA_TRAIL_MOR, CAItems.OCEAN_FIBRE, CAItems.COOKED_MOR, CAItems.BROKEN_CELL_CLUSTER, CAItems.CELL_CLUSTER, CAItems.CARAMEL_MOR, CAItems.OCEAN_PEDUNCLE, CAItems.ELITE_PEDUNCLE, CAItems.COOKED_FIBRE, CAItems.COOKED_BROKEN_CELL_CLUSTER, CAItems.COOKED_CELL_CLUSTER, CAItems.COOKED_PEDUNCLE, CAItems.FAKE_EGG, CAItems.REAL_EGG, CAItems.COOKED_FAKEEGG, CAItems.COLLECTOR_MEAT, CAItems.COOKED_COLLECTOR, CAItems.CLAW, CAItems.COOKED_CLAW);
+        addItemsToTag(GENE, CAItems.DNA_REAPER, CAItems.HUNTER_GENE, CAItems.DNA_HORSE, CAItems.ROCINANTE_INJECTOR, CAItems.HUNTER_GENE_SKADI, CAItems.HUNTER_GENE_ULPIANS, CAItems.HUNTER_GENE_GLADIIA, CAItems.HUNTER_GENE_SPECTER, CAItems.NURTURE_GENE_SET, CAItems.GENE_SAMPLE_NORMAL, CAItems.GENE_SAMPLE_UPGRADED, CAItems.GENE_SAMPLE_SUPERB);
+        addItemsToTag(HAND_RELICS, CAItems.HAND_OF_THORNS, CAItems.HAND_OF_STRANGLE, CAItems.HAND_OF_FERTILIY, CAItems.HAND_OF_SPEED, CAItems.HAND_OF_BARREN, CAItems.HAND_OF_SPOTLESS, CAItems.HAND_OF_FIREWORK, CAItems.HAND_OF_ENGRAVE, CAItems.HAND_SWORD);
+        addItemsToTag(KING_RELICS, CAItems.RELIC_CROWN, CAItems.KINGS_ARMOUR, CAItems.KINGS_SPEAR, CAItems.KINGS_EXTENSION, CAItems.KINGS_CRYSTAL);
+        addItemsToTag(KNIGHT_EQUIPMENT, CAItems.IRON_SWORD_OF_KNIGHT_CORPUS, CAItems.LONG_SWORD_OF_KNIGHT_CORPUS, CAItems.KNIGHT_IRON_HELMET, CAItems.KNIGHT_IRON_CHESTPLATE, CAItems.KNIGHT_IRON_LEGGINGS, CAItems.KNIGHT_IRON_BOOTS);
+        addItemsToTag(MOIST_ITEM, CAItems.MOIST_ECHO_SHARD, CAItems.MOIST_STAR, CAItems.WATER_LOGGED_PEARL, CAItems.MOIST_CRYSTAL_ITEM, CAItems.MOIST_DRAGON_HEART);
+        addItemsToTag(NETHERSEA_LOGS, CAItems.NETHERSEA_WOOD, CAItems.STRIPPED_NETHERSEA_WOOD, CAItems.TRAIL_LOG, CAItems.STRIPPED_TRAIL_LOG);
+        addItemsToTag(NETHERSEA_PROTECTIVE, CAItems.TRAILRITE_AXE, CAItems.TRAILRITE_SWORD, CAItems.TRAILRITE_PICKAXE, CAItems.TRAILRITE_HOE, CAItems.TRAILRITE_SHOVEL, CAItems.TRAIL_MOP);
+        addItemsToTag(RELIC_ADVANCED, CAItems.SURVIVOR_CONTRACT, CAItems.CHITIN_KNIFE, CAItems.UNRIPE_YEARNING, CAItems.CRIMSON_TREATY);
+        addTagsToTag(RELIC_ADVANCED, KING_RELICS, ARCHFIEND_RELICS, HAND_RELICS);
+        addItemsToTag(RELIC_GENERIC, CAItems.SURVIVOR_CONTRACT, CAItems.CRIMSON_TREATY, CAItems.BOWL_SEAGRASS, CAItems.GOLDEN_STORM, CAItems.COFFEE_CANDY, CAItems.CANNED_CHERRY, CAItems.RAINBOW_CANDY, CAItems.AROMATIC_COFFEE, CAItems.SOLO_MUSIC_BOX, CAItems.REDSTONE_IRIS_FLOWER, CAItems.ODD_FLUTE, CAItems.VOYAGE_OF_GOLD, CAItems.PIGLIN_DIARY, CAItems.TOPONYM_TEXTOLOGY, CAItems.KETTLE, CAItems.CHITIN_KNIFE, CAItems.ALLAY_SCULPTURE, CAItems.BAT_BED, CAItems.PROOF_OF_LONGEVITY, CAItems.OMNI_KEY, CAItems.SCORE, CAItems.RESCISSION, CAItems.GUARDIAN_STARE, CAItems.UNRIPE_YEARNING, CAItems.MEAT_CAN, CAItems.SMELLY_HEMOSTATIC);
+        addTagsToTag(RELIC_GENERIC, HAND_RELICS, ARCHFIEND_RELICS, KING_RELICS);
+        addItemsToTag(SEABORN_LOOTS, CAItems.OCEAN_PHLOEM, CAItems.OCEAN_FIBRE, CAItems.OCEAN_EYE, CAItems.OCEAN_CRYSTAL, CAItems.OCEAN_CUTIN, CAItems.OCEAN_CHITIN, CAItems.HETEROPIC_PIECE, CAItems.BROKEN_OCEAN_CELL, CAItems.BROKEN_CELL_CLUSTER, CAItems.OCEAN_CELL, CAItems.CELL_CLUSTER);
+        addTagsToTag(SEABORN_LOOTS, FISH_FOOD, MOIST_ITEM);
+        addItemsToTag(SELF_MENDABLE, CAItems.COMPLEX_CHITIN_SWORD, CAItems.COMPLEX_CHITIN_PICKAXE, CAItems.COMPLEX_CHITIN_AXE, CAItems.COMPLEX_CHITIN_SHOVEL, CAItems.COMPLEX_CHITIN_HOE, CAItems.LEGENDARY_SPEAR, CAItems.TRAILED_WOODEN_SWORD, CAItems.TRAILED_STONE_SWORD, CAItems.TRAILED_IRON_SWORD, CAItems.TRAILED_DIAMOND_SWORD, CAItems.TRAILED_NETHERITE_SWORD, CAItems.TRAILED_GOLDEN_SWORD, CAItems.PHLOEM_BOW, CAItems.TRAILRITE_AXE, CAItems.TRAILRITE_SWORD, CAItems.PATH_INAUGURATOR, CAItems.COMPLEX_CHITIN_BOW);
+        addItemsToTag(FORGE_ARMOR_BOOTS, CAItems.CHITIN_ARMOR_BOOTS, CAItems.SEALEATHER_BOOTS, CAItems.COMPLEXCHITIN_ARMOR_BOOTS, Items.LEATHER_BOOTS, Items.CHAINMAIL_BOOTS, Items.IRON_BOOTS, Items.GOLDEN_BOOTS, Items.DIAMOND_BOOTS, Items.NETHERITE_BOOTS, CAItems.TRAILRITE_ARMOR_BOOTS, CAItems.SEALEATHER_CHITIN_BOOTS, CAItems.KNIGHT_IRON_BOOTS);
+        addItemsToTag(FORGE_ARMOR_CHESTPLATES, CAItems.CHITIN_ARMOR_CHESTPLATE, CAItems.SEALEATHER_CHESTPLATE, CAItems.COMPLEXCHITIN_ARMOR_CHESTPLATE, CAItems.WEARABLE_CHEST_CHESTPLATE, Items.LEATHER_CHESTPLATE, Items.CHAINMAIL_CHESTPLATE, Items.IRON_CHESTPLATE, Items.GOLDEN_CHESTPLATE, Items.DIAMOND_CHESTPLATE, Items.NETHERITE_CHESTPLATE, CAItems.SEALEATHER_CHITIN_CHESTPLATE, CAItems.TRAILRITE_ARMOR_CHESTPLATE, CAItems.KNIGHT_IRON_CHESTPLATE);
+        addItemsToTag(FORGE_ARMOR_HELMETS, CAItems.CHITIN_ARMOR_HELMET, CAItems.SEALEATHER_HELMET, CAItems.COMPLEXCHITIN_ARMOR_HELMET, CAItems.WEARABLE_CROWN_HELMET, Items.LEATHER_HELMET, Items.CHAINMAIL_HELMET, Items.TURTLE_HELMET, Items.IRON_HELMET, Items.GOLDEN_HELMET, Items.DIAMOND_HELMET, Items.NETHERITE_HELMET, CAItems.SEALEATHER_CHITIN_HELMET, CAItems.TRAILRITE_ARMOR_HELMET, CAItems.KNIGHT_IRON_HELMET);
+        addItemsToTag(FORGE_ARMOR_LEGGINGS, CAItems.CHITIN_ARMOR_LEGGINGS, CAItems.SEALEATHER_LEGGINGS, CAItems.COMPLEXCHITIN_ARMOR_LEGGINGS, Items.LEATHER_LEGGINGS, Items.CHAINMAIL_LEGGINGS, Items.IRON_LEGGINGS, Items.GOLDEN_LEGGINGS, Items.DIAMOND_LEGGINGS, Items.NETHERITE_LEGGINGS, CAItems.SEALEATHER_CHITIN_LEGGINGS, CAItems.TRAILRITE_ARMOR_LEGGINGS, CAItems.KNIGHT_IRON_LEGGINGS);
+        addItemsToTag(FORGE_ARMORS, CAItems.CHITIN_ARMOR_HELMET, CAItems.CHITIN_ARMOR_CHESTPLATE, CAItems.CHITIN_ARMOR_LEGGINGS, CAItems.CHITIN_ARMOR_BOOTS, CAItems.SEALEATHER_HELMET, CAItems.SEALEATHER_CHESTPLATE, CAItems.SEALEATHER_LEGGINGS, CAItems.SEALEATHER_BOOTS, CAItems.COMPLEXCHITIN_ARMOR_HELMET, CAItems.COMPLEXCHITIN_ARMOR_CHESTPLATE, CAItems.COMPLEXCHITIN_ARMOR_LEGGINGS, CAItems.COMPLEXCHITIN_ARMOR_BOOTS, Items.DIAMOND_HELMET, Items.DIAMOND_CHESTPLATE, Items.DIAMOND_LEGGINGS, Items.DIAMOND_BOOTS, Items.LEATHER_HELMET, Items.LEATHER_CHESTPLATE, Items.LEATHER_LEGGINGS, Items.LEATHER_BOOTS, Items.CHAINMAIL_HELMET, Items.CHAINMAIL_CHESTPLATE, Items.CHAINMAIL_LEGGINGS, Items.CHAINMAIL_BOOTS, Items.IRON_HELMET, Items.IRON_CHESTPLATE, Items.IRON_LEGGINGS, Items.IRON_BOOTS, Items.NETHERITE_HELMET, Items.NETHERITE_CHESTPLATE, Items.NETHERITE_LEGGINGS, Items.NETHERITE_BOOTS, CAItems.TRAILRITE_ARMOR_HELMET, CAItems.TRAILRITE_ARMOR_CHESTPLATE, CAItems.TRAILRITE_ARMOR_LEGGINGS, CAItems.TRAILRITE_ARMOR_BOOTS, CAItems.KNIGHT_IRON_HELMET, CAItems.KNIGHT_IRON_CHESTPLATE, CAItems.KNIGHT_IRON_LEGGINGS, CAItems.KNIGHT_IRON_BOOTS);
+        addTagsToTag(FORGE_ARMORS, FORGE_ARMOR_LEGGINGS, FORGE_ARMOR_CHESTPLATES, FORGE_ARMOR_BOOTS, FORGE_ARMOR_HELMETS);
+        addItemsToTag(FORGE_FENCES, CAItems.TRAIL_PLANKS_FENCE);
+        addItemsToTag(FORGE_FENCES_WOODEN, CAItems.TRAIL_PLANKS_FENCE);
+        addItemsToTag(FORGE_INGOTS, CAItems.REDSTONE_INGOT, CAItems.TRAILRITE);
+        addItemsToTag(FORGE_MEATS, CAItems.OCEAN_FIBRE, CAItems.COOKED_FIBRE, CAItems.OCEAN_PEDUNCLE, CAItems.ELITE_PEDUNCLE, CAItems.COOKED_PEDUNCLE, CAItems.COLLECTOR_MEAT, CAItems.COOKED_COLLECTOR);
+        addTagsToTag(FORGE_MEATS, MINECRAFT_MEAT);
+        addItemsToTag(FORGE_STORAGE_BLOCKS, CAItems.CHITIN_BLOCK, CAItems.OCEAN_CRYSTAL_BLOCK, CAItems.COMPLEX_CHITIN_BLOCK, CAItems.TRAILRITE_BLOCK, CAItems.HETEROPIC_BLOCK);
+        addItemsToTag(FORGE_STORAGE_BLOCKS_COMPLEX_CHITIN, CAItems.COMPLEX_CHITIN_BLOCK);
+        addItemsToTag(FORGE_STORAGE_BLOCKS_HETEROPIC, CAItems.HETEROPIC_BLOCK);
+        addItemsToTag(FORGE_STORAGE_BLOCKS_OCEAN_CHITIN, CAItems.CHITIN_BLOCK);
+        addItemsToTag(FORGE_STORAGE_BLOCKS_OCEAN_CRYSTAL, CAItems.OCEAN_CRYSTAL_BLOCK);
+        addItemsToTag(FORGE_STORAGE_BLOCKS_TRAILRITE, CAItems.TRAILRITE_BLOCK);
+        addItemsToTag(FORGE_TOOLS_BOWS, CAItems.PHLOEM_BOW, CAItems.TIDE_WAND, CAItems.CHITIN_BOW, CAItems.TIDELINKED_WAND, CAItems.DRAGON_WAND, CAItems.COMPLEX_CHITIN_BOW, CAItems.TRAILRITE_BOW);
+        addItemsToTag(FORGE_TOOLS_CROSSBOWS, CAItems.DRAGON_WAND);
+        addItemsToTag(FORGE_TOOLS_HOES, CAItems.CHITIN_HOE, CAItems.HOE_OCEAN_CRYSTAL, CAItems.COMPLEX_CHITIN_HOE, CAItems.PATH_INAUGURATOR, CAItems.TRAILRITE_HOE, Items.WOODEN_HOE, Items.STONE_HOE, Items.IRON_HOE, Items.GOLDEN_HOE, Items.DIAMOND_HOE, Items.NETHERITE_HOE);
 
-        addMinecraftValues("axes", "caerula_arbor:trailrite_axe", "caerula_arbor:complex_chitin_axe", "caerula_arbor:axe_ocean_crystal", "caerula_arbor:chitin_axe", "caerula_arbor:path_inaugurator", "caerula_arbor:circular_saw", "caerula_arbor:unfinished_beauty");
-        addMinecraftValues("base_stone_overworld", "minecraft:stone", "minecraft:granite", "minecraft:diorite", "minecraft:andesite");
-        addMinecraftValues("bookshelf_books", "caerula_arbor:survivor_contract", "caerula_arbor:piglin_diary", "caerula_arbor:toponym_textology", "caerula_arbor:martus_book", "caerula_arbor:dictationless_chapter", "caerula_arbor:relic_cursed_research", "caerula_arbor:dictation_chapter");
-        addMinecraftValues("buttons", "caerula_arbor:trail_button", "caerula_arbor:trail_plank_button");
-        addMinecraftValues("enchantable/sharp_weapon", "caerula_arbor:legendary_spear", "caerula_arbor:wavecleaver", "caerula_arbor:chitin_shovel", "caerula_arbor:block_spear", "caerula_arbor:sword_ocean_crystal", "caerula_arbor:chitin_axe", "caerula_arbor:chitin_sword", "caerula_arbor:axe_ocean_crystal", "caerula_arbor:complex_chitin_sword", "caerula_arbor:complex_chitin_axe", "caerula_arbor:trailed_wooden_sword", "caerula_arbor:trailed_stone_sword", "caerula_arbor:trailed_iron_sword", "caerula_arbor:trailed_diamond_sword", "caerula_arbor:trailed_netherite_sword", "caerula_arbor:trailed_golden_sword", "caerula_arbor:trailrite_axe", "caerula_arbor:trailrite_sword", "#minecraft:swords", "#minecraft:axes");
-        addMinecraftValues("enchantable/sword", "#minecraft:swords", "caerula_arbor:legendary_spear", "caerula_arbor:wavecleaver");
-        addMinecraftValues("enchantable/weapon", "caerula_arbor:the_spear", "caerula_arbor:sword_ocean_crystal", "caerula_arbor:chitin_sword", "caerula_arbor:complex_chitin_sword", "caerula_arbor:legendary_spear", "caerula_arbor:wavecleaver");
-        addMinecraftValues("fences", "caerula_arbor:trail_planks_fence");
-        addMinecraftValues("flowers", "caerula_arbor:trail_mushroom");
-        addMinecraftValues("fox_food", "caerula_arbor:fluore_berries", "caerula_arbor:radiant_berries", "caerula_arbor:canned_cherry");
-        addMinecraftValues("fruits", "minecraft:apple", "minecraft:golden_apple", "minecraft:enchanted_golden_apple", "minecraft:melon_slice", "minecraft:sweet_berries", "minecraft:glow_berries", "minecraft:glistering_melon_slice");
-        addMinecraftValues("hoes", "caerula_arbor:trailrite_hoe", "caerula_arbor:complex_chitin_hoe", "caerula_arbor:hoe_ocean_crystal", "caerula_arbor:chitin_hoe", "caerula_arbor:path_inaugurator");
-        addMinecraftValues("logs", "caerula_arbor:trail_log", "caerula_arbor:stripped_trail_log", "caerula_arbor:nethersea_wood", "caerula_arbor:stripped_nethersea_wood");
-        addMinecraftValues("meat", "minecraft:cooked_porkchop", "minecraft:cooked_beef", "minecraft:cooked_chicken", "minecraft:cooked_rabbit", "minecraft:cooked_mutton", "minecraft:cod", "minecraft:salmon", "minecraft:tropical_fish", "minecraft:pufferfish", "minecraft:cooked_cod", "minecraft:cooked_salmon");
-        addMinecraftValues("music_discs", "caerula_arbor:record_isharmla", "caerula_arbor:record_deepness", "caerula_arbor:record_undertides", "caerula_arbor:record_path_ahead", "caerula_arbor:record_endospore", "caerula_arbor:record_whisper", "caerula_arbor:bloody_record", "caerula_arbor:score");
-        addMinecraftValues("pickaxes", "caerula_arbor:trailrite_pickaxe", "caerula_arbor:hand_anchor", "caerula_arbor:trail_mop", "caerula_arbor:complex_chitin_pickaxe", "caerula_arbor:pickaxe_ocean_crystal", "caerula_arbor:chitin_pickaxe");
-        addMinecraftValues("piglin_loved", "caerula_arbor:trailed_golden_sword", "caerula_arbor:trail_golden_apple", "caerula_arbor:voyage_of_gold");
-        addMinecraftValues("planks", "caerula_arbor:trail_plank");
-        addMinecraftValues("sal_viento_deco", "caerula_arbor:saltwind_sandstone", "caerula_arbor:chiseled_saltwind_sandstone", "caerula_arbor:smooth_saltwind_sandatone", "caerula_arbor:saltwind_column", "caerula_arbor:saltwind_brick", "caerula_arbor:saltwind_smooth_brick");
-        addMinecraftValues("shovels", "caerula_arbor:trailrite_shovel", "caerula_arbor:complex_chitin_shovel", "caerula_arbor:shovel_ocean_crystal", "caerula_arbor:chitin_shovel");
-        addMinecraftValues("small_flowers", "caerula_arbor:trail_mushroom");
-        addMinecraftValues("stone_buttons", "caerula_arbor:trail_button");
-        addMinecraftValues("swords", "caerula_arbor:skadi_sword", "caerula_arbor:aegir_sword", "caerula_arbor:broken_sea", "caerula_arbor:aegir_lancet", "caerula_arbor:apocata_sword", "caerula_arbor:lanc_xiao", "caerula_arbor:long_sword_of_knight_corpus", "caerula_arbor:iron_sword_of_knight_corpus", "caerula_arbor:trailrite_sword", "caerula_arbor:trailed_golden_sword", "caerula_arbor:trailed_netherite_sword", "caerula_arbor:trailed_diamond_sword", "caerula_arbor:trailed_iron_sword", "caerula_arbor:trailed_stone_sword", "caerula_arbor:trailed_wooden_sword", "caerula_arbor:complex_chitin_sword", "caerula_arbor:chitin_sword", "caerula_arbor:sword_ocean_crystal", "caerula_arbor:the_spear", "caerula_arbor:legendary_spear");
-        addMinecraftValues("tools", "caerula_arbor:the_spear", "caerula_arbor:sword_ocean_crystal", "caerula_arbor:chitin_pickaxe", "caerula_arbor:pickaxe_ocean_crystal", "caerula_arbor:complex_chitin_pickaxe", "caerula_arbor:trailrite_pickaxe", "caerula_arbor:chitin_axe", "caerula_arbor:axe_ocean_crystal", "caerula_arbor:complex_chitin_axe", "caerula_arbor:trailrite_axe", "caerula_arbor:chitin_sword", "caerula_arbor:complex_chitin_sword", "caerula_arbor:trailed_wooden_sword", "caerula_arbor:trailed_stone_sword", "caerula_arbor:trailed_iron_sword", "caerula_arbor:trailed_diamond_sword", "caerula_arbor:trailed_netherite_sword", "caerula_arbor:trailed_golden_sword", "caerula_arbor:trailrite_sword", "caerula_arbor:iron_sword_of_knight_corpus", "caerula_arbor:long_sword_of_knight_corpus", "caerula_arbor:apocata_sword", "caerula_arbor:aegir_sword", "caerula_arbor:skadi_sword", "caerula_arbor:chitin_shovel", "caerula_arbor:shovel_ocean_crystal", "caerula_arbor:complex_chitin_shovel", "caerula_arbor:trailrite_shovel", "caerula_arbor:chitin_hoe", "caerula_arbor:hoe_ocean_crystal", "caerula_arbor:complex_chitin_hoe", "caerula_arbor:trailrite_hoe", "caerula_arbor:tide_wand", "caerula_arbor:tidelinked_wand", "caerula_arbor:highmore_scythe", "caerula_arbor:circular_saw", "caerula_arbor:aegir_lancet", "caerula_arbor:unambiguous_direction", "caerula_arbor:broken_sea", "caerula_arbor:wavecleaver", "caerula_arbor:unfinished_beauty");
-        addMinecraftValues("trim_templates", "caerula_arbor:ocean_trim_template", "caerula_arbor:hunter_gene", "caerula_arbor:hunter_gene_skadi", "caerula_arbor:hunter_gene_ulpians", "caerula_arbor:hunter_gene_gladiia", "caerula_arbor:hunter_gene_specter", "caerula_arbor:tide_hunet_template", "caerula_arbor:flamarine_upgrade_template");
-        addMinecraftValues("trimmable_armor", "caerula_arbor:chitin_armor_helmet", "caerula_arbor:chitin_armor_chestplate", "caerula_arbor:chitin_armor_leggings", "caerula_arbor:chitin_armor_boots");
-        addMinecraftValues("tulip", "minecraft:red_tulip", "minecraft:orange_tulip", "minecraft:white_tulip", "minecraft:pink_tulip");
-        addMinecraftValues("wooden_buttons", "caerula_arbor:trail_plank_button");
-        addMinecraftValues("wooden_fences", "caerula_arbor:trail_planks_fence");
-        addMinecraftValues("wooden_pressure_plates", "caerula_arbor:trail_plank_pressure_plate");
-        addMinecraftValues("wooden_slabs", "caerula_arbor:trail_plank_slab");
-        addMinecraftValues("wooden_stairs", "caerula_arbor:trail_plank_stair");
+        addItemsToTag(MINECRAFT_AXES, CAItems.TRAILRITE_AXE, CAItems.COMPLEX_CHITIN_AXE, CAItems.AXE_OCEAN_CRYSTAL, CAItems.CHITIN_AXE, CAItems.PATH_INAUGURATOR, CAItems.CIRCULAR_SAW, CAItems.UNFINISHED_BEAUTY);
+        addItemsToTag(MINECRAFT_BASE_STONE_OVERWORLD, Items.STONE, Items.GRANITE, Items.DIORITE, Items.ANDESITE);
+        addItemsToTag(MINECRAFT_BOOKSHELF_BOOKS, CAItems.SURVIVOR_CONTRACT, CAItems.PIGLIN_DIARY, CAItems.TOPONYM_TEXTOLOGY, CAItems.MARTUS_BOOK, CAItems.DICTATIONLESS_CHAPTER, CAItems.RELIC_CURSED_RESEARCH, CAItems.DICTATION_CHAPTER);
+        addItemsToTag(MINECRAFT_BUTTONS, CAItems.TRAIL_BUTTON, CAItems.TRAIL_PLANK_BUTTON);
+        addItemsToTag(MINECRAFT_ENCHANTABLE_SHARP_WEAPON, CAItems.LEGENDARY_SPEAR, CAItems.WAVECLEAVER, CAItems.CHITIN_SHOVEL, CAItems.BLOCK_SPEAR, CAItems.SWORD_OCEAN_CRYSTAL, CAItems.CHITIN_AXE, CAItems.CHITIN_SWORD, CAItems.AXE_OCEAN_CRYSTAL, CAItems.COMPLEX_CHITIN_SWORD, CAItems.COMPLEX_CHITIN_AXE, CAItems.TRAILED_WOODEN_SWORD, CAItems.TRAILED_STONE_SWORD, CAItems.TRAILED_IRON_SWORD, CAItems.TRAILED_DIAMOND_SWORD, CAItems.TRAILED_NETHERITE_SWORD, CAItems.TRAILED_GOLDEN_SWORD, CAItems.TRAILRITE_AXE, CAItems.TRAILRITE_SWORD);
+        addTagsToTag(MINECRAFT_ENCHANTABLE_SHARP_WEAPON, MINECRAFT_SWORDS, MINECRAFT_AXES);
+        addItemsToTag(MINECRAFT_ENCHANTABLE_SWORD, CAItems.LEGENDARY_SPEAR, CAItems.WAVECLEAVER);
+        addTagsToTag(MINECRAFT_ENCHANTABLE_SWORD, MINECRAFT_SWORDS);
+        addItemsToTag(MINECRAFT_ENCHANTABLE_WEAPON, CAItems.THE_SPEAR, CAItems.SWORD_OCEAN_CRYSTAL, CAItems.CHITIN_SWORD, CAItems.COMPLEX_CHITIN_SWORD, CAItems.LEGENDARY_SPEAR, CAItems.WAVECLEAVER);
+        addItemsToTag(MINECRAFT_FENCES, CAItems.TRAIL_PLANKS_FENCE);
+        addItemsToTag(MINECRAFT_FLOWERS, CAItems.TRAIL_MUSHROOM);
+        addItemsToTag(MINECRAFT_FOX_FOOD, CAItems.FLUORE_BERRIES, CAItems.RADIANT_BERRIES, CAItems.CANNED_CHERRY);
+        addItemsToTag(MINECRAFT_FRUITS, Items.APPLE, Items.GOLDEN_APPLE, Items.ENCHANTED_GOLDEN_APPLE, Items.MELON_SLICE, Items.SWEET_BERRIES, Items.GLOW_BERRIES, Items.GLISTERING_MELON_SLICE);
+        addItemsToTag(MINECRAFT_HOES, CAItems.TRAILRITE_HOE, CAItems.COMPLEX_CHITIN_HOE, CAItems.HOE_OCEAN_CRYSTAL, CAItems.CHITIN_HOE, CAItems.PATH_INAUGURATOR);
+        addItemsToTag(MINECRAFT_LOGS, CAItems.TRAIL_LOG, CAItems.STRIPPED_TRAIL_LOG, CAItems.NETHERSEA_WOOD, CAItems.STRIPPED_NETHERSEA_WOOD);
+        addItemsToTag(MINECRAFT_MEAT, Items.COOKED_PORKCHOP, Items.COOKED_BEEF, Items.COOKED_CHICKEN, Items.COOKED_RABBIT, Items.COOKED_MUTTON, Items.COD, Items.SALMON, Items.TROPICAL_FISH, Items.PUFFERFISH, Items.COOKED_COD, Items.COOKED_SALMON);
+        addItemsToTag(MINECRAFT_MUSIC_DISCS, CAItems.RECORD_ISHARMLA, CAItems.RECORD_DEEPNESS, CAItems.RECORD_UNDERTIDES, CAItems.RECORD_PATH_AHEAD, CAItems.RECORD_ENDOSPORE, CAItems.RECORD_WHISPER, CAItems.BLOODY_RECORD, CAItems.SCORE);
+        addItemsToTag(MINECRAFT_PICKAXES, CAItems.TRAILRITE_PICKAXE, CAItems.HAND_ANCHOR, CAItems.TRAIL_MOP, CAItems.COMPLEX_CHITIN_PICKAXE, CAItems.PICKAXE_OCEAN_CRYSTAL, CAItems.CHITIN_PICKAXE);
+        addItemsToTag(MINECRAFT_PIGLIN_LOVED, CAItems.TRAILED_GOLDEN_SWORD, CAItems.TRAIL_GOLDEN_APPLE, CAItems.VOYAGE_OF_GOLD);
+        addItemsToTag(MINECRAFT_PLANKS, CAItems.TRAIL_PLANK);
+        addItemsToTag(MINECRAFT_SAL_VIENTO_DECO, CAItems.SALTWIND_SANDSTONE, CAItems.CHISELED_SALTWIND_SANDSTONE, CAItems.SMOOTH_SALTWIND_SANDATONE, CAItems.SALTWIND_COLUMN, CAItems.SALTWIND_BRICK, CAItems.SALTWIND_SMOOTH_BRICK);
+        addItemsToTag(MINECRAFT_SHOVELS, CAItems.TRAILRITE_SHOVEL, CAItems.COMPLEX_CHITIN_SHOVEL, CAItems.SHOVEL_OCEAN_CRYSTAL, CAItems.CHITIN_SHOVEL);
+        addItemsToTag(MINECRAFT_SMALL_FLOWERS, CAItems.TRAIL_MUSHROOM);
+        addItemsToTag(MINECRAFT_STONE_BUTTONS, CAItems.TRAIL_BUTTON);
+        addItemsToTag(MINECRAFT_SWORDS, CAItems.SKADI_SWORD, CAItems.AEGIR_SWORD, CAItems.BROKEN_SEA, CAItems.AEGIR_LANCET, CAItems.APOCATA_SWORD, CAItems.LANC_XIAO, CAItems.LONG_SWORD_OF_KNIGHT_CORPUS, CAItems.IRON_SWORD_OF_KNIGHT_CORPUS, CAItems.TRAILRITE_SWORD, CAItems.TRAILED_GOLDEN_SWORD, CAItems.TRAILED_NETHERITE_SWORD, CAItems.TRAILED_DIAMOND_SWORD, CAItems.TRAILED_IRON_SWORD, CAItems.TRAILED_STONE_SWORD, CAItems.TRAILED_WOODEN_SWORD, CAItems.COMPLEX_CHITIN_SWORD, CAItems.CHITIN_SWORD, CAItems.SWORD_OCEAN_CRYSTAL, CAItems.THE_SPEAR, CAItems.LEGENDARY_SPEAR);
+        addItemsToTag(MINECRAFT_TOOLS, CAItems.THE_SPEAR, CAItems.SWORD_OCEAN_CRYSTAL, CAItems.CHITIN_PICKAXE, CAItems.PICKAXE_OCEAN_CRYSTAL, CAItems.COMPLEX_CHITIN_PICKAXE, CAItems.TRAILRITE_PICKAXE, CAItems.CHITIN_AXE, CAItems.AXE_OCEAN_CRYSTAL, CAItems.COMPLEX_CHITIN_AXE, CAItems.TRAILRITE_AXE, CAItems.CHITIN_SWORD, CAItems.COMPLEX_CHITIN_SWORD, CAItems.TRAILED_WOODEN_SWORD, CAItems.TRAILED_STONE_SWORD, CAItems.TRAILED_IRON_SWORD, CAItems.TRAILED_DIAMOND_SWORD, CAItems.TRAILED_NETHERITE_SWORD, CAItems.TRAILED_GOLDEN_SWORD, CAItems.TRAILRITE_SWORD, CAItems.IRON_SWORD_OF_KNIGHT_CORPUS, CAItems.LONG_SWORD_OF_KNIGHT_CORPUS, CAItems.APOCATA_SWORD, CAItems.AEGIR_SWORD, CAItems.SKADI_SWORD, CAItems.CHITIN_SHOVEL, CAItems.SHOVEL_OCEAN_CRYSTAL, CAItems.COMPLEX_CHITIN_SHOVEL, CAItems.TRAILRITE_SHOVEL, CAItems.CHITIN_HOE, CAItems.HOE_OCEAN_CRYSTAL, CAItems.COMPLEX_CHITIN_HOE, CAItems.TRAILRITE_HOE, CAItems.TIDE_WAND, CAItems.TIDELINKED_WAND, CAItems.HIGHMORE_SCYTHE, CAItems.CIRCULAR_SAW, CAItems.AEGIR_LANCET, CAItems.UNAMBIGUOUS_DIRECTION, CAItems.BROKEN_SEA, CAItems.WAVECLEAVER, CAItems.UNFINISHED_BEAUTY);
+        addItemsToTag(MINECRAFT_TRIM_TEMPLATES, CAItems.OCEAN_TRIM_TEMPLATE, CAItems.HUNTER_GENE, CAItems.HUNTER_GENE_SKADI, CAItems.HUNTER_GENE_ULPIANS, CAItems.HUNTER_GENE_GLADIIA, CAItems.HUNTER_GENE_SPECTER, CAItems.TIDE_HUNET_TEMPLATE, CAItems.FLAMARINE_UPGRADE_TEMPLATE);
+        addItemsToTag(MINECRAFT_TRIMMABLE_ARMOR, CAItems.CHITIN_ARMOR_HELMET, CAItems.CHITIN_ARMOR_CHESTPLATE, CAItems.CHITIN_ARMOR_LEGGINGS, CAItems.CHITIN_ARMOR_BOOTS);
+        addItemsToTag(MINECRAFT_TULIP, Items.RED_TULIP, Items.ORANGE_TULIP, Items.WHITE_TULIP, Items.PINK_TULIP);
+        addItemsToTag(MINECRAFT_WOODEN_BUTTONS, CAItems.TRAIL_PLANK_BUTTON);
+        addItemsToTag(MINECRAFT_WOODEN_FENCES, CAItems.TRAIL_PLANKS_FENCE);
+        addItemsToTag(MINECRAFT_WOODEN_PRESSURE_PLATES, CAItems.TRAIL_PLANK_PRESSURE_PLATE);
+        addItemsToTag(MINECRAFT_WOODEN_SLABS, CAItems.TRAIL_PLANK_SLAB);
+        addItemsToTag(MINECRAFT_WOODEN_STAIRS, CAItems.TRAIL_PLANK_STAIR);
+    }
+    private static TagKey<Item> caItemTag(String path) {
+        return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, path));
+    }
+
+    private static TagKey<Item> forgeItemTag(String path) {
+        return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("forge", path));
+    }
+
+    private static TagKey<Item> minecraftItemTag(String path) {
+        return TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace(path));
+    }
+
+    /**
+     * 向目标标签加入物品字段
+     *
+     * @param targetTag 目标标签
+     * @param items     要加入的物品字段
+     */
+    private void addItemsToTag(TagKey<Item> targetTag, Object... items) {
+        var appender = tag(targetTag);
+        for (var item : items) {
+            appender.add(itemKey(item));
+        }
+    }
+
+    private static ResourceKey<Item> itemKey(Object item) {
+        if (item instanceof RegistryObject<?> registryObject) {
+            return ResourceKey.create(Registries.ITEM, Objects.requireNonNull(registryObject.getId()));
+        }
+        if (item instanceof Item itemValue) {
+            return ResourceKey.create(Registries.ITEM, Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(itemValue)));
+        }
+        throw new IllegalArgumentException("Unsupported item field: " + item);
     }
 }

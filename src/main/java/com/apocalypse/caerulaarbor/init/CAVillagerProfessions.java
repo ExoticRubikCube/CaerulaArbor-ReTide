@@ -6,6 +6,9 @@ package com.apocalypse.caerulaarbor.init;
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
@@ -29,6 +32,7 @@ import java.util.function.Supplier;
 public class CAVillagerProfessions {
 	private static final Map<String, ProfessionPoiType> POI_TYPES = new HashMap<>();
 	public static final DeferredRegister<VillagerProfession> PROFESSIONS = DeferredRegister.create(ForgeRegistries.VILLAGER_PROFESSIONS, CaerulaArborMod.MODID);
+	public static final ResourceKey<PoiType> CANNOT_GOODENOUGH_POI = ResourceKey.create(Registries.POINT_OF_INTEREST_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "cannot_goodenough"));
 	public static final RegistryObject<VillagerProfession> CANNOT_GOODENOUGH = registerProfession("cannot_goodenough", CABlocks.BLOCK_RECORDER,
 			() -> SoundEvents.VILLAGER_WORK_CLERIC);
 

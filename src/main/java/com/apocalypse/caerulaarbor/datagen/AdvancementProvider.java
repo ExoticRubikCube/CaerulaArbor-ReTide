@@ -24,7 +24,7 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
- * 生成本模组的进度数据
+ * 生成进度数据
  */
 @SuppressWarnings("SameParameterValue")
 public class AdvancementProvider implements ForgeAdvancementProvider.AdvancementGenerator {

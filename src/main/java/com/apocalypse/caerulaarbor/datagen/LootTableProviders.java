@@ -41,14 +41,14 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 
 /**
- * 战利品表 datagen 聚合器，集中创建各类 LootTableSubProvider。
+ * 战利品表 datagen 聚合器，集中创建各类 LootTableSubProvider
  */
 public final class LootTableProviders {
     private LootTableProviders() {
     }
 
     /**
-     * 创建完整的战利品表 provider。
+     * 创建完整的战利品表 provider
      *
      * @param output datagen 输出位置
      * @return 已注册所有子 provider 的战利品表 provider
@@ -213,7 +213,7 @@ public final class LootTableProviders {
     }
 
     /**
-     * 将表定义列表写出为实际 loot table。
+     * 将表定义列表写出为实际 loot table
      */
     private abstract static class GeneratedLootTableProvider implements LootTableSubProvider {
         private final List<TableDef> tables;
@@ -223,7 +223,7 @@ public final class LootTableProviders {
         }
 
         /**
-         * 写出当前子 provider 持有的所有表定义。
+         * 写出当前子 provider 持有的所有表定义
          *
          * @param output 战利品表输出回调
          */
@@ -236,11 +236,11 @@ public final class LootTableProviders {
     }
 
     /**
-     * 生成方块战利品表。
+     * 生成方块战利品表
      */
     public static final class BlockTables extends GeneratedLootTableProvider {
         /**
-         * 创建方块战利品表子 provider。
+         * 创建方块战利品表子 provider
          */
         public BlockTables() {
             super(List.of(
@@ -1109,11 +1109,11 @@ public final class LootTableProviders {
     }
 
     /**
-     * 生成箱子战利品表。
+     * 生成箱子战利品表
      */
     public static final class ChestTables extends GeneratedLootTableProvider {
         /**
-         * 创建箱子战利品表子 provider。
+         * 创建箱子战利品表子 provider
          */
         public ChestTables() {
             super(List.of(
@@ -2237,11 +2237,11 @@ public final class LootTableProviders {
     }
 
     /**
-     * 生成实体战利品表。
+     * 生成实体战利品表
      */
     public static final class EntityTables extends GeneratedLootTableProvider {
         /**
-         * 创建实体战利品表子 provider。
+         * 创建实体战利品表子 provider
          */
         public EntityTables() {
             super(List.of(
@@ -3052,11 +3052,11 @@ public final class LootTableProviders {
     }
 
     /**
-     * 生成 gameplay 战利品表。
+     * 生成 gameplay 战利品表
      */
     public static final class GameplayTables extends GeneratedLootTableProvider {
         /**
-         * 创建 gameplay 战利品表子 provider。
+         * 创建 gameplay 战利品表子 provider
          */
         public GameplayTables() {
             super(List.of(

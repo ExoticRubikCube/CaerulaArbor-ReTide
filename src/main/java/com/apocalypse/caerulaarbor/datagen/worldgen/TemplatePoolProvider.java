@@ -28,7 +28,7 @@ public final class TemplatePoolProvider {
     }
 
     /**
-     * 注册本模组结构使用的模板池
+     * 注册结构使用的模板池
      *
      * @param context Mojang 提供的注册表 bootstrap 上下文
      */

@@ -1,13 +1,18 @@
 package com.apocalypse.caerulaarbor.datagen.tags;
 
+import com.apocalypse.caerulaarbor.init.CAPaintings;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.tags.PaintingVariantTags;
 import net.minecraft.world.entity.decoration.PaintingVariant;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -21,6 +26,14 @@ public class PaintingVariantTagsProvider extends TagsProvider.RegistryTagsProvid
 
     @Override
     protected void addTags(HolderLookup.@NotNull Provider provider) {
-        addMinecraftValues("placeable", "caerula_arbor:presious_days", "caerula_arbor:age_of_silence", "caerula_arbor:price_of_piece", "caerula_arbor:caerula_stella");
+        var placeable = tag(PaintingVariantTags.PLACEABLE);
+        placeable.add(paintingVariantKey(CAPaintings.PRESIOUS_DAYS));
+        placeable.add(paintingVariantKey(CAPaintings.AGE_OF_SILENCE));
+        placeable.add(paintingVariantKey(CAPaintings.PRICE_OF_PIECE));
+        placeable.add(paintingVariantKey(CAPaintings.CAERULA_STELLA));
+    }
+
+    private static ResourceKey<PaintingVariant> paintingVariantKey(RegistryObject<PaintingVariant> variant) {
+        return ResourceKey.create(Registries.PAINTING_VARIANT, Objects.requireNonNull(variant.getId()));
     }
 }

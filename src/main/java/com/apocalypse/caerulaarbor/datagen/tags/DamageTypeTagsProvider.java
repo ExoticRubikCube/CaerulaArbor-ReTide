@@ -19,12 +19,35 @@ import java.util.concurrent.CompletableFuture;
 
 
 /**
- * 生成伤害类型标签数据，覆盖本模组、minecraft、forge 和兼容模组命名空间
+ * 生成伤害类型标签数据，覆盖 caerula_arbor、minecraft、forge 和兼容模组命名空间
  */
 public class DamageTypeTagsProvider extends TagsProvider<DamageType> {
+    private static final TagKey<DamageType> MINECRAFT_ALWAYS_HURTS_ENDER_DRAGONS = minecraftTag("always_hurts_ender_dragons");
+    private static final TagKey<DamageType> MINECRAFT_BYPASSES_ARMOR = minecraftTag("bypasses_armor");
+    private static final TagKey<DamageType> MINECRAFT_BYPASSES_COOLDOWN = minecraftTag("bypasses_cooldown");
+    private static final TagKey<DamageType> MINECRAFT_BYPASSES_EFFECTS = minecraftTag("bypasses_effects");
+    private static final TagKey<DamageType> MINECRAFT_BYPASSES_ENCHANTMENTS = minecraftTag("bypasses_enchantments");
+    private static final TagKey<DamageType> MINECRAFT_BYPASSES_INVULNERABILITY = minecraftTag("bypasses_invulnerability");
+    private static final TagKey<DamageType> MINECRAFT_BYPASSES_SHIELD = minecraftTag("bypasses_shield");
+    private static final TagKey<DamageType> MINECRAFT_IS_EXPLOSION = minecraftTag("is_explosion");
+    private static final TagKey<DamageType> MINECRAFT_IS_PROJECTILE = minecraftTag("is_projectile");
+    private static final TagKey<DamageType> CATACLYSM_BYPASSES_HURT_TIME = TagKey.create(
+            Registries.DAMAGE_TYPE,
+            ResourceLocation.fromNamespaceAndPath("cataclysm", "bypasses_hurt_time")
+    );
 
     protected DamageTypeTagsProvider(PackOutput pOutput, CompletableFuture<HolderLookup.Provider> future, @Nullable ExistingFileHelper existingFileHelper) {
         super(pOutput, Registries.DAMAGE_TYPE, future, CaerulaArborMod.MODID, existingFileHelper);
+    }
+
+    /**
+     * 创建 minecraft 命名空间的 damage_type 标签 key
+     *
+     * @param path 标签路径
+     * @return 标签 key
+     */
+    private static TagKey<DamageType> minecraftTag(String path) {
+        return TagKey.create(Registries.DAMAGE_TYPE, ResourceLocation.withDefaultNamespace(path));
     }
 
     @Override
@@ -225,56 +248,160 @@ public class DamageTypeTagsProvider extends TagsProvider<DamageType> {
                 DamageTypes.GUNMU_DAMAGE
         );
 
-        addValuesToTag("minecraft", "always_hurts_ender_dragons", "caerula_arbor:hand_firework", "caerula_arbor:highmore_attack", "caerula_arbor:hunter_attack", "caerula_arbor:izumik_normal_attack", "caerula_arbor:izumik_skill", "caerula_arbor:ocean_magic", "caerula_arbor:repeller_attack", "caerula_arbor:sanity_break", "caerula_arbor:wipe_magic");
-        addValuesToTag("minecraft", "bypasses_armor", "caerula_arbor:sanity_break", "caerula_arbor:oceanize_damage", "caerula_arbor:oceankiller_damage", "caerula_arbor:ocean_magic", "caerula_arbor:wipe_magic", "caerula_arbor:trail_damage", "caerula_arbor:izumik_skill", "caerula_arbor:izumik_normal_attack", "caerula_arbor:inv_killer", "caerula_arbor:hand_of_choker", "caerula_arbor:gunmu_damage", "caerula_arbor:warden_sonic", "caerula_arbor:super_cat_attack", "caerula_arbor:ocean_wither", "caerula_arbor:immortal_punishment", "caerula_arbor:isharmla_cursed", "caerula_arbor:isharmla_attack");
-        addValuesToTag("minecraft", "bypasses_cooldown", "caerula_arbor:oceankiller_damage", "caerula_arbor:repeller_attack", "caerula_arbor:sanity_break", "caerula_arbor:hand_spike", "caerula_arbor:axe_cleave", "caerula_arbor:ocean_magic", "caerula_arbor:cleaver_mix", "caerula_arbor:highmore_attack", "caerula_arbor:hand_firework", "caerula_arbor:hunter_attack", "caerula_arbor:generic_seaborn_attack", "caerula_arbor:brand_bomb", "caerula_arbor:saw_cut", "caerula_arbor:izumik_normal_attack", "caerula_arbor:izumik_skill", "caerula_arbor:ocean_counter", "caerula_arbor:generic_warrior_attack", "caerula_arbor:inv_killer", "caerula_arbor:hand_of_choker", "caerula_arbor:gunmu_damage", "caerula_arbor:warden_attack", "caerula_arbor:warden_sonic", "caerula_arbor:super_cat_attack", "caerula_arbor:golem_attack", "caerula_arbor:ocean_wither", "caerula_arbor:last_knight_attack", "caerula_arbor:puncture_attack", "caerula_arbor:endspeaker_attack", "caerula_arbor:immortal_punishment", "caerula_arbor:isharmla_cursed", "caerula_arbor:isharmla_attack", "caerula_arbor:wipe_magic");
-        addValuesToTag("minecraft", "bypasses_effects", "caerula_arbor:sanity_break", "caerula_arbor:inv_killer", "caerula_arbor:gunmu_damage", "caerula_arbor:hand_of_choker", "caerula_arbor:immortal_punishment", "caerula_arbor:isharmla_cursed", "caerula_arbor:isharmla_attack", "caerula_arbor:oceankiller_damage");
-        addValuesToTag("minecraft", "bypasses_enchantments", "caerula_arbor:sanity_break", "caerula_arbor:inv_killer", "caerula_arbor:gunmu_damage", "caerula_arbor:hand_of_choker", "caerula_arbor:immortal_punishment", "caerula_arbor:isharmla_cursed", "caerula_arbor:isharmla_attack");
-        addValuesToTag("minecraft", "bypasses_invulnerability", "caerula_arbor:inv_killer", "caerula_arbor:sanity_break", "caerula_arbor:hand_of_choker", "caerula_arbor:immortal_punishment", "caerula_arbor:isharmla_cursed");
-        addValuesToTag("minecraft", "bypasses_shield", "caerula_arbor:sanity_break", "caerula_arbor:izumik_skill", "caerula_arbor:inv_killer", "caerula_arbor:hand_of_choker", "caerula_arbor:gunmu_damage", "caerula_arbor:warden_attack", "caerula_arbor:warden_sonic", "caerula_arbor:ocean_wither", "caerula_arbor:immortal_punishment", "caerula_arbor:isharmla_cursed", "caerula_arbor:isharmla_attack");
-        addValuesToTag("minecraft", "is_explosion", "caerula_arbor:brand_bomb");
-        addValuesToTag("minecraft", "is_projectile", "caerula_arbor:highmore_attack", "caerula_arbor:hand_firework", "caerula_arbor:puncture_attack");
-        addValuesToTag("cataclysm", "bypasses_hurt_time", "caerula_arbor:cleaver_mix", "caerula_arbor:hand_firework", "caerula_arbor:hand_spike", "caerula_arbor:highmore_attack", "caerula_arbor:hunter_attack", "caerula_arbor:izumik_normal_attack", "caerula_arbor:izumik_skill", "caerula_arbor:ocean_magic", "caerula_arbor:repeller_attack", "caerula_arbor:sanity_break", "caerula_arbor:wipe_magic", "caerula_arbor:inv_killer", "caerula_arbor:gunmu_damage", "caerula_arbor:warden_sonic", "caerula_arbor:super_cat_attack", "caerula_arbor:hand_of_choker", "caerula_arbor:endspeaker_attack", "caerula_arbor:isharmla_cursed", "caerula_arbor:isharmla_attack");
+        addDamagesToTag(MINECRAFT_ALWAYS_HURTS_ENDER_DRAGONS,
+                DamageTypes.HAND_FIREWORK,
+                DamageTypes.HIGHMORE_ATTACK,
+                DamageTypes.HUNTER_ATTACK,
+                DamageTypes.IZUMIK_NORMAL_ATTACK,
+                DamageTypes.IZUMIK_SKILL,
+                DamageTypes.OCEAN_MAGIC,
+                DamageTypes.REPELLER_ATTACK,
+                DamageTypes.SANITY_BREAK,
+                DamageTypes.WIPE_MAGIC
+        );
+        addDamagesToTag(MINECRAFT_BYPASSES_ARMOR,
+                DamageTypes.SANITY_BREAK,
+                DamageTypes.OCEANIZE_DAMAGE,
+                DamageTypes.OCEANKILLER_DAMAGE,
+                DamageTypes.OCEAN_MAGIC,
+                DamageTypes.WIPE_MAGIC,
+                DamageTypes.TRAIL_DAMAGE,
+                DamageTypes.IZUMIK_SKILL,
+                DamageTypes.IZUMIK_NORMAL_ATTACK,
+                DamageTypes.INV_KILLER,
+                DamageTypes.HAND_OF_CHOKER,
+                DamageTypes.GUNMU_DAMAGE,
+                DamageTypes.WARDEN_SONIC,
+                DamageTypes.SUPER_CAT_ATTACK,
+                DamageTypes.OCEAN_WITHER,
+                DamageTypes.IMMORTAL_PUNISHMENT,
+                DamageTypes.ISHARMLA_CURSED,
+                DamageTypes.ISHARMLA_ATTACK
+        );
+        addDamagesToTag(MINECRAFT_BYPASSES_COOLDOWN,
+                DamageTypes.OCEANKILLER_DAMAGE,
+                DamageTypes.REPELLER_ATTACK,
+                DamageTypes.SANITY_BREAK,
+                DamageTypes.HAND_SPIKE,
+                DamageTypes.AXE_CLEAVE,
+                DamageTypes.OCEAN_MAGIC,
+                DamageTypes.CLEAVER_MIX,
+                DamageTypes.HIGHMORE_ATTACK,
+                DamageTypes.HAND_FIREWORK,
+                DamageTypes.HUNTER_ATTACK,
+                DamageTypes.GENERIC_SEABORN_ATTACK,
+                DamageTypes.BRAND_BOMB,
+                DamageTypes.SAW_CUT,
+                DamageTypes.IZUMIK_NORMAL_ATTACK,
+                DamageTypes.IZUMIK_SKILL,
+                DamageTypes.OCEAN_COUNTER,
+                DamageTypes.GENERIC_WARRIOR_ATTACK,
+                DamageTypes.INV_KILLER,
+                DamageTypes.HAND_OF_CHOKER,
+                DamageTypes.GUNMU_DAMAGE,
+                DamageTypes.WARDEN_ATTACK,
+                DamageTypes.WARDEN_SONIC,
+                DamageTypes.SUPER_CAT_ATTACK,
+                DamageTypes.GOLEM_ATTACK,
+                DamageTypes.OCEAN_WITHER,
+                DamageTypes.LAST_KNIGHT_ATTACK,
+                DamageTypes.PUNCTURE_ATTACK,
+                DamageTypes.ENDSPEAKER_ATTACK,
+                DamageTypes.IMMORTAL_PUNISHMENT,
+                DamageTypes.ISHARMLA_CURSED,
+                DamageTypes.ISHARMLA_ATTACK,
+                DamageTypes.WIPE_MAGIC
+        );
+        addDamagesToTag(MINECRAFT_BYPASSES_EFFECTS,
+                DamageTypes.SANITY_BREAK,
+                DamageTypes.INV_KILLER,
+                DamageTypes.GUNMU_DAMAGE,
+                DamageTypes.HAND_OF_CHOKER,
+                DamageTypes.IMMORTAL_PUNISHMENT,
+                DamageTypes.ISHARMLA_CURSED,
+                DamageTypes.ISHARMLA_ATTACK,
+                DamageTypes.OCEANKILLER_DAMAGE
+        );
+        addDamagesToTag(MINECRAFT_BYPASSES_ENCHANTMENTS,
+                DamageTypes.SANITY_BREAK,
+                DamageTypes.INV_KILLER,
+                DamageTypes.GUNMU_DAMAGE,
+                DamageTypes.HAND_OF_CHOKER,
+                DamageTypes.IMMORTAL_PUNISHMENT,
+                DamageTypes.ISHARMLA_CURSED,
+                DamageTypes.ISHARMLA_ATTACK
+        );
+        addDamagesToTag(MINECRAFT_BYPASSES_INVULNERABILITY,
+                DamageTypes.INV_KILLER,
+                DamageTypes.SANITY_BREAK,
+                DamageTypes.HAND_OF_CHOKER,
+                DamageTypes.IMMORTAL_PUNISHMENT,
+                DamageTypes.ISHARMLA_CURSED
+        );
+        addDamagesToTag(MINECRAFT_BYPASSES_SHIELD,
+                DamageTypes.SANITY_BREAK,
+                DamageTypes.IZUMIK_SKILL,
+                DamageTypes.INV_KILLER,
+                DamageTypes.HAND_OF_CHOKER,
+                DamageTypes.GUNMU_DAMAGE,
+                DamageTypes.WARDEN_ATTACK,
+                DamageTypes.WARDEN_SONIC,
+                DamageTypes.OCEAN_WITHER,
+                DamageTypes.IMMORTAL_PUNISHMENT,
+                DamageTypes.ISHARMLA_CURSED,
+                DamageTypes.ISHARMLA_ATTACK
+        );
+        addDamagesToTag(MINECRAFT_IS_EXPLOSION,
+                DamageTypes.BRAND_BOMB
+        );
+        addDamagesToTag(MINECRAFT_IS_PROJECTILE,
+                DamageTypes.HIGHMORE_ATTACK,
+                DamageTypes.HAND_FIREWORK,
+                DamageTypes.PUNCTURE_ATTACK
+        );
+        addDamagesToTag(CATACLYSM_BYPASSES_HURT_TIME,
+                DamageTypes.CLEAVER_MIX,
+                DamageTypes.HAND_FIREWORK,
+                DamageTypes.HAND_SPIKE,
+                DamageTypes.HIGHMORE_ATTACK,
+                DamageTypes.HUNTER_ATTACK,
+                DamageTypes.IZUMIK_NORMAL_ATTACK,
+                DamageTypes.IZUMIK_SKILL,
+                DamageTypes.OCEAN_MAGIC,
+                DamageTypes.REPELLER_ATTACK,
+                DamageTypes.SANITY_BREAK,
+                DamageTypes.WIPE_MAGIC,
+                DamageTypes.INV_KILLER,
+                DamageTypes.GUNMU_DAMAGE,
+                DamageTypes.WARDEN_SONIC,
+                DamageTypes.SUPER_CAT_ATTACK,
+                DamageTypes.HAND_OF_CHOKER,
+                DamageTypes.ENDSPEAKER_ATTACK,
+                DamageTypes.ISHARMLA_CURSED,
+                DamageTypes.ISHARMLA_ATTACK
+        );
     }
 
-    private void addValuesToTag(String namespace, String tagPath, String... values) {
-        var targetTag = TagKey.create(Registries.DAMAGE_TYPE, location(namespace, tagPath));
-        for (var value : values) {
-            if (value.startsWith("#")) {
-                tag(targetTag).addTag(TagKey.create(Registries.DAMAGE_TYPE, entryLocation(value.substring(1))));
-            } else {
-                tag(targetTag).add(ResourceKey.create(Registries.DAMAGE_TYPE, entryLocation(value)));
-            }
-        }
-    }
-
-    private static ResourceLocation entryLocation(String id) {
-        int separator = id.indexOf(':');
-        if (separator >= 0) {
-            String namespace = id.substring(0, separator);
-            String path = id.substring(separator + 1);
-            return location(namespace, path);
-        }
-        return ResourceLocation.withDefaultNamespace(id);
-    }
-
-    private static ResourceLocation location(String namespace, String path) {
-        if ("minecraft".equals(namespace)) {
-            return ResourceLocation.withDefaultNamespace(path);
-        }
-        return ResourceLocation.fromNamespaceAndPath(namespace, path);
-    }
-
+    /**
+     * 向目标标签加入子标签引用
+     *
+     * @param targetTag 目标标签
+     * @param tags      要加入的子标签
+     */
     @SafeVarargs
-    @SuppressWarnings("SameParameterValue")
     private void addTagsToTag(TagKey<DamageType> targetTag, TagKey<DamageType>... tags) {
         for (TagKey<DamageType> tag : tags) {
             tag(targetTag).addTag(tag);
         }
     }
 
+    /**
+     * 向目标标签加入伤害类型
+     *
+     * @param tag   目标标签
+     * @param types 要加入的伤害类型 key
+     */
     @SafeVarargs
-    @SuppressWarnings("SameParameterValue")
     private void addDamagesToTag(TagKey<DamageType> tag, ResourceKey<DamageType>... types) {
         for (ResourceKey<DamageType> type : types) {
             tag(tag).add(type);

@@ -36,6 +36,8 @@ import java.util.List;
 
 @Mod.EventBusSubscriber
 public class CABiomes {
+	public static final ResourceKey<Biome> BRANDED_LAND = ResourceKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "branded_land"));
+
 	@SubscribeEvent
 	public static void onServerAboutToStart(ServerAboutToStartEvent event) {
 		MinecraftServer server = event.getServer();
@@ -50,9 +52,9 @@ public class CABiomes {
 				if (chunkGenerator.getBiomeSource() instanceof MultiNoiseBiomeSource noiseSource) {
 					List<Pair<Climate.ParameterPoint, Holder<Biome>>> parameters = new ArrayList<>(noiseSource.parameters().values());
 					addParameterPoint(parameters, new Pair<>(new Climate.ParameterPoint(Climate.Parameter.span(0.25f, 0.55f), Climate.Parameter.span(0.1f, 0.45f), Climate.Parameter.span(-0.3f, 0.2f), Climate.Parameter.span(-0.75f, 0.5f),
-							Climate.Parameter.point(0.0f), Climate.Parameter.span(-0.4f, 0.4f), 0), biomeRegistry.getHolderOrThrow(ResourceKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "branded_land")))));
+							Climate.Parameter.point(0.0f), Climate.Parameter.span(-0.4f, 0.4f), 0), biomeRegistry.getHolderOrThrow(BRANDED_LAND)));
 					addParameterPoint(parameters, new Pair<>(new Climate.ParameterPoint(Climate.Parameter.span(0.25f, 0.55f), Climate.Parameter.span(0.1f, 0.45f), Climate.Parameter.span(-0.3f, 0.2f), Climate.Parameter.span(-0.75f, 0.5f),
-							Climate.Parameter.point(1.0f), Climate.Parameter.span(-0.4f, 0.4f), 0), biomeRegistry.getHolderOrThrow(ResourceKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "branded_land")))));
+							Climate.Parameter.point(1.0f), Climate.Parameter.span(-0.4f, 0.4f), 0), biomeRegistry.getHolderOrThrow(BRANDED_LAND)));
 					chunkGenerator.biomeSource = MultiNoiseBiomeSource.createFromList(new Climate.ParameterList<>(parameters));
 					chunkGenerator.featuresPerStep = Suppliers
 							.memoize(() -> FeatureSorter.buildFeaturesPerStep(List.copyOf(chunkGenerator.biomeSource.possibleBiomes()), biome -> chunkGenerator.generationSettingsGetter.apply(biome).features(), true));
@@ -63,7 +65,7 @@ public class CABiomes {
 					SurfaceRules.RuleSource currentRuleSource = noiseGeneratorSettings.surfaceRule();
 					if (currentRuleSource instanceof SurfaceRules.SequenceRuleSource sequenceRuleSource) {
 						List<SurfaceRules.RuleSource> surfaceRules = new ArrayList<>(sequenceRuleSource.sequence());
-						addSurfaceRule(surfaceRules, 1, preliminarySurfaceRule(ResourceKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "branded_land")), Blocks.GRASS_BLOCK.defaultBlockState(), Blocks.DIRT.defaultBlockState(),
+						addSurfaceRule(surfaceRules, 1, preliminarySurfaceRule(BRANDED_LAND, Blocks.GRASS_BLOCK.defaultBlockState(), Blocks.DIRT.defaultBlockState(),
 								CABlocks.SALTSAND.get().defaultBlockState()));
 						NoiseGeneratorSettings moddedNoiseGeneratorSettings = new NoiseGeneratorSettings(noiseGeneratorSettings.noiseSettings(), noiseGeneratorSettings.defaultBlock(), noiseGeneratorSettings.defaultFluid(),
 								noiseGeneratorSettings.noiseRouter(), SurfaceRules.sequence(surfaceRules.toArray(SurfaceRules.RuleSource[]::new)), noiseGeneratorSettings.spawnTarget(), noiseGeneratorSettings.seaLevel(),

@@ -12,12 +12,12 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * 内置注册表数据的唯一 DatapackBuiltinEntriesProvider。
- * <p>DamageType 和 worldgen 都应挂到同一个 BUILDER，避免重复 provider。</p>
+ * 内置注册表数据的唯一 DatapackBuiltinEntriesProvider
+ * <p>DamageType 和 worldgen 都应挂到同一个 BUILDER，避免重复 provider</p>
  */
 public class RegistryDataProvider extends DatapackBuiltinEntriesProvider {
     /**
-     * 共享注册表构建器，用于集中接入所有内置注册表 bootstrap。
+     * 共享注册表构建器，用于集中接入所有内置注册表 bootstrap
      */
     public static final RegistrySetBuilder BUILDER = new RegistrySetBuilder();
 
@@ -27,7 +27,7 @@ public class RegistryDataProvider extends DatapackBuiltinEntriesProvider {
     }
 
     /**
-     * 创建内置注册表数据 provider。
+     * 创建内置注册表数据 provider
      *
      * @param output   datagen 输出位置
      * @param provider 上游注册表查询 provider
