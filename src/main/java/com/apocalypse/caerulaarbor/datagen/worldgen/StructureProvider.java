@@ -1,11 +1,13 @@
 package com.apocalypse.caerulaarbor.datagen.worldgen;
 
-import net.minecraft.core.Holder;
+import com.apocalypse.caerulaarbor.init.CABiomes;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstapContext;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraft.world.level.levelgen.VerticalAnchor;
 import net.minecraft.world.level.levelgen.heightproviders.ConstantHeight;
@@ -22,8 +24,44 @@ import java.util.Optional;
 
 /**
  * 生成 structure 注册表数据
+ *
+ * <p>新增 structure 时，在 {@link #bootstrap(BootstapContext)} 中创建 {@link JigsawStructure}，
+ * 用 {@code settings(...)} 指定可生成 biome、生成阶段和地形调整，
+ * 再绑定 template pool、起始高度和搜索深度
+ * <p>示例：
+ * <pre>{@code
+ * public static void bootstrap(BootstapContext<Structure> context) {
+ *     // 查询 biome 注册表，用于 settings(...) 解析结构可生成 biome
+ *     HolderGetter<Biome> biomes = context.lookup(Registries.BIOME);
+ *     // 查询 template pool 注册表，用于 JigsawStructure 选择起始模板池
+ *     HolderGetter<StructureTemplatePool> pools = context.lookup(Registries.TEMPLATE_POOL);
+ *
+ *     // 调用 register(...) 写入 structure，并创建 JigsawStructure 定义
+ *     register(context, WorldgenKeys.Structures.ABYSSAL_LAB, new JigsawStructure(
+ *             // 用 settings(...) 设置可生成 biome、生成阶段和地形调整
+ *             settings(biomes, GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.BEARD_THIN, Biomes.PLAINS, CABiomes.BRANDED_LAND),
+ *             // 直接引用 template pool key 查找起始模板池
+ *             pools.getOrThrow(WorldgenKeys.TemplatePools.ABYSSAL_LAB),
+ *             // 不指定起始 jigsaw 名称
+ *             Optional.empty(),
+ *             // 设置 jigsaw 递归深度
+ *             1,
+ *             // 设置结构起始高度
+ *             ConstantHeight.of(VerticalAnchor.absolute(0)),
+ *             // 不使用扩大包围盒适配地形
+ *             false,
+ *             // 不指定最大距离投影
+ *             Optional.empty(),
+ *             // 设置最大结构搜索距离
+ *             64
+ *     ));
+ * }
+ * }</pre>
  */
 public final class StructureProvider {
+    /**
+     * 工具类不实例化
+     */
     private StructureProvider() {
     }
 
@@ -35,82 +73,74 @@ public final class StructureProvider {
     public static void bootstrap(BootstapContext<Structure> context) {
         HolderGetter<Biome> biomes = context.lookup(Registries.BIOME);
         HolderGetter<StructureTemplatePool> pools = context.lookup(Registries.TEMPLATE_POOL);
-        register(context, "abyssal_lab", new JigsawStructure(settings(biomes, "strongholds", "none", "snowy_plains", "snowy_taiga"), pools.getOrThrow(WorldgenProvider.key(Registries.TEMPLATE_POOL, "caerula_arbor:abyssal_lab")), Optional.empty(), 1, UniformHeight.of(VerticalAnchor.absolute(-36), VerticalAnchor.absolute(-8)), false, Optional.empty(), 64));
-        register(context, "aegir_lab", new JigsawStructure(settings(biomes, "fluid_springs", "none", "deep_cold_ocean", "deep_frozen_ocean", "deep_lukewarm_ocean", "deep_ocean"), pools.getOrThrow(WorldgenProvider.key(Registries.TEMPLATE_POOL, "caerula_arbor:aegir_lab")), Optional.empty(), 1, UniformHeight.of(VerticalAnchor.absolute(53), VerticalAnchor.absolute(54)), false, Optional.empty(), 64));
-        register(context, "air_base", new JigsawStructure(settings(biomes, "surface_structures", "none", "caerula_arbor:branded_land", "snowy_plains", "stony_shore"), pools.getOrThrow(WorldgenProvider.key(Registries.TEMPLATE_POOL, "caerula_arbor:air_base")), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
-        register(context, "aircraft", new JigsawStructure(settings(biomes, "surface_structures", "bury", "beach", "snowy_beach", "desert"), pools.getOrThrow(WorldgenProvider.key(Registries.TEMPLATE_POOL, "caerula_arbor:aircraft")), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
-        register(context, "anchor_ruin", new JigsawStructure(settings(biomes, "fluid_springs", "beard_thin", "cold_ocean", "deep_cold_ocean", "deep_lukewarm_ocean", "deep_ocean", "lukewarm_ocean", "ocean", "warm_ocean"), pools.getOrThrow(WorldgenProvider.key(Registries.TEMPLATE_POOL, "caerula_arbor:anchor_ruin")), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
-        register(context, "believer_home", new JigsawStructure(settings(biomes, "surface_structures", "beard_thin", "caerula_arbor:branded_land", "beach", "snowy_beach", "stony_shore", "flower_forest", "forest"), pools.getOrThrow(WorldgenProvider.key(Registries.TEMPLATE_POOL, "caerula_arbor:believer_home")), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
-        register(context, "bishop_cave", new JigsawStructure(settings(biomes, "underground_structures", "none", "deep_cold_ocean", "deep_lukewarm_ocean", "deep_ocean"), pools.getOrThrow(WorldgenProvider.key(Registries.TEMPLATE_POOL, "caerula_arbor:bishop_cave")), Optional.empty(), 1, TrapezoidHeight.of(VerticalAnchor.absolute(-32), VerticalAnchor.absolute(-8)), false, Optional.empty(), 64));
-        register(context, "brand_palace", new JigsawStructure(settings(biomes, "surface_structures", "beard_thin", "caerula_arbor:branded_land"), pools.getOrThrow(WorldgenProvider.key(Registries.TEMPLATE_POOL, "caerula_arbor:brand_palace")), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
-        register(context, "brand_portal", new JigsawStructure(settings(biomes, "surface_structures", "none", "caerula_arbor:branded_land"), pools.getOrThrow(WorldgenProvider.key(Registries.TEMPLATE_POOL, "caerula_arbor:brand_portal")), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
-        register(context, "branded_town", new JigsawStructure(settings(biomes, "surface_structures", "beard_thin", "caerula_arbor:branded_land", "birch_forest", "old_growth_birch_forest", "beach", "snowy_beach"), pools.getOrThrow(WorldgenProvider.key(Registries.TEMPLATE_POOL, "caerula_arbor:branded_town")), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
-        register(context, "chest_museum", new JigsawStructure(settings(biomes, "surface_structures", "beard_thin", "dark_forest", "jungle"), pools.getOrThrow(WorldgenProvider.key(Registries.TEMPLATE_POOL, "caerula_arbor:chest_museum")), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
-        register(context, "chitin_factory", new JigsawStructure(settings(biomes, "surface_structures", "beard_thin", "desert"), pools.getOrThrow(WorldgenProvider.key(Registries.TEMPLATE_POOL, "caerula_arbor:chitin_factory")), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
-        register(context, "church", new JigsawStructure(settings(biomes, "strongholds", "bury", "plains", "snowy_plains"), pools.getOrThrow(WorldgenProvider.key(Registries.TEMPLATE_POOL, "caerula_arbor:church")), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
-        register(context, "cloister", new JigsawStructure(settings(biomes, "surface_structures", "beard_thin", "plains", "sunflower_plains", "stony_shore", "meadow"), pools.getOrThrow(WorldgenProvider.key(Registries.TEMPLATE_POOL, "caerula_arbor:cloister")), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
-        register(context, "containment_cave", new JigsawStructure(settings(biomes, "strongholds", "beard_thin", "nether_wastes", "warped_forest"), pools.getOrThrow(WorldgenProvider.key(Registries.TEMPLATE_POOL, "caerula_arbor:containment_cave")), Optional.empty(), 1, UniformHeight.of(VerticalAnchor.absolute(24), VerticalAnchor.absolute(75)), false, Optional.empty(), 64));
-        register(context, "coral_crown", new JigsawStructure(settings(biomes, "surface_structures", "none", "beach", "snowy_beach"), pools.getOrThrow(WorldgenProvider.key(Registries.TEMPLATE_POOL, "caerula_arbor:coral_crown")), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
-        register(context, "deep_reef", new JigsawStructure(settings(biomes, "fluid_springs", "beard_thin", "deep_cold_ocean", "deep_frozen_ocean", "deep_lukewarm_ocean", "deep_ocean"), pools.getOrThrow(WorldgenProvider.key(Registries.TEMPLATE_POOL, "caerula_arbor:deep_reef")), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
-        register(context, "flourish", new JigsawStructure(settings(biomes, "surface_structures", "none", "caerula_arbor:branded_land"), pools.getOrThrow(WorldgenProvider.key(Registries.TEMPLATE_POOL, "caerula_arbor:flourish")), Optional.empty(), 7, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
-        register(context, "golden_age", new JigsawStructure(settings(biomes, "fluid_springs", "none", "deep_cold_ocean", "deep_frozen_ocean", "deep_ocean"), pools.getOrThrow(WorldgenProvider.key(Registries.TEMPLATE_POOL, "caerula_arbor:golden_age")), Optional.empty(), 1, UniformHeight.of(VerticalAnchor.absolute(56), VerticalAnchor.absolute(59)), false, Optional.empty(), 64));
-        register(context, "haunted_house", new JigsawStructure(settings(biomes, "underground_structures", "none", "dark_forest", "swamp", "windswept_forest", "windswept_savanna"), pools.getOrThrow(WorldgenProvider.key(Registries.TEMPLATE_POOL, "caerula_arbor:haunted_house")), Optional.empty(), 1, UniformHeight.of(VerticalAnchor.absolute(0), VerticalAnchor.absolute(16)), false, Optional.empty(), 64));
-        register(context, "iberia_eye", new JigsawStructure(settings(biomes, "surface_structures", "beard_box", "caerula_arbor:branded_land"), pools.getOrThrow(WorldgenProvider.key(Registries.TEMPLATE_POOL, "caerula_arbor:iberia_eye")), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
-        register(context, "inquisition_outpost", new JigsawStructure(settings(biomes, "surface_structures", "beard_thin", "meadow", "plains", "sunflower_plains"), pools.getOrThrow(WorldgenProvider.key(Registries.TEMPLATE_POOL, "caerula_arbor:inquisition_outpost")), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
-        register(context, "isharmlacemetry", new JigsawStructure(settings(biomes, "fluid_springs", "none", "deep_cold_ocean", "deep_frozen_ocean"), pools.getOrThrow(WorldgenProvider.key(Registries.TEMPLATE_POOL, "caerula_arbor:isharmlacemetry")), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
-        register(context, "izumik_island", new JigsawStructure(settings(biomes, "surface_structures", "none", "end_highlands"), pools.getOrThrow(WorldgenProvider.key(Registries.TEMPLATE_POOL, "caerula_arbor:izumik_island")), Optional.empty(), 1, UniformHeight.of(VerticalAnchor.absolute(72), VerticalAnchor.absolute(96)), false, Optional.empty(), 64));
-        register(context, "lamp", new JigsawStructure(settings(biomes, "surface_structures", "none", "birch_forest", "dark_forest", "old_growth_birch_forest", "windswept_forest", "caerula_arbor:branded_land"), pools.getOrThrow(WorldgenProvider.key(Registries.TEMPLATE_POOL, "caerula_arbor:lamp")), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
-        register(context, "lighthouse", new JigsawStructure(settings(biomes, "surface_structures", "beard_thin", "beach", "snowy_beach", "stony_shore"), pools.getOrThrow(WorldgenProvider.key(Registries.TEMPLATE_POOL, "caerula_arbor:lighthouse")), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
-        register(context, "oddfactory", new JigsawStructure(settings(biomes, "surface_structures", "beard_thin", "badlands", "eroded_badlands", "wooded_badlands"), pools.getOrThrow(WorldgenProvider.key(Registries.TEMPLATE_POOL, "caerula_arbor:oddfactory")), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
-        register(context, "rhodes_site", new JigsawStructure(settings(biomes, "surface_structures", "none", "old_growth_spruce_taiga", "snowy_taiga", "taiga"), pools.getOrThrow(WorldgenProvider.key(Registries.TEMPLATE_POOL, "caerula_arbor:rhodes_site")), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
-        register(context, "sadness_church", new JigsawStructure(settings(biomes, "surface_structures", "beard_thin", "caerula_arbor:branded_land", "snowy_plains", "birch_forest", "dark_forest", "old_growth_birch_forest", "windswept_forest"), pools.getOrThrow(WorldgenProvider.key(Registries.TEMPLATE_POOL, "caerula_arbor:sadness_church")), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
-        register(context, "safe_house", new JigsawStructure(settings(biomes, "surface_structures", "beard_thin", "snowy_plains", "meadow", "caerula_arbor:branded_land", "badlands", "desert"), pools.getOrThrow(WorldgenProvider.key(Registries.TEMPLATE_POOL, "caerula_arbor:safe_house")), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
-        register(context, "sink_field", new JigsawStructure(settings(biomes, "fluid_springs", "beard_thin", "cold_ocean", "deep_cold_ocean", "deep_frozen_ocean", "frozen_ocean"), pools.getOrThrow(WorldgenProvider.key(Registries.TEMPLATE_POOL, "caerula_arbor:sink_field")), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
-        register(context, "sink_garden", new JigsawStructure(settings(biomes, "fluid_springs", "beard_box", "deep_lukewarm_ocean", "deep_ocean", "lukewarm_ocean", "ocean", "warm_ocean"), pools.getOrThrow(WorldgenProvider.key(Registries.TEMPLATE_POOL, "caerula_arbor:sink_garden")), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
-        register(context, "sink_hall", new JigsawStructure(settings(biomes, "fluid_springs", "bury", "deep_cold_ocean", "deep_lukewarm_ocean"), pools.getOrThrow(WorldgenProvider.key(Registries.TEMPLATE_POOL, "caerula_arbor:sink_hall")), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
-        register(context, "sink_remains", new JigsawStructure(settings(biomes, "fluid_springs", "beard_thin", "cold_ocean", "frozen_ocean", "lukewarm_ocean", "ocean", "warm_ocean"), pools.getOrThrow(WorldgenProvider.key(Registries.TEMPLATE_POOL, "caerula_arbor:sink_remains")), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
-        register(context, "slider_statu", new JigsawStructure(settings(biomes, "fluid_springs", "beard_thin", "deep_cold_ocean", "deep_frozen_ocean", "deep_ocean"), pools.getOrThrow(WorldgenProvider.key(Registries.TEMPLATE_POOL, "caerula_arbor:slider_statu")), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
-        register(context, "submarine", new JigsawStructure(settings(biomes, "fluid_springs", "beard_thin", "deep_cold_ocean", "deep_frozen_ocean", "deep_ocean", "deep_lukewarm_ocean"), pools.getOrThrow(WorldgenProvider.key(Registries.TEMPLATE_POOL, "caerula_arbor:submarine")), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
-        register(context, "tide_station", new JigsawStructure(settings(biomes, "fluid_springs", "beard_thin", "lukewarm_ocean", "ocean", "warm_ocean"), pools.getOrThrow(WorldgenProvider.key(Registries.TEMPLATE_POOL, "caerula_arbor:tide_station")), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
-        register(context, "trader_cave", new JigsawStructure(settings(biomes, "underground_decoration", "none", "lush_caves"), pools.getOrThrow(WorldgenProvider.key(Registries.TEMPLATE_POOL, "caerula_arbor:trader_cave")), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
-        register(context, "trader_end", new JigsawStructure(settings(biomes, "surface_structures", "none", "end_midlands"), pools.getOrThrow(WorldgenProvider.key(Registries.TEMPLATE_POOL, "caerula_arbor:trader_end")), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
-        register(context, "trader_oak", new JigsawStructure(settings(biomes, "surface_structures", "none", "flower_forest", "forest"), pools.getOrThrow(WorldgenProvider.key(Registries.TEMPLATE_POOL, "caerula_arbor:trader_oak")), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
-        register(context, "trader_sand", new JigsawStructure(settings(biomes, "surface_structures", "none", "desert"), pools.getOrThrow(WorldgenProvider.key(Registries.TEMPLATE_POOL, "caerula_arbor:trader_sand")), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
-        register(context, "trader_sky", new JigsawStructure(settings(biomes, "surface_structures", "none", "stony_peaks", "windswept_gravelly_hills", "windswept_hills"), pools.getOrThrow(WorldgenProvider.key(Registries.TEMPLATE_POOL, "caerula_arbor:trader_sky")), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
-        register(context, "trader_tnt", new JigsawStructure(settings(biomes, "surface_structures", "none", "badlands"), pools.getOrThrow(WorldgenProvider.key(Registries.TEMPLATE_POOL, "caerula_arbor:trader_tnt")), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
-        register(context, "watchtower", new JigsawStructure(settings(biomes, "surface_structures", "beard_thin", "stony_shore", "beach", "snowy_beach", "plains", "snowy_plains"), pools.getOrThrow(WorldgenProvider.key(Registries.TEMPLATE_POOL, "caerula_arbor:watchtower")), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
+        register(context, WorldgenKeys.Structures.ABYSSAL_LAB, new JigsawStructure(settings(biomes, GenerationStep.Decoration.STRONGHOLDS, TerrainAdjustment.NONE, Biomes.SNOWY_PLAINS, Biomes.SNOWY_TAIGA), pools.getOrThrow(WorldgenKeys.TemplatePools.ABYSSAL_LAB), Optional.empty(), 1, UniformHeight.of(VerticalAnchor.absolute(-36), VerticalAnchor.absolute(-8)), false, Optional.empty(), 64));
+        register(context, WorldgenKeys.Structures.AEGIR_LAB, new JigsawStructure(settings(biomes, GenerationStep.Decoration.FLUID_SPRINGS, TerrainAdjustment.NONE, Biomes.DEEP_COLD_OCEAN, Biomes.DEEP_FROZEN_OCEAN, Biomes.DEEP_LUKEWARM_OCEAN, Biomes.DEEP_OCEAN), pools.getOrThrow(WorldgenKeys.TemplatePools.AEGIR_LAB), Optional.empty(), 1, UniformHeight.of(VerticalAnchor.absolute(53), VerticalAnchor.absolute(54)), false, Optional.empty(), 64));
+        register(context, WorldgenKeys.Structures.AIR_BASE, new JigsawStructure(settings(biomes, GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE, CABiomes.BRANDED_LAND, Biomes.SNOWY_PLAINS, Biomes.STONY_SHORE), pools.getOrThrow(WorldgenKeys.TemplatePools.AIR_BASE), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
+        register(context, WorldgenKeys.Structures.AIRCRAFT, new JigsawStructure(settings(biomes, GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.BURY, Biomes.BEACH, Biomes.SNOWY_BEACH, Biomes.DESERT), pools.getOrThrow(WorldgenKeys.TemplatePools.AIRCRAFT), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
+        register(context, WorldgenKeys.Structures.ANCHOR_RUIN, new JigsawStructure(settings(biomes, GenerationStep.Decoration.FLUID_SPRINGS, TerrainAdjustment.BEARD_THIN, Biomes.COLD_OCEAN, Biomes.DEEP_COLD_OCEAN, Biomes.DEEP_LUKEWARM_OCEAN, Biomes.DEEP_OCEAN, Biomes.LUKEWARM_OCEAN, Biomes.OCEAN, Biomes.WARM_OCEAN), pools.getOrThrow(WorldgenKeys.TemplatePools.ANCHOR_RUIN), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
+        register(context, WorldgenKeys.Structures.BELIEVER_HOME, new JigsawStructure(settings(biomes, GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.BEARD_THIN, CABiomes.BRANDED_LAND, Biomes.BEACH, Biomes.SNOWY_BEACH, Biomes.STONY_SHORE, Biomes.FLOWER_FOREST, Biomes.FOREST), pools.getOrThrow(WorldgenKeys.TemplatePools.BELIEVER_HOME), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
+        register(context, WorldgenKeys.Structures.BISHOP_CAVE, new JigsawStructure(settings(biomes, GenerationStep.Decoration.UNDERGROUND_STRUCTURES, TerrainAdjustment.NONE, Biomes.DEEP_COLD_OCEAN, Biomes.DEEP_LUKEWARM_OCEAN, Biomes.DEEP_OCEAN), pools.getOrThrow(WorldgenKeys.TemplatePools.BISHOP_CAVE), Optional.empty(), 1, TrapezoidHeight.of(VerticalAnchor.absolute(-32), VerticalAnchor.absolute(-8)), false, Optional.empty(), 64));
+        register(context, WorldgenKeys.Structures.BRAND_PALACE, new JigsawStructure(settings(biomes, GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.BEARD_THIN, CABiomes.BRANDED_LAND), pools.getOrThrow(WorldgenKeys.TemplatePools.BRAND_PALACE), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
+        register(context, WorldgenKeys.Structures.BRAND_PORTAL, new JigsawStructure(settings(biomes, GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE, CABiomes.BRANDED_LAND), pools.getOrThrow(WorldgenKeys.TemplatePools.BRAND_PORTAL), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
+        register(context, WorldgenKeys.Structures.BRANDED_TOWN, new JigsawStructure(settings(biomes, GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.BEARD_THIN, CABiomes.BRANDED_LAND, Biomes.BIRCH_FOREST, Biomes.OLD_GROWTH_BIRCH_FOREST, Biomes.BEACH, Biomes.SNOWY_BEACH), pools.getOrThrow(WorldgenKeys.TemplatePools.BRANDED_TOWN), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
+        register(context, WorldgenKeys.Structures.CHEST_MUSEUM, new JigsawStructure(settings(biomes, GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.BEARD_THIN, Biomes.DARK_FOREST, Biomes.JUNGLE), pools.getOrThrow(WorldgenKeys.TemplatePools.CHEST_MUSEUM), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
+        register(context, WorldgenKeys.Structures.CHITIN_FACTORY, new JigsawStructure(settings(biomes, GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.BEARD_THIN, Biomes.DESERT), pools.getOrThrow(WorldgenKeys.TemplatePools.CHITIN_FACTORY), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
+        register(context, WorldgenKeys.Structures.CHURCH, new JigsawStructure(settings(biomes, GenerationStep.Decoration.STRONGHOLDS, TerrainAdjustment.BURY, Biomes.PLAINS, Biomes.SNOWY_PLAINS), pools.getOrThrow(WorldgenKeys.TemplatePools.CHURCH), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
+        register(context, WorldgenKeys.Structures.CLOISTER, new JigsawStructure(settings(biomes, GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.BEARD_THIN, Biomes.PLAINS, Biomes.SUNFLOWER_PLAINS, Biomes.STONY_SHORE, Biomes.MEADOW), pools.getOrThrow(WorldgenKeys.TemplatePools.CLOISTER), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
+        register(context, WorldgenKeys.Structures.CONTAINMENT_CAVE, new JigsawStructure(settings(biomes, GenerationStep.Decoration.STRONGHOLDS, TerrainAdjustment.BEARD_THIN, Biomes.NETHER_WASTES, Biomes.WARPED_FOREST), pools.getOrThrow(WorldgenKeys.TemplatePools.CONTAINMENT_CAVE), Optional.empty(), 1, UniformHeight.of(VerticalAnchor.absolute(24), VerticalAnchor.absolute(75)), false, Optional.empty(), 64));
+        register(context, WorldgenKeys.Structures.CORAL_CROWN, new JigsawStructure(settings(biomes, GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE, Biomes.BEACH, Biomes.SNOWY_BEACH), pools.getOrThrow(WorldgenKeys.TemplatePools.CORAL_CROWN), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
+        register(context, WorldgenKeys.Structures.DEEP_REEF, new JigsawStructure(settings(biomes, GenerationStep.Decoration.FLUID_SPRINGS, TerrainAdjustment.BEARD_THIN, Biomes.DEEP_COLD_OCEAN, Biomes.DEEP_FROZEN_OCEAN, Biomes.DEEP_LUKEWARM_OCEAN, Biomes.DEEP_OCEAN), pools.getOrThrow(WorldgenKeys.TemplatePools.DEEP_REEF), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
+        register(context, WorldgenKeys.Structures.FLOURISH, new JigsawStructure(settings(biomes, GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE, CABiomes.BRANDED_LAND), pools.getOrThrow(WorldgenKeys.TemplatePools.FLOURISH), Optional.empty(), 7, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
+        register(context, WorldgenKeys.Structures.GOLDEN_AGE, new JigsawStructure(settings(biomes, GenerationStep.Decoration.FLUID_SPRINGS, TerrainAdjustment.NONE, Biomes.DEEP_COLD_OCEAN, Biomes.DEEP_FROZEN_OCEAN, Biomes.DEEP_OCEAN), pools.getOrThrow(WorldgenKeys.TemplatePools.GOLDEN_AGE), Optional.empty(), 1, UniformHeight.of(VerticalAnchor.absolute(56), VerticalAnchor.absolute(59)), false, Optional.empty(), 64));
+        register(context, WorldgenKeys.Structures.HAUNTED_HOUSE, new JigsawStructure(settings(biomes, GenerationStep.Decoration.UNDERGROUND_STRUCTURES, TerrainAdjustment.NONE, Biomes.DARK_FOREST, Biomes.SWAMP, Biomes.WINDSWEPT_FOREST, Biomes.WINDSWEPT_SAVANNA), pools.getOrThrow(WorldgenKeys.TemplatePools.HAUNTED_HOUSE), Optional.empty(), 1, UniformHeight.of(VerticalAnchor.absolute(0), VerticalAnchor.absolute(16)), false, Optional.empty(), 64));
+        register(context, WorldgenKeys.Structures.IBERIA_EYE, new JigsawStructure(settings(biomes, GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.BEARD_BOX, CABiomes.BRANDED_LAND), pools.getOrThrow(WorldgenKeys.TemplatePools.IBERIA_EYE), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
+        register(context, WorldgenKeys.Structures.INQUISITION_OUTPOST, new JigsawStructure(settings(biomes, GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.BEARD_THIN, Biomes.MEADOW, Biomes.PLAINS, Biomes.SUNFLOWER_PLAINS), pools.getOrThrow(WorldgenKeys.TemplatePools.INQUISITION_OUTPOST), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
+        register(context, WorldgenKeys.Structures.ISHARMLACEMETRY, new JigsawStructure(settings(biomes, GenerationStep.Decoration.FLUID_SPRINGS, TerrainAdjustment.NONE, Biomes.DEEP_COLD_OCEAN, Biomes.DEEP_FROZEN_OCEAN), pools.getOrThrow(WorldgenKeys.TemplatePools.ISHARMLACEMETRY), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
+        register(context, WorldgenKeys.Structures.IZUMIK_ISLAND, new JigsawStructure(settings(biomes, GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE, Biomes.END_HIGHLANDS), pools.getOrThrow(WorldgenKeys.TemplatePools.IZUMIK_ISLAND), Optional.empty(), 1, UniformHeight.of(VerticalAnchor.absolute(72), VerticalAnchor.absolute(96)), false, Optional.empty(), 64));
+        register(context, WorldgenKeys.Structures.LAMP, new JigsawStructure(settings(biomes, GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE, Biomes.BIRCH_FOREST, Biomes.DARK_FOREST, Biomes.OLD_GROWTH_BIRCH_FOREST, Biomes.WINDSWEPT_FOREST, CABiomes.BRANDED_LAND), pools.getOrThrow(WorldgenKeys.TemplatePools.LAMP), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
+        register(context, WorldgenKeys.Structures.LIGHTHOUSE, new JigsawStructure(settings(biomes, GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.BEARD_THIN, Biomes.BEACH, Biomes.SNOWY_BEACH, Biomes.STONY_SHORE), pools.getOrThrow(WorldgenKeys.TemplatePools.LIGHTHOUSE), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
+        register(context, WorldgenKeys.Structures.ODDFACTORY, new JigsawStructure(settings(biomes, GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.BEARD_THIN, Biomes.BADLANDS, Biomes.ERODED_BADLANDS, Biomes.WOODED_BADLANDS), pools.getOrThrow(WorldgenKeys.TemplatePools.ODDFACTORY), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
+        register(context, WorldgenKeys.Structures.RHODES_SITE, new JigsawStructure(settings(biomes, GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE, Biomes.OLD_GROWTH_SPRUCE_TAIGA, Biomes.SNOWY_TAIGA, Biomes.TAIGA), pools.getOrThrow(WorldgenKeys.TemplatePools.RHODES_SITE), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
+        register(context, WorldgenKeys.Structures.SADNESS_CHURCH, new JigsawStructure(settings(biomes, GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.BEARD_THIN, CABiomes.BRANDED_LAND, Biomes.SNOWY_PLAINS, Biomes.BIRCH_FOREST, Biomes.DARK_FOREST, Biomes.OLD_GROWTH_BIRCH_FOREST, Biomes.WINDSWEPT_FOREST), pools.getOrThrow(WorldgenKeys.TemplatePools.SADNESS_CHURCH), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
+        register(context, WorldgenKeys.Structures.SAFE_HOUSE, new JigsawStructure(settings(biomes, GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.BEARD_THIN, Biomes.SNOWY_PLAINS, Biomes.MEADOW, CABiomes.BRANDED_LAND, Biomes.BADLANDS, Biomes.DESERT), pools.getOrThrow(WorldgenKeys.TemplatePools.SAFE_HOUSE), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
+        register(context, WorldgenKeys.Structures.SINK_FIELD, new JigsawStructure(settings(biomes, GenerationStep.Decoration.FLUID_SPRINGS, TerrainAdjustment.BEARD_THIN, Biomes.COLD_OCEAN, Biomes.DEEP_COLD_OCEAN, Biomes.DEEP_FROZEN_OCEAN, Biomes.FROZEN_OCEAN), pools.getOrThrow(WorldgenKeys.TemplatePools.SINK_FIELD), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
+        register(context, WorldgenKeys.Structures.SINK_GARDEN, new JigsawStructure(settings(biomes, GenerationStep.Decoration.FLUID_SPRINGS, TerrainAdjustment.BEARD_BOX, Biomes.DEEP_LUKEWARM_OCEAN, Biomes.DEEP_OCEAN, Biomes.LUKEWARM_OCEAN, Biomes.OCEAN, Biomes.WARM_OCEAN), pools.getOrThrow(WorldgenKeys.TemplatePools.SINK_GARDEN), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
+        register(context, WorldgenKeys.Structures.SINK_HALL, new JigsawStructure(settings(biomes, GenerationStep.Decoration.FLUID_SPRINGS, TerrainAdjustment.BURY, Biomes.DEEP_COLD_OCEAN, Biomes.DEEP_LUKEWARM_OCEAN), pools.getOrThrow(WorldgenKeys.TemplatePools.SINK_HALL), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
+        register(context, WorldgenKeys.Structures.SINK_REMAINS, new JigsawStructure(settings(biomes, GenerationStep.Decoration.FLUID_SPRINGS, TerrainAdjustment.BEARD_THIN, Biomes.COLD_OCEAN, Biomes.FROZEN_OCEAN, Biomes.LUKEWARM_OCEAN, Biomes.OCEAN, Biomes.WARM_OCEAN), pools.getOrThrow(WorldgenKeys.TemplatePools.SINK_REMAINS), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
+        register(context, WorldgenKeys.Structures.SLIDER_STATU, new JigsawStructure(settings(biomes, GenerationStep.Decoration.FLUID_SPRINGS, TerrainAdjustment.BEARD_THIN, Biomes.DEEP_COLD_OCEAN, Biomes.DEEP_FROZEN_OCEAN, Biomes.DEEP_OCEAN), pools.getOrThrow(WorldgenKeys.TemplatePools.SLIDER_STATU), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
+        register(context, WorldgenKeys.Structures.SUBMARINE, new JigsawStructure(settings(biomes, GenerationStep.Decoration.FLUID_SPRINGS, TerrainAdjustment.BEARD_THIN, Biomes.DEEP_COLD_OCEAN, Biomes.DEEP_FROZEN_OCEAN, Biomes.DEEP_OCEAN, Biomes.DEEP_LUKEWARM_OCEAN), pools.getOrThrow(WorldgenKeys.TemplatePools.SUBMARINE), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
+        register(context, WorldgenKeys.Structures.TIDE_STATION, new JigsawStructure(settings(biomes, GenerationStep.Decoration.FLUID_SPRINGS, TerrainAdjustment.BEARD_THIN, Biomes.LUKEWARM_OCEAN, Biomes.OCEAN, Biomes.WARM_OCEAN), pools.getOrThrow(WorldgenKeys.TemplatePools.TIDE_STATION), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
+        register(context, WorldgenKeys.Structures.TRADER_CAVE, new JigsawStructure(settings(biomes, GenerationStep.Decoration.UNDERGROUND_DECORATION, TerrainAdjustment.NONE, Biomes.LUSH_CAVES), pools.getOrThrow(WorldgenKeys.TemplatePools.TRADER_CAVE), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
+        register(context, WorldgenKeys.Structures.TRADER_END, new JigsawStructure(settings(biomes, GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE, Biomes.END_MIDLANDS), pools.getOrThrow(WorldgenKeys.TemplatePools.TRADER_END), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
+        register(context, WorldgenKeys.Structures.TRADER_OAK, new JigsawStructure(settings(biomes, GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE, Biomes.FLOWER_FOREST, Biomes.FOREST), pools.getOrThrow(WorldgenKeys.TemplatePools.TRADER_OAK), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
+        register(context, WorldgenKeys.Structures.TRADER_SAND, new JigsawStructure(settings(biomes, GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE, Biomes.DESERT), pools.getOrThrow(WorldgenKeys.TemplatePools.TRADER_SAND), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
+        register(context, WorldgenKeys.Structures.TRADER_SKY, new JigsawStructure(settings(biomes, GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE, Biomes.STONY_PEAKS, Biomes.WINDSWEPT_GRAVELLY_HILLS, Biomes.WINDSWEPT_HILLS), pools.getOrThrow(WorldgenKeys.TemplatePools.TRADER_SKY), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
+        register(context, WorldgenKeys.Structures.TRADER_TNT, new JigsawStructure(settings(biomes, GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.NONE, Biomes.BADLANDS), pools.getOrThrow(WorldgenKeys.TemplatePools.TRADER_TNT), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
+        register(context, WorldgenKeys.Structures.WATCHTOWER, new JigsawStructure(settings(biomes, GenerationStep.Decoration.SURFACE_STRUCTURES, TerrainAdjustment.BEARD_THIN, Biomes.STONY_SHORE, Biomes.BEACH, Biomes.SNOWY_BEACH, Biomes.PLAINS, Biomes.SNOWY_PLAINS), pools.getOrThrow(WorldgenKeys.TemplatePools.WATCHTOWER), Optional.empty(), 1, ConstantHeight.of(VerticalAnchor.absolute(0)), false, Optional.empty(), 64));
     }
 
-    private static void register(BootstapContext<Structure> context, String name, Structure structure) {
-        context.register(WorldgenProvider.modKey(Registries.STRUCTURE, name), structure);
+    /**
+     * 注册结构定义
+     *
+     * @param context   注册表 bootstrap 上下文
+     * @param key       structure 注册 key
+     * @param structure 结构实例
+     */
+    private static void register(BootstapContext<Structure> context, ResourceKey<Structure> key, Structure structure) {
+        context.register(key, structure);
     }
 
-    private static Structure.StructureSettings settings(HolderGetter<Biome> biomes, String step, String terrain, String... biomeIds) {
-        return new Structure.StructureSettings(HolderSet.direct(Arrays.stream(biomeIds).map(id -> biome(biomes, id)).toList()), Map.of(), decoration(step), terrain(terrain));
-    }
-
-    private static Holder<Biome> biome(HolderGetter<Biome> biomes, String id) {
-        return biomes.getOrThrow(WorldgenProvider.key(Registries.BIOME, id));
-    }
-
-    private static GenerationStep.Decoration decoration(String step) {
-        return switch (step) {
-            case "fluid_springs" -> GenerationStep.Decoration.FLUID_SPRINGS;
-            case "strongholds" -> GenerationStep.Decoration.STRONGHOLDS;
-            case "surface_structures" -> GenerationStep.Decoration.SURFACE_STRUCTURES;
-            case "underground_decoration" -> GenerationStep.Decoration.UNDERGROUND_DECORATION;
-            case "underground_structures" -> GenerationStep.Decoration.UNDERGROUND_STRUCTURES;
-            default -> throw new IllegalArgumentException("Unsupported structure step: " + step);
-        };
-    }
-
-    private static TerrainAdjustment terrain(String terrain) {
-        return switch (terrain) {
-            case "beard_box" -> TerrainAdjustment.BEARD_BOX;
-            case "beard_thin" -> TerrainAdjustment.BEARD_THIN;
-            case "bury" -> TerrainAdjustment.BURY;
-            case "none" -> TerrainAdjustment.NONE;
-            default -> throw new IllegalArgumentException("Unsupported terrain adjustment: " + terrain);
-        };
+    /**
+     * 构建结构生成设置
+     *
+     * @param biomes   biome 查询器
+     * @param step      生成阶段
+     * @param terrain   地形调整
+     * @param biomeKeys 可生成 biome key
+     * @return 结构生成设置
+     */
+    @SafeVarargs
+    private static Structure.StructureSettings settings(HolderGetter<Biome> biomes, GenerationStep.Decoration step, TerrainAdjustment terrain, ResourceKey<Biome>... biomeKeys) {
+        return new Structure.StructureSettings(HolderSet.direct(Arrays.stream(biomeKeys).map(biomes::getOrThrow).toList()), Map.of(), step, terrain);
     }
 }

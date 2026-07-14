@@ -36,6 +36,12 @@ public class BiomeTagsProvider extends TagsProvider.RegistryTagsProvider<Biome> 
         super(output, Registries.BIOME, lookupProvider, existingFileHelper);
     }
 
+    /**
+     * 创建 caerula_arbor 命名空间的 biome 标签 key
+     *
+     * @param path 标签路径
+     * @return biome 标签 key
+     */
     private static TagKey<Biome> caBiomeTag(String path) {
         return TagKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, path));
     }

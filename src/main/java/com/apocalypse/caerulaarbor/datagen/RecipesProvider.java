@@ -27,6 +27,17 @@ public class RecipesProvider extends RecipeProvider {
         super(output);
     }
 
+    /**
+     * 写出有序合成配方
+     *
+     * @param writer   配方输出回调
+     * @param id       配方路径
+     * @param category 配方分类
+     * @param group    配方分组，可为 null
+     * @param result   结果物品 JSON
+     * @param pattern  合成图案
+     * @param keys     图案字符映射
+     */
     private static void shaped(Consumer<FinishedRecipe> writer, String id, String category, @Nullable String group, JsonObject result, String[] pattern, KeyEntry... keys) {
         var recipe = baseRecipe("minecraft:crafting_shaped");
         recipe.addProperty("category", category);
@@ -46,6 +57,16 @@ public class RecipesProvider extends RecipeProvider {
         save(writer, id, recipe);
     }
 
+    /**
+     * 写出无序合成配方
+     *
+     * @param writer      配方输出回调
+     * @param id          配方路径
+     * @param category    配方分类
+     * @param group       配方分组，可为 null
+     * @param result      结果物品 JSON
+     * @param ingredients 原料列表
+     */
     private static void shapeless(Consumer<FinishedRecipe> writer, String id, String category, @Nullable String group, JsonObject result, IngredientEntry[] ingredients) {
         var recipe = baseRecipe("minecraft:crafting_shapeless");
         recipe.addProperty("category", category);
@@ -55,6 +76,19 @@ public class RecipesProvider extends RecipeProvider {
         save(writer, id, recipe);
     }
 
+    /**
+     * 写出烧炼类配方
+     *
+     * @param writer      配方输出回调
+     * @param id          配方路径
+     * @param type        配方类型 ID
+     * @param category    配方分类
+     * @param group       配方分组，可为 null
+     * @param ingredient  原料
+     * @param result      结果物品 ID
+     * @param experience  经验值
+     * @param cookingTime 烧炼时间
+     */
     private static void cooking(Consumer<FinishedRecipe> writer, String id, String type, String category, @Nullable String group, IngredientEntry ingredient, String result, float experience, int cookingTime) {
         var recipe = baseRecipe(type);
         recipe.addProperty("category", category);
@@ -66,6 +100,15 @@ public class RecipesProvider extends RecipeProvider {
         save(writer, id, recipe);
     }
 
+    /**
+     * 写出切石机配方
+     *
+     * @param writer     配方输出回调
+     * @param id         配方路径
+     * @param ingredient 原料
+     * @param result     结果物品 ID
+     * @param count      结果数量
+     */
     private static void stonecutting(Consumer<FinishedRecipe> writer, String id, IngredientEntry ingredient, String result, int count) {
         var recipe = baseRecipe("minecraft:stonecutting");
         recipe.add("ingredient", ingredient.toJson());
@@ -74,6 +117,16 @@ public class RecipesProvider extends RecipeProvider {
         save(writer, id, recipe);
     }
 
+    /**
+     * 写出锻造转换配方
+     *
+     * @param writer   配方输出回调
+     * @param id       配方路径
+     * @param template 模板原料
+     * @param base     基底原料
+     * @param addition 追加原料
+     * @param result   结果物品 JSON
+     */
     private static void smithingTransform(Consumer<FinishedRecipe> writer, String id, IngredientEntry template, IngredientEntry base, IngredientEntry addition, JsonObject result) {
         var recipe = baseRecipe("minecraft:smithing_transform");
         recipe.add("template", template.toJson());
@@ -83,6 +136,14 @@ public class RecipesProvider extends RecipeProvider {
         save(writer, id, recipe);
     }
 
+    /**
+     * 写出 Patchouli 书籍配方
+     *
+     * @param writer      配方输出回调
+     * @param id          配方路径
+     * @param book        书籍 ID
+     * @param ingredients 原料列表
+     */
     @SuppressWarnings("SameParameterValue")
     private static void patchouliBook(Consumer<FinishedRecipe> writer, String id, String book, IngredientEntry[] ingredients) {
         var recipe = baseRecipe("patchouli:shapeless_book_recipe");
@@ -91,18 +152,36 @@ public class RecipesProvider extends RecipeProvider {
         save(writer, id, recipe);
     }
 
+    /**
+     * 创建带类型字段的配方 JSON
+     *
+     * @param type 配方类型 ID
+     * @return 配方 JSON
+     */
     private static JsonObject baseRecipe(String type) {
         var recipe = new JsonObject();
         recipe.addProperty("type", type);
         return recipe;
     }
 
+    /**
+     * 写入可选配方分组
+     *
+     * @param recipe 配方 JSON
+     * @param group  配方分组，可为 null
+     */
     private static void addGroup(JsonObject recipe, @Nullable String group) {
         if (group != null) {
             recipe.addProperty("group", group);
         }
     }
 
+    /**
+     * 将原料列表转为 JSON 数组
+     *
+     * @param ingredients 原料列表
+     * @return 原料 JSON 数组
+     */
     private static JsonArray ingredientsToJson(IngredientEntry[] ingredients) {
         var array = new JsonArray();
         for (var ingredient : ingredients) {
@@ -111,42 +190,99 @@ public class RecipesProvider extends RecipeProvider {
         return array;
     }
 
+    /**
+     * 提交生成后的配方 JSON
+     *
+     * @param writer 配方输出回调
+     * @param id     配方路径
+     * @param recipe 配方 JSON
+     */
     private static void save(Consumer<FinishedRecipe> writer, String id, JsonObject recipe) {
         writer.accept(new JsonFinishedRecipe(modLoc(id), recipe));
     }
 
+    /**
+     * 创建有序配方图案
+     *
+     * @param pattern 图案行
+     * @return 图案数组
+     */
     private static String[] pattern(String... pattern) {
         return pattern;
     }
 
+    /**
+     * 创建原料数组
+     *
+     * @param ingredients 原料列表
+     * @return 原料数组
+     */
     private static IngredientEntry[] ingredients(IngredientEntry... ingredients) {
         return ingredients;
     }
 
+    /**
+     * 创建有序配方字符映射
+     *
+     * @param key        图案字符
+     * @param ingredient 字符对应原料
+     * @return 字符映射
+     */
     private static KeyEntry key(char key, IngredientEntry ingredient) {
         return new KeyEntry(key, ingredient);
     }
 
+    /**
+     * 创建物品原料
+     *
+     * @param item 物品 ID
+     * @return 原料定义
+     */
     private static IngredientEntry item(String item) {
         return new IngredientEntry("item", item);
     }
 
+    /**
+     * 创建标签原料
+     *
+     * @param tag 标签 ID
+     * @return 原料定义
+     */
     private static IngredientEntry tag(String tag) {
         return new IngredientEntry("tag", tag);
     }
 
+    /**
+     * 创建单个结果物品 JSON
+     *
+     * @param item 物品 ID
+     * @return 结果 JSON
+     */
     private static JsonObject result(String item) {
         var result = new JsonObject();
         result.addProperty("item", item);
         return result;
     }
 
+    /**
+     * 创建带数量的结果物品 JSON
+     *
+     * @param item  物品 ID
+     * @param count 结果数量
+     * @return 结果 JSON
+     */
     private static JsonObject result(String item, int count) {
         var result = result(item);
         result.addProperty("count", count);
         return result;
     }
 
+    /**
+     * 创建 caerula_arbor 命名空间的配方 ID
+     *
+     * @param path 配方路径
+     * @return 配方 ID
+     */
     private static ResourceLocation modLoc(String path) {
         return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, path);
     }

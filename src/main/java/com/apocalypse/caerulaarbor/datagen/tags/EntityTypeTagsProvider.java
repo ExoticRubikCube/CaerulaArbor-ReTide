@@ -105,10 +105,23 @@ public class EntityTypeTagsProvider extends TagsProvider.RegistryTagsProvider<En
 
         addEntityTypesToTag(EntityTypeTags.POWDER_SNOW_WALKABLE_MOBS, CAEntities.THE_LAST_KNIGHT, CAEntities.MEGA_CHEST, CAEntities.LAST_KNIGHT_AND_HORSE, CAEntities.OCEANIZED_FOX, CAEntities.OCEANIZED_POLAR_BEAR);
     }
+
+    /**
+     * 创建 caerula_arbor 命名空间的实体类型标签 key
+     *
+     * @param path 标签路径
+     * @return 实体类型标签 key
+     */
     private static TagKey<EntityType<?>> caEntityTypeTag(String path) {
         return TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, path));
     }
 
+    /**
+     * 创建 forge 命名空间的实体类型标签 key
+     *
+     * @param path 标签路径
+     * @return 实体类型标签 key
+     */
     private static TagKey<EntityType<?>> forgeEntityTypeTag(String path) {
         return TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath("forge", path));
     }
@@ -126,6 +139,12 @@ public class EntityTypeTagsProvider extends TagsProvider.RegistryTagsProvider<En
         }
     }
 
+    /**
+     * 从注册对象或原版实体类型创建实体类型 key
+     *
+     * @param type 实体类型字段
+     * @return 实体类型 key
+     */
     private static ResourceKey<EntityType<?>> entityTypeKey(Object type) {
         if (type instanceof RegistryObject<?> registryObject) {
             return ResourceKey.create(Registries.ENTITY_TYPE, Objects.requireNonNull(registryObject.getId()));

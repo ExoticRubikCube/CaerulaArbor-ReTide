@@ -52,18 +52,42 @@ public class BlockTagsProvider extends TagsProvider.RegistryTagsProvider<Block> 
         super(output, Registries.BLOCK, lookupProvider, existingFileHelper);
     }
 
+    /**
+     * 创建 caerula_arbor 命名空间的方块标签 key
+     *
+     * @param path 标签路径
+     * @return 方块标签 key
+     */
     private static TagKey<Block> caBlockTag(String path) {
         return TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, path));
     }
 
+    /**
+     * 创建 forge 命名空间的方块标签 key
+     *
+     * @param path 标签路径
+     * @return 方块标签 key
+     */
     private static TagKey<Block> forgeBlockTag(String path) {
         return TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("forge", path));
     }
 
+    /**
+     * 从注册对象创建方块 key
+     *
+     * @param block 方块注册对象
+     * @return 方块 key
+     */
     private static ResourceKey<Block> blockKey(RegistryObject<? extends Block> block) {
         return ResourceKey.create(Registries.BLOCK, Objects.requireNonNull(block.getId()));
     }
 
+    /**
+     * 从原版方块实例创建方块 key
+     *
+     * @param block 方块实例
+     * @return 方块 key
+     */
     private static ResourceKey<Block> blockKey(Block block) {
         return ResourceKey.create(Registries.BLOCK, Objects.requireNonNull(ForgeRegistries.BLOCKS.getKey(block)));
     }

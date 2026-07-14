@@ -33,6 +33,12 @@ public class PaintingVariantTagsProvider extends TagsProvider.RegistryTagsProvid
         placeable.add(paintingVariantKey(CAPaintings.CAERULA_STELLA));
     }
 
+    /**
+     * 从注册对象创建画作变体 key
+     *
+     * @param variant 画作变体注册对象
+     * @return 画作变体 key
+     */
     private static ResourceKey<PaintingVariant> paintingVariantKey(RegistryObject<PaintingVariant> variant) {
         return ResourceKey.create(Registries.PAINTING_VARIANT, Objects.requireNonNull(variant.getId()));
     }

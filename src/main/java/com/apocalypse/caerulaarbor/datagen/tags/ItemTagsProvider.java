@@ -189,14 +189,33 @@ public class ItemTagsProvider extends TagsProvider.RegistryTagsProvider<Item> {
         addItemsToTag(MINECRAFT_WOODEN_SLABS, CAItems.TRAIL_PLANK_SLAB);
         addItemsToTag(MINECRAFT_WOODEN_STAIRS, CAItems.TRAIL_PLANK_STAIR);
     }
+
+    /**
+     * 创建 caerula_arbor 命名空间的物品标签 key
+     *
+     * @param path 标签路径
+     * @return 物品标签 key
+     */
     private static TagKey<Item> caItemTag(String path) {
         return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, path));
     }
 
+    /**
+     * 创建 forge 命名空间的物品标签 key
+     *
+     * @param path 标签路径
+     * @return 物品标签 key
+     */
     private static TagKey<Item> forgeItemTag(String path) {
         return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("forge", path));
     }
 
+    /**
+     * 创建 minecraft 命名空间的物品标签 key
+     *
+     * @param path 标签路径
+     * @return 物品标签 key
+     */
     private static TagKey<Item> minecraftItemTag(String path) {
         return TagKey.create(Registries.ITEM, ResourceLocation.withDefaultNamespace(path));
     }
@@ -214,6 +233,12 @@ public class ItemTagsProvider extends TagsProvider.RegistryTagsProvider<Item> {
         }
     }
 
+    /**
+     * 从注册对象或原版物品创建物品 key
+     *
+     * @param item 物品字段
+     * @return 物品 key
+     */
     private static ResourceKey<Item> itemKey(Object item) {
         if (item instanceof RegistryObject<?> registryObject) {
             return ResourceKey.create(Registries.ITEM, Objects.requireNonNull(registryObject.getId()));

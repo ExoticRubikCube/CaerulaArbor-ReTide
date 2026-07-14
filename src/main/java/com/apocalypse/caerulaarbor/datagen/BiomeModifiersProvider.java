@@ -85,6 +85,17 @@ public class BiomeModifiersProvider implements DataProvider {
         return CompletableFuture.allOf(futures.build().toArray(CompletableFuture[]::new));
     }
 
+    /**
+     * 添加实体生成 modifier
+     *
+     * @param modifiers modifier 输出集合
+     * @param name      modifier 文件名
+     * @param biomes    目标 biome 条件
+     * @param entityType 实体类型 ID
+     * @param weight    生成权重
+     * @param minCount  最小生成数量
+     * @param maxCount  最大生成数量
+     */
     private static void addSpawn(Map<String, JsonObject> modifiers, String name, JsonElement biomes, String entityType, int weight, int minCount, int maxCount) {
         var spawner = new JsonObject();
         spawner.addProperty("type", entityType);
@@ -97,6 +108,15 @@ public class BiomeModifiersProvider implements DataProvider {
         modifiers.put(name, modifier);
     }
 
+    /**
+     * 添加 feature 注入 modifier
+     *
+     * @param modifiers modifier 输出集合
+     * @param name      modifier 文件名
+     * @param biomes    目标 biome 条件
+     * @param features  要注入的 placed feature
+     * @param step      生成阶段
+     */
     private static void addFeature(Map<String, JsonObject> modifiers, String name, JsonElement biomes, JsonElement features, String step) {
         var modifier = baseModifier("forge:add_features", biomes);
         modifier.add("features", features);
@@ -104,6 +124,13 @@ public class BiomeModifiersProvider implements DataProvider {
         modifiers.put(name, modifier);
     }
 
+    /**
+     * 创建 Forge biome modifier 基础 JSON
+     *
+     * @param type   modifier 类型
+     * @param biomes 目标 biome 条件
+     * @return modifier JSON
+     */
     private static JsonObject baseModifier(String type, JsonElement biomes) {
         var modifier = new JsonObject();
         modifier.addProperty("type", type);
@@ -111,20 +138,43 @@ public class BiomeModifiersProvider implements DataProvider {
         return modifier;
     }
 
+    /**
+     * 创建匹配任意 biome 的条件
+     *
+     * @return 任意 biome 条件 JSON
+     */
     private static JsonObject anyBiome() {
         var biomes = new JsonObject();
         biomes.addProperty("type", "forge:any");
         return biomes;
     }
 
+    /**
+     * 创建 biome 条件值
+     *
+     * @param biomes biome ID 列表
+     * @return 单值或数组 JSON
+     */
     private static JsonElement biomes(String... biomes) {
         return stringOrArray(biomes);
     }
 
+    /**
+     * 创建 feature 条件值
+     *
+     * @param features placed feature ID 列表
+     * @return 单值或数组 JSON
+     */
     private static JsonElement features(String... features) {
         return stringOrArray(features);
     }
 
+    /**
+     * 单个值写为字符串，多个值写为数组
+     *
+     * @param values 字符串值
+     * @return 字符串或数组 JSON
+     */
     private static JsonElement stringOrArray(String... values) {
         if (values.length == 1) {
             return new JsonPrimitive(values[0]);
