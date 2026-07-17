@@ -6,6 +6,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageType;
 
+/**
+ * 自定义伤害类型标签常量
+ */
 public interface DamageTypeTags {
     TagKey<DamageType> BYPASSES_DEFENSE = create("bypasses_defense");
     TagKey<DamageType> BYPASSES_MISS = create("bypasses_miss");

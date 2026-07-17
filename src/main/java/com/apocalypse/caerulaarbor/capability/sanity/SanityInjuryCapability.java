@@ -18,8 +18,6 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.MinecraftForge;
 
-import java.util.Optional;
-
 public class SanityInjuryCapability implements ISanityInjuryCapability {
     public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "sanity_injury");
     private static final double DEFAULT_MAX_SANITY = 1000.0;
@@ -42,23 +40,24 @@ public class SanityInjuryCapability implements ISanityInjuryCapability {
             return false;
         }
 
-        if (!(owner instanceof Player player) || (!player.isCreative() && !player.isSpectator())) {
-            double sanityResistance = Optional.ofNullable(owner.getAttribute(CAAttributes.SANITY_RESISTANCE.get()))
-                    .map(AttributeInstance::getValue)
-                    .orElse(0D);
-            damage *= 1 - sanityResistance / 100;
-            if (damage <= 0) {
-                return false;
-            }
-            value -= damage;
-            if (value <= 0) {
-                sanityBreak();
-                value = 0;
-                recovering = true;
-            }
-            return true;
+        if (owner instanceof Player player && (player.isCreative() || player.isSpectator())) {
+            return false;
         }
-        return false;
+
+        AttributeInstance sanityResistanceAttribute = owner.getAttribute(CAAttributes.SANITY_RESISTANCE.get());
+        double sanityResistance = sanityResistanceAttribute == null ? 0.0 : sanityResistanceAttribute.getValue();
+        damage *= 1 - sanityResistance / 100;
+        if (damage <= 0) {
+            return false;
+        }
+
+        value -= damage;
+        if (value <= 0) {
+            sanityBreak();
+            value = 0;
+            recovering = true;
+        }
+        return true;
     }
 
     @Override
@@ -93,9 +92,8 @@ public class SanityInjuryCapability implements ISanityInjuryCapability {
     }
 
     public double getMaxValue() {
-        return Math.max(1.0, Optional.ofNullable(owner.getAttribute(CAAttributes.MAX_SANITY.get()))
-                .map(AttributeInstance::getValue)
-                .orElse(DEFAULT_MAX_SANITY));
+        AttributeInstance maxSanityAttribute = owner.getAttribute(CAAttributes.MAX_SANITY.get());
+        return Math.max(1.0, maxSanityAttribute == null ? DEFAULT_MAX_SANITY : maxSanityAttribute.getValue());
     }
 
     public void lockToMax() {
@@ -123,20 +121,13 @@ public class SanityInjuryCapability implements ISanityInjuryCapability {
 
         owner.addEffect(new MobEffectInstance(CAMobEffects.UNDER_BREAK.get(), 200, 0, false, false, true));
         if (owner instanceof Player player) {
-            //TODO 抵抗效果已通过Mixin适配所有debuff，此处重复
-//            int dizzyDuration = 200;
-//            MobEffectInstance essenceResistance = player.getEffect(CAMobEffects.ESSENCE_RESISTANCE.get());
-//            if (essenceResistance != null) {
-//                int level = Math.min(5, essenceResistance.getAmplifier() + 1);
-//                dizzyDuration = Math.max(1, (int) Math.ceil(dizzyDuration * (1.0 - level * 0.10)));
-//            }
             player.addEffect(new MobEffectInstance(CAMobEffects.DIZZY.get(), 200, 0, false, false));
             player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 200, 0, false, true));
             player.hurt(sanityBreakDamage, baseDamage);
         } else {
-            if (owner.getAttributes().hasAttribute(CAAttributes.NUMB.get())) {
-                owner.getAttribute(CAAttributes.NUMB.get()).setBaseValue(Math.max(
-                        owner.getAttribute(CAAttributes.NUMB.get()).getBaseValue(), 3));
+            AttributeInstance numbAttribute = owner.getAttribute(CAAttributes.NUMB.get());
+            if (numbAttribute != null) {
+                numbAttribute.setBaseValue(Math.max(numbAttribute.getBaseValue(), 3));
             }
             owner.hurt(sanityBreakDamage, (float) Math.min(Math.max(owner.getMaxHealth() * 0.8F, baseDamage), baseDamage * 6));
         }

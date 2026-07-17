@@ -1,19 +1,21 @@
-/*
- *	MCreator 注：此文件会在每次构建时重新生成。
- */
 package com.apocalypse.caerulaarbor.init;
 
 import net.minecraft.world.level.block.ComposterBlock;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
-public class CACompostableItems {
-	//TODO 可能需要修改为dataGen
-	@SubscribeEvent
-	public static void addComposterItems(FMLCommonSetupEvent event) {
-		ComposterBlock.COMPOSTABLES.put(CAItems.SEA_TRAIL_MOR.get(), 0.2f);
-		ComposterBlock.COMPOSTABLES.put(CABlocks.SEA_TRAIL_SOLID.get().asItem(), 0.75f);
-	}
+public final class CACompostableItems {
+    private CACompostableItems() {
+    }
+
+    /**
+     * 在通用设置阶段注册可堆肥物品
+     *
+     * @param event 通用设置事件
+     */
+    public static void addComposterItems(FMLCommonSetupEvent event) {
+        event.enqueueWork(() -> {
+            ComposterBlock.COMPOSTABLES.put(CAItems.SEA_TRAIL_MOR.get(), 0.2F);
+            ComposterBlock.COMPOSTABLES.put(CABlocks.SEA_TRAIL_SOLID.get().asItem(), 0.75F);
+        });
+    }
 }

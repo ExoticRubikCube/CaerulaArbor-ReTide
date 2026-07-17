@@ -1,16 +1,44 @@
 package com.apocalypse.caerulaarbor.datagen.worldgen;
 
-import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import net.minecraft.core.Registry;
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 
+/**
+ * worldgen 注册表数据入口，只负责把各子 provider 挂到外部 RegistrySetBuilder
+ *
+ * <p>新增 worldgen 注册表数据时，先创建对应子 provider 的 {@code bootstrap} 方法，再在
+ * {@link #init(RegistrySetBuilder)} 中追加 {@code builder.add}
+ * <p>示例：
+ * <pre>{@code
+ * public static void init(RegistrySetBuilder builder) {
+ *     // 注册 configured feature bootstrap，先生成 feature 配置
+ *     builder.add(Registries.CONFIGURED_FEATURE, ConfiguredFeatureProvider::bootstrap)
+ *             // 注册 placed feature bootstrap，引用 configured feature 并配置放置规则
+ *             .add(Registries.PLACED_FEATURE, PlacedFeatureProvider::bootstrap)
+ *             // 注册 biome bootstrap，引用 placed feature、carver 和 sound event
+ *             .add(Registries.BIOME, BiomeProvider::bootstrap);
+ * }
+ *
+ * // 在 WorldgenKeys 中声明 ResourceKey 字段
+ * ResourceKey<PlacedFeature> key = WorldgenKeys.PlacedFeatures.BRANDED_LAND_TREE;
+ *
+ * // provider 直接将字段传给 context.register 或 HolderGetter.getOrThrow
+ * context.register(key, placedFeature);
+ * }
+ * }</pre>
+ */
 public final class WorldgenProvider {
+    /**
+     * 工具类不实例化
+     */
     private WorldgenProvider() {
     }
 
+    /**
+     * 注册所有 worldgen bootstrap
+     *
+     * @param builder 来自 RegistryDataProvider 的共享构建器
+     */
     public static void init(RegistrySetBuilder builder) {
         builder.add(Registries.CONFIGURED_FEATURE, ConfiguredFeatureProvider::bootstrap)
                 .add(Registries.PLACED_FEATURE, PlacedFeatureProvider::bootstrap)
@@ -20,28 +48,4 @@ public final class WorldgenProvider {
                 .add(Registries.STRUCTURE_SET, StructureSetProvider::bootstrap);
     }
 
-    static ResourceLocation location(String id) {
-        int separator = id.indexOf(':');
-        if (separator < 0) {
-            return ResourceLocation.withDefaultNamespace(id);
-        }
-        String namespace = id.substring(0, separator);
-        String path = id.substring(separator + 1);
-        if ("minecraft".equals(namespace)) {
-            return ResourceLocation.withDefaultNamespace(path);
-        }
-        return ResourceLocation.fromNamespaceAndPath(namespace, path);
-    }
-
-    static ResourceLocation modLocation(String path) {
-        return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, path);
-    }
-
-    static <T> ResourceKey<T> key(ResourceKey<? extends Registry<T>> registry, String id) {
-        return ResourceKey.create(registry, location(id));
-    }
-
-    static <T> ResourceKey<T> modKey(ResourceKey<? extends Registry<T>> registry, String path) {
-        return ResourceKey.create(registry, modLocation(path));
-    }
 }

@@ -6,8 +6,15 @@ import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler;
 import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler.StrategyType;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
-import com.apocalypse.caerulaarbor.init.CAConfigs;
-import com.apocalypse.caerulaarbor.entity.*;
+import com.apocalypse.caerulaarbor.entity.BoneFishEntity;
+import com.apocalypse.caerulaarbor.entity.ChitinGolemEntity;
+import com.apocalypse.caerulaarbor.entity.ComplexChitinGolemEntity;
+import com.apocalypse.caerulaarbor.entity.FakeOffspringEntity;
+import com.apocalypse.caerulaarbor.entity.HighmoreEntity;
+import com.apocalypse.caerulaarbor.entity.PredatorAbyssalEntity;
+import com.apocalypse.caerulaarbor.entity.SpikeChestEntity;
+import com.apocalypse.caerulaarbor.entity.TideutantRockSpiderEntity;
+import com.apocalypse.caerulaarbor.entity.TidutantExcrescenceEntity;
 import com.apocalypse.caerulaarbor.entity.bullets.HighmoreShootEntity;
 import com.apocalypse.caerulaarbor.init.*;
 import com.apocalypse.caerulaarbor.manager.GrowUpgradeManager;
@@ -15,8 +22,6 @@ import com.apocalypse.caerulaarbor.manager.SilenceUpgradeManager;
 import com.apocalypse.caerulaarbor.manager.SubsistingUpgradeManager;
 import com.apocalypse.caerulaarbor.util.CaerulaUtil;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
-import net.minecraft.advancements.Advancement;
-import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
@@ -26,12 +31,12 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.DamageTypeTags;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -40,12 +45,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -53,19 +57,31 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Comparator;
-import java.util.List;
+import java.util.Objects;
 
+@SuppressWarnings("unused")
 @Mod.EventBusSubscriber
 public class LivingAttackEventHandler {
 
+    private static final TagKey<EntityType<?>> INQUISITION = TagKey.create(Registries.ENTITY_TYPE,
+            ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "inquisition"));
+    private static final TagKey<EntityType<?>> HUMAN_SIDE = TagKey.create(Registries.ENTITY_TYPE,
+            ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside"));
+    private static final TagKey<EntityType<?>> OCEAN_OFFSPRING = TagKey.create(Registries.ENTITY_TYPE,
+            ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"));
+    private static final TagKey<EntityType<?>> OCEAN_PET = TagKey.create(Registries.ENTITY_TYPE,
+            ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanpet"));
+    private static final TagKey<EntityType<?>> SKIP_MIGRATION = TagKey.create(Registries.ENTITY_TYPE,
+            ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "skip_migration"));
+    private static final TagKey<EntityType<?>> IGNORE_MIGRATION = TagKey.create(Registries.ENTITY_TYPE,
+            ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "ignore_migration"));
+
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onEntityAttack(LivingAttackEvent event) {
-        if (event == null || event.getEntity() == null) return;
-
         handleInvulnerable(event);
         handleNumbness(event);
         handleMissRate(event);
-        handleMartusArrowImmue(event);
+        handleMartusArrowImmunity(event);
         handleInquisitionFriendlyFire(event);
         handleDamagePrevention(event);
         handleHighmoreCounter(event);
@@ -75,168 +91,132 @@ public class LivingAttackEventHandler {
     }
 
     private static void handleInvulnerable(LivingAttackEvent event) {
-        DamageSource damagesource = event.getSource();
-        Entity entity = event.getEntity();
+        var damageSource = event.getSource();
+        var target = event.getEntity();
+        if (damageSource.is(CADamageTypes.INV_KILLER)) return;
 
-        if (damagesource == null || entity == null || damagesource.is(CADamageTypes.INV_KILLER)) return;
-
-        if (entity instanceof LivingEntity livEnt1 && livEnt1.hasEffect(CAMobEffects.INVULNERABLE.get())) {
+        if (target.hasEffect(CAMobEffects.INVULNERABLE.get())) {
             event.setCanceled(true);
         }
     }
 
     private static void handleNumbness(LivingAttackEvent event) {
-        LevelAccessor world = event.getEntity().level();
-        double x = event.getEntity().getX();
-        double y = event.getEntity().getY();
-        double z = event.getEntity().getZ();
-        Entity sourceentity = event.getSource().getEntity();
-
-        if (sourceentity == null) return;
+        var level = event.getEntity().level();
+        var target = event.getEntity();
+        var sourceEntity = event.getSource().getEntity();
+        if (!(sourceEntity instanceof LivingEntity attacker)) return;
         if (event.isCanceled()) return;
 
-        double numb = sourceentity instanceof LivingEntity livingEntity1 && livingEntity1.getAttributes().hasAttribute(CAAttributes.NUMB.get())
-                ? livingEntity1.getAttribute(CAAttributes.NUMB.get()).getBaseValue()
-                : 0;
-
-        if (numb > 0) {
-            if (sourceentity instanceof LivingEntity livingEntity2 && livingEntity2.getAttributes().hasAttribute(CAAttributes.NUMB.get()))
-                livingEntity2.getAttribute(CAAttributes.NUMB.get()).setBaseValue((numb - 1));
-            if (world instanceof ServerLevel level)
-                level.sendParticles(CAParticles.NUMBNESS.get(), (sourceentity.getX()), (sourceentity.getY() + 1), (sourceentity.getZ()), 12, 1, 1, 1, 0.1);
-            if (world instanceof Level level) {
-                    level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.WAXED_SIGN_INTERACT_FAIL, SoundSource.HOSTILE, 2, 1);
+        var numbness = attacker.getAttribute(CAAttributes.NUMB.get());
+        if (numbness != null && numbness.getBaseValue() > 0) {
+            numbness.setBaseValue(numbness.getBaseValue() - 1);
+            if (level instanceof ServerLevel serverLevel)
+                serverLevel.sendParticles(CAParticles.NUMBNESS.get(), attacker.getX(), attacker.getY() + 1, attacker.getZ(), 12, 1, 1, 1, 0.1);
+            if (level instanceof Level) {
+                level.playSound(null, target.blockPosition(), SoundEvents.WAXED_SIGN_INTERACT_FAIL, SoundSource.HOSTILE, 2, 1);
             }
             event.setCanceled(true);
         }
     }
 
     private static void handleMissRate(LivingAttackEvent event) {
-        LevelAccessor world = event.getEntity().level();
-        double x = event.getEntity().getX();
-        double y = event.getEntity().getY();
-        double z = event.getEntity().getZ();
-        DamageSource damagesource = event.getSource();
-        Entity entity = event.getEntity();
-
-        if (damagesource == null || entity == null) return;
+        var world = event.getEntity().level();
+        var target = event.getEntity();
+        var damageSource = event.getSource();
         if (event.isCanceled()) return;
 
-        double missRate = entity instanceof LivingEntity livingEntity1 && livingEntity1.getAttributes().hasAttribute(CAAttributes.MISSRATE.get())
-                ? livingEntity1.getAttribute(CAAttributes.MISSRATE.get()).getValue()
-                : 0;
+        var missRate = target.getAttribute(CAAttributes.MISSRATE.get());
+        if (missRate == null || missRate.getValue() <= 0 || damageSource.is(CADamageTags.BYPASS_MISS)
+                || target.hasEffect(CAMobEffects.MUTE.get()) || target.getRandom().nextDouble() * 100 >= missRate.getValue())
+            return;
 
-        if (missRate > 0) {
-            if (!damagesource.is(CADamageTags.BYPASS_MISS)) {
-                if (!(entity instanceof LivingEntity livEnt3 && livEnt3.hasEffect(CAMobEffects.MUTE.get()))) {
-                    if (Math.random() * 100 < missRate) {
-                        if (world instanceof ServerLevel level)
-                            level.sendParticles(CAParticles.MISS.get(), x, y, z, 6, 1, 1, 1, 0.1);
-                        if (entity instanceof PredatorAbyssalEntity) {
-                            ((PredatorAbyssalEntity) entity).setAnimation("animation.predator.miss");
-                        }
-                        if (entity instanceof ChitinGolemEntity) {
-                            ((ChitinGolemEntity) entity).setAnimation("animation.chitgolem.block");
-                        }
-                        event.setCanceled(true);
-                    }
-                }
-            }
+        if (world instanceof ServerLevel level) {
+            level.sendParticles(CAParticles.MISS.get(), target.getX(), target.getY(), target.getZ(), 6, 1, 1, 1, 0.1);
         }
+        if (target instanceof PredatorAbyssalEntity predator) {
+            predator.setAnimation("animation.predator.miss");
+        }
+        if (target instanceof ChitinGolemEntity chitinGolem) {
+            chitinGolem.setAnimation("animation.chitgolem.block");
+        }
+        event.setCanceled(true);
     }
 
-    private static void handleMartusArrowImmue(LivingAttackEvent event) {
-        DamageSource damagesource = event.getSource();
-        Entity entity = event.getEntity();
-        Entity sourceentity = event.getSource().getEntity();
-        double amount = event.getAmount();
+    private static void handleMartusArrowImmunity(LivingAttackEvent event) {
+        var damageSource = event.getSource();
+        var target = event.getEntity();
+        var sourceEntity = damageSource.getEntity();
+        if (sourceEntity == null || !target.hasEffect(CAMobEffects.MARTUS_PROTECTION.get())) return;
 
-        if (damagesource == null || entity == null || sourceentity == null) return;
-
-        if (entity instanceof LivingEntity livEnt0 && livEnt0.hasEffect(CAMobEffects.MARTUS_PROTECTION.get())) {
-            if (damagesource.is(DamageTypeTags.IS_PROJECTILE) && sourceentity.distanceTo(entity) > 2 && amount <= (entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 2) {
-                event.setCanceled(true);
-            } else if (entity.distanceTo(sourceentity) > 3) {
-                if (Math.random() < 0.5) {
-                    event.setCanceled(true);
-                }
-            }
+        if (damageSource.is(DamageTypeTags.IS_PROJECTILE) && sourceEntity.distanceTo(target) > 2
+                && event.getAmount() <= target.getMaxHealth() * 2) {
+            event.setCanceled(true);
+        } else if (target.distanceTo(sourceEntity) > 3 && target.getRandom().nextBoolean()) {
+            event.setCanceled(true);
         }
     }
 
     private static void handleInquisitionFriendlyFire(LivingAttackEvent event) {
-        Entity entity = event.getEntity();
-        Entity sourceentity = event.getSource().getEntity();
-
-        if (entity == null || sourceentity == null) return;
-
-        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "inquisition")))
-                && sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "inquisition")))) {
+        var target = event.getEntity();
+        var sourceEntity = event.getSource().getEntity();
+        if (sourceEntity != null && target.getType().is(INQUISITION) && sourceEntity.getType().is(INQUISITION)) {
             event.setCanceled(true);
         }
     }
 
     private static void handleDamagePrevention(LivingAttackEvent event) {
-        Entity entity = event.getEntity();
-        Entity sourceentity = event.getSource().getEntity();
-        LevelAccessor world = entity.level();
+        var target = event.getEntity();
+        var sourceEntity = event.getSource().getEntity();
+        if (sourceEntity == null) return;
 
-        preventSameTeamDamage(event, world, entity, sourceentity);
-        preventInquisitionDamage(event, entity, sourceentity);
-        preventHumanSideFriendlyFire(event, entity, sourceentity);
+        preventSameTeamDamage(event, target.level(), target, sourceEntity);
+        preventInquisitionDamage(event, target, sourceEntity);
+        preventHumanSideFriendlyFire(event, target, sourceEntity);
     }
 
-    private static void preventSameTeamDamage(LivingAttackEvent event, LevelAccessor world, Entity entity, Entity sourceentity) {
-        if (entity == null || sourceentity == null) return;
-        if (sourceentity instanceof Player) return;
-        if (entity instanceof Player) return;
+    private static void preventSameTeamDamage(LivingAttackEvent event, LevelAccessor world, LivingEntity target, Entity sourceEntity) {
+        if (target instanceof Player || sourceEntity instanceof Player) return;
 
-        if (world.getLevelData().getGameRules().getBoolean(CAGameRules.AGGRESIVE_MODE) || !world.getLevelData().getGameRules().getBoolean(net.minecraft.world.level.GameRules.RULE_MOBGRIEFING)) {
-            if (EntityUtils.isSameTeam(entity, sourceentity)) {
-                event.setCanceled(true);
-            }
+        if ((world.getLevelData().getGameRules().getBoolean(CAGameRules.AGGRESIVE_MODE)
+                || !world.getLevelData().getGameRules().getBoolean(net.minecraft.world.level.GameRules.RULE_MOBGRIEFING))
+                && EntityUtils.isSameTeam(target, sourceEntity)) {
+            event.setCanceled(true);
         }
     }
 
-    private static void preventInquisitionDamage(LivingAttackEvent event, Entity entity, Entity sourceentity) {
-        if (entity == null || sourceentity == null) return;
+    private static void preventInquisitionDamage(LivingAttackEvent event, LivingEntity target, Entity sourceEntity) {
+        if (!target.getType().is(INQUISITION) || !(sourceEntity instanceof Player player)) return;
 
-        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "inquisition"))) && sourceentity instanceof Player entity1) {
-            if ((entity.getPersistentData().getString("recentCommander")).equals(sourceentity.getDisplayName().getString())) {
-                event.setCanceled(true);
-            }
-            if (entity1.isHolding(CAItems.INTERPHONE.get())) {
-                entity.getPersistentData().putString("recentCommander", "");
-            }
+        if (target.getPersistentData().getString("recentCommander").equals(sourceEntity.getDisplayName().getString())) {
+            event.setCanceled(true);
+        }
+        if (player.isHolding(CAItems.INTERPHONE.get())) {
+            target.getPersistentData().putString("recentCommander", "");
         }
     }
 
-    private static void preventHumanSideFriendlyFire(LivingAttackEvent event, Entity entity, Entity sourceentity) {
-        if (entity == null || sourceentity == null) return;
+    private static void preventHumanSideFriendlyFire(LivingAttackEvent event, LivingEntity target, Entity sourceEntity) {
+        if (!target.getType().is(HUMAN_SIDE) || !sourceEntity.getType().is(HUMAN_SIDE)
+                || target instanceof Mob mob && sourceEntity == mob.getTarget()) return;
 
-        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside")))) {
-            if (sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside")))
-                    && !(sourceentity == (entity instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null))) {
-                event.setCanceled(true);
-            }
-        }
+        event.setCanceled(true);
     }
 
-    // TODO锛欻ighmore 鍙嶅嚮閫昏緫浠嶉渶澶嶆牳锛屽彲鑳介渶瑕佷笅鏀?
+    // TODO：Highmore 反击逻辑仍需复核，可能需要下放
     private static void handleHighmoreCounter(LivingAttackEvent event) {
         LevelAccessor world = event.getEntity().level();
         DamageSource damagesource = event.getSource();
-        Entity entity = event.getEntity();
-        Entity sourceentity = event.getSource().getEntity();
+        var entity = event.getEntity();
+        var sourceEntity = event.getSource().getEntity();
 
-        if (damagesource == null || entity == null || sourceentity == null) return;
+        if (damagesource == null || entity == null || sourceEntity == null) return;
 
         if (entity instanceof HighmoreEntity livEnt1) {
             if (livEnt1.hasEffect(CAMobEffects.COOLDOWN_SINAL.get())) return;
 
-            if (!(damagesource.is(CADamageTypes.HAND_SPIKE) || damagesource.is(DamageTypes.THORNS) || sourceentity instanceof HighmoreEntity)) {
-                if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-                    livingEntity.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL.get(), 100, 0, false, false));
+            if (!(damagesource.is(CADamageTypes.HAND_SPIKE) || damagesource.is(DamageTypes.THORNS) || sourceEntity instanceof HighmoreEntity)) {
+                if (!livEnt1.level().isClientSide())
+                    livEnt1.addEffect(new MobEffectInstance(CAMobEffects.COOLDOWN_SINAL.get(), 100, 0, false, false));
 
                 double range;
                 if ((entity instanceof HighmoreEntity datEntI ? datEntI.getEntityData().get(HighmoreEntity.DATA_PHASE) : 0) == 0) {
@@ -247,15 +227,15 @@ public class LivingAttackEventHandler {
                     range = 17;
                 }
 
-                if (entity.distanceTo(sourceentity) >= range) {
-                    double atk = (entity instanceof LivingEntity livingEntity10 && livingEntity10.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)
-                            ? livingEntity10.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 2.5;
+                if (entity.distanceTo(sourceEntity) >= range) {
+                    double atk = (livEnt1.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)
+                            ? Objects.requireNonNull(livEnt1.getAttribute(Attributes.ATTACK_DAMAGE)).getValue() : 0) * 2.5;
 
-                    spawnHighmoreProjectile(world, entity, sourceentity, atk, sourceentity.getX(), sourceentity.getY() + sourceentity.getBbHeight() + 4, sourceentity.getZ(), 0, -1, 0);
-                    spawnHighmoreProjectile(world, entity, sourceentity, atk, sourceentity.getX() + sourceentity.getBbWidth() * 2, sourceentity.getY() + sourceentity.getBbHeight(), sourceentity.getZ(), -1, 0, 0);
-                    spawnHighmoreProjectile(world, entity, sourceentity, atk, sourceentity.getX() - sourceentity.getBbWidth() * 2, sourceentity.getY() + sourceentity.getBbHeight(), sourceentity.getZ(), 1, 0, 0);
-                    spawnHighmoreProjectile(world, entity, sourceentity, atk, sourceentity.getX(), sourceentity.getY() + sourceentity.getBbHeight(), sourceentity.getZ() + sourceentity.getBbWidth() * 2, 0, 0, -1);
-                    spawnHighmoreProjectile(world, entity, sourceentity, atk, sourceentity.getX(), sourceentity.getY() + sourceentity.getBbHeight(), sourceentity.getZ() - sourceentity.getBbWidth() * 2, 0, 0, 1);
+                    spawnHighmoreProjectile(world, entity, sourceEntity, atk, sourceEntity.getX(), sourceEntity.getY() + sourceEntity.getBbHeight() + 4, sourceEntity.getZ(), 0, -1, 0);
+                    spawnHighmoreProjectile(world, entity, sourceEntity, atk, sourceEntity.getX() + sourceEntity.getBbWidth() * 2, sourceEntity.getY() + sourceEntity.getBbHeight(), sourceEntity.getZ(), -1, 0, 0);
+                    spawnHighmoreProjectile(world, entity, sourceEntity, atk, sourceEntity.getX() - sourceEntity.getBbWidth() * 2, sourceEntity.getY() + sourceEntity.getBbHeight(), sourceEntity.getZ(), 1, 0, 0);
+                    spawnHighmoreProjectile(world, entity, sourceEntity, atk, sourceEntity.getX(), sourceEntity.getY() + sourceEntity.getBbHeight(), sourceEntity.getZ() + sourceEntity.getBbWidth() * 2, 0, 0, -1);
+                    spawnHighmoreProjectile(world, entity, sourceEntity, atk, sourceEntity.getX(), sourceEntity.getY() + sourceEntity.getBbHeight(), sourceEntity.getZ() - sourceEntity.getBbWidth() * 2, 0, 0, 1);
                 }
             }
         }
@@ -276,7 +256,7 @@ public class LivingAttackEventHandler {
         projectileLevel.addFreshEntity(entityToSpawn);
     }
 
-    // TODO锛歍idutant 鐮寸敳閫昏緫浠嶉渶澶嶆牳
+    // TODO：Midutant 破甲逻辑仍需复核
     private static void handleTidutantArmorBreak(LivingAttackEvent event) {
         Entity entity = event.getEntity();
         Entity sourceentity = event.getSource().getEntity();
@@ -291,251 +271,205 @@ public class LivingAttackEventHandler {
     }
 
     private static void handleMobHit(LivingAttackEvent event) {
-        LevelAccessor world = event.getEntity().level();
-        double x = event.getEntity().getX();
-        double y = event.getEntity().getY();
-        double z = event.getEntity().getZ();
-        DamageSource damagesource = event.getSource();
-        Entity entity = event.getEntity();
-        Entity sourceentity = event.getSource().getEntity();
-        double amount = event.getAmount();
-
-        if (damagesource == null || entity == null || sourceentity == null) return;
+        var world = event.getEntity().level();
+        var target = event.getEntity();
+        var damageSource = event.getSource();
+        var sourceEntity = damageSource.getEntity();
+        if (sourceEntity == null) return;
         if (event.isCanceled()) return;
 
-        handleMobHitMigration(event, world, x, y, z, damagesource, entity, sourceentity, amount);
-        handleMobHitEvolution(event, world, x, y, z, damagesource, entity, sourceentity, amount);
-        handleMobHitSpecialEffects(event, world, x, y, z, damagesource, entity, sourceentity, amount);
+        handleMobHitMigration(world, target, sourceEntity, damageSource);
+        handleMobHitEvolution(event, world, target, sourceEntity, damageSource, event.getAmount());
+        handleMobHitSpecialEffects(world, target, sourceEntity, damageSource, event.getAmount());
     }
 
-    private static void handleMobHitMigration(LivingAttackEvent event, LevelAccessor world, double x, double y, double z, DamageSource damagesource, Entity entity, Entity sourceentity, double amount) {
-        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))
-                && !sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))
-                && !entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanpet")))
-                && !entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "skip_migration")))) {
-            if (MapVariables.get(world).strategy_migration > 0) {
-                if (!(sourceentity instanceof Player player && player.getAbilities().instabuild)
-                        && !damagesource.is(CADamageTags.BYPASSES_MIGRATION)) {
-                    for (Entity entityiterator : world.getEntities(entity,
-                            new AABB((x - (8 + MapVariables.get(world).strategy_migration * 16)), (y - 16), (z - (8 + MapVariables.get(world).strategy_migration * 16)),
-                                    (x + 8 + MapVariables.get(world).strategy_migration * 24), (y + 16), (z + 8 + MapVariables.get(world).strategy_migration * 24)))) {
-                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))
-                                && !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanpet")))) {
-                            if (entityiterator == sourceentity) continue;
-                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "ignore_migration")))) continue;
-                            if (entityiterator instanceof Mob mob)
-                                mob.getNavigation().moveTo(x, y, z, 0.5);
-                            if (entityiterator instanceof Mob mob && sourceentity instanceof LivingEntity livingEntity)
-                                mob.setTarget(livingEntity);
-                        }
-                    }
-                }
-            }
+    private static void handleMobHitMigration(LevelAccessor world, LivingEntity target, Entity sourceEntity, DamageSource damageSource) {
+        var migrationLevel = MapVariables.get(world).strategy_migration;
+        if (migrationLevel <= 0) return;
+
+        if (target.getType().is(OCEAN_OFFSPRING) && !sourceEntity.getType().is(OCEAN_OFFSPRING)
+                && !target.getType().is(OCEAN_PET) && !target.getType().is(SKIP_MIGRATION)
+                && !(sourceEntity instanceof Player player && player.getAbilities().instabuild)
+                && !damageSource.is(CADamageTags.BYPASSES_MIGRATION)) {
+            var migrationArea = new AABB(target.getX() - (8 + migrationLevel * 16), target.getY() - 16,
+                    target.getZ() - (8 + migrationLevel * 16), target.getX() + 8 + migrationLevel * 24,
+                    target.getY() + 16, target.getZ() + 8 + migrationLevel * 24);
+            directMigratingMobs(world, target, sourceEntity, migrationArea, 0.5, true);
         }
 
-        if (entity instanceof Player && (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization >= 3) {
-            if (MapVariables.get(world).strategy_migration > 0 && !sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
-                for (Entity entityiterator : world.getEntities(entity,
-                        new AABB((x - (8 + MapVariables.get(world).strategy_migration * 24)), (y - 16), (z - (8 + MapVariables.get(world).strategy_migration * 24)),
-                                (x + 8 + MapVariables.get(world).strategy_migration * 24), (y + 16), (z + 8 + MapVariables.get(world).strategy_migration * 24)))) {
-                    if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))
-                            && !entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanpet")))) {
-                        if (entityiterator == sourceentity) continue;
-                        if (entityiterator instanceof Mob mob)
-                            mob.getNavigation().moveTo(x, y, z, 0.8);
-                        if (entityiterator instanceof Mob mob && sourceentity instanceof LivingEntity livingEntity)
-                            mob.setTarget(livingEntity);
-                    }
-                }
+        if (target instanceof Player player
+                && player.getCapability(ModCapabilities.PLAYER_VARIABLE).map(data -> data.player_oceanization >= 3).orElse(false)
+                && !sourceEntity.getType().is(OCEAN_OFFSPRING)) {
+            var migrationArea = new AABB(target.getX() - (8 + migrationLevel * 24), target.getY() - 16,
+                    target.getZ() - (8 + migrationLevel * 24), target.getX() + 8 + migrationLevel * 24,
+                    target.getY() + 16, target.getZ() + 8 + migrationLevel * 24);
+            directMigratingMobs(world, target, sourceEntity, migrationArea, 0.8, false);
+        }
+    }
+
+    private static void directMigratingMobs(LevelAccessor world, LivingEntity target, Entity sourceEntity, AABB area, double speed, boolean ignoreMarkedEntities) {
+        for (var candidate : world.getEntities(target, area)) {
+            if (!candidate.getType().is(OCEAN_OFFSPRING) || candidate.getType().is(OCEAN_PET)
+                    || candidate == sourceEntity || ignoreMarkedEntities && candidate.getType().is(IGNORE_MIGRATION)
+                    || !(candidate instanceof Mob mob)) continue;
+
+            mob.getNavigation().moveTo(target.getX(), target.getY(), target.getZ(), speed);
+            if (sourceEntity instanceof LivingEntity livingSource) {
+                mob.setTarget(livingSource);
             }
         }
     }
 
-    private static void handleMobHitEvolution(LivingAttackEvent event, LevelAccessor world, double x, double y, double z, DamageSource damagesource, Entity entity, Entity sourceentity, double amount) {
-        if (sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
-            if (world.getLevelData().getGameRules().getBoolean(CAGameRules.NATURAL_EVOLUTION)) {
-                MapVariablesHandler.addEvoPoint(world, StrategyType.GROW, amount * 0.025);
-                GrowUpgradeManager.applyGrowthUpgrade(world);
-                SilenceUpgradeManager.applySilenceUpgrade(world, amount * 0.025);
+    private static void handleMobHitEvolution(LivingAttackEvent event, LevelAccessor world, LivingEntity target, Entity sourceEntity, DamageSource damageSource, double amount) {
+        if (sourceEntity.getType().is(OCEAN_OFFSPRING)
+                && world.getLevelData().getGameRules().getBoolean(CAGameRules.NATURAL_EVOLUTION)) {
+            var growthPoints = amount * 0.025;
+            MapVariablesHandler.addEvoPoint(world, StrategyType.GROW, growthPoints);
+            GrowUpgradeManager.applyGrowthUpgrade(world);
+            SilenceUpgradeManager.applySilenceUpgrade(world, growthPoints);
+        }
+
+        if (!target.getType().is(OCEAN_OFFSPRING)) return;
+
+        if (sourceEntity instanceof ServerPlayer player) {
+            var advancement = player.server.getAdvancements().getAdvancement(
+                    ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "encounter_from_the_ocean"));
+            if (advancement != null) {
+                var progress = player.getAdvancements().getOrStartProgress(advancement);
+                for (var criterion : progress.getRemainingCriteria()) {
+                    player.getAdvancements().award(advancement, criterion);
+                }
             }
         }
 
-        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
-            if (sourceentity instanceof ServerPlayer player) {
-                Advancement adv = player.server.getAdvancements().getAdvancement(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "encounter_from_the_ocean"));
-                AdvancementProgress ap = player.getAdvancements().getOrStartProgress(adv);
-                if (!ap.isDone()) {
-                    for (String criteria : ap.getRemainingCriteria())
-                        player.getAdvancements().award(adv, criteria);
-                }
-            }
+        if (world.getLevelData().getGameRules().getBoolean(CAGameRules.NATURAL_EVOLUTION)
+                && !damageSource.is(CADamageTags.BYPASSES_EVOLUTION)) {
+            var subsistingPoints = Math.min(amount, target.getMaxHealth()) * 0.025;
+            MapVariablesHandler.addEvoPoint(world, StrategyType.SUBSISTING, subsistingPoints);
+            SubsistingUpgradeManager.applySubsistingUpgrade(world);
+            SilenceUpgradeManager.applySilenceUpgrade(world, subsistingPoints);
+        }
 
-            if (world.getLevelData().getGameRules().getBoolean(CAGameRules.NATURAL_EVOLUTION)
-                    && !damagesource.is(CADamageTags.BYPASSES_EVOLUTION)) {
-                MapVariablesHandler.addEvoPoint(world, StrategyType.SUBSISTING,
-                        Math.min(amount, entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.025);
-                SubsistingUpgradeManager.applySubsistingUpgrade(world);
-                SilenceUpgradeManager.applySilenceUpgrade(world, Math.min(amount, entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.025);
-            }
+        if (sourceEntity.getType().is(OCEAN_OFFSPRING)
+                && (!(sourceEntity instanceof Mob mob) || target != mob.getTarget())) {
+            event.setCanceled(true);
+        }
 
-            if (sourceentity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
-                if (!(entity == (sourceentity instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null))) {
-                    event.setCanceled(true);
-                }
-            }
-
-            if (entity instanceof LivingEntity livingEntity71 && livingEntity71.getAttributes().hasAttribute(CAAttributes.EVOLVED.get()))
-                livingEntity71.getAttribute(CAAttributes.EVOLVED.get()).setBaseValue(1);
+        var evolved = target.getAttribute(CAAttributes.EVOLVED.get());
+        if (evolved != null) {
+            evolved.setBaseValue(1);
         }
     }
 
-    private static void handleMobHitSpecialEffects(LivingAttackEvent event, LevelAccessor world, double x, double y, double z, DamageSource damagesource, Entity entity, Entity sourceentity, double amount) {
-        if (sourceentity instanceof BoneFishEntity) {
-            EntityUtils.giveLessArmor(entity, 1);
+    private static void handleMobHitSpecialEffects(LevelAccessor world, LivingEntity target, Entity sourceEntity, DamageSource damageSource, double amount) {
+        if (sourceEntity instanceof BoneFishEntity) {
+            EntityUtils.giveLessArmor(target, 1);
+        } else if (sourceEntity instanceof FakeOffspringEntity) {
+            EntityUtils.giveLessArmor(target, 2);
         }
-        if (sourceentity instanceof FakeOffspringEntity) {
-            EntityUtils.giveLessArmor(entity, 2);
+        if ((sourceEntity instanceof ChitinGolemEntity || sourceEntity instanceof ComplexChitinGolemEntity)
+                && target.getBbWidth() * target.getBbHeight() <= 6 && !damageSource.is(CADamageTypes.GOLEM_ATTACK)) {
+            target.push(0, 0.5, 0);
         }
-        if (sourceentity instanceof ChitinGolemEntity || sourceentity instanceof ComplexChitinGolemEntity) {
-            if (entity.getBbWidth() * entity.getBbHeight() <= 6 && !damagesource.is(CADamageTypes.GOLEM_ATTACK)) {
-                entity.push(0, 0.5, 0);
-            }
+        if (sourceEntity instanceof HighmoreEntity && sourceEntity != target) {
+            EntityUtils.giveLessArmor(target, 21);
         }
-        if (sourceentity instanceof HighmoreEntity) {
-            if (!(sourceentity == entity)) {
-                EntityUtils.giveLessArmor(entity, 21);
-            }
-        }
-
-        if (entity instanceof SpikeChestEntity) {
-            if (entity.isAlive()) {
-                sourceentity.hurt(CADamageTypes.source(world, CADamageTypes.CHEST_SPIKE),
-                        (float) (amount * 0.33));
-            }
+        if (target instanceof SpikeChestEntity && target.isAlive()) {
+            sourceEntity.hurt(CADamageTypes.source(world, CADamageTypes.CHEST_SPIKE), (float) (amount * 0.33));
         }
     }
 
     private static void handlePlayerHit(LivingAttackEvent event) {
-        LevelAccessor world = event.getEntity().level();
-        double x = event.getEntity().getX();
-        double y = event.getEntity().getY();
-        double z = event.getEntity().getZ();
-        Entity entity = event.getEntity();
-        Entity immediatesourceentity = event.getSource().getDirectEntity();
-        Entity sourceentity = event.getSource().getEntity();
-        double amount = event.getAmount();
+        var world = event.getEntity().level();
+        var target = event.getEntity();
+        var immediateSource = event.getSource().getDirectEntity();
+        var sourceEntity = event.getSource().getEntity();
+        if (immediateSource == null || sourceEntity == null) return;
 
-        if (entity == null || immediatesourceentity == null || sourceentity == null) return;
-
-        ItemStack mainHandItem = (sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY).copy();
-
-        if (EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.MUTE_ATTACK.get(), mainHandItem) != 0) {
-            if (Math.random() < 0.2 * mainHandItem.getEnchantmentLevel(CAEnchantments.MUTE_ATTACK.get())) {
-                if (entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-                    livingEntity.addEffect(new MobEffectInstance(CAMobEffects.MUTE.get(), 30 * mainHandItem.getEnchantmentLevel(CAEnchantments.MUTE_ATTACK.get()), 0, false, false));
-            }
+        var mainHandItem = sourceEntity instanceof LivingEntity livingSource ? livingSource.getMainHandItem() : ItemStack.EMPTY;
+        var muteAttackLevel = mainHandItem.getEnchantmentLevel(CAEnchantments.MUTE_ATTACK.get());
+        if (muteAttackLevel > 0 && world.random.nextFloat() < 0.2F * muteAttackLevel && !world.isClientSide()) {
+            target.addEffect(new MobEffectInstance(CAMobEffects.MUTE.get(), 30 * muteAttackLevel, 0, false, false));
         }
 
         if (event.isCanceled()) return;
 
-        if (sourceentity instanceof Player) {
-            handlePlayerHitRelics(event, world, x, y, z, entity, immediatesourceentity, sourceentity, amount, mainHandItem);
+        if (sourceEntity instanceof Player player) {
+            player.getCapability(ModCapabilities.PLAYER_VARIABLE).ifPresent(playerVariables -> handlePlayerHitRelics(
+                    world, target, target.position(), immediateSource, player, event.getAmount(), mainHandItem, playerVariables));
         }
     }
 
-    private static void handlePlayerHitRelics(LivingAttackEvent event, LevelAccessor world, double x, double y, double z, Entity entity, Entity immediatesourceentity, Entity sourceentity, double amount, ItemStack mainHandItem) {
-        if (!(immediatesourceentity == sourceentity)) {
-            String rname = ForgeRegistries.ITEMS.getKey(mainHandItem.getItem()).toString();
-            boolean validItem;
+    private static void handlePlayerHitRelics(Level world, LivingEntity target, Vec3 targetPosition, Entity immediateSource,
+                                              Player player, double amount, ItemStack mainHandItem, PlayerVariable playerVariables) {
+        if (immediateSource != player) {
+            var itemKey = ForgeRegistries.ITEMS.getKey(mainHandItem.getItem());
+            var registryName = itemKey == null ? "" : itemKey.toString();
 
-            if ((sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_STRANGLE) {
-                validItem = false;
-                if (mainHandItem.is(ItemTags.create(ResourceLocation.parse("forge:tools/crossbows")))) {
-                    validItem = true;
-                } else if (mainHandItem.getItem() instanceof CrossbowItem) {
-                    validItem = true;
-                } else {
-                    for (String stringiterator : CAConfigs.HAND_STRANGLE.get()) {
-                        if (CaerulaUtil.matchesRegistryName(stringiterator, rname)) {
-                            validItem = true;
-                            break;
-                        }
-                    }
+            if (playerVariables.relic_hand_STRANGLE && isStrangleWeapon(mainHandItem, registryName)
+                    && target.isAlive() && target.getHealth() < target.getMaxHealth() * 0.25F) {
+                target.hurt(CADamageTypes.source(world, CADamageTypes.HAND_OF_CHOKER, player), target.getMaxHealth() * 99);
+                if (world instanceof ServerLevel level) {
+                    level.sendParticles(ParticleTypes.GLOW_SQUID_INK, target.getX(), target.getY(), target.getZ(), 128, 1, 1, 1, 0.33);
                 }
-                if (validItem && (entity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) < (entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 0.25) {
-                    if (entity.isAlive()) {
-                        entity.hurt(CADamageTypes.source(world, CADamageTypes.HAND_OF_CHOKER, sourceentity),
-                                (entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * 99);
-                        if (world instanceof ServerLevel level)
-                            level.sendParticles(ParticleTypes.GLOW_SQUID_INK, (entity.getX()), (entity.getY()), (entity.getZ()), 128, 1, 1, 1, 0.33);
-                        if (world instanceof Level level) {
-                                level.playSound(null, BlockPos.containing(entity.getX(), entity.getY(), entity.getZ()), SoundEvents.WITHER_HURT, SoundSource.NEUTRAL, 2, 1);
-                        }
-                    }
-                }
+                world.playSound(null, target.blockPosition(), SoundEvents.WITHER_HURT, SoundSource.NEUTRAL, 2, 1);
             }
 
-            if ((sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_hand_FIREWORK) {
-                validItem = false;
-                if (mainHandItem.getItem() == Items.BOW) {
-                    validItem = true;
-                } else if (mainHandItem.getItem() instanceof BowItem) {
-                    validItem = true;
-                } else if (mainHandItem.getItem() == CAItems.PHLOEM_BOW.get()) {
-                    validItem = true;
-                } else if (mainHandItem.is(ItemTags.create(ResourceLocation.parse("forge:tools/bows")))) {
-                    validItem = true;
-                } else {
-                    for (String stringiterator : CAConfigs.HAND_FIREWORK.get()) {
-                        if (CaerulaUtil.matchesRegistryName(stringiterator, rname)) {
-                            validItem = true;
-                            break;
-                        }
-                    }
-                }
-                if (validItem && Math.random() < 0.33) {
-                    if (world instanceof Level level) {
-                            level.playSound(null, BlockPos.containing(sourceentity.getX(), sourceentity.getY(), sourceentity.getZ()), SoundEvents.FIREWORK_ROCKET_LAUNCH, SoundSource.PLAYERS, (float) 3.6, 1);
-                    }
-                    CaerulaArborMod.queueServerWork(10, () -> {
-                        if (world instanceof ServerLevel level)
-                            level.sendParticles(ParticleTypes.FIREWORK, x, y, z, 85, 2, 2, 2, 0.22);
-                        if (world instanceof Level level) {
-                                level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.FIREWORK_ROCKET_TWINKLE, SoundSource.PLAYERS, (float) 3.6, 1);
-                        }
-                        final Vec3 center = new Vec3(x, y, z);
-                        List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(5 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
-                        for (Entity entityiterator : entfound) {
-                            if (((ForgeRegistries.ENTITY_TYPES.getKey(entityiterator.getType()).toString()).equals(ForgeRegistries.ENTITY_TYPES.getKey(entity.getType()).toString()) || entityiterator instanceof Monster)
-                                    && !(entityiterator == sourceentity)) {
-                                entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.HAND_FIREWORK, sourceentity),
-                                        (float) (amount * 3));
-                            }
-                        }
-                    });
-                }
+            if (playerVariables.relic_hand_FIREWORK && isFireworkWeapon(mainHandItem, registryName)
+                    && player.getRandom().nextFloat() < 0.33F) {
+                world.playSound(null, player.blockPosition(), SoundEvents.FIREWORK_ROCKET_LAUNCH, SoundSource.PLAYERS, 3.6F, 1);
+                CaerulaArborMod.queueServerWork(10, () -> detonateFireworkRelic(world, target, targetPosition, player, amount));
             }
         }
 
-        if ((sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).relic_legend_CHITIN) {
-            if (Math.random() < 0.05) {
-                ItemStack setval = (sourceentity instanceof LivingEntity livEnt ? livEnt.getMainHandItem() : ItemStack.EMPTY);
-                sourceentity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                    capability.chitin_knife_selected = setval.copy();
-                    capability.syncPlayerVariables(sourceentity);
-                });
-                double perc = EntityUtils.getHealthPerc(sourceentity);
-                if (sourceentity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
-                    livingEntity.addEffect(new MobEffectInstance(CAMobEffects.TIDE_OF_CHITIN.get(), 500, 0, false, false));
-                if (perc > 0) {
-                    if (sourceentity instanceof LivingEntity livingEntity)
-                        livingEntity.setHealth((float) ((sourceentity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1) * perc));
-                }
-                if (world instanceof Level level) {
-                    if (level.isClientSide()) {
-                        level.playLocalSound(x, y, z, SoundEvents.BEACON_ACTIVATE, SoundSource.NEUTRAL, (float) 3.2, 1, false);
-                    }
-                }
+        if (!playerVariables.relic_legend_CHITIN || player.getRandom().nextFloat() >= 0.05F) return;
+
+        playerVariables.chitin_knife_selected = player.getMainHandItem().copy();
+        playerVariables.syncPlayerVariables(player);
+        var healthPercent = EntityUtils.getHealthPerc(player);
+        if (!world.isClientSide()) {
+            player.addEffect(new MobEffectInstance(CAMobEffects.TIDE_OF_CHITIN.get(), 500, 0, false, false));
+        }
+        if (healthPercent > 0) {
+            player.setHealth((float) (player.getMaxHealth() * healthPercent));
+        }
+        if (world.isClientSide()) {
+            world.playLocalSound(targetPosition.x, targetPosition.y, targetPosition.z,
+                    SoundEvents.BEACON_ACTIVATE, SoundSource.NEUTRAL, 3.2F, 1, false);
+        }
+    }
+
+    private static boolean isStrangleWeapon(ItemStack itemStack, String registryName) {
+        return itemStack.is(Tags.Items.TOOLS_CROSSBOWS) || itemStack.getItem() instanceof CrossbowItem
+                || matchesConfiguredItem(CAConfigs.HAND_STRANGLE.get(), registryName);
+    }
+
+    private static boolean isFireworkWeapon(ItemStack itemStack, String registryName) {
+        return itemStack.is(Tags.Items.TOOLS_BOWS) || itemStack.getItem() instanceof BowItem
+                || itemStack.is(CAItems.PHLOEM_BOW.get())
+                || matchesConfiguredItem(CAConfigs.HAND_FIREWORK.get(), registryName);
+    }
+
+    private static boolean matchesConfiguredItem(Iterable<? extends String> configuredItems, String registryName) {
+        for (var configuredItem : configuredItems) {
+            if (CaerulaUtil.matchesRegistryName(configuredItem, registryName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static void detonateFireworkRelic(Level world, LivingEntity target, Vec3 targetPosition, Player player, double amount) {
+        if (world instanceof ServerLevel level) {
+            level.sendParticles(ParticleTypes.FIREWORK, targetPosition.x, targetPosition.y, targetPosition.z, 85, 2, 2, 2, 0.22);
+        }
+        world.playSound(null, BlockPos.containing(targetPosition), SoundEvents.FIREWORK_ROCKET_TWINKLE, SoundSource.PLAYERS, 3.6F, 1);
+
+        var nearbyEntities = world.getEntitiesOfClass(Entity.class, new AABB(targetPosition, targetPosition).inflate(2.5), candidate -> true)
+                .stream().sorted(Comparator.comparingDouble(candidate -> candidate.distanceToSqr(targetPosition))).toList();
+        for (var candidate : nearbyEntities) {
+            if (candidate != player && (candidate.getType() == target.getType() || candidate instanceof Monster)) {
+                candidate.hurt(CADamageTypes.source(world, CADamageTypes.HAND_FIREWORK, player), (float) (amount * 3));
             }
         }
     }

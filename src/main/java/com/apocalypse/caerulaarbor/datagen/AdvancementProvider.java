@@ -23,17 +23,33 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.function.Consumer;
 
+/**
+ * 生成进度数据
+ */
 @SuppressWarnings("SameParameterValue")
 public class AdvancementProvider implements ForgeAdvancementProvider.AdvancementGenerator {
 
     public static ArrayList<Advancement> advancements = new ArrayList<>();
 
+    /**
+     * 创建进度显示信息
+     *
+     * @param icon           图标物品 ID
+     * @param title          标题翻译键
+     * @param description    描述翻译键
+     * @param background     背景贴图 ID，可为 null
+     * @param frame          进度边框类型
+     * @param showToast      是否显示 toast
+     * @param announceToChat 是否发送聊天栏公告
+     * @param hidden         是否隐藏
+     * @return 显示信息
+     */
     private static DisplayInfo display(String icon, String title, String description, String background, FrameType frame, boolean showToast, boolean announceToChat, boolean hidden) {
         return new DisplayInfo(
                 item(icon),
                 Component.translatable(title),
                 Component.translatable(description),
-                background == null ? null : rl(background),
+                background == null ? null : resLoc(background),
                 frame,
                 showToast,
                 announceToChat,
@@ -41,10 +57,23 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
         );
     }
 
+    /**
+     * 创建无法自动完成的条件
+     *
+     * @return impossible 条件
+     */
     private static Criterion impossible() {
         return criterion("minecraft:impossible", new JsonObject());
     }
 
+    /**
+     * 创建物品数量变化条件
+     *
+     * @param item 物品 ID
+     * @param min  最小数量
+     * @param max  最大数量
+     * @return inventory_changed 条件
+     */
     private static Criterion inventoryChanged(String item, int min, int max) {
         var itemIds = new JsonArray();
         itemIds.add(item);
@@ -65,6 +94,12 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
         return criterion("minecraft:inventory_changed", conditions);
     }
 
+    /**
+     * 创建放置方块条件
+     *
+     * @param block 方块 ID
+     * @return placed_block 条件
+     */
     private static Criterion placedBlock(String block) {
         var locationCondition = new JsonObject();
         locationCondition.addProperty("condition", "minecraft:block_state_property");
@@ -78,6 +113,15 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
         return criterion("minecraft:placed_block", conditions);
     }
 
+    /**
+     * 创建玩家受到实体伤害条件
+     *
+     * @param sourceEntity 伤害来源实体 ID
+     * @param minTaken     最小伤害
+     * @param maxTaken     最大伤害
+     * @param blocked      是否要求被盾牌阻挡
+     * @return entity_hurt_player 条件
+     */
     private static Criterion entityHurtPlayer(String sourceEntity, int minTaken, int maxTaken, boolean blocked) {
         var taken = new JsonObject();
         taken.addProperty("min", minTaken);
@@ -96,55 +140,127 @@ public class AdvancementProvider implements ForgeAdvancementProvider.Advancement
         return criterion("minecraft:entity_hurt_player", conditions);
     }
 
+    /**
+     * 创建指定 trigger 的进度条件
+     *
+     * @param trigger    trigger ID
+     * @param conditions 条件 JSON
+     * @return 进度条件
+     */
     private static Criterion criterion(String trigger, JsonObject conditions) {
-        return new Criterion(new JsonCriterionTriggerInstance(rl(trigger), conditions));
+        return new Criterion(new JsonCriterionTriggerInstance(resLoc(trigger), conditions));
     }
 
+    /**
+     * 创建只解锁配方的奖励
+     *
+     * @param recipes 配方 ID 列表
+     * @return 奖励 builder
+     */
     private static AdvancementRewards.Builder recipeRewards(String... recipes) {
         return rewards(0, new String[0], recipes);
     }
 
+    /**
+     * 创建经验与配方奖励
+     *
+     * @param experience 经验值
+     * @param recipes    配方 ID 列表
+     * @return 奖励 builder
+     */
     private static AdvancementRewards.Builder experienceRewards(int experience, String... recipes) {
         return rewards(experience, new String[0], recipes);
     }
 
+    /**
+     * 创建经验、战利品表与配方奖励
+     *
+     * @param experience 经验值
+     * @param lootTables 战利品表 ID 列表
+     * @param recipes    配方 ID 列表
+     * @return 奖励 builder
+     */
     private static AdvancementRewards.Builder lootRewards(int experience, String[] lootTables, String... recipes) {
         return rewards(experience, lootTables, recipes);
     }
 
+    /**
+     * 创建进度奖励
+     *
+     * @param experience 经验值
+     * @param lootTables 战利品表 ID 列表
+     * @param recipes    配方 ID 列表
+     * @return 奖励 builder
+     */
     private static AdvancementRewards.Builder rewards(int experience, String[] lootTables, String... recipes) {
         var builder = new AdvancementRewards.Builder();
         builder.addExperience(experience);
         for (var lootTable : lootTables) {
-            builder.addLootTable(rl(lootTable));
+            builder.addLootTable(resLoc(lootTable));
         }
         for (var recipe : recipes) {
-            builder.addRecipe(rl(recipe));
+            builder.addRecipe(resLoc(recipe));
         }
         return builder;
     }
 
+    /**
+     * 创建战利品表数组
+     *
+     * @param lootTables 战利品表 ID 列表
+     * @return 战利品表数组
+     */
     private static String[] loot(String... lootTables) {
         return lootTables;
     }
 
+    /**
+     * 创建进度图标物品栈
+     *
+     * @param id 物品 ID
+     * @return 图标物品栈
+     */
     private static ItemStack item(String id) {
-        var item = ForgeRegistries.ITEMS.getValue(rl(id));
+        var item = ForgeRegistries.ITEMS.getValue(resLoc(id));
         return new ItemStack(Objects.requireNonNull(item, "Missing advancement icon item: " + id));
     }
 
+    /**
+     * 创建 caerula_arbor 命名空间资源 ID
+     *
+     * @param path 资源路径
+     * @return 资源 ID
+     */
     private static ResourceLocation modLoc(String path) {
         return ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, path);
     }
 
-    private static ResourceLocation rl(String id) {
+    /**
+     * 解析资源 ID，省略命名空间时按 minecraft 处理
+     *
+     * @param id 资源 ID
+     * @return 资源 ID
+     */
+    private static ResourceLocation resLoc(String id) {
         var separator = id.indexOf(':');
         if (separator >= 0) {
-            return ResourceLocation.fromNamespaceAndPath(id.substring(0, separator), id.substring(separator + 1));
+            String namespace = id.substring(0, separator);
+            String path = id.substring(separator + 1);
+            if (ResourceLocation.DEFAULT_NAMESPACE.equals(namespace)) {
+                return ResourceLocation.withDefaultNamespace(path);
+            }
+            return ResourceLocation.fromNamespaceAndPath(namespace, path);
         }
-        return ResourceLocation.fromNamespaceAndPath(ResourceLocation.DEFAULT_NAMESPACE, id);
+        return ResourceLocation.withDefaultNamespace(id);
     }
 
+    /**
+     * 写出全部进度定义
+     *
+     * @param registries         注册表查询 provider
+     * @param saver              进度输出回调
+     * @param existingFileHelper 已有资源检查器
+     */
     @Override
     public void generate(HolderLookup.@NotNull Provider registries, @NotNull Consumer<Advancement> saver, @NotNull ExistingFileHelper existingFileHelper) {
         advancements.clear();

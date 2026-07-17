@@ -2,7 +2,6 @@ package com.apocalypse.caerulaarbor.mixin;
 
 import com.apocalypse.caerulaarbor.entity.MartusEntity;
 import com.apocalypse.caerulaarbor.init.CAMobEffects;
-import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
@@ -17,18 +16,18 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = {LivingEntity.class}, priority = 65536)
-public abstract class AddEffectMixinMixin {
+public abstract class AddEffectMixin {
     @ModifyVariable(
             method = "addEffect(Lnet/minecraft/world/effect/MobEffectInstance;Lnet/minecraft/world/entity/Entity;)Z",
             at = @At("HEAD"),
             argsOnly = true)
-    public MobEffectInstance addShorterEffect(MobEffectInstance value){
+    public MobEffectInstance addShorterEffect(MobEffectInstance value) {
         MobEffect effect = value.getEffect();
-        if(effect.isInstantenous()) return value;
-        if(effect.getCategory() == MobEffectCategory.HARMFUL){
+        if (effect.isInstantenous()) return value;
+        if (effect.getCategory() == MobEffectCategory.HARMFUL) {
             LivingEntity me = (LivingEntity) (Object) this;
             MobEffect resist = CAMobEffects.ESSENCE_RESISTANCE.get();
-            if(!me.hasEffect(resist)) return value;
+            if (!me.hasEffect(resist)) return value;
             MobEffectInstance resistInstance = me.getEffect(resist);
             int amplifier = 0;
             if (resistInstance != null) amplifier = resistInstance.getAmplifier();
@@ -47,34 +46,35 @@ public abstract class AddEffectMixinMixin {
     }
 
     @Inject(method = "setHealth", at = @At("HEAD"), cancellable = true)
-    public void immortalSetHealth(float pHealth, CallbackInfo ci){
-        LivingEntity me = (LivingEntity)(Object) this;
-        if(me.hasEffect(CAMobEffects.IMMORTAL.get())){
-            if(pHealth < 0.5) {
+    public void immortalSetHealth(float pHealth, CallbackInfo ci) {
+        LivingEntity me = (LivingEntity) (Object) this;
+        if (me.hasEffect(CAMobEffects.IMMORTAL.get())) {
+            if (pHealth < 0.5) {
                 ci.cancel();
                 if (me.getMaxHealth() >= 0.5)
-                	me.setHealth(0.5f);
-                me.getPersistentData().putBoolean("immortalTriggered",true);
+                    me.setHealth(0.5f);
+                me.getPersistentData().putBoolean("immortalTriggered", true);
             }
         }
-        if(me.hasEffect(CAMobEffects.INVULNERABLE.get()) && !(me instanceof MartusEntity)){
-            if(pHealth < me.getHealth()) {
+        if (me.hasEffect(CAMobEffects.INVULNERABLE.get()) && !(me instanceof MartusEntity)) {
+            if (pHealth < me.getHealth()) {
                 ci.cancel();
             }
         }
     }
 
     @Inject(method = "die", at = @At("HEAD"), cancellable = true)
-    public void doNotDie(DamageSource pDamageSource, CallbackInfo ci){
-        LivingEntity me = (LivingEntity)(Object) this;
-        if(me.hasEffect(CAMobEffects.IMMORTAL.get())){
+    public void doNotDie(DamageSource pDamageSource, CallbackInfo ci) {
+        LivingEntity me = (LivingEntity) (Object) this;
+        if (me.hasEffect(CAMobEffects.IMMORTAL.get())) {
             ci.cancel();
-            me.getPersistentData().putBoolean("immortalTriggered",true);
+            me.getPersistentData().putBoolean("immortalTriggered", true);
         }
-        if(me.hasEffect(CAMobEffects.INVULNERABLE.get()) && !(me instanceof MartusEntity)){
+        if (me.hasEffect(CAMobEffects.INVULNERABLE.get()) && !(me instanceof MartusEntity)) {
             ci.cancel();
         }
     }
-    
-    @Shadow public abstract boolean addEffect(MobEffectInstance pEffectInstance, @org.jetbrains.annotations.Nullable Entity pEntity);
+
+    @Shadow
+    public abstract boolean addEffect(MobEffectInstance pEffectInstance, @org.jetbrains.annotations.Nullable Entity pEntity);
 }
