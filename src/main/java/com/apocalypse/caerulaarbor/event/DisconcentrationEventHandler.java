@@ -26,7 +26,6 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.TickEvent;
@@ -65,8 +64,7 @@ public class DisconcentrationEventHandler {
                 player.addEffect(new MobEffectInstance(CAMobEffects.FLESHDEFORMITY.get(), 999, 1, false, false));
             }
         } else if (player.hasEffect(CAMobEffects.FLESHDEFORMITY.get())) {
-            // TODO：待向原作者确认。待移植文件这里移除的是 HAEMOPHILIA，而不是 FLESHDEFORMITY，当前先保留原行为。
-            player.removeEffect(CAMobEffects.HAEMOPHILIA.get());
+            player.removeEffect(CAMobEffects.FADINGSHADOW.get());
         }
     }
 
@@ -157,8 +155,11 @@ public class DisconcentrationEventHandler {
 
         if (player instanceof ServerPlayer serverPlayer) {
             Advancement advancement = serverPlayer.server.getAdvancements().getAdvancement(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "to_we_many"));
-            AdvancementProgress advancementProgress = serverPlayer.getAdvancements().getOrStartProgress(advancement);
-            if (!advancementProgress.isDone()) {
+            AdvancementProgress advancementProgress = null;
+            if (advancement != null) {
+                advancementProgress = serverPlayer.getAdvancements().getOrStartProgress(advancement);
+            }
+            if (advancementProgress != null && !advancementProgress.isDone()) {
                 for (String criteria : advancementProgress.getRemainingCriteria()) {
                     serverPlayer.getAdvancements().award(advancement, criteria);
                 }
@@ -177,7 +178,7 @@ public class DisconcentrationEventHandler {
         }
         for (int armorSlotIndex = 0; armorSlotIndex < 4; armorSlotIndex++) {
             ItemStack armorItem = livingEntity.getItemBySlot(EquipmentSlot.byTypeAndIndex(EquipmentSlot.Type.ARMOR, armorSlotIndex)).copy();
-            if (EnchantmentHelper.getItemEnchantmentLevel(CAEnchantments.REJECTION_CURSE.get(), armorItem) != 0) {
+            if (armorItem.getEnchantmentLevel(CAEnchantments.REJECTION_CURSE.get()) != 0) {
                 return true;
             }
         }

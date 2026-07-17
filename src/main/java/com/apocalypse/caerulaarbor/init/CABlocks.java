@@ -1,8 +1,5 @@
 package com.apocalypse.caerulaarbor.init;
 
-/*
- *    MCreator 注：此文件会在每次构建时重新生成。
- */
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.block.*;

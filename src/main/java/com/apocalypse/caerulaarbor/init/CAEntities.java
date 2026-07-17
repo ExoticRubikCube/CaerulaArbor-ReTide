@@ -1,6 +1,3 @@
-/*
- *    MCreator 注：此文件会在每次构建时重新生成。
- */
 package com.apocalypse.caerulaarbor.init;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
@@ -53,8 +50,6 @@ import java.util.function.Supplier;
 public class CAEntities {
     public static final DeferredRegister<EntityType<?>> REGISTRY = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, CaerulaArborMod.MODID);
     private static final LinkedHashMap<RegistryObject<? extends EntityType<?>>, EntityRegistrationData> ENTITY_REGISTRATIONS = new LinkedHashMap<>();
-    private static final List<RegistryObject<? extends EntityType<? extends LivingEntity>>> LIVING_ENTITY_TYPES;
-    private static final List<RegistryObject<? extends EntityType<? extends LivingEntity>>> SUMMONABLE_ENTITY_TYPES;
     public static final RegistryObject<EntityType<RunFishEntity>> RUN_FISH = register("run_fish",
             EntityType.Builder.<RunFishEntity>of(RunFishEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(6).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new RunFishEntity(level))
 
@@ -528,6 +523,8 @@ public class CAEntities {
             EntityType.Builder.<OceanizedShulkerEntity>of(OceanizedShulkerEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(9).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new OceanizedShulkerEntity(level))
 
                     .sized(1f, 1f));
+    private static final List<RegistryObject<? extends EntityType<? extends LivingEntity>>> LIVING_ENTITY_TYPES;
+    private static final List<RegistryObject<? extends EntityType<? extends LivingEntity>>> SUMMONABLE_ENTITY_TYPES;
 
     static {
         addAttributeRegistration(RUN_FISH, RunFishEntity::createAttributes);

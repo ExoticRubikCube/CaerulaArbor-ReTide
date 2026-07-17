@@ -1,6 +1,3 @@
-/*
- *	MCreator 注：此文件会在每次构建时重新生成。
- */
 package com.apocalypse.caerulaarbor.init;
 
 import com.apocalypse.caerulaarbor.client.gui.*;
@@ -12,19 +9,19 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class CAScreens {
-	@SubscribeEvent
-	public static void clientLoad(FMLClientSetupEvent event) {
-		event.enqueueWork(() -> {
-			MenuScreens.register(CAMenus.CAERULA_RECORD_GUI.get(), CaerulaRecordGUIScreen::new);
-			MenuScreens.register(CAMenus.RELIC_SHOWCASE.get(), RelicShowcaseScreen::new);
-			MenuScreens.register(CAMenus.INFO_STRATEGY_SUBSIS.get(), InfoStrategySubsisScreen::new);
-			MenuScreens.register(CAMenus.INFO_STRATEGY_BREED.get(), InfoStrategyBreedScreen::new);
-			MenuScreens.register(CAMenus.INFO_STRATEGY_MIGRATION.get(), InfoStrategyMigrationScreen::new);
-			MenuScreens.register(CAMenus.INFO_STRATEGY_GROW.get(), InfoStrategyGrowScreen::new);
-			MenuScreens.register(CAMenus.INFO_STRATEGY_ALL.get(), InfoStrategyAllScreen::new);
-			MenuScreens.register(CAMenus.EVO_TREE.get(), EvoTreeScreen::new);
-			MenuScreens.register(CAMenus.CENTRIFUGER_SELECT.get(), CentrifugerSelectScreen::new);
-			MenuScreens.register(CAMenus.PLAYER_EVO.get(), PlayerEvoScreen::new);
-		});
-	}
+    @SubscribeEvent
+    public static void clientLoad(FMLClientSetupEvent event) {
+        event.enqueueWork(() -> {
+            MenuScreens.register(CAMenus.CAERULA_RECORD_GUI.get(), CaerulaRecordGUIScreen::new);
+            MenuScreens.register(CAMenus.RELIC_SHOWCASE.get(), RelicShowcaseScreen::new);
+            MenuScreens.register(CAMenus.INFO_STRATEGY_SUBSIS.get(), InfoStrategySubsisScreen::new);
+            MenuScreens.register(CAMenus.INFO_STRATEGY_BREED.get(), InfoStrategyBreedScreen::new);
+            MenuScreens.register(CAMenus.INFO_STRATEGY_MIGRATION.get(), InfoStrategyMigrationScreen::new);
+            MenuScreens.register(CAMenus.INFO_STRATEGY_GROW.get(), InfoStrategyGrowScreen::new);
+            MenuScreens.register(CAMenus.INFO_STRATEGY_ALL.get(), InfoStrategyAllScreen::new);
+            MenuScreens.register(CAMenus.EVO_TREE.get(), EvoTreeScreen::new);
+            MenuScreens.register(CAMenus.CENTRIFUGER_SELECT.get(), CentrifugerSelectScreen::new);
+            MenuScreens.register(CAMenus.PLAYER_EVO.get(), PlayerEvoScreen::new);
+        });
+    }
 }
