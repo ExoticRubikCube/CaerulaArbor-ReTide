@@ -274,7 +274,7 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
                         if (dist > 6) {
                             new Object() {
                                 void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
-                                    if (((Entity) OceanizedEvokerEntity.this).isAlive()) {
+                                    if (OceanizedEvokerEntity.this.isAlive()) {
                                         spawnLinearFangs(world, timedloopiterator + 1);
                                     }
                                     final int tick2 = ticks;
@@ -288,7 +288,7 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
                         } else {
                             new Object() {
                                 void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
-                                    if (((Entity) OceanizedEvokerEntity.this).isAlive()) {
+                                    if (OceanizedEvokerEntity.this.isAlive()) {
                                         double dt;
                                         double r;
                                         double fy;
@@ -358,7 +358,7 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
                     CaerulaArborMod.queueServerWork(10, () -> {
                         new Object() {
                             void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
-                                if (((Entity) OceanizedEvokerEntity.this).isAlive()) {
+                                if (OceanizedEvokerEntity.this.isAlive()) {
                                     double angl;
                                     double d;
                                     double tx;
@@ -492,7 +492,6 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
         FleefishBulletEntity.shoot(this, target, (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttributeValue(Attributes.ATTACK_DAMAGE) : 0) * (3.2 / 3.0));
     }
 
-
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
         builder = builder.add(Attributes.MOVEMENT_SPEED, 0.16);
@@ -573,7 +572,6 @@ public class OceanizedEvokerEntity extends SeaMonster implements RangedAttackMob
         data.add(new AnimationController<>(this, "attacking", 1, this::attackingPredicate));
         data.add(new AnimationController<>(this, "procedure", 1, this::procedurePredicate));
     }
-
 
     @Override
     public void setAnimationProcedure(String animation) {

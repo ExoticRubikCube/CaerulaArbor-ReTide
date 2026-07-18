@@ -339,7 +339,6 @@ public class CollectorProkaryoteEntity extends SeaMonster implements Bucketable 
 		data.add(new AnimationController<>(this, "procedure", 3, this::procedurePredicate));
 	}
 
-
 	@Override
 	public void setAnimationProcedure(String animation) {
 		this.animationprocedure = animation;

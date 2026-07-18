@@ -50,7 +50,7 @@ public class BiomeModifiersProvider implements DataProvider {
         addSpawn(modifiers, "chiseler_fish_biome_modifier", anyBiome(), "caerula_arbor:chiseler_fish", 45, 1, 4);
         addSpawn(modifiers, "collector_prokaryote_biome_modifier", anyBiome(), "caerula_arbor:collector_prokaryote", 60, 2, 4);
         addSpawn(modifiers, "cracker_abyssal_biome_modifier", anyBiome(), "caerula_arbor:cracker_abyssal", 25, 1, 1);
-        addSpawn(modifiers, "creeper_fish_biome_modifier", anyBiome(), "caerula_arbor:creeper_fish", 40, 1, 1);
+        addSpawn(modifiers, "pocket_sea_creeper_biome_modifier", anyBiome(), "caerula_arbor:pocket_sea_creeper", 40, 1, 1);
         addSpawn(modifiers, "depositer_prokaryote_biome_modifier", biomes("cold_ocean", "deep_cold_ocean", "deep_frozen_ocean", "deep_lukewarm_ocean", "deep_ocean", "frozen_ocean", "lukewarm_ocean", "ocean", "warm_ocean"), "caerula_arbor:depositer_prokaryote", 45, 1, 3);
         addSpawn(modifiers, "feeder_prokaryote_biome_modifier", anyBiome(), "caerula_arbor:feeder_prokaryote", 45, 1, 2);
         addSpawn(modifiers, "first_to_talk_biome_modifier", anyBiome(), "caerula_arbor:first_to_talk", 1, 1, 1);

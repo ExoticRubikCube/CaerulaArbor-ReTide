@@ -1403,11 +1403,11 @@
       }
     ]
   },
-  "creeper_fish_explode": {
-    "subtitle": "subtitles.creeper_fish_explode",
+  "pocket_sea_creeper_explode": {
+    "subtitle": "subtitles.pocket_sea_creeper_explode",
     "sounds": [
       {
-        "name": "caerula_arbor:creeper_fish_explode",
+        "name": "caerula_arbor:pocket_sea_creeper_explode",
         "stream": false
       }
     ]

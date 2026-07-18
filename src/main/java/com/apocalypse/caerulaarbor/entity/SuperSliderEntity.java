@@ -187,9 +187,7 @@ public class SuperSliderEntity extends SeaMonster {
             return event.setAndContinue(RawAnimation.begin().thenPlay("animation.slidingfish.boss_die"));
         }
         if (this.animationprocedure.equals("empty")) {
-            if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
-
-            ) {
+            if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))) {
                 return event.setAndContinue(RawAnimation.begin().thenLoop("animation.slidingfish.move"));
             }
             return event.setAndContinue(RawAnimation.begin().thenLoop("animation.slidingfish.idle"));
@@ -254,7 +252,6 @@ public class SuperSliderEntity extends SeaMonster {
         data.add(new AnimationController<>(this, "attacking", 0, this::attackingPredicate));
         data.add(new AnimationController<>(this, "procedure", 0, this::procedurePredicate));
     }
-
 
     @Override
     public void setAnimationProcedure(String animation) {

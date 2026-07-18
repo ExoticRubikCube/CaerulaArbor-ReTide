@@ -98,7 +98,7 @@ public class CAItems {
     public static final RegistryObject<Item> SHOOTER_FISH_SPAWN_EGG = REGISTRY.register("shooter_fish_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.SHOOTER_FISH, -13434676, -3355444, new Item.Properties()));
     public static final RegistryObject<Item> FLY_FISH_SPAWN_EGG = REGISTRY.register("fly_fish_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.FLY_FISH, -16737895, -3355444, new Item.Properties()));
     public static final RegistryObject<Item> REAPER_FISH_SPAWN_EGG = REGISTRY.register("reaper_fish_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.REAPER_FISH, -6710785, -3355444, new Item.Properties()));
-    public static final RegistryObject<Item> CREEPER_FISH_SPAWN_EGG = REGISTRY.register("creeper_fish_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.CREEPER_FISH, -10092442, -3342337, new Item.Properties()));
+    public static final RegistryObject<Item> POCKET_SEA_CREEPER_SPAWN_EGG = REGISTRY.register("pocket_sea_creeper_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.POCKET_SEA_CREEPER, -10092442, -3342337, new Item.Properties()));
     public static final RegistryObject<Item> PUNCTURE_FISH_SPAWN_EGG = REGISTRY.register("puncture_fish_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.PUNCTURE_FISH, -16750900, -1, new Item.Properties()));
     public static final RegistryObject<Item> SEA_TRAIL_INIT = block(CABlocks.SEA_TRAIL_INIT);
     public static final RegistryObject<Item> SEA_TRAIL_GROWING = block(CABlocks.SEA_TRAIL_GROWING);

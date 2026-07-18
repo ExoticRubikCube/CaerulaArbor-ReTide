@@ -186,7 +186,7 @@ public class NautilusHeadhunterEntity extends Animal implements GeoEntity, Synce
 
 	@Override
 	public boolean hurt(DamageSource source, float amount) {
-        ((Entity) this).stopRiding();
+        this.stopRiding();
         if (source.is(DamageTypes.DROWN))
 			return false;
 		return super.hurt(source, amount);

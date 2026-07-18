@@ -90,7 +90,6 @@ public class FlamarineGolemEntity extends SeaMonster {
         this.entityData.define(DATA_ADDITION, 40);
     }
 
-
     @Override
     public boolean canCollideWith(Entity entity) {
         return true;

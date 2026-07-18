@@ -22,7 +22,7 @@ public class OceanizedEnderinaRenderer extends GeoEntityRenderer<OceanizedEnderi
 
 	@Override
 	public RenderType getRenderType(OceanizedEnderinaEntity animatable, ResourceLocation texture, MultiBufferSource bufferSource, float partialTick) {
-		return RenderType.entityTranslucent(getTextureLocation(animatable));
+		return OceanizedEnderinaRenderType.get(animatable, partialTick);
 	}
 
 	@Override

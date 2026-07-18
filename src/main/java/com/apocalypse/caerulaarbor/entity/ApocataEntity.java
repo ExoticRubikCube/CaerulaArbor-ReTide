@@ -70,7 +70,6 @@ public class ApocataEntity extends PathfinderMob implements GeoEntity, SyncedAni
 		this.entityData.define(DATA_DURATION, 0);
 	}
 
-
 	@Override
 	public Packet<ClientGamePacketListener> getAddEntityPacket() {
 		return NetworkHooks.getEntitySpawningPacket(this);
@@ -162,22 +161,17 @@ public class ApocataEntity extends PathfinderMob implements GeoEntity, SyncedAni
 		double x = this.getX();
 		double y = this.getY();
 		double z = this.getZ();
-		Entity entity = this;
-		Level world = this.level();
-        if ((entity instanceof ApocataEntity datEntI ? datEntI.getEntityData().get(DATA_DURATION) : 0) > 0) {
+        if (this.getEntityData().get(DATA_DURATION) > 0) {
             return InteractionResult.PASS;
         }
         if (sourceentity.getMainHandItem().getItem() == Blocks.AIR.asItem() && sourceentity.getOffhandItem().getItem() == Blocks.AIR.asItem()) {
-			if (entity instanceof ApocataEntity) {
-				((ApocataEntity) entity).setAnimation("animation.apocata.tap");
+			if (this instanceof ApocataEntity) {
+				this.setAnimation("animation.apocata.tap");
 			}
-			if (!((LevelAccessor) world).isClientSide()) {
-				if ((LevelAccessor) world instanceof Level level) {
-					level.playSound(null, BlockPos.containing(x, y, z), CASounds.APOCATA_INTERACT.get(), SoundSource.NEUTRAL, 3, (float) 1.5);
-				}
+			if (!this.level().isClientSide()) {
+				this.level().playSound(null, BlockPos.containing(x, y, z), CASounds.APOCATA_INTERACT.get(), SoundSource.NEUTRAL, 3, (float) 1.5);
 			}
-			if (entity instanceof ApocataEntity datEntSetI)
-				datEntSetI.getEntityData().set(DATA_DURATION, 20);
+			this.getEntityData().set(DATA_DURATION, 20);
 			return InteractionResult.SUCCESS;
 		}
         return InteractionResult.PASS;
@@ -194,8 +188,6 @@ public class ApocataEntity extends PathfinderMob implements GeoEntity, SyncedAni
         }
         this.refreshDimensions();
 	}
-
-	
 
 	@Override
 	public void aiStep() {

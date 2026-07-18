@@ -17,18 +17,9 @@ import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
-import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
-import net.minecraft.world.level.storage.loot.functions.ApplyExplosionDecay;
-import net.minecraft.world.level.storage.loot.functions.EnchantWithLevelsFunction;
-import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
-import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
+import net.minecraft.world.level.storage.loot.functions.*;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
-import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
-import net.minecraft.world.level.storage.loot.predicates.InvertedLootItemCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
-import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraft.world.level.storage.loot.predicates.MatchTool;
+import net.minecraft.world.level.storage.loot.predicates.*;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
@@ -2254,7 +2245,7 @@ public final class LootTableProviders {
                     echitinGolem(),
                     ecomplexChitinGolem(),
                     ecrackerAbyssal(),
-                    ecreeperFish(),
+                    ePocketSeaCreeper(),
                     edepositerProkaryote(),
                     eendspeaker(),
                     efeederProkaryote(),
@@ -2407,8 +2398,8 @@ public final class LootTableProviders {
                             entry("minecraft:netherite_scrap", 10, cond(), setCount(u(1.0F, 2.0F)))));
         }
 
-        private static TableDef ecreeperFish() {
-            return table("entities/creeper_fish",
+        private static TableDef ePocketSeaCreeper() {
+            return table("entities/pocket_sea_creeper",
                     pool(u(1.0F, 2.0F), u(0.0F, 1.0F), cond(),
                             entry("caerula_arbor:ocean_crystal", 32, cond(), setCount(u(1.0F, 2.0F))),
                             entry("caerula_arbor:ocean_cutin", 48, cond(), setCount(u(3.0F, 5.0F)))),

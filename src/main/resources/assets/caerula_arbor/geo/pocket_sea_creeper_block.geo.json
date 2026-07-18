@@ -3,7 +3,7 @@
 	"minecraft:geometry": [
 		{
 			"description": {
-				"identifier": "geometry.creeper_fish_block",
+				"identifier": "geometry.pocket_sea_creeper_block",
 				"texture_width": 64,
 				"texture_height": 64,
 				"visible_bounds_width": 3,

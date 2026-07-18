@@ -1,13 +1,7 @@
 package com.apocalypse.caerulaarbor.init;
 
 import com.apocalypse.caerulaarbor.CaerulaArborMod;
-import com.apocalypse.caerulaarbor.client.model.entity.ModelAnchorFly;
-import com.apocalypse.caerulaarbor.client.model.entity.ModelBulletProjectile;
-import com.apocalypse.caerulaarbor.client.model.entity.ModelFakerggShoot;
-import com.apocalypse.caerulaarbor.client.model.entity.ModelFleefishBullet;
-import com.apocalypse.caerulaarbor.client.model.entity.ModelHighmoreShoot;
-import com.apocalypse.caerulaarbor.client.model.entity.ModelOceanArrow;
-import com.apocalypse.caerulaarbor.client.model.entity.ModelSealeatherChitinArmor;
+import com.apocalypse.caerulaarbor.client.model.entity.*;
 import com.apocalypse.caerulaarbor.client.renderer.entity.*;
 import com.apocalypse.caerulaarbor.entity.*;
 import com.apocalypse.caerulaarbor.entity.bullets.*;
@@ -76,8 +70,8 @@ public class CAEntities {
             EntityType.Builder.<ReaperFishEntity>of(ReaperFishEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(10).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new ReaperFishEntity(level))
 
                     .sized(1.2f, 2.8f));
-    public static final RegistryObject<EntityType<CreeperFishEntity>> CREEPER_FISH = register("creeper_fish",
-            EntityType.Builder.<CreeperFishEntity>of(CreeperFishEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new CreeperFishEntity(level))
+    public static final RegistryObject<EntityType<PocketSeaCreeperEntity>> POCKET_SEA_CREEPER = register("pocket_sea_creeper",
+            EntityType.Builder.<PocketSeaCreeperEntity>of(PocketSeaCreeperEntity::new, MobCategory.MONSTER).setShouldReceiveVelocityUpdates(true).setTrackingRange(8).setUpdateInterval(3).setCustomClientFactory((spawnEntity, level) -> new PocketSeaCreeperEntity(level))
 
                     .sized(0.8f, 1.5f));
     public static final RegistryObject<EntityType<PunctureFishEntity>> PUNCTURE_FISH = register("puncture_fish",
@@ -533,7 +527,7 @@ public class CAEntities {
         addAttributeRegistration(SHOOTER_FISH, ShooterFishEntity::createAttributes);
         addAttributeRegistration(FLY_FISH, FlyFishEntity::createAttributes);
         addAttributeRegistration(REAPER_FISH, ReaperFishEntity::createAttributes);
-        addAttributeRegistration(CREEPER_FISH, CreeperFishEntity::createAttributes);
+        addAttributeRegistration(POCKET_SEA_CREEPER, PocketSeaCreeperEntity::createAttributes);
         addAttributeRegistration(PUNCTURE_FISH, PunctureFishEntity::createAttributes);
         addAttributeRegistration(BASELAYER_ABYSSAL, BaselayerAbyssalEntity::createAttributes);
         addAttributeRegistration(PREDATOR_ABYSSAL, PredatorAbyssalEntity::createAttributes);
@@ -652,7 +646,7 @@ public class CAEntities {
         markSummonable(SHOOTER_FISH);
         markSummonable(FLY_FISH);
         markSummonable(REAPER_FISH);
-        markSummonable(CREEPER_FISH);
+        markSummonable(POCKET_SEA_CREEPER);
         markSummonable(PUNCTURE_FISH);
         markSummonable(BASELAYER_ABYSSAL);
         markSummonable(PREDATOR_ABYSSAL);
@@ -725,7 +719,7 @@ public class CAEntities {
         addSpawnPlacementRegistration(SHOOTER_FISH, ShooterFishEntity::registerSpawnPlacements);
         addSpawnPlacementRegistration(FLY_FISH, FlyFishEntity::registerSpawnPlacements);
         addSpawnPlacementRegistration(REAPER_FISH, ReaperFishEntity::registerSpawnPlacements);
-        addSpawnPlacementRegistration(CREEPER_FISH, CreeperFishEntity::registerSpawnPlacements);
+        addSpawnPlacementRegistration(POCKET_SEA_CREEPER, PocketSeaCreeperEntity::registerSpawnPlacements);
         addSpawnPlacementRegistration(PUNCTURE_FISH, PunctureFishEntity::registerSpawnPlacements);
         addSpawnPlacementRegistration(BASELAYER_ABYSSAL, BaselayerAbyssalEntity::registerSpawnPlacements);
         addSpawnPlacementRegistration(PREDATOR_ABYSSAL, PredatorAbyssalEntity::registerSpawnPlacements);
@@ -869,7 +863,7 @@ public class CAEntities {
             addRenderer(CAEntities.FISH_SHOOT, FishShootRenderer::new);
             addRenderer(CAEntities.FLY_FISH, FlyFishRenderer::new);
             addRenderer(CAEntities.REAPER_FISH, ReaperFishRenderer::new);
-            addRenderer(CAEntities.CREEPER_FISH, CreeperFishRenderer::new);
+            addRenderer(CAEntities.POCKET_SEA_CREEPER, PocketSeaCreeperRenderer::new);
             addRenderer(CAEntities.PUNCTURE_FISH, PunctureFishRenderer::new);
             addRenderer(CAEntities.BASELAYER_ABYSSAL, BaselayerAbyssalRenderer::new);
             addRenderer(CAEntities.PREDATOR_ABYSSAL, PredatorAbyssalRenderer::new);

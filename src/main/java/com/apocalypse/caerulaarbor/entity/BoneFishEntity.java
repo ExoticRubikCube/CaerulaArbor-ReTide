@@ -214,8 +214,6 @@ public class BoneFishEntity extends SeaMonster implements Bucketable {
 		this.refreshDimensions();
 	}
 
-	
-
 	@Override
 	public boolean canBreatheUnderwater() {
 		return true;

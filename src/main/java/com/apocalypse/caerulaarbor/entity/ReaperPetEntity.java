@@ -227,11 +227,9 @@ public class ReaperPetEntity extends TamableAnimal implements GeoEntity, SyncedA
 					if (item.isEdible() && this.isFood(itemstack) && this.getHealth() < this.getMaxHealth()) {
 						this.usePlayerItem(sourceentity, hand, itemstack);
 						this.heal((float) item.getFoodProperties().getNutrition());
-						this.level().isClientSide();
 					} else if (this.isFood(itemstack) && this.getHealth() < this.getMaxHealth()) {
 						this.usePlayerItem(sourceentity, hand, itemstack);
 						this.heal(4);
-						this.level().isClientSide();
 					} else {
 						super.mobInteract(sourceentity, hand);
 					}
@@ -245,7 +243,6 @@ public class ReaperPetEntity extends TamableAnimal implements GeoEntity, SyncedA
 					this.level().broadcastEntityEvent(this, (byte) 6);
 				}
 				this.setPersistenceRequired();
-				this.level().isClientSide();
 			} else {
 				retval = super.mobInteract(sourceentity, hand);
 				if (retval == InteractionResult.SUCCESS || retval == InteractionResult.CONSUME)
@@ -261,9 +258,8 @@ public class ReaperPetEntity extends TamableAnimal implements GeoEntity, SyncedA
 					&& ((Entity) sourceentity instanceof LivingEntity livEnt ? livEnt.getOffhandItem() : ItemStack.EMPTY).getItem() == Blocks.AIR.asItem()) {
 				if ((LevelAccessor) world instanceof ServerLevel level)
 					level.sendParticles(ParticleTypes.HEART, x, y, z, 4, 0.8, 0.5, 0.8, 0.3);
-				((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((sourceentity.getX()), (sourceentity.getY()), (sourceentity.getZ())));
-				if ((Entity) this instanceof Mob entity)
-					entity.getNavigation().stop();
+				this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((sourceentity.getX()), (sourceentity.getY()), (sourceentity.getZ())));
+                this.getNavigation().stop();
 				if (this instanceof ReaperPetEntity) {
 					this.setAnimation("animation.reaperpet.interact");
 				}
@@ -450,7 +446,6 @@ public class ReaperPetEntity extends TamableAnimal implements GeoEntity, SyncedA
 	public AnimatableInstanceCache getAnimatableInstanceCache() {
 		return this.cache;
 	}
-
 
 	@Override
 	public void setAnimationProcedure(String animation) {

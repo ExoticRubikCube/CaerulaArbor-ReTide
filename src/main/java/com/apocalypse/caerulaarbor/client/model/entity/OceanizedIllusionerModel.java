@@ -33,7 +33,7 @@ public class OceanizedIllusionerModel extends GeoModel<OceanizedIllusionerEntity
 	public void setCustomAnimations(OceanizedIllusionerEntity animatable, long instanceId, AnimationState<OceanizedIllusionerEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("Head");
 		if (head != null) {
-			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);
+			EntityModelData entityData = animationState.getData(DataTickets.ENTITY_MODEL_DATA);
 			head.setRotX(entityData.headPitch() * Mth.DEG_TO_RAD);
 			head.setRotY(entityData.netHeadYaw() * Mth.DEG_TO_RAD);
 		}

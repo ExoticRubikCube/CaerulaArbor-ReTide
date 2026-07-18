@@ -13,11 +13,9 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
@@ -30,13 +28,8 @@ public class PlayerEvoMenu extends AbstractContainerMenu implements Supplier<Map
 	public final Level world;
 	public final Player entity;
 	public int x, y, z;
-	private ContainerLevelAccess access = ContainerLevelAccess.NULL;
 	private final IItemHandler internal;
 	private final Map<Integer, Slot> customSlots = new HashMap<>();
-	private final boolean bound = false;
-	private final Supplier<Boolean> boundItemMatcher = null;
-	private final Entity boundEntity = null;
-	private final BlockEntity boundBlockEntity = null;
 
 	public PlayerEvoMenu(int id, Inventory inv, FriendlyByteBuf extraData) {
 		super(CAMenus.PLAYER_EVO.get(), id);
@@ -49,21 +42,12 @@ public class PlayerEvoMenu extends AbstractContainerMenu implements Supplier<Map
 			this.x = pos.getX();
 			this.y = pos.getY();
 			this.z = pos.getZ();
-			access = ContainerLevelAccess.create(world, pos);
 		}
         entity.getPersistentData().putString("showcasingEvoNode", "");
     }
 
 	@Override
 	public boolean stillValid(Player player) {
-		if (this.bound) {
-			if (this.boundItemMatcher != null)
-				return this.boundItemMatcher.get();
-			else if (this.boundBlockEntity != null)
-				return AbstractContainerMenu.stillValid(this.access, player, this.boundBlockEntity.getBlockState().getBlock());
-			else if (this.boundEntity != null)
-				return this.boundEntity.isAlive();
-		}
 		return true;
 	}
 

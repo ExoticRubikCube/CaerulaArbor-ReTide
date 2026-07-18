@@ -1,7 +1,7 @@
 {
 	"format_version": "1.8.0",
 	"animations": {
-		"animation.creeperfish.idle": {
+		"animation.pocket_sea_creeper.idle": {
 			"loop": true,
 			"animation_length": 3,
 			"bones": {
@@ -221,7 +221,7 @@
 				}
 			}
 		},
-		"animation.creeperfish.move": {
+		"animation.pocket_sea_creeper.move": {
 			"loop": true,
 			"animation_length": 1,
 			"bones": {
@@ -478,7 +478,7 @@
 				}
 			}
 		},
-		"animation.creeperfish.die": {
+		"animation.pocket_sea_creeper.die": {
 			"loop": "hold_on_last_frame",
 			"animation_length": 1,
 			"bones": {
@@ -692,7 +692,7 @@
 				}
 			}
 		},
-		"animation.creeperfish.attack": {
+		"animation.pocket_sea_creeper.attack": {
 			"animation_length": 0.95,
 			"bones": {
 				"stem": {
@@ -799,7 +799,7 @@
 				}
 			}
 		},
-		"animation.creeperfish.jump": {
+		"animation.pocket_sea_creeper.jump": {
 			"animation_length": 1.7083,
 			"bones": {
 				"stem": {

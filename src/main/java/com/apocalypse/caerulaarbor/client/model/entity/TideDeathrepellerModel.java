@@ -11,7 +11,7 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class TideDeathrepellerModel extends GeoModel<TideDeathrepellerEntity> {
-	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/deathrepellertexture.png");
+	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/deathrepeller.png");
 
 	@Override
 	public ResourceLocation getAnimationResource(TideDeathrepellerEntity entity) {
@@ -32,7 +32,7 @@ public class TideDeathrepellerModel extends GeoModel<TideDeathrepellerEntity> {
 	public void setCustomAnimations(TideDeathrepellerEntity animatable, long instanceId, AnimationState<TideDeathrepellerEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("Head");
 		if (head != null) {
-			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);
+			EntityModelData entityData = animationState.getData(DataTickets.ENTITY_MODEL_DATA);
 			head.setRotX(entityData.headPitch() * Mth.DEG_TO_RAD);
 			head.setRotY(entityData.netHeadYaw() * Mth.DEG_TO_RAD);
 		}

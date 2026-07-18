@@ -44,19 +44,19 @@ import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 
-public class CreeperFishEntity extends SeaMonster implements RangedSanityAttacker {
-	public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(CreeperFishEntity.class, EntityDataSerializers.BOOLEAN);
-	public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(CreeperFishEntity.class, EntityDataSerializers.STRING);
-	public static final EntityDataAccessor<Integer> DATA_DEAL = SynchedEntityData.defineId(CreeperFishEntity.class, EntityDataSerializers.INT);
+public class PocketSeaCreeperEntity extends SeaMonster implements RangedSanityAttacker {
+	public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(PocketSeaCreeperEntity.class, EntityDataSerializers.BOOLEAN);
+	public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(PocketSeaCreeperEntity.class, EntityDataSerializers.STRING);
+	public static final EntityDataAccessor<Integer> DATA_DEAL = SynchedEntityData.defineId(PocketSeaCreeperEntity.class, EntityDataSerializers.INT);
 	private boolean swinging;
 	private long lastSwing;
 	public String animationprocedure = "empty";
 
-	public CreeperFishEntity(Level world) {
-		this(CAEntities.CREEPER_FISH.get(), world);
+	public PocketSeaCreeperEntity(Level world) {
+		this(CAEntities.POCKET_SEA_CREEPER.get(), world);
 	}
 
-	public CreeperFishEntity(EntityType<CreeperFishEntity> type, Level world) {
+	public PocketSeaCreeperEntity(EntityType<PocketSeaCreeperEntity> type, Level world) {
 		super(type, world);
 		xpReward = 8;
 		setNoAi(false);
@@ -146,18 +146,18 @@ public class CreeperFishEntity extends SeaMonster implements RangedSanityAttacke
 		double x = this.getX();
 		double y = this.getY();
 		double z = this.getZ();
-		CreeperFishEntity entity = this;
+		PocketSeaCreeperEntity entity = this;
 		Level world = this.level();
         if (itemstack.getItem() == Items.FLINT_AND_STEEL) {
             if ((LevelAccessor) world instanceof Level level) {
                     level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.CREEPER_PRIMED, SoundSource.HOSTILE, 2, 1);
             }
-            if (entity instanceof CreeperFishEntity) {
+            if (entity instanceof PocketSeaCreeperEntity) {
                 entity.setAnimation("animation.explosivefish.jump");
             }
             new Object() {
                 void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
-                    CreeperFishEntity.this.performRangedSanityAttack();
+                    PocketSeaCreeperEntity.this.performRangedSanityAttack();
                     final int tick2 = ticks;
                     CaerulaArborMod.queueServerWork(tick2, () -> {
                         if (timedlooptotal > timedloopiterator + 1) {
@@ -180,7 +180,7 @@ public class CreeperFishEntity extends SeaMonster implements RangedSanityAttacke
 	
 
 	public static void registerSpawnPlacements() {
-		SpawnPlacements.register(CAEntities.CREEPER_FISH.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
+		SpawnPlacements.register(CAEntities.POCKET_SEA_CREEPER.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (entityType, world, reason, pos, random) -> {
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();
@@ -262,7 +262,7 @@ public class CreeperFishEntity extends SeaMonster implements RangedSanityAttacke
 	protected void tickDeath() {
 		++this.deathTime;
 		if (this.deathTime == 20) {
-			this.remove(CreeperFishEntity.RemovalReason.KILLED);
+			this.remove(PocketSeaCreeperEntity.RemovalReason.KILLED);
 			this.dropExperience();
 		}
 	}
