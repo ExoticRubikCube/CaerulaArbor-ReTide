@@ -328,6 +328,7 @@ public final class LootTableProviders {
                     bstrippedTrailLog(),
                     bthirstCoral(),
                     btideBishopCore(),
+                    btidebishopCoreEmpty(),
                     btideObservation(),
                     btrailBrick(),
                     btrailButton(),
@@ -919,6 +920,12 @@ public final class LootTableProviders {
             return table("blocks/tide_bishop_core",
                     pool(number(1.0F), null, cond(survivesExplosion()),
                             entry("caerula_arbor:tide_bishop_core", 1, cond())));
+        }
+
+        private static TableDef btidebishopCoreEmpty() {
+            return table("blocks/tidebishop_core_empty",
+                    pool(number(1.0F), null, cond(survivesExplosion()),
+                            entry("caerula_arbor:tidebishop_core_empty", 1, cond())));
         }
 
         private static TableDef btideObservation() {

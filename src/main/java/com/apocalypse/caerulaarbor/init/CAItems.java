@@ -301,6 +301,7 @@ public class CAItems {
     public static final RegistryObject<Item> CHIESELED_SALTWIND_SAND_WALL = block(CABlocks.CHIESELED_SALTWIND_SAND_WALL);
     public static final RegistryObject<Item> SMOOTH_SALTWIND_SAND_WALL = block(CABlocks.SMOOTH_SALTWIND_SAND_WALL);
     public static final RegistryObject<Item> TIDE_BISHOP_CORE = block(CABlocks.TIDE_BISHOP_CORE);
+    public static final RegistryObject<Item> TIDE_BISHOP_CORE_EMPTY = block(CABlocks.TIDE_BISHOP_CORE_EMPTY);
     public static final RegistryObject<Item> ADV_ITEM = REGISTRY.register("adv_item", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)));
     public static final RegistryObject<Item> HETEROPIC_BLOCK = block(CABlocks.HETEROPIC_BLOCK);
     public static final RegistryObject<Item> TRAIL_LOG = block(CABlocks.TRAIL_LOG);

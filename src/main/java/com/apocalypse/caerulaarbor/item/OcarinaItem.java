@@ -207,6 +207,7 @@ public class OcarinaItem extends Item {
                                         player.getInventory().clearOrCountMatchingItems(p -> stktoremove.getItem() == p.getItem(), 1, player.inventoryMenu.getCraftSlots());
                                     }
                                     world.destroyBlock(BlockPos.containing(px, py, pz), false);
+                                    ((LevelAccessor) world).setBlock(BlockPos.containing(px, py - 2, pz), CABlocks.TIDE_BISHOP_CORE_EMPTY.get().defaultBlockState(), 3);
                                     found = true;
                                 } else if (cradle.getBlock() == CABlocks.UNDERTIDE_TABLE.get()) {
                                     if ((Entity) entity instanceof Player player && !player.level().isClientSide())

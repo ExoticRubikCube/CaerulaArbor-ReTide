@@ -67,6 +67,7 @@ public class CABlocks {
     public static final RegistryObject<Block> CHIESELED_SALTWIND_SAND_WALL = REGISTRY.register("chieseled_saltwind_sand_wall", ChieseledSaltwindSandWallBlock::new);
     public static final RegistryObject<Block> SMOOTH_SALTWIND_SAND_WALL = REGISTRY.register("smooth_saltwind_sand_wall", SmoothSaltwindSandWallBlock::new);
     public static final RegistryObject<Block> TIDE_BISHOP_CORE = REGISTRY.register("tide_bishop_core", TideBishopCoreBlock::new);
+    public static final RegistryObject<Block> TIDE_BISHOP_CORE_EMPTY = REGISTRY.register("tidebishop_core_empty", TideBishopCoreEmptyBlock::new);
     public static final RegistryObject<Block> HETEROPIC_BLOCK = REGISTRY.register("heteropic_block", HeteropicBlockBlock::new);
     public static final RegistryObject<Block> TRAIL_LOG = REGISTRY.register("trail_log", TrailLogBlock::new);
     public static final RegistryObject<Block> TRAIL_LEAVE = REGISTRY.register("trail_leave", TrailLeaveBlock::new);
