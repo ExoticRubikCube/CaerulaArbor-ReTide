@@ -3864,10 +3864,27 @@ public class RecipesProvider extends RecipeProvider {
         );
     }
 
+    /**
+     * 保存配方图案字符与材料条目的对应关系
+     *
+     * @param key        图案中的字符
+     * @param ingredient 字符对应的材料条目
+     */
     private record KeyEntry(char key, IngredientEntry ingredient) {
     }
 
+    /**
+     * 保存材料条目的 JSON 字段和值
+     *
+     * @param type  材料条目的 JSON 字段名
+     * @param value 材料条目的值
+     */
     private record IngredientEntry(String type, String value) {
+        /**
+         * 将材料条目转换为 JSON 对象
+         *
+         * @return 包含材料字段和值的 JSON 对象
+         */
         private JsonObject toJson() {
             var json = new JsonObject();
             json.addProperty(type, value);
@@ -3875,7 +3892,18 @@ public class RecipesProvider extends RecipeProvider {
         }
     }
 
+    /**
+     * 保存自定义配方 JSON 并实现配方数据输出接口
+     *
+     * @param id     配方资源位置
+     * @param recipe 配方 JSON 数据
+     */
     private record JsonFinishedRecipe(ResourceLocation id, JsonObject recipe) implements FinishedRecipe {
+        /**
+         * 将配方字段复制到数据生成器提供的 JSON 对象
+         *
+         * @param json 接收配方字段的 JSON 对象
+         */
         @Override
         public void serializeRecipeData(@NotNull JsonObject json) {
             for (var entry : recipe.entrySet()) {
@@ -3885,26 +3913,51 @@ public class RecipesProvider extends RecipeProvider {
             }
         }
 
+        /**
+         * 获取配方 JSON 的副本
+         *
+         * @return 配方 JSON 副本
+         */
         @Override
         public @NotNull JsonObject serializeRecipe() {
             return recipe.deepCopy();
         }
 
+        /**
+         * 获取配方资源位置
+         *
+         * @return 配方资源位置
+         */
         @Override
         public @NotNull ResourceLocation getId() {
             return id;
         }
 
+        /**
+         * 获取配方序列化器类型
+         *
+         * @return 无序配方序列化器
+         */
         @Override
         public @NotNull RecipeSerializer<?> getType() {
             return RecipeSerializer.SHAPELESS_RECIPE;
         }
 
+        /**
+         * 获取附加进度数据
+         *
+         * @return null，表示不生成附加进度
+         */
         @Override
         public @Nullable JsonObject serializeAdvancement() {
             return null;
         }
 
+        /**
+         * 获取附加进度资源位置
+         *
+         * @return null，表示不生成附加进度
+         */
         @Override
         public @Nullable ResourceLocation getAdvancementId() {
             return null;
