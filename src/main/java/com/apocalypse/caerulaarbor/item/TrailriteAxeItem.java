@@ -11,6 +11,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -21,6 +23,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public class TrailriteAxeItem extends AxeItem {
 	public TrailriteAxeItem() {
@@ -86,5 +89,15 @@ public class TrailriteAxeItem extends AxeItem {
                     living.addEffect(new MobEffectInstance(CAMobEffects.ADD_REACH.get(), 20, 2, false, false));
             }
         }
+	}
+
+	@Override
+	public boolean canBeHurtBy(DamageSource pDamageSource) {
+		return pDamageSource.is(DamageTypeTags.BYPASSES_EFFECTS);
+	}
+
+	@Override
+	public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+		return Math.min(amount, 1);
 	}
 }

@@ -1,0 +1,46 @@
+{
+  "name": "玛利图斯，“海嗣”",
+  "icon": "caerula_arbor:martus_spawnegg",
+  "category": "caerula_arbor:mod_bosses",
+  "read_by_default": true,
+  "sortnum": 4,
+  "pages": [
+    {
+      "type": "image",
+      "title": "玛利图斯",
+      "border": true,
+      "images": [
+        "caerula_arbor:patchouli_books/image_sets/martus.png"
+      ],
+      "text": "$(o)玛利图斯，先哲，叛徒，伟人，罪人。"
+    },
+    {
+      "type": "text",
+      "title": "召唤",
+      "text": "在3x3x3范围内放置九个渊密谜题馆，随后使用漩海密文板右键其中心。"
+    },
+    {
+      "type": "text",
+      "title": "玛利图斯",
+      "text": " · 生理耐受：不明$(br) · 进攻强度：不明$(br) · 机动：标准$(br) · 物种特性：飞行，不攻击，不断召唤海怪。$(br)常态$(d)无敌$()。第一阶段下击杀玛利图斯祝福的海怪、第二阶段下击杀任意海怪，可令玛利图斯损失生命值。$(br)第二阶段下，生命值较低时，玛利图斯会解除$(d)无敌$()状态。"
+    },
+    {
+      "type": "text",
+      "title": "",
+      "text": "· 物种技能：$(br)↓一阶段$(br)【引导演化】祝福附近生命最高的海怪，使之大幅加强。会有线条连接玛利图斯和被祝福的海怪。$(br)↓二阶段$(br)【哺育生机】令周围海怪$(d)无敌$()、不移动且不断恢复生命，期间自身损失一定生命值。$(br)【人性之囚】令敌人在一段时间内获得减益并不断损失生命值。"
+    },
+    {
+      "type": "text",
+      "title": "击杀建议",
+      "text": "被玛利图斯祝福过的海怪极为强大，应尽快击杀。$(br)玛利图斯解除无敌状态后，仍具有极高的抗性，故仍推荐击杀其它海怪以击败玛利图斯。"
+    },
+    {
+      "type": "relations",
+      "title": "相关链接",
+      "text": "本条目提到的其它概念链接如上",
+      "entries": [
+        "caerula_arbor:mod_items/whirl_eye"
+      ]
+    }
+  ]
+}

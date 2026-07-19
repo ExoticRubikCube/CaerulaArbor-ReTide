@@ -11,7 +11,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderGuiEvent;
@@ -45,10 +44,8 @@ public class LightShowOverlay {
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 		RenderSystem.setShaderColor(1, 1, 1, 1);
-        boolean result1 = false;
-        if (entity != null) {
-            result1 = ((Entity) entity).isAlive() && (((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).show_stats;
-        }
+        boolean result1;
+        result1 = entity.isAlive() && entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable()).show_stats;
         if (result1) {
 			boolean isNeat = CAConfigs.LIGHTS_NEAT_STYLE.get();
 			int lightDx = CAConfigs.X_OFFSET_LIGHT.get().intValue();
@@ -96,10 +93,8 @@ public class LightShowOverlay {
 			event.getGuiGraphics().blit(LIFE_POINT, 
 				6 + lifeDx, h - 24 + lifeDy, 0, 0, 24, 16, 24, 16);
 
-            boolean result = false;
-            if (entity != null) {
-                result = (((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_shield > 0;
-            }
+            boolean result;
+            result = entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable()).player_shield > 0;
             if (result) {
 				event.getGuiGraphics().blit(SHIELD_POINT, 
 					6 + lifeDx, h - 40 + lifeDy, 0, 0, 24, 16, 24, 16);

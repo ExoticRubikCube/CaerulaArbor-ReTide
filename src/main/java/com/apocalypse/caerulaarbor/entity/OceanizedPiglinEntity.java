@@ -164,8 +164,7 @@ public class OceanizedPiglinEntity extends SeaMonster implements PolarMountRider
 				level.sendParticles(ParticleTypes.LAVA, x, (y + 0.75), z, 32, 0.75, 0.75, 0.75, 0.1);
 		}
 		if (this.getHealth() < this.getMaxHealth()) {
-			;
-			this.heal((float) (this.getMaxHealth() * 0.15));
+            this.heal((float) (this.getMaxHealth() * 0.15));
 			if (world instanceof ServerLevel level)
 				level.sendParticles(ParticleTypes.HAPPY_VILLAGER, x, (y + 0.75), z, 32, 0.75, 0.75, 0.75, 0.1);
 		}
@@ -220,8 +219,7 @@ public class OceanizedPiglinEntity extends SeaMonster implements PolarMountRider
 	private PlayState attackingPredicate(AnimationState<?> event) {
 		double d1 = this.getX() - this.xOld;
 		double d0 = this.getZ() - this.zOld;
-		float velocity = (float) Math.sqrt(d1 * d1 + d0 * d0);
-		if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
+        if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
 			this.swinging = true;
 			this.lastSwing = level().getGameTime();
 		}

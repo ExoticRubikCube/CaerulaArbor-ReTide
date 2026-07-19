@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
+import software.bernie.geckolib.cache.object.GeoBone;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 public class OceanizedEnderinaRenderer extends GeoEntityRenderer<OceanizedEnderinaEntity> {
@@ -22,7 +23,19 @@ public class OceanizedEnderinaRenderer extends GeoEntityRenderer<OceanizedEnderi
 
 	@Override
 	public RenderType getRenderType(OceanizedEnderinaEntity animatable, ResourceLocation texture, MultiBufferSource bufferSource, float partialTick) {
-		return RenderType.entityTranslucent(getTextureLocation(animatable));
+		// 当前自定义 core shader 替换整个实体渲染类型，第三方光影包不保证兼容；未来应让主体回归原版 RenderType，并将效果迁移到独立渲染层。
+		return OceanizedEnderinaRenderType.get(animatable, partialTick);
+	}
+
+	@Override
+	public void renderRecursively(PoseStack stack, OceanizedEnderinaEntity animatable, GeoBone bone, RenderType type, MultiBufferSource buffer, VertexConsumer bufferIn, boolean isReRender, float partialTick, int packedLightIn, int packedOverlayIn,
+			float red, float green, float blue, float alpha) {
+		if (bone.getName().equals("EyeFloat")) {
+			// EyeFloat 及其子骨骼使用原版 RenderType，避免自定义 shader 覆盖。
+			type = RenderType.entityTranslucent(getTextureLocation(animatable));
+			bufferIn = buffer.getBuffer(type);
+		}
+		super.renderRecursively(stack, animatable, bone, type, buffer, bufferIn, isReRender, partialTick, packedLightIn, packedOverlayIn, red, green, blue, alpha);
 	}
 
 	@Override

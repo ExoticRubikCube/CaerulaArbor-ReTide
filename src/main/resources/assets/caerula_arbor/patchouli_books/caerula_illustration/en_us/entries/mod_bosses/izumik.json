@@ -1,0 +1,57 @@
+{
+  "name": "伊祖米克，生态泉源",
+  "icon": "caerula_arbor:izumik_spawnegg",
+  "category": "caerula_arbor:mod_bosses",
+  "read_by_default": true,
+  "sortnum": 8,
+  "pages": [
+    {
+      "type": "image",
+      "title": "伊祖米克",
+      "border": true,
+      "images": [
+        "caerula_arbor:patchouli_books/image_sets/izumik.png"
+      ],
+      "text": "$(o)临近进化奇点的完美生物，大群的建言者与引领者，“后生的初生”。"
+    },
+    {
+      "type": "text",
+      "title": "召唤",
+      "text": "升在华漩涡中心，携带漩海密文板，吹响几丁质陶笛，即可召唤伊祖米克。$(br)用伊祖米克掉落的“决心”右键召唤方块，可将其重置。"
+    },
+    {
+      "type": "text",
+      "title": "伊祖米克",
+      "text": " · 生理耐受：不朽$(br) · 进攻强度：天灾$(br) · 机动：优良$(br) · 物种特性：飞行，近战攻击范围较大，额外造成魔法伤害。$(br)第一阶段下不行动，$(d)无敌$()，不断召唤子代。吞噬子代自身可获得攻击增益。$(br)第二阶段初始获得一段时间的$(d)无敌$()，并展开进攻。$(br)静谧进化达到III级后，会进入第三阶段，该阶段下攻击概率造成麻痹。"
+    },
+    {
+      "type": "text",
+      "title": "",
+      "text": "· 物种技能：$(br)↓第一阶段$(br)【博览】召唤多个子代。触发八次后进入第二阶段。$(br)【学习】每吞噬五个子代，造成范围伤害，获得一层攻击增益。获得四层后进入第二阶段。$(br)↓第二、三阶段$(br)【震撼】造成多次大范围魔法伤害，离中心越近，伤害次数越多。被波及的敌人陷入晕眩并不断受到额外魔法伤害，且有概率获得麻痹。玩家界面左侧可以看到该技能的冷却。"
+    },
+    {
+      "type": "text",
+      "title": "伊祖米克的子代",
+      "text": " · 生理耐受：优良$(br) · 进攻强度：无$(br) · 机动：标准$(br) · 物种特性：飞行，向伊组米克靠近。$(br)一般情况下不攻击。周围存在生物或受到较近的伤害时，转化为随机生物。"
+    },
+    {
+      "type": "text",
+      "title": "击杀建议",
+      "text": "子代为伊祖米克带来的增益极为显著，条件允许的话需要全部消灭。$(br)若未能消灭子代，则应避免与伊祖米克近战，因为一般情况下极难抵御伊组米克的攻击。"
+    },
+    {
+      "type": "text",
+      "title": "升华漩涡",
+      "text": "注册名：caerula_arbor:izumik_island$(br2)会出现在末地。通常出现在x、z为2048的整数倍的区域。"
+    },
+    {
+      "type": "relations",
+      "title": "相关链接",
+      "text": "本条目提到的其它概念链接如上",
+      "entries": [
+        "caerula_arbor:mod_items/ocarina",
+        "caerula_arbor:mod_items/whirl_eye"
+      ]
+    }
+  ]
+}

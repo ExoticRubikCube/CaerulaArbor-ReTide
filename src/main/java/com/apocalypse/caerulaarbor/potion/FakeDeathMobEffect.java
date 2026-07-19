@@ -9,7 +9,6 @@ import net.minecraft.client.gui.screens.inventory.EffectRenderingInventoryScreen
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -37,32 +36,24 @@ public class FakeDeathMobEffect extends MobEffect {
     }
 
     @Override
-    public void addAttributeModifiers(LivingEntity entity, AttributeMap attributeMap, int amplifier) {
-        super.addAttributeModifiers(entity, attributeMap, amplifier);
-        if (entity == null)
-            return;
-        if ((Entity) entity instanceof LivingEntity livingEntity)
+    public void addAttributeModifiers(LivingEntity livingEntity, AttributeMap attributeMap, int amplifier) {
+        super.addAttributeModifiers(livingEntity, attributeMap, amplifier);
             livingEntity.setHealth(1);
     }
 
     @Override
-    public void applyEffectTick(LivingEntity entity, int amplifier) {
-        if (entity == null)
-            return;
-        if ((Entity) entity instanceof LivingEntity livingEntity)
+    public void applyEffectTick(LivingEntity livingEntity, int amplifier) {
             livingEntity.setHealth((float) (livingEntity.getHealth() + livingEntity.getMaxHealth() * 0.025 * ((double) amplifier + 1)));
     }
 
     @Override
     public void removeAttributeModifiers(LivingEntity entity, AttributeMap attributeMap, int amplifier) {
         super.removeAttributeModifiers(entity, attributeMap, amplifier);
-        if (entity == null)
-            return;
-        if (entity instanceof TideBishopEntity) {
-            ((TideBishopEntity) entity).setAnimation("animation.tidebishop.die_idle");
+        if (entity instanceof TideBishopEntity tideBishop) {
+            tideBishop.setAnimation("animation.tidebishop.die_idle");
         }
-        if (entity instanceof TideDeathrepellerEntity) {
-            ((TideDeathrepellerEntity) entity).setAnimation("animation.deathrepeller.die_idle");
+        if (entity instanceof TideDeathrepellerEntity deathrepellerEntity) {
+            deathrepellerEntity.setAnimation("animation.deathrepeller.die_idle");
         }
         entity.setShiftKeyDown(false);
     }

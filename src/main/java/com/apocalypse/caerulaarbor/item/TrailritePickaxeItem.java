@@ -4,12 +4,15 @@ package com.apocalypse.caerulaarbor.item;
 import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.init.CAItems;
 import net.minecraft.network.chat.Component;
+import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public class TrailritePickaxeItem extends PickaxeItem {
 	public TrailritePickaxeItem() {
@@ -73,5 +76,15 @@ public class TrailritePickaxeItem extends PickaxeItem {
 		list.add(Component.translatable("item.caerula_arbor.trailrite_pickaxe.description_0"));
 		list.add(Component.translatable("item.caerula_arbor.trailrite_pickaxe.description_1"));
 		list.add(Component.translatable("item.caerula_arbor.trailrite_pickaxe.description_2"));
+	}
+
+	@Override
+	public boolean canBeHurtBy(DamageSource pDamageSource) {
+		return pDamageSource.is(DamageTypeTags.BYPASSES_EFFECTS);
+	}
+
+	@Override
+	public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+		return Math.min(amount, 1);
 	}
 }

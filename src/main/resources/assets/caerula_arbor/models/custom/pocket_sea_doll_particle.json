@@ -1,6 +1,6 @@
 {
-  "parent": "caerula_arbor:displaysettings/creeper_fish_block",
+  "parent": "caerula_arbor:displaysettings/pocket_sea_creeper_block",
   "textures": {
-    "particle": "caerula_arbor:block/creeperfish"
+    "particle": "caerula_arbor:block/pocket_sea_creeper"
   }
 }

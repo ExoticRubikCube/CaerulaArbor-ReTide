@@ -33,7 +33,7 @@ public class OceanizedSheepModel extends GeoModel<OceanizedSheepEntity> {
 	public void setCustomAnimations(OceanizedSheepEntity animatable, long instanceId, AnimationState<OceanizedSheepEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("neck");
 		if (head != null) {
-			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);
+			EntityModelData entityData = animationState.getData(DataTickets.ENTITY_MODEL_DATA);
 			head.setRotX(entityData.headPitch() * Mth.DEG_TO_RAD);
 			head.setRotY(entityData.netHeadYaw() * Mth.DEG_TO_RAD);
 		}

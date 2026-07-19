@@ -49,7 +49,7 @@ public class InvulnerableMobEffect extends MobEffect {
             if (world instanceof ServerLevel level)
                 level.sendParticles(CAParticles.INV_PTC_VOILET.get(), (x + 2 * Math.sin(ang)), (y + 1.25), (z + 2 * Math.cos(ang)), 4, 0.1, 2, 0.1, 0.2);
             if (entity instanceof IzumikEntity && ((Entity) entity instanceof IzumikEntity datEntI ? datEntI.getEntityData().get(IzumikEntity.DATA_PHASE) : 0) == 0) {
-                phase = Math.floor(((Entity) entity instanceof IzumikEntity datEntI ? datEntI.getEntityData().get(IzumikEntity.DATA_GROWTH_P) : 0) / 5);
+                phase = ((Entity) entity instanceof IzumikEntity datEntI ? datEntI.getEntityData().get(IzumikEntity.DATA_GROWTH_P) : 0) / 5;
                 if ((Entity) entity instanceof LivingEntity livingEntity)
                     livingEntity.setHealth((float) (livingEntity.getMaxHealth() * (0.4 + phase * 0.15)));
             }

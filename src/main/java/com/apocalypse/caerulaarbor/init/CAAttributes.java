@@ -53,10 +53,7 @@ public class CAAttributes {
         }
     }
 
-    private static void addAttributeToEntities(
-            EntityAttributeModificationEvent event, Attribute attribute,
-            List<RegistryObject<? extends EntityType<? extends LivingEntity>>> entityTypes
-    ) {
+    private static void addAttributeToEntities(EntityAttributeModificationEvent event, Attribute attribute, List<RegistryObject<? extends EntityType<? extends LivingEntity>>> entityTypes) {
         for (RegistryObject<? extends EntityType<? extends LivingEntity>> registryObject : entityTypes) {
             event.add(registryObject.get(), attribute);
         }

@@ -117,17 +117,17 @@ public abstract class SealeatherItem extends ArmorItem {
 
 		@Override
     	public void inventoryTick(ItemStack itemstack, Level world, Entity entity, int slot, boolean selected) {
-        super.inventoryTick(itemstack, world, entity, slot, selected);
-        if (entity instanceof Player player && Iterables.contains(player.getArmorSlots(), itemstack)) {
-        	if (player.hasEffect(CAMobEffects.ESSENCE_RESISTANCE.get())) return;
-            if (player.tickCount % 600 == 64){
-                player.addEffect(
-                	new MobEffectInstance(CAMobEffects.ESSENCE_RESISTANCE.get(),
-                	400, 0, false, false)
-                	);
-            }
-        }
-    }
+			super.inventoryTick(itemstack, world, entity, slot, selected);
+			if (entity instanceof Player player && Iterables.contains(player.getArmorSlots(), itemstack)) {
+				if (player.hasEffect(CAMobEffects.ESSENCE_RESISTANCE.get())) return;
+				if (player.tickCount % 600 == 64) {
+					player.addEffect(
+							new MobEffectInstance(CAMobEffects.ESSENCE_RESISTANCE.get(),
+									400, 0, false, false)
+					);
+				}
+			}
+		}
 	}
 
 	public static class Leggings extends SealeatherItem {

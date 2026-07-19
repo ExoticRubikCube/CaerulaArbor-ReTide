@@ -47,8 +47,6 @@ public class SplasherAttackMobEffect extends MobEffect {
         double x = entity.getX();
         double y = entity.getY();
         double z = entity.getZ();
-        if (entity == null)
-            return;
         double num;
         double rand;
         double dama;

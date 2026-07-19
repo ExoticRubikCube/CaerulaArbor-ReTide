@@ -34,7 +34,7 @@ public class OceannizedWitheriaModel extends GeoModel<OceannizedWitheriaEntity> 
 	public void setCustomAnimations(OceannizedWitheriaEntity animatable, long instanceId, AnimationState<OceannizedWitheriaEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("Head");
 		if (head != null) {
-			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);
+			EntityModelData entityData = animationState.getData(DataTickets.ENTITY_MODEL_DATA);
 			head.setRotX(entityData.headPitch() * Mth.DEG_TO_RAD);
 			head.setRotY(entityData.netHeadYaw() * Mth.DEG_TO_RAD);
 		}

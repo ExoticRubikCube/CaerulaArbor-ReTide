@@ -295,7 +295,7 @@ public class FeederProkaryoteEntity extends SeaMonster {
                         }
                     } else if (rand < 0.65) {
                         if (world instanceof ServerLevel level) {
-                            Entity entityToSpawn = CAEntities.CREEPER_FISH.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
+                            Entity entityToSpawn = CAEntities.POCKET_SEA_CREEPER.get().spawn(level, BlockPos.containing(x, y, z), MobSpawnType.MOB_SUMMONED);
                             if (entityToSpawn != null) {
                                 entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
                             }

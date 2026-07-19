@@ -32,7 +32,7 @@ public class IreneModel extends GeoModel<IreneEntity> {
 	public void setCustomAnimations(IreneEntity animatable, long instanceId, AnimationState<IreneEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("Head");
 		if (head != null) {
-			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);
+			EntityModelData entityData = animationState.getData(DataTickets.ENTITY_MODEL_DATA);
 			head.setRotX(entityData.headPitch() * Mth.DEG_TO_RAD);
 			head.setRotY(entityData.netHeadYaw() * Mth.DEG_TO_RAD);
 		}

@@ -33,8 +33,6 @@ public class MartusProtectionMobEffect extends MobEffect {
     @Override
     public void applyEffectTick(LivingEntity entity, int amplifier) {
         LevelAccessor world = entity.level();
-        if (entity == null)
-            return;
         if (entity.tickCount % 5 == 0) {
             double y = entity.getY();
             double r;

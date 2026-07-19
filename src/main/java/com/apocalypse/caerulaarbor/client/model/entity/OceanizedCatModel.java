@@ -32,7 +32,7 @@ public class OceanizedCatModel extends GeoModel<OceanizedCatEntity> {
 	public void setCustomAnimations(OceanizedCatEntity animatable, long instanceId, AnimationState<OceanizedCatEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("head");
 		if (head != null) {
-			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);
+			EntityModelData entityData = animationState.getData(DataTickets.ENTITY_MODEL_DATA);
 			head.setRotX(entityData.headPitch() * Mth.DEG_TO_RAD);
 			head.setRotY(entityData.netHeadYaw() * Mth.DEG_TO_RAD);
 		}

@@ -380,7 +380,7 @@ public class CrisisTableBlock extends BaseEntityBlock implements EntityBlock {
 		offset0 = Mth.nextDouble(RandomSource.create(), -3, 4);
 		offset1 = Mth.nextDouble(RandomSource.create(), -5, 6);
 		if (world instanceof ServerLevel level) {
-			Entity entityToSpawn = CAEntities.CREEPER_FISH.get().spawn(level, BlockPos.containing(x + offset0 * dire.getStepX() + offset1 * dire1.getStepX(), y + 1, z + offset0 * dire.getStepZ() + offset1 * dire1.getStepZ()),
+			Entity entityToSpawn = CAEntities.POCKET_SEA_CREEPER.get().spawn(level, BlockPos.containing(x + offset0 * dire.getStepX() + offset1 * dire1.getStepX(), y + 1, z + offset0 * dire.getStepZ() + offset1 * dire1.getStepZ()),
 					MobSpawnType.MOB_SUMMONED);
 			if (entityToSpawn != null) {
 				entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);

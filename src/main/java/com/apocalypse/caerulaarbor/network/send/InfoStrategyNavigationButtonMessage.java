@@ -75,7 +75,6 @@ public class InfoStrategyNavigationButtonMessage {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	private static void openScreen(Player entity, int x, int y, int z, String title, Class<? extends AbstractContainerMenu> menuClass) {
 		if (!(entity instanceof ServerPlayer serverPlayer))
 			return;

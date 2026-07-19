@@ -11,7 +11,7 @@ import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.model.data.EntityModelData;
 
 public class TideBishopModel extends GeoModel<TideBishopEntity> {
-	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/tidebishoptexture.png");
+	private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/entities/tidebishop.png");
 
 	@Override
 	public ResourceLocation getAnimationResource(TideBishopEntity entity) {
@@ -32,7 +32,7 @@ public class TideBishopModel extends GeoModel<TideBishopEntity> {
 	public void setCustomAnimations(TideBishopEntity animatable, long instanceId, AnimationState<TideBishopEntity> animationState) {
 		CoreGeoBone head = getAnimationProcessor().getBone("Head");
 		if (head != null) {
-			EntityModelData entityData = (EntityModelData) animationState.getData(DataTickets.ENTITY_MODEL_DATA);
+			EntityModelData entityData = animationState.getData(DataTickets.ENTITY_MODEL_DATA);
 			head.setRotX(entityData.headPitch() * Mth.DEG_TO_RAD);
 			head.setRotY(entityData.netHeadYaw() * Mth.DEG_TO_RAD);
 		}

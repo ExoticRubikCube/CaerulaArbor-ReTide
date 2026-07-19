@@ -6,6 +6,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
+import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -18,6 +20,7 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class TrailriteBowItem extends BowItem {
@@ -145,4 +148,14 @@ public class TrailriteBowItem extends BowItem {
             }
         }
     }
+
+	@Override
+	public boolean canBeHurtBy(DamageSource pDamageSource) {
+		return pDamageSource.is(DamageTypeTags.BYPASSES_EFFECTS);
+	}
+
+	@Override
+	public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+		return Math.min(amount, 1);
+	}
 }

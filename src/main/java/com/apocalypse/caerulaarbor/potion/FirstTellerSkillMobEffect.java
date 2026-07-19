@@ -70,13 +70,13 @@ public class FirstTellerSkillMobEffect extends MobEffect {
         new Object() {
             void timedLoop(int timedloopiterator, int timedlooptotal, int ticks) {
                 if (world instanceof ServerLevel level)
-                    level.sendParticles(ParticleTypes.ELECTRIC_SPARK, (x + -2.5), y, z, 64, 0.1, 0.2, 2, 0.1);
+                    level.sendParticles(ParticleTypes.ELECTRIC_SPARK, (x - 2.5), y, z, 64, 0.1, 0.2, 2, 0.1);
                 if (world instanceof ServerLevel level)
                     level.sendParticles(ParticleTypes.ELECTRIC_SPARK, (x + 2.5), y, z, 64, 0.1, 0.2, 2, 0.1);
                 if (world instanceof ServerLevel level)
                     level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, y, (z + 2.5), 64, 2, 0.2, 0.1, 0.1);
                 if (world instanceof ServerLevel level)
-                    level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, y, (z + -2.5), 64, 2, 0.2, 0.1, 0.1);
+                    level.sendParticles(ParticleTypes.ELECTRIC_SPARK, x, y, (z - 2.5), 64, 2, 0.2, 0.1, 0.1);
                 final int tick2 = ticks;
                 CaerulaArborMod.queueServerWork(tick2, () -> {
                     if (timedlooptotal > timedloopiterator + 1) {
@@ -106,7 +106,7 @@ public class FirstTellerSkillMobEffect extends MobEffect {
                 return;
             }
             ayk = enemy instanceof LivingEntity livingEntity13 && livingEntity13.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity13.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
-            for (Entity entityiterator : world.getEntities(entity, new AABB((x + 2.5), (y + 4), (z + 2.5), (x + -2.5), y, (z + -2.5)))) {
+            for (Entity entityiterator : world.getEntities(entity, new AABB((x + 2.5), (y + 4), (z + 2.5), (x - 2.5), y, (z - 2.5)))) {
                 if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
                     continue;
                 }
@@ -135,7 +135,7 @@ public class FirstTellerSkillMobEffect extends MobEffect {
                 entityToSpawn.shoot((Mth.nextDouble(RandomSource.create(), -0.125, 0.125)), (-1), (Mth.nextDouble(RandomSource.create(), -0.125, 0.125)), 1, 5);
                 projectileLevel.addFreshEntity(entityToSpawn);
             }
-            ((Entity) entity).hurt(CADamageTypes.source(world, CADamageTypes.OCEAN_MAGIC), (float) (ayk * 0.6));
+            entity.hurt(CADamageTypes.source(world, CADamageTypes.OCEAN_MAGIC), (float) (ayk * 0.6));
             SIHelper.causeSanityInjury(entity, ayk * 60, SanityEvent.Hurt.Type.POTION);
         }
     }

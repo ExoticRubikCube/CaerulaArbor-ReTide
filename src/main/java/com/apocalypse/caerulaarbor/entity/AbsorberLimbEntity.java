@@ -138,8 +138,6 @@ public class AbsorberLimbEntity extends SeaMonster {
 		this.refreshDimensions();
 	}
 
-	
-
 	@Override
 	public boolean isPushable() {
 		return false;
@@ -223,7 +221,6 @@ public class AbsorberLimbEntity extends SeaMonster {
 		data.add(new AnimationController<>(this, "movement", 0, this::movementPredicate));
 		data.add(new AnimationController<>(this, "procedure", 0, this::procedurePredicate));
 	}
-
 
 	@Override
 	public void setAnimationProcedure(String animation) {

@@ -67,7 +67,6 @@ public class FleefishBulletEntity extends AbstractArrow implements ItemSupplier 
 	@Override
 	public void onHitEntity(EntityHitResult entityHitResult) {
 		super.onHitEntity(entityHitResult);
-        this.level();
         Entity entity = entityHitResult.getEntity();
         Entity sourceentity = this.getOwner();
         if (sourceentity == null)

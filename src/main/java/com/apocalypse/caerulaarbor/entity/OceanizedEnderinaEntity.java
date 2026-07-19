@@ -7,7 +7,6 @@ import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -21,7 +20,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.DamageTypeTags;
-import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
@@ -41,7 +39,6 @@ import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.RangedAttackMob;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
@@ -58,9 +55,7 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 
 import javax.annotation.Nullable;
-import java.util.Comparator;
-import java.util.EnumSet;
-import java.util.List;
+import java.util.*;
 
 public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackMob {
 	public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(OceanizedEnderinaEntity.class, EntityDataSerializers.BOOLEAN);
@@ -73,8 +68,7 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 	private boolean swinging;
 	private long lastSwing;
 	public String animationprocedure = "empty";
-	@Nullable
-	private DamageSource lastDamageSource;
+	public Set<String> crystals = new HashSet<>();
 
 	public static void spawnLinkParticles(LevelAccessor world, double fromX, double fromY, double fromZ, double toX, double toY, double toZ) {
 		double vx = toX - fromX;
@@ -89,6 +83,19 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 	}
 
 	private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.PINK, ServerBossEvent.BossBarOverlay.NOTCHED_10);
+
+	public void putCrystal(Entity crystal) {
+		this.crystals.add(crystal.getStringUUID());
+	}
+
+	public MoistEnderCrystalEntity getCrystal(String uuid) {
+		Level level = this.level();
+		if (level instanceof ServerLevel) {
+			Entity c = ((ServerLevel) level).getEntity(UUID.fromString(uuid));
+			return c instanceof MoistEnderCrystalEntity ? (MoistEnderCrystalEntity) c : null;
+		}
+		return null;
+	}
 
 	public OceanizedEnderinaEntity(Level world) {
 		this(CAEntities.OCEANIZED_ENDERINA.get(), world);
@@ -281,7 +288,6 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 
 	@Override
 	public boolean hurt(DamageSource source, float amount) {
-		this.lastDamageSource = source;
 		if (source.is(DamageTypes.DRAGON_BREATH)) return false;
 		Entity sourceEntity = source.getEntity();
 		if (source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)
@@ -296,36 +302,9 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 
 	@Override
 	public void die(DamageSource source) {
-		Entity sourceEntity = source == null ? null : source.getEntity();
-		boolean canEnterSecondPhase = false;
-		if (sourceEntity != null) {
-			if ((sourceEntity instanceof LivingEntity livingEntity ? livingEntity.getOffhandItem() : ItemStack.EMPTY).getItem() == CAItems.ENDERINA_SPAWNER.get()) {
-				canEnterSecondPhase = true;
-			} else if (!sourceEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))
-					&& (!(sourceEntity instanceof TamableAnimal tamableAnimal) || !tamableAnimal.isTame())) {
-				canEnterSecondPhase = !(sourceEntity instanceof Player || sourceEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside"))));
-			}
-		}
-		if (this.getPhase() == 0 && !this.isReviving() && canEnterSecondPhase) {
-			super.setHealth(this.getMaxHealth() * 0.5F);
-			this.getEntityData().set(DATA_PHASE, 1);
-			if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)) {
-				this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(this.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() * 2);
-			}
-			if (this.getAttributes().hasAttribute(Attributes.MAX_HEALTH)) {
-				this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(this.getAttribute(Attributes.MAX_HEALTH).getBaseValue() * 3);
-			}
-			if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get())) {
-				this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).setBaseValue(this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getBaseValue() * 2);
-			}
-			if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())) {
-				this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).getBaseValue() + 20);
-			}
+		if (!this.isReviving()) {
+			this.setHealth(this.getMaxHealth() * 0.5F);
 			this.reviveing();
-			if (!this.level().isClientSide()) {
-				this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 200, 1, false, false));
-				this.addEffect(new MobEffectInstance(CAMobEffects.FAKE_DEATH.get(), 200, 1, false, false));
-			}
 			return;
 		}
 		super.die(source);
@@ -335,36 +314,9 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 	public void setHealth(float pHealth) {
 		float hlth = this.getHealth();
 		float mhlth = this.getMaxHealth();
-		Entity sourceEntity = this.lastDamageSource == null ? null : this.lastDamageSource.getEntity();
-		boolean canEnterSecondPhase = false;
-		if (sourceEntity != null) {
-			if ((sourceEntity instanceof LivingEntity livingEntity ? livingEntity.getOffhandItem() : ItemStack.EMPTY).getItem() == CAItems.ENDERINA_SPAWNER.get()) {
-				canEnterSecondPhase = true;
-			} else if (!sourceEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))
-					&& (!(sourceEntity instanceof TamableAnimal tamableAnimal) || !tamableAnimal.isTame())) {
-				canEnterSecondPhase = !(sourceEntity instanceof Player || sourceEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "is_humanside"))));
-			}
-		}
-		if (pHealth <= 0 && this.getPhase() == 0 && !this.isReviving() && canEnterSecondPhase) {
-			super.setHealth(this.getMaxHealth() * 0.5F);
-			this.getEntityData().set(DATA_PHASE, 1);
-			if (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE)) {
-				this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(this.getAttribute(Attributes.ATTACK_DAMAGE).getBaseValue() * 2);
-			}
-			if (this.getAttributes().hasAttribute(Attributes.MAX_HEALTH)) {
-				this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(this.getAttribute(Attributes.MAX_HEALTH).getBaseValue() * 3);
-			}
-			if (this.getAttributes().hasAttribute(CAAttributes.GENERAL_DEFENSE.get())) {
-				this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).setBaseValue(this.getAttribute(CAAttributes.GENERAL_DEFENSE.get()).getBaseValue() * 2);
-			}
-			if (this.getAttributes().hasAttribute(CAAttributes.MAGIC_RESISTANCE.get())) {
-				this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).setBaseValue(this.getAttribute(CAAttributes.MAGIC_RESISTANCE.get()).getBaseValue() + 20);
-			}
+		if (pHealth <= 0 && !this.isReviving()) {
+			super.setHealth(mhlth * 0.5F);
 			this.reviveing();
-			if (!this.level().isClientSide()) {
-				this.addEffect(new MobEffectInstance(CAMobEffects.INVULNERABLE.get(), 200, 1, false, false));
-				this.addEffect(new MobEffectInstance(CAMobEffects.FAKE_DEATH.get(), 200, 1, false, false));
-			}
 			return;
 		}
 		float reduction = hlth - pHealth;
@@ -442,7 +394,7 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 			P = (Entity) this instanceof OceanizedEnderinaEntity datEntI ? datEntI.getEntityData().get(DATA_PHASE) : 0;
 			if (rev > 0) {
 				if ((Entity) this instanceof OceanizedEnderinaEntity datEntSetI)
-					datEntSetI.getEntityData().set(DATA_REVIVE_TICK, (int) (dura - 1));
+					datEntSetI.getEntityData().set(DATA_REVIVE_TICK, (int) (rev - 1));
 				setShiftKeyDown(true);
 				setDeltaMovement(new Vec3(0, 0, 0));
 				if (tickCount % 10 == 0) {
@@ -528,28 +480,24 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 				}
 			}
 			if (tickCount % 20 == 0) {
-				final Vec3 center = new Vec3(x, y, z);
-				List<MoistEnderCrystalEntity> entfound = world.getEntitiesOfClass(MoistEnderCrystalEntity.class,
-						new AABB(center, center).inflate(16), e -> !e.IS_STATIC);
-				for (Entity entityiterator : entfound) {
-					if (entityiterator == null || this == null)
-						continue;
-					Entity illusioner;
-					Entity enemy1 = null;
-					illusioner = this;
-					if (illusioner == null) {
-						continue;
+				if ((Entity) this instanceof OceanizedEnderinaEntity enderina) {
+					Set<String> crystalUUIDs = enderina.crystals;
+					Set<String> toDelete = new HashSet<>();
+					for (String uuid1 : crystalUUIDs) {
+						MoistEnderCrystalEntity crystal = enderina.getCrystal(uuid1);
+						if (crystal != null && crystal.isAlive()) {
+							if (enderina.getEntityData().get(DATA_REVIVE_TICK) <= 0) {
+								enderina.crytsalToEnderina(crystal, this);
+								EntityUtils.heal(enderina, enderina.getMaxHealth() * 0.01);
+							} else {
+								crystal.getNavigation().moveTo(getX(), getY(), getZ(), 0.5);
+							}
+							spawnLinkParticles(enderina.level(), crystal.getX(), crystal.getY() + 0.5, crystal.getZ(), getX(), getY(), getZ());
+						} else {
+							toDelete.add(uuid1);
+						}
 					}
-					if ((illusioner instanceof OceanizedEnderinaEntity datEntI ? datEntI.getEntityData().get(DATA_REVIVE_TICK) : 0) <= 0) {
-						crytsalToEnderina(entityiterator, illusioner);
-						EntityUtils.heal(this, this.getMaxHealth() * 0.01);
-					} else {
-						if (entityiterator instanceof Mob entity)
-							entity.getNavigation().moveTo((illusioner.getX()), (illusioner.getY()), (illusioner.getZ()), 0.5);
-					}
-					if (illusioner == null)
-						continue;
-					OceanizedEnderinaEntity.spawnLinkParticles(world, entityiterator.getX(), entityiterator.getY() + 0.5, entityiterator.getZ(), illusioner.getX(), illusioner.getY(), illusioner.getZ());
+					crystalUUIDs.removeAll(toDelete);
 				}
 			}
 			if (rev > 0 && tickCount % 70 == 50) {
@@ -854,7 +802,7 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 		this.getEntityData().set(OceanizedEnderinaEntity.DATA_REVIVE_TICK, 600);
 	}
 
-	private void crytsalToEnderina(Entity me, Entity owner) {
+	public void crytsalToEnderina(Entity me, Entity owner) {
 		Vec3 ownerPos = owner.position();
 		Vec3 goal;
 		Vec3 v1 = ownerPos.vectorTo(me.position());

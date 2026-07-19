@@ -98,7 +98,7 @@ public class CAItems {
     public static final RegistryObject<Item> SHOOTER_FISH_SPAWN_EGG = REGISTRY.register("shooter_fish_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.SHOOTER_FISH, -13434676, -3355444, new Item.Properties()));
     public static final RegistryObject<Item> FLY_FISH_SPAWN_EGG = REGISTRY.register("fly_fish_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.FLY_FISH, -16737895, -3355444, new Item.Properties()));
     public static final RegistryObject<Item> REAPER_FISH_SPAWN_EGG = REGISTRY.register("reaper_fish_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.REAPER_FISH, -6710785, -3355444, new Item.Properties()));
-    public static final RegistryObject<Item> CREEPER_FISH_SPAWN_EGG = REGISTRY.register("creeper_fish_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.CREEPER_FISH, -10092442, -3342337, new Item.Properties()));
+    public static final RegistryObject<Item> POCKET_SEA_CREEPER_SPAWN_EGG = REGISTRY.register("pocket_sea_creeper_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.POCKET_SEA_CREEPER, -10092442, -3342337, new Item.Properties()));
     public static final RegistryObject<Item> PUNCTURE_FISH_SPAWN_EGG = REGISTRY.register("puncture_fish_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.PUNCTURE_FISH, -16750900, -1, new Item.Properties()));
     public static final RegistryObject<Item> SEA_TRAIL_INIT = block(CABlocks.SEA_TRAIL_INIT);
     public static final RegistryObject<Item> SEA_TRAIL_GROWING = block(CABlocks.SEA_TRAIL_GROWING);
@@ -301,6 +301,7 @@ public class CAItems {
     public static final RegistryObject<Item> CHIESELED_SALTWIND_SAND_WALL = block(CABlocks.CHIESELED_SALTWIND_SAND_WALL);
     public static final RegistryObject<Item> SMOOTH_SALTWIND_SAND_WALL = block(CABlocks.SMOOTH_SALTWIND_SAND_WALL);
     public static final RegistryObject<Item> TIDE_BISHOP_CORE = block(CABlocks.TIDE_BISHOP_CORE);
+    public static final RegistryObject<Item> TIDE_BISHOP_CORE_EMPTY = block(CABlocks.TIDE_BISHOP_CORE_EMPTY);
     public static final RegistryObject<Item> ADV_ITEM = REGISTRY.register("adv_item", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)));
     public static final RegistryObject<Item> HETEROPIC_BLOCK = block(CABlocks.HETEROPIC_BLOCK);
     public static final RegistryObject<Item> TRAIL_LOG = block(CABlocks.TRAIL_LOG);
@@ -387,6 +388,7 @@ public class CAItems {
     public static final RegistryObject<Item> COLOURFULL_JELLY = REGISTRY.register("colourfull_jelly", ColourfullJellyItem::new);
     public static final RegistryObject<Item> CHITIN_SHIELD = REGISTRY.register("chitin_shield", ChitinShieldItem::new);
     public static final RegistryObject<Item> COMPLEX_CHITIN_SHIELD = REGISTRY.register("complex_chitin_shield", ComplexChitinShieldItem::new);
+    public static final RegistryObject<Item> TRAILRITE_SHIELD = REGISTRY.register("trailrite_shield", TrailriteShieldItem::new);
     public static final RegistryObject<Item> HIGHMORE_SPAWNBLOCK = REGISTRY.register(Objects.requireNonNull(CABlocks.HIGHMORE_SPAWNBLOCK.getId()).getPath(),
             () -> new HighmoreSpawnblockDisplayItem(CABlocks.HIGHMORE_SPAWNBLOCK.get(), new Item.Properties()));
     public static final RegistryObject<Item> CRISIS_TABLE = REGISTRY.register(Objects.requireNonNull(CABlocks.CRISIS_TABLE.getId()).getPath(), () -> new CrisisTableDisplayItem(CABlocks.CRISIS_TABLE.get(), new Item.Properties()));
@@ -586,6 +588,8 @@ public class CAItems {
     public static final RegistryObject<Item> OCEAN_PHLOEM = tooltipItem("ocean_phloem", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)), 1);
     public static final RegistryObject<Item> OCEAN_FIBRE = tooltipItem("ocean_fibre",
             () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(2).saturationMod(0.2f).meat().build())), 1);
+    public static final RegistryObject<Item> CHITIN_COOKIE_RAW = REGISTRY.register("chitin_cookie_raw", ChitinCookieRawItem::new);
+    public static final RegistryObject<Item> CHITIN_COOKIE_DONE = REGISTRY.register("chitin_cookie_done", ChitinCookieDoneItem::new);
     public static final RegistryObject<Item> OCEAN_CRYSTAL = tooltipItem("ocean_crystal", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)), 1);
     public static final RegistryObject<Item> OCEAN_CUTIN = tooltipItem("ocean_cutin", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)), 1);
     public static final RegistryObject<Item> OCEAN_CHITIN = tooltipItem("ocean_chitin", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)), 1);
@@ -653,6 +657,8 @@ public class CAItems {
             () -> new ForgeSpawnEggItem(CAEntities.OCEANIZED_ENDERINA, -1, -1, new Item.Properties().stacksTo(64).rarity(Rarity.EPIC)), 1);
     public static final RegistryObject<Item> MOIST_DRAGON_HEART = tooltipItem("moist_dragon_heart", () -> new Item(new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.RARE)), 1);
     public static final RegistryObject<Item> NETHERSEA_PRESERVED_EGG = tooltipItem("nethersea_preserved_egg", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food(new FoodProperties.Builder().nutrition(4).saturationMod(0.4f).alwaysEat().effect(() -> new MobEffectInstance(CAMobEffects.ESSENCE_RESISTANCE.get(), 400, 1, false, true), 1.0F).effect(() -> new MobEffectInstance(CAMobEffects.DEDUCT_ONE_SANITY.get(), 60, 0, false, false), 1.0F).build())), 1);
+    public static final RegistryObject<Item> SEA_PRAIRIE_BOMB = block(CABlocks.SEA_PRAIRIE_BOMB);
+    public static final RegistryObject<Item> CHEST_FISH_FOOD = block(CABlocks.CHEST_FISH_FOOD);
 
     private static <T extends Item> RegistryObject<T> tooltipItem(String name, Supplier<T> factory, int tooltipCount) {
         TOOLTIP_COUNTS.put(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, name), tooltipCount);
@@ -676,6 +682,7 @@ public class CAItems {
             ItemProperties.register(CHITIN_SHIELD.get(), ResourceLocation.parse("blocking"), Objects.requireNonNull(ItemProperties.getProperty(Items.SHIELD, ResourceLocation.parse("blocking"))));
             ItemProperties.register(COMPLEX_CHITIN_SHIELD.get(), ResourceLocation.parse("blocking"), Objects.requireNonNull(ItemProperties.getProperty(Items.SHIELD, ResourceLocation.parse("blocking"))));
             ItemProperties.register(TIDELINKED_SHIELD.get(), ResourceLocation.parse("blocking"), Objects.requireNonNull(ItemProperties.getProperty(Items.SHIELD, ResourceLocation.parse("blocking"))));
+            ItemProperties.register(TRAILRITE_SHIELD.get(), ResourceLocation.parse("blocking"), Objects.requireNonNull(ItemProperties.getProperty(Items.SHIELD, ResourceLocation.parse("blocking"))));
             ItemProperties.register(CHITIN_BOW.get(), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "chitin_bow_pulling"),
                     (itemStackToRender, clientWorld, living, itemEntityId) -> living != null && living.isUsingItem()
                             && living.getUseItem().is(itemStackToRender.getItem()) ? living.getTicksUsingItem() : 0.0F);

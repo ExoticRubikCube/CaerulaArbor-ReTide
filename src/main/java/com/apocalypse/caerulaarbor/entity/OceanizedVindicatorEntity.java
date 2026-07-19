@@ -115,17 +115,12 @@ public class OceanizedVindicatorEntity extends SeaMonster implements PolarMountR
         return super.hurt(source, amount);
     }
 
-    
-
-    
-
     @Override
     public void baseTick() {
         super.baseTick();
         if ((getDisplayName().getString()).equals("Johnny")) {
-            if (!((Entity) this instanceof LivingEntity livEnt1 && livEnt1.hasEffect(CAMobEffects.ANGER_OF_TIDE.get()))) {
-                if (!this.level().isClientSide())
-                    this.addEffect(new MobEffectInstance(CAMobEffects.ANGER_OF_TIDE.get(), 20, 0, false, false));
+            if (!this.level().isClientSide() &&!this.hasEffect(CAMobEffects.ANGER_OF_TIDE.get())) {
+                this.addEffect(new MobEffectInstance(CAMobEffects.ANGER_OF_TIDE.get(), 20, 0, false, false));
             }
         }
         this.refreshDimensions();
@@ -135,7 +130,6 @@ public class OceanizedVindicatorEntity extends SeaMonster implements PolarMountR
     public EntityDimensions getDimensions(Pose p_33597_) {
         return super.getDimensions(p_33597_).scale((float) 1);
     }
-
 
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
@@ -221,7 +215,6 @@ public class OceanizedVindicatorEntity extends SeaMonster implements PolarMountR
         data.add(new AnimationController<>(this, "attacking", 1, this::attackingPredicate));
         data.add(new AnimationController<>(this, "procedure", 1, this::procedurePredicate));
     }
-
 
     @Override
     public void setAnimationProcedure(String animation) {

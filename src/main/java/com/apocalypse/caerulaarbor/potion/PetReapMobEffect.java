@@ -48,7 +48,7 @@ public class PetReapMobEffect extends MobEffect {
         double y = entity.getY();
         double z = entity.getZ();
         double angle;
-        if ((Entity) entity instanceof Mob mobEnt0 && mobEnt0.isAggressive() && ((Entity) entity).isAlive()) {
+        if (entity instanceof Mob mobEnt0 && mobEnt0.isAggressive() && entity.isAlive()) {
             for (int index0 = 0; index0 < 120; index0++) {
                 angle = Mth.nextDouble(RandomSource.create(), 0, 6.283);
                 if (world instanceof ServerLevel level)

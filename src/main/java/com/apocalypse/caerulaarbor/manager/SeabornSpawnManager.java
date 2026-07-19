@@ -66,7 +66,7 @@ public class SeabornSpawnManager {
 	private static final RegistryObject[] LAND_ELITE_POOL = {
 		CAEntities.BASELAYER_ABYSSAL,
 		CAEntities.CRACKER_ABYSSAL,
-		CAEntities.CREEPER_FISH,
+		CAEntities.POCKET_SEA_CREEPER,
 		CAEntities.GUIDE_ABYSSAL,
 		CAEntities.PUNCTURE_FISH,
 		CAEntities.REAPER_FISH,

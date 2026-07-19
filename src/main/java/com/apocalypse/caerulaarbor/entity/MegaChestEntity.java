@@ -72,7 +72,6 @@ public class MegaChestEntity extends SeaMonster {
         this.entityData.define(DATA_RELEASED, false);
     }
 
-
     @Override
     public boolean canCollideWith(Entity entity) {
         return true;
@@ -97,27 +96,23 @@ public class MegaChestEntity extends SeaMonster {
         this.goalSelector.addGoal(3, new RandomStrollGoal(this, 0.4) {
             @Override
             public boolean canUse() {
-                if (!super.canUse()) return false;
-                return !isShiftKeyDown();
+                return super.canContinueToUse() && !isShiftKeyDown();
             }
 
             @Override
             public boolean canContinueToUse() {
-                if (!super.canContinueToUse()) return false;
-                return !isShiftKeyDown();
+                return super.canContinueToUse() && !isShiftKeyDown();
             }
         });
         this.goalSelector.addGoal(4, new RandomLookAroundGoal(this) {
             @Override
             public boolean canUse() {
-                if (!super.canUse()) return false;
-                return !isShiftKeyDown();
+                return super.canContinueToUse() && !isShiftKeyDown();
             }
 
             @Override
             public boolean canContinueToUse() {
-                if (!super.canContinueToUse()) return false;
-                return !isShiftKeyDown();
+                return super.canContinueToUse() && !isShiftKeyDown();
             }
         });
     }
@@ -306,8 +301,6 @@ public class MegaChestEntity extends SeaMonster {
     }
 
     private PlayState attackingPredicate(AnimationState<?> event) {
-        double d1 = this.getX() - this.xOld;
-        double d0 = this.getZ() - this.zOld;
         if (getAttackAnim(event.getPartialTick()) > 0f && !this.swinging) {
             this.swinging = true;
             this.lastSwing = level().getGameTime();

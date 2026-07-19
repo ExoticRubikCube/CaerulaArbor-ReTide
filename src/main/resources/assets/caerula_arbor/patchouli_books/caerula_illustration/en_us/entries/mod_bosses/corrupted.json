@@ -1,0 +1,52 @@
+{
+  "name": "咏叹的“深海猎人”",
+  "icon": "caerula_arbor:corrupted_heart_spawner",
+  "category": "caerula_arbor:mod_bosses",
+  "read_by_default": true,
+  "sortnum": 6,
+  "pages": [
+    {
+      "type": "image",
+      "title": "腐化之心",
+      "border": true,
+      "images": [
+        "caerula_arbor:patchouli_books/image_sets/corrupted.png"
+      ],
+      "text": "$(o)被伊莎玛拉的血肉侵染的深海猎人。"
+    },
+    {
+      "type": "text",
+      "title": "召唤",
+      "text": "在陵潮安息地，带着仗剑的深海猎人，主手持有漩海密文板，副手持有深蓝之心，激活封印的骸骨。$(br)此后用使用伊莎玛拉之泪右键骸骨可将其重置。"
+    },
+    {
+      "type": "text",
+      "title": "腐化之心",
+      "text": " · 生理耐受：卓越$(br) · 进攻强度：标准$(br) · 机动：标准$(br) · 物种特性：近战攻击，不断召唤海怪。每隔一段时间进入新的阶段，若被击败且未满足$(b)净化$()条件，则提前进入新的阶段。$(br)第一阶段下受到的伤害大幅减少，不断进行不分敌我的治疗，为周围海嗣分担伤害。受到足量来自人类阵营的伤害后被$(b)净化$()并变回深海猎人。"
+    },
+    {
+      "type": "text",
+      "title": "",
+      "text": "第二阶段下，减伤幅度降低，只治疗海怪，并使周围海怪获得增强。被击败时若受到来自人类阵营伤害占比足够，则被$(b)净化$()并变回深海猎人。$(br)第三阶段下，失去减伤，不断损失生命，使周围海怪获得大幅增强，不断造成范围极大的真实伤害。$(c)无法被净化。$()$(br)死亡后，若未被$(b)净化$()，则会变为$(6)伊莎玛拉。"
+    },
+    {
+      "type": "text",
+      "title": "击杀建议",
+      "text": "若要将其$(b)净化$()，需要玩家、审判庭、深海猎人、几丁质傀儡等友军对其发起攻击。$(br)第三阶段下，$(6)伊莎玛拉$()的降临无法阻止，且她会造成范围极大的真实伤害，难以抵挡，建议远离。"
+    },
+    {
+      "type": "text",
+      "title": "陵潮安息地",
+      "text": "注册名：caerula_arbor:isharmlacemetery$(br2)存放伊莎玛拉遗骸的地方，会出现在海面。"
+    },
+    {
+      "type": "relations",
+      "title": "相关链接",
+      "text": "本条目提到的其它概念链接如上",
+      "entries": [
+        "caerula_arbor:mod_items/whirl_eye",
+        "caerula_arbor:mod_bosses/isharmla"
+      ]
+    }
+  ]
+}

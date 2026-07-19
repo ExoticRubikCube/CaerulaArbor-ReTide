@@ -302,7 +302,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
             sklp1 = (Entity) this instanceof UlpiansEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP_1) : 0;
             skillp2 = (Entity) this instanceof UlpiansEntity datEntI ? datEntI.getEntityData().get(DATA_SKILLP_2) : 0;
             dura = (Entity) this instanceof UlpiansEntity datEntI ? datEntI.getEntityData().get(DATA_DURATION) : 0;
-            target = (Entity) this instanceof Mob mobEnt ? mobEnt.getTarget() : null;
+            target = this.getTarget();
             if (dura > 0) {
                 if ((Entity) this instanceof UlpiansEntity datEntSetI)
                     datEntSetI.getEntityData().set(DATA_DURATION, (int) (dura - 1));
@@ -323,7 +323,7 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                         if (world instanceof Level level) {
                             level.playSound(null, BlockPos.containing(x, y, z), CASounds.ULPIANS_PUL_PRE.get(), SoundSource.NEUTRAL, (float) 2.2, 1);
                         }
-                        ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((target.getX()), (target.getY() + 1.6), (target.getZ())));
+                        this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((target.getX()), (target.getY() + 1.6), (target.getZ())));
                         CaerulaArborMod.queueServerWork(13, () -> {
                             if (this.isAlive()) {
                                 if (world instanceof Level level) {
@@ -375,10 +375,8 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
                         });
                         CaerulaArborMod.queueServerWork(24, () -> {
                             if (this.isAlive()) {
-                                Entity enemy1;
-                                double r;
-                                enemy1 = (Entity) this instanceof Mob mobEnt ? mobEnt.getTarget() : null;
-                                r = 4.5;
+                                Entity enemy1 = this.getTarget();
+                                double r = 4.5;
                                 {
                                     final Vec3 center = new Vec3(x, y, z);
                                     List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(9 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
@@ -542,7 +540,6 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
         this.updateSwingTime();
     }
 
-
     public static AttributeSupplier.Builder createAttributes() {
         AttributeSupplier.Builder builder = Mob.createMobAttributes();
         builder = builder.add(Attributes.MOVEMENT_SPEED, 0.18);
@@ -636,7 +633,6 @@ public class UlpiansEntity extends Animal implements GeoEntity, SyncedAnimationE
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return this.cache;
     }
-
 
     @Override
     public void setAnimationProcedure(String animation) {

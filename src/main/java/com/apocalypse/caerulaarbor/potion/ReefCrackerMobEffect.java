@@ -35,9 +35,6 @@ public class ReefCrackerMobEffect extends MobEffect {
         double x = entity.getX();
         double y = entity.getY();
         double z = entity.getZ();
-        if (entity == null)
-            return;
-        double angle = 0;
         if (world instanceof ServerLevel level)
             level.sendParticles(CAParticles.CRACKER_BUFF_0.get(), x, (y + entity.getBbHeight() * 0.5), z, (int) ((double) amplifier + 1), 0.8, 1.5, 0.8, 0.3);
         if ((double) amplifier > 6) {
@@ -49,8 +46,6 @@ public class ReefCrackerMobEffect extends MobEffect {
     @Override
     public void removeAttributeModifiers(LivingEntity entity, AttributeMap attributeMap, int amplifier) {
         super.removeAttributeModifiers(entity, attributeMap, amplifier);
-        if (entity == null)
-            return;
         if ((double) amplifier >= 2) {
             if ((Entity) entity instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())
                 livingEntity.addEffect(new MobEffectInstance(CAMobEffects.REEF_CRACKER.get(), 60, (int) ((double) amplifier - 2), false, false));

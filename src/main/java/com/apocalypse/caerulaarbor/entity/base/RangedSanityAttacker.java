@@ -44,7 +44,7 @@ public interface RangedSanityAttacker {
 				}
 			}.timedLoop(0, 5, 2);
 
-			level.playSound(null, BlockPos.containing(x, y, z), CASounds.CREEPER_FISH_EXPLODE.get(), SoundSource.HOSTILE, 3, 1);
+			level.playSound(null, BlockPos.containing(x, y, z), CASounds.POCKET_SEA_CREEPER_EXPLODE.get(), SoundSource.HOSTILE, 3, 1);
 
 			Vec3 centerPos = new Vec3(x, y + 1.5, z);
 			List<Entity> nearbyEntities = level.getEntitiesOfClass(Entity.class, new AABB(centerPos, centerPos).inflate(8 / 2d), entity -> true).stream().sorted(Comparator.comparingDouble(entity -> entity.distanceToSqr(centerPos))).toList();

@@ -13,8 +13,6 @@ public class RegenerationPerclyMobEffect extends MobEffect {
 
 	@Override
 	public void applyEffectTick(LivingEntity entity, int amplifier) {
-        if (entity == null)
-            return;
         EntityUtils.heal(entity, entity.getMaxHealth() * 0.0025 * ((double) amplifier + 1));
     }
 

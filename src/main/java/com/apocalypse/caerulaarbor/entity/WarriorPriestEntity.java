@@ -151,7 +151,7 @@ public class WarriorPriestEntity extends Animal implements GeoEntity, SyncedAnim
                         datEntSetI.getEntityData().set(DATA_SKILL_P, 150);
                     CaerulaArborMod.queueServerWork(15, () -> {
                         if (sourceentity.isAlive()) {
-                            ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((sourceentity.getX()), (sourceentity.getY()), (sourceentity.getZ())));
+                            this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((sourceentity.getX()), (sourceentity.getY()), (sourceentity.getZ())));
                             if (world instanceof Level level) {
                                 level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.EMPTY, SoundSource.HOSTILE, (float) 2.5, 1);
                             }

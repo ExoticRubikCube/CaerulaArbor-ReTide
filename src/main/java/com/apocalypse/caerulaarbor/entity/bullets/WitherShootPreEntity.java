@@ -178,7 +178,7 @@ public class WitherShootPreEntity extends AbstractArrow implements ItemSupplier 
 		return entityarrow;
 	}
 
-       // TODO：当前置凋灵弹 API 重构时，重新审视这个遗留的双参数接口。
+	// TODO：当前置凋灵弹 API 重构时，重新审视这个遗留的双参数接口。
 	public static WitherShootPreEntity shoot(LivingEntity entity, LivingEntity target) {
 		WitherShootPreEntity entityarrow = new WitherShootPreEntity(CAEntities.WITHER_SHOOT_PRE.get(), entity, entity.level());
 		double dx = target.getX() - entity.getX();
