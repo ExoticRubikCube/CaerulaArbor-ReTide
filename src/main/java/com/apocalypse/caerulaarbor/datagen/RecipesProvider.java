@@ -1129,7 +1129,10 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:empty_can", 3),
-                pattern("a a", "bab"),
+                pattern(
+                        "a a",
+                        "bab"
+                ),
                 key('a', item("minecraft:iron_ingot")),
                 key('b', tag("forge:dyes"))
         );
@@ -1306,7 +1309,11 @@ public class RecipesProvider extends RecipeProvider {
                 "equipment",
                 null,
                 result("caerula_arbor:chitin_pickaxe", 1),
-                pattern("aba", " c ", " c "),
+                pattern(
+                        "aba",
+                        " c ",
+                        " c "
+                ),
                 key('a', item("caerula_arbor:ocean_chitin")),
                 key('b', item("caerula_arbor:chitin_ingot")),
                 key('c', item("caerula_arbor:cutin_stick"))
@@ -1317,7 +1324,11 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:chitin_shield", 1),
-                pattern("aba", "bcb", "aba"),
+                pattern(
+                        "aba",
+                        "bcb",
+                        "aba"
+                ),
                 key('a', item("caerula_arbor:ocean_phloem")),
                 key('b', item("caerula_arbor:ocean_chitin")),
                 key('c', item("caerula_arbor:chitin_ingot"))
@@ -1328,7 +1339,11 @@ public class RecipesProvider extends RecipeProvider {
                 "equipment",
                 null,
                 result("caerula_arbor:chitin_shovel", 1),
-                pattern("a", "b", "b"),
+                pattern(
+                        "a",
+                        "b",
+                        "b"
+                ),
                 key('a', item("caerula_arbor:chitin_ingot")),
                 key('b', item("caerula_arbor:cutin_stick"))
         );
@@ -1338,7 +1353,11 @@ public class RecipesProvider extends RecipeProvider {
                 "equipment",
                 null,
                 result("caerula_arbor:chitin_sword", 1),
-                pattern("a", "a", "b"),
+                pattern(
+                        "a",
+                        "a",
+                        "b"
+                ),
                 key('a', item("caerula_arbor:chitin_ingot")),
                 key('b', item("caerula_arbor:cutin_stick"))
         );
@@ -1348,7 +1367,11 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:chitin_block", 1),
-                pattern("aaa", "aaa", "aaa"),
+                pattern(
+                        "aaa",
+                        "aaa",
+                        "aaa"
+                ),
                 key('a', item("caerula_arbor:ocean_chitin"))
         );
         shaped(
@@ -1357,7 +1380,11 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:circular_saw", 1),
-                pattern(" ab", "cda", "de "),
+                pattern(
+                        " ab",
+                        "cda",
+                        "de "
+                ),
                 key('a', item("caerula_arbor:ocean_crystal")),
                 key('b', item("caerula_arbor:trail_powder_core")),
                 key('c', item("minecraft:leather")),
@@ -1386,7 +1413,11 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:complex_chitin", 2),
-                pattern("abc", "bdb", "ebf"),
+                pattern(
+                        "abc",
+                        "bdb",
+                        "ebf"
+                ),
                 key('a', item("caerula_arbor:sea_trail_mor")),
                 key('b', item("caerula_arbor:chitin_ingot")),
                 key('c', item("caerula_arbor:ocean_crystal")),
@@ -1408,7 +1439,11 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:bomb_copper", 1),
-                pattern("aba", "cdc", "aba"),
+                pattern(
+                        "aba",
+                        "cdc",
+                        "aba"
+                ),
                 key('a', item("minecraft:copper_ingot")),
                 key('b', item("minecraft:gunpowder")),
                 key('c', item("caerula_arbor:trail_powder")),
@@ -1420,7 +1455,11 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:trail_cream", 1),
-                pattern("aaa", "aba", "aaa"),
+                pattern(
+                        "aaa",
+                        "aba",
+                        "aaa"
+                ),
                 key('a', item("caerula_arbor:sea_trail_mor")),
                 key('b', item("minecraft:slime_ball"))
         );
@@ -1430,7 +1469,11 @@ public class RecipesProvider extends RecipeProvider {
                 "equipment",
                 null,
                 result("caerula_arbor:axe_ocean_crystal", 1),
-                pattern("aa", "ab", " b"),
+                pattern(
+                        "aa",
+                        "ab",
+                        " b"
+                ),
                 key('a', item("caerula_arbor:ocean_crystal")),
                 key('b', item("caerula_arbor:cutin_stick"))
         );
@@ -1440,7 +1483,11 @@ public class RecipesProvider extends RecipeProvider {
                 "equipment",
                 null,
                 result("caerula_arbor:hoe_ocean_crystal", 1),
-                pattern("aa", " b", " b"),
+                pattern(
+                        "aa",
+                        " b",
+                        " b"
+                ),
                 key('a', item("caerula_arbor:ocean_crystal")),
                 key('b', item("caerula_arbor:cutin_stick"))
         );
@@ -1450,7 +1497,11 @@ public class RecipesProvider extends RecipeProvider {
                 "equipment",
                 null,
                 result("caerula_arbor:pickaxe_ocean_crystal", 1),
-                pattern("aaa", " b ", " b "),
+                pattern(
+                        "aaa",
+                        " b ",
+                        " b "
+                ),
                 key('a', item("caerula_arbor:ocean_crystal")),
                 key('b', item("caerula_arbor:cutin_stick"))
         );
@@ -1460,7 +1511,11 @@ public class RecipesProvider extends RecipeProvider {
                 "equipment",
                 null,
                 result("caerula_arbor:shovel_ocean_crystal", 1),
-                pattern("a", "b", "b"),
+                pattern(
+                        "a",
+                        "b",
+                        "b"
+                ),
                 key('a', item("caerula_arbor:ocean_crystal")),
                 key('b', item("caerula_arbor:cutin_stick"))
         );
@@ -1470,7 +1525,11 @@ public class RecipesProvider extends RecipeProvider {
                 "equipment",
                 null,
                 result("caerula_arbor:sword_ocean_crystal", 1),
-                pattern("a", "a", "b"),
+                pattern(
+                        "a",
+                        "a",
+                        "b"
+                ),
                 key('a', item("caerula_arbor:ocean_crystal")),
                 key('b', item("caerula_arbor:cutin_stick"))
         );
@@ -1480,7 +1539,9 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:ocean_glasspane", 2),
-                pattern("aaa"),
+                pattern(
+                        "aaa"
+                ),
                 key('a', item("caerula_arbor:ocean_cutin"))
         );
         stonecutting(
@@ -1504,7 +1565,11 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:diorite_sculpture", 1),
-                pattern("aba", "cdc", "aea"),
+                pattern(
+                        "aba",
+                        "cdc",
+                        "aea"
+                ),
                 key('a', item("minecraft:diorite")),
                 key('b', item("caerula_arbor:chitin_block")),
                 key('c', item("minecraft:netherite_ingot")),
@@ -1517,7 +1582,11 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:echo_jelly", 7),
-                pattern("aba", "aca", "aaa"),
+                pattern(
+                        "aba",
+                        "aca",
+                        "aaa"
+                ),
                 key('a', item("caerula_arbor:fruit_jelly")),
                 key('b', item("caerula_arbor:sea_trail_mor")),
                 key('c', item("caerula_arbor:moist_echo_shard"))
@@ -1536,7 +1605,11 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:emergency_aid_building", 2),
-                pattern("aba", "cdc", "aea"),
+                pattern(
+                        "aba",
+                        "cdc",
+                        "aea"
+                ),
                 key('a', tag("forge:sandstone")),
                 key('b', item("minecraft:prismarine_shard")),
                 key('c', item("minecraft:prismarine_crystals")),
@@ -1549,7 +1622,11 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:treaty_empty", 1),
-                pattern("aaa", "bcb", "aaa"),
+                pattern(
+                        "aaa",
+                        "bcb",
+                        "aaa"
+                ),
                 key('a', item("minecraft:paper")),
                 key('b', item("minecraft:ink_sac")),
                 key('c', tag("forge:dyes"))
@@ -1560,7 +1637,11 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:enderina_core", 1),
-                pattern("aba", "aca", "ada"),
+                pattern(
+                        "aba",
+                        "aca",
+                        "ada"
+                ),
                 key('a', item("caerula_arbor:dragon_brand")),
                 key('b', item("caerula_arbor:heteropic_piece")),
                 key('c', tag("caerula_arbor:moist_item")),
@@ -1572,7 +1653,11 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:ocean_extractor", 1),
-                pattern("aa ", "abc", " cd"),
+                pattern(
+                        "aa ",
+                        "abc",
+                        " cd"
+                ),
                 key('a', item("caerula_arbor:cutin_stick")),
                 key('b', item("caerula_arbor:ocean_glass")),
                 key('c', item("caerula_arbor:ocean_crystal")),
@@ -1584,7 +1669,11 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:fax", 1),
-                pattern("aba", "acd", "efe"),
+                pattern(
+                        "aba",
+                        "acd",
+                        "efe"
+                ),
                 key('a', item("minecraft:iron_ingot")),
                 key('b', item("minecraft:iron_bars")),
                 key('c', item("minecraft:ink_sac")),
@@ -1630,7 +1719,11 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:pale_gold_pendant", 1),
-                pattern("aba", "cdc", "aea"),
+                pattern(
+                        "aba",
+                        "cdc",
+                        "aea"
+                ),
                 key('a', item("minecraft:gold_ingot")),
                 key('b', item("minecraft:lapis_lazuli")),
                 key('c', item("minecraft:copper_ingot")),
@@ -1643,7 +1736,11 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:golden_chalise", 1),
-                pattern("aba", "aca", " d "),
+                pattern(
+                        "aba",
+                        "aca",
+                        " d "
+                ),
                 key('a', item("minecraft:gold_ingot")),
                 key('b', tag("caerula_arbor:relic_generic")),
                 key('c', item("minecraft:ender_chest")),
@@ -1655,7 +1752,11 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:trail_golden_apple", 1),
-                pattern("aaa", "aba", "aaa"),
+                pattern(
+                        "aaa",
+                        "aba",
+                        "aaa"
+                ),
                 key('a', item("minecraft:gold_ingot")),
                 key('b', item("caerula_arbor:trail_apple"))
         );
@@ -1673,7 +1774,11 @@ public class RecipesProvider extends RecipeProvider {
                 "equipment",
                 null,
                 result("caerula_arbor:hand_anchor", 1),
-                pattern("abc", " db", "e a"),
+                pattern(
+                        "abc",
+                        " db",
+                        "e a"
+                ),
                 key('a', item("minecraft:iron_ingot")),
                 key('b', item("minecraft:iron_block")),
                 key('c', item("caerula_arbor:trail_powder_core")),
@@ -1694,7 +1799,11 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:interphone", 1),
-                pattern(" ab", "aca", "da "),
+                pattern(
+                        " ab",
+                        "aca",
+                        "da "
+                ),
                 key('a', item("minecraft:iron_ingot")),
                 key('b', item("minecraft:lightning_rod")),
                 key('c', item("minecraft:emerald")),
@@ -1714,7 +1823,10 @@ public class RecipesProvider extends RecipeProvider {
                 "building",
                 null,
                 result("caerula_arbor:isharmla_brick", 1),
-                pattern("aa", "aa"),
+                pattern(
+                        "aa",
+                        "aa"
+                ),
                 key('a', item("caerula_arbor:isharmla_scute"))
         );
         shapeless(
@@ -1739,7 +1851,11 @@ public class RecipesProvider extends RecipeProvider {
                 "equipment",
                 null,
                 result("caerula_arbor:aegir_lancet", 1),
-                pattern(" ab", "cda", "dc "),
+                pattern(
+                        " ab",
+                        "cda",
+                        "dc "
+                ),
                 key('a', item("minecraft:copper_ingot")),
                 key('b', item("caerula_arbor:trail_powder_core")),
                 key('c', item("minecraft:iron_ingot")),
@@ -1751,7 +1867,11 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:lantern_judgement", 1),
-                pattern(" a ", "bcb", " d "),
+                pattern(
+                        " a ",
+                        "bcb",
+                        " d "
+                ),
                 key('a', item("caerula_arbor:heteropic_piece")),
                 key('b', item("minecraft:amethyst_shard")),
                 key('c', item("minecraft:lantern")),
@@ -1763,7 +1883,10 @@ public class RecipesProvider extends RecipeProvider {
                 "equipment",
                 null,
                 result("caerula_arbor:sealeather_boots", 1),
-                pattern("a a", "a a"),
+                pattern(
+                        "a a",
+                        "a a"
+                ),
                 key('a', item("caerula_arbor:ocean_phloem"))
         );
         shaped(
@@ -1772,7 +1895,11 @@ public class RecipesProvider extends RecipeProvider {
                 "equipment",
                 null,
                 result("caerula_arbor:sealeather_chestplate", 1),
-                pattern("a a", "aaa", "aaa"),
+                pattern(
+                        "a a",
+                        "aaa",
+                        "aaa"
+                ),
                 key('a', item("caerula_arbor:ocean_phloem"))
         );
         shaped(
@@ -1781,7 +1908,10 @@ public class RecipesProvider extends RecipeProvider {
                 "equipment",
                 null,
                 result("caerula_arbor:sealeather_helmet", 1),
-                pattern("aaa", "a a"),
+                pattern(
+                        "aaa",
+                        "a a"
+                ),
                 key('a', item("caerula_arbor:ocean_phloem"))
         );
         shaped(
@@ -1790,7 +1920,11 @@ public class RecipesProvider extends RecipeProvider {
                 "equipment",
                 null,
                 result("caerula_arbor:sealeather_leggings", 1),
-                pattern("aaa", "a a", "a a"),
+                pattern(
+                        "aaa",
+                        "a a",
+                        "a a"
+                ),
                 key('a', item("caerula_arbor:ocean_phloem"))
         );
         shapeless(
@@ -1807,7 +1941,11 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:moist_bag", 1),
-                pattern("aba", "aca", "bdb"),
+                pattern(
+                        "aba",
+                        "aca",
+                        "bdb"
+                ),
                 key('a', item("caerula_arbor:ocean_phloem")),
                 key('b', item("minecraft:leather")),
                 key('c', tag("caerula_arbor:any_coral")),
@@ -1819,7 +1957,11 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:trail_mop", 1),
-                pattern(" ab", " ca", "c  "),
+                pattern(
+                        " ab",
+                        " ca",
+                        "c  "
+                ),
                 key('a', tag("minecraft:wool")),
                 key('b', item("caerula_arbor:trail_cream")),
                 key('c', item("minecraft:stick"))
@@ -1846,7 +1988,9 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 "food",
                 result("caerula_arbor:nethersea_pumpkin_pie", 1),
-                pattern("abc"),
+                pattern(
+                        "abc"
+                ),
                 key('a', item("caerula_arbor:trail_pumpking")),
                 key('b', item("minecraft:egg")),
                 key('c', item("minecraft:sugar"))
@@ -1873,7 +2017,11 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:instant_noodle", 1),
-                pattern("aaa", "aba", "aaa"),
+                pattern(
+                        "aaa",
+                        "aba",
+                        "aaa"
+                ),
                 key('a', item("minecraft:wheat")),
                 key('b', item("minecraft:carrot"))
         );
@@ -1891,7 +2039,10 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:ocarina", 1),
-                pattern(" a ", "aba"),
+                pattern(
+                        " a ",
+                        "aba"
+                ),
                 key('a', item("caerula_arbor:ocean_chitin")),
                 key('b', item("caerula_arbor:ocean_eye"))
         );
@@ -1901,7 +2052,11 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:ocean_arrow", 4),
-                pattern("a", "b", "c"),
+                pattern(
+                        "a",
+                        "b",
+                        "c"
+                ),
                 key('a', item("caerula_arbor:bone_shard")),
                 key('b', item("caerula_arbor:cutin_stick")),
                 key('c', item("minecraft:feather"))
@@ -1912,7 +2067,10 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:oceanglass_cup", 2),
-                pattern("a a", " a "),
+                pattern(
+                        "a a",
+                        " a "
+                ),
                 key('a', item("caerula_arbor:ocean_glasspane"))
         );
         shapeless(
@@ -1943,7 +2101,11 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:pocket_sea_doll", 1),
-                pattern(" a ", "aba", "cdc"),
+                pattern(
+                        " a ",
+                        "aba",
+                        "cdc"
+                ),
                 key('a', item("caerula_arbor:ocean_cutin")),
                 key('b', tag("minecraft:wool")),
                 key('c', item("caerula_arbor:ocean_crystal")),
@@ -1963,7 +2125,11 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:radiant_berries", 3),
-                pattern("aba", "ccc", "bab"),
+                pattern(
+                        "aba",
+                        "ccc",
+                        "bab"
+                ),
                 key('a', item("minecraft:blaze_powder")),
                 key('b', item("minecraft:prismarine_crystals")),
                 key('c', item("caerula_arbor:fluore_berries"))
@@ -1982,7 +2148,11 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:rocinante_injector", 1),
-                pattern(" a ", "bcb", " a "),
+                pattern(
+                        " a ",
+                        "bcb",
+                        " a "
+                ),
                 key('a', item("caerula_arbor:tide_hunet_template")),
                 key('b', item("caerula_arbor:cell_cluster")),
                 key('c', item("caerula_arbor:dna_horse"))
@@ -1993,7 +2163,11 @@ public class RecipesProvider extends RecipeProvider {
                 "building",
                 null,
                 result("caerula_arbor:emergency_aid_building_salviento", 2),
-                pattern("aba", "cdc", "aea"),
+                pattern(
+                        "aba",
+                        "cdc",
+                        "aea"
+                ),
                 key('a', tag("minecraft:sal_viento_deco")),
                 key('b', item("minecraft:prismarine_shard")),
                 key('c', item("minecraft:prismarine_crystals")),
@@ -2014,7 +2188,11 @@ public class RecipesProvider extends RecipeProvider {
                 "equipment",
                 null,
                 result("caerula_arbor:the_spear", 1),
-                pattern("  a", " b ", "b  "),
+                pattern(
+                        "  a",
+                        " b ",
+                        "b  "
+                ),
                 key('a', item("caerula_arbor:kings_spear")),
                 key('b', item("minecraft:bone"))
         );
@@ -2032,7 +2210,11 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:stonecutter_doll", 1),
-                pattern(" a ", " b ", "cdc"),
+                pattern(
+                        " a ",
+                        " b ",
+                        "cdc"
+                ),
                 key('a', item("caerula_arbor:shell_of_stonecutter")),
                 key('b', tag("minecraft:wool")),
                 key('c', item("caerula_arbor:claw")),
@@ -2044,7 +2226,11 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:swarmcaller_doll", 1),
-                pattern(" a ", "bcb", "ded"),
+                pattern(
+                        " a ",
+                        "bcb",
+                        "ded"
+                ),
                 key('a', item("minecraft:tube_coral_fan")),
                 key('b', item("caerula_arbor:sea_trail_mor")),
                 key('c', tag("minecraft:wool")),
@@ -2057,7 +2243,11 @@ public class RecipesProvider extends RecipeProvider {
                 "equipment",
                 null,
                 result("caerula_arbor:tide_hunet_template", 2),
-                pattern("aba", "aca", "aaa"),
+                pattern(
+                        "aba",
+                        "aca",
+                        "aaa"
+                ),
                 key('a', item("caerula_arbor:ocean_crystal")),
                 key('b', item("caerula_arbor:tide_hunet_template")),
                 key('c', item("caerula_arbor:knight_corpse"))
@@ -2068,7 +2258,11 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:tide_observation", 1),
-                pattern("aba", "cdc", "aca"),
+                pattern(
+                        "aba",
+                        "cdc",
+                        "aca"
+                ),
                 key('a', item("minecraft:obsidian")),
                 key('b', item("minecraft:diamond")),
                 key('c', item("minecraft:deepslate")),
@@ -2080,7 +2274,11 @@ public class RecipesProvider extends RecipeProvider {
                 "equipment",
                 null,
                 result("caerula_arbor:tidelinked_shield", 1),
-                pattern("aba", "bab", " b "),
+                pattern(
+                        "aba",
+                        "bab",
+                        " b "
+                ),
                 key('a', item("caerula_arbor:repeller_shell")),
                 key('b', item("caerula_arbor:ocean_chitin"))
         );
@@ -2090,7 +2288,10 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:trail_tile", 4),
-                pattern("aa", "aa"),
+                pattern(
+                        "aa",
+                        "aa"
+                ),
                 key('a', item("caerula_arbor:trail_brick"))
         );
         shapeless(
@@ -2115,7 +2316,10 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:trail_brick", 2),
-                pattern("aa", "aa"),
+                pattern(
+                        "aa",
+                        "aa"
+                ),
                 key('a', item("caerula_arbor:sea_trail_solid"))
         );
         shaped(
@@ -2124,7 +2328,9 @@ public class RecipesProvider extends RecipeProvider {
                 "redstone",
                 null,
                 result("caerula_arbor:trail_button", 1),
-                pattern("a"),
+                pattern(
+                        "a"
+                ),
                 key('a', item("caerula_arbor:sea_trail_solid"))
         );
         shaped(
@@ -2133,7 +2339,9 @@ public class RecipesProvider extends RecipeProvider {
                 "redstone",
                 null,
                 result("caerula_arbor:trail_pressure_plate", 1),
-                pattern("aa"),
+                pattern(
+                        "aa"
+                ),
                 key('a', item("caerula_arbor:trail_brick"))
         );
         shaped(
@@ -2142,7 +2350,9 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:trail_slab", 6),
-                pattern("aaa"),
+                pattern(
+                        "aaa"
+                ),
                 key('a', item("caerula_arbor:trail_brick"))
         );
         shaped(
@@ -2151,7 +2361,11 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:trail_stair", 4),
-                pattern("a  ", "aa ", "aaa"),
+                pattern(
+                        "a  ",
+                        "aa ",
+                        "aaa"
+                ),
                 key('a', item("caerula_arbor:trail_brick"))
         );
         smithingTransform(
@@ -2176,7 +2390,11 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:trailrite_arrow", 4),
-                pattern("a", "b", "c"),
+                pattern(
+                        "a",
+                        "b",
+                        "c"
+                ),
                 key('a', item("caerula_arbor:trailrite_nugget")),
                 key('b', item("caerula_arbor:cutin_stick")),
                 key('c', item("minecraft:feather"))
@@ -2187,7 +2405,10 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:trail_wall", 6),
-                pattern("aaa", "aaa"),
+                pattern(
+                        "aaa",
+                        "aaa"
+                ),
                 key('a', item("caerula_arbor:trail_brick"))
         );
         shapeless(
@@ -2220,7 +2441,9 @@ public class RecipesProvider extends RecipeProvider {
                 "equipment",
                 null,
                 result("caerula_arbor:trailed_diamond_sword", 1),
-                pattern("ab"),
+                pattern(
+                        "ab"
+                ),
                 key('a', item("minecraft:diamond_sword")),
                 key('b', item("caerula_arbor:trail_cream"))
         );
@@ -2230,7 +2453,9 @@ public class RecipesProvider extends RecipeProvider {
                 "equipment",
                 null,
                 result("caerula_arbor:trailed_golden_sword", 1),
-                pattern("ab"),
+                pattern(
+                        "ab"
+                ),
                 key('a', item("minecraft:golden_sword")),
                 key('b', item("caerula_arbor:trail_cream"))
         );
@@ -2240,7 +2465,9 @@ public class RecipesProvider extends RecipeProvider {
                 "equipment",
                 null,
                 result("caerula_arbor:trailed_iron_sword", 1),
-                pattern("ab"),
+                pattern(
+                        "ab"
+                ),
                 key('a', item("minecraft:iron_sword")),
                 key('b', item("caerula_arbor:trail_cream"))
         );
@@ -2250,7 +2477,9 @@ public class RecipesProvider extends RecipeProvider {
                 "equipment",
                 null,
                 result("caerula_arbor:trailed_netherite_sword", 1),
-                pattern("ab"),
+                pattern(
+                        "ab"
+                ),
                 key('a', item("minecraft:netherite_sword")),
                 key('b', item("caerula_arbor:trail_cream"))
         );
@@ -2268,7 +2497,9 @@ public class RecipesProvider extends RecipeProvider {
                 "equipment",
                 null,
                 result("caerula_arbor:trailed_stone_sword", 1),
-                pattern("ab"),
+                pattern(
+                        "ab"
+                ),
                 key('a', item("minecraft:stone_sword")),
                 key('b', item("caerula_arbor:trail_cream"))
         );
@@ -2278,7 +2509,9 @@ public class RecipesProvider extends RecipeProvider {
                 "equipment",
                 null,
                 result("caerula_arbor:trailed_wooden_sword", 1),
-                pattern("ab"),
+                pattern(
+                        "ab"
+                ),
                 key('a', item("minecraft:wooden_sword")),
                 key('b', item("caerula_arbor:trail_cream"))
         );
@@ -2462,7 +2695,11 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:ocean_cell", 2),
-                pattern("aaa", "aba", "aaa"),
+                pattern(
+                        "aaa",
+                        "aba",
+                        "aaa"
+                ),
                 key('a', item("caerula_arbor:sea_trail_mor")),
                 key('b', item("caerula_arbor:broken_ocean_cell"))
         );
@@ -2491,7 +2728,10 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:sea_trail_grown", 1),
-                pattern("aaa", "aaa"),
+                pattern(
+                        "aaa",
+                        "aaa"
+                ),
                 key('a', item("caerula_arbor:sea_trail_mor"))
         );
         shapeless(
@@ -2516,7 +2756,11 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:heteropic_block", 1),
-                pattern("aaa", "aaa", "aaa"),
+                pattern(
+                        "aaa",
+                        "aaa",
+                        "aaa"
+                ),
                 key('a', item("caerula_arbor:heteropic_piece"))
         );
         shaped(
@@ -2525,7 +2769,11 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:anchor_upper", 1),
-                pattern("aba", "aca", "ada"),
+                pattern(
+                        "aba",
+                        "aca",
+                        "ada"
+                ),
                 key('a', item("caerula_arbor:isharmla_scute")),
                 key('b', item("caerula_arbor:heteropic_piece")),
                 key('c', item("caerula_arbor:heteropic_block")),
@@ -2537,7 +2785,11 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:anchor_lower", 1),
-                pattern("aba", "aca", "ada"),
+                pattern(
+                        "aba",
+                        "aca",
+                        "ada"
+                ),
                 key('a', item("caerula_arbor:isharmla_scute")),
                 key('b', item("caerula_arbor:tear_isharmla")),
                 key('c', item("caerula_arbor:moist_echo_shard")),
@@ -2549,7 +2801,11 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:anchor_medium", 1),
-                pattern("aba", "aca", "ada"),
+                pattern(
+                        "aba",
+                        "aca",
+                        "ada"
+                ),
                 key('a', item("caerula_arbor:isharmla_scute")),
                 key('b', item("caerula_arbor:ocean_machine")),
                 key('c', tag("caerula_arbor:animus")),
@@ -2569,7 +2825,10 @@ public class RecipesProvider extends RecipeProvider {
                 "building",
                 null,
                 result("caerula_arbor:nethersea_wood", 3),
-                pattern("aa", "aa"),
+                pattern(
+                        "aa",
+                        "aa"
+                ),
                 key('a', item("caerula_arbor:trail_log"))
         );
         shaped(
@@ -2578,7 +2837,11 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:ocean_machine", 1),
-                pattern("aba", "cdc", "aba"),
+                pattern(
+                        "aba",
+                        "cdc",
+                        "aba"
+                ),
                 key('a', item("caerula_arbor:ocean_crystal")),
                 key('b', item("minecraft:redstone")),
                 key('c', item("caerula_arbor:chitin_ingot")),
@@ -2590,7 +2853,11 @@ public class RecipesProvider extends RecipeProvider {
                 "redstone",
                 null,
                 result("caerula_arbor:redstonium", 1),
-                pattern("aaa", "aaa", "aaa"),
+                pattern(
+                        "aaa",
+                        "aaa",
+                        "aaa"
+                ),
                 key('a', item("caerula_arbor:redstone_ingot"))
         );
         shaped(
@@ -2599,7 +2866,10 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("minecraft:bone", 1),
-                pattern("aa", "aa"),
+                pattern(
+                        "aa",
+                        "aa"
+                ),
                 key('a', item("caerula_arbor:bone_shard"))
         );
         shaped(
@@ -2608,7 +2878,11 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:caramel_cake", 1),
-                pattern("aaa", "bcb", "ddd"),
+                pattern(
+                        "aaa",
+                        "bcb",
+                        "ddd"
+                ),
                 key('a', item("caerula_arbor:caramel_mor")),
                 key('b', item("caerula_arbor:cooked_mor")),
                 key('c', item("caerula_arbor:real_egg")),
@@ -2620,7 +2894,11 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:trail_cake", 1),
-                pattern("aaa", "bcb", "ddd"),
+                pattern(
+                        "aaa",
+                        "bcb",
+                        "ddd"
+                ),
                 key('a', item("caerula_arbor:sea_trail_mor")),
                 key('b', item("minecraft:sugar")),
                 key('c', item("caerula_arbor:real_egg")),
@@ -2640,7 +2918,11 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:trail_plank_door", 3),
-                pattern("aa", "aa", "aa"),
+                pattern(
+                        "aa",
+                        "aa",
+                        "aa"
+                ),
                 key('a', item("caerula_arbor:trail_plank"))
         );
         shapeless(
@@ -2657,7 +2939,10 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:ocean_glasspane", 16),
-                pattern("aaa", "aaa"),
+                pattern(
+                        "aaa",
+                        "aaa"
+                ),
                 key('a', item("caerula_arbor:ocean_glass"))
         );
         shaped(
@@ -2666,7 +2951,10 @@ public class RecipesProvider extends RecipeProvider {
                 "building",
                 null,
                 result("minecraft:obsidian", 1),
-                pattern("aa", "aa"),
+                pattern(
+                        "aa",
+                        "aa"
+                ),
                 key('a', item("caerula_arbor:obisidian_ball"))
         );
         shaped(
@@ -2675,7 +2963,10 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:ocean_glass", 3),
-                pattern("aa", "aa"),
+                pattern(
+                        "aa",
+                        "aa"
+                ),
                 key('a', item("caerula_arbor:ocean_cutin"))
         );
         shaped(
@@ -2684,7 +2975,11 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:paper_bag", 4),
-                pattern("a a", "aba", "aaa"),
+                pattern(
+                        "a a",
+                        "aba",
+                        "aaa"
+                ),
                 key('a', item("minecraft:paper")),
                 key('b', item("minecraft:leather"))
         );
@@ -2710,7 +3005,11 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:moist_crystal_item", 1),
-                pattern("aba", "bcb", "aba"),
+                pattern(
+                        "aba",
+                        "bcb",
+                        "aba"
+                ),
                 key('a', item("caerula_arbor:trail_powder")),
                 key('b', item("caerula_arbor:dragon_brand")),
                 key('c', item("minecraft:end_crystal"))
@@ -2721,7 +3020,11 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("minecraft:conduit", 1),
-                pattern("aaa", "aba", "aaa"),
+                pattern(
+                        "aaa",
+                        "aba",
+                        "aaa"
+                ),
                 key('a', item("caerula_arbor:shell_of_stonecutter")),
                 key('b', item("minecraft:heart_of_the_sea"))
         );
@@ -2731,7 +3034,11 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:nourished_apple_pie", 2),
-                pattern("aaa", "bcb", "ded"),
+                pattern(
+                        "aaa",
+                        "bcb",
+                        "ded"
+                ),
                 key('a', item("minecraft:wheat")),
                 key('b', item("caerula_arbor:trail_apple")),
                 key('c', item("caerula_arbor:trail_golden_apple")),
@@ -2744,7 +3051,11 @@ public class RecipesProvider extends RecipeProvider {
                 "equipment",
                 null,
                 result("caerula_arbor:phloem_bow", 1),
-                pattern(" ab", "acb", " ab"),
+                pattern(
+                        " ab",
+                        "acb",
+                        " ab"
+                ),
                 key('a', item("caerula_arbor:phloem_block")),
                 key('b', item("caerula_arbor:ocean_fibre")),
                 key('c', item("caerula_arbor:ocean_eye"))
@@ -2762,7 +3073,10 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:trail_planks_fence", 1),
-                pattern("aba", "aba"),
+                pattern(
+                        "aba",
+                        "aba"
+                ),
                 key('a', item("caerula_arbor:trail_plank")),
                 key('b', item("minecraft:stick"))
         );
@@ -2772,7 +3086,10 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:trail_plank_fencedoor", 1),
-                pattern("aba", "aba"),
+                pattern(
+                        "aba",
+                        "aba"
+                ),
                 key('a', item("minecraft:stick")),
                 key('b', item("caerula_arbor:trail_plank"))
         );
@@ -2790,7 +3107,9 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:trail_plank_slab", 6),
-                pattern("aaa"),
+                pattern(
+                        "aaa"
+                ),
                 key('a', item("caerula_arbor:trail_plank"))
         );
         shaped(
@@ -2799,7 +3118,11 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:trail_plank_stair", 4),
-                pattern("a  ", "aa ", "aaa"),
+                pattern(
+                        "a  ",
+                        "aa ",
+                        "aaa"
+                ),
                 key('a', item("caerula_arbor:trail_plank"))
         );
         shaped(
@@ -2808,7 +3131,9 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:trail_plank_pressure_plate", 1),
-                pattern("aa"),
+                pattern(
+                        "aa"
+                ),
                 key('a', item("caerula_arbor:trail_plank"))
         );
         shapeless(
@@ -2833,7 +3158,10 @@ public class RecipesProvider extends RecipeProvider {
                 "building",
                 null,
                 result("caerula_arbor:saltwind_sandstone", 1),
-                pattern("aa", "aa"),
+                pattern(
+                        "aa",
+                        "aa"
+                ),
                 key('a', item("caerula_arbor:saltsand"))
         );
         shaped(
@@ -2842,7 +3170,10 @@ public class RecipesProvider extends RecipeProvider {
                 "building",
                 null,
                 result("caerula_arbor:chiseled_saltwind_sandstone", 4),
-                pattern("aa", "aa"),
+                pattern(
+                        "aa",
+                        "aa"
+                ),
                 key('a', item("caerula_arbor:smooth_saltwind_sandatone"))
         );
         shaped(
@@ -2851,7 +3182,9 @@ public class RecipesProvider extends RecipeProvider {
                 "building",
                 null,
                 result("caerula_arbor:saltwind_sand_slab", 6),
-                pattern("aaa"),
+                pattern(
+                        "aaa"
+                ),
                 key('a', item("caerula_arbor:saltwind_sandstone"))
         );
         shaped(
@@ -2860,7 +3193,10 @@ public class RecipesProvider extends RecipeProvider {
                 "building",
                 null,
                 result("caerula_arbor:smooth_saltwind_sandatone", 4),
-                pattern("aa", "aa"),
+                pattern(
+                        "aa",
+                        "aa"
+                ),
                 key('a', item("caerula_arbor:saltwind_sandstone"))
         );
         shaped(
@@ -2869,7 +3205,9 @@ public class RecipesProvider extends RecipeProvider {
                 "building",
                 null,
                 result("caerula_arbor:smooth_saltwind_sand_slab", 6),
-                pattern("aaa"),
+                pattern(
+                        "aaa"
+                ),
                 key('a', item("caerula_arbor:smooth_saltwind_sandatone"))
         );
         shaped(
@@ -2878,7 +3216,11 @@ public class RecipesProvider extends RecipeProvider {
                 "building",
                 null,
                 result("caerula_arbor:smooth_saltwind_sand_stair", 4),
-                pattern("a  ", "aa ", "aaa"),
+                pattern(
+                        "a  ",
+                        "aa ",
+                        "aaa"
+                ),
                 key('a', item("caerula_arbor:smooth_saltwind_sandatone"))
         );
         shaped(
@@ -2887,7 +3229,10 @@ public class RecipesProvider extends RecipeProvider {
                 "building",
                 null,
                 result("caerula_arbor:smooth_saltwind_sand_wall", 6),
-                pattern("aaa", "aaa"),
+                pattern(
+                        "aaa",
+                        "aaa"
+                ),
                 key('a', item("caerula_arbor:smooth_saltwind_sandatone"))
         );
         shaped(
@@ -2896,7 +3241,11 @@ public class RecipesProvider extends RecipeProvider {
                 "building",
                 null,
                 result("caerula_arbor:saltwind_sand_stair", 4),
-                pattern("a  ", "aa ", "aaa"),
+                pattern(
+                        "a  ",
+                        "aa ",
+                        "aaa"
+                ),
                 key('a', item("caerula_arbor:saltwind_sandstone"))
         );
         shaped(
@@ -2905,7 +3254,10 @@ public class RecipesProvider extends RecipeProvider {
                 "building",
                 null,
                 result("caerula_arbor:saltwind_sand_wall", 6),
-                pattern("aaa", "aaa"),
+                pattern(
+                        "aaa",
+                        "aaa"
+                ),
                 key('a', item("caerula_arbor:saltwind_sandstone"))
         );
         shapeless(
@@ -3346,7 +3698,11 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:sea_trail_solid", 1),
-                pattern("aaa", "aba", "aaa"),
+                pattern(
+                        "aaa",
+                        "aba",
+                        "aaa"
+                ),
                 key('a', item("caerula_arbor:sea_trail_mor")),
                 key('b', item("caerula_arbor:sea_trail_grown"))
         );
@@ -3433,7 +3789,10 @@ public class RecipesProvider extends RecipeProvider {
                 "building",
                 null,
                 result("caerula_arbor:stripped_nethersea_wood", 3),
-                pattern("aa", "aa"),
+                pattern(
+                        "aa",
+                        "aa"
+                ),
                 key('a', item("caerula_arbor:stripped_trail_log"))
         );
         shapeless(
@@ -3450,7 +3809,11 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:bomb_trailer", 4),
-                pattern("aba", "bcb", "aba"),
+                pattern(
+                        "aba",
+                        "bcb",
+                        "aba"
+                ),
                 key('a', item("minecraft:iron_block")),
                 key('b', item("minecraft:gunpowder")),
                 key('c', item("caerula_arbor:ocean_machine"))
@@ -3469,7 +3832,10 @@ public class RecipesProvider extends RecipeProvider {
                 "misc",
                 null,
                 result("caerula_arbor:breath_of_tide", 1),
-                pattern("abc", "ddd"),
+                pattern(
+                        "abc",
+                        "ddd"
+                ),
                 key('a', item("minecraft:conduit")),
                 key('b', item("caerula_arbor:whirl_eye")),
                 key('c', item("caerula_arbor:heteropic_piece")),

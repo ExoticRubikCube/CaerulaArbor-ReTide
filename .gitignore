@@ -132,3 +132,4 @@ $RECYCLE.BIN/
 /tools/temp/
 /src/generated/
 /.codemoss/
+/.codex/config.toml
