@@ -4,13 +4,7 @@ import com.apocalypse.caerulaarbor.CaerulaArborMod;
 import com.apocalypse.caerulaarbor.api.event.SanityEvent;
 import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CAAttributes;
-import com.apocalypse.caerulaarbor.init.CABlocks;
-import com.apocalypse.caerulaarbor.init.CADamageTags;
-import com.apocalypse.caerulaarbor.init.CADamageTypes;
-import com.apocalypse.caerulaarbor.init.CAEntities;
-import com.apocalypse.caerulaarbor.init.CAMobEffects;
-import com.apocalypse.caerulaarbor.init.CAParticles;
+import com.apocalypse.caerulaarbor.init.*;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
@@ -32,14 +26,8 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityDimensions;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.MobType;
-import net.minecraft.world.entity.Pose;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -50,12 +38,7 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.SnowGolem;
-import net.minecraft.world.entity.monster.Endermite;
-import net.minecraft.world.entity.monster.Illusioner;
-import net.minecraft.world.entity.monster.Pillager;
-import net.minecraft.world.entity.monster.Vindicator;
-import net.minecraft.world.entity.monster.Witch;
-import net.minecraft.world.entity.monster.ZombifiedPiglin;
+import net.minecraft.world.entity.monster.*;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.monster.piglin.PiglinBrute;
 import net.minecraft.world.entity.npc.Villager;
@@ -78,11 +61,13 @@ public class OceanizedEndermanEntity extends SeaMonster {
     public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(OceanizedEndermanEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Integer> DATA_SKILLP = SynchedEntityData.defineId(OceanizedEndermanEntity.class, EntityDataSerializers.INT);
     public static final EntityDataAccessor<Integer> DATA_COOLDOWN = SynchedEntityData.defineId(OceanizedEndermanEntity.class, EntityDataSerializers.INT);
+    public static final EntityDataAccessor<Boolean> DATA_HOLDING_CREEPER = SynchedEntityData.defineId(OceanizedEndermanEntity.class, EntityDataSerializers.BOOLEAN);
     private static final TagKey<DamageType> BYPASSES_ENDERMAN = CADamageTags.BYPASSES_ENDERMAN;
     public String animationprocedure = "empty";
     String prevAnim = "empty";
     private boolean swinging;
     private long lastSwing;
+    private boolean creeperCharged;
 
     public OceanizedEndermanEntity(Level world) {
         this(CAEntities.OCEANIZED_ENDERMAN.get(), world);
@@ -94,6 +79,19 @@ public class OceanizedEndermanEntity extends SeaMonster {
         setNoAi(false);
         setMaxUpStep(1f);
         setPersistenceRequired();
+        this.creeperCharged = false;
+    }
+
+    public boolean getCreeperCharged() {
+        return this.creeperCharged;
+    }
+
+    public void setCreeperCharged() {
+        this.creeperCharged = true;
+    }
+
+    public boolean isHolding() {
+        return this.entityData.get(DATA_HOLDING_CREEPER);
     }
 
     private static double findValidTeleportY(LevelAccessor world, double x, double y, double z) {
@@ -142,6 +140,7 @@ public class OceanizedEndermanEntity extends SeaMonster {
         this.entityData.define(DATA_ANIMATION, "undefined");
         this.entityData.define(DATA_SKILLP, 150);
         this.entityData.define(DATA_COOLDOWN, 200);
+        this.entityData.define(DATA_HOLDING_CREEPER, false);
     }
 
     @Override
@@ -287,7 +286,8 @@ public class OceanizedEndermanEntity extends SeaMonster {
             return false;
         if (source.is(DamageTypes.DROWN))
             return false;
-        return super.hurt(source, amount);
+        float finalAmount = this.isHolding() && !source.is(CADamageTags.BYPASS_PROTECTION) ? amount * 0.8f : amount;
+        return super.hurt(source, finalAmount);
     }
 
     private void teleportTo(double fromX, double fromY, double fromZ, double toX, double toY, double toZ) {
@@ -322,6 +322,8 @@ public class OceanizedEndermanEntity extends SeaMonster {
         super.addAdditionalSaveData(compound);
         compound.putInt("Skillp", this.entityData.get(DATA_SKILLP));
         compound.putInt("Cooldown", this.entityData.get(DATA_COOLDOWN));
+        compound.putBoolean("HoldingCreeper", this.entityData.get(DATA_HOLDING_CREEPER));
+        compound.putBoolean("CreeperCharged", this.getCreeperCharged());
     }
 
     @Override
@@ -332,6 +334,12 @@ public class OceanizedEndermanEntity extends SeaMonster {
         }
         if (compound.contains("Cooldown")) {
             this.entityData.set(DATA_COOLDOWN, compound.getInt("Cooldown"));
+        }
+        if (compound.contains("HoldingCreeper")) {
+            this.entityData.set(DATA_HOLDING_CREEPER, compound.getBoolean("HoldingCreeper"));
+        }
+        if (compound.contains("CreeperCharged") && compound.getBoolean("CreeperCharged")) {
+            this.setCreeperCharged();
         }
     }
 
@@ -428,7 +436,50 @@ public class OceanizedEndermanEntity extends SeaMonster {
                 }
             }
         }
+        if (!this.isHolding() && this.isAlive()) {
+            PocketSeaCreeperEntity targetCreeper;
+            if (this.tickCount % 40 == 10 && Math.random() < 0.67) {
+                targetCreeper = world.getEntitiesOfClass(PocketSeaCreeperEntity.class, AABB.ofSize(new Vec3(x, y, z), 48.0, 48.0, 48.0),
+                        e -> e.getDisplayName().getString().equals(e.getType().getDescription().getString()) && checkSameTeam(this, e))
+                        .stream().sorted(Comparator.comparingDouble(ent -> ent.distanceToSqr(x, y, z))).findFirst().orElse(null);
+                if (targetCreeper != null && targetCreeper.isAlive()) {
+                    this.getNavigation().moveTo(targetCreeper.getX(), targetCreeper.getY(), targetCreeper.getZ(), 1.0);
+                }
+            }
+            if (this.tickCount % 20 == 10) {
+                targetCreeper = world.getEntitiesOfClass(PocketSeaCreeperEntity.class, AABB.ofSize(new Vec3(x, y, z), 5.0, 5.0, 5.0),
+                        e -> e.getDisplayName().getString().equals(e.getType().getDescription().getString()) && checkSameTeam(this, e))
+                        .stream().sorted(Comparator.comparingDouble(ent -> ent.distanceToSqr(x, y, z))).findFirst().orElse(null);
+                if (targetCreeper != null && targetCreeper.isAlive()) {
+                    if (!this.level().isClientSide()) {
+                        this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 10, 9, false, false));
+                    }
+                    if (!targetCreeper.level().isClientSide()) {
+                        targetCreeper.discard();
+                    }
+                    if (world instanceof Level level) {
+                        level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.ARMOR_EQUIP_LEATHER, SoundSource.HOSTILE, 2.0f, 1.0f);
+                    }
+                    this.entityData.set(DATA_HOLDING_CREEPER, true);
+                    if (targetCreeper.charged()) {
+                        this.setCreeperCharged();
+                    }
+                }
+            }
+        }
         this.refreshDimensions();
+    }
+
+    private boolean checkSameTeam(Entity a, Entity b) {
+        if (a == null || b == null) {
+            return false;
+        }
+        var at = a.getTeam();
+        var bt = b.getTeam();
+        if (at == null) {
+            return bt == null;
+        }
+        return at.isAlliedTo(bt);
     }
 
     @Override
@@ -437,17 +488,24 @@ public class OceanizedEndermanEntity extends SeaMonster {
     }
 
     private PlayState movementPredicate(AnimationState<?> event) {
+        if (this.isDeadOrDying()) {
+            return event.setAndContinue(RawAnimation.begin().thenPlay("animation.oceanzied_enderman.die"));
+        }
         if (this.animationprocedure.equals("empty")) {
-            if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F))
-
-                    && !this.isAggressive()) {
+            if ((event.isMoving() || !(event.getLimbSwingAmount() > -0.15F && event.getLimbSwingAmount() < 0.15F)) && !this.isAggressive()) {
+                if (this.isHolding()) {
+                    return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanzied_enderman.walk_hold"));
+                }
                 return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanzied_enderman.walk"));
             }
-            if (this.isDeadOrDying()) {
-                return event.setAndContinue(RawAnimation.begin().thenPlay("animation.oceanzied_enderman.die"));
-            }
             if (this.isAggressive() && event.isMoving()) {
+                if (this.isHolding()) {
+                    return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanzied_enderman.sprint_hold"));
+                }
                 return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanzied_enderman.sprint"));
+            }
+            if (this.isHolding()) {
+                return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanzied_enderman.idle_hold"));
             }
             return event.setAndContinue(RawAnimation.begin().thenLoop("animation.oceanzied_enderman.idle"));
         }
@@ -464,6 +522,9 @@ public class OceanizedEndermanEntity extends SeaMonster {
         }
         if (this.swinging && event.getController().getAnimationState() == AnimationController.State.STOPPED) {
             event.getController().forceAnimationReset();
+            if (this.isHolding()) {
+                return event.setAndContinue(RawAnimation.begin().thenPlay("animation.oceanzied_enderman.attack_hold"));
+            }
             return event.setAndContinue(RawAnimation.begin().thenPlay("animation.oceanzied_enderman.attack"));
         }
         return PlayState.CONTINUE;
@@ -512,6 +573,9 @@ public class OceanizedEndermanEntity extends SeaMonster {
     }
 
     public void setAnimation(String animation) {
+        if (animation.equals("animation.oceanzied_enderman.skill") && this.isHolding()) {
+            animation = animation + "_hold";
+        }
         this.entityData.set(DATA_ANIMATION, animation);
     }
 

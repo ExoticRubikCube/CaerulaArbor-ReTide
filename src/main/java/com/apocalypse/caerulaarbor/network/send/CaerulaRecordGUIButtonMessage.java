@@ -2,7 +2,6 @@ package com.apocalypse.caerulaarbor.network.send;
 
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
-import com.apocalypse.caerulaarbor.menu.CaerulaRecordGUIMenu;
 import com.apocalypse.caerulaarbor.menu.PlayerEvoMenu;
 import com.apocalypse.caerulaarbor.menu.RelicShowcaseMenu;
 import io.netty.buffer.Unpooled;
@@ -19,7 +18,6 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.NetworkHooks;
 
-import java.util.HashMap;
 import java.util.function.Supplier;
 
 public class CaerulaRecordGUIButtonMessage {
@@ -63,15 +61,14 @@ public class CaerulaRecordGUIButtonMessage {
 
 	public static void handleButtonAction(Player entity, int buttonID, int x, int y, int z) {
 		Level world = entity.level();
-		HashMap guistate = CaerulaRecordGUIMenu.guistate;
-		// 安全措施：防止任意区块生成
+        // 安全措施：防止任意区块生成
 		if (!world.hasChunkAt(new BlockPos(x, y, z)))
 			return;
 		if (buttonID == 0) {
 
             {
-                boolean setval = !(((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).show_stats;
-                ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                boolean setval = !(entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).show_stats;
+                entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                     capability.show_stats = setval;
                     capability.syncPlayerVariables(entity);
                 });
@@ -80,8 +77,8 @@ public class CaerulaRecordGUIButtonMessage {
 		if (buttonID == 1) {
 
             {
-                boolean setval = !(((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).kingShowPtc;
-                ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                boolean setval = !(entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).kingShowPtc;
+                entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                     capability.kingShowPtc = setval;
                     capability.syncPlayerVariables(entity);
                 });

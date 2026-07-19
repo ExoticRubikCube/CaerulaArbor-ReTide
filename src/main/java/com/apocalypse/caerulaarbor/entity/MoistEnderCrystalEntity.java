@@ -57,10 +57,12 @@ import java.util.List;
 public class MoistEnderCrystalEntity extends PathfinderMob implements GeoEntity, SyncedAnimationEntity {
     public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(MoistEnderCrystalEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(MoistEnderCrystalEntity.class, EntityDataSerializers.STRING);
+    public static final EntityDataAccessor<Integer> DATA_OWNER_ID = SynchedEntityData.defineId(MoistEnderCrystalEntity.class, EntityDataSerializers.INT);
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     public String animationprocedure = "empty";
     public boolean IS_STATIC = false;
     String prevAnim = "empty";
+    public Entity owner = null;
 
     public MoistEnderCrystalEntity(Level world) {
         this(CAEntities.MOIST_ENDER_CRYSTAL.get(), world);
@@ -92,6 +94,24 @@ public class MoistEnderCrystalEntity extends PathfinderMob implements GeoEntity,
         super.defineSynchedData();
         this.entityData.define(DATA_SHOOT, false);
         this.entityData.define(DATA_ANIMATION, "undefined");
+        this.entityData.define(DATA_OWNER_ID, -1);
+    }
+
+    public void setOwner(Entity entity) {
+        if (this.owner == null) {
+            this.entityData.set(DATA_OWNER_ID, entity.getId());
+        }
+    }
+
+    public Entity getOwner() {
+        if (this.owner == null) {
+            int id = this.entityData.get(DATA_OWNER_ID);
+            if (id == -1) {
+                return null;
+            }
+            this.owner = this.level().getEntity(id);
+        }
+        return this.owner;
     }
 
     @Override
@@ -201,9 +221,21 @@ public class MoistEnderCrystalEntity extends PathfinderMob implements GeoEntity,
 
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-        SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
         this.setDeltaMovement(Vec3.ZERO);
-        return retval;
+        if (!world.isClientSide()) {
+            double x = this.getX();
+            double y = this.getY();
+            double z = this.getZ();
+            List<OceanizedEnderinaEntity> enderinas = world.getEntitiesOfClass(OceanizedEnderinaEntity.class,
+                    new AABB(x, y, z, x, y, z).inflate(32), e -> e.isAlive());
+            if (!enderinas.isEmpty()) {
+                enderinas.sort(Comparator.comparingDouble(e -> e.distanceToSqr(x, y, z)));
+                OceanizedEnderinaEntity enderina = enderinas.get(0);
+                enderina.putCrystal(this);
+                this.setOwner(enderina);
+            }
+        }
+        return super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
     }
 
     private PlayState movementPredicate(AnimationState<?> event) {

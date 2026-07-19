@@ -24,7 +24,7 @@ public class MuteMobEffect extends MobEffect {
 
 	@Override
 	public List<ItemStack> getCurativeItems() {
-		ArrayList<ItemStack> cures = new ArrayList<ItemStack>();
+		ArrayList<ItemStack> cures = new ArrayList<>();
 		cures.add(new ItemStack(Items.MILK_BUCKET));
 		cures.add(new ItemStack(Items.TOTEM_OF_UNDYING));
 		cures.add(new ItemStack(Items.HONEY_BOTTLE));

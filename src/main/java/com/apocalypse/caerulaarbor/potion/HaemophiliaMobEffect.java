@@ -33,12 +33,10 @@ public class HaemophiliaMobEffect extends MobEffect {
     @Override
     public void applyEffectTick(LivingEntity entity, int amplifier) {
         LevelAccessor world = entity.level();
-        if (entity == null)
-            return;
         double health_cur;
         if (Math.round((Entity) entity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) < Math.round((Entity) entity instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1)) {
             health_cur = Math.max(((Entity) entity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) * (0.975 - 0.025 * (double) amplifier), 0.5);
-            if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) > 0.5 && ((Entity) entity).isAlive()) {
+            if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) > 0.5 && entity.isAlive()) {
                 if ((Entity) entity instanceof LivingEntity livingEntity)
                     livingEntity.setHealth((float) health_cur);
                 for (int index0 = 0; index0 < 24; index0++) {

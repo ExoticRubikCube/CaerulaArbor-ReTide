@@ -72,6 +72,8 @@ public class CATabs {
                 tabData.accept(CABlocks.NETHERSEA_SOUL_SAND.get().asItem());
                 tabData.accept(CABlocks.TRAIL_STONE.get().asItem());
                 tabData.accept(CABlocks.BLOCK_RECORDER.get().asItem());
+                tabData.accept(CABlocks.SEA_PRAIRIE_BOMB.get().asItem());
+                tabData.accept(CABlocks.CHEST_FISH_FOOD.get().asItem());
                 tabData.accept(CABlocks.TIDE_OBSERVATION.get().asItem());
                 tabData.accept(CABlocks.BOMB_TRAILER.get().asItem());
                 tabData.accept(CABlocks.BOMB_COPPER.get().asItem());
@@ -414,6 +416,8 @@ public class CATabs {
                 tabData.accept(CAItems.NERVOUS_REGENERATION.get());
                 tabData.accept(CAItems.NETHERSEA_EGG_CUSTARD.get());
                 tabData.accept(CAItems.NETHERSEA_PRESERVED_EGG.get());
+                tabData.accept(CAItems.CHITIN_COOKIE_RAW.get());
+                tabData.accept(CAItems.CHITIN_COOKIE_DONE.get());
             }).withTabsBefore(CAERULA_LIVINGS.getId()).build());
 
     public static final RegistryObject<CreativeModeTab> CAERULA_WEAPONS = REGISTRY.register("caerula_weapons",

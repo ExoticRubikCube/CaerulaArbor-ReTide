@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:smithing_transform",
+  "template": {
+    "item": "caerula_arbor:ocean_trim_template"
+  },
+  "base": {
+    "item": "caerula_arbor:chitin_armor_chestplate"
+  },
+  "addition": {
+    "item": "caerula_arbor:complex_chitin"
+  },
+  "result": {
+    "item": "caerula_arbor:complexchitin_armor_chestplate"
+  }
+}

@@ -29,7 +29,7 @@ public class SubHaemoMobEffect extends MobEffect {
 
 	@Override
 	public List<ItemStack> getCurativeItems() {
-		ArrayList<ItemStack> cures = new ArrayList<ItemStack>();
+		ArrayList<ItemStack> cures = new ArrayList<>();
 		cures.add(new ItemStack(Items.MILK_BUCKET));
 		cures.add(new ItemStack(Items.TOTEM_OF_UNDYING));
 		cures.add(new ItemStack(Items.HONEY_BOTTLE));
@@ -45,7 +45,7 @@ public class SubHaemoMobEffect extends MobEffect {
             if (health_cur < 1) {
                 health_cur = 1;
             }
-            if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) > 1 && ((Entity) entity).isAlive()) {
+            if (((Entity) entity instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) > 1 && entity.isAlive()) {
                 if ((Entity) entity instanceof LivingEntity livingEntity)
                     livingEntity.setHealth((float) health_cur);
                 for (int index0 = 0; index0 < 24; index0++) {

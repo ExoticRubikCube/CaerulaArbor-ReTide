@@ -91,9 +91,9 @@ public class CentrifugerSelectButtonMessage {
                     {
                         int value = 1;
                         BlockPos pos = BlockPos.containing(x, y, z);
-                        BlockState bs = ((LevelAccessor) world).getBlockState(pos);
+                        BlockState bs = world.getBlockState(pos);
                         if (bs.getBlock().getStateDefinition().getProperty("animation") instanceof IntegerProperty integerProp && integerProp.getPossibleValues().contains(value))
-                            ((LevelAccessor) world).setBlock(pos, bs.setValue(integerProp, value), 3);
+                            world.setBlock(pos, bs.setValue(integerProp, value), 3);
                     }
                     if ((LevelAccessor) world instanceof Level level) {
                             level.playSound(null, BlockPos.containing(x, y, z), CASounds.NOTICE.get(), SoundSource.BLOCKS, 2, 1);

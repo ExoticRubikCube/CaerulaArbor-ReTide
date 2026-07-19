@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:smithing_transform",
+  "template": {
+    "item": "caerula_arbor:tide_hunet_template"
+  },
+  "base": {
+    "item": "minecraft:iron_leggings"
+  },
+  "addition": {
+    "item": "caerula_arbor:knight_corpse"
+  },
+  "result": {
+    "item": "caerula_arbor:knight_iron_leggings"
+  }
+}

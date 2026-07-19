@@ -35,9 +35,7 @@ import net.minecraft.world.entity.ai.control.FlyingMoveControl;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.projectile.AbstractHurtingProjectile;
 import net.minecraft.world.entity.projectile.DragonFireball;
-import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
@@ -172,46 +170,20 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
         double x = this.getX();
         double y = this.getY();
         double z = this.getZ();
-        String uuid2;
-        String uuid1;
-        Entity target;
-        if (tickCount >= 1200) {
-            if (!level().isClientSide())
-                discard();
+        if (tickCount >= 1200 && !level().isClientSide()) {
+            discard();
         }
         if (this.isAlive()) {
             clearFire();
             setAirSupply(20);
-            uuid2 = (Entity) this instanceof MoistDragonBreathEntity datEntS ? datEntS.getEntityData().get(DATA_TARGET) : "";
-            uuid1 = (Entity) this instanceof MoistDragonBreathEntity datEntS ? datEntS.getEntityData().get(DATA_OWNER) : "";
-            target = new Object() {
-                Entity entityFromStringUUID(String uuid3, Level world) {
-                    Entity uuidentity = null;
-                    if (world instanceof ServerLevel server) {
-                        try {
-                            uuidentity = server.getEntity(UUID.fromString(uuid3));
-                        } catch (Exception ignored) {
-                        }
-                    }
-                    return uuidentity;
-                }
-            }.entityFromStringUUID(uuid2, (Level) world);
-            new Object() {
-                Entity entityFromStringUUID(String uuid3, Level world) {
-                    Entity uuidentity = null;
-                    if (world instanceof ServerLevel server) {
-                        try {
-                            uuidentity = server.getEntity(UUID.fromString(uuid3));
-                        } catch (Exception ignored) {
-                        }
-                    }
-                    return uuidentity;
-                }
-            }.entityFromStringUUID(uuid1, (Level) world);
-            if (world instanceof ServerLevel level)
-                level.sendParticles(CAParticles.EDERMAN_PTC.get(), x, (y + 0.25), z, 3, 0.1, 0.1, 0.1, 0.1);
-            if (!(target == null) && target.isAlive()) {
-                ((Entity) this).lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3((target.getX()), (target.getY() + 0.5), (target.getZ())));
+            SynchedEntityData data = this.getEntityData();
+            Entity target = null;
+            if (world instanceof ServerLevel level) {
+                target = level.getEntity(UUID.fromString(data.get(DATA_TARGET)));
+                level.sendParticles(CAParticles.EDERMAN_PTC.get(), x, y + 0.25, z, 3, 0.1, 0.1, 0.1, 0.1);
+            }
+            if (target != null && target.isAlive()) {
+                this.lookAt(EntityAnchorArgument.Anchor.EYES, new Vec3(target.getX(), target.getY() + 0.5, target.getZ()));
                 if (tickCount > 20) {
                     if (distanceTo(target) > 0.5) {
                         Vec3 offset = position()
@@ -228,9 +200,8 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
                 }
             } else {
                 target = this.getTarget();
-                if (!(target == null) && target.isAlive()) {
-                    if ((Entity) this instanceof MoistDragonBreathEntity datEntSetS)
-                        datEntSetS.getEntityData().set(DATA_TARGET, (target.getStringUUID()));
+                if (target != null && target.isAlive()) {
+                    data.set(DATA_TARGET, target.getStringUUID());
                 } else {
                     dragonBreathExplode(world, x, y, z, this);
                 }
@@ -383,19 +354,14 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
         tx = x + d * Math.cos(r);
         tz = z + d * Math.sin(r);
         if (world instanceof ServerLevel projectileLevel) {
-            Projectile entityToSpawn = new Object() {
-                public Projectile getFireball(Level level, Entity shooter, double ax, double ay, double az) {
-                    AbstractHurtingProjectile entityToSpawn = new DragonFireball(EntityType.DRAGON_FIREBALL, level);
-                    entityToSpawn.setOwner(shooter);
-                    entityToSpawn.xPower = ax;
-                    entityToSpawn.yPower = ay;
-                    entityToSpawn.zPower = az;
-                    return entityToSpawn;
-                }
-            }.getFireball(projectileLevel, entity, 0, (-0.1), 0);
-            entityToSpawn.setPos(tx, (y + Mth.nextInt(RandomSource.create(), 6, 9)), tz);
-            entityToSpawn.shoot(0, 1, 0, (float) (-0.5), 0);
-            projectileLevel.addFreshEntity(entityToSpawn);
+            DragonFireball fireball = new DragonFireball(EntityType.DRAGON_FIREBALL, projectileLevel);
+            fireball.setOwner(entity);
+            fireball.xPower = 0;
+            fireball.yPower = -0.1;
+            fireball.zPower = 0;
+            fireball.setPos(tx, (y + Mth.nextInt(RandomSource.create(), 6, 9)), tz);
+            fireball.shoot(0, 1, 0, (float) (-0.5), 0);
+            projectileLevel.addFreshEntity(fireball);
         }
     }
 
@@ -416,30 +382,8 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
         }
         uuid = entity instanceof MoistDragonBreathEntity datEntS ? datEntS.getEntityData().get(MoistDragonBreathEntity.DATA_TARGET) : "";
         uuid1 = entity instanceof MoistDragonBreathEntity datEntS ? datEntS.getEntityData().get(MoistDragonBreathEntity.DATA_OWNER) : "";
-        target = new Object() {
-            Entity entityFromStringUUID(String uuid, Level world) {
-                Entity uuidentity = null;
-                if (world instanceof ServerLevel server) {
-                    try {
-                        uuidentity = server.getEntity(UUID.fromString(uuid));
-                    } catch (Exception ignored) {
-                    }
-                }
-                return uuidentity;
-            }
-        }.entityFromStringUUID(uuid, (Level) world);
-        owner = new Object() {
-            Entity entityFromStringUUID(String uuid, Level world) {
-                Entity uuidentity = null;
-                if (world instanceof ServerLevel server) {
-                    try {
-                        uuidentity = server.getEntity(UUID.fromString(uuid));
-                    } catch (Exception ignored) {
-                    }
-                }
-                return uuidentity;
-            }
-        }.entityFromStringUUID(uuid1, (Level) world);
+        target = world instanceof ServerLevel server ? server.getEntity(UUID.fromString(uuid)) : null;
+        owner = world instanceof ServerLevel server ? server.getEntity(UUID.fromString(uuid1)) : null;
         if (!(owner == null) && owner.isAlive()) {
             d = owner instanceof LivingEntity livingEntity8 && livingEntity8.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity8.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0;
         } else {
@@ -450,53 +394,51 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
             if (T > 0.5) {
                 d = d * 1.35;
             }
-            {
-                final Vec3 center = new Vec3(x, y, z);
-                List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(5 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
-                for (Entity entityiterator : entfound) {
-                    if (!(entityiterator instanceof LivingEntity)) {
-                        continue;
-                    }
-                    if (entityiterator == owner) {
-                        continue;
-                    }
-                    boolean result = true;
-                    if (target == null || owner == null) {
-                        result = false;
-                    } else {
-                        Entity recentVictim;
-                        Entity recentAttacker;
-                        if (owner instanceof OceanizedEnderinaEntity) {
-                            if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
-                                if (!(entityiterator == target)) {
-                                    result = false;
-                                }
+            final Vec3 center = new Vec3(x, y, z);
+            List<Entity> entfound = world.getEntitiesOfClass(Entity.class, new AABB(center, center).inflate(5 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+            for (Entity entityiterator : entfound) {
+                if (!(entityiterator instanceof LivingEntity)) {
+                    continue;
+                }
+                if (entityiterator == owner) {
+                    continue;
+                }
+                boolean result = true;
+                if (target == null || owner == null) {
+                    result = false;
+                } else {
+                    Entity recentVictim;
+                    Entity recentAttacker;
+                    if (owner instanceof OceanizedEnderinaEntity) {
+                        if (entityiterator.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
+                            if (!(entityiterator == target)) {
+                                result = false;
                             }
-                        } else if (!(entityiterator instanceof Monster)) {
-                            if (entityiterator != target) {
-                                recentVictim = (owner instanceof LivingEntity livingOwner) ? livingOwner.getLastHurtMob() : null;
-                                recentAttacker = (owner instanceof LivingEntity livingOwner) ? livingOwner.getLastHurtByMob() : null;
-                                if (entityiterator != recentVictim) {
-                                    if (entityiterator != recentAttacker) {
-                                        if ((entityiterator instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) != owner) {
-                                            result = false;
-                                        }
+                        }
+                    } else if (!(entityiterator instanceof Monster)) {
+                        if (entityiterator != target) {
+                            recentVictim = (owner instanceof LivingEntity livingOwner) ? livingOwner.getLastHurtMob() : null;
+                            recentAttacker = (owner instanceof LivingEntity livingOwner) ? livingOwner.getLastHurtByMob() : null;
+                            if (entityiterator != recentVictim) {
+                                if (entityiterator != recentAttacker) {
+                                    if ((entityiterator instanceof Mob mobEnt ? (Entity) mobEnt.getTarget() : null) != owner) {
+                                        result = false;
                                     }
                                 }
                             }
                         }
                     }
-                    if (result) {
-                        if (entity.distanceTo(entityiterator) <= 2.5) {
-                            entityiterator.hurt(
-                                    CADamageTypes.source(world, CADamageTypes.OCEAN_MAGIC, entity, owner),
-                                    (float) d);
-                            if (entityiterator instanceof LivingEntity livingTarget) {
-                                if (owner instanceof LivingEntity attacker) {
-                                    SIHelper.causeSanityInjury(livingTarget, attacker, d * 20, SanityEvent.Hurt.Type.ENTITY);
-                                } else {
-                                    SIHelper.causeSanityInjury(livingTarget, d * 20, SanityEvent.Hurt.Type.ENTITY);
-                                }
+                }
+                if (result) {
+                    if (entity.distanceTo(entityiterator) <= 2.5) {
+                        entityiterator.hurt(
+                                CADamageTypes.source(world, CADamageTypes.OCEAN_MAGIC, entity, owner),
+                                (float) d);
+                        if (entityiterator instanceof LivingEntity livingTarget) {
+                            if (owner instanceof LivingEntity attacker) {
+                                SIHelper.causeSanityInjury(livingTarget, attacker, d * 20, SanityEvent.Hurt.Type.ENTITY);
+                            } else {
+                                SIHelper.causeSanityInjury(livingTarget, d * 20, SanityEvent.Hurt.Type.ENTITY);
                             }
                         }
                     }
@@ -504,9 +446,9 @@ public class MoistDragonBreathEntity extends PathfinderMob implements GeoEntity,
             }
             if (world instanceof Level level) {
                 level.playSound(null, BlockPos.containing(x, y, z), CASounds.CASTER_EXPLODE.get(), SoundSource.HOSTILE, 3, (float) Mth.nextDouble(RandomSource.create(), 0.9, 1.1));
+                if (world instanceof ServerLevel serverLevel)
+                    serverLevel.sendParticles(ParticleTypes.DRAGON_BREATH, x, (y + 0.25), z, 32, 2, 2, 2, 0.18);
             }
-            if (world instanceof ServerLevel level)
-                level.sendParticles(ParticleTypes.DRAGON_BREATH, x, (y + 0.25), z, 32, 2, 2, 2, 0.18);
         }
         if (!entity.level().isClientSide())
             entity.discard();

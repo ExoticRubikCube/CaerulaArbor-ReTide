@@ -55,9 +55,7 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 
 import javax.annotation.Nullable;
-import java.util.Comparator;
-import java.util.EnumSet;
-import java.util.List;
+import java.util.*;
 
 public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackMob {
 	public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(OceanizedEnderinaEntity.class, EntityDataSerializers.BOOLEAN);
@@ -70,6 +68,7 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 	private boolean swinging;
 	private long lastSwing;
 	public String animationprocedure = "empty";
+	public Set<String> crystals = new HashSet<>();
 
 	public static void spawnLinkParticles(LevelAccessor world, double fromX, double fromY, double fromZ, double toX, double toY, double toZ) {
 		double vx = toX - fromX;
@@ -84,6 +83,19 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 	}
 
 	private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.PINK, ServerBossEvent.BossBarOverlay.NOTCHED_10);
+
+	public void putCrystal(Entity crystal) {
+		this.crystals.add(crystal.getStringUUID());
+	}
+
+	public MoistEnderCrystalEntity getCrystal(String uuid) {
+		Level level = this.level();
+		if (level instanceof ServerLevel) {
+			Entity c = ((ServerLevel) level).getEntity(UUID.fromString(uuid));
+			return c instanceof MoistEnderCrystalEntity ? (MoistEnderCrystalEntity) c : null;
+		}
+		return null;
+	}
 
 	public OceanizedEnderinaEntity(Level world) {
 		this(CAEntities.OCEANIZED_ENDERINA.get(), world);
@@ -468,28 +480,24 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 				}
 			}
 			if (tickCount % 20 == 0) {
-				final Vec3 center = new Vec3(x, y, z);
-				List<MoistEnderCrystalEntity> entfound = world.getEntitiesOfClass(MoistEnderCrystalEntity.class,
-						new AABB(center, center).inflate(16), e -> !e.IS_STATIC);
-				for (Entity entityiterator : entfound) {
-					if (entityiterator == null || this == null)
-						continue;
-					Entity illusioner;
-					Entity enemy1 = null;
-					illusioner = this;
-					if (illusioner == null) {
-						continue;
+				if ((Entity) this instanceof OceanizedEnderinaEntity enderina) {
+					Set<String> crystalUUIDs = enderina.crystals;
+					Set<String> toDelete = new HashSet<>();
+					for (String uuid1 : crystalUUIDs) {
+						MoistEnderCrystalEntity crystal = enderina.getCrystal(uuid1);
+						if (crystal != null && crystal.isAlive()) {
+							if (enderina.getEntityData().get(DATA_REVIVE_TICK) <= 0) {
+								enderina.crytsalToEnderina(crystal, this);
+								EntityUtils.heal(enderina, enderina.getMaxHealth() * 0.01);
+							} else {
+								crystal.getNavigation().moveTo(getX(), getY(), getZ(), 0.5);
+							}
+							spawnLinkParticles(enderina.level(), crystal.getX(), crystal.getY() + 0.5, crystal.getZ(), getX(), getY(), getZ());
+						} else {
+							toDelete.add(uuid1);
+						}
 					}
-					if ((illusioner instanceof OceanizedEnderinaEntity datEntI ? datEntI.getEntityData().get(DATA_REVIVE_TICK) : 0) <= 0) {
-						crytsalToEnderina(entityiterator, illusioner);
-						EntityUtils.heal(this, this.getMaxHealth() * 0.01);
-					} else {
-						if (entityiterator instanceof Mob entity)
-							entity.getNavigation().moveTo((illusioner.getX()), (illusioner.getY()), (illusioner.getZ()), 0.5);
-					}
-					if (illusioner == null)
-						continue;
-					OceanizedEnderinaEntity.spawnLinkParticles(world, entityiterator.getX(), entityiterator.getY() + 0.5, entityiterator.getZ(), illusioner.getX(), illusioner.getY(), illusioner.getZ());
+					crystalUUIDs.removeAll(toDelete);
 				}
 			}
 			if (rev > 0 && tickCount % 70 == 50) {
@@ -794,7 +802,7 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 		this.getEntityData().set(OceanizedEnderinaEntity.DATA_REVIVE_TICK, 600);
 	}
 
-	private void crytsalToEnderina(Entity me, Entity owner) {
+	public void crytsalToEnderina(Entity me, Entity owner) {
 		Vec3 ownerPos = owner.position();
 		Vec3 goal;
 		Vec3 v1 = ownerPos.vectorTo(me.position());

@@ -12,6 +12,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -19,10 +20,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
@@ -48,6 +46,7 @@ public class PocketSeaCreeperEntity extends SeaMonster implements RangedSanityAt
 	public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(PocketSeaCreeperEntity.class, EntityDataSerializers.BOOLEAN);
 	public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(PocketSeaCreeperEntity.class, EntityDataSerializers.STRING);
 	public static final EntityDataAccessor<Integer> DATA_DEAL = SynchedEntityData.defineId(PocketSeaCreeperEntity.class, EntityDataSerializers.INT);
+	public static final EntityDataAccessor<Boolean> DATA_CHARGED = SynchedEntityData.defineId(PocketSeaCreeperEntity.class, EntityDataSerializers.BOOLEAN);
 	private boolean swinging;
 	private long lastSwing;
 	public String animationprocedure = "empty";
@@ -69,6 +68,15 @@ public class PocketSeaCreeperEntity extends SeaMonster implements RangedSanityAt
 		this.entityData.define(DATA_SHOOT, false);
 		this.entityData.define(DATA_ANIMATION, "undefined");
 		this.entityData.define(DATA_DEAL, 0);
+		this.entityData.define(DATA_CHARGED, false);
+	}
+
+	public boolean charged() {
+		return this.entityData.get(DATA_CHARGED);
+	}
+
+	public void setCharged() {
+		this.entityData.set(DATA_CHARGED, true);
 	}
 
 	@Override
@@ -112,6 +120,8 @@ public class PocketSeaCreeperEntity extends SeaMonster implements RangedSanityAt
 	public boolean hurt(DamageSource source, float amount) {
 		if (source.is(DamageTypes.DROWN))
 			return false;
+		if (this.charged() && (source.is(DamageTypes.ON_FIRE) || source.is(DamageTypes.IN_FIRE)))
+			return false;
 		float healthBeforeDamage = this.getHealth();
 		boolean damaged = super.hurt(source, amount);
 		if (damaged && amount <= healthBeforeDamage) {
@@ -129,6 +139,7 @@ public class PocketSeaCreeperEntity extends SeaMonster implements RangedSanityAt
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
 		compound.putInt("Deal", this.entityData.get(DATA_DEAL));
+		compound.putBoolean("Charged", this.entityData.get(DATA_CHARGED));
 	}
 
 	@Override
@@ -136,6 +147,9 @@ public class PocketSeaCreeperEntity extends SeaMonster implements RangedSanityAt
 		super.readAdditionalSaveData(compound);
 		if (compound.contains("Deal")) {
 		    this.entityData.set(DATA_DEAL, compound.getInt("Deal"));
+		}
+		if (compound.contains("Charged")) {
+			this.entityData.set(DATA_CHARGED, compound.getBoolean("Charged"));
 		}
 	}
 
@@ -273,6 +287,11 @@ public class PocketSeaCreeperEntity extends SeaMonster implements RangedSanityAt
 
 	public void setAnimation(String animation) {
 		this.entityData.set(DATA_ANIMATION, animation);
+	}
+
+	public void thunderHit(ServerLevel serverWorld, LightningBolt lightningBolt) {
+		super.thunderHit(serverWorld, lightningBolt);
+		this.setCharged();
 	}
 
 	@Override

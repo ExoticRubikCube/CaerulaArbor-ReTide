@@ -116,7 +116,6 @@ public class NautilusHeadhunterEntity extends Animal implements GeoEntity, Synce
 		this.entityData.define(DATA_BONUS, 0);
 	}
 
-
 	@Override
 	protected float getStandingEyeHeight(Pose poseIn, EntityDimensions sizeIn) {
 		return 0.35F;
@@ -236,52 +235,50 @@ public class NautilusHeadhunterEntity extends Animal implements GeoEntity, Synce
         Entity target;
         Entity vehicle;
         if (this.isAlive()) {
-            dryTick = (Entity) this instanceof NautilusHeadhunterEntity datEntI ? datEntI.getEntityData().get(DATA_DRY_TICK) : 0;
-            target = this.getTarget();
-            isMounting = isPassenger();
-            if (isInWaterRainOrBubble() || isMounting) {
-                if ((Entity) this instanceof NautilusHeadhunterEntity datEntSetI)
-                    datEntSetI.getEntityData().set(DATA_DRY_TICK, 0);
-            } else {
-                if ((Entity) this instanceof NautilusHeadhunterEntity datEntSetI)
-                    datEntSetI.getEntityData().set(DATA_DRY_TICK, (int) (dryTick + 1));
-            }
-            if (tickCount % 20 == 5) {
-                if (dryTick > 300) {
-                    this.hurt(this.damageSources().dryOut(), (float) (this.getMaxHealth() * 0.05));
-                }
-                if (isMounting) {
-                    vehicle = getVehicle();
-                    if (!(vehicle == null) && vehicle.isAlive()) {
-                        if (!world.isClientSide()) {
-                            if (world instanceof Level level) {
-                                    level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.DOLPHIN_EAT, SoundSource.HOSTILE, 1, 1);
-                            }
-                        }
-                        vehicle.hurt(CADamageTypes.source(this.level(), DamageTypes.IN_WALL, this),
-                                (float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
-                        if (vehicle instanceof LivingEntity livingTarget) {
-                            SIHelper.causeSanityInjury(livingTarget, this, 50, SanityEvent.Hurt.Type.ENTITY);
-                        }
-                    }
-                } else {
-                    if (!(target == null) && target.isAlive() && !(target instanceof Player)) {
-                        if (distanceTo(target) <= 2 && !target.isVehicle()) {
-                            if (!world.isClientSide()) {
-                                if (world instanceof Level level) {
-                                        level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.STRIDER_SADDLE, SoundSource.HOSTILE, 1, 1);
-                                }
-                            }
-                            startRiding(target);
-                        }
-                    }
-                }
-            }
-        }
+			dryTick = this.getEntityData().get(DATA_DRY_TICK);
+			target = this.getTarget();
+			isMounting = isPassenger();
+			if (isInWaterRainOrBubble() || isMounting) {
+				this.getEntityData().set(DATA_DRY_TICK, 0);
+			} else {
+				if ((Entity) this instanceof NautilusHeadhunterEntity datEntSetI)
+					datEntSetI.getEntityData().set(DATA_DRY_TICK, (int) (dryTick + 1));
+			}
+			if (tickCount % 20 == 5) {
+				if (dryTick > 300) {
+					this.hurt(this.damageSources().dryOut(), (float) (this.getMaxHealth() * 0.05));
+				}
+				if (isMounting) {
+					vehicle = getVehicle();
+					if (!(vehicle == null) && vehicle.isAlive()) {
+						if (!world.isClientSide()) {
+							if (world instanceof Level level) {
+								level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.DOLPHIN_EAT, SoundSource.HOSTILE, 1, 1);
+							}
+						}
+						vehicle.hurt(CADamageTypes.source(this.level(), DamageTypes.IN_WALL, this),
+								(float) (this.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? this.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0));
+						if (vehicle instanceof LivingEntity livingTarget) {
+							SIHelper.causeSanityInjury(livingTarget, this, 50, SanityEvent.Hurt.Type.ENTITY);
+						}
+					}
+				} else {
+					if (!(target == null) && target.isAlive() && !(target instanceof Player)) {
+						if (distanceTo(target) <= 2 && !target.isVehicle()) {
+							if (!world.isClientSide()) {
+								if (world instanceof Level level) {
+									level.playSound(null, BlockPos.containing(x, y, z), SoundEvents.STRIDER_SADDLE, SoundSource.HOSTILE, 1, 1);
+								}
+							}
+							startRiding(target);
+						}
+					}
+				}
+			}
+		}
         this.refreshDimensions();
 	}
 
-	
 
 	@Override
 	public AgeableMob getBreedOffspring(ServerLevel serverWorld, AgeableMob ageable) {

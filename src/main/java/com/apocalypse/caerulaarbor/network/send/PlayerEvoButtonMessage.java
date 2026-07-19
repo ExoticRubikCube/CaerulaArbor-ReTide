@@ -122,7 +122,7 @@ public class PlayerEvoButtonMessage {
             } else if (!PlayerStateUtils.isNexusExpoShieldSelected(entity) && (title).equals("nexus.expo_shield") && quality >= 4) {
                 {
                     boolean setval = true;
-                    ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                    entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                         capability.PEVO_NEXUS_expo_shield = setval;
                         capability.syncPlayerVariables(entity);
                     });
@@ -135,7 +135,7 @@ public class PlayerEvoButtonMessage {
                         if (quantity >= index0 + 1) {
                             {
                                 double setval = index0 + 1;
-                                ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                                entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                                     capability.PEVO_NODE_add_def = setval;
                                     capability.syncPlayerVariables(entity);
                                 });
@@ -152,7 +152,7 @@ public class PlayerEvoButtonMessage {
                         if (quantity >= index1 + 1) {
                             {
                                 double setval = index1 + 1;
-                                ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                                entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                                     capability.PEVO_NODE_add_resis = setval;
                                     capability.syncPlayerVariables(entity);
                                 });
@@ -169,7 +169,7 @@ public class PlayerEvoButtonMessage {
                         if (quantity >= index2 + 1) {
                             {
                                 double setval = index2 + 1;
-                                ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                                entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                                     capability.PEVO_NODE_add_speed = setval;
                                     capability.syncPlayerVariables(entity);
                                 });
@@ -186,7 +186,7 @@ public class PlayerEvoButtonMessage {
                         if (quantity >= index3 + 1) {
                             {
                                 double setval = index3 + 1;
-                                ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                                entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                                     capability.PEVO_NODE_add_sanity = setval;
                                     capability.syncPlayerVariables(entity);
                                 });
@@ -208,7 +208,7 @@ public class PlayerEvoButtonMessage {
                         if (quantity >= quantity_cost) {
                             {
                                 double setval = index4 + 1;
-                                ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                                entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                                     capability.PEVO_NODE_add_damage = setval;
                                     capability.syncPlayerVariables(entity);
                                 });
@@ -219,7 +219,7 @@ public class PlayerEvoButtonMessage {
                     }
                 }
             } else if (title.contains("node.less_damage")) {
-                add_def = (((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).PEVO_NODE_less_damage;
+                add_def = (entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).PEVO_NODE_less_damage;
                 for (int index5 = 0; index5 < 4; index5++) {
                     if (add_def < index5 + 1) {
                         if (index5 + 1 <= 2) {
@@ -230,7 +230,7 @@ public class PlayerEvoButtonMessage {
                         if (quantity >= quantity_cost) {
                             {
                                 double setval = index5 + 1;
-                                ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                                entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                                     capability.PEVO_NODE_less_damage = setval;
                                     capability.syncPlayerVariables(entity);
                                 });
@@ -248,7 +248,7 @@ public class PlayerEvoButtonMessage {
                         if (quantity >= quantity_cost) {
                             {
                                 double setval = index6 + 1;
-                                ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                                entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                                     capability.PEVO_NODE_living_barrier = setval;
                                     capability.syncPlayerVariables(entity);
                                 });
@@ -266,7 +266,7 @@ public class PlayerEvoButtonMessage {
                         if (quantity >= quantity_cost) {
                             {
                                 double setval = index7 + 1;
-                                ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                                entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                                     capability.PEVO_NODE_add_miss = setval;
                                     capability.syncPlayerVariables(entity);
                                 });
@@ -284,7 +284,7 @@ public class PlayerEvoButtonMessage {
                         if (quantity >= quantity_cost) {
                             {
                                 double setval = index8 + 1;
-                                ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                                entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                                     capability.PEVO_NODE_real_damage = setval;
                                     capability.syncPlayerVariables(entity);
                                 });
@@ -302,7 +302,7 @@ public class PlayerEvoButtonMessage {
                         if (quantity >= quantity_cost) {
                             {
                                 double setval = index9 + 1;
-                                ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                                entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                                     capability.PEVO_NODE_heal_damage = setval;
                                     capability.syncPlayerVariables(entity);
                                 });
@@ -399,14 +399,12 @@ public class PlayerEvoButtonMessage {
                 if ((LevelAccessor) world instanceof Level level) {
                         level.playSound(null, BlockPos.containing(x, y, z), CASounds.ALERT.get(), SoundSource.PLAYERS, 2, 1);
                 }
-                {
-                    double setval = quality - quality_cost;
-                    ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                        capability.reserve_quality = setval;
-                        capability.syncPlayerVariables(entity);
-                    });
-                }
-                if ((Entity) entity instanceof ServerPlayer ent) {
+                double setval = quality - quality_cost;
+                entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+                    capability.reserve_quality = setval;
+                    capability.syncPlayerVariables(entity);
+                });
+                if (entity instanceof ServerPlayer ent) {
                     BlockPos bpos = BlockPos.containing(x, y, z);
                     NetworkHooks.openScreen(ent, new MenuProvider() {
                         @Override

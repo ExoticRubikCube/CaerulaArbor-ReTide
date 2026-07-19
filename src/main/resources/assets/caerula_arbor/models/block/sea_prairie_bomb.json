@@ -1,0 +1,11 @@
+{
+  "parent": "caerula_arbor:custom/sea_prairie_bomb",
+  "textures": {
+    "all": "caerula_arbor:block/sea_prairie_burner_frame",
+    "particle": "caerula_arbor:block/sea_prairie_burner_frame",
+    "1": "caerula_arbor:block/sea_prairie_burner_frame",
+    "2": "caerula_arbor:block/sea_prairie_core",
+    "3": "caerula_arbor:block/sea_prairie_core_rim"
+  },
+  "render_type": "cutout"
+}

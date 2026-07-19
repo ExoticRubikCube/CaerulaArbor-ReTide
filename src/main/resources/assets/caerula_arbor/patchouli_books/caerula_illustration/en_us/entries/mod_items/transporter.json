@@ -1,0 +1,16 @@
+{
+  "name": "阿戈尔人员转运枢纽",
+  "icon": "caerula_arbor:personnel_transporter",
+  "category": "caerula_arbor:mod_items",
+  "read_by_default": true,
+  "sortnum": 6,
+  "pages": [
+    {
+      "type": "spotlight",
+      "title": "阿戈尔人员转运枢纽",
+      "item": "caerula_arbor:personnel_transporter",
+      "scale": 1,
+      "text": "右键可以装载被弃者、深海猎人及审判庭单位等。$(br)潜行右键即可释放装载的单位。$(br2)可以在阿戈尔实验中心的办公室等房间获得。"
+    }
+  ]
+}

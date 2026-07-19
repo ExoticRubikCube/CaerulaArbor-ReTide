@@ -147,4 +147,6 @@ public class CABlocks {
     public static final RegistryObject<Block> ENDERINA_CORE = REGISTRY.register("enderina_core", EnderinaCoreBlock::new);
     public static final RegistryObject<Block> THIRST_CORAL = REGISTRY.register("thirst_coral", ThirstCoralBlock::new);
     public static final RegistryObject<Block> NETHERSEA_SAMPLING = REGISTRY.register("nethersea_sampling", NetherseaSamplingBlock::new);
+	public static final RegistryObject<Block> SEA_PRAIRIE_BOMB = REGISTRY.register("sea_prairie_bomb", SeaPrairieBombBlock::new);
+	public static final RegistryObject<Block> CHEST_FISH_FOOD = REGISTRY.register("chest_fish_food", ChestFishFoodBlock::new);
 }

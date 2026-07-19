@@ -1,0 +1,9 @@
+{
+  "parent": "caerula_arbor:custom/chestfish_food",
+  "textures": {
+    "all": "caerula_arbor:block/chest_fish",
+    "particle": "caerula_arbor:block/chest_fish",
+    "0": "caerula_arbor:block/chest_fish"
+  },
+  "render_type": "cutout"
+}

@@ -586,6 +586,8 @@ public class CAItems {
     public static final RegistryObject<Item> OCEAN_PHLOEM = tooltipItem("ocean_phloem", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)), 1);
     public static final RegistryObject<Item> OCEAN_FIBRE = tooltipItem("ocean_fibre",
             () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(2).saturationMod(0.2f).meat().build())), 1);
+    public static final RegistryObject<Item> CHITIN_COOKIE_RAW = REGISTRY.register("chitin_cookie_raw", ChitinCookieRawItem::new);
+    public static final RegistryObject<Item> CHITIN_COOKIE_DONE = REGISTRY.register("chitin_cookie_done", ChitinCookieDoneItem::new);
     public static final RegistryObject<Item> OCEAN_CRYSTAL = tooltipItem("ocean_crystal", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)), 1);
     public static final RegistryObject<Item> OCEAN_CUTIN = tooltipItem("ocean_cutin", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)), 1);
     public static final RegistryObject<Item> OCEAN_CHITIN = tooltipItem("ocean_chitin", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)), 1);
@@ -653,6 +655,8 @@ public class CAItems {
             () -> new ForgeSpawnEggItem(CAEntities.OCEANIZED_ENDERINA, -1, -1, new Item.Properties().stacksTo(64).rarity(Rarity.EPIC)), 1);
     public static final RegistryObject<Item> MOIST_DRAGON_HEART = tooltipItem("moist_dragon_heart", () -> new Item(new Item.Properties().stacksTo(64).fireResistant().rarity(Rarity.RARE)), 1);
     public static final RegistryObject<Item> NETHERSEA_PRESERVED_EGG = tooltipItem("nethersea_preserved_egg", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food(new FoodProperties.Builder().nutrition(4).saturationMod(0.4f).alwaysEat().effect(() -> new MobEffectInstance(CAMobEffects.ESSENCE_RESISTANCE.get(), 400, 1, false, true), 1.0F).effect(() -> new MobEffectInstance(CAMobEffects.DEDUCT_ONE_SANITY.get(), 60, 0, false, false), 1.0F).build())), 1);
+    public static final RegistryObject<Item> SEA_PRAIRIE_BOMB = block(CABlocks.SEA_PRAIRIE_BOMB);
+    public static final RegistryObject<Item> CHEST_FISH_FOOD = block(CABlocks.CHEST_FISH_FOOD);
 
     private static <T extends Item> RegistryObject<T> tooltipItem(String name, Supplier<T> factory, int tooltipCount) {
         TOOLTIP_COUNTS.put(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, name), tooltipCount);

@@ -127,8 +127,14 @@ $RECYCLE.BIN/
 # Ignore possible local server config files written by the mod
 /config/caerula_arbor-server.toml
 **/serverconfig/caerula_arbor-server.toml
+
 /参考文件/
 /待移植文件/
+/最新版本待移植文件/
+
 /tools/temp/
 /src/generated/
+
 /.codemoss/
+/.dbg/
+/scripts/

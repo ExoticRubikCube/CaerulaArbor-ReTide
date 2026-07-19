@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "aba",
+    "bcb",
+    "aba"
+  ],
+  "key": {
+    "a": {
+      "item": "caerula_arbor:ocean_phloem"
+    },
+    "b": {
+      "item": "caerula_arbor:ocean_chitin"
+    },
+    "c": {
+      "item": "caerula_arbor:chitin_ingot"
+    }
+  },
+  "result": {
+    "item": "caerula_arbor:chitin_shield",
+    "count": 1
+  }
+}

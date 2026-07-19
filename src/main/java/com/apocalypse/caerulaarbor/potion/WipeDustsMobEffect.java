@@ -39,8 +39,6 @@ public class WipeDustsMobEffect extends MobEffect {
     @Override
     public void applyEffectTick(LivingEntity entity, int amplifier) {
         LevelAccessor world = entity.level();
-        if (entity == null)
-            return;
         if ((Entity) entity instanceof LivingEntity livEnt0 && livEnt0.hasEffect(MobEffects.REGENERATION) && ((Entity) entity instanceof Player playerHasItem && playerHasItem.getInventory().contains(new ItemStack(Items.BRUSH)))) {
             {
                 final Vec3 center = new Vec3(entity.getX(), entity.getY(), entity.getZ());
