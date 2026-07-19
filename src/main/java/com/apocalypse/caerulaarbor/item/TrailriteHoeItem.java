@@ -5,7 +5,9 @@ import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.init.CABlocks;
 import com.apocalypse.caerulaarbor.init.CAItems;
 import net.minecraft.network.chat.Component;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.UseOnContext;
@@ -15,6 +17,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public class TrailriteHoeItem extends HoeItem {
 	public TrailriteHoeItem() {
@@ -93,5 +96,15 @@ public class TrailriteHoeItem extends HoeItem {
 			context.getLevel().setBlock(context.getClickedPos(), oceanFarmlandState, 3);
 		}
 		return InteractionResult.SUCCESS;
+	}
+
+	@Override
+	public boolean canBeHurtBy(DamageSource pDamageSource) {
+		return pDamageSource.is(DamageTypeTags.BYPASSES_EFFECTS);
+	}
+
+	@Override
+	public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+		return Math.min(amount, 1);
 	}
 }

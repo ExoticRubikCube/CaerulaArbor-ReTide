@@ -177,7 +177,8 @@ public class EntityJoinLevelEventHandler {
                         if (MapVariables.get(finalWorld).strategy_breed > 0) {
                             if (!finalEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "bossoffspring")))
                                     && !finalEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanspawn")))
-                                    && !finalEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanpet")))) {
+                                    && !finalEntity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanpet")))
+                                    && finalEntity.getPersistentData().getBoolean("caerulaNaturalSpawn")) {
                                 if (EntityUtils.getFellowAround(finalWorld, finalX, finalY, finalZ, finalEntity) < 5) {
                                     if (Math.random() < 0.05 + 0.05 * MapVariables.get(finalWorld).strategy_breed) {
                                         if (!finalEntity.level().isClientSide() && finalEntity.getServer() != null) {

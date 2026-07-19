@@ -482,6 +482,7 @@ public class CATabs {
                 tabData.accept(CAItems.CHITIN_SHIELD.get());
                 tabData.accept(CAItems.COMPLEX_CHITIN_SHIELD.get());
                 tabData.accept(CAItems.TIDELINKED_SHIELD.get());
+                tabData.accept(CAItems.TRAILRITE_SHIELD.get());
             }).withTabsBefore(SEA_FOOD.getId()).build());
 
     @SubscribeEvent

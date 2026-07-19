@@ -11,6 +11,8 @@ import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -119,6 +121,16 @@ public class TrailriteArmorItem extends ArmorItem implements GeoItem, SyncedAnim
     public void setDamage(ItemStack stack, int damage){
         super.setDamage(stack,Math.min(damage,this.getDamage(stack)+1));
     }
+
+	@Override
+	public boolean canBeHurtBy(DamageSource pDamageSource) {
+		return pDamageSource.is(DamageTypeTags.BYPASSES_EFFECTS);
+	}
+
+	@Override
+	public <T extends LivingEntity> int damageItem(ItemStack stack, int amount, T entity, Consumer<T> onBroken) {
+		return Math.min(amount, 1);
+	}
 
 	private PlayState predicate(AnimationState<?> event) {
 		if (this.animationprocedure.equals("empty")) {

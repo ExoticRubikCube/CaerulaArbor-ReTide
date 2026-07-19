@@ -8,6 +8,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
@@ -18,6 +19,7 @@ import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Set;
 import java.util.function.Predicate;
 
 public class ComplexChitinBowItem extends BowItem {
@@ -33,8 +35,8 @@ public class ComplexChitinBowItem extends BowItem {
 
 	public static float getPowerForTime(int pCharge) {
         float f = (float) pCharge / 30.0F;
-        f = (f * f + 2 * f) / 1.2F;
-        if (f > 2.5F) f = 2.5F;
+        f = (f * f + 2.0F * f) / 1.2F;
+        if (f > 2.0F) f = 2.0F;
         return f;
     }
 
@@ -52,11 +54,16 @@ public class ComplexChitinBowItem extends BowItem {
 
     public static final Predicate<ItemStack> ALSO_OCEAN_ARROW = (itemStack) -> ARROW_ONLY.test(itemStack) || itemStack.getItem() == CAItems.OCEAN_ARROW.get();
 
-    private double getRate(Player player){
-    	AttributeInstance inst = player.getAttribute(Attributes.ATTACK_DAMAGE);
-    	if (inst == null) return 1;
-    	if (inst.getBaseValue() == 0) return 1;
-    	return Math.max(inst.getValue() / inst.getBaseValue(), 1);
+    private double getRate(Player player) {
+        AttributeInstance atk = player.getAttribute(Attributes.ATTACK_DAMAGE);
+        if (atk == null) {
+            return 0.0;
+        }
+        Set<AttributeModifier> baseModifiers = atk.getModifiers(AttributeModifier.Operation.MULTIPLY_BASE);
+        Set<AttributeModifier> totalModifiers = atk.getModifiers(AttributeModifier.Operation.MULTIPLY_TOTAL);
+        double expoBase = 1.0 + baseModifiers.stream().mapToDouble(AttributeModifier::getAmount).sum();
+        double expoTotal = totalModifiers.stream().mapToDouble(m -> 1.0 + m.getAmount()).reduce(1.0, (a, b) -> a * b);
+        return expoBase * expoTotal;
     }
 
     public void releaseUsing(ItemStack pStack, Level pLevel, LivingEntity pEntityLiving, int pTimeLeft) {

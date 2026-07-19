@@ -161,9 +161,6 @@ public class AnchorFlyEntity extends AbstractArrow implements ItemSupplier {
                 if (!(entityiterator instanceof Mob)) {
                     continue;
                 }
-                if (entityiterator instanceof Player) {
-                    continue;
-                }
                 if (new Vec3((entityiterator.getX()), (entityiterator.getY()), (entityiterator.getZ())).distanceTo(new Vec3(x, y, z)) <= 6) {
                     entityiterator.hurt(CADamageTypes.source(world, CADamageTypes.ANCHOR_SMASH, entity), (float) ((entity instanceof LivingEntity livingEntity15 && livingEntity15.getAttributes().hasAttribute(Attributes.ATTACK_DAMAGE) ? livingEntity15.getAttribute(Attributes.ATTACK_DAMAGE).getValue() : 0) * 1.5));
                     if (entityiterator instanceof LivingEntity livingEntity && !livingEntity.level().isClientSide())

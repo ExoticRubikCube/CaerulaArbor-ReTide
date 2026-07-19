@@ -387,6 +387,7 @@ public class CAItems {
     public static final RegistryObject<Item> COLOURFULL_JELLY = REGISTRY.register("colourfull_jelly", ColourfullJellyItem::new);
     public static final RegistryObject<Item> CHITIN_SHIELD = REGISTRY.register("chitin_shield", ChitinShieldItem::new);
     public static final RegistryObject<Item> COMPLEX_CHITIN_SHIELD = REGISTRY.register("complex_chitin_shield", ComplexChitinShieldItem::new);
+    public static final RegistryObject<Item> TRAILRITE_SHIELD = REGISTRY.register("trailrite_shield", TrailriteShieldItem::new);
     public static final RegistryObject<Item> HIGHMORE_SPAWNBLOCK = REGISTRY.register(Objects.requireNonNull(CABlocks.HIGHMORE_SPAWNBLOCK.getId()).getPath(),
             () -> new HighmoreSpawnblockDisplayItem(CABlocks.HIGHMORE_SPAWNBLOCK.get(), new Item.Properties()));
     public static final RegistryObject<Item> CRISIS_TABLE = REGISTRY.register(Objects.requireNonNull(CABlocks.CRISIS_TABLE.getId()).getPath(), () -> new CrisisTableDisplayItem(CABlocks.CRISIS_TABLE.get(), new Item.Properties()));
@@ -680,6 +681,7 @@ public class CAItems {
             ItemProperties.register(CHITIN_SHIELD.get(), ResourceLocation.parse("blocking"), Objects.requireNonNull(ItemProperties.getProperty(Items.SHIELD, ResourceLocation.parse("blocking"))));
             ItemProperties.register(COMPLEX_CHITIN_SHIELD.get(), ResourceLocation.parse("blocking"), Objects.requireNonNull(ItemProperties.getProperty(Items.SHIELD, ResourceLocation.parse("blocking"))));
             ItemProperties.register(TIDELINKED_SHIELD.get(), ResourceLocation.parse("blocking"), Objects.requireNonNull(ItemProperties.getProperty(Items.SHIELD, ResourceLocation.parse("blocking"))));
+            ItemProperties.register(TRAILRITE_SHIELD.get(), ResourceLocation.parse("blocking"), Objects.requireNonNull(ItemProperties.getProperty(Items.SHIELD, ResourceLocation.parse("blocking"))));
             ItemProperties.register(CHITIN_BOW.get(), ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "chitin_bow_pulling"),
                     (itemStackToRender, clientWorld, living, itemEntityId) -> living != null && living.isUsingItem()
                             && living.getUseItem().is(itemStackToRender.getItem()) ? living.getTicksUsingItem() : 0.0F);
