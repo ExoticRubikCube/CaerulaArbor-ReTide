@@ -342,12 +342,11 @@ public abstract class AbstractPathshaperEntity extends SeaMonster {
 
 	@Override
 	public SpawnGroupData finalizeSpawn(ServerLevelAccessor world, DifficultyInstance difficulty, MobSpawnType reason, @Nullable SpawnGroupData livingdata, @Nullable CompoundTag tag) {
-		SpawnGroupData retval = super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
         if (world.getEntitiesOfClass(Player.class, AABB.ofSize(new Vec3(this.getX(), this.getY(), this.getZ()), 16, 16, 16), e -> true).isEmpty()) {
             if (!this.level().isClientSide())
                 this.addEffect(new MobEffectInstance(MobEffects.GLOWING, 1800, 0, false, false));
         }
-        return retval;
+        return super.finalizeSpawn(world, difficulty, reason, livingdata, tag);
 	}
 
 	@Override

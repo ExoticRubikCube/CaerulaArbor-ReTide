@@ -77,7 +77,5 @@ public class CaerulaArborMod {
             actions.forEach(e -> e.getKey().run());
             workQueue.removeAll(actions);
         }
-
-
     }
 }

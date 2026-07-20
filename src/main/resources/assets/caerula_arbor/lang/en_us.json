@@ -2265,5 +2265,7 @@
   "evolution.caerula_aerbor.sublimation.breed.3": "[Sublimation] Non-leader seaborns have a 20% chance to revive with 25% HP when first defeated.",
   "evolution.caerula_aerbor.sublimation.breed.3_1": "10% chance to summon a Caerula Offspring after revival.",
   "evolution.caerula_aerbor.sublimation.breed.4": "[Sublimation] Non-leader seaborns have a 25% chance to revive with 30% HP when first defeated.",
-  "evolution.caerula_aerbor.sublimation.breed.4_1": "20% chance to summon a Caerula Offspring after revival."
+  "evolution.caerula_aerbor.sublimation.breed.4_1": "20% chance to summon a Caerula Offspring after revival.",
+  "entity.caerula_arbor.caerula_offspring": "Caerula Offspring",
+  "item.caerula_arbor.caerula_offspring_spawn_egg": "Caerula Offspring Spawn Egg"
 }

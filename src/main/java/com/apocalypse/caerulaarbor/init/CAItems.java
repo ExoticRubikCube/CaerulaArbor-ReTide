@@ -378,6 +378,7 @@ public class CAItems {
     public static final RegistryObject<Item> OCEANIZED_RAVAGER_SPAWN_EGG = REGISTRY.register("oceanized_ravager_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.OCEANIZED_RAVAGER, -10919578, -6771789, new Item.Properties()));
     public static final RegistryObject<Item> OCEANIZED_WITCH_SPAWN_EGG = REGISTRY.register("oceanized_witch_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.OCEANIZED_WITCH, -16176318, -12024617, new Item.Properties()));
     public static final RegistryObject<Item> IZUMIK_OFFSPRING_SPAWN_EGG = REGISTRY.register("izumik_offspring_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.IZUMIK_OFFSPRING, -592138, -405009, new Item.Properties()));
+    public static final RegistryObject<Item> CAERULA_OFFSPRING_SPAWN_EGG = REGISTRY.register("caerula_offspring_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.CAERULA_OFFSPRING, -592138, -405009, new Item.Properties()));
     public static final RegistryObject<Item> DEEP_SEAGRASS = block(CABlocks.DEEP_SEAGRASS);
     public static final RegistryObject<Item> SEA_TRAIL_STOP = block(CABlocks.SEA_TRAIL_STOP);
     public static final RegistryObject<Item> QUINTUS_SPAWNEGG = REGISTRY.register("quintus_spawnegg", () -> new ForgeSpawnEggItem(CAEntities.BISHOP_FISH, -1, -1, new Item.Properties().stacksTo(64).rarity(Rarity.RARE)));
