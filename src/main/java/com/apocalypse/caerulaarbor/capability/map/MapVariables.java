@@ -1,5 +1,6 @@
 package com.apocalypse.caerulaarbor.capability.map;
 
+import com.apocalypse.caerulaarbor.init.CAConfigs;
 import com.apocalypse.caerulaarbor.init.CANetwork;
 import com.apocalypse.caerulaarbor.network.receive.SavedDataSyncMessage;
 import net.minecraft.nbt.CompoundTag;
@@ -26,6 +27,9 @@ public class MapVariables extends SavedData {
     public double strategy_silence = 0;
     public double evo_point_silence = 0;
     public boolean silence_enabled = false;
+    public double strategy_sublimation = 0;
+    public double evo_point_sublimation = 0;
+    public boolean if_sublimation = !CAConfigs.SUBLIMATION_BAN.get();
     public double endspeaker_abolities = 0;
     public boolean endspeakerSummon = true;
     public double incandescentAnimaUseTick = 0;
@@ -48,6 +52,9 @@ public class MapVariables extends SavedData {
         strategy_silence = nbt.getDouble("strategy_silence");
         evo_point_silence = nbt.getDouble("evo_point_silence");
         silence_enabled = nbt.getBoolean("silence_enabled");
+        strategy_sublimation = nbt.getDouble("strategy_sublimation");
+        evo_point_sublimation = nbt.getDouble("evo_point_sublimation");
+        if_sublimation = nbt.getBoolean("if_sublimation");
         endspeaker_abolities = nbt.getDouble("endspeaker_abolities");
         endspeakerSummon = nbt.getBoolean("endspeakerSummon");
         incandescentAnimaUseTick = nbt.getDouble("incandescentAnimaUseTick");
@@ -66,6 +73,9 @@ public class MapVariables extends SavedData {
         nbt.putDouble("strategy_silence", strategy_silence);
         nbt.putDouble("evo_point_silence", evo_point_silence);
         nbt.putBoolean("silence_enabled", silence_enabled);
+        nbt.putDouble("strategy_sublimation", strategy_sublimation);
+        nbt.putDouble("evo_point_sublimation", evo_point_sublimation);
+        nbt.putBoolean("if_sublimation", if_sublimation);
         nbt.putDouble("endspeaker_abolities", endspeaker_abolities);
         nbt.putBoolean("endspeakerSummon", endspeakerSummon);
         nbt.putDouble("incandescentAnimaUseTick", incandescentAnimaUseTick);

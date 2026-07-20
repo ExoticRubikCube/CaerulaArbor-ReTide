@@ -5,6 +5,7 @@ import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.init.CABlocks;
+import com.apocalypse.caerulaarbor.init.CAConfigs;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.BlockPos;
@@ -62,12 +63,13 @@ public class CaerulaUtil {
 
 	public static void setMaxLifePoint(Player player, int value){
 		if(value < 1) return;
+		int clampedValue = (int) Math.min(value, CAConfigs.LP_LIMIT.get());
 		player.getCapability(ModCapabilities.PLAYER_VARIABLE, null)
 		.ifPresent(c -> {
-			c.player_maxlive = value;
+			c.player_maxlive = clampedValue;
 			c.syncPlayerVariables(player);
 		});
-		if (value < getLifePoint(player)) setLifePoint(player, value);
+		if (clampedValue < getLifePoint(player)) setLifePoint(player, clampedValue);
 	}
 
 	// 护盾点数
@@ -77,9 +79,10 @@ public class CaerulaUtil {
 	}
 	public static void setShieldPoint(Player player, int value){
 		if(value < 0) return;
+		int clampedValue = (int) Math.min(value, CAConfigs.SHIELD_LIMIT.get());
 		player.getCapability(ModCapabilities.PLAYER_VARIABLE, null)
 		.ifPresent(c -> {
-			c.player_shield = value;
+			c.player_shield = clampedValue;
 			c.syncPlayerVariables(player);
 		});
 	}

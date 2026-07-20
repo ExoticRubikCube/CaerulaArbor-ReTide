@@ -1,5 +1,6 @@
 package com.apocalypse.caerulaarbor.command;
 
+import com.apocalypse.caerulaarbor.capability.map.MapVariables;
 import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler;
 import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler.StrategyType;
 import com.apocalypse.caerulaarbor.init.CASounds;
@@ -267,6 +268,104 @@ public class EvolutionCommand {
                 }
                 info = Component.translatable("command.evolution.silence").getString();
                 info = info.replace("<num>", "" + Math.round(DoubleArgumentType.getDouble(arguments, "lvl")));
+                {
+                    final String success = info;
+                    final boolean informAdmins = true;
+                    arguments.getSource().sendSuccess(() -> Component.literal(success), informAdmins);
+                }
+            }
+            return 0;
+		}))).then(Commands.literal("sublimation")
+				.then(Commands.literal("rise").executes(arguments -> {
+			Level world = arguments.getSource().getUnsidedLevel();
+			double x = arguments.getSource().getPosition().x();
+			double y = arguments.getSource().getPosition().y();
+			double z = arguments.getSource().getPosition().z();
+			Entity entity = arguments.getSource().getEntity();
+			if (entity == null && world instanceof ServerLevel servLevel)
+				entity = FakePlayerFactory.getMinecraft(servLevel);
+			Direction direction = Direction.DOWN;
+			if (entity != null)
+                entity.getDirection();
+
+            if (MapVariables.get(world).if_sublimation) {
+                double doneLvl = Math.min(MapVariables.get(world).strategy_sublimation + 1.0, 4.0);
+                MapVariablesHandler.setStrategyLevel(world, StrategyType.SUBLIMATION, doneLvl);
+                if (doneLvl >= 3) {
+                    if ((LevelAccessor) world instanceof Level level) {
+                            level.playSound(null, BlockPos.containing(x, y, z), CASounds.SUBLIMATION_2.get(), SoundSource.NEUTRAL, 4, 1);
+                    }
+                } else if (doneLvl > 0) {
+                    if ((LevelAccessor) world instanceof Level level) {
+                            level.playSound(null, BlockPos.containing(x, y, z), CASounds.SUBLIMATION_1.get(), SoundSource.NEUTRAL, 4, 1);
+                    }
+                }
+                String info = Component.translatable("command.evolution.sublimation").getString();
+                info = info.replace("<num>", "" + Math.round(doneLvl));
+                {
+                    final String success = info;
+                    final boolean informAdmins = true;
+                    arguments.getSource().sendSuccess(() -> Component.literal(success), informAdmins);
+                }
+            } else {
+                String info = Component.translatable("command.evolution.sublimation.fail").getString();
+                {
+                    final String success = info;
+                    final boolean informAdmins = true;
+                    arguments.getSource().sendSuccess(() -> Component.literal(success), informAdmins);
+                }
+            }
+            return 0;
+		})).then(Commands.literal("disable").executes(arguments -> {
+			Level world = arguments.getSource().getUnsidedLevel();
+			Entity entity = arguments.getSource().getEntity();
+			if (entity == null && world instanceof ServerLevel servLevel)
+				entity = FakePlayerFactory.getMinecraft(servLevel);
+			Direction direction = Direction.DOWN;
+			if (entity != null)
+                entity.getDirection();
+
+            MapVariables.get(world).if_sublimation = false;
+            MapVariablesHandler.setStrategyLevel(world, StrategyType.SUBLIMATION, 0);
+            String info = Component.translatable("command.evolution.sublimation.ban").getString();
+            {
+                final String success = info;
+                final boolean informAdmins = true;
+                arguments.getSource().sendSuccess(() -> Component.literal(success), informAdmins);
+            }
+            return 0;
+		})).then(Commands.argument("lvl", DoubleArgumentType.doubleArg(0, 4)).executes(arguments -> {
+			Level world = arguments.getSource().getUnsidedLevel();
+			double x = arguments.getSource().getPosition().x();
+			double y = arguments.getSource().getPosition().y();
+			double z = arguments.getSource().getPosition().z();
+			Entity entity = arguments.getSource().getEntity();
+			if (entity == null && world instanceof ServerLevel servLevel)
+				entity = FakePlayerFactory.getMinecraft(servLevel);
+			Direction direction = Direction.DOWN;
+			if (entity != null)
+                entity.getDirection();
+
+            if (MapVariables.get(world).if_sublimation) {
+                MapVariablesHandler.setStrategyLevel(world, StrategyType.SUBLIMATION, Math.round(DoubleArgumentType.getDouble(arguments, "lvl")));
+                if (DoubleArgumentType.getDouble(arguments, "lvl") >= 3) {
+                    if ((LevelAccessor) world instanceof Level level) {
+                            level.playSound(null, BlockPos.containing(x, y, z), CASounds.SUBLIMATION_2.get(), SoundSource.NEUTRAL, 4, 1);
+                    }
+                } else if (DoubleArgumentType.getDouble(arguments, "lvl") > 0) {
+                    if ((LevelAccessor) world instanceof Level level) {
+                            level.playSound(null, BlockPos.containing(x, y, z), CASounds.SUBLIMATION_1.get(), SoundSource.NEUTRAL, 4, 1);
+                    }
+                }
+                String info = Component.translatable("command.evolution.sublimation").getString();
+                info = info.replace("<num>", "" + Math.round(DoubleArgumentType.getDouble(arguments, "lvl")));
+                {
+                    final String success = info;
+                    final boolean informAdmins = true;
+                    arguments.getSource().sendSuccess(() -> Component.literal(success), informAdmins);
+                }
+            } else {
+                String info = Component.translatable("command.evolution.sublimation.fail").getString();
                 {
                     final String success = info;
                     final boolean informAdmins = true;

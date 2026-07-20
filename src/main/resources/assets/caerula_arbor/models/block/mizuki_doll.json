@@ -1,0 +1,9 @@
+{
+  "parent": "caerula_arbor:custom/mizuki_doll",
+  "textures": {
+    "all": "caerula_arbor:block/mizuki_doll",
+    "particle": "caerula_arbor:block/mizuki_doll",
+    "0": "caerula_arbor:block/mizuki_doll"
+  },
+  "render_type": "cutout"
+}

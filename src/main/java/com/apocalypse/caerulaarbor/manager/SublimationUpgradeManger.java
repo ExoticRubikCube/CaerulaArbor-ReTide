@@ -1,0 +1,104 @@
+package com.apocalypse.caerulaarbor.manager;
+
+import com.apocalypse.caerulaarbor.CaerulaArborMod;
+import com.apocalypse.caerulaarbor.capability.map.MapVariables;
+import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler;
+import com.apocalypse.caerulaarbor.capability.map.MapVariablesHandler.StrategyType;
+import com.apocalypse.caerulaarbor.init.CAConfigs;
+import com.apocalypse.caerulaarbor.init.CASounds;
+import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementProgress;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+
+import java.util.ArrayList;
+
+public class SublimationUpgradeManger {
+
+    public static void applySublimationUpgrade(LevelAccessor world, double point) {
+        AdvancementProgress _ap;
+        Advancement _adv;
+        ServerPlayer _player;
+        double stra = 0.0;
+        String prefix = "";
+        String num = "";
+        stra = MapVariables.get(world).strategy_sublimation;
+
+        if (stra > 0.0) {
+            for (Entity entityiterator : new ArrayList<>(world.players())) {
+                if (!(entityiterator instanceof ServerPlayer serverPlayer)) continue;
+                _player = serverPlayer;
+                _adv = _player.server.getAdvancements().getAdvancement(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "fifth_touch"));
+                _ap = _player.getAdvancements().getOrStartProgress(_adv);
+                if (_ap.isDone()) continue;
+                for (String criteria : _ap.getRemainingCriteria()) {
+                    _player.getAdvancements().award(_adv, criteria);
+                }
+            }
+        }
+
+        if (MapVariables.get(world).if_sublimation) {
+            MapVariablesHandler.addEvoPoint(world, StrategyType.SUBLIMATION, point);
+
+            if (stra < 4.0) {
+                if (MapVariables.get(world).evo_point_sublimation >= Math.pow(stra + 1.0, 3.0) * CAConfigs.SUBLIMATION_COEFFICIENT.get() * 12.0) {
+                    MapVariablesHandler.setStrategyLevel(world, StrategyType.SUBLIMATION, stra + 1.0);
+                    stra = MapVariables.get(world).strategy_sublimation;
+                    MapVariablesHandler.setEvoPoint(world, StrategyType.SUBLIMATION, 0.0);
+
+                    if (stra == 1.0) {
+                        num = "I";
+                        prefix = "§p";
+                    } else if (stra == 2.0) {
+                        num = "II";
+                        prefix = "§p";
+                    } else if (stra == 3.0) {
+                        num = "III";
+                        prefix = "§e";
+                    } else if (stra == 4.0) {
+                        num = "IV";
+                        prefix = "§6";
+                    }
+
+                    if (CAConfigs.EVOSOUND.get()) {
+                        for (Entity entityiterator : new ArrayList<>(world.players())) {
+                            if (stra <= 2.0) {
+                                if (world instanceof Level level) {
+                                    level.playSound(null, BlockPos.containing(entityiterator.getX(), entityiterator.getY(), entityiterator.getZ()), CASounds.SUBLIMATION_1.get(), SoundSource.NEUTRAL, 5.0f, 1.0f);
+                                }
+                            } else {
+                                if (world instanceof Level level) {
+                                    level.playSound(null, BlockPos.containing(entityiterator.getX(), entityiterator.getY(), entityiterator.getZ()), CASounds.SUBLIMATION_2.get(), SoundSource.NEUTRAL, 5.0f, 1.0f);
+                                }
+                            }
+                        }
+                    }
+
+                    if (!world.isClientSide() && world.getServer() != null) {
+                        world.getServer().getPlayerList().broadcastSystemMessage(Component.literal(prefix + Component.translatable("evolution.caerula_arbor.sublimation").getString() + num), false);
+                    }
+                }
+            } else {
+                MapVariablesHandler.setEvoPoint(world, StrategyType.SUBLIMATION, 0.0);
+                for (Entity entityiterator : new ArrayList<>(world.players())) {
+                    if (!(entityiterator instanceof ServerPlayer)) continue;
+                    _player = (ServerPlayer) entityiterator;
+                    _adv = _player.server.getAdvancements().getAdvancement(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "absurd_of_evolution"));
+                    _ap = _player.getAdvancements().getOrStartProgress(_adv);
+                    if (_ap.isDone()) continue;
+                    for (String criteria : _ap.getRemainingCriteria()) {
+                        _player.getAdvancements().award(_adv, criteria);
+                    }
+                }
+            }
+        } else {
+            MapVariablesHandler.setStrategyLevel(world, StrategyType.SUBLIMATION, 0.0);
+        }
+    }
+}

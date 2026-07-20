@@ -1780,6 +1780,33 @@
       }
     ]
   },
+  "oceanwish_fullset": {
+    "subtitle": "subtitles.oceanwish_fullset",
+    "sounds": [
+      {
+        "name": "caerula_arbor:oceanwish_fullset",
+        "stream": true
+      }
+    ]
+  },
+  "operation_underdawn": {
+    "subtitle": "subtitles.operation_underdawn",
+    "sounds": [
+      {
+        "name": "caerula_arbor:operation_underdawn",
+        "stream": true
+      }
+    ]
+  },
+  "mare_natus": {
+    "subtitle": "subtitles.mare_natus",
+    "sounds": [
+      {
+        "name": "caerula_arbor:mare_natus",
+        "stream": true
+      }
+    ]
+  },
   "caster_pre": {
     "subtitle": "subtitles.caster_pre",
     "sounds": [

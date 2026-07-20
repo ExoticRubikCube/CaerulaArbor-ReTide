@@ -541,6 +541,9 @@ public class CAItems {
     public static final RegistryObject<Item> ISHARMLA_TEAR_SPAWN_EGG = REGISTRY.register("isharmla_tear_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.ISHARMLA_TEAR, -3034976, -328990, new Item.Properties()));
     public static final RegistryObject<Item> LEVIATHAN_ANIMUS = REGISTRY.register("leviathan_animus", LeviathanAnimusItem::new);
     public static final RegistryObject<Item> RECORD_ISHARMLA = REGISTRY.register("record_isharmla", () -> new RecordItem(4, CASounds.CONQUERER, new Item.Properties().stacksTo(1).rarity(Rarity.RARE), 4020));
+    public static final RegistryObject<Item> RECORD_OCEANWISH = REGISTRY.register("record_oceanwish", () -> new RecordItem(8, CASounds.OCEANWISH_FULLSET, new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.RARE), 2720));
+    public static final RegistryObject<Item> RECORD_UNDERDAWN = REGISTRY.register("record_underdawn", () -> new RecordItem(9, CASounds.OPERATION_UNDERDAWN, new Item.Properties().stacksTo(1).rarity(Rarity.RARE), 1480));
+    public static final RegistryObject<Item> RECORD_MARE_NATUS = REGISTRY.register("record_mare_natus", () -> new RecordItem(8, CASounds.MARE_NATUS, new Item.Properties().stacksTo(64).rarity(Rarity.RARE), 4000));
     public static final RegistryObject<Item> TEAR_ISHARMLA = REGISTRY.register("tear_isharmla", TearIsharmlaItem::new);
     public static final RegistryObject<Item> ISHARMLA_SCUTE = REGISTRY.register("isharmla_scute", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON)));
     public static final RegistryObject<Item> ISHARMLA_BRICK = block(CABlocks.ISHARMLA_BRICK);
@@ -578,6 +581,11 @@ public class CAItems {
     public static final RegistryObject<Item> GENE_SAMPLE_UPGRADED = REGISTRY.register("gene_sample_upgraded", GeneSampleUpgradedItem::new);
     public static final RegistryObject<Item> GENE_SAMPLE_SUPERB = REGISTRY.register("gene_sample_superb", GeneSampleSuperbItem::new);
     public static final RegistryObject<Item> NETHERSEA_SAMPLING = block(CABlocks.NETHERSEA_SAMPLING);
+    public static final RegistryObject<Item> HIGHMORE_DOLL = block(CABlocks.HIGHMORE_DOLL);
+    public static final RegistryObject<Item> MIZUKI_DOLL = block(CABlocks.MIZUKI_DOLL);
+    public static final RegistryObject<Item> REDSTONIUM_BLOCK = block(CABlocks.REDSTONIUM_BLOCK);
+    public static final RegistryObject<Item> MOTAR_BASE_BLOCK = block(CABlocks.MOTAR_BASE_BLOCK);
+    public static final RegistryObject<Item> CHEST_FISH_COOKED = block(CABlocks.CHEST_FISH_COOKED);
     public static final RegistryObject<Item> ARCHIVE_SAL_VIENTO = REGISTRY.register("archive_sal_viento", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON)));
     public static final RegistryObject<Item> ARCHIVE_OF_TIDELINK = REGISTRY.register("archive_of_tidelink", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON)));
     public static final RegistryObject<Item> ARCHIVE_OF_MARTUS = REGISTRY.register("archive_of_martus", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.UNCOMMON)));

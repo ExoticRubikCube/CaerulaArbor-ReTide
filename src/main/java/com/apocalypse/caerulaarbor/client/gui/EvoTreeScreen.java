@@ -95,13 +95,13 @@ public class EvoTreeScreen extends AbstractContainerScreen<EvoTreeMenu> {
         }
         guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/evo_arrow.png"), this.leftPos + 14, this.topPos + 160, Mth.clamp((int) result4 * 161, 0, 161), 0, 161, 8, 322, 8);
 
-		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/evo_complete.png"), this.leftPos + 32, this.topPos + 28, Mth.clamp((int) StrategyUtils.getStraSubsis(world) * 128, 0, 512), 0, 128, 33, 640, 33);
+		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/evo_complete_subs.png"), this.leftPos + 32, this.topPos + 28, Mth.clamp((int) StrategyUtils.getStraSubsis(world) * 128, 0, 512), 0, 128, 32, 640, 32);
 
-		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/evo_complete.png"), this.leftPos + 32, this.topPos + 68, Mth.clamp((int) StrategyUtils.getStraBreed(world) * 128, 0, 512), 0, 128, 33, 640, 33);
+		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/evo_complete.png"), this.leftPos + 32, this.topPos + 68, Mth.clamp((int) StrategyUtils.getStraBreed(world) * 128, 0, 512), 0, 128, 32, 640, 32);
 
-		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/evo_complete.png"), this.leftPos + 32, this.topPos + 108, Mth.clamp((int) StrategyUtils.getStraGrow(world) * 128, 0, 512), 0, 128, 33, 640, 33);
+		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/evo_complete_grow.png"), this.leftPos + 32, this.topPos + 108, Mth.clamp((int) StrategyUtils.getStraGrow(world) * 128, 0, 512), 0, 128, 32, 640, 32);
 
-		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/evo_complete.png"), this.leftPos + 32, this.topPos + 148, Mth.clamp((int) StrategyUtils.getStraMigration(world) * 128, 0, 512), 0, 128, 33, 640, 33);
+		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/evo_complete_mig.png"), this.leftPos + 32, this.topPos + 148, Mth.clamp((int) StrategyUtils.getStraMigration(world) * 128, 0, 512), 0, 128, 32, 640, 32);
 
         double result1 = 0;
         if (MapVariables.get(world).strategy_silence >= 1) {
@@ -110,6 +110,10 @@ public class EvoTreeScreen extends AbstractContainerScreen<EvoTreeMenu> {
         guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/side_arrow.png"), this.leftPos + 176, this.topPos + 42, 0, Mth.clamp((int) result1 * 123, 0, 123), 39, 123, 39, 246);
 
 		guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/silence.png"), this.leftPos + 208, this.topPos + 86, Mth.clamp((int) StrategyUtils.getStraSilence(world) * 29, 0, 116), 0, 29, 33, 145, 33);
+
+        if (MapVariables.get(world).if_sublimation) {
+            guiGraphics.blit(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "textures/overlay/sublimation.png"), this.leftPos + 239, this.topPos + 87, Mth.clamp((int) MapVariables.get(world).strategy_sublimation * 28, 0, 112), 0, 28, 32, 140, 32);
+        }
 
 		RenderSystem.disableBlend();
 	}

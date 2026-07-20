@@ -3,6 +3,7 @@ package com.apocalypse.caerulaarbor.command;
 
 import com.apocalypse.caerulaarbor.capability.ModCapabilities;
 import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
+import com.apocalypse.caerulaarbor.init.CAConfigs;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.Commands;
@@ -38,7 +39,7 @@ public class SetPlayerLifeCommand {
                     double lfs;
                     try {
                         for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
-                            lfs = Math.min(DoubleArgumentType.getDouble(arguments, "life"), (entityiterator.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_maxlive);
+                            lfs = Math.min(DoubleArgumentType.getDouble(arguments, "life"), Math.min(CAConfigs.LP_LIMIT.get(), (entityiterator.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_maxlive));
                             {
                                 double setval = lfs;
                                 entityiterator.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
@@ -75,7 +76,7 @@ public class SetPlayerLifeCommand {
                     try {
                         for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
                             {
-                                double setval = DoubleArgumentType.getDouble(arguments, "life");
+                                double setval = Math.min(DoubleArgumentType.getDouble(arguments, "life"), CAConfigs.LP_LIMIT.get());
                                 entityiterator.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                                     capability.player_maxlive = setval;
                                     capability.syncPlayerVariables(entityiterator);
@@ -110,7 +111,7 @@ public class SetPlayerLifeCommand {
                     try {
                         for (Entity entityiterator : EntityArgument.getEntities(arguments, "name")) {
                             {
-                                double setval = DoubleArgumentType.getDouble(arguments, "shield");
+                                double setval = Math.min(DoubleArgumentType.getDouble(arguments, "shield"), CAConfigs.SHIELD_LIMIT.get());
                                 entityiterator.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
                                     capability.player_shield = setval;
                                     capability.syncPlayerVariables(entityiterator);

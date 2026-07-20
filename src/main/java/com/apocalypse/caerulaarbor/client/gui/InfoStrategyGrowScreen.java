@@ -109,6 +109,14 @@ public class InfoStrategyGrowScreen extends AbstractContainerScreen<InfoStrategy
 			guiGraphics.drawString(this.font,
 
 					StrategyUtils.getSilenceGrow(world), 1, 116, -3407872, false);
+		if (MapVariables.get(world).if_sublimation)
+			guiGraphics.drawString(this.font,
+
+					StrategyUtils.getSublimationGrow(world), 1, 132, -26113, false);
+		if (MapVariables.get(world).if_sublimation)
+			guiGraphics.drawString(this.font,
+
+					StrategyUtils.getSublimationGrow2(world), 1, 148, -26113, false);
 	}
 
 	@Override

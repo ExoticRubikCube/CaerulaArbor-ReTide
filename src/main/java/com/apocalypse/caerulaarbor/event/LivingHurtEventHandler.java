@@ -8,12 +8,8 @@ import com.apocalypse.caerulaarbor.capability.player.PlayerVariable;
 import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
 import com.apocalypse.caerulaarbor.entity.*;
 import com.apocalypse.caerulaarbor.init.*;
-import com.apocalypse.caerulaarbor.util.CaerulaUtil;
-import com.apocalypse.caerulaarbor.util.EntityUtils;
-import com.apocalypse.caerulaarbor.util.MathUtils;
-import com.apocalypse.caerulaarbor.util.NodeUtils;
-import com.apocalypse.caerulaarbor.util.PlayerStateUtils;
-import com.apocalypse.caerulaarbor.util.WorldUtils;
+import com.apocalypse.caerulaarbor.manager.SublimationUpgradeManger;
+import com.apocalypse.caerulaarbor.util.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
@@ -32,12 +28,7 @@ import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.TamableAnimal;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.Slime;
@@ -100,6 +91,7 @@ public class LivingHurtEventHandler {
         handlePlayerEvolutionDamageReduction(event);
         handlePlayerEvolutionDamageAmplification(event);
         handleKillMuteSelf(event);
+        handleSublimationDamage(event);
     }
 
     private static void handleKillMuteSelf(LivingHurtEvent event) {
@@ -111,6 +103,20 @@ public class LivingHurtEventHandler {
         if (damagesource.is(DamageTypes.GENERIC_KILL)) {
             if (entity instanceof BaselayerAbyssalEntity datEntSetI)
                 datEntSetI.getEntityData().set(BaselayerAbyssalEntity.DATA_MUTE_TIME, 100);
+        }
+    }
+
+    private static void handleSublimationDamage(LivingHurtEvent event) {
+        LevelAccessor world = event.getEntity().level();
+        Entity entity = event.getEntity();
+        double amount = event.getAmount();
+
+        if (entity == null) return;
+
+        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
+            entity.getPersistentData().putDouble("caerula.lastHurtByTime", entity.tickCount);
+            entity.getPersistentData().putDouble("caerula.sublimationDamage", entity.getPersistentData().getDouble("caerula.sublimationDamage") + amount);
+            SublimationUpgradeManger.applySublimationUpgrade(world, amount);
         }
     }
 

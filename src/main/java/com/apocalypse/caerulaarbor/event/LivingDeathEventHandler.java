@@ -68,6 +68,7 @@ public class LivingDeathEventHandler {
         handleLifePoint(event);
         handleBarrierReset(event);
         handleInvulnerableDeath(event);
+        handleSublimationRevival(event);
     }
 
     @SubscribeEvent
@@ -201,6 +202,33 @@ public class LivingDeathEventHandler {
         if (entity instanceof LivingEntity livEnt0 && livEnt0.hasEffect(CAMobEffects.INVULNERABLE.get()) && !damagesource.is(CADamageTypes.INV_KILLER)) {
             if (event.isCancelable()) {
                 event.setCanceled(true);
+            }
+        }
+    }
+
+    private static void handleSublimationRevival(LivingDeathEvent event) {
+        DamageSource damagesource = event.getSource();
+        Entity entity = event.getEntity();
+        LevelAccessor world = entity.level();
+
+        if (damagesource == null) return;
+
+        if (entity.getType().is(TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring")))) {
+            double subl = MapVariables.get(world).strategy_sublimation;
+            if (subl >= 3.0) {
+                if (!entity.getPersistentData().getBoolean("caerula.sublimationRevived")) {
+                    double finalBreed = Math.min(subl, MapVariables.get(world).strategy_breed);
+                    if (Math.random() < 0.2 * finalBreed) {
+                        if (event.isCancelable()) {
+                            event.setCanceled(true);
+                        }
+                        if (entity instanceof LivingEntity living) {
+                            living.setHealth((float) (living.getMaxHealth() * 0.25));
+                        }
+                        entity.getPersistentData().putBoolean("caerula.sublimationRevived", true);
+                        entity.getPersistentData().putDouble("caerula.sublimationDamage", 0);
+                    }
+                }
             }
         }
     }

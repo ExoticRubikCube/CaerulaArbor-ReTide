@@ -359,7 +359,7 @@ public class WorldUtils {
 				|| block.getBlock() == CABlocks.STRIPPED_TRAIL_LOG.get()) {
 			return false;
 		}
-		if (block.is(BlockTags.create(ResourceLocation.parse("forge:phayrilesh"))) || block.is(BlockTags.create(ResourceLocation.parse("spore:fungal_blocks")))) {
+		if (CAConfigs.EXTERNAL_ERROSION.get() && (block.is(BlockTags.create(ResourceLocation.parse("forge:phayrilesh"))) || block.is(BlockTags.create(ResourceLocation.parse("spore:fungal_blocks"))))) {
 			return Math.random() < 0.33;
 		}
 		return block.is(BlockTags.create(ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "organic")));

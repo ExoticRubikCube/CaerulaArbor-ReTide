@@ -71,4 +71,100 @@ public class StrategyUtils {
 	public static String getDescrMigra(LevelAccessor world) {
 		return Component.translatable("item.caerula_arbor.sample_migration.description_" + Math.round(MapVariables.get(world).strategy_migration)).getString();
 	}
+
+	public static boolean isSublimation(LevelAccessor world) {
+		return MapVariables.get(world).strategy_sublimation > 0;
+	}
+
+	public static double getStraSublimation(LevelAccessor world) {
+		return MapVariables.get(world).strategy_sublimation;
+	}
+
+	public static String getDescrSublimation(LevelAccessor world) {
+		return Component.translatable("item.caerula_arbor.sample_sublimation.description_" + Math.round(MapVariables.get(world).strategy_sublimation)).getString();
+	}
+
+	public static String getSublimationSubsis(LevelAccessor world) {
+		double lvl = Math.min(MapVariables.get(world).strategy_subsisting, MapVariables.get(world).strategy_sublimation);
+		if (lvl < 1) {
+			return "";
+		}
+		return Component.translatable("evolution.caerula_aerbor.sublimation.subsis." + (int) lvl).getString();
+	}
+
+	public static String getSublimationSubsis2(LevelAccessor world) {
+		double lvl = Math.min(MapVariables.get(world).strategy_subsisting, MapVariables.get(world).strategy_sublimation);
+		if (lvl < 1) {
+			return "";
+		}
+		String key = "evolution.caerula_aerbor.sublimation.subsis." + (int) lvl + "_1";
+		String desc = Component.translatable(key).getString();
+		if (desc.equals(key)) {
+			return "";
+		}
+		return desc;
+	}
+
+	public static String getSublimationBreed(LevelAccessor world) {
+		double lvl = Math.min(MapVariables.get(world).strategy_breed, MapVariables.get(world).strategy_sublimation);
+		if (lvl < 1) {
+			return "";
+		}
+		return Component.translatable("evolution.caerula_aerbor.sublimation.breed." + (int) lvl).getString();
+	}
+
+	public static String getSublimationBreed1(LevelAccessor world) {
+		double lvl = Math.min(MapVariables.get(world).strategy_breed, MapVariables.get(world).strategy_sublimation);
+		if (lvl < 1) {
+			return "";
+		}
+		String key = "evolution.caerula_aerbor.sublimation.breed." + (int) lvl + "_1";
+		String desc = Component.translatable(key).getString();
+		if (desc.equals(key)) {
+			return "";
+		}
+		return desc;
+	}
+
+	public static String getSublimationGrow(LevelAccessor world) {
+		double lvl = Math.min(MapVariables.get(world).strategy_grow, MapVariables.get(world).strategy_sublimation);
+		if (lvl < 1) {
+			return "";
+		}
+		return Component.translatable("evolution.caerula_aerbor.sublimation.grow." + (int) lvl).getString();
+	}
+
+	public static String getSublimationGrow2(LevelAccessor world) {
+		double lvl = Math.min(MapVariables.get(world).strategy_grow, MapVariables.get(world).strategy_sublimation);
+		if (lvl < 1) {
+			return "";
+		}
+		String key = "evolution.caerula_aerbor.sublimation.grow." + (int) lvl + "_1";
+		String desc = Component.translatable(key).getString();
+		if (desc.equals(key)) {
+			return "";
+		}
+		return desc;
+	}
+
+	public static String getSublimationMig(LevelAccessor world) {
+		double lvl = Math.min(MapVariables.get(world).strategy_migration, MapVariables.get(world).strategy_sublimation);
+		if (lvl < 1) {
+			return "";
+		}
+		return Component.translatable("evolution.caerula_aerbor.sublimation.migration." + (int) lvl).getString();
+	}
+
+	public static String getSublimationMig2(LevelAccessor world) {
+		double lvl = Math.min(MapVariables.get(world).strategy_migration, MapVariables.get(world).strategy_sublimation);
+		if (lvl < 1) {
+			return "";
+		}
+		String key = "evolution.caerula_aerbor.sublimation.migration." + (int) lvl + "_1";
+		String desc = Component.translatable(key).getString();
+		if (desc.equals(key)) {
+			return "";
+		}
+		return desc;
+	}
 }

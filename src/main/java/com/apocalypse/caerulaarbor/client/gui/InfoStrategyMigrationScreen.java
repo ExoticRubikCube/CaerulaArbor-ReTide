@@ -109,6 +109,14 @@ public class InfoStrategyMigrationScreen extends AbstractContainerScreen<InfoStr
 			guiGraphics.drawString(this.font,
 
 					StrategyUtils.getSilenceMigration(world), 1, 116, -3407872, false);
+		if (MapVariables.get(world).if_sublimation)
+			guiGraphics.drawString(this.font,
+
+					StrategyUtils.getSublimationMig(world), 1, 132, -26113, false);
+		if (MapVariables.get(world).if_sublimation)
+			guiGraphics.drawString(this.font,
+
+					StrategyUtils.getSublimationMig2(world), 1, 148, -26113, false);
 	}
 
 	@Override
