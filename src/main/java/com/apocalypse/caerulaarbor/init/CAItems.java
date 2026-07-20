@@ -417,6 +417,7 @@ public class CAItems {
     public static final RegistryObject<Item> GUNMU_SPAWN_EGG = REGISTRY.register("gunmu_spawn_egg", () -> new ForgeSpawnEggItem(CAEntities.GUNMU, -1, -1, new Item.Properties()));
     public static final RegistryObject<Item> NETHERSEA_PUMPKIN_PIE = REGISTRY.register("nethersea_pumpkin_pie", NetherseaPumpkinPieItem::new);
     public static final RegistryObject<Item> NETHERSEA_STEW = REGISTRY.register("nethersea_stew", NetherseaStewItem::new);
+    public static final RegistryObject<Item> NETHERSEA_MILK = REGISTRY.register("nethersea_milk", NetherseaMilkItem::new);
     public static final RegistryObject<Item> RECORD_WHISPER = REGISTRY.register("record_whisper", () -> new RecordItem(6, CASounds.WHISPER_ILLUSION, new Item.Properties().stacksTo(1).rarity(Rarity.RARE), 4480));
     public static final RegistryObject<Item> OCEANIZED_WARDEN_SPAWNEGG = REGISTRY.register("oceanized_warden_spawnegg", OceanizedWardenSpawneggItem::new);
     public static final RegistryObject<Item> MUTAGENISIS_CAPSULE = REGISTRY.register("mutagenisis_capsule", MutagenisisCapsuleItem::new);

@@ -1,10 +1,7 @@
 package com.apocalypse.caerulaarbor.entity;
 
 import com.apocalypse.caerulaarbor.entity.base.SeaMonster;
-import com.apocalypse.caerulaarbor.init.CAAttributes;
-import com.apocalypse.caerulaarbor.init.CABlocks;
-import com.apocalypse.caerulaarbor.init.CAEntities;
-import com.apocalypse.caerulaarbor.init.CAMobEffects;
+import com.apocalypse.caerulaarbor.init.*;
 import com.apocalypse.caerulaarbor.util.EntityUtils;
 import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
@@ -53,6 +50,7 @@ public class OceanizedCowEntity extends SeaMonster {
     public static final EntityDataAccessor<Boolean> DATA_SHOOT = SynchedEntityData.defineId(OceanizedCowEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<String> DATA_ANIMATION = SynchedEntityData.defineId(OceanizedCowEntity.class, EntityDataSerializers.STRING);
     public static final EntityDataAccessor<Boolean> DATA_SKILL = SynchedEntityData.defineId(OceanizedCowEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<Integer> DATA_MILK_COOLDOWN = SynchedEntityData.defineId(OceanizedCowEntity.class, EntityDataSerializers.INT);
     private boolean swinging;
     private long lastSwing;
     public String animationprocedure = "empty";
@@ -74,6 +72,7 @@ public class OceanizedCowEntity extends SeaMonster {
         this.entityData.define(DATA_SHOOT, false);
         this.entityData.define(DATA_ANIMATION, "undefined");
         this.entityData.define(DATA_SKILL, true);
+        this.entityData.define(DATA_MILK_COOLDOWN, 0);
     }
 
     @Override
@@ -126,6 +125,7 @@ public class OceanizedCowEntity extends SeaMonster {
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putBoolean("Skill", this.entityData.get(DATA_SKILL));
+        compound.putInt("MilkCooldown", this.entityData.get(DATA_MILK_COOLDOWN));
     }
 
     @Override
@@ -133,6 +133,9 @@ public class OceanizedCowEntity extends SeaMonster {
         super.readAdditionalSaveData(compound);
         if (compound.contains("Skill")) {
             this.entityData.set(DATA_SKILL, compound.getBoolean("Skill"));
+        }
+        if (compound.contains("MilkCooldown")) {
+            this.entityData.set(DATA_MILK_COOLDOWN, compound.getInt("MilkCooldown"));
         }
     }
 
@@ -159,6 +162,22 @@ public class OceanizedCowEntity extends SeaMonster {
             }
             return InteractionResult.SUCCESS;
         }
+        if (sourceentity.getMainHandItem().getItem() == Items.BUCKET) {
+            int cooldown = this.entityData.get(DATA_MILK_COOLDOWN);
+            if (cooldown <= 0) {
+                ItemStack bucket = sourceentity.getMainHandItem();
+                bucket.shrink(1);
+                ItemStack milk = new ItemStack(CAItems.NETHERSEA_MILK.get());
+                if (sourceentity.getInventory().add(milk)) {
+                    // success
+                } else {
+                    sourceentity.drop(milk, false);
+                }
+                this.entityData.set(DATA_MILK_COOLDOWN, Mth.nextInt(RandomSource.create(), 1200, 2400));
+                world.playSound(null, BlockPos.containing(x, y, z), SoundEvents.COW_MILK, SoundSource.PLAYERS, 1, 1);
+                return InteractionResult.SUCCESS;
+            }
+        }
         return InteractionResult.PASS;
     }
 
@@ -170,6 +189,10 @@ public class OceanizedCowEntity extends SeaMonster {
             if (!this.level().isClientSide() && !datEntL1.hasEffect(CAMobEffects.COW_BUFF.get())) {
                 this.addEffect(new MobEffectInstance(CAMobEffects.COW_BUFF.get(), 20, 0, false, false));
             }
+        }
+        int milkCooldown = this.entityData.get(DATA_MILK_COOLDOWN);
+        if (milkCooldown > 0) {
+            this.entityData.set(DATA_MILK_COOLDOWN, milkCooldown - 1);
         }
         this.refreshDimensions();
     }
