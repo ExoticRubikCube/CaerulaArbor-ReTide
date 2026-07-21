@@ -13,7 +13,6 @@ import com.apocalypse.caerulaarbor.util.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -61,12 +60,13 @@ public class LivingHurtEventHandler {
     public static final TagKey<DamageType> B_PROTECTION = CADamageTags.BYPASS_PROTECTION;
     public static final TagKey<DamageType> IS_MAGIC = CADamageTags.IS_MAGIC;
     public static final TagKey<DamageType> B_DEFENSE = CADamageTags.BYPASS_DEFENSE;
-    public static final ResourceKey<DamageType> NETHERSEA_DAMAGE = CADamageTypes.TRAIL_DAMAGE;
+    private static final TagKey<EntityType<?>> OCEAN_OFFSPRING = TagKey.create(Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(CaerulaArborMod.MODID, "oceanoffspring"));
 
     @SubscribeEvent(priority = EventPriority.LOW)
     public static void onEntityHurt(LivingHurtEvent event) {
         if (event == null || event.getEntity() == null) return;
 
+        handleNetherseaImmunity(event);
         handleBarrierFunc(event);
         handleMagicResis(event);
         handleFlamarineHurt(event);
@@ -117,6 +117,14 @@ public class LivingHurtEventHandler {
             entity.getPersistentData().putDouble("caerula.lastHurtByTime", entity.tickCount);
             entity.getPersistentData().putDouble("caerula.sublimationDamage", entity.getPersistentData().getDouble("caerula.sublimationDamage") + amount);
             SublimationUpgradeManger.applySublimationUpgrade(world, amount);
+        }
+    }
+
+    private static void handleNetherseaImmunity(LivingHurtEvent event) {
+        DamageSource damageSource = event.getSource();
+        LivingEntity entity = event.getEntity();
+        if (damageSource.is(CADamageTypes.TRAIL_DAMAGE) && entity.getType().is(OCEAN_OFFSPRING)) {
+            event.setCanceled(true);
         }
     }
 
@@ -756,7 +764,7 @@ public class LivingHurtEventHandler {
 
         if (damagesource == null || entity == null) return;
 
-        if (damagesource.is(NETHERSEA_DAMAGE)) {
+        if (damagesource.is(CADamageTypes.TRAIL_DAMAGE)) {
             if (entity instanceof Slime slime) {
                 if (slime.getHealth() <= slime.getMaxHealth() * 0.5 || slime.getHealth() <= 1) {
                     int size = slime.getSize();

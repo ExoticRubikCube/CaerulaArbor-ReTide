@@ -1,10 +1,10 @@
 
 package com.apocalypse.caerulaarbor.item;
 
-import com.apocalypse.caerulaarbor.init.CAMobEffects;
-import com.apocalypse.caerulaarbor.init.CAItems;
 import com.apocalypse.caerulaarbor.api.event.SanityEvent;
 import com.apocalypse.caerulaarbor.capability.sanity.SIHelper;
+import com.apocalypse.caerulaarbor.init.CAItems;
+import com.apocalypse.caerulaarbor.init.CAMobEffects;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -51,12 +51,10 @@ public class OceanCavairItem extends Item {
 		SIHelper.causeSanityInjury(entity, 325, SanityEvent.Hurt.Type.FOOD);
 		if (itemstack.isEmpty()) {
 			return retval;
-		} else {
-			if (entity instanceof Player player && !player.getAbilities().instabuild) {
-				if (!player.getInventory().add(retval))
-					player.drop(retval, false);
-			}
-			return itemstack;
+		} else if (entity instanceof Player player && !player.getAbilities().instabuild) {
+			if (!player.getInventory().add(retval))
+				player.drop(retval, false);
 		}
+		return itemstack;
 	}
 }

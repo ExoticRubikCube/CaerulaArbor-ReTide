@@ -167,7 +167,7 @@ public class EntityUtils {
 		}
 	}
 
-	// 施加 Nethseabrand 的伤害效果
+	// 施加 Nethseabrand 的伤害效果，可能需要做成接口
 	public static void damagedByNethseabrand(LevelAccessor world, Entity entity) {
 		if (entity == null)
 			return;
@@ -656,13 +656,11 @@ public class EntityUtils {
 
 	// TODO: 海化玩家附近判定逻辑仍需复核
 	public static boolean isOceanizedPlayerNearby(LevelAccessor world, double x, double y, double z) {
-		{
-			final Vec3 center = new Vec3(x, y, z);
-			List<Player> entfound = world.getEntitiesOfClass(Player.class, new AABB(center, center).inflate(72 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
-			for (Player entityiterator : entfound) {
-				if ((entityiterator.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization >= 2.9) {
-						return false;
-				}
+		final Vec3 center = new Vec3(x, y, z);
+		List<Player> entfound = world.getEntitiesOfClass(Player.class, new AABB(center, center).inflate(72 / 2d), e -> true).stream().sorted(Comparator.comparingDouble(entcnd -> entcnd.distanceToSqr(center))).toList();
+		for (Player entityiterator : entfound) {
+			if ((entityiterator.getCapability(ModCapabilities.PLAYER_VARIABLE, null).orElse(new PlayerVariable())).player_oceanization >= 2.9) {
+				return false;
 			}
 		}
 		return true;

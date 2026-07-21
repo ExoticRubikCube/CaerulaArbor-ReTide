@@ -117,8 +117,8 @@ public class EntityJoinLevelEventHandler {
                 if (n > 0) {
                     n = 1 + 0.01 * n * 2;
                     coef = 1;
-                    for (Entity entityiterator : new ArrayList<>(world.players())) {
-                        if (entityiterator instanceof ServerPlayer plr) {
+                    for (Entity playerEntity : new ArrayList<>(world.players())) {
+                        if (entity instanceof ServerPlayer plr) {
                             coef_cur = 1;
                             java.util.List<? extends String> entries = CAConfigs.N18_ENTRY.get();
                             for (int i = 0; i < Math.min(entries.size(), 4); i++) {
@@ -247,8 +247,8 @@ public class EntityJoinLevelEventHandler {
                 if (n > 0) {
                     n = 1 + 0.01 * n * 2;
                     coef = 1;
-                    for (Entity entityiterator : new ArrayList<>(world.players())) {
-                        if (entityiterator instanceof ServerPlayer plr) {
+                    for (Entity playerEntity : new ArrayList<>(world.players())) {
+                        if (entity instanceof ServerPlayer plr) {
                             coef_cur = 1;
                             java.util.List<? extends String> entries = CAConfigs.N18_ENTRY.get();
                             for (int i = 0; i < Math.min(entries.size(), 4); i++) {
@@ -308,8 +308,8 @@ public class EntityJoinLevelEventHandler {
                 if (n > 0) {
                     n = 1 + 0.01 * n * 2;
                     coef = 1;
-                    for (Entity entityiterator : new ArrayList<>(world.players())) {
-                        if (entityiterator instanceof ServerPlayer plr) {
+                    for (Entity playerEntity : new ArrayList<>(world.players())) {
+                        if (entity instanceof ServerPlayer plr) {
                             coef_cur = 1;
                             java.util.List<? extends String> entries = CAConfigs.N18_ENTRY.get();
                             for (int i = 0; i < Math.min(entries.size(), 4); i++) {

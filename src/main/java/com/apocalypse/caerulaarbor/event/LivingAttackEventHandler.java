@@ -278,8 +278,19 @@ public class LivingAttackEventHandler {
         if (event.isCanceled()) return;
 
         handleMobHitMigration(world, target, sourceEntity, damageSource);
+        handleOceanOffspringFriendlyFire(event, target, sourceEntity);
+        if (event.isCanceled()) return;
         handleMobHitEvolution(event, world, target, sourceEntity, damageSource, event.getAmount());
         handleMobHitSpecialEffects(world, target, sourceEntity, damageSource, event.getAmount());
+    }
+
+    private static void handleOceanOffspringFriendlyFire(LivingAttackEvent event, LivingEntity target, Entity sourceEntity) {
+        if (sourceEntity.getType().is(OCEAN_OFFSPRING) && target.getType().is(OCEAN_OFFSPRING)) {
+            LivingEntity srcTarget = sourceEntity instanceof Mob mobEnt ? mobEnt.getTarget() : null;
+            if (target != srcTarget) {
+                event.setCanceled(true);
+            }
+        }
     }
 
     private static void handleMobHitMigration(LevelAccessor world, LivingEntity target, Entity sourceEntity, DamageSource damageSource) {
@@ -347,11 +358,6 @@ public class LivingAttackEventHandler {
             MapVariablesHandler.addEvoPoint(world, StrategyType.SUBSISTING, subsistingPoints);
             SubsistingUpgradeManager.applySubsistingUpgrade(world);
             SilenceUpgradeManager.applySilenceUpgrade(world, subsistingPoints);
-        }
-
-        if (sourceEntity.getType().is(OCEAN_OFFSPRING)
-                && (!(sourceEntity instanceof Mob mob) || target != mob.getTarget())) {
-            event.setCanceled(true);
         }
 
         var evolved = target.getAttribute(CAAttributes.EVOLVED.get());

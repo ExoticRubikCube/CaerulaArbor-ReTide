@@ -12,7 +12,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
@@ -49,14 +48,12 @@ public class TulipMedcineItem extends Item {
 		double y = entity.getY();
 		double z = entity.getZ();
         if ((LevelAccessor) world instanceof ServerLevel level)
-            level.sendParticles(ParticleTypes.CLOUD, x, (y + 0.75), z, 32, 0.75, 0.75, 0.75, 0.15);
-        {
-            double setval = 0;
-            ((Entity) entity).getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
-                capability.disoclusion = setval;
-                capability.syncPlayerVariables(entity);
-            });
-        }
+			level.sendParticles(ParticleTypes.CLOUD, x, (y + 0.75), z, 32, 0.75, 0.75, 0.75, 0.15);
+		double setval = 0;
+		entity.getCapability(ModCapabilities.PLAYER_VARIABLE, null).ifPresent(capability -> {
+			capability.disoclusion = setval;
+			capability.syncPlayerVariables(entity);
+		});
         if (!entity.level().isClientSide()) {
             entity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 400, 2));
             entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 400, 1));

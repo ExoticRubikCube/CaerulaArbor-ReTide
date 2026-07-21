@@ -131,7 +131,7 @@ public class RelicCurseEMELIGHTItem extends Item {
                 }
                 if ((LevelAccessor) world instanceof ServerLevel level)
                     level.sendParticles(ParticleTypes.CRIMSON_SPORE, x, y, z, 99, 1, 1, 1, 1);
-                if (((LevelAccessor) world).isClientSide())
+                if (world.isClientSide())
                     Minecraft.getInstance().gameRenderer.displayItemActivation(itemstack);
                 itemstack.getOrCreateTag().putBoolean("used", true);
             }

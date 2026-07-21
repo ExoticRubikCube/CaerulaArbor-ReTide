@@ -1,4 +1,3 @@
-
 package com.apocalypse.caerulaarbor.item;
 
 import net.minecraft.core.BlockPos;

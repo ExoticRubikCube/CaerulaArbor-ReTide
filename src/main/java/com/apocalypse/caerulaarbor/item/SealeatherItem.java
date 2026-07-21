@@ -1,4 +1,3 @@
-
 package com.apocalypse.caerulaarbor.item;
 
 import com.apocalypse.caerulaarbor.init.CAAttributes;

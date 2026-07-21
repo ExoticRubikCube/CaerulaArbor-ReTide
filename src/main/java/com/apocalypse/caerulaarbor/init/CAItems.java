@@ -223,9 +223,8 @@ public class CAItems {
     public static final RegistryObject<Item> COOKED_PEDUNCLE = REGISTRY.register("cooked_peduncle", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(6).saturationMod(1f).meat().build())) {
         @Override
         public @NotNull ItemStack finishUsingItem(@NotNull ItemStack itemstack, net.minecraft.world.level.@NotNull Level world, net.minecraft.world.entity.@NotNull LivingEntity entity) {
-            ItemStack retval = super.finishUsingItem(itemstack, world, entity);
             ModCapabilities.getSanityInjury(entity).heal(15);
-            return retval;
+            return super.finishUsingItem(itemstack, world, entity);
         }
     });
     public static final RegistryObject<Item> OCEAN_ARROW = REGISTRY.register("ocean_arrow", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON)));
@@ -238,9 +237,8 @@ public class CAItems {
     public static final RegistryObject<Item> BOILED_EGG = REGISTRY.register("boiled_egg", () -> new Item(new Item.Properties().stacksTo(64).rarity(Rarity.COMMON).food((new FoodProperties.Builder()).nutrition(6).saturationMod(0.5f).alwaysEat().build())) {
         @Override
         public @NotNull ItemStack finishUsingItem(@NotNull ItemStack itemstack, net.minecraft.world.level.@NotNull Level world, net.minecraft.world.entity.@NotNull LivingEntity entity) {
-            ItemStack retval = super.finishUsingItem(itemstack, world, entity);
             ModCapabilities.getSanityInjury(entity).heal(125);
-            return retval;
+            return super.finishUsingItem(itemstack, world, entity);
         }
     });
     public static final RegistryObject<Item> FRIED_EGG = REGISTRY.register("fried_egg", FriedEggItem::new);

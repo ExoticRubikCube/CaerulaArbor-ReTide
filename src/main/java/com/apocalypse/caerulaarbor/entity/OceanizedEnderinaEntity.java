@@ -8,6 +8,8 @@ import com.apocalypse.caerulaarbor.util.WorldUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -69,33 +71,7 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 	private long lastSwing;
 	public String animationprocedure = "empty";
 	public Set<String> crystals = new HashSet<>();
-
-	public static void spawnLinkParticles(LevelAccessor world, double fromX, double fromY, double fromZ, double toX, double toY, double toZ) {
-		double vx = toX - fromX;
-		double vy = toY - fromY;
-		double vz = toZ - fromZ;
-		double size = Math.max(Math.min(Math.round(Math.sqrt(vx * vx + vy * vy + vz * vz)), 32), 1);
-		for (int index0 = 0; index0 < (int) size; index0++) {
-			if (world instanceof ServerLevel serverLevel) {
-				serverLevel.sendParticles(CAParticles.EDERMAN_PTC.get(), fromX + (vx / size) * index0, fromY + (vy / size) * index0 + 1, fromZ + (vz / size) * index0, 1, 0, 0, 0, 0.01);
-			}
-		}
-	}
-
 	private final ServerBossEvent bossInfo = new ServerBossEvent(this.getDisplayName(), ServerBossEvent.BossBarColor.PINK, ServerBossEvent.BossBarOverlay.NOTCHED_10);
-
-	public void putCrystal(Entity crystal) {
-		this.crystals.add(crystal.getStringUUID());
-	}
-
-	public MoistEnderCrystalEntity getCrystal(String uuid) {
-		Level level = this.level();
-		if (level instanceof ServerLevel) {
-			Entity c = ((ServerLevel) level).getEntity(UUID.fromString(uuid));
-			return c instanceof MoistEnderCrystalEntity ? (MoistEnderCrystalEntity) c : null;
-		}
-		return null;
-	}
 
 	public OceanizedEnderinaEntity(Level world) {
 		this(CAEntities.OCEANIZED_ENDERINA.get(), world);
@@ -168,6 +144,31 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 				return this.canUse();
 			}
 		});
+	}
+
+	public void putCrystal(Entity crystal) {
+		this.crystals.add(crystal.getStringUUID());
+	}
+
+	public MoistEnderCrystalEntity getCrystal(String uuid) {
+		Level level = this.level();
+		if (level instanceof ServerLevel) {
+			Entity c = ((ServerLevel) level).getEntity(UUID.fromString(uuid));
+			return c instanceof MoistEnderCrystalEntity ? (MoistEnderCrystalEntity) c : null;
+		}
+		return null;
+	}
+
+	public static void spawnLinkParticles(LevelAccessor world, double fromX, double fromY, double fromZ, double toX, double toY, double toZ) {
+		double vx = toX - fromX;
+		double vy = toY - fromY;
+		double vz = toZ - fromZ;
+		double size = Math.max(Math.min(Math.round(Math.sqrt(vx * vx + vy * vy + vz * vz)), 32), 1);
+		for (int index0 = 0; index0 < (int) size; index0++) {
+			if (world instanceof ServerLevel serverLevel) {
+				serverLevel.sendParticles(CAParticles.EDERMAN_PTC.get(), fromX + (vx / size) * index0, fromY + (vy / size) * index0 + 1, fromZ + (vz / size) * index0, 1, 0, 0, 0, 0.01);
+			}
+		}
 	}
 
 	public class RangedAttackGoal extends Goal {
@@ -345,10 +346,15 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 	@Override
 	public void addAdditionalSaveData(CompoundTag compound) {
 		super.addAdditionalSaveData(compound);
+
+		ListTag crystalsTag = new ListTag();
+		this.crystals.forEach(uuid -> crystalsTag.add(StringTag.valueOf(uuid)));
+
 		compound.putInt("ReviveTick", this.entityData.get(DATA_REVIVE_TICK));
 		compound.putInt("Phase", this.entityData.get(DATA_PHASE));
 		compound.putInt("SkillP", this.entityData.get(DATA_SKILL_P));
 		compound.putInt("Duration", this.entityData.get(DATA_DURATION));
+		compound.put("crystals", crystalsTag);
 	}
 
 	@Override
@@ -365,6 +371,12 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 		}
 		if (compound.contains("Duration")) {
 		    this.entityData.set(DATA_DURATION, compound.getInt("Duration"));
+		}
+		if (compound.contains("crystals")) {
+			ListTag crystalsTag = compound.getList("crystals", 8);
+			for (int index = 0; index < crystalsTag.size(); index++) {
+				this.crystals.add(crystalsTag.getString(index));
+			}
 		}
 	}
 
@@ -415,9 +427,7 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 						if ((Entity) this instanceof OceanizedEnderinaEntity datEntSetI)
 							datEntSetI.getEntityData().set(DATA_REVIVE_TICK, 0);
 					}
-					if (rev < 100) {
-					}
-				} else {
+                } else {
 					if (((Entity) this instanceof LivingEntity livEnt ? livEnt.getHealth() : -1) >= ((Entity) this instanceof LivingEntity livEnt ? livEnt.getMaxHealth() : -1)) {
 						if ((Entity) this instanceof OceanizedEnderinaEntity datEntSetI)
 							datEntSetI.getEntityData().set(DATA_REVIVE_TICK, 0);
@@ -480,25 +490,22 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 				}
 			}
 			if (tickCount % 20 == 0) {
-				if ((Entity) this instanceof OceanizedEnderinaEntity enderina) {
-					Set<String> crystalUUIDs = enderina.crystals;
+				Set<String> crystalUUIDs = this.crystals;
 					Set<String> toDelete = new HashSet<>();
 					for (String uuid1 : crystalUUIDs) {
-						MoistEnderCrystalEntity crystal = enderina.getCrystal(uuid1);
+						MoistEnderCrystalEntity crystal = this.getCrystal(uuid1);
 						if (crystal != null && crystal.isAlive()) {
-							if (enderina.getEntityData().get(DATA_REVIVE_TICK) <= 0) {
-								enderina.crytsalToEnderina(crystal, this);
-								EntityUtils.heal(enderina, enderina.getMaxHealth() * 0.01);
+							if (this.getEntityData().get(DATA_REVIVE_TICK) <= 0) {
+								this.crytsalToEnderina(crystal, this);
+								EntityUtils.heal(this, this.getMaxHealth() * 0.01);
 							} else {
 								crystal.getNavigation().moveTo(getX(), getY(), getZ(), 0.5);
 							}
-							spawnLinkParticles(enderina.level(), crystal.getX(), crystal.getY() + 0.5, crystal.getZ(), getX(), getY(), getZ());
 						} else {
 							toDelete.add(uuid1);
 						}
 					}
 					crystalUUIDs.removeAll(toDelete);
-				}
 			}
 			if (rev > 0 && tickCount % 70 == 50) {
 				distributeCrystal(world, x, y, z);
@@ -758,12 +765,7 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 		double d;
 		double tx;
 		double tz;
-		double result;
-		final Vec3 center = new Vec3(x, y, z);
-		List<MoistEnderCrystalEntity> entfound = world.getEntitiesOfClass(MoistEnderCrystalEntity.class,
-				new AABB(center, center).inflate(32 / 2d), MoistEnderCrystalEntity::isAlive);
-		result = entfound.size();
-		if (result < 12) {
+		if (this.crystals.size() < 8) {
 			r = Mth.nextDouble(RandomSource.create(), 0, 6.283);
 			d = Mth.nextDouble(RandomSource.create(), 7, 12);
 			tx = x + d * Math.cos(r);
@@ -771,6 +773,7 @@ public class OceanizedEnderinaEntity extends SeaMonster implements RangedAttackM
 			if (world instanceof ServerLevel level) {
 				Entity entityToSpawn = CAEntities.MOIST_ENDER_CRYSTAL.get().spawn(level, BlockPos.containing(tx, y, tz), MobSpawnType.MOB_SUMMONED);
 				if (entityToSpawn != null) {
+					this.putCrystal(entityToSpawn);
 					entityToSpawn.setYRot(world.getRandom().nextFloat() * 360F);
 				}
 			}
