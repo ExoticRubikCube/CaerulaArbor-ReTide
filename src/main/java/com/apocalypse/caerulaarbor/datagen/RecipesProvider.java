@@ -3268,6 +3268,23 @@ public class RecipesProvider extends RecipeProvider {
                 result("caerula_arbor:treaty_copper", 1),
                 ingredients(item("minecraft:copper_ingot"), item("caerula_arbor:treaty_empty"), item("caerula_arbor:redstone_ingot"), item("caerula_arbor:redstone_ingot"), item("caerula_arbor:redstone_ingot"), item("caerula_arbor:redstone_ingot"), item("caerula_arbor:redstone_ingot"))
         );
+        shaped(
+                writer,
+                "sea_prairie_bomb",
+                "misc",
+                null,
+                result("caerula_arbor:sea_prairie_bomb", 1),
+                pattern(
+                        "aba",
+                        "cdc",
+                        "aea"
+                ),
+                key('a', item("caerula_arbor:trailrite_nugget")),
+                key('b', item("minecraft:blaze_powder")),
+                key('c', item("caerula_arbor:trail_powder")),
+                key('d', item("caerula_arbor:bomb_copper")),
+                key('e', item("caerula_arbor:item_helper"))
+        );
         shapeless(
                 writer,
                 "seal_diamond_treaty",

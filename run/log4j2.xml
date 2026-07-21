@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--<Configuration status="trace" monitorInterval="5">-->
+<Configuration monitorInterval="5">
+
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT" follow="true">
+            <!--
+            INFO 绿 / WARN 黄 / ERROR 红 / DEBUG 青 / TRACE 蓝
+            时间、线程、logger 名由 Logback 预设自动降权（灰/淡洋红/青）
+            -->
+            <PatternLayout disableAnsi="false" charset="UTF-8">
+                <pattern>
+                    %highlight{%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n}{STYLE=Logback}
+                </pattern>
+            </PatternLayout>
+        </Console>
+    </Appenders>
+
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+        </Root>
+    </Loggers>
+
+</Configuration>

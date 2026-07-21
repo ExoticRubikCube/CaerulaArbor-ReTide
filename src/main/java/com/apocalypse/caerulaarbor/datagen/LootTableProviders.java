@@ -17,9 +17,18 @@ import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
-import net.minecraft.world.level.storage.loot.functions.*;
+import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
+import net.minecraft.world.level.storage.loot.functions.ApplyExplosionDecay;
+import net.minecraft.world.level.storage.loot.functions.EnchantWithLevelsFunction;
+import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
-import net.minecraft.world.level.storage.loot.predicates.*;
+import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
+import net.minecraft.world.level.storage.loot.predicates.InvertedLootItemCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
+import net.minecraft.world.level.storage.loot.predicates.MatchTool;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
@@ -247,6 +256,7 @@ public final class LootTableProviders {
                     bberryCanumber(),
                     bblockBatbed(),
                     bblockChestfish(),
+                    bchestFishFood(),
                     bblockCrownumber(),
                     bblockCrystal(),
                     bblockExtension(),
@@ -313,6 +323,7 @@ public final class LootTableProviders {
                     bsaltwindSmoothSlab(),
                     bsaltwindSmoothStair(),
                     bsaltwindStair(),
+                    bseaPrairieBomb(),
                     bseaTrailBurntSolid(),
                     bseaTrailBurnt(),
                     bseaTrailGrowing(),
@@ -428,6 +439,10 @@ public final class LootTableProviders {
             return table("blocks/block_chestfish",
                     pool(number(1.0F), null, cond(survivesExplosion()),
                             entry("caerula_arbor:block_chestfish", 1, cond())));
+        }
+
+        private static TableDef bchestFishFood() {
+            return table("blocks/chest_fish_food");
         }
 
         private static TableDef bblockCrownumber() {
@@ -830,6 +845,12 @@ public final class LootTableProviders {
             return table("blocks/saltwind_stair",
                     pool(number(1.0F), null, cond(survivesExplosion()),
                             entry("caerula_arbor:saltwind_stair", 1, cond())));
+        }
+
+        private static TableDef bseaPrairieBomb() {
+            return table("blocks/sea_prairie_bomb",
+                    pool(number(1.0F), null, cond(survivesExplosion()),
+                            entry("caerula_arbor:sea_prairie_bomb", 1, cond())));
         }
 
         private static TableDef bseaTrailBurntSolid() {

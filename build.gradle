@@ -8,14 +8,38 @@ plugins {
 
 def getGitCommitHash() {
     try {
-        def stdout = new ByteArrayOutputStream()
-        exec {
+        return providers.exec {
             commandLine 'git', 'rev-parse', '--short', 'HEAD'
-            standardOutput = stdout
-        }
-        return stdout.toString().trim()
-    } catch (ignored) {
+        }.standardOutput.asText.get().trim()
+    } catch (Exception ignored) {
         return 'unknown'
+    }
+}
+
+def log4jConfigurationUri = file('run/log4j2.xml').toURI().toString()
+def findJansiJar = {
+    def jansiJar = configurations.runtimeClasspath.files.find {
+        it.name.startsWith('jansi-') && it.name.endsWith('.jar')
+    }
+    if (jansiJar == null) {
+        throw new GradleException('Jansi jar not found on runtimeClasspath')
+    }
+    return jansiJar
+}
+def jansiNativeDirectory = layout.buildDirectory.dir('jansi-native')
+def extractJansiNative = tasks.register('extractJansiNative', Sync) {
+    from { zipTree(findJansiJar()) }
+    include 'META-INF/native/**'
+    eachFile { fileDetails ->
+        fileDetails.path = fileDetails.path.replaceFirst('META-INF/native/', '')
+    }
+    includeEmptyDirs = false
+    into jansiNativeDirectory
+}
+
+tasks.configureEach {
+    if (name.startsWith('run') || name == 'genIntellijRuns') {
+        dependsOn(extractJansiNative)
     }
 }
 
@@ -55,6 +79,12 @@ minecraft {
 
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
+            property 'terminal.ansi', 'true'
+            property 'log4j.skipJansi', 'false'
+            property 'log4j2.configurationFile', log4jConfigurationUri
+            property 'library.jansi.path', jansiNativeDirectory.get().asFile.absolutePath
+            lazyToken('jansi_jar', { findJansiJar().absolutePath })
+            jvmArg('-Xbootclasspath/a:{jansi_jar}')
             //property 'mixin.debug', 'true'
             //property 'mixin.debug.verbose', 'true'
             //property 'mixin.debug.export', 'true'
@@ -66,7 +96,7 @@ minecraft {
             property 'geckolib.disable_examples', 'true'
             mods {
                 "${mod_id}" {
-                    source sourceSets.main
+                    source(sourceSets.main)
                 }
             }
         }
@@ -98,7 +128,7 @@ repositories {
     }
     maven {
         name = 'GeckoLib'
-        url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
+        url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
         content {
             includeGroupByRegex("software\\.bernie.*")
             includeGroup("com.eliotlash.mclib")
@@ -113,13 +143,13 @@ repositories {
         }
     }
     maven {
-        url "https://maven.shedaniel.me/"
+        url = "https://maven.shedaniel.me/"
         content {
             includeGroup "me.shedaniel.cloth"
         }
     }
     maven {
-        url "https://cursemaven.com"
+        url = "https://cursemaven.com"
         content {
             includeGroup "curse.maven"
         }
@@ -128,7 +158,7 @@ repositories {
         forRepository {
             maven {
                 name = "Modrinth"
-                url "https://api.modrinth.com/maven"
+                url = "https://api.modrinth.com/maven"
             }
         }
         forRepositories(fg.repository)
@@ -148,6 +178,7 @@ processResources {
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+    runtimeOnly 'org.fusesource.jansi:jansi:1.18'
 
     implementation fg.deobf('software.bernie.geckolib:geckolib-forge-1.20.1:4.4.9')
 
